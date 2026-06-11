@@ -2,8 +2,8 @@
 
 ## Current State
 
-- Repository: `https://github.com/jongsunP/action-sports-journal`
-- Local path: `/Users/parkjongsun/Repository/action-sports-journal`
+- Repository: `https://github.com/jongsunP/action-sports-journal-app`
+- Local path: `/Users/parkjongsun/Repository/action-sports-journal-app`
 - Platform: iOS-first React Native app
 - Runtime: Expo Go on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`

@@ -15,8 +15,8 @@
 
 The user's current main project is Action Sports Journal.
 
-- Local path: `/Users/parkjongsun/Repository/action-sports-journal`
-- GitHub remote: `https://github.com/jongsunP/action-sports-journal`
+- Local path: `/Users/parkjongsun/Repository/action-sports-journal-app`
+- GitHub remote: `https://github.com/jongsunP/action-sports-journal-app`
 - Product: iOS-first React Native action sports life log platform.
 - Current stage: Stage 1 initial setup.
 - Current Expo SDK: `~54.0.35` for compatibility with the user's App Store Expo Go on a physical iPhone.
