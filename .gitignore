@@ -1,0 +1,16 @@
+# Secrets and local state
+.env
+.env.*
+*.key
+*.pem
+auth.json
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Dependencies and generated files
+node_modules/
+.DS_Store
+
+# Codex generated state should not be copied here
+.codex/
