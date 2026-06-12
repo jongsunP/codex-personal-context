@@ -33,12 +33,14 @@ Current status:
 
 ```text
 Stage 1 complete
+Stage 2 local ActivityGroup / Session prototype complete
+App Store / TestFlight preparation started
 ```
 
-Latest Stage 1 commit:
+Latest local project checkpoint commit:
 
 ```text
-8d44d7b Add Stage 1 repository review
+b5d4eb1 Add continuity checkpoint for App Store prep
 ```
 
 ## Confirmed Project Facts
@@ -46,11 +48,15 @@ Latest Stage 1 commit:
 - Expo SDK is `~54.0.35`.
 - React Native is `0.81.5`.
 - React is `19.1.0`.
-- The app opens on the user's physical iPhone through Expo Go.
+- The app opens on the user physical iPhone through Expo Go.
+- Tunnel mode worked when LAN mode was unreliable.
 - The first screen source is `src/features/sessions/HomeScreen.tsx`.
 - The app entry is `App.tsx`.
-- Stage 1 review exists in `REVIEW.md`.
+- Stage 2 local ActivityGroup / Session prototype works with mock data and React state only.
 - Project handoff exists in `docs/HANDOFF.md`.
+- Latest checkpoint exists in `docs/CONTINUITY_CHECKPOINT.md`.
+- App Store build identifiers were added to `app.json`.
+- Initial EAS config exists in `eas.json`.
 
 ## Resume Commands
 
@@ -64,7 +70,7 @@ codex
 Suggested first prompt:
 
 ```text
-AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, and REVIEW.md를 먼저 읽고 Stage 1 완료 상태에서 이어서 진행해줘.
+AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, and REVIEW.md를 먼저 읽고 Stage 2 완료 및 App Store 준비 상태에서 이어서 진행해줘.
 ```
 
 ## Run Commands
@@ -72,7 +78,7 @@ AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, and REVIEW.md를 먼저 읽�
 ```bash
 cd /Users/parkjongsun/Repository/action-sports-journal-app
 npm install
-npx expo start --lan
+npx expo start --tunnel --port 8082
 ```
 
 Use Node 20 or newer for Expo.
@@ -83,7 +89,7 @@ Use Node 20 or newer for Expo.
 - It is not an AI-only analysis app.
 - Session is the center of the system.
 - ActivityGroup -> Session -> AnalysisResult -> ShareResult.
-- Sharing is important long-term, but should not be implemented in Stage 1.
+- Sharing is important long-term, but should not be implemented yet.
 
 ## Do Not Implement Yet
 
@@ -99,12 +105,16 @@ Use Node 20 or newer for Expo.
 
 ## Next Likely Work
 
-Only when the user asks to continue product development:
+Do not add product features yet.
 
-- Start Stage 2 planning.
-- Keep it local-only.
-- Consider a tiny mock ActivityGroup and Session prototype.
-- Avoid external services and premature architecture.
+The next work should focus on release-path validation:
+
+1. Ensure local project commits are pushed to GitHub.
+2. Confirm Expo account login with EAS CLI.
+3. Confirm Apple Developer Program / App Store Connect access.
+4. Create or verify the App Store Connect app record for `com.jongsunp.actionsportsjournal`.
+5. Run an iOS production EAS build.
+6. Submit the build to App Store Connect / TestFlight.
 
 ## Other Context Files
 
