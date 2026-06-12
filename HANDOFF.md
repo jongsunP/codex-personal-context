@@ -41,7 +41,7 @@ App Store / TestFlight preparation started
 Latest local project checkpoint commit:
 
 ```text
-0cc8b5b Polish session home screen layout
+149b2bf Localize prototype UI copy
 ```
 
 ## Confirmed Project Facts
@@ -64,6 +64,7 @@ Latest local project checkpoint commit:
 - A first AI analysis request flow exists with a mock fallback.
 - Remote analysis responses are normalized before rendering.
 - Home screen layout was polished with scroll support, header metrics, clearer session cards, and status pills.
+- Visible prototype UI copy and mock data were localized for Korean users.
 - Real OpenAI analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
 
 ## Resume Commands
