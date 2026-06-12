@@ -21,6 +21,7 @@
 ## Important Files
 
 - `AGENTS.md`: project rules and current setup context
+- `docs/HANDOFF.md`: cross-session project handoff
 - `App.tsx`: root app entry
 - `src/features/sessions/HomeScreen.tsx`: first visible screen
 - `src/types/index.ts`: initial domain types
@@ -45,3 +46,11 @@ Do not implement these yet:
 ## Next Likely Step
 
 When the user is ready, review the Stage 1 app structure together and decide whether to start Stage 2 as a local-only Session prototype.
+
+## New Session Prompt
+
+Use this prompt when opening the project in a new Codex terminal session:
+
+```text
+AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, and REVIEW.md를 먼저 읽고 Stage 1 완료 상태에서 이어서 진행해줘.
+```
