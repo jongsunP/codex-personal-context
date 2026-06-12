@@ -8,7 +8,7 @@
 - Runtime: Expo Go on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
 - Current stage: Stage 3 video-to-analysis prototype started; App Store / TestFlight preparation also exists
-- Latest local project checkpoint commit: `ef942d8 Add video analysis prototype flow`
+- Latest local project checkpoint commit: `62bb3c1 Document video analysis API contract`
 
 ## Confirmed Working
 
@@ -33,6 +33,7 @@
 - `docs/CONTINUITY_CHECKPOINT.md`: latest continuity checkpoint
 - `docs/CURRENT_STAGE.md`: current stage summary
 - `docs/STAGE_2_PLAN.md`: Stage 2 scope
+- `docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md`: video analysis API contract
 - `App.tsx`: root app entry
 - `src/features/sessions/HomeScreen.tsx`: first visible screen
 - `src/features/groups/mockActivityGroups.ts`: local mock ActivityGroups

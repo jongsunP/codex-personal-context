@@ -41,7 +41,7 @@ App Store / TestFlight preparation started
 Latest local project checkpoint commit:
 
 ```text
-ef942d8 Add video analysis prototype flow
+62bb3c1 Document video analysis API contract
 ```
 
 ## Confirmed Project Facts
@@ -56,11 +56,13 @@ ef942d8 Add video analysis prototype flow
 - Stage 2 local ActivityGroup / Session prototype works with mock data and React state only.
 - Project handoff exists in `docs/HANDOFF.md`.
 - Latest checkpoint exists in `docs/CONTINUITY_CHECKPOINT.md`.
+- Stage 3 API contract exists in `docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md`.
 - App Store build identifiers were added to `app.json`.
 - Initial EAS config exists in `eas.json`.
 - `expo-image-picker` is installed for selecting session videos.
 - The app can attach a selected video URI to a new Session.
 - A first AI analysis request flow exists with a mock fallback.
+- Remote analysis responses are normalized before rendering.
 - Real OpenAI analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
 
 ## Resume Commands
