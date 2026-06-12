@@ -26,6 +26,11 @@ project or context files, pull the relevant repository when possible. If local
 state differs from remote state, do not assume local is correct unless the user
 explicitly says the local unpushed work should be treated as authoritative.
 
+When the user asks to check app or project progress, interpret that as a request
+to verify the remote-backed source of truth first. Fetch or pull the relevant
+project repository and read the committed handoff/status documents instead of
+answering from chat history or local assumptions.
+
 ## Session Startup
 
 At the beginning of work:
@@ -73,3 +78,5 @@ scratch details.
 - Prefer remote-pushed Git context over local-only notes for durable progress
   and user-context updates.
 - Treat remote Git as the default source of truth for continuity.
+- For app progress questions, check the remote repository state first unless
+  the user explicitly asks for local-only worktree state.

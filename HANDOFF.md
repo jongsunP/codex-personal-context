@@ -12,6 +12,9 @@ Do not store secrets here.
 - Use polite 존댓말 consistently.
 - Be concise, but explain important engineering decisions clearly.
 - When approvals are needed, proceed proactively by requesting the required approval.
+- When the user asks to confirm app or project progress, treat it as a request
+  to check remote Git first and answer from the remote-backed handoff/status
+  documents rather than from memory alone.
 
 ## Current Main Project
 
@@ -85,14 +88,20 @@ Latest project checkpoint commit:
   direct video input. Therefore the benchmark uses server-side frame sampling
   rather than assuming model inferiority.
 - TypeScript validation passed after the OpenAI benchmark implementation.
+- `SETUP.md` now documents the new-Mac setup audit, required tools, EAS/Apple
+  state, `.env.local` structure, key handling, gitignore audit, backup targets,
+  and a 30-minute setup checklist.
 - A dummy-key upload test confirmed the server reaches OpenAI authentication
   after video upload and frame extraction; a real `OPENAI_API_KEY` is still
   needed for the actual GPT-5.5 benchmark result.
 - The user's iPhone could open `http://10.10.7.17:8787/health` from Safari on the same Wi-Fi.
 - EAS preview environment variable was set:
   `EXPO_PUBLIC_AI_ANALYSIS_ENDPOINT=http://10.10.7.17:8787/api/analyze-session-video`.
-- Development API spend target is under KRW 10,000/month with max 20MB video, 3 analyses/day, 600 output tokens.
-- User must configure Gemini API billing/budget and local `.env.local`; API keys must not be committed.
+- Development API spend target is under KRW 10,000/month. The current OpenAI
+  benchmark defaults are max 50MB video, 3 analyses/day, 3200 output tokens,
+  18 sampled frames, and 1536px frame width.
+- User must configure local `.env.local` with `OPENAI_API_KEY` for the current
+  benchmark; API keys must not be committed.
 - Real AI analysis must go through a server/BFF endpoint; do not put Gemini or
   OpenAI API keys in the mobile app.
 

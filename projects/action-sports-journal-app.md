@@ -10,6 +10,13 @@
 - Current stage: Stage 3 real video-to-analysis prototype in progress
 - Latest project commit: `699457b Add setup audit guide`
 
+## Continuity Rule
+
+When the user asks to check Action Sports Journal progress, check the remote
+GitHub repository first and read the remote-backed project docs such as
+`docs/HANDOFF.md`, `docs/CURRENT_STAGE.md`, `docs/CONTINUITY_CHECKPOINT.md`,
+`docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md`, and `SETUP.md`.
+
 ## Confirmed Working
 
 - GitHub repository exists.
@@ -39,6 +46,8 @@
 - Structured benchmark fields include observations, patternRecognition,
   inferences, confidence, and selfCritique.
 - TypeScript validation passed.
+- `SETUP.md` was added as the new-Mac setup audit and 30-minute execution
+  checklist.
 - Dummy-key testing confirmed video upload and frame extraction reach OpenAI
   authentication. Actual benchmark still needs a real local `OPENAI_API_KEY`.
 - The user's iPhone could open `http://10.10.7.17:8787/health` on the same Wi-Fi.
