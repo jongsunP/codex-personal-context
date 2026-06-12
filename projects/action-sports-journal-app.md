@@ -8,7 +8,7 @@
 - Runtime: standalone EAS preview/internal distribution app on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
 - Current stage: Stage 3 real video-to-analysis prototype in progress
-- Latest project commit: `699457b Add setup audit guide`
+- Latest project commit: `b47cca4 Add parallel OpenAI benchmark foundations`
 
 ## Continuity Rule
 
@@ -36,20 +36,20 @@ GitHub repository first and read the remote-backed project docs such as
 - The mobile mock AI analysis fallback was removed.
 - `AI 체크하기` calls `EXPO_PUBLIC_AI_ANALYSIS_ENDPOINT`.
 - Local dev-server exists in `dev-server/index.ts`.
-- The dev-server currently contains an OpenAI GPT-5.5 benchmark implementation
-  for wakeboard video analysis quality testing.
+- The dev-server keeps Gemini as the app-facing endpoint and contains a parallel
+  OpenAI GPT-5.5 benchmark endpoint for wakeboard video analysis quality testing.
 - The OpenAI benchmark uses server-side whole-video frame sampling because
   official OpenAI docs list GPT-5.5 as text/image input, not direct video input.
 - The benchmark sends sampled frames to GPT-5.5 via Responses API with
   `reasoning.effort=xhigh`, high verbosity, a world-class wakeboard coaching
-  prompt, and strict structured JSON.
+  prompt, human-readable coaching output, and strict structured JSON.
 - Structured benchmark fields include observations, patternRecognition,
   inferences, confidence, and selfCritique.
 - TypeScript validation passed.
 - `SETUP.md` was added as the new-Mac setup audit and 30-minute execution
   checklist.
-- Dummy-key testing confirmed video upload and frame extraction reach OpenAI
-  authentication. Actual benchmark still needs a real local `OPENAI_API_KEY`.
+- Actual Gemini/OpenAI comparison still needs real local `GEMINI_API_KEY`,
+  `OPENAI_API_KEY`, and the same wakeboard comparison video.
 - The user's iPhone could open `http://10.10.7.17:8787/health` on the same Wi-Fi.
 - EAS preview environment variable was set:
   `EXPO_PUBLIC_AI_ANALYSIS_ENDPOINT=http://10.10.7.17:8787/api/analyze-session-video`.
@@ -71,7 +71,8 @@ GitHub repository first and read the remote-backed project docs such as
 - `src/types/index.ts`: domain types
 - `app.json`: Expo app config, bundle identifier, build numbers
 - `eas.json`: EAS build/submit config
-- `dev-server/index.ts`: local OpenAI GPT-5.5 benchmark analysis server
+- `dev-server/index.ts`: local Gemini analysis server plus parallel OpenAI
+  GPT-5.5 benchmark endpoint
 
 ## Current Boundary
 
@@ -91,10 +92,10 @@ Do not implement these yet:
 Focus on validating the OpenAI GPT-5.5 benchmark before making provider
 conclusions:
 
-1. Add local `.env.local` with `OPENAI_API_KEY`.
+1. Add local `.env.local` with `GEMINI_API_KEY` and `OPENAI_API_KEY`.
 2. Run `npm run server:dev`.
-3. Confirm `/health` returns OpenAI GPT-5.5 configured.
-4. Test the exact same wakeboard video used for Gemini output.
+3. Confirm `/health` returns Gemini and OpenAI benchmark configured.
+4. Test the exact same wakeboard video through Gemini and OpenAI benchmark.
 5. Compare GPT-5.5 output with Gemini output.
 6. Decide whether earlier OpenAI quality issues came from prompt, API usage,
    video input implementation, model limitation, or ChatGPT orchestration.
@@ -104,5 +105,5 @@ conclusions:
 Use this prompt when opening the project in a new Codex terminal session:
 
 ```text
-AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md를 먼저 읽고, 현재 dev-server의 OpenAI GPT-5.5 wakeboard benchmark 구현 상태에서 이어서 진행해줘. 실제 OPENAI_API_KEY로 같은 웨이크보드 영상을 테스트하고 Gemini 결과와 비교해줘.
+AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md, docs/OPENAI_BENCHMARK_REPORT.md를 먼저 읽고, Gemini는 유지한 상태에서 OpenAI GPT-5.5 wakeboard benchmark를 이어서 진행해줘. 실제 GEMINI_API_KEY와 OPENAI_API_KEY로 같은 웨이크보드 영상을 테스트하고 결과를 비교해줘.
 ```

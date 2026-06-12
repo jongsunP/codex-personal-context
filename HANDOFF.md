@@ -44,7 +44,7 @@ Stage 3 real video-to-analysis prototype in progress
 Latest project checkpoint commit:
 
 ```text
-699457b Add setup audit guide
+b47cca4 Add parallel OpenAI benchmark foundations
 ```
 
 ## Confirmed Project Facts
@@ -74,16 +74,14 @@ Latest project checkpoint commit:
 - Home screen layout was polished with scroll support, header metrics, clearer session cards, and status pills.
 - Visible prototype UI copy and mock data were localized for Korean users.
 - Guarded local Gemini analysis dev server exists in `dev-server/index.ts`.
-- The dev server calls Gemini Video Understanding through server-side Gemini API credentials.
-- The dev server was confirmed on port `8787` with `/health` returning
-  `geminiConfigured: true` and model `gemini-3.5-flash`.
-- On 2026-06-12, the dev analysis server was switched back to an OpenAI GPT-5.5
-  benchmark path to test whether ChatGPT-quality wakeboard coaching can be
-  reproduced through the OpenAI API before giving up on OpenAI.
+- `/api/analyze-session-video` remains the Gemini-backed app-facing endpoint.
+- `/api/benchmarks/openai-wakeboard-video` is a parallel GPT-5.5 benchmark
+  endpoint for same-video comparison; it does not replace Gemini.
 - Latest OpenAI benchmark implementation samples the whole video into evenly
   spaced frames, sends image inputs to GPT-5.5 through the Responses API, uses
-  `reasoning.effort=xhigh`, and returns structured JSON with observations,
-  pattern recognition, inferences, confidence, and self-critique.
+  `reasoning.effort=xhigh`, and returns human-readable coaching plus structured
+  JSON with observations, pattern recognition, inferences, confidence, and
+  self-critique.
 - OpenAI official model docs say GPT-5.5 supports text and image input, not
   direct video input. Therefore the benchmark uses server-side frame sampling
   rather than assuming model inferiority.
@@ -100,8 +98,8 @@ Latest project checkpoint commit:
 - Development API spend target is under KRW 10,000/month. The current OpenAI
   benchmark defaults are max 50MB video, 3 analyses/day, 3200 output tokens,
   18 sampled frames, and 1536px frame width.
-- User must configure local `.env.local` with `OPENAI_API_KEY` for the current
-  benchmark; API keys must not be committed.
+- User must configure local `.env.local` with `GEMINI_API_KEY` and
+  `OPENAI_API_KEY` for the comparison; API keys must not be committed.
 - Real AI analysis must go through a server/BFF endpoint; do not put Gemini or
   OpenAI API keys in the mobile app.
 
@@ -117,7 +115,7 @@ codex
 Suggested first prompt:
 
 ```text
-AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md를 먼저 읽고, 현재 dev-server의 OpenAI GPT-5.5 wakeboard benchmark 구현 상태에서 이어서 진행해줘. OpenAI를 포기하지 말고, 실제 OPENAI_API_KEY로 같은 웨이크보드 영상을 테스트한 뒤 Gemini 결과와 비교해줘.
+AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md, docs/OPENAI_BENCHMARK_REPORT.md를 먼저 읽고, Gemini는 유지한 상태에서 OpenAI GPT-5.5 wakeboard benchmark를 이어서 진행해줘. 실제 GEMINI_API_KEY와 OPENAI_API_KEY로 같은 웨이크보드 영상을 테스트한 뒤 결과를 비교해줘.
 ```
 
 ## Run Commands
