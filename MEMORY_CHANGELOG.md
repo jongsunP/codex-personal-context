@@ -24,3 +24,7 @@
   progress or user context, durable findings should be committed and pushed to
   the appropriate Git source of truth rather than left only in local state or
   chat history.
+- Corrected the local Codex startup sync instruction in `~/.codex/AGENTS.md`
+  from `cd ~/.Codex && git pull` to
+  `cd ~/repository/codex-personal-context && git pull`, because `~/.codex` is
+  an app state/config directory, not the Git source of truth.
