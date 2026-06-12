@@ -8,7 +8,7 @@
 - Runtime: Expo Go on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
 - Current stage: Stage 3 video-to-analysis prototype started; App Store / TestFlight preparation also exists
-- Latest local project checkpoint commit: `62bb3c1 Document video analysis API contract`
+- Latest local project checkpoint commit: `0cc8b5b Polish session home screen layout`
 
 ## Confirmed Working
 

@@ -41,7 +41,7 @@ App Store / TestFlight preparation started
 Latest local project checkpoint commit:
 
 ```text
-62bb3c1 Document video analysis API contract
+0cc8b5b Polish session home screen layout
 ```
 
 ## Confirmed Project Facts
@@ -63,6 +63,7 @@ Latest local project checkpoint commit:
 - The app can attach a selected video URI to a new Session.
 - A first AI analysis request flow exists with a mock fallback.
 - Remote analysis responses are normalized before rendering.
+- Home screen layout was polished with scroll support, header metrics, clearer session cards, and status pills.
 - Real OpenAI analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
 
 ## Resume Commands
