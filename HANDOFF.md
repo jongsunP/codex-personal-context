@@ -34,13 +34,14 @@ Current status:
 ```text
 Stage 1 complete
 Stage 2 local ActivityGroup / Session prototype complete
+Stage 3 video-to-analysis prototype started
 App Store / TestFlight preparation started
 ```
 
 Latest local project checkpoint commit:
 
 ```text
-b5d4eb1 Add continuity checkpoint for App Store prep
+ef942d8 Add video analysis prototype flow
 ```
 
 ## Confirmed Project Facts
@@ -57,6 +58,10 @@ b5d4eb1 Add continuity checkpoint for App Store prep
 - Latest checkpoint exists in `docs/CONTINUITY_CHECKPOINT.md`.
 - App Store build identifiers were added to `app.json`.
 - Initial EAS config exists in `eas.json`.
+- `expo-image-picker` is installed for selecting session videos.
+- The app can attach a selected video URI to a new Session.
+- A first AI analysis request flow exists with a mock fallback.
+- Real OpenAI analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
 
 ## Resume Commands
 
@@ -93,7 +98,7 @@ Use Node 20 or newer for Expo.
 
 ## Do Not Implement Yet
 
-- AI integration
+- Real server-side OpenAI integration
 - Database
 - Login or phone authentication
 - Real video upload
@@ -105,16 +110,17 @@ Use Node 20 or newer for Expo.
 
 ## Next Likely Work
 
-Do not add product features yet.
+Do not add unrelated product features yet.
 
-The next work should focus on release-path validation:
+The next work should focus on validating the first video-to-analysis flow:
 
-1. Ensure local project commits are pushed to GitHub.
-2. Confirm Expo account login with EAS CLI.
-3. Confirm Apple Developer Program / App Store Connect access.
-4. Create or verify the App Store Connect app record for `com.jongsunp.actionsportsjournal`.
-5. Run an iOS production EAS build.
-6. Submit the build to App Store Connect / TestFlight.
+1. Run the app on the physical iPhone.
+2. Add a Session.
+3. Select a video.
+4. Save the Session.
+5. Tap `Request AI Check`.
+6. Confirm the mock analysis result appears.
+7. Then add a minimal server/BFF endpoint for real OpenAI analysis.
 
 ## Other Context Files
 

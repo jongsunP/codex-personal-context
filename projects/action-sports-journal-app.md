@@ -7,8 +7,8 @@
 - Platform: iOS-first React Native app
 - Runtime: Expo Go on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
-- Current stage: Stage 2 complete; App Store / TestFlight preparation started
-- Latest local project checkpoint commit: `b5d4eb1 Add continuity checkpoint for App Store prep`
+- Current stage: Stage 3 video-to-analysis prototype started; App Store / TestFlight preparation also exists
+- Latest local project checkpoint commit: `ef942d8 Add video analysis prototype flow`
 
 ## Confirmed Working
 
@@ -21,6 +21,10 @@
 - Add Session opens an input flow.
 - Saving a session adds it to the in-memory list.
 - Added sessions disappear after reload because persistence is intentionally not implemented yet.
+- `expo-image-picker` is installed for selecting session videos.
+- A selected video can be attached to a new Session.
+- `Request AI Check` returns a local mock analysis result unless `EXPO_PUBLIC_AI_ANALYSIS_ENDPOINT` is configured.
+- Real OpenAI analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
 
 ## Important Files
 
@@ -41,7 +45,7 @@
 
 Do not implement these yet:
 
-- AI integration
+- Real server-side OpenAI integration
 - Database
 - Login or phone authentication
 - Real video upload
@@ -53,14 +57,15 @@ Do not implement these yet:
 
 ## Next Likely Step
 
-Focus on release-path validation before more product work:
+Focus on validating the first feature flow before more infrastructure:
 
-1. Push local project commits to GitHub.
-2. Confirm Expo/EAS login.
-3. Confirm Apple Developer and App Store Connect readiness.
-4. Create or verify the App Store Connect app record for `com.jongsunp.actionsportsjournal`.
-5. Run `eas build --platform ios --profile production`.
-6. Run `eas submit --platform ios --profile production` or upload manually if needed.
+1. Run the app on the physical iPhone.
+2. Add a Session.
+3. Select a video.
+4. Save the Session.
+5. Tap `Request AI Check`.
+6. Confirm the mock analysis result appears.
+7. Then add a minimal server/BFF endpoint for real OpenAI analysis.
 
 ## New Session Prompt
 
