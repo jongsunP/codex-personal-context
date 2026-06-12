@@ -13,3 +13,10 @@
   Codex for side projects, ChatGPT for personal questions and coaching.
 - Confirmed Action Sports Journal latest local project commit is
   `c7cdfe9 Switch dev analysis server to Gemini video input`.
+- Updated Action Sports Journal latest project commit to
+  `802bd94 Benchmark OpenAI wakeboard analysis`.
+- Recorded that the current priority is an OpenAI GPT-5.5 wakeboard analysis
+  benchmark before giving up on OpenAI. The implementation uses whole-video
+  frame sampling, Responses API image inputs, xhigh reasoning, and structured
+  coaching JSON. Actual GPT-5.5 benchmark still requires a local
+  `OPENAI_API_KEY`.

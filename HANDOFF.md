@@ -41,7 +41,7 @@ Stage 3 real video-to-analysis prototype in progress
 Latest local project checkpoint commit:
 
 ```text
-c7cdfe9 Switch dev analysis server to Gemini video input
+802bd94 Benchmark OpenAI wakeboard analysis
 ```
 
 ## Confirmed Project Facts
@@ -74,12 +74,27 @@ c7cdfe9 Switch dev analysis server to Gemini video input
 - The dev server calls Gemini Video Understanding through server-side Gemini API credentials.
 - The dev server was confirmed on port `8787` with `/health` returning
   `geminiConfigured: true` and model `gemini-3.5-flash`.
+- On 2026-06-12, the dev analysis server was switched back to an OpenAI GPT-5.5
+  benchmark path to test whether ChatGPT-quality wakeboard coaching can be
+  reproduced through the OpenAI API before giving up on OpenAI.
+- Latest OpenAI benchmark implementation samples the whole video into evenly
+  spaced frames, sends image inputs to GPT-5.5 through the Responses API, uses
+  `reasoning.effort=xhigh`, and returns structured JSON with observations,
+  pattern recognition, inferences, confidence, and self-critique.
+- OpenAI official model docs say GPT-5.5 supports text and image input, not
+  direct video input. Therefore the benchmark uses server-side frame sampling
+  rather than assuming model inferiority.
+- TypeScript validation passed after the OpenAI benchmark implementation.
+- A dummy-key upload test confirmed the server reaches OpenAI authentication
+  after video upload and frame extraction; a real `OPENAI_API_KEY` is still
+  needed for the actual GPT-5.5 benchmark result.
 - The user's iPhone could open `http://10.10.7.17:8787/health` from Safari on the same Wi-Fi.
 - EAS preview environment variable was set:
   `EXPO_PUBLIC_AI_ANALYSIS_ENDPOINT=http://10.10.7.17:8787/api/analyze-session-video`.
 - Development API spend target is under KRW 10,000/month with max 20MB video, 3 analyses/day, 600 output tokens.
 - User must configure Gemini API billing/budget and local `.env.local`; API keys must not be committed.
-- Real Gemini analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
+- Real AI analysis must go through a server/BFF endpoint; do not put Gemini or
+  OpenAI API keys in the mobile app.
 
 ## Resume Commands
 
@@ -93,7 +108,7 @@ codex
 Suggested first prompt:
 
 ```text
-AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md를 먼저 읽고, iPhone standalone preview build와 local Gemini dev-server 연결 상태에서 이어서 진행해줘.
+AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md를 먼저 읽고, 현재 dev-server의 OpenAI GPT-5.5 wakeboard benchmark 구현 상태에서 이어서 진행해줘. OpenAI를 포기하지 말고, 실제 OPENAI_API_KEY로 같은 웨이크보드 영상을 테스트한 뒤 Gemini 결과와 비교해줘.
 ```
 
 ## Run Commands
@@ -151,15 +166,19 @@ Apple Team ID: L339A3KKLC
 
 Do not add unrelated product features yet.
 
-The next work should focus on validating the real iPhone-to-Gemini flow:
+The next work should focus on validating the OpenAI GPT-5.5 wakeboard benchmark
+before making provider conclusions:
 
-1. Install the latest EAS preview build from current `master`.
+1. Add local `.env.local` with `OPENAI_API_KEY` and GPT-5.5 benchmark settings.
 2. Run `npm run server:dev`.
-3. Confirm iPhone Safari opens `http://10.10.7.17:8787/health` or the current Mac LAN IP.
-4. Add a Session with a short video under 20 MB in the standalone app.
-5. Tap `AI 체크하기`.
-6. Confirm real Korean Gemini-backed feedback renders in the app.
-7. If it fails, inspect the dev-server terminal error first.
+3. Confirm `/health` returns `provider: "openai"`, `model: "gpt-5.5"`, and
+   `openaiConfigured: true`.
+4. Test the exact same wakeboard video used for Gemini comparison.
+5. Save the GPT-5.5 JSON output.
+6. Compare it with the current Gemini output.
+7. Report whether poor quality was caused by weak prompt, incorrect API usage,
+   video input implementation, model limitation, or ChatGPT internal
+   orchestration differences.
 
 ## Other Context Files
 
