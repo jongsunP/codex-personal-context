@@ -1,5 +1,27 @@
 # Memory Changelog
 
+## 2026-06-13
+
+- Updated Action Sports Journal project memory after the evidence-first video
+  analysis validation day.
+- Recorded latest project commits:
+  - `e5e6d98 Validate evidence-first video analysis`
+  - `4664bfb Prioritize trick initiation evidence`
+- Recorded current recommended architecture:
+  `Video -> Gemini Evidence Extraction -> User Confirmation -> Coaching Engine -> Stored Session Intelligence`.
+- Recorded the current model split: Gemini is primary for video/motion evidence
+  extraction; GPT is preferred for coaching/reporting after evidence and rider
+  intent are confirmed.
+- Recorded that exact Back Roll vs Tantrum classification is still not reliable
+  enough to bypass user confirmation, but repeated Back Roll tests now fail in a
+  more plausible Back Roll/Tantrum-family range instead of unrelated tricks.
+- Recorded the wakeboard domain rule for future evaluation: trick identity
+  should be determined primarily from stance, edge, approach, takeoff, pop, and
+  rotation initiation. Landing and crash are outcomes, not primary
+  trick-classification evidence.
+- Recorded local evidence extraction stability setting:
+  `GEMINI_EVIDENCE_MAX_OUTPUT_TOKENS=6000`.
+
 ## 2026-06-12
 
 - Added initial personal context bootstrap structure.

@@ -8,7 +8,7 @@
 - Runtime: standalone EAS preview/internal distribution app on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
 - Current stage: Stage 3 real video-to-analysis prototype in progress
-- Latest project commit: `b47cca4 Add parallel OpenAI benchmark foundations`
+- Latest project commit: `4664bfb Prioritize trick initiation evidence`
 
 ## Continuity Rule
 
@@ -38,19 +38,33 @@ GitHub repository first and read the remote-backed project docs such as
 - Local dev-server exists in `dev-server/index.ts`.
 - The dev-server keeps Gemini as the app-facing endpoint and contains a parallel
   OpenAI GPT-5.5 benchmark endpoint for wakeboard video analysis quality testing.
-- The OpenAI benchmark uses server-side whole-video frame sampling because
-  official OpenAI docs list GPT-5.5 as text/image input, not direct video input.
-- The benchmark sends sampled frames to GPT-5.5 via Responses API with
-  `reasoning.effort=xhigh`, high verbosity, a world-class wakeboard coaching
-  prompt, human-readable coaching output, and strict structured JSON.
-- Structured benchmark fields include observations, patternRecognition,
-  inferences, confidence, and selfCritique.
+- Real Gemini video analysis and the OpenAI benchmark path both work locally.
+- Gemini evidence extraction exists at `/api/extract-session-evidence`.
+- The current recommended architecture is:
+  `Video -> Gemini Evidence Extraction -> User Confirmation -> Coaching Engine -> Stored Session Intelligence`.
+- GPT is currently stronger for coaching/report generation, while Gemini is
+  currently stronger for video/motion evidence extraction.
+- User-confirmed trick flow is implemented; user-confirmed trick intent is kept
+  separate from the AI-estimated trick.
+- Motion-aware dense sampling is implemented for the OpenAI benchmark.
+- Gemini 503 retry/fallback handling exists. `gemini-2.5-flash-lite` is
+  degraded fallback only, not a trick-recognition quality benchmark.
+- Evidence JSON truncation was mitigated by setting
+  `GEMINI_EVIDENCE_MAX_OUTPUT_TOKENS=6000`.
+- Lightweight consistency validation flags internally inconsistent evidence
+  before coaching.
+- Wakeboard trick identity should be evaluated primarily from stance, edge,
+  approach, takeoff, pop, and rotation initiation. Landing and crash are
+  outcomes, not primary trick-classification evidence. A crashed HS Back Roll is
+  still an HS Back Roll attempt.
 - TypeScript validation passed.
 - `SETUP.md` was added as the new-Mac setup audit and 30-minute execution
   checklist.
-- Actual Gemini/OpenAI comparison still needs real local `GEMINI_API_KEY`,
-  `OPENAI_API_KEY`, and the same wakeboard comparison video.
-- The user's iPhone could open `http://10.10.7.17:8787/health` on the same Wi-Fi.
+- Same-video tests showed exact Back Roll vs Tantrum recognition is still not
+  reliable enough to bypass user confirmation, but failures now stay in a more
+  plausible Back Roll/Tantrum-family range rather than clearly unrelated tricks.
+- The user's iPhone could open the current local `/health` endpoint on the same
+  Wi-Fi after using HTTP explicitly.
 - EAS preview environment variable was set:
   `EXPO_PUBLIC_AI_ANALYSIS_ENDPOINT=http://10.10.7.17:8787/api/analyze-session-video`.
 - Real Gemini analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
@@ -89,21 +103,22 @@ Do not implement these yet:
 
 ## Next Likely Step
 
-Focus on validating the OpenAI GPT-5.5 benchmark before making provider
-conclusions:
+Do not add unrelated product features yet.
 
-1. Add local `.env.local` with `GEMINI_API_KEY` and `OPENAI_API_KEY`.
-2. Run `npm run server:dev`.
-3. Confirm `/health` returns Gemini and OpenAI benchmark configured.
-4. Test the exact same wakeboard video through Gemini and OpenAI benchmark.
-5. Compare GPT-5.5 output with Gemini output.
-6. Decide whether earlier OpenAI quality issues came from prompt, API usage,
-   video input implementation, model limitation, or ChatGPT orchestration.
+Continue validating the evidence-first loop:
+
+1. Run the same wakeboard video through Gemini evidence extraction.
+2. Confirm or correct the intended trick in the app.
+3. Compare GPT vs Gemini coaching quality after the confirmed trick is supplied.
+4. Evaluate whether the classifier correctly prioritizes stance, edge, approach,
+   takeoff, pop, and rotation initiation over landing/crash outcome.
+5. Start shaping stored Session intelligence only after the evidence and
+   confirmation loop is stable.
 
 ## New Session Prompt
 
 Use this prompt when opening the project in a new Codex terminal session:
 
 ```text
-AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md, docs/OPENAI_BENCHMARK_REPORT.md를 먼저 읽고, Gemini는 유지한 상태에서 OpenAI GPT-5.5 wakeboard benchmark를 이어서 진행해줘. 실제 GEMINI_API_KEY와 OPENAI_API_KEY로 같은 웨이크보드 영상을 테스트하고 결과를 비교해줘.
+AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md, docs/OPENAI_BENCHMARK_REPORT.md를 먼저 읽고, evidence-first wakeboard analysis 상태를 이어서 진행해줘. Gemini evidence extraction은 stance/edge/approach/takeoff/pop/rotation initiation을 landing/crash보다 우선해서 평가하고, 사용자가 확정한 trick intent를 coaching에 우선 적용해줘.
 ```
