@@ -7,7 +7,8 @@
 - Platform: iOS-first React Native app
 - Runtime: Expo Go on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
-- Current stage: Stage 1 initial setup
+- Current stage: Stage 1 complete
+- Latest Stage 1 commit: `8d44d7b Add Stage 1 repository review`
 
 ## Confirmed Working
 
@@ -15,6 +16,7 @@
 - Expo SDK was downgraded to SDK 54 for the user's current App Store Expo Go.
 - The app is visible on the user's physical iPhone.
 - The first screen shows static text from `src/features/sessions/HomeScreen.tsx`.
+- `REVIEW.md` was added and pushed as the Stage 1 repository review.
 
 ## Important Files
 
@@ -42,4 +44,4 @@ Do not implement these yet:
 
 ## Next Likely Step
 
-When the user is ready, review the Stage 1 app structure together and decide whether to start a local-only Session prototype.
+When the user is ready, review the Stage 1 app structure together and decide whether to start Stage 2 as a local-only Session prototype.

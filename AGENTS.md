@@ -18,11 +18,12 @@ The user's current main project is Action Sports Journal.
 - Local path: `/Users/parkjongsun/Repository/action-sports-journal-app`
 - GitHub remote: `https://github.com/jongsunP/action-sports-journal-app`
 - Product: iOS-first React Native action sports life log platform.
-- Current stage: Stage 1 initial setup.
+- Current stage: Stage 1 complete. Next work should start from Stage 2 planning/prototype only when the user asks.
 - Current Expo SDK: `~54.0.35` for compatibility with the user's App Store Expo Go on a physical iPhone.
 - Current mobile status: The app opens on the user's physical iPhone through Expo Go.
 - First screen source: `src/features/sessions/HomeScreen.tsx`
 - Root entry: `App.tsx`
+- Latest Stage 1 commit: `8d44d7b Add Stage 1 repository review`
 
 ## Project Rules To Remember
 
