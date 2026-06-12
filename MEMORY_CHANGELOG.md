@@ -28,3 +28,6 @@
   from `cd ~/.Codex && git pull` to
   `cd ~/repository/codex-personal-context && git pull`, because `~/.codex` is
   an app state/config directory, not the Git source of truth.
+- Added the user's remote-first rule: remote Git state is the default source of
+  truth for continuity; local files are working copies unless the user
+  explicitly says local unpushed work should be treated as authoritative.

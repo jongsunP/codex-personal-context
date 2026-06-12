@@ -11,6 +11,9 @@ session can understand the same user and continue useful work quickly.
 
 AI memory is secondary. Git-based context is primary.
 
+Remote Git is the priority. Local files are useful working copies, but durable
+context should be pulled from and pushed to the relevant remote repository.
+
 ## Operating Principle
 
 Always prioritize durable, documentable context over transient session memory.
@@ -32,6 +35,9 @@ When starting a new session:
 
 If this repository does not exist locally, clone it. If it exists, pull it
 before making decisions that depend on long-term context.
+
+When remote and local context differ, prefer the remote state unless the user
+explicitly says to preserve or promote local unpushed changes.
 
 ## Read Order
 
@@ -108,4 +114,3 @@ The user's purpose is not simply to use AI. The purpose is to build a personal
 knowledge system that continues even when the AI changes.
 
 All judgments and suggestions should support this goal.
-

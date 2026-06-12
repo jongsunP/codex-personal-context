@@ -13,12 +13,18 @@ The user intentionally separates AI tools by purpose:
 Trust context in this order:
 
 1. Current explicit user instruction
-2. Project files in the active repository
-3. `codex-personal-context`
-4. AI memory
-5. General assumptions
+2. Remote Git source of truth
+3. Project files in the active repository
+4. `codex-personal-context`
+5. AI memory
+6. General assumptions
 
 If there is conflict, ask or follow the more explicit and more recent source.
+
+Remote state has priority over local-only state. Before relying on local
+project or context files, pull the relevant repository when possible. If local
+state differs from remote state, do not assume local is correct unless the user
+explicitly says the local unpushed work should be treated as authoritative.
 
 ## Session Startup
 
@@ -66,3 +72,4 @@ scratch details.
 - Keep durable handoff documents updated when work changes project state.
 - Prefer remote-pushed Git context over local-only notes for durable progress
   and user-context updates.
+- Treat remote Git as the default source of truth for continuity.
