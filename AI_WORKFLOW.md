@@ -39,6 +39,24 @@ When discovering something likely to matter in future sessions, the AI should:
 
 Do not store secrets or sensitive credentials.
 
+## Remote Continuity Rule
+
+When the user asks to check project progress, verify current state, or confirm
+something about the user, do not leave durable findings only in local state or
+chat history.
+
+If the finding is likely to matter in future sessions, update the appropriate
+remote-backed Git source of truth:
+
+- Project progress belongs in the relevant project repository handoff docs.
+- User-level preferences and cross-project context belong in
+  `codex-personal-context`.
+- Commit and push durable context updates when safe, so another AI session or
+  another computer can continue from the same facts.
+
+Avoid committing secrets, credentials, private customer data, or transient
+scratch details.
+
 ## Preferred AI Behavior
 
 - Be proactive once context is clear.
@@ -46,4 +64,5 @@ Do not store secrets or sensitive credentials.
 - Explain important tradeoffs.
 - Preserve project continuity.
 - Keep durable handoff documents updated when work changes project state.
-
+- Prefer remote-pushed Git context over local-only notes for durable progress
+  and user-context updates.

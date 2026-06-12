@@ -20,3 +20,7 @@
   frame sampling, Responses API image inputs, xhigh reasoning, and structured
   coaching JSON. Actual GPT-5.5 benchmark still requires a local
   `OPENAI_API_KEY`.
+- Added the remote continuity rule: when the user asks to check project
+  progress or user context, durable findings should be committed and pushed to
+  the appropriate Git source of truth rather than left only in local state or
+  chat history.
