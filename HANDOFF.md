@@ -41,7 +41,7 @@ App Store / TestFlight preparation started
 Latest local project checkpoint commit:
 
 ```text
-149b2bf Localize prototype UI copy
+ea832e4 Add guarded OpenAI analysis dev server
 ```
 
 ## Confirmed Project Facts
@@ -65,6 +65,9 @@ Latest local project checkpoint commit:
 - Remote analysis responses are normalized before rendering.
 - Home screen layout was polished with scroll support, header metrics, clearer session cards, and status pills.
 - Visible prototype UI copy and mock data were localized for Korean users.
+- Guarded local OpenAI analysis dev server exists in `dev-server/index.ts`.
+- Development API spend target is under KRW 10,000/month with max 20MB video, 3 analyses/day, 600 output tokens.
+- User must configure OpenAI Platform billing/budget and local `.env.local`; API keys must not be committed.
 - Real OpenAI analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
 
 ## Resume Commands

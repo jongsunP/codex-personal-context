@@ -8,7 +8,7 @@
 - Runtime: Expo Go on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
 - Current stage: Stage 3 video-to-analysis prototype started; App Store / TestFlight preparation also exists
-- Latest local project checkpoint commit: `149b2bf Localize prototype UI copy`
+- Latest local project checkpoint commit: `ea832e4 Add guarded OpenAI analysis dev server`
 
 ## Confirmed Working
 
@@ -34,6 +34,7 @@
 - `docs/CURRENT_STAGE.md`: current stage summary
 - `docs/STAGE_2_PLAN.md`: Stage 2 scope
 - `docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md`: video analysis API contract
+- `docs/DEV_AI_ANALYSIS_SETUP.md`: local API setup and spend guardrails
 - `App.tsx`: root app entry
 - `src/features/sessions/HomeScreen.tsx`: first visible screen
 - `src/features/groups/mockActivityGroups.ts`: local mock ActivityGroups
