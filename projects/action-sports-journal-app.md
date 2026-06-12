@@ -3,12 +3,12 @@
 ## Current State
 
 - Repository: `https://github.com/jongsunP/action-sports-journal-app`
-- Local path: `/Users/parkjongsun/Repository/action-sports-journal-app`
+- Local path: `/Users/parkjongsun/repository/action-sports-journal-app`
 - Platform: iOS-first React Native app
 - Runtime: standalone EAS preview/internal distribution app on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
 - Current stage: Stage 3 real video-to-analysis prototype in progress
-- Latest local project checkpoint commit: `163a6ee Refresh handoff after iPhone preview setup`
+- Latest local project commit: `c7cdfe9 Switch dev analysis server to Gemini video input`
 
 ## Confirmed Working
 
@@ -29,12 +29,12 @@
 - The mobile mock AI analysis fallback was removed.
 - `AI 체크하기` calls `EXPO_PUBLIC_AI_ANALYSIS_ENDPOINT`.
 - Local dev-server exists in `dev-server/index.ts`.
-- The dev-server calls OpenAI Responses API using server-side `OPENAI_API_KEY`.
-- `/health` was confirmed with `openAiConfigured: true` and model `gpt-5-mini`.
+- The dev-server calls Gemini Video Understanding using server-side Gemini API credentials.
+- `/health` was confirmed with `geminiConfigured: true` and model `gemini-3.5-flash`.
 - The user's iPhone could open `http://10.10.7.17:8787/health` on the same Wi-Fi.
 - EAS preview environment variable was set:
   `EXPO_PUBLIC_AI_ANALYSIS_ENDPOINT=http://10.10.7.17:8787/api/analyze-session-video`.
-- Real OpenAI analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
+- Real Gemini analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
 
 ## Important Files
 
@@ -52,7 +52,7 @@
 - `src/types/index.ts`: domain types
 - `app.json`: Expo app config, bundle identifier, build numbers
 - `eas.json`: EAS build/submit config
-- `dev-server/index.ts`: local OpenAI-backed analysis server
+- `dev-server/index.ts`: local Gemini-backed analysis server
 
 ## Current Boundary
 
@@ -76,7 +76,7 @@ Focus on validating the real standalone iPhone analysis loop before more infrast
 3. Confirm iPhone Safari opens `http://10.10.7.17:8787/health` or the current Mac LAN IP.
 4. Add a Session with a short video under 20 MB in the standalone app.
 5. Tap `AI 체크하기`.
-6. Confirm Korean feedback renders in the app.
+6. Confirm real Korean Gemini-backed feedback renders in the app.
 7. If it fails, inspect the dev-server terminal error first.
 
 ## New Session Prompt
@@ -84,5 +84,5 @@ Focus on validating the real standalone iPhone analysis loop before more infrast
 Use this prompt when opening the project in a new Codex terminal session:
 
 ```text
-AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md를 먼저 읽고, iPhone standalone preview build와 local OpenAI dev-server 연결 상태에서 이어서 진행해줘.
+AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md를 먼저 읽고, iPhone standalone preview build와 local Gemini dev-server 연결 상태에서 이어서 진행해줘.
 ```

@@ -26,7 +26,7 @@ https://github.com/jongsunP/action-sports-journal-app
 Local path:
 
 ```text
-/Users/parkjongsun/Repository/action-sports-journal-app
+/Users/parkjongsun/repository/action-sports-journal-app
 ```
 
 Current status:
@@ -41,7 +41,7 @@ Stage 3 real video-to-analysis prototype in progress
 Latest local project checkpoint commit:
 
 ```text
-163a6ee Refresh handoff after iPhone preview setup
+c7cdfe9 Switch dev analysis server to Gemini video input
 ```
 
 ## Confirmed Project Facts
@@ -70,36 +70,36 @@ Latest local project checkpoint commit:
 - Remote analysis responses are normalized before rendering.
 - Home screen layout was polished with scroll support, header metrics, clearer session cards, and status pills.
 - Visible prototype UI copy and mock data were localized for Korean users.
-- Guarded local OpenAI analysis dev server exists in `dev-server/index.ts`.
-- The dev server calls OpenAI Responses API with server-side `OPENAI_API_KEY`.
+- Guarded local Gemini analysis dev server exists in `dev-server/index.ts`.
+- The dev server calls Gemini Video Understanding through server-side Gemini API credentials.
 - The dev server was confirmed on port `8787` with `/health` returning
-  `openAiConfigured: true` and model `gpt-5-mini`.
+  `geminiConfigured: true` and model `gemini-3.5-flash`.
 - The user's iPhone could open `http://10.10.7.17:8787/health` from Safari on the same Wi-Fi.
 - EAS preview environment variable was set:
   `EXPO_PUBLIC_AI_ANALYSIS_ENDPOINT=http://10.10.7.17:8787/api/analyze-session-video`.
 - Development API spend target is under KRW 10,000/month with max 20MB video, 3 analyses/day, 600 output tokens.
-- User must configure OpenAI Platform billing/budget and local `.env.local`; API keys must not be committed.
-- Real OpenAI analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
+- User must configure Gemini API billing/budget and local `.env.local`; API keys must not be committed.
+- Real Gemini analysis must go through a server/BFF endpoint; do not put API keys in the mobile app.
 
 ## Resume Commands
 
 Open the project in a terminal:
 
 ```bash
-cd /Users/parkjongsun/Repository/action-sports-journal-app
+cd /Users/parkjongsun/repository/action-sports-journal-app
 codex
 ```
 
 Suggested first prompt:
 
 ```text
-AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md를 먼저 읽고, iPhone standalone preview build와 local OpenAI dev-server 연결 상태에서 이어서 진행해줘.
+AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md를 먼저 읽고, iPhone standalone preview build와 local Gemini dev-server 연결 상태에서 이어서 진행해줘.
 ```
 
 ## Run Commands
 
 ```bash
-cd /Users/parkjongsun/Repository/action-sports-journal-app
+cd /Users/parkjongsun/repository/action-sports-journal-app
 npm install
 npm run server:dev
 ```
@@ -151,14 +151,14 @@ Apple Team ID: L339A3KKLC
 
 Do not add unrelated product features yet.
 
-The next work should focus on validating the real iPhone-to-OpenAI flow:
+The next work should focus on validating the real iPhone-to-Gemini flow:
 
 1. Install the latest EAS preview build from current `master`.
 2. Run `npm run server:dev`.
 3. Confirm iPhone Safari opens `http://10.10.7.17:8787/health` or the current Mac LAN IP.
 4. Add a Session with a short video under 20 MB in the standalone app.
 5. Tap `AI 체크하기`.
-6. Confirm Korean feedback renders in the app.
+6. Confirm real Korean Gemini-backed feedback renders in the app.
 7. If it fails, inspect the dev-server terminal error first.
 
 ## Other Context Files
