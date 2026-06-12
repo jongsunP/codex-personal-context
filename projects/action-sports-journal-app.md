@@ -8,7 +8,7 @@
 - Runtime: standalone EAS preview/internal distribution app on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
 - Current stage: Stage 3 real video-to-analysis prototype in progress
-- Latest local project commit: `802bd94 Benchmark OpenAI wakeboard analysis`
+- Latest project commit: `699457b Add setup audit guide`
 
 ## Confirmed Working
 
