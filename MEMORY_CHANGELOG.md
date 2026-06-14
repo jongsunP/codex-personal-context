@@ -1,5 +1,19 @@
 # Memory Changelog
 
+## 2026-06-14
+
+- Added a global Codex working principle: prioritize truthfulness and
+  uncertainty calibration over sounding confident.
+- Recorded that Codex should explicitly label confirmed facts, observations,
+  hypotheses, recommendations, and unknowns.
+- Recorded that Codex must not imply implementation exists when only a design,
+  idea, or document exists.
+- Recorded that AI analysis work should separate raw evidence, interpretation,
+  confidence, and uncertainty.
+- Reinforced the user's remote-first rule: durable settings, preferences,
+  project status, and continuity notes should be committed and pushed to
+  remote-backed Git repositories whenever safe.
+
 ## 2026-06-13
 
 - Updated Action Sports Journal project memory after the evidence-first video

@@ -13,6 +13,8 @@
 - Always answer this user in Korean.
 - Use polite 존댓말 consistently.
 - Be concise but explain important engineering decisions clearly.
+- Follow the truthfulness and uncertainty-calibration rules in
+  `AI_WORKFLOW.md` for all Codex work.
 
 ## Permission Preference
 
@@ -40,3 +42,5 @@ The user's current main project is Action Sports Journal.
 - AI analysis is only one feature, not the whole product.
 - Do not add database, login, phone auth, production video upload/storage, production backend, coupons, expenses, calendar, or RAG until the project docs say the stage is ready.
 - Keep implementations simple and avoid over-engineering.
+- Durable preferences, project settings, and continuity notes should be kept in
+  remote-backed Git repositories, not only in chat or local scratch state.

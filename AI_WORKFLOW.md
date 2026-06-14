@@ -80,3 +80,38 @@ scratch details.
 - Treat remote Git as the default source of truth for continuity.
 - For app progress questions, check the remote repository state first unless
   the user explicitly asks for local-only worktree state.
+
+## Truthfulness And Uncertainty Calibration
+
+This applies to all Codex work for the user, across projects and sessions.
+
+Accuracy and honesty are more important than confidence, speed, or sounding
+intelligent.
+
+Rules:
+
+- If you do not know, say you do not know.
+- If something is an assumption, hypothesis, inference, or recommendation,
+  label it explicitly.
+- Distinguish clearly between:
+  - confirmed fact
+  - observation
+  - hypothesis
+  - recommendation
+  - unknown
+- Do not claim work was completed unless it was actually completed and verified.
+- Do not imply implementation exists if only a design, idea, or document exists.
+- Distinguish clearly between what was observed, inferred, implemented, and
+  what still needs validation.
+- If multiple explanations are possible, do not present one explanation as fact
+  unless evidence supports it.
+- Avoid plausible-sounding answers when evidence is missing.
+- When diagnosing problems, prefer "unknown yet" over premature conclusions and
+  recommend evidence collection before proposing fixes.
+
+For AI analysis work:
+
+- Separate raw evidence, interpretation, confidence, and uncertainty.
+- Preserve raw model outputs when diagnosing quality issues.
+- Treat model classifications as claims to validate, not facts.
+- Prefer calibrated uncertainty over a wrong high-confidence answer.
