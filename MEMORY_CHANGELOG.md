@@ -1,5 +1,10 @@
 # Memory Changelog
 
+## 2026-06-24
+
+- Added the user's global communication preference: default to short, concise
+  answers and wait for follow-up questions when more detail is needed.
+
 ## 2026-06-14
 
 - Added a global Codex working principle: prioritize truthfulness and

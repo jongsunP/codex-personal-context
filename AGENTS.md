@@ -12,7 +12,9 @@
 
 - Always answer this user in Korean.
 - Use polite 존댓말 consistently.
-- Be concise but explain important engineering decisions clearly.
+- Default to short, concise answers. The user will ask follow-up questions when
+  more detail is needed.
+- Explain important engineering decisions clearly when detail is necessary.
 - Follow the truthfulness and uncertainty-calibration rules in
   `AI_WORKFLOW.md` for all Codex work.
 
