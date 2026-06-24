@@ -25,6 +25,19 @@
 - The user prefers Codex to proceed proactively and request required approvals directly when tools need elevated permissions.
 - Still follow Codex/system permission prompts when they appear.
 
+## Wrap-Up Workflow
+
+- When the user says to wrap up, pause, close out, hand off, or summarize a
+  session checkpoint, proactively organize the current state instead of only
+  saying goodbye.
+- For project work, include completed work, decisions, verified facts, open
+  questions, changed files when relevant, and the next starting point.
+- Decide whether durable memory or project documentation should be updated. If
+  it should, update the appropriate Git-backed document/repository and commit
+  and push when safe.
+- For lightweight question/learning sessions, keep the wrap-up shorter but
+  still capture durable preferences or project decisions when they appeared.
+
 ## Active Project Context
 
 The user's current main project is Action Sports Journal.

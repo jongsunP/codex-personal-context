@@ -6,6 +6,10 @@
   user's questions should be short by default, while development work, CTO
   handoffs, implementation notes, decision records, and cross-session summaries
   should include as much detail as needed.
+- Added the user's wrap-up workflow preference: when the user asks to wrap up,
+  pause, close out, hand off, or summarize a checkpoint, Codex should
+  proactively organize the state and update durable Git-backed memory or
+  project docs when appropriate.
 
 ## 2026-06-14
 
