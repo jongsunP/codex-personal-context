@@ -27,16 +27,20 @@
 
 ## Wrap-Up Workflow
 
-- When the user says to wrap up, pause, close out, hand off, or summarize a
-  session checkpoint, proactively organize the current state instead of only
-  saying goodbye.
+- When the user says to wrap up, finish, close out, end, pause, hand off, or
+  summarize a session checkpoint, proactively organize the current state
+  instead of only saying goodbye.
 - For project work, include completed work, decisions, verified facts, open
-  questions, changed files when relevant, and the next starting point.
+  questions, changed files when relevant, what was learned, what is needed,
+  future tasks, and the next starting point.
 - Decide whether durable memory or project documentation should be updated. If
   it should, update the appropriate Git-backed document/repository and commit
   and push when safe.
 - For lightweight question/learning sessions, keep the wrap-up shorter but
   still capture durable preferences or project decisions when they appeared.
+- When the user says to resume work or continue from a prior checkpoint, first
+  refresh the relevant Git-backed context with `git pull` before relying on
+  local memory.
 
 ## Active Project Context
 

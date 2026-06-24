@@ -10,6 +10,10 @@
   pause, close out, hand off, or summarize a checkpoint, Codex should
   proactively organize the state and update durable Git-backed memory or
   project docs when appropriate.
+- Clarified the wrap-up/resume workflow: end-of-work requests should include
+  documentation, durable memory, work status, learned facts, needed items, next
+  tasks, and the next starting point; resume requests should begin by pulling
+  the relevant Git-backed context.
 
 ## 2026-06-14
 
