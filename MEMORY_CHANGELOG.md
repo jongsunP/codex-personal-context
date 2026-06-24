@@ -2,6 +2,9 @@
 
 ## 2026-06-24
 
+- Added the user's UI/readability preference: direct answers should minimize
+  screen footprint by avoiding unnecessary headings, long lists, and verbose
+  explanations.
 - Added `SESSION_WORKFLOW.md` as the durable cross-project session operating
   model for start, resume, wrap-up, session roles, repository boundaries,
   communication style, database safety, and continuity.

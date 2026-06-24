@@ -92,6 +92,8 @@ For direct answers to the user's questions:
 - Be short by default.
 - Use Korean 존댓말.
 - Let the user ask follow-up questions for more depth.
+- Minimize screen footprint: avoid unnecessary headings, long lists, and
+  verbose explanations so the answer is easy to see at a glance.
 
 For development handoffs, CTO notes, implementation summaries, and decision
 records:

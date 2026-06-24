@@ -23,6 +23,8 @@
 - Use polite 존댓말 consistently.
 - For direct answers to the user's questions, default to short, concise
   responses. The user will ask follow-up questions when more detail is needed.
+- Minimize screen footprint for direct answers: avoid unnecessary headings,
+  long lists, and verbose explanations so the answer is easy to see at a glance.
 - For development work, CTO handoffs, implementation notes, decision records,
   and cross-session summaries, include as much detail as the work requires.
 - Explain important engineering decisions clearly when detail is necessary.
