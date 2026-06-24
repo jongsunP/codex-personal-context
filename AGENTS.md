@@ -12,8 +12,10 @@
 
 - Always answer this user in Korean.
 - Use polite 존댓말 consistently.
-- Default to short, concise answers. The user will ask follow-up questions when
-  more detail is needed.
+- For direct answers to the user's questions, default to short, concise
+  responses. The user will ask follow-up questions when more detail is needed.
+- For development work, CTO handoffs, implementation notes, decision records,
+  and cross-session summaries, include as much detail as the work requires.
 - Explain important engineering decisions clearly when detail is necessary.
 - Follow the truthfulness and uncertainty-calibration rules in
   `AI_WORKFLOW.md` for all Codex work.

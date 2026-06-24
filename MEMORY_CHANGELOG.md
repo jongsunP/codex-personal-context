@@ -2,8 +2,10 @@
 
 ## 2026-06-24
 
-- Added the user's global communication preference: default to short, concise
-  answers and wait for follow-up questions when more detail is needed.
+- Added the user's global communication preference: direct answers to the
+  user's questions should be short by default, while development work, CTO
+  handoffs, implementation notes, decision records, and cross-session summaries
+  should include as much detail as needed.
 
 ## 2026-06-14
 
