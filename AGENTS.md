@@ -4,6 +4,8 @@
 
 - Treat this repository as the Git-based source of truth for long-term context.
 - Read `BOOTSTRAP.md` first in a new session.
+- Read `SESSION_WORKFLOW.md` for session start, resume, wrap-up, and
+  repository-boundary rules.
 - Prefer documented context over AI memory.
 - When a durable user preference or project principle is discovered, suggest
   adding it to this repository.

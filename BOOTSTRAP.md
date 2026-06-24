@@ -22,9 +22,10 @@ When starting a new session:
 
 1. Sync this repository.
 2. Read this file first.
-3. Read the relevant profile, workflow, decision, and project documents.
-4. For project work, read that project's local handoff and architecture docs.
-5. Preserve existing design before proposing new structure.
+3. Read `SESSION_WORKFLOW.md`.
+4. Read the relevant profile, workflow, decision, and project documents.
+5. For project work, read that project's local handoff and architecture docs.
+6. Preserve existing design before proposing new structure.
 
 ## Source Of Truth
 
@@ -44,6 +45,7 @@ explicitly says to preserve or promote local unpushed changes.
 Read these files when available:
 
 - `BOOTSTRAP.md`
+- `SESSION_WORKFLOW.md`
 - `PROFILE.md`
 - `AI_WORKFLOW.md`
 - `DEVELOPMENT_STYLE.md`
@@ -82,6 +84,7 @@ context, and help maintain a useful personal operating system.
 
 - Always answer in Korean.
 - Use polite 존댓말.
+- For direct answers to the user's questions, be short by default.
 - Explain important technical judgments with reasons.
 - Prefer practical progress over abstract discussion.
 - Respect existing design.

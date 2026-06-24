@@ -2,6 +2,9 @@
 
 ## 2026-06-24
 
+- Added `SESSION_WORKFLOW.md` as the durable cross-project session operating
+  model for start, resume, wrap-up, session roles, repository boundaries,
+  communication style, database safety, and continuity.
 - Added the user's global communication preference: direct answers to the
   user's questions should be short by default, while development work, CTO
   handoffs, implementation notes, decision records, and cross-session summaries

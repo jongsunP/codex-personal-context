@@ -45,12 +45,15 @@ c7cdfe9 Switch dev analysis server to Gemini video input
 ## How To Use
 
 Start with `BOOTSTRAP.md` when a new Codex session needs to understand the user.
-Then read `HANDOFF.md` for current continuation context. For project work, also
-read the target project's `AGENTS.md` and handoff docs.
+Then read `SESSION_WORKFLOW.md` and `HANDOFF.md` for current continuation
+context. For project work, also read the target project's `AGENTS.md` and
+handoff docs.
 
 ## Core Files
 
 - `BOOTSTRAP.md`: first file to read in a new AI session
+- `SESSION_WORKFLOW.md`: start, resume, wrap-up, session-role, and repository
+  boundary rules
 - `PROFILE.md`: stable user profile
 - `AI_WORKFLOW.md`: how the user separates AI tools and context
 - `DEVELOPMENT_STYLE.md`: coding and product collaboration preferences
