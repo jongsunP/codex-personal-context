@@ -14,6 +14,10 @@
   documentation, durable memory, work status, learned facts, needed items, next
   tasks, and the next starting point; resume requests should begin by pulling
   the relevant Git-backed context.
+- Recorded the repository separation rule: `codex-personal-context` stores
+  cross-project user preferences, Codex working style, session workflows, and
+  personal context; individual project repositories store project-specific
+  product decisions, technical status, handoffs, and docs.
 
 ## 2026-06-14
 

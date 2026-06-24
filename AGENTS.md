@@ -7,6 +7,13 @@
 - Prefer documented context over AI memory.
 - When a durable user preference or project principle is discovered, suggest
   adding it to this repository.
+- Use this repository for cross-project user preferences, Codex working style,
+  session start/end workflows, and durable personal context regardless of the
+  active project.
+- Use each project repository for project-specific product decisions,
+  technical status, implementation handoffs, and project documentation.
+- If a note applies to both, record the general rule here and the concrete
+  project-specific state in the relevant project docs.
 
 ## Communication
 
@@ -27,6 +34,9 @@
 
 ## Wrap-Up Workflow
 
+- At the start of a new or resumed session, refresh this repository and the
+  relevant project repository with `git pull` before relying on local context
+  when the user asks to resume work or continue from a prior checkpoint.
 - When the user says to wrap up, finish, close out, end, pause, hand off, or
   summarize a session checkpoint, proactively organize the current state
   instead of only saying goodbye.
