@@ -37,7 +37,8 @@ Separate sessions by role when useful:
 - Main development session: code changes, tests, commits, builds, technical
   execution.
 - CTO or strategy session: product direction, architecture decisions, roadmap,
-  prioritization.
+  prioritization, risk review, and copyable prompts for the development
+  session.
 - Question, DB, and concept session: terminology, database inspection,
   structure explanation, learning, and low-risk investigation.
 
@@ -65,6 +66,15 @@ For Action Sports Journal, read:
 - `docs/HANDOFF.md`
 - Other documents only when relevant to the task.
 
+If the user says "작업 재개하자" for Action Sports Journal, treat it as a
+status-recovery request. Prepare:
+
+- What is already complete.
+- What is current.
+- What should happen next.
+- What needs the Founder to decide.
+- The first copyable development-session prompt if implementation can proceed.
+
 ## Wrap-Up Or End Workflow
 
 When the user says to wrap up, finish, close out, end, pause, hand off, or
@@ -80,6 +90,10 @@ summarize:
 8. Record the next starting point.
 9. Decide whether durable memory or project docs should be updated.
 10. If documentation is updated, commit and push when safe.
+
+If the user says "작업 마무리하자" for Action Sports Journal, treat it as a
+closeout request. Prepare documentation, handoff/checkpoint updates, commit and
+push guidance or execution, and the next session starting point.
 
 For lightweight question or learning sessions, keep the wrap-up shorter, but
 still preserve durable preferences or project decisions that should survive
@@ -101,6 +115,40 @@ records:
 - Include the detail needed for another session to continue safely.
 - Separate confirmed facts, observations, hypotheses, recommendations, and
   unknowns when the distinction matters.
+
+## Action Sports Journal CTO Output Contract
+
+For the Action Sports Journal CTO session:
+
+- The only active project target is
+  `/Users/parkjongsun/Repository/action-sports-journal-app`.
+- The CTO session should not act as the implementation developer by default.
+- Actual code work should be given to a separate development session as one
+  copyable prompt.
+- If there is nothing the Founder needs to know, show only the development
+  session prompt.
+
+Use this exact owner format when needed:
+
+````markdown
+## **개발 세션에게**
+```text
+cd ~/Repository/action-sports-journal-app
+
+...
+```
+````
+
+Use the user section only when the Founder has a decision or direct action:
+
+````markdown
+## **사용자에게**
+<short explanation>
+
+```text
+<copyable command or value only when needed>
+```
+````
 
 ## Database And Sensitive Work
 

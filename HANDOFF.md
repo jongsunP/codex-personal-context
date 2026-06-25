@@ -29,7 +29,7 @@ https://github.com/jongsunP/action-sports-journal-app
 Local path:
 
 ```text
-/Users/parkjongsun/repository/action-sports-journal-app
+/Users/parkjongsun/Repository/action-sports-journal-app
 ```
 
 Current status:
@@ -37,14 +37,15 @@ Current status:
 ```text
 Stage 1 complete
 Stage 2 local ActivityGroup / Session prototype complete
-Standalone iPhone EAS preview/internal distribution validated
-Stage 3 real video-to-analysis prototype in progress
+Stage 3 product foundation in progress
+Build 75 Kakao Recovery / Account Linking E2E validated
+Push Observability P2 complete for current internal/dev scope
 ```
 
 Latest project checkpoint commit:
 
 ```text
-4664bfb Prioritize trick initiation evidence
+65c58ca docs: require remote push at session closeout
 ```
 
 ## Confirmed Project Facts
@@ -55,6 +56,21 @@ Latest project checkpoint commit:
 - The app opens on the user physical iPhone through Expo Go.
 - The app has also been installed and opened on the user's iPhone as a
   standalone EAS preview/internal distribution app, without Expo Go.
+- Build 74 closed Auth Phase 2 Push QA. Push registration/delivery works and
+  Push Observability P2 now records delivery attempts, token counts, ticket
+  mapping, and manual/internal receipt checks.
+- Build 75 validated Kakao Recovery / Account Linking on standalone iOS.
+- Device-first Anonymous Auth is a product principle, not a temporary shortcut.
+- Recovery is treated as account linking for record protection, not signup as
+  the first user experience.
+- Ownership Boundary, Private Realtime, and No-Token Policy should not be
+  reverted.
+- Email Recovery is baseline/fallback. It can send the change-email magic link,
+  but productization still needs redirect/deep-link strategy and link-validity
+  QA.
+- Kakao Recovery is currently the verified recovery path.
+- Next immediate product work is Kakao Linking UI success/failure/cancel-state
+  clarity.
 - Tunnel mode worked when LAN mode was unreliable.
 - The first screen source is `src/features/sessions/HomeScreen.tsx`.
 - The app entry is `App.tsx`.
@@ -116,20 +132,20 @@ Latest project checkpoint commit:
 Open the project in a terminal:
 
 ```bash
-cd /Users/parkjongsun/repository/action-sports-journal-app
+cd /Users/parkjongsun/Repository/action-sports-journal-app
 codex
 ```
 
 Suggested first prompt:
 
 ```text
-AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md, docs/OPENAI_BENCHMARK_REPORT.md를 먼저 읽고, Gemini는 유지한 상태에서 OpenAI GPT-5.5 wakeboard benchmark를 이어서 진행해줘. 실제 GEMINI_API_KEY와 OPENAI_API_KEY로 같은 웨이크보드 영상을 테스트한 뒤 결과를 비교해줘.
+AGENTS.md, docs/PROJECT_MEMORY.md, docs/CURRENT_STAGE.md, docs/HANDOFF.md를 먼저 읽고 현재 ASJ 상태를 복구해줘. 최신 기준선은 Build 75 Kakao Recovery / Account Linking E2E 통과, Push Observability P2 완료, 다음 작업은 Kakao Linking UI success/failure/cancel-state polish야. 구현 전에 현재 완료된 것, 지금 하는 것, 앞으로 해야 할 것을 짧게 정리하고 개발 계획을 제안해줘.
 ```
 
 ## Run Commands
 
 ```bash
-cd /Users/parkjongsun/repository/action-sports-journal-app
+cd /Users/parkjongsun/Repository/action-sports-journal-app
 npm install
 npm run server:dev
 ```
@@ -165,34 +181,39 @@ Apple Team ID: L339A3KKLC
 - Session is the center of the system.
 - ActivityGroup -> Session -> AnalysisResult -> ShareResult.
 - Sharing is important long-term, but should not be implemented yet.
+- Login should not precede use. Users should be able to install, use, upload,
+  analyze, and create records first.
+- Account linking exists to protect records later.
 
 ## Do Not Implement Yet
 
-- Database
-- Login or phone authentication
-- Production video upload/storage
-- Production backend
+- Unrelated login expansion
+- Phone authentication
 - Coupons
 - Expenses
 - Calendar
 - RAG
+- Compression / upload optimization
+- AI calibration
+- Social features
 
 ## Next Likely Work
 
-Do not add unrelated product features yet.
+Do not add unrelated product features yet. Current priority is product
+foundation polish:
 
-The next work should focus on validating the evidence-first wakeboard loop:
-
-1. Run the same wakeboard video through Gemini evidence extraction.
-2. Confirm or correct the intended trick in the app.
-3. Compare GPT vs Gemini coaching quality after confirmed trick input.
-4. Check that trick classification prioritizes stance, edge, approach, takeoff,
-   pop, and rotation initiation over landing/crash outcome.
-5. Do not add unrelated product features until this loop is stable.
+1. Kakao Linking UI success/failure/cancel-state polish.
+2. Decide whether Kakao `name` / `full_name` should sync to
+   `public.users.display_name`.
+3. Recheck ownership continuity with a user that already has Moments.
+4. Foundation Safety Check.
+5. External No-Token Finalization.
+6. Push token account-switch policy.
 
 ## Other Context Files
 
 - `AGENTS.md`: personal Codex guidance
+- `SESSION_WORKFLOW.md`: cross-device session start/resume/wrap-up workflow
 - `projects/action-sports-journal-app.md`: project-specific context
 
 ## Safety

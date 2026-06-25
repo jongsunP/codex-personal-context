@@ -3,12 +3,12 @@
 ## Current State
 
 - Repository: `https://github.com/jongsunP/action-sports-journal-app`
-- Local path: `/Users/parkjongsun/repository/action-sports-journal-app`
+- Local path: `/Users/parkjongsun/Repository/action-sports-journal-app`
 - Platform: iOS-first React Native app
 - Runtime: standalone EAS preview/internal distribution app on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
-- Current stage: Stage 3 real video-to-analysis prototype in progress
-- Latest project commit: `4664bfb Prioritize trick initiation evidence`
+- Current stage: Stage 3 product foundation and recovery/account-linking polish
+- Latest project commit: `65c58ca docs: require remote push at session closeout`
 
 ## Continuity Rule
 
@@ -24,6 +24,16 @@ GitHub repository first and read the remote-backed project docs such as
 - The app is visible on the user physical iPhone.
 - The app was installed and opened as a standalone iPhone app through EAS
   preview/internal distribution, without Expo Go.
+- Build 74 closed Auth Phase 2 Push QA. Push delivery was confirmed after
+  analysis completion.
+- Push Observability P2 is complete for the current internal/dev scope.
+- Build 75 validated Kakao Recovery / Account Linking E2E on standalone iOS.
+- Kakao identity linking attached to the existing anonymous Auth user rather
+  than creating a separate new Auth user in the QA window.
+- Device-first Anonymous Auth, Ownership Boundary, Private Realtime, and
+  No-Token Policy are durable foundations and should not be reverted.
+- Email Recovery is baseline/fallback. The magic-link send path works, but
+  productization needs redirect/deep-link strategy and link-validity QA.
 - Tunnel mode worked when LAN mode was unreliable.
 - ActivityGroups can be selected.
 - Sessions are filtered by selected ActivityGroup.
@@ -73,6 +83,7 @@ GitHub repository first and read the remote-backed project docs such as
 
 - `AGENTS.md`: project rules and current setup context
 - `docs/HANDOFF.md`: cross-session project handoff
+- `docs/PROJECT_MEMORY.md`: primary project memory and operating system
 - `docs/CONTINUITY_CHECKPOINT.md`: latest continuity checkpoint
 - `docs/CURRENT_STAGE.md`: current stage summary
 - `docs/STAGE_2_PLAN.md`: Stage 2 scope
@@ -92,33 +103,33 @@ GitHub repository first and read the remote-backed project docs such as
 
 Do not implement these yet:
 
-- Database
-- Login or phone authentication
-- Production video upload/storage
-- Production backend
+- Unrelated login expansion
+- Phone authentication
 - Coupons
 - Expenses
 - Calendar
 - RAG
+- Compression / upload optimization
+- AI calibration
+- Additional social features
 
 ## Next Likely Step
 
 Do not add unrelated product features yet.
 
-Continue validating the evidence-first loop:
+Current immediate work:
 
-1. Run the same wakeboard video through Gemini evidence extraction.
-2. Confirm or correct the intended trick in the app.
-3. Compare GPT vs Gemini coaching quality after the confirmed trick is supplied.
-4. Evaluate whether the classifier correctly prioritizes stance, edge, approach,
-   takeoff, pop, and rotation initiation over landing/crash outcome.
-5. Start shaping stored Session intelligence only after the evidence and
-   confirmation loop is stable.
+1. Kakao Linking UI success/failure/cancel-state polish.
+2. Kakao display name sync decision.
+3. Ownership continuity check with a user that already has Moments.
+4. Foundation Safety Check.
+5. External No-Token Finalization.
+6. Push token account-switch policy.
 
 ## New Session Prompt
 
 Use this prompt when opening the project in a new Codex terminal session:
 
 ```text
-AGENTS.md, docs/HANDOFF.md, docs/CURRENT_STAGE.md, docs/CONTINUITY_CHECKPOINT.md, docs/STAGE_3_VIDEO_ANALYSIS_PLAN.md, docs/DEV_AI_ANALYSIS_SETUP.md, docs/OPENAI_BENCHMARK_REPORT.md를 먼저 읽고, evidence-first wakeboard analysis 상태를 이어서 진행해줘. Gemini evidence extraction은 stance/edge/approach/takeoff/pop/rotation initiation을 landing/crash보다 우선해서 평가하고, 사용자가 확정한 trick intent를 coaching에 우선 적용해줘.
+AGENTS.md, docs/PROJECT_MEMORY.md, docs/CURRENT_STAGE.md, docs/HANDOFF.md를 먼저 읽고 현재 ASJ 상태를 복구해줘. 최신 기준선은 Build 75 Kakao Recovery / Account Linking E2E 통과, Push Observability P2 완료, 다음 작업은 Kakao Linking UI success/failure/cancel-state polish야. 구현 전에 현재 완료된 것, 지금 하는 것, 앞으로 해야 할 것을 짧게 정리하고 개발 계획을 제안해줘.
 ```
