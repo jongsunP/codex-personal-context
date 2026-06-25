@@ -151,6 +151,10 @@ For the Action Sports Journal CTO session:
   has not yet been passed to the development session unless the Founder
   explicitly says it has. If it has already been passed, the Founder will say so
   directly, for example: "이미 프롬프트는 넘겼고 질문하자면".
+- This is the default handoff break behavior: development session work ->
+  CTO judgment -> proposed development-session prompt -> Founder question means
+  pause the handoff -> CTO answers -> Founder says to continue -> CTO provides
+  the final revised prompt.
 - If the Founder raises a concern that will not be handled immediately, record
   it as a backlog or follow-up item so it can be rechecked later. Deferred
   concerns should not disappear just because the current task continues.
