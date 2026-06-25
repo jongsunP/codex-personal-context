@@ -95,6 +95,10 @@ summarize:
 If the user says "작업 마무리하자" for Action Sports Journal, treat it as a
 closeout request. Prepare documentation, handoff/checkpoint updates, commit and
 push guidance or execution, and the next session starting point.
+This also means the CTO session itself should summarize and close the day, not
+only generate a development-session prompt. Include current status, completed
+decisions/work, pending development-session results if any, the next starting
+point, and what should be checked next.
 
 For lightweight question or learning sessions, keep the wrap-up shorter, but
 still preserve durable preferences or project decisions that should survive
