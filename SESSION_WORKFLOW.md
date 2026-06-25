@@ -188,6 +188,11 @@ Product judgment policy:
   web frontend terms. Keep explanations technically direct; if the Founder is
   confused, check whether the missing piece is an app/mobile/backend/infra
   difference from web frontend work.
+- ASJ is not deadline-driven MVP work. When a discovered issue affects the
+  development or QA foundation and fixing it will keep paying off in future
+  work, prefer solving it before moving to the next product step. If the issue
+  is unrelated, low leverage, or would derail the product task too much, record
+  it as backlog instead.
 
 Use this exact owner format when needed:
 
