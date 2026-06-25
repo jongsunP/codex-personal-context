@@ -68,7 +68,7 @@ The user's current main project is Action Sports Journal.
 - Current mobile status: The app opens on the user's physical iPhone through Expo Go and as a standalone EAS preview/internal distribution app.
 - First screen source: `src/features/sessions/HomeScreen.tsx`
 - Root entry: `App.tsx`
-- Latest documented project commit: `65c58ca docs: require remote push at session closeout`
+- Latest documented project commit: `eae6576 docs: align stable workstream next step`
 
 ## Project Rules To Remember
 
@@ -76,6 +76,7 @@ The user's current main project is Action Sports Journal.
 - ActivityGroup -> Session -> AnalysisResult -> ShareResult.
 - AI analysis is only one feature, not the whole product.
 - Device-first anonymous auth, ownership boundary, private realtime, Push delivery, Push Observability P2, and Kakao Recovery / Account Linking are established product foundations.
+- Kakao Recovery Sign-in P1 is implemented and Build 81 is ready for real-device QA; do not mark Build 81 passed until the user completes QA.
 - Do not add unrelated login methods, phone auth, coupons, expenses, calendar, RAG, compression optimization, or AI calibration until the project docs say the stage is ready.
 - Keep implementations simple and avoid over-engineering.
 - Durable preferences, project settings, and continuity notes should be kept in

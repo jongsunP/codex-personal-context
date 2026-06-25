@@ -8,7 +8,7 @@
 - Runtime: standalone EAS preview/internal distribution app on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
 - Current stage: Stage 3 product foundation and recovery/account-linking polish
-- Latest project commit: `65c58ca docs: require remote push at session closeout`
+- Latest project commit: `eae6576 docs: align stable workstream next step`
 
 ## Product Philosophy
 
@@ -60,6 +60,13 @@ GitHub repository first and read the remote-backed project docs such as
 - Build 75 validated Kakao Recovery / Account Linking E2E on standalone iOS.
 - Kakao identity linking attached to the existing anonymous Auth user rather
   than creating a separate new Auth user in the QA window.
+- Kakao Linking UI follow-up is closed beyond Build 75: false success is
+  blocked, linked-state copy is clearer, and cleanup confirmed the same Kakao
+  account can be linked to a fresh anonymous user after the old test account is
+  removed.
+- Kakao Recovery Sign-in P1 is implemented and Build 81 is ready for
+  standalone iOS QA. Build 81 should not be recorded as passed until the user
+  runs real-device QA.
 - Device-first Anonymous Auth, Ownership Boundary, Private Realtime, and
   No-Token Policy are durable foundations and should not be reverted.
 - Email Recovery is baseline/fallback. The magic-link send path works, but
@@ -149,7 +156,7 @@ Do not add unrelated product features yet.
 
 Current immediate work:
 
-1. Kakao Linking UI success/failure/cancel-state polish.
+1. Build 81 real-device QA for Kakao Recovery Sign-in.
 2. Kakao display name sync decision.
 3. Ownership continuity check with a user that already has Moments.
 4. Foundation Safety Check.
@@ -174,5 +181,5 @@ Current immediate work:
 Use this prompt when opening the project in a new Codex terminal session:
 
 ```text
-AGENTS.md, docs/PROJECT_MEMORY.md, docs/CURRENT_STAGE.md, docs/HANDOFF.md를 먼저 읽고 현재 ASJ 상태를 복구해줘. 최신 기준선은 Build 75 Kakao Recovery / Account Linking E2E 통과, Push Observability P2 완료, 다음 작업은 Kakao Linking UI success/failure/cancel-state polish야. 구현 전에 현재 완료된 것, 지금 하는 것, 앞으로 해야 할 것을 짧게 정리하고 개발 계획을 제안해줘.
+AGENTS.md, docs/PROJECT_MEMORY.md, docs/CURRENT_STAGE.md, docs/HANDOFF.md를 먼저 읽고 현재 ASJ 상태를 복구해줘. 최신 기준선은 Push Observability P2 완료, Build 75 Kakao Recovery / Account Linking E2E 통과, Kakao Linking UI false-success 방지/실패 UX polish 완료, Kakao Recovery Sign-in P1 구현 및 Build 81 생성 완료야. 다음 작업은 Build 81 실기기 QA야. 구현 전에 현재 완료된 것, 지금 하는 것, 앞으로 해야 할 것을 짧게 정리하고 필요한 QA 체크리스트만 제안해줘.
 ```
