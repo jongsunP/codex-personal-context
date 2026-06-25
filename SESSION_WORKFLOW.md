@@ -152,11 +152,19 @@ Product judgment policy:
 
 - Do not frame ASJ as an MVP. It is a real service being built one proper
   foundation at a time.
-- Treat upload reliability as survival-critical. Imperfect AI quality can be
-  tolerated temporarily; preventable or unobservable upload failure cannot.
+- Treat upload reliability as survival-critical. AI quality is an ongoing
+  development area; preventable, unknown, or unobservable upload failure cannot
+  be accepted as a normal state.
+- Remember that one user may upload one item at a time while multiple
+  previously uploaded items are analyzing. Preserve and explain per-item state
+  visibility when reviewing upload/analysis flows.
 - Judge product/channel decisions against ASJ's specific action-sports niche
   users, whose actual sharing and communication habits favor Instagram and
   KakaoTalk, not generic mass-market assumptions.
+- The Founder is a web frontend developer who understands websockets,
+  presigned upload flows, and engineering causality. Explain mobile/product
+  choices by structure and reason, not by assuming unfamiliarity with the
+  underlying development patterns.
 
 Use this exact owner format when needed:
 

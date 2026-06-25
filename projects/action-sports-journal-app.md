@@ -17,13 +17,26 @@
 - Upload is the service's starting point and survival-critical core. Imperfect
   AI analysis can be tolerated temporarily, but preventable upload failure
   cannot be treated casually.
+- AI analysis quality is an ongoing development area. Upload is a basic
+  foundation and should not fail in unknown or unobservable ways.
 - Upload failures should be predictable and observable unless the cause is an
   unavoidable external network condition.
+- A user uploads one item at a time, but multiple already-uploaded items can be
+  analyzing at the same time. Per-item state visibility matters for trust:
+  upload progress, uploaded, analyzing, completed, failed, and recoverable or
+  non-recoverable conditions should be distinguishable when relevant.
 - The target users are a specific action-sports niche group, not the general
   public.
 - Instagram and KakaoTalk matter because they match that group's actual sharing
   and communication habits. Product/channel decisions should be judged against
   that niche group rather than generic mass-market assumptions.
+- The Founder is originally a web frontend developer, not an app developer, but
+  understands development flow, websocket-based systems, and presigned upload
+  patterns. Do not copy web patterns blindly into mobile; explain architecture
+  by why a pattern exists and whether it fits the mobile/product flow.
+- Slow infrastructure caused by a low plan can be acceptable when understood.
+  Preventable issues caused by bad configuration or bad design are the real
+  concern.
 
 ## Continuity Rule
 
