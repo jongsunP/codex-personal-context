@@ -78,8 +78,8 @@ status-recovery request. Prepare:
 
 ## Wrap-Up Or End Workflow
 
-When the user says to wrap up, finish, close out, end, pause, hand off, or
-summarize:
+When the user says to wrap up, finish, close out, end, pause, hand off,
+summarize, "정리하자", or "마무리하자":
 
 1. Summarize completed work.
 2. Record decisions made.
@@ -92,9 +92,10 @@ summarize:
 9. Decide whether durable memory or project docs should be updated.
 10. If documentation is updated, commit and push when safe.
 
-If the user says "작업 마무리하자" for Action Sports Journal, treat it as a
-closeout request. Prepare documentation, handoff/checkpoint updates, commit and
-push guidance or execution, and the next session starting point.
+If the user says "작업 마무리하자" or "정리하자" for Action Sports Journal,
+treat it as a remote-backed closeout request. Prepare documentation,
+handoff/checkpoint updates, commit and push guidance or execution, and the next
+session starting point.
 This also means the CTO session itself should summarize and close the day, not
 only generate a development-session prompt. Include current status, completed
 decisions/work, pending development-session results if any, the next starting

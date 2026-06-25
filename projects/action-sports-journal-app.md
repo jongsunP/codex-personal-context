@@ -7,8 +7,8 @@
 - Platform: iOS-first React Native app
 - Runtime: standalone EAS preview/internal distribution app on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
-- Current stage: Stage 3 product foundation and recovery/account-linking polish
-- Latest project commit: `eae6576 docs: align stable workstream next step`
+- Current stage: Stage 3 post-foundation UX QA
+- Latest project commit: `df1016f docs: close out build 82 qa handoff`
 
 ## Product Philosophy
 
@@ -64,9 +64,22 @@ GitHub repository first and read the remote-backed project docs such as
   blocked, linked-state copy is clearer, and cleanup confirmed the same Kakao
   account can be linked to a fresh anonymous user after the old test account is
   removed.
-- Kakao Recovery Sign-in P1 is implemented and Build 81 is ready for
-  standalone iOS QA. Build 81 should not be recorded as passed until the user
-  runs real-device QA.
+- Kakao Recovery Sign-in P1 passed Build 81 real-device QA.
+- Foundation Safety Check is complete and found no major blocking foundation
+  issue. A broad refactor is not required at the current scale.
+- External No-Token Finalization is complete. User-owned external no-token
+  API paths now return 401 unless explicit internal development fallback is
+  enabled.
+- Push Token Account-switch Policy is complete. A same-device Expo push token
+  moves to the current authenticated owner after account switch/recovery.
+- Product UX Baseline P1 is complete: user-facing moment status labels are
+  unified as 진행중 / 완료 / 실패.
+- Kakao Recovery UI is now a single user-facing Kakao CTA while internal
+  link-vs-recover branching remains hidden from the user.
+- Detail Retry / Action UI, Home Journal first slice, Upload Entry UX polish,
+  and Analysis Trust UX are complete for the current post-foundation slice.
+- Build 82 was created for post-foundation UX QA and is waiting for the
+  Founder's real-device QA result.
 - Device-first Anonymous Auth, Ownership Boundary, Private Realtime, and
   No-Token Policy are durable foundations and should not be reverted.
 - Email Recovery is baseline/fallback. The magic-link send path works, but
@@ -156,12 +169,20 @@ Do not add unrelated product features yet.
 
 Current immediate work:
 
-1. Build 81 real-device QA for Kakao Recovery Sign-in.
-2. Kakao display name sync decision.
-3. Ownership continuity check with a user that already has Moments.
-4. Foundation Safety Check.
-5. External No-Token Finalization.
-6. Push token account-switch policy.
+1. Founder shares Build 82 real-device QA results.
+2. CTO reviews QA result before sending any new development-session prompt.
+3. If QA is clean, choose the next product slice from recovery-attempt
+   observability, Email Recovery deep-link strategy, Journal/Analysis/Media UX,
+   or another user-observed issue.
+
+Build 82 details:
+
+- buildNumber: `82`
+- build commit: `16b44a9 chore: prepare post-foundation ux qa build`
+- EAS build page:
+  `https://expo.dev/accounts/jspark88/projects/action-sports-journal/builds/c0effa32-29cb-49e6-9baf-e0642c480b68`
+- install/build URL:
+  `https://expo.dev/artifacts/eas/ttWHXF2SLddnDWq0NG0TV3r3e3LKRGDgg0Lgi-jsbQA.ipa`
 
 ## Deferred Follow-Up Issues
 
@@ -181,5 +202,5 @@ Current immediate work:
 Use this prompt when opening the project in a new Codex terminal session:
 
 ```text
-AGENTS.md, docs/PROJECT_MEMORY.md, docs/CURRENT_STAGE.md, docs/HANDOFF.md를 먼저 읽고 현재 ASJ 상태를 복구해줘. 최신 기준선은 Push Observability P2 완료, Build 75 Kakao Recovery / Account Linking E2E 통과, Kakao Linking UI false-success 방지/실패 UX polish 완료, Kakao Recovery Sign-in P1 구현 및 Build 81 생성 완료야. 다음 작업은 Build 81 실기기 QA야. 구현 전에 현재 완료된 것, 지금 하는 것, 앞으로 해야 할 것을 짧게 정리하고 필요한 QA 체크리스트만 제안해줘.
+AGENTS.md, docs/PROJECT_MEMORY.md, docs/CURRENT_STAGE.md, docs/HANDOFF.md를 먼저 읽고 현재 ASJ 상태를 복구해줘. 최신 기준선은 Build 81 Kakao Recovery Sign-in QA 통과, Foundation Safety Check 완료, External No-Token Finalization 완료, Push Token Account-switch Policy 완료, Product UX Baseline P1/Single Kakao CTA/Detail Retry/Home Journal/Upload Entry/Analysis Trust UX 반영 완료야. Build 82가 post-foundation UX QA용으로 생성되어 있고, 다음 시작점은 사용자의 Build 82 실기기 QA 결과 공유야. QA 결과를 받기 전에는 새 개발 세션 프롬프트를 주지 말고, 현재 완료/현재/바로 앞/가까운 후속/나중/장기 목록을 안정된 workstream 기준으로 짧게 정리해줘.
 ```
