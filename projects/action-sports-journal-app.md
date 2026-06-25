@@ -32,8 +32,10 @@
   that niche group rather than generic mass-market assumptions.
 - The Founder is originally a web frontend developer, not an app developer, but
   understands development flow, websocket-based systems, and presigned upload
-  patterns. Do not copy web patterns blindly into mobile; explain architecture
-  by why a pattern exists and whether it fits the mobile/product flow.
+  patterns. This is context for diagnosing possible misunderstandings, not a
+  requirement to always explain in web frontend terms. If something is unclear,
+  consider whether the gap comes from app/mobile/backend/infra differences and
+  explain the missing structural difference directly.
 - Slow infrastructure caused by a low plan can be acceptable when understood.
   Preventable issues caused by bad configuration or bad design are the real
   concern.

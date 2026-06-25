@@ -162,9 +162,11 @@ Product judgment policy:
   users, whose actual sharing and communication habits favor Instagram and
   KakaoTalk, not generic mass-market assumptions.
 - The Founder is a web frontend developer who understands websockets,
-  presigned upload flows, and engineering causality. Explain mobile/product
-  choices by structure and reason, not by assuming unfamiliarity with the
-  underlying development patterns.
+  presigned upload flows, and engineering causality. This is context for
+  diagnosing possible misunderstanding, not a requirement to always explain in
+  web frontend terms. Keep explanations technically direct; if the Founder is
+  confused, check whether the missing piece is an app/mobile/backend/infra
+  difference from web frontend work.
 
 Use this exact owner format when needed:
 
