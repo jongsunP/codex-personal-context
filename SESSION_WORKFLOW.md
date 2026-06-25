@@ -133,6 +133,10 @@ For the Action Sports Journal CTO session:
   session prompt.
 - When answering current status, judgment, or context for the Founder, use
   normal prose or a short normal list unless there is a copy/paste action.
+- If the Founder asks a question before passing a development-session prompt to
+  the development session, treat the question as intentionally pausing the
+  handoff. Answer the question first and do not repeat the prompt unless the
+  answer changes it or the Founder asks for it again.
 
 Validation-cost policy:
 
