@@ -156,6 +156,19 @@ Current immediate work:
 5. External No-Token Finalization.
 6. Push token account-switch policy.
 
+## Deferred Follow-Up Issues
+
+- Initial loading / Video tab spinner observability: after fresh standalone
+  install, early app loading can be very slow and the video tab can show a
+  spinner for too long or indefinitely; after several reinstalls/reopens it may
+  become normal. Investigate later by finding where the app is waiting instead
+  of guessing from symptoms. Main hypotheses: install/cache behavior,
+  anonymous auth/user bootstrap timing, push registration, realtime
+  subscription, local storage hydration, moments/video fetch, upload recovery
+  scan, backend/Supabase cold start, and missing timeout/error/empty-state
+  handling. Slow infra can be acceptable if understood; an indefinite spinner
+  or unknown waiting state is not acceptable.
+
 ## New Session Prompt
 
 Use this prompt when opening the project in a new Codex terminal session:

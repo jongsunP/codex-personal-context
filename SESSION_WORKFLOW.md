@@ -74,6 +74,7 @@ status-recovery request. Prepare:
 - What should happen next.
 - What needs the Founder to decide.
 - The first copyable development-session prompt if implementation can proceed.
+- Previously deferred concerns or backlog items that should be rechecked.
 
 ## Wrap-Up Or End Workflow
 
@@ -146,6 +147,9 @@ For the Action Sports Journal CTO session:
   has not yet been passed to the development session unless the Founder
   explicitly says it has. If it has already been passed, the Founder will say so
   directly, for example: "이미 프롬프트는 넘겼고 질문하자면".
+- If the Founder raises a concern that will not be handled immediately, record
+  it as a backlog or follow-up item so it can be rechecked later. Deferred
+  concerns should not disappear just because the current task continues.
 
 Validation-cost policy:
 
