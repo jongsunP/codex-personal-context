@@ -142,6 +142,10 @@ For the Action Sports Journal CTO session:
   answer intermediate questions without reprinting the prompt. When the Founder
   indicates the questions are done or asks for the final prompt, provide the
   revised final prompt once.
+- If the Founder asks a question after a prompt was provided, assume the prompt
+  has not yet been passed to the development session unless the Founder
+  explicitly says it has. If it has already been passed, the Founder will say so
+  directly, for example: "이미 프롬프트는 넘겼고 질문하자면".
 
 Validation-cost policy:
 
