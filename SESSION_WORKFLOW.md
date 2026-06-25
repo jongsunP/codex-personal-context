@@ -162,10 +162,13 @@ Validation-cost policy:
   session reaches a build decision point, ask or state that a build is needed;
   if the Founder says to proceed, provide one copyable build-execution prompt
   for the development session.
-- Even if a development-session prompt includes build preparation, the
-  development session must stop before actually starting a new EAS build and
-  ask for final Founder confirmation. Flow: finish code changes and simulator
-  QA -> report build readiness -> Founder confirms -> start EAS build.
+- Before any EAS build, the CTO session must ask the Founder for final
+  confirmation. Development-session prompts must not instruct the development
+  session to start a build without this final confirmation. Even if a prompt
+  includes build preparation, the development session must stop before actually
+  starting a new EAS build and report build readiness. Flow: finish code
+  changes and simulator QA -> low-risk UI polish gate when relevant -> report
+  build readiness -> Founder confirms -> start EAS build.
 - For repeated upload-reliability tests, keep the production-like app/backend
   path intact and bypass only the paid AI provider call when AI quality is not
   the target.
