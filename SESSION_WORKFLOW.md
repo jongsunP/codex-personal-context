@@ -154,6 +154,10 @@ Validation-cost policy:
   new EAS build, use that path first.
 - If the behavior specifically requires standalone physical-device validation,
   say so clearly and proceed toward the build.
+- Builds are executed by the development session by default. When the CTO
+  session reaches a build decision point, ask or state that a build is needed;
+  if the Founder says to proceed, provide one copyable build-execution prompt
+  for the development session.
 - For repeated upload-reliability tests, keep the production-like app/backend
   path intact and bypass only the paid AI provider call when AI quality is not
   the target.
