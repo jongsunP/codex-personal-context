@@ -134,6 +134,20 @@ For the Action Sports Journal CTO session:
 - When answering current status, judgment, or context for the Founder, use
   normal prose or a short normal list unless there is a copy/paste action.
 
+Validation-cost policy:
+
+- Builds and AI API calls are allowed when they are the right validation step.
+- If simulator or physical-device testing can verify the behavior without a
+  new EAS build, use that path first.
+- If the behavior specifically requires standalone physical-device validation,
+  say so clearly and proceed toward the build.
+- For repeated upload-reliability tests, keep the production-like app/backend
+  path intact and bypass only the paid AI provider call when AI quality is not
+  the target.
+- Bypassing the AI provider is not app mock-data testing. The product path
+  should remain as close to production as possible; only the cost-incurring
+  provider call is substituted.
+
 Use this exact owner format when needed:
 
 ````markdown
