@@ -137,6 +137,11 @@ For the Action Sports Journal CTO session:
   the development session, treat the question as intentionally pausing the
   handoff. Answer the question first and do not repeat the prompt unless the
   answer changes it or the Founder asks for it again.
+- A development-session prompt is not considered handed off until the Founder
+  actually passes it to the development session. During a paused handoff,
+  answer intermediate questions without reprinting the prompt. When the Founder
+  indicates the questions are done or asks for the final prompt, provide the
+  revised final prompt once.
 
 Validation-cost policy:
 
