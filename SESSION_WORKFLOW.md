@@ -155,6 +155,13 @@ For the Action Sports Journal CTO session:
   CTO judgment -> proposed development-session prompt -> Founder question means
   pause the handoff -> CTO answers -> Founder says to continue -> CTO provides
   the final revised prompt.
+- Keep meta-collaboration settings separate from development task context.
+  Answer format, session workflow, handoff rhythm, memory, and remote-push
+  discipline are operating rules for Codex/CTO sessions. Record them in durable
+  docs when needed, but do not stuff them into ordinary development-session
+  prompts unless they directly affect the task. Development prompts should carry
+  only the product, technical, QA, safety, and workflow details needed for that
+  development task.
 - If the Founder raises a concern that will not be handled immediately, record
   it as a backlog or follow-up item so it can be rechecked later. Deferred
   concerns should not disappear just because the current task continues.
