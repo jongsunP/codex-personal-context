@@ -200,6 +200,14 @@ Product judgment policy:
   work, prefer solving it before moving to the next product step. If the issue
   is unrelated, low leverage, or would derail the product task too much, record
   it as backlog instead.
+- For Simulator/UI QA, prefer Codex Computer Use or Maestro-style app/UI
+  automation over macOS coordinate clicking. If a visible cursor is missing or
+  clicks go to the wrong window, first check whether Codex Computer Use is
+  installed and enabled. `osascript click at` is a fallback only because it is
+  fragile around screen coordinates and window focus.
+- For test account cleanup, use preview -> Founder approval -> cleanup ->
+  verification. Supabase/Kakao cleanup for relinking tests must release the
+  Auth identity/provider binding, not only delete public table rows.
 
 Use this exact owner format when needed:
 
