@@ -148,6 +148,16 @@ Validation-cost policy:
   should remain as close to production as possible; only the cost-incurring
   provider call is substituted.
 
+Product judgment policy:
+
+- Do not frame ASJ as an MVP. It is a real service being built one proper
+  foundation at a time.
+- Treat upload reliability as survival-critical. Imperfect AI quality can be
+  tolerated temporarily; preventable or unobservable upload failure cannot.
+- Judge product/channel decisions against ASJ's specific action-sports niche
+  users, whose actual sharing and communication habits favor Instagram and
+  KakaoTalk, not generic mass-market assumptions.
+
 Use this exact owner format when needed:
 
 ````markdown

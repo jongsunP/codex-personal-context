@@ -10,6 +10,21 @@
 - Current stage: Stage 3 product foundation and recovery/account-linking polish
 - Latest project commit: `65c58ca docs: require remote push at session closeout`
 
+## Product Philosophy
+
+- ASJ is not an MVP. It is a real service being built one proper foundation at
+  a time.
+- Upload is the service's starting point and survival-critical core. Imperfect
+  AI analysis can be tolerated temporarily, but preventable upload failure
+  cannot be treated casually.
+- Upload failures should be predictable and observable unless the cause is an
+  unavoidable external network condition.
+- The target users are a specific action-sports niche group, not the general
+  public.
+- Instagram and KakaoTalk matter because they match that group's actual sharing
+  and communication habits. Product/channel decisions should be judged against
+  that niche group rather than generic mass-market assumptions.
+
 ## Continuity Rule
 
 When the user asks to check Action Sports Journal progress, check the remote
