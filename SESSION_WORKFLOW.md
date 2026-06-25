@@ -115,6 +115,10 @@ records:
 - Include the detail needed for another session to continue safely.
 - Separate confirmed facts, observations, hypotheses, recommendations, and
   unknowns when the distinction matters.
+- Do not put ordinary status summaries, explanations, or CTO judgments in
+  text/code blocks. Use text/code blocks only for copyable material such as
+  development-session prompts, terminal commands, exact values, or text the
+  user needs to paste elsewhere.
 
 ## Action Sports Journal CTO Output Contract
 
@@ -127,6 +131,8 @@ For the Action Sports Journal CTO session:
   copyable prompt.
 - If there is nothing the Founder needs to know, show only the development
   session prompt.
+- When answering current status, judgment, or context for the Founder, use
+  normal prose or a short normal list unless there is a copy/paste action.
 
 Use this exact owner format when needed:
 
