@@ -8,7 +8,7 @@
 - Runtime: standalone EAS preview/internal distribution app on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
 - Current stage: Stage 3 post-foundation UX QA
-- Latest project commit: `df1016f docs: close out build 82 qa handoff`
+- Latest project commit: `12741db fix: prevent indefinite video archive loading`
 
 ## Product Philosophy
 
@@ -76,10 +76,20 @@ GitHub repository first and read the remote-backed project docs such as
   unified as 진행중 / 완료 / 실패.
 - Kakao Recovery UI is now a single user-facing Kakao CTA while internal
   link-vs-recover branching remains hidden from the user.
+- Build 84 passed Kakao Single CTA one-click real-device QA: one ASJ app
+  `카카오로 계속하기` press recovered the existing Kakao-linked account without
+  showing the previous `확인 필요` state or a second ASJ CTA. Home, Video, and
+  Detail restored under the recovered account, and relaunch preserved the
+  recovered state.
+- Startup / Video Tab Loading Observability P1 first pass is implemented:
+  initial remote sync no longer leaves list loading pending forever after
+  timeout/failed, Video Archive first page has loading/empty/timeout/error/ready
+  state separation, retry UI exists for timeout/error, and boot/video request
+  logs include duration/status/count/reason without sensitive values.
+- QA Debug Overlay/Panel is the current in-progress follow-up for real-device
+  diagnosis of slow startup or Video/List spinner behavior.
 - Detail Retry / Action UI, Home Journal first slice, Upload Entry UX polish,
   and Analysis Trust UX are complete for the current post-foundation slice.
-- Build 82 was created for post-foundation UX QA and is waiting for the
-  Founder's real-device QA result.
 - Device-first Anonymous Auth, Ownership Boundary, Private Realtime, and
   No-Token Policy are durable foundations and should not be reverted.
 - Email Recovery is baseline/fallback. The magic-link send path works, but
@@ -167,30 +177,76 @@ Do not implement these yet:
 
 Do not add unrelated product features yet.
 
-Current immediate work:
+Stable project list:
 
-1. Founder shares Build 82 real-device QA results.
-2. CTO reviews QA result before sending any new development-session prompt.
-3. If QA is clean, choose the next product slice from recovery-attempt
-   observability, Email Recovery deep-link strategy, Journal/Analysis/Media UX,
-   or another user-observed issue.
+Completed foundation and product slices:
 
-Build 82 details:
+- Upload Part 1.
+- Upload Reliability P0/P1.
+- Auth Phase 1 / Auth Phase 2.
+- Device-first Anonymous Auth.
+- Ownership Boundary.
+- Private Realtime.
+- No-Token Policy / External No-Token Finalization.
+- Push Registration.
+- Push Delivery.
+- Push Observability P2.
+- Push Token Account-switch Policy.
+- State Sync stabilization.
+- Polling removal.
+- Thumbnail Persistence.
+- Build 74 QA baseline.
+- Email Recovery baseline/fallback.
+- Kakao Recovery Method Linking.
+- Kakao Recovery Sign-in P1.
+- Kakao Single CTA Recovery UX.
+- Product UX Baseline P1.
+- Detail Retry / Action UI.
+- Home Journal first slice.
+- Upload Entry UX Polish.
+- Analysis Trust UX.
+- Build 84 Kakao one-click recovery real-device QA passed.
 
-- buildNumber: `82`
-- build commit: `16b44a9 chore: prepare post-foundation ux qa build`
-- EAS build page:
-  `https://expo.dev/accounts/jspark88/projects/action-sports-journal/builds/c0effa32-29cb-49e6-9baf-e0642c480b68`
-- install/build URL:
-  `https://expo.dev/artifacts/eas/ttWHXF2SLddnDWq0NG0TV3r3e3LKRGDgg0Lgi-jsbQA.ipa`
+Current active work:
+
+- Initial Loading / Video Tab Spinner Observability.
+- QA Debug Overlay/Panel for real-device diagnosis.
+
+Immediate next checks:
+
+- Review the development-session result for QA Debug Overlay/Panel.
+- Confirm that the panel exposes boot/auth/video status, duration, count, retry,
+  and last reason without tokens or personal data.
+- Decide whether a new standalone build is needed after the debug panel gate.
+
+Near follow-ups:
+
+- Use the debug panel/logs to separate app loading-state bugs from
+  Render/Supabase/free-plan latency.
+- If the app handles timeout/error/retry correctly but latency remains the
+  bottleneck, consider a basic infrastructure plan upgrade as a validation step.
+- OAuth Step Reduction Investigation: Kakao/iOS may still feel like two external
+  `계속` steps even though ASJ's own CTA is one-click.
+
+Later backlog:
+
+- Kakao display_name sync.
+- Email Recovery deep link / redirect.
+- Recovery attempt observability row/log design.
+- Media / Share UX later.
+- Upload Entry Bottom Sheet remains deferred unless a real pre-submit choice
+  proves it necessary.
+- Compression / Upload Optimization.
+- AI Calibration.
 
 ## Deferred Follow-Up Issues
 
-- Initial loading / Video tab spinner observability: after fresh standalone
-  install, early app loading can be very slow and the video tab can show a
-  spinner for too long or indefinitely; after several reinstalls/reopens it may
-  become normal. Investigate later by finding where the app is waiting instead
-  of guessing from symptoms. Main hypotheses: install/cache behavior,
+- Initial loading / Video tab spinner observability: active. First pass fixed
+  the likely indefinite list loading path after remote sync timeout/failed and
+  separated Video Archive loading/empty/timeout/error/ready states. Continue with
+  QA Debug Overlay/Panel so real-device QA can show where the app is waiting,
+  how long each step took, and whether the cause is app state handling or
+  infrastructure/network latency. Main hypotheses remain install/cache behavior,
   anonymous auth/user bootstrap timing, push registration, realtime
   subscription, local storage hydration, moments/video fetch, upload recovery
   scan, backend/Supabase cold start, and missing timeout/error/empty-state
@@ -202,5 +258,5 @@ Build 82 details:
 Use this prompt when opening the project in a new Codex terminal session:
 
 ```text
-AGENTS.md, docs/PROJECT_MEMORY.md, docs/CURRENT_STAGE.md, docs/HANDOFF.md를 먼저 읽고 현재 ASJ 상태를 복구해줘. 최신 기준선은 Build 81 Kakao Recovery Sign-in QA 통과, Foundation Safety Check 완료, External No-Token Finalization 완료, Push Token Account-switch Policy 완료, Product UX Baseline P1/Single Kakao CTA/Detail Retry/Home Journal/Upload Entry/Analysis Trust UX 반영 완료야. Build 82가 post-foundation UX QA용으로 생성되어 있고, 다음 시작점은 사용자의 Build 82 실기기 QA 결과 공유야. QA 결과를 받기 전에는 새 개발 세션 프롬프트를 주지 말고, 현재 완료/현재/바로 앞/가까운 후속/나중/장기 목록을 안정된 workstream 기준으로 짧게 정리해줘.
+codex-personal-context의 AGENTS.md, SESSION_WORKFLOW.md, projects/action-sports-journal-app.md와 ASJ 프로젝트의 AGENTS.md, docs/PROJECT_MEMORY.md, docs/CURRENT_STAGE.md, docs/HANDOFF.md, docs/TECH_DEBT_AND_REFACTOR_TODO.md를 먼저 pull/read하고 현재 ASJ 상태를 복구해줘. 최신 기준선은 Build 84 Kakao Single CTA one-click recovery 실기기 QA 통과, Startup / Video Tab Loading Observability P1 1차 수정 완료, 현재 진행은 QA Debug Overlay/Panel이야. 리스트업은 프로젝트 전체 시간축 기준으로 유지하고, 완료된 기반 작업도 생략하지 말아줘. 다음에는 QA Debug Overlay/Panel 결과 확인 후 필요 시 실기기 build 여부를 판단한다.
 ```
