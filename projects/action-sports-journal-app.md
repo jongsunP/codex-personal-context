@@ -188,67 +188,71 @@ Keep workstream names stable and evolve the same list over time.
 
 Completed product foundations and slices:
 
-- Direct Upload Foundation: the app can create riding records from user-selected
-  videos.
-- Upload Reliability: upload, analysis handoff, result reflection, recovery
-  cases, and thumbnail persistence are stable enough for the current phase.
-- Device-first Identity: users can start with anonymous/device-first usage
-  instead of a login wall.
-- Ownership and Privacy Boundary: records are scoped to the user owner, realtime
-  is private, and external no-token user paths are closed.
-- Push Notification Foundation: push registration, delivery, observability, and
-  account-switch token ownership are established.
-- State Sync Foundation: Home, Video, Detail, upload completion, analysis
-  completion, Push, and Realtime can converge without polling as the primary
-  model.
-- Recovery Baseline: Email Recovery exists as a fallback baseline.
-- Kakao Recovery: Kakao account linking, reinstall/new-device recovery sign-in,
-  and one user-facing Kakao CTA are verified for the current phase.
-- Product UX Baseline: user-facing record status language is unified as 진행중 /
-  완료 / 실패.
-- Detail Action UX: detail retry/delete/action states are visible and explainable.
-- Journal First Slice: Home now behaves more like a riding journal entry point,
-  not only a video gallery.
-- Upload Entry UX: the upload entry surface is polished for the current phase.
-- Analysis Trust UX: analysis/trick review/result explanation has a clearer
-  trust path.
-- Loading Observability: slow startup and Video/List spinner behavior now have
-  app-side timeout/error/retry handling and QA diagnostics for real-device
-  investigation.
-- Kakao Display Name Policy: investigated; current metadata/display_name sync is
-  sufficient, with only low-priority fallback/policy follow-ups left.
+- Direct Upload Foundation(직접 업로드 기반): the app can create riding records
+  from user-selected videos.
+- Upload Reliability(업로드 신뢰성): upload, analysis handoff, result reflection,
+  recovery cases, and thumbnail persistence are stable enough for the current
+  phase.
+- Device-first Identity(기기 우선 인증): users can start with anonymous/device-first
+  usage instead of a login wall.
+- Ownership and Privacy Boundary(소유권/프라이버시 경계): records are scoped to the
+  user owner, realtime is private, and external no-token user paths are closed.
+- Push Notification Foundation(푸시 알림 기반): push registration, delivery,
+  observability, and account-switch token ownership are established.
+- State Sync Foundation(상태 동기화 기반): Home, Video, Detail, upload completion,
+  analysis completion, Push, and Realtime can converge without polling as the
+  primary model.
+- Recovery Baseline(복구 기준선): Email Recovery exists as a fallback baseline.
+- Kakao Recovery(카카오 복구): Kakao account linking, reinstall/new-device recovery
+  sign-in, and one user-facing Kakao CTA are verified for the current phase.
+- Product UX Baseline(제품 UX 기준선): user-facing record status language is
+  unified as 진행중 / 완료 / 실패.
+- Detail Action UX(상세 액션 UX): detail retry/delete/action states are visible and
+  explainable.
+- Journal First Slice(저널 첫 슬라이스): Home now behaves more like a riding
+  journal entry point, not only a video gallery.
+- Upload Entry UX(업로드 진입 UX): the upload entry surface is polished for the
+  current phase.
+- Analysis Trust UX(분석 신뢰 UX): analysis/trick review/result explanation has a
+  clearer trust path.
+- Loading Observability(로딩 관측성): slow startup and Video/List spinner behavior
+  now have app-side timeout/error/retry handling and QA diagnostics for
+  real-device investigation.
+- Kakao Display Name Policy(카카오 표시 이름 정책): investigated; current
+  metadata/display_name sync is sufficient, with only low-priority
+  fallback/policy follow-ups left.
 
 Current active work:
 
-- Email Recovery Connection: connect a recovery email to the current
+- Email Recovery Connection(복구 이메일 연결): connect a recovery email to the current
   device-first account and return to ASJ through the app deep link.
 
 Near follow-ups:
 
-- Email Recovery Sign-in: recover existing records by email after reinstall or
-  on a new device.
-- Email Recovery Redirect / Site URL Policy: decide production-safe fallback and
-  redirect rules for email flows.
-- Real-use Loading Diagnosis: if slow startup or Video spinner behavior
+- Email Recovery Sign-in(이메일 기존 기록 복구): recover existing records by email
+  after reinstall or on a new device.
+- Email Recovery Redirect / Site URL Policy(이메일 리다이렉트/Site URL 정책):
+  decide production-safe fallback and redirect rules for email flows.
+- Real-use Loading Diagnosis(실사용 로딩 진단): if slow startup or Video spinner behavior
   reappears, use QA diagnostics to separate app-state issues from
   Render/Supabase/free-plan latency.
-- Infrastructure Plan Validation: if app behavior is correct but latency remains
-  the bottleneck, test a basic Render/Supabase plan upgrade.
-- Kakao OAuth Step Reduction: investigate whether Kakao/iOS external "continue"
-  friction can be reduced without breaking Supabase OAuth.
+- Infrastructure Plan Validation(인프라 플랜 검증): if app behavior is correct but
+  latency remains the bottleneck, test a basic Render/Supabase plan upgrade.
+- Kakao OAuth Step Reduction(카카오 OAuth 단계 축소): investigate whether Kakao/iOS
+  external "continue" friction can be reduced without breaking Supabase OAuth.
 
 Later backlog:
 
-- Display Name Fallbacks and Profile Policy: add preferred_username/user_name
-  fallback only if needed, and revisit overwrite rules when user-editable profile
-  names exist.
-- Recovery Attempt Observability: add durable row/log design for recovery
-  attempts if debugging requires more than screen diagnostics.
-- Media / Share UX.
-- Upload Entry Bottom Sheet: keep deferred unless a real pre-submit choice proves
-  it necessary.
-- Compression / Upload Optimization.
-- AI Calibration.
+- Display Name Fallbacks and Profile Policy(표시 이름 fallback/프로필 정책): add
+  preferred_username/user_name fallback only if needed, and revisit overwrite
+  rules when user-editable profile names exist.
+- Recovery Attempt Observability(복구 시도 관측성): add durable row/log design for
+  recovery attempts if debugging requires more than screen diagnostics.
+- Media / Share UX(미디어/공유 UX).
+- Upload Entry Bottom Sheet(업로드 진입 바텀시트): keep deferred unless a real
+  pre-submit choice proves it necessary.
+- Compression / Upload Optimization(압축/업로드 최적화).
+- AI Calibration(AI 보정).
 
 ## Deferred Follow-Up Issues
 

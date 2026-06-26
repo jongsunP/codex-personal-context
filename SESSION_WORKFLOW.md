@@ -193,7 +193,9 @@ For the Action Sports Journal CTO session:
   QA, build readiness, or "wait for development-session result" as list items.
   Build numbers can be supporting evidence, but they should not appear as
   standalone product workstreams. Keep workstream names stable and evolve the
-  same list over time.
+  same list over time. Prefer paired labels in the form `English(한국어)` for
+  product/workstream names so the Founder can scan both product terminology and
+  meaning consistently.
 
 Validation-cost policy:
 
