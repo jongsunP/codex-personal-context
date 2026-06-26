@@ -174,6 +174,14 @@ For the Action Sports Journal CTO session:
   prompts unless they directly affect the task. Development prompts should carry
   only the product, technical, QA, safety, and workflow details needed for that
   development task.
+- The conversation can contain mixed context: product development decisions,
+  technical implementation details, QA observations, infrastructure concerns,
+  personal working preferences, and session operating rules. Preserve all durable
+  context, but classify and apply it by situation. When working on development,
+  prioritize development/product/technical context. When answering about session
+  behavior, prompt format, memory, sync, build policy, or collaboration style,
+  treat that as operating guidance. Do not merge working-style instructions into
+  product requirements unless they directly affect the development task.
 - If the Founder raises a concern that will not be handled immediately, record
   it as a backlog or follow-up item so it can be rechecked later. Deferred
   concerns should not disappear just because the current task continues.
