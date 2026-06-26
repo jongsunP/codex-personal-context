@@ -55,13 +55,8 @@ or answer from a duplicated list in this personal-context file.
 When the Founder asks for the list, keep the project format:
 
 ```text
-완료된 기반:
-지속 원칙:
-현재 상태:
-바로 앞 작업:
-가까운 후속:
-나중에 해도 좋은 것:
-장기 보관 목록:
+완료:
+현재 남은 과제:
 ```
 
 The list is a PM/product workstream timeline, not a transient engineering
