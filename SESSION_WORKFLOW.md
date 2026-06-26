@@ -227,11 +227,13 @@ For the Action Sports Journal CTO session:
 - The conversation can contain mixed context: product development decisions,
   technical implementation details, QA observations, infrastructure concerns,
   personal working preferences, and session operating rules. Preserve all durable
-  context, but classify and apply it by situation. When working on development,
-  prioritize development/product/technical context. When answering about session
-  behavior, prompt format, memory, sync, build policy, or collaboration style,
-  treat that as operating guidance. Do not merge working-style instructions into
-  product requirements unless they directly affect the development task.
+  context, but first classify whether the current turn is development/product
+  work or meta/session setup work, then act in the matching lane. When working
+  on development, prioritize development/product/technical context. When
+  answering about session behavior, prompt format, memory, sync, build policy,
+  or collaboration style, treat that as operating guidance. Do not merge
+  working-style instructions into product requirements unless they directly
+  affect the development task.
 - If the Founder raises a concern that will not be handled immediately, record
   it as a backlog or follow-up item so it can be rechecked later. Deferred
   concerns should not disappear just because the current task continues.
