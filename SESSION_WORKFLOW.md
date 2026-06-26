@@ -52,14 +52,22 @@ When the user asks to start, resume, continue, or pick up work:
 
 1. Pull `codex-personal-context`.
 2. Pull the relevant project repository.
-3. Read the current bootstrap and handoff documents.
+3. Read the current bootstrap, agent, project memory, stage, and handoff
+   documents from the remote-backed repos.
 4. Check the project git status before touching files.
 5. Identify the current branch, latest relevant commit, and next starting
    point.
 6. Continue from the documented state instead of relying only on chat memory.
 
+Assume project-internal Codex sessions are local-device-bound. For remote work
+continuity, treat Git-backed documents as the durable source of truth, not the
+current device's local session state.
+
 For Action Sports Journal, read:
 
+- `codex-personal-context` `AGENTS.md`
+- `codex-personal-context` `SESSION_WORKFLOW.md`
+- `codex-personal-context` `projects/action-sports-journal-app.md`
 - Project `AGENTS.md`
 - `docs/PROJECT_MEMORY.md`
 - `docs/CURRENT_STAGE.md`
@@ -100,6 +108,9 @@ This also means the CTO session itself should summarize and close the day, not
 only generate a development-session prompt. Include current status, completed
 decisions/work, pending development-session results if any, the next starting
 point, and what should be checked next.
+On closeout, ensure durable decisions, current status, QA/build state, and the
+next starting point are written to the appropriate project docs and/or
+`codex-personal-context`, then pushed when safe.
 
 For lightweight question or learning sessions, keep the wrap-up shorter, but
 still preserve durable preferences or project decisions that should survive
