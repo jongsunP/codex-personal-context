@@ -179,6 +179,12 @@ Do not add unrelated product features yet.
 
 Stable project list:
 
+This list is a project feature/workstream timeline, not a temporary engineering
+checklist. Do not include transient validation steps such as typecheck,
+diff-check, Simulator QA, build readiness, or "wait for development-session
+result" as list items. Keep the list at the product/technical plan level, keep
+existing workstream names stable, and move items forward as the project evolves.
+
 Completed foundation and product slices:
 
 - Upload Part 1.
@@ -206,32 +212,30 @@ Completed foundation and product slices:
 - Upload Entry UX Polish.
 - Analysis Trust UX.
 - Build 84 Kakao one-click recovery real-device QA passed.
+- Initial Loading / Video Tab Spinner Observability P1.
+- QA Debug Overlay / Panel P1.
+- Kakao display_name sync investigation.
 
 Current active work:
 
-- Initial Loading / Video Tab Spinner Observability.
-- QA Debug Overlay/Panel for real-device diagnosis.
-
-Immediate next checks:
-
-- Review the development-session result for QA Debug Overlay/Panel.
-- Confirm that the panel exposes boot/auth/video status, duration, count, retry,
-  and last reason without tokens or personal data.
-- Decide whether a new standalone build is needed after the debug panel gate.
+- Email Recovery P1: current-account recovery email connection completion.
 
 Near follow-ups:
 
-- Use the debug panel/logs to separate app loading-state bugs from
-  Render/Supabase/free-plan latency.
-- If the app handles timeout/error/retry correctly but latency remains the
-  bottleneck, consider a basic infrastructure plan upgrade as a validation step.
+- Email Recovery sign-in flow for reinstall/new-device recovery.
+- Email Recovery redirect / Site URL policy.
+- Use QA Debug Panel values to separate app loading-state bugs from
+  Render/Supabase/free-plan latency if slow startup or Video spinner behavior
+  reappears in real use.
+- If latency remains the bottleneck after app-side handling is verified, consider
+  a basic infrastructure plan upgrade as a validation step.
 - OAuth Step Reduction Investigation: Kakao/iOS may still feel like two external
   `계속` steps even though ASJ's own CTA is one-click.
 
 Later backlog:
 
-- Kakao display_name sync.
-- Email Recovery deep link / redirect.
+- preferred_username / user_name fallback for display-name sync.
+- Revisit display_name overwrite policy if user-editable profile names are added.
 - Recovery attempt observability row/log design.
 - Media / Share UX later.
 - Upload Entry Bottom Sheet remains deferred unless a real pre-submit choice
