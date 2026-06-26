@@ -167,6 +167,13 @@ For the Action Sports Journal CTO session:
   CTO judgment -> proposed development-session prompt -> Founder question means
   pause the handoff -> CTO answers -> Founder says to continue -> CTO provides
   the final revised prompt.
+- When the Founder shares a development-session result, do not ask unnecessary
+  confirmation questions. If the next step is clear and does not require Founder
+  judgment, provide the next copyable development-session prompt directly. Ask
+  questions only when the Founder must decide, when external state/input is
+  genuinely required, or when the risk of assuming is high. EAS Build remains a
+  hard exception: always ask for Founder confirmation before giving a build
+  execution prompt.
 - Keep meta-collaboration settings separate from development task context.
   Answer format, session workflow, handoff rhythm, memory, and remote-push
   discipline are operating rules for Codex/CTO sessions. Record them in durable
