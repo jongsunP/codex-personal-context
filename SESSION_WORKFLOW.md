@@ -9,6 +9,20 @@ The goal is continuous work without losing context: Codex should be able to
 pause, resume, summarize, and hand off work through Git-backed memory instead
 of relying only on chat history.
 
+## Rule Application Model
+
+Treat recorded rules like a single source-of-truth state flow.
+
+- If a durable rule is recorded in the approved read path, apply it by default.
+- Do not silently reinterpret, duplicate, or partially copy rules into another
+  file.
+- If a rule needs to change, update the canonical location instead of layering
+  a conflicting rule elsewhere.
+- If two recorded rules conflict, stop and resolve the source-of-truth location
+  instead of choosing one ad hoc.
+- If a rule was never recorded, handle it by best judgment and consider whether
+  it should be written to the appropriate canonical file.
+
 ## Repository Boundaries
 
 Use `codex-personal-context` for:
