@@ -9,6 +9,19 @@ The goal is continuous work without losing context: Codex should be able to
 pause, resume, summarize, and hand off work through Git-backed memory instead
 of relying only on chat history.
 
+## Portable Workspace Principle
+
+Treat `codex-personal-context` plus the active project repository as a
+portable, Git-backed workspace. If Device A and Device B both pull the same
+personal-context repo and the same project repo, Codex should behave as
+consistently as possible across both devices.
+
+This includes communication preferences such as Korean honorific replies,
+handoff format, read order, closeout behavior, build policy, and project
+source-of-truth rules. Device-local chat history can add context, but it must
+not override the Git-backed rules unless the user explicitly changes and
+records the rule.
+
 ## Rule Application Model
 
 Treat recorded rules like a single source-of-truth state flow.
