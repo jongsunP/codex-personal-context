@@ -184,9 +184,11 @@ change list or temporary engineering checklist. Do not include transient
 validation steps such as typecheck, diff-check, Simulator QA, build readiness,
 or "wait for development-session result" as list items. Build numbers may be
 mentioned as evidence in notes, but they are not standalone product workstreams.
-Keep workstream names stable and evolve the same list over time.
+Keep workstream names stable and evolve the same list over time. When the user
+asks for the list, show only `완료:` and `남은 것:` in time order. Do not
+invent separate current/near/later headings per session.
 
-Completed product foundations and slices:
+완료:
 
 - Direct Upload Foundation(직접 업로드 기반): the app can create riding records
   from user-selected videos.
@@ -222,29 +224,26 @@ Completed product foundations and slices:
   metadata/display_name sync is sufficient, with only low-priority
   fallback/policy follow-ups left.
 
-Current active work:
+남은 것:
 
 - Email Recovery Connection(복구 이메일 연결): connect a recovery email to the current
-  device-first account and return to ASJ through the app deep link. Build 86 was
-  created for standalone email-link callback QA and is waiting for Founder
-  feedback.
-
-Near follow-ups:
-
+  device-first account and return to ASJ through the app deep link. Build 86
+  was created for standalone email-link callback QA. Supabase Site URL was
+  corrected after the first localhost fallback failure, and Build 86 re-QA is
+  pending.
 - Email Recovery Sign-in(이메일 기존 기록 복구): recover existing records by email
   after reinstall or on a new device.
 - Email Recovery Redirect / Site URL Policy(이메일 리다이렉트/Site URL 정책):
   decide production-safe fallback and redirect rules for email flows.
 - Real-use Loading Diagnosis(실사용 로딩 진단): if slow startup or Video spinner behavior
   reappears, use QA diagnostics to separate app-state issues from
-  Render/Supabase/free-plan latency.
+  Render/Supabase/free-plan latency. A QA Debug log with
+  `Remote moment sync timed out` was captured and sent to the development
+  session for analysis.
 - Infrastructure Plan Validation(인프라 플랜 검증): if app behavior is correct but
   latency remains the bottleneck, test a basic Render/Supabase plan upgrade.
 - Kakao OAuth Step Reduction(카카오 OAuth 단계 축소): investigate whether Kakao/iOS
   external "continue" friction can be reduced without breaking Supabase OAuth.
-
-Later backlog:
-
 - Display Name Fallbacks and Profile Policy(표시 이름 fallback/프로필 정책): add
   preferred_username/user_name fallback only if needed, and revisit overwrite
   rules when user-editable profile names exist.
