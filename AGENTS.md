@@ -63,12 +63,10 @@ The user's current main project is Action Sports Journal.
 - Local path: `/Users/parkjongsun/Repository/action-sports-journal-app`
 - GitHub remote: `https://github.com/jongsunP/action-sports-journal-app`
 - Product: iOS-first React Native action sports life log platform.
-- Current stage: Stage 3 post-foundation UX QA.
 - Current Expo SDK: `~54.0.35`.
-- Current mobile status: The app opens on the user's physical iPhone through Expo Go and as a standalone EAS preview/internal distribution app.
-- First screen source: `src/features/sessions/HomeScreen.tsx`
-- Root entry: `App.tsx`
-- Latest documented project commit: `df1016f docs: close out build 82 qa handoff`
+- For current ASJ status, do not use this file as the source of truth. Read
+  `projects/action-sports-journal-app.md`, then the ASJ project `README.md`
+  and `docs/PROJECT_MEMORY.md`.
 
 ## Project Rules To Remember
 
@@ -76,8 +74,6 @@ The user's current main project is Action Sports Journal.
 - ActivityGroup -> Session -> AnalysisResult -> ShareResult.
 - AI analysis is only one feature, not the whole product.
 - Device-first anonymous auth, ownership boundary, private realtime, Push delivery, Push Observability P2, and Kakao Recovery / Account Linking are established product foundations.
-- Kakao Recovery Sign-in P1 passed Build 81 real-device QA.
-- Build 82 is ready for post-foundation UX QA; wait for the user's QA result before sending any new development-session prompt.
 - Do not add unrelated login methods, phone auth, coupons, expenses, calendar, RAG, compression optimization, or AI calibration until the project docs say the stage is ready.
 - Keep implementations simple and avoid over-engineering.
 - Durable preferences, project settings, and continuity notes should be kept in

@@ -23,7 +23,9 @@ Read the project documents instead of duplicating their contents here.
 
 ## Start/Resume Read Order
 
-When resuming ASJ work, first pull both repositories, then read:
+When resuming ASJ work, first pull both repositories, then read this exact
+order. Do not skip, reorder, or replace it with a chat summary unless a file is
+genuinely missing:
 
 1. `codex-personal-context/AGENTS.md`
 2. `codex-personal-context/SESSION_WORKFLOW.md`

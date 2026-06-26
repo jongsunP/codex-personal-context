@@ -48,7 +48,9 @@ summarized into durable docs before being reused elsewhere.
 
 ## Start Or Resume Workflow
 
-When the user asks to start, resume, continue, or pick up work:
+When the user asks to start, resume, continue, or pick up work, follow the
+documented read order exactly. Do not skip, reorder, or replace it with a chat
+summary unless a file is genuinely missing.
 
 1. Pull `codex-personal-context`.
 2. Pull the relevant project repository.
@@ -67,16 +69,19 @@ Assume project-internal Codex sessions are local-device-bound. For remote work
 continuity, treat Git-backed documents as the durable source of truth, not the
 current device's local session state.
 
-For Action Sports Journal, read:
+For Action Sports Journal, read in this exact order:
 
-- `codex-personal-context` `AGENTS.md`
-- `codex-personal-context` `SESSION_WORKFLOW.md`
-- `codex-personal-context` `projects/action-sports-journal-app.md`
-- Project `AGENTS.md`
-- `docs/PROJECT_MEMORY.md`
-- `docs/CURRENT_STAGE.md`
-- `docs/HANDOFF.md`
-- Other documents only when relevant to the task.
+1. `codex-personal-context/AGENTS.md`
+2. `codex-personal-context/SESSION_WORKFLOW.md`
+3. `codex-personal-context/projects/action-sports-journal-app.md`
+4. `action-sports-journal-app/README.md`
+5. `action-sports-journal-app/AGENTS.md`
+6. `action-sports-journal-app/docs/PROJECT_MEMORY.md`
+7. `action-sports-journal-app/docs/CURRENT_STAGE.md`
+8. `action-sports-journal-app/docs/HANDOFF.md`
+9. `action-sports-journal-app/docs/TECH_DEBT_AND_REFACTOR_TODO.md`
+
+Only read other project docs when the active task points to them.
 
 If the user says "작업 재개하자" for Action Sports Journal, treat it as a
 status-recovery request. Prepare:
