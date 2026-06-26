@@ -186,12 +186,14 @@ For the Action Sports Journal CTO session:
   it as a backlog or follow-up item so it can be rechecked later. Deferred
   concerns should not disappear just because the current task continues.
 - When the Founder asks for the current list/list-up for Action Sports Journal,
-  show the stable project feature/workstream timeline, not a temporary execution
-  checklist. Include completed foundation/product slices, current active
-  workstreams, near follow-ups, and later backlog. Do not include transient
-  validation steps such as typecheck, diff-check, Simulator QA, build readiness,
-  or "wait for development-session result" as list items. Keep workstream names
-  stable and evolve the same list over time.
+  show the stable PM-style product/workstream timeline, not a code change list
+  or temporary execution checklist. Include completed product foundations and
+  slices, current active workstreams, near follow-ups, and later backlog. Do not
+  include transient validation steps such as typecheck, diff-check, Simulator
+  QA, build readiness, or "wait for development-session result" as list items.
+  Build numbers can be supporting evidence, but they should not appear as
+  standalone product workstreams. Keep workstream names stable and evolve the
+  same list over time.
 
 Validation-cost policy:
 

@@ -179,67 +179,74 @@ Do not add unrelated product features yet.
 
 Stable project list:
 
-This list is a project feature/workstream timeline, not a temporary engineering
-checklist. Do not include transient validation steps such as typecheck,
-diff-check, Simulator QA, build readiness, or "wait for development-session
-result" as list items. Keep the list at the product/technical plan level, keep
-existing workstream names stable, and move items forward as the project evolves.
+This list is a product/workstream timeline for PM-style planning, not a code
+change list or temporary engineering checklist. Do not include transient
+validation steps such as typecheck, diff-check, Simulator QA, build readiness,
+or "wait for development-session result" as list items. Build numbers may be
+mentioned as evidence in notes, but they are not standalone product workstreams.
+Keep workstream names stable and evolve the same list over time.
 
-Completed foundation and product slices:
+Completed product foundations and slices:
 
-- Upload Part 1.
-- Upload Reliability P0/P1.
-- Auth Phase 1 / Auth Phase 2.
-- Device-first Anonymous Auth.
-- Ownership Boundary.
-- Private Realtime.
-- No-Token Policy / External No-Token Finalization.
-- Push Registration.
-- Push Delivery.
-- Push Observability P2.
-- Push Token Account-switch Policy.
-- State Sync stabilization.
-- Polling removal.
-- Thumbnail Persistence.
-- Build 74 QA baseline.
-- Email Recovery baseline/fallback.
-- Kakao Recovery Method Linking.
-- Kakao Recovery Sign-in P1.
-- Kakao Single CTA Recovery UX.
-- Product UX Baseline P1.
-- Detail Retry / Action UI.
-- Home Journal first slice.
-- Upload Entry UX Polish.
-- Analysis Trust UX.
-- Build 84 Kakao one-click recovery real-device QA passed.
-- Initial Loading / Video Tab Spinner Observability P1.
-- QA Debug Overlay / Panel P1.
-- Kakao display_name sync investigation.
+- Direct Upload Foundation: the app can create riding records from user-selected
+  videos.
+- Upload Reliability: upload, analysis handoff, result reflection, recovery
+  cases, and thumbnail persistence are stable enough for the current phase.
+- Device-first Identity: users can start with anonymous/device-first usage
+  instead of a login wall.
+- Ownership and Privacy Boundary: records are scoped to the user owner, realtime
+  is private, and external no-token user paths are closed.
+- Push Notification Foundation: push registration, delivery, observability, and
+  account-switch token ownership are established.
+- State Sync Foundation: Home, Video, Detail, upload completion, analysis
+  completion, Push, and Realtime can converge without polling as the primary
+  model.
+- Recovery Baseline: Email Recovery exists as a fallback baseline.
+- Kakao Recovery: Kakao account linking, reinstall/new-device recovery sign-in,
+  and one user-facing Kakao CTA are verified for the current phase.
+- Product UX Baseline: user-facing record status language is unified as 진행중 /
+  완료 / 실패.
+- Detail Action UX: detail retry/delete/action states are visible and explainable.
+- Journal First Slice: Home now behaves more like a riding journal entry point,
+  not only a video gallery.
+- Upload Entry UX: the upload entry surface is polished for the current phase.
+- Analysis Trust UX: analysis/trick review/result explanation has a clearer
+  trust path.
+- Loading Observability: slow startup and Video/List spinner behavior now have
+  app-side timeout/error/retry handling and QA diagnostics for real-device
+  investigation.
+- Kakao Display Name Policy: investigated; current metadata/display_name sync is
+  sufficient, with only low-priority fallback/policy follow-ups left.
 
 Current active work:
 
-- Email Recovery P1: current-account recovery email connection completion.
+- Email Recovery Connection: connect a recovery email to the current
+  device-first account and return to ASJ through the app deep link.
 
 Near follow-ups:
 
-- Email Recovery sign-in flow for reinstall/new-device recovery.
-- Email Recovery redirect / Site URL policy.
-- Use QA Debug Panel values to separate app loading-state bugs from
-  Render/Supabase/free-plan latency if slow startup or Video spinner behavior
-  reappears in real use.
-- If latency remains the bottleneck after app-side handling is verified, consider
-  a basic infrastructure plan upgrade as a validation step.
-- OAuth Step Reduction Investigation: Kakao/iOS may still feel like two external
-  `계속` steps even though ASJ's own CTA is one-click.
+- Email Recovery Sign-in: recover existing records by email after reinstall or
+  on a new device.
+- Email Recovery Redirect / Site URL Policy: decide production-safe fallback and
+  redirect rules for email flows.
+- Real-use Loading Diagnosis: if slow startup or Video spinner behavior
+  reappears, use QA diagnostics to separate app-state issues from
+  Render/Supabase/free-plan latency.
+- Infrastructure Plan Validation: if app behavior is correct but latency remains
+  the bottleneck, test a basic Render/Supabase plan upgrade.
+- Kakao OAuth Step Reduction: investigate whether Kakao/iOS external "continue"
+  friction can be reduced without breaking Supabase OAuth.
 
 Later backlog:
 
-- preferred_username / user_name fallback for display-name sync.
-- Revisit display_name overwrite policy if user-editable profile names are added.
-- Recovery attempt observability row/log design.
-- Media / Share UX later.
-- Upload Entry Bottom Sheet remains deferred unless a real pre-submit choice
-  proves it necessary.
+- Display Name Fallbacks and Profile Policy: add preferred_username/user_name
+  fallback only if needed, and revisit overwrite rules when user-editable profile
+  names exist.
+- Recovery Attempt Observability: add durable row/log design for recovery
+  attempts if debugging requires more than screen diagnostics.
+- Media / Share UX.
+- Upload Entry Bottom Sheet: keep deferred unless a real pre-submit choice proves
+  it necessary.
 - Compression / Upload Optimization.
 - AI Calibration.
 
