@@ -64,18 +64,22 @@ checklist. Do not add typecheck, diff-check, Simulator QA, build readiness, or
 "waiting for development-session result" as standalone workstreams. Build
 numbers can be supporting evidence, not the workstream itself.
 
-## Development Session Bootstrap Prompt
+## Session Bootstrap Prompts
 
-The canonical development-session initial setup prompt lives in the ASJ project
-repository:
+The canonical CTO-session and development-session initial setup prompts live in
+the ASJ project repository:
 
 ```text
 action-sports-journal-app/README.md
 ```
 
-Use the `Development Session Bootstrap Prompt` section from that file when the
-Founder asks a CTO session for the development-session setup prompt. Do not
-keep a second copy of the prompt here.
+Use the `CTO Session Bootstrap Prompt` section when the Founder asks for a new
+CTO-session setup prompt.
+
+Use the `Development Session Bootstrap Prompt` section when the Founder asks a
+CTO session for the development-session setup prompt.
+
+Do not keep second copies of these prompts here.
 
 ## Current Shortcut
 
