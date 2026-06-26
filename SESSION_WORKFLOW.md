@@ -54,10 +54,14 @@ When the user asks to start, resume, continue, or pick up work:
 2. Pull the relevant project repository.
 3. Read the current bootstrap, agent, project memory, stage, and handoff
    documents from the remote-backed repos.
-4. Check the project git status before touching files.
-5. Identify the current branch, latest relevant commit, and next starting
+4. Check every known remote-backed information source that is relevant and
+   available for that project, not only the last chat summary. This includes
+   personal context, project `AGENTS.md`, project memory/stage/handoff docs,
+   and relevant TODO/tech-debt docs.
+5. Check the project git status before touching files.
+6. Identify the current branch, latest relevant commit, and next starting
    point.
-6. Continue from the documented state instead of relying only on chat memory.
+7. Continue from the documented state instead of relying only on chat memory.
 
 Assume project-internal Codex sessions are local-device-bound. For remote work
 continuity, treat Git-backed documents as the durable source of truth, not the
