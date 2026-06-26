@@ -64,6 +64,10 @@ checklist. Do not add typecheck, diff-check, Simulator QA, build readiness, or
 "waiting for development-session result" as standalone workstreams. Build
 numbers can be supporting evidence, not the workstream itself.
 
+Unless the Founder explicitly asks for a summary, subset, or priority-only
+answer, show the full canonical list from the project repo, including the
+complete `완료` section.
+
 ## Session Bootstrap Prompts
 
 The canonical CTO-session and development-session initial setup prompts live in
