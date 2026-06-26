@@ -8,7 +8,7 @@
 - Runtime: standalone EAS preview/internal distribution app on physical iPhone
 - Current SDK: Expo SDK `~54.0.35`
 - Current stage: Stage 3 post-foundation UX QA
-- Latest project commit: `12741db fix: prevent indefinite video archive loading`
+- Latest project commit: `473c131 chore: prepare email recovery qa build`
 
 ## Product Philosophy
 
@@ -225,7 +225,9 @@ Completed product foundations and slices:
 Current active work:
 
 - Email Recovery Connection(복구 이메일 연결): connect a recovery email to the current
-  device-first account and return to ASJ through the app deep link.
+  device-first account and return to ASJ through the app deep link. Build 86 was
+  created for standalone email-link callback QA and is waiting for Founder
+  feedback.
 
 Near follow-ups:
 
@@ -256,12 +258,10 @@ Later backlog:
 
 ## Deferred Follow-Up Issues
 
-- Initial loading / Video tab spinner observability: active. First pass fixed
-  the likely indefinite list loading path after remote sync timeout/failed and
-  separated Video Archive loading/empty/timeout/error/ready states. Continue with
-  QA Debug Overlay/Panel so real-device QA can show where the app is waiting,
-  how long each step took, and whether the cause is app state handling or
-  infrastructure/network latency. Main hypotheses remain install/cache behavior,
+- Initial loading / Video tab spinner observability: completed for the current
+  P1 preview/internal QA scope, with ongoing real-use monitoring. If slow startup
+  or Video spinner behavior reappears, collect QA Debug Panel values before
+  changing code or infrastructure. Main hypotheses remain install/cache behavior,
   anonymous auth/user bootstrap timing, push registration, realtime
   subscription, local storage hydration, moments/video fetch, upload recovery
   scan, backend/Supabase cold start, and missing timeout/error/empty-state
@@ -273,5 +273,5 @@ Later backlog:
 Use this prompt when opening the project in a new Codex terminal session:
 
 ```text
-codex-personal-context의 AGENTS.md, SESSION_WORKFLOW.md, projects/action-sports-journal-app.md와 ASJ 프로젝트의 AGENTS.md, docs/PROJECT_MEMORY.md, docs/CURRENT_STAGE.md, docs/HANDOFF.md, docs/TECH_DEBT_AND_REFACTOR_TODO.md를 먼저 pull/read하고 현재 ASJ 상태를 복구해줘. 최신 기준선은 Build 84 Kakao Single CTA one-click recovery 실기기 QA 통과, Startup / Video Tab Loading Observability P1 1차 수정 완료, 현재 진행은 QA Debug Overlay/Panel이야. 리스트업은 프로젝트 전체 시간축 기준으로 유지하고, 완료된 기반 작업도 생략하지 말아줘. 다음에는 QA Debug Overlay/Panel 결과 확인 후 필요 시 실기기 build 여부를 판단한다.
+codex-personal-context의 AGENTS.md, SESSION_WORKFLOW.md, projects/action-sports-journal-app.md와 ASJ 프로젝트의 AGENTS.md, docs/PROJECT_MEMORY.md, docs/CURRENT_STAGE.md, docs/HANDOFF.md, docs/TECH_DEBT_AND_REFACTOR_TODO.md를 먼저 pull/read하고 현재 ASJ 상태를 복구해줘. 최신 기준선은 Build 84 Kakao Single CTA one-click recovery 실기기 QA 통과, Build 85 Loading Observability/QA Debug Panel 실기기 QA 통과, 현재 진행은 Build 86 Email Recovery Connection 실기기 QA 대기야. 리스트업은 PM 관점의 제품/워크스트림 시간축으로 유지하고, English(한국어) 병행 표기를 써줘. 다음에는 사용자의 Build 86 이메일 링크 QA 결과를 확인한다.
 ```
