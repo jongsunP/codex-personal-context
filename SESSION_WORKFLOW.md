@@ -47,6 +47,10 @@ Treat recorded rules like a single source-of-truth state flow.
 - If a durable rule is recorded in the approved read path, apply it by default.
 - Do not silently reinterpret, duplicate, or partially copy rules into another
   file.
+- The user may restate the same intent in different words. Treat that as a
+  signal to normalize the intent, compare it with existing canonical rules, and
+  merge or tighten the existing rule instead of appending a duplicate.
+- Record durable preferences as curated operating rules, not as a raw chat log.
 - If a rule needs to change, update the canonical location instead of layering
   a conflicting rule elsewhere.
 - If two recorded rules conflict, stop and resolve the source-of-truth location
