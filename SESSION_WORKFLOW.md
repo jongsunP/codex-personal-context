@@ -69,6 +69,13 @@ Assume project-internal Codex sessions are local-device-bound. For remote work
 continuity, treat Git-backed documents as the durable source of truth, not the
 current device's local session state.
 
+When writing durable context, use the repository boundary strictly. General
+Codex/session behavior belongs in `codex-personal-context`. Project product
+state, technical decisions, QA status, and handoffs belong in that project's
+repository. Do not duplicate a project's canonical status list into personal
+context or create a new status `.md` when an existing project source-of-truth
+document applies.
+
 For Action Sports Journal, read in this exact order:
 
 1. `codex-personal-context/AGENTS.md`

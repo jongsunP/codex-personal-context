@@ -14,6 +14,10 @@ QA state, and backlog live in the project repository:
 
 Read the project documents instead of duplicating their contents here.
 
+When updating ASJ-specific state, write to the ASJ project repository according
+to its `README.md` "Where To Write" map. This personal-context file should stay
+an index, not a duplicated project memory.
+
 ## Repository
 
 - Repository: `https://github.com/jongsunP/action-sports-journal-app`
