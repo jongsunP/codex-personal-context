@@ -276,6 +276,9 @@ Validation-cost policy:
 - Builds and AI API calls are allowed when they are the right validation step.
 - If simulator or physical-device testing can verify the behavior without a
   new EAS build, use that path first.
+- If repeated real-device validation is needed because of native modules or
+  native config, consider Development Build or Local Build before spending many
+  EAS cloud preview/internal builds.
 - If the behavior specifically requires standalone physical-device validation,
   say so clearly and proceed toward the build.
 - Builds are executed by the development session by default. When the CTO
