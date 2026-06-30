@@ -1,16 +1,22 @@
-# Secrets and local state
-.env
-.env.*
-*.key
-*.pem
-auth.json
-*.sqlite
-*.sqlite-shm
-*.sqlite-wal
+# Default-deny: when this repository is checked out as ~/.codex, the directory
+# also contains auth, logs, sqlite state, plugins, caches, and session files.
+# Track only durable personal context documents and explicit bootstrap scripts.
+*
 
-# Dependencies and generated files
-node_modules/
-.DS_Store
-
-# Codex generated state should not be copied here
-.codex/
+!.gitignore
+!AGENTS.md
+!AI_WORKFLOW.md
+!BOOTSTRAP.md
+!DECISION_FRAMEWORK.md
+!DEVELOPMENT_STYLE.md
+!FITNESS.md
+!HANDOFF.md
+!MEMORY_CHANGELOG.md
+!PROFILE.md
+!PROJECTS.md
+!README.md
+!SESSION_WORKFLOW.md
+!VEHICLE.md
+!setup-local-codex.sh
+!projects/
+!projects/**/*.md

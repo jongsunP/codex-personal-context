@@ -40,12 +40,14 @@ before making decisions that depend on long-term context.
 After cloning this repository on a new device, run:
 
 ```bash
-cd ~/Repository/codex-personal-context
+cd ~/.codex
 ./setup-local-codex.sh
 ```
 
-This makes the local global Codex guidance file, `~/.codex/AGENTS.md`, point to
-this repository's `AGENTS.md`.
+The preferred clone target is `~/.codex`, so this repository itself becomes the
+local global Codex guidance home. The setup script also creates
+`~/Repository/codex-personal-context` as a convenient alias to `~/.codex` when
+it does not already exist.
 
 When remote and local context differ, prefer the remote state unless the user
 explicitly says to preserve or promote local unpushed changes.

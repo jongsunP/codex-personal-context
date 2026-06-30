@@ -44,17 +44,18 @@ c7cdfe9 Switch dev analysis server to Gemini video input
 
 ## How To Use
 
-On a new device, clone this repository and run the local Codex setup once:
+On a new device, clone this repository as the Codex home and run the local
+setup once:
 
 ```bash
-git clone https://github.com/jongsunP/codex-personal-context.git ~/Repository/codex-personal-context
-cd ~/Repository/codex-personal-context
+git clone https://github.com/jongsunP/codex-personal-context.git ~/.codex
+cd ~/.codex
 ./setup-local-codex.sh
 ```
 
-This links `~/.codex/AGENTS.md` to this repository's `AGENTS.md`, so the
-Git-backed personal guidance becomes the active global Codex guidance on that
-device.
+This makes the Git-backed personal guidance the active global Codex guidance on
+that device. The script also creates `~/Repository/codex-personal-context` as a
+convenient alias to `~/.codex` when it does not already exist.
 
 Start with `BOOTSTRAP.md` when a new Codex session needs to understand the user.
 Then read `SESSION_WORKFLOW.md` and `HANDOFF.md` for current continuation
