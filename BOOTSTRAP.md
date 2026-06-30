@@ -37,6 +37,16 @@ When starting a new session:
 If this repository does not exist locally, clone it. If it exists, pull it
 before making decisions that depend on long-term context.
 
+After cloning this repository on a new device, run:
+
+```bash
+cd ~/Repository/codex-personal-context
+./setup-local-codex.sh
+```
+
+This makes the local global Codex guidance file, `~/.codex/AGENTS.md`, point to
+this repository's `AGENTS.md`.
+
 When remote and local context differ, prefer the remote state unless the user
 explicitly says to preserve or promote local unpushed changes.
 
