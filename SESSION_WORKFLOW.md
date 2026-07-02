@@ -266,8 +266,11 @@ For the Action Sports Journal CTO session:
   it as a backlog or follow-up item so it can be rechecked later. Deferred
   concerns should not disappear just because the current task continues.
 - When the Founder asks for the current list/list-up for Action Sports Journal,
-  show the stable PM-style product/workstream timeline, not a code change list
-  or temporary execution checklist. Include completed product foundations and
+  treat terms such as "리스트업", "현재 리스트업", "리스트", "전체 리스트",
+  and "현재/남은 것" as a stable signal for the full project workstream list,
+  not the narrow topic from the immediately preceding conversation. Show the
+  stable PM-style product/workstream timeline, not a code change list or
+  temporary execution checklist. Include completed product foundations and
   slices, current active workstreams, near follow-ups, and later backlog. Do not
   include transient validation steps such as typecheck, diff-check, Simulator
   QA, build readiness, or "wait for development-session result" as list items.
@@ -275,7 +278,8 @@ For the Action Sports Journal CTO session:
   standalone product workstreams. Keep workstream names stable and evolve the
   same list over time. Prefer paired labels in the form `English(한국어)` for
   product/workstream names so the Founder can scan both product terminology and
-  meaning consistently.
+  meaning consistently. If only a subset is intentionally shown, explicitly say
+  the scope first, for example "Startup Performance 기준으로는...".
 
 Validation-cost policy:
 

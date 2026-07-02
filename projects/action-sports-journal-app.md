@@ -52,7 +52,10 @@ action-sports-journal-app/docs/PROJECT_MEMORY.md
 Use the `Current stable workstream list` block from that file. Do not maintain
 or answer from a duplicated list in this personal-context file.
 
-When the Founder asks for the list, keep the project format:
+When the Founder asks for the list, list-up, "리스트업", "현재 리스트업",
+"리스트", "전체 리스트", or "현재/남은 것", treat it as a request for the
+full project workstream list unless the Founder explicitly narrows the scope.
+Keep the project format:
 
 ```text
 완료:
@@ -67,6 +70,10 @@ numbers can be supporting evidence, not the workstream itself.
 Unless the Founder explicitly asks for a summary, subset, or priority-only
 answer, show the full canonical list from the project repo, including the
 complete `완료` section.
+
+If a response intentionally covers only a narrow area, name that scope first so
+it cannot be mistaken for the full list. For example: "Startup Performance
+기준으로는...".
 
 ## Session Bootstrap Prompts
 
@@ -87,10 +94,9 @@ Do not keep second copies of these prompts here.
 
 ## Current Shortcut
 
-As of the latest sync, the immediate ASJ flow is still governed by the project
-repo docs. In the current conversation, Build 86 Email Recovery Connection QA
-and Real-use Loading Diagnosis were the active threads. Always re-check the
-project repo before relying on this shortcut.
+Do not rely on this file for current ASJ status. Always re-check the project
+repo documents in the read order above. This file is only an index and durable
+operating-rule layer.
 
 ## Durable Product Principles
 
