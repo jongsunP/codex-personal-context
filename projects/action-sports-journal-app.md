@@ -102,6 +102,23 @@ Do not rely on this file for current ASJ status. Always re-check the project
 repo documents in the read order above. This file is only an index and durable
 operating-rule layer.
 
+## CTO Session Boundary
+
+For ASJ, the CTO session is the Founder-facing coordination lane. It should
+interpret QA, classify product priorities, keep the stable list aligned, update
+durable documentation when appropriate, and provide copyable prompts for the
+development session.
+
+Do not treat "계속해줘", "진행해", or similar continuation phrases in the CTO
+session as permission to implement ASJ app/server code directly. Those phrases
+mean to continue the CTO workflow unless the Founder explicitly asks this
+session to execute code changes here.
+
+Actual ASJ app/server implementation, migrations, validation commands, commits,
+pushes, and EAS builds belong in the separate development session by default.
+If this boundary is missed, recover by returning to the Git-backed project docs
+and the `SESSION_WORKFLOW.md` CTO contract.
+
 ## Durable Product Principles
 
 - ASJ is not an MVP. It is a real service built one reliable foundation at a
