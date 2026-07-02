@@ -31,8 +31,8 @@ When starting a new session:
 
 - Repository: `codex-personal-context`
 - GitHub owner: `jongsunP`
-- Local repository root: `/Users/parkjongsun/repository/codex-personal-context`
-- General local repository folder: `/Users/parkjongsun/repository`
+- Local repository root: `/Users/parkjongsun/Repository/codex-personal-context`
+- General local repository folder: `/Users/parkjongsun/Repository`
 
 If this repository does not exist locally, clone it. If it exists, pull it
 before making decisions that depend on long-term context.
@@ -40,14 +40,16 @@ before making decisions that depend on long-term context.
 After cloning this repository on a new device, run:
 
 ```bash
-cd ~/.codex
+mkdir -p ~/Repository
+git clone https://github.com/jongsunP/codex-personal-context.git ~/Repository/codex-personal-context
+cd ~/Repository/codex-personal-context
 ./setup-local-codex.sh
 ```
 
-The preferred clone target is `~/.codex`, so this repository itself becomes the
-local global Codex guidance home. The setup script also creates
-`~/Repository/codex-personal-context` as a convenient alias to `~/.codex` when
-it does not already exist.
+The preferred clone target is `~/Repository/codex-personal-context`, so this
+repository appears as a normal project folder. The setup script copies the
+active guidance files into `~/.codex`, while `~/.codex` remains the local Codex
+runtime home for auth, caches, logs, sessions, and other machine-local state.
 
 When remote and local context differ, prefer the remote state unless the user
 explicitly says to preserve or promote local unpushed changes.

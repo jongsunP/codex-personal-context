@@ -36,6 +36,12 @@ write only to canonical locations
 commit and push durable changes
 ```
 
+The preferred local layout keeps `~/Repository/codex-personal-context` as a
+normal Git repository folder and keeps `~/.codex` as Codex's machine-local
+runtime home. Do not make `~/Repository/codex-personal-context` a symlink to
+`~/.codex` by default. Use `setup-local-codex.sh` to sync the active guidance
+files from the repository into `~/.codex`.
+
 If a setting, preference, project state, or handoff rule matters beyond the
 current chat, it should be represented in Git-backed documents rather than
 left only in local session memory.

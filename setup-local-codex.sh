@@ -3,12 +3,25 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
-REPOSITORY_ALIAS="${CODEX_PERSONAL_CONTEXT_ALIAS:-$HOME/Repository/codex-personal-context}"
-TARGET="$REPO_ROOT/AGENTS.md"
-LINK="$CODEX_HOME/AGENTS.md"
+SYNC_PATHS=(
+  "AGENTS.md"
+  "AI_WORKFLOW.md"
+  "BOOTSTRAP.md"
+  "DECISION_FRAMEWORK.md"
+  "DEVELOPMENT_STYLE.md"
+  "FITNESS.md"
+  "HANDOFF.md"
+  "MEMORY_CHANGELOG.md"
+  "PROFILE.md"
+  "PROJECTS.md"
+  "README.md"
+  "SESSION_WORKFLOW.md"
+  "VEHICLE.md"
+  "projects/action-sports-journal-app.md"
+)
 
-if [[ ! -f "$TARGET" ]]; then
-  echo "Missing AGENTS.md at $TARGET" >&2
+if [[ ! -f "$REPO_ROOT/AGENTS.md" ]]; then
+  echo "Missing AGENTS.md at $REPO_ROOT" >&2
   exit 1
 fi
 
@@ -18,30 +31,30 @@ if git -C "$REPO_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   git -C "$REPO_ROOT" pull --ff-only
 fi
 
-if [[ "$TARGET" == "$LINK" ]]; then
-  mkdir -p "$(dirname "$REPOSITORY_ALIAS")"
-  if [[ ! -e "$REPOSITORY_ALIAS" ]]; then
-    ln -s "$REPO_ROOT" "$REPOSITORY_ALIAS"
-    echo "Linked $REPOSITORY_ALIAS -> $REPO_ROOT"
-  fi
-  echo "$CODEX_HOME is already the Git-backed Codex home."
-  exit 0
-fi
+for rel_path in "${SYNC_PATHS[@]}"; do
+  source_path="$REPO_ROOT/$rel_path"
+  target_path="$CODEX_HOME/$rel_path"
 
-if [[ -L "$LINK" ]]; then
-  current_target="$(readlink "$LINK")"
-  if [[ "$current_target" == "$TARGET" ]]; then
-    echo "$LINK already points to $TARGET"
-    exit 0
+  if [[ ! -e "$source_path" ]]; then
+    echo "Skipping missing $source_path"
+    continue
   fi
-  backup="$LINK.backup.$(date +%Y%m%d-%H%M%S)"
-  mv "$LINK" "$backup"
-  echo "Backed up existing symlink to $backup"
-elif [[ -e "$LINK" ]]; then
-  backup="$LINK.backup.$(date +%Y%m%d-%H%M%S)"
-  mv "$LINK" "$backup"
-  echo "Backed up existing file to $backup"
-fi
 
-ln -s "$TARGET" "$LINK"
-echo "Linked $LINK -> $TARGET"
+  mkdir -p "$(dirname "$target_path")"
+
+  if [[ "$source_path" == "$target_path" ]]; then
+    echo "$rel_path already lives in $CODEX_HOME"
+    continue
+  fi
+
+  if [[ -e "$target_path" ]] && ! cmp -s "$source_path" "$target_path"; then
+    backup="$target_path.backup.$(date +%Y%m%d-%H%M%S)"
+    cp -p "$target_path" "$backup"
+    echo "Backed up existing $target_path to $backup"
+  fi
+
+  cp -p "$source_path" "$target_path"
+  echo "Synced $rel_path to $CODEX_HOME"
+done
+
+echo "Codex personal context synced from $REPO_ROOT to $CODEX_HOME"
