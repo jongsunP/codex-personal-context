@@ -119,6 +119,15 @@ pushes, and EAS builds belong in the separate development session by default.
 If this boundary is missed, recover by returning to the Git-backed project docs
 and the `SESSION_WORKFLOW.md` CTO contract.
 
+Hard gate: the CTO session must separate "needed" from "approved". EAS builds,
+Render deploys, DB writes/migrations, build-number changes, project code
+commits/pushes, and cost-incurring AI/API calls require explicit Founder
+approval for that exact action before the CTO session gives executable
+instructions to a development session. Vague continuation phrases such as
+"계속해줘", "진행해", "고", or "좋아" are not enough for these actions. Sync,
+read-only investigation, or readiness-check prompts should explicitly say
+"검증만 / 수정 금지 / 빌드 금지" unless execution has been approved.
+
 ## Durable Product Principles
 
 - ASJ is not an MVP. It is a real service built one reliable foundation at a

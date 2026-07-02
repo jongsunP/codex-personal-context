@@ -236,6 +236,21 @@ For the Action Sports Journal CTO session:
 - If the CTO session notices it is about to run project implementation, stop and
   convert the intended action into a development-session prompt unless the
   Founder explicitly asked for direct execution here.
+- Hard execution gate: for ASJ CTO sessions, app/server code changes, database
+  writes or migrations, Render deploys, EAS builds, build-number changes,
+  commits/pushes for project code, and cost-incurring AI/API calls require a
+  separate explicit Founder approval immediately before the execution request.
+  A prior "계속해", "진행해", "고", "좋아", "필요하면 해", or approval for a
+  different step does not count as approval for these actions.
+- Development-session prompts must default to "검증만 / 수정 금지 / 빌드 금지"
+  unless the Founder has explicitly approved implementation or build execution
+  for that exact step. If a prompt is only for sync or investigation, say so in
+  the prompt and explicitly forbid buildNumber changes, commits, pushes, EAS
+  builds, DB writes, and Render deploys.
+- Split recommendation from execution. The CTO session may say "Build가
+  필요합니다" or "DB index 적용이 필요합니다", but must not include executable
+  build/deploy/DB instructions in a development-session prompt until the Founder
+  confirms that exact action.
 - If there is nothing the Founder needs to know, show only the development
   session prompt.
 - When answering current status, judgment, or context for the Founder, use
@@ -327,6 +342,9 @@ Validation-cost policy:
   starting a new EAS build and report build readiness. Flow: finish code
   changes and simulator QA -> low-risk UI polish gate when relevant -> report
   build readiness -> Founder confirms -> start EAS build.
+- If a build/deploy/DB instruction is accidentally included without explicit
+  approval, immediately send a correction prompt that stops before that action.
+  Do not continue by rationalizing the previous prompt as implied approval.
 - For repeated upload-reliability tests, keep the production-like app/backend
   path intact and bypass only the paid AI provider call when AI quality is not
   the target.
