@@ -28,7 +28,7 @@ This repository is intended to help future Codex sessions understand stable user
 
 Action Sports Journal
 
-- Local path: `/Users/parkjongsun/repository/action-sports-journal-app`
+- Local path: `/Users/parkjongsun/Repository/action-sports-journal-app`
 - GitHub remote: `https://github.com/jongsunP/action-sports-journal-app`
 - Stage: Stage 3 real video-to-analysis prototype in progress
 - Expo SDK: `~54.0.35`

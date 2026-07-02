@@ -9,7 +9,7 @@ The canonical ASJ product status, stable workstream list, technical decisions,
 QA state, and backlog live in the project repository:
 
 ```text
-/Users/parkjongsun/repository/action-sports-journal-app
+/Users/parkjongsun/Repository/action-sports-journal-app
 ```
 
 Read the project documents instead of duplicating their contents here.
@@ -21,7 +21,7 @@ an index, not a duplicated project memory.
 ## Repository
 
 - Repository: `https://github.com/jongsunP/action-sports-journal-app`
-- Local path: `/Users/parkjongsun/repository/action-sports-journal-app`
+- Local path: `/Users/parkjongsun/Repository/action-sports-journal-app`
 - Platform: iOS-first React Native / Expo app
 - Current Expo SDK: `~54.0.35`
 
@@ -70,6 +70,10 @@ numbers can be supporting evidence, not the workstream itself.
 Unless the Founder explicitly asks for a summary, subset, or priority-only
 answer, show the full canonical list from the project repo, including the
 complete `완료` section.
+
+If a future session answers from only the immediate chat topic, treat that as a
+workflow miss and re-read the ASJ project `README.md`, `docs/PROJECT_MEMORY.md`,
+`docs/CURRENT_STAGE.md`, and `docs/HANDOFF.md` before answering again.
 
 If a response intentionally covers only a narrow area, name that scope first so
 it cannot be mistaken for the full list. For example: "Startup Performance

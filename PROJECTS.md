@@ -5,7 +5,7 @@
 The user's personal repositories are generally located under:
 
 ```text
-/Users/parkjongsun/repository
+/Users/parkjongsun/Repository
 ```
 
 Check this folder first when finding or continuing local projects.
@@ -15,7 +15,7 @@ Check this folder first when finding or continuing local projects.
 ### Action Sports Journal
 
 - Repository: `https://github.com/jongsunP/action-sports-journal-app`
-- Local path: `/Users/parkjongsun/repository/action-sports-journal-app`
+- Local path: `/Users/parkjongsun/Repository/action-sports-journal-app`
 - Product: action sports life log platform
 - Current design center: Session
 
