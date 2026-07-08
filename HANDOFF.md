@@ -47,8 +47,8 @@ Latest facts:
 - Verified: clinic type, build, prettier check, lint, commit hook, and push hook. Lint has existing project warnings but no failure.
 - Remaining future work: replace mock invite state with real Clinic invite API/query/mutation hooks when backend APIs are ready.
 - Mobile note: judge mobile completion only against mobile designs actually provided in Figma. Do not call missing mobile designs incomplete just because responsive code is not obvious.
-- Figma note: final closeout reconnect attempt failed on local MCP `127.0.0.1:3845`; reconnect Figma before making new design-completion claims.
-- Jira correction: `DL-15495` is not part of the user-approved DL-14232 invite scope. It was mistakenly updated; the bad comment was edited as invalid and the parent `DL-14232` comment was corrected. Jira MCP did not expose a transition back from `Ready for Deploy` to `Todo`, so status may require manual Jira correction.
+- Figma note: reconnect was later confirmed. Invite modal section node `224:31671` is accessible but returns sparse section metadata, so future design checks should inspect actual child frames/screenshots before making new completion claims.
+- Jira correction: `DL-15495` is not part of the user-approved DL-14232 invite scope. It was mistakenly updated; the bad comment was edited as invalid and the parent `DL-14232` comment was corrected. DL-15495 was later rechecked and confirmed back in Todo / `해야 할 일`.
 
 ## User Preferences
 

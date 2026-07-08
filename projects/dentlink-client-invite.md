@@ -70,7 +70,7 @@ Status: pushed, worktree clean at the time of handoff
 - Help icon is Arrow/diagonal-line; screen used SvgArrowDiagonalLine but icon/style was reviewed against Figma.
 - Pagination/stepper should not be shown because it was removed/hidden recently.
 - Mobile completion must be judged only against provided Figma mobile screens. At closeout, code-level responsive existence alone was not used as the source of truth.
-- Figma MCP reconnect check at the final closeout failed locally on `127.0.0.1:3845`, so any future agent should reconnect Figma before making new design-completion claims.
+- Figma MCP reconnect was later confirmed. The specific invite modal section node `224:31671` is accessible, but it returns sparse section metadata; future agents should inspect actual child frames/screenshots before making new design-completion claims.
 
 ## Verification already done
 
@@ -105,7 +105,7 @@ Status: pushed, worktree clean at the time of handoff
 
 - Do not treat `DL-15495` (`[FE] 디자인시스템 변경 대응`) as part of the known user-approved DL-14232 invite scope.
 - In this session, `DL-15495` was mistakenly updated in Jira. The incorrect comment was edited to mark it invalid, and the DL-14232 parent comment was corrected to exclude DL-15495.
-- Jira MCP did not expose a transition from `Ready for Deploy` back to `Todo`, and direct status editing was rejected by Jira. If DL-15495 still shows the wrong status, it must be manually moved back to Todo in Jira by a user with the right workflow action.
+- DL-15495 status was later rechecked through Jira MCP and confirmed back in Todo / `해야 할 일`.
 
 ### Current overall judgment
 
