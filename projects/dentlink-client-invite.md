@@ -70,7 +70,8 @@ Status: pushed, worktree clean at the time of handoff
 - Help icon is Arrow/diagonal-line; screen used SvgArrowDiagonalLine but icon/style was reviewed against Figma.
 - Pagination/stepper should not be shown because it was removed/hidden recently.
 - Mobile completion must be judged only against provided Figma mobile screens. At closeout, code-level responsive existence alone was not used as the source of truth.
-- Figma MCP reconnect was later confirmed. The specific invite modal section node `224:31671` is accessible, but it returns sparse section metadata; future agents should inspect actual child frames/screenshots before making new design-completion claims.
+- Figma Desktop MCP reconnect was later confirmed. The specific invite modal section node `224:31671` is accessible, but it returns sparse section metadata; future agents should inspect actual child frames/screenshots before making new design-completion claims.
+- Codex in-app browser Figma web SSO was attempted so Figma could be used without Desktop MCP, but it stopped on a blank `finish_google_sso` callback page. Treat Desktop MCP as the reliable Figma path unless web auth is completed separately.
 
 ## Verification already done
 
@@ -169,4 +170,4 @@ Related work: DL-14232 / DL-15493 member management invite flow
 - Authority dropdown now uses the existing project `PopupMenu` with `useFixedPortal` so it is not clipped by drawer content or the Remove Member area.
 - Member detail content was aligned to existing project UI primitives (`Typography`, `Button`, `PopupMenu`, `ProfileImage`, `Icon`) rather than raw one-off styled text/buttons where practical.
 - Local `HEAD` and `origin/feature/DL-14232` matched `291dfb61c`; worktree was clean after push.
-- Jira could not be opened in the current Codex session. Next likely step: update Jira parent/subtask status from a Jira-capable session, then continue with remaining DL-14232 child cards.
+- Jira access was later confirmed in Codex. DL-15495 was rechecked and confirmed back in Todo / `해야 할 일`; do not include DL-15495 in the known DL-14232 invite scope.
