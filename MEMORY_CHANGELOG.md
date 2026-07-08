@@ -1,5 +1,11 @@
 # Memory Changelog
 
+## 2026-07-08
+
+- Added Dentlink `DL-14232` checkpoint: Clinic invite/member-management UI is ready for commit/push before real Clinic invite API integration.
+- Recorded that invite API is still unavailable; invite page/modal behavior remains mock/local state, while Role/Authority code dropdown APIs are connected with fallback.
+- Recorded query refresh fix: member detail actions now refresh member list/detail/count caches after authority change, member removal, approval, and rejection.
+
 ## 2026-06-24
 
 - Added the user's UI/readability preference: direct answers should minimize

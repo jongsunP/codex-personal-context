@@ -6,6 +6,44 @@ This private repository stores non-secret context so Codex can continue work acr
 
 Do not store secrets here.
 
+## Current Dentlink Work - DL-14232
+
+Repository:
+
+```text
+/Users/parkjongsun/repository/dentlink-client
+```
+
+Branch:
+
+```text
+feature/DL-14232
+```
+
+Checkpoint date:
+
+```text
+2026-07-08
+```
+
+Status:
+
+```text
+Clinic invite/member-management UI final review complete, ready for commit/push.
+```
+
+Latest facts:
+
+- Jira: `DL-14232` - `[치과] employee 초대 기능`.
+- Scope now completed in Clinic: invite page, invite modal, member list review, member detail refresh behavior.
+- Invite page uses All/Pending/Expired tabs, Pending Members table, status/action UI, empty/min-height behavior, and no pagination.
+- Invite modal uses existing `Modal` and `MultiChipInput`; invite API is not available yet, so invite creation remains mock/local state.
+- Role/Authority dropdowns use existing `PopupMenu` through a clinic-local adapter with `useFixedPortal`; shared UI component internals were not modified.
+- Role/Authority options use available code APIs with mock fallback.
+- Member detail/list sync was fixed: authority change, remove, approval, and rejection invalidate relevant list/detail/count queries.
+- Verified: clinic type, build, prettier check, lint, and diff check. Lint has existing project warnings but no failure.
+- Remaining future work: replace mock invite state with real Clinic invite API/query/mutation hooks when backend APIs are ready.
+
 ## User Preferences
 
 - Always answer in Korean.
