@@ -29,7 +29,7 @@ Checkpoint date:
 Status:
 
 ```text
-Clinic invite/member-management UI final review complete, ready for commit/push.
+Clinic invite/member-management UI committed and pushed; master PR is open.
 ```
 
 Latest facts:
@@ -41,8 +41,14 @@ Latest facts:
 - Role/Authority dropdowns use existing `PopupMenu` through a clinic-local adapter with `useFixedPortal`; shared UI component internals were not modified.
 - Role/Authority options use available code APIs with mock fallback.
 - Member detail/list sync was fixed: authority change, remove, approval, and rejection invalidate relevant list/detail/count queries.
-- Verified: clinic type, build, prettier check, lint, and diff check. Lint has existing project warnings but no failure.
+- Latest pushed commit: `3cafb25f0 [DL-14232] docs: 프로젝트 Claude 가이드 복구`.
+- Master PR: https://github.com/Innvoaid/dentlink-client/pull/4353
+- Develop PR `#4352` was merged; user later said only master comparison matters.
+- Verified: clinic type, build, prettier check, lint, commit hook, and push hook. Lint has existing project warnings but no failure.
 - Remaining future work: replace mock invite state with real Clinic invite API/query/mutation hooks when backend APIs are ready.
+- Mobile note: judge mobile completion only against mobile designs actually provided in Figma. Do not call missing mobile designs incomplete just because responsive code is not obvious.
+- Figma note: final closeout reconnect attempt failed on local MCP `127.0.0.1:3845`; reconnect Figma before making new design-completion claims.
+- Jira correction: `DL-15495` is not part of the user-approved DL-14232 invite scope. It was mistakenly updated; the bad comment was edited as invalid and the parent `DL-14232` comment was corrected. Jira MCP did not expose a transition back from `Ready for Deploy` to `Todo`, so status may require manual Jira correction.
 
 ## User Preferences
 

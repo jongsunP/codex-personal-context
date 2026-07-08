@@ -2,18 +2,19 @@
 
 Repo: /Users/parkjongsun/repository/dentlink-client
 Branch: feature/DL-14232
-Latest pushed commit: ef4a0606a [DL-14232] ui: 초대 화면 디자인 시스템 정리
+Latest pushed commit: 3cafb25f0 [DL-14232] docs: 프로젝트 Claude 가이드 복구
 Status: pushed, worktree clean at the time of handoff
 
 ## User direction / constraints
 
 - Always answer the user in Korean honorific style.
-- Goal for clinic invite work: complete up to immediately before real invite API integration.
+- Goal for clinic invite work: complete UI/design work up to immediately before real invite API integration.
 - Do not call invite APIs directly while checking UI.
 - No e2e required for this task; only UI click/smoke checks were requested.
 - Use existing project UI/design system first. New styling/components are allowed only when there is no suitable existing component or when a local adapter is needed.
 - Figma is the reference, but implementation should follow existing project conventions where exact Figma parity conflicts with established components.
 - Do not commit additional changes unless the user explicitly asks.
+- Mobile scope rule: judge mobile completion only against mobile designs that actually exist in Figma. Do not mark an area incomplete only because responsive code is not obvious when no mobile design was provided.
 
 ## Branch-wide invite-related completed work
 
@@ -41,9 +42,9 @@ Status: pushed, worktree clean at the time of handoff
 - Member detail was changed to drawer-based UI; old standalone detail route/components were removed.
 - Member detail drawer and authority UI were adjusted to existing project UI primitives.
 
-### Clinic invite page completed
+### Clinic invite page and modal completed
 
-- Included branch commits: faad6f8a4 and ef4a0606a.
+- Included branch commits: faad6f8a4, ef4a0606a, 1043ad396, 34e9c0ee8.
 - Added /office/managed/invites route guarded by OWNER authority.
 - Added OfficePendingMembersPage using mock/local state.
 - Added mock invite data, invite types, and useOfficePendingMembers local-state hook.
@@ -53,18 +54,23 @@ Status: pushed, worktree clean at the time of handoff
 - Implemented status labels for Pending Acceptance, Pending Approval, and Invitation Expired.
 - Implemented action buttons for Resend / Cancel / Approve / Reject / Delete as UI/local handlers.
 - Implemented responsive/mobile list representation.
-- Added provisional Invite Members modal using existing Modal/Button/dropdown pieces. Figma modal design is not available yet.
+- Implemented Invite Members modal against the later-provided Figma modal design node, using existing project UI primitives/components where possible.
+- Invite modal uses existing Modal, Button, Typography, Icon, MultiChipInput, and clinic-local dropdown/table composition.
+- Invite modal follows the lab-style invite concept: email pre-validation first, then later send/create invite API when Clinic APIs are available. Real Clinic invite APIs are not available yet, so current submit remains mock/local.
+- Role/authority dropdown option data uses available code APIs with mock fallback.
 - Reworked invite page to use existing UI primitives: Tabs, DataListTable, DropdownBase, Modal, Button, Chip, Typography, Icon.
 - Removed over-splitting where possible; kept local table/dropdown/modal components because they are clinic invite specific adapters/compositions.
 
 ### Figma/design notes confirmed
 
 - Figma source: 0097. 치과 employee 초대 기능, node 101:4640 / invite page area 224:48715.
+- Invite modal Figma node used during the session: 224:31671.
 - Confirmed invite layout: toolbar height 54, tab compact instances, Invite Members button, Pending_chart/card, 55px card header, table header 44px, rows 72px, role/authority dropdowns 160x37.
 - Help link text: Check role & authority differences.
 - Help icon is Arrow/diagonal-line; screen used SvgArrowDiagonalLine but icon/style was reviewed against Figma.
 - Pagination/stepper should not be shown because it was removed/hidden recently.
-- Invite modal design was not available in Figma, so current modal is explicitly provisional.
+- Mobile completion must be judged only against provided Figma mobile screens. At closeout, code-level responsive existence alone was not used as the source of truth.
+- Figma MCP reconnect check at the final closeout failed locally on `127.0.0.1:3845`, so any future agent should reconnect Figma before making new design-completion claims.
 
 ## Verification already done
 
@@ -77,6 +83,10 @@ Status: pushed, worktree clean at the time of handoff
   - Invite Members modal opened/closed.
   - /office/managed member list rendered.
   - Member detail drawer opened.
+- Additional final branch verification completed later:
+  - master comparison PR created: https://github.com/Innvoaid/dentlink-client/pull/4353
+  - develop comparison PR #4352 was merged; user later said only master comparison matters.
+  - Project memory files were removed from the master PR diff where they were not part of the branch scope; `claude.md` was restored to the master version instead of deleting upstream content.
 - Push hook produced existing lint/coverage output but did not block push.
 
 ## Remaining work
@@ -88,8 +98,14 @@ Status: pushed, worktree clean at the time of handoff
 - Map API DTO values for role, authority, status, expiration dates, and actions.
 - Wire create invite, resend, cancel, approve, reject, and delete to real mutations.
 - Add server-backed loading/error/empty behavior.
-- Revisit Invite Members modal when Figma design becomes available.
+- Revisit Invite Members modal only if Figma changes or API integration requires behavior changes.
 - Do final QA after API integration.
+
+### Jira correction / important warning
+
+- Do not treat `DL-15495` (`[FE] 디자인시스템 변경 대응`) as part of the known user-approved DL-14232 invite scope.
+- In this session, `DL-15495` was mistakenly updated in Jira. The incorrect comment was edited to mark it invalid, and the DL-14232 parent comment was corrected to exclude DL-15495.
+- Jira MCP did not expose a transition from `Ready for Deploy` back to `Todo`, and direct status editing was rejected by Jira. If DL-15495 still shows the wrong status, it must be manually moved back to Todo in Jira by a user with the right workflow action.
 
 ### Current overall judgment
 
