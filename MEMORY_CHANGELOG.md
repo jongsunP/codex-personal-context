@@ -2,6 +2,10 @@
 
 ## 2026-07-09
 
+- Updated Dentlink `DL-14232` checkpoint after follow-up commit `f00341b5d`:
+  member detail `Member Info` outer border/radius/overflow removed, leaving only
+  row dividers so the section no longer looks like a table box. Jira comment
+  `43085` records the pushed commit and verification.
 - Updated Dentlink `DL-14232` checkpoint after design QA commit
   `277a3314b`: ChartDropdown added, invite page/table/modal and member detail
   styling aligned more closely to Figma, PopupMenu outside-click behavior fixed

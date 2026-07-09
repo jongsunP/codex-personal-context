@@ -2,8 +2,22 @@
 
 Repo: /Users/parkjongsun/Repository/dentlink-client-invite
 Branch: feature/DL-14232
-Latest pushed commit: 277a3314b [DL-14232] fix: 초대 화면 디자인 QA 수정
+Latest pushed commit: f00341b5d [DL-14232] fix: 멤버 상세 정보 보더 수정
 Status: pushed, worktree clean
+
+## Session 2026-07-09 post-QA follow-up
+
+- Follow-up commit pushed after member-detail visual review:
+  - `f00341b5d [DL-14232] fix: 멤버 상세 정보 보더 수정`
+- Member detail `Member Info` no longer has an outer border/radius/overflow wrapper.
+- Row-to-row divider lines remain, matching the intended non-table-like Figma structure.
+- Jira DL-14232 comment `43085` records the follow-up commit and verification.
+- Verification for this follow-up:
+  - `git diff --check` passed.
+  - `pnpm --filter dentlink-clinic-web type` passed.
+  - `pnpm --filter dentlink-clinic-web lint` exited 0 with existing project warnings.
+  - Commit hook ran clinic/lab/admin type checks and passed.
+  - Push hook ran lint and shared coverage guard and passed with existing warnings/output.
 
 ## Session 2026-07-09 design QA completed work
 
@@ -23,7 +37,7 @@ Status: pushed, worktree clean
   - Modal width/min-height, left/right columns, email input copy, Member Info table header/body sizing, empty state copy, draft table scroll behavior, and footer button widths were aligned to Figma.
 - Member list/detail QA fixes:
   - Member detail profile header now allows full-name wrapping without ellipsis and keeps authority badge plus `(Me)` beside the badge.
-  - Member Info border/separator colors and text typography were normalized to shared Typography variants and palette tokens.
+  - Member Info row separators and text typography were normalized to shared Typography variants and palette tokens; outer list border was removed in the follow-up commit so it does not read as a table box.
   - Member authority dropdown selected-check icon was removed per design.
   - PopupMenu outside-click detection was fixed so clicking drawer blank/dim areas closes the dropdown instead of treating the entire portal root as inside.
 - Jira DL-14232 was updated with the latest pushed commit and verification summary.

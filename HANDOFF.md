@@ -11,7 +11,7 @@ Do not store secrets here.
 Repository:
 
 ```text
-/Users/parkjongsun/repository/dentlink-client
+/Users/parkjongsun/Repository/dentlink-client-invite
 ```
 
 Branch:
@@ -23,13 +23,13 @@ feature/DL-14232
 Checkpoint date:
 
 ```text
-2026-07-08
+2026-07-09
 ```
 
 Status:
 
 ```text
-Clinic invite/member-management UI committed and pushed; master PR is open.
+Clinic invite/member-management UI and follow-up design QA commits are pushed; master PR is open.
 ```
 
 Latest facts:
@@ -38,13 +38,14 @@ Latest facts:
 - Scope now completed in Clinic: invite page, invite modal, member list review, member detail refresh behavior.
 - Invite page uses All/Pending/Expired tabs, Pending Members table, status/action UI, empty/min-height behavior, and no pagination.
 - Invite modal uses existing `Modal` and `MultiChipInput`; invite API is not available yet, so invite creation remains mock/local state.
-- Role/Authority dropdowns use existing `PopupMenu` through a clinic-local adapter with `useFixedPortal`; shared UI component internals were not modified.
+- Role/Authority dropdowns on the invite table use shared `ChartDropdown`, a compact dropdown added for chart/table use and portaled/fixed so it is not clipped inside table/list containers.
 - Role/Authority options use available code APIs with mock fallback.
 - Member detail/list sync was fixed: authority change, remove, approval, and rejection invalidate relevant list/detail/count queries.
-- Latest pushed commit: `3cafb25f0 [DL-14232] docs: 프로젝트 Claude 가이드 복구`.
+- Latest pushed commit: `f00341b5d [DL-14232] fix: 멤버 상세 정보 보더 수정`.
+- Latest follow-up: member detail `Member Info` outer border/radius/overflow was removed so only row dividers remain; Jira DL-14232 comment `43085` records this update.
 - Master PR: https://github.com/Innvoaid/dentlink-client/pull/4353
 - Develop PR `#4352` was merged; user later said only master comparison matters.
-- Verified: clinic type, build, prettier check, lint, commit hook, and push hook. Lint has existing project warnings but no failure.
+- Verified: clinic type/lint, commit hook clinic/lab/admin type checks, and push-hook lint/coverage. Lint has existing project warnings but no failure. Build and Computer Use QA were intentionally excluded in the latest Codex pass per user direction.
 - Remaining future work: replace mock invite state with real Clinic invite API/query/mutation hooks when backend APIs are ready.
 - Mobile note: judge mobile completion only against mobile designs actually provided in Figma. Do not call missing mobile designs incomplete just because responsive code is not obvious.
 - Figma note: Desktop MCP reconnect was later confirmed. Invite modal section node `224:31671` is accessible but returns sparse section metadata, so future design checks should inspect actual child frames/screenshots before making new completion claims. Codex in-app browser Figma web SSO was attempted, but it stopped on a blank `finish_google_sso` callback page; use Desktop MCP as the reliable path unless web auth is completed separately.
