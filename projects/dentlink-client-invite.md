@@ -1,3 +1,52 @@
+# Dentlink Invite checkpoint - 2026-07-09
+
+Repo: /Users/parkjongsun/Repository/dentlink-client-invite
+Branch: feature/DL-14232
+Latest pushed commit: 50dbae903 fix: StyledMobileList display:none 오버라이드 깨짐 수정
+Status: pushed, worktree clean
+
+## Session 2026-07-09 completed work
+
+### API 연동 (/office/managed/invites — DL-15493 범위)
+
+- `usePendingMembersQuery(status)` 생성 — `findEmployerOwnPendingMembers({ status })` API 호출
+- `useOfficePendingMembers` 훅: mock 로컬 상태 → 실제 API 기반 전환
+- 탭 상태: URL query `?status=ALL|PENDING|EXPIRED` 로 관리 (Next.js router.push shallow)
+- 탭 카운트: `OfficePendingMemberListDto.counts.all/pending/expired` 직접 참조 (별도 카운트 API 없음)
+- `useEmployeeApproveMutate` / `useEmployeeRejectMutate`: success 시 `EMPLOYER_OWN_PENDING_MEMBERS` query invalidate
+
+### 코드 리뷰 수정 (15개 파일 — 커밋 e4fc864a8)
+
+- `canRemoveMember` undefined guard 추가
+- `OfficeMemberAuthorityChip`: 로컬 타입 → `EnumTypes.AuthorityTypes`
+- `OfficeMemberDetailDrawer`: inline `matchMedia` → `useIsBelowTablet()` hook
+- `(Me)` 라벨: `body3 gray700` → **`body2 bold information`** (Figma node 103-13728 반영)
+  - `OfficeMemberList` (데스크탑 테이블), `OfficeMemberMobileList` (모바일 카드) 모두 수정
+- `InviteMembersModal`: `Date.now()` ID → `useRef` 카운터 (`draftIdCounter.current += 1`)
+- `MAX_INVITE_EMAIL_COUNT = 10`: `InviteMembersModal.types.ts`에 중앙화, Modal/EmailPanel 양쪽 import
+- `OfficePendingMembersDropdown`: `option.label === value` 매칭 제거 (value만 사용)
+- Page/Table 네이밍·flex 컨벤션 통일 (`StyledPageWrapper`, `StyledSection`, `DisplayFlexRow/Col`)
+- `SlideDrawer`: 스크롤 락 타이밍을 `$isOpen` → `isMounted` 기준으로 변경
+  - (닫힘 300ms 애니메이션 중에도 스크롤 잠금 유지)
+- admin `useInvitations`: query 로직 hook 내부로 이동
+- admin `useInviteCreate`: `ApiResponseDto` import를 `@dentlink/models` → `@models/common/base`로 수정; `handleSubmit` 두 번째 인자 제거 (react-hook-form 타입 에러)
+
+### 버그 수정
+
+- **`handleInviteMembers` lint 에러** (`c5ba31238`): `@typescript-eslint/no-empty-function` — 멀티라인 빈 함수를 한 줄로 collapse하고 eslint-disable-next-line 적용
+- **`StyledMobileList` display:none 깨짐** (`50dbae903`): `styled(DisplayFlexCol)` → `styled.div` 원복
+  - 원인: styled-components CSS 주입 순서로 `DisplayFlexCol`의 `display: flex`가 `display: none`을 덮어씀
+  - 교훈: `display` 속성을 동적으로 제어해야 하는 래퍼는 `styled(DisplayFlexCol)` 확장 불가. `styled.div`로 작성 후 미디어쿼리 안에 `display: flex; flex-direction: column` 명시
+
+## Remaining work (DL-15494)
+
+- 초대 생성 API (`createInvitation`) 연동 — BE 준비 대기
+- Resend / Cancel / Delete mutation — invitationId 기반, BE 미준비
+- Role / Authority 수정 API — sourceType별 분기 (`EMPLOYEE`: updateEmployeeRole/Authority, `INVITATION`: BE 미준비)
+- 모바일 초대 페이지 디자인 미확정 — Figma 확정 후 반영
+
+---
+
 # Dentlink Invite checkpoint - 2026-07-08
 
 Repo: /Users/parkjongsun/repository/dentlink-client
