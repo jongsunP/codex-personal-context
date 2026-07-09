@@ -1,5 +1,18 @@
 # Memory Changelog
 
+## 2026-07-09
+
+- Updated Dentlink `DL-14232` checkpoint after design QA commit
+  `277a3314b`: ChartDropdown added, invite page/table/modal and member detail
+  styling aligned more closely to Figma, PopupMenu outside-click behavior fixed
+  for member detail drawer, and branch pushed to `origin/feature/DL-14232`.
+- Recorded verification boundaries for the latest pass: `git diff --check`,
+  clinic TypeScript, commit-hook clinic/lab/admin type checks, and push-hook
+  lint completed; build and Computer Use QA were intentionally left to the user.
+- Reconfirmed remaining blocker: real clinic invite create/resend/cancel/delete
+  and invitation update APIs are still not generated/available, so mock/local
+  invite actions remain until DL-15494/BE readiness.
+
 ## 2026-07-08
 
 - Added Dentlink `DL-14232` checkpoint: Clinic invite/member-management UI is ready for commit/push before real Clinic invite API integration.

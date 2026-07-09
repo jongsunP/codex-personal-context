@@ -1,9 +1,49 @@
-# Dentlink Invite checkpoint - 2026-07-09
+# Dentlink Invite checkpoint - 2026-07-09 design QA
 
 Repo: /Users/parkjongsun/Repository/dentlink-client-invite
 Branch: feature/DL-14232
-Latest pushed commit: 50dbae903 fix: StyledMobileList display:none 오버라이드 깨짐 수정
+Latest pushed commit: 277a3314b [DL-14232] fix: 초대 화면 디자인 QA 수정
 Status: pushed, worktree clean
+
+## Session 2026-07-09 design QA completed work
+
+- Figma source used for the latest QA pass:
+  - Invite page node: `224:46661`
+  - Pending Members design area: `224:46663`
+  - Invite modal section/frame checked through Figma MCP screenshot/context
+- Added shared `ChartDropdown` for chart/table-internal compact dropdowns:
+  - Built as a DropdownBase/PopupMenu-style shared UI component, not a one-off table implementation.
+  - Menu is portaled to `modal-root` and uses fixed positioning so it is not clipped inside list/table containers.
+  - Trigger height, typography, hover/focus/open state, selected-row background, and menu sizing were aligned to the Figma chart dropdown requirement.
+- Clinic invite page/table QA fixes:
+  - `/office/managed/invites` table min height now follows the design intent: 44px header + 300px body minimum, not an arbitrary 548px fixed/min height.
+  - Header background, row height, first/last column padding, top/bottom borders, last-row border behavior, title spacing, help-link typography, and status dot/label colors were adjusted.
+  - Mobile invite page entry remains unsupported/hidden by requirement.
+- Invite Members modal QA fixes:
+  - Modal width/min-height, left/right columns, email input copy, Member Info table header/body sizing, empty state copy, draft table scroll behavior, and footer button widths were aligned to Figma.
+- Member list/detail QA fixes:
+  - Member detail profile header now allows full-name wrapping without ellipsis and keeps authority badge plus `(Me)` beside the badge.
+  - Member Info border/separator colors and text typography were normalized to shared Typography variants and palette tokens.
+  - Member authority dropdown selected-check icon was removed per design.
+  - PopupMenu outside-click detection was fixed so clicking drawer blank/dim areas closes the dropdown instead of treating the entire portal root as inside.
+- Jira DL-14232 was updated with the latest pushed commit and verification summary.
+
+## Verification for latest design QA commit
+
+- `git diff --check` passed.
+- `clinic` direct TypeScript check passed with `cd clinic && ./node_modules/.bin/tsc --noEmit`.
+- Commit hook ran clinic/lab/admin type checks and passed.
+- Push hook ran lint-staged, clinic/lab/admin lint, and coverage guard; it completed successfully with existing project warnings.
+- Build and Computer Use QA were intentionally not run in this Codex pass because the user excluded them and planned to do Computer Use QA directly.
+
+## Current remaining work
+
+- Real clinic invite APIs for create/resend/cancel/delete/update are still not generated/available in the clinic model.
+- DL-15494 / BE-side invite API readiness is still the blocker for replacing mock/local invite create and invitation-source actions.
+- After the user completes Computer Use visual QA, continue with code-level review in three scopes if requested:
+  - today design QA scope
+  - clinic invite/member-management scope
+  - full branch invite-related scope
 
 ## Session 2026-07-09 completed work
 
