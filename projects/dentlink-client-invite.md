@@ -6,10 +6,27 @@ changed.
 
 Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
 Branch: `feature/DL-14232`
-Remote HEAD: `6bc9e7eb8 [DL-14232] wip: 치과 초대장 페이지 UI 추가`
+Remote HEAD: `470c45c55 [DL-14232] feat: 치과 회원가입 역할 선택 항목 추가`
 Status: local and remote SHA matched; worktree clean at closeout
 PR: [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353), Open Draft,
 base `master`, merge state `DIRTY`
+
+## Latest signup Step 3 update
+
+- Figma source: `kOTUAdts2gBFsF9Yr3Q5PL`, node `275:11988`.
+- `/auth/signup?step=3` now shows the required role options in the Figma order:
+  Dentist, Office Manager, Assistant, and Hygienist.
+- API values are `DENTIST`, `OFFICE_MANAGER`, `DENTAL_ASSISTANCE`, and
+  `HYGIENIST` respectively.
+- `OfficeUserJoinDto.roleType` now uses the existing shared
+  `EnumTypes.RoleType`, matching the updated generated API contract.
+- The existing signup submit path spreads `roleType` into the payload sent to
+  `POST /office/users`; invited/verified signup sends the same value to
+  `POST /office/users/register`.
+- Verification passed: direct Clinic type check, Clinic lint with existing
+  warnings, commit-hook Clinic/Lab/Admin type checks, and push-hook app lint plus
+  shared coverage guard.
+- Actual browser/network QA was not run for this small follow-up.
 
 ## Resume order
 
