@@ -46,6 +46,27 @@ If a setting, preference, project state, or handoff rule matters beyond the
 current chat, it should be represented in Git-backed documents rather than
 left only in local session memory.
 
+## Meaning Of Memory
+
+When this user says `메모리`, `메모리 저장`, or `메모리 싱크`, the default
+meaning is the Git-backed `codex-personal-context` repository, not Codex's
+machine-local runtime memory under `~/.codex/memories`.
+
+- `codex-personal-context` is the portable, pullable source of truth across
+  sessions, devices, and Codex installations.
+- `~/.codex` is a local runtime target for active guidance, auth, caches,
+  sessions, and secondary AI memory. Writing only there does not count as
+  remote durable memory.
+- Intermediate implementation details do not need to be pushed continuously.
+  At meaningful work closeout, curate the current status, learned rules,
+  blockers, verification, and next start point into the appropriate Git-backed
+  document and push it when explicitly authorized.
+- At work start or resume, pull `codex-personal-context` first and read the
+  relevant project document before relying on chat history or runtime memory.
+- General working rules belong in the canonical personal guidance files.
+  Concrete project checkpoints belong in `projects/<project>.md` and, when a
+  project repository has its own canonical handoff, in that project repository.
+
 ## Rule Application Model
 
 Treat recorded rules like a single source-of-truth state flow.

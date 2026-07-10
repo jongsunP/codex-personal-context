@@ -7,6 +7,10 @@
 - Read `SESSION_WORKFLOW.md` for session start, resume, wrap-up, and
   repository-boundary rules.
 - Prefer documented context over AI memory.
+- When this user says `메모리`, treat the Git-backed
+  `codex-personal-context` repository as the default meaning. Local Codex
+  runtime memory under `~/.codex` is secondary and is not sufficient for
+  cross-device continuity.
 - When a durable user preference or project principle is discovered, suggest
   adding it to this repository.
 - Use this repository for cross-project user preferences, Codex working style,
@@ -55,6 +59,9 @@
 - When the user says to resume work or continue from a prior checkpoint, first
   refresh the relevant Git-backed context with `git pull` before relying on
   local memory.
+- At meaningful project closeout, curate durable context into this repository
+  and the relevant project documentation, then commit and push when explicitly
+  authorized. Do not require every intermediate step to be recorded remotely.
 
 ## Active Project Context
 

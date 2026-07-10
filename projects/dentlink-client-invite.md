@@ -1,3 +1,149 @@
+# Dentlink Invite current checkpoint - 2026-07-10 closeout
+
+This section is the current source of truth. Older dated sections below are
+historical snapshots and may describe APIs or remaining work that has since
+changed.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232`
+Remote HEAD: `6bc9e7eb8 [DL-14232] wip: 치과 초대장 페이지 UI 추가`
+Status: local and remote SHA matched; worktree clean at closeout
+PR: [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353), Open Draft,
+base `master`, merge state `DIRTY`
+
+## Resume order
+
+1. Pull `codex-personal-context` and read this latest section.
+2. Pull `/Users/parkjongsun/Repository/dentlink-client-invite`.
+3. Check branch, `git status`, remote HEAD, PR state, and latest `master` before
+   changing files.
+4. Continue from the recipient invitation page/API workflow described below.
+5. Do not inspect or update Jira unless the user requests it again.
+
+## Branch-wide completed invite scope
+
+### Admin
+
+- Office/Lab invitation list and pagination
+- Email validation and invitation creation
+- Role/Authority update
+- Resend/Delete
+- Target selection and `USER` permission guard
+
+### Lab
+
+- Existing member invitation flow aligned to the new API structure
+- Email validation and invitation submission connected
+- Duplicate interaction guarded during validation/submission
+
+### Clinic member management
+
+- Member list Role/Authority display including `VIEWER`
+- Member detail moved from standalone route to desktop side drawer/mobile
+  fullscreen drawer
+- OWNER authority update and member removal
+- OWNER-only Pending Members entry on desktop
+
+### Clinic Pending Members and Invite Members
+
+- `/office/managed/invites` with `All / Pending / Expired`
+- Employee approval requests and email invitations shown in one API-backed list
+- Role/Authority updates
+- Approve/Reject for employee requests
+- Resend/Cancel/Delete for invitation rows
+- Row/field-scoped mutation loading plus optimistic cache update/rollback where
+  applicable
+- Invite Members modal with up to ten emails, server validation,
+  registered/invited/invalid classification, Role/Authority selection, and
+  invitation creation
+- Mobile entry and Invite Members modal remain intentionally unsupported by the
+  confirmed requirement and are not an omission
+
+### Shared/API foundation
+
+- Admin/Lab/Clinic generated invitation management APIs and DTOs are present
+- Clinic sender-side validate/create/resend/delete/update role/update authority
+  APIs are connected
+- `ChartDropdown`, `SlideDrawer`, Button design-system changes, Modal,
+  MultiChipInput, Popup, and PopupMenu corrections are included
+
+## Current partial scope: recipient invitation page
+
+- Figma file: `kOTUAdts2gBFsF9Yr3Q5PL`
+- Figma section: `296:71550`
+- Route: `/invitations/[invitation_id]`
+- Page: `clinic/src/pages/invitations/[invitation_id].tsx`
+- UI: `clinic/src/components/OfficeInvitation/OfficeInvitationPage.tsx`
+- Desktop/mobile design and long office-name/address behavior are implemented.
+- The route still renders Figma preview data and does not read
+  `invitation_id`.
+- `Join Office` and `Remind Me Later` have no connected callbacks.
+- Login redirect and return flow is not implemented. Intended shape:
+  `/auth/signin?next=/invitations/{id}`.
+- Recipient invitation detail, Join/Accept, loading, invalid, expired, and
+  already-processed states remain.
+- The generated Clinic model currently exposes sender-side management APIs but
+  no confirmed recipient detail/Join API.
+
+## Latest master integration blocker
+
+Latest `origin/master` has moved to Next.js 16, React Query v5, and
+styled-components 6. The feature branch still contains React Query v4-style
+mutation syntax in invite work, so conflict resolution must preserve the
+feature while migrating to the current base conventions.
+
+`git merge-tree --write-tree origin/master HEAD` reported seven conflicts:
+
+- `admin/src/lib/Invitation/useResendInvitation.ts`
+- `admin/src/services/common/queryKeys.ts`
+- `clinic/src/components/OfficeMemberList/OfficeMemberList.tsx`
+- `clinic/src/pages/office/managed/members/[employee_id].tsx` (master modified,
+  branch deleted)
+- `clinic/src/services/employer/employer.query.ts`
+- `lab/src/lib/members/useInviteCreate.tsx`
+- `shared/ui/src/Button/Button.tsx`
+
+The internal invite-management implementation works in the current branch
+environment, but the PR is not merge-ready until these conflicts and major
+dependency migrations are handled.
+
+## Verification and test gaps
+
+- Clinic type/lint passed before the latest WIP commit.
+- Commit hook passed Clinic/Lab/Admin type checks.
+- Push hook passed all three app lints with existing warnings and the shared
+  coverage guard with no baseline change.
+- `/invitations/preview` compiled and returned HTTP 200.
+- No dedicated invitation test/spec/story covers email classification,
+  source-type action routing, optimistic rollback, or recipient auth/Join.
+
+## Next work
+
+1. Confirm or generate recipient invitation detail/Join API contracts.
+2. Read `invitation_id` and connect server data and page states.
+3. Implement unauthenticated sign-in redirect and return to the invitation.
+4. Implement Join Office and confirm Remind Me Later destination policy.
+5. Merge latest `master`, resolve seven conflicts, and migrate invite code to
+   current React Query/Next/styled-components conventions.
+6. Recheck shared UI side effects and Admin/Lab/Clinic regressions.
+7. Add focused tests, run type/lint and actual UI/API QA, then clean up the
+   Draft PR.
+
+## Durable user rules from this work
+
+- `메모리` means the Git-backed `codex-personal-context` repository by default.
+- Pull this personal context and the project repository at work start.
+- Intermediate steps do not require constant memory commits, but meaningful
+  closeout must update and push durable context when explicitly authorized.
+- Reuse existing project components and props before introducing wrappers or
+  new shared behavior.
+- One feedback example should trigger a search for equivalent occurrences.
+- `진행해` does not authorize commit, push, or PR mutation. Require explicit
+  wording such as `커밋해`, `푸시해`, or `PR 수정해`.
+- Jira is out of scope until the user asks again.
+
+---
+
 # Dentlink Invite checkpoint - 2026-07-09 design QA
 
 Repo: /Users/parkjongsun/Repository/dentlink-client-invite

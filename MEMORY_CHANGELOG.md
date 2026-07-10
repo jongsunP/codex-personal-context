@@ -1,5 +1,26 @@
 # Memory Changelog
 
+## 2026-07-10
+
+- Defined `메모리` as the Git-backed `codex-personal-context` repository for
+  this user; `~/.codex/memories` is secondary runtime memory and does not count
+  as remote cross-device continuity.
+- Tightened the session lifecycle: pull personal context at work start, and at
+  meaningful closeout curate and push durable status, learned rules, blockers,
+  verification, and the next start point when explicitly authorized.
+- Added project-aligned implementation guardrails generalized from DL-14232:
+  existing props/components first, minimal additive shared changes, generated
+  types and current library conventions, scoped loading, shared-consumer side
+  effect review, complete Figma state/flow QA, and separate implementation,
+  visual QA, and merge-readiness judgments.
+- Updated the Dentlink invite project checkpoint to remote HEAD `6bc9e7eb8`,
+  recorded completed Admin/Lab/Clinic invite management, recipient invitation
+  UI-only status, missing recipient APIs/auth flow, latest `master` dependency
+  drift, seven merge conflicts, verification, and the next start sequence.
+- Added `projects/dentlink-client-invite.md` to `setup-local-codex.sh` so a
+  pulled personal-context repository syncs the Dentlink checkpoint into the
+  local Codex runtime guidance tree.
+
 ## 2026-07-09
 
 - Updated Dentlink `DL-14232` checkpoint after follow-up commit `f00341b5d`:
