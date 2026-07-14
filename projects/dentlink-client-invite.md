@@ -7,9 +7,10 @@ branch state, or remaining work that has since changed.
 
 Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
 Branch: `feature/DL-14232`
-Pushed HEAD: `ad951b4f5 [DL-14232] feat: 치과 초대 가입 플로우 구현`
+Pushed HEAD: `e7ac68537 [DL-14232] fix: 초대 기능 UI 및 사용자 흐름 보완`
 Remote: `origin/feature/DL-14232` matched local HEAD (`0/0` ahead/behind)
-Worktree: active uncommitted review changes in 24 status entries
+Worktree: one uncommitted TODO comment in
+`clinic/src/lib/OfficeInvitation/officeInvitation.api.ts`
 
 ## Pushed baseline
 
@@ -45,16 +46,18 @@ Worktree: active uncommitted review changes in 24 status entries
 - Final `Join Office` acceptance and membership creation still depend on the
   dedicated backend acceptance API that is expected separately.
 
-## Active uncommitted review complete
+## Latest pushed review checkpoint
 
-- The branch-wide code and Figma review requested after `ad951b4f5` is complete.
-- Current edits cover Admin, Clinic, and shared UI files and intentionally
-  remain uncommitted in the shared project.
+- The branch-wide code and Figma review requested after `ad951b4f5` is complete
+  and was committed and pushed as `e7ac68537`.
+- The committed review covers Admin, Clinic, and shared UI files. It contains
+  the final code corrections identified before backend-complete QA, while the
+  only post-push worktree change documents the missing backend Join contract.
 - Review focus is project-method alignment, not cosmetic naming alone:
   component composition, existing props, hook boundaries and naming,
   query/mutation behavior, state ownership, responsive layout, loading/error
   behavior, and shared-component side effects.
-- Current work includes the Admin invitation-hook naming alignment, recipient
+- The pushed work includes the Admin invitation-hook naming alignment, recipient
   flow corrections, member/pending-list responsive cleanup, and minimal shared
   UI corrections.
 - `PendingMemberEditableField` now has a Clinic domain alias used consistently
@@ -64,7 +67,11 @@ Worktree: active uncommitted review changes in 24 status entries
   member drawer. The default shared Popup behavior is unchanged.
 - Invitation validation again follows the app's default window-focus refetch
   behavior so an invitation changed while the tab was away is revalidated.
-- No ad hoc test file is part of the current worktree.
+- The mobile member list no longer displays the obsolete Requested state;
+  requested users remain in Pending Members as specified by Figma.
+- Recipient office addresses now combine state and ZIP code in the existing
+  US address presentation.
+- No ad hoc test file was added.
 
 ## Latest static verification
 
@@ -77,8 +84,30 @@ Worktree: active uncommitted review changes in 24 status entries
 - All changed files passed Prettier check. The command still reports the
   repository's existing unknown import-order option warnings.
 - `git diff --check` passed.
+- Commit hooks passed Clinic, Lab, and Admin type checks.
+- Push hooks passed app lint and the shared coverage guard; repository-existing
+  lint warnings remained but did not fail the push.
 - Build and Computer Use QA were intentionally excluded; the user is performing
   browser functional and visual QA.
+
+## Current stage
+
+- Frontend implementation and the latest Figma/code static audit are complete
+  for the currently available backend contracts.
+- Until the dedicated Join acceptance API is available, the useful next work
+  is browser QA of all frontend-complete states rather than speculative API
+  implementation.
+- `officeInvitation.api.ts` contains a `TODO(DL-14232)` at the exact integration
+  point. The pending generated API must accept the invitation's employer ID and
+  email, accept the invitation and create the Employee, then return the created
+  `employeeId` for the existing active-employee switch flow.
+- QA should cover member list/detail, Pending Members, Invite Members modal
+  validation and server-classified email errors, recipient validation and auth
+  routing, signup invitation mode, notification entry, responsive behavior,
+  and mutation loading/error recovery.
+- Record failures by route, account/auth state, invitation status, expected
+  Figma state, actual UI, and network response so backend blockers remain
+  separate from frontend defects.
 
 ## Figma review scope
 
@@ -92,13 +121,14 @@ Worktree: active uncommitted review changes in 24 status entries
 
 ## Remaining work
 
-1. Complete the user's browser functional and visual QA for the uncommitted
-   review set.
+1. Continue the user's browser functional and visual QA against pushed commit
+   `e7ac68537` for all states that do not require the missing Join API.
 2. Connect final `Join Office` acceptance when the dedicated backend contract is
    generated and confirmed.
-3. Commit or push the shared Dentlink repository only on explicit user request.
-4. Before that commit, recheck live branch status because this checkpoint
-   describes a deliberately dirty worktree.
+3. Re-run recipient Join, active-tenant switching, duplicate submission, and
+   final error recovery QA after that API is generated and connected.
+4. Commit the current TODO-only project change, or any future shared Dentlink
+   changes, only on explicit user request.
 
 ## Durable implementation rules
 
