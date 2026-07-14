@@ -7,10 +7,9 @@ branch state, or remaining work that has since changed.
 
 Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
 Branch: `feature/DL-14232`
-Pushed HEAD: `e7ac68537 [DL-14232] fix: 초대 기능 UI 및 사용자 흐름 보완`
+Pushed HEAD: `838ac53ad [DL-14232] chore: 초대 수락 API 후속 작업 명시`
 Remote: `origin/feature/DL-14232` matched local HEAD (`0/0` ahead/behind)
-Worktree: one uncommitted TODO comment in
-`clinic/src/lib/OfficeInvitation/officeInvitation.api.ts`
+Worktree: clean
 
 ## Pushed baseline
 
@@ -51,8 +50,9 @@ Worktree: one uncommitted TODO comment in
 - The branch-wide code and Figma review requested after `ad951b4f5` is complete
   and was committed and pushed as `e7ac68537`.
 - The committed review covers Admin, Clinic, and shared UI files. It contains
-  the final code corrections identified before backend-complete QA, while the
-  only post-push worktree change documents the missing backend Join contract.
+  the final code corrections identified before backend-complete QA.
+- Follow-up commit `838ac53ad` documents the missing backend Join contract at
+  its exact integration point without introducing a speculative HTTP request.
 - Review focus is project-method alignment, not cosmetic naming alone:
   component composition, existing props, hook boundaries and naming,
   query/mutation behavior, state ownership, responsive layout, loading/error
@@ -127,8 +127,8 @@ Worktree: one uncommitted TODO comment in
    generated and confirmed.
 3. Re-run recipient Join, active-tenant switching, duplicate submission, and
    final error recovery QA after that API is generated and connected.
-4. Commit the current TODO-only project change, or any future shared Dentlink
-   changes, only on explicit user request.
+4. Commit or push any future shared Dentlink changes only on explicit user
+   request.
 
 ## Durable implementation rules
 
