@@ -12,6 +12,9 @@ Remote: `origin/feature/DL-14232` matched local HEAD (`0/0` ahead/behind)
 Worktree: clean
 PR: [#4371](https://github.com/Innvoaid/dentlink-client/pull/4371), merged into
 `develop`; Auto Assign and CodeRabbit checks succeeded
+Develop merge SHA: `b5749bea76d2113459c43594ef68838c02050655`
+Legacy comparison PR: [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353),
+Open Draft, base `master`, intentionally untouched
 
 ## Pushed baseline
 
@@ -160,6 +163,21 @@ PR: [#4371](https://github.com/Innvoaid/dentlink-client/pull/4371), merged into
    recovery QA.
 4. Commit or push any future shared Dentlink changes only on explicit user
    request.
+
+## Resume on another device
+
+1. Pull `codex-personal-context` and read this current checkpoint before using
+   chat or runtime memory.
+2. Fetch the shared repository, checkout `develop`, and fast-forward it to at
+   least merge SHA `b5749bea7`.
+3. Start backend follow-up work from the latest `origin/develop`, not directly
+   on the old `feature/DL-14232` history. PR #4371 was squash-merged: the old
+   feature branch and develop currently have the same tree, but their histories
+   report `1/2` divergence.
+4. Confirm the deployed signup schema before editing: regenerate models and
+   inspect `OfficeUserJoinDto.code` and `invitation.employerId` nullability.
+5. Resume with valid/expired/canceled/ordinary signup network QA, then connect
+   the separate Join Office API when its generated client becomes available.
 
 ## Durable implementation rules
 
