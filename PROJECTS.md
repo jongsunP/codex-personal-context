@@ -1,5 +1,9 @@
 # Projects
 
+Common Codex guidance lives in the repository root. Each project has a personal
+configuration, current checkpoint, and history under `projects/`; see
+`projects/README.md` for the required structure and lifecycle.
+
 ## Repository Folder
 
 The user's personal repositories are generally located under:
@@ -10,7 +14,7 @@ The user's personal repositories are generally located under:
 
 Check this folder first when finding or continuing local projects.
 
-## Current Main Project
+## Projects
 
 ### Action Sports Journal
 
@@ -38,9 +42,16 @@ Current preference:
 
 For detailed current state, read:
 
-- `HANDOFF.md`
-- `projects/action-sports-journal-app.md`
-- Project-local `docs/HANDOFF.md`
-- Project-local `docs/CURRENT_STAGE.md`
-- Project-local `docs/CONTINUITY_CHECKPOINT.md`
+- Personal current checkpoint and history:
+  `projects/action-sports-journal-app.md`
+- Cross-project personal continuation context: `HANDOFF.md`
+- Stable team-owned project documentation when relevant:
+  project-local `README.md`, `AGENTS.md`, and architecture/product docs
 
+### Dentlink Invite
+
+- Shared repository: `https://github.com/Innvoaid/dentlink-client`
+- Local worktree: `/Users/parkjongsun/Repository/dentlink-client-invite`
+- Active branch: `feature/DL-14232`
+- Personal current checkpoint and history:
+  `projects/dentlink-client-invite.md`

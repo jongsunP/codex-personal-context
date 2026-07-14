@@ -2,21 +2,21 @@
 
 ## Purpose
 
-This file is an index for ASJ-specific context in `codex-personal-context`.
-It is not the canonical project memory.
+This file is the user's personal ASJ configuration, checkpoint, and history in
+`codex-personal-context`. It owns ASJ-specific Codex workflow rules and personal
+continuity without adding personal AI state to the shared repository.
 
-The canonical ASJ product status, stable workstream list, technical decisions,
-QA state, and backlog live in the project repository:
+The shared project repository remains the source for live code and stable
+team-owned product and technical documentation:
 
 ```text
 /Users/parkjongsun/Repository/action-sports-journal-app
 ```
 
-Read the project documents instead of duplicating their contents here.
-
-When updating ASJ-specific state, write to the ASJ project repository according
-to its `README.md` "Where To Write" map. This personal-context file should stay
-an index, not a duplicated project memory.
+At resume, read this file first, then verify every time-sensitive checkpoint
+against the live project Git state and relevant team-owned docs. At meaningful
+closeout, update the personal progress and history here. Update the shared
+project documentation only when stable information needed by the team changes.
 
 ## Repository
 
@@ -96,11 +96,14 @@ CTO session for the development-session setup prompt.
 
 Do not keep second copies of these prompts here.
 
-## Current Shortcut
+## Current Checkpoint Rule
 
-Do not rely on this file for current ASJ status. Always re-check the project
-repo documents in the read order above. This file is only an index and durable
-operating-rule layer.
+Use this file for personal ASJ progress and history, but never treat a dated
+checkpoint as live proof. Pull the ASJ repository and reconcile branch, HEAD,
+remote divergence, worktree, code, and stable team docs before answering current
+status. This storage-boundary reorganization occurred during Dentlink work, so
+refresh the ASJ progress section during the next ASJ session rather than
+guessing its current state here.
 
 ## CTO Session Boundary
 
@@ -116,8 +119,9 @@ session to execute code changes here.
 
 Actual ASJ app/server implementation, migrations, validation commands, commits,
 pushes, and EAS builds belong in the separate development session by default.
-If this boundary is missed, recover by returning to the Git-backed project docs
-and the `SESSION_WORKFLOW.md` CTO contract.
+If this boundary is missed, recover by returning to this personal project
+checkpoint, the relevant stable team-owned docs, and the `SESSION_WORKFLOW.md`
+CTO contract.
 
 Hard gate: the CTO session must separate "needed" from "approved". EAS builds,
 Render deploys, DB writes/migrations, build-number changes, project code
@@ -127,6 +131,47 @@ instructions to a development session. Vague continuation phrases such as
 "계속해줘", "진행해", "고", or "좋아" are not enough for these actions. Sync,
 read-only investigation, or readiness-check prompts should explicitly say
 "검증만 / 수정 금지 / 빌드 금지" unless execution has been approved.
+
+## CTO Handoff Behavior
+
+- Keep the CTO session in coordination, judgment, QA interpretation,
+  documentation, and prompt-handoff mode by default.
+- In the CTO session, vague continuation phrases continue the CTO workflow; they
+  do not authorize app/server code, migrations, project commits or pushes,
+  deploys, builds, database writes, or paid AI calls.
+- Separate recommendation from execution. A needed build, deploy, or migration
+  must be explained before an execution prompt is issued.
+- Development-session prompts default to read-only investigation and no build
+  unless the Founder approved that exact implementation or execution step.
+- If the Founder asks a question after a proposed prompt, pause the handoff and
+  answer the question without repeating the prompt. Provide one revised final
+  prompt when the Founder asks to continue.
+- When a development result arrives and the next safe step is clear, provide the
+  next prompt without unnecessary confirmation. EAS Build remains a hard final
+  confirmation exception.
+- Keep operating rules out of ordinary development prompts unless they directly
+  affect that task. Preserve deferred concerns in the personal checkpoint or
+  backlog so they do not disappear.
+
+## Validation Cost
+
+- Prefer the cheapest proof that validates the behavior: static checks, local
+  app, Simulator, or physical-device testing before a new EAS build.
+- Use Development Build or Local Build when repeated native validation would
+  otherwise consume multiple cloud builds.
+- Before every EAS build, finish code and lower-cost QA, report build readiness,
+  and obtain final Founder confirmation.
+- For upload reliability tests, preserve the production-like app/backend path
+  and bypass only the paid AI-provider call when AI quality is not the target.
+
+## Output Format
+
+- Ordinary status and CTO judgment use concise normal prose.
+- Put only copyable prompts, commands, or exact values in code blocks.
+- When only the development session needs an action, show the development prompt
+  without an empty user section.
+- Use the owner headings `개발 세션에게` and `사용자에게` only when both lanes
+  genuinely have content.
 
 ## Durable Product Principles
 

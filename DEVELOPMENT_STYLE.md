@@ -31,6 +31,14 @@ request as an isolated new solution. First discover how the project already
 solves the same class of problem, then preserve its components, props, hooks,
 types, state ownership, and layout conventions while meeting the requirement.
 
+"Follow the existing project" applies to the whole implementation method, not
+only CSS, naming, or visual similarity. Before coding, inspect the closest
+production implementation in the same app and current base version, then match
+its component boundaries, hook placement and signatures, API/query/mutation
+flow, cache behavior, state ownership, generated types, loading and error
+handling, routing, responsive layout, imports, and naming. Do not substitute a
+personally preferred pattern merely because it also works.
+
 Use this decision order:
 
 1. Same concept: use the existing component and existing props.
@@ -92,6 +100,9 @@ appear nowhere else in the app.
 
 - Follow the current app's data-fetching and mutation style instead of mixing
   in a personally preferred async/await or try/catch structure.
+- Match the existing hook boundary as well as its syntax: where data is fetched,
+  where redirects and side effects live, how callbacks are exposed, who owns
+  loading/error state, and how query keys and invalidation are organized.
 - Use the syntax of the library major version on the current base branch.
 - Treat generated DTOs and EnumTypes as the contract. Prefer project-style
   domain aliases over repeating string unions.
@@ -137,12 +148,3 @@ appear nowhere else in the app.
   Run builds when requested or when the risk justifies them.
 - Report existing warnings separately from failures and state test gaps rather
   than overstating completion.
-
-## Product Bias
-
-For Action Sports Journal and similar projects:
-
-- AI is a feature, not the whole product.
-- The core product should reflect the user's real life and sports progression.
-- Session-based logging is central.
-- Sharing may matter later, but should not be implemented before the foundation is ready.

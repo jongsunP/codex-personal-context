@@ -14,12 +14,18 @@
 - When a durable user preference or project principle is discovered, suggest
   adding it to this repository.
 - Use this repository for cross-project user preferences, Codex working style,
-  session start/end workflows, and durable personal context regardless of the
-  active project.
-- Use each project repository for project-specific product decisions,
-  technical status, implementation handoffs, and project documentation.
-- If a note applies to both, record the general rule here and the concrete
-  project-specific state in the relevant project docs.
+  session workflows, durable personal context, and the user's project progress
+  history regardless of the active project.
+- Keep personal project checkpoints in `projects/<project>.md`: branch and
+  commit state, completed and remaining work, QA and verification, blockers,
+  decisions, and the next starting point.
+- Keep each shared project repository focused on code and stable, team-owned
+  information such as product contracts, architecture, and developer
+  documentation. Do not add personal Codex session status or handoff files to a
+  repository used by the whole team.
+- If a fact affects both, record the personal work history here and update the
+  project repository only when the information belongs in the team's canonical
+  documentation.
 
 ## Communication
 
@@ -39,6 +45,11 @@
 
 - The user prefers Codex to proceed proactively and request required approvals directly when tools need elevated permissions.
 - Still follow Codex/system permission prompts when they appear.
+- Shared project code, commits, pushes, and PR mutations require the user's
+  explicit authorization. Personal memory maintenance in
+  `codex-personal-context` is different: at meaningful session closeout, commit
+  and push its curated history automatically so the next session or device can
+  recover it.
 
 ## Wrap-Up Workflow
 
@@ -51,37 +62,28 @@
 - For project work, include completed work, decisions, verified facts, open
   questions, changed files when relevant, what was learned, what is needed,
   future tasks, and the next starting point.
-- Decide whether durable memory or project documentation should be updated. If
-  it should, update the appropriate Git-backed document/repository and commit
-  and push when safe.
+- Update the relevant personal project checkpoint when durable progress has
+  changed. Update project documentation only when team-owned canonical
+  information changed. Commit and push the personal context at meaningful
+  closeout; commit or push the shared project only when explicitly authorized.
 - For lightweight question/learning sessions, keep the wrap-up shorter but
   still capture durable preferences or project decisions when they appeared.
 - When the user says to resume work or continue from a prior checkpoint, first
   refresh the relevant Git-backed context with `git pull` before relying on
   local memory.
-- At meaningful project closeout, curate durable context into this repository
-  and the relevant project documentation, then commit and push when explicitly
-  authorized. Do not require every intermediate step to be recorded remotely.
+- At meaningful project closeout, curate the personal progress history into
+  this repository and commit and push it. Update, commit, or push the shared
+  project only when explicitly authorized. Do not require every intermediate
+  step to be recorded remotely.
 
-## Active Project Context
+## Project-Specific Layer
 
-The user's current main project is Action Sports Journal.
-
-- Local path: `/Users/parkjongsun/Repository/action-sports-journal-app`
-- GitHub remote: `https://github.com/jongsunP/action-sports-journal-app`
-- Product: iOS-first React Native action sports life log platform.
-- Current Expo SDK: `~54.0.35`.
-- For current ASJ status, do not use this file as the source of truth. Read
-  `projects/action-sports-journal-app.md`, then the ASJ project `README.md`
-  and `docs/PROJECT_MEMORY.md`.
-
-## Project Rules To Remember
-
-- Session is the center of the domain model.
-- ActivityGroup -> Session -> AnalysisResult -> ShareResult.
-- AI analysis is only one feature, not the whole product.
-- Device-first anonymous auth, ownership boundary, private realtime, Push delivery, Push Observability P2, and Kakao Recovery / Account Linking are established product foundations.
-- Do not add unrelated login methods, phone auth, coupons, expenses, calendar, RAG, compression optimization, or AI calibration until the project docs say the stage is ready.
-- Keep implementations simple and avoid over-engineering.
-- Durable preferences, project settings, and continuity notes should be kept in
-  remote-backed Git repositories, not only in chat or local scratch state.
+- Use `PROJECTS.md` as the project index and read the active
+  `projects/<project>.md` after the common guidance files.
+- Project-specific product rules, implementation constraints, role boundaries,
+  progress, QA history, and next steps belong in that project file rather than
+  this common agent guide.
+- Common rules apply to every project. A project file may add narrower rules for
+  its own scope but must not silently weaken user permission or safety rules.
+- Verify every time-sensitive project checkpoint against the live shared
+  repository before relying on it.

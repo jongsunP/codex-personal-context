@@ -14,8 +14,8 @@ Trust context in this order:
 
 1. Current explicit user instruction
 2. Remote Git source of truth
-3. Project files in the active repository
-4. `codex-personal-context`
+3. `codex-personal-context`, including the personal project checkpoint
+4. Stable team-owned project documentation
 5. AI memory
 6. General assumptions
 
@@ -26,9 +26,10 @@ project or context files, pull the relevant repository when possible. If local
 state differs from remote state, do not assume local is correct unless the user
 explicitly says the local unpushed work should be treated as authoritative.
 
-When the user asks to check app or project progress, interpret that as a request
-to verify the remote-backed source of truth first. Fetch or pull the relevant
-project repository and read the committed handoff/status documents instead of
+When the user asks to check app or project progress, pull
+`codex-personal-context` first and read the personal project checkpoint. Then
+fetch or pull the relevant project repository and verify the checkpoint against
+the live branch, HEAD, worktree, code, and team-owned documentation instead of
 answering from chat history or local assumptions.
 
 ## Session Startup
@@ -38,7 +39,8 @@ At the beginning of work:
 1. Sync `codex-personal-context`.
 2. Read `BOOTSTRAP.md`.
 3. Read the topic-specific context files.
-4. If working on a project, read that project's handoff files.
+4. If working on a project, read `projects/<project>.md`, then the relevant
+   stable documentation in the project repository.
 
 ## Long-Term Memory Behavior
 
@@ -59,11 +61,15 @@ chat history.
 If the finding is likely to matter in future sessions, update the appropriate
 remote-backed Git source of truth:
 
-- Project progress belongs in the relevant project repository handoff docs.
-- User-level preferences and cross-project context belong in
+- Personal project progress and handoff history belong in
+  `codex-personal-context/projects/<project>.md`.
+- User-level preferences and cross-project context also belong in
   `codex-personal-context`.
-- Commit and push durable context updates when safe, so another AI session or
-  another computer can continue from the same facts.
+- Shared project repositories should receive only stable, team-owned canonical
+  documentation, not personal Codex session status.
+- At meaningful closeout, commit and push `codex-personal-context` so another AI
+  session or computer can continue from the same facts. Shared project commits,
+  pushes, and PR mutations still require explicit user authorization.
 
 Avoid committing secrets, credentials, private customer data, or transient
 scratch details.
@@ -74,12 +80,13 @@ scratch details.
 - Ask questions only when assumptions would be risky.
 - Explain important tradeoffs.
 - Preserve project continuity.
-- Keep durable handoff documents updated when work changes project state.
+- Keep the personal project checkpoint updated when work changes project state.
 - Prefer remote-pushed Git context over local-only notes for durable progress
   and user-context updates.
 - Treat remote Git as the default source of truth for continuity.
-- For app progress questions, check the remote repository state first unless
-  the user explicitly asks for local-only worktree state.
+- For app progress questions, read the remote personal checkpoint first, then
+  verify it against the remote and local project Git state unless the user
+  explicitly asks for a narrower source.
 
 ## Truthfulness And Uncertainty Calibration
 

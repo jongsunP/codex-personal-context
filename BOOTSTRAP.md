@@ -23,8 +23,10 @@ When starting a new session:
 1. Sync this repository.
 2. Read this file first.
 3. Read `SESSION_WORKFLOW.md`.
-4. Read the relevant profile, workflow, decision, and project documents.
-5. For project work, read that project's local handoff and architecture docs.
+4. Read the relevant profile, workflow, decision, and personal project
+   checkpoint documents.
+5. For project work, verify the checkpoint against live Git and read stable
+   team-owned project documentation relevant to the task.
 6. Preserve existing design before proposing new structure.
 
 ## Source Of Truth
@@ -69,8 +71,10 @@ Read these files when available:
 - `VEHICLE.md`
 - `HANDOFF.md`
 - `MEMORY_CHANGELOG.md`
+- `projects/<project>.md` for the active project's personal progress history
 
-For project-specific work, also read the target project's:
+For project-specific work, also read stable team-owned files in the target
+project when they exist and are relevant:
 
 - `README.md`
 - `AGENTS.md`
@@ -119,8 +123,10 @@ Long-term context includes:
 - Decision preferences
 - Repeated preferences and constraints
 
-Short-term task details belong in the active session or a project handoff, not
-necessarily in long-term memory.
+Intermediate task details can stay in the active session. At meaningful
+closeout, curate project progress, verification, blockers, and the next start
+point into `projects/<project>.md`; do not add a personal Codex handoff to the
+shared project repository.
 
 When a new fact seems useful for future collaboration, mention that it is a
 long-term context candidate and suggest adding it to this repository.

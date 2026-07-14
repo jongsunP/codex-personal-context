@@ -59,13 +59,14 @@ machine-local runtime memory under `~/.codex/memories`.
   remote durable memory.
 - Intermediate implementation details do not need to be pushed continuously.
   At meaningful work closeout, curate the current status, learned rules,
-  blockers, verification, and next start point into the appropriate Git-backed
-  document and push it when explicitly authorized.
+  blockers, verification, and next start point into
+  `projects/<project>.md`, then commit and push `codex-personal-context`.
 - At work start or resume, pull `codex-personal-context` first and read the
   relevant project document before relying on chat history or runtime memory.
 - General working rules belong in the canonical personal guidance files.
-  Concrete project checkpoints belong in `projects/<project>.md` and, when a
-  project repository has its own canonical handoff, in that project repository.
+  Personal project checkpoints belong in `projects/<project>.md`. A shared
+  project repository should contain only code and stable, team-owned canonical
+  documentation, not a duplicate personal Codex handoff.
 
 ## Rule Application Model
 
@@ -94,17 +95,21 @@ Use `codex-personal-context` for:
 - Session start and end workflows.
 - Durable personal context.
 - AI tool usage preferences.
+- Personal project progress and history.
+- Branch and commit checkpoints, QA and verification, blockers, decisions, and
+  the next starting point for each project under `projects/<project>.md`.
 
 Use each project repository for:
 
-- Project-specific product decisions.
-- Technical status.
-- Implementation handoffs.
-- Architecture notes.
-- Project documentation.
+- Source code and generated artifacts that belong to the product.
+- Stable product contracts and architecture used by the team.
+- Team-owned developer instructions and canonical project documentation.
+- Information that remains useful independently of this user's Codex workflow.
 
-When a note applies to both, record the general rule here and the concrete
-project state in the relevant project docs.
+Do not add personal session progress, AI handoffs, or transient QA checkpoints
+to a repository shared by the whole team. When a finding changes team-owned
+canonical information, update both the personal history here and the relevant
+project documentation without duplicating the entire status log.
 
 ## Session Roles
 
@@ -129,52 +134,29 @@ documented read order exactly. Do not skip, reorder, or replace it with a chat
 summary unless a file is genuinely missing.
 
 1. Pull `codex-personal-context`.
-2. Pull the relevant project repository.
-3. Read the current bootstrap, agent, project memory, stage, and handoff
-   documents from the remote-backed repos.
-4. Check every known remote-backed information source that is relevant and
-   available for that project, not only the last chat summary. This includes
-   personal context, project `AGENTS.md`, project memory/stage/handoff docs,
-   and relevant TODO/tech-debt docs.
-5. Check the project git status before touching files.
-6. Identify the current branch, latest relevant commit, and next starting
-   point.
-7. Continue from the documented state instead of relying only on chat memory.
+2. Read the global guidance and `projects/<project>.md` personal checkpoint.
+3. Pull the relevant project repository.
+4. Check the live project branch, HEAD, remote divergence, worktree, and recent
+   commits before touching files.
+5. Read stable team-owned project documentation that is relevant to the task.
+6. Reconcile the personal checkpoint with live Git and code; current explicit
+   user instructions and verified live state override an older checkpoint.
+7. Continue from the reconciled state instead of relying only on chat memory.
 
 Assume project-internal Codex sessions are local-device-bound. For remote work
 continuity, treat Git-backed documents as the durable source of truth, not the
 current device's local session state.
 
 When writing durable context, use the repository boundary strictly. General
-Codex/session behavior belongs in `codex-personal-context`. Project product
-state, technical decisions, QA status, and handoffs belong in that project's
-repository. Do not duplicate a project's canonical status list into personal
-context or create a new status `.md` when an existing project source-of-truth
-document applies.
+Codex/session behavior and personal project progress belong in
+`codex-personal-context`; use `projects/<project>.md` for the current checkpoint
+and dated history. Shared project repositories keep code and stable team-owned
+documentation. Always verify time-sensitive personal progress against the live
+project Git state when resuming.
 
-For Action Sports Journal, read in this exact order:
-
-1. `codex-personal-context/AGENTS.md`
-2. `codex-personal-context/SESSION_WORKFLOW.md`
-3. `codex-personal-context/projects/action-sports-journal-app.md`
-4. `action-sports-journal-app/README.md`
-5. `action-sports-journal-app/AGENTS.md`
-6. `action-sports-journal-app/docs/PROJECT_MEMORY.md`
-7. `action-sports-journal-app/docs/CURRENT_STAGE.md`
-8. `action-sports-journal-app/docs/HANDOFF.md`
-9. `action-sports-journal-app/docs/TECH_DEBT_AND_REFACTOR_TODO.md`
-
-Only read other project docs when the active task points to them.
-
-If the user says "작업 재개하자" for Action Sports Journal, treat it as a
-status-recovery request. Prepare:
-
-- What is already complete.
-- What is current.
-- What should happen next.
-- What needs the Founder to decide.
-- The first copyable development-session prompt if implementation can proceed.
-- Previously deferred concerns or backlog items that should be rechecked.
+Project-specific read orders, role boundaries, validation gates, and output
+contracts belong in the active `projects/<project>.md`. Load them after this
+common workflow and before acting in that project.
 
 ## Wrap-Up Or End Workflow
 
@@ -189,20 +171,10 @@ summarize, "정리하자", or "마무리하자":
 6. Record changed files when relevant.
 7. Record what is needed next.
 8. Record the next starting point.
-9. Decide whether durable memory or project docs should be updated.
-10. If documentation is updated, commit and push when safe.
-
-If the user says "작업 마무리하자" or "정리하자" for Action Sports Journal,
-treat it as a remote-backed closeout request. Prepare documentation,
-handoff/checkpoint updates, commit and push guidance or execution, and the next
-session starting point.
-This also means the CTO session itself should summarize and close the day, not
-only generate a development-session prompt. Include current status, completed
-decisions/work, pending development-session results if any, the next starting
-point, and what should be checked next.
-On closeout, ensure durable decisions, current status, QA/build state, and the
-next starting point are written to the appropriate project docs and/or
-`codex-personal-context`, then pushed when safe.
+9. Update the personal project checkpoint when durable progress changed, and
+   update team documentation only when its canonical information changed.
+10. Commit and push `codex-personal-context` so the history is remote-backed.
+    Commit or push the shared project only when explicitly authorized.
 
 For lightweight question or learning sessions, keep the wrap-up shorter, but
 still preserve durable preferences or project decisions that should survive
@@ -229,205 +201,6 @@ records:
   development-session prompts, terminal commands, exact values, or text the
   user needs to paste elsewhere.
 
-## Action Sports Journal CTO Output Contract
-
-For the Action Sports Journal CTO session:
-
-- The only active project target is
-  `/Users/parkjongsun/Repository/action-sports-journal-app`.
-- Treat the CTO session as a coordination, judgment, QA interpretation,
-  documentation, and prompt-handoff lane by hard default.
-- The CTO session must not act as the implementation developer by default.
-- Actual app/server code work, migrations, validation commands, commits, pushes,
-  and EAS builds should be given to a separate development session as one
-  copyable prompt.
-- Do not start implementation from vague continuation phrases such as
-  "계속해줘", "진행해", "그렇게 해줘", or "다 해줘" inside the CTO session.
-  In the CTO session, those phrases mean "continue the CTO workflow": interpret
-  results, update docs when appropriate, or provide the next development-session
-  prompt.
-- The CTO session may directly edit only meta/session documentation or durable
-  context repositories when the Founder is explicitly discussing operating
-  rules, memory, read order, handoff style, or cross-session continuity.
-- The CTO session may directly touch the ASJ project repository only when the
-  Founder explicitly says to do the work in this session, or when work was
-  already accidentally started in this session and finishing it is the safest
-  way to avoid an inconsistent repository state. Treat that as an exception and
-  return to the handoff model immediately afterward.
-- If the CTO session notices it is about to run project implementation, stop and
-  convert the intended action into a development-session prompt unless the
-  Founder explicitly asked for direct execution here.
-- Hard execution gate: for ASJ CTO sessions, app/server code changes, database
-  writes or migrations, Render deploys, EAS builds, build-number changes,
-  commits/pushes for project code, and cost-incurring AI/API calls require a
-  separate explicit Founder approval immediately before the execution request.
-  A prior "계속해", "진행해", "고", "좋아", "필요하면 해", or approval for a
-  different step does not count as approval for these actions.
-- Development-session prompts must default to "검증만 / 수정 금지 / 빌드 금지"
-  unless the Founder has explicitly approved implementation or build execution
-  for that exact step. If a prompt is only for sync or investigation, say so in
-  the prompt and explicitly forbid buildNumber changes, commits, pushes, EAS
-  builds, DB writes, and Render deploys.
-- Split recommendation from execution. The CTO session may say "Build가
-  필요합니다" or "DB index 적용이 필요합니다", but must not include executable
-  build/deploy/DB instructions in a development-session prompt until the Founder
-  confirms that exact action.
-- If there is nothing the Founder needs to know, show only the development
-  session prompt.
-- When answering current status, judgment, or context for the Founder, use
-  normal prose or a short normal list unless there is a copy/paste action.
-- If the Founder asks a question before passing a development-session prompt to
-  the development session, treat the question as intentionally pausing the
-  handoff. Answer the question first and do not repeat the prompt unless the
-  answer changes it or the Founder asks for it again.
-- A development-session prompt is not considered handed off until the Founder
-  actually passes it to the development session. During a paused handoff,
-  answer intermediate questions without reprinting the prompt. When the Founder
-  indicates the questions are done or asks for the final prompt, provide the
-  revised final prompt once.
-- If the Founder asks a question after a prompt was provided, assume the prompt
-  has not yet been passed to the development session unless the Founder
-  explicitly says it has. If it has already been passed, the Founder will say so
-  directly, for example: "이미 프롬프트는 넘겼고 질문하자면".
-- This is the default handoff break behavior: development session work ->
-  CTO judgment -> proposed development-session prompt -> Founder question means
-  pause the handoff -> CTO answers -> Founder says to continue -> CTO provides
-  the final revised prompt.
-- When the Founder shares a development-session result, do not ask unnecessary
-  confirmation questions. If the next step is clear and does not require Founder
-  judgment, provide the next copyable development-session prompt directly. Ask
-  questions only when the Founder must decide, when external state/input is
-  genuinely required, or when the risk of assuming is high. EAS Build remains a
-  hard exception: always ask for Founder confirmation before giving a build
-  execution prompt.
-- Keep meta-collaboration settings separate from development task context.
-  Answer format, session workflow, handoff rhythm, memory, and remote-push
-  discipline are operating rules for Codex/CTO sessions. Record them in durable
-  docs when needed, but do not stuff them into ordinary development-session
-  prompts unless they directly affect the task. Development prompts should carry
-  only the product, technical, QA, safety, and workflow details needed for that
-  development task.
-- The conversation can contain mixed context: product development decisions,
-  technical implementation details, QA observations, infrastructure concerns,
-  personal working preferences, and session operating rules. Preserve all durable
-  context, but first classify whether the current turn is development/product
-  work or meta/session setup work, then act in the matching lane. When working
-  on development, prioritize development/product/technical context. When
-  answering about session behavior, prompt format, memory, sync, build policy,
-  or collaboration style, treat that as operating guidance. Do not merge
-  working-style instructions into product requirements unless they directly
-  affect the development task.
-- If the CTO session violates the execution boundary, treat it as workflow
-  drift, not as a product decision. On the next turn, acknowledge it briefly,
-  record or tighten the operating rule if needed, and continue from the remote
-  Git source of truth. Do not assume the personal-context repository is corrupt
-  unless there is evidence such as missing files, failed sync, conflicting
-  canonical rules, or unexpected local-only edits.
-- If the Founder raises a concern that will not be handled immediately, record
-  it as a backlog or follow-up item so it can be rechecked later. Deferred
-  concerns should not disappear just because the current task continues.
-- When the Founder asks for the current list/list-up for Action Sports Journal,
-  treat terms such as "리스트업", "현재 리스트업", "리스트", "전체 리스트",
-  and "현재/남은 것" as a stable signal for the full project workstream list,
-  not the narrow topic from the immediately preceding conversation. Show the
-  stable PM-style product/workstream timeline, not a code change list or
-  temporary execution checklist. Include completed product foundations and
-  slices, current active workstreams, near follow-ups, and later backlog. Do not
-  include transient validation steps such as typecheck, diff-check, Simulator
-  QA, build readiness, or "wait for development-session result" as list items.
-  Build numbers can be supporting evidence, but they should not appear as
-  standalone product workstreams. Keep workstream names stable and evolve the
-  same list over time. Prefer paired labels in the form `English(한국어)` for
-  product/workstream names so the Founder can scan both product terminology and
-  meaning consistently. If only a subset is intentionally shown, explicitly say
-  the scope first, for example "Startup Performance 기준으로는...".
-
-Validation-cost policy:
-
-- Builds and AI API calls are allowed when they are the right validation step.
-- If simulator or physical-device testing can verify the behavior without a
-  new EAS build, use that path first.
-- If repeated real-device validation is needed because of native modules or
-  native config, consider Development Build or Local Build before spending many
-  EAS cloud preview/internal builds.
-- If the behavior specifically requires standalone physical-device validation,
-  say so clearly and proceed toward the build.
-- Builds are executed by the development session by default. When the CTO
-  session reaches a build decision point, ask or state that a build is needed;
-  if the Founder says to proceed, provide one copyable build-execution prompt
-  for the development session.
-- Before any EAS build, the CTO session must ask the Founder for final
-  confirmation. Development-session prompts must not instruct the development
-  session to start a build without this final confirmation. Even if a prompt
-  includes build preparation, the development session must stop before actually
-  starting a new EAS build and report build readiness. Flow: finish code
-  changes and simulator QA -> low-risk UI polish gate when relevant -> report
-  build readiness -> Founder confirms -> start EAS build.
-- If a build/deploy/DB instruction is accidentally included without explicit
-  approval, immediately send a correction prompt that stops before that action.
-  Do not continue by rationalizing the previous prompt as implied approval.
-- For repeated upload-reliability tests, keep the production-like app/backend
-  path intact and bypass only the paid AI provider call when AI quality is not
-  the target.
-- Bypassing the AI provider is not app mock-data testing. The product path
-  should remain as close to production as possible; only the cost-incurring
-  provider call is substituted.
-
-Product judgment policy:
-
-- Do not frame ASJ as an MVP. It is a real service being built one proper
-  foundation at a time.
-- Treat upload reliability as survival-critical. AI quality is an ongoing
-  development area; preventable, unknown, or unobservable upload failure cannot
-  be accepted as a normal state.
-- Remember that one user may upload one item at a time while multiple
-  previously uploaded items are analyzing. Preserve and explain per-item state
-  visibility when reviewing upload/analysis flows.
-- Judge product/channel decisions against ASJ's specific action-sports niche
-  users, whose actual sharing and communication habits favor Instagram and
-  KakaoTalk, not generic mass-market assumptions.
-- The Founder is a web frontend developer who understands websockets,
-  presigned upload flows, and engineering causality. This is context for
-  diagnosing possible misunderstanding, not a requirement to always explain in
-  web frontend terms. Keep explanations technically direct; if the Founder is
-  confused, check whether the missing piece is an app/mobile/backend/infra
-  difference from web frontend work.
-- ASJ is not deadline-driven MVP work. When a discovered issue affects the
-  development or QA foundation and fixing it will keep paying off in future
-  work, prefer solving it before moving to the next product step. If the issue
-  is unrelated, low leverage, or would derail the product task too much, record
-  it as backlog instead.
-- For Simulator/UI QA, prefer Codex Computer Use or Maestro-style app/UI
-  automation over macOS coordinate clicking. If a visible cursor is missing or
-  clicks go to the wrong window, first check whether Codex Computer Use is
-  installed and enabled. `osascript click at` is a fallback only because it is
-  fragile around screen coordinates and window focus.
-- For test account cleanup, use preview -> Founder approval -> cleanup ->
-  verification. Supabase/Kakao cleanup for relinking tests must release the
-  Auth identity/provider binding, not only delete public table rows.
-
-Use this exact owner format when needed:
-
-````markdown
-## **개발 세션에게**
-```text
-cd ~/Repository/action-sports-journal-app
-
-...
-```
-````
-
-Use the user section only when the Founder has a decision or direct action:
-
-````markdown
-## **사용자에게**
-<short explanation>
-
-```text
-<copyable command or value only when needed>
-```
-````
-
 ## Database And Sensitive Work
 
 Default database work should be read-only.
@@ -441,6 +214,7 @@ Default database work should be read-only.
 ## Continuity Principle
 
 Codex sessions can stay alive, but they should not be treated as the only
-source of truth. Important state should be written to Git-backed memory or
-project docs so work can continue across sessions, devices, and future AI
-context resets.
+source of truth. Personal progress should be written to Git-backed
+`codex-personal-context`, while stable team-owned information belongs in the
+shared project repository, so work can continue across sessions, devices, and
+future AI context resets.

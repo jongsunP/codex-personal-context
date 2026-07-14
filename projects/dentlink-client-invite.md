@@ -1,8 +1,126 @@
-# Dentlink Invite current checkpoint - 2026-07-10 closeout
+# Dentlink Invite current checkpoint - 2026-07-14
 
-This section is the current source of truth. Older dated sections below are
-historical snapshots and may describe APIs or remaining work that has since
-changed.
+This is the current personal work checkpoint. It records the user's progress
+history and must be verified against the live shared repository when work
+resumes. Older dated checkpoints remain below as history and may describe APIs,
+branch state, or remaining work that has since changed.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232`
+Pushed HEAD: `ad951b4f5 [DL-14232] feat: 치과 초대 가입 플로우 구현`
+Remote: `origin/feature/DL-14232` matched local HEAD (`0/0` ahead/behind)
+Worktree: active uncommitted review changes in 18 paths
+
+## Pushed baseline
+
+- Admin, Lab, and Clinic sender-side invitation management APIs and generated
+  models are connected for the currently available contract.
+- Clinic member list, member detail drawer, Pending Members page, Invite Members
+  modal, role/authority actions, and invitation actions are implemented.
+- Clinic recipient entry uses
+  `/invitations?type=INVITATION&employerId={id}&email={email}`.
+- An additional email-link `id` parameter is currently ignored by Clinic;
+  validation uses `employerId` and `email`.
+- `/invitations` owns invitation validation for email and notification entry,
+  then routes according to validation status, existing-account state, and auth.
+- Valid new-account signup uses the invitation flow and the fixed verification
+  code `4520`; ordinary entry without invitation parameters keeps the normal
+  signup flow.
+- Referral and invitation funnel cookies remain separate, while the latest
+  funnel entry replaces the previous funnel cookie.
+- The temporary frontend `roleType` fallback requested during backend debugging
+  was removed after the API accepted the real signup value.
+
+## Recipient flow QA observed
+
+- Existing account, signed out, valid invitation to another office:
+  validation returned `VALID` with `isExistingUser: true`; sign-in and return to
+  the invitation flow worked in user QA.
+- New account, signed out, valid invitation:
+  `/invitations` displayed its validation loading spinner and routed to signup
+  step 0 after `VALID` with `isExistingUser: false`.
+- The spinner before signup is owned by `/invitations` and
+  `useOfficeInvitation` while router readiness and validation resolve.
+- `Remind Me Later` should return an existing user to the current office home.
+- Final `Join Office` acceptance and membership creation still depend on the
+  dedicated backend acceptance API that is expected separately.
+
+## Active uncommitted review
+
+- The user requested a branch-wide code and Figma review after `ad951b4f5`.
+- Current edits cover Admin, Clinic, and shared UI files and are intentionally
+  waiting before a shared-project commit.
+- Review focus is project-method alignment, not cosmetic naming alone:
+  component composition, existing props, hook boundaries and naming,
+  query/mutation behavior, state ownership, responsive layout, loading/error
+  behavior, and shared-component side effects.
+- Current work includes the Admin invitation-hook naming alignment, recipient
+  flow corrections, member/pending-list responsive cleanup, and minimal shared
+  UI corrections.
+- No ad hoc test file is part of the current worktree.
+
+## Latest static verification
+
+- Admin, Clinic, and Lab type checks passed for the current review set.
+- App lint checks passed; the changed Clinic files were clean.
+- Admin retained five existing `DataFilters` warnings, reported separately from
+  failures.
+- Direct shared lint remains blocked by the repository's existing duplicate
+  `react-hooks` plugin configuration rather than the changed shared files.
+- `git diff --check` passed.
+- Build and Computer Use QA were intentionally excluded; the user is performing
+  browser functional and visual QA.
+
+## Figma review scope
+
+- Clinic member list and mobile variants
+- Clinic member detail drawer and mobile fullscreen presentation
+- Pending Members page: `224:46661`
+- Invite Members modal and error states: `296:50698`
+- Recipient invitation page: `296:71550`
+- Signup role step: `275:11988`
+- End-to-end invitation flow: `362:45613`
+
+## Remaining work
+
+1. Finish the current code review across today's edits, the Clinic invite scope,
+   and the Admin/Lab/shared blast radius.
+2. Finish static Figma comparison for Invite Members modal error UX and the
+   recipient-flow states; incorporate findings without inventing unsupported
+   behavior.
+3. Connect final `Join Office` acceptance when the dedicated backend contract is
+   generated and confirmed.
+4. Run final type/lint after the coherent edit set is complete; keep build and
+   Computer Use within the user's stated QA boundary.
+5. Commit or push the shared Dentlink repository only on explicit user request.
+6. At meaningful closeout, update, commit, and push this personal checkpoint.
+
+## Durable implementation rules
+
+- In Dentlink and repositories derived from `dentlink-client`, matching the
+  project means matching the complete implementation method, not only CSS or
+  naming.
+- Use the closest equivalent in the current app, base, and installed library
+  version for components, props, hooks, API/query/mutation style, state, types,
+  errors, routing, responsive layout, imports, and naming.
+- Choose responsive breakpoint direction and layout composition from the
+  surrounding current implementation; a valid `maxTablet` alternative is not a
+  reason to ignore an established mobile-first `tablet` pattern.
+- A concrete user comment is a request to audit the full changed scope for the
+  same root pattern.
+- Prefer existing primitives and usage composition. Deviate only for a concrete
+  unmet requirement, keep the change minimal and additive, preserve defaults,
+  and review all affected consumers.
+- Shared project code commits, pushes, and PR mutations require explicit user
+  authorization. Personal-context closeout synchronization does not.
+- Jira remains out of scope until the user requests it again.
+
+---
+
+# Historical checkpoint - 2026-07-10 closeout
+
+This is a historical snapshot and is preserved for the user's project history.
+Use the 2026-07-14 section above for the current checkpoint.
 
 Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
 Branch: `feature/DL-14232`
@@ -151,7 +269,9 @@ dependency migrations are handled.
 - `메모리` means the Git-backed `codex-personal-context` repository by default.
 - Pull this personal context and the project repository at work start.
 - Intermediate steps do not require constant memory commits, but meaningful
-  closeout must update and push durable context when explicitly authorized.
+  closeout must update, commit, and push the personal context. Explicit
+  commit/push permission is required for the shared Dentlink repository, not
+  for personal memory synchronization.
 - Reuse existing project components and props before introducing wrappers or
   new shared behavior.
 - One feedback example should trigger a search for equivalent occurrences.

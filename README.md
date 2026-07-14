@@ -24,23 +24,11 @@ This repository is intended to help future Codex sessions understand stable user
 - `.env` files
 - Private customer/user data
 
-## Current Main Project
+## Projects
 
-Action Sports Journal
-
-- Local path: `/Users/parkjongsun/Repository/action-sports-journal-app`
-- GitHub remote: `https://github.com/jongsunP/action-sports-journal-app`
-- Stage: Stage 3 real video-to-analysis prototype in progress
-- Expo SDK: `~54.0.35`
-- React Native: `0.81.5`
-- React: `19.1.0`
-- Status: visible on the user's physical iPhone through Expo Go and standalone EAS preview/internal distribution
-
-Latest documented project commit:
-
-```text
-c7cdfe9 Switch dev analysis server to Gemini video input
-```
+Use `PROJECTS.md` as the index. Common rules live at the repository root;
+project-specific settings, current checkpoints, and history live under
+`projects/`.
 
 ## How To Use
 
@@ -60,9 +48,10 @@ This keeps the Git-backed personal guidance in
 auth, caches, logs, sessions, and other machine-local state.
 
 Start with `BOOTSTRAP.md` when a new Codex session needs to understand the user.
-Then read `SESSION_WORKFLOW.md` and `HANDOFF.md` for current continuation
-context. For project work, also read the target project's `AGENTS.md` and
-handoff docs.
+Then read `SESSION_WORKFLOW.md` and the relevant `projects/<project>.md` for
+personal continuation context. Pull the target project repository, verify the
+checkpoint against live Git, and read stable team-owned project documentation
+when relevant.
 
 ## Core Files
 
@@ -76,5 +65,8 @@ handoff docs.
 - `FITNESS.md`: fitness and action sports context
 - `VEHICLE.md`: vehicle context
 - `PROJECTS.md`: project index
-- `HANDOFF.md`: current cross-session handoff
+- `projects/README.md`: project-specific context structure and lifecycle
+- `projects/<project>.md`: personal project progress, history, QA, blockers, and
+  next starting point
+- `HANDOFF.md`: cross-session resume index and repository-boundary summary
 - `MEMORY_CHANGELOG.md`: durable context change log

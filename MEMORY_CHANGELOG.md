@@ -1,5 +1,38 @@
 # Memory Changelog
 
+## 2026-07-14
+
+- Corrected the repository boundary for this user's workflow. Personal project
+  progress, QA, blockers, branch/commit checkpoints, decisions, history, and
+  next starting points belong in
+  `codex-personal-context/projects/<project>.md`; shared project repositories
+  keep code and stable, team-owned canonical information only.
+- Defined resume and closeout behavior around that boundary: pull personal
+  context first, reconcile its time-sensitive checkpoint with live project Git,
+  and always commit and push the personal history at meaningful closeout.
+- Clarified that explicit commit/push authorization applies to shared project
+  code and repositories, not to routine closeout synchronization of
+  `codex-personal-context`.
+- Split personal configuration into common and project-specific layers. Root
+  guidance now contains only cross-project rules; each
+  `projects/<project>.md` owns that project's workflow, implementation rules,
+  current checkpoint, QA, and history.
+- Added `projects/README.md` as the project-context schema, reduced `HANDOFF.md`
+  to a resume index, moved ASJ-specific workflow out of common
+  `SESSION_WORKFLOW.md`, and refreshed the Dentlink current checkpoint while
+  retaining its dated history.
+- Strengthened the canonical project-alignment rule: matching an existing
+  product means following its complete implementation method, including hooks,
+  API/query/mutation flow, cache behavior, state ownership, generated types,
+  loading/error handling, routing, responsive layout, imports, and naming, not
+  only CSS or visual conventions.
+- Made this the default for `dentlink-client` and all derived Dentlink
+  worktrees, branches, and repositories, using the closest implementation in
+  the current app, base, and installed library version as the primary reference.
+- Recorded that a concrete review comment is a signal to audit the full changed
+  feature for the same root pattern, and that deviations require a specific
+  need, minimal additive scope, preserved defaults, and consumer review.
+
 ## 2026-07-10
 
 - Defined `메모리` as the Git-backed `codex-personal-context` repository for
@@ -7,7 +40,8 @@
   as remote cross-device continuity.
 - Tightened the session lifecycle: pull personal context at work start, and at
   meaningful closeout curate and push durable status, learned rules, blockers,
-  verification, and the next start point when explicitly authorized.
+  verification, and the next start point. The 2026-07-14 policy clarified that
+  personal-context synchronization is automatic at meaningful closeout.
 - Added project-aligned implementation guardrails generalized from DL-14232:
   existing props/components first, minimal additive shared changes, generated
   types and current library conventions, scoped loading, shared-consumer side
@@ -64,10 +98,10 @@
   documentation, durable memory, work status, learned facts, needed items, next
   tasks, and the next starting point; resume requests should begin by pulling
   the relevant Git-backed context.
-- Recorded the repository separation rule: `codex-personal-context` stores
-  cross-project user preferences, Codex working style, session workflows, and
-  personal context; individual project repositories store project-specific
-  product decisions, technical status, handoffs, and docs.
+- Recorded an initial repository separation rule. This boundary was superseded
+  on 2026-07-14: personal project status and handoffs now live in
+  `codex-personal-context/projects/<project>.md`, while shared repositories keep
+  stable team-owned information.
 
 ## 2026-06-14
 
