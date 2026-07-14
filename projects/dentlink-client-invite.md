@@ -10,8 +10,8 @@ Branch: `feature/DL-14232`
 Pushed HEAD: `91a630fef [DL-14232] fix: 초대장 UI 및 가입 API 계약 반영`
 Remote: `origin/feature/DL-14232` matched local HEAD (`0/0` ahead/behind)
 Worktree: clean
-PR: [#4371](https://github.com/Innvoaid/dentlink-client/pull/4371), Open,
-ready for review, base `develop`, mergeable; CodeRabbit succeeded at creation
+PR: [#4371](https://github.com/Innvoaid/dentlink-client/pull/4371), merged into
+`develop`; Auto Assign and CodeRabbit checks succeeded
 
 ## Pushed baseline
 
@@ -54,7 +54,7 @@ ready for review, base `develop`, mergeable; CodeRabbit succeeded at creation
 ## Latest pushed review checkpoint
 
 - Develop follow-up PR [#4371](https://github.com/Innvoaid/dentlink-client/pull/4371)
-  contains two new commits after the previous develop deployment:
+  was merged with two new commits after the previous develop deployment:
   `ae44eb60e [DL-14232] refactor: 레이아웃 transient prop 정리` and
   `91a630fef [DL-14232] fix: 초대장 UI 및 가입 API 계약 반영`.
 - Recipient invitation page `296:71550` now uses the final product decision:
@@ -120,7 +120,7 @@ ready for review, base `develop`, mergeable; CodeRabbit succeeded at creation
 ## Current stage
 
 - Frontend implementation, final invitation-page design, and the provisional
-  new signup contract are pushed and proposed to develop in PR #4371.
+  new signup contract were pushed and merged into develop through PR #4371.
 - The backend signup contract described by the team is not deployed yet. FE
   currently assumes `code: null` and `invitation: { employerId }` for valid or
   expired invitation signup, and `invitation: null` for ordinary/canceled flow.
@@ -158,9 +158,7 @@ ready for review, base `develop`, mergeable; CodeRabbit succeeded at creation
 3. Connect final `Join Office` acceptance when the dedicated backend contract
    is generated and confirmed, then re-run active-office switching and error
    recovery QA.
-4. Monitor PR #4371 checks/review and merge only when requested or approved by
-   the normal team workflow.
-5. Commit or push any future shared Dentlink changes only on explicit user
+4. Commit or push any future shared Dentlink changes only on explicit user
    request.
 
 ## Durable implementation rules
