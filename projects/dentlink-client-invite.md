@@ -51,8 +51,17 @@ Open Draft, base `master`, intentionally untouched
 - The spinner before signup is owned by `/invitations` and
   `useOfficeInvitation` while router readiness and validation resolve.
 - The final `Close` action returns an existing user to the current office home.
-- Final `Join Office` acceptance and membership creation still depend on the
-  dedicated backend acceptance API that is expected separately.
+- Final `Join Office` Employee bypass still depends on the dedicated backend
+  API that is expected separately.
+
+## Terminology and backend work split
+
+- `Signup 회원가입 수정` means the new-account flow through
+  `POST /office/users`: nullable `code` and `invitation: { employerId }` for a
+  valid or expired invitation. Do not call this Employee bypass.
+- `Join Office Employee bypass` means the existing-account flow from the
+  `/invitations` page: click Join Office, call the separate bypass API, receive
+  the Employee result, switch the active office, and go home.
 
 ## Latest pushed review checkpoint
 
@@ -124,16 +133,17 @@ Open Draft, base `master`, intentionally untouched
 
 - Frontend implementation, final invitation-page design, and the provisional
   new signup contract were pushed and merged into develop through PR #4371.
-- The backend signup contract described by the team is not deployed yet. FE
+- The backend Signup 회원가입 수정 contract described by the team is not
+  deployed yet. FE
   currently assumes `code: null` and `invitation: { employerId }` for valid or
   expired invitation signup, and `invitation: null` for ordinary/canceled flow.
 - Until the dedicated Join acceptance API is available, the useful next work
   is browser QA of all frontend-complete states rather than speculative API
   implementation.
-- `officeInvitation.api.ts` contains a `TODO(DL-14232)` at the exact integration
-  point. The pending generated API must accept the invitation's employer ID and
-  email, accept the invitation and create the Employee, then return the created
-  `employeeId` for the existing active-employee switch flow.
+- `officeInvitation.api.ts` contains a `TODO(DL-14232)` at the exact Join Office
+  Employee bypass integration point. The pending generated API must accept the
+  invitation's employer ID and email, create or return the Employee, then
+  return its `employeeId` for the existing active-office switch flow.
 - QA should cover member list/detail, Pending Members, Invite Members modal
   validation and server-classified email errors, recipient validation and auth
   routing, signup invitation mode, notification entry, responsive behavior,
@@ -154,13 +164,14 @@ Open Draft, base `master`, intentionally untouched
 
 ## Remaining work
 
-1. After the signup backend deploys, regenerate shared API models and compare
-   field naming, requiredness, and nullability with the provisional FE types.
+1. After the Signup 회원가입 수정 backend deploys, regenerate shared API models
+   and compare field naming, requiredness, and nullability with the provisional
+   FE types.
 2. Re-run valid, expired, canceled, and ordinary signup network QA and verify
    the exact `code`, `invitation`, and funnel payloads.
-3. Connect final `Join Office` acceptance when the dedicated backend contract
-   is generated and confirmed, then re-run active-office switching and error
-   recovery QA.
+3. Connect the `Join Office` Employee bypass API when its dedicated backend
+   contract is generated and confirmed, then re-run active-office switching
+   and error recovery QA.
 4. Commit or push any future shared Dentlink changes only on explicit user
    request.
 
@@ -176,8 +187,9 @@ Open Draft, base `master`, intentionally untouched
    report `1/2` divergence.
 4. Confirm the deployed signup schema before editing: regenerate models and
    inspect `OfficeUserJoinDto.code` and `invitation.employerId` nullability.
-5. Resume with valid/expired/canceled/ordinary signup network QA, then connect
-   the separate Join Office API when its generated client becomes available.
+5. Resume with valid/expired/canceled/ordinary Signup 회원가입 수정 network QA,
+   then connect the separate Join Office Employee bypass API when its generated
+   client becomes available.
 
 ## Durable implementation rules
 
