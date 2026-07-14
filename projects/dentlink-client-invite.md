@@ -9,7 +9,7 @@ Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
 Branch: `feature/DL-14232`
 Pushed HEAD: `ad951b4f5 [DL-14232] feat: 치과 초대 가입 플로우 구현`
 Remote: `origin/feature/DL-14232` matched local HEAD (`0/0` ahead/behind)
-Worktree: active uncommitted review changes in 18 paths
+Worktree: active uncommitted review changes in 24 status entries
 
 ## Pushed baseline
 
@@ -45,11 +45,11 @@ Worktree: active uncommitted review changes in 18 paths
 - Final `Join Office` acceptance and membership creation still depend on the
   dedicated backend acceptance API that is expected separately.
 
-## Active uncommitted review
+## Active uncommitted review complete
 
-- The user requested a branch-wide code and Figma review after `ad951b4f5`.
-- Current edits cover Admin, Clinic, and shared UI files and are intentionally
-  waiting before a shared-project commit.
+- The branch-wide code and Figma review requested after `ad951b4f5` is complete.
+- Current edits cover Admin, Clinic, and shared UI files and intentionally
+  remain uncommitted in the shared project.
 - Review focus is project-method alignment, not cosmetic naming alone:
   component composition, existing props, hook boundaries and naming,
   query/mutation behavior, state ownership, responsive layout, loading/error
@@ -57,16 +57,25 @@ Worktree: active uncommitted review changes in 18 paths
 - Current work includes the Admin invitation-hook naming alignment, recipient
   flow corrections, member/pending-list responsive cleanup, and minimal shared
   UI corrections.
+- `PendingMemberEditableField` now has a Clinic domain alias used consistently
+  by the pending-member hook and components.
+- Popup Escape propagation now uses the existing opt-in prop to stop later
+  listeners on the same target, so a removal popup does not also close its
+  member drawer. The default shared Popup behavior is unchanged.
+- Invitation validation again follows the app's default window-focus refetch
+  behavior so an invitation changed while the tab was away is revalidated.
 - No ad hoc test file is part of the current worktree.
 
 ## Latest static verification
 
 - Admin, Clinic, and Lab type checks passed for the current review set.
-- App lint checks passed; the changed Clinic files were clean.
-- Admin retained five existing `DataFilters` warnings, reported separately from
-  failures.
-- Direct shared lint remains blocked by the repository's existing duplicate
-  `react-hooks` plugin configuration rather than the changed shared files.
+- Clinic, Admin, and Lab app lint checks passed with repository-existing
+  warnings only; no changed invite/member file introduced a warning.
+- The three changed shared UI files passed ESLint when run with the shared UI
+  package's own config. Running them through the root config remains invalid
+  because the repository resolves two `react-hooks` plugin versions.
+- All changed files passed Prettier check. The command still reports the
+  repository's existing unknown import-order option warnings.
 - `git diff --check` passed.
 - Build and Computer Use QA were intentionally excluded; the user is performing
   browser functional and visual QA.
@@ -83,17 +92,13 @@ Worktree: active uncommitted review changes in 18 paths
 
 ## Remaining work
 
-1. Finish the current code review across today's edits, the Clinic invite scope,
-   and the Admin/Lab/shared blast radius.
-2. Finish static Figma comparison for Invite Members modal error UX and the
-   recipient-flow states; incorporate findings without inventing unsupported
-   behavior.
-3. Connect final `Join Office` acceptance when the dedicated backend contract is
+1. Complete the user's browser functional and visual QA for the uncommitted
+   review set.
+2. Connect final `Join Office` acceptance when the dedicated backend contract is
    generated and confirmed.
-4. Run final type/lint after the coherent edit set is complete; keep build and
-   Computer Use within the user's stated QA boundary.
-5. Commit or push the shared Dentlink repository only on explicit user request.
-6. At meaningful closeout, update, commit, and push this personal checkpoint.
+3. Commit or push the shared Dentlink repository only on explicit user request.
+4. Before that commit, recheck live branch status because this checkpoint
+   describes a deliberately dirty worktree.
 
 ## Durable implementation rules
 
