@@ -7,9 +7,11 @@ branch state, or remaining work that has since changed.
 
 Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
 Branch: `feature/DL-14232`
-Pushed HEAD: `838ac53ad [DL-14232] chore: 초대 수락 API 후속 작업 명시`
+Pushed HEAD: `91a630fef [DL-14232] fix: 초대장 UI 및 가입 API 계약 반영`
 Remote: `origin/feature/DL-14232` matched local HEAD (`0/0` ahead/behind)
 Worktree: clean
+PR: [#4371](https://github.com/Innvoaid/dentlink-client/pull/4371), Open,
+ready for review, base `develop`, mergeable; CodeRabbit succeeded at creation
 
 ## Pushed baseline
 
@@ -23,9 +25,13 @@ Worktree: clean
   validation uses `employerId` and `email`.
 - `/invitations` owns invitation validation for email and notification entry,
   then routes according to validation status, existing-account state, and auth.
-- Valid new-account signup uses the invitation flow and the fixed verification
-  code `4520`; ordinary entry without invitation parameters keeps the normal
-  signup flow.
+- Valid or expired new-account signup uses the invitation flow and sends
+  `code: null` with `invitation: { employerId }`; ordinary entry without valid
+  invitation data keeps the normal verification-code signup flow and sends
+  `invitation: null`.
+- Invitation signup no longer overrides `firstFunnelChannel` or
+  `secondFunnelChannel`; the existing frontend funnel resolution remains in
+  place until the backend-generated contract is available.
 - Referral and invitation funnel cookies remain separate, while the latest
   funnel entry replaces the previous funnel cookie.
 - The temporary frontend `roleType` fallback requested during backend debugging
@@ -41,12 +47,27 @@ Worktree: clean
   step 0 after `VALID` with `isExistingUser: false`.
 - The spinner before signup is owned by `/invitations` and
   `useOfficeInvitation` while router readiness and validation resolve.
-- `Remind Me Later` should return an existing user to the current office home.
+- The final `Close` action returns an existing user to the current office home.
 - Final `Join Office` acceptance and membership creation still depend on the
   dedicated backend acceptance API that is expected separately.
 
 ## Latest pushed review checkpoint
 
+- Develop follow-up PR [#4371](https://github.com/Innvoaid/dentlink-client/pull/4371)
+  contains two new commits after the previous develop deployment:
+  `ae44eb60e [DL-14232] refactor: 레이아웃 transient prop 정리` and
+  `91a630fef [DL-14232] fix: 초대장 UI 및 가입 API 계약 반영`.
+- Recipient invitation page `296:71550` now uses the final product decision:
+  no expiration display, `Close / Join Office`, actions in normal mobile
+  document flow rather than a fixed footer, a filled office icon, and the
+  phone icon without its embedded white rectangle.
+- `validation-register.expiresAt` remains in the response model and mapper but
+  is no longer consumed by invitation presentation, cookie lifetime, or signup.
+- Account mismatch uses the generic Invalid Invitation copy instead of the
+  removed design-external `Invitation email mismatch` message.
+- `OfficeUserJoinDto.code` is nullable and optional, and the provisional
+  frontend model includes nullable invitation data with an employer ID. These
+  generated-model edits must be regenerated and compared after backend deploy.
 - The branch-wide code and Figma review requested after `ad951b4f5` is complete
   and was committed and pushed as `e7ac68537`.
 - The committed review covers Admin, Clinic, and shared UI files. It contains
@@ -75,6 +96,10 @@ Worktree: clean
 
 ## Latest static verification
 
+- Commits `ae44eb60e` and `91a630fef` passed the commit hook's Clinic, Lab, and
+  Admin type checks.
+- The final push passed Clinic/Admin/Lab full lint and the shared coverage
+  guard. Existing repository warnings remained but did not fail the push.
 - Admin, Clinic, and Lab type checks passed for the current review set.
 - Clinic, Admin, and Lab app lint checks passed with repository-existing
   warnings only; no changed invite/member file introduced a warning.
@@ -87,13 +112,18 @@ Worktree: clean
 - Commit hooks passed Clinic, Lab, and Admin type checks.
 - Push hooks passed app lint and the shared coverage guard; repository-existing
   lint warnings remained but did not fail the push.
-- Build and Computer Use QA were intentionally excluded; the user is performing
-  browser functional and visual QA.
+- The recipient invitation page was visually checked in local Chrome during
+  implementation for desktop and mobile layout before the final commit. The
+  new signup request cannot be end-to-end verified until the backend contract
+  is deployed.
 
 ## Current stage
 
-- Frontend implementation and the latest Figma/code static audit are complete
-  for the currently available backend contracts.
+- Frontend implementation, final invitation-page design, and the provisional
+  new signup contract are pushed and proposed to develop in PR #4371.
+- The backend signup contract described by the team is not deployed yet. FE
+  currently assumes `code: null` and `invitation: { employerId }` for valid or
+  expired invitation signup, and `invitation: null` for ordinary/canceled flow.
 - Until the dedicated Join acceptance API is available, the useful next work
   is browser QA of all frontend-complete states rather than speculative API
   implementation.
@@ -121,13 +151,16 @@ Worktree: clean
 
 ## Remaining work
 
-1. Continue the user's browser functional and visual QA against pushed commit
-   `e7ac68537` for all states that do not require the missing Join API.
-2. Connect final `Join Office` acceptance when the dedicated backend contract is
-   generated and confirmed.
-3. Re-run recipient Join, active-tenant switching, duplicate submission, and
-   final error recovery QA after that API is generated and connected.
-4. Commit or push any future shared Dentlink changes only on explicit user
+1. After the signup backend deploys, regenerate shared API models and compare
+   field naming, requiredness, and nullability with the provisional FE types.
+2. Re-run valid, expired, canceled, and ordinary signup network QA and verify
+   the exact `code`, `invitation`, and funnel payloads.
+3. Connect final `Join Office` acceptance when the dedicated backend contract
+   is generated and confirmed, then re-run active-office switching and error
+   recovery QA.
+4. Monitor PR #4371 checks/review and merge only when requested or approved by
+   the normal team workflow.
+5. Commit or push any future shared Dentlink changes only on explicit user
    request.
 
 ## Durable implementation rules
