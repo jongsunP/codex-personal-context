@@ -5,13 +5,16 @@ repository and external project tools when work resumes.
 
 Repo: `/Users/parkjongsun/repository/dentlink-client`
 Canonical branch: `feature/DL-14232`
-Pushed HEAD: `1675ef418 [DL-15570] feat: 초대 관리 앰플리튜드 이벤트 추가`
+Pushed HEAD: `1be4ee8db [DL-14232] refactor: 앰플리튜드 보조 파일 제거`
 Remote: `origin/feature/DL-14232` matched local HEAD
 Worktree: clean
 Canonical PR: [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353),
 Open Draft, base `master`, head `feature/DL-14232`
 Develop API PR: [#4376](https://github.com/Innvoaid/dentlink-client/pull/4376),
 merged into `develop` as `44e6220c5227ae2b4a44f6df30d6959acb664d37`
+Develop follow-up PR:
+[#4378](https://github.com/Innvoaid/dentlink-client/pull/4378), Open, base
+`develop`, head `codex/DL-14232-followup-develop`
 Office develop deployment run
 [#29401876035](https://github.com/Innvoaid/dentlink-client/actions/runs/29401876035):
 build/deploy and post-deploy E2E both succeeded
@@ -34,10 +37,11 @@ build/deploy and post-deploy E2E both succeeded
 - Added all eight DL-15570 invitation-management events and eight documented
   properties, including pending-member actions, dropdown changes, chip delete,
   and invite send click/success/failure.
-- Added targeted tests for signup-completion pending/consume behavior and
-  invitation analytics property mapping.
-- Pushed three follow-up commits:
-  `0700fa572`, `5e52c5b3b`, and `1675ef418`.
+- Removed the separately added signup-tracking and invitation-analytics helper
+  and test files by user direction. The runtime behavior remains in the existing
+  `useSignupForm`, `_app`, and `useOfficePendingMembers` files.
+- Pushed follow-up commits `0700fa572`, `5e52c5b3b`, `1675ef418`, and
+  cleanup commit `1be4ee8db`.
 - Updated PR #4353 body to include DL-14232, DL-15575, DL-15570, exact review
   points, verification, and remaining live QA.
 - Updated the relevant Notion taxonomy: DL-15575's missing event/property and
@@ -78,9 +82,9 @@ build/deploy and post-deploy E2E both succeeded
 ## Verification
 
 - Clinic TypeScript check passed.
-- Clinic tests passed with a temporary Next 16-compatible Jest config: three
-  suites and eight tests. The repository's default Jest command still fails to
-  parse `clinic/jest.config.ts` because it imports `next/jest` instead of the
+- No feature-specific test files remain after the user-requested cleanup. The
+  repository's default Jest command still fails to parse
+  `clinic/jest.config.ts` because it imports `next/jest` instead of the
   ESM-compatible `next/jest.js`; this also reproduces on `origin/master`.
 - Changed-file Prettier and Clinic ESLint passed. ESLint reported six existing
   warnings and no errors.
@@ -107,7 +111,8 @@ build/deploy and post-deploy E2E both succeeded
   reject, delete, or send mutations because those operations change shared
   development data. The latest DL-15575/DL-15570 analytics commits were also
   intentionally not included in the API-only develop deployment, so their live
-  event delivery was not claimed; their code paths and targeted tests passed.
+  event delivery was not claimed; their code paths, type checks, lint, and
+  formatting checks passed.
 
 ## Remaining work
 
@@ -128,7 +133,7 @@ build/deploy and post-deploy E2E both succeeded
 ## Resume order
 
 1. Pull `codex-personal-context`, fetch the shared repository, and confirm PR
-   #4353 still targets `master` with HEAD at least `1675ef418`.
+   #4353 still targets `master` with HEAD at least `1be4ee8db`.
 2. Confirm the successful Office development deployment remains live for merge
    `44e6220c5` before starting account-state QA.
 3. Read current Jira comments and child-card status before deciding whether a
