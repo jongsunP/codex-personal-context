@@ -5,7 +5,7 @@ repository and external project tools when work resumes.
 
 Repo: `/Users/parkjongsun/repository/dentlink-client`
 Canonical branch: `feature/DL-14232`
-Pushed HEAD: `1be4ee8db [DL-14232] refactor: 앰플리튜드 보조 파일 제거`
+Pushed HEAD: `58d16969d [DL-15575] fix: 회원가입 완료 이벤트 전송 시점 단순화`
 Remote: `origin/feature/DL-14232` matched local HEAD
 Worktree: clean
 Canonical PR: [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353),
@@ -17,7 +17,7 @@ Develop follow-up PR:
 `develop`, head `codex/DL-14232-followup-develop`
 Develop follow-up worktree:
 `/Users/parkjongsun/repository/dentlink-client-invitation-api-develop`
-Pushed HEAD: `660fbcde2 [DL-14232] refactor: 앰플리튜드 보조 파일 제거`
+Pushed HEAD: `0c3edf7b4 [DL-15575] fix: 회원가입 완료 이벤트 전송 시점 단순화`
 Remote matched local; PR is mergeable/CLEAN and CodeRabbit succeeded. It has
 not been merged or deployed yet.
 Office develop deployment run
@@ -36,17 +36,19 @@ build/deploy and post-deploy E2E both succeeded
   server. Spread order was corrected so stale form values cannot leak through.
 - Added the missing DL-15575 `onboarding_click` event with documented
   `onboardingType` values: `fee schedule`, `scanner`, and `payment`.
-- Changed Clinic `create_account_complete` tracking to wait until authenticated
-  app startup, identify the created account's user ID, and fire once for the
-  matching signup email.
+- Kept Clinic `create_account_complete` at the exact signup API success point
+  for both ordinary and verified signup. Removed the later authenticated-app
+  handoff because it could miss or delay completed signups when auto-login or
+  user-profile loading failed.
 - Added all eight DL-15570 invitation-management events and eight documented
   properties, including pending-member actions, dropdown changes, chip delete,
   and invite send click/success/failure.
 - Removed the separately added signup-tracking and invitation-analytics helper
   and test files by user direction. The runtime behavior remains in the existing
-  `useSignupForm`, `_app`, and `useOfficePendingMembers` files.
+  `useSignupForm` and `useOfficePendingMembers` files.
 - Pushed follow-up commits `0700fa572`, `5e52c5b3b`, `1675ef418`, and
-  cleanup commit `1be4ee8db`.
+  cleanup commit `1be4ee8db`, followed by direct signup-success tracking commit
+  `58d16969d`. The equivalent develop follow-up HEAD is `0c3edf7b4`.
 - Updated PR #4353 body to include DL-14232, DL-15575, DL-15570, exact review
   points, verification, and remaining live QA.
 - Updated the relevant Notion taxonomy: DL-15575's missing event/property and
@@ -57,6 +59,8 @@ build/deploy and post-deploy E2E both succeeded
 - Created develop follow-up PR #4378 for the post-API payload and analytics
   commits. It intentionally remains open for user review; the current develop
   deployment contains PR #4376's API changes, not PR #4378's follow-up events.
+- Updated both PR descriptions to state that `create_account_complete` fires at
+  signup API success rather than after authenticated user identification.
 - Final code worktrees are clean and both code branches match their remotes.
 
 ## Review sources and findings
@@ -92,8 +96,10 @@ build/deploy and post-deploy E2E both succeeded
 
 - DL-15575 adds `onboarding_click` with `onboardingType` values
   `fee schedule`, `scanner`, and `payment`; `create_account_complete` fires
-  once after the newly signed-up account is identified during authenticated
-  app startup.
+  directly in the successful ordinary or verified signup mutation callback.
+- No `_app` effect or analytics-only `sessionStorage` marker remains. The
+  separate `sessionStorage` in `pages/auth/signup.tsx` is pre-existing
+  multi-step form navigation/recovery state, not event delivery state.
 - DL-15570 event names are exactly `pending_members_button_click`,
   `invite_members_button_click`, `pending_members_action_click`,
   `pending_members_dropdown_changed`, `invite_email_chip_delete`,
@@ -137,7 +143,7 @@ build/deploy and post-deploy E2E both succeeded
   repository's default Jest command still fails to parse
   `clinic/jest.config.ts` because it imports `next/jest` instead of the
   ESM-compatible `next/jest.js`; this also reproduces on `origin/master`.
-- Changed-file Prettier and Clinic ESLint passed. ESLint reported five existing
+- Changed-file Prettier and Clinic ESLint passed. ESLint reported six existing
   warnings and no errors.
 - The final push hook passed full Clinic/Lab/Admin lint and shared coverage.
   It reported 419 repository-existing warnings and no errors.
@@ -191,8 +197,8 @@ build/deploy and post-deploy E2E both succeeded
 ## Resume order
 
 1. Pull `codex-personal-context`, fetch the shared repository, and confirm PR
-   #4353 still targets `master` with HEAD at least `1be4ee8db`, and PR #4378
-   still targets `develop` with HEAD at least `660fbcde2`.
+   #4353 still targets `master` with HEAD at least `58d16969d`, and PR #4378
+   still targets `develop` with HEAD at least `0c3edf7b4`.
 2. Check whether #4378 was merged. If merged, confirm the new Office development
    deployment before live analytics QA; otherwise the live server remains the
    API-only #4376 deployment at merge `44e6220c5`.

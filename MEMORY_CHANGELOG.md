@@ -2,9 +2,18 @@
 
 ## 2026-07-15
 
+- Simplified DL-15575 `create_account_complete` delivery in both PR branches:
+  removed the `_app`/email `sessionStorage` handoff and now fire directly from
+  ordinary and verified signup API success callbacks. Canonical HEAD is
+  `58d16969d`; develop follow-up HEAD is `0c3edf7b4`.
+- Re-audited the analytics implementation for similar global state, temporary
+  storage, helper/test artifacts, and misplaced event calls. No comparable new
+  pattern remains; the pre-existing signup-page session storage serves the
+  multi-step form flow and is unrelated to analytics delivery.
 - Closed out the DL-14232 implementation review with canonical master PR #4353
-  at `1be4ee8db`, develop API PR #4376 merged/deployed successfully, and open
-  develop follow-up PR #4378 at `660fbcde2` for payload and analytics changes.
+  now at `58d16969d`, develop API PR #4376 merged/deployed successfully, and
+  open develop follow-up PR #4378 now at `0c3edf7b4` for payload and analytics
+  changes.
 - Recorded the verified Jira comments/child-card snapshot, Notion DL-15570 and
   DL-15575 event/property contract, Figma/FigJam alignment, generated invitation
   API contract/error codes, development-server QA, and remaining integrated QA.
