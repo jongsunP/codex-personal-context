@@ -12,6 +12,9 @@ Canonical PR: [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353),
 Open Draft, base `master`, head `feature/DL-14232`
 Develop API PR: [#4376](https://github.com/Innvoaid/dentlink-client/pull/4376),
 merged into `develop` as `44e6220c5227ae2b4a44f6df30d6959acb664d37`
+Office develop deployment run
+[#29401876035](https://github.com/Innvoaid/dentlink-client/actions/runs/29401876035):
+build/deploy and post-deploy E2E both succeeded
 
 ## 2026-07-15 completed work
 
@@ -40,6 +43,8 @@ merged into `develop` as `44e6220c5227ae2b4a44f6df30d6959acb664d37`
 - Updated the relevant Notion taxonomy: DL-15575's missing event/property and
   all DL-15570 events/properties are marked complete; the DL-15570 parent Office
   task is also complete.
+- The isolated develop API PR was deployed successfully and its post-deploy
+  E2E job completed successfully.
 
 ## Review sources and findings
 
@@ -86,8 +91,7 @@ merged into `develop` as `44e6220c5227ae2b4a44f6df30d6959acb664d37`
 
 ## Remaining work
 
-1. Wait for the Office development deployment created by develop merge
-   `44e6220c5` to complete, then run network/browser QA.
+1. Run network/browser QA against the deployed develop version.
 2. Verify valid, expired, canceled, and ordinary signup payloads, especially
    `code`, `invitation`, and absence of frontend funnel fields.
 3. Verify existing-account accept success, accepted-state refetch, active-office
@@ -104,7 +108,8 @@ merged into `develop` as `44e6220c5227ae2b4a44f6df30d6959acb664d37`
 
 1. Pull `codex-personal-context`, fetch the shared repository, and confirm PR
    #4353 still targets `master` with HEAD at least `1675ef418`.
-2. Check the Office development deployment run for develop merge `44e6220c5`.
+2. Confirm the successful Office development deployment remains live for merge
+   `44e6220c5` before starting account-state QA.
 3. Read current Jira comments and child-card status before deciding whether a
    failure belongs to frontend, backend, email, cookie, notification, or QA.
 4. Continue with live QA before adding speculative code.
