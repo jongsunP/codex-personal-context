@@ -4,10 +4,12 @@ This is the current personal work checkpoint. Verify it against the live shared
 repository and external project tools when work resumes.
 
 Repo: `/Users/parkjongsun/repository/dentlink-client`
-Canonical branch: `feature/DL-14232`
-Pushed HEAD: `648822fcc [DL-14232] fix: 의도된 공용 UI 및 Layout 변경 복구`
-Remote: `origin/feature/DL-14232` matched local HEAD
+Current checkout: `develop`
+Current HEAD: `c0356438e [DL-14232] feat: 초대 기능 후속 수정 develop 반영 (#4378)`
+Remote: `origin/develop` matched local HEAD
 Worktree: clean
+Canonical delivery branch: `feature/DL-14232`
+Canonical pushed HEAD: `648822fcc [DL-14232] fix: 의도된 공용 UI 및 Layout 변경 복구`
 Canonical PR: [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353),
 Open Draft, base `master`, head `feature/DL-14232`, mergeable/CLEAN with
 CodeRabbit success
@@ -16,9 +18,9 @@ merged into `develop` as `44e6220c5227ae2b4a44f6df30d6959acb664d37`
 Develop follow-up PR:
 [#4378](https://github.com/Innvoaid/dentlink-client/pull/4378), merged into
 `develop` as `c0356438e9555fee2840d239903a3f4fd796e225`
-Develop follow-up worktree:
-`/Users/parkjongsun/repository/dentlink-client-invitation-api-develop`
-Current branch: `develop`, matching `origin/develop` at `c0356438e`
+Former develop follow-up worktree:
+`/Users/parkjongsun/repository/dentlink-client-invitation-api-develop`, now
+detached at `c0356438e` after moving the primary checkout to `develop`
 
 ## Final handoff for the next device
 
@@ -31,6 +33,11 @@ Current branch: `develop`, matching `origin/develop` at `c0356438e`
 - The mistaken scope-reduction commit `fdb9fd8c3` and corrective commit
   `648822fcc` cancel at tree level. The final feature content matches the intended
   pre-review tree, and develop never received the mistaken revert.
+- Final develop audit confirmed that squash commit `c0356438e` is tree-identical
+  to PR #4378 head `0c3edf7b4` and changes exactly eight intended payload and
+  analytics files. It contains no `_app`, analytics storage, test/analysis
+  artifact, Button, `ChartDropdown`, or Layout change. Closed PR #4379 was never
+  merged.
 - Resume with PR #4353 review or requested QA only. Do not make new implementation
   changes, monitor downstream workflows, or reopen closed PR #4379 unless the
   user gives new feedback or an explicit request.

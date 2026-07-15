@@ -2,6 +2,11 @@
 
 ## 2026-07-15
 
+- Completed the final `develop` audit and switched the primary repository
+  checkout to clean `develop` at `c0356438e`, matching `origin/develop`. The
+  squash result is tree-identical to PR #4378 head `0c3edf7b4`, contains only
+  the intended eight payload/analytics files, and excludes the closed #4379
+  cleanup scope as well as `_app`, analytics storage, and test/analysis files.
 - Added the final cross-device handoff: implementation is complete, develop is
   only the development-environment path and already contains the required code,
   while master-targeting PR #4353 is the final review/production objective. No
