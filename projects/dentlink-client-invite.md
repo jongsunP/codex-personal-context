@@ -89,20 +89,41 @@ build/deploy and post-deploy E2E both succeeded
 - Isolated shared-UI ESLint is blocked by the repository's duplicate Storybook
   plugin versions, but the full push hook lint succeeded.
 
+## Development server QA
+
+- Rechecked the successfully deployed API-only develop build in desktop and
+  390x844 mobile viewports.
+- Verified invalid invitation query handling and Close routing to sign-in.
+- Verified a real existing-user valid invitation and a real new-user valid
+  invitation against employer 86. The existing-user link preserved the invite
+  query through sign-in; the new-user link opened the two-step invitation
+  signup with its email prefilled and disabled.
+- Verified an uninvited new email falls back to ordinary signup after the
+  invalid-invitation popup.
+- With an authenticated owner session, verified the managed-member Pending
+  Members entry, All/Pending/Expired tabs and counts, expired empty state, and
+  Invite Members modal email-chip validation states.
+- Did not execute final Join Office, account creation, resend, cancel, approve,
+  reject, delete, or send mutations because those operations change shared
+  development data. The latest DL-15575/DL-15570 analytics commits were also
+  intentionally not included in the API-only develop deployment, so their live
+  event delivery was not claimed; their code paths and targeted tests passed.
+
 ## Remaining work
 
-1. Run network/browser QA against the deployed develop version.
-2. Verify valid, expired, canceled, and ordinary signup payloads, especially
-   `code`, `invitation`, and absence of frontend funnel fields.
-3. Verify existing-account accept success, accepted-state refetch, active-office
-   switching, and failure recovery against the deployed API.
-4. Verify actual email-link/template, invitation cookie, and home-notification
+1. Run state-changing end-to-end QA for final account creation, existing-account
+   acceptance, active-office switching, and mutation failure recovery in an
+   isolated test account/office.
+2. Verify actual email-link/template, invitation cookie, and home-notification
    entry paths with DL-15490, DL-15491, and DL-15492 integrated.
-5. Complete the DL-15499 QA pass across member management, Pending Members,
+3. Complete the DL-15499 QA pass across member management, Pending Members,
    Invite Members, recipient flow, responsive states, and analytics delivery.
-6. Confirm the `isFormatError` naming/value inversion, multi-invite String
+4. Confirm the `isFormatError` naming/value inversion, multi-invite String
    serialization, and Viewer authority taxonomy with product/data owners if
    they require different reporting semantics.
+5. Decide whether accept-API race codes such as already accepted/already a
+   member should receive dedicated success recovery; no product copy or explicit
+   frontend behavior is currently specified, so the UI keeps generic failure UX.
 
 ## Resume order
 
@@ -112,7 +133,8 @@ build/deploy and post-deploy E2E both succeeded
    `44e6220c5` before starting account-state QA.
 3. Read current Jira comments and child-card status before deciding whether a
    failure belongs to frontend, backend, email, cookie, notification, or QA.
-4. Continue with live QA before adding speculative code.
+4. Continue only the remaining state-changing/integrated QA before adding
+   speculative error-code UX.
 
 ---
 
