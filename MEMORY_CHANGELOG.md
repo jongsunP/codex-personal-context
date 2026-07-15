@@ -13,9 +13,9 @@
   #4379 was closed without merge, so develop retains the intended Button,
   `ChartDropdown`, and `$isFull` changes. The develop worktree now tracks the
   clean `develop` branch.
-- Clarified that Office deployment run #29411023549 was automatically triggered
-  by the #4378 merge, not manually started by Codex. Status monitoring was
-  stopped and must not resume unless the user requests it.
+- Recorded the user's PR boundary: when delivery is requested only through PR
+  creation, downstream merge, deployment, and automatic workflow status must
+  not be monitored or reported unless explicitly requested.
 - Re-audited the final 93-file branch diff. No `_app` analytics handoff,
   analytics-only storage, unrequested test/analysis/helper artifact, or other
   requirement-untraceable global behavior remains.

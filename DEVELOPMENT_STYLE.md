@@ -158,6 +158,9 @@ appear nowhere else in the app.
   comments and child cards, Notion/Figma context, user instructions, and the
   as-is behavior being corrected. If intent is still ambiguous, ask before
   undoing completed design work.
+- When the user limits delivery to PR creation, downstream merge, deployment,
+  and automatic workflow status are outside the task. Do not monitor or report
+  them unless the user explicitly asks.
 - Global lifecycle code has a higher bar than shared styling. Do not move a
   domain event into `_app`, add storage handoffs, or introduce app-wide effects
   when the owning mutation or workflow already provides the exact lifecycle

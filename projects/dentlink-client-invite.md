@@ -19,13 +19,6 @@ Develop follow-up PR:
 Develop follow-up worktree:
 `/Users/parkjongsun/repository/dentlink-client-invitation-api-develop`
 Current branch: `develop`, matching `origin/develop` at `c0356438e`
-Office develop deployment run
-[#29411023549](https://github.com/Innvoaid/dentlink-client/actions/runs/29411023549):
-automatically triggered by the #4378 merge, not manually started by Codex. The
-build/deploy job succeeded and E2E was still running when status monitoring was
-stopped by user direction. Do not monitor it again unless requested. The earlier
-API-only run [#29401876035](https://github.com/Innvoaid/dentlink-client/actions/runs/29401876035)
-succeeded including post-deploy E2E.
 
 ## 2026-07-15 completed work
 
@@ -61,9 +54,8 @@ succeeded including post-deploy E2E.
 - The isolated develop API PR was deployed successfully and its post-deploy
   E2E job completed successfully.
 - Develop follow-up PR #4378 was merged for the post-API payload and analytics
-  commits. The merge automatically started Office run #29411023549; Codex did
-  not trigger it. Do not claim live event delivery until deployment succeeds and
-  the events are observed, and do not monitor the run again unless requested.
+  commits. Downstream merge/deployment operation is user-owned and outside this
+  task; do not monitor or report it unless explicitly requested.
 - Updated both PR descriptions to state that `create_account_complete` fires at
   signup API success rather than after authenticated user identification.
 - Re-audited the full 93-file final diff by commit origin and requirement history.
@@ -208,11 +200,9 @@ succeeded including post-deploy E2E.
 
 ## Remaining work
 
-1. If live analytics QA is requested later, first confirm automatic Office run
-   #29411023549 for merged PR #4378 completed successfully. Do not proactively
-   monitor it, and until confirmed do not claim the new analytics are live.
-2. Verify actual Amplitude network delivery for the exact event/property names
-   after the #4378 deployment succeeds.
+1. If live analytics QA is explicitly requested later, first verify the exact
+   deployed revision; until then, do not monitor deployment or claim events live.
+2. Verify actual Amplitude network delivery for the exact event/property names.
 3. Run state-changing end-to-end QA for final account creation, existing-account
    acceptance, active-office switching, and mutation failure recovery in an
    isolated test account/office.
@@ -231,11 +221,9 @@ succeeded including post-deploy E2E.
 
 1. Pull `codex-personal-context`, fetch the shared repository, and confirm PR
    #4353 still targets `master` with HEAD at least `648822fcc`.
-2. Only when live analytics QA is requested, confirm automatic Office run
-   #29411023549 for merged PR #4378. Closed PR #4379 must remain unmerged.
-3. Read current Jira comments and child-card status before deciding whether a
+2. Read current Jira comments and child-card status before deciding whether a
    failure belongs to frontend, backend, email, cookie, notification, or QA.
-4. Continue only the remaining state-changing/integrated QA before adding
+3. Continue only the remaining state-changing/integrated QA before adding
    speculative error-code UX.
 
 ---
