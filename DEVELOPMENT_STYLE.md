@@ -151,6 +151,20 @@ appear nowhere else in the app.
 
 ## User-Directed Scope Discipline
 
+- Judge scope by traceable causality to requirements, design, explicit user
+  direction, and branch history. A shared file or broad visual diff is not
+  automatically over-scoped.
+- Before reverting a suspicious change, inspect its introducing commits, Jira
+  comments and child cards, Notion/Figma context, user instructions, and the
+  as-is behavior being corrected. If intent is still ambiguous, ask before
+  undoing completed design work.
+- Global lifecycle code has a higher bar than shared styling. Do not move a
+  domain event into `_app`, add storage handoffs, or introduce app-wide effects
+  when the owning mutation or workflow already provides the exact lifecycle
+  point.
+- Treat transient styled-component props such as `$isFull` as correctness work
+  when they preserve the requested style while preventing style-only props from
+  leaking to the DOM; do not classify them by filename alone.
 - Do not add new test files, dedicated analytics mapper files, analysis
   artifacts, helper modules, or documentation merely because they would make
   verification or organization easier. Add them only when the user explicitly

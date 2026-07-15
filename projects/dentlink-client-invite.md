@@ -5,24 +5,27 @@ repository and external project tools when work resumes.
 
 Repo: `/Users/parkjongsun/repository/dentlink-client`
 Canonical branch: `feature/DL-14232`
-Pushed HEAD: `58d16969d [DL-15575] fix: 회원가입 완료 이벤트 전송 시점 단순화`
+Pushed HEAD: `648822fcc [DL-14232] fix: 의도된 공용 UI 및 Layout 변경 복구`
 Remote: `origin/feature/DL-14232` matched local HEAD
 Worktree: clean
 Canonical PR: [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353),
-Open Draft, base `master`, head `feature/DL-14232`
+Open Draft, base `master`, head `feature/DL-14232`, mergeable/CLEAN with
+CodeRabbit success
 Develop API PR: [#4376](https://github.com/Innvoaid/dentlink-client/pull/4376),
 merged into `develop` as `44e6220c5227ae2b4a44f6df30d6959acb664d37`
 Develop follow-up PR:
-[#4378](https://github.com/Innvoaid/dentlink-client/pull/4378), Open, base
-`develop`, head `codex/DL-14232-followup-develop`
+[#4378](https://github.com/Innvoaid/dentlink-client/pull/4378), merged into
+`develop` as `c0356438e9555fee2840d239903a3f4fd796e225`
 Develop follow-up worktree:
 `/Users/parkjongsun/repository/dentlink-client-invitation-api-develop`
-Pushed HEAD: `0c3edf7b4 [DL-15575] fix: 회원가입 완료 이벤트 전송 시점 단순화`
-Remote matched local; PR is mergeable/CLEAN and CodeRabbit succeeded. It has
-not been merged or deployed yet.
+Current branch: `develop`, matching `origin/develop` at `c0356438e`
 Office develop deployment run
-[#29401876035](https://github.com/Innvoaid/dentlink-client/actions/runs/29401876035):
-build/deploy and post-deploy E2E both succeeded
+[#29411023549](https://github.com/Innvoaid/dentlink-client/actions/runs/29411023549):
+automatically triggered by the #4378 merge, not manually started by Codex. The
+build/deploy job succeeded and E2E was still running when status monitoring was
+stopped by user direction. Do not monitor it again unless requested. The earlier
+API-only run [#29401876035](https://github.com/Innvoaid/dentlink-client/actions/runs/29401876035)
+succeeded including post-deploy E2E.
 
 ## 2026-07-15 completed work
 
@@ -48,7 +51,8 @@ build/deploy and post-deploy E2E both succeeded
   `useSignupForm` and `useOfficePendingMembers` files.
 - Pushed follow-up commits `0700fa572`, `5e52c5b3b`, `1675ef418`, and
   cleanup commit `1be4ee8db`, followed by direct signup-success tracking commit
-  `58d16969d`. The equivalent develop follow-up HEAD is `0c3edf7b4`.
+  `58d16969d`. The equivalent develop follow-up HEAD `0c3edf7b4` was merged by
+  PR #4378 as `c0356438e`.
 - Updated PR #4353 body to include DL-14232, DL-15575, DL-15570, exact review
   points, verification, and remaining live QA.
 - Updated the relevant Notion taxonomy: DL-15575's missing event/property and
@@ -56,12 +60,40 @@ build/deploy and post-deploy E2E both succeeded
   task is also complete.
 - The isolated develop API PR was deployed successfully and its post-deploy
   E2E job completed successfully.
-- Created develop follow-up PR #4378 for the post-API payload and analytics
-  commits. It intentionally remains open for user review; the current develop
-  deployment contains PR #4376's API changes, not PR #4378's follow-up events.
+- Develop follow-up PR #4378 was merged for the post-API payload and analytics
+  commits. The merge automatically started Office run #29411023549; Codex did
+  not trigger it. Do not claim live event delivery until deployment succeeds and
+  the events are observed, and do not monitor the run again unless requested.
 - Updated both PR descriptions to state that `create_account_complete` fires at
   signup API success rather than after authenticated user identification.
-- Final code worktrees are clean and both code branches match their remotes.
+- Re-audited the full 93-file final diff by commit origin and requirement history.
+  Every remaining change maps to DL-15489, DL-15493, DL-14232 design/API work,
+  the explicitly requested Layout prop cleanup, or DL-15570/DL-15575 analytics.
+- A scope-review pass briefly reverted the shared Button design, `ChartDropdown`,
+  and Layout transient-prop work in `fdb9fd8c3`. That judgment was incorrect:
+  Button/ChartDropdown are intentional design changes and `$isFull` is the
+  requested invalid-DOM-prop correction. Corrective commit `648822fcc` restores
+  the exact pre-review tree; develop was never changed by the bad revert.
+- Develop cleanup PR #4379 was closed without merge. Do not merge its branch.
+- Final canonical and develop worktrees are clean and match their remotes.
+
+## Scope review rule learned on 2026-07-15
+
+- Judge over-spec by causal relationship to the requirement, design, explicit
+  user direction, and existing branch history, not by whether a file is shared
+  or the diff is large.
+- Before removing a suspicious change, inspect the introducing commit, Jira
+  comments/child cards, Notion/Figma context, user instructions, and the as-is
+  behavior it corrects. Ask before reverting when that context is ambiguous.
+- Shared Button/theme changes and a specialized shared dropdown are in scope
+  when they implement the approved design. Transient props such as `$isFull`
+  are correctness work when they prevent style-only props from leaking to DOM.
+- A true over-spec example in this work was moving signup analytics delivery to
+  `_app` with an analytics-only `sessionStorage` handoff even though the signup
+  mutation success callback already owns the exact completion point.
+- Other red flags are unrequested test/analysis/helper artifacts, unrelated
+  global lifecycle state, duplicated side effects, or behavior with no traceable
+  requirement/history. None remain in the final branch.
 
 ## Review sources and findings
 
@@ -149,9 +181,9 @@ build/deploy and post-deploy E2E both succeeded
   It reported 419 repository-existing warnings and no errors.
 - Isolated shared-UI ESLint is blocked by the repository's duplicate Storybook
   plugin versions, but the full push hook lint succeeded.
-- On current `origin/develop`, standalone Clinic TypeScript has a baseline PNG
-  module declaration error in `BrowserPDFHeaderUI.tsx`; it reproduces without
-  the follow-up commits. Do not attribute it to PR #4378.
+- On current `origin/develop`, standalone Clinic and Lab TypeScript have a
+  baseline PNG module declaration error in `BrowserPDFHeaderUI.tsx`; Admin type
+  passes. Do not attribute it to PR #4378 or the final scope review.
 
 ## Development server QA
 
@@ -176,10 +208,11 @@ build/deploy and post-deploy E2E both succeeded
 
 ## Remaining work
 
-1. After user review, merge develop follow-up PR #4378 and confirm its Office
-   development deployment. Until then, do not claim the new analytics are live.
+1. If live analytics QA is requested later, first confirm automatic Office run
+   #29411023549 for merged PR #4378 completed successfully. Do not proactively
+   monitor it, and until confirmed do not claim the new analytics are live.
 2. Verify actual Amplitude network delivery for the exact event/property names
-   after #4378 is deployed.
+   after the #4378 deployment succeeds.
 3. Run state-changing end-to-end QA for final account creation, existing-account
    acceptance, active-office switching, and mutation failure recovery in an
    isolated test account/office.
@@ -197,11 +230,9 @@ build/deploy and post-deploy E2E both succeeded
 ## Resume order
 
 1. Pull `codex-personal-context`, fetch the shared repository, and confirm PR
-   #4353 still targets `master` with HEAD at least `58d16969d`, and PR #4378
-   still targets `develop` with HEAD at least `0c3edf7b4`.
-2. Check whether #4378 was merged. If merged, confirm the new Office development
-   deployment before live analytics QA; otherwise the live server remains the
-   API-only #4376 deployment at merge `44e6220c5`.
+   #4353 still targets `master` with HEAD at least `648822fcc`.
+2. Only when live analytics QA is requested, confirm automatic Office run
+   #29411023549 for merged PR #4378. Closed PR #4379 must remain unmerged.
 3. Read current Jira comments and child-card status before deciding whether a
    failure belongs to frontend, backend, email, cookie, notification, or QA.
 4. Continue only the remaining state-changing/integrated QA before adding

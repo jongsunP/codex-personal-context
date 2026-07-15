@@ -2,6 +2,23 @@
 
 ## 2026-07-15
 
+- Corrected the final DL-14232 scope audit after initially misclassifying the
+  shared Button design, `ChartDropdown`, and Layout transient-prop correction as
+  over-scoped. Commit `648822fcc` restores the exact intended pre-audit tree;
+  canonical PR #4353 is CLEAN/mergeable with CodeRabbit success.
+- Recorded the durable scope rule: use requirement/design/user/history causality,
+  not shared-file location or diff size. Inspect introducing commits and source
+  context before reverting, and ask when intent remains ambiguous.
+- Develop follow-up PR #4378 was merged as `c0356438e`. Incorrect cleanup PR
+  #4379 was closed without merge, so develop retains the intended Button,
+  `ChartDropdown`, and `$isFull` changes. The develop worktree now tracks the
+  clean `develop` branch.
+- Clarified that Office deployment run #29411023549 was automatically triggered
+  by the #4378 merge, not manually started by Codex. Status monitoring was
+  stopped and must not resume unless the user requests it.
+- Re-audited the final 93-file branch diff. No `_app` analytics handoff,
+  analytics-only storage, unrequested test/analysis/helper artifact, or other
+  requirement-untraceable global behavior remains.
 - Simplified DL-15575 `create_account_complete` delivery in both PR branches:
   removed the `_app`/email `sessionStorage` handoff and now fire directly from
   ordinary and verified signup API success callbacks. Canonical HEAD is
@@ -11,8 +28,8 @@
   pattern remains; the pre-existing signup-page session storage serves the
   multi-step form flow and is unrelated to analytics delivery.
 - Closed out the DL-14232 implementation review with canonical master PR #4353
-  now at `58d16969d`, develop API PR #4376 merged/deployed successfully, and
-  open develop follow-up PR #4378 now at `0c3edf7b4` for payload and analytics
+  now at `648822fcc`, develop API PR #4376 merged/deployed successfully, and
+  develop follow-up PR #4378 merged as `c0356438e` for payload and analytics
   changes.
 - Recorded the verified Jira comments/child-card snapshot, Notion DL-15570 and
   DL-15575 event/property contract, Figma/FigJam alignment, generated invitation
