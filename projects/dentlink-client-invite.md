@@ -20,6 +20,21 @@ Develop follow-up worktree:
 `/Users/parkjongsun/repository/dentlink-client-invitation-api-develop`
 Current branch: `develop`, matching `origin/develop` at `c0356438e`
 
+## Final handoff for the next device
+
+- This session is complete. No additional code change is currently required on
+  `feature/DL-14232` or `develop`.
+- `develop` is only the development-environment delivery and QA path. The needed
+  code was already merged through PR #4378; no follow-up develop PR is required.
+- The actual final objective is canonical PR #4353 from `feature/DL-14232` to
+  `master`, for final review and production integration.
+- The mistaken scope-reduction commit `fdb9fd8c3` and corrective commit
+  `648822fcc` cancel at tree level. The final feature content matches the intended
+  pre-review tree, and develop never received the mistaken revert.
+- Resume with PR #4353 review or requested QA only. Do not make new implementation
+  changes, monitor downstream workflows, or reopen closed PR #4379 unless the
+  user gives new feedback or an explicit request.
+
 ## 2026-07-15 completed work
 
 - Regenerated Office API models and connected

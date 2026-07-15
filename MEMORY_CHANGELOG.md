@@ -2,6 +2,10 @@
 
 ## 2026-07-15
 
+- Added the final cross-device handoff: implementation is complete, develop is
+  only the development-environment path and already contains the required code,
+  while master-targeting PR #4353 is the final review/production objective. No
+  further branch changes are needed without new user feedback.
 - Corrected the final DL-14232 scope audit after initially misclassifying the
   shared Button design, `ChartDropdown`, and Layout transient-prop correction as
   over-scoped. Commit `648822fcc` restores the exact intended pre-audit tree;
