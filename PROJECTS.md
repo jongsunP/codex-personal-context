@@ -51,7 +51,10 @@ For detailed current state, read:
 ### Dentlink Invite
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Local worktree: `/Users/parkjongsun/Repository/dentlink-client-invite`
+- Canonical local worktree: `/Users/parkjongsun/repository/dentlink-client`
 - Active branch: `feature/DL-14232`
+- Develop follow-up worktree:
+  `/Users/parkjongsun/repository/dentlink-client-invitation-api-develop`
+- Develop follow-up branch: `codex/DL-14232-followup-develop`
 - Personal current checkpoint and history:
   `projects/dentlink-client-invite.md`

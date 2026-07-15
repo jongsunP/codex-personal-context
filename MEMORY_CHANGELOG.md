@@ -1,5 +1,22 @@
 # Memory Changelog
 
+## 2026-07-15
+
+- Closed out the DL-14232 implementation review with canonical master PR #4353
+  at `1be4ee8db`, develop API PR #4376 merged/deployed successfully, and open
+  develop follow-up PR #4378 at `660fbcde2` for payload and analytics changes.
+- Recorded the verified Jira comments/child-card snapshot, Notion DL-15570 and
+  DL-15575 event/property contract, Figma/FigJam alignment, generated invitation
+  API contract/error codes, development-server QA, and remaining integrated QA.
+- Added the user's scope rule: do not create unsolicited test files, analytics
+  mapper/helper files, analysis artifacts, or documentation. Keep event work in
+  the feature's existing files and request approval before expanding structure.
+- Removed the previously added feature-specific test/helper files from both the
+  master feature branch and develop follow-up branch while preserving runtime
+  tracking behavior; updated both PR descriptions to match.
+- Corrected the active Dentlink repository/worktree paths and added the isolated
+  develop follow-up worktree to the project index.
+
 ## 2026-07-14
 
 - Corrected the repository boundary for this user's workflow. Personal project

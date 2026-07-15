@@ -148,3 +148,20 @@ appear nowhere else in the app.
   Run builds when requested or when the risk justifies them.
 - Report existing warnings separately from failures and state test gaps rather
   than overstating completion.
+
+## User-Directed Scope Discipline
+
+- Do not add new test files, dedicated analytics mapper files, analysis
+  artifacts, helper modules, or documentation merely because they would make
+  verification or organization easier. Add them only when the user explicitly
+  requests them or after explaining a repository-required need and receiving
+  approval.
+- For instrumentation work, first follow the feature's existing `AMP_Track`
+  placement and property-construction style inside the existing domain files.
+  Verify event names and properties against the requested Notion/Jira source,
+  but do not introduce a new analytics abstraction by default.
+- Command-based type, lint, formatting, diff, browser, and network verification
+  does not justify leaving permanent test or support files in the branch.
+- Never claim an analytics event is live merely because code is committed or a
+  PR exists. Confirm that the exact commit is deployed and observe delivery, or
+  clearly label live delivery as pending.

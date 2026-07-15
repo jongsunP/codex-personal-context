@@ -15,6 +15,11 @@ merged into `develop` as `44e6220c5227ae2b4a44f6df30d6959acb664d37`
 Develop follow-up PR:
 [#4378](https://github.com/Innvoaid/dentlink-client/pull/4378), Open, base
 `develop`, head `codex/DL-14232-followup-develop`
+Develop follow-up worktree:
+`/Users/parkjongsun/repository/dentlink-client-invitation-api-develop`
+Pushed HEAD: `660fbcde2 [DL-14232] refactor: 앰플리튜드 보조 파일 제거`
+Remote matched local; PR is mergeable/CLEAN and CodeRabbit succeeded. It has
+not been merged or deployed yet.
 Office develop deployment run
 [#29401876035](https://github.com/Innvoaid/dentlink-client/actions/runs/29401876035):
 build/deploy and post-deploy E2E both succeeded
@@ -49,6 +54,10 @@ build/deploy and post-deploy E2E both succeeded
   task is also complete.
 - The isolated develop API PR was deployed successfully and its post-deploy
   E2E job completed successfully.
+- Created develop follow-up PR #4378 for the post-API payload and analytics
+  commits. It intentionally remains open for user review; the current develop
+  deployment contains PR #4376's API changes, not PR #4378's follow-up events.
+- Final code worktrees are clean and both code branches match their remotes.
 
 ## Review sources and findings
 
@@ -67,7 +76,34 @@ build/deploy and post-deploy E2E both succeeded
   integrated QA: DL-15490 email link/template, DL-15491 cookie, DL-15492 home
   notification, DL-15499 QA, and DL-15559 backend work.
 
-## Deliberate analytics interpretations
+## Jira status snapshot checked on 2026-07-15
+
+- DL-15162: complete.
+- DL-15489, DL-15493, DL-15494, DL-15495, and DL-15503: Ready for Deploy.
+- DL-15490, DL-15491, and DL-15492: In Progress.
+- DL-15499: QA Todo; DL-15544 and DL-15559: In Progress.
+- DL-15570 and DL-15575 remain Todo in Jira even though the requested frontend
+  implementation and Notion development taxonomy updates are complete. Jira
+  status/comments were not mutated in this session.
+- Re-read Jira comments and relevant child cards where the user is assignee,
+  reporter, or mentioned. Recheck live Jira before changing ownership/status.
+
+## Analytics contract and deliberate interpretations
+
+- DL-15575 adds `onboarding_click` with `onboardingType` values
+  `fee schedule`, `scanner`, and `payment`; `create_account_complete` fires
+  once after the newly signed-up account is identified during authenticated
+  app startup.
+- DL-15570 event names are exactly `pending_members_button_click`,
+  `invite_members_button_click`, `pending_members_action_click`,
+  `pending_members_dropdown_changed`, `invite_email_chip_delete`,
+  `invite_send_clicked`, `invite_send_succeeded`, and `invite_send_failed`.
+- Documented properties are exactly `isAlert`, `actionType`, `memberStatus`,
+  `isFormatError`, `inviteCount`, `roleType`, `authorityType`, and
+  `roleAuthorityCombinations`.
+- Event calls and property mapping remain in existing feature files. Do not
+  recreate separate analytics mapper or feature-specific test files unless the
+  user explicitly requests them.
 
 - Notion names the property `isFormatError` but explicitly defines normal chip
   as `true` and error chip as `false`; implementation follows the documented
@@ -79,19 +115,37 @@ build/deploy and post-deploy E2E both succeeded
   approved UI also exposes Viewer. Viewer is tracked with the same mapping and
   remains a documentation gap to confirm with product/data owners.
 
+## API contract details
+
+- Register validation posts `{ employerId, email }`.
+- Existing-member acceptance posts `{ employerId }` to
+  `/office/employees/invitations/accept`; the response is void.
+- Invitation signup sends `code: null` and `invitation: { employerId }` while
+  omitting role, referral, funnel, first-funnel, and second-funnel values.
+- Generated accept error codes reviewed: 2140 no invitation/wrong account,
+  2134 already accepted, 2135 canceled, 2112 expired, 2020 already an office
+  member, 2023 pending approval, 2024 suspended, and 2053 affiliation limit.
+- Current UI presents generic acceptance failure except for account-email
+  mismatch. Do not invent per-code copy or success recovery without an explicit
+  product decision.
+
 ## Verification
 
-- Clinic TypeScript check passed.
+- Clinic TypeScript check passed; the final commit hook also passed Clinic,
+  Lab, and Admin TypeScript checks.
 - No feature-specific test files remain after the user-requested cleanup. The
   repository's default Jest command still fails to parse
   `clinic/jest.config.ts` because it imports `next/jest` instead of the
   ESM-compatible `next/jest.js`; this also reproduces on `origin/master`.
-- Changed-file Prettier and Clinic ESLint passed. ESLint reported six existing
+- Changed-file Prettier and Clinic ESLint passed. ESLint reported five existing
   warnings and no errors.
 - The final push hook passed full Clinic/Lab/Admin lint and shared coverage.
   It reported 419 repository-existing warnings and no errors.
 - Isolated shared-UI ESLint is blocked by the repository's duplicate Storybook
   plugin versions, but the full push hook lint succeeded.
+- On current `origin/develop`, standalone Clinic TypeScript has a baseline PNG
+  module declaration error in `BrowserPDFHeaderUI.tsx`; it reproduces without
+  the follow-up commits. Do not attribute it to PR #4378.
 
 ## Development server QA
 
@@ -116,26 +170,32 @@ build/deploy and post-deploy E2E both succeeded
 
 ## Remaining work
 
-1. Run state-changing end-to-end QA for final account creation, existing-account
+1. After user review, merge develop follow-up PR #4378 and confirm its Office
+   development deployment. Until then, do not claim the new analytics are live.
+2. Verify actual Amplitude network delivery for the exact event/property names
+   after #4378 is deployed.
+3. Run state-changing end-to-end QA for final account creation, existing-account
    acceptance, active-office switching, and mutation failure recovery in an
    isolated test account/office.
-2. Verify actual email-link/template, invitation cookie, and home-notification
+4. Verify actual email-link/template, invitation cookie, and home-notification
    entry paths with DL-15490, DL-15491, and DL-15492 integrated.
-3. Complete the DL-15499 QA pass across member management, Pending Members,
+5. Complete the DL-15499 QA pass across member management, Pending Members,
    Invite Members, recipient flow, responsive states, and analytics delivery.
-4. Confirm the `isFormatError` naming/value inversion, multi-invite String
+6. Confirm the `isFormatError` naming/value inversion, multi-invite String
    serialization, and Viewer authority taxonomy with product/data owners if
    they require different reporting semantics.
-5. Decide whether accept-API race codes such as already accepted/already a
+7. Decide whether accept-API race codes such as already accepted/already a
    member should receive dedicated success recovery; no product copy or explicit
    frontend behavior is currently specified, so the UI keeps generic failure UX.
 
 ## Resume order
 
 1. Pull `codex-personal-context`, fetch the shared repository, and confirm PR
-   #4353 still targets `master` with HEAD at least `1be4ee8db`.
-2. Confirm the successful Office development deployment remains live for merge
-   `44e6220c5` before starting account-state QA.
+   #4353 still targets `master` with HEAD at least `1be4ee8db`, and PR #4378
+   still targets `develop` with HEAD at least `660fbcde2`.
+2. Check whether #4378 was merged. If merged, confirm the new Office development
+   deployment before live analytics QA; otherwise the live server remains the
+   API-only #4376 deployment at merge `44e6220c5`.
 3. Read current Jira comments and child-card status before deciding whether a
    failure belongs to frontend, backend, email, cookie, notification, or QA.
 4. Continue only the remaining state-changing/integrated QA before adding
