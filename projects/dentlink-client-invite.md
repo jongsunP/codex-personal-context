@@ -1,9 +1,121 @@
-# Dentlink Invite current checkpoint - 2026-07-14
+# Dentlink Invite current checkpoint - 2026-07-15
 
-This is the current personal work checkpoint. It records the user's progress
-history and must be verified against the live shared repository when work
-resumes. Older dated checkpoints remain below as history and may describe APIs,
-branch state, or remaining work that has since changed.
+This is the current personal work checkpoint. Verify it against the live shared
+repository and external project tools when work resumes.
+
+Repo: `/Users/parkjongsun/repository/dentlink-client`
+Canonical branch: `feature/DL-14232`
+Pushed HEAD: `1675ef418 [DL-15570] feat: 초대 관리 앰플리튜드 이벤트 추가`
+Remote: `origin/feature/DL-14232` matched local HEAD
+Worktree: clean
+Canonical PR: [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353),
+Open Draft, base `master`, head `feature/DL-14232`
+Develop API PR: [#4376](https://github.com/Innvoaid/dentlink-client/pull/4376),
+merged into `develop` as `44e6220c5227ae2b4a44f6df30d6959acb664d37`
+
+## 2026-07-15 completed work
+
+- Regenerated Office API models and connected
+  `POST /office/employees/invitations/accept` with body
+  `{ employerId: number }` for existing-member invitation acceptance.
+- After acceptance, the flow refetches accepted invitation state, fetches the
+  employee list, switches to the invited office, and continues to Office home.
+- Removed frontend `firstFunnelChannel` and `secondFunnelChannel` values from
+  invitation signup payloads because Jira confirms those fields are set by the
+  server. Spread order was corrected so stale form values cannot leak through.
+- Added the missing DL-15575 `onboarding_click` event with documented
+  `onboardingType` values: `fee schedule`, `scanner`, and `payment`.
+- Changed Clinic `create_account_complete` tracking to wait until authenticated
+  app startup, identify the created account's user ID, and fire once for the
+  matching signup email.
+- Added all eight DL-15570 invitation-management events and eight documented
+  properties, including pending-member actions, dropdown changes, chip delete,
+  and invite send click/success/failure.
+- Added targeted tests for signup-completion pending/consume behavior and
+  invitation analytics property mapping.
+- Pushed three follow-up commits:
+  `0700fa572`, `5e52c5b3b`, and `1675ef418`.
+- Updated PR #4353 body to include DL-14232, DL-15575, DL-15570, exact review
+  points, verification, and remaining live QA.
+- Updated the relevant Notion taxonomy: DL-15575's missing event/property and
+  all DL-15570 events/properties are marked complete; the DL-15570 parent Office
+  task is also complete.
+
+## Review sources and findings
+
+- Reviewed Jira DL-14232, DL-15570, and DL-15575, including comments, child
+  cards, assignee/reporter relationships, and user mentions.
+- Reviewed FigJam node `3:4698` and Figma design node `296:50698` in the desktop
+  files. The current UI and flow are materially aligned with the documented
+  member, Pending Members, Invite Members, and recipient-invitation scope.
+- Jira comments establish that signup code is optional, valid/expired signup
+  sends `invitation: { employerId }`, canceled invitation sends `null`, and
+  first/second funnel values are server-owned.
+- The latest generated accept API matches the frontend call: no email field and
+  a void response. Generic error UX remains; no contract-specific error code
+  presentation is currently defined.
+- Open related Jira work remains outside this frontend implementation or needs
+  integrated QA: DL-15490 email link/template, DL-15491 cookie, DL-15492 home
+  notification, DL-15499 QA, and DL-15559 backend work.
+
+## Deliberate analytics interpretations
+
+- Notion names the property `isFormatError` but explicitly defines normal chip
+  as `true` and error chip as `false`; implementation follows the documented
+  values rather than the misleading name.
+- Success properties are typed String while one event may contain multiple
+  invitations. Role, authority, and role-authority combinations are serialized
+  as comma-joined values so every invitation remains represented.
+- Notion lists Admin, Billing Manager, and Member authority examples, while the
+  approved UI also exposes Viewer. Viewer is tracked with the same mapping and
+  remains a documentation gap to confirm with product/data owners.
+
+## Verification
+
+- Clinic TypeScript check passed.
+- Clinic tests passed with a temporary Next 16-compatible Jest config: three
+  suites and eight tests. The repository's default Jest command still fails to
+  parse `clinic/jest.config.ts` because it imports `next/jest` instead of the
+  ESM-compatible `next/jest.js`; this also reproduces on `origin/master`.
+- Changed-file Prettier and Clinic ESLint passed. ESLint reported six existing
+  warnings and no errors.
+- The final push hook passed full Clinic/Lab/Admin lint and shared coverage.
+  It reported 419 repository-existing warnings and no errors.
+- Isolated shared-UI ESLint is blocked by the repository's duplicate Storybook
+  plugin versions, but the full push hook lint succeeded.
+
+## Remaining work
+
+1. Wait for the Office development deployment created by develop merge
+   `44e6220c5` to complete, then run network/browser QA.
+2. Verify valid, expired, canceled, and ordinary signup payloads, especially
+   `code`, `invitation`, and absence of frontend funnel fields.
+3. Verify existing-account accept success, accepted-state refetch, active-office
+   switching, and failure recovery against the deployed API.
+4. Verify actual email-link/template, invitation cookie, and home-notification
+   entry paths with DL-15490, DL-15491, and DL-15492 integrated.
+5. Complete the DL-15499 QA pass across member management, Pending Members,
+   Invite Members, recipient flow, responsive states, and analytics delivery.
+6. Confirm the `isFormatError` naming/value inversion, multi-invite String
+   serialization, and Viewer authority taxonomy with product/data owners if
+   they require different reporting semantics.
+
+## Resume order
+
+1. Pull `codex-personal-context`, fetch the shared repository, and confirm PR
+   #4353 still targets `master` with HEAD at least `1675ef418`.
+2. Check the Office development deployment run for develop merge `44e6220c5`.
+3. Read current Jira comments and child-card status before deciding whether a
+   failure belongs to frontend, backend, email, cookie, notification, or QA.
+4. Continue with live QA before adding speculative code.
+
+---
+
+# Historical checkpoint - 2026-07-14
+
+This is a historical snapshot and may describe APIs, branch state, or remaining
+work that has since changed. Use the 2026-07-15 section above as the current
+checkpoint.
 
 Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
 Branch: `feature/DL-14232`
