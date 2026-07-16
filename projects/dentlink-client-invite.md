@@ -22,9 +22,10 @@ Worktree: clean
   [#4385](https://github.com/Innvoaid/dentlink-client/pull/4385), merged on
   2026-07-16 as `01e6f4935e09f2254ad32c91171d508243552786`.
 - Final Develop follow-up PR:
-  [#4386](https://github.com/Innvoaid/dentlink-client/pull/4386), open and ready,
-  base `develop`, head `codex/DL-14232-signup-validation-develop`, merge state
-  `CLEAN`, mergeable, checks passed. Its one change commit is `68421a496`.
+  [#4386](https://github.com/Innvoaid/dentlink-client/pull/4386), merged into
+  `develop` on 2026-07-16 as
+  `df62cd5533a00a65a97aa3eb80464c263ad189ce`. Its one change commit was
+  `68421a496`.
 - Both shared-repository worktrees are clean and match their remotes at `0/0`.
   No shared-repository change is uncommitted or unpushed.
 
@@ -58,6 +59,31 @@ Worktree: clean
 - Notification invitation URLs are normalized through the existing invitation
   route so a complete landing URL reaches validation. Actual notification data
   still needs integrated QA.
+
+## Durable working direction learned on 2026-07-16
+
+- Separate invitation entry validation from post-signup validation. Email,
+  notification, and existing-account sign-in return belong to `/invitations`;
+  the new-account post-signup check belongs to the signup completion screen
+  because that is where the user should see Pending Approval.
+- Centralize the validation API contract in the existing invitation helper, but
+  do not force every consumer through a visible intermediate route. A consumer
+  may call the shared validation helper locally when preserving its background
+  screen is part of the intended UX.
+- Pending Approval ownership is flow-specific: ordinary employee application
+  remains in `/office/find`; invitation signup remains in signup step 2; home
+  must not infer the signup funnel from employee-list state or display a global
+  pending popup.
+- Backend employee status remains the source of truth for membership and team
+  activation. Do not add frontend storage keys or a `funnel: "INVITATION"`
+  response contract merely to decide popup ownership when the flow itself
+  already provides that context.
+- Existing accounts never enter the new-account signup Pending Approval path.
+  Their second `/invitations` visit after sign-in is intentional and should show
+  either the valid invitation action UI or an invalid/error outcome.
+- Preserve the distinction between user-observed QA success, code-fixed but
+  re-QA-required, untested scenarios, and backend/real-data verification. Do not
+  promote a static code match to QA success.
 
 ## Verification and remaining QA
 
@@ -94,16 +120,18 @@ Scenario status at stop:
 
 1. Pull this personal context and verify the canonical branch is still at or
    contains `1ab700aaa`.
-2. Merge Develop PR #4386 and wait for the relevant frontend/backend deployment.
+2. Develop PR #4386 is already merged. Wait for the relevant frontend/backend
+   deployment.
 3. Re-QA the scenarios above without promoting code-only fixes to success. For
    N2/N3, confirm the Pending Approval popup appears over signup step 2 and that
    the browser does not revisit `/invitations` after signup. For existing
    accounts, confirm sign-in return still revisits `/invitations` and only valid
    invitation UI or failure UI is shown, never Pending Approval.
 4. Continue final review on master PR #4353.
-5. Keep `/Users/parkjongsun/Repository/dentlink-client-signup-validation-develop`
-   until PR #4386 is merged. Optional cleanup also remains for the two older
-   develop worktrees
+5. Develop PR #4386 is merged, so its worktree
+   `/Users/parkjongsun/Repository/dentlink-client-signup-validation-develop` may
+   be removed after confirming it is clean. Optional cleanup also remains for
+   the two older develop worktrees
    `/Users/parkjongsun/Repository/dentlink-client-invite-validation-develop` and
    `/Users/parkjongsun/Repository/dentlink-client-recipient-qa-develop`; do not
    remove them without checking their status first.
