@@ -147,6 +147,23 @@ Assume project-internal Codex sessions are local-device-bound. For remote work
 continuity, treat Git-backed documents as the durable source of truth, not the
 current device's local session state.
 
+## External MCP Connection Policy
+
+- Prefer one global direct MCP configuration in `~/.codex/config.toml` for a
+  service used across multiple projects. Do not duplicate the same service in
+  project `.codex/config.toml` files.
+- For Figma on this user's machines, use the global streamable HTTP server at
+  `https://mcp.figma.com/mcp`. Do not install the Figma plugin connector on top
+  of that direct server unless intentionally replacing the connection model.
+- Distinguish a plugin app connector from a direct MCP server. Authenticating
+  one does not prove that the other is connected.
+- After adding, removing, authenticating, or changing an MCP server, verify it
+  from a fresh Codex process and restart the ChatGPT/Codex client before
+  continuing in a new task. Existing tasks retain their original tool bridge.
+- For Figma, verify the direct server with `mcp__figma__whoami`. A
+  `mcp__codex_apps__figma_*` tool belongs to the plugin connector and should not
+  be treated as proof that the global direct MCP is unavailable.
+
 When writing durable context, use the repository boundary strictly. General
 Codex/session behavior and personal project progress belong in
 `codex-personal-context`; use `projects/<project>.md` for the current checkpoint

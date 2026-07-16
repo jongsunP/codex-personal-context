@@ -1,7 +1,146 @@
-# Dentlink Invite current checkpoint - 2026-07-15
+# Dentlink Invite current checkpoint - 2026-07-16
 
-This is the current personal work checkpoint. Verify it against the live shared
-repository and external project tools when work resumes.
+This is the active personal checkpoint for the recipient-flow QA continuation.
+Verify it against live Git and Figma after starting a new Codex task.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232`
+HEAD: `648822fcc96a16b3e2a780821cf3ec996e52e1b3`
+Remote: `origin/feature/DL-14232`, ahead/behind `0/0`
+Worktree: clean
+
+## Current stop line
+
+- The 2026-07-16 work is QA follow-up for the recipient invitation flow only.
+  Do not report branch-wide completion unless the user explicitly requests it.
+- The QA defects below were analyzed, but no shared project code was changed in
+  this task. They still require implementation and user re-QA.
+- Do not commit, push, or mutate the PR after implementing the fixes unless the
+  user explicitly requests that Git operation.
+
+## Figma MCP recovery completed on 2026-07-16
+
+- Removed `figma@openai-curated` so its hosted app connector no longer competes
+  with the local direct MCP connection.
+- Registered one global direct MCP server named `figma` at
+  `https://mcp.figma.com/mcp` and completed OAuth as `jongsun@dentlink.app`.
+- Removed the legacy Figma STDIO/PAT block from the untracked local
+  `/Users/parkjongsun/Repository/dentlink-client-e2e/.codex/config.toml`; its
+  Atlassian server entry remains.
+- Fresh `codex exec` processes called `mcp__figma__whoami` successfully twice.
+  A separate `invalid_grant` warning disappeared when the Expo MCP was disabled
+  for an isolated check, so that warning was not a Figma authentication failure.
+- The task that performed the cleanup still exposes its original disconnected
+  `mcp__codex_apps__figma_*` connector tools. Fully restart ChatGPT/Codex and
+  start a new task before implementation. In the new task, verify
+  `mcp__figma__whoami` first.
+- Do not restore a project-specific Figma config or reinstall the Figma plugin
+  as a workaround. The direct global MCP is now the canonical connection.
+
+## Recipient flow QA matrix
+
+Status meanings:
+
+- `QA success`: the user actually observed the expected flow.
+- `QA issue`: the user reproduced a mismatch.
+- `Static match / re-QA`: code appears aligned but the latest flow was not
+  interactively reconfirmed.
+- `Fix pending`: analysis is complete but code has not been changed.
+- `Integrated QA pending`: the path exists but requires state-changing or real
+  notification data to verify.
+
+| Account and entry | Expected Figma flow | Latest evidence | Status |
+| --- | --- | --- | --- |
+| New account, email entry, validation stays `VALID` through signup | Validate, signup steps 0 -> 1 -> 2, automatic sign-in, invited office home | User completed this flow successfully | QA success |
+| New account, initially `VALID`, invitation becomes `EXPIRED` before signup submission | Signup still completes; server creates pending employee; home shows `Pending Approval` | Signup completed but the Pending Approval popup did not appear | QA issue, fix pending |
+| New account, initially `EXPIRED` | Enter the same signup steps 0 -> 1 -> 2 without an early expiration popup; finish as pending and show Pending Approval | Current UI shows a design-absent `Invitation expired` popup before signup, then also misses Pending Approval | QA issue, fix pending |
+| New account, `CANCELED` | Show `Invitation canceled` / `This invitation has been canceled by the office.`, then Close starts ordinary signup at step 0 | Current status branch contains the exact canceled copy and signup destination | Static match / re-QA |
+| New account, `NOT_INVITED` or deleted | Show generic Invalid Invitation, then ordinary signup | Current fallback routes to signup after generic Invalid | Static match / re-QA |
+| New account without an invitation email entry | Ordinary signup only; no invitation validation | Existing ordinary signup path remains separate | Integrated QA pending |
+| Existing account, email entry, signed out, `VALID` | Validate, sign in if needed, return to invitation, then Join Office or Remind Me Later | This path previously passed user QA with preserved invitation query | QA success before latest pass; regression re-QA required after fixes |
+| Existing account, notification entry, signed out, expected `VALID` | Validation API must run, then sign in if needed and return to invitation | Invalid Invitation appeared immediately and the validation API was never called | QA issue, fix pending; inspect the actual notification `landingUrl` |
+| Existing account, signed in, `VALID` | Show Join Office / Remind Me Later | Existing invitation page and accept flow are implemented | Integrated QA pending |
+| Existing account, `EXPIRED`, `CANCELED`, deleted, or otherwise invalid | Show generic `Invalid Invitation` / `This invitation is no longer valid.` and return to sign-in or the existing office home as appropriate | Current code presents status-specific expired/canceled copy in several branches | QA issue, fix pending |
+| Existing account, already `ACCEPTED` | Sign in if needed, locate the target employee, activate that office, and go home | Recovery path exists in code | Integrated state-changing QA pending |
+| Notification entry with an invalid invitation | Run validation, show generic Invalid Invitation, and return to the existing destination | Current malformed-query path skips validation; valid-query status branches can still show status-specific copy | QA issue, fix pending |
+| Valid existing account chooses Remind Me Later | Keep the current office and return to its home | Current close action routes to the default home | Static match / re-QA |
+
+## Exact Figma evidence for the next task
+
+- Overall updated QA flow: `563:29722`
+- Pending Approval popup: `563:30377`
+- New-account canceled popup: `563:29750`
+- Notification invalid state: `563:30621`
+- Existing-account invalid state: `563:33138`
+- Expired-signup pending behavior note: `563:32934`
+- Broader recipient invitation flow: `362:45613`
+- File key: `kOTUAdts2gBFsF9Yr3Q5PL`
+
+Pending Approval exact UI:
+
+- Title: `Pending Approval`
+- Description: `Your office authentication request has been completed. Please await approval from the office owner.`
+- Action: `Ok`
+- Icon: existing `SvgObjectSandclockFilled`, primary, size 48
+- Reuse the existing Popup composition in
+  `shared/ui/src/OfficeFindUI/OfficeFindStepperForm.tsx`.
+
+## Confirmed code causes and implementation target
+
+- `useOfficeInvitation.tsx` has `openExpiredSignupPopup`, which creates the
+  design-absent early expiration popup for a new account. An initially expired
+  new-account invitation should go directly to the invitation signup flow.
+- `useSignupForm.tsx` always sends invitation signup success to `/` and has no
+  one-time handoff indicating that the resulting employee is pending.
+- `DashboardNonEmployee.tsx` renders pending employee rows but does not show the
+  required Pending Approval popup after expired invitation signup.
+- `parseOfficeInvitationQuery` requires exact `type=INVITATION`, a positive
+  integer `employerId`, and a valid `email`. If any value is missing or malformed,
+  validation is disabled and the page opens Invalid Invitation immediately.
+- Notification navigation pushes the backend `landingUrl` unchanged. Capture
+  the actual failing notification URL before deciding whether frontend
+  normalization is possible; do not invent a missing employer ID or email.
+- Existing-account invalid statuses should use the generic Figma Invalid
+  Invitation copy instead of separate expired/canceled terminal copy.
+
+Implementation should remain local to the owning flows:
+
+1. Remove the early expired-signup popup and route new `VALID`/`EXPIRED` states
+   through the same invitation signup UI.
+2. Add the smallest project-aligned one-time post-signup handoff, then show the
+   existing Pending Approval Popup only after the pending employee list is
+   available. Clean the handoff after confirmation and do not add global `_app`
+   lifecycle state.
+3. Normalize existing-account invalid terminal copy to the Figma generic
+   Invalid Invitation state.
+4. Verify signup mutation error contracts for canceled/deleted race conditions
+   before adding frontend recovery. Do not guess the response shape or copy.
+5. Investigate the real notification `landingUrl`; frontend code can only fix
+   parameters that are actually present.
+6. Reuse existing Popup, routing, query, and employee-list patterns. Do not add
+   a new shared modal, new test file, or broad refactor.
+
+## New-task start order
+
+1. Fully quit and reopen ChatGPT/Codex, then create a new project task in
+   `/Users/parkjongsun/Repository/dentlink-client-invite`.
+2. Pull `codex-personal-context` and read the documented bootstrap order plus
+   this checkpoint.
+3. Verify branch, HEAD, remote divergence, and worktree before editing.
+4. Call direct `mcp__figma__whoami`, then read the exact Figma nodes above.
+5. Reconcile Figma with the live code files named above and implement only the
+   recipient-flow QA fixes.
+6. Run targeted Clinic type and changed-file lint checks, but do not build.
+7. Stop before commit. Report changed files, verification, and the full QA
+   matrix using `QA success`, `QA issue`, `fix complete / re-QA required`, and
+   `backend or real-data pending` without promoting untested fixes to success.
+
+---
+
+# Historical checkpoint - 2026-07-15
+
+This is a historical personal work checkpoint. Use the 2026-07-16 section
+above as the current resume source.
 
 Repo: `/Users/parkjongsun/repository/dentlink-client`
 Current checkout: `develop`
