@@ -58,3 +58,11 @@ For detailed current state, read:
 - Develop follow-up branch: `codex/DL-14232-followup-develop`
 - Personal current checkpoint and history:
   `projects/dentlink-client-invite.md`
+
+### Dentlink PDF Label Conversion (Completed)
+
+- Shared repository: `https://github.com/Innvoaid/dentlink-client`
+- Former worktree: `/Users/parkjongsun/Repository/dentlink-client-pdf`
+- Delivery branch: `feature/DL-15438`
+- Personal completed checkpoint:
+  `projects/dentlink-client-pdf.md`
