@@ -1,3 +1,181 @@
+# Dentlink Invite production-readiness audit checkpoint - 2026-07-20
+
+This is the current resume source and supersedes every checkpoint below. The
+shared branch is committed and pushed, but the final static audit found
+recipient-flow risks that should be resolved before production merge.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232`
+HEAD: `b5b0d573adbc20e796acacf5a931d7369616e919`
+Remote: `origin/feature/DL-14232`, ahead/behind `0/0`
+Worktree: clean
+
+## Delivery state
+
+- Latest pushed commit:
+  `b5b0d573a [DL-14232] refactor: 초대 가입 쿠키 의존 제거`.
+- Canonical master PR:
+  [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353), open draft,
+  base `master`, head `feature/DL-14232`, merge state `CLEAN`, mergeable.
+- The branch contains current `origin/master`; the PR is no longer conflicted.
+- CodeRabbit check is successful.
+- The earlier Develop delivery was merged. The latest cookie-removal commit
+  `b5b0d573a` is not in `origin/develop`; do not assume Develop contains this
+  final canonical state.
+- No commit, push, or PR mutation remains pending in this worktree. The audit
+  itself made no shared-repository code change.
+
+## Final cookie and popup direction
+
+- Invitation flow no longer creates or reads an `officeInvitationData` cookie.
+  The invitation query (`type`, `employerId`, `email`) is the only frontend
+  invitation context.
+- A syntactically valid `/invitations` entry immediately deletes the existing
+  referral cookie. Referral cookie behavior otherwise remains unchanged.
+- Invitation signup payload continues to suppress referral/funnel/UTM/business
+  partner attribution and sends only the invitation employer context required
+  by the backend.
+- Home has no invitation Pending Approval popup. Ordinary employee application
+  keeps its existing popup in `/office/find`; invitation signup owns its popup
+  on signup step 2 after the post-signup validation call.
+- No frontend storage key, `afterSignup`, or `funnel: "INVITATION"` response
+  dependency remains.
+
+## Production-readiness conclusion
+
+Status: **hold the production merge until the P1 recipient findings below are
+resolved or disproved with the deployed backend contract.** No P0 security or
+secret-exposure issue was found.
+
+### P1 recipient findings
+
+1. Valid new-account signup can be misclassified as Pending Approval.
+   `useSignupForm.tsx` treats only post-signup validation `VALID` as success and
+   opens Pending Approval for every other status. The generated `POST
+   /office/users` contract says a valid invitation creates an approved employee
+   and marks the invitation `ACCEPTED`, and validation explicitly returns
+   `ACCEPTED`. Unless the deployed API contradicts its generated contract, N1
+   will show the Pending popup incorrectly after the latest popup relocation.
+2. `/invitations` can resolve cached validation data before the mandatory fresh
+   validation finishes. The query uses the ordinary React Query cache and the
+   screen gates only on `isLoading`; with cached data, background refetch has
+   data and `isLoading` is false. Same-invitation sign-in return, re-entry, and
+   notification entry can therefore route from stale `VALID` or stale invalid
+   data before the latest server result. This is a direct risk to E1, E2, E3,
+   and E7.
+3. `ACCEPTED` handling can show Invalid Invitation from a stale or not-yet-
+   reflected affiliated-employee list. It gates only on list `isLoading`, while
+   the `USER_OWN_EMPLOYEE_LIST/activate` cache can already exist. Immediately
+   after acceptance, a cached list without the new employee or backend read
+   propagation delay is treated as invalid instead of waiting/retrying. This is
+   a direct risk to E4 and E5.
+
+### P2 contract and operational risks
+
+- After `acceptOfficeInvitation`, one immediate validation refetch must already
+  return `ACCEPTED`; otherwise a Figma-absent `Unable to join this office` toast
+  appears. Verify synchronous backend behavior or make the frontend tolerant of
+  read propagation delay.
+- If a valid invitation is canceled or deleted while the user is already on
+  signup, the join mutation has no error-code routing. Generated codes 2135 and
+  2140 document a transition to ordinary signup, but the current frontend falls
+  through to generic mutation error handling.
+- Admin marks only `REGISTERED` as terminal. If the unified Employee invitation
+  list returns its documented terminal status `ACCEPTED`, completed rows still
+  expose role, authority, resend, and delete controls. Confirm the real Admin
+  response; if it returns `ACCEPTED`, treat `REGISTERED | ACCEPTED` as terminal.
+- Admin row mutations have no pending/operation lock. Rapid repeated clicks,
+  especially Resend, can issue duplicate requests and duplicate email sends.
+
+### P3 cleanup findings
+
+- Invite chip deletion analytics sends `isFormatError: isValid`; the boolean is
+  semantically reversed and corrupts that event dimension.
+- `OfficeMemberList` still destructures unused `approvedEmployeeCounts` after
+  the status-column change.
+
+## Confirmed-normal areas
+
+- Clinic invitation create/validate/resend/cancel/delete/role/authority,
+  Pending Members owner gating, approve/reject, query invalidation, and
+  optimistic rollback are structurally connected.
+- Clinic invitation entry removes referral attribution and no invitation-cookie
+  identifier remains anywhere in Clinic/Admin/Lab/shared source.
+- Existing-account sign-in return preserves invitation query parameters; web
+  notification landing URLs are normalized into the invitation route when the
+  required parameters are present.
+- Existing-account invalid copy, new-account canceled copy, and Pending Approval
+  popup copy/actions match the specified Figma nodes. The removed expiry text is
+  a later product-policy decision and is not treated as a Figma defect.
+- Team activation calls the existing activation API. Activation failure restores
+  the previous employee ID and routes home without a new popup/toast.
+- Clinic member drawer permission guards and request/data matching, Lab invite
+  validation/submission locks, and shared modal interaction locks are present.
+- Mobile Pending Members/Invite modal absence is documented policy, not a
+  regression.
+- No invitation or recipient email was added to analytics payloads, and no
+  secret was introduced.
+
+## Verification performed on the final pushed HEAD
+
+- `pnpm --filter dentlink-clinic-web type`: passed.
+- `pnpm --filter dentlink-lab-web type`: passed.
+- `pnpm --filter dentlink-admin-web type`: passed.
+- Changed Clinic/Lab/Admin/shared source lint: zero errors. There are 21
+  warnings in total; most are existing hook/data-filter warnings, plus the
+  unused Clinic destructure noted above. Shared UI required its local ESLint
+  config because the monorepo has duplicate plugin resolution, and then passed
+  with warnings only.
+- `git diff --check`: passed.
+- No new test file, broad refactor, build, coverage run, or interactive browser
+  QA was added in this final audit, matching the requested scope.
+- Direct Figma MCP identity and the specified 2026-07-16 QA nodes were checked.
+
+## Scenario status at stop
+
+- `Historical QA success, current regression check required`: N1 valid new
+  account and E1 valid existing-account email/login/return were previously
+  observed successfully, but the latest validation relocation/cache behavior
+  means they must not be reported as current-pass QA success without re-QA.
+- `Fix complete / re-QA required`: invitation-cookie removal and referral-cookie
+  precedence; N2 expires during signup; N3 initially expired; N4 initially
+  canceled; N5 initially deleted/not invited; E3 existing-account invalid copy;
+  notification route normalization.
+- `Not yet interactively verified`: N6 ordinary signup; E2 web notification;
+  E4 Join Office and target-office activation; E5 already accepted activation;
+  E6 Close/current-office home; E7 portal notification.
+- `Backend or real-data pending`: actual notification `landingUrl`, post-signup
+  validation status after a valid invitation, acceptance/read-model timing,
+  Admin Employee terminal status, and cancel/delete-during-signup error codes.
+
+## Additional production smoke checks
+
+- Confirm canceled-email re-invitation preserves or replaces role/authority as
+  intended by backend policy.
+- Smoke the shared legacy Button red/black line and size styles across Clinic,
+  Lab, and Admin because the master diff changes shared button tokens.
+- Confirm removal of the standalone member-detail URL is intentional for saved
+  bookmarks/external links; internal navigation now uses the drawer and no
+  internal reference remains.
+
+## Next start
+
+1. Pull this context and verify the canonical branch still contains
+   `b5b0d573a` and remains clean against its remote.
+2. Fix or contract-verify the three P1 recipient findings first: accept
+   `ACCEPTED` as successful valid signup completion, prevent cached validation
+   from resolving the route before a fresh request, and wait/retry for the
+   target employee after `ACCEPTED` instead of showing Invalid immediately.
+3. Run Clinic type, changed-file lint, and `git diff --check`, then re-QA N1,
+   N2/N3, E1/E2/E3/E4/E5/E7 with deployed backend data.
+4. Decide the P2 Admin terminal-status and duplicate-mutation protections after
+   confirming the actual Admin response.
+5. Keep master PR #4353 as draft until the P1 items and required re-QA pass.
+   If Develop also needs the final fixes, prepare a separate Develop-targeted
+   branch/PR only after the canonical branch is updated.
+
+---
+
 # Dentlink Invite closeout checkpoint - 2026-07-16
 
 This is the current resume source. The earlier 2026-07-16 analysis below is
