@@ -1,3 +1,102 @@
+# Dentlink Invite full QA follow-up checkpoint - 2026-07-20
+
+This is the current resume source and supersedes every checkpoint below. The
+user completed the full recipient-flow QA and reported no issue other than the
+two frontend findings recorded here. Both fixes are committed and pushed to
+the canonical master-target branch, and only those two follow-up commits were
+prepared separately for Develop deployment.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232`
+HEAD: `781befe381ab2bac702fc22f1b13d4b26d7e9c3b`
+Remote: `origin/feature/DL-14232`, ahead/behind `0/0`
+Worktree: clean
+
+## Delivery state
+
+- Canonical master PR:
+  [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353), open draft,
+  base `master`, head `feature/DL-14232`, merge state `CLEAN`, mergeable. Keep
+  it draft and unmerged until the focused deployed re-QA below passes.
+- New canonical QA follow-up commits:
+  - `2c222605e [DL-14232] fix: Pending Members 탭 카운트 깜빡임 수정`
+  - `781befe38 [DL-14232] fix: 웹 알림 초대 검증 진입 보정`
+- Previous Develop PR
+  [#4394](https://github.com/Innvoaid/dentlink-client/pull/4394) is merged;
+  its merge commit is `4e958d1ccdda87d86eac34b75fe07657f4eebf6a`.
+- Current Develop follow-up PR:
+  [#4397](https://github.com/Innvoaid/dentlink-client/pull/4397), open and
+  ready, base `develop`, head `codex/DL-14232-qa-followup-develop`, merge state
+  `CLEAN`, mergeable. Auto Assign and CodeRabbit checks passed.
+- PR #4397 was branched from the latest merged Develop state and contains only
+  the two follow-up cherry-picks below; the full master feature branch was not
+  merged into Develop:
+  - `d7800a9df` from `2c222605e`
+  - `ba0f61a13` from `781befe38`
+- Develop worktree:
+  `/Users/parkjongsun/Repository/dentlink-client-invite-final-qa-develop`,
+  clean and ahead/behind its remote `0/0`.
+
+## Full QA result
+
+- `QA success`: new-account scenarios N1-N7 and existing-account scenarios
+  E1, E3-E7. The user completed the full scenario run and reported no other
+  special behavior.
+- `QA issue / fix complete / deployed re-QA required`: E2, valid invitation via
+  web notification. The real notification URL omitted the frontend-only
+  `type=INVITATION`, so parsing stopped before the validation API and showed
+  Invalid Invitation. `/invitations` now supplies `INVITATION` only when that
+  route query omits `type`; an explicitly wrong type and missing or malformed
+  `employerId` or `email` remain invalid.
+- `QA issue / fix complete / deployed re-QA required`: Pending Members first
+  visit. Selecting the first uncached tab briefly changed every tab count to
+  zero. The pending-members query now preserves the previous page while the new
+  page fetches, and the table remains loading while placeholder data is active
+  so rows from the previous tab are not exposed.
+- `Backend or real-data pending`: no new backend blocker was identified in the
+  completed full QA. E2 still needs one real notification recheck after PR
+  #4397 is deployed because the frontend correction was made after the failed
+  run.
+
+## Technical decisions
+
+- `type=INVITATION` is a frontend flow discriminator, not a validation API
+  payload field. The validation request continues to use only `employerId` and
+  `email`.
+- The `/invitations` page may infer a missing type because the route itself is
+  invitation-specific. The shared invitation query parser stays strict, so
+  sign-in and sign-up invitation discrimination is unchanged.
+- The actual failing notification shape was
+  `/invitations?employerId=1409&email=jongsun.test2%40dentlink.app`.
+- No generated DTO, backend response field, invitation cookie, Pending popup
+  storage, new test file, or broad refactor was introduced for these fixes.
+
+## Verification
+
+- Canonical branch: Clinic, Lab, and Admin type checks passed; changed-file
+  lint and `git diff --check` passed. The commit and push hooks passed the full
+  three-app lint with 419 existing warnings and zero errors and passed the
+  shared coverage delta check.
+- Develop follow-up branch: changed-file lint and `git diff --check` passed.
+  The pre-push hook passed full three-app lint with 419 existing warnings and
+  zero errors plus coverage with no delta; it was not bypassed.
+- Develop Clinic type checking reaches one existing unchanged baseline error:
+  `shared/ui/src/PdfUI/BrowserPDFHeaderUI.tsx` cannot resolve
+  `shared/templates/invoice/logo-dentlink.png`. Neither follow-up commit changes
+  that file, asset, or TypeScript configuration.
+
+## Next start
+
+1. Merge and deploy Develop PR #4397 through the normal workflow.
+2. Recheck Pending Members on the first uncached tab switch: counts must remain
+   stable, and the table may show loading until the selected tab data arrives.
+3. Re-run E2 from a real web notification: `/invitations` must call validation
+   and show the valid invitation screen instead of Invalid Invitation.
+4. If those two focused checks pass, record them as QA success and move master
+   PR #4353 out of draft or merge it only when the user authorizes that step.
+
+---
+
 # Dentlink Invite final QA delivery checkpoint - 2026-07-20
 
 This is the current resume source and supersedes every checkpoint below. The
