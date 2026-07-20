@@ -1,3 +1,91 @@
+# Dentlink Invite post-QA review hardening checkpoint - 2026-07-20
+
+This is the current resume source and supersedes every checkpoint below. The
+user completed the full recipient-flow QA, then requested one final review of
+master PR #4353. Six frontend edge cases found by that review are now fixed in
+one local canonical-branch commit. The code is intentionally not pushed yet;
+full staging QA will be rerun after deployment. Future work must not create a
+separate Develop delivery PR unless the user explicitly changes this decision.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232`
+HEAD: `c01d6659c [DL-14232] fix: 초대 QA 경계 동작 보완`
+Remote HEAD: `781befe381ab2bac702fc22f1b13d4b26d7e9c3b`
+Remote: `origin/feature/DL-14232`, local ahead by 1
+Worktree: clean
+
+## Delivery state
+
+- Canonical master PR:
+  [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353), open draft,
+  base `master`, head `feature/DL-14232`. GitHub still points at remote HEAD
+  `781befe38` because `c01d6659c` has not been pushed.
+- Do not create or maintain another Develop delivery branch or PR for this
+  invitation work. Continue only on the canonical master-target branch unless
+  the user explicitly requests otherwise.
+- No shared-branch push or PR mutation was performed in this checkpoint.
+
+## Final review fixes in `c01d6659c`
+
+- Invitation signup keeps the Confirm button locked until the post-signup
+  validation and redirect work completes. Signup API errors still release the
+  lock through the existing mutation error path, so downstream errors are not
+  reclassified as signup failures.
+- Join Office checks both invitation-validation and signed-in-user refetch
+  results for errors before reading cached data. A failed fresh read can no
+  longer continue acceptance from stale `VALID` data, and no new popup or toast
+  was added.
+- Pending Members uses `mutateAsync` with request-local `try/catch/finally` so
+  concurrent operations on different rows each retain their own optimistic
+  rollback and operation cleanup. Different rows remain independently usable.
+- Pending Members now locks all controls for one employee or invitation while
+  any role, authority, or action request for that same identity is in flight.
+  This prevents Role/Authority updates racing Approve, Reject, Cancel, Resend,
+  or Delete without globally locking the table.
+- Portaled PopupMenu instances track only their own Modal content panel. Mobile
+  Profile header and body-padding clicks stay inside the menu, while backdrop
+  clicks and unrelated portals remain outside.
+- MultiChipInput Backspace deletion now calls the same `onDeleteChip` callback
+  as the delete icon, restoring `invite_email_chip_delete` analytics.
+
+## Scope and side-effect boundary
+
+- No API payload, generated DTO, invitation status mapping, routing rule,
+  query parser, copy, or new popup/toast was introduced.
+- The Modal change is an optional ref prop used only by PopupMenu, and the row
+  lock is identity-scoped rather than page-wide.
+- No new test file or broad feature refactor was added.
+
+## Verification
+
+- Clinic TypeScript passed after all six files were combined.
+- The commit hook passed Clinic, Lab, and Admin TypeScript checks.
+- Changed Clinic files had zero lint errors and two unchanged exhaustive-deps
+  warnings in `useSignupForm.tsx`.
+- Changed shared UI files passed isolated ESLint with zero errors. The ordinary
+  shared UI lint command remains blocked before file analysis by the existing
+  duplicate Storybook plugin resolution.
+- Prettier and `git diff --check` passed.
+- The standalone shared UI TypeScript command still reaches existing unrelated
+  generated-icon, Storybook, and legacy module errors; no reported error
+  referenced the six changed files, and the three app type checks passed.
+
+## QA state and next start
+
+- Status: `fix complete / full staging re-QA required` for the final candidate.
+- The user intends to rerun the complete N1-N7 and E1-E7 staging scenarios, so
+  no earlier result should be promoted to final production QA after this commit
+  without that deployed run.
+- Pay special attention to a single signup POST during slow post-signup
+  validation, no accept request after a failed Join Office fresh read, same-row
+  and cross-row Pending Members concurrency, the mobile Profile menu, and
+  Backspace chip-delete analytics.
+- Next: push `feature/DL-14232` only when the user explicitly requests it,
+  deploy the canonical branch through the normal staging path, complete full
+  staging QA, then update or merge master PR #4353 only with explicit approval.
+
+---
+
 # Dentlink Invite full QA follow-up checkpoint - 2026-07-20
 
 This is the current resume source and supersedes every checkpoint below. The
