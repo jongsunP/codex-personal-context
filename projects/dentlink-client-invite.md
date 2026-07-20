@@ -1,3 +1,130 @@
+# Dentlink Invite final QA delivery checkpoint - 2026-07-20
+
+This is the current resume source and supersedes every checkpoint below. The
+final frontend candidate is committed and pushed to the canonical master-target
+branch, and only the follow-up delta has been prepared as a separate Develop
+PR. Production recipient QA is still pending.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232`
+HEAD: `d52ad2119d177540d371c92a4942a2aa444d4746`
+Remote: `origin/feature/DL-14232`, ahead/behind `0/0`
+Worktree: clean
+
+## Delivery state
+
+- Canonical master PR:
+  [#4353](https://github.com/Innvoaid/dentlink-client/pull/4353), open draft,
+  base `master`, head `feature/DL-14232`, merge state `CLEAN`, mergeable.
+- Final canonical commits are:
+  - `b5b0d573a [DL-14232] refactor: 초대 가입 쿠키 의존 제거`
+  - `f8d593756 [DL-14232] fix: 초대 수신자 최신 상태 처리 보강`
+  - `5ff9a2cfe [DL-14232] fix: 관리자 초대 중복 요청과 완료 상태 보정`
+  - `d52ad2119 [DL-14232] docs: 초대 API 계약 주석 정렬`
+- Develop delivery PR:
+  [#4394](https://github.com/Innvoaid/dentlink-client/pull/4394), open and
+  ready for merge, base `develop`, head
+  `codex/DL-14232-final-qa-develop`, merge state `CLEAN`, mergeable. Auto
+  Assign and CodeRabbit checks passed.
+- The Develop branch was created from `origin/develop` at `208710919` and
+  contains exactly the four follow-up cherry-picks below. The full master
+  feature branch was not merged into Develop:
+  - `7e6c3c84a` from `b5b0d573a`
+  - `ad775c653` from `f8d593756`
+  - `3d9c7ce44` from `5ff9a2cfe`
+  - `5e6438074` from `d52ad2119`
+- Develop worktree:
+  `/Users/parkjongsun/Repository/dentlink-client-invite-final-qa-develop`,
+  clean and ahead/behind its remote `0/0`.
+
+## Final frontend direction
+
+- Invitation flow creates and reads no invitation cookie. Its frontend context
+  is only the invitation URL query (`type`, `employerId`, `email`).
+- A syntactically valid `/invitations` entry immediately removes any existing
+  referral cookie. Referral behavior remains unchanged outside invitation
+  entry, and invitation signup payload suppresses referral/funnel/UTM/business
+  partner attribution.
+- Home has no invitation Pending Approval popup. Ordinary employee application
+  retains its original popup in `/office/find`. Invitation signup owns its
+  Pending Approval popup on signup step 2, after signup succeeds and validation
+  runs on that screen.
+- Post-signup validation treats both `VALID` and `ACCEPTED` as the successful
+  approved path. Other returned statuses show the Figma Pending Approval popup;
+  transport failure shows the existing retry popup. Initial email entry still
+  does not show the early expired Pending popup.
+- Invitation signup errors `2135` (canceled) and `2140` (missing/deleted) route
+  to ordinary signup without invitation query context. The backend remains the
+  authority for signup outcome and employee status.
+- `/invitations` always refetches validation on mount and does not resolve
+  routing while that fresh request is fetching. Cached validation can no longer
+  route a return visit or notification entry before the latest response.
+- After an accepted invitation, the affiliated employee list also refetches on
+  mount with `staleTime: 0`, and routing waits while it fetches. If the target
+  employee is still absent, the flow goes home without the Figma-absent Invalid
+  popup. If present, the existing employee activation API performs the team
+  switch; activation failure restores the previous employee and goes home
+  without a new popup/toast.
+- Join Office treats backend codes `2134` and `2020` as already completed and
+  sets the existing validation query cache to `ACCEPTED` after the accept call.
+  This avoids requiring an immediately propagated validation read solely to
+  continue the established activation flow.
+- Admin treats both `REGISTERED` and `ACCEPTED` as terminal invitation states.
+  Role, authority, resend, cancel, and delete actions now reuse mutation
+  `isPending` state to prevent repeated requests while an action is running.
+- Manual Clinic/Admin API wrappers and invitation DTO comments now document the
+  implemented signup, validation, accept, cancel, delete, role, authority, and
+  error-code contracts. This was comment-only contract alignment; no generated
+  response field such as `funnel: "INVITATION"` was added.
+
+## Verification
+
+- Canonical branch final verification: Clinic, Lab, and Admin type checks
+  passed; changed-file lint and `git diff --check` passed. The push hook ran
+  repository-wide Clinic/Lab/Admin lint with 419 existing warnings and zero
+  errors, then passed the shared coverage delta check.
+- Develop branch: changed Clinic/Admin/shared lint passed with zero errors
+  (four existing Clinic warnings), and `git diff --check` passed. Admin type
+  passed. Clinic/Lab type reached one module-resolution error in unchanged
+  `shared/ui/src/PdfUI/BrowserPDFHeaderUI.tsx` for
+  `shared/templates/invoice/logo-dentlink.png`; none of the four delivery
+  commits changes that file, asset, or TypeScript configuration.
+- The Develop pre-push hook passed the full three-app lint with 419 existing
+  warnings and zero errors and passed coverage with no delta. It was not
+  bypassed.
+- No new test file, broad refactor, build, or interactive browser QA was added,
+  matching the requested verification scope.
+
+## Recipient QA state
+
+- User-observed before the final four commits: new-account scenarios N1-N7 had
+  been exercised.
+- `Fix complete / final re-QA required`: N1-N7. Cookie removal, post-signup
+  `ACCEPTED` handling, signup error routing, and fresh validation behavior have
+  changed since that QA, so none should be reported as current QA success until
+  the Develop deployment is tested again from the start.
+- `Not yet user-QA'd`: existing-account scenarios E1-E7. These are first QA,
+  not re-QA merely because the code path was affected.
+- `Backend or real-data confirmation required`: actual web-notification
+  `landingUrl` behavior for E2/E7, invitation status and error-code responses,
+  accepted employee-list propagation/team activation, and Admin terminal status
+  data. Frontend behavior is now tolerant of the known read timing cases but
+  cannot prove deployed backend data statically.
+
+## Next start
+
+1. Pull this context and both worktrees. Confirm canonical HEAD `d52ad2119`,
+   Develop delivery PR #4394 state, and clean `0/0` worktrees.
+2. Merge/deploy PR #4394 through the normal Develop workflow.
+3. Re-run N1-N7 from the start on the final deployed code, then run E1-E7 as
+   first-time existing-account QA. Keep results separated as QA success, QA
+   issue, fix complete/re-QA required, and backend/real-data pending.
+4. Keep master PR #4353 draft and unmerged until the required QA passes. The
+   canonical branch remains the master source; do not merge Develop back into
+   it merely to synchronize this delivery PR.
+
+---
+
 # Dentlink Invite production-readiness audit checkpoint - 2026-07-20
 
 This is the current resume source and supersedes every checkpoint below. The
