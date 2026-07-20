@@ -3,8 +3,8 @@
 This is the current resume source and supersedes every checkpoint below. The
 user completed the full recipient-flow QA and reported no issue other than the
 two frontend findings recorded here. Both fixes are committed and pushed to
-the canonical master-target branch, and only those two follow-up commits were
-prepared separately for Develop deployment.
+the canonical master-target branch, and the two-commit Develop follow-up PR is
+merged. Work is paused pending deployment and focused re-QA results.
 
 Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
 Branch: `feature/DL-14232`
@@ -25,9 +25,10 @@ Worktree: clean
   [#4394](https://github.com/Innvoaid/dentlink-client/pull/4394) is merged;
   its merge commit is `4e958d1ccdda87d86eac34b75fe07657f4eebf6a`.
 - Current Develop follow-up PR:
-  [#4397](https://github.com/Innvoaid/dentlink-client/pull/4397), open and
-  ready, base `develop`, head `codex/DL-14232-qa-followup-develop`, merge state
-  `CLEAN`, mergeable. Auto Assign and CodeRabbit checks passed.
+  [#4397](https://github.com/Innvoaid/dentlink-client/pull/4397), merged into
+  `develop` as `e60a737edcffc212f3c8c108dc7c32c6ebd2dd5c`. Its base was
+  `develop`, its head was `codex/DL-14232-qa-followup-develop`, and Auto Assign
+  and CodeRabbit checks passed before merge.
 - PR #4397 was branched from the latest merged Develop state and contains only
   the two follow-up cherry-picks below; the full master feature branch was not
   merged into Develop:
@@ -87,7 +88,7 @@ Worktree: clean
 
 ## Next start
 
-1. Merge and deploy Develop PR #4397 through the normal workflow.
+1. Confirm PR #4397 is deployed to the Develop environment.
 2. Recheck Pending Members on the first uncached tab switch: counts must remain
    stable, and the table may show loading until the selected tab data arrives.
 3. Re-run E2 from a real web notification: `/invitations` must call validation
