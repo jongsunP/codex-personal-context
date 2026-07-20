@@ -21,8 +21,10 @@
 
 - 선행 PR [#4387](https://github.com/Innvoaid/dentlink-client/pull/4387)이 `release/v1.78.0`에 머지됐고, 해당 릴리즈 기준 커밋은 `619b1c22b0683d6b489193f1c1c45d503adfb05d`다.
 - 후속 작업 브랜치 `codex/DL-15560-turnaround-response-race`는 위 커밋과 정확히 같은 기준에서 생성됐다.
-- 후속 작업 커밋: `f775668a358e50b8d2e9c9c87ac2b3626788339a`
+- 핵심 수정 커밋: `f775668a358e50b8d2e9c9c87ac2b3626788339a`
+- CodeRabbit 검토 설명 커밋을 포함한 현재 HEAD: `1bf5044718b04230de34a4f53f15349f4a9fe575`
 - PR [#4391](https://github.com/Innvoaid/dentlink-client/pull/4391)이 `release/v1.78.0` 대상으로 열려 있다.
+- PR은 `APPROVED / MERGEABLE / CLEAN`이며 CodeRabbit 체크가 통과했고 미해결 리뷰 스레드는 0건이다.
 - 공유 저장소 작업 트리는 clean이며 브랜치는 `origin/codex/DL-15560-turnaround-response-race`를 추적한다.
 
 ### Completed Changes
@@ -46,6 +48,7 @@
 - 변경 파일 lint는 오류 0건이며 기존 `setMethods` 의존성 경고 1건만 있다.
 - push hook의 Clinic/Lab/Admin 타입 검사와 coverage 검사는 통과했다. 전체 lint는 기존 경고 419건, 오류 0건으로 성공했다.
 - 최종 경계조건 보완 뒤 기존 주문 편집·동일 페이지 주문 전환에 대한 별도 브라우저 smoke는 실행하지 않았다.
+- CodeRabbit의 `splintedToothNumbers` 재지정 제거 제안은 적용하지 않았다. 비동기 복원 중 빈 `caseGroups`를 본 공용 UI effect가 splint를 임시 정리하므로, hydration 시 서버 기준 splint를 함께 복원해야 기존 주문 값이 사라지지 않는다. 코드에 의도를 주석으로 남겼고 CodeRabbit도 설명을 수용해 지적을 철회했으며 스레드를 resolve했다.
 - PR #4391 코드는 아직 스테이징에 배포되지 않았으므로 유효한 스테이징 결과는 없다. 배포 전 Step2 실패는 기존 배포본 결과이며 이번 패치 검증으로 보지 않는다.
 
 ### Remaining Work
@@ -66,6 +69,6 @@
 ## Next Start Point
 
 1. `codex-personal-context`와 공유 저장소를 pull한다.
-2. PR #4391의 상태와 커밋 `f775668a3`의 `release/v1.78.0` 포함 여부를 확인한다.
+2. PR #4391의 상태와 현재 HEAD `1bf504471`의 `release/v1.78.0` 포함 여부를 확인한다.
 3. 머지·배포 후 스테이징 UI 2회와 CLI 2회를 반드시 순차 실행한다.
 4. 각 실행 결과를 `passed / intentional skipped / failed`로 기록하고 실패 원인을 정책에 따라 분류한다.
