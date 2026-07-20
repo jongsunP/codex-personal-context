@@ -1,3 +1,69 @@
+# Dentlink Invite release review closeout checkpoint - 2026-07-20
+
+This is the current resume source and supersedes every checkpoint below. The
+invitation implementation and automated review hardening are complete on the
+release-target PR. The user is closing the implementation phase here; the
+remaining work is staging deployment followed by invitation scenario QA.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232`
+HEAD: `18ca8181e122a7e21fb359badd1796708679b13f`
+Remote: `origin/feature/DL-14232`, ahead/behind `0/0`
+Worktree: clean
+
+## Delivery state
+
+- Release PR:
+  [#4399](https://github.com/Innvoaid/dentlink-client/pull/4399), open and
+  ready for review, base `release/v1.79.0`, head `feature/DL-14232`.
+- PR head matches local and remote `18ca8181e`. GitHub reports the PR as
+  mergeable; `REVIEW_REQUIRED` / `BLOCKED` means only the required human review
+  remains.
+- CodeRabbit final re-review passed and the unresolved review-thread count is
+  zero. Every actionable thread was answered and resolved.
+- Do not create another Develop delivery PR. Develop delivery was already
+  merged, and the user explicitly ended that parallel delivery path.
+
+## Final review commits
+
+- `0bf30a031 [DL-14232] chore: Swagger API 모델 재생성` includes the intended
+  generated API delta after the `swagger-typescript-api` version change.
+- `9fcdde5d5 [DL-14232] fix: 초대 흐름 및 공통 UI 접근성 보완` addresses the
+  first five actionable CodeRabbit threads: employee-scoped drawer fallback,
+  signup error handling, duplicate invite-signup submission prevention,
+  dropdown keyboard navigation, and drawer focus/ARIA behavior.
+- `18ca8181e [DL-14232] fix: 중첩 오버레이 Escape 처리 보완` prevents a nested
+  Modal or Popup Escape action from closing the underlying drawer at the same
+  time.
+- Broad style-only CodeRabbit suggestions were intentionally not applied when
+  they would add unrelated churn or side-effect risk.
+
+## Verification
+
+- Clinic, Lab, and Admin TypeScript checks passed through the commit hook.
+- Changed-file Clinic/shared UI lint passed with zero errors. The full push
+  hook completed with 419 existing warnings and zero errors.
+- Shared coverage delta was unchanged, and `git diff --check` passed.
+- CodeRabbit completed successfully after the final push and found no remaining
+  unresolved actionable thread.
+
+## QA state and next start
+
+- Implementation status: complete for the invitation feature and current
+  review scope.
+- QA status: staging deployment and final staging QA remain. Do not report the
+  release as production-QA complete before that deployed run.
+- Re-run the agreed new-account scenarios N1-N7 and existing-account scenarios
+  E1-E7 on staging. Include the web-notification E2 route, Pending Members
+  first-tab behavior, signup duplicate-submit boundary, fresh Join Office
+  validation, same-row action locking, and nested drawer Popup/Modal keyboard
+  behavior.
+- If staging QA finds no issue, the PR is ready for the required human review
+  and later merge. Any merge or new shared-repo mutation still requires the
+  user's explicit authorization.
+
+---
+
 # Dentlink Invite post-QA review hardening checkpoint - 2026-07-20
 
 This is the current resume source and supersedes every checkpoint below. The
