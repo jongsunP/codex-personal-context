@@ -1,3 +1,106 @@
+# Dentlink Invite admin serviceType delivery and deployment-QA checkpoint - 2026-07-21
+
+This is the current resume source and supersedes every checkpoint below. The
+latest Jira-requested Admin invitation contract change has been implemented,
+verified, committed, pushed, and documented in the release PR. Implementation
+work is complete for the current scope; the next gate is release deployment and
+staging QA.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232`
+HEAD: `1ad100af8e1e37c11d209e30e6d0a89d63ddbf48`
+Remote: `origin/feature/DL-14232`, ahead/behind `0/0`
+Worktree: clean
+
+## Latest Jira contract follow-up
+
+The exact source was Jira DL-14232 comment `43196`:
+`https://innovaid.atlassian.net/browse/DL-14232?focusedCommentId=43196`.
+The comment was read through the authenticated Atlassian connector and requires:
+
+- Admin invitation list request and response to use `serviceType` instead of
+  `invitationType`.
+- Admin invitation deletion to send only the invitation ID.
+- Other Admin invitation mutation APIs to send `serviceType` according to the
+  generated contract.
+
+The committed implementation maps OFFICE invitations to `serviceType: "OFFICE"`
+and Lab invitations to `serviceType: "LAB"`. List, create, email validation,
+resend, role update, and authority update use the new service type. Cancel sends
+`serviceType` as the generated API query contract requires. Delete sends only
+the invitation ID. The list response exposes `serviceType`, and row actions use
+that value with the selected employer type as a compatibility fallback.
+
+## Delivery
+
+- Commit:
+  `1ad100af8 [DL-14232] fix: 관리자 초대 serviceType 계약 반영`.
+- The commit is pushed to `origin/feature/DL-14232`.
+- Release PR:
+  [#4399](https://github.com/Innvoaid/dentlink-client/pull/4399), base
+  `release/v1.79.0`, head `feature/DL-14232`, open, non-draft, approved, and
+  mergeable at the last check.
+- The PR body now includes the comment `43196` reference, the serviceType
+  contract work, delete-ID-only behavior, and reviewer verification points.
+- CodeRabbit re-review was pending immediately after the final push. The user
+  explicitly chose not to wait for that check and moved the work to deployment
+  QA preparation. Do not treat that pending check as a blocker unless the user
+  asks to review a later result.
+- No Develop delivery PR is needed. The user previously ended that path.
+- The PR has not been merged by Codex. Merge and deployment remain user-owned
+  unless explicitly requested.
+
+## Changed files in the latest commit
+
+- Generated models:
+  - `shared/models/src/Admin.ts`
+  - `shared/models/src/data-contracts.ts`
+- Manual Admin invitation models/APIs:
+  - `shared/models/src/user/user.types.ts`
+  - `shared/models/src/user/user.apis.admin.ts`
+- Admin usage:
+  - `admin/src/pages/employers/invitations.tsx`
+  - `admin/src/lib/Invitation/MemberInvitesAdmin.tsx`
+  - `admin/src/lib/Invitation/useInvitations.tsx`
+  - `admin/src/lib/Invitation/useResendInvitation.ts`
+  - `admin/src/lib/Invitation/useCancelInvitation.ts`
+  - `admin/src/lib/Invitation/useDeleteInvitation.ts`
+
+## Verification
+
+- Fresh Swagger generation in a temporary directory matched
+  `shared/models/src/data-contracts.ts` exactly. Its `Admin.ts` matched the
+  checked-in file exactly after applying the repository Prettier configuration,
+  confirming no accidental manual generated-model edit.
+- No `invitationType` remains in the affected Admin invitation manual API/type
+  and screen scope.
+- Targeted Admin type and changed-file lint passed; shared manual API/type lint
+  had zero errors.
+- Commit hook passed Clinic, Lab, and Admin TypeScript checks.
+- Push hook completed with 419 existing warnings and zero errors and reported no
+  shared coverage delta.
+- `git diff --check` passed.
+
+## Deployment and QA next start
+
+1. Merge PR #4399 through the normal release process and deploy it to the
+   staging environment. Before QA, confirm the deployed revision contains
+   `1ad100af8`.
+2. Re-run the agreed recipient scenarios N1-N7 and E1-E7. Continue reporting
+   each as `QA 성공`, `QA 문제 발생`, `수정 완료 / 재 QA 필요`, or
+   `백엔드 또는 실데이터 확인 필요`; do not promote a static/code result to QA
+   success.
+3. Add focused Admin regression checks for both Office and Lab invitations:
+   list retrieval and returned `serviceType`, email validation/create, resend,
+   role/authority updates, Office cancel, and delete. In the network panel,
+   confirm delete sends only `/admin/users/invitations/{id}` with no former
+   invitation-type query.
+4. If deployed QA is clean, the implementation can be considered release-QA
+   complete. Any new failure should be classified by FE, backend contract, or
+   real-data/deployment state before changing code.
+
+---
+
 # Dentlink Invite Jira follow-up and generated-model checkpoint - 2026-07-21
 
 This is the current resume source and supersedes every checkpoint below until
