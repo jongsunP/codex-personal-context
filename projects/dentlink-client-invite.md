@@ -1,3 +1,66 @@
+# Dentlink Invite Jira follow-up and generated-model checkpoint - 2026-07-21
+
+This is the current resume source and supersedes every checkpoint below until
+the generated-model follow-up is either committed or discarded. The invitation
+feature implementation and CodeRabbit hardening remain complete at the last
+pushed release-candidate commit, but the working tree now has a new uncommitted
+Swagger-generated API model delta.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232`
+HEAD: `18ca8181e122a7e21fb359badd1796708679b13f`
+Remote: `origin/feature/DL-14232`, ahead/behind `0/0`
+Worktree: dirty
+
+## Current dirty files
+
+- `shared/models/src/Admin.ts`
+- `shared/models/src/data-contracts.ts`
+
+The current uncommitted diff is generated-model-only by file path and changes
+the admin invitation API contract shape around:
+
+- `invitationType: "USER" | "EMPLOYEE"` -> `serviceType: "ADMIN" | "OFFICE" | "LAB" | "SYSTEM"` for admin invitation list, invite, resend, validation, role, and authority DTO/API surfaces.
+- `InvitationListDto` now documents and exposes `serviceType` and no longer
+  exposes `invitationType`.
+- Admin invitation delete no longer accepts a query object; `delete2(id,
+  params)` now sends `DELETE /admin/users/invitations/{id}` without
+  `invitationType`.
+
+No commit, push, PR update, typecheck, or lint has been run for this new dirty
+generated-model state yet. Before committing it, inspect usages that still pass
+or read `invitationType` and update them only where required by the new
+generated contract.
+
+## Jira comment status
+
+The user asked to check 수정사항 from the comments on Jira
+`https://innovaid.atlassian.net/browse/DL-14232`. Direct browser access to
+`innovaid.atlassian.net` was blocked by the Codex browser security policy in
+this environment. A dedicated Atlassian connector would be the clean path, but
+the suggested Atlassian Rovo plugin was not installed or confirmed in the
+interrupted turn. Therefore, the Jira comments have not been read yet.
+
+Next session should either use an authenticated Atlassian connector or ask the
+user to paste the relevant Jira comments. Do not claim Jira comment review is
+complete until that content is actually read.
+
+## Stable state from previous checkpoint
+
+- Release PR
+  [#4399](https://github.com/Innvoaid/dentlink-client/pull/4399) was open,
+  ready for review, base `release/v1.79.0`, head `feature/DL-14232`.
+- CodeRabbit final re-review had passed with unresolved review-thread count
+  zero at commit `18ca8181e`.
+- Remaining product work was staging deployment and final invitation scenario
+  QA, unless the new generated API contract delta requires additional frontend
+  code changes.
+- Do not create another Develop delivery PR unless the user explicitly asks.
+- Shared project commits, pushes, PR edits, and merges still require explicit
+  user authorization.
+
+---
+
 # Dentlink Invite release review closeout checkpoint - 2026-07-20
 
 This is the current resume source and supersedes every checkpoint below. The
