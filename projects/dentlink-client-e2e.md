@@ -5,7 +5,7 @@
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
 - Local worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`
 - Jira: `DL-15560`
-- Release target: `release/v1.78.0`
+- Release target: `release/v1.79.0`
 
 ## E2E Policy
 
@@ -66,9 +66,58 @@
 - 현재 E2E 실패와 직접 연결되지는 않았으며 별도 범위로 조사한다.
 - Default Scanner 미설정 상태는 기존 계정을 변경하거나 API로 모킹하지 않고, 추후 전용 계정을 만든 뒤 의도적 스킵 3건을 활성화한다.
 
+## Current Checkpoint — 2026-07-21
+
+### Integration State
+
+- Active worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`
+- Current branch: `codex/DL-15560-lab-shipment-photo`
+- Current HEAD: `e972cae55` (`Merge remote-tracking branch 'origin/master' into codex/DL-15560-lab-shipment-photo`)
+- Core E2E commit: `cc37538aa` (`[DL-15560] test: E2E 반복 실행 안정화`)
+- Branch is clean and synchronized with `origin/codex/DL-15560-lab-shipment-photo`.
+- Latest `origin/master` was merged into the branch without conflicts.
+- PR [#4400](https://github.com/Innvoaid/dentlink-client/pull/4400) is open against `release/v1.79.0`.
+- PR #4400 is `MERGEABLE`, non-draft, but GitHub reports `mergeStateStatus: BLOCKED` while CodeRabbit/review checks are still pending.
+
+### Completed Changes
+
+- Lab shipment photo selection now scopes the Patient Photo "No" radio to the exact question block to avoid strict-mode ambiguity.
+- Lab status `Pending Order -> New` now reselects turnaround date, waits for `PUT /orders/{id}/additional`, and asserts the response status is `NEW` before proceeding.
+- UI reload and overlapping runner lifecycle were hardened so onboarding temporary offices are owned by the creating runner and cleaned by captured teardown state.
+- Onboarding auth/meta/lock artifacts are isolated by API + onboarding account fingerprint, preventing local and staging runs from sharing `onboard-meta` or deleting the wrong environment's employer ID.
+- Global setup/teardown preserves exact meta when cleanup cannot be proven, retries previous cleanup before creating a new office, and removes owned artifacts only after confirmed cleanup.
+- `globalTeardown` config was removed in favor of the `globalSetup` returned teardown closure.
+
+### Verification
+
+- Commit hook for `cc37538aa` ran clinic/lab/admin TypeScript checks successfully.
+- Push hook completed with existing lint warnings (`419 warnings`, `0 errors`) and coverage check unchanged from baseline.
+- Local `e2e:clinic:ui` on the final code after merging `origin/master`:
+  - Run 1: `94 passed / 5 skipped / 0 failed`
+  - Reload + Run 2: `94 passed / 5 skipped / 0 failed`
+- Local `e2e:clinic` on the final code after merging `origin/master`:
+  - Run 1: `94 passed / 5 skipped / 0 failed` in 6.1m
+  - Run 2: `94 passed / 5 skipped / 0 failed` in 5.7m
+- Temporary onboarding employers observed during final runs were deleted, and no `dentlink-e2e-onboard-*` lock remained afterward.
+- `git diff --check origin/release/v1.79.0...HEAD` passed.
+- Expected intentional skips remain 5:
+  - Referral code setup 1
+  - BP partner key setup 1
+  - Default Scanner unset dedicated account setup 3
+
+### Remaining Work
+
+1. Watch PR #4400 checks/review, especially CodeRabbit.
+2. Merge PR #4400 into `release/v1.79.0` when review/checks allow.
+3. After staging deployment includes PR #4400, run staging Clinic UI full, reload, full for 2 consecutive passes.
+4. After staging deployment includes PR #4400, run staging headless `e2e:clinic:stg` twice.
+5. Completion target remains `94 passed / 5 intentional skipped / 0 failed` for each staging run.
+6. styled-components v6 DOM prop warnings remain a separate backlog item, not a current E2E blocker.
+
 ## Next Start Point
 
-1. `codex-personal-context`와 공유 저장소를 pull한다.
-2. PR #4391의 상태와 현재 HEAD `1bf504471`의 `release/v1.78.0` 포함 여부를 확인한다.
-3. 머지·배포 후 스테이징 UI 2회와 CLI 2회를 반드시 순차 실행한다.
-4. 각 실행 결과를 `passed / intentional skipped / failed`로 기록하고 실패 원인을 정책에 따라 분류한다.
+1. Pull `codex-personal-context` and `/Users/parkjongsun/Repository/dentlink-client-e2e`.
+2. Confirm PR #4400 status and whether it has merged into `release/v1.79.0`.
+3. If not merged, resolve CodeRabbit/review feedback first.
+4. If merged and staging has deployed it, run staging UI 2회 and staging headless 2회.
+5. Record every run as `passed / intentional skipped / failed` and classify any failure by the E2E policy.
