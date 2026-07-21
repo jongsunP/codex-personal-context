@@ -137,6 +137,11 @@ appear nowhere else in the app.
 
 - Treat one concrete user example as a request to search all equivalent
   occurrences. Fix the underlying pattern, not only the quoted line.
+- Treat user-verified and QA-corrected behavior as a protected baseline. Before
+  a later cleanup, responsive pass, refactor, or adjacent feature edit changes
+  the same area, inspect the prior fix and preserve it unless the new
+  requirement explicitly conflicts. If it conflicts, explain the tradeoff and
+  get the user's direction instead of silently replacing the verified behavior.
 - When told to make code match the project, compare neighboring imports,
   component props, hook syntax, types, state ownership, and naming rather than
   performing a cosmetic rename.

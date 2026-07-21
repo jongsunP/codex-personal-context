@@ -1,3 +1,55 @@
+# Dentlink Invite release QA follow-up checkpoint - 2026-07-21
+
+This is the current resume source and supersedes every checkpoint below. Live
+QA on `release/v1.79.0` produced three member-management follow-ups. The shared
+repository changes are intentionally uncommitted while the user reviews QA
+results.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `release/v1.79.0`
+Local committed HEAD: `213c2d3336ad2f93684e5106b8c0da39a1307a26`
+Remote relation: local is one commit ahead of `origin/release/v1.79.0`
+Worktree: `OfficeMemberDetailContent.tsx` modified and uncommitted
+
+## Current QA follow-ups
+
+- `DL-15632`: committed locally as
+  `213c2d333 [DL-15632] fix: 권한 드롭다운 Viewer 옵션 제거`; not pushed.
+  Clinic and Admin authority dropdown options now come from
+  `/codes/authority-type`, with Admin requesting the selected target service
+  type rather than `ADMIN`.
+- `DL-15629`: the member-detail authority control was still using `PopupMenu`
+  even though Figma uses `ChartDropdown`. The local uncommitted change replaces
+  only that control with the shared `ChartDropdown`; authority query and
+  mutation behavior remain unchanged.
+- `DL-15628`: the member-detail profile row was content-centered, so its left
+  position changed with the member-name width. Figma anchors the row at the
+  profile card's left padding. The local uncommitted change uses
+  `justify-content: flex-start` and `padding: 16px 24px` so the profile image
+  and text remain aligned independently of actual member data.
+
+## Regression cause and required discipline
+
+- Commit `14f0295ae` previously corrected the profile left padding. Later
+  commit `e7ac68537`, while performing a broader mobile/UI follow-up, changed
+  that already-QA-corrected area without an explicit request. The final squash
+  merge `f50f289b2` retained the later result.
+- This was not a merge conflict or release-branch accident. It was an
+  over-broad adjacent edit. A user-verified or QA-corrected area is a protected
+  baseline: later cleanup, responsive work, refactoring, and adjacent feature
+  work must preserve it unless a new explicit requirement conflicts.
+- When a conflict exists, inspect the introducing history, explain the
+  tradeoff, and ask before replacing the verified behavior. Do not silently
+  reinterpret it as a general cleanup opportunity.
+
+## Next step
+
+Clinic changed-file lint, Clinic type check, and `git diff --check` passed with
+the two uncommitted QA fixes together. Keep the shared repository uncommitted
+until the user reviews the code and explicitly requests a commit.
+
+---
+
 # Dentlink Invite release delivery and staging-QA checkpoint - 2026-07-21
 
 This is the current resume source and supersedes every checkpoint below. PR
