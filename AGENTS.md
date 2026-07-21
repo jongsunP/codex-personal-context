@@ -50,6 +50,16 @@
   `codex-personal-context` is different: at meaningful session closeout, commit
   and push its curated history automatically so the next session or device can
   recover it.
+- When the user asks to `CodeRabbit 리뷰 확인` or equivalent, treat that
+  wording as explicit authorization for the complete review cycle on the
+  current PR: inspect every unresolved CodeRabbit thread, verify each finding
+  against the current code, apply valid findings or reply with a concise
+  technical rationale when not applying one, resolve the handled threads, run
+  proportionate checks, commit and push resulting code, and check once more for
+  newly created unresolved threads. Continue until the CodeRabbit check has
+  completed and no unresolved CodeRabbit thread remains, unless genuinely
+  blocked. This authorization does not include merging the PR or mutating an
+  unrelated branch or PR.
 
 ## Wrap-Up Workflow
 

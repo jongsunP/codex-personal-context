@@ -1,3 +1,51 @@
+# Dentlink Invite release QA CodeRabbit closeout - 2026-07-21
+
+This is the current resume source and supersedes every checkpoint below. The
+release-QA fixes are on a dedicated feature branch and PR, and the requested
+CodeRabbit review cycle is complete.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232-release-qa`
+HEAD: `114b975e7 [DL-14232] fix: 권한 옵션 조회 상태 처리 보완`
+Remote: `origin/feature/DL-14232-release-qa`, ahead/behind `0/0`
+Worktree: clean
+
+## PR and review state
+
+- PR [#4410](https://github.com/Innvoaid/dentlink-client/pull/4410) targets
+  `release/v1.79.0`, is open and non-draft, and still requires the normal human
+  review.
+- Four valid CodeRabbit findings about authority-option loading/failure/empty
+  states were implemented across Admin and Clinic. Existing values remain
+  readable while unsafe invite or authority-edit actions are disabled.
+- Clinic authority-option failures reuse the existing global query error toast
+  through `meta.showErrorToast`; no new Figma-undefined popup was introduced.
+- A follow-up suggestion to add a retry/error control inside every Pending
+  Members authority cell was intentionally not applied. The thread received a
+  technical rationale because it would duplicate the global error notification
+  per row and add an unrequested UI. The safe read-only label fallback remains.
+- All five CodeRabbit review threads have replies where needed and are resolved.
+  The final CodeRabbit check passed with unresolved-thread count `0`.
+- Changed-file lint, Admin and Clinic type checks, commit hooks, and push hooks
+  passed. Full app lint completed with existing warnings and zero errors.
+
+## Durable CodeRabbit instruction
+
+When the user asks to check a CodeRabbit review, do not stop after listing its
+comments. Treat the request as authorization to validate every unresolved
+finding, implement it or leave a reasoned reply, resolve the thread, run the
+relevant checks, commit and push the code, then recheck for comments created by
+the new CodeRabbit run. Stop only after the check completes and unresolved
+thread count is zero, or report a concrete blocker. PR merge remains outside
+that authorization.
+
+## Next step
+
+No further code or review action is pending from this CodeRabbit pass. Continue
+with human review, merge, deployment, or staging QA only when requested.
+
+---
+
 # Dentlink Invite release QA follow-up checkpoint - 2026-07-21
 
 This is the current resume source and supersedes every checkpoint below. Live
