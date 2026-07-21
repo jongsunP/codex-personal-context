@@ -76,8 +76,8 @@
 - Core E2E commit: `cc37538aa` (`[DL-15560] test: E2E 반복 실행 안정화`)
 - Branch is clean and synchronized with `origin/codex/DL-15560-lab-shipment-photo`.
 - Latest `origin/master` was merged into the branch without conflicts.
-- PR [#4400](https://github.com/Innvoaid/dentlink-client/pull/4400) is open against `release/v1.79.0`.
-- PR #4400 is non-draft and `APPROVED / MERGEABLE / CLEAN`.
+- PR [#4400](https://github.com/Innvoaid/dentlink-client/pull/4400) was squash-merged into `release/v1.79.0` on 2026-07-21.
+- Release merge commit: `9a85b3e01` (`[DL-15560] E2E 반복 실행 안정화 (#4400)`). Its tree is identical to source branch HEAD `5dc084e7c`.
 - CodeRabbit re-review passed, both inline review threads are resolved, and there are no unresolved review threads.
 
 ### Completed Changes
@@ -113,16 +113,23 @@
 
 ### Remaining Work
 
-1. Merge PR #4400 into `release/v1.79.0`.
-2. Confirm staging deployment includes PR #4400.
-3. After staging deployment includes PR #4400, run staging Clinic UI full, reload, full for 2 consecutive passes.
-4. After staging deployment includes PR #4400, run staging headless `e2e:clinic:stg` twice.
-5. Completion target remains `94 passed / 5 intentional skipped / 0 failed` for each staging run.
-6. styled-components v6 DOM prop warnings remain a separate backlog item, not a current E2E blocker.
+1. Wait for the user to confirm staging deployment includes release commit `9a85b3e01`.
+2. Run staging Clinic UI full, Reload, full using Computer Use for 2 consecutive passes.
+3. Run local Clinic UI full, Reload, full using Computer Use for 2 consecutive passes.
+4. Each run target is `94 passed / 5 intentional skipped / 0 failed`.
+5. Stop each UI runner normally and confirm onboarding teardown removes its temporary employer and releases the lock.
+6. Classify every failure as version regression, existing issue, new scenario, or environment setup before changing code.
+7. styled-components v6 DOM prop warnings remain a separate backlog item, not a current E2E blocker.
+
+### UI Execution Boundary
+
+- Always use `/Users/parkjongsun/Repository/dentlink-client-e2e` for this E2E work.
+- Use only the IDE connected to this worktree and that IDE's existing terminal; do not use another Dentlink worktree or IDE.
+- Use Computer Use to operate and observe the Playwright UI runner directly.
 
 ## Next Start Point
 
 1. Pull `codex-personal-context` and `/Users/parkjongsun/Repository/dentlink-client-e2e`.
-2. Confirm PR #4400 has merged into `release/v1.79.0` and staging deployment includes HEAD `5dc084e7c`.
-3. After deployment, run staging UI 2회 and staging headless 2회.
-4. Record every run as `passed / intentional skipped / failed` and classify any failure by the E2E policy.
+2. Confirm staging deployment includes release commit `9a85b3e01`, then sync this worktree to the latest `release/v1.79.0` state before testing.
+3. In this worktree's IDE terminal, run staging UI 2회 and local UI 2회, with Reload between the two full runs in each environment.
+4. Record every run as `passed / intentional skipped / failed`, confirm teardown/lock cleanup, and classify any failure by the E2E policy.
