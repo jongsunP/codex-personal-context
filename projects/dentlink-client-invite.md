@@ -1,10 +1,11 @@
-# Dentlink Invite DL-15643 backend-contract design checkpoint - 2026-07-21
+# Dentlink Invite DL-15643 minimal-popup-fix checkpoint - 2026-07-21
 
 This is the current resume source and supersedes every checkpoint below. No
 shared-repository code was changed for this checkpoint. DL-15643 was inspected
 and the frontend/backend boundary is understood, but the backend response
 contract is still being designed and implementation should wait for that
-contract to be confirmed.
+contract to be confirmed. This checkpoint corrects the earlier over-expanded
+idea that frontend office activation or team switching had to be added.
 
 Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
 Branch: `feature/DL-14232-release-qa`
@@ -18,9 +19,11 @@ Worktree: clean
   DL-14232. The QA account had a valid invitation to an existing office but did
   not enter through the invitation link. It signed up directly, reached
   `/office/find?from=signup&step=2`, and requested access to the invited office.
-- Product expectation: a valid invitation should cause the existing-office
-  application to be approved immediately. The Pending Approval popup should
-  not appear. An expired invitation may still produce the normal pending flow.
+- Product expectation and user-confirmed scope: the backend already recognizes
+  the valid invitation and performs approval/activation. The QA problem is only
+  that the frontend displays the normal Pending Approval popup even though that
+  popup is inappropriate for this already-approved case. An expired invitation
+  may still produce the normal pending flow.
 - The relevant request is `POST /office/employee`, not the new-office creation
   request `POST /office/employers`.
 - Current frontend logic in `useOfficeFindForm.handleRequestAccess` only checks
@@ -32,7 +35,7 @@ Worktree: clean
   invitation URL context in this direct-signup path, so it must not infer the
   outcome from local invitation state.
 
-## Contract direction under consideration
+## Final frontend direction and contract under consideration
 
 - Preserve the ordinary existing-office application flow exactly as it is:
   successful normal application opens the existing Pending Approval popup.
@@ -41,25 +44,32 @@ Worktree: clean
 - Current working design, not yet a finalized backend contract:
 
   ```ts
+  result?: "COMPLETE" | "FAIL";
   funnel?: "INVITATION";
-  funnelStatus?: "AUTO_APPROVED" | "PENDING_APPROVAL";
+  employeeStatus?:
+    | "OFFICE_EMPLOYEE_APPROVED"
+    | "OFFICE_EMPLOYEE_PENDING_APPROVAL_OF_APPLY";
   ```
 
-- `funnel` identifies the originating business path. `funnelStatus` must
-  describe the result of this office-application operation, not merely repeat
-  the invitation lifecycle state. The exact property values/names remain for
-  backend agreement.
+- `funnel` identifies the originating business path and `employeeStatus`
+  reports the employee state that the backend actually produced. This is
+  clearer than inventing a separate `funnelStatus`, but the exact backend field
+  names and enum contract still require confirmation.
 - Intended frontend behavior after the contract is confirmed:
   - any `result === "FAIL"`: keep the existing error handling;
-  - `funnel === "INVITATION"` plus an auto-approved status: do not open the
-    Pending popup, refresh user/employee data, activate the target office using
-    the existing team-switch flow, then go home;
+  - `funnel === "INVITATION"` plus
+    `employeeStatus === "OFFICE_EMPLOYEE_APPROVED"`: do not call `openModal()`;
+    immediately run the same existing completion navigation as the popup's Ok
+    action (`router.replace(LINKS.DEFAULT_REDIRECT)`);
   - normal success or invitation pending status: keep the existing Pending
     Approval popup.
-- Do not use `funnel === "INVITATION"` alone unless the backend explicitly
-  guarantees that it is returned only for an immediately approved valid
-  invitation. Otherwise an expired invitation could be incorrectly treated as
-  approved.
+- Do not add a new employee lookup, query invalidation, `employeeId`, activation
+  API, team-switch call, storage handoff, or new popup for this card. The
+  existing frontend flow currently performs no explicit activation after
+  `POST /office/employee`; the popup Ok action only goes home. Backend owns the
+  approval/activation result, and the new response fields only tell frontend
+  whether to suppress the misleading popup. Reconsider data refresh only if
+  later QA proves the existing home transition is stale.
 
 ## Next start
 
@@ -68,11 +78,24 @@ Worktree: clean
 2. Confirm that the deployed `POST /office/employee` response contains those
    fields, then regenerate or update the service-specific `ApplyResultDto`
    according to the repository's generated-model workflow.
-3. Implement the minimal branch in `useOfficeFindForm.handleRequestAccess`.
-   Reuse existing query invalidation, office activation/team switching, routing,
-   popup, and error patterns; do not create a new popup.
+3. Implement only the minimal branch in
+   `useOfficeFindForm.handleRequestAccess`: invitation plus approved skips
+   `openModal()` and follows the existing home navigation; every other success
+   keeps `openModal()`. Do not introduce activation or team-switch logic.
 4. Re-QA at least DL-15643 plus the ordinary existing-office Pending Approval
    path and the expired-invitation pending path.
+
+## Admin invitation side inspection
+
+- On `/employers/invitations`, `DomainAuthorityWrapper` with `USER / CREATE`
+  hides the invite UI entirely when the Admin lacks create authority; it does
+  not make a visible button disabled.
+- A visible disabled invite control means at least one of these is true:
+  employer type missing, selected employer ID missing/not yet URL-synchronized,
+  or authority options are loading, errored, or empty. The authority-options
+  unavailable guard was added in `114b975e7` to prevent opening an invite form
+  with no valid authority choices.
+- This inspection made no code change.
 
 ---
 
