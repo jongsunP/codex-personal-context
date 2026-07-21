@@ -151,6 +151,14 @@ appear nowhere else in the app.
 
 ## User-Directed Scope Discipline
 
+- In every Dentlink repository, a generic request to commit, upload, or push
+  does not authorize using an admin or ruleset bypass to push directly to a
+  protected `master`, `develop`, or `release/*` branch. If a direct protected
+  branch push is technically appropriate because a separate delivery branch
+  would add little value, first verify the protection and current bypass
+  capability, explain the direct-push path and its alternatives, obtain the
+  user's explicit approval, and only then proceed. Report a server-authorized
+  bypass as a bypass even when no `--force` option was used.
 - Judge scope by traceable causality to requirements, design, explicit user
   direction, and branch history. A shared file or broad visual diff is not
   automatically over-scoped.
