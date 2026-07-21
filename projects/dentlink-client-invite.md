@@ -1,3 +1,81 @@
+# Dentlink Invite DL-15643 backend-contract design checkpoint - 2026-07-21
+
+This is the current resume source and supersedes every checkpoint below. No
+shared-repository code was changed for this checkpoint. DL-15643 was inspected
+and the frontend/backend boundary is understood, but the backend response
+contract is still being designed and implementation should wait for that
+contract to be confirmed.
+
+Repo: `/Users/parkjongsun/Repository/dentlink-client-invite`
+Branch: `feature/DL-14232-release-qa`
+HEAD: `114b975e7 [DL-14232] fix: 권한 옵션 조회 상태 처리 보완`
+Remote: `origin/feature/DL-14232-release-qa`, ahead/behind `0/0`
+Worktree: clean
+
+## DL-15643 scenario and current cause
+
+- Jira: [DL-15643](https://innovaid.atlassian.net/browse/DL-15643), child of
+  DL-14232. The QA account had a valid invitation to an existing office but did
+  not enter through the invitation link. It signed up directly, reached
+  `/office/find?from=signup&step=2`, and requested access to the invited office.
+- Product expectation: a valid invitation should cause the existing-office
+  application to be approved immediately. The Pending Approval popup should
+  not appear. An expired invitation may still produce the normal pending flow.
+- The relevant request is `POST /office/employee`, not the new-office creation
+  request `POST /office/employers`.
+- Current frontend logic in `useOfficeFindForm.handleRequestAccess` only checks
+  whether any `ApplyResultDto.result` is `FAIL`. Every successful response with
+  no `FAIL` calls `openModal()`, so it displays the normal Pending Approval
+  popup even if the backend already approved an invitation-derived employee.
+- `result: COMPLETE | FAIL` reports request-level success and cannot distinguish
+  immediate employee approval from pending approval. The frontend also has no
+  invitation URL context in this direct-signup path, so it must not infer the
+  outcome from local invitation state.
+
+## Contract direction under consideration
+
+- Preserve the ordinary existing-office application flow exactly as it is:
+  successful normal application opens the existing Pending Approval popup.
+- Add optional response fields to `POST /office/employee` / `ApplyResultDto` so
+  only an invitation-derived outcome can take a separate frontend branch.
+- Current working design, not yet a finalized backend contract:
+
+  ```ts
+  funnel?: "INVITATION";
+  funnelStatus?: "AUTO_APPROVED" | "PENDING_APPROVAL";
+  ```
+
+- `funnel` identifies the originating business path. `funnelStatus` must
+  describe the result of this office-application operation, not merely repeat
+  the invitation lifecycle state. The exact property values/names remain for
+  backend agreement.
+- Intended frontend behavior after the contract is confirmed:
+  - any `result === "FAIL"`: keep the existing error handling;
+  - `funnel === "INVITATION"` plus an auto-approved status: do not open the
+    Pending popup, refresh user/employee data, activate the target office using
+    the existing team-switch flow, then go home;
+  - normal success or invitation pending status: keep the existing Pending
+    Approval popup.
+- Do not use `funnel === "INVITATION"` alone unless the backend explicitly
+  guarantees that it is returned only for an immediately approved valid
+  invitation. Otherwise an expired invitation could be incorrectly treated as
+  approved.
+
+## Next start
+
+1. Confirm the final backend field names, enum values, and exact semantics for
+   normal application, valid invitation, expired invitation, and failure.
+2. Confirm that the deployed `POST /office/employee` response contains those
+   fields, then regenerate or update the service-specific `ApplyResultDto`
+   according to the repository's generated-model workflow.
+3. Implement the minimal branch in `useOfficeFindForm.handleRequestAccess`.
+   Reuse existing query invalidation, office activation/team switching, routing,
+   popup, and error patterns; do not create a new popup.
+4. Re-QA at least DL-15643 plus the ordinary existing-office Pending Approval
+   path and the expired-invitation pending path.
+
+---
+
 # Dentlink Invite release QA CodeRabbit closeout - 2026-07-21
 
 This is the current resume source and supersedes every checkpoint below. The
