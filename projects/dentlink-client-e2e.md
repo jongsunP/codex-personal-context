@@ -72,12 +72,13 @@
 
 - Active worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`
 - Current branch: `codex/DL-15560-lab-shipment-photo`
-- Current HEAD: `e972cae55` (`Merge remote-tracking branch 'origin/master' into codex/DL-15560-lab-shipment-photo`)
+- Current HEAD: `5dc084e7c` (`[DL-15560] fix: 온보딩 실행 잠금 생존 확인 보완`)
 - Core E2E commit: `cc37538aa` (`[DL-15560] test: E2E 반복 실행 안정화`)
 - Branch is clean and synchronized with `origin/codex/DL-15560-lab-shipment-photo`.
 - Latest `origin/master` was merged into the branch without conflicts.
 - PR [#4400](https://github.com/Innvoaid/dentlink-client/pull/4400) is open against `release/v1.79.0`.
-- PR #4400 is `MERGEABLE`, non-draft, but GitHub reports `mergeStateStatus: BLOCKED` while CodeRabbit/review checks are still pending.
+- PR #4400 is non-draft and `APPROVED / MERGEABLE / CLEAN`.
+- CodeRabbit re-review passed, both inline review threads are resolved, and there are no unresolved review threads.
 
 ### Completed Changes
 
@@ -87,6 +88,8 @@
 - Onboarding auth/meta/lock artifacts are isolated by API + onboarding account fingerprint, preventing local and staging runs from sharing `onboard-meta` or deleting the wrong environment's employer ID.
 - Global setup/teardown preserves exact meta when cleanup cannot be proven, retries previous cleanup before creating a new office, and removes owned artifacts only after confirmed cleanup.
 - `globalTeardown` config was removed in favor of the `globalSetup` returned teardown closure.
+- `process.kill(pid, 0)`의 `EPERM`을 살아 있는 프로세스로 처리해 활성 runner lock을 stale로 오인하지 않도록 보완했다.
+- CodeRabbit의 저장소 규칙 제안에 따라 onboarding run 객체 타입 2건을 `interface`로 정리했다.
 
 ### Verification
 
@@ -100,6 +103,9 @@
   - Run 2: `94 passed / 5 skipped / 0 failed` in 5.7m
 - Temporary onboarding employers observed during final runs were deleted, and no `dentlink-e2e-onboard-*` lock remained afterward.
 - `git diff --check origin/release/v1.79.0...HEAD` passed.
+- Review follow-up commit `5dc084e7c`에서 E2E TypeScript, Prettier, `git diff --check`가 통과했다.
+- Review follow-up commit hook의 Clinic/Lab/Admin TypeScript 검사가 통과했고, push hook도 기존 lint 경고 419건·오류 0건 및 coverage baseline 변화 없음으로 통과했다.
+- CodeRabbit의 환자 사진 질문 공백 제안은 적용하지 않았다. 질문이 형제 `Typography`로 나뉘어 상위 DOM `textContent`가 실제로 `thepatient`로 결합되므로 literal space를 넣으면 locator가 깨진다. 근거를 답변했고 CodeRabbit이 지적을 철회했다.
 - Expected intentional skips remain 5:
   - Referral code setup 1
   - BP partner key setup 1
@@ -107,8 +113,8 @@
 
 ### Remaining Work
 
-1. Watch PR #4400 checks/review, especially CodeRabbit.
-2. Merge PR #4400 into `release/v1.79.0` when review/checks allow.
+1. Merge PR #4400 into `release/v1.79.0`.
+2. Confirm staging deployment includes PR #4400.
 3. After staging deployment includes PR #4400, run staging Clinic UI full, reload, full for 2 consecutive passes.
 4. After staging deployment includes PR #4400, run staging headless `e2e:clinic:stg` twice.
 5. Completion target remains `94 passed / 5 intentional skipped / 0 failed` for each staging run.
@@ -117,7 +123,6 @@
 ## Next Start Point
 
 1. Pull `codex-personal-context` and `/Users/parkjongsun/Repository/dentlink-client-e2e`.
-2. Confirm PR #4400 status and whether it has merged into `release/v1.79.0`.
-3. If not merged, resolve CodeRabbit/review feedback first.
-4. If merged and staging has deployed it, run staging UI 2회 and staging headless 2회.
-5. Record every run as `passed / intentional skipped / failed` and classify any failure by the E2E policy.
+2. Confirm PR #4400 has merged into `release/v1.79.0` and staging deployment includes HEAD `5dc084e7c`.
+3. After deployment, run staging UI 2회 and staging headless 2회.
+4. Record every run as `passed / intentional skipped / failed` and classify any failure by the E2E policy.
