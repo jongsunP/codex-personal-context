@@ -127,9 +127,45 @@
 - Use only the IDE connected to this worktree and that IDE's existing terminal; do not use another Dentlink worktree or IDE.
 - Use Computer Use to operate and observe the Playwright UI runner directly.
 
+## Final Closeout — 2026-07-21
+
+### Integration State
+
+- PR [#4405](https://github.com/Innvoaid/dentlink-client/pull/4405) (`[DL-15560] ISV Step3 및 회원가입 E2E 변경 반영`)이 `release/v1.79.0`에 머지됐고 스테이징에 배포됐다.
+- 해당 릴리즈 커밋은 `205b18b2d`이며, 최종 검증 시점의 최신 `origin/release/v1.79.0` HEAD는 `4bed4aece82c3ca152d4cd117fd4b7f651473e13`이다.
+- E2E 워크트리는 변경사항 없이 clean하고, 브랜치를 체크아웃하지 않은 detached HEAD 상태로 위 원격 릴리즈 커밋을 정확히 가리킨다.
+- 추가 E2E 코드 수정, 커밋, 푸시, PR은 필요하지 않다.
+
+### Final Diagnosis
+
+- 스테이징 ISV Step3의 `Option value price is not found` 400 응답은 E2E 코드 회귀가 아니라 어드민 상품/가격 세팅 문제였다.
+- 사용자가 어드민 세팅을 정상화한 뒤 ISV 단독 시나리오 4개가 모두 통과했고, 이어진 전체 반복 검증에서도 같은 문제가 재발하지 않았다.
+- 따라서 현재 결론은 환경 세팅 문제 해결 완료이며, 이 실패를 위한 별도 코드 대응은 필요하지 않다.
+- 회원가입 테스트 분리 반영으로 전체 테스트 수는 100개, 현재 기대값은 `95 passed / 5 intentional skipped / 0 failed`다.
+
+### Final UI Verification
+
+- 스테이징 `e2e:clinic:ui:stg`:
+  - Run 1: `95 passed / 5 intentional skipped / 0 failed`
+  - Reload + Run 2: `95 passed / 5 intentional skipped / 0 failed`
+- 로컬 `e2e:clinic:ui`:
+  - Run 1: `95 passed / 5 intentional skipped / 0 failed`
+  - Reload + Run 2: `95 passed / 5 intentional skipped / 0 failed`
+- ISV Step3, 주문 Step4, Lab Shipment, Lab Status를 포함해 의도적 스킵 외 모든 UI 시나리오가 로컬과 스테이징에서 반복 통과했다.
+- 각 UI runner 종료 후 소유한 onboarding 임시 employer 삭제와 run lock 해제를 확인했다.
+
+### Intentional Skips And Backlog
+
+- 의도적 스킵 5건은 그대로 유지한다.
+  - Referral 코드 세팅 대기 1건
+  - BP 파트너 키 세팅 대기 1건
+  - Default Scanner 미설정 전용 계정 세팅 대기 3건
+- Default Scanner 미설정 테스트는 기존 계정 변경이나 API 모킹 없이 추후 전용 계정을 만든 뒤 활성화한다.
+- styled-components v6 DOM prop 경고는 별도 backlog이며 현재 E2E blocker가 아니다.
+
 ## Next Start Point
 
-1. Pull `codex-personal-context` and `/Users/parkjongsun/Repository/dentlink-client-e2e`.
-2. Confirm staging deployment includes release commit `9a85b3e01`, then sync this worktree to the latest `release/v1.79.0` state before testing.
-3. In this worktree's IDE terminal, run staging UI 2회 and local UI 2회, with Reload between the two full runs in each environment.
-4. Record every run as `passed / intentional skipped / failed`, confirm teardown/lock cleanup, and classify any failure by the E2E policy.
+1. 현재 DL-15560 E2E 안정화 작업은 UI 완결 기준을 충족했으므로 추가 작업 없이 종료한다.
+2. 재개가 필요하면 먼저 `codex-personal-context`와 E2E 워크트리를 pull/fetch하고 최신 `release/v1.79.0` 상태를 확인한다.
+3. 새 코드 수정이 필요하면 detached release HEAD에서 직접 작업하지 말고 최신 `release/v1.79.0` 기준의 새 `codex/` 브랜치를 만든다.
+4. 추후 남은 작업은 의도적 스킵용 세팅 5건 활성화 또는 styled-components 경고의 별도 조사뿐이다.

@@ -71,6 +71,6 @@ For detailed current state, read:
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
 - Local worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`
-- Release target: `release/v1.78.0`
+- Release target: `release/v1.79.0`
 - Personal current checkpoint and history:
   `projects/dentlink-client-e2e.md`
