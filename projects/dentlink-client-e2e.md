@@ -169,3 +169,56 @@
 2. 재개가 필요하면 먼저 `codex-personal-context`와 E2E 워크트리를 pull/fetch하고 최신 `release/v1.79.0` 상태를 확인한다.
 3. 새 코드 수정이 필요하면 detached release HEAD에서 직접 작업하지 말고 최신 `release/v1.79.0` 기준의 새 `codex/` 브랜치를 만든다.
 4. 추후 남은 작업은 의도적 스킵용 세팅 5건 활성화 또는 styled-components 경고의 별도 조사뿐이다.
+
+## Reopened Checkpoint — 2026-07-21 (PR #4411)
+
+이 섹션은 위 `Final Closeout` 이후 ISV Step3 옵션 구성이 다시 변경되고 반복 실패가 확인되어 재개된 최신 상태다. 다음 세션에서는 위 종료 판단보다 이 체크포인트를 우선한다.
+
+### Integration State
+
+- PR [#4408](https://github.com/Innvoaid/dentlink-client/pull/4408) (`[DL-15560] ISV Step3 옵션 이관 원복`)이 `release/v1.79.0`에 머지되고 스테이징에 배포됐다.
+- 새 작업 브랜치 `codex/DL-15560-isv-step3-ready`는 당시 최신 `origin/release/v1.79.0` 커밋 `c6da49ba375f0d1c58a0fb710bd43db745797e99`에서 생성했다.
+- 수정 커밋은 `fe8126b189752062bdbf8a44b117e530efad70f1` (`[DL-15560] test: ISV Step3 선택 안정화`)이다.
+- PR [#4411](https://github.com/Innvoaid/dentlink-client/pull/4411) (`[DL-15560] ISV Step3 선택 안정화`)을 `release/v1.79.0` 대상으로 생성했다.
+- 마지막 확인 시 PR은 `OPEN / non-draft / MERGEABLE`이며 `mergeStateStatus: BLOCKED`다. CodeRabbit과 `add-reviews` 체크는 모두 통과했으므로 코드 충돌이나 체크 실패가 아니라 필수 리뷰/승인 상태를 다음 세션에서 확인해야 한다.
+- E2E 워크트리는 브랜치 `codex/DL-15560-isv-step3-ready`, HEAD `fe8126b18`이며 `origin/codex/DL-15560-isv-step3-ready`와 동기화된 clean 상태다.
+
+### Latest Diagnosis And Changes
+
+- 사용자가 배포 후 실행한 전체 100개 테스트에서는 아래 ISV 실패 외 별도 이상이 없었다.
+- 실패 위치는 `e2e/clinic/specs/03_orders/step4-ui-state.spec.ts`의 첫 ISV Step4 진입 테스트였다. Step3 `PUT /orders/{id}/option` 응답이 발생하지 않고 90초 타임아웃이 났다.
+- 실패 화면에서는 필수 Treatment Preference 중 하나가 사라져 `Required information is missing.` validation이 발생했다.
+- React Hook Form의 `useFieldArray.update`가 옵션 필드를 재마운트하는 동안 상·하위 필수 선택이 초기화될 수 있으므로, E2E가 각 클릭 뒤 이전 버튼의 detach와 새 선택 요약 반영을 기다리도록 수정했다.
+- 선택 트리 갱신이 끝난 뒤 누락된 필수 옵션만 계층 순서대로 복구하고, 최종 안정 구간 후 모든 선택이 동시에 유지되는지 검증한다.
+- `Natural` 요약 검증이 기존 `Natural I`를 부분 일치로 오인하던 직접 원인도 확인했다. 요약값 끝까지 정확히 일치하도록 바꿔 Preferred Shade 누락을 실제로 탐지한다.
+- Step3 validation이 보이면 존재하지 않는 저장 응답을 90초 기다리지 않고 `Order option step validation failed`로 즉시 원인을 표시한다.
+- 변경 파일은 `e2e/clinic/steps/order/order-step3-option.ts` 한 개뿐이며 실제 Clinic 앱 코드는 수정하지 않았다.
+
+### Verification
+
+- 최종 코드로 스테이징 `step4-ui-state.spec.ts` 전체를 IDE 터미널에서 2회 연속 실행했다.
+  - Run 1: `7 passed / 3 intentional skipped / 0 failed`
+  - Run 2: `7 passed / 3 intentional skipped / 0 failed`
+- 해당 파일의 의도적 스킵 3건은 Default Scanner 미설정 전용 계정 세팅 대기 테스트다.
+- E2E TypeScript 검사, Clinic 전체 TypeScript, Prettier, 변경 파일 ESLint, `git diff --check`가 통과했다.
+- commit hook의 Clinic/Lab/Admin TypeScript 검사가 통과했다.
+- push hook은 기존 lint 경고 `419 warnings / 0 errors`와 coverage baseline 변화 없음으로 통과했다.
+- 각 반복 실행의 onboarding 임시 employer가 teardown에서 삭제됐고 lock 파일은 남지 않았다.
+- 최종 수정 이후 전체 100개 테스트는 아직 다시 실행하지 않았다. 사용자의 직전 전체 실행에서 본 ISV 한 건 외 별도 이상이 없었다는 결과와, 수정 후 관련 스펙 2회 통과까지만 확정 상태다.
+
+### Remaining Work / Next Session Start
+
+1. 먼저 `codex-personal-context`와 `/Users/parkjongsun/Repository/dentlink-client-e2e`를 pull/fetch한다.
+2. 브랜치 `codex/DL-15560-isv-step3-ready`, HEAD `fe8126b18`, PR #4411의 실제 상태와 CodeRabbit/review/check를 확인한다.
+3. CodeRabbit 지적이 있으면 E2E 정책에 맞는지 판단해 반영 또는 근거를 답변하고 스레드를 resolve한다.
+4. PR #4411이 merge 가능하면 사용자에게 보고한다. 사용자가 머지·스테이징 배포 완료를 알리기 전에는 release 기준 최종 스테이징 검증으로 간주하지 않는다.
+5. 머지·배포 후 `release/v1.79.0`을 pull하고, 반드시 `dentlink-client-e2e` IDE와 그 IDE의 기존 터미널만 사용해 스테이징 UI 전체 실행 → Reload → 전체 실행을 2회 검증한다.
+6. 새 helper가 로컬 환경의 Crown/Ideal 옵션에도 회귀를 만들지 않았는지 로컬 UI 전체 실행 → Reload → 전체 실행 2회도 검증한다.
+7. 전체 기대값은 각 실행 `95 passed / 5 intentional skipped / 0 failed`다. 엄격한 기존 4-command 검증 매트릭스를 마무리할 경우 `e2e:clinic:stg`와 `e2e:clinic` CLI도 각각 2회 실행한다.
+8. 실패가 나오면 바로 수정하지 말고 버전 회귀, 기존 문제, 신규 시나리오, 환경 세팅 문제로 먼저 분류한다.
+
+### Unchanged Intentional Skips And Backlog
+
+- 의도적 스킵 5건은 Referral 코드 1건, BP partner key 1건, Default Scanner 미설정 전용 계정 3건이다.
+- Default Scanner 미설정 테스트는 기존 계정 변경이나 API 모킹 없이 추후 전용 계정을 만든 뒤 활성화한다.
+- styled-components v6 DOM prop 경고는 별도 backlog이며 현재 E2E blocker가 아니다.
