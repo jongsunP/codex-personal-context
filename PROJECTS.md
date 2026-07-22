@@ -51,18 +51,22 @@ For detailed current state, read:
 ### Dentlink Invite
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Canonical local worktree: `/Users/parkjongsun/repository/dentlink-client`
-- Active branch: `feature/DL-14232`
-- Develop follow-up worktree:
-  `/Users/parkjongsun/repository/dentlink-client-invitation-api-develop`
-- Develop follow-up branch: `codex/DL-14232-followup-develop`
+- Local workspace: `/Users/parkjongsun/repository/dentlink-client`
+- Use this main workspace unless the user explicitly requests another
+  worktree.
+- Current state: PR #4410 merged; DL-15643 waits for the backend response
+  contract and deployment.
 - Personal current checkpoint and history:
   `projects/dentlink-client-invite.md`
 
 ### Dentlink E2E Stabilization
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Local worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`
+- Local workspace: `/Users/parkjongsun/repository/dentlink-client`
+- Use this main workspace unless the user explicitly requests another
+  worktree.
 - Release target: `release/v1.79.0`
+- Current state: PR #4411 merged; wait for staging deployment, then run the
+  final local and staging E2E matrix.
 - Personal current checkpoint and history:
   `projects/dentlink-client-e2e.md`

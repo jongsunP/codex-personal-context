@@ -1,3 +1,41 @@
+# Dentlink Invite backend-wait checkpoint - 2026-07-22
+
+This is the current resume source and supersedes every checkpoint below.
+
+Repo: `/Users/parkjongsun/repository/dentlink-client`
+Current checkout: `master`
+Current HEAD: `707f0eb10 Release/v1.78.0 -> master (#4398)`
+Remote: `origin/master`, ahead/behind `0/0`
+Worktree: clean
+
+## Current state
+
+- PR [#4410](https://github.com/Innvoaid/dentlink-client/pull/4410) was
+  squash-merged into `release/v1.79.0` as `1da4e9e26` on 2026-07-22.
+- Its final source HEAD was
+  `8920297f3 [DL-15645] fix: 회원 삭제 경고 문구 수정`.
+- DL-15645 is complete. The existing Remove Member confirmation description
+  now reads `Can't remove this member — an order is still in progress`.
+- No invite code change is currently pending except DL-15643, which must wait
+  for the backend response contract and deployment. Do not implement guessed
+  response fields or frontend activation/team-switch behavior.
+- After the backend is ready, regenerate or update the actual
+  `ApplyResultDto`, add only the minimal `handleRequestAccess` branch that skips
+  the Pending Approval popup for an invitation-derived approved employee, and
+  re-QA normal, valid-invitation, and expired-invitation paths.
+
+## Local workspace rule
+
+- On this device, use only
+  `/Users/parkjongsun/repository/dentlink-client` for Dentlink Invite and E2E
+  work unless the user explicitly requests a separate worktree.
+- The Codex-created auxiliary worktrees were deleted. At this checkpoint the
+  only local branches are `master` and `feature/DL-14232-release-qa`.
+- Start future work by fetching the remote and checking out or fast-forwarding
+  the branch belonging to the relevant PR in this main workspace.
+
+---
+
 # Dentlink Invite DL-15643 minimal-popup-fix checkpoint - 2026-07-21
 
 This is the current resume source and supersedes every checkpoint below. No

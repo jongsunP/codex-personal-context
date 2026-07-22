@@ -1,5 +1,20 @@
 # Memory Changelog
 
+## 2026-07-22
+
+- Removed the completed Dentlink PDF project from the active project index and
+  deleted its completed checkpoint document.
+- Recorded the device-local Dentlink workflow override: use only the main
+  `/Users/parkjongsun/repository/dentlink-client` workspace for Invite and E2E
+  unless the user explicitly requests a separate worktree. Codex-created
+  auxiliary worktrees were removed and local branches were reduced to `master`
+  plus the active Invite PR branch.
+- Recorded PR #4410 merged as `1da4e9e26`, including completed DL-15645 copy
+  change `8920297f3`. Invite work now waits only for the DL-15643 backend
+  response contract and deployment before the minimal frontend popup branch.
+- Recorded PR #4411 merged as `6ee361e87`. E2E work waits for staging to contain
+  that commit before the final local and staging full UI verification matrix.
+
 ## 2026-07-15
 
 - Completed the final `develop` audit and switched the primary repository

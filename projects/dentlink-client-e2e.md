@@ -1,9 +1,33 @@
+# Dentlink E2E staging-verification wait checkpoint - 2026-07-22
+
+This is the current resume source and supersedes every checkpoint below.
+
+- Use `/Users/parkjongsun/repository/dentlink-client`, not a dedicated E2E
+  worktree, unless the user explicitly requests another worktree.
+- PR [#4411](https://github.com/Innvoaid/dentlink-client/pull/4411)
+  (`[DL-15560] ISV Step3 선택 안정화`) was squash-merged into
+  `release/v1.79.0` as `6ee361e87` on 2026-07-22.
+- Its final source HEAD was
+  `fe8126b18 [DL-15560] test: ISV Step3 선택 안정화` and changed only
+  `e2e/clinic/steps/order/order-step3-option.ts`.
+- The focused staging spec passed twice at
+  `7 passed / 3 intentional skipped / 0 failed`; the full 100-test matrix has
+  not been rerun after that final fix.
+- Current action is to wait until staging contains `6ee361e87`, then use the
+  main workspace to run staging Clinic UI full, Reload, full twice and local
+  Clinic UI full, Reload, full twice. Each run must reach
+  `95 passed / 5 intentional skipped / 0 failed`.
+- Do not change E2E code before classifying any failure as version regression,
+  existing issue, new scenario, or environment setup.
+
+---
+
 # Dentlink E2E Stabilization
 
 ## Repository
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Local worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`
+- Historical local worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`
 - Jira: `DL-15560`
 - Release target: `release/v1.79.0`
 
