@@ -2,6 +2,13 @@
 
 ## 2026-07-22
 
+- Added the durable branch-naming rule: never introduce an agent-specific
+  `codex/` prefix; follow each repository's existing `feature/`, `release/`,
+  and related taxonomy.
+- Recorded that release QA aggregation branches should be named for the release
+  QA purpose rather than only the first Jira card, such as
+  `feature/v1.79.0-qa` targeting `release/v1.79.0`.
+
 - Removed the completed Dentlink PDF project from the active project index and
   deleted its completed checkpoint document.
 - Recorded the device-local Dentlink workflow override: use only the main

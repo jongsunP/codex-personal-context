@@ -156,6 +156,14 @@ appear nowhere else in the app.
 
 ## User-Directed Scope Discipline
 
+- Do not invent or use an agent-specific branch prefix such as `codex/` in the
+  user's repositories. Before proposing or creating a branch, inspect and
+  follow that repository's established taxonomy, such as `feature/` or
+  `release/`. If the repository convention is still ambiguous, ask the user.
+- Name a branch for its intended delivery scope. When a branch is meant to
+  collect multiple QA fixes for one release, use the release QA purpose rather
+  than the first Jira card alone; for example, `feature/v1.79.0-qa` for fixes
+  targeting `release/v1.79.0`.
 - In every Dentlink repository, a generic request to commit, upload, or push
   does not authorize using an admin or ruleset bypass to push directly to a
   protected `master`, `develop`, or `release/*` branch. If a direct protected
