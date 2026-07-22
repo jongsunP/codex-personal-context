@@ -15,6 +15,9 @@
 - Recorded DL-15643 delivery on `feature/v1.79.0-qa`: commit `5093f9fcc` is
   pushed and PR #4414 targets `release/v1.79.0`. CodeRabbit handling is deferred
   until explicitly requested.
+- Verified DL-15645 Jira comment `43226` and pushed `1b0bc7539`, making the
+  member-removal mutation show the backend error message when supplied and
+  reuse the existing project error handler only when it is absent.
 
 - Removed the completed Dentlink PDF project from the active project index and
   deleted its completed checkpoint document.

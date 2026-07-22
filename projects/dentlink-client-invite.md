@@ -4,7 +4,7 @@ This is the current resume source and supersedes every checkpoint below.
 
 Repo: `/Users/parkjongsun/repository/dentlink-client`
 Branch: `feature/v1.79.0-qa`
-HEAD: `5093f9fcc [DL-15643] fix: 초대 승인 완료 시 대기 팝업 생략`
+HEAD: `1b0bc7539 [DL-15645] fix: 회원 삭제 서버 오류 문구 노출`
 Remote: `origin/feature/v1.79.0-qa`, ahead/behind `0/0`
 
 ## Delivered change
@@ -23,6 +23,11 @@ Remote: `origin/feature/v1.79.0-qa`, ahead/behind `0/0`
   existing popup behavior.
 - No activation API, team switch, query invalidation, storage handoff, global
   lifecycle code, new test file, or unrelated UI change was added.
+- Jira DL-15645 comment `43226` confirmed that the member-removal DELETE API
+  should show the backend-provided message for any HTTP error status. Commit
+  `1b0bc7539` adds an endpoint-specific mutation `onError`: it displays
+  `response.data.message` when present and otherwise delegates to the existing
+  project `queryErrorHandler`, without inventing a new fallback message.
 - Clinic/Lab/Admin type checks passed. The push hook passed with zero errors and
   419 existing lint warnings; its shared coverage check also completed.
 

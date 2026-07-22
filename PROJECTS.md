@@ -54,9 +54,9 @@ For detailed current state, read:
 - Local workspace: `/Users/parkjongsun/repository/dentlink-client`
 - Use this main workspace unless the user explicitly requests another
   worktree.
-- Current state: DL-15643 is implemented and pushed as `5093f9fcc` on
-  `feature/v1.79.0-qa`; PR #4414 targets `release/v1.79.0`. Review handling is
-  deferred until explicitly requested.
+- Current state: DL-15643 and the DL-15645 server-error-message follow-up are
+  pushed through `1b0bc7539` on `feature/v1.79.0-qa`; PR #4414 targets
+  `release/v1.79.0`. Review handling is deferred until explicitly requested.
 - Personal current checkpoint and history:
   `projects/dentlink-client-invite.md`
 
