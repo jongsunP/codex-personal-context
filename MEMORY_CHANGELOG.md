@@ -21,6 +21,9 @@
 - Removed the five remaining unrelated Swagger-generated local diffs after the
   user authorized cleanup. `feature/v1.79.0-qa` is now clean and synchronized;
   the committed DL-15643 response fields remain intact.
+- Added the final cross-device handoff for PR #4414: exact branch/HEAD, clean
+  remote state, user-owned deployment boundary, post-deployment invitation and
+  member-removal QA matrix, and explicit-only CodeRabbit handling.
 
 - Removed the completed Dentlink PDF project from the active project index and
   deleted its completed checkpoint document.

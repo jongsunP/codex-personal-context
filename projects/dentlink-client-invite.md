@@ -1,4 +1,4 @@
-# Dentlink Invite DL-15643 PR checkpoint - 2026-07-22
+# Dentlink Invite cross-device QA handoff - 2026-07-22
 
 This is the current resume source and supersedes every checkpoint below.
 
@@ -6,11 +6,12 @@ Repo: `/Users/parkjongsun/repository/dentlink-client`
 Branch: `feature/v1.79.0-qa`
 HEAD: `1b0bc7539 [DL-15645] fix: 회원 삭제 서버 오류 문구 노출`
 Remote: `origin/feature/v1.79.0-qa`, ahead/behind `0/0`
+Worktree: clean
 
 ## Delivered change
 
 - PR [#4414](https://github.com/Innvoaid/dentlink-client/pull/4414) is open and
-  ready for review, with base `release/v1.79.0` and head
+  non-draft, with base `release/v1.79.0` and head
   `feature/v1.79.0-qa`.
 - The backend `ApplyResultDto` contract now exposes
   `sourceType: INVITATION | EMPLOYEE` and `employeeStatus`. The same fields are
@@ -49,6 +50,29 @@ Remote: `origin/feature/v1.79.0-qa`, ahead/behind `0/0`
 - The worktree is clean and synchronized with
   `origin/feature/v1.79.0-qa`. The committed DL-15643 `sourceType` and
   `employeeStatus` fields remain intact.
+
+## Next device start
+
+1. Pull `codex-personal-context`, then use only the main Dentlink workspace
+   unless the user explicitly requests a worktree.
+2. Fetch the Dentlink repository, switch to `feature/v1.79.0-qa`, fast-forward
+   it from origin, and verify clean HEAD `1b0bc7539` before making changes.
+3. The user plans to deploy the QA branch and continue with QA. Do not deploy,
+   merge, or monitor workflows unless explicitly requested.
+4. After deployment, verify these independent cases:
+   - valid invitation plus `OFFICE_EMPLOYEE_APPROVED`: no Pending Approval
+     popup and existing home redirect;
+   - normal office application or invitation not approved: existing Pending
+     Approval popup remains;
+   - member removal blocked by an ongoing order: the toast displays the exact
+     backend message. Frontend no longer rewrites it, so the backend must supply
+     the final requested copy instead of `There is an ongoing order.`;
+   - an error without a backend message still uses the existing project error
+     handler.
+5. Handle CodeRabbit only if the user explicitly says `리뷰까지 처리해줘`.
+
+No code, commit, push, PR creation, review response, merge, deployment, or QA
+execution is currently pending without a new user request.
 
 ---
 
