@@ -164,6 +164,14 @@ appear nowhere else in the app.
   collect multiple QA fixes for one release, use the release QA purpose rather
   than the first Jira card alone; for example, `feature/v1.79.0-qa` for fixes
   targeting `release/v1.79.0`.
+- For every pull request, read and follow the repository's PR skill before
+  committing or creating the PR. A request to commit, push, and open a PR
+  includes the full CodeRabbit closeout flow: create the target PR, wait for
+  the review, validate each finding, implement or leave a reasoned reply,
+  resolve every addressed thread, push any follow-up commit, and recheck the
+  resulting review until no unresolved CodeRabbit thread remains or a concrete
+  blocker is reported. PR merge is still outside this flow unless explicitly
+  requested.
 - In every Dentlink repository, a generic request to commit, upload, or push
   does not authorize using an admin or ruleset bypass to push directly to a
   protected `master`, `develop`, or `release/*` branch. If a direct protected
