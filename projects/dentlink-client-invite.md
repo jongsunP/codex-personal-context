@@ -41,16 +41,14 @@ Remote: `origin/feature/v1.79.0-qa`, ahead/behind `0/0`
   user.
 - PR merge and deployment remain outside the current authorization.
 
-## Preserved local API delta
+## Local state
 
-- The worktree intentionally remains dirty in generated files only:
-  `shared/models/src/Admin.ts`, `Lab.ts`, `Office.ts`, `System.ts`, and
-  `data-contracts.ts`.
-- These remaining generated changes concern unrelated order-approval, Admin
-  funnel/payment-retry, and System payment APIs. The DL-15643 response fields
-  were selectively committed, so no DL-15643 code or push is pending.
-- Preserve these user-generated local changes. Do not commit, discard, stash,
-  or mix them into PR #4414 without explicit direction.
+- The five unrelated Swagger-generated diffs for order approval, Admin
+  funnel/payment retries, and System payment APIs were removed after explicit
+  user authorization. They are not part of PR #4414.
+- The worktree is clean and synchronized with
+  `origin/feature/v1.79.0-qa`. The committed DL-15643 `sourceType` and
+  `employeeStatus` fields remain intact.
 
 ---
 

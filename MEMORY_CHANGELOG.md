@@ -18,6 +18,9 @@
 - Verified DL-15645 Jira comment `43226` and pushed `1b0bc7539`, making the
   member-removal mutation show the backend error message when supplied and
   reuse the existing project error handler only when it is absent.
+- Removed the five remaining unrelated Swagger-generated local diffs after the
+  user authorized cleanup. `feature/v1.79.0-qa` is now clean and synchronized;
+  the committed DL-15643 response fields remain intact.
 
 - Removed the completed Dentlink PDF project from the active project index and
   deleted its completed checkpoint document.
