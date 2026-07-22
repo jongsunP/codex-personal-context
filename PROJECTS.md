@@ -54,8 +54,9 @@ For detailed current state, read:
 - Local workspace: `/Users/parkjongsun/repository/dentlink-client`
 - Use this main workspace unless the user explicitly requests another
   worktree.
-- Current state: PR #4410 merged; DL-15643 waits for the backend response
-  contract and deployment.
+- Current state: DL-15643 is implemented and pushed as `5093f9fcc` on
+  `feature/v1.79.0-qa`; PR #4414 targets `release/v1.79.0`. Review handling is
+  deferred until explicitly requested.
 - Personal current checkpoint and history:
   `projects/dentlink-client-invite.md`
 

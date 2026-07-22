@@ -1,3 +1,54 @@
+# Dentlink Invite DL-15643 PR checkpoint - 2026-07-22
+
+This is the current resume source and supersedes every checkpoint below.
+
+Repo: `/Users/parkjongsun/repository/dentlink-client`
+Branch: `feature/v1.79.0-qa`
+HEAD: `5093f9fcc [DL-15643] fix: 초대 승인 완료 시 대기 팝업 생략`
+Remote: `origin/feature/v1.79.0-qa`, ahead/behind `0/0`
+
+## Delivered change
+
+- PR [#4414](https://github.com/Innvoaid/dentlink-client/pull/4414) is open and
+  ready for review, with base `release/v1.79.0` and head
+  `feature/v1.79.0-qa`.
+- The backend `ApplyResultDto` contract now exposes
+  `sourceType: INVITATION | EMPLOYEE` and `employeeStatus`. The same fields are
+  synchronized into the project-used `EmployeeTypes.ApplyResultDto`.
+- `useOfficeFindForm.handleRequestAccess` still handles any `result === FAIL`
+  first. Only `sourceType === INVITATION` together with
+  `employeeStatus === OFFICE_EMPLOYEE_APPROVED` skips the Pending Approval
+  popup and follows the existing home redirect. Normal applications, missing
+  source fields, and invitation outcomes that are not approved keep the
+  existing popup behavior.
+- No activation API, team switch, query invalidation, storage handoff, global
+  lifecycle code, new test file, or unrelated UI change was added.
+- Clinic/Lab/Admin type checks passed. The push hook passed with zero errors and
+  419 existing lint warnings; its shared coverage check also completed.
+
+## Review boundary
+
+- A normal commit/push/PR request ends at PR creation. Do not monitor or handle
+  CodeRabbit unless the user explicitly asks, for example with
+  `리뷰까지 처리해줘`.
+- CodeRabbit was pending at the last check, and the user explicitly deferred it
+  for later. Do not infer its later result without a new check requested by the
+  user.
+- PR merge and deployment remain outside the current authorization.
+
+## Preserved local API delta
+
+- The worktree intentionally remains dirty in generated files only:
+  `shared/models/src/Admin.ts`, `Lab.ts`, `Office.ts`, `System.ts`, and
+  `data-contracts.ts`.
+- These remaining generated changes concern unrelated order-approval, Admin
+  funnel/payment-retry, and System payment APIs. The DL-15643 response fields
+  were selectively committed, so no DL-15643 code or push is pending.
+- Preserve these user-generated local changes. Do not commit, discard, stash,
+  or mix them into PR #4414 without explicit direction.
+
+---
+
 # Dentlink Invite backend-wait checkpoint - 2026-07-22
 
 This is the current resume source and supersedes every checkpoint below.
