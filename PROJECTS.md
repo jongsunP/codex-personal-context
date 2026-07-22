@@ -59,14 +59,6 @@ For detailed current state, read:
 - Personal current checkpoint and history:
   `projects/dentlink-client-invite.md`
 
-### Dentlink PDF Label Conversion (Completed)
-
-- Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Former worktree: `/Users/parkjongsun/Repository/dentlink-client-pdf`
-- Delivery branch: `feature/DL-15438`
-- Personal completed checkpoint:
-  `projects/dentlink-client-pdf.md`
-
 ### Dentlink E2E Stabilization
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
