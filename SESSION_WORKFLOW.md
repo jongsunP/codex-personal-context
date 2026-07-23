@@ -164,15 +164,22 @@ current device's local session state.
 - Prefer one global direct MCP configuration in `~/.codex/config.toml` for a
   service used across multiple projects. Do not duplicate the same service in
   project `.codex/config.toml` files.
-- For Figma on this user's machines, use the global streamable HTTP server at
-  `https://mcp.figma.com/mcp`. Do not install the Figma plugin connector on top
-  of that direct server unless intentionally replacing the connection model.
+- For Figma on this user's machines, use the global streamable HTTP server named
+  `figma_http` at `https://mcp.figma.com/mcp`. Keep this name distinct from the
+  common Claude-imported project server name `figma`; otherwise Codex can merge
+  an imported STDIO `command` with the global HTTP `url` and reject the config.
+  Do not install the Figma plugin connector on top of that direct server unless
+  intentionally replacing the connection model.
+- When importing Claude Code setup into a project, exclude MCP server
+  configuration because the canonical Figma connection is already global. The
+  distinct `figma_http` name remains the device-level guard if project MCP
+  configuration is imported accidentally.
 - Distinguish a plugin app connector from a direct MCP server. Authenticating
   one does not prove that the other is connected.
 - After adding, removing, authenticating, or changing an MCP server, verify it
   from a fresh Codex process and restart the ChatGPT/Codex client before
   continuing in a new task. Existing tasks retain their original tool bridge.
-- For Figma, verify the direct server with `mcp__figma__whoami`. A
+- For Figma, verify the direct server with `mcp__figma_http__whoami`. A
   `mcp__codex_apps__figma_*` tool belongs to the plugin connector and should not
   be treated as proof that the global direct MCP is unavailable.
 
