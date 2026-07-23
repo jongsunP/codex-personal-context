@@ -149,6 +149,12 @@ or worktree differs from the current location, make no changes in either place
 and ask the user which path to use. Do not infer the target from a nearby clone
 or sibling worktree.
 
+Treat the Codex project and each separate session as an intentional scope for
+one feature and its assigned worktree. Access to another clone or worktree of
+the same repository does not make it part of that session's scope. Do not move
+implementation or Git operations across that boundary unless the user
+explicitly redirects the session after the target path is confirmed.
+
 Assume project-internal Codex sessions are local-device-bound. For remote work
 continuity, treat Git-backed documents as the durable source of truth, not the
 current device's local session state.
