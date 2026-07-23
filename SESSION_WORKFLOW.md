@@ -143,6 +143,12 @@ summary unless a file is genuinely missing.
    user instructions and verified live state override an older checkpoint.
 7. Continue from the reconciled state instead of relying only on chat memory.
 
+Before any project mutation, verify that the current working directory and
+worktree are the exact project location the user intends. If the named project
+or worktree differs from the current location, make no changes in either place
+and ask the user which path to use. Do not infer the target from a nearby clone
+or sibling worktree.
+
 Assume project-internal Codex sessions are local-device-bound. For remote work
 continuity, treat Git-backed documents as the durable source of truth, not the
 current device's local session state.
