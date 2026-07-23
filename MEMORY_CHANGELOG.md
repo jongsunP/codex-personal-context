@@ -12,83 +12,22 @@
   normal commit/push/PR request stops at PR creation. CodeRabbit monitoring,
   response, resolution, and recheck run only when the user explicitly asks to
   handle the review; PR merge remains explicitly separate.
-- Recorded DL-15643 delivery on `feature/v1.79.0-qa`: commit `5093f9fcc` is
-  pushed and PR #4414 targets `release/v1.79.0`. CodeRabbit handling is deferred
-  until explicitly requested.
-- Verified DL-15645 Jira comment `43226` and pushed `1b0bc7539`, making the
-  member-removal mutation show the backend error message when supplied and
-  reuse the existing project error handler only when it is absent.
-- Removed the five remaining unrelated Swagger-generated local diffs after the
-  user authorized cleanup. `feature/v1.79.0-qa` is now clean and synchronized;
-  the committed DL-15643 response fields remain intact.
-- Added the final cross-device handoff for PR #4414: exact branch/HEAD, clean
-  remote state, user-owned deployment boundary, post-deployment invitation and
-  member-removal QA matrix, and explicit-only CodeRabbit handling.
-
 - Removed the completed Dentlink PDF project from the active project index and
   deleted its completed checkpoint document.
-- Recorded the device-local Dentlink workflow override: use only the main
-  `/Users/parkjongsun/repository/dentlink-client` workspace for Invite and E2E
-  unless the user explicitly requests a separate worktree. Codex-created
-  auxiliary worktrees were removed and local branches were reduced to `master`
-  plus the active Invite PR branch.
-- Recorded PR #4410 merged as `1da4e9e26`, including completed DL-15645 copy
-  change `8920297f3`. Invite work now waits only for the DL-15643 backend
-  response contract and deployment before the minimal frontend popup branch.
 - Recorded PR #4411 merged as `6ee361e87`. E2E work waits for staging to contain
   that commit before the final local and staging full UI verification matrix.
 
 ## 2026-07-15
 
-- Completed the final `develop` audit and switched the primary repository
-  checkout to clean `develop` at `c0356438e`, matching `origin/develop`. The
-  squash result is tree-identical to PR #4378 head `0c3edf7b4`, contains only
-  the intended eight payload/analytics files, and excludes the closed #4379
-  cleanup scope as well as `_app`, analytics storage, and test/analysis files.
-- Added the final cross-device handoff: implementation is complete, develop is
-  only the development-environment path and already contains the required code,
-  while master-targeting PR #4353 is the final review/production objective. No
-  further branch changes are needed without new user feedback.
-- Corrected the final DL-14232 scope audit after initially misclassifying the
-  shared Button design, `ChartDropdown`, and Layout transient-prop correction as
-  over-scoped. Commit `648822fcc` restores the exact intended pre-audit tree;
-  canonical PR #4353 is CLEAN/mergeable with CodeRabbit success.
 - Recorded the durable scope rule: use requirement/design/user/history causality,
   not shared-file location or diff size. Inspect introducing commits and source
   context before reverting, and ask when intent remains ambiguous.
-- Develop follow-up PR #4378 was merged as `c0356438e`. Incorrect cleanup PR
-  #4379 was closed without merge, so develop retains the intended Button,
-  `ChartDropdown`, and `$isFull` changes. The develop worktree now tracks the
-  clean `develop` branch.
 - Recorded the user's PR boundary: when delivery is requested only through PR
   creation, downstream merge, deployment, and automatic workflow status must
   not be monitored or reported unless explicitly requested.
-- Re-audited the final 93-file branch diff. No `_app` analytics handoff,
-  analytics-only storage, unrequested test/analysis/helper artifact, or other
-  requirement-untraceable global behavior remains.
-- Simplified DL-15575 `create_account_complete` delivery in both PR branches:
-  removed the `_app`/email `sessionStorage` handoff and now fire directly from
-  ordinary and verified signup API success callbacks. Canonical HEAD is
-  `58d16969d`; develop follow-up HEAD is `0c3edf7b4`.
-- Re-audited the analytics implementation for similar global state, temporary
-  storage, helper/test artifacts, and misplaced event calls. No comparable new
-  pattern remains; the pre-existing signup-page session storage serves the
-  multi-step form flow and is unrelated to analytics delivery.
-- Closed out the DL-14232 implementation review with canonical master PR #4353
-  now at `648822fcc`, develop API PR #4376 merged/deployed successfully, and
-  develop follow-up PR #4378 merged as `c0356438e` for payload and analytics
-  changes.
-- Recorded the verified Jira comments/child-card snapshot, Notion DL-15570 and
-  DL-15575 event/property contract, Figma/FigJam alignment, generated invitation
-  API contract/error codes, development-server QA, and remaining integrated QA.
 - Added the user's scope rule: do not create unsolicited test files, analytics
   mapper/helper files, analysis artifacts, or documentation. Keep event work in
   the feature's existing files and request approval before expanding structure.
-- Removed the previously added feature-specific test/helper files from both the
-  master feature branch and develop follow-up branch while preserving runtime
-  tracking behavior; updated both PR descriptions to match.
-- Corrected the active Dentlink repository/worktree paths and added the isolated
-  develop follow-up worktree to the project index.
 
 ## 2026-07-14
 
@@ -109,8 +48,7 @@
   current checkpoint, QA, and history.
 - Added `projects/README.md` as the project-context schema, reduced `HANDOFF.md`
   to a resume index, moved ASJ-specific workflow out of common
-  `SESSION_WORKFLOW.md`, and refreshed the Dentlink current checkpoint while
-  retaining its dated history.
+  `SESSION_WORKFLOW.md`, and defined the project-specific checkpoint lifecycle.
 - Strengthened the canonical project-alignment rule: matching an existing
   product means following its complete implementation method, including hooks,
   API/query/mutation flow, cache behavior, state ownership, generated types,
@@ -132,41 +70,11 @@
   meaningful closeout curate and push durable status, learned rules, blockers,
   verification, and the next start point. The 2026-07-14 policy clarified that
   personal-context synchronization is automatic at meaningful closeout.
-- Added project-aligned implementation guardrails generalized from DL-14232:
+- Added project-aligned implementation guardrails:
   existing props/components first, minimal additive shared changes, generated
   types and current library conventions, scoped loading, shared-consumer side
   effect review, complete Figma state/flow QA, and separate implementation,
   visual QA, and merge-readiness judgments.
-- Updated the Dentlink invite project checkpoint to remote HEAD `6bc9e7eb8`,
-  recorded completed Admin/Lab/Clinic invite management, recipient invitation
-  UI-only status, missing recipient APIs/auth flow, latest `master` dependency
-  drift, seven merge conflicts, verification, and the next start sequence.
-- Added `projects/dentlink-client-invite.md` to `setup-local-codex.sh` so a
-  pulled personal-context repository syncs the Dentlink checkpoint into the
-  local Codex runtime guidance tree.
-
-## 2026-07-09
-
-- Updated Dentlink `DL-14232` checkpoint after follow-up commit `f00341b5d`:
-  member detail `Member Info` outer border/radius/overflow removed, leaving only
-  row dividers so the section no longer looks like a table box. Jira comment
-  `43085` records the pushed commit and verification.
-- Updated Dentlink `DL-14232` checkpoint after design QA commit
-  `277a3314b`: ChartDropdown added, invite page/table/modal and member detail
-  styling aligned more closely to Figma, PopupMenu outside-click behavior fixed
-  for member detail drawer, and branch pushed to `origin/feature/DL-14232`.
-- Recorded verification boundaries for the latest pass: `git diff --check`,
-  clinic TypeScript, commit-hook clinic/lab/admin type checks, and push-hook
-  lint completed; build and Computer Use QA were intentionally left to the user.
-- Reconfirmed remaining blocker: real clinic invite create/resend/cancel/delete
-  and invitation update APIs are still not generated/available, so mock/local
-  invite actions remain until DL-15494/BE readiness.
-
-## 2026-07-08
-
-- Added Dentlink `DL-14232` checkpoint: Clinic invite/member-management UI is ready for commit/push before real Clinic invite API integration.
-- Recorded that invite API is still unavailable; invite page/modal behavior remains mock/local state, while Role/Authority code dropdown APIs are connected with fallback.
-- Recorded query refresh fix: member detail actions now refresh member list/detail/count caches after authority change, member removal, approval, and rejection.
 
 ## 2026-06-24
 

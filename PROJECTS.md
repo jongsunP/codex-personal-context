@@ -48,19 +48,6 @@ For detailed current state, read:
 - Stable team-owned project documentation when relevant:
   project-local `README.md`, `AGENTS.md`, and architecture/product docs
 
-### Dentlink Invite
-
-- Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Local workspace: `/Users/parkjongsun/repository/dentlink-client`
-- Use this main workspace unless the user explicitly requests another
-  worktree.
-- Current state: DL-15643 and the DL-15645 server-error-message follow-up are
-  pushed through `1b0bc7539` on `feature/v1.79.0-qa`; PR #4414 targets
-  `release/v1.79.0`. The branch is clean and now waits for user-directed
-  deployment and QA; review handling is deferred until explicitly requested.
-- Personal current checkpoint and history:
-  `projects/dentlink-client-invite.md`
-
 ### Dentlink E2E Stabilization
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`

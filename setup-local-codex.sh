@@ -18,7 +18,6 @@ SYNC_PATHS=(
   "SESSION_WORKFLOW.md"
   "VEHICLE.md"
   "projects/action-sports-journal-app.md"
-  "projects/dentlink-client-invite.md"
   "projects/README.md"
 )
 

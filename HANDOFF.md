@@ -24,7 +24,6 @@ Do not store secrets or private customer data here.
 ## Project Checkpoints
 
 - Action Sports Journal: `projects/action-sports-journal-app.md`
-- Dentlink invite (`DL-14232`): `projects/dentlink-client-invite.md`
 
 Use `PROJECTS.md` for repository paths and the broader project index.
 
