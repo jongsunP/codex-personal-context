@@ -59,3 +59,15 @@ For detailed current state, read:
   final local and staging E2E matrix.
 - Personal current checkpoint and history:
   `projects/dentlink-client-e2e.md`
+
+### Dentlink Lab i18n
+
+- Shared repository: `https://github.com/Innvoaid/dentlink-client`
+- Dedicated worktree:
+  `/Users/parkjongsun/Repository/dentlink-client-i18n`
+- Branch: `feature/i18n`
+- Current state: production-shaped Lab English/Korean i18n sample is local and
+  uncommitted while the user reviews code and team documentation. No remote
+  feature branch exists yet.
+- Personal current checkpoint and resume instructions:
+  `projects/dentlink-client-i18n.md`
