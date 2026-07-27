@@ -66,8 +66,8 @@ For detailed current state, read:
 - Dedicated worktree:
   `/Users/parkjongsun/Repository/dentlink-client-i18n`
 - Branch: `feature/i18n`
-- Current state: production-shaped Lab English/Korean i18n sample is local and
-  uncommitted while the user reviews code and team documentation. No remote
-  feature branch exists yet.
+- Current state: the production-shaped Lab English/Korean i18n sample is split
+  into five commits and pushed to `origin/feature/i18n` at `57a410355`. The
+  user is reviewing it before follow-up fixes or PR work.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`

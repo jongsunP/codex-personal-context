@@ -9,35 +9,42 @@ continuing.
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
 - Dedicated worktree: `/Users/parkjongsun/Repository/dentlink-client-i18n`
 - Branch: `feature/i18n`
-- Base and current HEAD:
+- Original implementation base:
   `b9c981ea1b52038784521201bf4362917605a3ab`
-  (`Release/v1.80.0 -> master (#4426)`)
-- At closeout, `HEAD == origin/master` and divergence is `0 behind / 0 ahead`.
-- The branch currently tracks `origin/master`; there is no remote
-  `feature/i18n` branch yet.
+  (`Release/v1.80.0 -> master (#4426)`).
+- Current HEAD:
+  `57a41035506dc82f603b31418292ca8517fc1671`
+  (`feat: Lab 주문 목록 번역 적용`).
+- The branch now tracks `origin/feature/i18n`; local and remote HEAD match.
+- Latest checked `origin/master` is
+  `833a5b40498e1673d082dd4439cb4ada3658952c`
+  (`release/v1.81.0 -> master (#4435)`). The feature branch is `5 ahead / 5
+  behind` relative to it. Do not merge or rebase without explicit user
+  authorization.
 - The sibling `/Users/parkjongsun/Repository/dentlink-client` worktree owns
   `master`. Do not edit or move this work into that worktree.
-- Current working tree is intentionally uncommitted: `0 staged`, `26 tracked
-  modified`, and `24 untracked` files.
-- No Dentlink commit, push, PR, branch recreation, reset, rebase, or amend was
-  performed at this checkpoint.
+- The product working tree is clean and the implementation was split into five
+  commits and pushed to `origin/feature/i18n`:
+  - `cc4b9a4e4` `chore: Lab i18n 카탈로그 생성 기반 추가`
+  - `9317931a7` `feat: Lab i18n 런타임 및 공통 UI 번역 연동`
+  - `7e6b8c18e` `feat: Lab 언어 선택과 메뉴 번역 적용`
+  - `35adafb28` `feat: Lab 대시보드 번역 적용`
+  - `57a410355` `feat: Lab 주문 목록 번역 적용`
+- No PR, merge, rebase, reset, or amend was performed.
 - Local session files `AGENTS.md`, `.agents/`, and `.codex/config.toml` still
   exist and are excluded through the shared Git directory's `info/exclude`.
   Do not stage, delete, or mix them with the i18n changes.
 
-The product changes exist only in this device's uncommitted worktree. This
-personal checkpoint is remote-portable, but another device cannot inspect or
-continue the actual code diff until the user reviews it and explicitly asks to
-commit and push `feature/i18n`. Do not copy the code diff into this personal
-context repository as a workaround.
+The implementation is now remote-portable through `origin/feature/i18n` and
+can be reviewed or resumed from another device.
 
 ## Current Stage
 
-- The current stage is user review of the code, spreadsheet operating model,
-  and Notion briefing.
+- The current stage is user review of the pushed code, spreadsheet operating
+  model, and Notion briefing.
 - Do not make additional product changes while the user is reviewing.
-- After review, wait for an explicit request before committing or pushing the
-  shared Dentlink repository.
+- After review, wait for explicit instructions before applying follow-up
+  changes, creating a PR, or synchronizing with `origin/master`.
 - The implementation is a production-shaped partial Lab sample, not a full
   translation pass.
 
@@ -161,14 +168,24 @@ context repository as a workaround.
 
 ## Verification At This Checkpoint
 
-- Live `git fetch origin master --prune` confirmed the HEAD/base relationship
-  above.
-- Current `git diff --check` passed.
-- Earlier in the same session, `pnpm check:i18n` passed with `55 keys across 8
-  locale files`.
-- Earlier in the same session, Lab typecheck and build passed.
-- Lab lint completed with `0 errors / 196 warnings`; the warnings are existing
-  project warnings and were not treated as failures.
+- Live `git fetch origin master --prune` confirmed the current remote state and
+  `5 ahead / 5 behind` divergence above.
+- `git diff --check`, Lab typecheck, and Lab production build passed.
+- Every commit hook ran and passed Clinic, Lab, and Admin typecheck.
+- The successful pre-push hook ran all three service lints with `0 errors / 419
+  warnings`, then passed its shared coverage comparison after creating the
+  ignored local `coverage-baseline.json` required by the repository hook.
+- `pnpm check:i18n` currently fails because Google Sheet row 57 duplicates
+  `gnb.navigation.home` from row 2 and has blank English and Korean values.
+  This is sheet data drift and was intentionally not edited during commit and
+  push.
+- A pre-commit review found that `generate:i18n`, `check:i18n`, and Lab's
+  `generate:locales` command require the ignored `lab/.env.local` file. A clean
+  checkout or CI can therefore fail before using injected environment
+  variables. Make `.env.local` loading optional in the follow-up change.
+- The standalone `shared/ui` build still reports broad pre-existing package
+  baseline errors; the Lab build provides integration compile coverage for the
+  shared components changed by this work.
 - Claude Code `2.1.209` is installed, its local doctor reported no installation
   issues, the i18n skill YAML frontmatter parsed successfully, and stale skill
   examples/path assumptions were removed.
@@ -177,35 +194,32 @@ context repository as a workaround.
 - Browser-level English/Korean visual QA, responsive long-text QA, and final
   team demo are still review items; do not report them as completed.
 
-Before commit, rerun the proportional checks because the working tree remains
-uncommitted and may change during user review.
-
 ## Next Start Point
 
 1. Pull `codex-personal-context` and read this file before relying on chat
    history.
 2. Confirm the exact worktree is
-   `/Users/parkjongsun/Repository/dentlink-client-i18n`. On the original device,
-   fetch rather than destructively pulling/rebasing the dirty worktree.
-3. Verify branch, HEAD, `origin/master`, worktree list, staged state, and the
-   full untracked-file list. Preserve all existing user changes.
-4. If working from another device before the feature branch is pushed, stop:
-   the implementation is still local-only. Use the original device for review
-   and delivery unless the user has since pushed the branch.
-5. Read the live Notion page and check the spreadsheet's sharing state. The
+   `/Users/parkjongsun/Repository/dentlink-client-i18n`, fetch remotes, and
+   verify that local `feature/i18n` matches `origin/feature/i18n` at
+   `57a410355` before changing anything. On another device, check out the
+   remote feature branch into a dedicated worktree.
+3. Verify HEAD, `origin/master`, worktree list, and working-tree state. Preserve
+   ignored local session files and credentials.
+4. Read the live Notion page and check the spreadsheet's sharing state. The
    service account should be a viewer; verify this rather than assuming the
    previous temporary editor permission was reverted.
-6. Continue only from the user's review feedback. Do not broaden the sample or
+5. Continue only from the user's review feedback. Do not broaden the sample or
    add CI automation yet.
-7. When the user explicitly asks to commit, use the repository's commit skill
-   and separate dependencies/runtime+generation, shared UI integration, Lab
-   sample application, and stable documentation/skill as appropriate after
-   inspecting the final diff.
+6. First follow-up candidates are optional `.env.local` loading and the Sheet
+   row 57 duplicate/blank data. Do not edit the sheet without an explicit
+   request and appropriate editor authorization.
+7. Before a PR, decide with the user how to synchronize the branch with the
+   newer `origin/master`; do not merge or rebase automatically.
 8. Rerun at least `pnpm check:i18n`, Lab typecheck, Lab lint, Lab build,
    `git diff --check`, `git status -sb`, and `git diff --stat`. Validate
    `shared/ui` proportionally if its final diff remains.
-9. When the user explicitly asks to push, do not run plain `git push` because
-   the current upstream is `origin/master`. Push exactly with
-   `git push -u origin feature/i18n` so no feature changes target master.
+9. Commit and push additional shared-repository changes only on explicit user
+   authorization. The branch now tracks `origin/feature/i18n`, but still name
+   the intended remote branch when the context could be ambiguous.
 10. Create or update a PR only on an explicit request and verify the intended
     target branch at that time.
