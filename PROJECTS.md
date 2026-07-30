@@ -71,3 +71,16 @@ For detailed current state, read:
   user is reviewing it before follow-up fixes or PR work.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`
+
+### Dentlink DSO Dashboard
+
+- Shared repository: `https://github.com/Innvoaid/dentlink-client`
+- Dedicated worktree:
+  `/Users/parkjongsun/Repository/dentlink-client-dso`
+- Branch: `feature/DL-15223`
+- Jira: `DL-15223`
+- Current state: the first Admin Organization CRUD implementation and the
+  fixture-backed Clinic DSO screens are pushed. PR #4443 merged the feature
+  branch into `develop`; development-server deployment verification is pending.
+- Personal current checkpoint, decisions, and prioritized TODO list:
+  `projects/dentlink-client-dso.md`
