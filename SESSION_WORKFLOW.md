@@ -127,6 +127,44 @@ This separation exists to reduce context contamination. It does not need to be
 rigid, but important implementation work and strategic decisions should be
 summarized into durable docs before being reused elsewhere.
 
+## Main Worktree And Feature Session Model
+
+For repositories where the user keeps a long-lived main worktree, treat its
+Codex session as the repository administrator and `master` management session.
+That session may keep `master` synchronized, inspect repository-wide state,
+create and remove worktrees and branches, prepare new feature environments,
+and handle work that explicitly belongs to the main worktree. Do not mix an
+independent feature implementation into the main worktree merely because the
+main session created or manages its branch.
+
+For each substantial new feature, use this flow when the user requests it:
+
+1. Verify that the main worktree is clean and synchronize `master` with its
+   remote using a fast-forward-only path.
+2. Confirm that the requested feature branch and folder do not already exist.
+3. Create one dedicated `feature/*` branch and one sibling worktree from the
+   requested base, then push the new branch and set its correct upstream when
+   the user requests remote setup.
+4. Create or open a separate Codex project and session rooted at that feature
+   worktree. Treat that session as the sole implementation scope for the
+   feature.
+5. From the main session, give the feature session a copyable startup prompt
+   containing the user's common working style, personal-context read order,
+   repository and permission boundaries, validation/reporting rules, exact
+   worktree/branch/upstream/HEAD state, and any relevant local-environment
+   warnings.
+6. Leave Jira requirements, Figma nodes, and the actual implementation request
+   for the user to provide directly in the feature session. Do not invent them
+   in the bootstrap prompt.
+7. After delivery is merged and the user asks for cleanup, verify the feature
+   worktree is clean and its commits are preserved remotely or merged before
+   removing the local worktree and branch.
+
+The main session remains responsible for repository-level coordination and
+master-related work, while each feature session owns edits, checks, commits,
+pushes, and PR work inside only its assigned worktree and only within the
+user's authorization boundaries.
+
 ## Start Or Resume Workflow
 
 When the user asks to start, resume, continue, or pick up work, follow the
