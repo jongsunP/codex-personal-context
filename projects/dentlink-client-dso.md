@@ -157,6 +157,9 @@ Clinic은 화면 뼈대와 랜딩 흐름까지 구현됐지만 실제 DSO 데이
 - Clinic은 백엔드 API가 준비되기 전까지 디자인 우선, 목데이터 기반으로 진행한다.
 - 존재하지 않는 API를 추측해 만들지 않고 실제 배포된 스펙만 사용한다.
 - 디자인과 세부 요구사항은 변경될 수 있으므로 데이터 계층과 화면 표현을 분리한다.
+- Figma는 제품 요구와 UI/UX 의도를 확인하는 기준이며 임의의 픽셀 차이를 맞추는
+  것이 목적이 아니다. 기능, 정보 구조, 상태, 상호작용은 반영하되 기존 프로젝트의
+  공용 UI, 디자인 토큰, 레이아웃, 반응형 규칙과 운영 패턴을 우선한다.
 - 기존 프로젝트와 가장 가까운 운영 컴포넌트, hook, query/cache, routing 방식을
   우선하며 코드량과 추상화를 무조건 늘리지 않는다.
 - Admin은 별도 디자인보다 기존 내부 CRUD 사용성을 따른다.
@@ -164,6 +167,53 @@ Clinic은 화면 뼈대와 랜딩 흐름까지 구현됐지만 실제 DSO 데이
   제한한다.
 - Organization 기본 랜딩 판단은 로그인 후 기본 목적지가 필요한 경우에만 한다.
   모든 인증 페이지 이동에 전역 redirect를 추가하지 않는다.
+
+## 최신 Figma 전체 재검토 — 2026-07-31
+
+Figma 원본 화면과 최신 명세, 공개 댓글 1~19를 현재 Clinic 구현 및 브라우저
+렌더링과 다시 대조했다. 이번 검토에서는 공유 프로젝트 코드를 수정하지 않았다.
+
+현재 DSO 데스크톱 화면은 기존 디자인의 큰 구조와 주요 상태를 따른다. 90일 날짜
+제한, 이전 동일 기간 비교, 주문 오름차순·의사 내림차순 기본값, 카테고리 0건의
+그래프 제외·목록 유지, hover 시 이름·건수·비율과 다른 조각 opacity 처리,
+Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필터와
+페이지네이션은 최신 Figma 및 댓글의 최종 합의와 일치한다.
+
+백엔드 DSO 데이터 API가 없어도 다음 UI·UX 및 기존 API 범위는 구현할 수 있다.
+
+- 기존 `/office/managed` 레이아웃과 탭 구조에 단일병원 Admin Dashboard를 추가한다.
+  별도 페이지 레이아웃을 복제하지 않고 기존 좌측 Office 정보 카드와 데스크톱·모바일
+  반응형 구조를 그대로 사용한다.
+- 단일병원 Dashboard는 Office 필터 없이 날짜와 새로고침, 주문·청구 2개 지표,
+  카테고리와 의사 목록을 보여준다. 기존 Organization Dashboard의 지표·차트·목록
+  단위를 실제 두 번째 사용처에 맞게 제한적으로 공용화한다.
+- Organization 관리자에게만 Clinic 데스크톱 GNB의 `Dashboard ↗` 진입점을 추가하고
+  모바일에서는 숨긴다.
+- My Profile에 `Default View`의 `Dashboard | Office` 제어를 추가한다. 생성 API 타입에
+  이미 있는 `/office/users/own/default-view`를 기존 수기 API wrapper, mutation,
+  사용자 cache·atom 갱신 패턴에 연결하고 기존 `SegmentControl`을 사용한다.
+- Dashboard 기본 날짜를 실행일 기준 최근 30일로 만들고 최초 새로고침 표시는
+  `Data from 1min ago`로 맞춘다.
+- 같은 시작일·종료일 선택은 공용 날짜 컴포넌트에 기본값이 기존 동작을 유지하는
+  선택적 prop으로 확장하고 Dashboard와 export에서만 활성화한다.
+- 지표 이전 기간 tooltip의 hover trigger를 비교 문구가 아니라 전체 지표 행 또는
+  카드로 넓힌다.
+- Dashboard의 수기 정렬 제어는 기존 `SegmentControl`로 교체한다.
+- Billing 목록·차트의 최소 높이는 300px 기준으로 조정한다. Advanced Export는
+  기존 공용 입력·드롭다운·날짜 범위 컴포넌트와 목 옵션으로 실제 로컬 선택 및
+  90일 검증이 되게 만들고, 현재의 raw input/select 기반 임시 동작을 제거한다.
+- Organization shell의 inline Dashboard SVG는 적합한 기존 아이콘이 없으면 저장소의
+  기존 SVGR 생성 방식으로 추가한다.
+
+다음 항목은 실제 API 또는 제품 결정 전에는 완료로 처리하지 않는다.
+
+- 실제 지표·주문·Billing·export 데이터, loading·empty·error 상태
+- 국가·통화와 비활성·퇴사 의사 포함 여부를 반영하는 실제 응답
+- Office 방문 시 선택 Office의 active employer 전환에 필요한 실데이터 매핑
+- 단일병원 디자인에서 말하는 `Admin`을 Clinic의 `OWNER`, `PAYMENT_MANAGER`,
+  `EDITOR`, `VIEWER` 중 어떤 권한으로 제한할지에 대한 확정
+- 댓글의 미해결 질문인 새로고침 elapsed label의 `days` 최대 기간 또는 30일 단위
+  자동 갱신 규칙
 
 ## 검증된 내용
 
