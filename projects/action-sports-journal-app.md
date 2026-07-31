@@ -105,6 +105,35 @@ status. This storage-boundary reorganization occurred during Dentlink work, so
 refresh the ASJ progress section during the next ASJ session rather than
 guessing its current state here.
 
+## Temporary Pause Checkpoint
+
+As of 2026-07-31, the Founder has temporarily paused ASJ work and intends to
+resume it later. This is a pause, not a cancellation of the project.
+
+Cost controls applied for the pause:
+
+- Render automatic payment / saved-card billing has been disabled or removed.
+- Expo automatic payment / saved-card billing has been disabled or removed.
+- Apple Developer Program remains active because it is an annual membership
+  and the next renewal is still far away.
+- Supabase remains on the unchanged Free plan according to the current project
+  record, so no separate cancellation was performed.
+- Gemini and OpenAI API usage are usage-based rather than recorded ASJ monthly
+  subscriptions. No separate cancellation was performed, and the paused
+  project should make no paid AI/API calls.
+- The billing review found no other recorded ASJ recurring project charge.
+  GitHub, Postico, Kakao OAuth, APNs Push, and the not-yet-purchased custom
+  domain do not add a recorded recurring ASJ charge in the current setup.
+
+When work resumes:
+
+1. Pull this personal-context repository and the ASJ project repository.
+2. Follow the documented ASJ read order and verify live Git/project state.
+3. Re-enable Render or Expo billing only when the next approved work genuinely
+   needs those services.
+4. Treat the billing notes above as a dated checkpoint and verify current
+   provider settings before incurring new costs.
+
 ## CTO Session Boundary
 
 For ASJ, the CTO session is the Founder-facing coordination lane. It should
