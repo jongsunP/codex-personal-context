@@ -79,10 +79,12 @@ For detailed current state, read:
   `/Users/parkjongsun/Repository/dentlink-client-dso`
 - Branch: `feature/DL-15223`
 - Jira: `DL-15223`
-- Current state: Admin Organization CRUD and the latest fixture-backed Clinic
-  DSO design/filter changes are pushed at `95a64e5db`. PR #4443 merged the
-  earlier feature state into `develop`; the two newer Clinic commits are not
-  included in `develop` yet. Remaining Clinic data APIs and latest deployment
-  verification are pending.
+- Current state: Admin Organization CRUD and the earlier fixture-backed Clinic
+  DSO changes are pushed at `95a64e5db`. The latest Figma/comment re-review and
+  browser-confirmed Clinic UI refinements are local and intentionally
+  uncommitted. PR #4443 merged the earlier feature state into `develop`; the
+  newer Clinic commits and local refinements are not included in `develop`.
+  Remaining Clinic data APIs, unresolved product decisions, and latest
+  deployment verification are pending.
 - Personal current checkpoint, decisions, and prioritized TODO list:
   `projects/dentlink-client-dso.md`

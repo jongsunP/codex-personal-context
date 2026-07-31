@@ -36,7 +36,12 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 - 현재 feature HEAD:
   `95a64e5dbcaf78d4931c33c2cf00e13a49df01ab`
   (`[DL-15223] feat: DSO 대시보드 디자인 및 필터 개선`)
-- local feature와 upstream은 일치하며 worktree는 clean하다.
+- local feature HEAD와 upstream commit은 일치한다. 다만 최신 Figma·댓글 재검토 뒤
+  가능한 Clinic UI/UX 보완을 진행해 현재 worktree에는 19개 미커밋 경로가 있다.
+  - tracked 변경 16개: 수정 15개, 삭제 1개
+  - untracked 3개
+  - staged 파일 0개
+  - 공유 저장소 commit·push·merge는 하지 않았다.
 - feature는 현재 `origin/master` 대비 `4 ahead / 0 behind`다.
 - 작업 커밋:
   - `e8c65d3f2` `[DL-15223] chore: 배포 API 스펙 동기화`
@@ -171,7 +176,9 @@ Clinic은 화면 뼈대와 랜딩 흐름까지 구현됐지만 실제 DSO 데이
 ## 최신 Figma 전체 재검토 — 2026-07-31
 
 Figma 원본 화면과 최신 명세, 공개 댓글 1~19를 현재 Clinic 구현 및 브라우저
-렌더링과 다시 대조했다. 이번 검토에서는 공유 프로젝트 코드를 수정하지 않았다.
+렌더링과 다시 대조했다. 1차 검토 뒤 백엔드나 제품 결정 없이 처리할 수 있는
+UI/UX 범위는 공유 프로젝트의 로컬 변경으로 반영했으며, 사용자의 지시대로 아직
+커밋하거나 push하지 않았다.
 
 현재 DSO 데스크톱 화면은 기존 디자인의 큰 구조와 주요 상태를 따른다. 90일 날짜
 제한, 이전 동일 기간 비교, 주문 오름차순·의사 내림차순 기본값, 카테고리 0건의
@@ -215,6 +222,60 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 - 댓글의 미해결 질문인 새로고침 elapsed label의 `days` 최대 기간 또는 30일 단위
   자동 갱신 규칙
 
+## 오늘 최종 체크포인트 — 2026-07-31
+
+### 완료한 개발·디자인 범위
+
+- Chrome Default 프로필의 실제 로그인 세션으로 다음 화면을 직접 확인했다.
+  - `/organizations`
+  - `/organizations/offices`
+  - `/organizations/billings`
+  - Advanced Export modal과 필수 입력 오류
+  - `/my`의 `Default View`
+- Figma 원본의 Dashboard, Offices, Billings 노드를 다시 렌더링해 실제 화면과
+  대조했다. 화면에 보이는 댓글 그룹은 `4 + 2 + 2 + 3 + 2 + 3`개와 단독 댓글
+  1개로 총 17개였고, 앞서 모든 본문과 답글을 읽어 반영 여부를 분류한 상태와
+  동일해 새 댓글 누락은 확인되지 않았다.
+- Dashboard에서 아래 항목을 실제 렌더링으로 확인했다.
+  - `Manage Offices` 로고, Organization 전용 navigation과 GNB
+  - 잘리지 않는 `All Offices`, 날짜 범위, 디자인 패딩을 유지한 가변 너비
+    `Data from 1min ago`
+  - `Order Counts` 표기와 Orders 오름차순·Dentist 내림차순 기본값
+  - 지표 카드 전체 hover 시 실제 이전 기간
+    `2026/05/31-2026/06/30` 표시
+  - 카테고리 hover의 이름·건수·반올림 비율과 다른 segment opacity 30%
+  - API 카테고리 이름 기반 목 지표 매핑, `Sample case` 0건 목록 유지,
+    14개 응답을 위한 412px 내부 스크롤
+- Offices에서 목록, `Visit Office`, `Not an Employee` 상태를 확인했다.
+- Billings에서 `All Offices`, `All Statuses`, `Partially paid`, pagination,
+  PDF 버튼, Advanced Export modal을 확인했다.
+- Advanced Export는 기존 공용 입력·필터·날짜 컴포넌트를 사용하며 dentist와
+  date 미선택 시 실제 required error가 표시되는 것을 확인했다.
+- My Profile에서 Organization 관리자에게 `Dashboard ↗` GNB 진입점과
+  `Default View: Dashboard | Office`가 표시되는 것을 확인했다. 값 변경은 실제
+  PATCH이므로 최종 시각 검토에서는 mutation을 실행하지 않았다.
+- Organization 화면 전용 보정은 공용 필터 컴포넌트의 전역 스타일을 바꾸지 않고
+  해당 화면의 아이콘 크기·간격만 조정했다. 별도
+  `OrganizationDateRangeFilter`/`DateRangeFieldV2` 복제본은 만들지 않았고 공용
+  컴포넌트를 선택적 prop으로 확장해 기존 호출부 기본 동작을 유지했다.
+- Dashboard 아이콘은 저장소의 기존 생성 방식과 동일한 assets/dist 구조로
+  추가했다.
+
+### 오늘 기준 미완료·대기
+
+- Clinic DSO의 실제 지표, 주문, 지점, Billing, export API와 실데이터 연동
+- `office/users/own.organizations[].countryCode` 배포 뒤 현재 `US` fallback 교체
+- 여러 Organization 중 현재 Organization을 선택·유지하는 서버·전역 상태 계약
+- `Visit Office`가 선택 지점 employer context를 실제로 전환하는 연동
+- 실데이터 기준 loading, empty, error, 권한 없음과 부분 응답 상태
+- 비활성·퇴사 의사 포함 규칙, 국가별 통화, 단일병원 Dashboard의 Admin 권한 범위
+- 댓글에서 답이 확정되지 않은 새로고침 elapsed label의 최대 기간·자동 갱신 규칙
+- 현재 로컬 변경의 공유 저장소 commit·push·PR 반영과 개발서버 배포 revision 확인
+
+현재 처리 가능한 디자인·UI·UX 범위에서는 알려진 추가 작업이 없다. Clinic 전체
+기능 완료라고 부를 수 없는 이유는 위 API·실데이터·제품 결정 대기 항목 때문이며,
+Admin 1차 구현 완료 판단과는 구분한다.
+
 ## 검증된 내용
 
 - Admin TypeScript 통과
@@ -233,6 +294,13 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 - 신규 Organization 수기 코드의 `data-contracts` 직접 참조 0건 확인
 - Clinic unauthenticated `/organizations` 접근 시 signin의 `next` 경로로 이동하는
   기존 인증 흐름 확인
+- 2026-07-31 최신 로컬 변경에서 Clinic TypeScript 통과
+- 최신 Dashboard·Billings·fixture 대상 ESLint 통과
+- Clinic 전체 lint 오류 0건, 기존 warning 234건으로 성공
+- `git diff --check` 통과
+- 로컬 HTTP route smoke에서 `/organizations`, `/organizations/offices`,
+  `/organizations/billings`, `/my` 모두 200 확인
+- Chrome 실제 화면과 Figma 원본 노드의 Dashboard, Offices, Billings 최종 대조 완료
 
 제한 사항:
 
@@ -243,9 +311,9 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
   것으로 간주하지 않는다.
 - Clinic 실데이터, loading, empty, error 상태와 다중 Organization 선택 동작은
   백엔드 계약이 아직 연결되지 않아 검증하지 않았다.
-- 날짜 필터 공용 컴포넌트 확장 뒤 최종 브라우저 시각 재확인은 개발 서버 종료 전
-  완료하지 못했다. 정적 디자인 대조와 코드 검증은 했지만 실제 렌더링 확인은
-  다음 시작점에서 다시 수행한다.
+- shared UI 전체 lint는 저장소에 동시에 해석되는 `eslint-plugin-storybook`
+  `8.38.0`과 `8.57.1` 충돌로 실행되지 않았다. Clinic TypeScript와 실제 호출부
+  대상 lint는 통과했으므로 이번 변경의 lint 실패로 분류하지 않는다.
 - Admin의 사용자 화면 검토는 완료됐지만 모든 mutation을 별도 테스트 데이터로
   반복하는 정형 E2E는 실행하지 않았다.
 - 기존 lint warning, Next 권장 TypeScript 버전 경고, 오래된 Browserslist 데이터
@@ -320,11 +388,10 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 2. 정확한 worktree가
    `/Users/parkjongsun/Repository/dentlink-client-dso`인지 확인한다.
 3. `feature/DL-15223`, HEAD, upstream, `origin/master`, `origin/develop`, PR #4443과
-   worktree clean 상태를 live Git에서 다시 확인한다.
-4. `/organizations`를 실행해 날짜 필터와 최신 Dashboard 디자인을 브라우저에서
-   최종 확인한다.
-5. 최신 두 커밋의 `develop` 통합은 사용자의 명시적 지시 후 진행하고, 그 다음
-   개발서버 revision을 확인한다.
+   worktree 상태를 live Git에서 다시 확인한다.
+4. 현재 19개 미커밋 경로의 diff와 이 체크포인트를 확인하고, 사용자가 명시적으로
+   요청한 경우에만 공유 저장소 commit·push를 진행한다.
+5. 그 뒤 `develop` 통합 방법과 개발서버 revision을 확인한다.
 6. 배포가 정상이라면 Admin P1 실데이터 스모크를 수행한다.
 7. Admin 결과와 별개로 Clinic은 실제 API 계약을 확인한 뒤 목데이터 교체 작업을
    시작한다.
