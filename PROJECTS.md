@@ -80,9 +80,10 @@ For detailed current state, read:
 - Branch: `feature/DL-15223`
 - Jira: `DL-15223`
 - Current state: Admin Organization CRUD and the fixture-backed Clinic DSO UI,
-  including the latest Figma/comment re-review and browser-confirmed hover
-  refinements, are committed and pushed at `3dbb8d93c`. PR #4443 merged the
-  earlier feature state into `develop`; six newer feature commits are not yet
+  including the latest full Figma/comment re-review, single Office filter,
+  responsive Orders card, chart typography, sidebar states, and browser QA,
+  are committed and pushed at `b389ce2d2`. PR #4443 merged the earlier feature
+  state into `develop`; seven newer feature commits are not yet
   included in `develop`. Remaining Clinic data APIs, unresolved product
   decisions, and latest deployment verification are pending.
 - Personal current checkpoint, decisions, and prioritized TODO list:
