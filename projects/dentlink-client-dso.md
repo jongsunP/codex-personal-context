@@ -34,10 +34,10 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   `833a5b40498e1673d082dd4439cb4ada3658952c`
   (`release/v1.81.0 -> master (#4435)`)
 - 현재 feature HEAD:
-  `f6cf0b8ec`
-  (`[DL-15223] feat: DSO 대시보드 및 기본 화면 설정 개선`)
+  `3dbb8d93c`
+  (`[DL-15223] fix: Organization 아이콘 디자인 반영`)
 - local feature HEAD와 `origin/feature/DL-15223`는 일치하며 worktree는 clean이다.
-- feature는 현재 `origin/master` 대비 `7 ahead / 0 behind`다.
+- feature는 현재 `origin/master` 대비 `8 ahead / 0 behind`다.
 - 작업 커밋:
   - `e8c65d3f2` `[DL-15223] chore: 배포 API 스펙 동기화`
   - `40bfd9526` `[DL-15223] feat: 치과 그룹 관리 및 대시보드 추가`
@@ -46,6 +46,7 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   - `6d0f4e133` `[DL-15223] chore: 배포 API 스펙 동기화`
   - `628594828` `[DL-15223] ui: 날짜 범위 선택 기능 확장`
   - `f6cf0b8ec` `[DL-15223] feat: DSO 대시보드 및 기본 화면 설정 개선`
+  - `3dbb8d93c` `[DL-15223] fix: Organization 아이콘 디자인 반영`
 - PR [#4443](https://github.com/Innvoaid/dentlink-client/pull/4443)
   (`Feature/dl 15223`)이 `feature/DL-15223 -> develop`으로 머지됐다.
 - 현재 `origin/develop`:
@@ -53,9 +54,9 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   - 부모는 `origin/master` 기준 커밋 `833a5b404`와 feature HEAD
     `40bfd9526`이다.
   - 기존 Admin과 1차 Clinic 구현의 개발 브랜치 통합은 확인됐다.
-  - `96106b5cd`부터 `f6cf0b8ec`까지 다섯 커밋은 PR 머지 뒤 추가돼 현재
+  - `96106b5cd`부터 `3dbb8d93c`까지 여섯 커밋은 PR 머지 뒤 추가돼 현재
     `origin/develop`에는 없다. `origin/develop...feature/DL-15223`은 develop 쪽
-    1개, feature 쪽 5개로 갈라져 있다.
+    1개, feature 쪽 6개로 갈라져 있다.
   - 최신 Clinic 디자인 변경의 개발서버 배포 revision과 완료 여부는 아직
     확인하지 않았다.
 
@@ -175,7 +176,7 @@ Clinic은 화면 뼈대와 랜딩 흐름까지 구현됐지만 실제 DSO 데이
 
 Figma 원본 화면과 최신 명세, 공개 댓글 1~19를 현재 Clinic 구현 및 브라우저
 렌더링과 다시 대조했다. 1차 검토 뒤 백엔드나 제품 결정 없이 처리할 수 있는
-UI/UX 범위는 공유 프로젝트에 반영하고 `f6cf0b8ec`까지 커밋·push했다.
+UI/UX 범위는 공유 프로젝트에 반영하고 `3dbb8d93c`까지 커밋·push했다.
 
 현재 DSO 데스크톱 화면은 기존 디자인의 큰 구조와 주요 상태를 따른다. 90일 날짜
 제한, 이전 동일 기간 비교, 주문 오름차순·의사 내림차순 기본값, 카테고리 0건의
@@ -262,6 +263,9 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
   Chrome에서 콘텐츠 hover 시 노출되고 padding hover 시 노출되지 않는 것을 확인했다.
 - 최신 생성 API 타입 변경은 CRM, 배송지 연락 이메일, 주문 상세 상태 관련이며
   DSO 전용 API 변경은 없다. `organizations[].countryCode`도 아직 추가되지 않았다.
+- Figma 댓글 `#1866490807`에 맞춰 상단 Organization 이름의 Office 아이콘을 기존
+  `SvgObjectOfficeLine`에서 `SvgObjectOfficeFilled`로 교체했다. 기존 공용 아이콘을
+  22px로 재사용했으며 Chrome 실제 화면에서 Filled 형상과 크기를 확인했다.
 
 ### 오늘 기준 미완료·대기
 
@@ -272,7 +276,7 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 - 실데이터 기준 loading, empty, error, 권한 없음과 부분 응답 상태
 - 비활성·퇴사 의사 포함 규칙, 국가별 통화, 단일병원 Dashboard의 Admin 권한 범위
 - 댓글에서 답이 확정되지 않은 새로고침 elapsed label의 최대 기간·자동 갱신 규칙
-- 다섯 신규 feature 커밋의 `develop` 통합과 개발서버 배포 revision 확인
+- 여섯 신규 feature 커밋의 `develop` 통합과 개발서버 배포 revision 확인
 
 현재 처리 가능한 디자인·UI·UX 범위에서는 알려진 추가 작업이 없다. Clinic 전체
 기능 완료라고 부를 수 없는 이유는 위 API·실데이터·제품 결정 대기 항목 때문이며,
@@ -289,7 +293,7 @@ Admin 1차 구현 완료 판단과는 구분한다.
 - shared coverage는 baseline 대비 변화 없음
 - Prettier와 `git diff --check` 통과
 - 최신 변경 대상 Clinic 파일 ESLint 통과
-- 최신 세 커밋의 commit hook에서 Clinic, Lab, Admin TypeScript 통과
+- 최신 네 커밋의 commit hook에서 Clinic, Lab, Admin TypeScript 통과
 - 최신 push hook에서 전체 lint 오류 0건, 기존 warning 420건과 shared coverage
   baseline 대비 변화 없음으로 성공
 - Admin과 Clinic production build route 목록에 Organization 페이지 생성 확인
@@ -309,7 +313,7 @@ Admin 1차 구현 완료 판단과는 구분한다.
 - Clinic Jest는 기존 Next/Jest module 설정 문제로 실행 시작 단계에서 실패했으며,
   이번 변경의 테스트 실패로 확정하지 않았다.
 - 실제 개발서버 배포 완료와 배포 revision은 아직 확인하지 않았다.
-- 최신 다섯 커밋은 `origin/develop`에 아직 없으므로 기존 개발 배포에 자동 포함된
+- 최신 여섯 커밋은 `origin/develop`에 아직 없으므로 기존 개발 배포에 자동 포함된
   것으로 간주하지 않는다.
 - Clinic 실데이터, loading, empty, error 상태와 다중 Organization 선택 동작은
   백엔드 계약이 아직 연결되지 않아 검증하지 않았다.
@@ -325,7 +329,7 @@ Admin 1차 구현 완료 판단과는 구분한다.
 
 ### P0 — 최신 Clinic 변경 통합과 개발 배포 확인
 
-- [ ] 최신 다섯 커밋을 `develop`에 반영할 PR 또는 통합 방법은 사용자의 명시적
+- [ ] 최신 여섯 커밋을 `develop`에 반영할 PR 또는 통합 방법은 사용자의 명시적
   지시 후 진행한다.
 - [ ] 통합 뒤 개발서버가 최신 Clinic HEAD를 포함하는 revision인지 확인한다.
 - [ ] Admin과 Clinic의 실제 배포 URL 및 health 상태를 확인한다.
