@@ -121,6 +121,10 @@ Cost controls applied for the pause:
 - Gemini and OpenAI API usage are usage-based rather than recorded ASJ monthly
   subscriptions. No separate cancellation was performed, and the paused
   project should make no paid AI/API calls.
+- The Founder has already added small prepaid amounts for OpenAI and Gemini API
+  use. Leave those existing balances in place and do not pursue a refund during
+  the pause. Accept that unused credits may expire under each provider's credit
+  policy; do not add more credit or enable automatic top-ups while paused.
 - The billing review found no other recorded ASJ recurring project charge.
   GitHub, Postico, Kakao OAuth, APNs Push, and the not-yet-purchased custom
   domain do not add a recorded recurring ASJ charge in the current setup.
