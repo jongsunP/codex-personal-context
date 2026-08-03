@@ -2,6 +2,10 @@
 
 ## 2026-08-03
 
+- Confirmed Figma comment `#26` against the committed code: both Organization
+  and single-Office dashboards already update the `Data from ... ago` label on
+  a 60-second interval without refetching APIs. Corrected the checkpoint rather
+  than adding duplicate timer code.
 - Corrected the scope of the reusable Dentlink guidance: it comes from the
   entire `feature/DL-15223` lifecycle, not only its DL-15801 Amplitude task.
   The common method now explicitly covers requirement reconciliation across

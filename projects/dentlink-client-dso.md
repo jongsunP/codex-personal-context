@@ -146,6 +146,9 @@ Admin은 현재 요구된 1차 범위에서 완료로 분류한다. 개발서버
     맞췄다.
   - `Data from ... ago` 버튼은 글자 크기를 줄이지 않고 디자인 패딩을 유지한
     가변 너비로 변경했다.
+  - Figma 댓글 `#26`에서 확인을 요청한 경과시간 문구는 Organization과 단일병원
+    Dashboard 모두 기존 60초 interval로 브라우저 새로고침 없이 갱신된다.
+    `currentTime` 표시 상태만 변경하며 API를 다시 호출하지 않는다.
   - `ManageOffices` 텍스트 SVG를 기존 icon 생성 설정과 같은 방식으로 추가했다.
   - 주문·매출·카테고리·의사 카드의 아이콘, tooltip, 표, 정렬, skeleton과
     목 지표를 최신 디자인에 맞춰 보완했다.
