@@ -85,7 +85,9 @@ For detailed current state, read:
   DL-15801 Amplitude click events are committed and pushed at `345699e4d`.
   PR #4443 merged only the earlier state through `40bfd9526`; 11 newer feature
   commits are not in `develop` and there is no open follow-up PR. Advanced
-  Export API integration, multi-Organization selection policy, master/develop
-  integration, deployment revision, and live Amplitude delivery remain pending.
+  Export API integration, master/develop integration, deployment revision, and
+  live Amplitude delivery remain pending. The current backend policy
+  intentionally uses the sole `organizations[0]`; `Visit Office` already
+  reuses the existing active-Office transition flow.
 - Personal current checkpoint, decisions, and prioritized TODO list:
   `projects/dentlink-client-dso.md`

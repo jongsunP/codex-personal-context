@@ -164,8 +164,12 @@ Admin은 현재 요구된 1차 범위에서 완료로 분류한다. 개발서버
   명세서 PDF를 배포된 Organization API에 연결했다.
 - 단일병원 `/office/managed` Dashboard도 배포된 Office dashboard API에 연결했다.
 - Organization 목록의 `countryCode`를 카테고리 조회와 날짜·통화 형식에 사용한다.
-  백엔드와의 현재 정책대로 `organizations[0]`을 사용하되 향후 다중 Organization
-  선택 계약이 필요함을 코드 주석과 체크포인트에 남겼다.
+  백엔드와 합의한 현재 범위는 응답 배열에 Organization이 항상 하나이므로
+  `organizations[0]`을 사용한다. 다중 선택은 현재 미완료가 아니라 정책 변경 시
+  다시 다룰 향후 범위다.
+- `Visit Office`는 기존 Office 선택 흐름과 같이 `activeEmployeeId` 설정,
+  `activateEmployee`, query invalidation, 기본 홈 이동을 사용한다. 실패 시 이전
+  employee ID로 복원하고 성공 응답으로 `activeEmployee`도 갱신한다.
 - Office 표시 이름은 `branchName`을 우선하고 없으면 `employerName`을 사용한다.
 - Organization Billing은 서버 목록, Office·상태 필터, 서버 페이지네이션을 사용하고
   기존 `/billing/statement`와 동일한 PDF 화면을 Organization statement API로
@@ -193,7 +197,7 @@ Admin은 현재 요구된 1차 범위에서 완료로 분류한다. 개발서버
   저장 시 `Office.ts` 등에 대량 포맷 diff가 재발하지 않게 했다.
 
 현재 서버 API가 없는 `Advanced Export` 실제 파일 생성만 디자인·유효성 UI 상태로
-남아 있다. 다중 Organization 선택 계약과 develop 통합·배포 확인도 별도 대기다.
+남아 있다. develop 통합·배포 확인도 별도 대기다.
 
 ### 공유 모델과 API
 
@@ -426,8 +430,8 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
   것으로 간주하지 않는다.
 - `DL-15801` 이벤트는 코드와 push까지만 완료했다. 배포 revision 및 실제 Amplitude
   수신은 확인하지 않았으므로 live 완료로 분류하지 않는다.
-- Advanced Export 실제 파일 생성, 다중 Organization 선택과 일부 실데이터 경계
-  상태는 서버 계약이 없어 검증하지 않았다.
+- Advanced Export 실제 파일 생성과 일부 실데이터 경계 상태는 서버 계약이 없어
+  검증하지 않았다.
 - shared UI 전체 lint는 저장소에 동시에 해석되는 `eslint-plugin-storybook`
   `8.38.0`과 `8.57.1` 충돌로 실행되지 않았다. Clinic TypeScript와 실제 호출부
   대상 lint는 통과했으므로 이번 변경의 lint 실패로 분류하지 않는다.
@@ -466,12 +470,8 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 
 ### P1 — Clinic 남은 서버 계약과 계측 확인
 
-- [ ] 여러 Organization 소속 사용자의 현재 Organization 선택·유지 계약을 확정한다.
 - [ ] Advanced Export API가 배포되면 현재 modal 입력을 payload에 연결하고 실제
   파일 다운로드·실패 상태를 구현한다.
-- [ ] Organization 변경 시 화면 데이터와 URL·전역 상태의 책임을 확정한다.
-- [ ] `Visit Office`가 선택 지점 employer context를 전환하는 서버·전역 상태 계약을
-  확정한다.
 - [ ] 비활성·퇴사 의사 포함 규칙과 부분 응답 경계 상태를 실제 데이터로 확인한다.
 - [ ] `345699e4d`가 배포된 revision인지 확인한 뒤 Amplitude에서 네 이벤트 이름과
   `defaultviewType` 값을 실제 수신 검증한다.

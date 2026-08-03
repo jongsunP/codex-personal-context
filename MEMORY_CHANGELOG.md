@@ -2,6 +2,11 @@
 
 ## 2026-08-03
 
+- Corrected two DSO TODO classifications after checking live code and the
+  confirmed backend policy: `organizations[0]` is the completed current
+  single-Organization rule rather than a current selection blocker, and
+  `Visit Office` already reuses the established active-employee transition,
+  invalidation, rollback, and default-home navigation flow.
 - Confirmed Figma comment `#26` against the committed code: both Organization
   and single-Office dashboards already update the `Data from ... ago` label on
   a 60-second interval without refetching APIs. Corrected the checkpoint rather
