@@ -118,6 +118,50 @@ appear nowhere else in the app.
 - Add refs/effects only when they solve a concrete stale-closure, race, or
   synchronous duplicate-request problem that state alone cannot solve.
 
+## Dentlink Client Implementation Defaults
+
+Treat these as reusable project-aligned defaults for new `dentlink-client`
+features, not as permission to ignore newer code or a verified exception.
+Recheck the closest implementation in the target app and current branch before
+applying them.
+
+- Keep Clinic and Admin patterns separate. A Clinic feature should follow the
+  nearest Clinic screen, hook, service, routing, and state-ownership pattern;
+  an Admin feature should follow the nearest Admin CRUD, form, query, and table
+  pattern. Do not transfer a sibling app's style merely because it is in the
+  same monorepo.
+- Treat Swagger generation output as the transport contract. Handwritten model
+  and feature code should consume the repository's app-facing exports, domain
+  types, and API wrappers; do not import generated `data-contracts` directly
+  from a handwritten feature type merely to save a small type definition.
+- Keep query and mutation ownership at the same hook or service boundary used
+  by neighboring code. Components should receive semantic data, loading state,
+  and callbacks rather than mutation objects or duplicated invalidation and
+  navigation logic.
+- Match selection cardinality end to end. If the UI allows multiple values and
+  the API accepts an array, preserve every selected value in state and the
+  request. Define sentinel options such as `all` explicitly so selecting it
+  clears specific values and clearing the final specific value restores the
+  intended default.
+- When a selector must offer the complete set from a paginated endpoint, do not
+  silently treat the first `100` records as complete. Use the existing
+  server-search interaction when available, or page until the response total
+  is satisfied.
+- Use Dentlink's shared date and currency utilities for user-visible values and
+  derive the locale/date format from the real Organization, Office, or user
+  country context. Keep API date parameters in the contract format through the
+  same utility; avoid direct `date-fns` formatting, string replacement, and a
+  hardcoded locale when a shared formatter already owns the rule.
+- Extend an existing shared input with a minimal optional prop when the
+  difference is real and reusable. For programmatic form updates, add a
+  controlled `value` path while preserving the existing uncontrolled
+  `defaultValue` or `defaultValues` behavior and defaults for all current
+  consumers.
+- When design arrives before an API, keep fixture data behind a boundary that
+  can be replaced by the normal query layer. Once a real API is deployed,
+  regenerate and inspect the contract before replacing fixtures; do not invent
+  endpoints, fields, or response behavior that are still undecided.
+
 ## Figma And QA
 
 - Inspect the provided node and sibling variants for desktop, mobile, long

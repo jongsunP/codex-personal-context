@@ -1,5 +1,21 @@
 # Memory Changelog
 
+## 2026-08-03
+
+- Added reusable `dentlink-client` implementation defaults learned while
+  reviewing the DSO work: keep Clinic and Admin patterns app-local, separate
+  generated Swagger transport artifacts from handwritten feature/domain types,
+  preserve hook/service mutation ownership, and match selection cardinality to
+  API payloads.
+- Recorded that complete relationship selectors must not silently stop at the
+  first 100 paginated results, and that user-visible dates and currency should
+  use Dentlink shared formatters with the actual country context.
+- Recorded the shared-input extension pattern: add a minimal optional
+  controlled value path while preserving existing uncontrolled defaults and
+  audit current consumers before changing shared behavior.
+- Reinforced the design-before-API boundary: fixtures remain replaceable UI
+  inputs, and only deployed, regenerated contracts authorize real integration.
+
 ## 2026-07-22
 
 - Added the durable branch-naming rule: never introduce an agent-specific
