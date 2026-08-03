@@ -120,10 +120,38 @@ appear nowhere else in the app.
 
 ## Dentlink Client Implementation Defaults
 
-Treat these as reusable project-aligned defaults for new `dentlink-client`
+These defaults were consolidated from the full `feature/DL-15223` lifecycle:
+Admin and Clinic implementation, changing Figma and comments, Swagger/API
+rollout, authentication and authorization, PDF reuse, generated files, browser
+QA, and analytics. They are not rules learned only from DL-15801 or Amplitude.
+
+Treat them as reusable project-aligned defaults for new `dentlink-client`
 features, not as permission to ignore newer code or a verified exception.
 Recheck the closest implementation in the target app and current branch before
 applying them.
+
+- Before editing, reconcile the Jira parent and related FE cards/comments,
+  FigJam flow, target Figma nodes/variants/comments, deployed Swagger contract,
+  live branch state, and the closest production implementation in the same app.
+  Keep inaccessible, undecided, and backend-pending items explicit rather than
+  completing them by assumption.
+- Work in replaceable stages when requirements arrive asynchronously: preserve
+  a clean UI/data boundary while an API is pending, regenerate and inspect the
+  deployed contract when it arrives, then connect it through the app's existing
+  service, domain type, and query layer. Do not leave fixtures mixed into the
+  server-backed result after migration.
+- Treat Figma as the source for product intent, information hierarchy, states,
+  interactions, and intentional visual details rather than an instruction to
+  duplicate every pixel with new CSS. Read sibling variants and comments, then
+  verify the relevant real browser state before claiming design alignment.
+- Place cross-cutting behavior at its narrowest owning boundary. For example,
+  resolve a default landing view in the login destination flow instead of
+  redirecting every authenticated navigation, and treat menu visibility and
+  direct-route authorization as separate protections.
+- Keep implementation, local checks, user visual QA, integration, deployed
+  revision, real-data verification, and live analytics delivery as distinct
+  completion states. A commit or successful push proves only the states that
+  were actually checked.
 
 - Keep Clinic and Admin patterns separate. A Clinic feature should follow the
   nearest Clinic screen, hook, service, routing, and state-ownership pattern;

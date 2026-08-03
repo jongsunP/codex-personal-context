@@ -2,6 +2,13 @@
 
 ## 2026-08-03
 
+- Corrected the scope of the reusable Dentlink guidance: it comes from the
+  entire `feature/DL-15223` lifecycle, not only its DL-15801 Amplitude task.
+  The common method now explicitly covers requirement reconciliation across
+  Jira/FigJam/Figma/Swagger/live code, app-local pattern reuse, replaceable
+  UI-to-API migration, generated-code ownership, narrow auth boundaries,
+  browser-backed design review, reversible deferrals, and separate delivery
+  states. DL-15801 remains recorded as one completed implementation checkpoint.
 - Recorded the analytics event-boundary rule learned from DL-15801: place CTA
   click events at the actual click before validation or mutation, reserve
   success events for confirmed outcomes, and verify existing page-view/session

@@ -61,6 +61,41 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 `origin/master` 동기화, merge, rebase, 추가 push, PR 변경은 현재 live 상태를 확인한
 뒤 사용자의 명시적 지시로만 수행한다.
 
+## 이 브랜치에서 일반화한 작업 방식
+
+이 항목은 DL-15801 Amplitude 구현만의 회고가 아니다. `feature/DL-15223`에서
+Admin Organization CRUD부터 Clinic DSO 화면, API 전환, 인증·권한, My Profile,
+PDF 재사용, Figma 재검토와 계측까지 진행하며 확인한 방법을 이후의 다른
+`dentlink-client` 신규 기능에도 적용하기 위한 기록이다. 공통 규칙은
+`DEVELOPMENT_STYLE.md`의 `Dentlink Client Implementation Defaults`에 반영했다.
+
+- 요구사항은 Jira 상위 카드만 보지 않고 관련 FE 카드·댓글, FigJam 흐름, Figma의
+  대상 노드·sibling variant·댓글, 배포된 Swagger, live Git과 같은 앱의 가장 가까운
+  운영 구현을 함께 대조한다. 접근하지 못했거나 결정되지 않은 내용은 추측하지 않는다.
+- Clinic은 Clinic의 컴포넌트·hook·service·query·routing을, Admin은 기존 Admin
+  CRUD·공용 폼·테이블·mutation 흐름을 따른다. 같은 모노레포라는 이유로 다른 앱의
+  구현 방식을 섞지 않는다.
+- 디자인 차이는 기존 공용 UI의 사용 조합이나 기본 동작을 보존하는 선택적 prop으로
+  먼저 해결한다. 실제로 반복되는 새로운 책임이 없으면 전용 wrapper나 helper,
+  화면별 복제 컴포넌트를 만들지 않는다.
+- API가 늦게 나오는 기능은 교체 가능한 UI/data 경계를 유지하고, 배포 뒤 Swagger를
+  다시 생성해 diff를 검토한 다음 기존 domain type·API wrapper·query 계층으로
+  연결한다. 생성 코드는 generator 소유 형식을 유지하고 수기 기능 코드에서
+  `data-contracts`를 직접 소비하지 않는다.
+- 인증 후 기본 랜딩, 명시적 `next`, 메뉴 노출, 직접 URL 접근 방어를 서로 다른
+  책임으로 다룬다. 전역 Auth redirect처럼 기존 탐색 흐름을 침범하는 방식보다 실제
+  lifecycle의 가장 좁은 소유 지점에서 처리한다.
+- Figma는 픽셀 복제보다 정보 구조·상태·상호작용·의도된 세부 표현을 확인하는
+  기준으로 사용한다. 전체 반영을 말하려면 대표 화면뿐 아니라 관련 variant와 댓글을
+  읽고 실제 브라우저의 화면·DOM·네트워크 또는 조건부 코드를 필요한 범위에서
+  검증한다.
+- 기존 Billing statement처럼 제품에 이미 검증된 흐름은 신규 기능에서도 재사용하고,
+  삭제 UI 숨김이나 미출시 export처럼 보류된 동작은 서버 계약과 복구 가능성을
+  보존한 채 현재 요구 범위만 제한한다.
+- 구현·로컬 검증·사용자 시각 QA·통합·배포 revision·실데이터·Amplitude 수신을
+  각각 별도 상태로 기록한다. 코드가 commit·push됐다는 이유만으로 배포나 운영
+  수신까지 완료됐다고 표현하지 않는다.
+
 ## 현재 완료 수준
 
 ### Admin — 1차 구현 완료
@@ -192,6 +227,9 @@ Admin은 현재 요구된 1차 범위에서 완료로 분류한다. 개발서버
   사용하고 명세에 없는 수기 duration 이벤트는 추가하지 않았다.
 - 구현 커밋 `345699e4d`를 `origin/feature/DL-15223`에 push했다. 배포 및 Amplitude
   수신 확인 전에는 live 이벤트 완료로 간주하지 않는다.
+
+DL-15801은 위 브랜치 전체 작업 방식의 한 적용 사례이자 완료 현황이다. 공통으로
+재사용할 방법의 범위를 Amplitude 계측에만 한정하지 않는다.
 
 ## 확정된 구현 결정
 
