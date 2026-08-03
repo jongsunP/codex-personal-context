@@ -2,6 +2,15 @@
 
 ## 2026-08-03
 
+- Recorded the analytics event-boundary rule learned from DL-15801: place CTA
+  click events at the actual click before validation or mutation, reserve
+  success events for confirmed outcomes, and verify existing page-view/session
+  capture before inventing manual dwell-time events.
+- Updated the Dentlink DSO checkpoint to pushed head `345699e4d`, including the
+  real dashboard/billing/PDF integrations, access and mobile guards,
+  outstanding balance, My Profile changes, generated-file formatting guard,
+  and DL-15801 Amplitude events. Advanced Export API, deployment/live event
+  verification, multi-Organization policy, and develop integration remain.
 - Added reusable `dentlink-client` implementation defaults learned while
   reviewing the DSO work: keep Clinic and Admin patterns app-local, separate
   generated Swagger transport artifacts from handwritten feature/domain types,

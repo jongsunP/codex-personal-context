@@ -79,12 +79,13 @@ For detailed current state, read:
   `/Users/parkjongsun/Repository/dentlink-client-dso`
 - Branch: `feature/DL-15223`
 - Jira: `DL-15223`
-- Current state: Admin Organization CRUD and the fixture-backed Clinic DSO UI,
-  including the latest full Figma/comment re-review, single Office filter,
-  responsive Orders card, chart typography, sidebar states, and browser QA,
-  are committed and pushed at `b389ce2d2`. PR #4443 merged the earlier feature
-  state into `develop`; seven newer feature commits are not yet
-  included in `develop`. Remaining Clinic data APIs, unresolved product
-  decisions, and latest deployment verification are pending.
+- Current state: Admin Organization CRUD, Clinic DSO/Office dashboards, My
+  Profile settings, Organization access/mobile guards, real dashboard/office/
+  billing APIs, existing-statement PDF reuse, outstanding balance, and
+  DL-15801 Amplitude click events are committed and pushed at `345699e4d`.
+  PR #4443 merged only the earlier state through `40bfd9526`; 11 newer feature
+  commits are not in `develop` and there is no open follow-up PR. Advanced
+  Export API integration, multi-Organization selection policy, master/develop
+  integration, deployment revision, and live Amplitude delivery remain pending.
 - Personal current checkpoint, decisions, and prioritized TODO list:
   `projects/dentlink-client-dso.md`

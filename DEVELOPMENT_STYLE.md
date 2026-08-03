@@ -251,6 +251,13 @@ applying them.
   placement and property-construction style inside the existing domain files.
   Verify event names and properties against the requested Notion/Jira source,
   but do not introduce a new analytics abstraction by default.
+- Preserve the source's event semantics: a CTA `click` event belongs at the
+  actual click boundary before validation, navigation, or mutation, while a
+  success event belongs only after the confirmed outcome. Do not relabel one as
+  the other for implementation convenience.
+- When an analytics brief lists dwell time as an analysis goal but specifies no
+  manual duration event, verify the app's existing page-view and session
+  capture before inventing another event.
 - Command-based type, lint, formatting, diff, browser, and network verification
   does not justify leaving permanent test or support files in the branch.
 - Never claim an analytics event is live merely because code is committed or a

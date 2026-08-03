@@ -24,23 +24,25 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 간주한다. 이 체크포인트는 사용자가 제공한 범위와 현재 코드·Git에서 검증한 사실을
 기록한다.
 
-## 저장소와 현재 Git 상태 — 2026-07-31
+## 저장소와 현재 Git 상태 — 2026-08-03
 
 - 공유 저장소: `https://github.com/Innvoaid/dentlink-client`
 - 전용 worktree: `/Users/parkjongsun/Repository/dentlink-client-dso`
 - 브랜치: `feature/DL-15223`
 - upstream: `origin/feature/DL-15223`
-- 분기 기준 및 현재 `origin/master`:
-  `833a5b40498e1673d082dd4439cb4ada3658952c`
-  (`release/v1.81.0 -> master (#4435)`)
+- 현재 `origin/master`:
+  `6bb4119c137921a23f724819781b6a59004b4e03`
+  (`Release/v1.82.0 -> master (#4457)`)
 - 현재 feature HEAD:
-  `b389ce2d25e54eff84396a56b54d9554ab81178d`
-  (`[DL-15223] feat: DSO 대시보드 디자인 정합성 개선`)
+  `345699e4d22b589c867acb97db87a636e88f8bc1`
+  (`[DL-15801] feat: DSO 대시보드 Amplitude 이벤트 추가`)
 - local feature HEAD와 `origin/feature/DL-15223`는 일치하며 worktree는 clean이다.
-- feature는 현재 `origin/master` 대비 `9 ahead / 0 behind`다.
-- 작업 커밋:
-  - `e8c65d3f2` `[DL-15223] chore: 배포 API 스펙 동기화`
-  - `40bfd9526` `[DL-15223] feat: 치과 그룹 관리 및 대시보드 추가`
+- `origin/master...feature/DL-15223`은 master 쪽 63개, feature 쪽 13개로
+  갈라져 있다. 최신 master 통합은 수행하지 않았다.
+- PR [#4443](https://github.com/Innvoaid/dentlink-client/pull/4443)은
+  `40bfd9526`까지 `develop`에 머지한 과거 PR이다. 이후 feature의 11개 커밋은
+  `origin/develop`에 없고 현재 이 head의 열린 PR도 없다.
+- PR 머지 뒤 추가된 커밋:
   - `96106b5cd` `[DL-15223] ui: 날짜 범위 필터 최대 기간 옵션 추가`
   - `95a64e5db` `[DL-15223] feat: DSO 대시보드 디자인 및 필터 개선`
   - `6d0f4e133` `[DL-15223] chore: 배포 API 스펙 동기화`
@@ -48,18 +50,12 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   - `f6cf0b8ec` `[DL-15223] feat: DSO 대시보드 및 기본 화면 설정 개선`
   - `3dbb8d93c` `[DL-15223] fix: Organization 아이콘 디자인 반영`
   - `b389ce2d2` `[DL-15223] feat: DSO 대시보드 디자인 정합성 개선`
-- PR [#4443](https://github.com/Innvoaid/dentlink-client/pull/4443)
-  (`Feature/dl 15223`)이 `feature/DL-15223 -> develop`으로 머지됐다.
-- 현재 `origin/develop`:
-  `43218771e2e5e89188ebc400635cbc96fa3f6497`
-  - 부모는 `origin/master` 기준 커밋 `833a5b404`와 feature HEAD
-    `40bfd9526`이다.
-  - 기존 Admin과 1차 Clinic 구현의 개발 브랜치 통합은 확인됐다.
-  - `96106b5cd`부터 `b389ce2d2`까지 일곱 커밋은 PR 머지 뒤 추가돼 현재
-    `origin/develop`에는 없다. `origin/develop...feature/DL-15223`은 develop 쪽
-    1개, feature 쪽 7개로 갈라져 있다.
-  - 최신 Clinic 디자인 변경의 개발서버 배포 revision과 완료 여부는 아직
-    확인하지 않았다.
+  - `5eb162832` `[DL-15223] feat: DSO 대시보드 API 및 화면 개선`
+  - `a140d32af` `[DL-15223] feat: DSO 대시보드 및 설정 화면 개선`
+  - `d4b4e01d0` `[DL-15223] feat: Organization 청구 및 접근 제어 기능 반영`
+  - `345699e4d` `[DL-15801] feat: DSO 대시보드 Amplitude 이벤트 추가`
+- `345699e4d` push hook은 전체 lint 오류 0건, 기존 warning 420건과 shared
+  coverage baseline 변화 없음으로 성공했다.
 
 이 worktree에서 `master`로 이동하거나 다른 Dentlink worktree를 수정하지 않는다.
 `origin/master` 동기화, merge, rebase, 추가 push, PR 변경은 현재 live 상태를 확인한
@@ -101,7 +97,7 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 Admin은 현재 요구된 1차 범위에서 완료로 분류한다. 개발서버 실데이터를 이용한
 안전한 CRUD 스모크와 배포 revision 확인은 별도 QA 단계다.
 
-### Clinic — 디자인 우선 구현 및 Figma 재조정, 데이터 연동 미완료
+### Clinic — 주요 API 연동 완료, export API 대기
 
 - Organization 전용 라우트를 추가했다.
   - `/organizations`
@@ -126,23 +122,46 @@ Admin은 현재 요구된 1차 범위에서 완료로 분류한다. 개발서버
     선택하면 오류가 즉시 갱신된다.
 - 기존 프로젝트 컴포넌트와 스타일 구조를 우선 사용하고 DSO 화면에 필요한
   컴포넌트만 새로 만들었다.
-- 현재 지표와 목록 데이터 대부분은 `organization.fixtures.ts`의 목데이터다.
-- `Orders by Category`의 카테고리 이름은 배포된
-  `/catalogs/category?countryCode=US` API를 사용한다.
-  - `office/users/own`의 Organization에 `countryCode`가 추가될 예정이므로 현재는
-    `US` fallback을 사용한다.
+- Dashboard 지표, Office·Category·Dentist 주문 집계, Office 목록, Billing 목록과
+  명세서 PDF를 배포된 Organization API에 연결했다.
+- 단일병원 `/office/managed` Dashboard도 배포된 Office dashboard API에 연결했다.
+- Organization 목록의 `countryCode`를 카테고리 조회와 날짜·통화 형식에 사용한다.
+  백엔드와의 현재 정책대로 `organizations[0]`을 사용하되 향후 다중 Organization
+  선택 계약이 필요함을 코드 주석과 체크포인트에 남겼다.
+- Office 표시 이름은 `branchName`을 우선하고 없으면 `employerName`을 사용한다.
+- Organization Billing은 서버 목록, Office·상태 필터, 서버 페이지네이션을 사용하고
+  기존 `/billing/statement`와 동일한 PDF 화면을 Organization statement API로
+  재사용한다.
+- 실제 청구서 `E186-2026-03-001`로 기존 Billing과 Organization 양쪽 PDF가 같은
+  `Consolidated Billing Statement`를 렌더링하고 Download blob을 만드는 것을
+  Chrome에서 확인했다.
+- `outstandingBalance > 0`이면 Organization sidebar에 미수금과 `Check Now`를
+  표시하고 UNPAID·PARTIALLY_PAID Billing 필터로 이동한다.
 - Organization 경로에서는 기존 Clinic 전역 배너와 지원 토글을 숨긴다.
 - `OfficeUserProfileDto.defaultLandingView`가 `ORGANIZATION`이면 로그인 직후 기본
   경로를 `/organizations`로 결정한다.
 - 명시적인 `next` 경로가 있으면 그 경로를 우선하며, 인증된 사용자가 주소창으로
   다른 기존 페이지에 직접 접근하는 흐름을 전역 Auth redirect로 막지 않는다.
+- `/organizations` 계열은 `organizations[0].authority === "ADMIN"` 사용자만
+  접근하며 직접 URL 접근도 403으로 방어한다. 모바일 진입과 데스크톱에서 모바일
+  크기로 바뀌는 경우에는 기존 주문하기 흐름과 같은 `react-device-detect` 및
+  viewport hook 조합으로 `Mobile Not Supported` popup을 표시한다.
+- My Profile은 기존 화면 내부 구조를 재사용해 Settings 레이아웃, Design Approval,
+  Case Preferences, Promotional SMS와 Organization 관리자용 Default View를
+  데스크톱·모바일 디자인에 맞게 재배치했다.
+- Admin Organization 상세의 Delete UI는 사용자 요청에 따라 현재 숨겨 두었으며
+  API와 복구 가능한 기존 구현은 유지한다.
+- Swagger 생성 파일은 generator format을 유지하도록 Prettier 대상에서 제외해
+  저장 시 `Office.ts` 등에 대량 포맷 diff가 재발하지 않게 했다.
 
-Clinic은 화면 뼈대와 랜딩 흐름까지 구현됐지만 실제 DSO 데이터·API가 연결되지
-않았으므로 기능 완료로 분류하지 않는다.
+현재 서버 API가 없는 `Advanced Export` 실제 파일 생성만 디자인·유효성 UI 상태로
+남아 있다. 다중 Organization 선택 계약과 develop 통합·배포 확인도 별도 대기다.
 
 ### 공유 모델과 API
 
 - 배포된 Swagger 기준으로 `generate:api-type`을 실행하고 생성 파일을 동기화했다.
+- Organization dashboard, own, billing list, billing statement와 Office dashboard
+  API 변경을 수기 domain wrapper·타입 계층에 반영했다.
 - Admin Organization용 수기 API wrapper와 서비스별 타입을 추가했다.
 - 신규 수기 Organization 모델은 `data-contracts`를 직접 참조하지 않는다.
   생성된 API client 내부의 `data-contracts` 참조와 수기 모델 계층을 구분한다.
@@ -155,11 +174,31 @@ Clinic은 화면 뼈대와 랜딩 흐름까지 구현됐지만 실제 DSO 데이
 - `SvgManageOfficesText` 생성 컴포넌트는 저장소의 SVGR 설정으로 다시 생성한
   결과와 byte-level diff가 없는 것을 확인했다.
 
+### Amplitude — DL-15801 구현 완료
+
+- Jira [DL-15801](https://innovaid.atlassian.net/browse/DL-15801)과 연결된
+  [Notion 기획](https://app.notion.com/p/3b1ce072e82f8056ac51fcb02d4a1bc5)을
+  직접 확인했다. Jira 카드에는 별도 댓글·첨부가 없었다.
+- 기존 `AMP_Track`을 소유 컴포넌트에 직접 추가했으며 별도 analytics helper나
+  mapper 파일을 만들지 않았다.
+  - 단일병원·DSO Dashboard refresh: `refresh_data_button_click`
+  - Billing Advanced Export: `advanced_export_button_click`
+  - Export Payment History CTA: `export_button_click`
+  - My Profile Default View: `default_view_click`
+    - `defaultviewType: "Office" | "Dashboard"`
+- `export_button_click`은 기획의 CTA 클릭 정의에 따라 날짜 유효성 검사 결과와
+  무관하게 실제 클릭 시 기록한다. 성공 이벤트로 해석하지 않는다.
+- Dashboard 체류시간은 운영 환경의 기존 Amplitude page view/session autocapture를
+  사용하고 명세에 없는 수기 duration 이벤트는 추가하지 않았다.
+- 구현 커밋 `345699e4d`를 `origin/feature/DL-15223`에 push했다. 배포 및 Amplitude
+  수신 확인 전에는 live 이벤트 완료로 간주하지 않는다.
+
 ## 확정된 구현 결정
 
 - 한 사용자는 여러 Organization에 소속될 수 있다.
 - Clinic Organization 라우트는 URL에 Organization ID를 넣지 않는다.
-- Clinic은 백엔드 API가 준비되기 전까지 디자인 우선, 목데이터 기반으로 진행한다.
+- Clinic은 배포된 API만 연결하고, 아직 API가 없는 기능만 교체 가능한 UI 상태로
+  유지한다.
 - 존재하지 않는 API를 추측해 만들지 않고 실제 배포된 스펙만 사용한다.
 - 디자인과 세부 요구사항은 변경될 수 있으므로 데이터 계층과 화면 표현을 분리한다.
 - Figma는 제품 요구와 UI/UX 의도를 확인하는 기준이며 임의의 픽셀 차이를 맞추는
@@ -211,7 +250,8 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 - Organization shell의 inline Dashboard SVG는 적합한 기존 아이콘이 없으면 저장소의
   기존 SVGR 생성 방식으로 추가한다.
 
-다음 항목은 실제 API 또는 제품 결정 전에는 완료로 처리하지 않는다.
+다음은 2026-07-31 당시의 대기 판단이다. 2026-08-03 현재 상태는 문서 상단의
+`Clinic — 주요 API 연동 완료, export API 대기`를 우선한다.
 
 - 실제 지표·주문·Billing·export 데이터, loading·empty·error 상태
 - 국가·통화와 비활성·퇴사 의사 포함 여부를 반영하는 실제 응답
@@ -289,7 +329,7 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
   16px/500/gray600, Category·Dentist 카드는 각각 608px, Dentist 그림자는 Figma 값으로
   렌더링되는 것을 computed style과 실제 화면으로 확인했다.
 
-### 오늘 기준 미완료·대기
+### 2026-07-31 당시 미완료·대기
 
 - Clinic DSO의 실제 지표, 주문, 지점, Billing, export API와 실데이터 연동
 - `office/users/own.organizations[].countryCode` 배포 뒤 현재 `US` fallback 교체
@@ -300,9 +340,7 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 - 댓글에서 답이 확정되지 않은 새로고침 elapsed label의 최대 기간·자동 갱신 규칙
 - 일곱 신규 feature 커밋의 `develop` 통합과 개발서버 배포 revision 확인
 
-현재 처리 가능한 디자인·UI·UX 범위에서는 알려진 추가 작업이 없다. Clinic 전체
-기능 완료라고 부를 수 없는 이유는 위 API·실데이터·제품 결정 대기 항목 때문이며,
-Admin 1차 구현 완료 판단과는 구분한다.
+이 목록은 이후 API 배포 전의 역사 기록이며 현재 TODO로 사용하지 않는다.
 
 ## 검증된 내용
 
@@ -318,6 +356,11 @@ Admin 1차 구현 완료 판단과는 구분한다.
 - 최신 네 커밋의 commit hook에서 Clinic, Lab, Admin TypeScript 통과
 - 최신 push hook에서 전체 lint 오류 0건, 기존 warning 420건과 shared coverage
   baseline 대비 변화 없음으로 성공
+- `345699e4d` 대상 Clinic TypeScript, 네 변경 파일 lint, Prettier와
+  `git diff --check`가 통과했다.
+- `345699e4d` commit hook에서 Clinic, Lab, Admin TypeScript가 모두 통과했다.
+- `345699e4d` push hook에서 전체 lint 오류 0건, 기존 warning 420건과 shared
+  coverage baseline 대비 변화 없음으로 성공했다.
 - `b389ce2d2` commit hook에서 Clinic, Lab, Admin TypeScript가 모두 통과했다.
 - `b389ce2d2` push hook에서 전체 lint 오류 0건, 기존 warning 420건과 shared coverage
   baseline 대비 변화 없음으로 성공했다.
@@ -338,10 +381,12 @@ Admin 1차 구현 완료 판단과는 구분한다.
 - Clinic Jest는 기존 Next/Jest module 설정 문제로 실행 시작 단계에서 실패했으며,
   이번 변경의 테스트 실패로 확정하지 않았다.
 - 실제 개발서버 배포 완료와 배포 revision은 아직 확인하지 않았다.
-- 최신 일곱 커밋은 `origin/develop`에 아직 없으므로 기존 개발 배포에 자동 포함된
+- 최신 11개 커밋은 `origin/develop`에 아직 없으므로 기존 개발 배포에 자동 포함된
   것으로 간주하지 않는다.
-- Clinic 실데이터, loading, empty, error 상태와 다중 Organization 선택 동작은
-  백엔드 계약이 아직 연결되지 않아 검증하지 않았다.
+- `DL-15801` 이벤트는 코드와 push까지만 완료했다. 배포 revision 및 실제 Amplitude
+  수신은 확인하지 않았으므로 live 완료로 분류하지 않는다.
+- Advanced Export 실제 파일 생성, 다중 Organization 선택과 일부 실데이터 경계
+  상태는 서버 계약이 없어 검증하지 않았다.
 - shared UI 전체 lint는 저장소에 동시에 해석되는 `eslint-plugin-storybook`
   `8.38.0`과 `8.57.1` 충돌로 실행되지 않았다. Clinic TypeScript와 실제 호출부
   대상 lint는 통과했으므로 이번 변경의 lint 실패로 분류하지 않는다.
@@ -354,8 +399,11 @@ Admin 1차 구현 완료 판단과는 구분한다.
 
 ### P0 — 최신 Clinic 변경 통합과 개발 배포 확인
 
-- [ ] 최신 일곱 커밋을 `develop`에 반영할 PR 또는 통합 방법은 사용자의 명시적
+- [ ] PR #4443 이후 최신 11개 커밋을 `develop`에 반영할 새 PR 또는 통합 방법은
+  사용자의 명시적
   지시 후 진행한다.
+- [ ] feature와 최신 `origin/master`가 크게 갈라져 있으므로 PR 전 master 반영
+  방법을 확인하고 충돌·회귀를 검토한다.
 - [ ] 통합 뒤 개발서버가 최신 Clinic HEAD를 포함하는 revision인지 확인한다.
 - [ ] Admin과 Clinic의 실제 배포 URL 및 health 상태를 확인한다.
 - [ ] 배포 실패 시 코드 문제, 환경 문제, 배포 revision 불일치를 먼저 구분한다.
@@ -375,20 +423,17 @@ Admin 1차 구현 완료 판단과는 구분한다.
 - [ ] 수정 중 창 포커스를 이동했다가 돌아와도 입력값이 초기화되지 않는지 확인한다.
 - [ ] create/update/delete 이후 목록·상세 cache와 이동 경로가 정상인지 확인한다.
 
-### P1 — Clinic 실제 데이터와 API 연동
+### P1 — Clinic 남은 서버 계약과 계측 확인
 
-- [ ] 백엔드에서 제공할 Clinic DSO API 목록과 DTO를 실제 Swagger로 확인한다.
-- [ ] `office/users/own` Organization의 `countryCode` 배포를 확인하고 카테고리
-  요청의 `US` fallback을 실제 값으로 교체한다.
 - [ ] 여러 Organization 소속 사용자의 현재 Organization 선택·유지 계약을 확정한다.
-- [ ] `organization.fixtures.ts`의 각 데이터 묶음을 실제 query와 응답 모델로 교체한다.
-  - 대시보드 지표와 주문·카테고리·의사 데이터
-  - 지점 목록
-  - Billing 목록, 필터, 페이지네이션과 export
-- [ ] 화면별 loading, empty, error와 부분 응답 상태를 추가한다.
-- [ ] 필터와 기간 선택이 실제 query parameter 및 cache key에 반영되는지 확인한다.
+- [ ] Advanced Export API가 배포되면 현재 modal 입력을 payload에 연결하고 실제
+  파일 다운로드·실패 상태를 구현한다.
 - [ ] Organization 변경 시 화면 데이터와 URL·전역 상태의 책임을 확정한다.
-- [ ] 권한이 없거나 Organization 소속이 없는 사용자 동작을 확정하고 구현한다.
+- [ ] `Visit Office`가 선택 지점 employer context를 전환하는 서버·전역 상태 계약을
+  확정한다.
+- [ ] 비활성·퇴사 의사 포함 규칙과 부분 응답 경계 상태를 실제 데이터로 확인한다.
+- [ ] `345699e4d`가 배포된 revision인지 확인한 뒤 Amplitude에서 네 이벤트 이름과
+  `defaultviewType` 값을 실제 수신 검증한다.
 
 ### P2 — 디자인과 사용자 경험 재QA
 
@@ -420,9 +465,8 @@ Admin 1차 구현 완료 판단과는 구분한다.
    `/Users/parkjongsun/Repository/dentlink-client-dso`인지 확인한다.
 3. `feature/DL-15223`, HEAD, upstream, `origin/master`, `origin/develop`, PR #4443과
    worktree 상태를 live Git에서 다시 확인한다.
-4. `develop` 통합 방법과 개발서버 revision을 확인한다.
-5. 배포가 정상이라면 Admin P1 실데이터 스모크를 수행한다.
-6. Admin 결과와 별개로 Clinic은 실제 API 계약을 확인한 뒤 목데이터 교체 작업을
-   시작한다.
+4. 최신 master 반영과 `develop` 통합 방법을 먼저 결정한다.
+5. 배포 뒤 DL-15801 Amplitude 수신과 Clinic 주요 화면의 실데이터 회귀를 확인한다.
+6. Advanced Export API가 배포되면 실제 다운로드 연동을 시작한다.
 7. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
    승인을 받는다.
