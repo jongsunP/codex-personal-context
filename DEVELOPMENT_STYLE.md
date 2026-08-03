@@ -152,6 +152,11 @@ applying them.
   revision, real-data verification, and live analytics delivery as distinct
   completion states. A commit or successful push proves only the states that
   were actually checked.
+- When the user asks only whether a feature is complete or what functionality
+  remains, report actionable product-development work only. Do not mix in PR
+  integration, deployment revision, real-data regression QA, live analytics
+  receipt, or external comment-posting status unless the user also asks for
+  delivery, QA, operations, or full checkpoint status.
 
 - Keep Clinic and Admin patterns separate. A Clinic feature should follow the
   nearest Clinic screen, hook, service, routing, and state-ownership pattern;

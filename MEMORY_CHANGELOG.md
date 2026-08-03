@@ -2,6 +2,11 @@
 
 ## 2026-08-03
 
+- Clarified completion reporting: a request for completed and remaining
+  functionality should contain product-development work only. PR integration,
+  deployment revision, real-data regression QA, live analytics receipt, and
+  comment-posting status belong in delivery/QA/operations reporting only when
+  requested.
 - Corrected two DSO TODO classifications after checking live code and the
   confirmed backend policy: `organizations[0]` is the completed current
   single-Organization rule rather than a current selection blocker, and
