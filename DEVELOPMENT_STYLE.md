@@ -194,6 +194,21 @@ applying them.
   can be replaced by the normal query layer. Once a real API is deployed,
   regenerate and inspect the contract before replacing fixtures; do not invent
   endpoints, fields, or response behavior that are still undecided.
+- If a backend-dependent export is not deployed, it is acceptable to complete
+  the validated modal and isolated presentation/PDF renderer first, but keep an
+  explicit adapter boundary and do not invent the endpoint, request DTO, result
+  source, download behavior, or error contract. Reuse existing PDF primitives,
+  isolate a genuinely new document from legacy routes, and preserve server-owned
+  row ordering unless the contract assigns sorting to the client.
+- For edit forms whose detail response may include nullable or unassigned
+  relations, separate display coverage from mutation payload. Let the response
+  represent available unassigned items when required, but initialize selection
+  and submit only relations with valid IDs; do not add a second fetch when the
+  canonical detail response already owns the full relation set.
+- Before calling a long-lived feature branch merge-ready, compare it with the
+  current base branch using a non-mutating merge check. Passing feature-local
+  types, lint, hooks, and browser QA does not remove integration risk when the
+  base has overlapping later work or generated-file conflicts.
 
 ## Figma And QA
 

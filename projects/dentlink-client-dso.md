@@ -24,7 +24,7 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 간주한다. 이 체크포인트는 사용자가 제공한 범위와 현재 코드·Git에서 검증한 사실을
 기록한다.
 
-## 저장소와 현재 Git 상태 — 2026-08-03
+## 저장소와 현재 Git 상태 — 2026-08-04
 
 - 공유 저장소: `https://github.com/Innvoaid/dentlink-client`
 - 전용 worktree: `/Users/parkjongsun/Repository/dentlink-client-dso`
@@ -34,13 +34,13 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   `6bb4119c137921a23f724819781b6a59004b4e03`
   (`Release/v1.82.0 -> master (#4457)`)
 - 현재 feature HEAD:
-  `345699e4d22b589c867acb97db87a636e88f8bc1`
-  (`[DL-15801] feat: DSO 대시보드 Amplitude 이벤트 추가`)
+  `98e5417322690c7b78fc9ef06a5228134cfd23b7`
+  (`[DL-15223] fix: Organization 화면 안정성 보완`)
 - local feature HEAD와 `origin/feature/DL-15223`는 일치하며 worktree는 clean이다.
-- `origin/master...feature/DL-15223`은 master 쪽 63개, feature 쪽 13개로
+- `origin/master...feature/DL-15223`은 master 쪽 63개, feature 쪽 15개로
   갈라져 있다. 최신 master 통합은 수행하지 않았다.
 - PR [#4443](https://github.com/Innvoaid/dentlink-client/pull/4443)은
-  `40bfd9526`까지 `develop`에 머지한 과거 PR이다. 이후 feature의 11개 커밋은
+  `40bfd9526`까지 `develop`에 머지한 과거 PR이다. 이후 feature의 13개 커밋은
   `origin/develop`에 없고 현재 이 head의 열린 PR도 없다.
 - PR 머지 뒤 추가된 커밋:
   - `96106b5cd` `[DL-15223] ui: 날짜 범위 필터 최대 기간 옵션 추가`
@@ -54,8 +54,17 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   - `a140d32af` `[DL-15223] feat: DSO 대시보드 및 설정 화면 개선`
   - `d4b4e01d0` `[DL-15223] feat: Organization 청구 및 접근 제어 기능 반영`
   - `345699e4d` `[DL-15801] feat: DSO 대시보드 Amplitude 이벤트 추가`
-- `345699e4d` push hook은 전체 lint 오류 0건, 기존 warning 420건과 shared
-  coverage baseline 변화 없음으로 성공했다.
+  - `47b0537c2` `[DL-15223] feat: Organization 관리 및 PDF 기능 보완`
+  - `98e541732` `[DL-15223] fix: Organization 화면 안정성 보완`
+- `98e541732`까지 local feature HEAD와 remote가 일치하고 worktree는 clean이다.
+- 두 최신 commit의 hook은 Clinic, Lab, Admin TypeScript를 통과했다. 최신 push
+  hook은 전체 lint 오류 0건, 기존 warning만 존재하고 shared coverage baseline
+  변화 없음으로 성공했다. 변경 파일 Prettier, ESLint와 `git diff --check`도
+  통과했다.
+- 최신 `origin/master`와 non-mutating merge-tree를 확인한 결과 My의 Design
+  Approval, links, 생성 아이콘/API/user 파일에 실제 충돌이 있다. master에는 이
+  feature와 겹치는 후속 작업이 들어와 있으므로, 통합 시 현재 feature를 단순히
+  우선하지 말고 양쪽의 최신 동작을 비교해 수동으로 조정해야 한다.
 
 이 worktree에서 `master`로 이동하거나 다른 Dentlink worktree를 수정하지 않는다.
 `origin/master` 동기화, merge, rebase, 추가 push, PR 변경은 현재 live 상태를 확인한
@@ -97,6 +106,39 @@ PDF 재사용, Figma 재검토와 계측까지 진행하며 확인한 방법을 
   수신까지 완료됐다고 표현하지 않는다.
 
 ## 현재 완료 수준
+
+### 2026-08-04 마무리 점검 결과
+
+- 백엔드 API가 나오기 전에 할 수 있는 Organization Advanced Export 범위를
+  구현했다. 신규 payment history PDF는 기존 Payment History PDF를 수정하지 않고
+  별도 인증 route와 컴포넌트로 분리했으며 공용 PDF header, publication, table,
+  price primitive를 재사용한다.
+- Advanced Export용 화면 모델은 생성 transport DTO를 추측하지 않고 shared
+  Organization presentation type으로만 정의했다. 행 순서는 서버 소유로 두어 FE에서
+  임의 정렬하지 않는다.
+- 임시 sample data로 실제 PDF blob을 생성하고 A4 한 페이지를 렌더링해 9개 열,
+  금액·summary·footer의 배치를 시각 확인한 뒤 sample 연결은 제거했다.
+- Admin 생성은 선택한 국가 기반 catalog category 조회를 사용한다. 수정은
+  Organization 상세 응답의 category-lab 관계만 사용하며 별도 category-labs 조회를
+  추가하지 않는다. 향후 `labId: null`인 미설정 category도 폼 선택값에서 제외하고,
+  payload에는 매핑된 category-lab만 보낸다.
+- Dashboard 날짜를 지우면 필수 API 파라미터가 비는 대신 기존 30일 기본 범위로
+  복원되도록 Organization과 Office Managed 양쪽을 맞췄다.
+- 기존 page shell이 이미 `main`을 소유하는 My Design Approval 하위 화면은 중첩
+  `main`을 `div`로 수정했다.
+
+현재 기능상 남은 범위는 다음 세 가지다.
+
+1. Organization Advanced Export API가 배포되면 modal query, 실제 dentist source,
+   다운로드/실패 흐름을 신규 PDF route에 연결한다.
+2. Admin Organization 상세 API가 미설정 category를 `labId: null`로 포함하도록
+   배포되면 수정 폼 실데이터를 확인한다. FE의 nullable 처리와 payload 제외 처리는
+   준비됐다.
+3. `Visit Office`는 기존 active employee 전환 구현을 사용하고 있으며, 사용자가
+   다중 병원 실계정으로 최종 전환을 직접 확인한다.
+
+기능 구현과 별개로 최신 master 통합은 충돌 조정이 필요한 별도 작업이다. merge나
+rebase는 아직 수행하지 않았다.
 
 ### Admin — 1차 구현 완료
 
@@ -196,8 +238,9 @@ Admin은 현재 요구된 1차 범위에서 완료로 분류한다. 개발서버
 - Swagger 생성 파일은 generator format을 유지하도록 Prettier 대상에서 제외해
   저장 시 `Office.ts` 등에 대량 포맷 diff가 재발하지 않게 했다.
 
-현재 서버 API가 없는 `Advanced Export` 실제 파일 생성만 디자인·유효성 UI 상태로
-남아 있다. develop 통합·배포 확인도 별도 대기다.
+현재 서버 API가 없는 `Advanced Export`는 modal, 유효성, 별도 PDF 화면·렌더러까지
+준비했다. 실제 query·dentist source·다운로드 연결은 배포 계약 대기다. develop
+통합·배포 확인도 별도 대기다.
 
 ### 공유 모델과 API
 
@@ -389,6 +432,15 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 
 ## 검증된 내용
 
+- `47b0537c2`, `98e541732` commit hook에서 Clinic, Lab, Admin TypeScript 통과
+- `98e541732` push hook에서 전체 lint 오류 0건, 기존 warning만 존재하고 shared
+  coverage baseline 변화 없음으로 성공
+- 최신 변경 파일 Prettier·ESLint와 `git diff --check` 통과
+- Organization Advanced Export PDF를 임시 sample route에서 실제 blob/A4 PNG로
+  렌더링해 한 페이지 레이아웃을 확인한 뒤 검증용 연결 제거
+- 최신 `origin/master`와 merge-tree 점검에서 겹치는 My·generated 영역의 실제 충돌
+  확인; 통합 작업 전에는 merge-ready로 분류하지 않음
+
 - Admin TypeScript 통과
 - Clinic TypeScript 통과
 - commit hook의 Clinic, Lab, Admin TypeScript 통과
@@ -470,8 +522,12 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 
 ### P1 — Clinic 남은 서버 계약과 계측 확인
 
-- [ ] Advanced Export API가 배포되면 현재 modal 입력을 payload에 연결하고 실제
-  파일 다운로드·실패 상태를 구현한다.
+- [ ] `Visit Office` 구현은 기존 Clinic의 active employee 전환 방식을 따르고 있다.
+  코드 수정은 완료로 두며, 실제로 가입된 병원이 2개 이상인 계정에서 대상 병원으로
+  전환되는지는 사용자가 추후 직접 테스트한다.
+- [ ] Advanced Export는 Organization 전용 API가 아직 없어 대기한다. API가 배포되면
+  현재 modal 입력을 payload에 연결하고 이미 분리한 Organization 전용 PDF route에
+  실제 query·dentist source·다운로드·실패 상태를 연결해 검증한다.
 - [ ] 비활성·퇴사 의사 포함 규칙과 부분 응답 경계 상태를 실제 데이터로 확인한다.
 - [ ] `345699e4d`가 배포된 revision인지 확인한 뒤 Amplitude에서 네 이벤트 이름과
   `defaultviewType` 값을 실제 수신 검증한다.
@@ -504,10 +560,16 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 1. `codex-personal-context`를 pull하고 이 문서를 읽는다.
 2. 정확한 worktree가
    `/Users/parkjongsun/Repository/dentlink-client-dso`인지 확인한다.
-3. `feature/DL-15223`, HEAD, upstream, `origin/master`, `origin/develop`, PR #4443과
+3. `feature/DL-15223`, HEAD `98e541732`, upstream, `origin/master`,
+   `origin/develop`, PR #4443과
    worktree 상태를 live Git에서 다시 확인한다.
-4. 최신 master 반영과 `develop` 통합 방법을 먼저 결정한다.
-5. 배포 뒤 DL-15801 Amplitude 수신과 Clinic 주요 화면의 실데이터 회귀를 확인한다.
-6. Advanced Export API가 배포되면 실제 다운로드 연동을 시작한다.
-7. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
+4. Advanced Export API 또는 Admin category-lab 상세 응답이 배포됐는지 먼저
+   `generate:api-type` 결과로 확인한다. API가 없으면 transport 계약을 추측하지 않는다.
+5. Advanced Export API가 배포되면 현재 별도 PDF route와 presentation model의
+   adapter를 실제 query로 교체하고 dentist source·다운로드·실패 흐름을 검증한다.
+6. 사용자가 준비한 다중 병원 계정으로 `Visit Office`의 실제 context 전환을
+   확인한다.
+7. 최신 master 통합이 지시되면 이미 확인된 My Design Approval, links, 생성
+   아이콘/API/user 파일 충돌을 양쪽 최신 동작 기준으로 수동 조정한다.
+8. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
    승인을 받는다.
