@@ -146,17 +146,35 @@ PDF 재사용, Figma 재검토와 계측까지 진행하며 확인한 방법을 
     스크롤한다.
   - shared UI 변경은 기존 기본 동작을 보존하는 optional prop과 multiple mode로
     제한했다. Figma 대상 노드와 실제 Chrome 화면에서 열림 방향·겹침을 재확인했다.
-- 모바일에서 Organization이 없는 사용자의 My Profile 항목 노출 여부는 최신 Figma
-  댓글에서 질문 단계이며 확정 요구사항이 아니다. 결정 전에는 관련 조건을 추측해
-  변경하지 않는다.
+- 최신 Figma 댓글에서 Organization/Office 소속이 없는 사용자도 My Profile의
+  Case Preferences와 Design Approval을 그대로 노출하는 것으로 확정됐다. 현재
+  desktop/mobile 구현은 두 항목을 소속 여부와 관계없이 노출하고 Default View만
+  Organization ADMIN에게 제한하므로 추가 수정이 필요 없다.
+- master 비교용 draft PR
+  [#4459](https://github.com/Innvoaid/dentlink-client/pull/4459)를 기준으로
+  `origin/master...feature/DL-15223`의 92개 변경 파일을 최종 코드 검토했다. 권한 우회,
+  데이터 손상, 기존 흐름을 깨는 치명적 문제와 명확한 불필요 수기 변경은 발견하지
+  않았다. 생성 API diff는 generator 소유 결과로 유지한다.
+- 최종 검토에서 Clinic/Admin/Lab TypeScript, 변경 파일 lint, Clinic/Admin production
+  build와 `git diff --check`가 통과했다. Clinic Jest는 기능 assertion 실패가 아니라
+  기존 `next/jest` module 해석 문제로 테스트 실행 자체가 시작되지 않았다.
+- 공용 `getCurrencyNumberFormat`은 이 프로젝트에서 country code를 받도록 사용하며
+  `CA`를 US 표기 방식으로 보정한다. `US`/`CA` 전달 자체는 신규 버그로 분류하지
+  않는다. 미수금과 Billing의 실제 통화 표시는 백엔드가 추가하기로 한 통화 심볼
+  계약이 배포된 뒤 해당 필드를 연결한다.
 
 현재 기능상 남은 범위는 다음 두 가지다.
 
 1. Organization Advanced Export API가 배포되면 modal query, 실제 dentist source,
    다운로드/실패 흐름을 신규 PDF route에 연결한다.
-2. Admin Organization 상세 API가 미설정 category를 `labId: null`로 포함하도록
-   배포되면 수정 폼 실데이터를 확인한다. FE의 nullable 처리와 payload 제외 처리는
-   준비됐다.
+2. 백엔드 통화 심볼 필드가 배포되면 API 타입을 다시 생성하고 미수금, Billing 금액과
+   `Amount (USD)` 고정 헤더, 필요 시 신규 PDF 금액 표시에 연결한다. 기존 화면과
+   포맷터 구조를 유지할 수 있는 작은 연동 범위이며 대대적인 재구현은 필요하지 않다.
+
+Admin category-lab의 nullable 처리와 미설정 payload 제외는 이미 준비돼 있으며 현재
+남은 FE 기능으로 분류하지 않는다. PR #4459는 draft라 CodeRabbit이 실제 리뷰를
+건너뛴 상태이며, 이는 제품 기능 미완료가 아니라 PR을 전달할 때 수행할 별도 리뷰
+게이트다.
 
 `Visit Office`는 기존 active employee 전환 구현을 사용하며, 사용자가 실제로
 버튼을 눌러 대상 병원으로 진입되는 것을 수동 확인했다.
@@ -531,78 +549,49 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 
 ## 우선순위 TODO
 
-### P0 — 전달 브랜치 통합과 개발 배포 확인
+### P0 — 남은 백엔드 계약
+
+- [ ] Organization Advanced Export API가 배포되면 현재 modal과 신규 PDF route에
+  query, dentist source, 다운로드와 실패 상태를 연결한다.
+- [ ] 통화 심볼이 포함된 API가 배포되면 `generate:api-type` diff를 검토하고 미수금,
+  Billing 헤더·금액과 필요 시 신규 PDF에 작은 범위로 연결한다.
+
+### P1 — 전달 전 최종 게이트
 
 - [x] 최신 `origin/master`를 feature에 merge하고 충돌·회귀를 검토해
   `d86e4cea2`로 push했다.
-- [ ] PR #4443 이후 feature 작업을 `develop`에 반영할 새 PR 또는 통합 방법은
-  사용자의 명시적 지시 후 진행한다.
-- [ ] 통합 뒤 개발서버가 최신 Clinic HEAD를 포함하는 revision인지 확인한다.
-- [ ] Admin과 Clinic의 실제 배포 URL 및 health 상태를 확인한다.
-- [ ] 배포 실패 시 코드 문제, 환경 문제, 배포 revision 불일치를 먼저 구분한다.
-- [ ] 배포 확인 결과를 이 문서의 현재 체크포인트에 갱신한다.
+- [x] PR #4459를 이용해 master 대비 전체 코드 diff와 불필요 변경을 검토했다.
+- [x] 최신 Figma의 관련 화면·댓글과 Jira 요구사항 기준 FE 누락을 재검토했다.
+- [ ] PR을 실제 전달할 때 draft 상태를 해제하거나 `@coderabbitai review`를 요청해
+  CodeRabbit 실제 리뷰를 수행한다. 현재 draft에서는 review가 skip됐다.
+- [ ] 추가 API 연결로 코드가 바뀌면 TypeScript, lint, build, `git diff --check`와
+  관련 브라우저 QA를 다시 수행한다.
 
-### P1 — Admin 개발서버 실데이터 스모크
+### 별도 검증 상태
 
-- [ ] 목록 조회, 페이지네이션과 ID·이름·국가·유형 필터를 실제 응답으로 확인한다.
-- [ ] 상세에서 연결 치과·멤버·기본 기공소 목록과 사용자·기공소 링크를 확인한다.
-- [ ] 안전한 테스트 Organization으로 생성 → 조회 → 수정 → 삭제를 확인한다.
-- [ ] 수정 폼에서 국가가 유지되고 다른 필드와 세 관계 전체 목록이 PUT되는지
-  payload를 확인한다.
-- [ ] 기존 사용자 검색과 `ADMIN` 권한 추가·제거를 확인한다.
-- [ ] 기존 Office 검색과 연결·해제를 확인한다.
-- [ ] 카테고리 선택 후 Lab 검색·매핑·제거를 확인하고, 카테고리 선택 전 Lab 요청이
-  나가지 않는지 확인한다.
-- [ ] 수정 중 창 포커스를 이동했다가 돌아와도 입력값이 초기화되지 않는지 확인한다.
-- [ ] create/update/delete 이후 목록·상세 cache와 이동 경로가 정상인지 확인한다.
-
-### P1 — Clinic 남은 서버 계약과 계측 확인
-
-- [x] `Visit Office`가 기존 Clinic의 active employee 전환 방식을 사용해 대상
-  병원으로 진입되는 것을 사용자가 수동 확인했다.
-- [ ] Advanced Export는 Organization 전용 API가 아직 없어 대기한다. API가 배포되면
-  현재 modal 입력을 payload에 연결하고 이미 분리한 Organization 전용 PDF route에
-  실제 query·dentist source·다운로드·실패 상태를 연결해 검증한다.
-- [ ] 비활성·퇴사 의사 포함 규칙과 부분 응답 경계 상태를 실제 데이터로 확인한다.
-- [ ] `345699e4d`가 배포된 revision인지 확인한 뒤 Amplitude에서 네 이벤트 이름과
-  `defaultviewType` 값을 실제 수신 검증한다.
-
-### P2 — 디자인과 사용자 경험 재QA
-
-- [ ] `/organizations`를 다시 실행해 최신 Figma와 desktop 기준으로 최종 대조한다.
-- [ ] 날짜 범위 90일 초과 오류, 재선택 시 오류 해제, 구분자와 footer 배치를
-  브라우저에서 확인한다.
-- [ ] 관련 sibling variant와 반응형·긴 텍스트·빈 데이터·loading 상태를 확인한다.
-- [ ] Dashboard, Offices, Billings의 간격, typography, 표, 카드, modal을 재확인한다.
-- [ ] 디자인 또는 기획 변경이 생기면 기존 컴포넌트 재사용 가능성을 먼저 검토한다.
-- [ ] 로그인 후 `defaultLandingView=ORGANIZATION`과 명시적 `next` 우선순위를
-  개발서버에서 재확인한다.
-- [ ] 기존 OFFICE 사용자의 기본 홈, 직접 URL 이동, 로그아웃·재로그인 회귀를
-  확인한다.
-
-### P3 — 통합과 완료 조건
-
-- [ ] 개발서버 QA 결과에 따른 최소 수정만 feature 브랜치에서 진행한다.
-- [ ] 추가 변경 시 TypeScript, lint, build, `git diff --check`와 관련 브라우저 QA를
-  다시 수행한다.
-- [ ] Jira 본문·댓글·관련 카드에서 누락된 FE 범위가 없는지 최종 확인한다.
-- [ ] Clinic API·실데이터·디자인 QA가 끝난 뒤에만 Clinic 구현 완료로 변경한다.
-- [ ] production 대상 PR, release 반영 및 merge-ready 여부는 별도 승인과 검증으로
-  판단한다.
+- `Visit Office`는 사용자가 실제 대상 병원 진입을 수동 확인했다.
+- Clinic/Admin production build와 Clinic/Admin/Lab TypeScript는 최종 검토에서
+  통과했다.
+- Clinic Jest는 기존 `next/jest` 설정 문제로 실행되지 않았으며 기능 테스트 실패로
+  분류하지 않는다.
+- 개발서버 revision, 실데이터 회귀, 실제 Amplitude 수신과 merge/release 여부는
+  구현 완료와 구분하는 전달·배포 단계다.
 
 ## 다음 시작점
 
 1. `codex-personal-context`를 pull하고 이 문서를 읽는다.
 2. 정확한 worktree가
    `/Users/parkjongsun/Repository/dentlink-client-dso`인지 확인한다.
-3. `feature/DL-15223`, HEAD `67f0f4017`, upstream, `origin/master`,
-   `origin/develop`, PR #4443과
-   worktree 상태를 live Git에서 다시 확인한다.
-4. Advanced Export API 또는 Admin category-lab 상세 응답이 배포됐는지 먼저
+3. `feature/DL-15223`, HEAD `67f0f4017`, upstream, `origin/master`와 draft PR
+   [#4459](https://github.com/Innvoaid/dentlink-client/pull/4459), worktree 상태를
+   live Git에서 다시 확인한다.
+4. Advanced Export API 또는 통화 심볼 계약이 배포됐는지 먼저
    `generate:api-type` 결과로 확인한다. API가 없으면 transport 계약을 추측하지 않는다.
 5. Advanced Export API가 배포되면 현재 별도 PDF route와 presentation model의
    adapter를 실제 query로 교체하고 dentist source·다운로드·실패 흐름을 검증한다.
-6. 이후 master가 다시 진행됐을 때만 새 차이를 확인한다. `d86e4cea2`까지의 master
+6. 통화 심볼 필드가 배포되면 기존 공용 포맷터와 화면 구조를 유지한 채 미수금,
+   Billing 헤더·금액과 필요 시 신규 PDF에만 연결한다.
+7. 이후 master가 다시 진행됐을 때만 새 차이를 확인한다. `d86e4cea2`까지의 master
    통합은 반복하지 않는다.
-7. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
+8. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
    승인을 받는다.
