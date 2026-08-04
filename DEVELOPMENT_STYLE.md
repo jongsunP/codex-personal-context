@@ -208,7 +208,15 @@ applying them.
 - Before calling a long-lived feature branch merge-ready, compare it with the
   current base branch using a non-mutating merge check. Passing feature-local
   types, lint, hooks, and browser QA does not remove integration risk when the
-  base has overlapping later work or generated-file conflicts.
+  base has overlapping later work or generated-file conflicts. During the real
+  merge, do not apply `ours` or `theirs` to every conflict: classify each file
+  by responsibility and chronology, preserve the base's newer common behavior,
+  and preserve later feature-specific work where it intentionally supersedes
+  the base. For generated files, keep non-conflicting changes from both sides
+  and resolve only the overlapping contract from the newest deployed source;
+  regenerate union-style outputs such as icon indexes from the merged assets.
+  Before committing, compare feature-owned conflict files with the pre-merge
+  first parent and verify that the base commit is an ancestor of the result.
 
 ## Figma And QA
 

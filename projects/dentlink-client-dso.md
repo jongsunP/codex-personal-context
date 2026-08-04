@@ -34,14 +34,14 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   `6bb4119c137921a23f724819781b6a59004b4e03`
   (`Release/v1.82.0 -> master (#4457)`)
 - 현재 feature HEAD:
-  `98e5417322690c7b78fc9ef06a5228134cfd23b7`
-  (`[DL-15223] fix: Organization 화면 안정성 보완`)
+  `d86e4cea2a9d953cdf93ced73f9cc27a2de11951`
+  (`[DL-15223] chore: 최신 master 반영`)
 - local feature HEAD와 `origin/feature/DL-15223`는 일치하며 worktree는 clean이다.
-- `origin/master...feature/DL-15223`은 master 쪽 63개, feature 쪽 15개로
-  갈라져 있다. 최신 master 통합은 수행하지 않았다.
+- `origin/master...feature/DL-15223`은 master 쪽 0개, feature 쪽 16개다.
+  `origin/master`는 merge parent로 포함돼 있다.
 - PR [#4443](https://github.com/Innvoaid/dentlink-client/pull/4443)은
-  `40bfd9526`까지 `develop`에 머지한 과거 PR이다. 이후 feature의 13개 커밋은
-  `origin/develop`에 없고 현재 이 head의 열린 PR도 없다.
+  `40bfd9526`까지 `develop`에 머지한 과거 PR이다. 이후 feature 작업과 최신 master
+  merge commit은 이 PR의 범위가 아니다.
 - PR 머지 뒤 추가된 커밋:
   - `96106b5cd` `[DL-15223] ui: 날짜 범위 필터 최대 기간 옵션 추가`
   - `95a64e5db` `[DL-15223] feat: DSO 대시보드 디자인 및 필터 개선`
@@ -56,15 +56,18 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   - `345699e4d` `[DL-15801] feat: DSO 대시보드 Amplitude 이벤트 추가`
   - `47b0537c2` `[DL-15223] feat: Organization 관리 및 PDF 기능 보완`
   - `98e541732` `[DL-15223] fix: Organization 화면 안정성 보완`
-- `98e541732`까지 local feature HEAD와 remote가 일치하고 worktree는 clean이다.
+  - `d86e4cea2` `[DL-15223] chore: 최신 master 반영`
+- `d86e4cea2`까지 local feature HEAD와 remote가 일치하고 worktree는 clean이다.
 - 두 최신 commit의 hook은 Clinic, Lab, Admin TypeScript를 통과했다. 최신 push
   hook은 전체 lint 오류 0건, 기존 warning만 존재하고 shared coverage baseline
   변화 없음으로 성공했다. 변경 파일 Prettier, ESLint와 `git diff --check`도
   통과했다.
-- 최신 `origin/master`와 non-mutating merge-tree를 확인한 결과 My의 Design
-  Approval, links, 생성 아이콘/API/user 파일에 실제 충돌이 있다. master에는 이
-  feature와 겹치는 후속 작업이 들어와 있으므로, 통합 시 현재 feature를 단순히
-  우선하지 말고 양쪽의 최신 동작을 비교해 수동으로 조정해야 한다.
+- 최신 `origin/master`를 merge하면서 My의 Design Approval, links, 생성 아이콘과
+  API/user 파일 충돌을 해결했다. My/DSO 화면과 최신 Organization transport 계약은
+  feature의 후속 구현을 유지하고, Case Preference entry point 정규화, Pickup 링크와
+  새 아이콘은 master를 반영했다. 생성 파일은 전체를 한쪽으로 덮지 않고 충돌한
+  Organization 계약만 더 최신 feature 결과를 유지해 master의 비충돌 API 변경을
+  보존했다.
 
 이 worktree에서 `master`로 이동하거나 다른 Dentlink worktree를 수정하지 않는다.
 `origin/master` 동기화, merge, rebase, 추가 push, PR 변경은 현재 live 상태를 확인한
@@ -137,8 +140,8 @@ PDF 재사용, Figma 재검토와 계측까지 진행하며 확인한 방법을 
 3. `Visit Office`는 기존 active employee 전환 구현을 사용하고 있으며, 사용자가
    다중 병원 실계정으로 최종 전환을 직접 확인한다.
 
-기능 구현과 별개로 최신 master 통합은 충돌 조정이 필요한 별도 작업이다. merge나
-rebase는 아직 수행하지 않았다.
+최신 master 통합과 충돌 조정도 `d86e4cea2`로 완료해 원격 feature 브랜치에
+push했다.
 
 ### Admin — 1차 구현 완료
 
@@ -440,6 +443,14 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
   렌더링해 한 페이지 레이아웃을 확인한 뒤 검증용 연결 제거
 - 최신 `origin/master`와 merge-tree 점검에서 겹치는 My·generated 영역의 실제 충돌
   확인; 통합 작업 전에는 merge-ready로 분류하지 않음
+- `d86e4cea2`에서 최신 `origin/master`를 merge하고 충돌을 파일별 책임과 변경
+  시간순으로 조정한 뒤 Clinic, Admin, Lab TypeScript·전체 lint·production build와
+  `git diff --check` 통과
+- merge push hook에서 세 앱 lint 오류 0건, 기존 warning만 존재했으며 shared hook
+  테스트 24건과 coverage check 통과
+- 신규 Case Preference Jest 단독 실행은 로컬 Next 16의 `next/jest` module resolution
+  문제로 테스트 코드 실행 전에 중단됨; TypeScript, build와 master의 동일 테스트
+  코드는 보존됐으나 로컬 Jest 성공으로 기록하지 않음
 
 - Admin TypeScript 통과
 - Clinic TypeScript 통과
@@ -478,12 +489,13 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 - Clinic Jest는 기존 Next/Jest module 설정 문제로 실행 시작 단계에서 실패했으며,
   이번 변경의 테스트 실패로 확정하지 않았다.
 - 실제 개발서버 배포 완료와 배포 revision은 아직 확인하지 않았다.
-- 최신 11개 커밋은 `origin/develop`에 아직 없으므로 기존 개발 배포에 자동 포함된
-  것으로 간주하지 않는다.
+- PR #4443은 `40bfd9526`까지만 포함하므로 이후 feature 작업과 `d86e4cea2`를 기존
+  개발 배포에 자동 포함된 것으로 간주하지 않는다.
 - `DL-15801` 이벤트는 코드와 push까지만 완료했다. 배포 revision 및 실제 Amplitude
   수신은 확인하지 않았으므로 live 완료로 분류하지 않는다.
-- Advanced Export 실제 파일 생성과 일부 실데이터 경계 상태는 서버 계약이 없어
-  검증하지 않았다.
+- Advanced Export의 API-backed 실제 조회·다운로드와 일부 실데이터 경계 상태는
+  서버 계약이 없어 검증하지 않았다. fixture 기반 신규 PDF blob/A4 렌더링은
+  검증했다.
 - shared UI 전체 lint는 저장소에 동시에 해석되는 `eslint-plugin-storybook`
   `8.38.0`과 `8.57.1` 충돌로 실행되지 않았다. Clinic TypeScript와 실제 호출부
   대상 lint는 통과했으므로 이번 변경의 lint 실패로 분류하지 않는다.
@@ -494,13 +506,12 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 
 ## 우선순위 TODO
 
-### P0 — 최신 Clinic 변경 통합과 개발 배포 확인
+### P0 — 전달 브랜치 통합과 개발 배포 확인
 
-- [ ] PR #4443 이후 최신 11개 커밋을 `develop`에 반영할 새 PR 또는 통합 방법은
-  사용자의 명시적
-  지시 후 진행한다.
-- [ ] feature와 최신 `origin/master`가 크게 갈라져 있으므로 PR 전 master 반영
-  방법을 확인하고 충돌·회귀를 검토한다.
+- [x] 최신 `origin/master`를 feature에 merge하고 충돌·회귀를 검토해
+  `d86e4cea2`로 push했다.
+- [ ] PR #4443 이후 feature 작업을 `develop`에 반영할 새 PR 또는 통합 방법은
+  사용자의 명시적 지시 후 진행한다.
 - [ ] 통합 뒤 개발서버가 최신 Clinic HEAD를 포함하는 revision인지 확인한다.
 - [ ] Admin과 Clinic의 실제 배포 URL 및 health 상태를 확인한다.
 - [ ] 배포 실패 시 코드 문제, 환경 문제, 배포 revision 불일치를 먼저 구분한다.
@@ -560,7 +571,7 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 1. `codex-personal-context`를 pull하고 이 문서를 읽는다.
 2. 정확한 worktree가
    `/Users/parkjongsun/Repository/dentlink-client-dso`인지 확인한다.
-3. `feature/DL-15223`, HEAD `98e541732`, upstream, `origin/master`,
+3. `feature/DL-15223`, HEAD `d86e4cea2`, upstream, `origin/master`,
    `origin/develop`, PR #4443과
    worktree 상태를 live Git에서 다시 확인한다.
 4. Advanced Export API 또는 Admin category-lab 상세 응답이 배포됐는지 먼저
@@ -569,7 +580,7 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
    adapter를 실제 query로 교체하고 dentist source·다운로드·실패 흐름을 검증한다.
 6. 사용자가 준비한 다중 병원 계정으로 `Visit Office`의 실제 context 전환을
    확인한다.
-7. 최신 master 통합이 지시되면 이미 확인된 My Design Approval, links, 생성
-   아이콘/API/user 파일 충돌을 양쪽 최신 동작 기준으로 수동 조정한다.
+7. 이후 master가 다시 진행됐을 때만 새 차이를 확인한다. `d86e4cea2`까지의 master
+   통합은 반복하지 않는다.
 8. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
    승인을 받는다.
