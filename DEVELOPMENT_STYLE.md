@@ -78,6 +78,10 @@ appear nowhere else in the app.
   design calls for them.
 - A menu that must escape a table, drawer, or modal must use the project's
   portal/fixed-position pattern and must not gain an accidental inner scroll.
+- When a dropdown is designed to open over later fields inside a fixed-height
+  modal, reuse the modal's existing overflow escape option and keep scrolling
+  inside the menu list. Do not make the modal body grow or scroll with the menu,
+  and do not invent a different opening direction without a confirmed design.
 - When a new specialized component replaces a temporary shared modification,
   re-evaluate and remove the shared modification if it is no longer needed.
 - Generic interaction behavior belongs in the UI component; domain API state

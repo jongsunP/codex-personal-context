@@ -34,10 +34,10 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   `6bb4119c137921a23f724819781b6a59004b4e03`
   (`Release/v1.82.0 -> master (#4457)`)
 - 현재 feature HEAD:
-  `fe961e3298d2f163fb7e9760962ae422b8b33a34`
-  (`[DL-15223] fix: Organization 지점명 기본값 설정`)
+  `67f0f40174053136147296f010c88fafce965933`
+  (`[DL-15223] ui: Advanced Export 선택 UI 개선`)
 - local feature HEAD와 `origin/feature/DL-15223`는 일치하며 worktree는 clean이다.
-- `origin/master...feature/DL-15223`은 master 쪽 0개, feature 쪽 17개다.
+- `origin/master...feature/DL-15223`은 master 쪽 0개, feature 쪽 18개다.
   `origin/master`는 merge parent로 포함돼 있다.
 - PR [#4443](https://github.com/Innvoaid/dentlink-client/pull/4443)은
   `40bfd9526`까지 `develop`에 머지한 과거 PR이다. 이후 feature 작업과 최신 master
@@ -58,7 +58,8 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   - `98e541732` `[DL-15223] fix: Organization 화면 안정성 보완`
   - `d86e4cea2` `[DL-15223] chore: 최신 master 반영`
   - `fe961e329` `[DL-15223] fix: Organization 지점명 기본값 설정`
-- `fe961e329`까지 local feature HEAD와 remote가 일치하고 worktree는 clean이다.
+  - `67f0f4017` `[DL-15223] ui: Advanced Export 선택 UI 개선`
+- `67f0f4017`까지 local feature HEAD와 remote가 일치하고 worktree는 clean이다.
 - 최신 commit hook은 Clinic, Lab, Admin TypeScript를 통과했다. 최신 push
   hook은 전체 lint 오류 0건, 기존 warning만 존재하고 shared coverage baseline
   변화 없음으로 성공했다. 변경 파일 Prettier, ESLint와 `git diff --check`도
@@ -134,6 +135,20 @@ PDF 재사용, Figma 재검토와 계측까지 진행하며 확인한 방법을 
   복원되도록 Organization과 Office Managed 양쪽을 맞췄다.
 - 기존 page shell이 이미 `main`을 소유하는 My Design Approval 하위 화면은 중첩
   `main`을 `div`로 수정했다.
+- Advanced Export의 최신 Figma 선택 UI를 API와 분리된 입력 경계까지 구현했다.
+  - Office는 검색 가능한 다중 선택이며 최대 5개로 제한하고 안내 문구를 표시한다.
+  - Office 표시는 기존 우선순위대로 `branchName`을 사용하고, 선택 요약은 첫 지점명과
+    추가 개수로 표시한다.
+  - 날짜는 기존 `DateRangeFieldV2`를 사용한 단일 범위 입력으로 통합하고 90일 제한과
+    공용 아이콘을 유지한다.
+  - 드롭다운은 기존 modal body의 overflow 해제 옵션을 사용해 아래 필드 위로
+    겹쳐 열리며, modal 높이를 늘리거나 body에 이중 스크롤을 만들지 않고 menu 내부만
+    스크롤한다.
+  - shared UI 변경은 기존 기본 동작을 보존하는 optional prop과 multiple mode로
+    제한했다. Figma 대상 노드와 실제 Chrome 화면에서 열림 방향·겹침을 재확인했다.
+- 모바일에서 Organization이 없는 사용자의 My Profile 항목 노출 여부는 최신 Figma
+  댓글에서 질문 단계이며 확정 요구사항이 아니다. 결정 전에는 관련 조건을 추측해
+  변경하지 않는다.
 
 현재 기능상 남은 범위는 다음 세 가지다.
 
@@ -508,6 +523,10 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
   반복하는 정형 E2E는 실행하지 않았다.
 - 기존 lint warning, Next 권장 TypeScript 버전 경고, 오래된 Browserslist 데이터
   경고는 이번 범위에서 수정하지 않았다.
+- `67f0f4017` commit hook에서 Clinic, Lab, Admin TypeScript가 통과했다. push hook은
+  lint 오류 0건(기존 warning 418건), shared hook test 24건과 coverage baseline을
+  통과했다. 변경한 Clinic/shared 파일의 직접 lint, Prettier와 `git diff --check`도
+  통과했다.
 
 ## 우선순위 TODO
 
@@ -576,7 +595,7 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 1. `codex-personal-context`를 pull하고 이 문서를 읽는다.
 2. 정확한 worktree가
    `/Users/parkjongsun/Repository/dentlink-client-dso`인지 확인한다.
-3. `feature/DL-15223`, HEAD `fe961e329`, upstream, `origin/master`,
+3. `feature/DL-15223`, HEAD `67f0f4017`, upstream, `origin/master`,
    `origin/develop`, PR #4443과
    worktree 상태를 live Git에서 다시 확인한다.
 4. Advanced Export API 또는 Admin category-lab 상세 응답이 배포됐는지 먼저
