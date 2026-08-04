@@ -34,10 +34,10 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   `6bb4119c137921a23f724819781b6a59004b4e03`
   (`Release/v1.82.0 -> master (#4457)`)
 - 현재 feature HEAD:
-  `d86e4cea2a9d953cdf93ced73f9cc27a2de11951`
-  (`[DL-15223] chore: 최신 master 반영`)
+  `fe961e3298d2f163fb7e9760962ae422b8b33a34`
+  (`[DL-15223] fix: Organization 지점명 기본값 설정`)
 - local feature HEAD와 `origin/feature/DL-15223`는 일치하며 worktree는 clean이다.
-- `origin/master...feature/DL-15223`은 master 쪽 0개, feature 쪽 16개다.
+- `origin/master...feature/DL-15223`은 master 쪽 0개, feature 쪽 17개다.
   `origin/master`는 merge parent로 포함돼 있다.
 - PR [#4443](https://github.com/Innvoaid/dentlink-client/pull/4443)은
   `40bfd9526`까지 `develop`에 머지한 과거 PR이다. 이후 feature 작업과 최신 master
@@ -57,8 +57,9 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   - `47b0537c2` `[DL-15223] feat: Organization 관리 및 PDF 기능 보완`
   - `98e541732` `[DL-15223] fix: Organization 화면 안정성 보완`
   - `d86e4cea2` `[DL-15223] chore: 최신 master 반영`
-- `d86e4cea2`까지 local feature HEAD와 remote가 일치하고 worktree는 clean이다.
-- 두 최신 commit의 hook은 Clinic, Lab, Admin TypeScript를 통과했다. 최신 push
+  - `fe961e329` `[DL-15223] fix: Organization 지점명 기본값 설정`
+- `fe961e329`까지 local feature HEAD와 remote가 일치하고 worktree는 clean이다.
+- 최신 commit hook은 Clinic, Lab, Admin TypeScript를 통과했다. 최신 push
   hook은 전체 lint 오류 0건, 기존 warning만 존재하고 shared coverage baseline
   변화 없음으로 성공했다. 변경 파일 Prettier, ESLint와 `git diff --check`도
   통과했다.
@@ -125,6 +126,10 @@ PDF 재사용, Figma 재검토와 계측까지 진행하며 확인한 방법을 
   Organization 상세 응답의 category-lab 관계만 사용하며 별도 category-labs 조회를
   추가하지 않는다. 향후 `labId: null`인 미설정 category도 폼 선택값에서 제외하고,
   payload에는 매핑된 category-lab만 보낸다.
+- Admin Organization 생성 폼에서 치과를 추가하면 해당 치과 이름을 필수 지점명의
+  기본값으로 넣고 사용자가 수정할 수 있게 했다. 수정 모드에서 서버가 준 기존
+  `branchName`은 덮어쓰지 않으며, 치과 이름이 없으면 빈 값과 기존 필수 검증을
+  유지한다.
 - Dashboard 날짜를 지우면 필수 API 파라미터가 비는 대신 기존 30일 기본 범위로
   복원되도록 Organization과 Office Managed 양쪽을 맞췄다.
 - 기존 page shell이 이미 `main`을 소유하는 My Design Approval 하위 화면은 중첩
@@ -571,7 +576,7 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 1. `codex-personal-context`를 pull하고 이 문서를 읽는다.
 2. 정확한 worktree가
    `/Users/parkjongsun/Repository/dentlink-client-dso`인지 확인한다.
-3. `feature/DL-15223`, HEAD `d86e4cea2`, upstream, `origin/master`,
+3. `feature/DL-15223`, HEAD `fe961e329`, upstream, `origin/master`,
    `origin/develop`, PR #4443과
    worktree 상태를 live Git에서 다시 확인한다.
 4. Advanced Export API 또는 Admin category-lab 상세 응답이 배포됐는지 먼저

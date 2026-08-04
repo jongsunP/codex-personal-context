@@ -205,6 +205,10 @@ applying them.
   represent available unassigned items when required, but initialize selection
   and submit only relations with valid IDs; do not add a second fetch when the
   canonical detail response already owns the full relation set.
+- When a required relationship label has a sensible value on the entity the
+  user just selected, prefill that value for creation and keep it editable.
+  Do not overwrite an existing server value when initializing edit mode, and
+  preserve the normal required-field validation when the source value is absent.
 - Before calling a long-lived feature branch merge-ready, compare it with the
   current base branch using a non-mutating merge check. Passing feature-local
   types, lint, hooks, and browser QA does not remove integration risk when the
