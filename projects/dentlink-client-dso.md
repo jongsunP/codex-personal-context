@@ -150,15 +150,16 @@ PDF 재사용, Figma 재검토와 계측까지 진행하며 확인한 방법을 
   댓글에서 질문 단계이며 확정 요구사항이 아니다. 결정 전에는 관련 조건을 추측해
   변경하지 않는다.
 
-현재 기능상 남은 범위는 다음 세 가지다.
+현재 기능상 남은 범위는 다음 두 가지다.
 
 1. Organization Advanced Export API가 배포되면 modal query, 실제 dentist source,
    다운로드/실패 흐름을 신규 PDF route에 연결한다.
 2. Admin Organization 상세 API가 미설정 category를 `labId: null`로 포함하도록
    배포되면 수정 폼 실데이터를 확인한다. FE의 nullable 처리와 payload 제외 처리는
    준비됐다.
-3. `Visit Office`는 기존 active employee 전환 구현을 사용하고 있으며, 사용자가
-   다중 병원 실계정으로 최종 전환을 직접 확인한다.
+
+`Visit Office`는 기존 active employee 전환 구현을 사용하며, 사용자가 실제로
+버튼을 눌러 대상 병원으로 진입되는 것을 수동 확인했다.
 
 최신 master 통합과 충돌 조정도 `d86e4cea2`로 완료해 원격 feature 브랜치에
 push했다.
@@ -557,9 +558,8 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 
 ### P1 — Clinic 남은 서버 계약과 계측 확인
 
-- [ ] `Visit Office` 구현은 기존 Clinic의 active employee 전환 방식을 따르고 있다.
-  코드 수정은 완료로 두며, 실제로 가입된 병원이 2개 이상인 계정에서 대상 병원으로
-  전환되는지는 사용자가 추후 직접 테스트한다.
+- [x] `Visit Office`가 기존 Clinic의 active employee 전환 방식을 사용해 대상
+  병원으로 진입되는 것을 사용자가 수동 확인했다.
 - [ ] Advanced Export는 Organization 전용 API가 아직 없어 대기한다. API가 배포되면
   현재 modal 입력을 payload에 연결하고 이미 분리한 Organization 전용 PDF route에
   실제 query·dentist source·다운로드·실패 상태를 연결해 검증한다.
@@ -602,9 +602,7 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
    `generate:api-type` 결과로 확인한다. API가 없으면 transport 계약을 추측하지 않는다.
 5. Advanced Export API가 배포되면 현재 별도 PDF route와 presentation model의
    adapter를 실제 query로 교체하고 dentist source·다운로드·실패 흐름을 검증한다.
-6. 사용자가 준비한 다중 병원 계정으로 `Visit Office`의 실제 context 전환을
-   확인한다.
-7. 이후 master가 다시 진행됐을 때만 새 차이를 확인한다. `d86e4cea2`까지의 master
+6. 이후 master가 다시 진행됐을 때만 새 차이를 확인한다. `d86e4cea2`까지의 master
    통합은 반복하지 않는다.
-8. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
+7. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
    승인을 받는다.

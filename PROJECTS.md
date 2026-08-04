@@ -88,7 +88,8 @@ For detailed current state, read:
   `40bfd9526`; newer feature commits are not in `develop` and there is no open
   follow-up PR. Develop integration, deployment revision, and live Amplitude
   delivery remain pending. The current backend policy
-  intentionally uses the sole `organizations[0]`; `Visit Office` already
-  reuses the existing active-Office transition flow.
+  intentionally uses the sole `organizations[0]`; `Visit Office` reuses the
+  existing active-Office transition flow and its target Office entry was
+  manually verified.
 - Personal current checkpoint, decisions, and prioritized TODO list:
   `projects/dentlink-client-dso.md`
