@@ -31,11 +31,19 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   - `feature/DL-15223`
   - `origin/feature/DL-15223`
 - local/remote HEAD는
-  `9d82d144b5eb8ece531c627f63f78d0485b46e6e`로 일치하며 worktree는 clean이다.
+  `8829beab8744481f64ab00c92d42d9f8751938d9`로 일치하며 worktree는 clean이다.
 - 이번에 원격 반영된 커밋:
   - `0742be5d2` `[DL-15801] feat: 대시보드 필터 Amplitude 이벤트 추가`
   - `65705d322` `[DL-15223] chore: 최신 API 스펙 동기화`
   - `9d82d144b` `[DL-15223] feat: Organization Advanced Export API 연동`
+  - `8829beab8` `[DL-15223] fix: CodeRabbit 리뷰 지적사항 반영`
+- release 전달용 PR
+  [#4469](https://github.com/Innvoaid/dentlink-client/pull/4469)는
+  `feature/DL-15223`에서 `release/v1.83.0`을 대상으로 열린 상태다.
+  CodeRabbit 기존 리뷰 18건을 모두 검토해 11건은 코드로 반영하고 7건은 현재 계약과
+  제품 정책에 따른 유지 사유를 답변했으며, 18개 thread를 모두 resolve했다. 마지막
+  live 확인에서 미해결 CodeRabbit thread는 0개였다. 이후 새 리뷰가 추가되면 해당
+  내용만 재검토하고, 추가 의견이 없으면 PR을 현재 상태로 유지한다.
 - 배포된 Advanced Export 계약을 생성 타입으로 확인하고
   `GET /office/organizations/{organizationId}/billings/payment-histories`를 실제
   modal과 별도 인증 PDF route에 연결했다.
@@ -607,8 +615,11 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
   `d86e4cea2`로 push했다.
 - [x] PR #4459를 이용해 master 대비 전체 코드 diff와 불필요 변경을 검토했다.
 - [x] 최신 Figma의 관련 화면·댓글과 Jira 요구사항 기준 FE 누락을 재검토했다.
-- [ ] PR을 실제 전달할 때 draft 상태를 해제하거나 `@coderabbitai review`를 요청해
-  CodeRabbit 실제 리뷰를 수행한다. 현재 draft에서는 review가 skip됐다.
+- [x] release 전달용 PR #4469에서 CodeRabbit 실제 리뷰 18건을 검토했다. 유효한
+  11건은 `8829beab8`에 반영하고 나머지 7건은 유지 사유를 답변했으며, 기존 thread는
+  모두 resolve했다.
+- [ ] PR #4469에 새로운 CodeRabbit 리뷰가 추가되면 그 내용만 재검토한다. 추가
+  의견이 없으면 PR을 그대로 유지한다.
 - [ ] 추가 API 연결로 코드가 바뀌면 TypeScript, lint, build, `git diff --check`와
   관련 브라우저 QA를 다시 수행한다.
 
@@ -627,9 +638,9 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 1. `codex-personal-context`를 pull하고 이 문서를 읽는다.
 2. 정확한 worktree가
    `/Users/parkjongsun/Repository/dentlink-client-dso`인지 확인한다.
-3. `feature/DL-15223`, HEAD `9d82d144b`, upstream, `origin/master`와 draft PR
-   [#4459](https://github.com/Innvoaid/dentlink-client/pull/4459), worktree 상태를
-   live Git에서 다시 확인한다.
+3. `feature/DL-15223`, HEAD `8829beab8`, upstream과 release PR
+   [#4469](https://github.com/Innvoaid/dentlink-client/pull/4469), worktree 상태를
+   live Git에서 다시 확인한다. PR 대상은 `release/v1.83.0`이다.
 4. 현재 확정 범위 FE 구현은 완료됐다. 다음 기능 작업이 아니라면 실제 로그인
    Advanced Export, 배포 revision, 실데이터 회귀, Amplitude 수신 같은 QA·전달 단계로
    시작한다.
@@ -637,5 +648,7 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
    새 diff를 검토한다. 현재 완료된 계약을 다시 추측하거나 fixture로 되돌리지 않는다.
 6. 이후 master가 다시 진행됐을 때만 새 차이를 확인한다. `d86e4cea2`까지의 master
    통합은 반복하지 않는다.
-7. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
+7. CodeRabbit 기존 18개 thread는 처리 완료다. 새 thread가 추가된 경우에만 다시
+   검토하며, 추가 의견이 없으면 PR #4469를 유지한다.
+8. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
    승인을 받는다.
