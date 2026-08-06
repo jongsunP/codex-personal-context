@@ -9,22 +9,24 @@ Git and external-service facts live before continuing.
 - Dedicated worktree: `/Users/parkjongsun/Repository/dentlink-client-i18n`
 - Branch: `feature/i18n`, tracking `origin/feature/i18n`
 - Current local and remote HEAD:
-  `a48b1cb8e13998af4bce23095a49465700139a20`
-  (`[DL-15223] feat: DSO 기능 변경사항 병합`)
-- The merge has two parents: the prior i18n tip
-  `7665e610972a1699c90d7e20d7d0c22b63d58100` and completed DSO branch tip
-  `9d82d144b5eb8ece531c627f63f78d0485b46e6e`.
-- `origin/feature/DL-15223` and the squashed `origin/develop` integration commit
-  `cbfb8dc077cd5b5ac81336545d97c5914ad96e0a` have identical trees.
+  `7665e610972a1699c90d7e20d7d0c22b63d58100`
+  (`chore: 패키지 버전업`).
+- A temporary DSO merge commit `a48b1cb8e` was removed from `feature/i18n`
+  with an explicit force-with-lease reset. The branch is back to its exact
+  pre-DSO state.
+- Combined development integration uses the separate worktree
+  `/Users/parkjongsun/Repository/dentlink-client-i18n-develop`, branch
+  `feature/i18n-develop`, at `7a9d7c7a6`.
+- PR #4472 (`feature/i18n-develop` -> `develop`) was merged as
+  `ec929a2cfebb038e659b3cb649bbe017c03336c1`. PR #4471 was closed.
 - Main implementation commit:
   `0fbc5ff979525d1d9f9233f5b366eda51bcec172`
   (`feat: Lab 정적 UI 문구에 한국어 i18n 적용`)
 - Latest merged base:
   `6bb4119c137921a23f724819781b6a59004b4e03`
   (`Release/v1.82.0 -> master (#4457)`). It is an ancestor of HEAD.
-- Final verified divergence is `origin/master...HEAD = 0 / 30`.
 - The working tree is clean. `HEAD` and `origin/feature/i18n` match.
-- The merge commit is pushed. No PR has been created.
+- The i18n branch restore and integration branch are both pushed.
 - The sibling `/Users/parkjongsun/Repository/dentlink-client` worktree owns
   `master`; do not move this feature work there.
 
@@ -35,8 +37,8 @@ Git and external-service facts live before continuing.
   fallback, and future language-expansion resource.
 - The earlier language selector, localStorage language preference, and related
   hooks were removed. There is no user-selectable locale in the current scope.
-- The completed `feature/DL-15223` DSO work is merged. Seven shared UI conflicts
-  were resolved by preserving both DSO behavior/props and Lab i18n fallback.
+- `feature/i18n` contains only the original i18n work. `feature/DL-15223`
+  remains separate. Their combined result is now on `develop` through PR #4472.
 - Google Sheets and generated locale JSON are no longer synchronized because
   the live Sheet schema changed after the previous checkpoint. The scripts stop
   safely rather than deleting the new columns.
@@ -130,8 +132,9 @@ Git and external-service facts live before continuing.
 
 - Before the DSO merge, `pnpm generate:i18n` and `pnpm check:i18n` passed with
   1,772 keys across 20 locale files.
-- After the merge, local read-only locale validation passed with 1,773 keys.
-  The additional key is `sharedUi.date.selectWithinDays` in both languages.
+- The temporary integration was locally validated with 1,773 keys. Its added
+  `sharedUi.date.selectWithinDays` key is in the `develop` integration, not in
+  the restored standalone `feature/i18n` branch.
 - Current `pnpm export:i18n` and `pnpm check:i18n`: safely failed because the
   live Sheet header moved to row 2 and gained three columns. The new local key
   has not been synchronized to the Sheet.
@@ -141,9 +144,11 @@ Git and external-service facts live before continuing.
 - Push hook full-repository lint: 0 errors, 418 warnings.
 - Shared hook tests: 24 passed; coverage delta check passed.
 - `git diff --check`: passed.
-- Final explicit `git push -u origin feature/i18n`: succeeded at
-  `a48b1cb8e`; the pre-push hook completed with 0 lint errors and 418 existing
-  warnings, and the shared hook coverage check passed.
+- `feature/i18n` was restored and force-pushed to `7665e6109`.
+- Per the user's explicit fast-path request, commit `7a9d7c7a6` and PR #4472
+  were created without running typecheck, lint, tests, or Git hooks. The earlier
+  temporary integration checks must not be treated as validation of that exact
+  final commit.
 - Non-blocking repository warnings remain: Next recommends TypeScript 5.1 or
   newer while the repository uses 5.0.4, Admin Browserslist data is old, and
   existing lint warnings remain.
@@ -158,11 +163,10 @@ Git and external-service facts live before continuing.
 1. Pull `codex-personal-context` and read this file.
 2. Use only `/Users/parkjongsun/Repository/dentlink-client-i18n`; fetch remotes
    and verify `feature/i18n`, its upstream, clean status, and live divergence.
-3. Review commit `0fbc5ff97` for the i18n implementation and merge commit
-   `a48b1cb8e` for the completed DL-15223 integration.
+3. Review commit `0fbc5ff97` for the i18n implementation. For the combined
+   development result, inspect merged PR #4472 / develop commit `ec929a2cf`.
 4. Reconcile the manifest/scripts with the live Sheet's note row and 11-column
-   schema without losing PM workflow data. Then synchronize
-   `sharedUi.date.selectWithinDays` and rerun export/generate/check.
+   schema without losing PM workflow data, then rerun export/generate/check.
 5. Have PM review English/Korean wording in the Sheet. Pull approved edits back
    with `pnpm generate:i18n`, then inspect the JSON diff.
 6. Run browser QA for fixed Korean display, fallback behavior, long Korean
@@ -171,6 +175,7 @@ Git and external-service facts live before continuing.
    DSO shared-component changes.
 7. Apply only review-driven fixes, rerun proportionate checks, and commit/push
    only on explicit user authorization.
-8. Before PR creation, fetch the live intended base and reconcile any new
-   divergence deliberately. Create the PR only when the user explicitly asks;
-   verify the target branch at that time.
+8. Run the skipped validation on the merged `develop` integration when the user
+   resumes QA. Future i18n changes should remain on `feature/i18n` and use a
+   separate develop-based integration branch when another combined deployment
+   is required.
