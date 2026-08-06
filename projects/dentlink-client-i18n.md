@@ -9,22 +9,22 @@ Git and external-service facts live before continuing.
 - Dedicated worktree: `/Users/parkjongsun/Repository/dentlink-client-i18n`
 - Branch: `feature/i18n`, tracking `origin/feature/i18n`
 - Current local and remote HEAD:
-  `7665e610972a1699c90d7e20d7d0c22b63d58100`
-  (`chore: 패키지 버전업`).
+  `c2ce3ddd91dee52040191dfd0100f1d2f125a15c`
+  (`chore: master 최신 변경사항 반영`).
 - A temporary DSO merge commit `a48b1cb8e` was removed from `feature/i18n`
-  with an explicit force-with-lease reset. The branch is back to its exact
-  pre-DSO state.
-- Combined development integration uses the separate worktree
-  `/Users/parkjongsun/Repository/dentlink-client-i18n-develop`, branch
-  `feature/i18n-develop`, at `7a9d7c7a6`.
+  with an explicit force-with-lease reset. The branch contains no DSO feature
+  history and has since merged the latest master.
+- Combined development integration branch `feature/i18n-develop` was created
+  at `7a9d7c7a6`; its local branch and worktree were deleted after use. The
+  remote branch remains.
 - PR #4472 (`feature/i18n-develop` -> `develop`) was merged as
   `ec929a2cfebb038e659b3cb649bbe017c03336c1`. PR #4471 was closed.
 - Main implementation commit:
   `0fbc5ff979525d1d9f9233f5b366eda51bcec172`
   (`feat: Lab 정적 UI 문구에 한국어 i18n 적용`)
 - Latest merged base:
-  `6bb4119c137921a23f724819781b6a59004b4e03`
-  (`Release/v1.82.0 -> master (#4457)`). It is an ancestor of HEAD.
+  `53325bd7928dd575a72e97b7cfb95f2dc914bc6c`
+  (`Release/v1.82.2 -> master (#4475)`). It is an ancestor of HEAD.
 - The working tree is clean. `HEAD` and `origin/feature/i18n` match.
 - The i18n branch restore and integration branch are both pushed.
 - The sibling `/Users/parkjongsun/Repository/dentlink-client` worktree owns
@@ -144,7 +144,11 @@ Git and external-service facts live before continuing.
 - Push hook full-repository lint: 0 errors, 418 warnings.
 - Shared hook tests: 24 passed; coverage delta check passed.
 - `git diff --check`: passed.
-- `feature/i18n` was restored and force-pushed to `7665e6109`.
+- `feature/i18n` was restored to `7665e6109`, then updated with the latest
+  master in merge commit `c2ce3ddd9` and pushed.
+- For that master synchronization, Clinic/Lab/Admin typechecks passed; the
+  push hook completed with 0 lint errors and 418 warnings; shared/config tests
+  3 and shared/hooks tests 24 passed with the coverage check.
 - Per the user's explicit fast-path request, commit `7a9d7c7a6` and PR #4472
   were created without running typecheck, lint, tests, or Git hooks. The earlier
   temporary integration checks must not be treated as validation of that exact
@@ -163,8 +167,9 @@ Git and external-service facts live before continuing.
 1. Pull `codex-personal-context` and read this file.
 2. Use only `/Users/parkjongsun/Repository/dentlink-client-i18n`; fetch remotes
    and verify `feature/i18n`, its upstream, clean status, and live divergence.
-3. Review commit `0fbc5ff97` for the i18n implementation. For the combined
-   development result, inspect merged PR #4472 / develop commit `ec929a2cf`.
+3. Review commit `0fbc5ff97` for the i18n implementation and `c2ce3ddd9` for
+   the latest master synchronization. For the combined development result,
+   inspect merged PR #4472 / develop commit `ec929a2cf`.
 4. Reconcile the manifest/scripts with the live Sheet's note row and 11-column
    schema without losing PM workflow data, then rerun export/generate/check.
 5. Have PM review English/Korean wording in the Sheet. Pull approved edits back
