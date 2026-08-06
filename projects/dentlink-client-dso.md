@@ -26,21 +26,25 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 
 ## 최신 체크포인트 — 2026-08-06
 
-- 전용 worktree와 브랜치는 기존과 동일하다.
+- 전용 worktree는 release 확인용으로 전환했다.
   - `/Users/parkjongsun/Repository/dentlink-client-dso`
-  - `feature/DL-15223`
-  - `origin/feature/DL-15223`
-- local/remote HEAD는
-  `9eab1b3c3c8edc271e7faef3c831b0f7a98b17c7`로 일치하며 worktree는 clean이다.
+  - `release/v1.83.0`
+  - `origin/release/v1.83.0`
+- local/remote release HEAD는
+  `ec792ab5ae0755cdaffe224aa54da790286cdc95`로 일치하며 worktree는 clean이다.
+  로컬 `feature/DL-15223` 브랜치는 삭제했고 원격 feature 브랜치는 보존했다.
 - 이번에 원격 반영된 커밋:
   - `0742be5d2` `[DL-15801] feat: 대시보드 필터 Amplitude 이벤트 추가`
   - `65705d322` `[DL-15223] chore: 최신 API 스펙 동기화`
   - `9d82d144b` `[DL-15223] feat: Organization Advanced Export API 연동`
   - `8829beab8` `[DL-15223] fix: CodeRabbit 리뷰 지적사항 반영`
   - `9eab1b3c3` `[DL-15223] fix: 모바일 팝업 저장소 접근 예외 처리`
+  - `44990b0ec` `[DL-15223] fix: 대시보드 모바일 판별 및 카드 너비 수정`
+  - `d324dc559` `[DL-15223] chore: 최신 master 반영`
 - release 전달용 PR
   [#4469](https://github.com/Innvoaid/dentlink-client/pull/4469)는
-  `feature/DL-15223`에서 `release/v1.83.0`을 대상으로 열린 상태다.
+  `feature/DL-15223`에서 `release/v1.83.0`으로 merge 완료됐으며 release merge
+  commit은 `ec792ab5a`다.
   CodeRabbit 리뷰 19건을 모두 검토해 12건은 코드로 반영하고 7건은 현재 계약과 제품
   정책에 따른 유지 사유를 답변했으며, 19개 thread를 모두 resolve했다. 후속 리뷰의
   `localStorage` 접근 예외도 `9eab1b3c3`에 반영했다. 마지막 live 확인에서 미해결
@@ -622,6 +626,9 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
   모두 resolve했다.
 - [x] 후속 CodeRabbit 리뷰 1건의 `localStorage` 접근 예외를 `9eab1b3c3`에 반영하고
   답변·resolve했다. 마지막 live 확인에서 미해결 thread는 0개다.
+- [x] 대시보드 모바일 차단을 실제 기기 판별로 제한하고 하단 카드 너비를
+  475~745px 균등 분할로 보정한 `44990b0ec`와 최신 master 병합 `d324dc559`까지
+  push한 뒤 PR #4469를 `release/v1.83.0`에 merge했다.
 - [ ] 추가 API 연결로 코드가 바뀌면 TypeScript, lint, build, `git diff --check`와
   관련 브라우저 QA를 다시 수행한다.
 
@@ -640,17 +647,17 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 1. `codex-personal-context`를 pull하고 이 문서를 읽는다.
 2. 정확한 worktree가
    `/Users/parkjongsun/Repository/dentlink-client-dso`인지 확인한다.
-3. `feature/DL-15223`, HEAD `9eab1b3c3`, upstream과 release PR
-   [#4469](https://github.com/Innvoaid/dentlink-client/pull/4469), worktree 상태를
-   live Git에서 다시 확인한다. PR 대상은 `release/v1.83.0`이다.
-4. 현재 확정 범위 FE 구현은 완료됐다. 다음 기능 작업이 아니라면 실제 로그인
+3. 현재 worktree의 `release/v1.83.0`, HEAD `ec792ab5a`, upstream과 merge 완료된 PR
+   [#4469](https://github.com/Innvoaid/dentlink-client/pull/4469) 상태를 live Git에서
+   다시 확인한다. 로컬 `feature/DL-15223`은 삭제된 상태다.
+4. 현재 확정 범위 FE 구현과 release 반영은 완료됐다. 다음 기능 작업이 아니라면 실제 로그인
    Advanced Export, 배포 revision, 실데이터 회귀, Amplitude 수신 같은 QA·전달 단계로
    시작한다.
 5. 백엔드가 이후 API를 다시 변경했다고 알린 경우에만 `generate:api-type`을 실행해
    새 diff를 검토한다. 현재 완료된 계약을 다시 추측하거나 fixture로 되돌리지 않는다.
 6. 이후 master가 다시 진행됐을 때만 새 차이를 확인한다. `d86e4cea2`까지의 master
    통합은 반복하지 않는다.
-7. CodeRabbit 기존 19개 thread는 처리 완료다. 새 thread가 추가된 경우에만 다시
-   검토하며, 추가 의견이 없으면 PR #4469를 유지한다.
+7. CodeRabbit 기존 19개 thread는 처리 완료됐고 PR도 merge됐다. 후속 수정은 새 Jira
+   또는 release 후속 브랜치에서 시작한다.
 8. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
    승인을 받는다.
