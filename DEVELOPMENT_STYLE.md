@@ -204,6 +204,11 @@ applying them.
   source, download behavior, or error contract. Reuse existing PDF primitives,
   isolate a genuinely new document from legacy routes, and preserve server-owned
   row ordering unless the contract assigns sorting to the client.
+- Separate report business data from presentation context. Before requesting a
+  new response field, check the exact PDF design and the authenticated profile
+  state already owned by the app. Reuse the existing locale or currency code
+  when it is stable product context, and do not add symbols to rows or summaries
+  when the design intentionally shows a code only at the grand total.
 - For edit forms whose detail response may include nullable or unassigned
   relations, separate display coverage from mutation payload. Let the response
   represent available unassigned items when required, but initialize selection

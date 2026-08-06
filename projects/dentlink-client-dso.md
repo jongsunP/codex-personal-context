@@ -24,6 +24,51 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 간주한다. 이 체크포인트는 사용자가 제공한 범위와 현재 코드·Git에서 검증한 사실을
 기록한다.
 
+## 최신 체크포인트 — 2026-08-06
+
+- 전용 worktree와 브랜치는 기존과 동일하다.
+  - `/Users/parkjongsun/Repository/dentlink-client-dso`
+  - `feature/DL-15223`
+  - `origin/feature/DL-15223`
+- local/remote HEAD는
+  `9d82d144b5eb8ece531c627f63f78d0485b46e6e`로 일치하며 worktree는 clean이다.
+- 이번에 원격 반영된 커밋:
+  - `0742be5d2` `[DL-15801] feat: 대시보드 필터 Amplitude 이벤트 추가`
+  - `65705d322` `[DL-15223] chore: 최신 API 스펙 동기화`
+  - `9d82d144b` `[DL-15223] feat: Organization Advanced Export API 연동`
+- 배포된 Advanced Export 계약을 생성 타입으로 확인하고
+  `GET /office/organizations/{organizationId}/billings/payment-histories`를 실제
+  modal과 별도 인증 PDF route에 연결했다.
+  - Office ID 1~5개, 선택 Dentist ID, payment status, 시작·종료일을 계약 형태로
+    전달한다.
+  - 목 Dentist 목록을 제거하고 기존 Clinic의 활성 Dentist 조회를 재사용한다.
+  - API의 `paymentHistories`와 `priceSummary`를 별도 수기 domain type/API wrapper
+    경계로 받아 기존 PDF header, publication, table, price primitive에 전달한다.
+  - Office 이름은 `branchName` 우선·`employerName` fallback, 결제수단과 상태는
+    기존 enum/status formatter를 사용한다.
+  - 행 순서는 서버 소유로 두며 FE 정렬이나 목데이터 가공을 추가하지 않았다.
+- Figma PDF 노드 `92-106286`을 Chrome에서 다시 확인했다. 행과 Subtotal, Tax,
+  Total, Amount Paid, Amount Refunded에는 통화 심볼을 표시하지 않고 `Total Due`에만
+  `AUD 720.00`처럼 통화 코드를 표시한다. Advanced Export 응답에는 별도 통화 필드가
+  필요하지 않으며, 기존 활성 병원 profile의 locale과 currency code를 사용한다.
+- Organization Billing은 응답 행의 currency를 우선해 `Amount (AUD)` 같은 동적
+  header와 금액 포맷을 사용하고, 데이터가 아직 없을 때는 활성 병원 currency를
+  fallback으로 사용한다. Sidebar Outstanding Balance도 같은 기존 활성 병원 통화로
+  표시한다. 추가 백엔드 문의 없이 현재 확정된 FE 범위는 구현 완료다.
+- 검증 결과:
+  - 변경 Clinic 파일 ESLint 오류 0건
+  - Clinic/Admin/Lab TypeScript 통과
+  - Clinic production build 통과 및 신규 PDF route 생성 확인
+  - `git diff --check` 통과
+  - push hook 전체 lint 오류 0건, 저장소 기존 warning 418건
+  - shared hook test 24건 및 coverage check 통과
+- 구현 완료와 별개로 실제 로그인 데이터의 Advanced Export, 배포 revision,
+  실데이터 회귀, 실제 Amplitude 수신은 QA·배포 단계이며 이번 FE 미완료로 분류하지
+  않는다.
+
+아래 2026-08-04 이하 체크포인트는 진행 경과를 보존한 역사 기록이다. 현재 상태와
+충돌하면 이 2026-08-06 체크포인트와 live Git을 우선한다.
+
 ## 저장소와 현재 Git 상태 — 2026-08-04
 
 - 공유 저장소: `https://github.com/Innvoaid/dentlink-client`
@@ -532,9 +577,8 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
   개발 배포에 자동 포함된 것으로 간주하지 않는다.
 - `DL-15801` 이벤트는 코드와 push까지만 완료했다. 배포 revision 및 실제 Amplitude
   수신은 확인하지 않았으므로 live 완료로 분류하지 않는다.
-- Advanced Export의 API-backed 실제 조회·다운로드와 일부 실데이터 경계 상태는
-  서버 계약이 없어 검증하지 않았다. fixture 기반 신규 PDF blob/A4 렌더링은
-  검증했다.
+- Advanced Export API 연동과 별도 PDF 렌더러 구현은 완료했다. 실제 로그인
+  실데이터 조회·다운로드는 아직 수동 검증하지 않았으며 구현과 구분되는 QA 상태다.
 - shared UI 전체 lint는 저장소에 동시에 해석되는 `eslint-plugin-storybook`
   `8.38.0`과 `8.57.1` 충돌로 실행되지 않았다. Clinic TypeScript와 실제 호출부
   대상 lint는 통과했으므로 이번 변경의 lint 실패로 분류하지 않는다.
@@ -549,12 +593,13 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 
 ## 우선순위 TODO
 
-### P0 — 남은 백엔드 계약
+### P0 — 백엔드 계약 반영 완료
 
-- [ ] Organization Advanced Export API가 배포되면 현재 modal과 신규 PDF route에
-  query, dentist source, 다운로드와 실패 상태를 연결한다.
-- [ ] 통화 심볼이 포함된 API가 배포되면 `generate:api-type` diff를 검토하고 미수금,
-  Billing 헤더·금액과 필요 시 신규 PDF에 작은 범위로 연결한다.
+- [x] Organization Advanced Export API를 modal과 신규 PDF route에 연결하고 query,
+  Dentist source, 로딩·오류·빈 결과와 다운로드 흐름을 구현했다.
+- [x] 생성 API diff를 검토하고 Organization Billing header·금액과 미수금 통화를
+  기존 profile/공용 formatter 구조로 반영했다. 신규 PDF는 확정 디자인대로 행·요약에
+  심볼을 붙이지 않고 Total Due에만 기존 profile의 통화 코드를 표시한다.
 
 ### P1 — 전달 전 최종 게이트
 
@@ -582,16 +627,15 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 1. `codex-personal-context`를 pull하고 이 문서를 읽는다.
 2. 정확한 worktree가
    `/Users/parkjongsun/Repository/dentlink-client-dso`인지 확인한다.
-3. `feature/DL-15223`, HEAD `67f0f4017`, upstream, `origin/master`와 draft PR
+3. `feature/DL-15223`, HEAD `9d82d144b`, upstream, `origin/master`와 draft PR
    [#4459](https://github.com/Innvoaid/dentlink-client/pull/4459), worktree 상태를
    live Git에서 다시 확인한다.
-4. Advanced Export API 또는 통화 심볼 계약이 배포됐는지 먼저
-   `generate:api-type` 결과로 확인한다. API가 없으면 transport 계약을 추측하지 않는다.
-5. Advanced Export API가 배포되면 현재 별도 PDF route와 presentation model의
-   adapter를 실제 query로 교체하고 dentist source·다운로드·실패 흐름을 검증한다.
-6. 통화 심볼 필드가 배포되면 기존 공용 포맷터와 화면 구조를 유지한 채 미수금,
-   Billing 헤더·금액과 필요 시 신규 PDF에만 연결한다.
-7. 이후 master가 다시 진행됐을 때만 새 차이를 확인한다. `d86e4cea2`까지의 master
+4. 현재 확정 범위 FE 구현은 완료됐다. 다음 기능 작업이 아니라면 실제 로그인
+   Advanced Export, 배포 revision, 실데이터 회귀, Amplitude 수신 같은 QA·전달 단계로
+   시작한다.
+5. 백엔드가 이후 API를 다시 변경했다고 알린 경우에만 `generate:api-type`을 실행해
+   새 diff를 검토한다. 현재 완료된 계약을 다시 추측하거나 fixture로 되돌리지 않는다.
+6. 이후 master가 다시 진행됐을 때만 새 차이를 확인한다. `d86e4cea2`까지의 master
    통합은 반복하지 않는다.
-8. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
+7. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
    승인을 받는다.
