@@ -79,19 +79,13 @@ For detailed current state, read:
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
 - Dedicated worktree:
   `/Users/parkjongsun/Repository/dentlink-client-dso`
-- Branch: `feature/DL-15223`
+- Branch: `DL-15223-qa`
 - Jira: `DL-15223`
-- Current state: Admin Organization CRUD, Clinic DSO/Office dashboards, My
-  Profile settings, Organization access/mobile guards, real dashboard/office/
-  billing APIs, existing-statement PDF reuse, outstanding balance, and
-  DL-15801 Amplitude click events are implemented. Advanced Export's latest
-  Figma selection UI is committed and pushed at `67f0f4017`; its backend API
-  integration remains pending. PR #4443 merged only the earlier state through
-  `40bfd9526`; newer feature commits are not in `develop` and there is no open
-  follow-up PR. Develop integration, deployment revision, and live Amplitude
-  delivery remain pending. The current backend policy
-  intentionally uses the sole `organizations[0]`; `Visit Office` reuses the
-  existing active-Office transition flow and its target Office entry was
-  manually verified.
+- Current state: release QA에서 바로 처리 가능한 Clinic/Admin DSO 기능과 디자인 QA를
+  `DL-15223-qa`에 반영하고 `release/v1.83.0` 대상 PR #4484를 열었다. local/remote
+  HEAD `2a9f33bca`는 일치하고 worktree는 clean이다. 마지막 확인 시 PR은 open,
+  mergeable, review required이며 CodeRabbit check가 pending이다. Frankie 담당 카드 중
+  구현 가능한 13건은 Ready for Deploy이고, DL-15906 카테고리 활성화 API와 DL-15937
+  Advanced Export 전용 Dentist API만 백엔드 배포 대기로 To Do에 유지한다.
 - Personal current checkpoint, decisions, and prioritized TODO list:
   `projects/dentlink-client-dso.md`

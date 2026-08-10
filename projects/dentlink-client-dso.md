@@ -24,6 +24,53 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 간주한다. 이 체크포인트는 사용자가 제공한 범위와 현재 코드·Git에서 검증한 사실을
 기록한다.
 
+## 최신 체크포인트 — 2026-08-10
+
+- 전용 worktree는 release QA 후속 브랜치에서 PR 리뷰 중이다.
+  - worktree: `/Users/parkjongsun/Repository/dentlink-client-dso`
+  - branch/upstream: `DL-15223-qa` / `origin/DL-15223-qa`
+  - HEAD: `2a9f33bca` (`Merge branch 'release/v1.83.0' into DL-15223-qa`)
+  - local과 remote는 일치하고 worktree는 clean이다.
+- release 전달용 PR
+  [#4484](https://github.com/Innvoaid/dentlink-client/pull/4484)를
+  `DL-15223-qa`에서 `release/v1.83.0` 대상으로 생성했다. PR은 open, mergeable,
+  review required 상태이며 마지막 확인 시 CodeRabbit check가 pending이다. merge는
+  수행하지 않았다.
+- 이번 QA 브랜치에 반영한 주요 커밋은 다음과 같다.
+  - `0e634e3ca` `[DL-15223] DSO QA 및 미수금 조회 기능 반영`
+  - `1bb4daa4e` `[DL-15223] DSO 최종 QA 누락사항 수정`
+  - `f4309d4f1` `[DL-15223] fix: Export 모달 외부 클릭 방지`
+  - `51d37649b` `[DL-15223] fix: 대시보드 최종 QA 수정`
+  - `fddf3a4eb` `[DL-15223] fix: 로그인 및 대시보드 QA 수정`
+  - `ce216f58b` `chore: 앱 버전 1.83.0 반영`
+- QA에서 확정된 FE 범위는 현재 브랜치에 반영했다.
+  - Organization 미수금 전용 탭과 서버의 `isOutstandingOnly` 계약
+  - 관리 치과 Dashboard의 데스크톱·모바일 레이아웃과 필터
+  - Dashboard/Billing 텍스트, 동적 통화 헤더, Export modal의 고정 footer와
+    validation caption 전환
+  - Default View가 Dashboard인 Organization ADMIN만 신규 로그인 이동의 영향을
+    받고 그 외 로그인·로그아웃·명시적 이동은 기존 흐름을 유지하도록 좁힌 처리
+  - 기존 Typography, SegmentControl, modal, date-range 등 가장 가까운 운영
+    컴포넌트 재사용과 공용 UI의 기존 기본 동작 보존
+- 마지막 Jira 정리 기준 Frankie 담당 하위 카드 중 바로 구현 가능한 13건은
+  `Ready for Deploy`이며, 아래 두 건만 백엔드 계약 대기로 `To Do`에 유지한다.
+  - `DL-15906`: 카테고리 활성화 신규 API 배포 대기
+  - `DL-15937`: Advanced Export 전용 Dentist 조회 API 배포 대기
+  - `DL-15888`은 이번 DSO QA 범위와 별도 작업이다.
+- 검증 및 전달 상태:
+  - commit hook의 Clinic, Lab, Admin TypeScript 통과
+  - push hook의 lint 오류 0건, 저장소 기존 warning 418건
+  - shared config test 3건, shared hook test 24건과 coverage check 통과
+  - 구현·코드 QA와 PR 전달은 완료했지만 release 실데이터 QA와 배포 결과는 별도다.
+- 로컬 브랜치 정리 결과, `master`, 현재 PR 브랜치, 별도 i18n worktree 브랜치와
+  다른 활성 worktree 브랜치만 있어 삭제할 수 있는 확실한 불필요 브랜치는 없었다.
+  다른 worktree가 점유한 브랜치와 현재 open PR 브랜치는 유지한다.
+
+다음 시작점은 PR #4484의 새 CodeRabbit/리뷰 thread 유무를 확인하는 것이다. 리뷰에서
+코드가 변경되면 필요한 범위만 검증·commit·push한다. 백엔드가 DL-15906 또는
+DL-15937 배포를 알린 경우 `generate:api-type` 결과 diff를 먼저 확인해 해당 카드만
+연결한다. PR merge와 release 실데이터 QA를 FE 구현 완료와 혼동하지 않는다.
+
 ## 최신 체크포인트 — 2026-08-06
 
 - 전용 worktree는 release 확인용으로 전환했다.
