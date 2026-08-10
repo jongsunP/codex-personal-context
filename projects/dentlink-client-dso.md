@@ -29,6 +29,8 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 - 전용 worktree는 release QA 후속 브랜치에서 PR 리뷰 중이다.
   - worktree: `/Users/parkjongsun/Repository/dentlink-client-dso`
   - branch/upstream: `DL-15223-qa` / `origin/DL-15223-qa`
+  - 현재 open PR이 연결된 기존 브랜치명은 그대로 유지하지만 prefix가 없는 예외다.
+    이후 신규 작업 브랜치는 기본적으로 `feature/` prefix를 사용한다.
   - HEAD: `8c2eae5cf` (`[DL-15223] fix: 대시보드 필터 복수 선택 복원`)
   - local과 remote는 일치하고 worktree는 clean이다.
 - release 전달용 PR

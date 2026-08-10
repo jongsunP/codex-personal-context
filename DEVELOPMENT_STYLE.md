@@ -273,10 +273,11 @@ applying them.
 
 ## User-Directed Scope Discipline
 
-- Do not invent or use an agent-specific branch prefix such as `codex/` in the
-  user's repositories. Before proposing or creating a branch, inspect and
-  follow that repository's established taxonomy, such as `feature/` or
-  `release/`. If the repository convention is still ambiguous, ask the user.
+- New work branches use the repository's normal `feature/` prefix by default.
+  Never invent or use an agent-specific prefix such as `codex/` or `claude/`.
+  `release/`, `hotfix/`, or another exceptional prefix is used only when the
+  user explicitly requests that branch purpose; otherwise do not infer an
+  exception from the tool or agent performing the work.
 - Name a branch for its intended delivery scope. When a branch is meant to
   collect multiple QA fixes for one release, use the release QA purpose rather
   than the first Jira card alone; for example, `feature/v1.79.0-qa` for fixes

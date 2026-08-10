@@ -1,5 +1,11 @@
 # Memory Changelog
 
+## 2026-08-10
+
+- Tightened the durable branch-naming rule: new work branches default to the
+  project's `feature/` taxonomy, never `codex/` or `claude/`; `release/`,
+  `hotfix/`, and other exceptional prefixes require explicit user direction.
+
 ## 2026-08-03
 
 - Clarified completion reporting: a request for completed and remaining
