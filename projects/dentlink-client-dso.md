@@ -29,7 +29,7 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 - 전용 worktree는 release QA 후속 브랜치에서 PR 리뷰 중이다.
   - worktree: `/Users/parkjongsun/Repository/dentlink-client-dso`
   - branch/upstream: `DL-15223-qa` / `origin/DL-15223-qa`
-  - HEAD: `2a9f33bca` (`Merge branch 'release/v1.83.0' into DL-15223-qa`)
+  - HEAD: `8c2eae5cf` (`[DL-15223] fix: 대시보드 필터 복수 선택 복원`)
   - local과 remote는 일치하고 worktree는 clean이다.
 - release 전달용 PR
   [#4484](https://github.com/Innvoaid/dentlink-client/pull/4484)를
@@ -43,6 +43,9 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   - `51d37649b` `[DL-15223] fix: 대시보드 최종 QA 수정`
   - `fddf3a4eb` `[DL-15223] fix: 로그인 및 대시보드 QA 수정`
   - `ce216f58b` `chore: 앱 버전 1.83.0 반영`
+  - `1365a631a` `[DL-15223] fix: CodeRabbit 리뷰 지적사항 반영`
+  - `24ed762a7` `[DL-15223] fix: 치과의사 주문 표 헤더 정렬 수정`
+  - `8c2eae5cf` `[DL-15223] fix: 대시보드 필터 복수 선택 복원`
 - QA에서 확정된 FE 범위는 현재 브랜치에 반영했다.
   - Organization 미수금 전용 탭과 서버의 `isOutstandingOnly` 계약
   - 관리 치과 Dashboard의 데스크톱·모바일 레이아웃과 필터
@@ -52,6 +55,8 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
     받고 그 외 로그인·로그아웃·명시적 이동은 기존 흐름을 유지하도록 좁힌 처리
   - 기존 Typography, SegmentControl, modal, date-range 등 가장 가까운 운영
     컴포넌트 재사용과 공용 UI의 기존 기본 동작 보존
+  - Dashboard/Billing Office 필터와 Billing status 필터의 복수 선택 및 `All`
+    상호배타 동작 보존
 - 마지막 Jira 정리 기준 Frankie 담당 하위 카드 중 바로 구현 가능한 13건은
   `Ready for Deploy`이며, 아래 두 건만 백엔드 계약 대기로 `To Do`에 유지한다.
   - `DL-15906`: 카테고리 활성화 신규 API 배포 대기
@@ -61,10 +66,19 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   - commit hook의 Clinic, Lab, Admin TypeScript 통과
   - push hook의 lint 오류 0건, 저장소 기존 warning 418건
   - shared config test 3건, shared hook test 24건과 coverage check 통과
+  - 실제 브라우저에서 Dashboard Office 2개, Billing Office 2개 및 상태 2개 복수
+    선택과 `All` 복원을 확인했다.
   - 구현·코드 QA와 PR 전달은 완료했지만 release 실데이터 QA와 배포 결과는 별도다.
 - 로컬 브랜치 정리 결과, `master`, 현재 PR 브랜치, 별도 i18n worktree 브랜치와
   다른 활성 worktree 브랜치만 있어 삭제할 수 있는 확실한 불필요 브랜치는 없었다.
   다른 worktree가 점유한 브랜치와 현재 open PR 브랜치는 유지한다.
+
+2026-08-10 최종 QA에서 `51d37649b`의 필터 helper 공통화가 기존 복수 선택 배열을
+마지막 한 값으로 축소한 회귀를 확인했다. 이는 Jira·Figma·API 요구가 아니라 기존
+동작의 cardinality를 보존하지 못한 구현 실수였다. `8c2eae5cf`에서 helper가 모든
+선택값을 유지하고 `All`만 상호배타적으로 처리하도록 복원했으며, 실행되지 않는 검증용
+신규 test 파일은 제품 브랜치에 남기지 않았다. 이후 selection helper를 공통화할 때는
+empty/All/single/multiple 동작표와 모든 호출부를 함께 검증한다.
 
 다음 시작점은 PR #4484의 새 CodeRabbit/리뷰 thread 유무를 확인하는 것이다. 리뷰에서
 코드가 변경되면 필요한 범위만 검증·commit·push한다. 백엔드가 DL-15906 또는

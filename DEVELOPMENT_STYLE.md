@@ -179,7 +179,11 @@ applying them.
   the API accepts an array, preserve every selected value in state and the
   request. Define sentinel options such as `all` explicitly so selecting it
   clears specific values and clearing the final specific value restores the
-  intended default.
+  intended default. Before extracting or consolidating selection logic into a
+  shared helper, record the existing truth table for empty, sentinel, single,
+  and multiple values, then verify every consumer against that table. A cleanup
+  or helper rename is not behavior-preserving if it silently changes
+  cardinality.
 - When a selector must offer the complete set from a paginated endpoint, do not
   silently treat the first `100` records as complete. Use the existing
   server-search interaction when available, or page until the response total
