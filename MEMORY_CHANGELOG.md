@@ -5,6 +5,9 @@
 - Tightened the durable branch-naming rule: new work branches default to the
   project's `feature/` taxonomy, never `codex/` or `claude/`; `release/`,
   `hotfix/`, and other exceptional prefixes require explicit user direction.
+- Recorded PR #4484 merged into `release/v1.83.0` as `41de67a8f`, then removed
+  the clean DSO worktree and local `DL-15223-qa` branch while preserving its
+  remote branch.
 
 ## 2026-08-03
 

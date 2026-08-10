@@ -26,18 +26,18 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 
 ## 최신 체크포인트 — 2026-08-10
 
-- 전용 worktree는 release QA 후속 브랜치에서 PR 리뷰 중이다.
-  - worktree: `/Users/parkjongsun/Repository/dentlink-client-dso`
-  - branch/upstream: `DL-15223-qa` / `origin/DL-15223-qa`
-  - 현재 open PR이 연결된 기존 브랜치명은 그대로 유지하지만 prefix가 없는 예외다.
-    이후 신규 작업 브랜치는 기본적으로 `feature/` prefix를 사용한다.
-  - HEAD: `8c2eae5cf` (`[DL-15223] fix: 대시보드 필터 복수 선택 복원`)
-  - local과 remote는 일치하고 worktree는 clean이다.
+- release QA 후속 전달과 로컬 정리를 완료했다.
+  - PR head: `8c2eae5cf` (`[DL-15223] fix: 대시보드 필터 복수 선택 복원`)
+  - merge commit: `41de67a8f` (`[DL-15223] DSO 대시보드 및 QA 반영 (#4484)`)
+  - 전용 worktree `/Users/parkjongsun/Repository/dentlink-client-dso`는 clean 상태를
+    확인한 뒤 제거했다.
+  - 로컬 `DL-15223-qa` 브랜치는 삭제했고 `origin/DL-15223-qa`는 보존했다.
+  - prefix가 없던 이 브랜치는 종료된 예외다. 이후 신규 작업 브랜치는 기본적으로
+    `feature/` prefix를 사용한다.
 - release 전달용 PR
   [#4484](https://github.com/Innvoaid/dentlink-client/pull/4484)를
-  `DL-15223-qa`에서 `release/v1.83.0` 대상으로 생성했다. PR은 open, mergeable,
-  review required 상태이며 마지막 확인 시 CodeRabbit check가 pending이다. merge는
-  수행하지 않았다.
+  `DL-15223-qa`에서 `release/v1.83.0` 대상으로 생성했고 2026-08-10에 merge했다.
+  GitHub merge 결과는 단일 parent의 squash commit `41de67a8f`다.
 - 이번 QA 브랜치에 반영한 주요 커밋은 다음과 같다.
   - `0e634e3ca` `[DL-15223] DSO QA 및 미수금 조회 기능 반영`
   - `1bb4daa4e` `[DL-15223] DSO 최종 QA 누락사항 수정`
@@ -71,9 +71,8 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
   - 실제 브라우저에서 Dashboard Office 2개, Billing Office 2개 및 상태 2개 복수
     선택과 `All` 복원을 확인했다.
   - 구현·코드 QA와 PR 전달은 완료했지만 release 실데이터 QA와 배포 결과는 별도다.
-- 로컬 브랜치 정리 결과, `master`, 현재 PR 브랜치, 별도 i18n worktree 브랜치와
-  다른 활성 worktree 브랜치만 있어 삭제할 수 있는 확실한 불필요 브랜치는 없었다.
-  다른 worktree가 점유한 브랜치와 현재 open PR 브랜치는 유지한다.
+- 로컬 정리 결과 DSO 전용 worktree와 `DL-15223-qa` 브랜치는 제거됐다. 별도 i18n
+  worktree는 유지하며, 원격 DSO head 브랜치는 별도 삭제 요청 전까지 보존한다.
 
 2026-08-10 최종 QA에서 `51d37649b`의 필터 helper 공통화가 기존 복수 선택 배열을
 마지막 한 값으로 축소한 회귀를 확인했다. 이는 Jira·Figma·API 요구가 아니라 기존
@@ -82,10 +81,11 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 신규 test 파일은 제품 브랜치에 남기지 않았다. 이후 selection helper를 공통화할 때는
 empty/All/single/multiple 동작표와 모든 호출부를 함께 검증한다.
 
-다음 시작점은 PR #4484의 새 CodeRabbit/리뷰 thread 유무를 확인하는 것이다. 리뷰에서
-코드가 변경되면 필요한 범위만 검증·commit·push한다. 백엔드가 DL-15906 또는
-DL-15937 배포를 알린 경우 `generate:api-type` 결과 diff를 먼저 확인해 해당 카드만
-연결한다. PR merge와 release 실데이터 QA를 FE 구현 완료와 혼동하지 않는다.
+다음 시작점은 release 실데이터 QA 결과 또는 백엔드 대기 카드의 계약 배포다.
+DL-15906 또는 DL-15937 배포를 알린 경우 종료된 브랜치를 되살리지 않고, 요청받은
+base에서 `feature/` prefix의 새 전용 worktree를 만든 뒤 `generate:api-type` 결과
+diff를 먼저 확인해 해당 카드만 연결한다. PR merge와 release 실데이터 QA를 FE 구현
+완료와 혼동하지 않는다.
 
 ## 최신 체크포인트 — 2026-08-06
 
