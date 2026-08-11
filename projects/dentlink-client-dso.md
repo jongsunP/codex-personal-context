@@ -26,16 +26,36 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 
 ## 최신 체크포인트 — 2026-08-11
 
-- PR #4484의 DSO merge commit `41de67a8f`는 `release/v1.83.0`과 현재
-  `origin/stage` HEAD `980e5bdf6`의 조상으로 포함돼 있다.
-- 사용자 확인 기준 스테이징 서버 배포가 완료됐고, 백엔드 대기 항목을 제외한
-  범위는 스테이징 재 QA 진행 중이다.
-- 현재 개발 대기는 아래 백엔드 API 2건뿐이다.
-  - `DL-15906`: 카테고리 활성화 신규 API
-  - `DL-15937`: Advanced Export 전용 Dentist 조회 API
-- DSO 전용 worktree와 로컬 QA 브랜치는 이미 제거했으며 원격 head 브랜치만
-  보존한다. 재 QA에서 수정이 생기거나 API가 배포되면 지정된 base에서
-  `feature/` prefix의 새 전용 worktree로 시작한다.
+- 백엔드 대기였던 두 API를 배포 계약 기준으로 반영해 현재 알려진 FE 개발 범위를
+  완료했다.
+  - `DL-15906`: Admin Organization의 카테고리별 기본 기공소 관계 조회,
+    `appliedOffices` 표시와 선택 Office 적용 API를 연결했다.
+  - `DL-15937`: Clinic Advanced Export의 Dentist source를 Organization 전용 조회
+    API로 교체했다.
+- 최종 전달 PR은 모두 merge됐다.
+  - [#4490](https://github.com/Innvoaid/dentlink-client/pull/4490):
+    `feature/DL-15906-DL-15937 -> release/v1.83.0`, merge commit
+    `fc7f9b977`, 2026-08-11 merge
+  - [#4491](https://github.com/Innvoaid/dentlink-client/pull/4491):
+    `feature/DL-15906-DL-15937-develop -> develop`, merge commit
+    `8a3168ca2`, 2026-08-11 merge
+  - [#4492](https://github.com/Innvoaid/dentlink-client/pull/4492):
+    `release/v1.83.0 -> stage`, merge commit `dd1be88bf`, 2026-08-11 merge
+- PR #4490 CodeRabbit 리뷰에서는 유효한 오류 처리 3건을 `81aaf2d35`로 반영하고,
+  생성 계약과 실제 렌더 경로에 맞지 않는 지적은 근거를 답변한 뒤 모든 thread를
+  resolve했다. 같은 수정은 develop용 브랜치에 `8924d54bc`로 반영했다.
+- `stage`는 기존 원격 브랜치를 삭제한 뒤 당시 `origin/master`
+  `064b02790`에서 다시 생성하고 PR #4492를 merge했다. 2026-08-11 live 확인 HEAD는
+  `origin/release/v1.83.0` `fc7f9b977`, `origin/develop` `8a3168ca2`,
+  `origin/stage` `dd1be88bf`다.
+- 사용자 확인 기준 현재 릴리즈 준비와 스테이징·개발서버 배포가 진행 중이다.
+  배포 revision과 실데이터 결과는 아직 별도 확인 전이며, 구현 완료와 구분한다.
+- 다음 단계는 배포 완료 후 Clinic/Admin DSO 전체의 최종 QA 1회다. 회귀나 신규
+  요구가 발견되지 않으면 DL-15223 개발을 종료한다. 현재 알려진 추가 FE 개발 및
+  백엔드 대기 항목은 없다.
+- 전용 worktree `/Users/parkjongsun/Repository/dentlink-client-dso`는 clean하며 현재
+  `feature/DL-15906-DL-15937-develop`을 checkout한 상태다. 두 feature PR은 merge됐지만
+  로컬·원격 branch 정리는 아직 요청받지 않았으므로 유지한다.
 
 ## 이전 체크포인트 — 2026-08-10
 
@@ -705,8 +725,9 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
 - [x] 대시보드 모바일 차단을 실제 기기 판별로 제한하고 하단 카드 너비를
   475~745px 균등 분할로 보정한 `44990b0ec`와 최신 master 병합 `d324dc559`까지
   push한 뒤 PR #4469를 `release/v1.83.0`에 merge했다.
-- [ ] 추가 API 연결로 코드가 바뀌면 TypeScript, lint, build, `git diff --check`와
-  관련 브라우저 QA를 다시 수행한다.
+- [x] DL-15906·DL-15937 API 연결 후 Clinic, Lab, Admin TypeScript와 push hook의
+  전체 lint, shared test·coverage를 다시 수행했다. lint 오류는 0건이고 저장소 기존
+  warning만 존재했다.
 
 ### 별도 검증 상태
 
@@ -715,19 +736,21 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
   통과했다.
 - Clinic Jest는 기존 `next/jest` 설정 문제로 실행되지 않았으며 기능 테스트 실패로
   분류하지 않는다.
-- `origin/stage`에는 DSO merge commit이 포함됐고 사용자 확인 기준 스테이징 배포 후
-  재 QA를 진행 중이다. 실제 Amplitude 수신은 별도 검증 상태다.
+- PR #4490·#4491·#4492가 각각 release, develop, stage에 merge됐다. 사용자 확인
+  기준 릴리즈 준비와 스테이징·개발서버 배포가 진행 중이며, 실제 배포 revision과
+  최종 실데이터 QA는 별도 검증 상태다.
 
 ## 다음 시작점
 
 1. `codex-personal-context`를 pull하고 이 문서를 읽는다.
-2. DSO 전용 worktree와 로컬 QA 브랜치는 제거된 상태이므로 기존 경로를 작업 위치로
-   가정하지 않는다.
-3. 현재 단계는 스테이징 재 QA다. QA 결과로 FE 수정이 확정되면 사용자가 지정한 base에서
-   `feature/` prefix의 새 전용 worktree를 만든다.
-4. DL-15906 또는 DL-15937 API가 배포됐다고 안내받으면 새 worktree에서
-   `generate:api-type`을 실행하고 생성 diff를 먼저 검토한 뒤 해당 카드만 연결한다.
-5. `origin/stage`, `release/v1.83.0`, 배포 revision과 Jira 상태는 재개 시 live 상태를
-   다시 확인한다.
+2. DSO 전용 worktree는 현재 `feature/DL-15906-DL-15937-develop`이며 두 feature PR은
+   merge된 상태다. 작업 전에 clean 상태와 live branch를 다시 확인한다.
+3. 릴리즈 준비와 스테이징·개발서버 배포 완료를 확인한 뒤 Clinic/Admin DSO 전체의
+   최종 QA를 1회 진행한다.
+4. 최종 QA가 통과하면 DL-15223 개발 완료로 종료하고, 사용자가 요청하면 merge된
+   feature branch와 worktree를 안전하게 정리한다. 회귀가 확인된 경우에만 사용자가
+   지정한 base에서 `feature/` prefix의 후속 브랜치를 준비한다.
+5. `origin/stage`, `origin/develop`, `release/v1.83.0`, 배포 revision과 Jira 상태는
+   재개 시 live 상태를 다시 확인한다.
 6. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
    승인을 받는다.

@@ -77,17 +77,14 @@ For detailed current state, read:
 ### Dentlink DSO Dashboard
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Dedicated worktree: merge 후 로컬 삭제 완료
-- Last branch: 로컬 `DL-15223-qa` 삭제, 원격 브랜치는 보존
+- Dedicated worktree:
+  `/Users/parkjongsun/Repository/dentlink-client-dso`
+- Current local branch: `feature/DL-15906-DL-15937-develop`
 - Jira: `DL-15223`
-- Current state: release QA에서 바로 처리 가능한 Clinic/Admin DSO 기능과 디자인 QA를
-  `DL-15223-qa`에 반영했고, PR #4484는 `release/v1.83.0`에 merge commit
-  `41de67a8f`로 반영됐다. 대시보드와 Billing의 Office 및 status 필터 복수 선택
-  회귀 수정도 포함됐다. 전용 worktree와 로컬 브랜치는 정리했으며 원격 head
-  브랜치는 보존했다. Frankie 담당 카드 중 구현 가능한 13건은 Ready for Deploy이고,
-  DL-15906 카테고리 활성화 API와 DL-15937 Advanced Export 전용 Dentist API만
-  백엔드 배포 대기로 To Do에 유지한다. `origin/stage`에는 DSO merge commit이
-  포함돼 있고, 사용자 확인 기준 스테이징 서버 배포 후 나머지 범위의 재 QA를
-  진행 중이다.
+- Current state: 백엔드 대기였던 DL-15906과 DL-15937 API까지 Clinic/Admin에
+  반영해 FE 개발 범위를 완료했다. release 전달 PR #4490, develop 전달 PR #4491,
+  `release/v1.83.0 -> stage` PR #4492가 모두 merge됐다. 사용자 확인 기준 릴리즈
+  준비와 스테이징·개발서버 배포가 진행 중이며, 배포 완료 후 최종 QA 1회를 통과하면
+  DL-15223 DSO 작업을 종료하는 단계다. 현재 알려진 추가 FE 개발 항목은 없다.
 - Personal current checkpoint, decisions, and prioritized TODO list:
   `projects/dentlink-client-dso.md`
