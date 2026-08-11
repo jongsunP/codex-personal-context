@@ -24,7 +24,20 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 간주한다. 이 체크포인트는 사용자가 제공한 범위와 현재 코드·Git에서 검증한 사실을
 기록한다.
 
-## 최신 체크포인트 — 2026-08-10
+## 최신 체크포인트 — 2026-08-11
+
+- PR #4484의 DSO merge commit `41de67a8f`는 `release/v1.83.0`과 현재
+  `origin/stage` HEAD `980e5bdf6`의 조상으로 포함돼 있다.
+- 사용자 확인 기준 스테이징 서버 배포가 완료됐고, 백엔드 대기 항목을 제외한
+  범위는 스테이징 재 QA 진행 중이다.
+- 현재 개발 대기는 아래 백엔드 API 2건뿐이다.
+  - `DL-15906`: 카테고리 활성화 신규 API
+  - `DL-15937`: Advanced Export 전용 Dentist 조회 API
+- DSO 전용 worktree와 로컬 QA 브랜치는 이미 제거했으며 원격 head 브랜치만
+  보존한다. 재 QA에서 수정이 생기거나 API가 배포되면 지정된 base에서
+  `feature/` prefix의 새 전용 worktree로 시작한다.
+
+## 이전 체크포인트 — 2026-08-10
 
 - release QA 후속 전달과 로컬 정리를 완료했다.
   - PR head: `8c2eae5cf` (`[DL-15223] fix: 대시보드 필터 복수 선택 복원`)
@@ -702,25 +715,19 @@ Sample Case 및 Partially Paid 반영, Office 정렬, Billing 단일 선택 필�
   통과했다.
 - Clinic Jest는 기존 `next/jest` 설정 문제로 실행되지 않았으며 기능 테스트 실패로
   분류하지 않는다.
-- 개발서버 revision, 실데이터 회귀, 실제 Amplitude 수신과 merge/release 여부는
-  구현 완료와 구분하는 전달·배포 단계다.
+- `origin/stage`에는 DSO merge commit이 포함됐고 사용자 확인 기준 스테이징 배포 후
+  재 QA를 진행 중이다. 실제 Amplitude 수신은 별도 검증 상태다.
 
 ## 다음 시작점
 
 1. `codex-personal-context`를 pull하고 이 문서를 읽는다.
-2. 정확한 worktree가
-   `/Users/parkjongsun/Repository/dentlink-client-dso`인지 확인한다.
-3. 현재 worktree의 `release/v1.83.0`, HEAD `ec792ab5a`, upstream과 merge 완료된 PR
-   [#4469](https://github.com/Innvoaid/dentlink-client/pull/4469) 상태를 live Git에서
-   다시 확인한다. 로컬 `feature/DL-15223`은 삭제된 상태다.
-4. 현재 확정 범위 FE 구현과 release 반영은 완료됐다. 다음 기능 작업이 아니라면 실제 로그인
-   Advanced Export, 배포 revision, 실데이터 회귀, Amplitude 수신 같은 QA·전달 단계로
-   시작한다.
-5. 백엔드가 이후 API를 다시 변경했다고 알린 경우에만 `generate:api-type`을 실행해
-   새 diff를 검토한다. 현재 완료된 계약을 다시 추측하거나 fixture로 되돌리지 않는다.
-6. 이후 master가 다시 진행됐을 때만 새 차이를 확인한다. `d86e4cea2`까지의 master
-   통합은 반복하지 않는다.
-7. CodeRabbit 기존 19개 thread는 처리 완료됐고 PR도 merge됐다. 후속 수정은 새 Jira
-   또는 release 후속 브랜치에서 시작한다.
-8. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
+2. DSO 전용 worktree와 로컬 QA 브랜치는 제거된 상태이므로 기존 경로를 작업 위치로
+   가정하지 않는다.
+3. 현재 단계는 스테이징 재 QA다. QA 결과로 FE 수정이 확정되면 사용자가 지정한 base에서
+   `feature/` prefix의 새 전용 worktree를 만든다.
+4. DL-15906 또는 DL-15937 API가 배포됐다고 안내받으면 새 worktree에서
+   `generate:api-type`을 실행하고 생성 diff를 먼저 검토한 뒤 해당 카드만 연결한다.
+5. `origin/stage`, `release/v1.83.0`, 배포 revision과 Jira 상태는 재개 시 live 상태를
+   다시 확인한다.
+6. 공유 저장소 commit, push, PR 수정, merge는 각 단계에서 사용자의 명시적
    승인을 받는다.

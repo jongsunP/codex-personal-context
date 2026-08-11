@@ -8,6 +8,9 @@
 - Recorded PR #4484 merged into `release/v1.83.0` as `41de67a8f`, then removed
   the clean DSO worktree and local `DL-15223-qa` branch while preserving its
   remote branch.
+- Recorded the current delivery phase: `origin/stage` contains the DSO merge,
+  the user confirmed staging deployment and re-QA are in progress, and only
+  DL-15906 and DL-15937 remain blocked on backend APIs.
 
 ## 2026-08-03
 

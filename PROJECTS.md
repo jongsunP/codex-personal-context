@@ -86,6 +86,8 @@ For detailed current state, read:
   회귀 수정도 포함됐다. 전용 worktree와 로컬 브랜치는 정리했으며 원격 head
   브랜치는 보존했다. Frankie 담당 카드 중 구현 가능한 13건은 Ready for Deploy이고,
   DL-15906 카테고리 활성화 API와 DL-15937 Advanced Export 전용 Dentist API만
-  백엔드 배포 대기로 To Do에 유지한다.
+  백엔드 배포 대기로 To Do에 유지한다. `origin/stage`에는 DSO merge commit이
+  포함돼 있고, 사용자 확인 기준 스테이징 서버 배포 후 나머지 범위의 재 QA를
+  진행 중이다.
 - Personal current checkpoint, decisions, and prioritized TODO list:
   `projects/dentlink-client-dso.md`
