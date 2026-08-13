@@ -282,6 +282,22 @@ Git and external-service facts live before continuing.
 
 ## Next Start Point
 
+### Agreed execution order
+
+- Do not treat all 1,772 current keys as screenshot targets.
+- First re-audit and remove only keys proven unused by Lab after checking
+  literal and dynamic references, shared UI consumers, route reachability,
+  conditional rendering, and Clinic/Admin side effects. Review duplicate
+  ownership and Lab-excluded Billing/amount groups in the same gate.
+- Freeze the remaining Lab key inventory, then create only as many annotated
+  screenshots as required by distinct page, UI state, and viewport. Reuse one
+  screenshot for multiple key rows by assigning marker numbers.
+- The shared Sheet should eventually add a screenshot link and marker number.
+  Raw coordinates are automation evidence, not a human-facing location method.
+- Completion means every remaining key is either linked to an annotated screen
+  state or has an explicit blocked/pending reason; unclassified keys must be
+  zero. Data/permission-dependent states must not be silently omitted.
+
 1. Pull `codex-personal-context`, then use only
    `/Users/parkjongsun/Repository/dentlink-client-i18n` and verify live Git and
    Sheet state before relying on this checkpoint.
