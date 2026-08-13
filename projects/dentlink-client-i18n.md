@@ -1,4 +1,4 @@
-# Dentlink Lab i18n closeout checkpoint — 2026-08-06
+# Dentlink Lab i18n closeout checkpoint — 2026-08-13
 
 This is the current resume source for the Lab i18n implementation. Verify all
 Git and external-service facts live before continuing.
@@ -25,7 +25,10 @@ Git and external-service facts live before continuing.
 - Latest merged base:
   `53325bd7928dd575a72e97b7cfb95f2dc914bc6c`
   (`Release/v1.82.2 -> master (#4475)`). It is an ancestor of HEAD.
-- The working tree is clean. `HEAD` and `origin/feature/i18n` match.
+- `HEAD` and `origin/feature/i18n` still match. The working tree now has
+  uncommitted management-only changes for usage auditing, the live Sheet
+  schema, and the repeatable i18n workflow. No product UI behavior or locale
+  wording was changed in this pass.
 - The i18n branch restore and integration branch are both pushed.
 - The sibling `/Users/parkjongsun/Repository/dentlink-client` worktree owns
   `master`; do not move this feature work there.
@@ -39,9 +42,9 @@ Git and external-service facts live before continuing.
   hooks were removed. There is no user-selectable locale in the current scope.
 - `feature/i18n` contains only the original i18n work. `feature/DL-15223`
   remains separate. Their combined result is now on `develop` through PR #4472.
-- Google Sheets and generated locale JSON are no longer synchronized because
-  the live Sheet schema changed after the previous checkpoint. The scripts stop
-  safely rather than deleting the new columns.
+- The Sheet scripts now support the live note row, row-2 header, and three PM
+  workflow columns without deleting them. One wording conflict remains between
+  the Sheet and JSON and is intentionally pending PM/FE review.
 - The next stage is code review, PM review of English/Korean text, browser/UI
   QA, any follow-up fixes, and then an explicitly requested PR.
 
@@ -69,13 +72,10 @@ Git and external-service facts live before continuing.
 - Canonical Sheet:
   `https://docs.google.com/spreadsheets/d/1iuncwk8EIi8ycbc36a0dMn-ZkxaqqMHy1jvyT6ubpq0/edit`
 - Tab: `화면 문구 수집`
-- The scripts and manifest currently expect row 1 to contain:
-  `namespace | key 1 | key 2 | key 3 | key 4 | 영문 | 한글 | 의미`.
-- The live Sheet now has a note in row 1 and an 11-column header in row 2:
+- Row 1 contains the product-term note and row 2 has the 11-column header:
   `namespace | key 1 | key 2 | key 3 | key 4 | 영문 | 한글 | 의미 | 확인 여부 | 수정 요청 | 랑키 확인여부`.
-- `pnpm export:i18n` and `pnpm check:i18n` currently stop on this mismatch. Do
-  not delete or overwrite the three PM workflow columns; update the schema and
-  scripts deliberately in the next task.
+- The manifest, reader, and exporter now use that structure. Export preserves
+  existing PM workflow values by full key and never removes the three columns.
 - Key depth is capped at four levels. If a fifth level seems necessary,
   reconsider the namespace or semantic grouping instead of adding a column.
 - Because the existing product supplied the source English text, the initial
@@ -117,12 +117,11 @@ Git and external-service facts live before continuing.
 
 ## Project Skill And Team Documentation
 
-- `.claude/skills/i18n/SKILL.md` is synchronized with the implemented model: fixed
-  Korean Lab UI, English fallback, no selector/localStorage, four key levels,
-  10 namespaces, bidirectional Sheet sync, shared UI ownership, and validation
-  commands.
-- Its Sheet-schema guidance must be revisited together with the scripts because
-  the live Sheet now has a note row and three additional PM workflow columns.
+- `.claude/skills/i18n/SKILL.md` is synchronized with the implemented model and
+  the next operating model: fixed Korean Lab UI, English fallback, no selector/
+  localStorage, four key levels, 10 namespaces, bidirectional Sheet sync,
+  shared UI ownership, Figma-first future work, service-language exposure,
+  usage auditing, and Clinic regression evidence.
 - The Notion briefing was used for the earlier team planning discussion. The
   team subsequently changed direction, and the user explicitly said it no
   longer needs updating. Treat this Git-backed checkpoint and live code as the
@@ -143,11 +142,9 @@ Git and external-service facts live before continuing.
      before review or deployment.
 - The current runtime, manifest, locale resources, Sheet export/generate flow,
   and shared UI provider boundary are reusable foundations for this workflow.
-  The repository skill is only partially ready for repeatable AI-assisted
-  feature work because it does not yet require Figma-first inspection, a
-  service/language exposure matrix, usage-location inventory, Lab reachability
-  checks, or Clinic/Admin regression evidence. Add these as a deliberate future
-  skill update; do not infer them from translation keys alone.
+  The repository skill now requires Figma-first inspection, a service/language
+  exposure decision, usage-location inventory, Lab reachability checks, and
+  Clinic/Admin regression evidence for repeatable AI-assisted feature work.
 - Keep the canonical translation Sheet at one row per full key. Add a separate
   one-to-many usage inventory when implementation resumes, with one row per
   actual use site and duplicate usages preserved. Prefer full key, route/page,
@@ -180,17 +177,14 @@ Git and external-service facts live before continuing.
   regressions. Still compare representative Clinic/Admin screens before and
   after because 360 shared UI files were touched and the provider boundary is
   not a substitute for browser regression QA.
-- At this review point no product code, Sheet content, or project skill was
-  changed. `feature/i18n` is clean at `c2ce3ddd9` and matches its remote, while
-  current `origin/master` is five commits ahead and includes new Lab order
-  approval text that has not yet been brought into the i18n review.
-- Browser readiness was confirmed on 2026-08-13: authenticated tabs are
-  available for `https://dev-lab.dentlink.io/` and
-  `https://dev-portal.dentlink.io/`. A read-only homepage snapshot showed Lab
-  static navigation/dashboard UI in Korean and Clinic static navigation and
-  dashboard UI in English. Korean names/data and English API/message content
-  are not evidence of a static-translation leak. This is only an initial-page
-  check, not complete shared-component regression QA.
+- `feature/i18n` remains at `c2ce3ddd9` and matches its remote. The current
+  audit changes are uncommitted; locale JSON and product rendering code remain
+  untouched. Recheck `origin/master` before a later product-change pass.
+- Authenticated browser inspection was performed on 2026-08-13 against
+  `https://dev-lab.dentlink.io/` and `https://dev-portal.dentlink.io/` across
+  representative routes and open UI states. Korean names/data and English API/
+  message content are not evidence of a static-translation leak. This remains
+  representative inspection, not complete shared-component regression QA.
 - There is currently no linked Figma source or dedicated order/settlement/
   Billing test-data set. Continue code-based usage classification first and
   mark visual/state evidence as pending where the current development data
@@ -200,15 +194,15 @@ Git and external-service facts live before continuing.
   loading/fallback behavior, line wrapping, button/table widths, and responsive
   layouts rather than treating it as a cosmetic-only swap.
 
-## Team Feedback And Execution Gate
+## Team Feedback And Current Execution Scope
 
-- Treat the current review scope as consolidated team feedback, not an active
-  implementation request. The user explicitly said not to start until a later
-  `시작` instruction. Until then, do not modify product code, the Sheet, the
-  repository skill, locale JSON, or deployment state.
+- The user authorized management and audit work on 2026-08-13: static usage
+  analysis, authenticated Lab/Clinic inspection, separate Sheet analysis tabs,
+  and reusable audit/skill documentation. Product rendering behavior, locale
+  wording, and key deletion were explicitly left out of scope.
 - Planned delivery sequence: wording review -> development-server wording
   deployment -> PD visual review on the deployed site -> design-fix follow-up.
-- When started, inspect all of the following together:
+- Continue using all of the following as review criteria:
   1. one-to-many key usage locations, preserving duplicate use sites and using
      coordinates only as optional viewport-specific evidence;
   2. whether shared UI introduces new Korean static text into Clinic, where
@@ -224,6 +218,45 @@ Git and external-service facts live before continuing.
   not currently available. Their absence must be reported as pending evidence,
   not filled in by assumption.
 
+## Usage Audit And Sheet Checkpoint — 2026-08-13
+
+- Added the uncommitted `pnpm audit:i18n` workflow and
+  `lab/scripts/i18n/audit-usage.js`. It combines TypeScript-AST references,
+  Lab page/import reachability, dynamic-call inventory, optional browser
+  observations, and current Sheet consistency without changing locale JSON.
+- The canonical `화면 문구 수집` tab was not changed. Three separate analysis
+  tabs were created or refreshed:
+  - `사용처 자동 분석`: 3,071 data rows, preserving duplicate use sites;
+  - `검토 필요 키`: 585 data rows, with manual FE/product/note columns
+    preserved on refresh;
+  - `Clinic 공용 UI 점검`: 35 data rows.
+- Static results: 1,772 catalog keys, 1,513 keys with literal references,
+  1,281 keys with a statically reachable Lab use, 259 without a literal
+  reference, 49 dynamic translation call sites, and zero unknown literal keys.
+  The 259 are review candidates, not automatic deletion candidates.
+- Browser evidence covered 15 Lab routes/states and 7 Clinic routes. It added
+  801 filtered Lab observations covering 241 keys. Route, screen state, UI
+  area, and source location are the primary identifiers; viewport coordinates
+  are secondary evidence only.
+- The audit found 29 keys behind confirmed non-Lab conditions: order credit,
+  refund amount/credits, order-summary completion, and estimated-cost groups.
+  These remain in locale JSON until the team confirms removal.
+- Billing/financial keys are not uniformly unused. Current Lab observations
+  include `gnb.navigation.settlement`, `settlements.info.currency`, and
+  `sharedUi.notifications.filters.billing`; the notification modal visibly
+  renders the Billing category as `결제`. Whether that category belongs in Lab
+  remains a product decision.
+- Clinic does not mount `SharedUiI18nProvider`. Across the 7 observed Clinic
+  routes there were zero exact Korean catalog matches introduced by the Lab
+  resources. All 25 Korean `defaultValue` entries found in shared UI existed
+  as Korean on `origin/master`, so the audit found zero new Clinic regression
+  candidates. This is representative evidence, not exhaustive UI QA.
+- One real Sheet/JSON conflict is pending rather than auto-fixed:
+  `sharedUi.filters.open` is `필터 열기` in JSON and `필터` in Sheet row 97.
+- No locale key, Korean/English wording, product component, or deployment state
+  was changed. The next product pass should begin only after FE/product review
+  of the analysis tabs.
+
 ## Verification At This Checkpoint
 
 - Before the DSO merge, `pnpm generate:i18n` and `pnpm check:i18n` passed with
@@ -231,9 +264,14 @@ Git and external-service facts live before continuing.
 - The temporary integration was locally validated with 1,773 keys. Its added
   `sharedUi.date.selectWithinDays` key is in the `develop` integration, not in
   the restored standalone `feature/i18n` branch.
-- Current `pnpm export:i18n` and `pnpm check:i18n`: safely failed because the
-  live Sheet header moved to row 2 and gained three columns. The new local key
-  has not been synchronized to the Sheet.
+- Current `pnpm export:i18n`: succeeds in preview mode with 1,772 local keys,
+  zero missing, zero stale, and one wording conflict.
+- Current `pnpm check:i18n`: reaches content validation and fails only because
+  `ko/sharedUi.json` differs from the one pending Sheet value above. Do not run
+  generate until that wording is decided.
+- `pnpm audit:i18n`, runtime-assisted audit, JavaScript syntax checks, and
+  `git diff --check`: passed. No app typecheck/build was run because this pass
+  did not modify product TypeScript/TSX behavior.
 - Clinic, Lab, and Admin `tsc --noEmit`: passed.
 - Clinic, Lab, and Admin production builds: passed.
 - Lab lint: 0 errors, 192 warnings.
