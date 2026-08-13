@@ -200,6 +200,30 @@ Git and external-service facts live before continuing.
   loading/fallback behavior, line wrapping, button/table widths, and responsive
   layouts rather than treating it as a cosmetic-only swap.
 
+## Team Feedback And Execution Gate
+
+- Treat the current review scope as consolidated team feedback, not an active
+  implementation request. The user explicitly said not to start until a later
+  `시작` instruction. Until then, do not modify product code, the Sheet, the
+  repository skill, locale JSON, or deployment state.
+- Planned delivery sequence: wording review -> development-server wording
+  deployment -> PD visual review on the deployed site -> design-fix follow-up.
+- When started, inspect all of the following together:
+  1. one-to-many key usage locations, preserving duplicate use sites and using
+     coordinates only as optional viewport-specific evidence;
+  2. whether shared UI introduces new Korean static text into Clinic, where
+     Lab English is acceptable but Clinic Korean is a release risk;
+  3. whether Lab resources contain keys that cannot actually render in Lab,
+     including the team's Billing/amount concern. Treat “Lab has no Billing” as
+     a hypothesis to verify against product behavior and reachability, not as a
+     confirmed fact;
+  4. the transition from this reverse migration to a Figma-first, service-aware
+     English/Korean design and implementation workflow that an AI skill can
+     repeat in normal feature work.
+- Figma references, dedicated state-specific test data, and the final font are
+  not currently available. Their absence must be reported as pending evidence,
+  not filled in by assumption.
+
 ## Verification At This Checkpoint
 
 - Before the DSO merge, `pnpm generate:i18n` and `pnpm check:i18n` passed with
