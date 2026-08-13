@@ -268,6 +268,41 @@ Git and external-service facts live before continuing.
   was changed. The next product pass should begin only after FE/product review
   of the analysis tabs.
 
+## Confirmed Review Operating Model — 2026-08-13
+
+- The shared operating surface must be one Google spreadsheet and one visible
+  tab, `화면 문구 수집`, for FE, PM, and PD together. Additional technical
+  tabs may exist as generated evidence but should be hidden from the normal
+  collaboration flow.
+- In the shared table, namespace and key-depth columns are FE-owned technical
+  data. English, Korean, and meaning are PM-owned review data. Screen location
+  and review evidence connect the two so a non-developer can understand where
+  each phrase appears without reading code.
+- A usable location is semantic and visual: page/function, UI state, precise
+  human-readable UI path, development-server link, and an annotated screenshot
+  around the phrase. Viewport coordinates remain secondary automation evidence
+  only.
+- The single visible table may intentionally contain one row per real screen
+  occurrence, including repeated full keys or repeated wording. The supporting
+  script must group identical full keys for JSON generation, keep their English
+  and Korean values synchronized, and stop on conflicting translations rather
+  than choosing one silently.
+- Before rebuilding the shared table, FE must audit the current code and key
+  inventory completely: literal and dynamic references, Lab reachability,
+  conditional or inaccessible states, shared UI ownership, Clinic/Admin Korean
+  regression risk, duplicate ownership, Billing/financial product scope, and
+  Sheet/JSON conflicts. An unobserved runtime phrase is not enough to delete a
+  key.
+- Only after that technical gate should remaining keys be mapped to exact
+  human-readable locations and exposed to PM/PD. The previously generated
+  `화면 검수표` and analysis tabs are provisional evidence, not the final
+  collaboration structure; keep them for now and hide or replace them after
+  the audit is complete.
+- Product behavior, locale wording, and key deletion remain approval-gated.
+  Codex may complete independent analysis, tooling, hidden-sheet maintenance,
+  and evidence collection, but must report product decisions or unavailable
+  evidence instead of guessing.
+
 ## Verification At This Checkpoint
 
 - Before the DSO merge, `pnpm generate:i18n` and `pnpm check:i18n` passed with
@@ -315,17 +350,22 @@ Git and external-service facts live before continuing.
 3. Review commit `0fbc5ff97` for the i18n implementation and `c2ce3ddd9` for
    the latest master synchronization. For the combined development result,
    inspect merged PR #4472 / develop commit `ec929a2cf`.
-4. Reconcile the manifest/scripts with the live Sheet's note row and 11-column
-   schema without losing PM workflow data, then rerun export/generate/check.
-5. Have PM review English/Korean wording in the Sheet. Pull approved edits back
-   with `pnpm generate:i18n`, then inspect the JSON diff.
-6. Run browser QA for fixed Korean display, fallback behavior, long Korean
+4. Continue the code/key audit to classify every current key before changing
+   the shared Sheet layout or asking PM/PD to review it. Resolve dynamic-key
+   families, service conditions, duplicate ownership, and Clinic/Admin impact;
+   request product decisions only where code and runtime evidence cannot decide.
+5. Rebuild the visible `화면 문구 수집` collaboration table from the audited
+   key inventory, including semantic locations and annotated screen evidence;
+   hide supporting technical tabs instead of deleting their evidence.
+6. Have PM review English/Korean wording in that table. Pull approved edits
+   back with `pnpm generate:i18n`, then inspect the JSON diff.
+7. Run browser QA for fixed Korean display, fallback behavior, long Korean
    text, wrapping/overflow, desktop/mobile layouts, and representative
    `shared/ui` consumers. Include Clinic/Admin regression checks for the merged
    DSO shared-component changes.
-7. Apply only review-driven fixes, rerun proportionate checks, and commit/push
+8. Apply only review-driven fixes, rerun proportionate checks, and commit/push
    only on explicit user authorization.
-8. Run the skipped validation on the merged `develop` integration when the user
+9. Run the skipped validation on the merged `develop` integration when the user
    resumes QA. Future i18n changes should remain on `feature/i18n` and use a
    separate develop-based integration branch when another combined deployment
    is required.
