@@ -184,6 +184,21 @@ Git and external-service facts live before continuing.
   changed. `feature/i18n` is clean at `c2ce3ddd9` and matches its remote, while
   current `origin/master` is five commits ahead and includes new Lab order
   approval text that has not yet been brought into the i18n review.
+- Browser readiness was confirmed on 2026-08-13: authenticated tabs are
+  available for `https://dev-lab.dentlink.io/` and
+  `https://dev-portal.dentlink.io/`. A read-only homepage snapshot showed Lab
+  static navigation/dashboard UI in Korean and Clinic static navigation and
+  dashboard UI in English. Korean names/data and English API/message content
+  are not evidence of a static-translation leak. This is only an initial-page
+  check, not complete shared-component regression QA.
+- There is currently no linked Figma source or dedicated order/settlement/
+  Billing test-data set. Continue code-based usage classification first and
+  mark visual/state evidence as pending where the current development data
+  cannot expose it.
+- Font replacement is intentionally deferred until the designer supplies the
+  target font. When supplied, recheck Korean/English family and weight support,
+  loading/fallback behavior, line wrapping, button/table widths, and responsive
+  layouts rather than treating it as a cosmetic-only swap.
 
 ## Verification At This Checkpoint
 
