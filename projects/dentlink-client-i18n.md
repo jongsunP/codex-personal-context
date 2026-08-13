@@ -128,6 +128,63 @@ Git and external-service facts live before continuing.
   longer needs updating. Treat this Git-backed checkpoint and live code as the
   continuation source unless the user asks to revise Notion again.
 
+## Review Direction After Initial Rollout (2026-08-13)
+
+- The first rollout was necessarily reverse-engineered from an already-built
+  English product: find existing text, define the FE-owned key, preserve the
+  English, propose Korean, then export it for PM review.
+- Future feature work should use a forward, design-first flow:
+  1. inspect the authoritative Figma design and relevant service behavior;
+  2. decide which languages each service actually exposes, such as fixed Korean
+     for Lab while preserving Clinic English;
+  3. define the namespace/key and English/Korean wording together with the UI;
+  4. implement and record every real usage location;
+  5. verify the target service and representative shared-component consumers
+     before review or deployment.
+- The current runtime, manifest, locale resources, Sheet export/generate flow,
+  and shared UI provider boundary are reusable foundations for this workflow.
+  The repository skill is only partially ready for repeatable AI-assisted
+  feature work because it does not yet require Figma-first inspection, a
+  service/language exposure matrix, usage-location inventory, Lab reachability
+  checks, or Clinic/Admin regression evidence. Add these as a deliberate future
+  skill update; do not infer them from translation keys alone.
+- Keep the canonical translation Sheet at one row per full key. Add a separate
+  one-to-many usage inventory when implementation resumes, with one row per
+  actual use site and duplicate usages preserved. Prefer full key, route/page,
+  screen state, UI area, component source location, viewport/visibility
+  condition, and screenshot or Figma link. Raw x/y coordinates are optional QA
+  evidence for a fixed viewport, not a stable primary identifier.
+- A sustainable automation target is a hybrid: statically collect literal
+  translation references and source locations, then supplement dynamic keys and
+  conditional UI with staging/browser evidence. Static text search alone cannot
+  prove that a shared component is reachable from a Lab page.
+- Current key inventory has 1,772 keys per language. A read-only source scan
+  found direct literal calls for 1,513 keys; 259 require dynamic/config or
+  reachability review, and 49 dynamic translation call sites explain many of
+  those apparent misses. Do not delete the 259 as unused without route and
+  runtime verification.
+- The coworker concern about billing/amount keys is valid as a scope audit, but
+  Lab does contain real financial UI: settlements pages, conditional order
+  settlement prices, invoice Excel controls, and the notification Billing
+  filter. Conversely, confirmed shared-only branches also exist: order credit,
+  refund-credit/refund-amount, and Estimated Cost UI are guarded from Lab by
+  `serviceType !== "LAB"` while their translations are present in Lab resources.
+  Classify these cases before PM wording review instead of assuming every shared
+  key belongs to Lab. A visible Billing filter may itself require product
+  confirmation if Lab is not supposed to expose that category.
+- Clinic/Admin do not mount `SharedUiI18nProvider`; without it, shared UI returns
+  each component's `defaultValue`. New English shared strings therefore do not
+  receive Lab Korean resources. The 25 Korean shared defaults found in the i18n
+  diff replace Korean strings that already existed on master, including
+  LinkTalk, memo, and password UI; they are not newly introduced Clinic Korean
+  regressions. Still compare representative Clinic/Admin screens before and
+  after because 360 shared UI files were touched and the provider boundary is
+  not a substitute for browser regression QA.
+- At this review point no product code, Sheet content, or project skill was
+  changed. `feature/i18n` is clean at `c2ce3ddd9` and matches its remote, while
+  current `origin/master` is five commits ahead and includes new Lab order
+  approval text that has not yet been brought into the i18n review.
+
 ## Verification At This Checkpoint
 
 - Before the DSO merge, `pnpm generate:i18n` and `pnpm check:i18n` passed with
