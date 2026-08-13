@@ -198,8 +198,9 @@ Git and external-service facts live before continuing.
 
 - The user authorized management and audit work on 2026-08-13: static usage
   analysis, authenticated Lab/Clinic inspection, a single shared Sheet view,
-  and reusable audit/skill documentation. Product rendering behavior, locale
-  wording, and key deletion were explicitly left out of scope.
+  reusable audit/skill documentation, and removal of keys proven unused by Lab.
+  Product rendering behavior and locale wording remain out of scope until
+  wording/design review.
 - Planned delivery sequence: wording review -> development-server wording
   deployment -> PD visual review on the deployed site -> design-fix follow-up.
 - Continue using all of the following as review criteria:
@@ -225,10 +226,11 @@ Git and external-service facts live before continuing.
 - The backup is excluded from automation and was verified as the preserved
   pre-restructure shape: the row-1 note, exact 11 headers, 1,772 unique key
   rows, and 1,774 total rows. It has a warning-only protected range.
-- The canonical `화면 문구 수집` tab has 22 columns, 1,772 unique keys, and
-  2,685 use-site rows plus the note/header. Existing English, Korean, meaning,
-  `확인 여부`, `수정 요청`, and `랑키 확인여부` values match the backup with
-  zero mismatches.
+- The canonical `화면 문구 수집` tab has 22 columns, 1,462 unique keys, and
+  2,382 use-site rows plus the note/header, for 2,384 total rows. The backup
+  remains at 1,772 unique keys. Existing English, Korean, meaning,
+  `확인 여부`, `수정 요청`, and `랑키 확인여부` values for every remaining
+  key match the backup with zero mismatches.
 - The four provisional technical tabs (`화면 검수표`, `사용처 자동 분석`,
   `검토 필요 키`, and `Clinic 공용 UI 점검`) were deleted only after checking
   that their manual review columns contained zero human edits.
@@ -237,17 +239,22 @@ Git and external-service facts live before continuing.
   one JSON key and fails if translations conflict. Usage is identified mainly
   by page/function, state, area, source evidence, and development URL;
   viewport/coordinates remain secondary.
-- Latest runtime-assisted audit results: 1,772 catalog keys, 1,513 literal-key
-  references, 197 indirectly recognized keys, 1,476 statically Lab-reachable
-  keys, 62 unresolved candidates, 49 dynamic call sites, and zero unknown
-  literal keys. The 62 are 48 unused candidates plus 14 keys whose wording
-  duplicates another used key; none may be removed automatically.
-- Runtime evidence contains 939 observations covering 274 keys and 483 screen
+- The cleanup removed 310 keys from both `en` and `ko`: keys with no resolved
+  use and shared-only keys that are not reachable from Lab. It retained one
+  initially over-pruned direct Lab reference after typecheck exposed it, and
+  the audit now fails when a Lab-usable literal key is absent from locale JSON.
+- Latest runtime-assisted audit results: 1,462 catalog keys, 1,265 literal-key
+  references, 197 indirectly recognized keys, 1,459 statically Lab-reachable
+  keys, zero unresolved keys, 49 dynamic call sites, and zero unknown literal
+  keys. The three conservative reachability-review keys are one direct Lab
+  source reference and two indirect approval-status keys.
+- Runtime evidence contains 1,035 observations covering 282 keys and 497 screen
   occurrences. The Clinic/shared audit found zero new Korean regression
   candidates in the representative routes, but it is not exhaustive UI QA.
-- Billing/financial keys are not uniformly unused. Credit/cost groups behind
-  confirmed non-Lab conditions are marked as exclusions, while settlement and
-  Billing notification wording observed in Lab remains a product decision.
+- Nineteen Billing/financial review keys remain because current code reaches
+  Lab settlements, invoice download, additional-fee, help, navigation, or
+  notification UI. Credit/cost/refund groups confirmed as non-Lab were removed;
+  the remaining product scope must not be guessed from the key names alone.
 - One Sheet/JSON wording conflict remains approval-gated:
   `sharedUi.filters.open` is `필터 열기` in JSON and `필터` in Sheet. No locale
   JSON, product component, key inventory, or deployment behavior was changed.
@@ -273,10 +280,11 @@ Git and external-service facts live before continuing.
   `git diff --check`, Sheet write/read-back, and backup/current-value comparison
   passed. Prettier emitted only the repository's existing unknown-option
   warnings.
-- `pnpm export:i18n` passes with 1,772 local keys, zero missing, zero stale, and
+- `pnpm export:i18n` passes with 1,462 local keys, zero missing, zero stale, and
   the one conflict above. `pnpm check:i18n` fails only because
-  `ko/sharedUi.json` is stale against that undecided Sheet value. App typecheck,
-  lint, build, exhaustive browser QA, and PM/PD review were not run in this pass.
+  `ko/sharedUi.json` is stale against that undecided Sheet value. Lab, Clinic,
+  and Admin typechecks pass. Lint, build, exhaustive browser QA, and PM/PD
+  review were not run in this pass.
 - Shared repository changes remain uncommitted and unpushed on
   `feature/i18n`; commit/push still requires explicit user authorization.
 
@@ -284,12 +292,11 @@ Git and external-service facts live before continuing.
 
 ### Agreed execution order
 
-- Do not treat all 1,772 current keys as screenshot targets.
-- First re-audit and remove only keys proven unused by Lab after checking
-  literal and dynamic references, shared UI consumers, route reachability,
-  conditional rendering, and Clinic/Admin side effects. Review duplicate
-  ownership and Lab-excluded Billing/amount groups in the same gate.
-- Freeze the remaining Lab key inventory, then create only as many annotated
+- The first cleanup gate is complete at 1,462 keys. Do not restore the removed
+  310 keys from the backup without a new verified Lab use.
+- Freeze the remaining Lab key inventory after FE/product decides the 19
+  Billing/financial scope items and the one Sheet/JSON wording conflict, then
+  create only as many annotated
   screenshots as required by distinct page, UI state, and viewport. Reuse one
   screenshot for multiple key rows by assigning marker numbers.
 - The shared Sheet should eventually add a screenshot link and marker number.
@@ -305,8 +312,8 @@ Git and external-service facts live before continuing.
    `화면 문구 수집` tab. Do not modify the `백업_작업전_2026-08-13` tab.
 3. Have FE/PM decide whether `sharedUi.filters.open` should be `필터` or
    `필터 열기`, then run `pnpm generate:i18n` and inspect the JSON diff.
-4. Have FE/product classify the 48 unused candidates, 14 duplicate-wording
-   candidates, and Lab Billing/amount scope before deleting or merging keys.
+4. Have FE/product decide the 19 remaining Billing/financial scope items; do
+   not remove the settlements/invoice/help/notification keys by name alone.
 5. Let PM/PD review wording and layout from the semantic use locations. Add
    annotated screenshot evidence only where route/area/state is insufficient.
 6. Run fixed-Korean Lab visual QA and representative Clinic/Admin regression
