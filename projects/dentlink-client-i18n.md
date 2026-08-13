@@ -224,8 +224,13 @@ Git and external-service facts live before continuing.
   `lab/scripts/i18n/audit-usage.js`. It combines TypeScript-AST references,
   Lab page/import reachability, dynamic-call inventory, optional browser
   observations, and current Sheet consistency without changing locale JSON.
-- The canonical `화면 문구 수집` tab was not changed. Three separate analysis
-  tabs were created or refreshed:
+- The canonical `화면 문구 수집` tab was not changed. Four separate analysis
+  and review tabs were created or refreshed:
+  - `화면 검수표`: 449 actual Lab screen occurrences across 15 captured
+    routes/states. It is the second and primary human-review tab and includes a
+    development-server link, screen/function, UI area, rendered text,
+    English/Korean source, manual wording/design/change decisions, key
+    candidates, viewport, and secondary coordinates;
   - `사용처 자동 분석`: 3,071 data rows, preserving duplicate use sites;
   - `검토 필요 키`: 585 data rows, with manual FE/product/note columns
     preserved on refresh;
@@ -238,6 +243,12 @@ Git and external-service facts live before continuing.
   801 filtered Lab observations covering 241 keys. Route, screen state, UI
   area, and source location are the primary identifiers; viewport coordinates
   are secondary evidence only.
+- The human review sheet excludes noisy interpolation-only parent matches,
+  groups multiple keys that share the exact same rendered phrase/location as
+  candidates instead of guessing ownership, and keeps duplicate real UI
+  occurrences. Its manual columns use dropdowns and are preserved by a hidden,
+  stable occurrence ID when the audit reruns. Running the audit without a
+  runtime observation file does not clear this sheet.
 - The audit found 29 keys behind confirmed non-Lab conditions: order credit,
   refund amount/credits, order-summary completion, and estimated-cost groups.
   These remain in locale JSON until the team confirms removal.
