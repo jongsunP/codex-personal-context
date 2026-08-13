@@ -226,7 +226,7 @@ Git and external-service facts live before continuing.
 - The backup is excluded from automation and was verified as the preserved
   pre-restructure shape: the row-1 note, exact 11 headers, 1,772 unique key
   rows, and 1,774 total rows. It has a warning-only protected range.
-- The canonical `화면 문구 수집` tab has 22 columns, 1,462 unique keys, and
+- The canonical `화면 문구 수집` tab has 24 columns, 1,462 unique keys, and
   2,382 use-site rows plus the note/header, for 2,384 total rows. The backup
   remains at 1,772 unique keys. Existing English, Korean, meaning,
   `확인 여부`, `수정 요청`, and `랑키 확인여부` values for every remaining
@@ -248,13 +248,25 @@ Git and external-service facts live before continuing.
   keys, zero unresolved keys, 49 dynamic call sites, and zero unknown literal
   keys. The three conservative reachability-review keys are one direct Lab
   source reference and two indirect approval-status keys.
-- Runtime evidence contains 1,035 observations covering 282 keys and 497 screen
+- Runtime evidence contains 1,035 observations covering 282 keys and 499 screen
   occurrences. The Clinic/shared audit found zero new Korean regression
   candidates in the representative routes, but it is not exhaustive UI QA.
+- Capture planning found 15 already visited Lab route/viewport groups and 25
+  unvisited route patterns. Only 282/1,462 keys are currently screen-observed;
+  1,180 require additional routes, modals, tabs, permission/data/error states,
+  or disambiguation. Full screenshot completion is therefore blocked on state
+  coverage and test data rather than screenshot mechanics.
 - Nineteen Billing/financial review keys remain because current code reaches
   Lab settlements, invoice download, additional-fee, help, navigation, or
   notification UI. Credit/cost/refund groups confirmed as non-Lab were removed;
   the remaining product scope must not be guessed from the key names alone.
+- The shared table now also has `캡처 링크` and `표시 번호`. One masked image is
+  intended to cover a page/state/viewport and be reused by multiple key rows
+  with marker numbers. Both columns are currently empty because no approved
+  shared image location and complete state set are available.
+- Runtime display text written to the Sheet is rebuilt from locale templates,
+  not raw DOM text. A post-write scan found zero email, account-name, address,
+  patient-test-name, or E2E identifier patterns in `화면 표시 문구`.
 - One Sheet/JSON wording conflict remains approval-gated:
   `sharedUi.filters.open` is `필터 열기` in JSON and `필터` in Sheet. No locale
   JSON, product component, key inventory, or deployment behavior was changed.
@@ -271,7 +283,9 @@ Git and external-service facts live before continuing.
   regression checks. It now writes only the canonical tab and no longer creates
   technical tabs.
 - Browser runtime observation JSON and the one-off backup creation code are
-  temporary evidence and are not added to the repository.
+  temporary evidence and are not added to the repository. The observation JSON
+  contained live account/patient text and was deleted after the sanitized Sheet
+  update and aggregate coverage recording.
 - `.claude/skills/i18n/SKILL.md` assumes the initial reverse migration is
   complete and guides future work through Figma/operating-screen review,
   service-aware wording/key ownership, Sheet sync, PM review, JSON generation,
@@ -299,7 +313,7 @@ Git and external-service facts live before continuing.
   create only as many annotated
   screenshots as required by distinct page, UI state, and viewport. Reuse one
   screenshot for multiple key rows by assigning marker numbers.
-- The shared Sheet should eventually add a screenshot link and marker number.
+- The shared Sheet already has empty screenshot-link and marker-number columns.
   Raw coordinates are automation evidence, not a human-facing location method.
 - Completion means every remaining key is either linked to an annotated screen
   state or has an explicit blocked/pending reason; unclassified keys must be
@@ -314,11 +328,15 @@ Git and external-service facts live before continuing.
    `필터 열기`, then run `pnpm generate:i18n` and inspect the JSON diff.
 4. Have FE/product decide the 19 remaining Billing/financial scope items; do
    not remove the settlements/invoice/help/notification keys by name alone.
-5. Let PM/PD review wording and layout from the semantic use locations. Add
-   annotated screenshot evidence only where route/area/state is insufficient.
-6. Run fixed-Korean Lab visual QA and representative Clinic/Admin regression
+5. Define or obtain the missing test states and a shared image location. Capture
+   the 15 baseline routes plus reachable missing states, mask actual data, and
+   fill `캡처 링크` and `표시 번호`; leave explicit pending reasons for states
+   that cannot be produced.
+6. Let PM/PD review wording and layout from the semantic use locations and
+   annotated screenshots.
+7. Run fixed-Korean Lab visual QA and representative Clinic/Admin regression
    QA. Apply only approved wording/design/key changes, then run proportionate
    typecheck/lint/build checks.
-7. Commit and push the shared branch only when explicitly requested. Use a
+8. Commit and push the shared branch only when explicitly requested. Use a
    separate `origin/develop`-based integration branch for another combined
    development deployment if needed.
