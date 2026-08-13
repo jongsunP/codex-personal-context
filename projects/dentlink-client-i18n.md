@@ -197,7 +197,7 @@ Git and external-service facts live before continuing.
 ## Team Feedback And Current Execution Scope
 
 - The user authorized management and audit work on 2026-08-13: static usage
-  analysis, authenticated Lab/Clinic inspection, separate Sheet analysis tabs,
+  analysis, authenticated Lab/Clinic inspection, a single shared Sheet view,
   and reusable audit/skill documentation. Product rendering behavior, locale
   wording, and key deletion were explicitly left out of scope.
 - Planned delivery sequence: wording review -> development-server wording
@@ -218,154 +218,84 @@ Git and external-service facts live before continuing.
   not currently available. Their absence must be reported as pending evidence,
   not filled in by assumption.
 
-## Usage Audit And Sheet Checkpoint — 2026-08-13
+## Current Sheet And Audit Checkpoint — 2026-08-13
 
-- Added the uncommitted `pnpm audit:i18n` workflow and
-  `lab/scripts/i18n/audit-usage.js`. It combines TypeScript-AST references,
-  Lab page/import reachability, dynamic-call inventory, optional browser
-  observations, and current Sheet consistency without changing locale JSON.
-- The canonical `화면 문구 수집` tab was not changed. Four separate analysis
-  and review tabs were created or refreshed:
-  - `화면 검수표`: 449 actual Lab screen occurrences across 15 captured
-    routes/states. It is the second and primary human-review tab and includes a
-    development-server link, screen/function, UI area, rendered text,
-    English/Korean source, manual wording/design/change decisions, key
-    candidates, viewport, and secondary coordinates;
-  - `사용처 자동 분석`: 3,071 data rows, preserving duplicate use sites;
-  - `검토 필요 키`: 585 data rows, with manual FE/product/note columns
-    preserved on refresh;
-  - `Clinic 공용 UI 점검`: 35 data rows.
-- Static results: 1,772 catalog keys, 1,513 keys with literal references,
-  1,281 keys with a statically reachable Lab use, 259 without a literal
-  reference, 49 dynamic translation call sites, and zero unknown literal keys.
-  The 259 are review candidates, not automatic deletion candidates.
-- Browser evidence covered 15 Lab routes/states and 7 Clinic routes. It added
-  801 filtered Lab observations covering 241 keys. Route, screen state, UI
-  area, and source location are the primary identifiers; viewport coordinates
-  are secondary evidence only.
-- The human review sheet excludes noisy interpolation-only parent matches,
-  groups multiple keys that share the exact same rendered phrase/location as
-  candidates instead of guessing ownership, and keeps duplicate real UI
-  occurrences. Its manual columns use dropdowns and are preserved by a hidden,
-  stable occurrence ID when the audit reruns. Running the audit without a
-  runtime observation file does not clear this sheet.
-- The audit found 29 keys behind confirmed non-Lab conditions: order credit,
-  refund amount/credits, order-summary completion, and estimated-cost groups.
-  These remain in locale JSON until the team confirms removal.
-- Billing/financial keys are not uniformly unused. Current Lab observations
-  include `gnb.navigation.settlement`, `settlements.info.currency`, and
-  `sharedUi.notifications.filters.billing`; the notification modal visibly
-  renders the Billing category as `결제`. Whether that category belongs in Lab
-  remains a product decision.
-- Clinic does not mount `SharedUiI18nProvider`. Across the 7 observed Clinic
-  routes there were zero exact Korean catalog matches introduced by the Lab
-  resources. All 25 Korean `defaultValue` entries found in shared UI existed
-  as Korean on `origin/master`, so the audit found zero new Clinic regression
-  candidates. This is representative evidence, not exhaustive UI QA.
-- One real Sheet/JSON conflict is pending rather than auto-fixed:
-  `sharedUi.filters.open` is `필터 열기` in JSON and `필터` in Sheet row 97.
-- No locale key, Korean/English wording, product component, or deployment state
-  was changed. The next product pass should begin only after FE/product review
-  of the analysis tabs.
+- The shared Google spreadsheet now has only two visible tabs:
+  `화면 문구 수집` and `백업_작업전_2026-08-13`.
+- The backup is excluded from automation and was verified as the preserved
+  pre-restructure shape: the row-1 note, exact 11 headers, 1,772 unique key
+  rows, and 1,774 total rows. It has a warning-only protected range.
+- The canonical `화면 문구 수집` tab has 22 columns, 1,772 unique keys, and
+  2,685 use-site rows plus the note/header. Existing English, Korean, meaning,
+  `확인 여부`, `수정 요청`, and `랑키 확인여부` values match the backup with
+  zero mismatches.
+- The four provisional technical tabs (`화면 검수표`, `사용처 자동 분석`,
+  `검토 필요 키`, and `Clinic 공용 UI 점검`) were deleted only after checking
+  that their manual review columns contained zero human edits.
+- The single shared table intentionally repeats a full key for distinct use
+  sites. The generator groups rows with identical English/Korean values into
+  one JSON key and fails if translations conflict. Usage is identified mainly
+  by page/function, state, area, source evidence, and development URL;
+  viewport/coordinates remain secondary.
+- Latest runtime-assisted audit results: 1,772 catalog keys, 1,513 literal-key
+  references, 197 indirectly recognized keys, 1,476 statically Lab-reachable
+  keys, 62 unresolved candidates, 49 dynamic call sites, and zero unknown
+  literal keys. The 62 are 48 unused candidates plus 14 keys whose wording
+  duplicates another used key; none may be removed automatically.
+- Runtime evidence contains 939 observations covering 274 keys and 483 screen
+  occurrences. The Clinic/shared audit found zero new Korean regression
+  candidates in the representative routes, but it is not exhaustive UI QA.
+- Billing/financial keys are not uniformly unused. Credit/cost groups behind
+  confirmed non-Lab conditions are marked as exclusions, while settlement and
+  Billing notification wording observed in Lab remains a product decision.
+- One Sheet/JSON wording conflict remains approval-gated:
+  `sharedUi.filters.open` is `필터 열기` in JSON and `필터` in Sheet. No locale
+  JSON, product component, key inventory, or deployment behavior was changed.
 
-## Confirmed Review Operating Model — 2026-08-13
+## Reusable Tooling And Skill State
 
-- The shared operating surface must be one Google spreadsheet and one visible
-  tab, `화면 문구 수집`, for FE, PM, and PD together. Additional technical
-  tabs may exist as generated evidence but should be hidden from the normal
-  collaboration flow.
-- In the shared table, namespace and key-depth columns are FE-owned technical
-  data. English, Korean, and meaning are PM-owned review data. Screen location
-  and review evidence connect the two so a non-developer can understand where
-  each phrase appears without reading code.
-- A usable location is semantic and visual: page/function, UI state, precise
-  human-readable UI path, development-server link, and an annotated screenshot
-  around the phrase. Viewport coordinates remain secondary automation evidence
-  only.
-- The single visible table may intentionally contain one row per real screen
-  occurrence, including repeated full keys or repeated wording. The supporting
-  script must group identical full keys for JSON generation, keep their English
-  and Korean values synchronized, and stop on conflicting translations rather
-  than choosing one silently.
-- Before rebuilding the shared table, FE must audit the current code and key
-  inventory completely: literal and dynamic references, Lab reachability,
-  conditional or inaccessible states, shared UI ownership, Clinic/Admin Korean
-  regression risk, duplicate ownership, Billing/financial product scope, and
-  Sheet/JSON conflicts. An unobserved runtime phrase is not enough to delete a
-  key.
-- Only after that technical gate should remaining keys be mapped to exact
-  human-readable locations and exposed to PM/PD. The previously generated
-  `화면 검수표` and analysis tabs are provisional evidence, not the final
-  collaboration structure; keep them for now and hide or replace them after
-  the audit is complete.
-- Product behavior, locale wording, and key deletion remain approval-gated.
-  Codex may complete independent analysis, tooling, hidden-sheet maintenance,
-  and evidence collection, but must report product decisions or unavailable
-  evidence instead of guessing.
-
-## Verification At This Checkpoint
-
-- Before the DSO merge, `pnpm generate:i18n` and `pnpm check:i18n` passed with
-  1,772 keys across 20 locale files.
-- The temporary integration was locally validated with 1,773 keys. Its added
-  `sharedUi.date.selectWithinDays` key is in the `develop` integration, not in
-  the restored standalone `feature/i18n` branch.
-- Current `pnpm export:i18n`: succeeds in preview mode with 1,772 local keys,
-  zero missing, zero stale, and one wording conflict.
-- Current `pnpm check:i18n`: reaches content validation and fails only because
-  `ko/sharedUi.json` differs from the one pending Sheet value above. Do not run
-  generate until that wording is decided.
-- `pnpm audit:i18n`, runtime-assisted audit, JavaScript syntax checks, and
-  `git diff --check`: passed. No app typecheck/build was run because this pass
-  did not modify product TypeScript/TSX behavior.
-- Clinic, Lab, and Admin `tsc --noEmit`: passed.
-- Clinic, Lab, and Admin production builds: passed.
-- Lab lint: 0 errors, 192 warnings.
-- Push hook full-repository lint: 0 errors, 418 warnings.
-- Shared hook tests: 24 passed; coverage delta check passed.
-- `git diff --check`: passed.
-- `feature/i18n` was restored to `7665e6109`, then updated with the latest
-  master in merge commit `c2ce3ddd9` and pushed.
-- For that master synchronization, Clinic/Lab/Admin typechecks passed; the
-  push hook completed with 0 lint errors and 418 warnings; shared/config tests
-  3 and shared/hooks tests 24 passed with the coverage check.
-- Per the user's explicit fast-path request, commit `7a9d7c7a6` and PR #4472
-  were created without running typecheck, lint, tests, or Git hooks. The earlier
-  temporary integration checks must not be treated as validation of that exact
-  final commit.
-- Non-blocking repository warnings remain: Next recommends TypeScript 5.1 or
-  newer while the repository uses 5.0.4, Admin Browserslist data is old, and
-  existing lint warnings remain.
-- The standalone `shared/ui` build still has broad pre-existing baseline
-  failures; changed-app integration typechecks/builds did not introduce new
-  errors.
-- Browser-level visual QA and PM wording approval have not been completed and
-  must not be reported as done.
+- Uncommitted shared-repository work updates the manifest, Sheets client,
+  locale export/generate scripts, catalog guide, package command, and Claude
+  i18n skill; it adds `lab/scripts/i18n/audit-usage.js`.
+- `sheets-client.js`, `generate-locales.js`, and
+  `export-locales-to-sheet.js` are permanent Sheet/JSON operating tools.
+  `audit-usage.js` is also retained as a repeatable maintenance tool for use
+  locations, Lab reachability, unused/duplicate candidates, and shared UI
+  regression checks. It now writes only the canonical tab and no longer creates
+  technical tabs.
+- Browser runtime observation JSON and the one-off backup creation code are
+  temporary evidence and are not added to the repository.
+- `.claude/skills/i18n/SKILL.md` assumes the initial reverse migration is
+  complete and guides future work through Figma/operating-screen review,
+  service-aware wording/key ownership, Sheet sync, PM review, JSON generation,
+  and Lab/Clinic/Admin QA. It documents the single-tab and duplicate-use rules.
+- Skill validation, JavaScript syntax checks, `pnpm audit:i18n`, Prettier,
+  `git diff --check`, Sheet write/read-back, and backup/current-value comparison
+  passed. Prettier emitted only the repository's existing unknown-option
+  warnings.
+- `pnpm export:i18n` passes with 1,772 local keys, zero missing, zero stale, and
+  the one conflict above. `pnpm check:i18n` fails only because
+  `ko/sharedUi.json` is stale against that undecided Sheet value. App typecheck,
+  lint, build, exhaustive browser QA, and PM/PD review were not run in this pass.
+- Shared repository changes remain uncommitted and unpushed on
+  `feature/i18n`; commit/push still requires explicit user authorization.
 
 ## Next Start Point
 
-1. Pull `codex-personal-context` and read this file.
-2. Use only `/Users/parkjongsun/Repository/dentlink-client-i18n`; fetch remotes
-   and verify `feature/i18n`, its upstream, clean status, and live divergence.
-3. Review commit `0fbc5ff97` for the i18n implementation and `c2ce3ddd9` for
-   the latest master synchronization. For the combined development result,
-   inspect merged PR #4472 / develop commit `ec929a2cf`.
-4. Continue the code/key audit to classify every current key before changing
-   the shared Sheet layout or asking PM/PD to review it. Resolve dynamic-key
-   families, service conditions, duplicate ownership, and Clinic/Admin impact;
-   request product decisions only where code and runtime evidence cannot decide.
-5. Rebuild the visible `화면 문구 수집` collaboration table from the audited
-   key inventory, including semantic locations and annotated screen evidence;
-   hide supporting technical tabs instead of deleting their evidence.
-6. Have PM review English/Korean wording in that table. Pull approved edits
-   back with `pnpm generate:i18n`, then inspect the JSON diff.
-7. Run browser QA for fixed Korean display, fallback behavior, long Korean
-   text, wrapping/overflow, desktop/mobile layouts, and representative
-   `shared/ui` consumers. Include Clinic/Admin regression checks for the merged
-   DSO shared-component changes.
-8. Apply only review-driven fixes, rerun proportionate checks, and commit/push
-   only on explicit user authorization.
-9. Run the skipped validation on the merged `develop` integration when the user
-   resumes QA. Future i18n changes should remain on `feature/i18n` and use a
-   separate develop-based integration branch when another combined deployment
-   is required.
+1. Pull `codex-personal-context`, then use only
+   `/Users/parkjongsun/Repository/dentlink-client-i18n` and verify live Git and
+   Sheet state before relying on this checkpoint.
+2. Review the uncommitted automation/skill diff and the single shared
+   `화면 문구 수집` tab. Do not modify the `백업_작업전_2026-08-13` tab.
+3. Have FE/PM decide whether `sharedUi.filters.open` should be `필터` or
+   `필터 열기`, then run `pnpm generate:i18n` and inspect the JSON diff.
+4. Have FE/product classify the 48 unused candidates, 14 duplicate-wording
+   candidates, and Lab Billing/amount scope before deleting or merging keys.
+5. Let PM/PD review wording and layout from the semantic use locations. Add
+   annotated screenshot evidence only where route/area/state is insufficient.
+6. Run fixed-Korean Lab visual QA and representative Clinic/Admin regression
+   QA. Apply only approved wording/design/key changes, then run proportionate
+   typecheck/lint/build checks.
+7. Commit and push the shared branch only when explicitly requested. Use a
+   separate `origin/develop`-based integration branch for another combined
+   development deployment if needed.
