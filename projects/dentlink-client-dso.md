@@ -24,6 +24,58 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 간주한다. 이 체크포인트는 사용자가 제공한 범위와 현재 코드·Git에서 검증한 사실을
 기록한다.
 
+## 최신 체크포인트 — 2026-08-13
+
+- 마지막으로 확인된 추가 FE 카드 `DL-15964`를 구현하고 Jira를
+  `Ready for Deploy`로 이동했다.
+  - Organization Dashboard, Office Managed Dashboard, Advanced Export의 최대 날짜
+    범위를 백엔드 계약과 동일한 92일로 확장했다.
+  - 통계·결제내역 조회 목적에 맞게 세 화면 모두 미래 날짜를 선택할 수 없고 오늘까지
+    선택할 수 있도록 통일했다.
+  - Advanced Export의 안내, FE 검증, 오류 문구도 92일 기준으로 맞췄다.
+- 날짜 경계 판단은 별도 국가 타임존 계산을 추가하지 않고 기존 Dentlink 흐름을
+  유지했다.
+  - Office API는 브라우저의 IANA 타임존을 `zone-id` 헤더로 이미 전달한다.
+  - Organization의 `countryCode`는 날짜 표시 형식에는 유효하지만 US처럼 복수
+    타임존인 국가의 현재 날짜를 결정하기에는 부족하므로 브라우저 현지 날짜가 현재
+    계약에 더 정확하다.
+  - 공용 Calendar의 `enabledEndDate`는 제외 경계다. UI에서 오늘까지 허용하려면
+    기존 사용처처럼 다음 날을 경계값으로 전달한다. 이는 내일을 선택 가능하게 하는
+    처리가 아니다.
+  - 공용 Calendar나 신규 날짜 util은 수정·추가하지 않았다.
+- API 조정 및 스테이징 전달 상태도 live Git/GitHub에서 재확인했다.
+  - PR [#4493](https://github.com/Innvoaid/dentlink-client/pull/4493):
+    기본 기공소 조회 API 변경을 `release/v1.83.0`에 merge,
+    `327047c54`
+  - PR [#4494](https://github.com/Innvoaid/dentlink-client/pull/4494):
+    같은 변경을 `develop`에 merge, `34f4fb6b8`
+  - PR [#4495](https://github.com/Innvoaid/dentlink-client/pull/4495):
+    master 기준으로 재생성한 `stage`에 `release/v1.83.0`을 merge,
+    `ced4ede7f`
+- `DL-15964`는 release와 develop의 DSO 레이아웃 차이를 보존하기 위해 각 base에서
+  별도 커밋과 PR로 준비했다.
+  - PR [#4496](https://github.com/Innvoaid/dentlink-client/pull/4496):
+    `feature/v1.83.0-follow-up -> release/v1.83.0`, commit `f2d348c30`, open.
+    마지막 확인 시 CodeRabbit이 pending이라 merge state는 blocked다.
+  - PR [#4497](https://github.com/Innvoaid/dentlink-client/pull/4497):
+    `feature/DL-15964-develop -> develop`, commit `dad54cc00`, open.
+    마지막 확인 시 CodeRabbit 성공, merge state clean이다.
+  - release 커밋을 develop에 그대로 cherry-pick하면 세 DSO 파일의 기존 구조 차이로
+    충돌하므로, cherry-pick을 중단하고 develop의 기존 레이아웃을 보존한 채 날짜
+    정책 변경만 적용했다.
+- 검증 결과:
+  - release/develop 양쪽 Clinic TypeScript, 대상 파일 ESLint, Prettier 통과
+  - commit hook의 Clinic, Lab, Admin TypeScript 통과
+  - push hook 성공, 전체 lint 오류 0건과 기존 warning만 존재
+  - shared hooks 24건 및 release shared configs 3건 통과
+  - develop push hook의 coverage report는 base와 baseline 차이로 큰 delta를
+    출력했지만 hook 자체는 성공했다. 기능 변경이 shared package를 수정하지는 않았다.
+- 현재 worktree `/Users/parkjongsun/Repository/dentlink-client-dso`는
+  `feature/DL-15964-develop` (`dad54cc00`)이고 원격과 일치하며 clean이다.
+- 다음 시작점은 PR #4496의 CodeRabbit 완료/리뷰 처리 요청과 두 PR merge 여부
+  확인이다. 두 PR이 merge되고 신규 QA가 없다면 현재 알려진 DSO FE 개발 범위는
+  종료다. PR merge, 배포 revision, 스테이징·실데이터 QA는 구현 완료와 구분한다.
+
 ## 최신 체크포인트 — 2026-08-11
 
 - 백엔드 대기였던 두 API를 배포 계약 기준으로 반영해 현재 알려진 FE 개발 범위를

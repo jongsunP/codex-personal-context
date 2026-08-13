@@ -193,6 +193,14 @@ applying them.
   country context. Keep API date parameters in the contract format through the
   same utility; avoid direct `date-fns` formatting, string replacement, and a
   hardcoded locale when a shared formatter already owns the rule.
+- For a date-only filter whose API already receives the browser IANA timezone
+  through `zone-id`, use the browser-local calendar date unless the contract
+  provides and requires a more specific entity timezone. Do not infer a current
+  date from `countryCode` alone because one country may span multiple timezones.
+  Check whether the shared calendar's end boundary is inclusive or exclusive;
+  Dentlink's current `enabledEndDate` is exclusive, so passing the next calendar
+  day is the existing way to make today the last selectable date, not to permit
+  a future date.
 - Extend an existing shared input with a minimal optional prop when the
   difference is real and reusable. For programmatic form updates, add a
   controlled `value` path while preserving the existing uncontrolled
