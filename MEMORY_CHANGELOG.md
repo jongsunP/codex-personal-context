@@ -2,6 +2,12 @@
 
 ## 2026-08-18
 
+- Reordered the generated developer-area Sheet columns around location review:
+  page, page path, and screen state now lead and remain frozen; wording and
+  technical key fields follow; hidden system fields remain at the end.
+- Recorded pushed i18n head `b4874f890` and verified that the Sheet reorder
+  preserved 1,959 use-site rows, 251 capture links across 201 keys, 110
+  representative capture groups, and 39 review memos without formula errors.
 - Updated the Dentlink Lab i18n checkpoint to pushed head `5a431821a`.
 - Recorded the two-tab Sheet ownership model: nondeveloper English/Korean and
   review notes are the wording source; developer use sites are the location

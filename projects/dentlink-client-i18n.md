@@ -11,8 +11,8 @@ deployment facts.
   `/Users/parkjongsun/Repository/dentlink-client-i18n`
 - Branch: `feature/i18n`, tracking `origin/feature/i18n`
 - Local and remote HEAD:
-  `5a431821a48bc9182d454854a9a0bc1ec84aea7f`
-  (`feat: Lab i18n 문구 사용처 검수 체계 정리`).
+  `b4874f8902574b44eaf02cea8a6e59ef42e669b3`
+  (`chore: i18n 개발자 시트 컬럼 순서 정리`).
 - The worktree was clean after the commit and push.
 - No PR was created in this closeout. PR creation remains separately
   authorized work.
@@ -80,6 +80,11 @@ deployment facts.
   - use status and stable use-site ID
 - Developer-area English/Korean cells reference the nondeveloper tab by
   formula.
+- The visible developer-area columns are ordered for location review:
+  page, page path, screen state, English, Korean, phrase ID, namespace, and
+  key. The first three location columns remain frozen while scrolling.
+- Capture URL, marker, use status, and use-site ID remain trailing hidden
+  system columns.
 - Nondeveloper page/screen-state/position/capture cells reference the
   representative developer-area use site by formula.
 - Page path stays only in the developer area because one key may have multiple
@@ -103,6 +108,8 @@ deployment facts.
 - Representative page/screen-state mismatch between tabs: 0.
 - Formula display errors in the checked ranges: 0.
 - Review memos preserved: 39.
+- The developer-column reorder preserved all 1,959 use-site rows, 251 capture
+  links covering 201 keys, and 110 representative capture groups.
 
 ## Screenshot And Usage Audit State
 
@@ -166,7 +173,7 @@ deployment facts.
 
 1. Pull `codex-personal-context`, then pull/verify
    `/Users/parkjongsun/Repository/dentlink-client-i18n` on
-   `feature/i18n` at or after `5a431821a`.
+   `feature/i18n` at or after `b4874f890`.
 2. Recheck the live Sheet/Drive before relying on the counts above.
 3. Continue exhaustive coverage in this order:
    - visit every Lab route and open all reachable tabs, drawers, dropdowns,
