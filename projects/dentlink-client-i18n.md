@@ -11,11 +11,16 @@ deployment facts.
   `/Users/parkjongsun/Repository/dentlink-client-i18n`
 - Branch: `feature/i18n`, tracking `origin/feature/i18n`
 - Local and remote HEAD:
-  `358b5fe57318c8be55aff0f831c43d41bbada629`
-  (`chore: i18n 시트 공통 컬럼명 통일`).
+  `d5e9041ffd00048370d2d7b6288679523b49b22b`
+  (`ui: Lab Pretendard 폰트 스타일 적용`).
 - The worktree is clean and matches `origin/feature/i18n`.
-- No PR was created in this closeout. PR creation remains separately
-  authorized work.
+- `origin/master` is `9b57bec96be7b8f63c48ef4fb67ff46fbe2d2928`.
+  The feature branch includes this base through merge commit `5025e5c51`.
+- The old remote `develop` was explicitly deleted and recreated from that
+  exact `origin/master` commit. PR #4508 (`feature/i18n -> develop`) was then
+  merged as `2cd64965a2545e67bb40da486384958177537b60` on 2026-08-18.
+- PR #4508 checks completed successfully. This proves integration into
+  `develop`; development-server deployment and browser QA remain separate.
 - The sibling `/Users/parkjongsun/Repository/dentlink-client` worktree owns
   `master`; do not move this feature implementation there.
 
@@ -38,6 +43,19 @@ deployment facts.
   separately requested.
 - Missing keys are obvious in non-production; production falls back to
   English.
+
+## Lab Typography
+
+- Lab now uses locally bundled Pretendard Medium and Bold for both Korean and
+  English. The previous Lab-local Lato font files were removed.
+- Figma Typography source:
+  `https://www.figma.com/design/syQbfe4vTWUz87SYqa5Kvx/000-DLDS?node-id=8816-14871&m=dev`.
+- Existing font sizes, weights, and line heights are preserved. Figma letter
+  spacing is applied as `0px` for H1 through Title3 and `-0.1px` for Body1
+  through Body4.
+- Lab supplies typography CSS variables to shared UI. Shared components use
+  the variables with their existing values as fallbacks, so Clinic and Admin
+  retain the prior typography when they do not provide the Lab variables.
 
 ## Shared UI Compatibility
 
@@ -163,6 +181,14 @@ deployment facts.
 - `git diff --check`: passed before commit.
 - Google Sheet formula/value read-back and visual inspection: passed.
 - Project commit and push: passed.
+- Pretendard implementation checks: Lab, Clinic, and Admin typechecks passed;
+  Lab production build passed; runtime computed style confirmed Pretendard and
+  the Lab typography variables.
+- Lab lint completed with 0 errors and 191 existing warnings.
+- The standalone `shared/ui` build still fails on pre-existing unrelated
+  Storybook/missing-module errors; none of the changed typography files were in
+  those errors.
+- PR #4508 Auto Assign and CodeRabbit checks: passed; PR merged into `develop`.
 
 ## Team Feedback That Still Governs The Work
 
@@ -184,9 +210,14 @@ deployment facts.
 
 1. Pull `codex-personal-context`, then pull/verify
    `/Users/parkjongsun/Repository/dentlink-client-i18n` on
-   `feature/i18n` at or after `358b5fe57`.
-2. Recheck the live Sheet/Drive before relying on the counts above.
-3. Continue exhaustive coverage in this order:
+   `feature/i18n` at or after `d5e9041ff`.
+2. Verify the live `develop` and its deployed development-server revision.
+   PR #4508 is merged at `2cd64965a`, but deployment has not been verified in
+   this checkpoint.
+3. On the development server, review Korean wording and Pretendard typography;
+   then have PD review the rendered design and record approved visual changes.
+4. Recheck the live Sheet/Drive before relying on the counts above, then
+   continue exhaustive coverage in this order:
    - visit every Lab route and open all reachable tabs, drawers, dropdowns,
      modals, scroll segments, empty/error states, and conditional controls;
    - run Lab locally and use existing development/test data for states that the
@@ -194,21 +225,20 @@ deployment facts.
    - when local execution still cannot expose a state, record the exact route,
      permission, data, and user action required, then ask the user to open that
      state for capture.
-4. Keep the human-facing Sheet simple. Add captures and markers through the
+5. Keep the human-facing Sheet simple. Add captures and markers through the
    developer usage rows; the nondeveloper tab must continue to read the
    representative values by formula.
-5. Classify every uncaptured key as reachable/captured, data-or-permission
+6. Classify every uncaptured key as reachable/captured, data-or-permission
    blocked, defensive, or genuinely unused. Remove only keys whose absence from
    Lab is verified.
-6. Perform PM wording review, development-server wording deployment, PD visual
-   review, and approved design fixes.
-7. Perform final fixed-Korean Lab QA and representative Clinic/Admin shared-UI
+7. Complete PM wording review and apply only confirmed wording/design fixes.
+8. Perform final fixed-Korean Lab QA and representative Clinic/Admin shared-UI
    regression QA.
-8. Create or update a PR only when explicitly requested.
+9. Decide the final release/master delivery path with the user; do not create,
+   update, or merge another PR without explicit authorization.
 
-No current Figma link, dedicated state-complete test-data set, or final Korean
-font has been supplied. Treat those as pending inputs rather than inventing
-them.
+No dedicated state-complete test-data set has been supplied. Treat unavailable
+conditional states as pending evidence rather than inventing them.
 
 ## Relevant History
 
@@ -222,3 +252,7 @@ them.
 - The current management/audit closeout supersedes the earlier one-tab Sheet
   experiments. Preserve the backup tabs for historical comparison, but use
   `비개발자 영역` and `개발자 영역` as the operational model.
+- `5025e5c51` merged the latest `master` into the feature without replacing the
+  i18n work. `d5e9041ff` then added the Lab-only Pretendard typography.
+- For development delivery, remote `develop` was recreated from `master` and
+  PR #4508 was merged. The feature branch remains the ongoing i18n source.

@@ -66,16 +66,16 @@ For detailed current state, read:
 - Dedicated worktree:
   `/Users/parkjongsun/Repository/dentlink-client-i18n`
 - Branch: `feature/i18n`
-- Current state: the Lab Korean-default i18n implementation and reusable
-  usage/capture audit workflow are pushed to `origin/feature/i18n` at
-  `358b5fe57`. The canonical Sheet separates nondeveloper wording review from
-  developer use-site details with cross-tab formulas. Developer columns now
-  keep page, screen state, marker, capture URL, and route as one location group.
-  The shared fields in both operational tabs now use the same names, including
-  `위치 번호` and `캡처`. The worktree is clean and matches the remote branch;
-  all 1,959 use sites and 251 captured occurrences remain.
-  Exhaustive conditional-state capture, PM/PD
-  review, final Lab/Clinic/Admin QA, and PR creation remain.
+- Current state: the Lab Korean-default i18n implementation, reusable
+  usage/capture audit workflow, and Lab-only Pretendard typography are pushed
+  to `origin/feature/i18n` at `d5e9041ff`. The canonical Sheet separates
+  nondeveloper wording review from developer use-site details with cross-tab
+  formulas; all 1,959 use sites and 251 captured occurrences remain. The
+  worktree is clean and matches the remote branch. `develop` was recreated
+  from `origin/master` at `9b57bec96`, then PR #4508 was merged into `develop`
+  as `2cd64965a`. Development-server wording/typography QA, exhaustive
+  conditional-state capture, PM/PD review, and final Lab/Clinic/Admin QA
+  remain.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`
 
