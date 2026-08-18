@@ -74,9 +74,11 @@ For detailed current state, read:
   worktree is clean and matches the remote branch. `develop` was recreated
   from `origin/master` at `9b57bec96`, then PR #4508 was merged into `develop`
   as `2cd64965a`. Admin·Clinic·Lab package versions were then raised to 1.83.1;
-  follow-up PR #4509 is open and contains only the three package files.
-  PR #4509 integration, development-server wording/typography QA, exhaustive
-  conditional-state capture, PM/PD review, and final Lab/Clinic/Admin QA remain.
+  follow-up PR #4509 was merged into `develop` as `7ac2f975a`. `develop` and
+  `feature/i18n` now have identical file trees, while `master` remains unchanged
+  at `9b57bec96`. Development-server wording/typography QA, exhaustive
+  conditional-state capture, PM/PD review, final Lab/Clinic/Admin QA, and the
+  later separately authorized `master` delivery remain.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`
 

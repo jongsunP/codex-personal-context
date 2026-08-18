@@ -25,9 +25,12 @@ deployment facts.
   `5f985b45b` (`chore: 서비스 버전 1.83.1 반영`). Because PR #4508 used a
   squash merge, `origin/develop` was then merged into `feature/i18n` as
   `dea87d99b` to connect history and keep the follow-up diff narrow.
-- Follow-up PR #4509 (`feature/i18n -> develop`) is open and mergeable:
-  `https://github.com/Innvoaid/dentlink-client/pull/4509`. Its diff contains
+- Follow-up PR #4509 (`feature/i18n -> develop`) was merged as
+  `7ac2f975afacf5433e8e1bec606f519fb9d3f662` on 2026-08-18:
+  `https://github.com/Innvoaid/dentlink-client/pull/4509`. Its diff contained
   only `admin/package.json`, `clinic/package.json`, and `lab/package.json`.
+- `origin/develop` and `origin/feature/i18n` now have identical file trees.
+  `origin/master` remains unchanged at `9b57bec96`; no master merge occurred.
 - The sibling `/Users/parkjongsun/Repository/dentlink-client` worktree owns
   `master`; do not move this feature implementation there.
 
@@ -198,8 +201,8 @@ deployment facts.
 - PR #4508 Auto Assign and CodeRabbit checks: passed; PR merged into `develop`.
 - Package-version commit hook: Admin, Clinic, and Lab typechecks passed.
 - Follow-up push hook: passed with existing lint warnings and coverage output.
-- PR #4509 was open, cleanly mergeable, and both CodeRabbit and Auto Assign
-  were successful at closeout. Downstream merge/deployment was not performed.
+- PR #4509 CodeRabbit and Auto Assign checks passed, and the PR was merged into
+  `develop`. Development-server deployment was not verified.
 
 ## Team Feedback That Still Governs The Work
 
@@ -222,10 +225,9 @@ deployment facts.
 1. Pull `codex-personal-context`, then pull/verify
    `/Users/parkjongsun/Repository/dentlink-client-i18n` on
    `feature/i18n` at or after `dea87d99b`.
-2. Recheck PR #4509 and merge it only with explicit user authorization. After
-   it is merged, verify the live `develop` and its deployed development-server
-   revision. PR #4508 is already merged at `2cd64965a`, but deployment has not
-   been verified in this checkpoint.
+2. Verify that `origin/develop` at or after `7ac2f975a` is deployed to the
+   development server. PR #4508 and follow-up PR #4509 are merged, but actual
+   deployment has not been verified in this checkpoint.
 3. On the development server, review Korean wording and Pretendard typography;
    then have PD review the rendered design and record approved visual changes.
 4. Recheck the live Sheet/Drive before relying on the counts above, then
@@ -271,3 +273,5 @@ conditional states as pending evidence rather than inventing them.
 - `5f985b45b` raised Admin, Clinic, and Lab package versions to 1.83.1.
   `dea87d99b` connected the squash-merged `develop` history so PR #4509 shows
   only those three version files rather than the full i18n implementation.
+- PR #4509 was merged into `develop` as `7ac2f975a`. This completed development
+  branch integration only; `master` remains unchanged for a later final PR.
