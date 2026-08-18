@@ -1,5 +1,17 @@
 # Memory Changelog
 
+## 2026-08-18
+
+- Updated the Dentlink Lab i18n checkpoint to pushed head `5a431821a`.
+- Recorded the two-tab Sheet ownership model: nondeveloper English/Korean and
+  review notes are the wording source; developer use sites are the location
+  source; each tab reads the other side's owned values through formulas.
+- Recorded 27 masked Drive screenshots, 251 observed occurrences, 201 observed
+  keys, 1,459 catalog keys, and the remaining exhaustive state-coverage flow.
+- Preserved the next-step rule: exhaust development-server states first, use a
+  local environment when possible, then request only the exact user-opened
+  state that cannot otherwise be produced.
+
 ## 2026-08-10
 
 - Tightened the durable branch-naming rule: new work branches default to the

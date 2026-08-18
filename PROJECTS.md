@@ -66,11 +66,12 @@ For detailed current state, read:
 - Dedicated worktree:
   `/Users/parkjongsun/Repository/dentlink-client-i18n`
 - Branch: `feature/i18n`
-- Current state: the full Lab frontend-owned static-text pass is implemented
-  with fixed Korean UI and English fallback, synchronized with the canonical
-  Sheet, merged with `origin/master` through v1.82.0, and pushed to
-  `origin/feature/i18n` at `2b5d0acfd`. The tree is clean and no PR exists;
-  PM wording review, browser/shared-consumer QA, and PR creation remain.
+- Current state: the Lab Korean-default i18n implementation and reusable
+  usage/capture audit workflow are pushed to `origin/feature/i18n` at
+  `5a431821a`. The canonical Sheet separates nondeveloper wording review from
+  developer use-site details with cross-tab formulas, and 27 masked
+  screenshots cover 251 observed occurrences. Exhaustive conditional-state
+  capture, PM/PD review, final Lab/Clinic/Admin QA, and PR creation remain.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`
 
