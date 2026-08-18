@@ -70,9 +70,11 @@ For detailed current state, read:
   usage/capture audit workflow are pushed to `origin/feature/i18n` at
   `98caa6e20`. The canonical Sheet separates nondeveloper wording review from
   developer use-site details with cross-tab formulas. Developer columns now
-  keep page, screen state, marker, capture URL, and route as one location group;
-  hidden source columns leave page, screen state, and route consecutive for
-  normal viewing. All 1,959 use sites and 251 captured occurrences remain.
+  keep page, screen state, marker, capture URL, and route as one location group.
+  The shared fields in both operational tabs now use the same names, including
+  `위치 번호` and `캡처`; the source code changes for this normalization remain
+  local and uncommitted pending explicit project commit/push authorization. All
+  1,959 use sites and 251 captured occurrences remain.
   Exhaustive conditional-state capture, PM/PD
   review, final Lab/Clinic/Admin QA, and PR creation remain.
 - Personal current checkpoint and resume instructions:

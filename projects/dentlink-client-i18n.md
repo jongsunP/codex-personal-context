@@ -13,7 +13,17 @@ deployment facts.
 - Local and remote HEAD:
   `98caa6e200cf92930ffcbc9a3bf815c99ffe38c4`
   (`chore: i18n 시트 위치 원본 열 정리`).
-- The worktree was clean after the commit and push.
+- The worktree was clean after that commit and push. It currently has six
+  intentional, uncommitted files that normalize the same-role Sheet field
+  names across both operational tabs:
+  - `.claude/skills/i18n/SKILL.md`
+  - `lab/i18n/catalog/README.md`
+  - `lab/i18n/i18n.manifest.json`
+  - `lab/scripts/i18n/audit-usage.js`
+  - `lab/scripts/i18n/export-locales-to-sheet.js`
+  - `lab/scripts/i18n/sheets-client.js`
+- Do not commit or push these shared-project changes until the user explicitly
+  authorizes that Git operation.
 - No PR was created in this closeout. PR creation remains separately
   authorized work.
 - The sibling `/Users/parkjongsun/Repository/dentlink-client` worktree owns
@@ -80,6 +90,10 @@ deployment facts.
   - use status and stable use-site ID
 - Developer-area English/Korean cells reference the nondeveloper tab by
   formula.
+- Fields with the same role use the same name in both operational tabs. The
+  shared names are `페이지`, `화면 상태`, `위치 번호`, `캡처`, `영문`, `한글`,
+  and `문구 ID`. Old developer-only names `표시 번호` and `캡처 링크` remain
+  accepted only as read-time migration aliases.
 - The visible developer-area columns are ordered for location review:
   page, screen state, page path, English, Korean, phrase ID, namespace, and
   key. This keeps the first two fields aligned with the nondeveloper area.
@@ -112,6 +126,8 @@ deployment facts.
 - Review memos preserved: 39.
 - The developer-column reorder preserved all 1,959 use-site rows, 251 capture
   links covering 201 keys, and 110 representative capture groups.
+- The 2026-08-18 live read-back after field-name normalization confirmed the
+  current headers in both tabs, 1,459 catalog rows, and 1,959 developer rows.
 
 ## Screenshot And Usage Audit State
 
@@ -145,6 +161,9 @@ deployment facts.
 ## Verification Completed
 
 - `pnpm check:i18n`: passed, 1,459 keys across 20 locale files.
+- `pnpm audit:i18n`: passed after the shared field-name normalization with
+  1,459 reachable keys, zero unresolved keys, zero unknown literal keys, and
+  zero Clinic regression candidates.
 - Lab typecheck: passed.
 - Clinic typecheck: passed.
 - Admin typecheck: passed.
@@ -173,11 +192,13 @@ deployment facts.
 
 ## Remaining Work And Next Start Point
 
-1. Pull `codex-personal-context`, then pull/verify
+1. Review the six local field-name-normalization changes and, only after
+   explicit authorization, commit and push them to `feature/i18n`.
+2. Pull `codex-personal-context`, then pull/verify
    `/Users/parkjongsun/Repository/dentlink-client-i18n` on
    `feature/i18n` at or after `98caa6e20`.
-2. Recheck the live Sheet/Drive before relying on the counts above.
-3. Continue exhaustive coverage in this order:
+3. Recheck the live Sheet/Drive before relying on the counts above.
+4. Continue exhaustive coverage in this order:
    - visit every Lab route and open all reachable tabs, drawers, dropdowns,
      modals, scroll segments, empty/error states, and conditional controls;
    - run Lab locally and use existing development/test data for states that the
@@ -185,17 +206,17 @@ deployment facts.
    - when local execution still cannot expose a state, record the exact route,
      permission, data, and user action required, then ask the user to open that
      state for capture.
-4. Keep the human-facing Sheet simple. Add captures and markers through the
+5. Keep the human-facing Sheet simple. Add captures and markers through the
    developer usage rows; the nondeveloper tab must continue to read the
    representative values by formula.
-5. Classify every uncaptured key as reachable/captured, data-or-permission
+6. Classify every uncaptured key as reachable/captured, data-or-permission
    blocked, defensive, or genuinely unused. Remove only keys whose absence from
    Lab is verified.
-6. Perform PM wording review, development-server wording deployment, PD visual
+7. Perform PM wording review, development-server wording deployment, PD visual
    review, and approved design fixes.
-7. Perform final fixed-Korean Lab QA and representative Clinic/Admin shared-UI
+8. Perform final fixed-Korean Lab QA and representative Clinic/Admin shared-UI
    regression QA.
-8. Create or update a PR only when explicitly requested.
+9. Create or update a PR only when explicitly requested.
 
 No current Figma link, dedicated state-complete test-data set, or final Korean
 font has been supplied. Treat those as pending inputs rather than inventing
