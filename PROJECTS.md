@@ -68,9 +68,9 @@ For detailed current state, read:
 - Branch: `feature/i18n`
 - Current state: the Lab Korean-default i18n implementation and reusable
   usage/capture audit workflow are pushed to `origin/feature/i18n` at
-  `b4874f890`. The canonical Sheet separates nondeveloper wording review from
+  `94f516938`. The canonical Sheet separates nondeveloper wording review from
   developer use-site details with cross-tab formulas. Developer columns now
-  show page, route, and screen state first while preserving 1,959 use sites
+  show page and screen state first, followed by route, while preserving 1,959 use sites
   and 251 captured occurrences. Exhaustive conditional-state capture, PM/PD
   review, final Lab/Clinic/Admin QA, and PR creation remain.
 - Personal current checkpoint and resume instructions:
