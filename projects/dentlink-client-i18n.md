@@ -11,8 +11,8 @@ deployment facts.
   `/Users/parkjongsun/Repository/dentlink-client-i18n`
 - Branch: `feature/i18n`, tracking `origin/feature/i18n`
 - Local and remote HEAD:
-  `d5e9041ffd00048370d2d7b6288679523b49b22b`
-  (`ui: Lab Pretendard 폰트 스타일 적용`).
+  `dea87d99bb9d6f6f1969096c72e2f0f902fc83f8`
+  (`chore: develop 머지 이력 반영`).
 - The worktree is clean and matches `origin/feature/i18n`.
 - `origin/master` is `9b57bec96be7b8f63c48ef4fb67ff46fbe2d2928`.
   The feature branch includes this base through merge commit `5025e5c51`.
@@ -21,6 +21,13 @@ deployment facts.
   merged as `2cd64965a2545e67bb40da486384958177537b60` on 2026-08-18.
 - PR #4508 checks completed successfully. This proves integration into
   `develop`; development-server deployment and browser QA remain separate.
+- User-added Admin, Clinic, and Lab package version changes were committed as
+  `5f985b45b` (`chore: 서비스 버전 1.83.1 반영`). Because PR #4508 used a
+  squash merge, `origin/develop` was then merged into `feature/i18n` as
+  `dea87d99b` to connect history and keep the follow-up diff narrow.
+- Follow-up PR #4509 (`feature/i18n -> develop`) is open and mergeable:
+  `https://github.com/Innvoaid/dentlink-client/pull/4509`. Its diff contains
+  only `admin/package.json`, `clinic/package.json`, and `lab/package.json`.
 - The sibling `/Users/parkjongsun/Repository/dentlink-client` worktree owns
   `master`; do not move this feature implementation there.
 
@@ -189,6 +196,10 @@ deployment facts.
   Storybook/missing-module errors; none of the changed typography files were in
   those errors.
 - PR #4508 Auto Assign and CodeRabbit checks: passed; PR merged into `develop`.
+- Package-version commit hook: Admin, Clinic, and Lab typechecks passed.
+- Follow-up push hook: passed with existing lint warnings and coverage output.
+- PR #4509 was open, cleanly mergeable, and both CodeRabbit and Auto Assign
+  were successful at closeout. Downstream merge/deployment was not performed.
 
 ## Team Feedback That Still Governs The Work
 
@@ -210,10 +221,11 @@ deployment facts.
 
 1. Pull `codex-personal-context`, then pull/verify
    `/Users/parkjongsun/Repository/dentlink-client-i18n` on
-   `feature/i18n` at or after `d5e9041ff`.
-2. Verify the live `develop` and its deployed development-server revision.
-   PR #4508 is merged at `2cd64965a`, but deployment has not been verified in
-   this checkpoint.
+   `feature/i18n` at or after `dea87d99b`.
+2. Recheck PR #4509 and merge it only with explicit user authorization. After
+   it is merged, verify the live `develop` and its deployed development-server
+   revision. PR #4508 is already merged at `2cd64965a`, but deployment has not
+   been verified in this checkpoint.
 3. On the development server, review Korean wording and Pretendard typography;
    then have PD review the rendered design and record approved visual changes.
 4. Recheck the live Sheet/Drive before relying on the counts above, then
@@ -256,3 +268,6 @@ conditional states as pending evidence rather than inventing them.
   i18n work. `d5e9041ff` then added the Lab-only Pretendard typography.
 - For development delivery, remote `develop` was recreated from `master` and
   PR #4508 was merged. The feature branch remains the ongoing i18n source.
+- `5f985b45b` raised Admin, Clinic, and Lab package versions to 1.83.1.
+  `dea87d99b` connected the squash-merged `develop` history so PR #4509 shows
+  only those three version files rather than the full i18n implementation.
