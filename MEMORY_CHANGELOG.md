@@ -1,5 +1,25 @@
 # Memory Changelog
 
+## 2026-08-19
+
+- Closed out Dentlink Lab i18n and cross-service typography work at pushed
+  `feature/i18n` head `1d1b2fda1`; Lab, Clinic, and Admin package versions are
+  1.84.0, and the user confirmed deployment.
+- Replaced the earlier one-catalog/many-use-site Sheet description with the
+  final 1:1 role-view model: both operational tabs have 1,464 identical message
+  IDs and shared representative page values, while full technical use-site IDs
+  remain hidden in the developer tab.
+- Recorded explicit request ownership and the preserved split of 39 notes:
+  16 PM/design-to-developer requests and 23 developer/automation-to-PM/design
+  requests.
+- Recorded full Pretendard policy completion: Clinic web and five PDF paths
+  migrated from Lato, Admin retained its existing Pretendard setup, and all
+  three services now use heading `0px` and body `-0.1px` letter spacing.
+- Recorded final verification and known local limits: direct Sheet/local
+  translation mismatch count 0, font/runtime/PDF checks passed, Admin typecheck
+  passed, Clinic remains blocked by the unrelated PNG module declaration, and
+  the push hook still lacks a local coverage baseline.
+
 ## 2026-08-18
 
 - Reordered the generated developer-area Sheet columns around location review:

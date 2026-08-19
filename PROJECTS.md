@@ -64,21 +64,15 @@ For detailed current state, read:
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
 - Dedicated worktree:
-  `/Users/parkjongsun/Repository/dentlink-client-i18n`
+  `/Users/parkjongsun/repository/dentlink-client-i18n`
 - Branch: `feature/i18n`
-- Current state: the Lab Korean-default i18n implementation, reusable
-  usage/capture audit workflow, and Lab-only Pretendard typography are pushed
-  to `origin/feature/i18n` at `dea87d99b`. The canonical Sheet separates
-  nondeveloper wording review from developer use-site details with cross-tab
-  formulas; all 1,959 use sites and 251 captured occurrences remain. The
-  worktree is clean and matches the remote branch. `develop` was recreated
-  from `origin/master` at `9b57bec96`, then PR #4508 was merged into `develop`
-  as `2cd64965a`. Admin·Clinic·Lab package versions were then raised to 1.83.1;
-  follow-up PR #4509 was merged into `develop` as `7ac2f975a`. `develop` and
-  `feature/i18n` now have identical file trees, while `master` remains unchanged
-  at `9b57bec96`. Development-server wording/typography QA, exhaustive
-  conditional-state capture, PM/PD review, final Lab/Clinic/Admin QA, and the
-  later separately authorized `master` delivery remain.
+- Current state: closeout completed at pushed head `1d1b2fda1`. Lab Korean
+  i18n contains 1,464 keys; the two operational Sheet tabs are 1:1 role-based
+  views with 1,464 identical message IDs and representative page values.
+  Lab, Clinic, and Admin now share the Pretendard and letter-spacing policy;
+  Clinic web and PDF were fully migrated from Lato. All three package versions
+  are 1.84.0, the worktree is clean and matches the remote branch, and the user
+  confirmed deployment on 2026-08-19. No requested implementation remains.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`
 
