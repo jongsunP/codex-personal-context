@@ -213,6 +213,23 @@ Known local verification limit:
 - `service-account.json` remains local and ignored. Grant Sheet edit permission
   only for an explicitly authorized write.
 
+## Capture Progress Snapshot — 2026-08-20
+
+Capture expansion is temporarily paused, not cancelled. The current priority is
+to preserve existing work and respond to design QA; the user may resume and
+complete the capture catalog later.
+
+- 27 actual capture images exist.
+- 201 of 1,469 message keys are connected to a capture (about 14%).
+- 27 of 110 currently identified page/state groups have a capture (about 25%).
+- 83 currently identified page/state groups show `캡처 준비 중`.
+- A conservative overall completion estimate is 15–20% because modal,
+  permission, error, and data-dependent states may reveal additional groups and
+  increase the current total of 110.
+
+This snapshot came from a read-only Sheet inspection; no capture or Sheet data
+was changed during the measurement.
+
 ## Remaining Delivery Work
 
 The planned code and Sheet maintenance is complete at `dc44bc492`. Wait for
