@@ -100,3 +100,16 @@ For detailed current state, read:
   DL-15223 DSO 작업을 종료하는 단계다. 현재 알려진 추가 FE 개발 항목은 없다.
 - Personal current checkpoint, decisions, and prioritized TODO list:
   `projects/dentlink-client-dso.md`
+
+### Dentlink 홈 LinkTalk 미확인 필터
+
+- Shared repository: `https://github.com/Innvoaid/dentlink-client`
+- Dedicated worktree:
+  `/Users/parkjongsun/Repository/dentlink-client-linktalk-unread`
+- Branch: `feature/DL-16002`
+- Jira: parent `DL-14984`, FE subtask `DL-16002`
+- Current state: Clinic/기공소 홈 LinkTalk의 All/Unread 필터 구현과 사용자 로컬
+  기능·모바일 스타일 확인을 완료했다. PR #4513은 `release/v1.85.0` 대상으로 open,
+  mergeable이며 CodeRabbit 성공·미해결 thread 0개다. 동료 승인과 merge를 기다린다.
+- Personal current checkpoint:
+  `projects/dentlink-client-linktalk-unread.md`
