@@ -11,15 +11,12 @@ take precedence if later work changes them.
   `/Users/parkjongsun/repository/dentlink-client-i18n`
 - Branch: `feature/i18n`, tracking `origin/feature/i18n`
 - Local and remote HEAD:
-  `1d1b2fda1` (`ui: Clinic과 Admin Pretendard 폰트 정책 적용`).
-- The local branch has no commit divergence from the remote branch, but the
-  worktree currently has 10 modified tracked files with 226 insertions and 31
-  deletions. This is active, uncommitted i18n follow-up work owned by its
-  separate feature session; do not discard, move, or modify it from the main
-  worktree session.
+  `dc44bc492` (`fix: 다국어 시트 정합성과 누락 문구 보완`).
+- The worktree is clean and has no commit divergence from
+  `origin/feature/i18n`.
 - The earlier deployment confirmation referred to the staging test flow, not a
-  completed production release. The user confirmed on 2026-08-20 that i18n is
-  still under staging verification and remains in progress.
+  completed production release. The planned development cleanup is complete,
+  and the work now waits for design QA and the final release path.
 - Current package version in Lab, Clinic, and Admin: `1.84.0`.
 
 Current release integration plan:
@@ -75,6 +72,7 @@ Final follow-up commits:
 - `b47ef8cb0` — `fix: 다국어 시트 역할별 인터페이스 정리`
 - `8a337bd13` — `chore: 서비스 버전 1.84.0 반영`
 - `1d1b2fda1` — `ui: Clinic과 Admin Pretendard 폰트 정책 적용`
+- `dc44bc492` — `fix: 다국어 시트 정합성과 누락 문구 보완`
 
 ## Lab i18n Runtime
 
@@ -84,7 +82,7 @@ Final follow-up commits:
   bundled locale JSON.
 - `lab/i18n/i18n.manifest.json` is the schema source for languages,
   namespaces, keys, and Sheet columns.
-- Current catalog: 1,464 keys across 20 files under
+- Current catalog: 1,469 keys across 20 files under
   `lab/src/i18n/locales/{en,ko}`.
 - Current namespaces: `gnb`, `sharedUi`, `dashboard`, `account`, `orders`,
   `shipping`, `settlements`, `patients`, `help`, and `linkTalk`.
@@ -103,9 +101,10 @@ Final follow-up commits:
 The two operational tabs are role-specific views of the same canonical message
 table, not independent datasets:
 
-- Both tabs contain exactly 1,464 data rows.
+- Both tabs contain exactly 1,469 data rows.
 - Every message ID is unique and the ID sequence is identical in both tabs.
-- Shared fields have the same name, relative order, and value.
+- Shared fields are connected by formulas and have one owning tab rather than
+  duplicated manual input.
 - `페이지`, `화면 상태`, and `페이지 경로` expose one representative use site
   only. They never expose a multiline list of all routes.
 - Multiple technical use-site identifiers remain aggregated only in the hidden
@@ -114,32 +113,41 @@ table, not independent datasets:
 
 Nondeveloper columns:
 
-`영문 | 한글 | 페이지 | 화면 상태 | 위치 번호 | 캡처 | 페이지 경로 |
-개발자 확인 요청 | PM·디자이너 확인 요청 | 문구 ID`
+`영문 | 한글 | 개발자에게 확인 요청 | PM·디자이너에게 확인 요청 | 페이지 |
+화면 상태 | 위치 번호 | 캡처 | 페이지 경로 | 문구 ID`
 
-Developer columns add `namespace`, `key`, hidden `사용 상태`, and hidden
-`사용처 ID` after the same shared columns. `문구 ID` remains hidden from the
-normal nondeveloper interface.
+Developer columns:
+
+`PM·디자이너에게 확인 요청 | 영문 | 한글 | 페이지 | 화면 상태 | 위치 번호 |
+캡처 | 페이지 경로 | 개발자에게 확인 요청 | 문구 ID | namespace | key |
+사용 상태 | 사용처 ID`
+
+`비개발자 영역` owns English, Korean, and `개발자에게 확인 요청`.
+`개발자 영역` owns `PM·디자이너에게 확인 요청`. Every other shared field is
+formula-linked or generated. Writable columns are yellow; generated/read-only
+columns are gray and protected with warning-only ranges.
 
 Request ownership is explicit:
 
-- `개발자 확인 요청`: PM or designer asks a developer about wording, context,
+- `개발자에게 확인 요청`: PM or designer asks a developer about wording, context,
   or exposure conditions.
-- `PM·디자이너 확인 요청`: a developer or automated audit asks PM/design for
+- `PM·디자이너에게 확인 요청`: a developer or automated audit asks PM/design for
   a product or wording decision, including screen-versus-JSON differences.
-- The 39 existing notes were preserved exactly and split into 16
-  PM/design-to-developer requests and 23 developer/automation-to-PM/design
-  requests, with zero overlap.
+- Current unresolved counts are nine PM/design-to-developer requests and one
+  developer-to-PM/design request. The user intentionally deferred all ten on
+  2026-08-20 rather than treating them as code blockers.
 
 Final Sheet read-back verified:
 
-- 1,464 unique IDs in each tab and identical row order
-- zero shared-field mismatches
-- zero multiline common page/state/path cells
-- zero formula errors
+- 1,469 unique IDs in each tab and identical row order
+- zero missing, stale, translation conflicts, misplaced requests, or role-view
+  formula-link issues
+- nine developer requests and one PM/designer request preserved in both views
+- a duplicate `페이지 경로` header found during final closeout was restored to
+  `개발자에게 확인 요청`; a full export then passed read-back verification
 - hidden use status and use-site IDs preserved
-- all 39 existing notes preserved
-- zero English/Korean mismatches against local locale JSON
+- capture expansion is paused by user decision; existing links remain and no
+  new captures are required before design QA
 
 ## Typography Policy
 
@@ -165,12 +173,11 @@ Service details:
 
 Completed verification:
 
-- `pnpm audit:i18n`: 1,464 keys, 1,464 reachable, zero unresolved keys, zero
+- `pnpm audit:i18n`: 1,469 keys, 1,469 reachable, zero unresolved keys, zero
   unknown literal keys, and zero review rows.
-- Canonical row generation: 1,464 unique rows with zero multiline common
-  page/state/path cells.
-- Direct live-Sheet CSV versus local JSON comparison: zero translation
-  mismatches.
+- `pnpm export:i18n`: 1,469 local keys with zero missing, stale, conflicts,
+  role-view link issues, or misplaced review requests.
+- `pnpm check:i18n`: 1,469 keys verified across 20 locale files.
 - Font asset hashes match their existing Lab/Admin source files.
 - Clinic source and public assets contain zero remaining Lato references.
 - Clinic and Admin development roots returned HTTP 200.
@@ -178,22 +185,17 @@ Completed verification:
   `-0.1px` in both projects.
 - All five Clinic PDF routes and all five new Clinic font asset URLs returned
   HTTP 200 without font compilation errors.
-- Admin typecheck passed.
-- Changed-file lint completed with zero errors and two pre-existing warnings.
-- `git diff --check` passed before each final commit.
+- Lab, Clinic, and Admin typechecks passed before commit and in the commit hook.
+- The push hook completed Clinic/Lab/Admin lint with zero errors and 418
+  existing warnings, and shared config/hook coverage tests passed (27 tests).
+- Prettier and `git diff --check` passed before the final commit.
 
-Known local verification limits:
+Known local verification limit:
 
-- `pnpm check:i18n` cannot authenticate from the local shell because Google
-  Application Default Credentials are unavailable. The direct authenticated
-  browser export and exact CSV-to-local comparison replaced that check for the
-  final verification.
-- Clinic typecheck currently stops at the pre-existing unrelated import error
-  in `shared/ui/src/PdfUI/BrowserPDFHeaderUI.tsx` for
-  `shared/templates/invoice/logo-dentlink.png`.
-- The pre-push coverage check requires a local coverage baseline that is not
-  present. Final commits were pushed with Husky disabled after the targeted
-  checks above.
+- `pnpm --filter @dentlink/ui build` still fails on broad pre-existing package
+  errors including generated icon unused imports, stale stories, and missing
+  legacy modules. All three consuming app typechecks pass, so no error was
+  traced to the changed shared order-title component.
 
 ## Durable Operating Rules
 
@@ -213,11 +215,16 @@ Known local verification limits:
 
 ## Remaining Delivery Work
 
-This work is not production-closeout complete. Continue staging verification,
-finish any remaining i18n work, create or select the final `release/v1.84.0`
-delivery path, and recheck the complete PR diff against that release before
-merging. After the 1.84 release is finalized, forward-propagate it to `master`
-and `release/v1.85.0` and distinguish that integration QA from the current
-staging QA. Optional repository maintenance outside the feature scope is to
-fix the PNG module declaration/typecheck environment issue and create the local
-coverage baseline required by the standard push hook.
+The planned code and Sheet maintenance is complete at `dc44bc492`. Wait for
+design QA, then apply only confirmed design corrections. The nine
+`개발자에게 확인 요청` rows and one `PM·디자이너에게 확인 요청` row are deferred
+human decisions, not code blockers. The remaining PM/design request concerns
+the `Additional Information` heading; clear it only after the latest Korean
+heading is deployed and verified. Capture expansion remains paused.
+
+This is still not production-closeout complete. The latest follow-up commit is
+pushed but deployment of that exact revision is not yet confirmed. Create or
+select the final `release/v1.84.0` delivery path, recheck the complete PR diff
+against that release, and run assembled-release QA before merging. After the
+1.84 release is finalized, forward-propagate it to `master` and
+`release/v1.85.0`.
