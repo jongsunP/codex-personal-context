@@ -12,8 +12,9 @@ take precedence if later work changes them.
 - Branch: `feature/i18n`, tracking `origin/feature/i18n`
 - Local and remote HEAD:
   `dc44bc492` (`fix: 다국어 시트 정합성과 누락 문구 보완`).
-- The worktree is clean and has no commit divergence from
-  `origin/feature/i18n`.
+- The pushed head still has no commit divergence from `origin/feature/i18n`,
+  but the worktree now has 22 modified files for the first direct design-QA
+  follow-up. These changes are intentionally uncommitted and unpushed.
 - The earlier deployment confirmation referred to the staging test flow, not a
   completed production release. The planned development cleanup is complete,
   and the work now waits for design QA and the final release path.
@@ -82,7 +83,7 @@ Final follow-up commits:
   bundled locale JSON.
 - `lab/i18n/i18n.manifest.json` is the schema source for languages,
   namespaces, keys, and Sheet columns.
-- Current catalog: 1,469 keys across 20 files under
+- Current catalog: 1,497 keys across 20 files under
   `lab/src/i18n/locales/{en,ko}`.
 - Current namespaces: `gnb`, `sharedUi`, `dashboard`, `account`, `orders`,
   `shipping`, `settlements`, `patients`, `help`, and `linkTalk`.
@@ -101,7 +102,7 @@ Final follow-up commits:
 The two operational tabs are role-specific views of the same canonical message
 table, not independent datasets:
 
-- Both tabs contain exactly 1,469 data rows.
+- Both tabs contain exactly 1,497 data rows after the direct design-QA export.
 - Every message ID is unique and the ID sequence is identical in both tabs.
 - Shared fields are connected by formulas and have one owning tab rather than
   duplicated manual input.
@@ -139,7 +140,7 @@ Request ownership is explicit:
 
 Final Sheet read-back verified:
 
-- 1,469 unique IDs in each tab and identical row order
+- 1,497 unique IDs in each tab and identical row order
 - zero missing, stale, translation conflicts, misplaced requests, or role-view
   formula-link issues
 - nine developer requests and one PM/designer request preserved in both views
@@ -173,11 +174,11 @@ Service details:
 
 Completed verification:
 
-- `pnpm audit:i18n`: 1,469 keys, 1,469 reachable, zero unresolved keys, zero
+- `pnpm audit:i18n`: 1,497 keys, 1,497 reachable, zero unresolved keys, zero
   unknown literal keys, and zero review rows.
-- `pnpm export:i18n`: 1,469 local keys with zero missing, stale, conflicts,
+- `pnpm export:i18n`: 1,497 local keys with zero missing, stale, conflicts,
   role-view link issues, or misplaced review requests.
-- `pnpm check:i18n`: 1,469 keys verified across 20 locale files.
+- `pnpm check:i18n`: 1,497 keys verified across 20 locale files.
 - Font asset hashes match their existing Lab/Admin source files.
 - Clinic source and public assets contain zero remaining Lato references.
 - Clinic and Admin development roots returned HTTP 200.
@@ -196,6 +197,51 @@ Known local verification limit:
   errors including generated icon unused imports, stale stories, and missing
   legacy modules. All three consuming app typechecks pass, so no error was
   traced to the changed shared order-title component.
+
+## Design QA Follow-up In Progress — 2026-08-20
+
+Eight directly actionable DL-15676 child items are implemented locally and
+their translation source has been exported to the canonical Sheet:
+
+- DL-16010: translate the order-list status dropdown from known order-status
+  enum keys while retaining the API display name as the fallback.
+- DL-16011 and DL-16022: translate the shipping print menu, label/sticker
+  selection modal, control buttons, empty/search/list labels, unavailable-label
+  toast, and sticker size-setting modal. Printed label/sticker document content
+  remains excluded from this scope.
+- DL-16012: add the confirmed Korean line break to the shipping notice and make
+  the common popup description honor intentional newlines.
+- DL-16018: use the requested `mono.400` equivalent icon color for Lab's
+  Add New Patient action while preserving Clinic/Admin behavior.
+- DL-16020 and DL-16021: apply the requested Lab-only Change Status width and
+  Design Upload View left padding without changing Clinic/Admin rendering.
+- DL-16023: translate the remaining hardcoded Back action in the skip-design
+  flow.
+
+The Sheet export added 28 keys and intentionally updated the single confirmed
+`shipping.policy.description` Korean newline conflict. Current verification:
+
+- Lab, Clinic, and Admin typechecks pass.
+- `pnpm check:i18n` verifies 1,497 keys across 20 locale files.
+- `pnpm audit:i18n` reports all 1,497 keys reachable with zero unresolved or
+  unknown literal keys and zero Clinic regression candidates.
+- `git diff --check` passes.
+- `@dentlink/ui` full build remains blocked only by the broad pre-existing
+  generated-icon, story, missing legacy-module, and unused-code errors; no new
+  error was reported in the changed files.
+
+Do not implement the following three items until their missing decision or
+reproduction evidence is provided:
+
+- DL-16013: status chips currently encode English-oriented per-status fixed
+  widths in shared UI. Recommended direction is intrinsic width with fixed
+  horizontal padding and no wrap, but design must confirm exact spacing and
+  whether the rule is Lab-only or cross-service.
+- DL-16019: the current Step 4 Scan control already reads the `orders` i18n key
+  and both English/Korean values exist. Reproduce against the latest deployed
+  revision and identify the exact overlapping element before changing code.
+- DL-16024: the order-category popup needs the exact intended Korean line-break
+  position from design before changing the translation.
 
 ## Durable Operating Rules
 
@@ -220,7 +266,7 @@ to preserve existing work and respond to design QA; the user may resume and
 complete the capture catalog later.
 
 - 27 actual capture images exist.
-- 201 of 1,469 message keys are connected to a capture (about 14%).
+- 201 of 1,497 message keys are connected to a capture (about 13%).
 - 27 of 110 currently identified page/state groups have a capture (about 25%).
 - 83 currently identified page/state groups show `캡처 준비 중`.
 - A conservative overall completion estimate is 15–20% because modal,
