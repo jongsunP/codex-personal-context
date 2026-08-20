@@ -201,6 +201,13 @@ Treat the following as Dentlink's default company branch strategy:
 - Once a release is finalized, use the finalized release branch or its exact
   merge commits as the forward-propagation source, not the old feature branch.
 
+PR [#4512](https://github.com/Innvoaid/dentlink-client/pull/4512) is a concrete
+reference for this workflow: the small `DL-16004` change was implemented on
+`feature/DL-16004`, created from the current `origin/master`, and its delivery
+PR targets `release/v1.85.0` because that is its intended production version.
+This example teaches the separation between implementation base and delivery
+target; it does not mean the 1.85 release train is complete or frozen.
+
 For a long-lived feature branch that started from an older `master` and later
 absorbed newer `master` commits, inspect the target-release comparison before
 delivery. Confirm that its PR does not accidentally introduce unrelated
@@ -251,6 +258,10 @@ the strategy must be replaced. When helping with Dentlink branches:
 - For a feature created from `master` but delivered to a release branch, check
   the target-release diff and merged-result behavior; local feature validation
   alone does not prove the final release combination.
+- Treat merge/conflict simulations made while either the earlier release or the
+  later release is still receiving features as preliminary risk discovery, not
+  final integration approval. Re-run them after both release contents are
+  finalized, then resolve conflicts semantically and repeat integration QA.
 - When multiple releases are active, explicitly track every required forward
   propagation path and never rely on memory alone. Prefer automation or an
   explicit checklist for older release to newer release and finalized release

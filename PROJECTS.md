@@ -67,14 +67,17 @@ For detailed current state, read:
   `/Users/parkjongsun/repository/dentlink-client-i18n`
 - Branch: `feature/i18n`
 - Current state: staging verification is in progress at pushed head
-  `1d1b2fda1`. Lab Korean
+  `1d1b2fda1`, while the local worktree contains additional uncommitted i18n
+  work. Lab Korean
   i18n contains 1,464 keys; the two operational Sheet tabs are 1:1 role-based
   views with 1,464 identical message IDs and representative page values.
   Lab, Clinic, and Admin now share the Pretendard and letter-spacing policy;
   Clinic web and PDF were fully migrated from Lato. All three package versions
   are 1.84.0. Draft comparison PR #4461 currently targets `master`; the desired
   production target is `v1.84.0` on 2026-08-24, after which the finalized
-  release must propagate forward to `master` and `release/v1.85.0`.
+  release must propagate forward to `master` and `release/v1.85.0`. The 1.85
+  release is also still receiving features, so current conflict checks are
+  preliminary and must be repeated after both release contents are finalized.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`
 

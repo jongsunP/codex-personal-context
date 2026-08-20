@@ -12,7 +12,11 @@ take precedence if later work changes them.
 - Branch: `feature/i18n`, tracking `origin/feature/i18n`
 - Local and remote HEAD:
   `1d1b2fda1` (`ui: Clinic과 Admin Pretendard 폰트 정책 적용`).
-- The worktree is clean and matches the remote branch.
+- The local branch has no commit divergence from the remote branch, but the
+  worktree currently has 10 modified tracked files with 226 insertions and 31
+  deletions. This is active, uncommitted i18n follow-up work owned by its
+  separate feature session; do not discard, move, or modify it from the main
+  worktree session.
 - The earlier deployment confirmation referred to the staging test flow, not a
   completed production release. The user confirmed on 2026-08-20 that i18n is
   still under staging verification and remains in progress.
@@ -35,6 +39,36 @@ Current release integration plan:
 - Continue `v1.85.0` feature integration on its release branch. After that
   release is finalized and deployed, propagate `release/v1.85.0` back into
   `master`.
+- PR [#4512](https://github.com/Innvoaid/dentlink-client/pull/4512) is the
+  concrete current example of the normal delivery flow: the small DL-16004
+  implementation branch was created from current `origin/master`, while its
+  PR targets `release/v1.85.0` because that is its intended deployment train.
+  It is one feature in that release, not evidence that the 1.85 contents are
+  complete.
+
+## Preliminary Parallel-Release Risk Check — 2026-08-20
+
+This check was intentionally performed before either the i18n work for 1.84 or
+the complete 1.85 feature set was finalized. It is a planning checkpoint only,
+not merge approval or a request to integrate branches now.
+
+- At the check time, `origin/master` and `origin/release/v1.85.0` both pointed
+  to `9b57bec96`, while remote `feature/i18n` contained that master plus 22
+  commits.
+- PR #4512 has no overlapping files or Git conflict with remote i18n.
+- A simulated aggregate of the then-open 1.85 PRs followed by remote i18n
+  predicted four semantic conflict surfaces:
+  - `shared/ui/src/Order/OrderForm/OrderAdditionalInfoComponent/PatientPhotoConfirm.tsx`
+  - `shared/ui/src/OrderDetailUI/parts/BoxComponent/OrderDetailBoxAdditionalInfo.tsx`
+  - `shared/ui/src/OrderDetailUI/parts/BoxComponent/OrderDetailBoxTitle/OrderDetailBoxTitleDesktop.tsx`
+  - `shared/ui/src/OrderDetailUI/parts/BoxComponent/OrderDetailBoxTitle/OrderDetailBoxTitleMobile.tsx`
+- These conflicts appeared manageable, but resolving text conflicts alone is
+  not final proof. Preserve newer feature behavior, reapply translations only
+  to surviving UI, confirm the 1.85 version bump, and run integration QA after
+  the finalized 1.84 release is propagated into the finalized 1.85 contents.
+- Because both release contents and the local i18n work are still changing,
+  repeat the live graph, overlap, merge simulation, and QA assessment at the
+  actual integration point rather than relying on this snapshot.
 
 Final follow-up commits:
 
