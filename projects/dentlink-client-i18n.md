@@ -218,6 +218,11 @@ their translation source has been exported to the canonical Sheet:
 - DL-16023: translate the remaining hardcoded Back action in the skip-design
   flow.
 
+Jira status was changed to `진행 중` for all eight implemented cards:
+DL-16010, DL-16011, DL-16012, DL-16018, DL-16020, DL-16021, DL-16022, and
+DL-16023. Do not mark them complete until the changes are committed, deployed,
+and rechecked.
+
 The Sheet export added 28 keys and intentionally updated the single confirmed
 `shipping.policy.description` Korean newline conflict. Current verification:
 
