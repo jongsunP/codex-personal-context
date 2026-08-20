@@ -113,3 +113,16 @@ For detailed current state, read:
   mergeable이며 CodeRabbit 성공·미해결 thread 0개다. 동료 승인과 merge를 기다린다.
 - Personal current checkpoint:
   `projects/dentlink-client-linktalk-unread.md`
+
+### Dentlink Admin Invitation 필터
+
+- Shared repository: `https://github.com/Innvoaid/dentlink-client`
+- Dedicated worktree:
+  `/Users/parkjongsun/Repository/dentlink-client-invitation-filter`
+- Branch: `feature/DL-16004`
+- Jira: `DL-16004`
+- Current state: Admin 이메일 알림과 CRM 필터에 Invitation 옵션을 추가했고 사용자
+  로컬 기능 확인을 완료했다. PR #4512는 `release/v1.85.0` 대상으로 open,
+  mergeable이며 CodeRabbit 성공·미해결 review thread 0개다. 동료 승인을 기다린다.
+- Personal current checkpoint:
+  `projects/dentlink-client-admin-invitation-filter.md`
