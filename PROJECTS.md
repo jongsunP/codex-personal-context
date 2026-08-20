@@ -67,9 +67,9 @@ For detailed current state, read:
   `/Users/parkjongsun/repository/dentlink-client-i18n`
 - Branch: `feature/i18n`
 - Current state: design QA is in progress. The pushed head remains
-  `dc44bc492`, with eight directly actionable QA items implemented locally but
-  not yet committed or pushed. Lab Korean i18n now contains 1,497 keys; the
-  two operational Sheet tabs are 1:1 role-based views with 1,497 identical
+  `dc44bc492`, with fifteen directly actionable QA items implemented locally
+  in a 39-file uncommitted patch. Lab Korean i18n now contains 1,524 keys; the
+  two operational Sheet tabs are 1:1 role-based views with 1,524 identical
   message IDs, single-source request columns, and representative page values.
   Nine PM/design-to-developer requests and one developer-to-PM/design request
   are intentionally deferred. Capture expansion is paused while existing
@@ -81,8 +81,9 @@ For detailed current state, read:
   release must propagate forward to `master` and `release/v1.85.0`. The 1.85
   release is also still receiving features, so current conflict checks are
   preliminary and must be repeated after both release contents are finalized.
-  Three QA items remain decision/reproduction dependent: status-chip sizing,
-  the Step 4 Scan overlap report, and the order-category popup line break.
+  Five QA items remain decision/reproduction dependent: status-chip sizing,
+  the Step 4 Scan overlap report, the order-category popup line break, API
+  timeline localization ownership, and empty remake-status transitions.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`
 

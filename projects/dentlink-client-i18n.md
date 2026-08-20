@@ -13,8 +13,9 @@ take precedence if later work changes them.
 - Local and remote HEAD:
   `dc44bc492` (`fix: 다국어 시트 정합성과 누락 문구 보완`).
 - The pushed head still has no commit divergence from `origin/feature/i18n`,
-  but the worktree now has 22 modified files for the first direct design-QA
-  follow-up. These changes are intentionally uncommitted and unpushed.
+  but the worktree now has 39 changed files for the direct design-QA
+  follow-up: 38 modified files and one new file. These changes are
+  intentionally uncommitted and unpushed.
 - The earlier deployment confirmation referred to the staging test flow, not a
   completed production release. The planned development cleanup is complete,
   and the work now waits for design QA and the final release path.
@@ -83,7 +84,7 @@ Final follow-up commits:
   bundled locale JSON.
 - `lab/i18n/i18n.manifest.json` is the schema source for languages,
   namespaces, keys, and Sheet columns.
-- Current catalog: 1,497 keys across 20 files under
+- Current catalog: 1,524 keys across 20 files under
   `lab/src/i18n/locales/{en,ko}`.
 - Current namespaces: `gnb`, `sharedUi`, `dashboard`, `account`, `orders`,
   `shipping`, `settlements`, `patients`, `help`, and `linkTalk`.
@@ -102,7 +103,7 @@ Final follow-up commits:
 The two operational tabs are role-specific views of the same canonical message
 table, not independent datasets:
 
-- Both tabs contain exactly 1,497 data rows after the direct design-QA export.
+- Both tabs contain exactly 1,524 data rows after the latest design-QA export.
 - Every message ID is unique and the ID sequence is identical in both tabs.
 - Shared fields are connected by formulas and have one owning tab rather than
   duplicated manual input.
@@ -140,7 +141,7 @@ Request ownership is explicit:
 
 Final Sheet read-back verified:
 
-- 1,497 unique IDs in each tab and identical row order
+- 1,524 unique IDs in each tab and identical row order
 - zero missing, stale, translation conflicts, misplaced requests, or role-view
   formula-link issues
 - nine developer requests and one PM/designer request preserved in both views
@@ -200,8 +201,9 @@ Known local verification limit:
 
 ## Design QA Follow-up In Progress — 2026-08-20
 
-Eight directly actionable DL-15676 child items are implemented locally and
-their translation source has been exported to the canonical Sheet:
+Fifteen directly actionable DL-15676 child items are implemented locally and
+their translation source has been exported to the canonical Sheet. The first
+eight are:
 
 - DL-16010: translate the order-list status dropdown from known order-status
   enum keys while retaining the API display name as the fallback.
@@ -223,20 +225,53 @@ DL-16010, DL-16011, DL-16012, DL-16018, DL-16020, DL-16021, DL-16022, and
 DL-16023. Do not mark them complete until the changes are committed, deployed,
 and rechecked.
 
-The Sheet export added 28 keys and intentionally updated the single confirmed
-`shipping.policy.description` Korean newline conflict. Current verification:
+Seven additional directly actionable cards were then implemented:
+
+- DL-16048: keep Pending Approval and Pending Order on one line in the Lab
+  order-board copy while preserving the shared English fallback.
+- DL-16049: translate the print button, menu, and tooltip.
+- DL-16050: translate pickup status and weekday labels; the new
+  `lab/src/i18n/formatUiWeekday.ts` centralizes English/Korean weekday
+  formatting and safely handles invalid dates.
+- DL-16051: translate settlement-status dropdown labels.
+- DL-16052: keep the delivery-date label and icon adjacent and correct the
+  Korean Pending Order graph alignment. This remains a visual re-QA item.
+- DL-16055: vertically center the settlement currency badge.
+- DL-16059: translate invitation authority and role labels while leaving the
+  backend code values unchanged.
+
+Jira status was also changed to `진행 중` for DL-16048, DL-16049, DL-16050,
+DL-16051, DL-16052, DL-16055, and DL-16059. Do not mark any of the fifteen
+cards complete until the local patch is committed, deployed, and visually
+rechecked.
+
+The latest Sheet export synchronized 1,524 local keys and appended the 12 new
+rows missing from the Sheet. It reported zero stale rows, translation
+conflicts, role-view link issues, or misplaced review requests. Current
+verification:
 
 - Lab, Clinic, and Admin typechecks pass.
-- `pnpm check:i18n` verifies 1,497 keys across 20 locale files.
-- `pnpm audit:i18n` reports all 1,497 keys reachable with zero unresolved or
+- `pnpm check:i18n` verifies 1,524 keys across 20 locale files.
+- `pnpm audit:i18n` reports all 1,524 keys reachable with zero unresolved or
   unknown literal keys and zero Clinic regression candidates.
 - `git diff --check` passes.
+- Targeted Lab ESLint passes with zero errors. The shared-UI lint command is
+  blocked by the repository's existing duplicate Storybook ESLint plugin
+  resolution, not by a confirmed error in this patch.
 - `@dentlink/ui` full build remains blocked only by the broad pre-existing
   generated-icon, story, missing legacy-module, and unused-code errors; no new
   error was reported in the changed files.
 
-Do not implement the following three items until their missing decision or
-reproduction evidence is provided:
+The full draft PR comparison was also reviewed through structural audit and
+targeted inspection of risk-heavy changes. No confirmed business-logic, API
+payload, or Clinic/Admin localization regression was found. Shared UI still
+uses Lab's provider bridge, while consumers without the provider retain their
+English `defaultValue`. This is not a claim that every state in the 553-file
+PR was visually inspected; final assembled-release and visual QA remain
+required.
+
+Do not implement the following five items until their missing decision,
+scope, or reproduction evidence is provided:
 
 - DL-16013: status chips currently encode English-oriented per-status fixed
   widths in shared UI. Recommended direction is intrinsic width with fixed
@@ -247,6 +282,13 @@ reproduction evidence is provided:
   revision and identify the exact overlapping element before changing code.
 - DL-16024: the order-category popup needs the exact intended Korean line-break
   position from design before changing the translation.
+- DL-16053: timeline title and description are complete prose strings from the
+  API. Decide whether the backend localizes them or exposes structured codes;
+  parsing arbitrary API prose in the frontend is not recommended.
+- DL-16054: the remake order-status modal can open with no available
+  transition. The current transition logic is unchanged from `master`, so
+  decide whether to hide or disable the button when empty, or identify which
+  transition the remake order should expose.
 
 ## Durable Operating Rules
 
@@ -271,7 +313,9 @@ to preserve existing work and respond to design QA; the user may resume and
 complete the capture catalog later.
 
 - 27 actual capture images exist.
-- 201 of 1,497 message keys are connected to a capture (about 13%).
+- 201 of the then-current 1,497 message keys were connected to a capture
+  (about 13%). The catalog has since grown to 1,524 keys, so refresh this
+  denominator before resuming capture work.
 - 27 of 110 currently identified page/state groups have a capture (about 25%).
 - 83 currently identified page/state groups show `캡처 준비 중`.
 - A conservative overall completion estimate is 15–20% because modal,
@@ -283,8 +327,9 @@ was changed during the measurement.
 
 ## Remaining Delivery Work
 
-Pause at the current local design-QA checkpoint and wait for the user to return
-with designer answers for DL-16013, DL-16019, and DL-16024. Ask for:
+Resume from the current uncommitted 39-file design-QA checkpoint. First obtain
+the missing product/design answers for DL-16013, DL-16019, DL-16024, DL-16053,
+and DL-16054:
 
 - DL-16013: auto-width versus fixed-width status chips, exact horizontal
   spacing and single-line rule, and Lab-only versus cross-service scope.
@@ -292,10 +337,16 @@ with designer answers for DL-16013, DL-16019, and DL-16024. Ask for:
   selected data, and deployed revision because the current source already
   translates Scan.
 - DL-16024: the exact Korean sentence and intended line-break position.
+- DL-16053: whether API timeline prose is localized by the backend or replaced
+  with structured event codes for frontend translation.
+- DL-16054: whether an empty transition list should hide/disable Change Status,
+  or which remake transition is expected for order `7000004865`.
 
-After those answers, implement only the confirmed three corrections, rerun the
-cross-service and i18n checks, and request explicit authorization before
-committing or pushing the 22-file product change set. The nine
+After those answers, implement only the confirmed corrections. Deploy the full
+local QA patch to development or staging and visually recheck the fifteen
+cards already marked `진행 중`, especially DL-16052, DL-16055, and DL-16059.
+Then rerun the cross-service and i18n checks and request explicit authorization
+before committing or pushing the 39-file product change set. The nine
 `개발자에게 확인 요청` rows and one `PM·디자이너에게 확인 요청` row are deferred
 human decisions, not code blockers. The remaining PM/design request concerns
 the `Additional Information` heading; clear it only after the latest Korean
