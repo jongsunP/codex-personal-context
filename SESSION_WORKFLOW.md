@@ -220,6 +220,29 @@ deployment, and forward propagation as distinct states. Planned release dates
 and active branch heads are time-sensitive and must be verified from live Git
 and PR state before acting.
 
+Use this normal post-PR delivery loop for Dentlink feature work:
+
+1. If CodeRabbit creates review threads and the user asks Codex to handle the
+   review, apply the complete review-cycle authority defined in `AGENTS.md`:
+   verify each finding, fix valid findings, keep the code unchanged with a
+   concise technical rationale for findings that should not be applied, resolve
+   every handled thread, run proportionate checks, push the authorized fixes,
+   and recheck for newly created unresolved threads.
+2. If there is no CodeRabbit review, or that cycle is complete, the PR waits for
+   a teammate's approval. Do not describe this waiting state as merge-ready
+   approval, and do not merge on the user's behalf without an explicit merge
+   instruction.
+3. After teammate approval, the user or team merges the feature PR into its
+   target release branch. This proves release inclusion, not staging QA or
+   production deployment.
+4. Test the feature as part of the assembled release on staging. Only after the
+   release QA is complete does that release proceed to production deployment.
+
+For PR #4512 specifically, the absence of a separate CodeRabbit review means
+the next expected state is teammate approval, followed by merge into
+`release/v1.85.0`, testing as part of the assembled 1.85 staging release, and
+then production deployment when the release passes its completion criteria.
+
 ### Terminology And Prior Experience
 
 The closest well-known label for the current Dentlink model is a
