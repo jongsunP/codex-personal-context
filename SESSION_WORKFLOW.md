@@ -182,8 +182,9 @@ user's authorization boundaries.
 
 Treat the following as Dentlink's default company branch strategy:
 
-- `master` is the latest integration baseline and ultimately receives every
-  finalized release.
+- `master` is the latest shared base and the final accumulator of completed
+  releases. Active release work may not yet be present in `master`, so do not
+  equate it with the union of every in-progress change.
 - `feature/*` branches are the only normal implementation branches.
 - `release/vX.Y.Z` branches are deployment-only release trains cut from
   `master`; they are not feature-development branches.
@@ -211,6 +212,58 @@ Keep Draft PR, staging deployment, staging QA, release merge, production
 deployment, and forward propagation as distinct states. Planned release dates
 and active branch heads are time-sensitive and must be verified from live Git
 and PR state before acting.
+
+### Terminology And Prior Experience
+
+The closest well-known label for the current Dentlink model is a
+`GitLab Flow`-inspired, master-centered parallel Release Train with environment
+branches. It is a valid customized branching strategy, not a broken use of Git,
+but it has more synchronization overhead than GitHub Flow or a short-lived
+release model.
+
+Do not call the current model classic `Git Flow`:
+
+- Classic Git Flow uses a long-lived `develop` integration branch, creates
+  `feature/*` from `develop`, cuts short-lived release branches from `develop`,
+  and merges a finished release into both `master` and `develop`.
+- The user previously worked in a company that followed this conventional Git
+  Flow shape. Jenkins deployed feature or development builds for testing, a
+  short-lived release branch collected completed features immediately before
+  production, and `master` recorded the production release. An alpha
+  environment existed but was not a mandatory promotion stage.
+- In current Dentlink usage, branches named `develop` and `stage` primarily
+  drive one development server and one staging server. They are environment
+  branches, not equivalents of classic Git Flow's `develop` integration
+  authority. Stable product history remains `feature -> release -> master`.
+
+### Assistance Rules For Parallel Releases
+
+The user's goal in discussing this strategy is accurate terminology and safer
+operation within the company's existing environment, not an assumption that
+the strategy must be replaced. When helping with Dentlink branches:
+
+- Accept the strategy as legitimate when its scheduled-release and staging-QA
+  needs justify it, while explaining concrete risks without presenting them as
+  proof that the strategy itself is invalid.
+- Before creating a feature branch or PR, verify the intended release version,
+  the live base and target heads, their merge base, and whether the target has
+  diverged from `master`.
+- For a feature created from `master` but delivered to a release branch, check
+  the target-release diff and merged-result behavior; local feature validation
+  alone does not prove the final release combination.
+- When multiple releases are active, explicitly track every required forward
+  propagation path and never rely on memory alone. Prefer automation or an
+  explicit checklist for older release to newer release and finalized release
+  to `master`.
+- Treat omission as a first-class risk: conflicts are visible, but a change
+  absent from the next release may merge and deploy without an error.
+- Keep environment branches from becoming an independent product history.
+  Prefer deploying an identified release commit or artifact, and verify the
+  actual deployed revision before reporting an environment as current.
+- Recommend short release lifetimes, a clear feature freeze, protected release
+  branches, release tags, a defined hotfix path, and re-QA after forward merges.
+  These are safeguards for the current strategy, not an instruction to replace
+  it unless the user requests a redesign.
 
 ## Start Or Resume Workflow
 
