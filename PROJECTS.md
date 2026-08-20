@@ -126,3 +126,18 @@ For detailed current state, read:
   mergeable이며 CodeRabbit 성공·미해결 review thread 0개다. 동료 승인을 기다린다.
 - Personal current checkpoint:
   `projects/dentlink-client-admin-invitation-filter.md`
+
+### Dentlink 주문 피드백 수집
+
+- Shared repository: `https://github.com/Innvoaid/dentlink-client`
+- Dedicated worktree:
+  `/Users/parkjongsun/Repository/dentlink-client-order-feedback`
+- Branch: `feature/DL-15828`
+- Jira: parent `DL-15828`
+- Current state: Jira/Notion/Figma 기반 1차 FE 플래닝과 하위 카드 재구성을
+  완료했다. 공통 API·상태 관리와 첫 앱 작업의 기술 검증을 별도 카드로 분리했으며,
+  앱을 제외한 산정은 플래닝 포함 5 points다. 앱 기술 검증과 구현은 미산정이다.
+  `origin/master` 기준 전용 worktree와 의존성/Husky 준비는 완료했지만 제품 코드는
+  아직 수정하지 않았고 feature branch도 원격에 push하지 않았다.
+- Personal current checkpoint:
+  `projects/dentlink-client-order-feedback.md`
