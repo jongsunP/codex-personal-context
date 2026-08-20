@@ -24,7 +24,33 @@ Jira·FigJam·Figma의 실제 내용은 접근 가능한 도구로 다시 읽은
 간주한다. 이 체크포인트는 사용자가 제공한 범위와 현재 코드·Git에서 검증한 사실을
 기록한다.
 
-## 최신 체크포인트 — 2026-08-13
+## 최종 완료 체크포인트 — 2026-08-20
+
+- 사용자가 DL-15223 DSO 대시보드 관련 실제 개발 범위가 모두 완료되고 `master`까지
+  반영됐음을 확정했다. 이후 작업은 이 기능의 연속 작업이 아니라 신규 요구 또는
+  회귀가 생길 때만 별도 작업으로 시작한다.
+- live Git에서 `origin/master` `9b57bec96`에 최종 Advanced Export 선택 제한 UI의
+  squash commit `a974c9363`이 포함된 것을 확인했다.
+  - PR [#4505](https://github.com/Innvoaid/dentlink-client/pull/4505):
+    `feature/DL-15223-advanced-export-limit-ui -> release/v1.83.0`, merge 완료
+  - Advanced Export의 Office 최대 5개 제한은 기존 API 계약과 상태 변경 차단을
+    유지하고, 5개 선택 이후 미선택 항목과 내부 Checkbox를 실제 disabled 상태로
+    표시하도록 보완했다.
+  - Organization Dentist 목록은 페이지네이션 없이 Organization 전체 활성
+    치과의사를 조회한다. 선택적 `name` 파라미터는 현재 사용하지 않고 이미 받은 전체
+    목록을 Combobox에서 로컬 검색한다.
+- 로컬 정리를 완료했다.
+  - 전용 worktree `/Users/parkjongsun/Repository/dentlink-client-dso` 제거
+  - 로컬 `feature/DL-15223-advanced-export-limit-ui`, `release/v1.83.0` 삭제
+  - 원격 `origin/feature/DL-15223-advanced-export-limit-ui`와
+    `origin/release/v1.83.0`은 사용자 요청대로 유지
+  - 별도 i18n worktree와 `feature/i18n`은 이번 정리 범위가 아니므로 유지
+- 현재 알려진 DSO FE 구현·API 연결·QA 후속 개발 항목은 없다. 다음에 DSO 신규
+  요구가 생기면 최신 `master`를 갱신하고 `feature/` prefix의 새 브랜치와 전용
+  worktree에서 시작한다. 이 문서 아래의 과거 대기·진행 상태는 이력이며 현재 상태로
+  해석하지 않는다.
+
+## 이전 체크포인트 — 2026-08-13
 
 - 마지막으로 확인된 추가 FE 카드 `DL-15964`를 구현하고 Jira를
   `Ready for Deploy`로 이동했다.
