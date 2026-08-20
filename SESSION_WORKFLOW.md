@@ -139,6 +139,13 @@ main session created or manages its branch.
 
 For each substantial new feature, use this flow when the user requests it:
 
+Before applying this dedicated-worktree flow, assess the verified change
+surface. When the task is clearly very small and localized, first ask the user
+whether to work on a `feature/<Jira>` branch in the main checkout without a
+separate worktree. Do not create the worktree until the user answers. If a
+dedicated worktree has already been created, keep it unless the user asks for
+cleanup.
+
 1. Verify that the main worktree is clean and fetch the remote. For ordinary
    new Dentlink feature work, use the current `origin/master` commit as the
    default base unless the user explicitly names another base; synchronize the
