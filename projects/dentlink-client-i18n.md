@@ -1,10 +1,10 @@
-# Dentlink i18n and typography closeout — 2026-08-19
+# Dentlink i18n and typography delivery checkpoint — 2026-08-20
 
-This is the durable closeout source for the Dentlink Lab i18n, operational
+This is the durable delivery checkpoint for the Dentlink Lab i18n, operational
 Sheet, and cross-service Pretendard work. Live Git and Google Sheet state still
 take precedence if later work changes them.
 
-## Final Delivery State
+## Current Delivery State
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
 - Dedicated worktree:
@@ -13,10 +13,28 @@ take precedence if later work changes them.
 - Local and remote HEAD:
   `1d1b2fda1` (`ui: Clinic과 Admin Pretendard 폰트 정책 적용`).
 - The worktree is clean and matches the remote branch.
-- The user confirmed on 2026-08-19 that deployment was completed. This is a
-  user-confirmed operational fact; the final deployment revision was not
-  independently queried in this closeout.
+- The earlier deployment confirmation referred to the staging test flow, not a
+  completed production release. The user confirmed on 2026-08-20 that i18n is
+  still under staging verification and remains in progress.
 - Current package version in Lab, Clinic, and Admin: `1.84.0`.
+
+Current release integration plan:
+
+- Draft PR [#4461](https://github.com/Innvoaid/dentlink-client/pull/4461)
+  is currently open and clean as `feature/i18n -> master`; it is a temporary
+  comparison PR, not yet the final release PR.
+- The desired production release is `v1.84.0`, planned for Monday,
+  2026-08-24. As of the 2026-08-20 live Git check,
+  `origin/release/v1.84.0` does not yet exist, so final release-branch wiring
+  remains pending.
+- `release/v1.85.0` is the following release train, planned for Monday,
+  2026-08-31.
+- After i18n is finalized as `release/v1.84.0`, propagate the finalized release
+  forward into both `master` and `release/v1.85.0`. Do not use the historical
+  `feature/i18n` branch as the propagation source after release finalization.
+- Continue `v1.85.0` feature integration on its release branch. After that
+  release is finalized and deployed, propagate `release/v1.85.0` back into
+  `master`.
 
 Final follow-up commits:
 
@@ -159,10 +177,13 @@ Known local verification limits:
 - `service-account.json` remains local and ignored. Grant Sheet edit permission
   only for an explicitly authorized write.
 
-## Closeout
+## Remaining Delivery Work
 
-There is no remaining requested implementation, commit, or push for this work.
-The feature branch is clean, remote-backed, versioned at 1.84.0, and the user
-confirmed deployment. Optional repository maintenance outside this scope is to
-fix the existing PNG module declaration/typecheck failure and create the
+This work is not production-closeout complete. Continue staging verification,
+finish any remaining i18n work, create or select the final `release/v1.84.0`
+delivery path, and recheck the complete PR diff against that release before
+merging. After the 1.84 release is finalized, forward-propagate it to `master`
+and `release/v1.85.0` and distinguish that integration QA from the current
+staging QA. Optional repository maintenance outside the feature scope is to
+fix the PNG module declaration/typecheck environment issue and create the local
 coverage baseline required by the standard push hook.

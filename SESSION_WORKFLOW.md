@@ -178,6 +178,40 @@ master-related work, while each feature session owns edits, checks, commits,
 pushes, and PR work inside only its assigned worktree and only within the
 user's authorization boundaries.
 
+## Dentlink Release-Train Branch Strategy
+
+Treat the following as Dentlink's default company branch strategy:
+
+- `master` is the latest integration baseline and ultimately receives every
+  finalized release.
+- `feature/*` branches are the only normal implementation branches.
+- `release/vX.Y.Z` branches are deployment-only release trains cut from
+  `master`; they are not feature-development branches.
+- A feature PR targets the release branch for its intended deployment version.
+  The target expresses the planned release, but inclusion is not confirmed
+  until the PR is merged.
+- Multiple upcoming release branches may be active at the same time. When an
+  earlier release is finalized, propagate it forward into `master` and every
+  later active release branch so the later release remains cumulative.
+- Propagation moves only forward: older release to newer release, and finalized
+  release to `master`. Never merge a later release backward into an older one.
+- After a later release finishes its own feature work and deployment, propagate
+  that finalized release back into `master` as well.
+- Once a release is finalized, use the finalized release branch or its exact
+  merge commits as the forward-propagation source, not the old feature branch.
+
+For a long-lived feature branch that started from an older `master` and later
+absorbed newer `master` commits, inspect the target-release comparison before
+delivery. Confirm that its PR does not accidentally introduce unrelated
+changes newer than that release cut. If it does, create a clean delivery branch
+from the intended release and transfer only the intended changes, then repeat
+release QA.
+
+Keep Draft PR, staging deployment, staging QA, release merge, production
+deployment, and forward propagation as distinct states. Planned release dates
+and active branch heads are time-sensitive and must be verified from live Git
+and PR state before acting.
+
 ## Start Or Resume Workflow
 
 When the user asks to start, resume, continue, or pick up work, follow the
