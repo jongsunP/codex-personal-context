@@ -243,6 +243,22 @@ applying them.
   Before committing, compare feature-owned conflict files with the pre-merge
   first parent and verify that the base commit is an ancestor of the result.
 
+## Dentlink Story Point Estimation
+
+Dentlink uses a time-based story-point convention rather than Fibonacci-style
+relative complexity.
+
+- `1 point` means one developer working day: 6 hours of planned implementation
+  work, with the remaining 2 hours of an 8-hour day kept as normal buffer.
+- Use `0.5 point` for about 3 hours and `0.25 point` for about 1.5 hours.
+- Use the same proportional scale for work longer than one day, such as `1.5`
+  for about 9 hours and `2` for about 12 hours.
+- Estimate Jira FE work in this unit by default. Do not translate a conventional
+  Fibonacci estimate such as 3, 5, or 8 directly into Dentlink story points.
+- Treat Codex estimates as drafts when API, design, native-app ownership, or
+  another material dependency is unresolved, and state what could change the
+  estimate so the user can make the final adjustment.
+
 ## Figma And QA
 
 - Inspect the provided node and sibling variants for desktop, mobile, long
