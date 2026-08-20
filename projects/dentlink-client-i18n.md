@@ -283,8 +283,19 @@ was changed during the measurement.
 
 ## Remaining Delivery Work
 
-The planned code and Sheet maintenance is complete at `dc44bc492`. Wait for
-design QA, then apply only confirmed design corrections. The nine
+Pause at the current local design-QA checkpoint and wait for the user to return
+with designer answers for DL-16013, DL-16019, and DL-16024. Ask for:
+
+- DL-16013: auto-width versus fixed-width status chips, exact horizontal
+  spacing and single-line rule, and Lab-only versus cross-service scope.
+- DL-16019: the exact overlapping element plus screenshot, route, viewport,
+  selected data, and deployed revision because the current source already
+  translates Scan.
+- DL-16024: the exact Korean sentence and intended line-break position.
+
+After those answers, implement only the confirmed three corrections, rerun the
+cross-service and i18n checks, and request explicit authorization before
+committing or pushing the 22-file product change set. The nine
 `개발자에게 확인 요청` rows and one `PM·디자이너에게 확인 요청` row are deferred
 human decisions, not code blockers. The remaining PM/design request concerns
 the `Additional Information` heading; clear it only after the latest Korean
