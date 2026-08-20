@@ -139,24 +139,30 @@ main session created or manages its branch.
 
 For each substantial new feature, use this flow when the user requests it:
 
-1. Verify that the main worktree is clean and synchronize `master` with its
-   remote using a fast-forward-only path.
+1. Verify that the main worktree is clean and fetch the remote. For ordinary
+   new Dentlink feature work, use the current `origin/master` commit as the
+   default base unless the user explicitly names another base; synchronize the
+   local `master` only through a fast-forward-only path.
 2. Confirm that the requested feature branch and folder do not already exist.
-3. Create one dedicated `feature/*` branch and one sibling worktree from the
-   requested base, then push the new branch and set its correct upstream when
-   the user requests remote setup.
-4. Create or open a separate Codex project and session rooted at that feature
+3. Before creating or editing anything, inspect the Jira card, its parent,
+   children, comments, and accessible linked sources together with the closest
+   current production code. Report the understood scope, evidence gaps, and
+   only the questions that materially affect implementation.
+4. Create one dedicated `feature/<Jira>` branch and one sibling worktree from
+   the requested or default base, then push the new branch and set its correct
+   upstream when the user requests remote setup.
+5. Create or open a separate Codex project and session rooted at that feature
    worktree. Treat that session as the sole implementation scope for the
    feature.
-5. From the main session, give the feature session a copyable startup prompt
+6. From the main session, give the feature session a copyable startup prompt
    containing the user's common working style, personal-context read order,
    repository and permission boundaries, validation/reporting rules, exact
    worktree/branch/upstream/HEAD state, and any relevant local-environment
    warnings.
-6. Leave Jira requirements, Figma nodes, and the actual implementation request
+7. Leave Jira requirements, Figma nodes, and the actual implementation request
    for the user to provide directly in the feature session. Do not invent them
    in the bootstrap prompt.
-7. After delivery is merged and the user asks for cleanup, verify the feature
+8. After delivery is merged and the user asks for cleanup, verify the feature
    worktree is clean and its commits are preserved remotely or merged before
    removing the local worktree and branch.
 
