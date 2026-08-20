@@ -331,6 +331,11 @@ Resume from the current uncommitted 39-file design-QA checkpoint. First obtain
 the missing product/design answers for DL-16013, DL-16019, DL-16024, DL-16053,
 and DL-16054:
 
+- Designer confirmation: DL-16013 and DL-16024.
+- Exact reproduction evidence: DL-16019.
+- Product/backend behavior or localization ownership decision: DL-16053 and
+  DL-16054.
+
 - DL-16013: auto-width versus fixed-width status chips, exact horizontal
   spacing and single-line rule, and Lab-only versus cross-service scope.
 - DL-16019: the exact overlapping element plus screenshot, route, viewport,

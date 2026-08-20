@@ -83,7 +83,9 @@ For detailed current state, read:
   preliminary and must be repeated after both release contents are finalized.
   Five QA items remain decision/reproduction dependent: status-chip sizing,
   the Step 4 Scan overlap report, the order-category popup line break, API
-  timeline localization ownership, and empty remake-status transitions.
+  timeline localization ownership, and empty remake-status transitions. These
+  divide into two designer confirmations, one reproduction case, and two
+  product/backend decisions.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`
 
