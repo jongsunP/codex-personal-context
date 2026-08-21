@@ -28,9 +28,11 @@ take precedence if later work changes them.
   release, stage, or production master.
 - On 2026-08-21, remote `stage` was deliberately deleted and recreated from
   `origin/master` at `9b57bec96`. Deployment PR
-  [#4523](https://github.com/Innvoaid/dentlink-client/pull/4523) is open as
-  `release/v1.84.0 -> stage`, with head `6e28e4d75`. It prepares staging
-  deployment only and has not been merged in this checkpoint.
+  [#4523](https://github.com/Innvoaid/dentlink-client/pull/4523) merged
+  `release/v1.84.0 -> stage` at `3607210d0`. The user initiated staging
+  deployment. At this checkpoint, the Lab, Clinic/Office, and Admin stage
+  workflows for that SHA are all running; deployment completion is not yet
+  verified.
 - Current package version in Lab, Clinic, and Admin: `1.84.0`.
 
 Current release integration plan:
@@ -38,8 +40,8 @@ Current release integration plan:
 - The production train is `release/v1.84.0`; it has not yet been merged into
   `master`, so production completion must not be inferred from the staging
   deployment.
-- PR #4522 is already in `release/v1.84.0`. Merge PR #4523 to deploy that
-  current release tree to stage.
+- PR #4522 is already in `release/v1.84.0`, and PR #4523 has merged that current
+  release tree into `stage` for staging deployment.
 - If the QA fixes in `095f503bc` must ship, first merge them into
   `release/v1.84.0` through a separate follow-up PR and then refresh the
   release-to-stage deployment. Do not assume PR #4523 contains that commit.
@@ -366,6 +368,22 @@ complete.
 - `service-account.json` remains local and ignored. Grant Sheet edit permission
   only for an explicitly authorized write.
 
+### Staging release deployment
+
+- The deployment branch is `stage`, never `staging`.
+- To deploy an assembled release, delete remote `stage`, recreate remote
+  `stage` from the exact current `origin/master`, and open
+  `release/vX.Y.Z -> stage`. Merge that PR to trigger staging deployment.
+- This reset-and-PR flow is intentional. The Lab, Clinic, and Admin staging
+  workflows listen to pushes on `stage` but each has a path filter limited to
+  its own top-level service directory. A commit that changes only `shared/**`
+  does not by itself trigger those consuming-service deployments. Comparing
+  the full release against a fresh master-based `stage` preserves the relevant
+  service-level release diff and starts the upper-service workflows.
+- Recheck remote refs and ensure no open PR still targets the old `stage` before
+  deleting it. Never infer deployment success from the PR merge alone; verify
+  the applicable GitHub Actions runs separately.
+
 ## Capture Progress Snapshot — 2026-08-20
 
 Capture expansion is temporarily paused, not cancelled. The current priority is
@@ -387,12 +405,12 @@ was changed during the measurement.
 
 ## Remaining Delivery Work
 
-The current release tree is ready for a new staging deployment through open PR
-#4523 (`release/v1.84.0 -> stage`). The remote `stage` base was recreated from
-`origin/master` before opening that PR. This is still not production-closeout
-complete: merge the final release into `master` only after assembled-release
-staging QA, then propagate the finalized 1.84 release into
-`release/v1.85.0`.
+PR #4523 (`release/v1.84.0 -> stage`) is merged after recreating remote `stage`
+from `origin/master`. The Lab, Clinic/Office, and Admin stage workflows started
+for merge SHA `3607210d0` and were still running at this checkpoint. This is
+still not production-closeout complete: verify those workflow results and
+assembled-release staging QA before merging the final release into `master`,
+then propagate the finalized 1.84 release into `release/v1.85.0`.
 
 The QA follow-up commit `095f503bc` is clean and pushed on
 `feature/i18n-maintenance`, but it was created after PR #4522 was merged. It
