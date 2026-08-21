@@ -14,9 +14,9 @@ take precedence if later work changes them.
   `61d6f7c55` (`[DL-16013] fix: 상태 뱃지 모드별 스타일 호환성 보완`).
 - The direct design-QA follow-up is committed and pushed. The worktree is
   clean and matches `origin/feature/i18n`.
-- The earlier deployment confirmation referred to the staging test flow, not a
-  completed production release. The planned development cleanup is complete,
-  and the work now waits for design QA and the final release path.
+- The latest `stage` deployment is complete by user confirmation. This is a
+  staging-server checkpoint, not a completed production release; the work now
+  waits for deployed-screen QA and the final release path.
 - Current package version in Lab, Clinic, and Admin: `1.84.0`.
 
 Current release integration plan:
@@ -27,9 +27,11 @@ Current release integration plan:
 - The mistaken remote `staging` branch and the old `stage` branch were removed.
   Remote `stage` was recreated directly from current `origin/master` at
   `9b57bec96`. Deployment PR
-  [#4516](https://github.com/Innvoaid/dentlink-client/pull/4516) now targets
-  `stage` from `feature/i18n` and is mergeable. PR #4515 is the already-merged
-  historical PR to the mistaken `staging` branch.
+  [#4516](https://github.com/Innvoaid/dentlink-client/pull/4516) was merged from
+  `feature/i18n` into `stage` as `fee7a145f`, and the user confirmed the
+  staging deployment completed. PR #4515 is the already-merged historical PR
+  to the mistaken `staging` branch. The staging-server branch name is exactly
+  `stage`; never infer `staging` from the environment name.
 - The desired production release is `v1.84.0`, planned for Monday,
   2026-08-24. As of the 2026-08-20 live Git check,
   `origin/release/v1.84.0` does not yet exist, so final release-branch wiring
@@ -360,17 +362,16 @@ was changed during the measurement.
 
 ## Remaining Delivery Work
 
-The code and Sheet work is committed and pushed. PR #4516 is clean and
-mergeable as the `stage` deployment path from `feature/i18n`; once deployed,
-visually recheck the cards already marked `Ready for Deploy`, especially
+The code and Sheet work is committed and pushed. PR #4516 was merged into
+`stage`, and the user confirmed the staging deployment completed. Visually
+recheck the cards already marked `Ready for Deploy`, especially
 DL-16013, DL-16052, DL-16055, DL-16059, and the DL-16019 Others state.
 DL-16053 and DL-16080 still require a product/design or API-scope answer in
 this web scope. DL-16072 is complete as `리메이크`; app QA remains on separate
 cards outside this worktree. Capture expansion remains paused.
 
-This is still not production-closeout complete. The latest follow-up commit is
-pushed but deployment of that exact revision is not yet confirmed. Create or
-select the final `release/v1.84.0` delivery path, recheck the complete PR diff
+This is still not production-closeout complete. Create or select the final
+`release/v1.84.0` delivery path, recheck the complete PR diff
 against that release, and run assembled-release QA before merging. After the
 1.84 release is finalized, forward-propagate it to `master` and
 `release/v1.85.0`.

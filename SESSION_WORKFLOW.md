@@ -265,6 +265,10 @@ Do not call the current model classic `Git Flow`:
   drive one development server and one staging server. They are environment
   branches, not equivalents of classic Git Flow's `develop` integration
   authority. Stable product history remains `feature -> release -> master`.
+- The exact staging-server branch name is `stage`, not `staging`. Before
+  deleting, recreating, or targeting an environment branch, verify the live
+  remote refs and documented deployment convention; do not derive a branch
+  name from the environment label alone.
 
 ### Assistance Rules For Parallel Releases
 

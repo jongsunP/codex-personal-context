@@ -88,8 +88,10 @@ For detailed current state, read:
   DL-16053 and new DL-16080 remain `진행 중` because their displayed prose and
   button labels come from API templates and need an explicit scope decision.
   The mistaken remote `staging` branch was removed. Remote `stage` was
-  recreated from `origin/master` at `9b57bec96`, and clean PR #4516 targets it
-  from `feature/i18n` for deployment verification.
+  recreated from `origin/master` at `9b57bec96`; PR #4516 was merged as
+  `feature/i18n -> stage` at `fee7a145f`, and the user confirmed the staging
+  deployment completed. Dentlink's exact staging-server branch is `stage`, not
+  `staging`.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`
 
