@@ -146,10 +146,12 @@ For detailed current state, read:
   `/Users/parkjongsun/Repository/dentlink-client-order-feedback`
 - Branch: `feature/DL-15828`
 - Jira: parent `DL-15828`
-- Current state: Jira/Notion/Figma 기반 1차 FE 플래닝과 하위 카드 재구성을
-  완료했다. 공통 API·상태 관리와 첫 앱 작업의 기술 검증을 별도 카드로 분리했으며,
-  앱을 제외한 산정은 플래닝 포함 5 points다. 앱 기술 검증과 구현은 미산정이다.
-  `origin/master` 기준 전용 worktree와 의존성/Husky 준비는 완료했지만 제품 코드는
-  아직 수정하지 않았고 feature branch도 원격에 push하지 않았다.
+- Current state: 최신 Figma 기준 Clinic PC·모바일 웹 UI 1차 구현을 완료했다.
+  `/my/feedback`, 마이페이지 Quick Links·My Office 모달, 목록·상세 입력, 주문 상세
+  피드백 배너와 API 교체 가능한 mock/query 경계가 commit `0e35c3f71`로
+  `origin/feature/DL-15828`에 push되어 있다. Clinic 타입·프로덕션 빌드와 실제
+  브라우저 QA를 통과했지만, 배포 Swagger에는 아직 주문 피드백 계약이 없어 실제
+  API·eligibility·pagination/count 연동은 대기 중이다. 앱을 제외한 산정은 관리자
+  임시 0.5점을 포함해 5.5 points이며 앱 기술 검증·구현·알림은 미산정이다.
 - Personal current checkpoint:
   `projects/dentlink-client-order-feedback.md`

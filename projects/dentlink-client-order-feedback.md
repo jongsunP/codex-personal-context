@@ -20,7 +20,7 @@
   피드백 자체의 앱 알림 작업은 `DL-16066`에서 별도로 추적하되, 스펙 확정
   전까지 미산정 상태로 둔다.
 
-## 현재 체크포인트 — 2026-08-20
+## 준비 당시 체크포인트 — 2026-08-20
 
 - 전용 worktree:
   `/Users/parkjongsun/Repository/dentlink-client-order-feedback`
@@ -34,6 +34,85 @@
 - 설치는 성공했으며 `shared/configs`와 `shared/models`의 순환 workspace 의존성과
   optional `canvas@2.11.2` 설치 생략 경고만 있었다.
 - 제품 코드 수정, project commit/push, PR, 신규 구현 세션은 아직 없다.
+
+## 현재 구현 체크포인트 — 2026-08-21
+
+- product branch/HEAD:
+  `feature/DL-15828` / `0e35c3f714c07f3c731a722d997a0b05d53214ce`
+  (`[DL-15828] feat: 주문 피드백 웹 화면 구현`)
+- upstream: `origin/feature/DL-15828`; 로컬 HEAD와 원격 ref가 동일하다.
+- worktree: commit과 push 후 clean이다.
+- PR은 생성하지 않았다.
+- 최신 `origin/master`는 준비 당시와 동일한 `9b57bec96`였으며, 기능 commit은 그
+  기준으로 생성했다.
+
+### 구현 완료 범위
+
+- Clinic 마이페이지를 최신 Figma 구조로 맞추고 `Quick Links`에
+  `Pending Reviews (count)`와 `My Office` 진입점을 추가했다. 기존 My Office
+  목록은 삭제하지 않고 모달로 전환했다.
+- 신규 경로는 `/my/feedback`이다. PC 500px 목록과 페이지네이션, 모바일
+  무한스크롤 구조, To Review/Reviewed count, loading/empty/error, Good/Bad 빠른
+  평가와 상세 진입 상태를 구현했다.
+- 상세 화면은 PC 550px side drawer와 모바일 full-screen 구조를 공용 컴포넌트로
+  구현했다. rating은 필수이고 keyword/comment는 현재 fixture 계약상 선택이며,
+  500자 제한과 동적 `isRequired` 제출 조건을 반영했다.
+- 주문 상세에는 eligibility 계약 전 개발용 preview 경계 안에서 피드백 배너를
+  추가했다. 모바일은 주문 정보와 탭 사이, PC는 오른쪽 패널 최상단이며 기존
+  LinkTalk/summary와 20px 간격을 유지한다.
+- API 계약 전 내부 `FeedbackItem` view-model, fixture, mock repository,
+  React Query query/mutation/cache invalidation을 분리했다. 배포 contract가 생기면
+  generated DTO를 adapter 입력으로 교체하고 화면 컴포넌트는 유지하는 구조다.
+- 사용자가 전달한 BE 질문 기본 구조를 fixture에 반영했다: `RATING`, `KEYWORD`,
+  `COMMENT`, PRODUCT category별 keyword mapping, SERVICE의 `isShippable` 조건과
+  comment placeholder다.
+- Figma asset을 `clinic/public/images/feedback`에 저장해 배너와 상품 artwork에
+  사용했다. 서버가 상품 이미지 식별자를 제공하지 않아 목록 카드별 서로 다른
+  artwork는 아직 공통 artwork로 표시한다.
+- 테스트 파일은 요청에 따라 추가하지 않았다.
+
+### 2026-08-21 live 자료 확인
+
+- Jira `DL-15828`, `DL-16056`, `DL-16057`, `DL-16058`, `DL-16060`,
+  `DL-16063`, `DL-16064`, `DL-16061`, `DL-16065`, `DL-16066`의 최신 본문과
+  상태를 다시 읽었다.
+- Notion `[치과] 주문 피드백 수집`은 여전히 `작성 중`이며 마지막 수정 시각은
+  `2026-08-20T07:57:13.912Z`였다. 2026-08-20 회의 문서에는 피드백 사진 첨부와
+  관리자 입력 관련 추가 논의가 있으나 최종 기획·디자인·계약은 없다.
+- Figma의 마이페이지 `160:38939`, 모바일 목록·상태 `160:41324`,
+  `160:42078`, `160:42101`, 상세 `160:41979`, PC drawer `160:40708`, 주문 상세
+  annotation `160:63485`와 관련 sibling 상태를 다시 조회했다.
+- `https://dev-api.dentlink.io/v3/api-docs`를 직접 확인했지만 주문 feedback/review/
+  rating/question endpoint와 schema는 없었다. 현재 generated model에도 주문
+  피드백 API/DTO가 없다. endpoint와 DTO는 추측하지 않았다.
+
+### 구현·QA 결과
+
+- `pnpm type`: 통과
+- `pnpm build:clinic`: 통과; `/my/feedback` route 포함을 확인했다.
+- 변경 Clinic 파일 대상 ESLint: 0 errors. 주문 상세 파일의 기존 hook dependency와
+  unused `style` warning 2건만 남았다.
+- Prettier check와 `git diff --check`: 통과. Prettier의 기존 unknown option warning은
+  결과에 영향이 없었다.
+- Admin type: 통과. pre-push 전체 Clinic/Lab/Admin lint는 0 errors이고 기존 warning만
+  보고했다.
+- pre-push shared coverage test: config 3건, hooks 24건 모두 통과했다. 다만 이
+  worktree에는 coverage baseline이 없어 마지막 coverage diff gate는 실행 완료로
+  판정되지 않았다.
+- Husky pre-commit의 Clinic type은 통과했으나 Lab type은 `origin/master`와 동일한
+  `BrowserPDFHeaderUI.tsx`의 PNG module resolution 오류로 중단됐다. 관련 파일과
+  PNG는 이번 commit에 포함되지 않으며 Admin type은 별도로 통과했다. 이 기존
+  기준선과 coverage baseline 부재만 제외하고 commit/push했다.
+- 로그인된 로컬 Chrome에서 PC·모바일 목록, 빠른 Good 저장 후 To Review 유지와
+  `Tell Us Why`, 상세 저장 후 Reviewed 이동·count 변경, 두 success toast, empty와
+  error/retry를 확인했다.
+- PC drawer width 550px, 모바일 drawer 전체 폭, 고정 footer 102px와 submit button
+  52px를 확인했다. 브라우저의 최소 모바일 viewport는 500x1083이어서 375px 실기기
+  폭 자체는 확인하지 못했지만 동일 maxTablet 레이아웃과 정확한 footer 수치는
+  확인했다.
+- 마이페이지 Quick Links와 My Office 모달, 주문 상세 배너의 PC 오른쪽 패널 및
+  모바일 주문 정보 아래 배치를 실제 화면에서 확인했다. 사용자가 앞선 QA에서
+  교정 후 마이페이지와 주문 상세 반영 상태도 확인했다.
 
 ## 준비 상태와 재개 기준 — 2026-08-21
 
@@ -52,9 +131,9 @@
   - `160:38938` 마이페이지
   - `160:40593` Pending Reviews 목록·상세
   - `160:38179` 주문상세 앱·웹
-- 제품 worktree는 `feature/DL-15828`이며 `HEAD 9b57bec96`에서 clean이다.
-  2026-08-21 확인 당시 `origin/master`와 ahead/behind `0/0`이고, `node_modules`와
-  Husky pre-commit이 준비되어 있다.
+- 제품 worktree는 `feature/DL-15828`이며 `HEAD 0e35c3f71`에서 clean이다.
+  `origin/feature/DL-15828`을 upstream으로 추적하며 로컬·원격 HEAD가 동일하다.
+  `node_modules`와 Husky가 준비되어 있다.
 
 ### 변경 가능 또는 미완성
 
@@ -69,9 +148,10 @@
 - App 저장소, 실행·빌드·기기 검증 환경과 WebView/native 책임은 `DL-16064`에서
   먼저 확인해야 한다.
 
-### 현재 안전하게 시작 가능한 범위
+### 현재 안전하게 이어갈 수 있는 범위
 
-- 최신 Figma를 기준으로 한 화면 구조 분석과 표현 UI 작업은 시작할 수 있다.
+- 최신 Figma를 기준으로 한 웹 표현 UI 1차 구현은 완료했다. 디자인이 변경되면
+  현재 컴포넌트 경계를 유지하며 확정된 차이만 반영할 수 있다.
 - API가 필요한 UI는 기존 프로젝트 경계를 따르는 fixture/mock 또는 교체 가능한
   view-model 경계 안에서만 진행하고, endpoint·DTO·eligibility를 추측하지 않는다.
 - 디자인 변경 가능성을 전제로 UI와 서버 상태 로직을 결합하지 않고, 변경 시
@@ -167,20 +247,27 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 사용자 노출 문구는 영어다.
 - 웹과 앱은 동일한 서버 데이터와 공통 query/cache 규칙을 사용한다.
 
-## 구현 전 남은 확인
+## 현재 남은 확인과 대기 항목
 
 - 목록 정렬 기준
 - Bad 선택 후 상세 화면 자동 진입 여부
 - 상세 사유가 완전 선택 사항인지 여부
+- Figma annotation은 빠른 평가 후 화면을 이탈하기 전까지 To Review에 유지하도록
+  표현하지만 Jira `DL-16057`은 저장 직후 Reviewed 반영으로 적혀 있다. 현재 UI는
+  Figma 동작을 따르며 최종 정책 확인이 필요하다.
 - Figma의 상품별 사유와 Notion의 Shade / Fit / Material / Other 사이 최종 계약
 - BE DTO, eligibility, pagination, count, category/reason 계약
+- 서버가 목록/주문별 상품 artwork 또는 이를 식별할 category/product 정보를 어떤
+  필드로 제공할지
 - App 저장소와 실행·빌드·디바이스 검증 환경
 - Clinic WebView와 native app의 화면, navigation, back, safe-area, deep-link 책임
 - 관리자 화면·권한·API·검증 범위
 - 앱 피드백 알림의 발송 조건, 대상, 문구, deep link, BE/FCM/native 책임
 - 파일 업로드를 포함한 2026-08-20 오후 추가 논의의 최종 기획·디자인 범위
-- 현재 `origin/master` generated model에는 주문 피드백 API contract가 없으므로
-  구현 시작 시 배포된 Swagger를 재확인해야 한다.
+- analytics event 명칭과 payload. Jira에는 telemetry 요구가 있으나 계약이 없어
+  이벤트를 추측해 추가하지 않았다.
+- 2026-08-21 배포 Swagger와 generated model에는 주문 피드백 API contract가
+  없으므로 실제 연동 시작 시 다시 확인해야 한다.
 
 ## 다음 시작점
 
@@ -188,9 +275,12 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
    `/Users/parkjongsun/Repository/dentlink-client-order-feedback`에 연결한다.
 2. 개인 컨텍스트를 pull하고 이 문서와 live Git/Jira/Notion/Figma를 reconcile한다.
 3. `git fetch --all --prune`, `git status -sb`, HEAD와 `origin/master` 차이를 확인한다.
-4. 배포된 Swagger와 BE 계약을 확인한 뒤 DL-16063 공통 데이터 기반부터 시작한다.
-5. DL-16056, DL-16057, DL-16058, DL-16060 순서와 의존성을 실제 코드 구조에
-   맞게 조정하며 웹 범위를 구현한다.
+4. 배포된 Swagger와 BE 계약을 확인하고, contract가 생기면 generated model을
+   재생성·diff review한 뒤 `feedback.mockRepository`를 실제 repository/adapter로
+   교체한다.
+5. 최신 기획·Figma 변경을 다시 대조해 빠른 평가 이동 시점, 사유 계약, 상품별
+   artwork, 사진 업로드, analytics를 확정한다. 현재 UI를 기준으로 API pagination,
+   count, eligibility와 error handling을 연결하고 PC·모바일 회귀 QA를 수행한다.
 6. 앱 구현 전에 DL-16064로 앱 환경과 WebView/native 책임을 확인하고, 그 결과로
    DL-16061의 범위와 스토리포인트를 확정한다.
 7. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
