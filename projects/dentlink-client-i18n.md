@@ -24,10 +24,12 @@ Current release integration plan:
 - Draft PR [#4461](https://github.com/Innvoaid/dentlink-client/pull/4461)
   is currently open and clean as `feature/i18n -> master`; it is a temporary
   comparison PR, not yet the final release PR.
-- Remote `staging` was absent, then recreated directly from current
-  `origin/master` at `9b57bec96`. Deployment PR
-  [#4515](https://github.com/Innvoaid/dentlink-client/pull/4515) now targets
-  `staging` from `feature/i18n`.
+- The mistaken remote `staging` branch and the old `stage` branch were removed.
+  Remote `stage` was recreated directly from current `origin/master` at
+  `9b57bec96`. Deployment PR
+  [#4516](https://github.com/Innvoaid/dentlink-client/pull/4516) now targets
+  `stage` from `feature/i18n` and is mergeable. PR #4515 is the already-merged
+  historical PR to the mistaken `staging` branch.
 - The desired production release is `v1.84.0`, planned for Monday,
   2026-08-24. As of the 2026-08-20 live Git check,
   `origin/release/v1.84.0` does not yet exist, so final release-branch wiring
@@ -358,8 +360,8 @@ was changed during the measurement.
 
 ## Remaining Delivery Work
 
-The code and Sheet work is committed and pushed. PR #4515 is clean and
-mergeable as the staging deployment path from `feature/i18n`; once deployed,
+The code and Sheet work is committed and pushed. PR #4516 is clean and
+mergeable as the `stage` deployment path from `feature/i18n`; once deployed,
 visually recheck the cards already marked `Ready for Deploy`, especially
 DL-16013, DL-16052, DL-16055, DL-16059, and the DL-16019 Others state.
 DL-16053 and DL-16080 still require a product/design or API-scope answer in
