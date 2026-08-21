@@ -66,10 +66,9 @@ For detailed current state, read:
 - Dedicated worktree:
   `/Users/parkjongsun/repository/dentlink-client-i18n`
 - Branch: `feature/i18n`
-- Current state: design QA is in progress. The pushed head remains
-  `dc44bc492`, with fifteen directly actionable QA items implemented locally
-  in a 40-file uncommitted patch. Lab Korean i18n now contains 1,524 keys; the
-  two operational Sheet tabs are 1:1 role-based views with 1,524 identical
+- Current state: design QA follow-up is committed and pushed at `9c0b48ef3`.
+  Lab Korean i18n now contains 1,528 keys; the
+  two operational Sheet tabs are 1:1 role-based views with 1,528 identical
   message IDs, single-source request columns, and representative page values.
   Nine PM/design-to-developer requests and one developer-to-PM/design request
   are intentionally deferred. Capture expansion is paused while existing
@@ -81,12 +80,11 @@ For detailed current state, read:
   release must propagate forward to `master` and `release/v1.85.0`. The 1.85
   release is also still receiving features, so current conflict checks are
   preliminary and must be repeated after both release contents are finalized.
-  The fifteen implemented cards are now `Ready for Deploy`. Fourteen cards are
-  `진행 중`: five web items divide into two designer confirmations, one
-  reproduction case, and two product/backend decisions; nine newly added
-  cards belong to the mobile app or the shared web/app Remake terminology
-  decision. Each of those fourteen cards has a no-mention Jira comment stating
-  what is required next.
+  The directly actionable web cards are `Ready for Deploy`. Only DL-16013,
+  DL-16053, and DL-16072 remain `진행 중` for design or policy confirmation;
+  mobile-app QA is outside this web worktree. Remote `staging` was recreated
+  from `origin/master` at `9b57bec96`, and PR #4515 targets it from
+  `feature/i18n` for deployment verification.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`
 

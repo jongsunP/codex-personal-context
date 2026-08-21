@@ -1,4 +1,4 @@
-# Dentlink i18n and typography delivery checkpoint — 2026-08-20
+# Dentlink i18n and typography delivery checkpoint — 2026-08-21
 
 This is the durable delivery checkpoint for the Dentlink Lab i18n, operational
 Sheet, and cross-service Pretendard work. Live Git and Google Sheet state still
@@ -11,11 +11,9 @@ take precedence if later work changes them.
   `/Users/parkjongsun/repository/dentlink-client-i18n`
 - Branch: `feature/i18n`, tracking `origin/feature/i18n`
 - Local and remote HEAD:
-  `dc44bc492` (`fix: 다국어 시트 정합성과 누락 문구 보완`).
-- The pushed head still has no commit divergence from `origin/feature/i18n`,
-  but the worktree now has 40 changed files for the direct design-QA
-  follow-up: 39 modified files and one new file. These changes are
-  intentionally uncommitted and unpushed.
+  `9c0b48ef3` (`[DL-15676] fix: 다국어 QA 수정사항 반영`).
+- The direct design-QA follow-up is committed and pushed. The worktree is
+  clean and matches `origin/feature/i18n`.
 - The earlier deployment confirmation referred to the staging test flow, not a
   completed production release. The planned development cleanup is complete,
   and the work now waits for design QA and the final release path.
@@ -26,6 +24,10 @@ Current release integration plan:
 - Draft PR [#4461](https://github.com/Innvoaid/dentlink-client/pull/4461)
   is currently open and clean as `feature/i18n -> master`; it is a temporary
   comparison PR, not yet the final release PR.
+- Remote `staging` was absent, then recreated directly from current
+  `origin/master` at `9b57bec96`. Deployment PR
+  [#4515](https://github.com/Innvoaid/dentlink-client/pull/4515) now targets
+  `staging` from `feature/i18n`.
 - The desired production release is `v1.84.0`, planned for Monday,
   2026-08-24. As of the 2026-08-20 live Git check,
   `origin/release/v1.84.0` does not yet exist, so final release-branch wiring
@@ -75,6 +77,7 @@ Final follow-up commits:
 - `8a337bd13` — `chore: 서비스 버전 1.84.0 반영`
 - `1d1b2fda1` — `ui: Clinic과 Admin Pretendard 폰트 정책 적용`
 - `dc44bc492` — `fix: 다국어 시트 정합성과 누락 문구 보완`
+- `9c0b48ef3` — `[DL-15676] fix: 다국어 QA 수정사항 반영`
 
 ## Lab i18n Runtime
 
@@ -84,7 +87,7 @@ Final follow-up commits:
   bundled locale JSON.
 - `lab/i18n/i18n.manifest.json` is the schema source for languages,
   namespaces, keys, and Sheet columns.
-- Current catalog: 1,524 keys across 20 files under
+- Current catalog: 1,528 keys across 20 files under
   `lab/src/i18n/locales/{en,ko}`.
 - Current namespaces: `gnb`, `sharedUi`, `dashboard`, `account`, `orders`,
   `shipping`, `settlements`, `patients`, `help`, and `linkTalk`.
@@ -103,7 +106,7 @@ Final follow-up commits:
 The two operational tabs are role-specific views of the same canonical message
 table, not independent datasets:
 
-- Both tabs contain exactly 1,524 data rows after the latest design-QA export.
+- Both tabs contain exactly 1,528 data rows after the latest design-QA export.
 - Every message ID is unique and the ID sequence is identical in both tabs.
 - Shared fields are connected by formulas and have one owning tab rather than
   duplicated manual input.
@@ -141,7 +144,7 @@ Request ownership is explicit:
 
 Final Sheet read-back verified:
 
-- 1,524 unique IDs in each tab and identical row order
+- 1,528 unique IDs in each tab and identical row order
 - zero missing, stale, translation conflicts, misplaced requests, or role-view
   formula-link issues
 - nine developer requests and one PM/designer request preserved in both views
@@ -175,11 +178,11 @@ Service details:
 
 Completed verification:
 
-- `pnpm audit:i18n`: 1,497 keys, 1,497 reachable, zero unresolved keys, zero
+- `pnpm audit:i18n`: 1,528 keys, 1,528 reachable, zero unresolved keys, zero
   unknown literal keys, and zero review rows.
-- `pnpm export:i18n`: 1,497 local keys with zero missing, stale, conflicts,
+- `pnpm export:i18n`: 1,528 local keys with zero missing, stale, conflicts,
   role-view link issues, or misplaced review requests.
-- `pnpm check:i18n`: 1,497 keys verified across 20 locale files.
+- `pnpm check:i18n`: 1,528 keys verified across 20 locale files.
 - Font asset hashes match their existing Lab/Admin source files.
 - Clinic source and public assets contain zero remaining Lato references.
 - Clinic and Admin development roots returned HTTP 200.
@@ -199,11 +202,11 @@ Known local verification limit:
   legacy modules. All three consuming app typechecks pass, so no error was
   traced to the changed shared order-title component.
 
-## Design QA Follow-up In Progress — 2026-08-20
+## Design QA Follow-up — 2026-08-21
 
-Fifteen directly actionable DL-15676 child items are implemented locally and
-their translation source has been exported to the canonical Sheet. The first
-eight are:
+The initial fifteen directly actionable DL-15676 child items are implemented,
+committed, and pushed. Their translation source has been exported to the
+canonical Sheet. The first eight are:
 
 - DL-16010: translate the order-list status dropdown from known order-status
   enum keys while retaining the API display name as the fallback.
@@ -245,17 +248,18 @@ DL-16050, DL-16051, DL-16052, DL-16055, and DL-16059.
 On 2026-08-21, all fifteen implemented cards were moved to
 `Ready for Deploy`: DL-16010, DL-16011, DL-16012, DL-16018, DL-16020,
 DL-16021, DL-16022, DL-16023, DL-16048, DL-16049, DL-16050, DL-16051,
-DL-16052, DL-16055, and DL-16059. Do not mark them complete until the local
-patch is committed, deployed, and visually rechecked.
+DL-16052, DL-16055, and DL-16059. Do not mark them complete until the pushed
+revision is deployed and visually rechecked.
 
-The latest Sheet export synchronized 1,524 local keys and appended the 12 new
+The latest Sheet export synchronized 1,528 local keys. The final follow-up
+added four Scan-platform keys for DL-16019 and appended the earlier 12 new
 rows missing from the Sheet. It reported zero stale rows, translation
 conflicts, role-view link issues, or misplaced review requests. Current
 verification:
 
 - Lab, Clinic, and Admin typechecks pass.
-- `pnpm check:i18n` verifies 1,524 keys across 20 locale files.
-- `pnpm audit:i18n` reports all 1,524 keys reachable with zero unresolved or
+- `pnpm check:i18n` verifies 1,528 keys across 20 locale files.
+- `pnpm audit:i18n` reports all 1,528 keys reachable with zero unresolved or
   unknown literal keys and zero Clinic regression candidates.
 - `git diff --check` passes.
 - Targeted Lab ESLint passes with zero errors. The shared-UI lint command is
@@ -273,29 +277,23 @@ English `defaultValue`. This is not a claim that every state in the 553-file
 PR was visually inspected; final assembled-release and visual QA remain
 required.
 
-Do not implement the following five items until their missing decision,
-scope, or reproduction evidence is provided:
+Only the following three items remain open for design or policy confirmation:
 
 - DL-16013: status chips currently encode English-oriented per-status fixed
   widths in shared UI. Recommended direction is intrinsic width with fixed
   horizontal padding and no wrap, but design must confirm exact spacing and
   whether the rule is Lab-only or cross-service.
-- DL-16019: the current Step 4 Scan control already reads the `orders` i18n key
-  and both English/Korean values exist. Reproduce against the latest deployed
-  revision and identify the exact overlapping element before changing code.
-- DL-16024: the order-category popup needs the exact intended Korean line-break
-  position from design before changing the translation.
 - DL-16053: timeline title and description are complete prose strings from the
-  API. Decide whether the backend localizes them or exposes structured codes;
-  parsing arbitrary API prose in the frontend is not recommended.
-- DL-16054: the remake order-status modal can open with no available
-  transition. The current transition logic is unchanged from `master`, so
-  decide whether to hide or disable the button when empty, or identify which
-  transition the remake order should expose.
+  API. The agreed i18n scope changes only static frontend strings, so the API
+  text remains unchanged; confirm that this scope is acceptable.
+- DL-16072: PM must decide whether the common product term is web `리메이크`
+  or app `재제작` before either resource is aligned.
 
-On 2026-08-21 these five cards were moved from `해야 할 일` to `진행 중` and
-received a concise Jira comment without user mentions explaining the exact
-decision or reproduction evidence required.
+DL-16019 was resolved by adding the four missing Scan-platform keys and was
+visually verified in the local Others state. DL-16024 received the specified
+Korean line break. DL-16054 was confirmed as an existing transition-state bug
+outside the i18n change; its static wording is correct and its explanatory
+comment is retained. These cards are `Ready for Deploy`.
 
 Nine new QA cards were added under DL-15676 on 2026-08-21. All are mobile-app
 issues or a web/app terminology decision and cannot be implemented in this
@@ -306,10 +304,8 @@ web-only worktree:
 - DL-16072: decide whether the common product term is web `리메이크` or app
   `재제작`, then align both resources.
 
-All nine were moved to `진행 중` and received a no-mention Jira comment stating
-the required app work or terminology decision. The resulting QA status split
-is 15 `Ready for Deploy` and 14 `진행 중` across 29 QA cards. No new product
-code or Sheet change was made while classifying the app cards.
+Mobile-app cards are outside this web worktree and are not part of the remaining
+web delivery queue. DL-16072 remains as the one shared terminology decision.
 
 ## Durable Operating Rules
 
@@ -335,7 +331,7 @@ complete the capture catalog later.
 
 - 27 actual capture images exist.
 - 201 of the then-current 1,497 message keys were connected to a capture
-  (about 13%). The catalog has since grown to 1,524 keys, so refresh this
+  (about 13%). The catalog has since grown to 1,528 keys, so refresh this
   denominator before resuming capture work.
 - 27 of 110 currently identified page/state groups have a capture (about 25%).
 - 83 currently identified page/state groups show `캡처 준비 중`.
@@ -348,40 +344,12 @@ was changed during the measurement.
 
 ## Remaining Delivery Work
 
-Resume from the current uncommitted 40-file design-QA checkpoint. The Jira
-status is now the operational queue: 15 web fixes are `Ready for Deploy`, and
-14 items requiring a decision, reproduction evidence, or app-repository work
-are `진행 중`. First obtain the missing product/design answers for DL-16013,
-DL-16019, DL-16024, DL-16053, and DL-16054:
-
-- Designer confirmation: DL-16013 and DL-16024.
-- Exact reproduction evidence: DL-16019.
-- Product/backend behavior or localization ownership decision: DL-16053 and
-  DL-16054.
-
-- DL-16013: auto-width versus fixed-width status chips, exact horizontal
-  spacing and single-line rule, and Lab-only versus cross-service scope.
-- DL-16019: the exact overlapping element plus screenshot, route, viewport,
-  selected data, and deployed revision because the current source already
-  translates Scan.
-- DL-16024: the exact Korean sentence and intended line-break position.
-- DL-16053: whether API timeline prose is localized by the backend or replaced
-  with structured event codes for frontend translation.
-- DL-16054: whether an empty transition list should hide/disable Change Status,
-  or which remake transition is expected for order `7000004865`.
-
-After those answers, implement only the confirmed corrections. Deploy the full
-local QA patch to development or staging and visually recheck the fifteen
-cards already marked `Ready for Deploy`, especially DL-16052, DL-16055, and
-DL-16059. Coordinate the nine mobile-app cards with the app repository owner;
-only DL-16072 also requires a shared terminology decision before either side
-changes its wording.
-Then rerun the cross-service and i18n checks and request explicit authorization
-before committing or pushing the 40-file product change set. The nine
-`개발자에게 확인 요청` rows and one `PM·디자이너에게 확인 요청` row are deferred
-human decisions, not code blockers. The remaining PM/design request concerns
-the `Additional Information` heading; clear it only after the latest Korean
-heading is deployed and verified. Capture expansion remains paused.
+The code and Sheet work is committed and pushed. PR #4515 is the staging
+deployment path from `feature/i18n`; once deployed, visually recheck the cards
+already marked `Ready for Deploy`, especially DL-16052, DL-16055, DL-16059,
+and the DL-16019 Others state. Only DL-16013, DL-16053, and DL-16072 require a
+new product/design answer before further code changes. Mobile-app QA remains
+outside this worktree. Capture expansion remains paused.
 
 This is still not production-closeout complete. The latest follow-up commit is
 pushed but deployment of that exact revision is not yet confirmed. Create or
