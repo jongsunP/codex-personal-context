@@ -8,34 +8,41 @@ take precedence if later work changes them.
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
 - Dedicated worktree:
-  `/Users/parkjongsun/repository/dentlink-client-i18n`
-- Branch: `feature/i18n`, tracking `origin/feature/i18n`
-- Local and remote HEAD:
-  `61d6f7c55` (`[DL-16013] fix: 상태 뱃지 모드별 스타일 호환성 보완`).
-- The direct design-QA follow-up is committed and pushed. The worktree is
-  clean and matches `origin/feature/i18n`.
-- The latest `stage` deployment is complete by user confirmation. This is a
-  staging-server checkpoint, not a completed production release; the work now
-  waits for deployed-screen QA and the final release path.
+  `/Users/parkjongsun/Repository/dentlink-client-i18n`
+- Current follow-up branch: `feature/i18n-maintenance`, tracking
+  `origin/feature/i18n-maintenance` at `c6b3ae200`
+  (`docs: i18n 후속 운영 절차 정리`). The worktree is clean.
+- Historical implementation branch: `feature/i18n` at `d14fa1435`
+  (`[DL-16083] ui: 상태 뱃지 콘텐츠 너비 유지`). Do not continue new work on
+  this branch after its release merge.
+- The complete i18n implementation was merged by PR
+  [#4518](https://github.com/Innvoaid/dentlink-client/pull/4518) into
+  `release/v1.84.0` at `7a7c0138b`.
+- PR [#4520](https://github.com/Innvoaid/dentlink-client/pull/4520) merged
+  `release/v1.84.0 -> stage` at `e822d9707`. The release and stage commits have
+  different history but identical tree `27cfc1e63`; the user confirmed this
+  assembled release was deployed to staging.
+- Documentation-only follow-up PR
+  [#4522](https://github.com/Innvoaid/dentlink-client/pull/4522) is open and
+  mergeable as `feature/i18n-maintenance -> release/v1.84.0`. It is not yet in
+  the release, stage, or production master.
 - Current package version in Lab, Clinic, and Admin: `1.84.0`.
 
 Current release integration plan:
 
-- Draft PR [#4461](https://github.com/Innvoaid/dentlink-client/pull/4461)
-  is currently open and clean as `feature/i18n -> master`; it is a temporary
-  comparison PR, not yet the final release PR.
-- The mistaken remote `staging` branch and the old `stage` branch were removed.
-  Remote `stage` was recreated directly from current `origin/master` at
-  `9b57bec96`. Deployment PR
-  [#4516](https://github.com/Innvoaid/dentlink-client/pull/4516) was merged from
-  `feature/i18n` into `stage` as `fee7a145f`, and the user confirmed the
-  staging deployment completed. PR #4515 is the already-merged historical PR
-  to the mistaken `staging` branch. The staging-server branch name is exactly
-  `stage`; never infer `staging` from the environment name.
-- The desired production release is `v1.84.0`, planned for Monday,
-  2026-08-24. As of the 2026-08-20 live Git check,
-  `origin/release/v1.84.0` does not yet exist, so final release-branch wiring
-  remains pending.
+- The production train is `release/v1.84.0`; it has not yet been merged into
+  `master`, so production completion must not be inferred from the staging
+  deployment.
+- Merge PR #4522 into `release/v1.84.0` if the operating guide is to ship with
+  this release. Recreate or update the release-to-stage deployment only when
+  that documentation change must also be present on stage.
+- The historical direct `feature/i18n -> stage` PRs are no longer the active
+  delivery path. The assembled release itself is the staging source:
+  `release/v1.84.0 -> stage`.
+- If implementation has already entered an active release and a follow-up is
+  needed, create a fresh feature branch from the latest remote release and PR
+  back to that release. Do not append commits to the already-merged historical
+  feature branch.
 - `release/v1.85.0` is the following release train, planned for Monday,
   2026-08-31.
 - After i18n is finalized as `release/v1.84.0`, propagate the finalized release
@@ -84,6 +91,9 @@ Final follow-up commits:
 - `9c0b48ef3` — `[DL-15676] fix: 다국어 QA 수정사항 반영`
 - `1aa72be08` — `[DL-16013] ui: 주문 상태 뱃지 너비를 유동형으로 변경`
 - `61d6f7c55` — `[DL-16013] fix: 상태 뱃지 모드별 스타일 호환성 보완`
+- `d14fa1435` — `[DL-16083] ui: 상태 뱃지 콘텐츠 너비 유지`
+- `c6b3ae200` — `docs: i18n 후속 운영 절차 정리` (open PR #4522;
+  not yet in release)
 
 ## Lab i18n Runtime
 
@@ -285,6 +295,12 @@ required.
 
 Current design or policy follow-up:
 
+- DL-16083 is implemented and `Ready for Deploy`. A shared flex-column parent
+  stretched multiple status chips to the full status-cell width. The common
+  `StatusChip` full-text wrapper now uses content width, so Lab, Clinic, Admin,
+  and shared call sites receive the same behavior while icon-only and
+  text-only modes keep their existing contracts. This change is included in
+  `release/v1.84.0` and the currently deployed stage tree.
 - DL-16013 is implemented and `Ready for Deploy`. The shared `StatusChip` no
   longer has per-status fixed widths. It uses content-based width, 6px
   horizontal and 1px vertical padding, a 4px icon-text gap, and keeps the 25px
@@ -362,16 +378,17 @@ was changed during the measurement.
 
 ## Remaining Delivery Work
 
-The code and Sheet work is committed and pushed. PR #4516 was merged into
-`stage`, and the user confirmed the staging deployment completed. Visually
-recheck the cards already marked `Ready for Deploy`, especially
-DL-16013, DL-16052, DL-16055, DL-16059, and the DL-16019 Others state.
-DL-16053 and DL-16080 still require a product/design or API-scope answer in
-this web scope. DL-16072 is complete as `리메이크`; app QA remains on separate
-cards outside this worktree. Capture expansion remains paused.
+The complete i18n implementation is in `release/v1.84.0` and its exact tree was
+deployed through PR #4520 to `stage`. Visually recheck the cards already marked
+`Ready for Deploy`, especially DL-16013, DL-16052, DL-16055, DL-16059,
+DL-16083, and the DL-16019 Others state. DL-16053 and DL-16080 still require a
+product/design or API-scope answer in this web scope. DL-16072 is complete as
+`리메이크`; app QA remains on separate cards outside this worktree. Capture
+expansion remains paused.
 
-This is still not production-closeout complete. Create or select the final
-`release/v1.84.0` delivery path, recheck the complete PR diff
-against that release, and run assembled-release QA before merging. After the
-1.84 release is finalized, forward-propagate it to `master` and
-`release/v1.85.0`.
+PR #4522 remains open for the post-release-merge operating guide and AI skill
+entry points. This is still not production-closeout complete: merge the final
+release into `master` only after assembled-release staging QA, then propagate
+the finalized 1.84 release into `release/v1.85.0`. At that point record the
+actual master commit and production result; do not mark them complete in
+advance.
