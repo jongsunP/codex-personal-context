@@ -11,7 +11,7 @@ take precedence if later work changes them.
   `/Users/parkjongsun/repository/dentlink-client-i18n`
 - Branch: `feature/i18n`, tracking `origin/feature/i18n`
 - Local and remote HEAD:
-  `9c0b48ef3` (`[DL-15676] fix: 다국어 QA 수정사항 반영`).
+  `1aa72be08` (`[DL-16013] ui: 주문 상태 뱃지 너비를 유동형으로 변경`).
 - The direct design-QA follow-up is committed and pushed. The worktree is
   clean and matches `origin/feature/i18n`.
 - The earlier deployment confirmation referred to the staging test flow, not a
@@ -78,6 +78,7 @@ Final follow-up commits:
 - `1d1b2fda1` — `ui: Clinic과 Admin Pretendard 폰트 정책 적용`
 - `dc44bc492` — `fix: 다국어 시트 정합성과 누락 문구 보완`
 - `9c0b48ef3` — `[DL-15676] fix: 다국어 QA 수정사항 반영`
+- `1aa72be08` — `[DL-16013] ui: 주문 상태 뱃지 너비를 유동형으로 변경`
 
 ## Lab i18n Runtime
 
@@ -277,17 +278,19 @@ English `defaultValue`. This is not a claim that every state in the 553-file
 PR was visually inspected; final assembled-release and visual QA remain
 required.
 
-Only the following three items remain open for design or policy confirmation:
+Current design or policy follow-up:
 
-- DL-16013: status chips currently encode English-oriented per-status fixed
-  widths in shared UI. Recommended direction is intrinsic width with fixed
-  horizontal padding and no wrap, but design must confirm exact spacing and
-  whether the rule is Lab-only or cross-service.
+- DL-16013 is implemented and `Ready for Deploy`. The shared `StatusChip` no
+  longer has per-status fixed widths. It uses content-based width, 6px
+  horizontal and 1px vertical padding, a 4px icon-text gap, and keeps the 25px
+  height, 1px border, and 6px radius. Clinic, Lab, and Admin typechecks and the
+  1,528-key i18n check pass. A local Lab order-list check confirmed the exact
+  computed spacing and distinct widths for `임시 주문서` and `완료`.
 - DL-16053: timeline title and description are complete prose strings from the
   API. The agreed i18n scope changes only static frontend strings, so the API
   text remains unchanged; confirm that this scope is acceptable.
-- DL-16072: PM must decide whether the common product term is web `리메이크`
-  or app `재제작` before either resource is aligned.
+- DL-16072: the common product term is decided as `리메이크`. Web already uses
+  it; the remaining mobile-app resource alignment is outside this worktree.
 
 DL-16019 was resolved by adding the four missing Scan-platform keys and was
 visually verified in the local Others state. DL-16024 received the specified
@@ -301,11 +304,12 @@ web-only worktree:
 
 - DL-16067 through DL-16071 and DL-16073 through DL-16075: mobile Lab or
   Clinic app copy/layout fixes owned by the app repository.
-- DL-16072: decide whether the common product term is web `리메이크` or app
-  `재제작`, then align both resources.
+- DL-16072: align the mobile-app resource from `재제작` to the decided common
+  term `리메이크` in the app-owned repository.
 
 Mobile-app cards are outside this web worktree and are not part of the remaining
-web delivery queue. DL-16072 remains as the one shared terminology decision.
+web delivery queue. The DL-16072 terminology decision is complete; only its app
+implementation remains.
 
 ## Durable Operating Rules
 
@@ -344,12 +348,14 @@ was changed during the measurement.
 
 ## Remaining Delivery Work
 
-The code and Sheet work is committed and pushed. PR #4515 is the staging
-deployment path from `feature/i18n`; once deployed, visually recheck the cards
-already marked `Ready for Deploy`, especially DL-16052, DL-16055, DL-16059,
-and the DL-16019 Others state. Only DL-16013, DL-16053, and DL-16072 require a
-new product/design answer before further code changes. Mobile-app QA remains
-outside this worktree. Capture expansion remains paused.
+The code and Sheet work is committed and pushed. PR #4515 is clean and
+mergeable as the staging deployment path from `feature/i18n`; once deployed,
+visually recheck the cards already marked `Ready for Deploy`, especially
+DL-16013, DL-16052, DL-16055, DL-16059, and the DL-16019 Others state. Only
+DL-16053 still requires a product/design answer in this web scope. DL-16072 is
+decided as `리메이크`, with app implementation remaining outside this
+worktree. Mobile-app QA remains outside this worktree. Capture expansion
+remains paused.
 
 This is still not production-closeout complete. The latest follow-up commit is
 pushed but deployment of that exact revision is not yet confirmed. Create or
