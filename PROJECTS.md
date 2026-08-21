@@ -149,6 +149,8 @@ For detailed current state, read:
 - Current state: 최신 Figma 기준 Clinic PC·모바일 웹 UI 1차 구현을 완료했다.
   `/my/feedback`, 마이페이지 Quick Links·My Office 모달, 목록·상세 입력, 주문 상세
   피드백 배너와 API 교체 가능한 mock/query 경계가 commit `0e35c3f71`로
+  구현됐고, 주문 상세 LinkTalk 툴팁이 피드백 드로어를 침범하던 레이어 문제를
+  `8a1b3909c`에서 화면 소유권에 맞게 격리했다. 두 commit 모두
   `origin/feature/DL-15828`에 push되어 있다. Clinic 타입·프로덕션 빌드와 실제
   브라우저 QA를 통과했지만, 배포 Swagger에는 아직 주문 피드백 계약이 없어 실제
   API·eligibility·pagination/count 연동은 대기 중이다. 앱을 제외한 산정은 관리자

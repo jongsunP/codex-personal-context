@@ -38,13 +38,14 @@
 ## 현재 구현 체크포인트 — 2026-08-21
 
 - product branch/HEAD:
-  `feature/DL-15828` / `0e35c3f714c07f3c731a722d997a0b05d53214ce`
-  (`[DL-15828] feat: 주문 피드백 웹 화면 구현`)
+  `feature/DL-15828` / `8a1b3909c68bbb7af74473530e8a41b6dba35953`
+  (`[DL-15828] fix: 주문 상세 피드백 패널 레이어 충돌 수정`)
 - upstream: `origin/feature/DL-15828`; 로컬 HEAD와 원격 ref가 동일하다.
 - worktree: commit과 push 후 clean이다.
 - PR은 생성하지 않았다.
 - 최신 `origin/master`는 준비 당시와 동일한 `9b57bec96`였으며, 기능 commit은 그
-  기준으로 생성했다.
+  기준으로 생성했다. UI 1차 구현 commit은 `0e35c3f71`이고 레이어 보완 commit은
+  `8a1b3909c`다.
 
 ### 구현 완료 범위
 
@@ -120,8 +121,34 @@
 - Jira가 요구하는 Amplitude 작성·수정 이벤트도 이벤트명과 payload 계약이 없어
   추측해서 넣지 않는다.
 - 최종 제품 상태는 `feature/DL-15828` / `0e35c3f71`, clean이며
-  `origin/feature/DL-15828`과 동일하다. 추가 제품 코드 변경·커밋은 없고 PR도 만들지
-  않았다.
+  `origin/feature/DL-15828`과 동일했다. 이 판단 이후 주문 상세 레이어 문제만
+  `8a1b3909c`로 별도 보완했으며 PR은 만들지 않았다.
+
+### 주문 상세 피드백 드로어 레이어 보완 — 2026-08-21 18:20 KST
+
+- 실제 Chrome 주문 상세에서 배송 예정일 안내와 LinkTalk 번역 안내 툴팁이 함께
+  노출된 상태로 피드백 드로어를 열어 stacking을 검증했다. 배송 예정일 안내는
+  드로어 dim 아래였지만, 공용 LinkTalk의 최초 진입 번역 안내는
+  `hoverTooltip(500)`을 사용해 `SlideDrawer(304)` 위의 피드백 입력 영역까지
+  침범했다.
+- 전역 `hoverTooltip`을 낮추거나 피드백 드로어에 전용 상위 z-index를 추가하면
+  Admin·Lab·LinkTalk 캐러셀과 향후 드로어 내부 툴팁에 영향을 줄 수 있으므로
+  적용하지 않았다. Clinic 주문 상세의 `OrderDetailLinkTalk` wrapper에만
+  `isolation: isolate`와 한글 설명 주석을 추가해 내부 레이어를 화면 소유권 안에
+  가뒀다.
+- 수정 후 Chrome에서 번역 안내 툴팁의 계산 z-index는 500으로 유지되지만 피드백
+  드로어 아래로 들어가고, 드로어의 textarea가 겹침 지점 최상단 요소가 되는 것을
+  확인했다. 배송 예정일 툴팁과 왼쪽 환자·주문 패널도 계속 dim 아래에 있었다.
+- 피드백 드로어 자체는 이미 `position: fixed`와 `drawer(304)`로 stacking context를
+  만들므로 추가 변경하지 않았다. 현재 피드백 드로어 내부에는 툴팁이 없으며,
+  공용 Tooltip은 body portal의 `hoverTooltip(500)`을 사용하므로 향후 드로어 내부에
+  추가될 일반 툴팁은 드로어 위에 표시될 수 있다.
+- 이번 범위 밖 리팩터링 후보는 공용 Tooltip의 overlay/portal 소유권, 직접 구현된
+  LinkTalk·배송일 툴팁 통합, `drawer + 1`·`modal - 1` 계산식의 의미 기반 토큰화,
+  Clinic/Lab `OrderDetailLinkTalk` 중복이다. 현재 확인된 장애가 아니고 영향 범위가
+  커서 DL-15828에서는 수정하지 않는 것으로 결정했다.
+- 제품 commit `8a1b3909c`를 `origin/feature/DL-15828`에 push했다. 제품 worktree는
+  clean이고 로컬·원격 HEAD가 동일하다. PR은 생성하지 않았다.
 
 ### 구현·QA 결과
 
@@ -150,6 +177,10 @@
 - 마이페이지 Quick Links와 My Office 모달, 주문 상세 배너의 PC 오른쪽 패널 및
   모바일 주문 정보 아래 배치를 실제 화면에서 확인했다. 사용자가 앞선 QA에서
   교정 후 마이페이지와 주문 상세 반영 상태도 확인했다.
+- 레이어 보완 후 PC Chrome에서 피드백 드로어가 LinkTalk 번역 안내와 배송 예정일
+  안내를 모두 덮는 것을 확인했다. 모바일은 이 보완 이후 별도 실화면 재검증하지
+  않았지만, 모바일 LinkTalk wrapper는 기존에도 `position: fixed`와 `modal - 1`로
+  stacking context를 만들고 있어 변경 전부터 드로어보다 아래인 구조다.
 
 ## 준비 상태와 재개 기준 — 2026-08-21
 
@@ -168,7 +199,7 @@
   - `160:38938` 마이페이지
   - `160:40593` Pending Reviews 목록·상세
   - `160:38179` 주문상세 앱·웹
-- 제품 worktree는 `feature/DL-15828`이며 `HEAD 0e35c3f71`에서 clean이다.
+- 제품 worktree는 `feature/DL-15828`이며 `HEAD 8a1b3909c`에서 clean이다.
   `origin/feature/DL-15828`을 upstream으로 추적하며 로컬·원격 HEAD가 동일하다.
   `node_modules`와 Husky가 준비되어 있다.
 
