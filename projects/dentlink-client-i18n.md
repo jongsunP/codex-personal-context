@@ -13,8 +13,8 @@ take precedence if later work changes them.
 - Local and remote HEAD:
   `dc44bc492` (`fix: 다국어 시트 정합성과 누락 문구 보완`).
 - The pushed head still has no commit divergence from `origin/feature/i18n`,
-  but the worktree now has 39 changed files for the direct design-QA
-  follow-up: 38 modified files and one new file. These changes are
+  but the worktree now has 40 changed files for the direct design-QA
+  follow-up: 39 modified files and one new file. These changes are
   intentionally uncommitted and unpushed.
 - The earlier deployment confirmation referred to the staging test flow, not a
   completed production release. The planned development cleanup is complete,
@@ -220,10 +220,9 @@ eight are:
 - DL-16023: translate the remaining hardcoded Back action in the skip-design
   flow.
 
-Jira status was changed to `진행 중` for all eight implemented cards:
+Jira status was initially changed to `진행 중` for all eight implemented cards:
 DL-16010, DL-16011, DL-16012, DL-16018, DL-16020, DL-16021, DL-16022, and
-DL-16023. Do not mark them complete until the changes are committed, deployed,
-and rechecked.
+DL-16023.
 
 Seven additional directly actionable cards were then implemented:
 
@@ -240,10 +239,14 @@ Seven additional directly actionable cards were then implemented:
 - DL-16059: translate invitation authority and role labels while leaving the
   backend code values unchanged.
 
-Jira status was also changed to `진행 중` for DL-16048, DL-16049, DL-16050,
-DL-16051, DL-16052, DL-16055, and DL-16059. Do not mark any of the fifteen
-cards complete until the local patch is committed, deployed, and visually
-rechecked.
+Jira status was also initially changed to `진행 중` for DL-16048, DL-16049,
+DL-16050, DL-16051, DL-16052, DL-16055, and DL-16059.
+
+On 2026-08-21, all fifteen implemented cards were moved to
+`Ready for Deploy`: DL-16010, DL-16011, DL-16012, DL-16018, DL-16020,
+DL-16021, DL-16022, DL-16023, DL-16048, DL-16049, DL-16050, DL-16051,
+DL-16052, DL-16055, and DL-16059. Do not mark them complete until the local
+patch is committed, deployed, and visually rechecked.
 
 The latest Sheet export synchronized 1,524 local keys and appended the 12 new
 rows missing from the Sheet. It reported zero stale rows, translation
@@ -290,6 +293,24 @@ scope, or reproduction evidence is provided:
   decide whether to hide or disable the button when empty, or identify which
   transition the remake order should expose.
 
+On 2026-08-21 these five cards were moved from `해야 할 일` to `진행 중` and
+received a concise Jira comment without user mentions explaining the exact
+decision or reproduction evidence required.
+
+Nine new QA cards were added under DL-15676 on 2026-08-21. All are mobile-app
+issues or a web/app terminology decision and cannot be implemented in this
+web-only worktree:
+
+- DL-16067 through DL-16071 and DL-16073 through DL-16075: mobile Lab or
+  Clinic app copy/layout fixes owned by the app repository.
+- DL-16072: decide whether the common product term is web `리메이크` or app
+  `재제작`, then align both resources.
+
+All nine were moved to `진행 중` and received a no-mention Jira comment stating
+the required app work or terminology decision. The resulting QA status split
+is 15 `Ready for Deploy` and 14 `진행 중` across 29 QA cards. No new product
+code or Sheet change was made while classifying the app cards.
+
 ## Durable Operating Rules
 
 - Do not edit, delete, or include tabs whose names start with `백업_` in Sheet
@@ -327,9 +348,11 @@ was changed during the measurement.
 
 ## Remaining Delivery Work
 
-Resume from the current uncommitted 39-file design-QA checkpoint. First obtain
-the missing product/design answers for DL-16013, DL-16019, DL-16024, DL-16053,
-and DL-16054:
+Resume from the current uncommitted 40-file design-QA checkpoint. The Jira
+status is now the operational queue: 15 web fixes are `Ready for Deploy`, and
+14 items requiring a decision, reproduction evidence, or app-repository work
+are `진행 중`. First obtain the missing product/design answers for DL-16013,
+DL-16019, DL-16024, DL-16053, and DL-16054:
 
 - Designer confirmation: DL-16013 and DL-16024.
 - Exact reproduction evidence: DL-16019.
@@ -349,9 +372,12 @@ and DL-16054:
 
 After those answers, implement only the confirmed corrections. Deploy the full
 local QA patch to development or staging and visually recheck the fifteen
-cards already marked `진행 중`, especially DL-16052, DL-16055, and DL-16059.
+cards already marked `Ready for Deploy`, especially DL-16052, DL-16055, and
+DL-16059. Coordinate the nine mobile-app cards with the app repository owner;
+only DL-16072 also requires a shared terminology decision before either side
+changes its wording.
 Then rerun the cross-service and i18n checks and request explicit authorization
-before committing or pushing the 39-file product change set. The nine
+before committing or pushing the 40-file product change set. The nine
 `개발자에게 확인 요청` rows and one `PM·디자이너에게 확인 요청` row are deferred
 human decisions, not code blockers. The remaining PM/design request concerns
 the `Additional Information` heading; clear it only after the latest Korean
