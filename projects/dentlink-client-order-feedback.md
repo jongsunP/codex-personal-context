@@ -82,9 +82,46 @@
 - Figma의 마이페이지 `160:38939`, 모바일 목록·상태 `160:41324`,
   `160:42078`, `160:42101`, 상세 `160:41979`, PC drawer `160:40708`, 주문 상세
   annotation `160:63485`와 관련 sibling 상태를 다시 조회했다.
+- 같은 날 최종 재검토에서 목록·상세 `160:40593`의 실제 metadata와 리뷰 카드
+  screenshot `160:41672`도 다시 확인했다. 시각 디자인은 상세 미입력 CTA를
+  `Tell Us Why`로 표시하지만 annotation `160:41593`, `160:41608`은
+  `Add More Details`로 적어 내부 불일치가 있다. 현재 구현은 사용자가 확인한
+  시각 디자인의 `Tell Us Why`를 유지한다.
+- Figma annotation `160:41593`에는 To Review를 주문 COMPLETED 최신순, Reviewed를
+  최초 리뷰 작성 최신순으로 정렬하고 수정 시 순서를 바꾸지 않는다고 적혀 있다.
+  그러나 Jira·기획의 공식 미결 항목 및 BE pagination/sort 계약과 reconcile되지
+  않았으므로 FE가 임의 정렬 필드나 요청 파라미터를 만들지 않는다.
+- Figma annotation `160:41597`은 Good/Bad 즉시 저장 후 현재 화면에서는 To Review에
+  유지하고 화면 이탈 또는 재진입 후 Reviewed로 이동하는 흐름을 명시한다. Jira
+  `DL-16057`의 저장 직후 Reviewed 반영 완료 조건과 충돌하며 현재 mock UI는 Figma를
+  따른다.
+- 주문 상세 annotation `160:63491`에는 피드백 영역 클릭 시 상세 화면으로 이동하는
+  설명이 있으나 현재 시각 UI와 구현은 상태별 버튼을 명시적 진입점으로 사용한다.
+  전체 배너 클릭 범위가 필요한지는 디자인 확인 후 바꾼다.
 - `https://dev-api.dentlink.io/v3/api-docs`를 직접 확인했지만 주문 feedback/review/
   rating/question endpoint와 schema는 없었다. 현재 generated model에도 주문
   피드백 API/DTO가 없다. endpoint와 DTO는 추측하지 않았다.
+
+### 최종 전체 검토와 대기 결정 — 2026-08-21 17:50 KST
+
+- 제품 저장소 전체 diff와 구현 플랜을 다시 검토했다. 확정된 Clinic 웹 화면과 mock
+  상태는 이미 구현·QA되어 있으며, 현재 스펙만으로 추가할 가치가 큰 확정 웹 기능은
+  없다. 임의 기능 추가보다 BE API와 최종 디자인·기획을 기다리는 것으로 결정했다.
+- `dentlink-client` monorepo에는 Clinic, Lab, Admin 웹 package가 있으므로 관리자 FE는
+  이 제품 저장소에서 진행한다. 다만 `DL-16065`는 화면·권한·API·검증 범위가 없어
+  지금은 구현하지 않는다.
+- 이 저장소에는 `isDentlinkApp`, RN message bridge와 App에서 사용하는 Clinic WebView
+  코드가 있어 앱용 웹 레이아웃 일부는 향후 여기서 처리할 수 있다. 반면 React
+  Native/Expo package와 native app 저장소·실행환경은 이 worktree에서 확인되지
+  않았다. native navigation, push, safe-area, deep link 변경은 `DL-16064` 검증 후
+  실제 소유 저장소에서 진행한다.
+- 2026-08-20 회의 문서에서 사진 첨부 추가와 관리자 회원 단위 입력·선택적 주문번호
+  방향은 확인했지만, 확정 디자인·API 계약이 없으므로 현재 코드에 추가하지 않는다.
+- Jira가 요구하는 Amplitude 작성·수정 이벤트도 이벤트명과 payload 계약이 없어
+  추측해서 넣지 않는다.
+- 최종 제품 상태는 `feature/DL-15828` / `0e35c3f71`, clean이며
+  `origin/feature/DL-15828`과 동일하다. 추가 제품 코드 변경·커밋은 없고 PR도 만들지
+  않았다.
 
 ### 구현·QA 결과
 
@@ -249,7 +286,8 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 
 ## 현재 남은 확인과 대기 항목
 
-- 목록 정렬 기준
+- 목록 정렬의 공식 계약. Figma annotation에는 기준이 있지만 Jira·기획·BE 계약과
+  아직 reconcile되지 않았다.
 - Bad 선택 후 상세 화면 자동 진입 여부
 - 상세 사유가 완전 선택 사항인지 여부
 - Figma annotation은 빠른 평가 후 화면을 이탈하기 전까지 To Review에 유지하도록
@@ -259,7 +297,8 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - BE DTO, eligibility, pagination, count, category/reason 계약
 - 서버가 목록/주문별 상품 artwork 또는 이를 식별할 category/product 정보를 어떤
   필드로 제공할지
-- App 저장소와 실행·빌드·디바이스 검증 환경
+- App 저장소와 실행·빌드·디바이스 검증 환경. 현재 worktree에는 native app package가
+  없고 Clinic WebView/RN bridge 코드만 있다.
 - Clinic WebView와 native app의 화면, navigation, back, safe-area, deep-link 책임
 - 관리자 화면·권한·API·검증 범위
 - 앱 피드백 알림의 발송 조건, 대상, 문구, deep link, BE/FCM/native 책임
@@ -279,8 +318,9 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
    재생성·diff review한 뒤 `feedback.mockRepository`를 실제 repository/adapter로
    교체한다.
 5. 최신 기획·Figma 변경을 다시 대조해 빠른 평가 이동 시점, 사유 계약, 상품별
-   artwork, 사진 업로드, analytics를 확정한다. 현재 UI를 기준으로 API pagination,
-   count, eligibility와 error handling을 연결하고 PC·모바일 회귀 QA를 수행한다.
+   artwork, 사진 업로드, analytics와 `Tell Us Why`/`Add More Details`, 주문 상세 배너
+   클릭 범위를 확정한다. 현재 UI를 기준으로 API pagination, sort, count,
+   eligibility와 error handling을 연결하고 PC·모바일 회귀 QA를 수행한다.
 6. 앱 구현 전에 DL-16064로 앱 환경과 WebView/native 책임을 확인하고, 그 결과로
    DL-16061의 범위와 스토리포인트를 확정한다.
 7. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
