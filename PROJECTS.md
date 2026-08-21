@@ -66,7 +66,7 @@ For detailed current state, read:
 - Dedicated worktree:
   `/Users/parkjongsun/repository/dentlink-client-i18n`
 - Branch: `feature/i18n`
-- Current state: design QA follow-up is committed and pushed at `1aa72be08`.
+- Current state: design QA follow-up is committed and pushed at `61d6f7c55`.
   Lab Korean i18n now contains 1,528 keys; the
   two operational Sheet tabs are 1:1 role-based views with 1,528 identical
   message IDs, single-source request columns, and representative page values.
@@ -82,10 +82,12 @@ For detailed current state, read:
   preliminary and must be repeated after both release contents are finalized.
   The directly actionable web cards, including DL-16013, are `Ready for
   Deploy`. DL-16013 now uses content-based shared status-chip widths with the
-  Figma spacing across Clinic, Lab, and Admin. DL-16053 remains `진행 중` for
-  frontend-static/API-response scope confirmation. The DL-16072 terminology
-  decision is `리메이크`; its remaining app alignment is outside this web
-  worktree. Remote `staging` was recreated from `origin/master` at
+  Figma spacing across Clinic, Lab, and Admin while preserving the existing
+  flat/icon/text-mode contracts. DL-16072 is also `Ready for Deploy` after the
+  common term was decided as `리메이크`; app cards are tracked separately.
+  DL-16053 and new DL-16080 remain `진행 중` because their displayed prose and
+  button labels come from API templates and need an explicit scope decision.
+  Remote `staging` was recreated from `origin/master` at
   `9b57bec96`, and clean PR #4515 targets it from `feature/i18n` for deployment
   verification.
 - Personal current checkpoint and resume instructions:

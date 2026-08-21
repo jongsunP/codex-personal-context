@@ -11,7 +11,7 @@ take precedence if later work changes them.
   `/Users/parkjongsun/repository/dentlink-client-i18n`
 - Branch: `feature/i18n`, tracking `origin/feature/i18n`
 - Local and remote HEAD:
-  `1aa72be08` (`[DL-16013] ui: 주문 상태 뱃지 너비를 유동형으로 변경`).
+  `61d6f7c55` (`[DL-16013] fix: 상태 뱃지 모드별 스타일 호환성 보완`).
 - The direct design-QA follow-up is committed and pushed. The worktree is
   clean and matches `origin/feature/i18n`.
 - The earlier deployment confirmation referred to the staging test flow, not a
@@ -79,6 +79,7 @@ Final follow-up commits:
 - `dc44bc492` — `fix: 다국어 시트 정합성과 누락 문구 보완`
 - `9c0b48ef3` — `[DL-15676] fix: 다국어 QA 수정사항 반영`
 - `1aa72be08` — `[DL-16013] ui: 주문 상태 뱃지 너비를 유동형으로 변경`
+- `61d6f7c55` — `[DL-16013] fix: 상태 뱃지 모드별 스타일 호환성 보완`
 
 ## Lab i18n Runtime
 
@@ -285,12 +286,21 @@ Current design or policy follow-up:
   horizontal and 1px vertical padding, a 4px icon-text gap, and keeps the 25px
   height, 1px border, and 6px radius. Clinic, Lab, and Admin typechecks and the
   1,528-key i18n check pass. A local Lab order-list check confirmed the exact
-  computed spacing and distinct widths for `임시 주문서` and `완료`.
+  computed spacing and distinct widths for `임시 주문서` and `완료`. A second
+  cross-service review confirmed normal and dark modes use the new intrinsic
+  width while flat, icon, and text modes preserve their prior overflow and
+  spacing behavior.
 - DL-16053: timeline title and description are complete prose strings from the
   API. The agreed i18n scope changes only static frontend strings, so the API
   text remains unchanged; confirm that this scope is acceptable.
 - DL-16072: the common product term is decided as `리메이크`. Web already uses
-  it; the remaining mobile-app resource alignment is outside this worktree.
+  it, app issues are tracked on separate cards, and this card is `Ready for
+  Deploy`.
+- DL-16080: the LinkTalk case-preference template renders API `message` and
+  button `label` values directly. It is `진행 중` pending a decision to either
+  localize the API template or explicitly exempt this template type for
+  frontend translation. A frontend exception also needs the confirmed Korean
+  label for `Set Preferences`.
 
 DL-16019 was resolved by adding the four missing Scan-platform keys and was
 visually verified in the local Others state. DL-16024 received the specified
@@ -304,12 +314,12 @@ web-only worktree:
 
 - DL-16067 through DL-16071 and DL-16073 through DL-16075: mobile Lab or
   Clinic app copy/layout fixes owned by the app repository.
-- DL-16072: align the mobile-app resource from `재제작` to the decided common
-  term `리메이크` in the app-owned repository.
+- DL-16072 is complete in this web QA queue; any app wording changes remain on
+  their own app QA cards.
 
 Mobile-app cards are outside this web worktree and are not part of the remaining
-web delivery queue. The DL-16072 terminology decision is complete; only its app
-implementation remains.
+web delivery queue. The DL-16072 terminology decision and card handling are
+complete.
 
 ## Durable Operating Rules
 
@@ -351,11 +361,10 @@ was changed during the measurement.
 The code and Sheet work is committed and pushed. PR #4515 is clean and
 mergeable as the staging deployment path from `feature/i18n`; once deployed,
 visually recheck the cards already marked `Ready for Deploy`, especially
-DL-16013, DL-16052, DL-16055, DL-16059, and the DL-16019 Others state. Only
-DL-16053 still requires a product/design answer in this web scope. DL-16072 is
-decided as `리메이크`, with app implementation remaining outside this
-worktree. Mobile-app QA remains outside this worktree. Capture expansion
-remains paused.
+DL-16013, DL-16052, DL-16055, DL-16059, and the DL-16019 Others state.
+DL-16053 and DL-16080 still require a product/design or API-scope answer in
+this web scope. DL-16072 is complete as `리메이크`; app QA remains on separate
+cards outside this worktree. Capture expansion remains paused.
 
 This is still not production-closeout complete. The latest follow-up commit is
 pushed but deployment of that exact revision is not yet confirmed. Create or
