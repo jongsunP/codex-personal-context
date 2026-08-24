@@ -461,6 +461,48 @@
   구현에 대조하는 것이다. 그 결과가 확인되기 전에는 추가 반응형 배치를 추측하지
   않는다.
 
+### 최신 Figma 전체 재검수와 반응형 파일 첨부 보완 — 2026-08-24
+
+- 공식 Figma의 전체 보드 `60:9606`과 주문 상세 웹·앱 `160:38179`, 마이페이지
+  `160:38938`, Pending Reviews `160:40593`, 상세 drawer `160:41646`, 리뷰 카드 UI
+  비교 `160:41672`를 다시 직접 조회했다. PC·웹 모바일·APP 영역, 상태 variant,
+  annotation, 빨간 화살표와 설명 문구를 함께 대조했으며 APP native 화면은 이번
+  Clinic 웹 구현 범위에서 제외했다.
+- 기존 웹 구현의 PC 10개 페이지네이션, 모바일 무한스크롤, 일반 회원과 Org Admin
+  마이페이지 차이, 빠른 평가 후 현재 탭 유지, 상세 CTA 저장, 주문 상세 노출 위치와
+  주요 카드·drawer 디자인은 현재 Figma와 일치했다. 이 재검수에서 새로 명확하게
+  확인된 웹 누락은 모바일 파일 첨부 상태와 첨부 validation toast였다.
+- `FeedbackAttachmentUpload`를 별도 컴포넌트로 분리했다. PC는 기존 공용
+  `FileUploadUI`와 470x121 영역을 유지하고, 719px 이하 웹 모바일에는 335x114 기본
+  업로드, processing overlay, `Add file`과 최대 240px 첨부 목록, 375x195 하단
+  선택 sheet, Photo/Camera/File 입력을 구현했다. drawer가 닫히면 내부 sheet도 함께
+  닫히도록 했다.
+- 공용 업로드 확장자 상수와 `FileUtils`를 재사용해 지원하지 않는 확장자, 최대 5개,
+  총 200MB를 분리 검증한다. Figma의 정확한 실패 toast 세 문구를 반영했고 PC와
+  모바일 일반 파일 input에 공용 accept 목록을 연결했다. 상세 fixture에는 HEIC,
+  STL, JPG, PDF, PLY 5개와 약 182MB 상태를 추가해 첨부 목록 UI를 확인할 수 있다.
+- Figma 모바일 첨부 표기에는 2G가 보이지만 최신 Notion 정책은 웹·앱 200MB이므로
+  현재 구현은 200MB를 유지한다. Figma 질문 문구와 BE fixture 질문 문구, 시각
+  `Tell Us Why`와 annotation `Add More Details`, 상품별 artwork와 서버 식별 필드도
+  아직 서로 완전히 일치하지 않는다. 최종 기획·BE 계약 전에는 임의로 한쪽을
+  계약화하지 않는다.
+- Clinic type, Lab type, Admin type, 대상 ESLint, Prettier와 `git diff --check`를
+  통과했다. pre-push 전체 lint는 0 errors와 기존 warning 418건, shared config 3건과
+  shared hook 24건, coverage delta 변화 없음을 확인했다. 새 worktree에 없던 Git
+  무시 대상 `lab/next-env.d.ts`는 `next typegen`으로, coverage baseline은 공식
+  script로 생성해 이번 commit과 push는 hook을 우회하지 않고 완료했다.
+- 로그인된 Chrome에서 PC·모바일 첨부 레이아웃, 719/720 breakpoint, 목록 스크롤,
+  삭제, drawer와 하단 sheet 닫힘을 확인했다. 자동 브라우저 제어에서는 로컬 파일
+  chooser와 synthetic File 주입이 차단돼 실제 파일 선택·카메라·갤러리 동작은
+  수동 QA 또는 App QA가 남아 있다.
+- 제품 commit `e4105f909` (`[DL-15828] feat: 피드백 파일 첨부 UI 및 검증 보완`)를
+  `origin/feature/DL-15828`에 push했다. 제품 worktree는 clean이고 로컬·원격 HEAD가
+  동일하며 PR은 생성하지 않았다.
+- 현재 확인 가능한 Clinic 웹 Figma 기준으로 더 명확한 미반영 UI는 없다. 다음
+  시작점은 최종 디자인·Notion 변경과 배포 Swagger/generated model의 피드백 계약을
+  다시 확인한 뒤 실제 API adapter, eligibility, count, pagination, attachment 업로드와
+  수동 파일 선택 QA를 연결하는 것이다.
+
 ## FE Jira 구조와 스토리포인트
 
 Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용한다.
@@ -508,8 +550,8 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   저장한다.
 - 상세 노출 keyword 기준은 Shade / Fit / Material / Service다.
 - 상세에는 웹·앱 갤러리 최대 5개와 앱 촬영 1개씩의 사진 첨부가 기획 범위로
-  추가됐다. PC Figma만 반영됐으므로 모바일 디자인과 API 계약 전에는 구현하지
-  않는다.
+  추가됐다. 최신 PC·웹 모바일 Figma UI는 fixture 경계에서 구현했으며 실제 업로드,
+  기존 첨부 수정과 App native 동작은 API·소유권 계약 전까지 연결하지 않는다.
 - 사용자 노출 문구는 영어다.
 - 웹과 앱은 동일한 서버 데이터와 공통 query/cache 규칙을 사용한다.
 - 서버와 React Query cache를 기준 상태로 사용하며, Figma의 현재 카드 유지만
@@ -531,9 +573,9 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - Clinic WebView와 native app의 화면, navigation, back, safe-area, deep-link 책임
 - 관리자 화면·권한·API·검증 범위
 - 앱 피드백 알림의 발송 조건, 대상, 문구, deep link, BE/FCM/native 책임
-- 사진 업로드의 모바일 Figma UI, upload/attachment DTO, 기존 파일 표시·삭제·재정렬,
-  부분 실패·재시도 계약. PC Figma와 기획에는 일부 반영됐지만 전체 웹 디자인과
-  API는 아직 없다.
+- 사진 업로드의 upload/attachment DTO, 기존 파일 표시·삭제·재정렬, 부분
+  실패·재시도 계약과 App native 카메라·갤러리 책임. PC·웹 모바일 UI는 반영됐지만
+  실제 API와 native 계약은 아직 없다.
 - 신규 analytics event의 정확한 trigger와 payload. 명칭은 추가됐지만 설명이 서로
   충돌해 이벤트를 추측해 추가하지 않았다.
 - 2026-08-24 배포 Swagger와 generated model에는 주문 피드백 API contract가
