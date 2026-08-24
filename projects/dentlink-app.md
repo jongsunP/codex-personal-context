@@ -21,6 +21,33 @@ This is the current resume source for the first local setup of
   necessary before creating one. Use a dedicated feature worktree/session for
   larger work when requested.
 
+## User Background And Guidance Style
+
+- The user is an experienced frontend developer working primarily with React
+  and TypeScript. Assume familiarity with components, hooks, state, API flows,
+  types, styling, review, and web delivery; do not teach these from zero.
+- The knowledge gap is the mobile ecosystem around otherwise familiar React
+  code. Explain unfamiliar concepts by mapping them to web equivalents, then
+  focus on the mobile-specific difference and the practical consequence.
+- Proactively identify whether a task is JavaScript-only or crosses the native
+  boundary; cross-platform or platform-specific; Metro-refreshable or requires
+  a native rebuild; simulator-verifiable or needs a physical device; and safe
+  for the user to implement or better handed to the app developer.
+- The user's intended scope is supporting app functionality connected to a
+  web-led feature. The app developer owns deep native work, signing, release
+  and store deployment, and final specialist review. Ask before implementation
+  when a requested change crosses that boundary or carries material platform
+  risk.
+- Guide in context while doing the work: explain permissions, lifecycle,
+  navigation, storage, networking, push, deep links, build variants, and
+  device/simulator constraints only as they become relevant. Keep explanations
+  concise but surface risks and validation requirements before they surprise
+  the user.
+- Start from Git-backed personal context, then verify drift-prone facts against
+  the live repository, team documents, Jira, Figma, and API contracts. Do not
+  rely on AI memory alone. At handoff, report Android and iOS verification
+  separately and identify what still needs the app developer's review.
+
 ## Repository
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-app`
