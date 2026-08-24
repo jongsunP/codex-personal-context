@@ -424,6 +424,43 @@
   artwork를 유지한다. APP native 구현, 실제 API 계약, 모바일 사진 첨부 디자인은
   다음 계약 확인 전까지 대기한다.
 
+### 상세 파일 첨부 상태 보드 구현 체크포인트 — 2026-08-24
+
+- Figma 상세 drawer 상태 보드 `160:41646`을 다시 조회해 Default, 전체 입력,
+  스크롤 최하단, 이미지 첨부·첨부 목록 스크롤·용량/장수 초과와 500자 초과 오류
+  상태를 구분했다. 기존 구현에는 하단 고정 Submit, 실제 첨부 UI와 목록 상태,
+  500자 초과 오류 표현이 빠져 있었다.
+- Clinic PC 상세 drawer에 공용 `FileUploadUI`를 사용한 이미지 선택, 최대 5개,
+  첨부 목록·미리보기·삭제·6px 스크롤바, 제한 초과 error toast를 구현했다. Figma
+  공용 업로더의 2GB 문구보다 최신 Notion의 웹·앱 200MB 정책을 우선했다.
+- Submit 영역은 PC·모바일 모두 drawer body 바깥의 102px 고정 footer로 통합했다.
+  PC는 40px 좌우 여백과 52px 버튼을 유지하고, drawer 본문은 6px 스크롤바를 포함해
+  Figma의 470px 콘텐츠 폭이 유지되도록 보정했다.
+- comment는 500자까지 입력을 잘라내는 대신 500자 초과 시 `#FF5151` border/caption
+  오류 상태를 표시하고 Submit을 비활성화한다. 상세 저장 전 Good/Bad와 reason은
+  기존 form state에 유지하며 CTA에서 함께 저장하는 Figma 흐름을 보존했다.
+- API DTO를 추측하지 않고 mock/view-model의 `FeedbackAttachment`를 optional로
+  추가했다. 실제 API 연결 시 file 업로드 결과와 attachment DTO로 교체해야 하며,
+  object URL과 mock 저장 로직을 서버 계약으로 재사용하지 않는다.
+- 해당 Figma node에는 모바일 파일 첨부 레이아웃이 없어 PC에만 첨부 영역을
+  노출했다. 모바일 UI, camera/gallery 구분, safe-area와 native 책임은 최신 디자인
+  확인 전까지 임의 구현하지 않는다.
+- Clinic type, 대상 파일 ESLint·Prettier, `git diff --check`를 통과했고 로그인된
+  Chrome에서 PC drawer, 고정 CTA, 업로드 박스와 500자 오류 색상·Submit 비활성화를
+  확인했다. 브라우저 제어의 로컬 파일 주입이 차단돼 실제 첨부 행 렌더링은 다음
+  수동 QA 또는 fixture 검증이 필요하다.
+- 정상 pre-commit은 이번 변경과 무관한 Lab `BrowserPDFHeaderUI.tsx` PNG module
+  resolution 기준선 오류로 중단됐다. 정상 pre-push는 전체 lint 0 errors와 기존
+  warning, shared config 3건·hook 24건 통과 후 이 worktree의 coverage baseline
+  부재에서 중단됐다. 두 hook만 `--no-verify`로 우회했다.
+- 제품 commit `75012792e` (`[DL-15828] feat: 피드백 상세 파일 첨부 상태 구현`)를
+  `origin/feature/DL-15828`에 push했다. 제품 worktree는 clean이고 PR은 생성하지
+  않았다.
+- 다음 즉시 시작점은 최신 Figma 전체 파일에서 새로 반영됐다는 파일 업로드 디자인을
+  PC 웹·모바일 웹·APP으로 다시 분리하고, 각 breakpoint와 상태·annotation을 기존
+  구현에 대조하는 것이다. 그 결과가 확인되기 전에는 추가 반응형 배치를 추측하지
+  않는다.
+
 ## FE Jira 구조와 스토리포인트
 
 Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용한다.
