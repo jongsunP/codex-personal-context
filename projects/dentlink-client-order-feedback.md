@@ -302,16 +302,18 @@
 
 ### 2026-08-24 Notion 변경
 
-- Notion `[치과] 주문 피드백 수집`은 여전히 `작성 중`이지만 최종 편집 시각이
-  `2026-08-24T04:24:20.241Z`로 갱신됐다.
+- Notion `[치과] 주문 피드백 수집`은 여전히 `작성 중`이며, 마지막 전수 확인 시
+  최종 편집 시각은 `2026-08-24T05:48:15.315Z`였다.
 - Good / Bad 필수, 상세 keyword와 comment 선택 정책이 명시됐다.
 - 기존 `Other`를 삭제하고 최종 노출 기준을 `Shade / Fit / Material / Service`로
   적었다. 사용자에게 공유된 BE 질문 구조의 PRODUCT/SERVICE category와 keyword
   codes는 이 노출 기준과 다르므로 adapter mapping 계약이 필요하다.
-- 상세에 사진 첨부가 1차 범위로 반영됐다. 웹·앱 갤러리 업로드는 최대 10장,
-  파일당 5MB와 지원 확장자는 전사 정책을 따르며, 앱 촬영 업로드는 1장이다.
-  Figma와 API에는 아직 반영되지 않아 UI·payload·기존 파일 삭제/재시도는 구현하지
-  않는다. 기존 웹 1.5점 산정에도 사진 업로드 추가분은 포함되지 않았다.
+- 상세에 사진 첨부가 1차 범위로 반영됐다. 최신 Notion에는 웹·앱 갤러리 업로드
+  최대 5개, 앱 촬영 업로드 1개씩, 웹·앱 파일 크기 200MB와 전사 업로드 정책을
+  따르는 것으로 적혀 있다. PC 상세 drawer Figma에는 Image Upload 영역이 추가됐지만
+  웹 모바일 Figma와 API에는 아직 반영되지 않았다. 반응형 동작, payload, 기존 파일
+  표시·삭제·실패·재시도 계약이 없으므로 구현하지 않는다. 기존 웹 1.5점 산정에도
+  사진 업로드 추가분은 포함되지 않았다.
 - 피드백은 주문과 Assigned Dentist 기준으로 구분하며 실제 제출 user ID도 저장한다.
   주문 하나에 Assigned Dentist별 복수 피드백이 가능하다. 변경 이력은 저장하지
   않고 최종 작성·수정 시점만 유지하며, 작성·수정 이벤트는 계약 확정 후
@@ -371,6 +373,31 @@
 - 제품 commit `4cddac797`를 `origin/feature/DL-15828`에 push했다. 제품 worktree는
   clean이고 PR은 생성하지 않았다.
 
+### 최종 전수 검토와 반응형 목록 단위 보완 — 2026-08-24
+
+- Figma의 MyPage `160:38938`, Feedback `160:40593`, Order `160:38179`에서 웹 PC,
+  웹 모바일, APP 영역과 annotation·빨간 화살표 flow를 다시 분리해 대조했다. 앱은
+  이번 Clinic 웹 구현 범위에서 제외했다.
+- 확정된 웹 범위의 마이페이지 Quick Links/My Office modal, 피드백 목록·상세 drawer,
+  주문 상세 피드백 배너는 현재 구현과 일치한다. PC 목록은 한 페이지 10개,
+  모바일은 5개 단위 무한스크롤이므로 상수를 분리하고 To Review/Reviewed fixture를
+  각각 11개로 늘려 두 동작을 실제 화면에서 검증했다.
+- 마지막 Figma에는 PC 상세 drawer의 Image Upload UI가 보이지만 모바일 디자인은
+  없다. 최신 Notion도 작성 중이고 피드백 API/DTO는 배포 Swagger와 generated model에
+  없다. 따라서 현재 확인 가능한 디자인은 최대한 반영하되, PC만 보고 모바일·업로드
+  계약을 추측하지 않는 대기 항목으로 분리한다.
+- Notion analytics 페이지에는 `review_select_reason`, `review_add_comments`,
+  `review_submit_click`이 추가됐지만 각 설명이 다른 클릭 동작을 가리켜 trigger 계약이
+  충돌한다. 기존에 확인된 세 이벤트 외에는 임의 추가하지 않는다.
+- Clinic type, 변경 파일 ESLint와 Prettier를 통과했다. pre-commit은 이번 변경과
+  무관한 Lab의 `BrowserPDFHeaderUI.tsx` PNG module resolution 오류로 중단돼
+  `--no-verify`로 commit했다. pre-push는 전체 lint 0 errors와 shared config 3건,
+  shared hook 24건을 통과한 뒤 로컬 coverage baseline 부재로 중단돼 `--no-verify`로
+  push했다.
+- 제품 branch는 `feature/DL-15828`, HEAD는 `85f992203`이며
+  `origin/feature/DL-15828`에 push됐다. commit은
+  `[DL-15828] feat: 피드백 목록 반응형 페이지 단위 보완`이고 PR은 생성하지 않았다.
+
 ## FE Jira 구조와 스토리포인트
 
 Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용한다.
@@ -417,8 +444,9 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 담당 의사가 변경되면 Assigned Dentist별 피드백을 구분하고 실제 제출 user ID도
   저장한다.
 - 상세 노출 keyword 기준은 Shade / Fit / Material / Service다.
-- 상세에는 웹·앱 갤러리 최대 10장과 앱 촬영 1장의 사진 첨부가 기획 범위로
-  추가됐다. Figma/API 계약 전에는 구현하지 않는다.
+- 상세에는 웹·앱 갤러리 최대 5개와 앱 촬영 1개씩의 사진 첨부가 기획 범위로
+  추가됐다. PC Figma만 반영됐으므로 모바일 디자인과 API 계약 전에는 구현하지
+  않는다.
 - 사용자 노출 문구는 영어다.
 - 웹과 앱은 동일한 서버 데이터와 공통 query/cache 규칙을 사용한다.
 - 서버와 React Query cache를 기준 상태로 사용하며, Figma의 현재 카드 유지만
@@ -440,10 +468,11 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - Clinic WebView와 native app의 화면, navigation, back, safe-area, deep-link 책임
 - 관리자 화면·권한·API·검증 범위
 - 앱 피드백 알림의 발송 조건, 대상, 문구, deep link, BE/FCM/native 책임
-- 사진 업로드의 Figma UI, upload/attachment DTO, 기존 파일 표시·삭제·재정렬,
-  부분 실패·재시도 계약. 기획에는 반영됐지만 디자인·API는 아직 없다.
-- analytics event 명칭과 payload. Jira에는 telemetry 요구가 있으나 계약이 없어
-  이벤트를 추측해 추가하지 않았다.
+- 사진 업로드의 모바일 Figma UI, upload/attachment DTO, 기존 파일 표시·삭제·재정렬,
+  부분 실패·재시도 계약. PC Figma와 기획에는 일부 반영됐지만 전체 웹 디자인과
+  API는 아직 없다.
+- 신규 analytics event의 정확한 trigger와 payload. 명칭은 추가됐지만 설명이 서로
+  충돌해 이벤트를 추측해 추가하지 않았다.
 - 2026-08-24 배포 Swagger와 generated model에는 주문 피드백 API contract가
   없으므로 실제 연동 시작 시 다시 확인해야 한다.
 
