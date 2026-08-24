@@ -69,7 +69,8 @@ For detailed current state, read:
   primary workload, but mobile app work is active and must be developed
   alongside web when a feature or user flow spans both; its task volume may be
   smaller or intermittent.
-- Current state: initial macOS setup is complete at `51aeb1520`. Office
+- Current state: the maximum practical initial macOS setup is complete at
+  `51aeb1520`. Office
   development login and the first Home dashboard are verified on both the API
   36 ARM64 `Dentlink_API_36` Android AVD and an iOS 26.5 ARM64 simulator.
   Android is the normal local path. iOS required an isolated simulator-only

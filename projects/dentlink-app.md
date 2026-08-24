@@ -185,6 +185,34 @@ This is the current resume source for the first local setup of
 - At closeout, Metro was running on port 8081 and both Android and iOS were left
   on the Office Home dashboard. No credential was written to this checkpoint.
 
+## Initial Setup Closeout And Future Work Contract
+
+- The initial objective was to complete as much local app setup and runtime
+  proof as possible, not to deliver a new app feature. That objective is
+  complete: dependencies, native toolchains, Android Studio and AVD, Xcode and
+  Pods, Watchman, Reactotron, Metro, native builds, development-server login,
+  and the first Office dashboard were exercised in proportion to the current
+  platform constraints.
+- This repository remains an active development scope connected to Dentlink
+  web. Future work may be mobile-only or span web and mobile; do not interpret
+  the app's lower task volume as an instruction to omit mobile implementation
+  or QA.
+- On every future app session, refresh the Git-backed personal context and the
+  live app repository first. Then verify the requested environment, branch,
+  related Jira/Figma/API sources, and the closest production pattern before
+  editing. Preserve `main` as the clean administrative checkout and base
+  feature work on the live `origin/develop` policy unless the team state has
+  changed.
+- Reuse the verified Android path as the default fast feedback loop. Use the
+  installed iOS proof app only for flows that do not require face recognition,
+  and keep its temporary nature explicit. Do not claim full iOS readiness until
+  a normal build, push registration, and any feature-specific native behavior
+  are verified.
+- Shared-repository code, commits, pushes, and PR changes still require the
+  user's explicit authorization. Curated personal progress history should be
+  updated and pushed at meaningful checkpoints. Never persist supplied login
+  credentials in source, project notes, or Codex memory.
+
 ## Next Starting Point
 
 1. For the verified Android path, boot `Dentlink_API_36`, run
