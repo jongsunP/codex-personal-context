@@ -65,6 +65,11 @@ This is the current resume source for the first local setup of
 
 ## Team Onboarding Sources
 
+- `웹 FE를 위한 Dentlink 앱 피처 개발 가이드`:
+  `https://app.notion.com/p/3c6ce072e82f80e3818ee8ecb35468fc`
+  - Reusable minimum workflow for web-led supporting app features; excludes
+    one-time setup status and routes deep native, signing, release, and final
+    specialist review to the app developer.
 - `APP 프로젝트 시작`:
   `https://app.notion.com/p/3c6ce072e82f80e58f0fdf8c8d3b9db6`
 - `Reactotron 세팅 (네트워크 확인)`:
