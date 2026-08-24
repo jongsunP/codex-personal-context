@@ -28,6 +28,8 @@ This is the current resume source for the first local setup of
 - `android/local.properties` points to the local SDK and is ignored by Git.
 - `~/.zshrc` exports the JDK/Android SDK paths and activates Mise. `~/.npmrc`
   uses the absolute user cache path so npm does not dirty project checkouts.
+- The local `.git/info/exclude` ignores `.npm-cache/` because npm initializes
+  logging before applying the final absolute cache configuration.
 - iOS Pods installed successfully: 123 Podfile dependencies and 159 total
   pods. The Xcode workspace exposes all six Office/Lab environment schemes.
 - No Android Virtual Device exists locally. The existing Apple iOS simulators
