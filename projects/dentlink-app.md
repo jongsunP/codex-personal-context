@@ -49,7 +49,10 @@ This is the current resume source for the first local setup of
 - Android Studio Quail 3 `2026.1.3 Patch 1` is installed.
 - JDK `17.0.19`, Android SDK root
   `/Users/parkjongsun/Library/Android/sdk`, API 34/35/36, Build Tools 35/36,
-  CMake 3.22.1, and NDK 27.0/27.1 are installed. SDK licenses are accepted.
+  CMake 3.22.1, and NDK 27.0/27.1 are installed. Existing build licenses are
+  accepted, but installing the API 36 ARM64 emulator image now requests the
+  additional `android-sdk-arm-dbt-license` and Android SDK license agreement.
+  Those new legal agreements were not accepted automatically.
 - `android/local.properties` points to the local SDK and is ignored by Git.
 - `~/.zshrc` exports the JDK/Android SDK paths and activates Mise. `~/.npmrc`
   uses the absolute user cache path so npm does not dirty project checkouts.
@@ -57,11 +60,17 @@ This is the current resume source for the first local setup of
   logging before applying the final absolute cache configuration.
 - iOS Pods installed successfully: 123 Podfile dependencies and 159 total
   pods. The Xcode workspace exposes all six Office/Lab environment schemes.
+- Watchman `2026.07.27.00` and Reactotron `3.11.0` are installed through
+  Homebrew. Reactotron is available at `/Applications/Reactotron.app` and was
+  opened successfully.
 - No Android Virtual Device exists locally and no physical Android device is
-  connected. Apple iOS 26.5 simulator devices exist, but the current project
-  excludes `arm64` for `iphonesimulator` in `ios/Podfile`; on this Apple
-  Silicon Mac, Xcode therefore exposes only the generic simulator placeholder
-  for the app scheme and cannot select an installed simulator device.
+  connected. Installing the recommended API 36 Google APIs ARM64 system image
+  is blocked only on explicit user acceptance of the new SDK licenses.
+- Apple iOS 26.5 simulator devices exist, but the current project excludes
+  `arm64` for `iphonesimulator` in `ios/Podfile`. `MLImage.framework` explains
+  the exclusion: its arm64 slice targets a physical iOS device while its
+  x86_64 slice targets the simulator. Xcode therefore exposes only the generic
+  simulator placeholder for the app scheme on this Apple Silicon Mac.
 
 ## Verification
 
@@ -101,26 +110,42 @@ This is the current resume source for the first local setup of
   successfully and is the current local workaround.
 - `react-native doctor` reports no Android SDK version, but API 34/35/36 and
   Build Tools 35/36 are present and the compileSdk 36 Android build succeeds;
-  treat that doctor result as a detection false negative. Watchman is not
-  installed.
+  treat that doctor result as a detection false negative. After installing
+  Watchman, Doctor recognizes Node, Yarn, Watchman, Xcode, Ruby, CocoaPods, and
+  `.xcode.env`; its remaining ADB error is expected while no Android device or
+  AVD exists.
+- An explicit Office development x86_64 simulator build passed using Rosetta,
+  a temporary derived-data directory, and temporary header-path links for the
+  `react-native-exit-app` Codegen headers. The app bundle is
+  `DentlinkDevelopment.app` with ID `com.innovaid.dentlink.development`.
+- The generated x86_64 app cannot be installed into the only available iOS
+  26.5 ARM64 simulator runtime (`Failed to find matching arch`). An arm64
+  simulator build reaches the final link but fails because the MLImage arm64
+  slice is an iOS-device binary. Therefore native iOS compilation is proven,
+  but actual iOS simulator launch is not currently available on this runtime.
+- The `react-native-exit-app` package also references its generated header via
+  paths CocoaPods does not expose in this build. The temporary `/tmp` links
+  prove the package can compile, but a durable shared-repository fix still
+  needs a maintenance scope.
 - The README framework versions are stale: live dependencies are React Native
   0.82.1, React 19.1.1, and TypeScript 5.9.3, not the versions shown at the top
   of the README.
-- Reactotron is wired into both Office and Lab development apps, but the
-  Reactotron desktop app is not installed locally. Both tracked
-  `ReactotronConfig.js` files use the same fixed host, which does not match the
-  Mac's current active network address. Reactotron is optional for first app
-  launch and should be configured separately without accidentally committing a
-  developer-specific address.
+- Reactotron is wired into both Office and Lab development apps and the desktop
+  app is installed. Both tracked `ReactotronConfig.js` files use
+  `10.10.7.18`, while the Mac's current active address is `10.10.7.46`.
+  Reactotron cannot connect until that developer-specific host is handled, and
+  the current address was intentionally not written to shared tracked files.
 
 ## Next Starting Point
 
-1. For the shortest path to runnable local development, create an Android
-   Virtual Device in Android Studio or connect a physical Android device. Use
-   `yarn metro-log` until the stale `yarn start` script is corrected.
-2. Before using an iOS simulator on this Apple Silicon Mac, correct and verify
-   the project-level `arm64` simulator exclusion; the installed simulator
-   runtime alone is not currently sufficient.
+1. After explicit user approval, accept the new Android SDK licenses, install
+   `system-images;android-36;google_apis;arm64-v8a`, create the recommended
+   Pixel AVD, and run the Office development app with `yarn metro-log`.
+2. For iOS simulator development on Apple Silicon, resolve the MLImage
+   simulator binary constraint and the `react-native-exit-app` Codegen header
+   exposure. Merely removing the Podfile arm64 exclusion is not sufficient.
+   A physical iPhone is the shorter current iOS runtime path if signing access
+   is available.
 3. Treat the typecheck, source lint, Jest configuration/test failures, stale
    start script, and README version mismatch as shared-repository baseline
    issues. Fix them only in an explicitly authorized feature or maintenance
