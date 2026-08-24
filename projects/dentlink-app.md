@@ -12,6 +12,24 @@ This is the current resume source for the first local setup of
 - The checkout is clean and synchronized with `origin/main`.
 - This main checkout is the repository-administration scope. Use a dedicated
   feature worktree/session for substantial implementation when requested.
+- Team branch policy uses `develop` as the feature and integration base, not
+  `main`. Live verification found `origin/develop` at `b5251df`, and the latest
+  Office `v2.2.3` and Lab `v1.0.3` release branches point to the same commit.
+  The production tags `office-v2.2.2` and `lab-v1.0.2` are contained in
+  `origin/main`.
+
+## Team Onboarding Sources
+
+- `APP 프로젝트 시작`:
+  `https://app.notion.com/p/3c6ce072e82f80e58f0fdf8c8d3b9db6`
+- `Reactotron 세팅 (네트워크 확인)`:
+  `https://app.notion.com/p/3b2ce072e82f80f9a5a9ee60923437ae`
+- `APP 모노레포 브랜치 전략`:
+  `https://app.notion.com/p/39fce072e82f80f99f47e7161c1adf1f`
+- The branch model is present in live remote refs and PR automation. The CI/CD
+  checks listed in the strategy document are recommendations rather than a
+  fully implemented current gate; the current validation workflow checks app
+  version consistency only on a limited path set.
 
 ## Local Environment
 
@@ -19,6 +37,11 @@ This is the current resume source for the first local setup of
 - Yarn `4.9.1` is activated through Homebrew Corepack.
 - Mise `2026.8.11` reads the repository `.tool-versions` and selects Ruby
   `3.2.2` in this checkout.
+- The team onboarding page and `Gemfile.lock` specify Ruby `3.4.5`, while the
+  committed `.tool-versions` selects `3.2.2`. This is a repository-owned
+  source-of-truth conflict to confirm with the app team. The current Ruby
+  `3.2.2` environment passes `bundle check` and native dependency/build checks,
+  so it is not the present build blocker.
 - Root, iOS, and Android Bundler dependencies are installed. The active `pod`
   command is CocoaPods `1.16.2`, while `bundle exec pod` follows the lockfile
   and uses CocoaPods `1.15.2`; Android Fastlane `2.228.0` runs under Ruby
@@ -83,6 +106,12 @@ This is the current resume source for the first local setup of
 - The README framework versions are stale: live dependencies are React Native
   0.82.1, React 19.1.1, and TypeScript 5.9.3, not the versions shown at the top
   of the README.
+- Reactotron is wired into both Office and Lab development apps, but the
+  Reactotron desktop app is not installed locally. Both tracked
+  `ReactotronConfig.js` files use the same fixed host, which does not match the
+  Mac's current active network address. Reactotron is optional for first app
+  launch and should be configured separately without accidentally committing a
+  developer-specific address.
 
 ## Next Starting Point
 
@@ -96,6 +125,8 @@ This is the current resume source for the first local setup of
    start script, and README version mismatch as shared-repository baseline
    issues. Fix them only in an explicitly authorized feature or maintenance
    scope; initial environment setup itself is complete.
-4. For feature implementation, verify live `origin/main`, Jira, Figma, the
-   closest Office/Lab production pattern, and create the requested feature
-   worktree/session before editing.
+4. For feature implementation, refresh and use live `origin/develop` as the
+   default base, then verify Jira, Figma, and the closest Office/Lab production
+   pattern before creating the requested feature worktree/session. Keep this
+   `main` checkout as the production/admin reference unless the user requests a
+   different working model.
