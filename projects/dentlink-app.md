@@ -84,11 +84,12 @@ This is the current resume source for the first local setup of
   Pixel 8 AVD named `Dentlink_API_36` are installed. The AVD boots and connects
   through ADB as `emulator-5554`; no physical Android device is required for
   the verified local development path.
-- Apple iOS 26.5 simulator devices exist, but the current project excludes
+- Apple iOS 26.5 simulator devices exist, but the committed project excludes
   `arm64` for `iphonesimulator` in `ios/Podfile`. `MLImage.framework` explains
   the exclusion: its arm64 slice targets a physical iOS device while its
-  x86_64 slice targets the simulator. Xcode therefore exposes only the generic
-  simulator placeholder for the app scheme on this Apple Silicon Mac.
+  x86_64 slice targets the simulator. The same constraint remains in the newer
+  MLImage `1.0.0-beta8`, so a dependency-version bump alone is not a proven
+  fix.
 
 ## Verification
 
@@ -143,9 +144,8 @@ This is the current resume source for the first local setup of
   `DentlinkDevelopment.app` with ID `com.innovaid.dentlink.development`.
 - The generated x86_64 app cannot be installed into the only available iOS
   26.5 ARM64 simulator runtime (`Failed to find matching arch`). An arm64
-  simulator build reaches the final link but fails because the MLImage arm64
-  slice is an iOS-device binary. Therefore native iOS compilation is proven,
-  but actual iOS simulator launch is not currently available on this runtime.
+  build from the committed dependency graph fails because the MLImage arm64
+  slice is an iOS-device binary.
 - The `react-native-exit-app` package also references its generated header via
   paths CocoaPods does not expose in this build. The temporary `/tmp` links
   prove the package can compile, but a durable shared-repository fix still
@@ -162,17 +162,43 @@ This is the current resume source for the first local setup of
   shared repository clean. A durable cross-developer host strategy remains a
   separate maintenance decision; the current address was not committed.
 
+## Office Development Runtime Proof - 2026-08-24
+
+- Android Office development was launched on `Dentlink_API_36`, authenticated
+  against the development server with the supplied test account, and reached
+  the Home dashboard for `frankieDevOffice`. The dashboard showed Action
+  Required cards and the Home, LinkTalk, Orders, and Profile tabs.
+- iOS Office development was also launched on the iOS 26.5 iPhone 17 Pro ARM64
+  simulator, authenticated with the same test account, and reached the same
+  Home dashboard.
+- The iOS proof used an isolated `/tmp` source copy. Only that copy omitted the
+  MLKit face-detection pod/plugin and the simulator arm64 exclusion, and its
+  temporary Pods header aliases handled the `react-native-exit-app` Codegen
+  path. The shared repository remained clean. Face recognition is therefore
+  unavailable in this proof build, and the committed project still needs a
+  durable simulator compatibility fix before `yarn ios-office:dev` is a normal
+  Apple Silicon workflow.
+- iOS first launch displayed a non-fatal Firebase Messaging development error:
+  `messaging/unregistered` from calling `getToken` before remote-message
+  registration. Returning from the notification Settings flow allowed login
+  and dashboard use; track this as a separate runtime maintenance issue.
+- At closeout, Metro was running on port 8081 and both Android and iOS were left
+  on the Office Home dashboard. No credential was written to this checkpoint.
+
 ## Next Starting Point
 
 1. For the verified Android path, boot `Dentlink_API_36`, run
    `yarn metro-log`, then run `yarn android-office:dev`. If Reactotron is
    needed, use the verified `localhost` plus `adb reverse tcp:9090 tcp:9090`
    approach temporarily or first authorize a durable shared configuration fix.
-2. For iOS simulator development on Apple Silicon, resolve the MLImage
-   simulator binary constraint and the `react-native-exit-app` Codegen header
-   exposure. Merely removing the Podfile arm64 exclusion is not sufficient.
-   A physical iPhone is the shorter current iOS runtime path if signing access
-   is available.
+2. The currently installed iOS proof app can be used for dashboard-level work
+   while its simulator remains available and Metro is running. For a normal,
+   reproducible Apple Silicon workflow, resolve the MLImage simulator binary
+   constraint, simulator-safe face-plugin registration, and
+   `react-native-exit-app` Codegen header exposure. Merely removing the Podfile
+   arm64 exclusion or upgrading to MLImage beta8 is not sufficient. A physical
+   iPhone remains the shortest full-feature path if signing access is
+   available.
 3. Treat the typecheck, source lint, Jest configuration/test failures, stale
    start script, and README version mismatch as shared-repository baseline
    issues. Fix them only in an explicitly authorized feature or maintenance

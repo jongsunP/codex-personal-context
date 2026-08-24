@@ -69,12 +69,14 @@ For detailed current state, read:
   primary workload, but mobile app work is active and must be developed
   alongside web when a feature or user flow spans both; its task volume may be
   smaller or intermittent.
-- Current state: initial macOS setup is complete at `51aeb1520`. Watchman and
-  Reactotron are installed, and the Office development app has been built,
-  installed, and displayed on the API 36 ARM64 `Dentlink_API_36` Pixel 8 AVD.
-  Metro and Reactotron runtime connections were also verified. The current
-  arm64 iOS simulator still cannot install the verified x86_64 build. The
-  repository remains clean; see the checkpoint for baseline issues.
+- Current state: initial macOS setup is complete at `51aeb1520`. Office
+  development login and the first Home dashboard are verified on both the API
+  36 ARM64 `Dentlink_API_36` Android AVD and an iOS 26.5 ARM64 simulator.
+  Android is the normal local path. iOS required an isolated simulator-only
+  proof build without MLKit face detection plus temporary Codegen header
+  aliases; the committed project still needs a durable simulator compatibility
+  fix. Metro and Reactotron runtime connections were verified, and the shared
+  repository remains clean. See the checkpoint for baseline issues.
 - Personal current checkpoint:
   `projects/dentlink-app.md`
 
