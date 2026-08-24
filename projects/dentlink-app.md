@@ -318,6 +318,42 @@ This is the current resume source for the first local setup of
   pass; whether to split app-specific navigation is an app-developer review
   item rather than an unapproved refactor.
 
+### Live Figma recheck - 2026-08-24 19:00 KST
+
+- Rechecked the official Figma file `Lu8GEh1TUU5hOfj2FCPRYn` at Profile
+  `160:38938`, Feedback `160:40593`, Order `160:38179` and Analytics
+  `269:66717`, including representative APP frames and annotations rather than
+  relying on the earlier handoff.
+- The current APP list frames `160:41475` and `160:41530` confirm the native
+  `Share Feedback` header, To Review/Reviewed counts, information banner,
+  Good/Bad actions, `Tell Us Why`, `Edit`, rating badge and scroll-to-top FAB.
+  The implemented list covers these current core states.
+- The current detail frames `289:70322` and `289:70789` make the added mobile
+  attachment states explicit: empty/uploaded lists, remove action,
+  Photo/Camera/File bottom sheet, five-file error, size error and unsupported
+  type error. The implementation covers the functional picker/list/validation
+  boundary, but its error-toast copy is not pixel-text identical to Figma.
+- Figma's picker footer still says `up to 5 files, total size up to 2G`, while
+  its size-error toast says 200 MB and the latest Notion policy says five files
+  and total 200 MB. Keep 200 MB until product/design makes the source of truth
+  consistent.
+- Profile annotation `160:40576` calls the menu `Share Feedback(N)`, while the
+  visible Profile frames still use `Pending Reviews (3)`. The app currently
+  uses `Pending Reviews`; do not rename it from one internally conflicting
+  Figma annotation.
+- Order APP frame `160:38775` adds a completed-order feedback banner and a
+  post-rating confirmation toast. The current real app order detail is a
+  Clinic WebView, so banner ownership and landing into the native feedback
+  detail still require an explicit WebView/native bridge and identifier
+  contract rather than a guessed navigation change.
+- The Analytics board still exposes only `review_feeback_click`,
+  `review_detail_click` and `review_edit_click` for the APP path, all already
+  present in the implementation. Additional Notion events are not treated as
+  Figma-confirmed requirements.
+- The current Figma file therefore does not expose another clearly safe core
+  screen to implement now. Remaining work is contract clarification, exact
+  copy/artwork polish and device/API QA, not an omitted major APP page.
+
 ### External inputs still required
 
 - Deployed Swagger and generated models still have no order-feedback endpoint
