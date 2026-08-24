@@ -68,10 +68,11 @@ For detailed current state, read:
 - Role: secondary/support app project with occasional small maintenance and
   feature work.
 - Current state: initial macOS setup is complete at `51aeb1520`. Watchman and
-  Reactotron are installed, Metro and the Office development Android build are
-  verified, while Android runtime awaits SDK license acceptance/AVD creation
-  and the current arm64 iOS simulator cannot install the verified x86_64
-  build. The repository remains clean; see the checkpoint for baseline issues.
+  Reactotron are installed, and the Office development app has been built,
+  installed, and displayed on the API 36 ARM64 `Dentlink_API_36` Pixel 8 AVD.
+  Metro and Reactotron runtime connections were also verified. The current
+  arm64 iOS simulator still cannot install the verified x86_64 build. The
+  repository remains clean; see the checkpoint for baseline issues.
 - Personal current checkpoint:
   `projects/dentlink-app.md`
 

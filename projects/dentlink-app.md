@@ -62,10 +62,9 @@ This is the current resume source for the first local setup of
 - Android Studio Quail 3 `2026.1.3 Patch 1` is installed.
 - JDK `17.0.19`, Android SDK root
   `/Users/parkjongsun/Library/Android/sdk`, API 34/35/36, Build Tools 35/36,
-  CMake 3.22.1, and NDK 27.0/27.1 are installed. Existing build licenses are
-  accepted, but installing the API 36 ARM64 emulator image now requests the
-  additional `android-sdk-arm-dbt-license` and Android SDK license agreement.
-  Those new legal agreements were not accepted automatically.
+  CMake 3.22.1, and NDK 27.0/27.1 are installed. The user explicitly approved
+  the additional Android SDK and ARM DBT license terms needed by the API 36
+  ARM64 emulator image, and the required terms were accepted.
 - `android/local.properties` points to the local SDK and is ignored by Git.
 - `~/.zshrc` exports the JDK/Android SDK paths and activates Mise. `~/.npmrc`
   uses the absolute user cache path so npm does not dirty project checkouts.
@@ -76,9 +75,10 @@ This is the current resume source for the first local setup of
 - Watchman `2026.07.27.00` and Reactotron `3.11.0` are installed through
   Homebrew. Reactotron is available at `/Applications/Reactotron.app` and was
   opened successfully.
-- No Android Virtual Device exists locally and no physical Android device is
-  connected. Installing the recommended API 36 Google APIs ARM64 system image
-  is blocked only on explicit user acceptance of the new SDK licenses.
+- Android Emulator `37.1.11`, the API 36 Google APIs ARM64 system image, and a
+  Pixel 8 AVD named `Dentlink_API_36` are installed. The AVD boots and connects
+  through ADB as `emulator-5554`; no physical Android device is required for
+  the verified local development path.
 - Apple iOS 26.5 simulator devices exist, but the current project excludes
   `arm64` for `iphonesimulator` in `ios/Podfile`. `MLImage.framework` explains
   the exclusion: its arm64 slice targets a physical iOS device while its
@@ -101,6 +101,12 @@ This is the current resume source for the first local setup of
 - `:app:assembleOfficeDevelopmentDebug` was re-run from the repository root
   with the Office development env and passed incrementally in 10 seconds. The
   refreshed local debug APK is about 266 MB.
+- With `Dentlink_API_36` booted and `yarn metro-log` running,
+  `yarn android-office:dev` passed in 29 seconds, installed
+  `com.innovaid.android.dentlink.development`, and launched `MainActivity`.
+  Metro completed both Office bundles, connected to Android 16/API 36, and the
+  app displayed its push-notification onboarding screen without a fatal
+  runtime error.
 - Android build warnings are dependency/tooling warnings: SDK XML version,
   older library build-tools declarations, AndroidManifest namespace,
   deprecated APIs, and D8 stack-map warnings. They did not fail the build.
@@ -125,8 +131,7 @@ This is the current resume source for the first local setup of
   Build Tools 35/36 are present and the compileSdk 36 Android build succeeds;
   treat that doctor result as a detection false negative. After installing
   Watchman, Doctor recognizes Node, Yarn, Watchman, Xcode, Ruby, CocoaPods, and
-  `.xcode.env`; its remaining ADB error is expected while no Android device or
-  AVD exists.
+  `.xcode.env`. ADB now recognizes the installed `Dentlink_API_36` AVD.
 - An explicit Office development x86_64 simulator build passed using Rosetta,
   a temporary derived-data directory, and temporary header-path links for the
   `react-native-exit-app` Codegen headers. The app bundle is
@@ -146,14 +151,18 @@ This is the current resume source for the first local setup of
 - Reactotron is wired into both Office and Lab development apps and the desktop
   app is installed. Both tracked `ReactotronConfig.js` files use
   `10.10.7.18`, while the Mac's current active address is `10.10.7.46`.
-  Reactotron cannot connect until that developer-specific host is handled, and
-  the current address was intentionally not written to shared tracked files.
+  For verification, the Office host was temporarily set to `localhost`,
+  `adb reverse tcp:9090 tcp:9090` was applied, and Reactotron confirmed one
+  Android 16/API 36 connection. The source was then restored, leaving the
+  shared repository clean. A durable cross-developer host strategy remains a
+  separate maintenance decision; the current address was not committed.
 
 ## Next Starting Point
 
-1. After explicit user approval, accept the new Android SDK licenses, install
-   `system-images;android-36;google_apis;arm64-v8a`, create the recommended
-   Pixel AVD, and run the Office development app with `yarn metro-log`.
+1. For the verified Android path, boot `Dentlink_API_36`, run
+   `yarn metro-log`, then run `yarn android-office:dev`. If Reactotron is
+   needed, use the verified `localhost` plus `adb reverse tcp:9090 tcp:9090`
+   approach temporarily or first authorize a durable shared configuration fix.
 2. For iOS simulator development on Apple Silicon, resolve the MLImage
    simulator binary constraint and the `react-native-exit-app` Codegen header
    exposure. Merely removing the Podfile arm64 exclusion is not sufficient.
