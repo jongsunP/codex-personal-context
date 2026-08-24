@@ -3,6 +3,19 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
+## Project Role And Continuity
+
+- This is a secondary/support project rather than the user's primary project.
+- Expect occasional small maintenance and feature tasks, and resume from this
+  onboarding checkpoint instead of repeating setup from scratch.
+- At the start of future work, sync this personal context and the shared app
+  repository, then verify live Git refs and current team documentation.
+- The app team's verified feature base is `origin/develop`; keep the `main`
+  checkout clean as an administrative reference unless the user asks otherwise.
+- For a very small localized task, confirm whether a dedicated worktree is
+  necessary before creating one. Use a dedicated feature worktree/session for
+  larger work when requested.
+
 ## Repository
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-app`

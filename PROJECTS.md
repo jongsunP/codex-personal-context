@@ -65,11 +65,13 @@ For detailed current state, read:
 - Shared repository: `https://github.com/Innvoaid/dentlink-app`
 - Main local checkout: `/Users/parkjongsun/Repository/dentlink-app`
 - Default branch: `main`
-- Current state: initial macOS setup is complete at `51aeb1520`. Yarn,
-  CocoaPods, Android Studio, JDK 17, Android API 36/NDK, and project-specific
-  Ruby 3.2.2 are installed. Office development Android APK builds
-  successfully; the repository remains clean. The current `main` TypeScript
-  baseline has 12 errors in 9 files and needs separate product-code work.
+- Role: secondary/support app project with occasional small maintenance and
+  feature work.
+- Current state: initial macOS setup is complete at `51aeb1520`. Watchman and
+  Reactotron are installed, Metro and the Office development Android build are
+  verified, while Android runtime awaits SDK license acceptance/AVD creation
+  and the current arm64 iOS simulator cannot install the verified x86_64
+  build. The repository remains clean; see the checkpoint for baseline issues.
 - Personal current checkpoint:
   `projects/dentlink-app.md`
 
