@@ -64,20 +64,19 @@ For detailed current state, read:
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-app`
 - Main local checkout: `/Users/parkjongsun/Repository/dentlink-app`
-- Default branch: `main`
+- Repository default branch: `main`; active feature base/PR target: `develop`
 - Role: ongoing product-development scope connected to Dentlink web. Web is the
   primary workload, but mobile app work is active and must be developed
   alongside web when a feature or user flow spans both; its task volume may be
   smaller or intermittent.
-- Current state: the maximum practical initial macOS setup is complete at
-  `51aeb1520`. Office
-  development login and the first Home dashboard are verified on both the API
-  36 ARM64 `Dentlink_API_36` Android AVD and an iOS 26.5 ARM64 simulator.
-  Android is the normal local path. iOS required an isolated simulator-only
-  proof build without MLKit face detection plus temporary Codegen header
-  aliases; the committed project still needs a durable simulator compatibility
-  fix. Metro and Reactotron runtime connections were verified, and the shared
-  repository remains clean. See the checkpoint for baseline issues.
+- Current state: initial macOS setup and Office development login/Home proof are
+  complete. The active checkout is now clean on `feature/DL-16061` at
+  `55d53263`, synchronized with its upstream and two commits ahead of current
+  `origin/develop`. Draft PR #286 contains the first native order-feedback UI,
+  development-only mock/query boundary and safety follow-up. Android API 36 and
+  the temporary iOS 26.5 simulator proof cover the main feedback flow; this is
+  not user or physical-device QA. Actual API/upload/push/deep link and normal
+  committed-source Apple Silicon iOS support remain pending app-team inputs.
 - Personal current checkpoint:
   `projects/dentlink-app.md`
 
@@ -170,12 +169,13 @@ For detailed current state, read:
 - Current state: 최신 Figma의 Clinic PC·모바일 웹과 APP 영역을 분리해 전수 대조했고,
   `/my/feedback`, 마이페이지 Quick Links·My Office 모달, 목록·상세 입력, 주문 상세
   피드백 배너와 API 교체 가능한 mock/query 경계를 구현했다. PC 10개 페이지네이션과
-  모바일 5개 단위 무한스크롤을 실제 Chrome에서 검증했고, 모바일 웹 목록 배경과
-  하단 여백을 Figma에 맞춘 최신 제품 commit은 `e56275ec6`이다.
+  모바일 5개 단위 무한스크롤을 실제 Chrome에서 검증했고, PC·모바일 파일 첨부와
+  검증 상태까지 반영한 최신 제품 commit은 `e4105f909`이다.
   `origin/feature/DL-15828`과 동일한 clean 상태이며 PR은 없다. APP 디자인은 확인했지만
   native 구현은 이 웹 저장소 범위가 아니다. 배포 Swagger에는 아직 주문 피드백
   계약이 없어 실제 API·eligibility·pagination/count·상품별 artwork 연동은 대기
-  중이다. 앱을 제외한 산정은 관리자 임시 0.5점을 포함해 5.5 points이며 앱 기술
-  검증·구현·알림은 미산정이다.
+  중이다. Native 앱은 별도 `dentlink-app`의 Draft PR #286에서 병행하며 앱의 현재
+  상태는 `projects/dentlink-app.md`가 정본이다. 앱을 제외한 산정은 관리자 임시
+  0.5점을 포함해 5.5 points이며 앱 기술 검증·구현·알림은 미산정이다.
 - Personal current checkpoint:
   `projects/dentlink-client-order-feedback.md`

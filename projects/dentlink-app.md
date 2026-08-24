@@ -1,4 +1,4 @@
-# Dentlink Mobile App initial setup checkpoint - 2026-08-24
+# Dentlink Mobile App setup and current checkpoint - 2026-08-24
 
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
@@ -15,8 +15,10 @@ This is the current resume source for the first local setup of
   scratch. At the start of future work, sync this personal context and all
   relevant shared repositories, then verify live Git refs and current team
   documentation.
-- The app team's verified feature base is `origin/develop`; keep the `main`
-  checkout clean as an administrative reference unless the user asks otherwise.
+- The app team's verified feature base is `origin/develop`. The first active
+  feature now intentionally uses the main local checkout on
+  `feature/DL-16061`, so always verify the exact live branch before editing and
+  do not assume this path is still on `main`.
 - For a very small localized task, confirm whether a dedicated worktree is
   necessary before creating one. Use a dedicated feature worktree/session for
   larger work when requested.
@@ -51,17 +53,18 @@ This is the current resume source for the first local setup of
 ## Repository
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-app`
-- Main local checkout: `/Users/parkjongsun/Repository/dentlink-app`
-- Default branch: `main`
-- Verified HEAD: `51aeb1520a1bf6244596b1aab7f83359dfbfaefa`
-- The checkout is clean and synchronized with `origin/main`.
-- This main checkout is the repository-administration scope. Use a dedicated
-  feature worktree/session for substantial implementation when requested.
-- Team branch policy uses `develop` as the feature and integration base, not
-  `main`. Live verification found `origin/develop` at `b5251df`, and the latest
-  Office `v2.2.3` and Lab `v1.0.3` release branches point to the same commit.
-  The production tags `office-v2.2.2` and `lab-v1.0.2` are contained in
-  `origin/main`.
+- Active local checkout: `/Users/parkjongsun/Repository/dentlink-app`
+- Repository default branch: `main`
+- Active feature base and PR target: `develop`
+- Current branch: `feature/DL-16061`
+- Current HEAD: `55d53263f4a1503816e85cd3e8f9549a2b373f15`
+- The checkout is clean and synchronized with
+  `origin/feature/DL-16061` as of 2026-08-24 18:54 KST.
+- `origin/develop` is `129a24f52645f085d9f097c3c3042253f28be1e9`;
+  the feature branch is two commits ahead and not behind.
+- This first feature was intentionally implemented in the existing checkout.
+  For a later substantial feature, use a dedicated feature worktree/session
+  only when the user requests it; for a tiny task, ask first.
 
 ## Team Onboarding Sources
 
@@ -245,13 +248,109 @@ This is the current resume source for the first local setup of
   updated and pushed at meaningful checkpoints. Never persist supplied login
   credentials in source, project notes, or Codex memory.
 
+## DL-15828 / DL-16061 Order Feedback App Checkpoint - 2026-08-24 18:54 KST
+
+### Cross-surface ownership
+
+- The web implementation has its own canonical checkpoint in
+  `projects/dentlink-client-order-feedback.md`; keep web branch, commit and QA
+  history there instead of duplicating it here.
+- This app repository owns the Office native Profile entry and native feedback
+  list/detail screens. The current Order Detail screen remains a Clinic
+  `/orders/:orderId` WebView, so its feedback banner/drawer/form remains owned
+  by the web repository.
+- Web and app are separate builds and cannot directly share TypeScript hooks.
+  They must share the server endpoint/DTO meaning, canonical feedback state,
+  count and invalidation behavior, while each repository implements its own
+  adapter and query layer.
+
+### Git and PR checkpoint
+
+- Branch `feature/DL-16061` is clean at `55d53263` and synchronized with its
+  upstream.
+- Commit `1977ae2f` implements the initial native UI and development-only
+  mock/query boundary.
+- Commit `55d53263` hides Pending Reviews outside development until the API is
+  connected, protects quick-rating finalization on fast exit, preserves detail
+  drafts across same-item refetches, and rejects attachments whose size cannot
+  be verified.
+- Draft PR [#286](https://github.com/Innvoaid/dentlink-app/pull/286) is open and
+  GitHub reports it mergeable. Its broken literal `\\n` body was replaced with
+  normal Markdown and the verification/risk notes were refreshed.
+- CodeRabbit reports success only because it skipped automatic review for a
+  Draft PR. No app-developer review, teammate approval, user QA, merge, staging
+  QA or deployment has occurred.
+
+### Implemented app scope
+
+- Office Profile Quick Links includes Pending Reviews in development and keeps
+  Help Center available in every environment.
+- Native `FeedbackListScreen` provides To Review/Reviewed tabs, counts,
+  infinite-list query structure, pull-to-refresh, scroll-to-top FAB, immediate
+  Good/Bad save and the non-automatic `Tell Us Why` detail entry.
+- Native `FeedbackDetailsScreen` provides rating, reason, comment, attachment
+  UI, fixed Submit action, unsaved-change protection and Android hardware-back
+  handling.
+- Good/Bad uses an immediate `RATING` mutation. The current To Review screen
+  keeps the rated card; leaving and re-entering promotes it to Reviewed in the
+  development mock. Detail Submit uses a separate `DETAIL` mutation.
+- Photo/Camera/File entry reuses the existing native picker and permission
+  boundary. The current client checks supported formats, at most five files,
+  total 200 MB and known positive file sizes, but stores only local metadata.
+- The repository/query/types boundary is development-only mock data. Staging
+  and production neither fabricate feedback data nor expose Pending Reviews.
+
+### Verification and current risk
+
+- Codex verified the main feedback flow on Android API 36
+  `Dentlink_API_36` and the temporary iOS 26.5 iPhone 17 Pro simulator proof.
+  This is not user QA or physical-device QA.
+- Targeted changed-file ESLint passes, and the feedback utility test passes
+  2/2 with `jest.config.js` selected explicitly.
+- Office and Lab development Metro bundles pass for both Android and iOS.
+- Office and Lab full typechecks still fail on the same nine untouched
+  baseline diagnostics; the feature files add no diagnostic.
+- Actual OS file selection, permission denial, real upload, slow/offline API,
+  physical devices, push/deep link and normal committed-source iOS build remain
+  unverified.
+- Office-only feedback screens are statically imported through shared
+  `AllScreens`, so they are included in the Lab Metro bundle. Both Lab bundles
+  pass; whether to split app-specific navigation is an app-developer review
+  item rather than an unapproved refactor.
+
+### External inputs still required
+
+- Deployed Swagger and generated models still have no order-feedback endpoint
+  or DTO. Do not invent API names, eligibility, pagination/count, upload or
+  notification contracts.
+- Notification payload/category, landing route, deep-link mapping and the
+  WebView-to-native bridge are not implemented.
+- Reason/category mapping, count timing after immediate rating, detailed
+  analytics events and the design-policy attachment conflict remain pending.
+  Current implementation follows the latest Notion policy of five files and
+  total 200 MB, not the Figma `2G` annotation or older 10-file/5-MB text.
+- App-developer review is the next human gate. The PR must remain Draft until
+  review and external contracts make it genuinely merge-ready.
+
 ## Next Starting Point
 
-1. For the verified Android path, boot `Dentlink_API_36`, run
+1. Resume `feature/DL-16061` only after pulling this personal context, fetching
+   the app repository and reconciling PR #286, Jira/Notion/Figma and deployed
+   Swagger. Start from `55d53263` only if live Git still matches.
+2. Ask the app developer to review PR #286's repository/query boundary,
+   Office/Lab navigation placement, back/safe-area behavior and native picker
+   reuse. Keep human approval separate from Codex simulator verification.
+3. When the API/DTO appears, regenerate and diff-review the generated models,
+   then replace the development mock repository with an adapter while
+   preserving immediate Good/Bad save and screen-local card presentation.
+4. Implement push/deep link or an Order Detail WebView-to-native bridge only
+   after the payload, identifiers, landing and back-navigation contract is
+   explicit across BE, web and app.
+5. For the verified Android path, boot `Dentlink_API_36`, run
    `yarn metro-log`, then run `yarn android-office:dev`. If Reactotron is
    needed, use the verified `localhost` plus `adb reverse tcp:9090 tcp:9090`
    approach temporarily or first authorize a durable shared configuration fix.
-2. The currently installed iOS proof app can be used for dashboard-level work
+6. The currently installed iOS proof app can be used for dashboard-level work
    while its simulator remains available and Metro is running. For a normal,
    reproducible Apple Silicon workflow, resolve the MLImage simulator binary
    constraint, simulator-safe face-plugin registration, and
@@ -259,12 +358,12 @@ This is the current resume source for the first local setup of
    arm64 exclusion or upgrading to MLImage beta8 is not sufficient. A physical
    iPhone remains the shortest full-feature path if signing access is
    available.
-3. Treat the typecheck, source lint, Jest configuration/test failures, stale
+7. Treat the typecheck, source lint, Jest configuration/test failures, stale
    start script, and README version mismatch as shared-repository baseline
    issues. Fix them only in an explicitly authorized feature or maintenance
    scope; initial environment setup itself is complete.
-4. For feature implementation, refresh and use live `origin/develop` as the
-   default base, then verify Jira, Figma, and the closest Office/Lab production
-   pattern before creating the requested feature worktree/session. Keep this
-   `main` checkout as the production/admin reference unless the user requests a
-   different working model.
+8. For later feature implementation, refresh and use live `origin/develop` as
+   the default base, then verify Jira, Figma, and the closest Office/Lab
+   production pattern before creating the requested feature worktree/session.
+   Do not assume the current checkout is on `main`; verify and either finish
+   this feature or use a separately requested worktree.

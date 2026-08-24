@@ -503,33 +503,19 @@
   다시 확인한 뒤 실제 API adapter, eligibility, count, pagination, attachment 업로드와
   수동 파일 선택 QA를 연결하는 것이다.
 
-### 앱 병행 세션 인계 — 2026-08-24 18:32 KST
+### 앱 병행 범위와 정본 — 2026-08-24
 
-- 앱 기능은 별도 저장소 `/Users/parkjongsun/Repository/dentlink-app`와 별도 Codex
-  세션에서 병행한다. 앱 branch는 `feature/DL-16061`, HEAD는 `1977ae2fd`이며
-  `origin/feature/DL-16061`과 동일한 clean 상태다. Draft PR #286은 open/mergeable이고
-  자동 검사와 CodeRabbit은 성공했지만 사람 리뷰와 사용자 QA는 아직 없다.
-- 앱의 Profile Quick Links, native 목록·상세, Good/Bad 즉시 저장, 상세 Submit,
-  attachment picker UI와 development-only mock/query 경계까지 구현됐다. 피드백 목록과
-  상세은 native가 소유하고, 앱 주문 상세는 Clinic `/orders/:orderId` WebView를 사용해
-  현재 피드백 banner/drawer/form은 웹이 계속 소유한다.
-- 주문 상세 WebView에서 native 상세로 이동시키는 bridge message와 route mapping은
-  아직 없다. 이 이동이 확정되기 전에는 웹이나 앱 한쪽에서 단독으로 추가하지 않고
-  RN bridge message, feedbackId/orderId와 back/deep-link 계약을 먼저 맞춘다.
-- 앱은 camera/gallery/file permission과 picker를, 웹은 브라우저 파일 선택 UI를
-  담당한다. 양쪽 모두 최대 5개·총 200MB를 적용하지만 실제 업로드 API와 URL은 없고
-  로컬 fixture/mock 상태만 유지한다. API 공개 시 TS 코드를 저장소 간 직접 공유하지
-  않고 endpoint, DTO 의미, 서버 canonical 상태, count와 invalidation 규칙을 공유해
-  각 저장소 adapter로 독립 구현한다.
-- 앱 Codex가 Android API 36 emulator와 iOS 26.5 simulator에서 Profile 진입, 목록,
-  Good/toast, 상세와 Submit 및 picker 진입 UI를 확인했다. 이는 사용자 QA가 아니며
-  실제 OS 파일 선택, 권한 거절, 업로드, physical device 검증은 남아 있다.
-- 18:30 KST의 배포 Swagger와 앱·웹 generated model에도 주문 피드백 계약이 없었다.
-  알림/deep-link, reason/category, 상세 analytics 4개, Good/Bad 직후 count 시점,
-  Notion 200MB·Figma 2G·과거 문서 10개/5MB 충돌도 여전히 외부 확정 대기다.
-- 앱 인계 결과 때문에 즉시 수정할 웹 코드는 없다. 웹은 `e4105f909`의 현재 UI와
-  5개/200MB, 빠른 평가/상세 Submit 흐름을 유지하며 새 Swagger·기획·디자인 또는
-  WebView/native 연동 계약이 도착할 때 재개한다.
+- 앱 구현의 branch, commit, PR, Android/iOS QA와 다음 시작점은 별도 저장소 단위 정본인
+  `projects/dentlink-app.md`에서 관리한다. 시간에 따라 바뀌는 앱 상태를 이 웹 문서에
+  복제하지 않는다.
+- 웹은 `/my/feedback`과 주문 상세 WebView 내부 banner/drawer/form을 소유하고, 앱은
+  Office native Profile 진입과 피드백 목록·상세을 소유한다. WebView에서 native 상세로
+  이동하는 bridge는 계약이 확정되기 전 어느 한쪽에서 단독 구현하지 않는다.
+- 양 저장소는 Good/Bad 즉시 저장, 상세 Submit 분리, 서버 canonical 상태, 최대 5개·총
+  200MB 정책을 공유하되 TypeScript hook을 직접 공유하지 않고 각각 adapter/query를
+  구현한다. 실제 API/업로드/알림/deep link는 여전히 외부 계약 대기다.
+- 현재 웹 구현은 `e4105f909`에서 clean/upstream 일치 상태이며 앱 결과 때문에 즉시
+  수정할 웹 코드는 없다.
 
 ## FE Jira 구조와 스토리포인트
 
@@ -622,6 +608,6 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
    artwork, 사진 업로드, analytics와 `Tell Us Why`/`Add More Details`, 주문 상세 배너
    클릭 범위를 확정한다. 현재 UI를 기준으로 API pagination, sort, count,
    eligibility와 error handling을 연결하고 PC·모바일 회귀 QA를 수행한다.
-6. 앱 구현 전에 DL-16064로 앱 환경과 WebView/native 책임을 확인하고, 그 결과로
-   DL-16061의 범위와 스토리포인트를 확정한다.
+6. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
+   API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
 7. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
