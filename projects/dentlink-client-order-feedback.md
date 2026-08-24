@@ -274,6 +274,65 @@
 - 개인 체크포인트는 이 저장소에 commit/push해 복구 가능하게 유지한다. shared
   제품 저장소의 commit/push/PR은 사용자의 명시 지시가 있을 때만 수행한다.
 
+## 상태·cache 기준 재정리와 최신 기획 변경 — 2026-08-24
+
+### Good / Bad와 상세 저장의 상태 관리 결정
+
+- Good / Bad는 탭 즉시 서버 mutation하고 상세 화면에 진입하지 않아도 응답 완료로
+  처리한다. 상세 keyword/comment/attachment Submit은 같은 피드백의 추가 작성·수정
+  흐름이다. 실제 create/update method와 response shape는 Swagger 계약 전까지 정하지
+  않는다.
+- 서버 응답과 React Query cache가 피드백의 기준 상태다. 컴포넌트 state는 form
+  draft, drawer/navigation, mutation pending과 같은 화면 상태에만 사용한다.
+- Figma `160:41597`의 "저장 후 화면 이탈 전까지 현재 To Review 카드 유지"는
+  cache 동기화를 끄거나 저장을 미루는 정책이 아니다. 현재 목록에서만 일시적으로
+  유지하는 표현 상태로 분리하고, 화면 이탈·새로고침·재진입 후에는 서버 조회
+  결과에 따라 Reviewed로 표시한다.
+- 같은 화면 유지 중 To Review/Reviewed count를 언제 변경할지는 Notion과 Figma에
+  명시가 없어 미확정이다. 실제 list/count 응답과 최종 UX 확인 없이 FE가 임의로
+  증감하지 않는다.
+- Figma `160:41593` 기준 To Review는 주문 COMPLETED 최신순, Reviewed는 최초 리뷰
+  작성 최신순이며 리뷰 수정으로 순서를 바꾸지 않는다. 실제 API sort field와
+  pagination 방식은 BE 계약을 따른다.
+- Good / Bad 선택 후 상세로 자동 진입하지 않는다. toast와 상세 입력 유도 CTA를
+  노출한다.
+- 현재 mock repository의 RATING pending 분류는 Figma 동작을 확인하기 위한 임시
+  구현이다. 실제 API 연결 시 서버 분류로 재사용하지 않도록 query/repository에
+  한글 주석을 추가했다. 제품 동작 자체는 변경하지 않았다.
+
+### 2026-08-24 Notion 변경
+
+- Notion `[치과] 주문 피드백 수집`은 여전히 `작성 중`이지만 최종 편집 시각이
+  `2026-08-24T04:24:20.241Z`로 갱신됐다.
+- Good / Bad 필수, 상세 keyword와 comment 선택 정책이 명시됐다.
+- 기존 `Other`를 삭제하고 최종 노출 기준을 `Shade / Fit / Material / Service`로
+  적었다. 사용자에게 공유된 BE 질문 구조의 PRODUCT/SERVICE category와 keyword
+  codes는 이 노출 기준과 다르므로 adapter mapping 계약이 필요하다.
+- 상세에 사진 첨부가 1차 범위로 반영됐다. 웹·앱 갤러리 업로드는 최대 10장,
+  파일당 5MB와 지원 확장자는 전사 정책을 따르며, 앱 촬영 업로드는 1장이다.
+  Figma와 API에는 아직 반영되지 않아 UI·payload·기존 파일 삭제/재시도는 구현하지
+  않는다. 기존 웹 1.5점 산정에도 사진 업로드 추가분은 포함되지 않았다.
+- 피드백은 주문과 Assigned Dentist 기준으로 구분하며 실제 제출 user ID도 저장한다.
+  주문 하나에 Assigned Dentist별 복수 피드백이 가능하다. 변경 이력은 저장하지
+  않고 최종 작성·수정 시점만 유지하며, 작성·수정 이벤트는 계약 확정 후
+  Amplitude로 추적한다.
+- 주문 상세 피드백 영역은 현재 COMPLETED이고 로그인 사용자가 Assigned Dentist인
+  eligible 주문에서만 노출한다. 목록에서는 최초 COMPLETED 이후 상태가 변경돼도
+  기한 없이 조회·수정할 수 있다.
+
+### Jira·Swagger·Git 반영 상태
+
+- Jira `DL-16057`, `DL-16058`, `DL-16060`, `DL-16063` 본문을 최신 Notion/Figma
+  우선 원칙에 맞게 수정했다. 빠른 평가의 현재 화면 유지 예외, 일반 React Query
+  cache 원칙, 확정된 정렬·상세 유도, Assigned Dentist, 사진 attachment와 미확정
+  API 계약을 구분했다.
+- `https://dev-api.dentlink.io/v3/api-docs`를 2026-08-24 다시 확인했지만 주문
+  feedback/review/rating endpoint와 schema가 없다. 현재 generated model에도 관련
+  계약이 없다.
+- 제품 branch는 `feature/DL-15828`, HEAD는 `8a1b3909c`다. 상태 관리 경계를 설명하는
+  한글 주석만 `feedback.query.ts`, `feedback.mockRepository.ts`에 추가되어 아직
+  commit/push하지 않은 dirty 상태다. 기능 동작 변경은 없다.
+
 ## FE Jira 구조와 스토리포인트
 
 Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용한다.
@@ -306,26 +365,36 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 ## 확인된 제품 정책
 
 - 피드백 단위는 주문이며 Good / Bad 선택만으로 응답 완료 처리한다.
-- 상세 사유와 자유서술은 추가 입력이며 등록 후에도 수정할 수 있다.
+- 상세 keyword와 자유서술은 선택 사항이며 등록 후에도 수정할 수 있다.
+- Good / Bad 저장 성공 후 현재 To Review 화면에서는 카드를 유지하고 toast와 상세
+  입력 유도 CTA를 노출한다. 이탈·새로고침·재진입 후 Reviewed로 표시한다.
+- Good / Bad 선택만으로 상세 화면에 자동 진입하지 않는다.
+- To Review는 주문 COMPLETED 최신순, Reviewed는 최초 리뷰 작성 최신순이며 수정으로
+  정렬 순서를 바꾸지 않는다.
 - 삭제는 지원하지 않는다.
 - 배포 이후 원주문이 최초 COMPLETED된 경우만 대상이다.
 - 피드백 목록에서는 주문 상태가 이후 변경되어도 계속 조회·수정할 수 있다.
 - 주문 상세 유도 영역은 현재 주문 상태가 COMPLETED인 동안만 노출한다.
-- 담당 의사가 변경되면 담당 의사별 피드백을 구분한다.
+- 주문 상세 유도 영역과 작성 권한은 Assigned Dentist에게만 제공한다.
+- 담당 의사가 변경되면 Assigned Dentist별 피드백을 구분하고 실제 제출 user ID도
+  저장한다.
+- 상세 노출 keyword 기준은 Shade / Fit / Material / Service다.
+- 상세에는 웹·앱 갤러리 최대 10장과 앱 촬영 1장의 사진 첨부가 기획 범위로
+  추가됐다. Figma/API 계약 전에는 구현하지 않는다.
 - 사용자 노출 문구는 영어다.
 - 웹과 앱은 동일한 서버 데이터와 공통 query/cache 규칙을 사용한다.
+- 서버와 React Query cache를 기준 상태로 사용하며, Figma의 현재 카드 유지만
+  화면 표현 state로 분리한다.
 
 ## 현재 남은 확인과 대기 항목
 
-- 목록 정렬의 공식 계약. Figma annotation에는 기준이 있지만 Jira·기획·BE 계약과
-  아직 reconcile되지 않았다.
-- Bad 선택 후 상세 화면 자동 진입 여부
-- 상세 사유가 완전 선택 사항인지 여부
-- Figma annotation은 빠른 평가 후 화면을 이탈하기 전까지 To Review에 유지하도록
-  표현하지만 Jira `DL-16057`은 저장 직후 Reviewed 반영으로 적혀 있다. 현재 UI는
-  Figma 동작을 따르며 최종 정책 확인이 필요하다.
-- Figma의 상품별 사유와 Notion의 Shade / Fit / Material / Other 사이 최종 계약
+- 빠른 평가 후 현재 카드를 유지하는 동안 To Review/Reviewed 및 마이페이지 count를
+  언제 변경할지
+- Figma의 상품별 사유, Notion의 Shade / Fit / Material / Service, 사용자에게
+  공유된 BE PRODUCT/SERVICE category·keyword code 사이의 adapter 계약
 - BE DTO, eligibility, pagination, count, category/reason 계약
+- 최초 Good / Bad 생성 응답의 feedback ID·전체 entity 포함 여부, 상세 Submit의
+  update 방식, idempotency와 중복 요청 처리
 - 서버가 목록/주문별 상품 artwork 또는 이를 식별할 category/product 정보를 어떤
   필드로 제공할지
 - App 저장소와 실행·빌드·디바이스 검증 환경. 현재 worktree에는 native app package가
@@ -333,10 +402,11 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - Clinic WebView와 native app의 화면, navigation, back, safe-area, deep-link 책임
 - 관리자 화면·권한·API·검증 범위
 - 앱 피드백 알림의 발송 조건, 대상, 문구, deep link, BE/FCM/native 책임
-- 파일 업로드를 포함한 2026-08-20 오후 추가 논의의 최종 기획·디자인 범위
+- 사진 업로드의 Figma UI, upload/attachment DTO, 기존 파일 표시·삭제·재정렬,
+  부분 실패·재시도 계약. 기획에는 반영됐지만 디자인·API는 아직 없다.
 - analytics event 명칭과 payload. Jira에는 telemetry 요구가 있으나 계약이 없어
   이벤트를 추측해 추가하지 않았다.
-- 2026-08-21 배포 Swagger와 generated model에는 주문 피드백 API contract가
+- 2026-08-24 배포 Swagger와 generated model에는 주문 피드백 API contract가
   없으므로 실제 연동 시작 시 다시 확인해야 한다.
 
 ## 다음 시작점
