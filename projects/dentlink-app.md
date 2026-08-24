@@ -5,11 +5,16 @@ This is the current resume source for the first local setup of
 
 ## Project Role And Continuity
 
-- This is a secondary/support project rather than the user's primary project.
-- Expect occasional small maintenance and feature tasks, and resume from this
-  onboarding checkpoint instead of repeating setup from scratch.
-- At the start of future work, sync this personal context and the shared app
-  repository, then verify live Git refs and current team documentation.
+- Dentlink web remains the user's primary workload, while the connected mobile
+  app is also an ongoing product-development scope. It is not inactive or
+  optional; "secondary" describes relative task volume and priority only.
+- Expect both occasional small app tasks and features whose user flow spans web
+  and mobile. For cross-surface work, inspect the relevant web and app code,
+  API contracts, release paths, and QA impact together.
+- Resume from this onboarding checkpoint instead of repeating setup from
+  scratch. At the start of future work, sync this personal context and all
+  relevant shared repositories, then verify live Git refs and current team
+  documentation.
 - The app team's verified feature base is `origin/develop`; keep the `main`
   checkout clean as an administrative reference unless the user asks otherwise.
 - For a very small localized task, confirm whether a dedicated worktree is

@@ -65,8 +65,10 @@ For detailed current state, read:
 - Shared repository: `https://github.com/Innvoaid/dentlink-app`
 - Main local checkout: `/Users/parkjongsun/Repository/dentlink-app`
 - Default branch: `main`
-- Role: secondary/support app project with occasional small maintenance and
-  feature work.
+- Role: ongoing product-development scope connected to Dentlink web. Web is the
+  primary workload, but mobile app work is active and must be developed
+  alongside web when a feature or user flow spans both; its task volume may be
+  smaller or intermittent.
 - Current state: initial macOS setup is complete at `51aeb1520`. Watchman and
   Reactotron are installed, and the Office development app has been built,
   installed, and displayed on the API 36 ARM64 `Dentlink_API_36` Pixel 8 AVD.
