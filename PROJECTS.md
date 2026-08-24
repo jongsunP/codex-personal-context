@@ -60,6 +60,19 @@ For detailed current state, read:
 - Personal current checkpoint and history:
   `projects/dentlink-client-e2e.md`
 
+### Dentlink Mobile App
+
+- Shared repository: `https://github.com/Innvoaid/dentlink-app`
+- Main local checkout: `/Users/parkjongsun/Repository/dentlink-app`
+- Default branch: `main`
+- Current state: initial macOS setup is complete at `51aeb1520`. Yarn,
+  CocoaPods, Android Studio, JDK 17, Android API 36/NDK, and project-specific
+  Ruby 3.2.2 are installed. Office development Android APK builds
+  successfully; the repository remains clean. The current `main` TypeScript
+  baseline has 12 errors in 9 files and needs separate product-code work.
+- Personal current checkpoint:
+  `projects/dentlink-app.md`
+
 ### Dentlink Lab i18n
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
