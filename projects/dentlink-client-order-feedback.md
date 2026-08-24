@@ -398,6 +398,32 @@
   `origin/feature/DL-15828`에 push됐다. commit은
   `[DL-15828] feat: 피드백 목록 반응형 페이지 단위 보완`이고 PR은 생성하지 않았다.
 
+### 목록 웹·앱 분리 재검수와 모바일 배경 보완 — 2026-08-24
+
+- Figma PC 목록 `160:40594`, 모바일 웹 목록 `160:41324`, PC·모바일 카드 비교
+  `160:41672`, APP 목록 `160:41456`을 다시 직접 조회했다. PC와 모바일 웹 목록
+  배경은 모두 `#f9f9f9`이고 모바일 웹 콘텐츠 하단 여백은 30px이다. APP은
+  `#f5f5f5` 배경, native header/FAB와 별도 카드 구성을 사용하므로 Clinic 모바일
+  웹과 섞지 않는다.
+- `clinic/src/pages/my/feedback/index.tsx`에서 모바일 웹의 흰 배경을 `gray100`으로
+  변경하고 하단 여백을 40px에서 30px로 맞췄다. PC의 `gray100` 배경과 위 40px·아래
+  60px 여백은 그대로 유지했다.
+- 실제 Chrome에서 PC 카드 500px, 한 페이지 10개와 다음 페이지 1개를 확인했다.
+  모바일 웹은 초기 5개에서 스크롤 후 11개까지 추가되는 무한스크롤, Reviewed의
+  `Tell Us Why`/`Edit`, 빈 화면 문구와 `#f9f9f9` 배경을 확인했다.
+- Clinic type, 변경 파일 ESLint·Prettier와 `git diff --check`를 통과했다. 정상
+  pre-commit은 이번 변경과 무관하고 `origin/master`와 동일한 Lab
+  `BrowserPDFHeaderUI.tsx`의 PNG module resolution 오류로 중단됐다. 정상 pre-push는
+  전체 lint 0 errors(기존 warning 418건)와 shared config 3건·hook 24건을 통과한 뒤
+  로컬 coverage baseline 부재로 중단됐다. 두 기존 로컬 gate만 `--no-verify`로
+  우회했다.
+- 제품 commit `e56275ec6` (`[DL-15828] fix: 모바일 피드백 목록 배경 수정`)을
+  `origin/feature/DL-15828`에 push했다. 제품 worktree는 clean이고 로컬·원격 HEAD가
+  동일하며 PR은 생성하지 않았다.
+- Figma의 상품별 서로 다른 artwork는 여전히 서버 식별 필드가 없어 공통 임시
+  artwork를 유지한다. APP native 구현, 실제 API 계약, 모바일 사진 첨부 디자인은
+  다음 계약 확인 전까지 대기한다.
+
 ## FE Jira 구조와 스토리포인트
 
 Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용한다.

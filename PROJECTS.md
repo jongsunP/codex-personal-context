@@ -164,14 +164,15 @@ For detailed current state, read:
   `/Users/parkjongsun/Repository/dentlink-client-order-feedback`
 - Branch: `feature/DL-15828`
 - Jira: parent `DL-15828`
-- Current state: 최신 Figma 기준 Clinic PC·모바일 웹 UI 1차 구현을 완료했다.
+- Current state: 최신 Figma의 Clinic PC·모바일 웹과 APP 영역을 분리해 전수 대조했고,
   `/my/feedback`, 마이페이지 Quick Links·My Office 모달, 목록·상세 입력, 주문 상세
-  피드백 배너와 API 교체 가능한 mock/query 경계가 commit `0e35c3f71`로
-  구현됐고, 주문 상세 LinkTalk 툴팁이 피드백 드로어를 침범하던 레이어 문제를
-  `8a1b3909c`에서 화면 소유권에 맞게 격리했다. 두 commit 모두
-  `origin/feature/DL-15828`에 push되어 있다. Clinic 타입·프로덕션 빌드와 실제
-  브라우저 QA를 통과했지만, 배포 Swagger에는 아직 주문 피드백 계약이 없어 실제
-  API·eligibility·pagination/count 연동은 대기 중이다. 앱을 제외한 산정은 관리자
-  임시 0.5점을 포함해 5.5 points이며 앱 기술 검증·구현·알림은 미산정이다.
+  피드백 배너와 API 교체 가능한 mock/query 경계를 구현했다. PC 10개 페이지네이션과
+  모바일 5개 단위 무한스크롤을 실제 Chrome에서 검증했고, 모바일 웹 목록 배경과
+  하단 여백을 Figma에 맞춘 최신 제품 commit은 `e56275ec6`이다.
+  `origin/feature/DL-15828`과 동일한 clean 상태이며 PR은 없다. APP 디자인은 확인했지만
+  native 구현은 이 웹 저장소 범위가 아니다. 배포 Swagger에는 아직 주문 피드백
+  계약이 없어 실제 API·eligibility·pagination/count·상품별 artwork 연동은 대기
+  중이다. 앱을 제외한 산정은 관리자 임시 0.5점을 포함해 5.5 points이며 앱 기술
+  검증·구현·알림은 미산정이다.
 - Personal current checkpoint:
   `projects/dentlink-client-order-feedback.md`
