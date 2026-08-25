@@ -49,6 +49,14 @@ This is the current resume source for the first local setup of
   the live repository, team documents, Jira, Figma, and API contracts. Do not
   rely on AI memory alone. At handoff, report Android and iOS verification
   separately and identify what still needs the app developer's review.
+- In an app-focused session, interpret the user's shorthand `Chrome control`
+  as a request to inspect and operate the app directly in the Android emulator
+  or iOS simulator. Use the actual Chrome browser only when the user explicitly
+  asks for Chrome itself or when Figma, planning, Swagger or another web source
+  must be inspected. When both app platforms matter and no order is specified,
+  validate Android first and then iOS. Keep app execution in the
+  `dentlink-app` IDE window and its integrated Metro terminal rather than the
+  web project's IDE.
 
 ## Repository
 
@@ -57,11 +65,11 @@ This is the current resume source for the first local setup of
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `55d53263f4a1503816e85cd3e8f9549a2b373f15`
+- Current HEAD: `8ea672330e1d57850cdd4b2cea3239d169f51b4c`
 - The checkout is clean and synchronized with
-  `origin/feature/DL-16061` as of 2026-08-24 18:54 KST.
+  `origin/feature/DL-16061` as of 2026-08-25 15:57 KST.
 - `origin/develop` is `129a24f52645f085d9f097c3c3042253f28be1e9`;
-  the feature branch is two commits ahead and not behind.
+  the feature branch is four commits ahead and not behind.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
