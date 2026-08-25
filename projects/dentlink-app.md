@@ -248,7 +248,7 @@ This is the current resume source for the first local setup of
   updated and pushed at meaningful checkpoints. Never persist supplied login
   credentials in source, project notes, or Codex memory.
 
-## DL-15828 / DL-16061 Order Feedback App Checkpoint - 2026-08-24 18:54 KST
+## DL-15828 / DL-16061 Order Feedback App Checkpoint - 2026-08-25 15:56 KST
 
 ### Cross-surface ownership
 
@@ -266,7 +266,7 @@ This is the current resume source for the first local setup of
 
 ### Git and PR checkpoint
 
-- Branch `feature/DL-16061` is clean at `55d53263` and synchronized with its
+- Branch `feature/DL-16061` is clean at `8ea67233` and synchronized with its
   upstream.
 - Commit `1977ae2f` implements the initial native UI and development-only
   mock/query boundary.
@@ -274,9 +274,17 @@ This is the current resume source for the first local setup of
   connected, protects quick-rating finalization on fast exit, preserves detail
   drafts across same-item refetches, and rejects attachments whose size cannot
   be verified.
+- Commit `f4156be` adapts the existing shared Photo/Camera/File picker to the
+  feedback-specific five-file and total-200-MB policy. It limits image and
+  document selection by the remaining attachment count, resolves missing file
+  sizes when possible, validates file metadata/format/size/count, preserves
+  existing chat defaults and adds focused tests.
+- Commit `8ea6723` updates the fixture rating prompt to the current Figma copy,
+  `How was this order?`.
 - Draft PR [#286](https://github.com/Innvoaid/dentlink-app/pull/286) is open and
   GitHub reports it mergeable. Its broken literal `\\n` body was replaced with
-  normal Markdown and the verification/risk notes were refreshed.
+  normal Markdown, and its task list, eight-test result, device evidence and
+  shared-picker regression-review request were refreshed at the new head.
 - CodeRabbit reports success only because it skipped automatic review for a
   Draft PR. No app-developer review, teammate approval, user QA, merge, staging
   QA or deployment has occurred.
@@ -295,8 +303,11 @@ This is the current resume source for the first local setup of
   keeps the rated card; leaving and re-entering promotes it to Reviewed in the
   development mock. Detail Submit uses a separate `DETAIL` mutation.
 - Photo/Camera/File entry reuses the existing native picker and permission
-  boundary. The current client checks supported formats, at most five files,
-  total 200 MB and known positive file sizes, but stores only local metadata.
+  boundary. Feedback configures the shared picker independently with a maximum
+  of five files, remaining-selection limits, total 200 MB, supported-format and
+  positive-size checks, Figma-aligned sheet behavior and feedback-only copy.
+  Existing chat callers retain their previous defaults. The feedback draft
+  still stores only local metadata because the upload/API contract is absent.
 - The repository/query/types boundary is development-only mock data. Staging
   and production neither fabricate feedback data nor expose Pending Reviews.
 
@@ -305,14 +316,17 @@ This is the current resume source for the first local setup of
 - Codex verified the main feedback flow on Android API 36
   `Dentlink_API_36` and the temporary iOS 26.5 iPhone 17 Pro simulator proof.
   This is not user QA or physical-device QA.
-- Targeted changed-file ESLint passes, and the feedback utility test passes
-  2/2 with `jest.config.js` selected explicitly.
+- Targeted changed-file ESLint passes with zero errors and the two existing
+  `console.warn` warnings in `useDeviceSystem.ts`. The focused feedback utility
+  test passes 8/8 with `jest.config.js` selected explicitly, and
+  `git diff --check` passes.
 - Office and Lab development Metro bundles pass for both Android and iOS.
 - Office and Lab full typechecks still fail on the same nine untouched
   baseline diagnostics; the feature files add no diagnostic.
-- Actual OS file selection, permission denial, real upload, slow/offline API,
-  physical devices, push/deep link and normal committed-source iOS build remain
-  unverified.
+- Android and iOS system photo pickers enforce five initial selections; iOS
+  also shows four remaining after one attachment. Document-file selection,
+  permission denial, real upload, slow/offline API, physical devices,
+  push/deep link and a fresh native iOS rebuild remain unverified.
 - Office-only feedback screens are statically imported through shared
   `AllScreens`, so they are included in the Lab Metro bundle. Both Lab bundles
   pass; whether to split app-specific navigation is an app-developer review
@@ -332,7 +346,7 @@ This is the current resume source for the first local setup of
   attachment states explicit: empty/uploaded lists, remove action,
   Photo/Camera/File bottom sheet, five-file error, size error and unsupported
   type error. The implementation covers the functional picker/list/validation
-  boundary, but its error-toast copy is not pixel-text identical to Figma.
+  boundary and applies the current Figma error-toast copy.
 - Figma's picker footer still says `up to 5 files, total size up to 2G`, while
   its size-error toast says 200 MB and the latest Notion policy says five files
   and total 200 MB. Keep 200 MB until product/design makes the source of truth
@@ -372,10 +386,11 @@ This is the current resume source for the first local setup of
 
 1. Resume `feature/DL-16061` only after pulling this personal context, fetching
    the app repository and reconciling PR #286, Jira/Notion/Figma and deployed
-   Swagger. Start from `55d53263` only if live Git still matches.
+   Swagger. Start from `8ea67233` only if live Git still matches.
 2. Ask the app developer to review PR #286's repository/query boundary,
-   Office/Lab navigation placement, back/safe-area behavior and native picker
-   reuse. Keep human approval separate from Codex simulator verification.
+   Office/Lab navigation placement, back/safe-area behavior, native picker reuse
+   and the existing chat Photo/File picker regression surface. Keep human
+   approval separate from Codex simulator verification.
 3. When the API/DTO appears, regenerate and diff-review the generated models,
    then replace the development mock repository with an adapter while
    preserving immediate Good/Bad save and screen-local card presentation.
