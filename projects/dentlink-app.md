@@ -256,7 +256,7 @@ This is the current resume source for the first local setup of
   updated and pushed at meaningful checkpoints. Never persist supplied login
   credentials in source, project notes, or Codex memory.
 
-## DL-15828 / DL-16061 Order Feedback App Checkpoint - 2026-08-25 18:25 KST
+## DL-15828 / DL-16061 Order Feedback App Checkpoint - 2026-08-25 19:16 KST
 
 ### Cross-surface ownership
 
@@ -300,6 +300,24 @@ This is the current resume source for the first local setup of
 - CodeRabbit reports success only because it skipped automatic review for a
   Draft PR. No app-developer review, teammate approval, user QA, merge, staging
   QA or deployment has occurred.
+
+### Jira checkpoint - 2026-08-25 19:14 KST
+
+- Parent `DL-15828` remains `진행 중`.
+- `DL-16064` (app development environment and WebView/native boundary
+  verification) moved through `진행 중` to `완료`. Jira comment `43696`
+  records the Android/iOS runtime proof, current native/WebView ownership and
+  the remaining iOS/native-contract constraints.
+- `DL-16061` (app feedback UI and native integration) moved to `진행 중`.
+  Jira comment `43697` links Draft PR #286 and the verified implementation and
+  QA, while explicitly separating pending API/DTO/upload, WebView bridge,
+  push/deep-link, app-developer review and physical-device QA.
+- `DL-16066` (app order-feedback notification) remains `해야 할 일`. Jira
+  comment `43698` records the missing trigger/recipient, notification copy and
+  mode, FCM payload/feedback identifier, landing/deep-link and WebView/native
+  bridge contracts. No speculative implementation was started.
+- Story points were not changed because the unresolved integration and
+  notification contracts still materially affect scope.
 
 ### Implemented app scope
 
