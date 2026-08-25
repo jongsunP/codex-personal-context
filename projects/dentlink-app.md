@@ -256,7 +256,7 @@ This is the current resume source for the first local setup of
   updated and pushed at meaningful checkpoints. Never persist supplied login
   credentials in source, project notes, or Codex memory.
 
-## DL-15828 / DL-16061 Order Feedback App Checkpoint - 2026-08-25 15:56 KST
+## DL-15828 / DL-16061 Order Feedback App Checkpoint - 2026-08-25 18:25 KST
 
 ### Cross-surface ownership
 
@@ -274,7 +274,7 @@ This is the current resume source for the first local setup of
 
 ### Git and PR checkpoint
 
-- Branch `feature/DL-16061` is clean at `8ea67233` and synchronized with its
+- Branch `feature/DL-16061` is clean at `4a9ec671` and synchronized with its
   upstream.
 - Commit `1977ae2f` implements the initial native UI and development-only
   mock/query boundary.
@@ -289,24 +289,35 @@ This is the current resume source for the first local setup of
   existing chat defaults and adds focused tests.
 - Commit `8ea6723` updates the fixture rating prompt to the current Figma copy,
   `How was this order?`.
+- Commit `4a9ec67` applies the current APP Profile layout, dynamic
+  `Share Feedback (N)` entry, Profile scroll-to-top FAB, Figma-aligned feedback
+  selection layout and the three detail interaction analytics events. It was
+  pushed after direct Android and iOS verification.
 - Draft PR [#286](https://github.com/Innvoaid/dentlink-app/pull/286) is open and
-  GitHub reports it mergeable. Its broken literal `\\n` body was replaced with
-  normal Markdown, and its task list, eight-test result, device evidence and
-  shared-picker regression-review request were refreshed at the new head.
+  GitHub reports it mergeable at head `4a9ec671`. Its broken literal `\\n` body
+  was replaced with normal Markdown earlier; this closeout did not mutate the
+  PR body or Draft state.
 - CodeRabbit reports success only because it skipped automatic review for a
   Draft PR. No app-developer review, teammate approval, user QA, merge, staging
   QA or deployment has occurred.
 
 ### Implemented app scope
 
-- Office Profile Quick Links includes Pending Reviews in development and keeps
-  Help Center available in every environment.
+- Office Profile follows the current APP card layout for profile identity,
+  Preferences, Notifications, Quick Links and the inline version/sign-out
+  footer. Quick Links exposes dynamic `Share Feedback (N)` in development and
+  keeps Help Center available in every environment. The Profile scroll-to-top
+  FAB is Office-only; Lab retains its previous presentation.
 - Native `FeedbackListScreen` provides To Review/Reviewed tabs, counts,
   infinite-list query structure, pull-to-refresh, scroll-to-top FAB, immediate
   Good/Bad save and the non-automatic `Tell Us Why` detail entry.
 - Native `FeedbackDetailsScreen` provides rating, reason, comment, attachment
   UI, fixed Submit action, unsaved-change protection and Android hardware-back
-  handling.
+  handling. Its selected rating fills the remaining row while unselected
+  ratings and reason chips retain content width on both platforms.
+- Detail interaction analytics now include `reviewdetail_select_reason`,
+  `reviewdetail_add_comments` and `reviewdetail_img_upload`, in addition to the
+  existing list/detail entry events.
 - Good/Bad uses an immediate `RATING` mutation. The current To Review screen
   keeps the rated card; leaving and re-entering promotes it to Reviewed in the
   development mock. Detail Submit uses a separate `DETAIL` mutation.
@@ -321,14 +332,25 @@ This is the current resume source for the first local setup of
 
 ### Verification and current risk
 
-- Codex verified the main feedback flow on Android API 36
-  `Dentlink_API_36` and the temporary iOS 26.5 iPhone 17 Pro simulator proof.
-  This is not user QA or physical-device QA.
-- Targeted changed-file ESLint passes with zero errors and the two existing
-  `console.warn` warnings in `useDeviceSystem.ts`. The focused feedback utility
-  test passes 8/8 with `jest.config.js` selected explicitly, and
-  `git diff --check` passes.
-- Office and Lab development Metro bundles pass for both Android and iOS.
+- Codex directly verified the current source on Android API 36
+  `Dentlink_API_36`: Profile top/bottom, dynamic count, scroll-to-top FAB,
+  To Review/Reviewed lists, detail layout, upload area and Photo/Camera/File
+  sheet. The Android check exposed a zero-width unselected-chip regression;
+  `flex-grow`/`flex-shrink` replaced `flex: 0` and the fixed result was
+  rechecked on-screen.
+- Codex directly verified the current source on the temporary iOS 26.5 iPhone
+  17 Pro simulator proof: Profile top/bottom and FAB, feedback list, detail
+  rating/reason layout, upload area and Photo/Camera/File sheet. Temporary QA
+  route/offset triggers were removed before the final diff, and a normal app
+  relaunch returned to the authenticated Home screen.
+- These checks are Codex simulator/emulator evidence, not user QA,
+  physical-device QA or app-developer approval.
+- Targeted ESLint over all seven changed files passes with zero output. The
+  focused feedback utility test passes 8/8 with `jest.config.js` selected
+  explicitly, and `git diff --check` passes.
+- Office runs the current source on both simulators, and Lab development Metro
+  bundles were regenerated from the final source for Android and iOS; both
+  passed. This closes a compile-level Lab regression check, not Lab runtime QA.
 - Office and Lab full typechecks still fail on the same nine untouched
   baseline diagnostics; the feature files add no diagnostic.
 - Android and iOS system photo pickers enforce five initial selections; iOS
@@ -340,7 +362,7 @@ This is the current resume source for the first local setup of
   pass; whether to split app-specific navigation is an app-developer review
   item rather than an unapproved refactor.
 
-### Live Figma recheck - 2026-08-24 19:00 KST
+### Live Figma recheck - 2026-08-25 18:25 KST
 
 - Rechecked the official Figma file `Lu8GEh1TUU5hOfj2FCPRYn` at Profile
   `160:38938`, Feedback `160:40593`, Order `160:38179` and Analytics
@@ -359,19 +381,20 @@ This is the current resume source for the first local setup of
   its size-error toast says 200 MB and the latest Notion policy says five files
   and total 200 MB. Keep 200 MB until product/design makes the source of truth
   consistent.
-- Profile annotation `160:40576` calls the menu `Share Feedback(N)`, while the
-  visible Profile frames still use `Pending Reviews (3)`. The app currently
-  uses `Pending Reviews`; do not rename it from one internally conflicting
-  Figma annotation.
+- Profile annotation `160:40576` calls the menu `Share Feedback(N)`, while an
+  older visible Profile frame says `Pending Reviews (3)`. The annotation is the
+  explicit APP behavior requirement, so the app now uses dynamic
+  `Share Feedback (N)` and keeps the development-only exposure boundary until
+  the live API exists.
 - Order APP frame `160:38775` adds a completed-order feedback banner and a
   post-rating confirmation toast. The current real app order detail is a
   Clinic WebView, so banner ownership and landing into the native feedback
   detail still require an explicit WebView/native bridge and identifier
   contract rather than a guessed navigation change.
-- The Analytics board still exposes only `review_feeback_click`,
-  `review_detail_click` and `review_edit_click` for the APP path, all already
-  present in the implementation. Additional Notion events are not treated as
-  Figma-confirmed requirements.
+- The APP analytics frames preserve `review_feeback_click`,
+  `review_detail_click` and `review_edit_click` and also specify
+  `reviewdetail_select_reason`, `reviewdetail_add_comments` and
+  `reviewdetail_img_upload`; all six are now represented in the app flow.
 - The current Figma file therefore does not expose another clearly safe core
   screen to implement now. Remaining work is contract clarification, exact
   copy/artwork polish and device/API QA, not an omitted major APP page.
@@ -383,8 +406,8 @@ This is the current resume source for the first local setup of
   notification contracts.
 - Notification payload/category, landing route, deep-link mapping and the
   WebView-to-native bridge are not implemented.
-- Reason/category mapping, count timing after immediate rating, detailed
-  analytics events and the design-policy attachment conflict remain pending.
+- Reason/category mapping, count timing after immediate rating and the
+  design-policy attachment conflict remain pending.
   Current implementation follows the latest Notion policy of five files and
   total 200 MB, not the Figma `2G` annotation or older 10-file/5-MB text.
 - App-developer review is the next human gate. The PR must remain Draft until
@@ -394,7 +417,7 @@ This is the current resume source for the first local setup of
 
 1. Resume `feature/DL-16061` only after pulling this personal context, fetching
    the app repository and reconciling PR #286, Jira/Notion/Figma and deployed
-   Swagger. Start from `8ea67233` only if live Git still matches.
+   Swagger. Start from `4a9ec671` only if live Git still matches.
 2. Ask the app developer to review PR #286's repository/query boundary,
    Office/Lab navigation placement, back/safe-area behavior, native picker reuse
    and the existing chat Photo/File picker regression surface. Keep human
