@@ -517,6 +517,42 @@
 - 현재 웹 구현은 `e4105f909`에서 clean/upstream 일치 상태이며 앱 결과 때문에 즉시
   수정할 웹 코드는 없다.
 
+### 파일 첨부 최종 브라우저 QA와 웹 대기 체크포인트 — 2026-08-25
+
+- 최신 Figma 파일 첨부 디자인과 로컬 Clinic 웹을 다시 대조해 파일 크기 표기를
+  10진수 단위로 맞추고, 확장자 표기와 모바일 Photo 아이콘을 디자인과 일치시켰다.
+  파일명 100자 초과와 0 byte 파일 검증을 추가하고, 선택한 원본 `File`을 UI
+  view-model에 유지하면서 생성한 object URL을 항목 변경·삭제·unmount 시 회수하도록
+  보완했다.
+- 실제 API가 없는 상태에서 운영 화면에 fixture가 노출되지 않도록 개발 환경의 mock
+  활성 조건에서만 `/my/feedback` route와 마이페이지 Pending Reviews 진입점·count
+  query가 활성화되도록 경계를 추가했다. 이 경계와 `localFile`은 실제 API/업로드
+  계약 연결 시 제거하거나 adapter 내부로 대체할 임시 웹 구현이다.
+- 로그인된 Chrome의 iPhone SE 375x667 emulation에서 Reviewed 목록, `Tell Us Why`와
+  `Edit`, 모바일 full-screen 상세, Photo/Camera/File 하단 sheet와 5개·총 200MB 안내를
+  직접 확인했다. Photo는 macOS 파일 선택기를 열었고, Camera input은 `image/*`와
+  `capture="environment"`, File input은 기존 프로젝트 공용 확장자 목록을 사용한다.
+- Chrome 확장의 file URL 접근 권한이 꺼져 있어 자동 제어로 native picker에서 저장소
+  파일을 선택하는 단계는 완료하지 못했다. 대신 동일한 로컬 화면에 실제 PNG `File`
+  event를 전달해 `sample-crown.png` 25.40kb의 thumbnail·메타데이터·삭제와 object URL
+  preview를 확인했다. 지원하지 않는 확장자, 6개 선택, 총 200MB 초과, 0 byte,
+  파일명 100자 초과가 각각 기대한 error toast를 표시하고 첨부를 추가하지 않는 것도
+  확인했다.
+- 실제 스마트폰의 카메라 권한·촬영·갤러리·OS 파일 선택기와 서버 업로드는 아직 QA가
+  아니다. 현재 배포 Swagger와 generated model에는 주문 피드백·첨부 계약이 없으므로
+  presign/S3, upload `callBy`, attachment DTO와 Submit payload를 추측하지 않는다.
+- 대상 Clinic ESLint, Clinic type과 `git diff --check`를 통과했다. commit hook의
+  Clinic/Lab/Admin type도 통과했고, pre-push 전체 lint는 0 errors와 기존 warning만
+  보고했다. shared config 3건·shared hook 24건과 coverage delta 변화 없음도 통과해
+  hook 우회 없이 push를 완료했다.
+- 제품 commit `55b1fe0cf` (`[DL-15828] fix: 피드백 파일 첨부와 임시 노출 조건 보완`)
+  을 `origin/feature/DL-15828`에 push했다. 제품 worktree는 clean이고 로컬·원격
+  HEAD가 동일하며 PR은 생성하지 않았다.
+- 현재 확인 가능한 Clinic 웹 디자인·코드·Chrome QA 범위에는 추가 확정 작업이 없다.
+  다음 시작점은 최종 기획/Figma 변경 또는 배포 Swagger/generated model 계약 확인 후
+  mock repository를 실제 query/mutation/adapter와 파일 업로드 흐름으로 교체하고,
+  실기기·서버 통합 QA를 수행하는 것이다.
+
 ## FE Jira 구조와 스토리포인트
 
 Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용한다.
