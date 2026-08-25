@@ -83,37 +83,18 @@ For detailed current state, read:
 ### Dentlink Lab i18n
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Dedicated worktree:
-  `/Users/parkjongsun/Repository/dentlink-client-i18n`
-- Branch: `feature/i18n-maintenance`, based on `release/v1.84.0`
-- Current state: the complete i18n implementation, including DL-16083, was
-  merged by PR #4518 into `release/v1.84.0` at `7a7c0138b`. PR #4520 merged
-  that release into `stage` at `e822d9707`; both commits have the same tree and
-  the user confirmed staging deployment. Documentation-only follow-up PR #4522
-  is open and mergeable from `feature/i18n-maintenance` to
-  `release/v1.84.0` at `c6b3ae200`.
-  Lab Korean i18n now contains 1,528 keys; the
-  two operational Sheet tabs are 1:1 role-based views with 1,528 identical
-  message IDs, single-source request columns, and representative page values.
-  Capture expansion is paused while existing capture links remain preserved;
-  remaining product/API decisions are recorded in the detailed checkpoint.
-  Lab, Clinic, and Admin now share the Pretendard and letter-spacing policy;
-  Clinic web and PDF were fully migrated from Lato. All three package versions
-  are 1.84.0. Production master integration is not complete; after assembled
-  release QA, the finalized `v1.84.0`
-  release must propagate forward to `master` and `release/v1.85.0`. The 1.85
-  release is also still receiving features, so current conflict checks are
-  preliminary and must be repeated after both release contents are finalized.
-  The directly actionable web cards, including DL-16013, are `Ready for
-  Deploy`. DL-16013 now uses content-based shared status-chip widths with the
-  Figma spacing across Clinic, Lab, and Admin while preserving the existing
-  flat/icon/text-mode contracts. DL-16072 is also `Ready for Deploy` after the
-  common term was decided as `리메이크`; app cards are tracked separately.
-  DL-16053 and new DL-16080 remain `진행 중` because their displayed prose and
-  button labels come from API templates and need an explicit scope decision.
-  Future fixes discovered after a feature has entered a release must branch
-  from the latest remote release and return to that release by PR; do not keep
-  appending commits to the historical feature branch. Dentlink's exact
+- Current state: the complete i18n implementation and operating documentation
+  are in `master` through `Release/v1.84.0 -> master` (`8e05cbb84`), and the
+  user confirmed production deployment. Live verification on 2026-08-25 found
+  `master` clean and synchronized with `origin/master`, with the required Lab
+  locale, provider, manifest, Sheet client, and i18n skill files present.
+- Local closeout: the dedicated
+  `/Users/parkjongsun/Repository/dentlink-client-i18n` worktree and local
+  `feature/i18n` / `feature/i18n-maintenance` branches were deleted on
+  2026-08-25. Matching remote branches were intentionally preserved. There is
+  no active dedicated i18n worktree.
+- Future i18n changes must start on a fresh feature branch from the current
+  release-plan base, not from either historical i18n branch. Dentlink's exact
   staging-server branch is `stage`, not `staging`.
 - Personal current checkpoint and resume instructions:
   `projects/dentlink-client-i18n.md`

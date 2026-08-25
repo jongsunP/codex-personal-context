@@ -1,4 +1,4 @@
-# Dentlink i18n and typography delivery checkpoint — 2026-08-21
+# Dentlink i18n and typography delivery checkpoint — 2026-08-25
 
 This is the durable delivery checkpoint for the Dentlink Lab i18n, operational
 Sheet, and cross-service Pretendard work. Live Git and Google Sheet state still
@@ -7,33 +7,49 @@ take precedence if later work changes them.
 ## Current Delivery State
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Dedicated worktree:
-  `/Users/parkjongsun/Repository/dentlink-client-i18n`
-- Current follow-up branch: `feature/i18n-maintenance`, tracking
-  `origin/feature/i18n-maintenance` at `095f503bc`
-  (`[DL-15676] fix: i18n 디자인 QA 후속 이슈 수정`). The worktree is clean.
-- Historical implementation branch: `feature/i18n` at `d14fa1435`
-  (`[DL-16083] ui: 상태 뱃지 콘텐츠 너비 유지`). Do not continue new work on
-  this branch after its release merge.
-- The complete i18n implementation was merged by PR
-  [#4518](https://github.com/Innvoaid/dentlink-client/pull/4518) into
-  `release/v1.84.0` at `7a7c0138b`.
-- PR [#4520](https://github.com/Innvoaid/dentlink-client/pull/4520) merged
-  `release/v1.84.0 -> stage` at `e822d9707`. The release and stage commits have
-  different history but identical tree `27cfc1e63`; the user confirmed this
-  assembled release was deployed to staging.
-- Follow-up PR [#4522](https://github.com/Innvoaid/dentlink-client/pull/4522)
-  was squash-merged into `release/v1.84.0` at `6e28e4d75`. The later QA commit
-  `095f503bc` was pushed after that merge and is therefore not yet in the
-  release, stage, or production master.
-- On 2026-08-21, remote `stage` was deliberately deleted and recreated from
-  `origin/master` at `9b57bec96`. Deployment PR
-  [#4523](https://github.com/Innvoaid/dentlink-client/pull/4523) merged
-  `release/v1.84.0 -> stage` at `3607210d0`. The user initiated staging
-  deployment. At this checkpoint, the Lab, Clinic/Office, and Admin stage
-  workflows for that SHA are all running; deployment completion is not yet
-  verified.
-- Current package version in Lab, Clinic, and Admin: `1.84.0`.
+- On 2026-08-25, live Git verification found local `master` clean and exactly
+  synchronized with `origin/master` at `8e05cbb84`
+  (`Release/v1.84.0 -> master (#4528)`).
+- `master` contains the primary i18n merge `7a7c0138b`
+  (`[DL-15676] Lab 다국어 및 디자인 QA 반영 (#4518)`) and the operating-doc
+  follow-up `6e28e4d75` (`i18n 후속 운영 절차 정리 (#4522)`).
+- Required runtime and operating files are present on `master`, including the
+  Lab locale/provider, `i18n.manifest.json`, Sheet client, and repository i18n
+  skill. The final local maintenance files had no diff against `master`.
+- The user confirmed that this i18n release has been deployed to production.
+  This deployment statement is user-confirmed; the Git integration above was
+  independently verified locally.
+- Local cleanup is complete: the dedicated
+  `/Users/parkjongsun/Repository/dentlink-client-i18n` worktree and local
+  `feature/i18n` / `feature/i18n-maintenance` branches were deleted. Their
+  matching remote branches remain intentionally untouched.
+- Removing the worktree also removed its ignored local-only
+  `lab/.env.local` and `lab/scripts/i18n/service-account.json`. These files
+  were never part of the shared repository.
+- There is no active dedicated i18n worktree. Any later i18n work must use a
+  fresh feature branch from the current release-plan base rather than either
+  historical branch.
+
+## Sheet Environment Setup
+
+- Normal Lab development and builds use the committed locale JSON and do not
+  require Google Sheet credentials or Sheet environment variables.
+- Sheet synchronization commands (`generate:i18n`, `check:i18n`, and
+  `export:i18n`) require Sheet configuration and authentication.
+- The current implementation reads `SHEETS_SPREADSHEET_ID` from the local
+  environment. `SHEETS_SHEET_NAME` already falls back to
+  `i18n.manifest.json`'s `sheet.defaultName`.
+- Authentication priority is `GOOGLE_SERVICE_ACCOUNT_KEY`, then the ignored
+  local `lab/scripts/i18n/service-account.json`, then gcloud Application
+  Default Credentials. Read/check operations need viewer access; Sheet writes
+  need editor access.
+- With the current code, a developer who runs Sheet commands should use an
+  ignored `lab/.env.local`; a shell-only `export` is less convenient because it
+  is session-scoped. The preferred future team improvement is to put the
+  non-secret spreadsheet ID in the tracked manifest as a default while keeping
+  an environment override. Credentials must remain local or in CI secrets.
+
+## Historical Delivery Checkpoint — 2026-08-21
 
 Current release integration plan:
 
