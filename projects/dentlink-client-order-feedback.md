@@ -729,6 +729,49 @@
   실제 GET/POST/PUT·목록/count·서버 질문 정본 계약으로 갱신했다. 실데이터 QA가
   필요한 완료 조건 체크박스는 임의로 완료 처리하지 않았다.
 
+### 피드백 상세 딥링크와 develop 추가 반영 준비 — 2026-08-27
+
+- 웹·앱·백엔드가 공유할 주문 피드백 상세 진입 URL을
+  `/my/feedback?orderId={orderId}`로 결정했다. 제품 식별값은 `orderId` 하나이며,
+  미생성 피드백도 있으므로 `feedbackId`를 사용하지 않는다. 백엔드에는 위 URL
+  형식만 요청하고, 확정되지 않은 `type`이나 `webPath` payload 필드를 새로 요구하지
+  않는다. 앱은 기존 FCM URL 필드를 통해 이 경로를 받은 뒤 native 피드백 목록과
+  해당 주문 상세로 변환한다.
+- Clinic의 `/my/feedback`은 알림 전용 예외가 아니라 모든 상세 drawer 진입에서 URL
+  `orderId`를 선택 상태의 정본으로 사용한다. 카드 클릭은 기존 query를 보존하며
+  `orderId`를 shallow push하고, 닫기·상세 제출 성공·탭 전환·병원 계정 변경은 해당
+  query만 shallow replace로 제거한다. 직접 URL 진입과 브라우저 뒤로/앞으로도 같은
+  흐름으로 동기화된다.
+- 유효한 양의 정수 `orderId`일 때 기존 상세 GET을 수행하고 정상 데이터가 있을 때만
+  공용 drawer를 연다. 잘못된 query 또는 상세 조회 실패는 기존 오류 toast 후 query를
+  제거한다. 직접 URL 진입은 목록 카드 클릭 Amplitude 이벤트를 발생시키지 않는다.
+  주문상세는 URL 계약 대상이 아니므로 기존 로컬 drawer 상태와 query cache 재사용을
+  유지한다.
+- URL·브라우저 navigation으로 drawer가 닫히는 경우에도 기존 닫기 버튼과 동일하게
+  미제출 FEEDBACK staging upload를 취소·삭제하도록 drawer 수명주기를 보완했다.
+- 원본 제품 commit은 `979813698` (`[DL-15828] feat: 피드백 상세 딥링크 연동`)이며
+  `feature/DL-15828`과 `origin/feature/DL-15828`이 동일한 clean 상태다. 원본 branch는
+  이번 develop 준비 과정에서 merge/rebase하지 않았다.
+- 원본에서 Clinic/Lab/Admin type, 대상 ESLint·Prettier, `git diff --check`, Clinic
+  production build를 통과했다. push hook은 전체 lint 0 errors·기존 warning 418건,
+  shared config 3 tests와 hooks 24 tests, coverage 비교를 통과했다. 로컬 서버와 실제
+  피드백 대상 주문이 없어 직접 URL·뒤로/앞으로·실제 상세 GET의 브라우저 통합 QA는
+  아직 수행하지 않았다.
+- 기존 개발서버 반영 commit `507e63945`인 최신 `origin/develop`에서 별도 worktree
+  `/Users/parkjongsun/Repository/dentlink-client-order-feedback-develop-preview-deeplink`와
+  branch `feature/DL-15828-develop-preview-deeplink`를 만들었다. 원본 commit을
+  conflict 없이 cherry-pick한 preview commit은 `8c304f5c9`이며
+  `origin/feature/DL-15828-develop-preview-deeplink`와 동일한 clean 상태다.
+- preview 조합에서도 Clinic type과 production build, `git diff --check`를 통과했고
+  push hook의 lint·shared tests·coverage 비교도 통과했다. fresh worktree에서 Next가
+  생성하는 `next-env.d.ts`가 없을 때 첫 type 검사가 실패했지만 Clinic build 후 같은
+  type 검사를 다시 실행해 통과했다. package version은 기존 develop의 `1.86.0`을
+  그대로 사용했으며 이번 Clinic 경로 변경을 위해 Lab/Admin 버전을 다시 올리지
+  않았다.
+- preview PR은 생성하지 않았다. 개발서버에 반영하려면 사용자의 명시 지시 후
+  `feature/DL-15828-develop-preview-deeplink -> develop` PR을 만들고 merge·배포
+  revision·실데이터 QA를 각각 별도 상태로 확인한다.
+
 ## FE Jira 구조와 스토리포인트
 
 Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용한다.
