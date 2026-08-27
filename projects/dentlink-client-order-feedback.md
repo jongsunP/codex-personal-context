@@ -570,6 +570,80 @@
 - 관리자 `DL-16065`와 앱 `DL-16064`, `DL-16061`, `DL-16066`은 이번 웹 상태 정리
   범위에서 제외해 변경하지 않았다.
 
+## 실제 API·Amplitude 연동 완료 체크포인트 — 2026-08-27
+
+- 제품 branch/HEAD는 `feature/DL-15828` /
+  `bda99f449e4469bc039262756316995e52803811`이다. 로컬과
+  `origin/feature/DL-15828`이 동일하고 worktree는 clean이다. PR은 생성하지
+  않았다.
+- 이번 연동 commit은 `748110dac` (`[DL-15828] chore: 주문 피드백 API 모델 생성`),
+  `bda99f449` (`[DL-15828] feat: 주문 피드백 API와 분석 이벤트 연동`)이다.
+- 최신 `origin/master`는 `8e05cbb84380274aad12e514bd66a71b8dd59c55`
+  (`Release/v1.84.0 -> master (#4528)`)이며 feature는 6 commits behind / 10 commits
+  ahead다. 마이페이지·주문상세·query key 등 겹치는 변경이 있어 PR 전 최신 master
+  통합은 별도 검토가 필요하지만 이번 권한 범위에서는 merge/rebase하지 않았다.
+
+### live 계약과 구현
+
+- `pnpm generate:api-type`으로 `https://dev-api.dentlink.io/v3/api-docs`를 다시
+  생성했다. Clinic 계약은 주문별 GET/POST/PUT과 To Review/own 목록 GET이며,
+  Admin 전체 목록 GET도 generated model에 추가됐다.
+- Clinic에서는 주문번호를 기준으로 동일한 상세 GET을 사용한다. 주문상세는 주문
+  상태가 `COMPLETED`일 때만 요청하고 정상 변환된 200 응답이 있을 때만 배너를
+  노출한다. 목록의 상세 CTA는 GET을 먼저 수행한 뒤 같은 drawer를 연다. 주문상세는
+  이미 조회한 동일 query cache를 재사용해 중복 GET하지 않는다.
+- 최초 Good/Bad는 POST, 이후 상세 저장·수정은 전체 답변 교체 PUT이다. 서버 응답과
+  employee-scoped React Query cache가 정본이며, Figma의 "현재 To Review 카드 유지"만
+  화면 로컬 overlay로 분리했다. 병원 계정 전환 시 overlay·drawer·page state를
+  초기화한다.
+- 서버 `questionLabel`, rating option, category·keyword와 `isRequired`를 그대로
+  렌더링한다. 카드의 주문번호 뒤 업체명 역할은 API의 `officeName`, 즉 치과명이다.
+  상품 이미지는 `categoryThumbnailUrl`이 있으면 사용하고 없으면 기존 fallback
+  artwork를 사용한다.
+- 기존 공용 multipart uploader에 feedback 전용 `callBy: "FEEDBACK"`와 주문번호
+  `relationId`를 적용했다. 최대 5개·총 200MB·파일명 최대 100자·0 byte·공용 확장자
+  검증을 사용한다. 업로드 완료 file ID만 Submit에 포함하고, PUT에서 빠진 기존
+  file ID는 서버 계약에 따라 삭제된다. 취소·drawer close·unmount 시 미제출 staging을
+  삭제하고 성공 Submit 후에는 서버 파일을 보존한 채 클라이언트 staging만 비운다.
+- mock query parameter, fixture와 mock repository를 제거했다. `/my/feedback`,
+  마이페이지 count와 주문상세 배너는 이제 실제 API만 사용한다.
+
+### Amplitude 확정
+
+- 최신 Analytics Notion `[치과] 주문 피드백 수집`을 직접 확인했다. 문서 상태는
+  `진행 중`이므로 향후 이벤트 추가 가능성은 남지만 현재 웹 계약 7개는 모두
+  구현됐다.
+- `review_feeback_click`: 목록·주문상세 Good/Bad 클릭, `feedbackType: Good | Bad`.
+- `review_detail_click`: `Tell Us Why` 또는 주문상세 `Share your feedback` 클릭.
+- `review_edit_click`: 상세가 있는 리뷰의 `Edit` 클릭.
+- `reviewdetail_select_reason`: drawer session에서 사유를 하나 이상 새로 선택한 첫
+  시점.
+- `reviewdetail_add_comments`: drawer session에서 첫 non-empty comment 입력 시점.
+- `reviewdetail_img_upload`: picker 클릭이 아니라 실제 FEEDBACK 파일 업로드 성공
+  callback의 첫 시점.
+- `reviewdetail_submit_click`: 유효하고 활성화된 Submit Feedback 클릭 시점.
+- Analytics 문서의 `puch_click`/`PushType`은 앱 푸시·알림 범위이므로 Clinic 웹
+  클릭 이벤트로 추측해 추가하지 않았다.
+
+### 최종 검증
+
+- 최신 Figma의 마이페이지 `160:38938`, 목록·상세 `160:40593`, 주문상세
+  `160:38179`, drawer 상태 `160:41646`, 카드 비교 `160:41672`를 다시 대조했다.
+  현재 확정된 PC·웹 모바일 UI에서 새로 확인된 누락은 없다.
+- 로그인된 로컬 Chrome에서 `/my/feedback` empty/count 0 API 경로, 마이페이지
+  `Pending Reviews (0)`·My Office, non-completed 주문상세에서 피드백 미노출을
+  확인했다. 현재 계정에는 실제 대상 피드백이 없어 API POST/PUT·실제 첨부·서버
+  drawer 데이터는 브라우저 E2E로 재현하지 못했다. 이전 fixture 기반 PC·iPhone SE
+  디자인 QA와 이번 정적 계약 검토는 통과했지만 서버 통합 QA와는 구분한다.
+- `pnpm generate:api-type`, `pnpm type`, `pnpm build:clinic`, Prettier check,
+  `git diff --check`를 통과했다. 전체 Clinic lint는 0 errors와 기존 warning만
+  보고했다.
+- commit hook의 Clinic/Lab/Admin type이 통과했다. push hook의 전체 lint도
+  0 errors였고 shared config 3 tests, shared hook 24 tests와 coverage 비교를 통과해
+  hook 우회 없이 push했다.
+- Notion 본문은 여전히 `작성 중`, Analytics 문서는 `진행 중`이다. 현재 Jira 웹
+  카드도 `진행 중`이며, 이번 turn에는 Jira 상태·본문·댓글을 변경하지 않았다.
+
 ## FE Jira 구조와 스토리포인트
 
 Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용한다.
@@ -615,10 +689,12 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 주문 상세 유도 영역과 작성 권한은 Assigned Dentist에게만 제공한다.
 - 담당 의사가 변경되면 Assigned Dentist별 피드백을 구분하고 실제 제출 user ID도
   저장한다.
-- 상세 노출 keyword 기준은 Shade / Fit / Material / Service다.
+- 상세 사유는 서버가 주문 조건을 반영해 내려주는 category·keyword와 label을 그대로
+  사용한다. 과거 Notion의 Shade / Fit / Material / Service 문구를 FE에서 별도 매핑
+  계약으로 만들지 않는다.
 - 상세에는 웹·앱 갤러리 최대 5개와 앱 촬영 1개씩의 사진 첨부가 기획 범위로
-  추가됐다. 최신 PC·웹 모바일 Figma UI는 fixture 경계에서 구현했으며 실제 업로드,
-  기존 첨부 수정과 App native 동작은 API·소유권 계약 전까지 연결하지 않는다.
+  추가됐다. Clinic PC·웹 모바일은 실제 공용 uploader와 feedback file ID 계약에
+  연결했으며, App native picker·권한과 물리 기기 QA는 앱 범위로 남긴다.
 - 사용자 노출 문구는 영어다.
 - 웹과 앱은 동일한 서버 데이터와 공통 query/cache 규칙을 사용한다.
 - 서버와 React Query cache를 기준 상태로 사용하며, Figma의 현재 카드 유지만
@@ -628,25 +704,21 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 
 - 빠른 평가 후 현재 카드를 유지하는 동안 To Review/Reviewed 및 마이페이지 count를
   언제 변경할지
-- Figma의 상품별 사유, Notion의 Shade / Fit / Material / Service, 사용자에게
-  공유된 BE PRODUCT/SERVICE category·keyword code 사이의 adapter 계약
-- BE DTO, eligibility, pagination, count, category/reason 계약
-- 최초 Good / Bad 생성 응답의 feedback ID·전체 entity 포함 여부, 상세 Submit의
-  update 방식, idempotency와 중복 요청 처리
-- 서버가 목록/주문별 상품 artwork 또는 이를 식별할 category/product 정보를 어떤
-  필드로 제공할지
-- App 저장소와 실행·빌드·디바이스 검증 환경. 현재 worktree에는 native app package가
-  없고 Clinic WebView/RN bridge 코드만 있다.
+- 최신 Notion·Analytics 문서가 완료 상태가 아니므로 이후 기획·디자인·이벤트 계약
+  변경 여부
+- 실제 대상 주문이 있는 치과 계정으로 목록·주문상세 GET, 최초 Good/Bad POST,
+  상세 PUT, 서버 분류·count·pagination과 에러 응답을 함께 확인하는 통합 QA
+- 실제 업로드 성공·취소·삭제·재시도와 기존 첨부 수정, 스마트폰 Photo/Camera/File
+  권한 및 picker를 포함한 물리 기기 QA
+- API가 idempotency 또는 중복 클릭에 대해 보장하는 세부 정책. FE는 mutation pending
+  중 관련 action을 비활성화하지만 서버 보장은 별도다.
+- 최신 `origin/master`의 6 commits를 feature에 통합할 때 마이페이지·주문상세·query
+  key·font 변경을 의미 단위로 reconcile하는 작업
 - Clinic WebView와 native app의 화면, navigation, back, safe-area, deep-link 책임
 - 관리자 화면·권한·API·검증 범위
 - 앱 피드백 알림의 발송 조건, 대상, 문구, deep link, BE/FCM/native 책임
-- 사진 업로드의 upload/attachment DTO, 기존 파일 표시·삭제·재정렬, 부분
-  실패·재시도 계약과 App native 카메라·갤러리 책임. PC·웹 모바일 UI는 반영됐지만
-  실제 API와 native 계약은 아직 없다.
-- 신규 analytics event의 정확한 trigger와 payload. 명칭은 추가됐지만 설명이 서로
-  충돌해 이벤트를 추측해 추가하지 않았다.
-- 2026-08-24 배포 Swagger와 generated model에는 주문 피드백 API contract가
-  없으므로 실제 연동 시작 시 다시 확인해야 한다.
+- Analytics 문서에 이후 추가될 이벤트. 현재 7개 웹 이벤트는 구현됐고
+  `puch_click`은 앱 알림 범위로 분리했다.
 
 ## 다음 시작점
 
@@ -654,13 +726,14 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
    `/Users/parkjongsun/Repository/dentlink-client-order-feedback`에 연결한다.
 2. 개인 컨텍스트를 pull하고 이 문서와 live Git/Jira/Notion/Figma를 reconcile한다.
 3. `git fetch --all --prune`, `git status -sb`, HEAD와 `origin/master` 차이를 확인한다.
-4. 배포된 Swagger와 BE 계약을 확인하고, contract가 생기면 generated model을
-   재생성·diff review한 뒤 `feedback.mockRepository`를 실제 repository/adapter로
-   교체한다.
-5. 최신 기획·Figma 변경을 다시 대조해 빠른 평가 이동 시점, 사유 계약, 상품별
-   artwork, 사진 업로드, analytics와 `Tell Us Why`/`Add More Details`, 주문 상세 배너
-   클릭 범위를 확정한다. 현재 UI를 기준으로 API pagination, sort, count,
-   eligibility와 error handling을 연결하고 PC·모바일 회귀 QA를 수행한다.
-6. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
+4. 최신 기획·Figma·Analytics와 Swagger 변경 여부를 확인한다. 변경이 있으면 API
+   model을 재생성·diff review하고 현재 adapter/query/cache·UI에 확정된 차이만
+   반영한다.
+5. 대상 데이터가 있는 치과 계정 또는 BE fixture를 확보해 목록·주문상세·상세
+   drawer·실제 파일 업로드의 GET/POST/PUT 통합 QA를 수행한다. 실제 모바일 브라우저
+   Camera/Photo/File picker도 별도 검증한다.
+6. PR 준비 지시가 오면 최신 master 통합 충돌을 먼저 의미 단위로 해결하고 전체
+   검사와 사용자 QA를 다시 수행한다. 현재는 PR 전 작업 브랜치 단계다.
+7. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
    API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
-7. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
+8. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
