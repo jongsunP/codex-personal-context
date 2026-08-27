@@ -65,11 +65,11 @@ This is the current resume source for the first local setup of
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `ddf9f0efb4ef399e99950745d7ed67847b7d321c`
+- Current HEAD: `9f66fa34cecc366fc9f0a74e9a3392f220cf6147`
 - The checkout is clean and synchronized with
-  `origin/feature/DL-16061` as of 2026-08-27 17:17 KST.
+  `origin/feature/DL-16061` as of 2026-08-27 18:08 KST.
 - `origin/develop` is `09ca56296de4d83acf81d57851d94a8269d58c20`;
-  the feature branch is six commits ahead and three commits behind.
+  the feature branch is eight commits ahead and three commits behind.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
@@ -497,11 +497,55 @@ This is the current resume source for the first local setup of
   complete. `DL-16064` remains Complete, `DL-16066` remains To Do pending its
   notification contract, and parent `DL-15828` remains In Progress.
 
+## DL-16061 Review-Ready Final Checkpoint - 2026-08-27 18:08 KST
+
+### Git, PR and review state
+
+- `feature/DL-16061` is clean and synchronized with its upstream at
+  `9f66fa34cecc366fc9f0a74e9a3392f220cf6147`.
+- Commit `aa8baf6` preserves detail answers during replacement PUT, strengthens
+  upload cleanup and fixes inactive-query and unmount behavior found during
+  review. Commit `9f66fa3` separates per-file and total attachment-size copy.
+- PR [#286](https://github.com/Innvoaid/dentlink-app/pull/286) is OPEN,
+  mergeable and no longer Draft. `add-labels` and CodeRabbit are successful;
+  all six review threads are resolved and the unresolved count is zero.
+- Focused feedback tests pass 15/15. Changed-file lint and formatting,
+  `git diff --check`, and Office/Lab new-error classification were completed
+  before the final push. The nine application type diagnostics are the same
+  untouched baseline errors rather than feedback regressions.
+
+### Final Android runtime proof
+
+- Metro was started from the integrated terminal of the Cursor IDE opened for
+  `/Users/parkjongsun/Repository/dentlink-app`, and Android API 36
+  `Dentlink_API_36` connected to the Office development app.
+- Current development data showed Profile `Share Feedback (5)`, To Review 5
+  and Reviewed 5. This supersedes the earlier time-sensitive 0/1 data snapshot.
+- Completed order `9000009126` opened its Clinic `/orders/:orderId` WebView and
+  displayed the rated `Glad to hear!` feedback banner. Selecting the banner
+  opened native `Feedback Details` for the same order, including the selected
+  Good rating and the `Image Upload` area.
+- No matching fatal React Native runtime error was found. The modal was closed
+  without changing feedback data. Real Good/Bad POST, detail PUT, file upload
+  and removal were intentionally not executed because they mutate development
+  data.
+
+### Jira and handoff state
+
+- `DL-16064` remains `완료`, `DL-16061` remains `Ready for Deploy`,
+  `DL-16066` remains `해야 할 일`, and parent `DL-15828` remains `진행 중`.
+- Jira comment `43750` records the latest commit, PR readiness, final Android
+  WebView-to-native runtime proof, mutation-QA exclusion and remaining delivery
+  gates.
+- The next human gate is now app-developer review of PR #286. This checkpoint
+  does not claim app-developer approval, physical-device QA, merge, release QA
+  or deployment.
+
 ## Next Starting Point
 
-1. For this feature, do not add speculative code. The next normal gate is app
-   developer review of PR #286, followed by merge/release QA according to the
-   team process.
+1. For this feature, do not add speculative code. Ask the app developer to
+   review PR #286. If review feedback arrives, verify and address only valid
+   findings, then repeat focused checks before any merge decision.
 2. When safe eligible data is provided, verify real Good/Bad POST, full-detail
    POST/PUT, file upload/removal and cache transitions. Validate Android first,
    then iOS or a physical device for camera and permission behavior.

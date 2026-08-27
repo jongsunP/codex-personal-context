@@ -70,13 +70,16 @@ For detailed current state, read:
   alongside web when a feature or user flow spans both; its task volume may be
   smaller or intermittent.
 - Current state: initial macOS setup and Office development login/Home proof are
-  complete. The active checkout is now clean on `feature/DL-16061` at
-  `55d53263`, synchronized with its upstream and two commits ahead of current
-  `origin/develop`. Draft PR #286 contains the first native order-feedback UI,
-  development-only mock/query boundary and safety follow-up. Android API 36 and
-  the temporary iOS 26.5 simulator proof cover the main feedback flow; this is
-  not user or physical-device QA. Actual API/upload/push/deep link and normal
-  committed-source Apple Silicon iOS support remain pending app-team inputs.
+  complete. The active checkout is clean on `feature/DL-16061` at `9f66fa3`
+  and synchronized with its upstream. PR #286 is open, mergeable and Ready for
+  review; CodeRabbit is successful with no unresolved review thread. The
+  deployed feedback API, cache and existing multipart-upload integration are
+  implemented. Android API 36 directly verified Profile, To Review/Reviewed,
+  the completed-order Clinic WebView feedback banner and its native detail and
+  Image Upload landing. The FE code scope is ready for app-developer review.
+  Real POST/PUT/upload mutation QA, physical-device QA, a fresh committed-source
+  Apple Silicon iOS build, and DL-16066 notification/deep-link work remain
+  separate gates.
 - Personal current checkpoint:
   `projects/dentlink-app.md`
 

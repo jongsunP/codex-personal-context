@@ -1,5 +1,19 @@
 # Memory Changelog
 
+## 2026-08-27
+
+- Closed the DL-16061 app FE implementation checkpoint at synchronized head
+  `9f66fa3`; PR #286 is Ready for review, mergeable, CodeRabbit-successful and
+  has zero unresolved review threads.
+- Recorded final Android API 36 proof for Profile feedback counts and lists,
+  completed-order Clinic WebView feedback banner, native Feedback Details and
+  Image Upload landing without mutating POST/PUT/upload data.
+- Recorded Jira final state and evidence: DL-16064 Complete, DL-16061 Ready for
+  Deploy with comment `43750`, DL-16066 To Do, and parent DL-15828 In Progress.
+- Preserved the next boundary: app-developer review is now appropriate, while
+  approval, physical-device and real-mutation QA, merge, release QA and
+  deployment remain separate gates.
+
 ## 2026-08-19
 
 - Closed out Dentlink Lab i18n and cross-service typography work at pushed
