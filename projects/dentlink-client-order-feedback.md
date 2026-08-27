@@ -671,6 +671,36 @@
 - 두 후속 commit을 `origin/feature/DL-15828`에 push했다. 제품 worktree는 clean이고
   로컬·원격 HEAD가 동일하며 PR은 여전히 생성하지 않았다.
 
+### develop 개발서버 확인용 임시 통합 — 2026-08-27
+
+- 개발서버에서 현재 기능을 확인하기 위해 원본 feature branch를 직접 develop에
+  합치지 않고 별도 worktree
+  `/Users/parkjongsun/Repository/dentlink-client-order-feedback-develop-preview`와
+  branch `codex/DL-15828-develop-preview`를 만들었다.
+- 최신 `origin/develop` `1e6801f2e6fb85b46ac9bce9c24a8d4c2f376907` 위에
+  `feature/DL-15828` 전체를 squash 통합했다. preview commit은
+  `f6e621beb568c669c757e412e9d83ff919a75bfc`
+  (`[DL-15828] wip: 개발서버 확인용 주문 피드백 반영`)이다.
+- 충돌은 shared EmployerItem의 다국어 hook과 typography 확장, 주문상세 layout의
+  system message loading state와 feedback component 추출이 겹친 두 곳이었다. 양쪽의
+  의미를 모두 보존해 preview branch에서만 해결했다.
+- Clinic/Lab/Admin type, Clinic production build, 전체 lint(0 errors, 기존 warning만),
+  shared config 3 tests, shared hooks 24 tests, coverage baseline 비교, Prettier와
+  `git diff --check`를 통과했다. Clinic build에서 `/my/feedback` route 생성도
+  확인했다.
+- develop 대상 PR [#4539](https://github.com/Innvoaid/dentlink-client/pull/4539)
+  `[DL-15828] 개발서버 확인용 주문 피드백 기능 임시 반영`을 생성했다. PR은 open,
+  non-draft, mergeable 상태이며 Auto Assign과 CodeRabbit check는 생성 직후 진행
+  중이었다. 이번 세션에서는 merge하지 않았다.
+- 원본 worktree와 `feature/DL-15828`는
+  `669114d3d47812d5fb791508deaf17d5c4566ca4`에서 clean이고 원격과 동일하다.
+  preview PR의 merge 여부와 무관하게 원본 이력은 유지된다. 임시 반영을 제거해야
+  하면 develop에서 PR #4539의 merge 결과를 revert하고 원본 feature branch는
+  건드리지 않는다.
+- PR이 merge됐다는 사실, 개발서버 배포 완료, 개발서버 QA 완료는 각각 별도 상태다.
+  현재 기록은 PR 생성까지이며 실제 대상 데이터 기반 GET/POST/PUT·파일 업로드 QA는
+  병합·배포 후 남는다.
+
 ## FE Jira 구조와 스토리포인트
 
 Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용한다.
