@@ -573,13 +573,15 @@
 ## 실제 API·Amplitude 연동 완료 체크포인트 — 2026-08-27
 
 - 제품 branch/HEAD는 `feature/DL-15828` /
-  `bda99f449e4469bc039262756316995e52803811`이다. 로컬과
+  `669114d3d47812d5fb791508deaf17d5c4566ca4`이다. 로컬과
   `origin/feature/DL-15828`이 동일하고 worktree는 clean이다. PR은 생성하지
   않았다.
 - 이번 연동 commit은 `748110dac` (`[DL-15828] chore: 주문 피드백 API 모델 생성`),
-  `bda99f449` (`[DL-15828] feat: 주문 피드백 API와 분석 이벤트 연동`)이다.
+  `bda99f449` (`[DL-15828] feat: 주문 피드백 API와 분석 이벤트 연동`)이며, 후속
+  보완 commit은 `4f291f64f` (`[DL-15828] fix: Typography DOM 중첩 경고 수정`),
+  `669114d3d` (`[DL-15828] fix: 주문상세 피드백 영역 깜박임 방지`)다.
 - 최신 `origin/master`는 `8e05cbb84380274aad12e514bd66a71b8dd59c55`
-  (`Release/v1.84.0 -> master (#4528)`)이며 feature는 6 commits behind / 10 commits
+  (`Release/v1.84.0 -> master (#4528)`)이며 feature는 6 commits behind / 12 commits
   ahead다. 마이페이지·주문상세·query key 등 겹치는 변경이 있어 PR 전 최신 master
   통합은 별도 검토가 필요하지만 이번 권한 범위에서는 merge/rebase하지 않았다.
 
@@ -643,6 +645,31 @@
   hook 우회 없이 push했다.
 - Notion 본문은 여전히 `작성 중`, Analytics 문서는 `진행 중`이다. 현재 Jira 웹
   카드도 `진행 중`이며, 이번 turn에는 Jira 상태·본문·댓글을 변경하지 않았다.
+
+### 주문상세 렌더링과 DOM 중첩 후속 보완 — 2026-08-27
+
+- 모바일 주문 목록의 Remake 배지는 내부 `DisplayFlexRow`와 아이콘 로딩 placeholder가
+  `<div>`이므로 바깥 `Typography`를 `as="div"`로 렌더링했다. 주문 목록 Chrome
+  재진입 후 기존 `validateDOMNesting` 경고가 다시 발생하지 않는 것을 확인했다.
+- 전체 tracked TSX/JSX를 정적 검사해 발견한 Admin Statement의 카드번호 문구는
+  문장 안 인라인 텍스트이므로 내부 `Typography`를 `as="span"`으로 수정했다. 수정
+  후 기본 `<p>` 형태의 `Typography` 중첩 후보는 남지 않았다. Admin 화면 실브라우저
+  재현은 하지 않았으며 구조·타입·정적 검사로 확인했다.
+- 주문상세는 주문 GET이 끝난 뒤 `COMPLETED` 여부를 알아야 피드백 GET을 시작하므로,
+  기존에는 피드백 200 응답 후 배너가 뒤늦게 삽입돼 레이아웃 이동 가능성이 있었다.
+  일반 주문은 기존처럼 주문 GET 직후 렌더링하고, `COMPLETED` 주문만 최초 피드백
+  query가 성공 또는 실패로 확정될 때까지 기존 상세 로딩 화면을 유지하도록 변경했다.
+  재조회 중에는 화면을 가리지 않는다. 피드백 200이면 배너를 포함해, 비정상 응답이면
+  배너 없이 주문상세를 한 번에 렌더링한다.
+- 피드백 스켈레톤은 비대상 완료 주문에서 다시 사라져 별도 레이아웃 이동을 만들 수
+  있어 사용하지 않았다. 장기적으로는 주문상세 응답에 피드백 노출 가능 여부가 함께
+  제공되면 순차 요청 자체를 제거할 수 있다.
+- Clinic/Lab/Admin type, 대상 파일 ESLint·Prettier와 `git diff --check`를 통과했다.
+  push hook은 lint 0 errors와 기존 warning 418건, shared config 3 tests와 shared hook
+  24 tests, coverage 비교를 통과했다. 실제 대상 피드백 주문이 없어 완료 주문의 초기
+  로딩 전환은 이번에 실브라우저로 재현하지 못했으며 서버 통합 QA에 포함한다.
+- 두 후속 commit을 `origin/feature/DL-15828`에 push했다. 제품 worktree는 clean이고
+  로컬·원격 HEAD가 동일하며 PR은 여전히 생성하지 않았다.
 
 ## FE Jira 구조와 스토리포인트
 
