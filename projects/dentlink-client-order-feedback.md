@@ -775,12 +775,22 @@
 - 새 `develop` 대상 개발서버 재반영 PR
   [#4541](https://github.com/Innvoaid/dentlink-client/pull/4541)
   `[DL-15828] 개발서버 주문 피드백 기능 재반영`을 생성했다. head는
-  `feature/DL-15828-develop-preview-deeplink` / `8c304f5c9`이며 PR은 open·mergeable,
-  생성 직후 Auto Assign check가 진행 중이다. master에서 develop을 다시 만들었기
-  때문에 diff에는 피드백 추가분뿐 아니라 삭제 전 develop에 있던 개발환경 변경도
-  함께 복원되며, 이 사실을 PR 본문에 명시했다.
-- PR merge, Clinic/Lab/Admin workflow 결과, 실제 배포 revision과 개발서버 QA는 아직
-  완료하지 않았다. PR 생성 지시는 review 처리나 merge 권한으로 확대하지 않았다.
+  `feature/DL-15828-develop-preview-deeplink` / `8c304f5c9`이다. master에서 develop을
+  다시 만들었기 때문에 diff에는 피드백 추가분뿐 아니라 삭제 전 develop에 있던
+  개발환경 변경도 함께 복원되며, 이 사실을 PR 본문에 명시했다.
+- 사용자가 PR #4541을 merge했고 실제 merge commit은
+  `5cacf1d78a6843ee6a695ee036c431b2d51e9887`이다. PR은 merged, Auto Assign과
+  CodeRabbit은 성공했다. merge commit과 preview branch의 tree가 동일함을 확인했다.
+- 사용자 확인과 live Actions 기준 Office·Lab·Admin 개발 배포 workflow는 정상적으로
+  진행 중이다. UI S3 workflow는 별도 실패 상태였으며, 세 앱 workflow 최종 성공과
+  실제 배포 revision·개발서버 QA는 아직 별도 확인 대상이다. 이 develop merge는
+  정식 release 포함이나 운영 배포를 의미하지 않는다.
+- preview commit이 merge 결과와 원격
+  `origin/feature/DL-15828-develop-preview-deeplink`에 보존된 것을 확인한 뒤 로컬
+  worktree `/Users/parkjongsun/Repository/dentlink-client-order-feedback-develop-preview-deeplink`와
+  로컬 branch `feature/DL-15828-develop-preview-deeplink`를 제거했다. 원격 preview
+  branch는 삭제하지 않았다. 원본 `/Users/parkjongsun/Repository/dentlink-client-order-feedback`
+  / `feature/DL-15828`은 `979813698`에서 clean·원격 동기화 상태로 유지했다.
 
 ## FE Jira 구조와 스토리포인트
 
