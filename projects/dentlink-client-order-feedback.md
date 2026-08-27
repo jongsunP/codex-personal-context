@@ -676,7 +676,9 @@
 - 개발서버에서 현재 기능을 확인하기 위해 원본 feature branch를 직접 develop에
   합치지 않고 별도 worktree
   `/Users/parkjongsun/Repository/dentlink-client-order-feedback-develop-preview`와
-  branch `codex/DL-15828-develop-preview`를 만들었다.
+  branch `feature/DL-15828-develop-preview`를 만들었다. 최초에 저장소 규칙과 다른
+  agent 전용 `codex/` prefix를 사용한 오류가 있었고, 원격 branch rename과 로컬
+  branch rename으로 바로잡았다.
 - 최신 `origin/develop` `1e6801f2e6fb85b46ac9bce9c24a8d4c2f376907` 위에
   `feature/DL-15828` 전체를 squash 통합했다. preview commit은
   `f6e621beb568c669c757e412e9d83ff919a75bfc`
@@ -688,14 +690,21 @@
   shared config 3 tests, shared hooks 24 tests, coverage baseline 비교, Prettier와
   `git diff --check`를 통과했다. Clinic build에서 `/my/feedback` route 생성도
   확인했다.
-- develop 대상 PR [#4539](https://github.com/Innvoaid/dentlink-client/pull/4539)
+- Clinic·Lab·Admin 개발 배포 workflow가 각각 자기 package 경로 변경을 감지하므로
+  세 `package.json` version을 `1.85.0`에서 `1.86.0`으로 올렸다. commit은
+  `b0c52d3c6aa40629528c71090e851f318a798b9e`
+  (`[DL-15828] chore: 개발서버 배포 버전 1.86.0 반영`)이다. commit hook의 세 앱
+  type과 push hook의 lint 0 errors·기존 warning 418건, shared tests 27개와 coverage
+  비교를 통과했다.
+- branch rename 시 GitHub가 기존 PR #4539를 자동으로 닫아 대체 PR
+  [#4540](https://github.com/Innvoaid/dentlink-client/pull/4540)
   `[DL-15828] 개발서버 확인용 주문 피드백 기능 임시 반영`을 생성했다. PR은 open,
-  non-draft, mergeable 상태이며 Auto Assign과 CodeRabbit check는 생성 직후 진행
-  중이었다. 이번 세션에서는 merge하지 않았다.
+  non-draft, mergeable이고 Auto Assign·CodeRabbit check가 성공했다. 닫힌 PR
+  #4539에는 대체 PR 링크를 댓글로 남겼으며 이번 세션에서는 merge하지 않았다.
 - 원본 worktree와 `feature/DL-15828`는
   `669114d3d47812d5fb791508deaf17d5c4566ca4`에서 clean이고 원격과 동일하다.
   preview PR의 merge 여부와 무관하게 원본 이력은 유지된다. 임시 반영을 제거해야
-  하면 develop에서 PR #4539의 merge 결과를 revert하고 원본 feature branch는
+  하면 develop에서 PR #4540의 merge 결과를 revert하고 원본 feature branch는
   건드리지 않는다.
 - PR이 merge됐다는 사실, 개발서버 배포 완료, 개발서버 QA 완료는 각각 별도 상태다.
   현재 기록은 PR 생성까지이며 실제 대상 데이터 기반 GET/POST/PUT·파일 업로드 QA는
@@ -704,9 +713,9 @@
   최신 구현·검증·PR·남은 QA를 각각 댓글로 기록하고 `Ready for Deploy`로 전환했다.
   개발 플래닝 `DL-15830`은 기존 `완료`를 유지한다.
 - 상위 `DL-15828`에는 담당 PM을 태그해 웹 실제 API·파일 첨부·Amplitude 반영과
-  PR #4539, 개발서버 QA 미완료 경계를 공유했다. 앱·관리자와 개발서버 QA가 남아
-  상위 카드는 `진행 중`, 관리자 `DL-16065`는 스펙 미확정으로 `해야 할 일`을
-  유지했다.
+  PR #4540, 세 앱 version 1.86.0과 개발서버 QA 미완료 경계를 공유했다.
+  앱·관리자와 개발서버 QA가 남아 상위 카드는 `진행 중`, 관리자 `DL-16065`는
+  스펙 미확정으로 `해야 할 일`을 유지했다.
 - Jira 본문의 명백히 오래된 계약도 정리했다. `DL-16058`은 첨부 최대 5개·총
   200MB·파일명 100자와 완료 file ID 규칙으로, `DL-16063`은 2026-08-27 Swagger의
   실제 GET/POST/PUT·목록/count·서버 질문 정본 계약으로 갱신했다. 실데이터 QA가
