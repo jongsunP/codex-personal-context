@@ -768,9 +768,19 @@
   type 검사를 다시 실행해 통과했다. package version은 기존 develop의 `1.86.0`을
   그대로 사용했으며 이번 Clinic 경로 변경을 위해 Lab/Admin 버전을 다시 올리지
   않았다.
-- preview PR은 생성하지 않았다. 개발서버에 반영하려면 사용자의 명시 지시 후
-  `feature/DL-15828-develop-preview-deeplink -> develop` PR을 만들고 merge·배포
-  revision·실데이터 QA를 각각 별도 상태로 확인한다.
+- 후속 지시에 따라 삭제 전 `develop`을 대상으로 열린 PR이 없고 classic branch
+  protection도 없음을 확인한 뒤 원격 `develop`을 삭제하고, `origin/master`
+  `8e05cbb84380274aad12e514bd66a71b8dd59c55`에서 같은 이름으로 다시 생성했다.
+  재생성 직후 `origin/develop`과 `origin/master`가 동일함을 확인했다.
+- 새 `develop` 대상 개발서버 재반영 PR
+  [#4541](https://github.com/Innvoaid/dentlink-client/pull/4541)
+  `[DL-15828] 개발서버 주문 피드백 기능 재반영`을 생성했다. head는
+  `feature/DL-15828-develop-preview-deeplink` / `8c304f5c9`이며 PR은 open·mergeable,
+  생성 직후 Auto Assign check가 진행 중이다. master에서 develop을 다시 만들었기
+  때문에 diff에는 피드백 추가분뿐 아니라 삭제 전 develop에 있던 개발환경 변경도
+  함께 복원되며, 이 사실을 PR 본문에 명시했다.
+- PR merge, Clinic/Lab/Admin workflow 결과, 실제 배포 revision과 개발서버 QA는 아직
+  완료하지 않았다. PR 생성 지시는 review 처리나 merge 권한으로 확대하지 않았다.
 
 ## FE Jira 구조와 스토리포인트
 
