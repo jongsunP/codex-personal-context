@@ -541,22 +541,82 @@ This is the current resume source for the first local setup of
   does not claim app-developer approval, physical-device QA, merge, release QA
   or deployment.
 
+## DL-16066 Feedback Notification Deep-Link Closeout - 2026-08-27
+
+### Git and PR state
+
+- `feature/DL-16061` is clean and synchronized with its upstream at
+  `c33515aa8931bcef701dd03325105cad9a8f212c`.
+- Commit `c33515a` adds the order-feedback notification deep link and its
+  focused tests. No generated model, native project, environment or release
+  file was changed.
+- PR [#286](https://github.com/Innvoaid/dentlink-app/pull/286) is OPEN,
+  non-Draft and mergeable at head `c33515a`; `add-labels` and the CodeRabbit
+  status are successful. The six existing review threads remain resolved, but
+  no new CodeRabbit review was submitted for `c33515a` at this checkpoint.
+  App-developer approval, merge, staging QA and deployment remain incomplete.
+
+### Confirmed contract and implementation
+
+- The existing FCM contract is reused without new product fields: the backend
+  supplies `/my/feedback?orderId={orderId}` through `data.deeplink`.
+  `orderId`, not `feedbackId`, is the feedback identity. No speculative
+  `type`, `webPath` or new scheme was added.
+- Relative and Dentlink Portal feedback URLs convert to the current app scheme.
+  The route is Office-only; Lab does not expose the feedback route.
+- A valid positive safe-integer `orderId` resets navigation to the native
+  feedback list. The list waits until employee and employer identity are ready,
+  performs the detail GET explicitly, and opens `FeedbackDetailsScreen` only
+  after canonical server data is returned.
+- Missing, invalid, unauthorized or failed detail lookup leaves the user on the
+  feedback list and uses the existing error toast. Back or close from a
+  successfully opened detail returns to that native list. The flow never opens
+  the Clinic order-detail WebView.
+- Existing Firebase and Notifee cold-start, foreground, background and duplicate
+  notification handling remains the owner of delivery and deduplication; this
+  change only maps the confirmed URL into the native feedback navigation.
+
+### Validation and remaining proof gates
+
+- Focused Jest validation passes 21/21 across deep-link, URL-conversion and
+  feedback repository suites. Changed-file ESLint, Prettier and
+  `git diff --check` pass.
+- `yarn typecheck:apps` still reports the same nine untouched repository
+  baseline diagnostics. None points to the nine files changed by `c33515a`.
+- Android API 36 directly verified valid warm, cold and background URL entry,
+  duplicate-entry deduplication, detail-to-list back behavior and failed-order
+  fallback using the development API.
+- iOS 26.5 Simulator verified the same JavaScript/navigation cases with the
+  previously installed development binary and current Metro bundle. This is
+  not proof that the current native source rebuilds: the known Apple-Silicon
+  simulator MLImage binary/architecture blocker remains.
+- A real backend-generated FCM notification was not available. Actual delivery
+  and tap behavior therefore remains backend/integration QA even though direct
+  URL lifecycle behavior is proven. Physical-device QA is also separate.
+- Jira was not mutated during this closeout. Reconcile `DL-16066` live before
+  changing its status or posting delivery evidence.
+
 ## Next Starting Point
 
-1. For this feature, do not add speculative code. Ask the app developer to
-   review PR #286. If review feedback arrives, verify and address only valid
-   findings, then repeat focused checks before any merge decision.
-2. When safe eligible data is provided, verify real Good/Bad POST, full-detail
+1. Ask the app developer to review PR #286 including `c33515a`. If review
+   feedback arrives, verify and address only valid findings, then repeat focused
+   checks before any merge decision.
+2. When the backend can send a real notification, verify that
+   `data.deeplink` contains `/my/feedback?orderId={orderId}` and test actual
+   cold, warm, background and duplicate taps. Do not add `type` or `webPath`
+   unless the shared contract changes explicitly.
+3. When safe eligible data is provided, verify real Good/Bad POST, full-detail
    POST/PUT, file upload/removal and cache transitions. Validate Android first,
    then iOS or a physical device for camera and permission behavior.
-3. When the app team accepts the full generated Swagger drift, regenerate the
+4. Treat a fresh iOS native build as a separate app-maintenance scope. The
+   installed simulator binary proves current JavaScript behavior but does not
+   resolve the committed MLImage simulator architecture constraint.
+5. When the app team accepts the full generated Swagger drift, regenerate the
    whole model in a separate reviewed commit and replace the temporary feedback
    transport types. Do not partially hand-edit generated files.
-4. Start notification/deep-link work only from a confirmed `DL-16066` trigger,
-   recipient, copy, payload identifier, landing and native/WebView contract.
-5. Continue to run servers from the integrated terminal of the IDE opened for
+6. Continue to run servers from the integrated terminal of the IDE opened for
    the exact app project. If that IDE is not prepared, ask the user before
    starting Metro directly elsewhere.
-6. For later feature implementation, refresh this context and live Git first,
+7. For later feature implementation, refresh this context and live Git first,
    then verify the active branch, Jira/Figma/API and closest production pattern.
    Keep shared app commits and pushes behind explicit user authorization.
