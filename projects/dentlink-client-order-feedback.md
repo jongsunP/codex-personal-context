@@ -698,17 +698,25 @@
   비교를 통과했다.
 - branch rename 시 GitHub가 기존 PR #4539를 자동으로 닫아 대체 PR
   [#4540](https://github.com/Innvoaid/dentlink-client/pull/4540)
-  `[DL-15828] 개발서버 확인용 주문 피드백 기능 임시 반영`을 생성했다. PR은 open,
-  non-draft, mergeable이고 Auto Assign·CodeRabbit check가 성공했다. 닫힌 PR
-  #4539에는 대체 PR 링크를 댓글로 남겼으며 이번 세션에서는 merge하지 않았다.
+  `[DL-15828] 개발서버 확인용 주문 피드백 기능 임시 반영`을 생성했다. Auto Assign·
+  CodeRabbit check가 성공했고 PR은 2026-08-27 `develop`에 squash commit
+  `507e6394533be08076779e0f758c5d1e4b1a71a1`로 squash merge됐다. 닫힌 PR
+  #4539에는 대체 PR 링크를 댓글로 남겼다.
 - 원본 worktree와 `feature/DL-15828`는
   `669114d3d47812d5fb791508deaf17d5c4566ca4`에서 clean이고 원격과 동일하다.
   preview PR의 merge 여부와 무관하게 원본 이력은 유지된다. 임시 반영을 제거해야
   하면 develop에서 PR #4540의 merge 결과를 revert하고 원본 feature branch는
   건드리지 않는다.
-- PR이 merge됐다는 사실, 개발서버 배포 완료, 개발서버 QA 완료는 각각 별도 상태다.
-  현재 기록은 PR 생성까지이며 실제 대상 데이터 기반 GET/POST/PUT·파일 업로드 QA는
-  병합·배포 후 남는다.
+- 사용자는 개발서버 배포를 수행했다고 확인했다. cleanup 시점의 GitHub Actions에서
+  squash commit `507e63945`의 Clinic·Lab·Admin 개발 배포 workflow는 모두 시작돼
+  `in_progress`였고, UI S3 workflow는 실패 상태였다. 앱별 workflow 최종 성공,
+  배포 revision과 실제 대상 데이터 기반 GET/POST/PUT·파일 업로드 QA는 별도 확인
+  상태다.
+- PR merge와 tree 동일성을 확인한 뒤 임시 worktree
+  `/Users/parkjongsun/Repository/dentlink-client-order-feedback-develop-preview`와 로컬
+  branch `feature/DL-15828-develop-preview`를 제거했다. 원격 preview branch는 사용자가
+  로컬 정리만 요청했으므로 보존했다. 정식 작업 worktree와 `feature/DL-15828`는
+  `669114d3d47812d5fb791508deaf17d5c4566ca4`에서 clean·원격 동기화 상태로 남겼다.
 - Jira 웹 구현 카드 `DL-16056`, `DL-16057`, `DL-16058`, `DL-16060`, `DL-16063`은
   최신 구현·검증·PR·남은 QA를 각각 댓글로 기록하고 `Ready for Deploy`로 전환했다.
   개발 플래닝 `DL-15830`은 기존 `완료`를 유지한다.
