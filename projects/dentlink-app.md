@@ -1,4 +1,4 @@
-# Dentlink Mobile App setup and current checkpoint - 2026-08-24
+# Dentlink Mobile App setup and current checkpoint - 2026-08-27
 
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
@@ -65,11 +65,11 @@ This is the current resume source for the first local setup of
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `8ea672330e1d57850cdd4b2cea3239d169f51b4c`
+- Current HEAD: `ddf9f0efb4ef399e99950745d7ed67847b7d321c`
 - The checkout is clean and synchronized with
-  `origin/feature/DL-16061` as of 2026-08-25 15:57 KST.
-- `origin/develop` is `129a24f52645f085d9f097c3c3042253f28be1e9`;
-  the feature branch is four commits ahead and not behind.
+  `origin/feature/DL-16061` as of 2026-08-27 17:17 KST.
+- `origin/develop` is `09ca56296de4d83acf81d57851d94a8269d58c20`;
+  the feature branch is six commits ahead and three commits behind.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
@@ -256,7 +256,7 @@ This is the current resume source for the first local setup of
   updated and pushed at meaningful checkpoints. Never persist supplied login
   credentials in source, project notes, or Codex memory.
 
-## DL-15828 / DL-16061 Order Feedback App Checkpoint - 2026-08-25 19:16 KST
+## Historical DL-15828 / DL-16061 UI Checkpoint - 2026-08-25 19:16 KST
 
 ### Cross-surface ownership
 
@@ -431,39 +431,88 @@ This is the current resume source for the first local setup of
 - App-developer review is the next human gate. The PR must remain Draft until
   review and external contracts make it genuinely merge-ready.
 
+## DL-15828 / DL-16061 API Integration Closeout - 2026-08-27 17:17 KST
+
+### Git and delivery state
+
+- `feature/DL-16061` is clean and synchronized at `ddf9f0e`.
+- Commit `ddf9f0e` replaces the development mock boundary with the deployed
+  feedback API, query/cache behavior and multipart attachment integration.
+- Draft PR [#286](https://github.com/Innvoaid/dentlink-app/pull/286) is open,
+  mergeable and points to `ddf9f0e`; GitHub `add-labels` and CodeRabbit report
+  success. Draft state, app-developer approval, merge, staging QA and deployment
+  remain distinct and incomplete.
+- The full development Swagger regeneration was deterministic but contained
+  thousands of unrelated model changes, including removal of
+  `OrderUpdateAdditionalDto.hasPhoto`. That generated drift was removed from
+  this feature. Only the feedback transport contract is temporarily isolated
+  in `shared/configs/types/feedback.ts`; replace it with generated types after
+  the app team accepts the full Swagger diff.
+
+### Implemented contract
+
+- The app now uses deployed list endpoints for To Review and Reviewed, detail
+  GET by `orderId`, initial POST with `templateVersion`, and full-replacement
+  PUT. Server questions, categories, keywords and file IDs are canonical.
+- Query keys include employee and employer identity plus `orderId`; count,
+  list and detail invalidation preserve the immediate Good/Bad and separate
+  detail Submit behavior.
+- The existing employee multipart upload path is reused without an invented
+  `callBy=FEEDBACK` presign field. Feedback sends completed `fileId` values in
+  the FILE answer. Failure abort, staged-file cleanup, unmount races and
+  omission-based server-file removal are handled.
+- Feedback keeps the five-file, total-200-MB, positive-size, filename and file
+  format policy. Existing chat upload callers retain their defaults.
+- Order details remain Clinic WebView-owned. Notification, FCM payload and
+  deep-link work remain isolated in `DL-16066` and were not guessed.
+
+### Current runtime proof
+
+- Android API 36 `Dentlink_API_36` and iOS 26.5 iPhone 17 Pro simulator were
+  both booted with Metro running in the `dentlink-app` Cursor terminal.
+- Codex directly verified the current `ddf9f0e` JavaScript on both platforms
+  against the development API: Profile `Share Feedback (0)`, To Review 0,
+  Reviewed 1, order `9000009126`, hospital `frankieDevOffice`, detail GET,
+  server question/keyword layout and Photo/Camera/File sheet.
+- Both platforms display the feedback attachment policy as five files and
+  total 200 MB. No unexpected layout, navigation or runtime defect was found.
+- The iOS proof still uses the previously installed temporary simulator app;
+  a fresh committed-source Apple Silicon build remains blocked by the known
+  MLImage/react-native-exit-app native maintenance boundary. The existing
+  non-fatal `messaging/unregistered` development overlay also remains a
+  separate baseline issue.
+- Real POST, PUT and file upload were not executed because they mutate
+  development data. Physical-device permission/camera behavior, user QA and
+  app-developer approval are still separate evidence gates.
+
+### Code verification and Jira
+
+- Feedback Jest suites pass 14/14. Changed-file ESLint, Prettier and
+  `git diff --check` pass.
+- Office and Lab typechecks have the same nine untouched baseline diagnostics;
+  the feedback implementation adds no TypeScript error. Removing generated
+  Swagger drift also removed the eight unrelated `hasPhoto` consumer errors.
+- Jira `DL-16061` description and comment `43748` contain the final scope and
+  evidence; its status is `Ready for Deploy` because FE development is
+  complete. `DL-16064` remains Complete, `DL-16066` remains To Do pending its
+  notification contract, and parent `DL-15828` remains In Progress.
+
 ## Next Starting Point
 
-1. Resume `feature/DL-16061` only after pulling this personal context, fetching
-   the app repository and reconciling PR #286, Jira/Notion/Figma and deployed
-   Swagger. Start from `4a9ec671` only if live Git still matches.
-2. Ask the app developer to review PR #286's repository/query boundary,
-   Office/Lab navigation placement, back/safe-area behavior, native picker reuse
-   and the existing chat Photo/File picker regression surface. Keep human
-   approval separate from Codex simulator verification.
-3. When the API/DTO appears, regenerate and diff-review the generated models,
-   then replace the development mock repository with an adapter while
-   preserving immediate Good/Bad save and screen-local card presentation.
-4. Implement push/deep link or an Order Detail WebView-to-native bridge only
-   after the payload, identifiers, landing and back-navigation contract is
-   explicit across BE, web and app.
-5. For the verified Android path, boot `Dentlink_API_36`, run
-   `yarn metro-log`, then run `yarn android-office:dev`. If Reactotron is
-   needed, use the verified `localhost` plus `adb reverse tcp:9090 tcp:9090`
-   approach temporarily or first authorize a durable shared configuration fix.
-6. The currently installed iOS proof app can be used for dashboard-level work
-   while its simulator remains available and Metro is running. For a normal,
-   reproducible Apple Silicon workflow, resolve the MLImage simulator binary
-   constraint, simulator-safe face-plugin registration, and
-   `react-native-exit-app` Codegen header exposure. Merely removing the Podfile
-   arm64 exclusion or upgrading to MLImage beta8 is not sufficient. A physical
-   iPhone remains the shortest full-feature path if signing access is
-   available.
-7. Treat the typecheck, source lint, Jest configuration/test failures, stale
-   start script, and README version mismatch as shared-repository baseline
-   issues. Fix them only in an explicitly authorized feature or maintenance
-   scope; initial environment setup itself is complete.
-8. For later feature implementation, refresh and use live `origin/develop` as
-   the default base, then verify Jira, Figma, and the closest Office/Lab
-   production pattern before creating the requested feature worktree/session.
-   Do not assume the current checkout is on `main`; verify and either finish
-   this feature or use a separately requested worktree.
+1. For this feature, do not add speculative code. The next normal gate is app
+   developer review of PR #286, followed by merge/release QA according to the
+   team process.
+2. When safe eligible data is provided, verify real Good/Bad POST, full-detail
+   POST/PUT, file upload/removal and cache transitions. Validate Android first,
+   then iOS or a physical device for camera and permission behavior.
+3. When the app team accepts the full generated Swagger drift, regenerate the
+   whole model in a separate reviewed commit and replace the temporary feedback
+   transport types. Do not partially hand-edit generated files.
+4. Start notification/deep-link work only from a confirmed `DL-16066` trigger,
+   recipient, copy, payload identifier, landing and native/WebView contract.
+5. Continue to run servers from the integrated terminal of the IDE opened for
+   the exact app project. If that IDE is not prepared, ask the user before
+   starting Metro directly elsewhere.
+6. For later feature implementation, refresh this context and live Git first,
+   then verify the active branch, Jira/Figma/API and closest production pattern.
+   Keep shared app commits and pushes behind explicit user authorization.
