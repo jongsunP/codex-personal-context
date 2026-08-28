@@ -150,16 +150,18 @@ For detailed current state, read:
   `/Users/parkjongsun/Repository/dentlink-client-order-feedback`
 - Branch: `feature/DL-15828`
 - Jira: parent `DL-15828`
-- Current state: 최신 Figma의 Clinic PC·모바일 웹과 APP 영역을 분리해 전수 대조했고,
-  `/my/feedback`, 마이페이지 Quick Links·My Office 모달, 목록·상세 입력, 주문 상세
-  피드백 배너와 API 교체 가능한 mock/query 경계를 구현했다. PC 10개 페이지네이션과
-  모바일 5개 단위 무한스크롤을 실제 Chrome에서 검증했고, PC·모바일 파일 첨부와
-  검증 상태까지 반영한 최신 제품 commit은 `e4105f909`이다.
-  `origin/feature/DL-15828`과 동일한 clean 상태이며 PR은 없다. APP 디자인은 확인했지만
-  native 구현은 이 웹 저장소 범위가 아니다. 배포 Swagger에는 아직 주문 피드백
-  계약이 없어 실제 API·eligibility·pagination/count·상품별 artwork 연동은 대기
-  중이다. Native 앱은 별도 `dentlink-app`의 Draft PR #286에서 병행하며 앱의 현재
-  상태는 `projects/dentlink-app.md`가 정본이다. 앱을 제외한 산정은 관리자 임시
-  0.5점을 포함해 5.5 points이며 앱 기술 검증·구현·알림은 미산정이다.
+- Current state: Clinic PC·웹 모바일의 `/my/feedback`, 마이페이지 Quick Links·My
+  Office 모달, 목록·상세 drawer·파일 첨부, 주문 상세 배너를 실제 Office 피드백
+  GET/POST/PUT API와 React Query cache에 연결했다. 딥링크는
+  `/my/feedback?orderId={orderId}`이며 최신 제품 commit `979813698`이
+  `origin/feature/DL-15828`과 동일한 clean 상태다. 개발서버 확인용 PR #4541은
+  `develop`에 merge됐고 Office·Lab·Admin 개발 배포가 성공했다. 2026-08-28 실제
+  eligible 주문으로 목록/count, 주문 상세 배너, 딥링크 상세 GET, PC·웹 모바일
+  drawer와 Photo/Camera/File 선택 UI를 Chrome에서 확인했다. 실제 Good/Bad POST,
+  상세 PUT과 업로드·삭제는 서버 데이터를 바꾸므로 별도 QA가 남아 있다. 첨부 제한은
+  현재 최대 5개·총 200MB이나 Notion과 Figma의 일부 문구가 상충해 확정이 필요하다.
+  웹 구현 Jira 카드는 `Ready for Deploy`, 상위는 `진행 중`, 관리자 DL-16065는
+  스펙 미확정으로 `해야 할 일`이다. 정식 release PR은 아직 없다. 앱은 별도
+  `dentlink-app` 저장소·세션에서 진행한다.
 - Personal current checkpoint:
   `projects/dentlink-client-order-feedback.md`

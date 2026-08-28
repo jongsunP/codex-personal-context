@@ -792,6 +792,47 @@
   branch는 삭제하지 않았다. 원본 `/Users/parkjongsun/Repository/dentlink-client-order-feedback`
   / `feature/DL-15828`은 `979813698`에서 clean·원격 동기화 상태로 유지했다.
 
+### 웹 FE 브레이크포인트 전수 점검 — 2026-08-28
+
+- 개인 컨텍스트와 제품 저장소를 최신화했다. 제품 worktree
+  `/Users/parkjongsun/Repository/dentlink-client-order-feedback`는
+  `feature/DL-15828` / `979813698`이고 `origin/feature/DL-15828`과 동일한 clean
+  상태다. 최신 `origin/master`는 `8e05cbb84380274aad12e514bd66a71b8dd59c55`이며
+  feature는 master 대비 6 commits behind, 13 commits ahead다. merge-tree 기준 즉시
+  드러나는 conflict marker는 없지만 정식 release PR 전 의미 단위 통합 검증은 별도다.
+- 최신 개발 Swagger에서 Office 주문 피드백 상세 GET/POST/PUT, To Review/Own 목록
+  GET과 Admin 목록 GET을 다시 확인했다. `pnpm generate:api-type` 재실행 결과 generated
+  model diff가 없어 현재 adapter/query 계약과 일치한다.
+- 정적 검증은 `pnpm type`, Clinic 전체 ESLint, `pnpm build:clinic`,
+  `git diff --check`를 통과했다. 전체 ESLint에는 기존 repository warning 232건이 있으나
+  error는 없고 피드백 구현의 type/build 실패도 없다. 로컬 개발 중 ChannelTalk 미로딩,
+  기존 styled-components prop forwarding과 `/api/qa-users` 오류는 피드백 범위 밖의
+  기존 개발환경 이슈로 분리했다.
+- 실제 개발 계정의 eligible 주문 `9000009157`을 사용해 Chrome에서 To Review/Reviewed
+  count·목록, 마이페이지 Pending Reviews, 주문 상세 피드백 배너,
+  `/my/feedback?orderId=9000009157` 상세 GET과 PC·웹 모바일 drawer를 확인했다. 웹
+  모바일 첨부 sheet의 Photo/Camera/File, `image/*`, `capture=environment`, multiple
+  속성도 확인했다. 서버 데이터를 변경하는 Good/Bad POST, 상세 PUT, 실제 파일
+  업로드·삭제는 중간 점검에서 임의 실행하지 않았다.
+- Figma의 마이페이지, 피드백 목록·카드·상세 drawer, 주문 상세, PC·웹 모바일 파일
+  첨부 흐름을 재대조했다. 현재 렌더링은 확정된 배치와 기존 artwork를 따른다. 다만
+  첨부 제한은 현재 구현·PC Figma의 최대 5개·총 200MB와 Notion의 5개/10개·5MB,
+  Figma 웹 모바일의 총 2G 문구가 서로 상충하므로 단일 계약 확인 전 임의 변경하지
+  않는다.
+- 개발서버 확인용 PR #4541은 merge commit
+  `5cacf1d78a6843ee6a695ee036c431b2d51e9887`로 `develop`에 merge됐다. live Actions에서
+  Office·Lab·Admin 개발 배포는 성공했고 UI S3만 기존 Storybook addon 호환 문제로
+  실패했다. 이는 정식 release 포함이나 운영 배포 증거가 아니다.
+- Jira 상위 DL-15828에 PM을 태그해 위 브레이크포인트, 올바른 PR #4541, 개발 배포,
+  실제 GET 기반 브라우저 검증과 남은 mutation/upload QA를 댓글 `43757`로 기록했다.
+  DL-16058에는 첨부 계약 상충과 남은 QA를 댓글 `43756`으로, DL-16065에는 Admin API는
+  있으나 UI·필터·권한·상세 스펙이 없다는 사실을 댓글 `43758`로 기록했다. 웹 카드
+  DL-16056/16057/16058/16060/16063은 정식 release 전이라 `Ready for Deploy`, 상위는
+  앱·관리자·QA가 남아 `진행 중`, Admin은 `해야 할 일`을 유지했다.
+- 이번 점검에서 제품 코드 수정 필요가 확인되지 않아 제품 commit/push는 만들지
+  않았다. 다음 웹 시작점은 확정된 디자인·기획/API 변경 반영, 실제 POST/PUT/upload
+  QA 또는 정식 release PR 준비다.
+
 ## FE Jira 구조와 스토리포인트
 
 Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용한다.
