@@ -855,8 +855,8 @@
   상세 PUT 성공 시에만 보존 state를 제거하도록 보완했다.
 - 후속 구조 검토에서 React Query cache는 계속 서버 정본으로 두고 보존 카드는 현재
   화면 전용 presentation state로만 합성하는 것이 적절하다고 확인했다. query cache를
-  To Review 상태로 임의 조작하지 않는다. 서버 재조회가 다음 항목을 당겨와도 PC
-  pagination과 모바일 infinite page의 현재 적재 용량을 넘지 않도록 표시 수를 제한하고,
+  To Review 상태로 임의 조작하지 않는다. PC pagination은 현재 page 표시 수를
+  유지하고, 모바일 infinite list는 아래의 offset 재정렬 규칙으로 별도 처리한다.
   상세 PUT은 활성 list·count query 재조회가 끝난 뒤 drawer를 닫도록 mutation
   invalidation을 await한다.
 - Figma `160:42055`의 실제 화살표와 설명을 다시 확인한 결과 상세 UI는 Reviewed 탭
@@ -883,6 +883,45 @@
   확인했다. 이후 clean 상태의 로컬 preview worktree와 로컬 branch를 제거했다. 원격
   `origin/feature/DL-15828-develop-preview-ux-sync`는 보존했고, 원본
   `feature/DL-15828` worktree는 계속 유지한다.
+
+### 모바일 무한스크롤과 현재 화면 overlay 최종 경계 — 2026-08-28
+
+- Notion 원문과 Figma `160:40593`, `160:41672`를 다시 직접 대조했다. Jira DL-16057과
+  DL-16058의 본문은 Codex가 정리한 카드이므로 요구사항 정본으로 사용하지 않는다.
+  PM 기획은 Good/Bad 즉시 저장·응답 완료와 선택적 상세 입력을 요구하고, Figma는
+  현재 To Review 화면에서 rated card·CTA·toast를 유지한 뒤 화면 재진입 또는 상세
+  Submit 시 Reviewed 상태와 count로 전환하도록 표현한다.
+- 최종 상태 모델은 서버와 React Query cache를 데이터 정본으로 유지하고, 현재 화면에
+  필요한 rated card만 `orderId`, 저장 결과, 화면 위치 anchor를 가진 session
+  presentation overlay로 합성한다. 전체 목록을 로컬 state로 복제하거나 query cache를
+  To Review 상태로 왜곡하지 않는다. Good/Bad만 저장한 현재 화면의 count는 유지하고,
+  상세 Submit·탭/페이지/회원/화면 전환·새로고침 후 서버 count를 사용한다.
+- offset pagination 서버 목록에서 Good/Bad 저장으로 항목이 제거된 뒤 모바일이 기존
+  다음 page를 바로 요청하면 중간 항목을 건너뛸 수 있음을 확인했다. rated-card 변경
+  revision이 생긴 경우 다음 infinite page 요청 전에 이미 적재된 page를 한 번 서버
+  기준으로 재조회한 뒤 갱신된 offset으로 다음 page를 요청하도록 보완했다. 재조회
+  실패 시 stale offset 요청을 중단한다.
+- 모바일은 서버 page와 retained overlay를 합친 이미 적재된 항목을 page-size로 다시
+  잘라 마지막 항목을 영구적으로 숨기지 않는다. PC는 page 이동을 현재 화면 이탈로
+  보고 overlay를 폐기한다. mutation 중에는 탭·PC pagination·infinite sentinel을
+  비활성화하고, 회원 변경 중 완료된 요청이 새 회원 화면에 overlay를 남기지 않게 했다.
+- 제품 commit은 `ba8a9c186` (`[DL-15828] fix: 모바일 피드백 목록 페이지 동기화`)이며
+  `feature/DL-15828`과 `origin/feature/DL-15828`이 동일한 clean 상태다. Clinic type,
+  대상 ESLint·Prettier와 `git diff --check`를 통과했다. commit hook의 Clinic/Lab/Admin
+  type이 통과했고 push hook은 기존 lint warning만 유지한 채 error 0건, shared config
+  3 tests·hooks 24 tests와 coverage 비교를 통과했다. 3000번 Clinic dev server가 실행
+  중이어서 같은 `.next`를 덮는 production build는 이번 변경에서 중복 실행하지 않았다.
+- 최신 `origin/develop` `b1d25302d` 기준의 1회성 개발서버 branch
+  `feature/DL-15828-develop-preview-infinite-sync`를 별도 임시 worktree에서 만들었다.
+  develop에 아직 없는 E2E 반복 실행 복구, 상세 종료 카드 상태 유지, 모바일
+  infinite 동기화를 conflict 없이 cherry-pick한 preview commit은 `8c2aa77f3`,
+  `e39a80b1b`, `3e8d462b4`이고 원격 branch까지 push했다. develop의 Clinic package
+  version `1.86.0`을 유지하며 Clinic 파일 변경으로 개발 배포 대상이 된다. 임시
+  worktree는 제거했고 원본 feature worktree는 변경하지 않았다. develop 대상 PR은
+  아직 생성하지 않았다.
+- 개발서버 후속 QA는 모바일 To Review에서 여러 카드를 평가한 뒤 마지막 page까지
+  스크롤할 때 누락·중복·영구 은닉이 없는지, 상세 열기/닫기와 Submit, 탭·화면
+  재진입 시 overlay와 count가 위 생명주기를 따르는지 확인한다.
 
 ## FE Jira 구조와 스토리포인트
 
