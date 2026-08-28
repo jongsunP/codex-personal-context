@@ -691,9 +691,49 @@ This is the current resume source for the first local setup of
   head, so `277fc43` remains a new review delta; it is not app-developer
   approval, merge, staging QA or deployment.
 
+## DL-16061 V2 Current-Head Runtime Closeout - 2026-08-28 14:49 KST
+
+### Final code and delivery state
+
+- Commit `8fc02c4` is pushed to `feature/DL-16061`, and the branch is clean and
+  synchronized with `origin/feature/DL-16061`.
+- The final change makes feedback mutation success handlers await collection
+  invalidation. Rating POST still avoids an immediate collection refetch, while
+  detail PUT waits for list/count synchronization before the screen-owned
+  navigation callback can run. This closes the stale-card/count transition
+  race without changing the V2 presentation-overlay contract.
+- Focused feedback/error-handler Jest suites pass 17/17. Changed-file ESLint,
+  Prettier and `git diff --check` pass.
+- PR [#286](https://github.com/Innvoaid/dentlink-app/pull/286) is OPEN,
+  non-Draft and mergeable at `8fc02c4`. Auto labels and CodeRabbit are green,
+  but the app developer's recorded review/comment predates this final V2 delta.
+  Human approval, merge, staging QA and deployment remain incomplete.
+
+### Android and iOS proof with shared E2E data
+
+- Metro remained in the integrated terminal of the Cursor IDE opened for the
+  exact app project. Android API 36 and iOS 26.5 both loaded the current
+  JavaScript and logged into the shared `e2e.clinic` development account.
+- Both platforms directly verified Profile, native Share Feedback, To Review,
+  Reviewed, server-canonical detail questions/options, hospital name and the
+  Photo/Camera/File attachment sheet. The sheet displays maximum five files and
+  total 200 MB.
+- The shared E2E account changed from To Review/Reviewed `31/7` to `29/9` and
+  finally `28/10` during the pass. After a complete feature exit and re-entry,
+  Android and iOS both converged on `28/10`, proving re-entry synchronization.
+  Treat these counts as transient shared-server data, not a durable fixture.
+- An Android coordinate intended for the upload area overlapped the fixed
+  Submit control and re-submitted already-reviewed order `9000009204` once.
+  No rating, comment or attachment value was changed. This is not complete PUT
+  QA and should not be treated as intentional mutation coverage.
+- Actual new Good/Bad POST, changed-detail PUT, file transfer/removal, physical
+  camera/permission behavior and backend-generated FCM delivery remain separate
+  QA gates. The known non-fatal iOS `messaging/unregistered` simulator warning
+  is unchanged and unrelated to feedback.
+
 ## Next Starting Point
 
-1. Ask the app developer to include the new `277fc43` V2 lifecycle delta in
+1. Ask the app developer to include the new `8fc02c4` V2 lifecycle delta in
    the existing PR #286 review. If feedback arrives, verify and address only
    valid findings, then repeat focused checks before any merge decision.
 2. When the backend can send a real notification, verify that
