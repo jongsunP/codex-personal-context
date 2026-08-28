@@ -849,18 +849,28 @@
   카드 유지 상태를 보존한다. 피드백 목록·count·상세 query는 window focus만으로
   현재 화면 유지 UX가 조기 해제되지 않게 했으며, 전역 mutation error toast를
   피드백 전용 재시도 toast가 덮어쓰도록 중복 오류 표시도 제거했다.
-- 제품 commit은 `cf61ae54c` (`[DL-15828] fix: 피드백 저장 후 탭 동기화 보완`)이며
+- 실제 개발서버에서 `Tell Us Why`로 drawer를 열 때 서버 To Review 목록이 재반영되어
+  보존 카드가 사라지는 후속 문제를 확인했다. 서버 목록에서 빠진 보존 카드도 현재
+  위치에 합성하고 표시 total에 포함하며, drawer를 저장 없이 닫으면 그대로 유지하고
+  상세 PUT 성공 시에만 보존 state를 제거하도록 보완했다.
+- Figma `160:42055`의 실제 화살표와 설명을 다시 확인한 결과 상세 UI는 Reviewed 탭
+  전용이 아니다. To Review의 `Tell Us Why`는 현재 작성 흐름을 이어서 열고,
+  Reviewed의 `Edit`과 주문상세 진입은 각각 그 문맥 위에서 같은 공용 상세 UI를 연다.
+  알림 계약이 미확정인 동안 직접 deep link도 Reviewed로 강제하지 않는다.
+- 제품 commit은 `cf61ae54c` (`[DL-15828] fix: 피드백 저장 후 탭 동기화 보완`)와
+  `440c60fa9` (`[DL-15828] fix: 상세 진입 중 피드백 카드 유지`)이며
   `feature/DL-15828`과 `origin/feature/DL-15828`이 동일한 clean 상태다. Clinic type,
-  대상 ESLint와 `git diff --check`를 통과했고 push hook의 전체 lint는 기존 warning
-  418건·error 0건, shared config 3 tests와 hooks 24 tests, coverage 비교를 통과했다.
+  대상 ESLint·Prettier, Clinic production build와 `git diff --check`를 통과했고 push
+  hook의 전체 lint는 기존 warning 418건·error 0건, shared config 3 tests와 hooks
+  24 tests, coverage 비교를 통과했다.
 - 1회성 개발서버 배포 준비는 최신 `origin/develop`
   `5cacf1d78a6843ee6a695ee036c431b2d51e9887`에서 별도 worktree
   `/Users/parkjongsun/Repository/dentlink-client-order-feedback-develop-preview-ux-sync`와
   branch `feature/DL-15828-develop-preview-ux-sync`를 만들고 제품 commit만
-  cherry-pick했다. preview commit은 `276ca9824`이며 원격 branch까지 push되어 clean·
-  동기화 상태다. diff는 Clinic 파일 2개뿐이고 `clinic/**` 변경으로 Office 개발 배포
-  workflow가 직접 실행되므로 Lab/Admin package version은 변경하지 않았다. 아직
-  develop 대상 PR은 생성하지 않았다.
+  cherry-pick했다. preview commit은 `276ca9824`, `2f7527ff1`이며 원격 branch까지
+  push되어 clean·동기화 상태다. diff는 Clinic 파일 2개뿐이고 `clinic/**` 변경으로
+  Office 개발 배포 workflow가 직접 실행되므로 Lab/Admin package version은 변경하지
+  않았다. 아직 develop 대상 PR은 생성하지 않았다.
 
 ## FE Jira 구조와 스토리포인트
 
@@ -899,6 +909,8 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   toast와 상세 입력 유도 CTA를 노출한다. 실제 탭·페이지 전환, 이탈·새로고침·재진입
   또는 상세 제출 후 서버 목록·count를 다시 동기화하고 Reviewed로 표시한다.
 - Good / Bad 선택만으로 상세 화면에 자동 진입하지 않는다.
+- 상세 drawer는 Reviewed 전용이 아니라 To Review의 후속 상세 입력, Reviewed 수정,
+  주문상세 진입이 공유한다. 열기만으로 탭을 강제 변경하지 않고 진입 문맥을 유지한다.
 - To Review는 주문 COMPLETED 최신순, Reviewed는 최초 리뷰 작성 최신순이며 수정으로
   정렬 순서를 바꾸지 않는다.
 - 삭제는 지원하지 않는다.
