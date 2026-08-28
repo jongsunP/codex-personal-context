@@ -833,6 +833,35 @@
   않았다. 다음 웹 시작점은 확정된 디자인·기획/API 변경 반영, 실제 POST/PUT/upload
   QA 또는 정식 release PR 준비다.
 
+### 피드백 E2E와 POST/PUT UX 동기화 보완 — 2026-08-28
+
+- 기존 E2E 규칙과 재사용 흐름을 따라 기공소 주문 생성부터 상태 전환, Clinic 주문
+  상세와 피드백 목록 노출까지 확인하는 시나리오를 추가한 commit은 `a0358d7f0`이다.
+  로컬 앱 서버와 E2E UI가 포트를 공유하지 않도록 Clinic/Lab/Admin E2E 포트를
+  3100/3105/3102와 `.next-e2e`로 분리한 commit은 `1dec6906e`다.
+- Figma `160:41597`, `160:42055`와 Jira DL-16057/DL-16063을 다시 대조했다. 최초
+  Good/Bad POST 성공 직후에는 현재 To Review 카드와 탭 count를 그대로 유지하고
+  상세 입력 CTA와 toast를 보여주는 것이 확정 동작이다. 실제 탭·페이지 전환,
+  이탈·재진입, 새로고침 또는 상세 PUT 이후에는 서버 목록·count를 정본으로 다시
+  동기화해야 한다.
+- 이에 피드백 목록의 실제 탭·데스크톱 페이지 전환에서 임시 카드 표시 state를
+  비우고 count를 다시 조회하도록 보완했다. 같은 탭에서 drawer만 닫을 때는 현재
+  카드 유지 상태를 보존한다. 피드백 목록·count·상세 query는 window focus만으로
+  현재 화면 유지 UX가 조기 해제되지 않게 했으며, 전역 mutation error toast를
+  피드백 전용 재시도 toast가 덮어쓰도록 중복 오류 표시도 제거했다.
+- 제품 commit은 `cf61ae54c` (`[DL-15828] fix: 피드백 저장 후 탭 동기화 보완`)이며
+  `feature/DL-15828`과 `origin/feature/DL-15828`이 동일한 clean 상태다. Clinic type,
+  대상 ESLint와 `git diff --check`를 통과했고 push hook의 전체 lint는 기존 warning
+  418건·error 0건, shared config 3 tests와 hooks 24 tests, coverage 비교를 통과했다.
+- 1회성 개발서버 배포 준비는 최신 `origin/develop`
+  `5cacf1d78a6843ee6a695ee036c431b2d51e9887`에서 별도 worktree
+  `/Users/parkjongsun/Repository/dentlink-client-order-feedback-develop-preview-ux-sync`와
+  branch `feature/DL-15828-develop-preview-ux-sync`를 만들고 제품 commit만
+  cherry-pick했다. preview commit은 `276ca9824`이며 원격 branch까지 push되어 clean·
+  동기화 상태다. diff는 Clinic 파일 2개뿐이고 `clinic/**` 변경으로 Office 개발 배포
+  workflow가 직접 실행되므로 Lab/Admin package version은 변경하지 않았다. 아직
+  develop 대상 PR은 생성하지 않았다.
+
 ## FE Jira 구조와 스토리포인트
 
 Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용한다.
@@ -866,8 +895,9 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 
 - 피드백 단위는 주문이며 Good / Bad 선택만으로 응답 완료 처리한다.
 - 상세 keyword와 자유서술은 선택 사항이며 등록 후에도 수정할 수 있다.
-- Good / Bad 저장 성공 후 현재 To Review 화면에서는 카드를 유지하고 toast와 상세
-  입력 유도 CTA를 노출한다. 이탈·새로고침·재진입 후 Reviewed로 표시한다.
+- Good / Bad 저장 성공 후 현재 To Review 화면에서는 카드와 탭 count를 유지하고
+  toast와 상세 입력 유도 CTA를 노출한다. 실제 탭·페이지 전환, 이탈·새로고침·재진입
+  또는 상세 제출 후 서버 목록·count를 다시 동기화하고 Reviewed로 표시한다.
 - Good / Bad 선택만으로 상세 화면에 자동 진입하지 않는다.
 - To Review는 주문 COMPLETED 최신순, Reviewed는 최초 리뷰 작성 최신순이며 수정으로
   정렬 순서를 바꾸지 않는다.
@@ -891,12 +921,11 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 
 ## 현재 남은 확인과 대기 항목
 
-- 빠른 평가 후 현재 카드를 유지하는 동안 To Review/Reviewed 및 마이페이지 count를
-  언제 변경할지
 - 최신 Notion·Analytics 문서가 완료 상태가 아니므로 이후 기획·디자인·이벤트 계약
   변경 여부
 - 실제 대상 주문이 있는 치과 계정으로 목록·주문상세 GET, 최초 Good/Bad POST,
-  상세 PUT, 서버 분류·count·pagination과 에러 응답을 함께 확인하는 통합 QA
+  같은 화면의 카드·count 유지, 탭·페이지 전환 후 목록·count 갱신, 상세 PUT, 서버
+  분류·pagination과 단일 오류 toast를 함께 확인하는 통합 QA
 - 실제 업로드 성공·취소·삭제·재시도와 기존 첨부 수정, 스마트폰 Photo/Camera/File
   권한 및 picker를 포함한 물리 기기 QA
 - API가 idempotency 또는 중복 클릭에 대해 보장하는 세부 정책. FE는 mutation pending
