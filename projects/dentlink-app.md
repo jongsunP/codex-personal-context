@@ -1,4 +1,4 @@
-# Dentlink Mobile App setup and current checkpoint - 2026-08-27
+# Dentlink Mobile App setup and current checkpoint - 2026-08-28
 
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
@@ -65,11 +65,11 @@ This is the current resume source for the first local setup of
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `b060294fcb8aa60da2c99c1bcea0f4e8b96d459c`
+- Current HEAD: `277fc437ae3c819ce9f8c6cd9fcb2a8e71cf174d`
 - The checkout is clean and synchronized with
-  `origin/feature/DL-16061` as of 2026-08-28 11:39 KST.
+  `origin/feature/DL-16061` as of 2026-08-28 14:08 KST.
 - `origin/develop` is `09ca56296de4d83acf81d57851d94a8269d58c20`;
-  the feature branch is eleven commits ahead and three commits behind.
+  the feature branch is twelve commits ahead and three commits behind.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
@@ -652,11 +652,50 @@ This is the current resume source for the first local setup of
   closeout so the user can inspect the verified screens. Treat that as
   transient session state and recheck it on resume.
 
+## DL-16061 V2 Feedback UX Lifecycle Closeout - 2026-08-28 14:08 KST
+
+### Confirmed UX contract and implementation
+
+- Commit `277fc43` is pushed to `feature/DL-16061`. It aligns the native
+  feedback flow with the cross-surface V2 UX contract without changing the
+  feedback API, generated models, attachment limits or screen layout.
+- A successful Good/Bad POST keeps the current To Review card and tab count
+  through `ratingOverlays`, exposes `Tell Us Why`, and does not refetch the
+  collection simply because the user enters or leaves the detail screen.
+- Closing detail without Submit preserves the same To Review overlay. A
+  successful detail PUT clears only that order's overlay and synchronizes
+  list/count state. Feedback-list entry returns to the list, while other
+  entry contexts keep their existing navigation stack with `goBack()`.
+- An actual tab switch, pull-to-refresh, feature re-entry or foreground resume
+  on the focused list clears the local overlay and reloads server-canonical
+  collections. Direct deep links still enter through the native list and are
+  not forced into the Reviewed tab.
+- Rating and detail mutations guard duplicate actions. The global mutation
+  error handler now excludes the feedback save endpoint so the screen-owned
+  retry toast appears once instead of being duplicated.
+
+### Verification and review boundary
+
+- Focused feedback/error-handler Jest suites pass 17/17. Changed-file ESLint
+  has zero errors and one existing unused-variable warning in
+  `shared/queries/errorHandlers.ts`; Prettier and `git diff --check` pass.
+- Office and Lab typechecks still report the same nine unrelated baseline
+  diagnostics. No diagnostic points to the six files in `277fc43`.
+- No Android emulator or iOS simulator was booted at this checkpoint, and the
+  project IDE was not prepared. In accordance with the user's standing rule,
+  Metro was not started elsewhere. The V2 POST/back/PUT lifecycle therefore
+  has code-level proof but no new mutation-data runtime proof.
+- PR [#286](https://github.com/Innvoaid/dentlink-app/pull/286) is OPEN,
+  non-Draft and mergeable at `277fc43`. Auto labels and CodeRabbit are green.
+  The app developer had already reviewed/commented on the previous `b060294`
+  head, so `277fc43` remains a new review delta; it is not app-developer
+  approval, merge, staging QA or deployment.
+
 ## Next Starting Point
 
-1. Wait for the already requested app-developer review of PR #286. If feedback
-   arrives, verify and address only valid findings, then repeat focused checks
-   before any merge decision.
+1. Ask the app developer to include the new `277fc43` V2 lifecycle delta in
+   the existing PR #286 review. If feedback arrives, verify and address only
+   valid findings, then repeat focused checks before any merge decision.
 2. When the backend can send a real notification, verify that
    `data.deeplink` contains `/my/feedback?orderId={orderId}` and test actual
    cold, warm, background and duplicate taps. Do not add `type` or `webPath`
