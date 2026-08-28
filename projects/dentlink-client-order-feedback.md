@@ -875,9 +875,14 @@
   `/Users/parkjongsun/Repository/dentlink-client-order-feedback-develop-preview-ux-sync`와
   branch `feature/DL-15828-develop-preview-ux-sync`를 만들고 제품 commit만
   cherry-pick했다. preview commit은 `276ca9824`, `2f7527ff1`, `7851607c9`이며 원격
-  branch까지 push되어 clean·동기화 상태다. diff는 Clinic 파일 2개뿐이고 `clinic/**`
-  변경으로 Office 개발 배포 workflow가 직접 실행되므로 Lab/Admin package version은
-  변경하지 않았다. 아직 develop 대상 PR은 생성하지 않았다.
+  branch까지 push했다. diff는 Clinic 파일 2개뿐이고 `clinic/**` 변경으로 Office 개발
+  배포 workflow가 직접 실행되므로 Lab/Admin package version은 변경하지 않았다.
+- develop 대상 PR [#4542](https://github.com/Innvoaid/dentlink-client/pull/4542)가
+  merge됐고 merge commit은 `b1d25302d`다. squash merge라 preview commit의 ancestor는
+  아니지만 두 tree가 완전히 동일함을 확인했으며 사용자가 개발서버 배포 완료를
+  확인했다. 이후 clean 상태의 로컬 preview worktree와 로컬 branch를 제거했다. 원격
+  `origin/feature/DL-15828-develop-preview-ux-sync`는 보존했고, 원본
+  `feature/DL-15828` worktree는 계속 유지한다.
 
 ## FE Jira 구조와 스토리포인트
 
