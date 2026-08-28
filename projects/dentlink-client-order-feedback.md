@@ -853,12 +853,19 @@
   보존 카드가 사라지는 후속 문제를 확인했다. 서버 목록에서 빠진 보존 카드도 현재
   위치에 합성하고 표시 total에 포함하며, drawer를 저장 없이 닫으면 그대로 유지하고
   상세 PUT 성공 시에만 보존 state를 제거하도록 보완했다.
+- 후속 구조 검토에서 React Query cache는 계속 서버 정본으로 두고 보존 카드는 현재
+  화면 전용 presentation state로만 합성하는 것이 적절하다고 확인했다. query cache를
+  To Review 상태로 임의 조작하지 않는다. 서버 재조회가 다음 항목을 당겨와도 PC
+  pagination과 모바일 infinite page의 현재 적재 용량을 넘지 않도록 표시 수를 제한하고,
+  상세 PUT은 활성 list·count query 재조회가 끝난 뒤 drawer를 닫도록 mutation
+  invalidation을 await한다.
 - Figma `160:42055`의 실제 화살표와 설명을 다시 확인한 결과 상세 UI는 Reviewed 탭
   전용이 아니다. To Review의 `Tell Us Why`는 현재 작성 흐름을 이어서 열고,
   Reviewed의 `Edit`과 주문상세 진입은 각각 그 문맥 위에서 같은 공용 상세 UI를 연다.
   알림 계약이 미확정인 동안 직접 deep link도 Reviewed로 강제하지 않는다.
-- 제품 commit은 `cf61ae54c` (`[DL-15828] fix: 피드백 저장 후 탭 동기화 보완`)와
-  `440c60fa9` (`[DL-15828] fix: 상세 진입 중 피드백 카드 유지`)이며
+- 제품 commit은 `cf61ae54c` (`[DL-15828] fix: 피드백 저장 후 탭 동기화 보완`),
+  `440c60fa9` (`[DL-15828] fix: 상세 진입 중 피드백 카드 유지`), `6b3b5ec7f`
+  (`[DL-15828] fix: 피드백 목록 동기화 안정화`)이며
   `feature/DL-15828`과 `origin/feature/DL-15828`이 동일한 clean 상태다. Clinic type,
   대상 ESLint·Prettier, Clinic production build와 `git diff --check`를 통과했고 push
   hook의 전체 lint는 기존 warning 418건·error 0건, shared config 3 tests와 hooks
@@ -867,10 +874,10 @@
   `5cacf1d78a6843ee6a695ee036c431b2d51e9887`에서 별도 worktree
   `/Users/parkjongsun/Repository/dentlink-client-order-feedback-develop-preview-ux-sync`와
   branch `feature/DL-15828-develop-preview-ux-sync`를 만들고 제품 commit만
-  cherry-pick했다. preview commit은 `276ca9824`, `2f7527ff1`이며 원격 branch까지
-  push되어 clean·동기화 상태다. diff는 Clinic 파일 2개뿐이고 `clinic/**` 변경으로
-  Office 개발 배포 workflow가 직접 실행되므로 Lab/Admin package version은 변경하지
-  않았다. 아직 develop 대상 PR은 생성하지 않았다.
+  cherry-pick했다. preview commit은 `276ca9824`, `2f7527ff1`, `7851607c9`이며 원격
+  branch까지 push되어 clean·동기화 상태다. diff는 Clinic 파일 2개뿐이고 `clinic/**`
+  변경으로 Office 개발 배포 workflow가 직접 실행되므로 Lab/Admin package version은
+  변경하지 않았다. 아직 develop 대상 PR은 생성하지 않았다.
 
 ## FE Jira 구조와 스토리포인트
 
