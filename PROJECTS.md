@@ -120,26 +120,21 @@ For detailed current state, read:
 ### Dentlink 홈 LinkTalk 미확인 필터
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Dedicated worktree:
-  `/Users/parkjongsun/Repository/dentlink-client-linktalk-unread`
-- Branch: `feature/DL-16002`
 - Jira: parent `DL-14984`, FE subtask `DL-16002`
-- Current state: Clinic/기공소 홈 LinkTalk의 All/Unread 필터 구현과 사용자 로컬
-  기능·모바일 스타일 확인을 완료했다. PR #4513은 `release/v1.85.0` 대상으로 open,
-  mergeable이며 CodeRabbit 성공·미해결 thread 0개다. 동료 승인과 merge를 기다린다.
+- Current state: 기존 구현 PR #4513은 `release/v1.85.0`에 merge됐다. QA 후속
+  DL-16226 미읽음 카운트 동기화와 DL-16227 Case Preference 빈 상태 안내는
+  PR #4544로 `release/v1.85.0` 대상 리뷰 대기 중이다. 전용 worktree와 관련 로컬
+  feature 브랜치는 제거했고 원격 PR head는 보존했다.
 - Personal current checkpoint:
   `projects/dentlink-client-linktalk-unread.md`
 
 ### Dentlink Admin Invitation 필터
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Dedicated worktree:
-  `/Users/parkjongsun/Repository/dentlink-client-invitation-filter`
-- Branch: `feature/DL-16004`
 - Jira: `DL-16004`
 - Current state: Admin 이메일 알림과 CRM 필터에 Invitation 옵션을 추가했고 사용자
-  로컬 기능 확인을 완료했다. PR #4512는 `release/v1.85.0` 대상으로 open,
-  mergeable이며 CodeRabbit 성공·미해결 review thread 0개다. 동료 승인을 기다린다.
+  로컬 기능 확인을 완료했다. PR #4512는 `release/v1.84.0`에 merge됐다. 전용
+  worktree와 로컬 feature 브랜치는 제거했고 원격 브랜치는 보존했다.
 - Personal current checkpoint:
   `projects/dentlink-client-admin-invitation-filter.md`
 

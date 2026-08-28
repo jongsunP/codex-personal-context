@@ -13,7 +13,7 @@
 - CRM `/crm`의 First Funnel Channel 필터에 `INVITATION`을 추가한다. 선택 시
   `?firstFunnelChannel=INVITATION`이 적용되어야 한다.
 
-## 현재 체크포인트 — 2026-08-20
+## 기존 체크포인트 — 2026-08-20
 
 - 전용 worktree:
   `/Users/parkjongsun/Repository/dentlink-client-invitation-filter`
@@ -25,7 +25,7 @@
 - release 전달 PR:
   [#4512](https://github.com/Innvoaid/dentlink-client/pull/4512)
   - head: `feature/DL-16004`
-  - base: `release/v1.85.0`
+  - base: `release/v1.84.0`
   - 마지막 live 확인: open, ready for review, mergeable, 동료 승인 필요
   - CodeRabbit와 Auto Assign check: 성공
   - 미해결 review thread: 0개
@@ -47,9 +47,9 @@
   승인했다.
 - CodeRabbit summary에는 두 상수의 파일 하단 배치를 제안하는 비차단 nitpick이
   있으나 review thread로 생성되지 않았고, 현재 유효한 차단 이슈는 없다.
-- 구현과 로컬 QA는 완료했지만 PR은 아직 merge되지 않았다.
+- 구현과 로컬 QA는 완료했지만 당시 PR은 아직 merge되지 않았다.
 - 스테이징 QA와 실제 배포도 완료로 간주하지 않는다.
-- 이 PR은 `release/v1.85.0`에 포함시키기 위한 기능 전달 PR이며, 동료 승인과 merge
+- 이 PR은 `release/v1.84.0`에 포함시키기 위한 기능 전달 PR이며, 동료 승인과 merge
   후 해당 릴리즈의 스테이징 검증을 거쳐 배포되는 흐름이다.
 
 ## 작업 방식 메모
@@ -60,7 +60,7 @@
 - shared Dentlink 저장소의 추가 commit, push, PR 수정, merge는 사용자의 명시
   요청이 있을 때만 수행한다.
 
-## 다음 시작점
+## 당시 다음 시작점
 
 1. PR #4512의 head, check, review, merge 상태를 live로 다시 확인한다.
 2. 새 유효 리뷰가 생기면 현재 코드에 맞는지 검토하고, 명시된 권한 범위에서만
@@ -68,3 +68,11 @@
 3. 동료 승인 후 release merge, 스테이징 QA, 배포를 각각 별도 상태로 확인한다.
 4. merge 후 사용자가 정리를 요청하면 worktree와 로컬 feature branch를 안전하게
    제거하고 main worktree를 최신 `master`로 대기시킨다.
+
+## 종료 기록 — 2026-08-28
+
+- PR #4512가 `release/v1.84.0`에 merge된 것을 live로 확인했다.
+- 사용자 요청에 따라
+  `/Users/parkjongsun/Repository/dentlink-client-invitation-filter` worktree와 로컬
+  `feature/DL-16004` 브랜치를 제거했다.
+- `origin/feature/DL-16004`는 삭제하지 않고 보존했다.

@@ -17,7 +17,27 @@
   - Clinic 모바일은 기존 정책대로 홈 LinkTalk 목록을 노출하지 않음
   - 기공소 모바일은 기존 바텀시트 흐름을 유지
 
-## 현재 체크포인트 — 2026-08-20
+## 현재 체크포인트 — 2026-08-28
+
+- 기존 구현 PR [#4513](https://github.com/Innvoaid/dentlink-client/pull/4513)은
+  `release/v1.85.0`에 merge됐다.
+- QA 후속 PR [#4544](https://github.com/Innvoaid/dentlink-client/pull/4544)을
+  `feature/DL-16226`에서 `release/v1.85.0` 대상으로 생성했다.
+  - `c81cfa384` `[DL-16226] fix: 링크톡 미읽음 카운트 동기화`
+  - `7d5455b59` `[DL-16227] fix: Case Preference 빈 상태 안내`
+- DL-16226은 Clinic/기공소에서 필터 전환 시 목록뿐 아니라 미읽음 카운트도
+  재조회해 두 표시가 어긋나는 문제를 수정한다.
+- DL-16227은 기존 Case Preference 데이터 소스와 노출 조건은 유지하고, 전체
+  preference가 비어 있을 때 안내 문구만 표시한다.
+- commit hook의 Clinic/Lab/Admin TypeScript 검사가 통과했다. push hook도 전체
+  lint 오류 0개(기존 warning 418개), shared config 3건·hook 24건과 coverage delta
+  변화 없음으로 통과했다.
+- 사용자 요청에 따라 전용 worktree와 로컬 `feature/DL-16002`,
+  `feature/DL-16226` 브랜치를 제거했다. 원격 브랜치는 보존했다.
+- 현재 로컬 Dentlink 웹 worktree는 메인 `master`와 진행 중인 주문 피드백
+  `feature/DL-15828`만 유지한다.
+
+## 기존 구현 체크포인트 — 2026-08-20
 
 - 전용 worktree:
   `/Users/parkjongsun/Repository/dentlink-client-linktalk-unread`
@@ -75,11 +95,11 @@
 
 ## 다음 시작점
 
-1. PR #4513의 head, CodeRabbit, 미해결 thread, 동료 승인과 merge 상태를 live로
+1. PR #4544의 head, CodeRabbit, 미해결 thread, 동료 승인과 merge 상태를 live로
    다시 확인한다.
 2. 새 유효 리뷰가 있으면 현재 코드에 맞는지 검토하고, 사용자가 CodeRabbit 전체
    처리나 수정·푸시를 요청한 범위에서만 반영한다.
 3. 동료 승인 후 release merge, 스테이징 배포, 실제 읽음 상태·카운트 갱신 QA를
    별도 상태로 확인한다.
-4. merge 후 사용자가 정리를 요청하면 worktree와 로컬 feature branch를 안전하게
-   제거하고 main worktree를 최신 `master`로 대기시킨다.
+4. 로컬 브랜치와 worktree는 이미 제거됐으므로 추가 수정이 필요하면 원격
+   `feature/DL-16226`에서 새 로컬 작업 환경을 준비한다.
