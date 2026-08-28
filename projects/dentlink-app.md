@@ -65,11 +65,11 @@ This is the current resume source for the first local setup of
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `277fc437ae3c819ce9f8c6cd9fcb2a8e71cf174d`
+- Current HEAD: `88066f069ea67bc12cc4ec5e43f647a58afe30b2`
 - The checkout is clean and synchronized with
-  `origin/feature/DL-16061` as of 2026-08-28 14:08 KST.
+  `origin/feature/DL-16061` as of 2026-08-28 15:44 KST.
 - `origin/develop` is `09ca56296de4d83acf81d57851d94a8269d58c20`;
-  the feature branch is twelve commits ahead and three commits behind.
+  the feature branch is fourteen commits ahead and three commits behind.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
@@ -731,17 +731,66 @@ This is the current resume source for the first local setup of
   QA gates. The known non-fatal iOS `messaging/unregistered` simulator warning
   is unchanged and unrelated to feedback.
 
+## DL-16061 Pagination Boundary Closeout - 2026-08-28 15:44 KST
+
+### Implementation and delivery state
+
+- Commit `88066f0` (`fix: 피드백 목록 페이지 누락 방지`) is pushed to
+  `feature/DL-16061`; the checkout is clean and synchronized with its
+  upstream.
+- The To Review presentation overlay now retains only the saved feedback item
+  and its current list anchor. It is merged with canonical server items
+  without rewriting the React Query cache, duplicating an order or slicing a
+  canonical last item out of the visible collection.
+- After a Good/Bad POST makes the server To Review collection shorter, the app
+  refetches every already-loaded infinite-query page before asking React Query
+  for the next page. A failed refetch blocks the stale offset request and
+  exposes a retry action instead of silently skipping an item.
+- Tab, account, refresh, foreground and detail-Submit synchronization
+  boundaries invalidate the current presentation scope. Late rating,
+  pagination or refresh responses cannot recreate an overlay in a newer
+  screen scope. Detail Submit now clears the current screen overlays only
+  after the mutation-owned list/count synchronization has completed.
+- PR [#286](https://github.com/Innvoaid/dentlink-app/pull/286) is OPEN,
+  non-Draft and mergeable at `88066f0`. Auto labels and CodeRabbit report
+  success. The app developer must review this newest pagination delta;
+  merge, staging QA and deployment remain separate and incomplete.
+
+### Verification boundary
+
+- Focused feedback repository and utility suites pass 18/18. Changed-file
+  ESLint and Prettier, plus `git diff --check`, pass.
+- Office/Lab `typecheck:apps` still reports the same nine unrelated baseline
+  diagnostics. No diagnostic points to the four files changed by `88066f0`.
+- Android API 36 with the shared `e2e.clinic` development account executed a
+  real Good POST for order `9000009193`. The current To Review screen kept
+  `23/17`, the Good badge and `Tell Us Why`; opening and closing detail without
+  Submit preserved that state. Scrolling through the last page exposed 23
+  distinct cards with no offset omission. Switching tabs then restored the
+  server-canonical `22/18` counts and showed the order in Reviewed.
+- iOS 26.5 loaded the same current JavaScript, converged on `22/18`, showed
+  order `9000009193` in Reviewed and opened/closed its native detail screen.
+  The Good mutation was not repeated on iOS. This remains runtime proof using
+  the existing simulator binary, not a fresh native build or physical-device
+  proof.
+- Shared E2E counts and order availability are time-sensitive test data. No
+  Jira mutation, changed-detail PUT, real file transfer/removal,
+  physical-device camera/permission QA or backend-generated FCM delivery was
+  performed in this pagination closeout.
+
 ## Next Starting Point
 
-1. Ask the app developer to include the new `8fc02c4` V2 lifecycle delta in
-   the existing PR #286 review. If feedback arrives, verify and address only
-   valid findings, then repeat focused checks before any merge decision.
+1. Ask the app developer to include the newest `88066f0` pagination and
+   presentation-scope delta in the existing PR #286 review. If feedback
+   arrives, verify and address only valid findings, then repeat focused checks
+   before any merge decision.
 2. When the backend can send a real notification, verify that
    `data.deeplink` contains `/my/feedback?orderId={orderId}` and test actual
    cold, warm, background and duplicate taps. Do not add `type` or `webPath`
    unless the shared contract changes explicitly.
-3. When safe eligible data is provided, verify real Good/Bad POST, full-detail
-   POST/PUT, file upload/removal and cache transitions. Validate Android first,
+3. The Android Good/Bad POST and list transition now have direct evidence.
+   When safe eligible data is provided, verify changed-detail PUT, file
+   upload/removal and remaining cache transitions. Validate Android first,
    then iOS or a physical device for camera and permission behavior.
 4. Treat a fresh iOS native build as a separate app-maintenance scope. The
    installed simulator binary proves current JavaScript behavior but does not
