@@ -123,8 +123,9 @@ For detailed current state, read:
 - Jira: parent `DL-14984`, FE subtask `DL-16002`
 - Current state: 기존 구현 PR #4513은 `release/v1.85.0`에 merge됐다. QA 후속
   DL-16226 미읽음 카운트 동기화와 DL-16227 Case Preference 빈 상태 안내는
-  PR #4544로 `release/v1.85.0` 대상 리뷰 대기 중이다. 전용 worktree와 관련 로컬
-  feature 브랜치는 제거했고 원격 PR head는 보존했다.
+  PR #4544로 `release/v1.85.0`에 merge됐다. 원격 `stage`는 최신 `master`로
+  재생성했으며 배포 PR #4545가 `release/v1.85.0`에서 `stage` 대상으로 열려 있다.
+  전용 worktree와 관련 로컬 feature 브랜치는 제거했고 원격 PR head는 보존했다.
 - Personal current checkpoint:
   `projects/dentlink-client-linktalk-unread.md`
 

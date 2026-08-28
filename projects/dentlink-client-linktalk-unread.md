@@ -21,8 +21,8 @@
 
 - 기존 구현 PR [#4513](https://github.com/Innvoaid/dentlink-client/pull/4513)은
   `release/v1.85.0`에 merge됐다.
-- QA 후속 PR [#4544](https://github.com/Innvoaid/dentlink-client/pull/4544)을
-  `feature/DL-16226`에서 `release/v1.85.0` 대상으로 생성했다.
+- QA 후속 PR [#4544](https://github.com/Innvoaid/dentlink-client/pull/4544)은
+  `feature/DL-16226`에서 `release/v1.85.0` 대상으로 merge됐다.
   - `c81cfa384` `[DL-16226] fix: 링크톡 미읽음 카운트 동기화`
   - `7d5455b59` `[DL-16227] fix: Case Preference 빈 상태 안내`
 - DL-16226은 Clinic/기공소에서 필터 전환 시 목록뿐 아니라 미읽음 카운트도
@@ -36,6 +36,10 @@
   `feature/DL-16226` 브랜치를 제거했다. 원격 브랜치는 보존했다.
 - 현재 로컬 Dentlink 웹 worktree는 메인 `master`와 진행 중인 주문 피드백
   `feature/DL-15828`만 유지한다.
+- 스테이징 배포를 위해 원격 `stage`를 삭제한 뒤 최신 `origin/master`
+  (`8e05cbb84`)와 동일하게 재생성했다. `release/v1.85.0`에서 `stage`로 향하는
+  배포 PR [#4545](https://github.com/Innvoaid/dentlink-client/pull/4545)을 생성했다.
+  마지막 live 확인 기준 mergeable이며 Auto Assign과 CodeRabbit은 진행 중이다.
 
 ## 기존 구현 체크포인트 — 2026-08-20
 
@@ -95,11 +99,10 @@
 
 ## 다음 시작점
 
-1. PR #4544의 head, CodeRabbit, 미해결 thread, 동료 승인과 merge 상태를 live로
-   다시 확인한다.
+1. 배포 PR #4545의 check, review, merge 상태를 live로 다시 확인한다.
 2. 새 유효 리뷰가 있으면 현재 코드에 맞는지 검토하고, 사용자가 CodeRabbit 전체
    처리나 수정·푸시를 요청한 범위에서만 반영한다.
-3. 동료 승인 후 release merge, 스테이징 배포, 실제 읽음 상태·카운트 갱신 QA를
-   별도 상태로 확인한다.
+3. PR #4545 merge 후 스테이징 배포와 실제 읽음 상태·카운트 갱신 QA를 별도
+   상태로 확인한다.
 4. 로컬 브랜치와 worktree는 이미 제거됐으므로 추가 수정이 필요하면 원격
    `feature/DL-16226`에서 새 로컬 작업 환경을 준비한다.
