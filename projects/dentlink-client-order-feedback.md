@@ -1007,8 +1007,10 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   TypeScript와 번들을 검증했다. push hook은 전체 lint 오류 0개·기존 warning 418개,
   shared config 3 tests·hooks 24 tests와 coverage 변화 없음으로 통과했다.
 - 원격 통합 branch에 push하고 새 `develop` 대상 PR
-  [#4546](https://github.com/Innvoaid/dentlink-client/pull/4546)을 생성했다. 마지막 live
-  확인 기준 mergeable, CodeRabbit 성공, Auto Assign 진행 중이다. 원본
+  [#4546](https://github.com/Innvoaid/dentlink-client/pull/4546)을 생성했다. PR은
+  `2bc62a121`로 merge됐고 CodeRabbit과 Auto Assign이 성공했으며 사용자가 개발서버
+  배포 완료를 확인했다. 이후 임시 통합 worktree와 로컬 통합 branch를 제거하고
+  원격 branch는 보존했다. 원본
   `/Users/parkjongsun/Repository/dentlink-client-order-feedback` /
   `feature/DL-15828`은 clean·원격 동기화 상태로 유지한다.
 
@@ -1043,9 +1045,9 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 5. 대상 데이터가 있는 치과 계정 또는 BE fixture를 확보해 목록·주문상세·상세
    drawer·실제 파일 업로드의 GET/POST/PUT 통합 QA를 수행한다. 실제 모바일 브라우저
    Camera/Photo/File picker도 별도 검증한다.
-6. 개발 배포 PR #4546의 check·review·merge와 배포 workflow를 live로 확인한다.
-   merge 후 임시 통합 worktree와 로컬 branch를 제거하되 원본 피드백 branch는
-   유지한다.
+6. 개발 배포 PR #4546과 임시 통합 환경 정리는 완료됐다. 이후 새 개발서버 반영이
+   필요하면 당시 최신 `develop`에서 별도 통합 branch/worktree를 다시 만들고 원본
+   피드백 branch는 유지한다.
 7. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
    API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
 8. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.

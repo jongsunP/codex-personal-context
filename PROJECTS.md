@@ -154,7 +154,9 @@ For detailed current state, read:
   물론 후속 동기화 PR #4542·#4543도 `develop`에 merge됐다. 이후 원격 `develop`을
   최신 `master`로 재생성하고, 기존 피드백 상태와 `release/v1.85.0`을 합친 통합
   branch `feature/DL-15828-develop-v1.85.0-integration` / `bcf55a61c`에서 새
-  `develop` 대상 PR #4546을 생성했다. 원본 피드백 branch는 변경하지 않았다.
+  `develop` 대상 PR #4546을 merge했으며 사용자가 개발서버 배포를 완료했다. 임시
+  통합 worktree와 로컬 branch는 제거했고 원격 branch는 보존했다. 원본 피드백
+  branch는 변경하지 않았다.
   2026-08-28 실제
   eligible 주문으로 목록/count, 주문 상세 배너, 딥링크 상세 GET, PC·웹 모바일
   drawer와 Photo/Camera/File 선택 UI를 Chrome에서 확인했다. 실제 Good/Bad POST,
