@@ -987,6 +987,31 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 서버와 React Query cache를 기준 상태로 사용하며, Figma의 현재 카드 유지만
   화면 표현 state로 분리한다.
 
+## release/v1.85.0 개발서버 통합 — 2026-08-28
+
+- 기존 `origin/develop`의 최신 피드백 상태 `1e24843bb`를 별도 worktree
+  `/Users/parkjongsun/Repository/dentlink-client-feedback-release-develop`와 branch
+  `feature/DL-15828-develop-v1.85.0-integration`에 먼저 보존했다.
+- 열린 develop 대상 PR이 없음을 확인한 뒤 원격 `develop`을 삭제하고 최신
+  `origin/master` `8e05cbb84`에서 재생성했다.
+- 통합 branch에서 `origin/release/v1.85.0` `a8f180b34`를 merge했다. package version은
+  develop의 `1.86.0`, 주문상세 피드백 패널은 기존 develop 상태를 유지하고,
+  release의 Case Preference 빈 상태 및 Clinic/Lab LinkTalk 미읽음 카운트 QA 수정을
+  함께 보존했다.
+- 통합 merge commit은 `bcf55a61c`이며 첫 번째 parent는 기존 피드백 develop
+  `1e24843bb`, 두 번째 parent는 release `a8f180b34`다. 두 commit 모두 통합 HEAD의
+  ancestor임을 확인했다.
+- Clinic·Lab production build, Clinic·Lab·Admin typecheck, 대상 app ESLint,
+  Prettier와 `git diff --check`를 통과했다. 공용 UI 단독 ESLint는 저장소 기존
+  Storybook plugin 중복으로 실행되지 않았지만 Clinic/Lab build에서 공용 UI 포함
+  TypeScript와 번들을 검증했다. push hook은 전체 lint 오류 0개·기존 warning 418개,
+  shared config 3 tests·hooks 24 tests와 coverage 변화 없음으로 통과했다.
+- 원격 통합 branch에 push하고 새 `develop` 대상 PR
+  [#4546](https://github.com/Innvoaid/dentlink-client/pull/4546)을 생성했다. 마지막 live
+  확인 기준 mergeable, CodeRabbit 성공, Auto Assign 진행 중이다. 원본
+  `/Users/parkjongsun/Repository/dentlink-client-order-feedback` /
+  `feature/DL-15828`은 clean·원격 동기화 상태로 유지한다.
+
 ## 현재 남은 확인과 대기 항목
 
 - 최신 Notion·Analytics 문서가 완료 상태가 아니므로 이후 기획·디자인·이벤트 계약
@@ -1018,8 +1043,9 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 5. 대상 데이터가 있는 치과 계정 또는 BE fixture를 확보해 목록·주문상세·상세
    drawer·실제 파일 업로드의 GET/POST/PUT 통합 QA를 수행한다. 실제 모바일 브라우저
    Camera/Photo/File picker도 별도 검증한다.
-6. PR 준비 지시가 오면 최신 master 통합 충돌을 먼저 의미 단위로 해결하고 전체
-   검사와 사용자 QA를 다시 수행한다. 현재는 PR 전 작업 브랜치 단계다.
+6. 개발 배포 PR #4546의 check·review·merge와 배포 workflow를 live로 확인한다.
+   merge 후 임시 통합 worktree와 로컬 branch를 제거하되 원본 피드백 branch는
+   유지한다.
 7. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
    API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
 8. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
