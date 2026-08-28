@@ -65,11 +65,11 @@ This is the current resume source for the first local setup of
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `9f66fa34cecc366fc9f0a74e9a3392f220cf6147`
+- Current HEAD: `b060294fcb8aa60da2c99c1bcea0f4e8b96d459c`
 - The checkout is clean and synchronized with
-  `origin/feature/DL-16061` as of 2026-08-27 18:08 KST.
+  `origin/feature/DL-16061` as of 2026-08-28 11:39 KST.
 - `origin/develop` is `09ca56296de4d83acf81d57851d94a8269d58c20`;
-  the feature branch is eight commits ahead and three commits behind.
+  the feature branch is eleven commits ahead and three commits behind.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
@@ -596,11 +596,67 @@ This is the current resume source for the first local setup of
 - Jira was not mutated during this closeout. Reconcile `DL-16066` live before
   changing its status or posting delivery evidence.
 
+## DL-16061 Current-HEAD Runtime And Review Closeout - 2026-08-28 11:39 KST
+
+### Git, PR and code verification
+
+- `feature/DL-16061` is clean and synchronized with its upstream at
+  `b060294fcb8aa60da2c99c1bcea0f4e8b96d459c`.
+- Commit `2902cef` limits its fixes to multi-upload busy state, rating-only
+  overlays, deep-link refetch result races and unused staged-file cleanup.
+  Commit `b060294` only normalizes Profile formatting. No code defect was
+  found during the final runtime pass, so no additional app commit was made.
+- PR [#286](https://github.com/Innvoaid/dentlink-app/pull/286) is OPEN,
+  non-Draft and mergeable at `b060294`. Auto labels and CodeRabbit are
+  successful; the description now records the current-head Android and iOS
+  proof. App-developer human review has been requested and remains the next
+  human gate.
+- The last focused verification remains feedback Jest 31/31, changed-source
+  ESLint with zero errors, source Prettier and `git diff --check` pass, and the
+  same nine unrelated Office/Lab baseline type diagnostics with no feedback
+  regression. `origin/develop` merge-tree has no conflict.
+
+### Current-head direct runtime proof
+
+- Metro ran from the integrated terminal of the Cursor IDE opened for the
+  exact `/Users/parkjongsun/Repository/dentlink-app` project. The final pass
+  loaded current `b060294` JavaScript on Android API 36 and iOS 26.5.
+- Android directly showed Office Home and Profile `Share Feedback (1)`, To
+  Review 1, Reviewed 1, reviewed order `9000009126`, canonical detail GET,
+  `Image Upload`, Photo/Camera/File selection, maximum five files and total
+  200 MB, direct `dentlink-dev://my/feedback?orderId=9000009126` navigation,
+  and detail close back to the native feedback list.
+- iOS directly showed the same native list/detail data and attachment sheet.
+  The direct feedback URL opened the native list and canonical detail, and
+  closing the sheet and detail returned to the list. This used the previously
+  installed development proof binary with the IDE Metro's current JavaScript;
+  it is runtime proof, not a fresh current-native-source build.
+- The simulator's existing ChannelTalk banner and non-fatal
+  `messaging/unregistered` LogBox notice were dismissed before the iOS flow.
+  They are baseline development-environment behavior and were not introduced
+  by the feedback changes.
+- Good/Bad, Submit and real file upload were deliberately not executed because
+  they change shared development data. Camera/permission and actual file
+  transfer still require suitable test data and preferably a physical device.
+
+### Jira and remaining boundaries
+
+- `DL-16061` and `DL-16066` both remain `Ready for Deploy`. Comments `43760`
+  and `43761` record the current-head two-platform runtime and the distinction
+  between direct URL proof and actual backend FCM delivery.
+- No further safe FE code work is known at this checkpoint. Remaining work is
+  downstream or externally gated: app-developer review feedback, actual
+  backend-generated FCM receipt/tap, mutation-safe POST/PUT/upload data,
+  physical-device camera/permission QA, merge, staging QA and deployment.
+- Metro, the Android emulator and the iOS simulator were left running at this
+  closeout so the user can inspect the verified screens. Treat that as
+  transient session state and recheck it on resume.
+
 ## Next Starting Point
 
-1. Ask the app developer to review PR #286 including `c33515a`. If review
-   feedback arrives, verify and address only valid findings, then repeat focused
-   checks before any merge decision.
+1. Wait for the already requested app-developer review of PR #286. If feedback
+   arrives, verify and address only valid findings, then repeat focused checks
+   before any merge decision.
 2. When the backend can send a real notification, verify that
    `data.deeplink` contains `/my/feedback?orderId={orderId}` and test actual
    cold, warm, background and duplicate taps. Do not add `type` or `webPath`
