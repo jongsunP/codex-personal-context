@@ -919,7 +919,11 @@
   version `1.86.0`을 유지하며 Clinic 파일 변경으로 개발 배포 대상이 된다. 임시
   worktree는 제거했고 원본 feature worktree는 변경하지 않았다. develop 대상
   [PR #4543](https://github.com/Innvoaid/dentlink-client/pull/4543)을 생성했으며,
-  현재 open·mergeable이고 Auto Assign과 CodeRabbit check가 통과했다.
+  Auto Assign과 CodeRabbit check 통과 후 2026-08-28에 `develop`으로 머지되었다.
+  merge commit은 `1e24843bb`이다. 머지 후 로컬의 일회성 배포 브랜치
+  `feature/DL-15828-develop-preview-feedback-state`와
+  `feature/DL-15828-develop-preview-infinite-sync`는 제거했고, 원본 작업 브랜치
+  `feature/DL-15828`은 clean·원격 동기화 상태로 유지했다.
 - 개발서버 후속 QA는 모바일 To Review에서 여러 카드를 평가한 뒤 마지막 page까지
   스크롤할 때 누락·중복·영구 은닉이 없는지, 상세 열기/닫기와 Submit, 탭·화면
   재진입 시 overlay와 count가 위 생명주기를 따르는지 확인한다.
