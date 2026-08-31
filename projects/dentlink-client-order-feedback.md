@@ -1068,6 +1068,28 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   `3895d2da563c6edcdd6c7e5bcd646b21540c0ec9`에서 동일한 clean 상태다. PR과 배포
   반영은 이번 closeout 범위에 포함하지 않았다.
 
+## 최신 master 통합·Admin 상세 계약·develop PR — 2026-08-31
+
+- 원격 `master`, `develop`, `stage`를 모두 `4fc3b4877`로 맞춘 뒤 최신 master를
+  `feature/DL-15828`에 merge했다. merge commit은 `173d9b2de`다. 충돌 6개는 master의
+  환자 사진 질문 제거·LinkTalk 로딩·Lab i18n 변경과 피드백 E2E의 Scan 선택 제어,
+  주문상세 피드백 슬롯, Admin 최신 계약을 함께 보존하는 방향으로 해결했다.
+- 새 개발 Swagger에서 `GET /admin/orders/{orderId}/feedback`이 공식 생성됐다.
+  `orderId` 경로값과 `userId` 쿼리는 필수이고 응답은 단건
+  `ApiResponseOrderFeedbackAdminDto`다. 프로젝트 구조상 generated client를 직접
+  인스턴스화하지 않고 기존 도메인 API wrapper를 유지하되, 추정 범용 응답 타입을
+  새 공식 generated 응답 타입으로 교체했다.
+- 제품 commit은 `ebe51318e` (`[DL-16065] feat: 관리자 피드백 상세 API 계약 반영`)다.
+  `feature/DL-15828`과 원격 branch가
+  `ebe51318e17eff534f98cf05a2aa06d045b1dd8c`에서 동일한 clean 상태다.
+- `feature/DL-15828 → develop` PR
+  [#4554](https://github.com/Innvoaid/dentlink-client/pull/4554)를 생성했다. 확인 시점에
+  OPEN·MERGEABLE이며 Auto Assign과 CodeRabbit 초기 검사가 성공했다. 아직 merge 및
+  develop 배포 QA는 완료 상태가 아니다.
+- Clinic·Lab·Admin과 E2E TypeScript, 대상 shared models ESLint, `git diff --check`를
+  통과했다. push hook은 전체 lint 오류 0개·기존 warning 419개, shared config 3
+  tests·hooks 24 tests와 coverage 비교를 통과했다.
+
 ## 현재 남은 확인과 대기 항목
 
 - 최신 Notion·Analytics 문서가 완료 상태가 아니므로 이후 기획·디자인·이벤트 계약
@@ -1079,8 +1101,7 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   권한 및 picker를 포함한 물리 기기 QA
 - API가 idempotency 또는 중복 클릭에 대해 보장하는 세부 정책. FE는 mutation pending
   중 관련 action을 비활성화하지만 서버 보장은 별도다.
-- 최신 `origin/master`의 6 commits를 feature에 통합할 때 마이페이지·주문상세·query
-  key·font 변경을 의미 단위로 reconcile하는 작업
+- PR #4554 리뷰·merge, develop 배포 확인과 개발서버 통합 QA
 - Clinic WebView와 native app의 화면, navigation, back, safe-area, deep-link 책임
 - 관리자 주문 상세에서 실제 상세 GET을 호출하기 위한 reviewer userId 계약, 실제
   피드백 데이터 기반 주문상세·회원상세·CRM drawer 통합 QA와 권한 검증
@@ -1100,9 +1121,9 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 5. 대상 데이터가 있는 치과 계정 또는 BE fixture를 확보해 목록·주문상세·상세
    drawer·실제 파일 업로드의 GET/POST/PUT 통합 QA를 수행한다. 실제 모바일 브라우저
    Camera/Photo/File picker도 별도 검증한다.
-6. 개발 배포 PR #4546과 임시 통합 환경 정리는 완료됐다. 이후 새 개발서버 반영이
-   필요하면 당시 최신 `develop`에서 별도 통합 branch/worktree를 다시 만들고 원본
-   피드백 branch는 유지한다.
+6. 과거 개발 배포 PR #4546과 임시 통합 환경 정리는 완료됐다. 현재 원본 피드백
+   branch에서 develop으로 직접 올린 PR #4554가 열려 있으므로 리뷰·merge·배포 상태를
+   먼저 확인한다.
 7. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
    API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
 8. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
