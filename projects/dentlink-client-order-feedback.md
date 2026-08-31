@@ -1083,12 +1083,17 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   `feature/DL-15828`과 원격 branch가
   `ebe51318e17eff534f98cf05a2aa06d045b1dd8c`에서 동일한 clean 상태다.
 - `feature/DL-15828 → develop` PR
-  [#4554](https://github.com/Innvoaid/dentlink-client/pull/4554)를 생성했다. 확인 시점에
-  OPEN·MERGEABLE이며 Auto Assign과 CodeRabbit 초기 검사가 성공했다. 아직 merge 및
-  develop 배포 QA는 완료 상태가 아니다.
+  [#4554](https://github.com/Innvoaid/dentlink-client/pull/4554)는
+  `c866cd742`로 merge됐다. develop의 tree는 작업 branch HEAD `ebe51318e`와 동일하다.
+  확인 시점에 Clinic·Lab·Admin 개발 배포 workflow는 진행 중이고 UI S3 workflow는
+  실패 상태다. 개발서버 배포 완료와 통합 QA는 아직 확인되지 않았다.
 - Clinic·Lab·Admin과 E2E TypeScript, 대상 shared models ESLint, `git diff --check`를
   통과했다. push hook은 전체 lint 오류 0개·기존 warning 419개, shared config 3
   tests·hooks 24 tests와 coverage 비교를 통과했다.
+- 상용 v1.85 Clinic·Lab·Admin workflow는 `1113de8b`에서 성공했고 해당 tree는 master
+  `4fc3b4877`과 동일하다. 원격 `stage` branch도 master와 같은 `4fc3b4877`이지만,
+  확인 가능한 마지막 Stage 서버 배포 성공은 이전 `db4dc3c48`이므로 branch 정렬과
+  Stage 서버 재배포 완료를 구분한다.
 
 ## 현재 남은 확인과 대기 항목
 
@@ -1101,7 +1106,8 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   권한 및 picker를 포함한 물리 기기 QA
 - API가 idempotency 또는 중복 클릭에 대해 보장하는 세부 정책. FE는 mutation pending
   중 관련 action을 비활성화하지만 서버 보장은 별도다.
-- PR #4554 리뷰·merge, develop 배포 확인과 개발서버 통합 QA
+- develop Clinic·Lab·Admin 배포 완료 확인과 개발서버 통합 QA. UI S3 실패가 피드백
+  배포에 영향을 주는지 필요 시 별도 확인
 - Clinic WebView와 native app의 화면, navigation, back, safe-area, deep-link 책임
 - 관리자 주문 상세에서 실제 상세 GET을 호출하기 위한 reviewer userId 계약, 실제
   피드백 데이터 기반 주문상세·회원상세·CRM drawer 통합 QA와 권한 검증
@@ -1121,9 +1127,9 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 5. 대상 데이터가 있는 치과 계정 또는 BE fixture를 확보해 목록·주문상세·상세
    drawer·실제 파일 업로드의 GET/POST/PUT 통합 QA를 수행한다. 실제 모바일 브라우저
    Camera/Photo/File picker도 별도 검증한다.
-6. 과거 개발 배포 PR #4546과 임시 통합 환경 정리는 완료됐다. 현재 원본 피드백
-   branch에서 develop으로 직접 올린 PR #4554가 열려 있으므로 리뷰·merge·배포 상태를
-   먼저 확인한다.
+6. 과거 개발 배포 PR #4546과 임시 통합 환경 정리는 완료됐다. 원본 피드백 branch의
+   PR #4554도 develop에 merge됐으므로 Clinic·Lab·Admin 배포 완료 여부와 개발서버
+   QA부터 이어간다. UI S3 workflow 실패는 핵심 앱 배포와 구분해 확인한다.
 7. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
    API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
 8. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
