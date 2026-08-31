@@ -1014,6 +1014,45 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   `/Users/parkjongsun/Repository/dentlink-client-order-feedback` /
   `feature/DL-15828`은 clean·원격 동기화 상태로 유지한다.
 
+## 관리자 조회 UI와 Amplitude 최종 반영 — 2026-08-31
+
+- 최신 개발 Swagger와 전달받은 상세 계약을 기준으로 관리자 피드백 조회를 추가했다.
+  목록은 `GET /admin/orders/feedbacks`에 `orderId` 또는 `userId`를 넘기며, 상세는
+  `GET /admin/orders/{orderId}/feedback?userId={userId}`를 사용한다. 상세의
+  `orderId`와 `userId`는 모두 필수다.
+- 관리자 주문 상세의 Lab Memo 다음에 Admin 표 형식 피드백 목록을 추가했다. 회원
+  상세와 CRM 보드의 회원 상세 오른쪽 영역에는 Orders 다음에 Clinic과 유사한 단일
+  컬럼 카드 목록을 추가했다. 두 진입점은 조작·저장 기능이 없는 공용 read-only
+  drawer를 사용하며 서버 question·answer·file 데이터를 그대로 표시한다.
+- 회원 상세와 CRM은 현재 userId를 알고 있어 카드 클릭 시 상세 GET을 호출한다.
+  주문 상세 목록 응답에는 작성자의 userId가 없어 필수 파라미터를 만들 수 없으므로
+  상세 GET을 추측 호출하지 않고 목록 row 스냅샷으로 drawer를 표시한다. BE가 목록에
+  reviewer userId를 제공하거나 별도 주문상세 계약을 확정하면 실제 상세 GET으로
+  전환한다.
+- Figma 이벤트 가이드 `269:66717`과 하위 주석을 실제 Clinic Web 코드에 재대조했다.
+  `review_feeback_click`과 `feedbackType(Good/Bad)`, `review_detail_click`,
+  `review_edit_click`, 상세 사유·댓글·이미지 업로드·Submit까지 웹 7개 이벤트가
+  반영돼 있다. `reviewdetail_img_upload`는 FEEDBACK 첨부 중 실제 이미지 업로드가
+  성공한 경우에만 한 번 발생하도록 보정했다.
+- Jira `DL-16065`는 구현 중인 범위를 댓글 `43827`에 기록하고 `진행 중`으로
+  전환했다. `DL-16229`에는 Figma·웹 이벤트 검증 결과를 댓글 `43822`, `43829`로
+  기록했다. 앱 전용 `push_click`의 `pushType = 1st Feedback | Order Feedback`이
+  현재 앱 코드에 없어 카드 전체는 `진행 중`을 유지한다.
+- `/crm?officeId=38`에서 `[OFFICE-DEV] E2E Test`가 기본 검색어로 복원될 때 기존
+  공통 `/admin/filters` 호출이 검색어를 URL 문자열에 직접 붙여 네트워크 오류가
+  발생하고, 공통 fetcher가 `error.response`를 무조건 구조 분해해 Next 오류 화면을
+  띄우는 문제를 확인했다. 피드백 API와 무관한 기존 Admin 공통 검색 문제이므로
+  사용자 결정에 따라 이번 변경에서는 수정하지 않았다.
+- Admin·Clinic type과 commit hook의 Clinic/Lab/Admin type이 모두 통과했다. 변경
+  파일 대상 ESLint는 오류 0건이고 기존 warning만 남았다. push hook은 전체 lint
+  오류 0건·기존 warning 418건, shared config 3 tests와 hooks 24 tests, coverage
+  비교를 통과했다.
+- 제품 commit은 `96ab32c45` (`[DL-16065] feat: 관리자 피드백 조회 화면 추가`)와
+  `b9dfaac5e` (`[DL-16229] fix: 피드백 이미지 업로드 이벤트 조건 보정`)이며
+  `feature/DL-15828`과 `origin/feature/DL-15828`이
+  `b9dfaac5e8858233bf24824a0d006e3350baf02a`에서 동일한 clean 상태다. PR과
+  develop/release 반영은 이번 closeout 범위에 포함하지 않았다.
+
 ## 현재 남은 확인과 대기 항목
 
 - 최신 Notion·Analytics 문서가 완료 상태가 아니므로 이후 기획·디자인·이벤트 계약
@@ -1028,10 +1067,11 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 최신 `origin/master`의 6 commits를 feature에 통합할 때 마이페이지·주문상세·query
   key·font 변경을 의미 단위로 reconcile하는 작업
 - Clinic WebView와 native app의 화면, navigation, back, safe-area, deep-link 책임
-- 관리자 화면·권한·API·검증 범위
+- 관리자 주문 상세에서 실제 상세 GET을 호출하기 위한 reviewer userId 계약, 실제
+  피드백 데이터 기반 주문상세·회원상세·CRM drawer 통합 QA와 권한 검증
 - 앱 피드백 알림의 발송 조건, 대상, 문구, deep link, BE/FCM/native 책임
 - Analytics 문서에 이후 추가될 이벤트. 현재 7개 웹 이벤트는 구현됐고
-  `puch_click`은 앱 알림 범위로 분리했다.
+  앱 전용 `push_click`의 `1st Feedback`, `Order Feedback` 프로퍼티가 남아 있다.
 
 ## 다음 시작점
 
