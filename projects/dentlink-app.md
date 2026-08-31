@@ -778,29 +778,71 @@ This is the current resume source for the first local setup of
   physical-device camera/permission QA or backend-generated FCM delivery was
   performed in this pagination closeout.
 
+## DL-16061 Planning And Analytics Reconciliation - 2026-08-31
+
+### Delivered changes and validation
+
+- Branch `feature/DL-16061` is clean and synchronized with its upstream at
+  `a6e28c76e9b6f2a468f8bd5d13578a8445fcc733`.
+- Commit `abac780` changes the Office Profile quick link from
+  `Share Feedback (N)` to the latest confirmed `Pending Reviews (N)` copy.
+- Commit `a6e28c7` records `reviewdetail_img_upload` only after a successful
+  image upload; a generic File upload no longer emits the image event.
+- Focused feedback repository and utility suites pass 18/18. Both changed
+  files pass ESLint and Prettier, and `git diff --check` passes.
+- Office/Lab typechecks still report the same nine unrelated baseline
+  diagnostics. Neither changed file adds a diagnostic.
+- Current feedback attachment policy is maximum five files and 200 MB total.
+  Figma's remaining `2G` text is stale; do not change the unrelated existing
+  order-upload policy that legitimately shows 2 GB.
+- Profile navigation keeps `Case Preferences` because it opens multiple saved
+  preferences. The future notification-setting row should use the singular
+  feature/category label `Case Preference`.
+- The newly deployed admin feedback search API is not an app UI scope. Do not
+  choose or implement an admin screen from this app session.
+
+### Durable backend questions for notification settings
+
+Before adding the new Office Profile notification rows, ask BE only these two
+questions and preserve the current three-row implementation until answered:
+
+1. What exact `pushType` values should `Case Preference` and `Order Feedback`
+   use with `/app/users/own/push-preferences`, and how should the existing
+   GET/POST/PATCH flow create and update them?
+2. Which stable FCM payload field distinguishes `1st Feedback` from recurring
+   `Order Feedback` so the existing `push_click` event can send the confirmed
+   `pushType` property without inferring it from notification copy?
+
+Do not invent new enum values, derive the distinction from title/body text, or
+implement the notification rows before this contract is available. Designer
+and PM decisions are not currently blocking: use 200 MB and the singular
+notification label `Case Preference`; a source-file wording cleanup is enough.
+
 ## Next Starting Point
 
-1. Ask the app developer to include the newest `88066f0` pagination and
-   presentation-scope delta in the existing PR #286 review. If feedback
-   arrives, verify and address only valid findings, then repeat focused checks
-   before any merge decision.
-2. When the backend can send a real notification, verify that
+1. Ask the app developer to review the latest `abac780` and `a6e28c7` delta in
+   PR #286. If feedback arrives, verify and address only valid findings before
+   any merge decision.
+2. Ask BE the two notification-setting questions recorded above. After the
+   contract is confirmed, implement only the new Profile notification rows and
+   the `push_click` property mapping supported by that contract.
+3. When the backend can send a real notification, verify that
    `data.deeplink` contains `/my/feedback?orderId={orderId}` and test actual
    cold, warm, background and duplicate taps. Do not add `type` or `webPath`
    unless the shared contract changes explicitly.
-3. The Android Good/Bad POST and list transition now have direct evidence.
-   When safe eligible data is provided, verify changed-detail PUT, file
+4. The Android Good/Bad POST and list transition have direct evidence. When
+   safe eligible data is provided, verify changed-detail PUT, file
    upload/removal and remaining cache transitions. Validate Android first,
    then iOS or a physical device for camera and permission behavior.
-4. Treat a fresh iOS native build as a separate app-maintenance scope. The
+5. Treat a fresh iOS native build as a separate app-maintenance scope. The
    installed simulator binary proves current JavaScript behavior but does not
    resolve the committed MLImage simulator architecture constraint.
-5. When the app team accepts the full generated Swagger drift, regenerate the
+6. When the app team accepts the full generated Swagger drift, regenerate the
    whole model in a separate reviewed commit and replace the temporary feedback
    transport types. Do not partially hand-edit generated files.
-6. Continue to run servers from the integrated terminal of the IDE opened for
+7. Continue to run servers from the integrated terminal of the IDE opened for
    the exact app project. If that IDE is not prepared, ask the user before
    starting Metro directly elsewhere.
-7. For later feature implementation, refresh this context and live Git first,
+8. For later feature implementation, refresh this context and live Git first,
    then verify the active branch, Jira/Figma/API and closest production pattern.
    Keep shared app commits and pushes behind explicit user authorization.
