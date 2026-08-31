@@ -1090,6 +1090,9 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - Clinic·Lab·Admin과 E2E TypeScript, 대상 shared models ESLint, `git diff --check`를
   통과했다. push hook은 전체 lint 오류 0개·기존 warning 419개, shared config 3
   tests·hooks 24 tests와 coverage 비교를 통과했다.
+- Jira `DL-16065`에는 최종 구현·검증·develop merge와 남은 실제 데이터 QA 및 주문
+  상세 목록의 reviewer userId 제약을 댓글 `43835`로 기록하고, 다른 웹 FE 카드와
+  동일하게 `Ready for Deploy`로 전환했다.
 - 상용 v1.85 Clinic·Lab·Admin workflow는 `1113de8b`에서 성공했고 해당 tree는 master
   `4fc3b4877`과 동일하다. 원격 `stage` branch도 master와 같은 `4fc3b4877`이지만,
   확인 가능한 마지막 Stage 서버 배포 성공은 이전 `db4dc3c48`이므로 branch 정렬과
