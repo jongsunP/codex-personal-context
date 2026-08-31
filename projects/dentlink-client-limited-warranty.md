@@ -29,21 +29,24 @@
 - Lab의 일반 UI 문구만 en/ko i18n 키에 추가했고 Google Sheet에도 동기화했다.
 - Lab 확장 사이드바의 푸터 항목 증가에 맞춰 메뉴 높이 계산을 조정했다.
 - 기존 Terms·Privacy 정책 페이지와 내용은 변경하지 않았다.
+- CodeRabbit이 확인한 정책 본문의 명백한 문법·철자 오류 5곳은 법적 의미를 바꾸지
+  않는 범위에서 교정했다.
 
 ## 현재 체크포인트 — 2026-08-31
 
 - 제품 repository: `/Users/parkjongsun/Repository/dentlink-client`
 - 제품 branch/upstream: `feature/DL-16258` / `origin/feature/DL-16258`
 - 제품 commit:
-  `b3a7163833c3061d57cd05f9206a0d4dd9afd3d9`
-  (`[DL-16258] feat: Dentlink Limited Warranty 페이지 및 진입점 추가`)
+  `8d3c8ad1ef5247f42fa68084af8008d7b02fa5a9`
+  (`[DL-16258] fix: Limited Warranty 영문 오탈자 수정`)
+  - 최초 기능 commit: `b3a7163833c3061d57cd05f9206a0d4dd9afd3d9`
 - release 전달 PR:
   [#4556](https://github.com/Innvoaid/dentlink-client/pull/4556)
   - head: `feature/DL-16258`
   - base: `release/v1.86.0`
   - 마지막 live 확인: open, ready for review, mergeable, review required
   - Auto Assign: 성공
-  - CodeRabbit: 진행 중
+  - CodeRabbit: 재검토 성공, 미해결 review thread 0개
 - 메인 worktree는 clean한 `master`이며 `origin/master`와 동기화됐다.
 - feature branch는 clean하고 원격과 동기화됐으며 PR merge 전이라 로컬과 원격 모두
   보존했다.
@@ -77,9 +80,8 @@
 
 ## 다음 시작점
 
-1. PR #4556의 CodeRabbit 완료와 unresolved review thread를 live로 확인한다.
-2. 사용자가 CodeRabbit 리뷰 확인을 요청하면 유효한 지적을 반영하거나 기술적 근거로
-   답변하고 thread를 resolve한 뒤 필요한 commit과 push까지 처리한다.
+1. PR #4556의 동료 review와 merge 상태를 live로 확인한다.
+2. 새 리뷰가 추가되면 현재 코드에 유효한지 검토하고 명시된 권한 범위에서 처리한다.
 3. 동료 승인 후 `release/v1.86.0` merge, 스테이징 배포와 실제 Clinic/Lab 경로 및
    주문·리메이크 진입점 QA를 각각 별도 상태로 확인한다.
 4. merge 후 사용자가 정리를 요청하면 로컬 feature branch를 안전하게 제거하고
