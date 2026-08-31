@@ -167,3 +167,15 @@ For detailed current state, read:
   `dentlink-app` 저장소·세션에서 진행한다.
 - Personal current checkpoint:
   `projects/dentlink-client-order-feedback.md`
+
+### Dentlink Limited Warranty
+
+- Shared repository: `https://github.com/Innvoaid/dentlink-client`
+- Jira: `DL-16258`
+- Current state: 과거 `frankieTemp/DL-10132`에서 보류됐던 Warranty 작업을 최신
+  `master` 기준 `feature/DL-16258`로 이식하고 현재 프로젝트 관례에 맞게 정리했다.
+  제품 commit `b3a716383`은 원격과 동기화됐고, `release/v1.86.0` 대상 PR #4556은
+  open·mergeable·review required 상태다. 메인 worktree는 clean한 `master`로
+  복귀했으며 PR merge 전까지 로컬/원격 feature branch를 유지한다.
+- Personal current checkpoint:
+  `projects/dentlink-client-limited-warranty.md`
