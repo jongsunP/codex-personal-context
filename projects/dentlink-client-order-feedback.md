@@ -1053,6 +1053,21 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   `b9dfaac5e8858233bf24824a0d006e3350baf02a`에서 동일한 clean 상태다. PR과
   develop/release 반영은 이번 closeout 범위에 포함하지 않았다.
 
+## Figma 피드백 목록 빈 상태 문구 반영 — 2026-08-31
+
+- Figma `160:41770`의 PC To Review 0건 상태와 연결된 미해결 댓글 `#1905944265`를
+  확인해 To Review 빈 상태 문구를 `No orders to review` / `Orders will appear here
+  when available`로 변경했다. 별도 변경 요청이 없는 Reviewed 빈 상태 문구는 기존
+  `No reviews to show` / `Reviews will appear here when available.`를 유지했다.
+- 기존 `FeedbackPageContent`와 공용 `EmptyDataInfo`를 그대로 사용했고 신규 자산이나
+  레이아웃 변경은 없다. Clinic type, 대상 파일 ESLint, `git diff --check`, commit
+  hook의 Clinic/Lab/Admin type을 통과했다. push hook은 전체 lint 오류 0개·기존
+  warning 418개와 shared config 3 tests·hooks 24 tests·coverage 비교를 통과했다.
+- 제품 commit은 `3895d2da5` (`[DL-16057] fix: 피드백 빈 상태 문구 수정`)이며
+  `feature/DL-15828`과 `origin/feature/DL-15828`이
+  `3895d2da563c6edcdd6c7e5bcd646b21540c0ec9`에서 동일한 clean 상태다. PR과 배포
+  반영은 이번 closeout 범위에 포함하지 않았다.
+
 ## 현재 남은 확인과 대기 항목
 
 - 최신 Notion·Analytics 문서가 완료 상태가 아니므로 이후 기획·디자인·이벤트 계약
