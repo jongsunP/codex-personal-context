@@ -147,7 +147,7 @@ For detailed current state, read:
   버튼 아래에 노출하도록 수정했다. `feature/DL-16269`의 commit `e6cb4a3fc`이
   원격과 동기화됐고, 최신 `origin/master`에서 생성한 `release/v1.85.1` 대상
   PR #4558이 open·review required 상태다. 사용자가 기능과 기본 배치를 로컬에서
-  확인했으며, 마지막 30px 간격 조정은 PR 전 정적 검증과 빌드를 통과했다.
+  확인했으며, 마지막 30px 간격을 포함한 최종 화면 노출도 로컬에서 확인했다.
 - Personal current checkpoint:
   `projects/dentlink-client-admin-case-preference.md`
 

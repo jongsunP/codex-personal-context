@@ -46,9 +46,8 @@
 
 ## 검증과 상태 경계
 
-- 사용자 로컬 확인: 기능과 기본 우측 배치는 정상으로 확인했다. 이후 요청으로
-  버튼-C.P 간격을 12px에서 30px로 조정했으며 최종 간격의 별도 사용자 재확인 여부는
-  아직 기록되지 않았다.
+- 사용자 로컬 확인: Admin 주문 화면에서 기능과 우측 배치, 최종 30px 간격을 포함한
+  화면 노출을 정상으로 확인했다.
 - `git diff --check` 통과.
 - Clinic, Lab, Admin TypeScript 검사 통과.
 - Admin Next.js production build 통과. 기존 TypeScript 최소 권장 버전 및
@@ -66,7 +65,6 @@
 
 1. PR #4558의 CodeRabbit 및 동료 리뷰 상태를 live로 확인한다.
 2. CodeRabbit 리뷰 처리는 사용자가 명시적으로 요청할 때 전체 review cycle로 진행한다.
-3. 필요하면 최종 30px 간격을 로컬에서 한 번 더 확인한다.
-4. 승인 후 `release/v1.85.1` merge와 배포·QA는 각각 별도 상태로 관리한다.
-5. merge 후 사용자가 요청하면 메인 checkout을 `master`로 복귀하고 로컬 feature
+3. 승인 후 `release/v1.85.1` merge와 배포·QA는 각각 별도 상태로 관리한다.
+4. merge 후 사용자가 요청하면 메인 checkout을 `master`로 복귀하고 로컬 feature
    branch를 정리한다.
