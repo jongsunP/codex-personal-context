@@ -22,16 +22,18 @@
 - 메인 checkout: `/Users/parkjongsun/Repository/dentlink-client`
 - branch/upstream: `feature/DL-16269` / `origin/feature/DL-16269`
 - base: `origin/master` `4fc3b4877458d99439d1474aff03b9eff17ab34a`
-- product commit:
-  `e6cb4a3fce4858f4aea184a0d796d5a2eafa492f`
-  `[DL-16269] fix: 관리자 주문서 Case Preference 위치 개선`
+- product commits:
+  - `e6cb4a3fce4858f4aea184a0d796d5a2eafa492f`
+    `[DL-16269] fix: 관리자 주문서 Case Preference 위치 개선`
+  - `be31e35967417b05de0b03fe1983d88fac7b6ac1`
+    `[DL-16269] fix: Case Preference 리뷰 반영`
 - release branch: `release/v1.85.1`
   - `origin/master`와 동일한 `4fc3b4877458d99439d1474aff03b9eff17ab34a`에서
     원격 브랜치를 신규 생성했다.
 - release PR: [#4558](https://github.com/Innvoaid/dentlink-client/pull/4558)
   - base/head: `release/v1.85.1` <- `feature/DL-16269`
-  - 마지막 live 확인: open, ready for review, mergeable, review required
-  - Auto Assign 성공, CodeRabbit pending
+  - 마지막 live 확인: open, review required
+  - CodeRabbit 재검토 성공, unresolved review thread 0개
 
 ## 구현 내용
 
@@ -55,6 +57,17 @@
 - Clinic/Lab/Admin 전체 lint는 오류 0개, 저장소 기존 warning 합계 419개로 통과했다.
 - push hook에서 shared config 3개, shared hook 24개, 합계 27개 테스트와 coverage
   검사가 통과했다.
+- CodeRabbit의 유효한 지적 2건을 반영했다. OPTION 단계 C.P는 현재 선택된
+  dentist userId를 우선 사용하고 직접 진입·새로고침 시 기존 employee detail 조회를
+  fallback으로 유지한다. Product 단계 슬롯은 오류·안내 메시지보다 앞에 배치해 액션
+  버튼 아래 30px 간격을 유지한다.
+- 후속 커밋에서 Clinic/Lab/Admin TypeScript, 전체 lint 오류 0개(기존 warning 419개),
+  Admin production build, 포맷, `git diff --check`, shared 27개 테스트와 coverage hook이
+  통과했다. shared UI 단독 lint는 저장소의 Storybook ESLint 플러그인 중복 버전 충돌로
+  실행 자체가 막혔으며 Admin 변경 파일 lint는 통과했다.
+- CodeRabbit 재검토의 세미콜론 제거 및 function 선언 전환 nitpick은 저장소
+  `.prettierrc`의 `semi: true` 및 인접 Order 컴포넌트의 `const` 패턴과 충돌해 적용하지
+  않고 PR에 근거를 남겼다.
 - 공용 UI standalone `tsc`는 이번 변경과 무관한 기존 generated icon, story 및 누락
   모듈 오류가 있어 독립 기준으로는 통과하지 않는다. 실제 세 앱 TypeScript와 Admin
   build로 이번 prop 연결을 검증했다.
@@ -63,8 +76,7 @@
 
 ## 다음 시작점
 
-1. PR #4558의 CodeRabbit 및 동료 리뷰 상태를 live로 확인한다.
-2. CodeRabbit 리뷰 처리는 사용자가 명시적으로 요청할 때 전체 review cycle로 진행한다.
-3. 승인 후 `release/v1.85.1` merge와 배포·QA는 각각 별도 상태로 관리한다.
-4. merge 후 사용자가 요청하면 메인 checkout을 `master`로 복귀하고 로컬 feature
+1. PR #4558의 동료 리뷰와 승인 상태를 live로 확인한다.
+2. 승인 후 `release/v1.85.1` merge와 배포·QA는 각각 별도 상태로 관리한다.
+3. merge 후 사용자가 요청하면 메인 checkout을 `master`로 복귀하고 로컬 feature
    branch를 정리한다.
