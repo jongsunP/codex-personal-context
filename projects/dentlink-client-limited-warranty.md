@@ -37,10 +37,14 @@
 - 제품 repository: `/Users/parkjongsun/Repository/dentlink-client`
 - 제품 branch/upstream: `feature/DL-16258` / `origin/feature/DL-16258`
 - 제품 commit:
-  `a7d0d92b6ce8e15d2786b0bfcdd07268b78703e4`
-  (`[DL-16258] fix: i18n 시트 사용처 자동 갱신`)
+  `e5d6d3ad90b2b6bc3013ea43360c654ef759b92e`
+  (`[DL-16258] fix: i18n 시트 복구 경로 보완`)
   - 최초 기능 commit: `b3a7163833c3061d57cd05f9206a0d4dd9afd3d9`
   - 영문 교정 commit: `8d3c8ad1ef5247f42fa68084af8008d7b02fa5a9`
+  - 시트 사용처 자동 갱신 commit:
+    `a7d0d92b6ce8e15d2786b0bfcdd07268b78703e4`
+  - 시트 단일 쓰기 경로 통합 commit:
+    `43e2509190a3724e1a4c05149fa115960acdd1ed`
 - release 전달 PR:
   [#4556](https://github.com/Innvoaid/dentlink-client/pull/4556)
   - head: `feature/DL-16258`
@@ -65,8 +69,12 @@
 - Warranty 번역 3개는 Sheet의 두 운영 탭에서 번역값과 문구 ID뿐 아니라 페이지,
   화면 상태, 경로, 사용 상태까지 채워진 것을 공개 read-back으로 확인했다. 캡처와
   위치 번호는 runtime 관찰이 없어 비어 있으며 정상이다.
-- 앞으로 `export:i18n -- --write`가 정적 사용처 감사를 자동 실행하도록 프로젝트
-  스크립트와 i18n 운영 문서를 갱신했다.
+- 앞으로 `export:i18n -- --write`가 실제 쓰기 전에 정적 사용처 감사를 검증하고 번역과
+  두 운영 탭을 하나의 제어된 경로로 갱신하도록 프로젝트 스크립트와 i18n 운영 문서를
+  갱신했다. 쓰기나 최종 검증이 실패하면 저장해 둔 이전 행으로 두 탭을 각각 독립
+  복구하며, 한 탭의 복구 실패가 다른 탭의 복구 시도를 막지 않는다.
+- CodeRabbit의 시트 부분 갱신 및 복구 안전성 지적 2건을 모두 반영했다. 최종
+  CodeRabbit 재검토는 성공했고 미해결 review thread는 0개다.
 - push hook은 전체 앱 lint 오류 0개와 shared config 3건, shared hooks 24건의
   테스트를 통과했다. 전체 lint의 기존 warning은 비차단 baseline이다.
 - 사용자가 코드와 정책 범위를 확인했다. 실제 release 환경 QA와 배포는 아직 완료로

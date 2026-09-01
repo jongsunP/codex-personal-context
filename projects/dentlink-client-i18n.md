@@ -47,10 +47,10 @@ take precedence if later work changes them.
 
 ## Automatic Sheet Metadata Rule — 2026-09-01
 
-- `pnpm export:i18n -- --write` is the canonical new-key write command. After
-  writing locale values, it automatically runs the static usage audit and
-  rewrites both operational tabs with the same canonical key order and
-  metadata.
+- `pnpm export:i18n -- --write` is the canonical new-key write command. It
+  validates the static usage audit before any write, then updates locale values
+  and both operational tabs through one controlled write path with the same
+  canonical key order and metadata.
 - Every new key receives every field the repository can derive from code:
   representative page, screen state, route, usage status, namespace, key, and
   usage ID. Screenshot and marker remain empty until a real runtime observation
@@ -58,6 +58,10 @@ take precedence if later work changes them.
 - Existing screenshot and marker data are preserved when the automatic static
   audit runs. A runtime observation may be supplied explicitly when those
   fields must be added or refreshed.
+- If a write or final verification fails, the command attempts to restore both
+  operational tabs independently from the rows fetched before the write. A
+  failure restoring one tab does not prevent restoration of the other, and all
+  failures are aggregated for diagnosis.
 - English/Korean and the two role-owned review-request columns keep their
   documented human ownership. Generated/read-only metadata must not be edited
   manually. If the documented command is used and generated columns are not
