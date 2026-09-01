@@ -37,14 +37,9 @@
 - 제품 repository: `/Users/parkjongsun/Repository/dentlink-client`
 - 제품 branch/upstream: `feature/DL-16258` / `origin/feature/DL-16258`
 - 제품 commit:
-  `e5d6d3ad98b0a0420258f80198943c6f7d7a6244`
-  (`[DL-16258] fix: i18n 시트 복구 경로 보완`)
+  `8d3c8ad1ef5247f42fa68084af8008d7b02fa5a9`
+  (`[DL-16258] fix: Limited Warranty 영문 오탈자 수정`)
   - 최초 기능 commit: `b3a7163833c3061d57cd05f9206a0d4dd9afd3d9`
-  - 영문 교정 commit: `8d3c8ad1ef5247f42fa68084af8008d7b02fa5a9`
-  - 시트 사용처 자동 갱신 commit:
-    `a7d0d92b6ce8e15d2786b0bfcdd07268b78703e4`
-  - 시트 단일 쓰기 경로 통합 commit:
-    `43e2509190a3724e1a4c05149fa115960acdd1ed`
 - release 전달 PR:
   [#4556](https://github.com/Innvoaid/dentlink-client/pull/4556)
   - head: `feature/DL-16258`
@@ -69,12 +64,11 @@
 - Warranty 번역 3개는 Sheet의 두 운영 탭에서 번역값과 문구 ID뿐 아니라 페이지,
   화면 상태, 경로, 사용 상태까지 채워진 것을 공개 read-back으로 확인했다. 캡처와
   위치 번호는 runtime 관찰이 없어 비어 있으며 정상이다.
-- 앞으로 `export:i18n -- --write`가 실제 쓰기 전에 정적 사용처 감사를 검증하고 번역과
-  두 운영 탭을 하나의 제어된 경로로 갱신하도록 프로젝트 스크립트와 i18n 운영 문서를
-  갱신했다. 쓰기나 최종 검증이 실패하면 저장해 둔 이전 행으로 두 탭을 각각 독립
-  복구하며, 한 탭의 복구 실패가 다른 탭의 복구 시도를 막지 않는다.
-- CodeRabbit의 시트 부분 갱신 및 복구 안전성 지적 2건을 모두 반영했다. 최종
-  CodeRabbit 재검토는 성공했고 미해결 review thread는 0개다.
+- i18n Sheet 자동화 스크립트와 운영 README 변경은 이 branch와 PR에서 제거했다.
+  공통 운영 개선은 독립 branch `feature/i18n-sheet-workflow`와 PR #4557로 이동했으며,
+  Warranty가 다시 홀드되어도 별도로 검토·merge할 수 있다.
+- Warranty PR의 CodeRabbit 검토는 성공했고 미해결 review thread는 0개다. 이전에
+  이 PR에 달렸던 Sheet 운영 리뷰는 분리 후 outdated·resolved 상태다.
 - push hook은 전체 앱 lint 오류 0개와 shared config 3건, shared hooks 24건의
   테스트를 통과했다. 전체 lint의 기존 warning은 비차단 baseline이다.
 - 사용자가 코드와 정책 범위를 확인했다. 실제 release 환경 QA와 배포는 아직 완료로
@@ -86,6 +80,8 @@
   필요한 기능만 이식했다. 원격 `frankieTemp/DL-10132`는 보존했다.
 - 현재 요구 범위는 Warranty 신규 페이지와 진입점뿐이다. 과거 branch의 Terms 변경이나
   현재 Terms·Privacy 내용 수정은 포함하지 않는다.
+- Warranty branch에는 제품 기능과 Warranty 전용 Lab 번역 키만 남겼다. 공통 i18n
+  운영 코드를 다시 합치지 않는다.
 - Lab 모바일 하단 내비게이션에는 법률 문서 푸터 진입점을 새로 만들지 않았다. 과거
   요구와 구현은 Clinic Footer, 주문 최종 단계, 리메이크 최종 단계를 명시했고 Lab의
   기존 푸터는 데스크톱 확장 사이드바에 있다.

@@ -72,6 +72,32 @@ take precedence if later work changes them.
   `lab/i18n/catalog/README.md`; this personal checkpoint records the decision
   but is not the implementation source of truth.
 
+### Delivery split from Warranty
+
+- The shared implementation was separated from DL-16258 so a later Warranty
+  hold or product change cannot block the generic i18n operating improvement.
+- Branch/upstream: `feature/i18n-sheet-workflow` /
+  `origin/feature/i18n-sheet-workflow`
+- Latest commit: `eebf35db3d44cc3e4d586ab452e48baf70a58033`
+  (`fix: i18n 시트 최종 검증 복구 범위 보완`)
+  - initial consolidated commit: `6cc94d0d5a312fe6c02395375685c9ba5722d467`
+- Release PR: [#4557](https://github.com/Innvoaid/dentlink-client/pull/4557)
+  targets `release/v1.86.0`; last live check was open, mergeable, and review
+  required. CodeRabbit passed with zero unresolved review threads.
+- The PR changes only `lab/i18n/catalog/README.md`,
+  `lab/scripts/i18n/audit-usage.js`, and
+  `lab/scripts/i18n/export-locales-to-sheet.js`.
+- Final verification includes catalog read-back, role-view formula links, and
+  misplaced review-request checks inside the same rollback boundary. A mocked
+  failure confirmed that final validation failure restores both tabs.
+- On this independent branch, static usage audit passes with 1,581 local keys,
+  zero unknown literals, and the existing eight unresolved indirect keys. Live
+  Sheet preview reports exactly three stale keys because the still-open
+  Warranty PR's three keys were already exported. This is external shared-Sheet
+  state, not a product-code dependency. If Warranty is actually put on hold,
+  reconcile those three Sheet rows separately before treating `check:i18n` on
+  the release-only tree as green.
+
 ## Historical Delivery Checkpoint — 2026-08-21
 
 Current release integration plan:
