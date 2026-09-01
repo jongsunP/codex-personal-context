@@ -51,8 +51,9 @@
 - feature branch는 clean하고 원격과 동기화됐으며 PR merge 전이라 로컬과 원격 모두
   보존했다.
 - 원격 `develop`과 `stage`는 배포 준비 과정에서 `origin/master` `4fc3b4877` 기준으로
-  재생성됐다. PR #4556이 아직 open이고 `release/v1.86.0`도 같은 `4fc3b4877`이므로
-  `release/v1.86.0 → stage` PR은 변경분이 없어 아직 생성할 수 없다.
+  재생성됐다. 실제 스테이징 대상은 `release/v1.85.1`로 정정됐으며, 해당 release를
+  `stage`에 반영하는 PR #4560이 open·mergeable 상태다. PR #4556의
+  `release/v1.86.0` 전달은 이번 스테이징 배포와 별개다.
 
 ## 검증과 상태 경계
 
@@ -95,8 +96,8 @@
 
 1. PR #4556의 동료 review와 merge 상태를 live로 확인한다.
 2. 새 리뷰가 추가되면 현재 코드에 유효한지 검토하고 명시된 권한 범위에서 처리한다.
-3. 동료 승인 후 `release/v1.86.0`에 merge하고, release와 stage 사이에 실제 diff가
-   생기면 스테이징 배포 PR을 생성한다. 이후 실제 Clinic/Lab 경로 및 주문·리메이크
-   진입점 QA를 각각 별도 상태로 확인한다.
+3. 동료 승인 후 `release/v1.86.0`에 merge한다. `release/v1.86.0`의 스테이징 반영은
+   이후 사용자가 해당 release 배포를 요청할 때 별도로 진행한다. 실제 Clinic/Lab
+   경로 및 주문·리메이크 진입점 QA도 각각 별도 상태로 확인한다.
 4. merge 후 사용자가 정리를 요청하면 로컬 feature branch를 안전하게 제거하고
    원격 branch 보존 여부는 그때 지시에 따른다.

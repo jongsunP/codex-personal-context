@@ -189,7 +189,8 @@ For detailed current state, read:
   `feature/i18n-sheet-workflow`의 최신 commit `eebf35db3`과 PR #4557로 분리했다.
   i18n 운영 PR #4557은 `release/v1.85.1`에 merge됐다. Warranty PR #4556은
   `release/v1.86.0` 대상 open 상태이며 CodeRabbit 최종 검토 성공·미해결 thread 0개다.
-  원격 `stage`는 `master`와 같은 `4fc3b4877`로 재생성됐지만 release에도 아직 변경이
-  없어 스테이징 PR은 생성 대기 상태다.
+  원격 `stage`는 `master`와 같은 `4fc3b4877`로 재생성됐고, 실제 스테이징 대상인
+  `release/v1.85.1`을 반영하는 PR #4560이 open·mergeable 상태다. Warranty의
+  `release/v1.86.0` 전달은 이 스테이징 배포와 별개다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
