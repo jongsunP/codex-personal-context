@@ -32,14 +32,15 @@
 - CodeRabbit이 확인한 정책 본문의 명백한 문법·철자 오류 5곳은 법적 의미를 바꾸지
   않는 범위에서 교정했다.
 
-## 현재 체크포인트 — 2026-08-31
+## 현재 체크포인트 — 2026-09-01
 
 - 제품 repository: `/Users/parkjongsun/Repository/dentlink-client`
 - 제품 branch/upstream: `feature/DL-16258` / `origin/feature/DL-16258`
 - 제품 commit:
-  `8d3c8ad1ef5247f42fa68084af8008d7b02fa5a9`
-  (`[DL-16258] fix: Limited Warranty 영문 오탈자 수정`)
+  `a7d0d92b6ce8e15d2786b0bfcdd07268b78703e4`
+  (`[DL-16258] fix: i18n 시트 사용처 자동 갱신`)
   - 최초 기능 commit: `b3a7163833c3061d57cd05f9206a0d4dd9afd3d9`
+  - 영문 교정 commit: `8d3c8ad1ef5247f42fa68084af8008d7b02fa5a9`
 - release 전달 PR:
   [#4556](https://github.com/Innvoaid/dentlink-client/pull/4556)
   - head: `feature/DL-16258`
@@ -61,6 +62,11 @@
   plugin 중복 문제는 이번 변경과 별개다.
 - `export:i18n --write`, `generate:i18n`, `check:i18n`을 통과했다. i18n audit의 기존
   unresolved key 8건은 변경 전후 동일하다.
+- Warranty 번역 3개는 Sheet의 두 운영 탭에서 번역값과 문구 ID뿐 아니라 페이지,
+  화면 상태, 경로, 사용 상태까지 채워진 것을 공개 read-back으로 확인했다. 캡처와
+  위치 번호는 runtime 관찰이 없어 비어 있으며 정상이다.
+- 앞으로 `export:i18n -- --write`가 정적 사용처 감사를 자동 실행하도록 프로젝트
+  스크립트와 i18n 운영 문서를 갱신했다.
 - push hook은 전체 앱 lint 오류 0개와 shared config 3건, shared hooks 24건의
   테스트를 통과했다. 전체 lint의 기존 warning은 비차단 baseline이다.
 - 사용자가 코드와 정책 범위를 확인했다. 실제 release 환경 QA와 배포는 아직 완료로

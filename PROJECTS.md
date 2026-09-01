@@ -174,9 +174,10 @@ For detailed current state, read:
 - Jira: `DL-16258`
 - Current state: 과거 `frankieTemp/DL-10132`에서 보류됐던 Warranty 작업을 최신
   `master` 기준 `feature/DL-16258`로 이식하고 현재 프로젝트 관례에 맞게 정리했다.
-  최신 제품 commit `8d3c8ad1e`은 원격과 동기화됐고, `release/v1.86.0` 대상 PR
-  #4556은 open·mergeable·review required 상태다. CodeRabbit 재검토는 성공했고
-  미해결 review thread는 0개다. 메인 worktree는 clean한 `master`로 복귀했으며 PR
-  merge 전까지 로컬/원격 feature branch를 유지한다.
+  최신 제품 commit `a7d0d92b6`은 원격과 동기화됐고, `release/v1.86.0` 대상 PR
+  #4556은 open·mergeable·review required 상태다. Warranty 번역 3개는 실제 Sheet에
+  페이지·화면 상태·경로·사용 상태까지 반영됐고, 이후 `export:i18n -- --write`가 같은
+  메타데이터 감사를 자동 실행하도록 프로젝트 스크립트와 운영 문서를 갱신했다. 메인
+  worktree는 clean한 `master`로 복귀시키고 PR merge 전까지 feature branch를 유지한다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`

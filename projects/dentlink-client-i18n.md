@@ -34,20 +34,39 @@ take precedence if later work changes them.
 
 - Normal Lab development and builds use the committed locale JSON and do not
   require Google Sheet credentials or Sheet environment variables.
-- Sheet synchronization commands (`generate:i18n`, `check:i18n`, and
-  `export:i18n`) require Sheet configuration and authentication.
-- The current implementation reads `SHEETS_SPREADSHEET_ID` from the local
-  environment. `SHEETS_SHEET_NAME` already falls back to
-  `i18n.manifest.json`'s `sheet.defaultName`.
+- The default spreadsheet ID and operational tab names are tracked in
+  `lab/i18n/i18n.manifest.json`. `SHEETS_SPREADSHEET_ID` and
+  `SHEETS_SHEET_NAME` are optional overrides for a temporary test Sheet.
+- `generate:i18n`, `check:i18n`, `export:i18n` preview, and `audit:i18n`
+  preview use the public read path and need no local credentials.
 - Authentication priority is `GOOGLE_SERVICE_ACCOUNT_KEY`, then the ignored
   local `lab/scripts/i18n/service-account.json`, then gcloud Application
-  Default Credentials. Read/check operations need viewer access; Sheet writes
-  need editor access.
-- With the current code, a developer who runs Sheet commands should use an
-  ignored `lab/.env.local`; a shell-only `export` is less convenient because it
-  is session-scoped. The preferred future team improvement is to put the
-  non-secret spreadsheet ID in the tracked manifest as a default while keeping
-  an environment override. Credentials must remain local or in CI secrets.
+  Default Credentials. Only `export:i18n -- --write` and
+  `audit:i18n -- --write-sheet` need editor authentication. Credentials remain
+  local or in CI secrets and must not be committed.
+
+## Automatic Sheet Metadata Rule — 2026-09-01
+
+- `pnpm export:i18n -- --write` is the canonical new-key write command. After
+  writing locale values, it automatically runs the static usage audit and
+  rewrites both operational tabs with the same canonical key order and
+  metadata.
+- Every new key receives every field the repository can derive from code:
+  representative page, screen state, route, usage status, namespace, key, and
+  usage ID. Screenshot and marker remain empty until a real runtime observation
+  exists; this is intentional rather than incomplete data.
+- Existing screenshot and marker data are preserved when the automatic static
+  audit runs. A runtime observation may be supplied explicitly when those
+  fields must be added or refreshed.
+- English/Korean and the two role-owned review-request columns keep their
+  documented human ownership. Generated/read-only metadata must not be edited
+  manually. If the documented command is used and generated columns are not
+  manually overridden, the same workflow applies regardless of developer,
+  device, worktree, or AI session.
+- The shared project owns and enforces this rule in
+  `lab/scripts/i18n/export-locales-to-sheet.js` and
+  `lab/i18n/catalog/README.md`; this personal checkpoint records the decision
+  but is not the implementation source of truth.
 
 ## Historical Delivery Checkpoint — 2026-08-21
 
