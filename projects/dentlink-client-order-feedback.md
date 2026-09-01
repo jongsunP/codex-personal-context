@@ -1149,6 +1149,34 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 원격 branch push hook은 전체 lint를 실행했고 오류 없이 기존 warning만 출력했다.
   이번 단계는 제품 코드 수정 없이 환경 branch와 PR만 조작한 배포 준비 상태다.
 
+## PR #4555 CodeRabbit 리뷰 정리 — 2026-09-01
+
+- release PR [#4555](https://github.com/Innvoaid/dentlink-client/pull/4555)의 미해결
+  CodeRabbit 스레드 10개를 현재 코드·Figma·개발 Swagger와 대조했다. 유효한 6건은
+  수정하고, 나머지 4건은 현재 경계와 계약상 변경하지 않는 근거를 각 스레드에 남긴
+  뒤 모두 해결 처리했다.
+- 수정한 항목은 열린 상세 drawer의 주문 전환 시 이전 주문 스테이징 업로드 정리,
+  Good 단독 평점의 Figma 배너 조합, 닫힌 My Office 수정 모달의 조건부 마운트,
+  disabled feedback query의 `isLoading` 판정, E2E 피드백 시나리오 skip 조건 문서화,
+  모바일 주문 상세에서 피드백만 있을 때 생기던 오른쪽 196px 빈 영역 제거다.
+- 제출 실패는 주문 상세·피드백 목록 호출부가 이미 단일 오류 toast를 표시한 뒤
+  rethrow하므로 drawer에서 중복 처리하지 않았다. generated `Admin.ts`는 수동 수정하지
+  않고 `FeedbackAdminListQuery` union을 쓰는 도메인 wrapper에서 필수 필터를 보장한다.
+  `reviewerName` null 설명과 실제 Swagger schema의 불일치는 BE Swagger 수정 대상이며,
+  `reviewerUserId` 누락은 임의 fallback이나 행 제거 대신 명시적 상세 로드 실패로
+  드러내는 현재 guard를 유지한다.
+- 제품 commit은 `85076f7c4` (`[DL-15828] fix: 코드리뷰 피드백 반영`)이며
+  `feature/DL-15828`과 `origin/feature/DL-15828`이
+  `85076f7c43d636e779c113e59640f8504430c15d`에서 동일한 clean 상태다. PR #4555의
+  CodeRabbit 재검토는 성공했고 신규 actionable comment와 미해결 스레드는 0개다.
+  PR은 open·mergeable이고 사람의 review는 아직 필요하다.
+- commit hook의 Clinic·Lab·Admin typecheck와 push hook의 전체 lint 오류 0개·기존
+  warning 419개, shared config 3 tests·hooks 24 tests·coverage 비교를 통과했다.
+  대상 Clinic ESLint도 오류 0개였고 기존 warning 2개만 남았다. shared UI 단독 ESLint는
+  기존 `eslint-plugin-storybook` 중복 해석 문제로 실행되지 않았지만, 해당 변경은 Clinic
+  typecheck와 세 앱 commit hook typecheck를 통과했다. `git diff --check`와 Prettier도
+  통과했다.
+
 ## 현재 남은 확인과 대기 항목
 
 - 최신 Notion·Analytics 문서가 완료 상태가 아니므로 이후 기획·디자인·이벤트 계약
@@ -1168,6 +1196,9 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 앱 피드백 알림의 발송 조건, 대상, 문구, deep link, BE/FCM/native 책임
 - Analytics 문서에 이후 추가될 이벤트. 현재 7개 웹 이벤트는 구현됐고
   앱 전용 `push_click`의 `1st Feedback`, `Order Feedback` 프로퍼티가 남아 있다.
+- Admin 피드백의 `reviewerName`은 설명상 탈퇴 사용자에게 null일 수 있지만 개발
+  Swagger schema에는 nullable 선언이 없다. FE generated 파일은 수동 보정하지 말고
+  BE Swagger 계약이 수정되면 재생성해 반영한다.
 
 ## 다음 시작점
 
@@ -1184,7 +1215,7 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 6. 새 `develop` 대상 PR #4559의 review·merge와 Clinic·Lab·Admin 개발서버 배포를
    확인한 뒤 개발서버 QA를 이어간다. 스테이징 배포는 `release/v1.85.1 → stage`
    PR #4560의 review·merge·실제 배포를 별도로 확인한다. 피드백의 정식 릴리즈 전달은
-   최신 head `c342882c0`이 반영된 PR #4555의 review·merge 상태로 추적한다.
+   최신 head `85076f7c4`가 반영된 PR #4555의 사람 review·merge 상태로 추적한다.
 7. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
    API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
 8. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
