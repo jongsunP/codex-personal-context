@@ -847,7 +847,7 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
    then verify the active branch, Jira/Figma/API and closest production pattern.
    Keep shared app commits and pushes behind explicit user authorization.
 
-## DL-16061 Full Breakpoint Reconciliation - 2026-09-01 18:31 KST
+## DL-16061 Full Breakpoint Reconciliation - 2026-09-01 18:42 KST
 
 ### Live delivery state
 
@@ -870,6 +870,10 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   non-Draft and MERGEABLE at `8f3ad05`; Auto PR Labels and CodeRabbit
   are successful. There is still no human approval, merge, staging QA or
   deployment proof.
+- Compared with `origin/develop`, the feature changes no `android/`, `ios/`,
+  package manifest or lockfile. Its TypeScript, JavaScript and bundled-asset
+  surface is technically CodePush-compatible; the app developer still owns the
+  final deployment method and target-version decision.
 
 ### Canonical app contract and document reconciliation
 
@@ -915,12 +919,18 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - Office/Lab typecheck still reports ten baseline diagnostics and no current
   feedback/deep-link regression. Keep baseline failures distinct from changed
   file validation.
-- Latest direct Android API 36 and iOS 26.5 simulator checks showed the native
-  list and orderId detail through the earlier no-employer development links.
-  The new employer-path route is covered by focused tests but was not rerun in
-  the emulator or simulator at this checkpoint because Metro and both devices
-  were not running. The earlier iOS proof used the previously installed binary
-  plus current Metro JavaScript, not a fresh native build.
+- Metro was started in the integrated terminal of the Cursor IDE opened for the
+  exact `dentlink-app` project. Android API 36 rebuilt and reinstalled the
+  current Office development app successfully in 42 seconds, then the final
+  employer-path list and order-detail deep links opened the native list and
+  canonical detail GET. Android hardware back returned from detail to the list.
+- iOS 26.5 loaded the same current Metro JavaScript through the previously
+  installed proof binary. The final employer-path list and detail links opened
+  the same native server data, and closing detail returned to the list. This is
+  current JavaScript/navigation proof, not a fresh native-source iOS build. The
+  known non-fatal `messaging/unregistered` development error remains visible.
+- Both runtime passes used read-only list/detail navigation. No Good/Bad POST,
+  changed-detail PUT, file transfer or removal was executed.
 - Actual backend-generated FCM delivery/tap, mutation-safe POST/PUT/file upload,
   physical camera/permission behavior, fresh iOS native build, human review,
   merge and deployment remain separate gates, not unfinished FE code in this
