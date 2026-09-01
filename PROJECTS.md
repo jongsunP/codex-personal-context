@@ -139,6 +139,18 @@ For detailed current state, read:
 - Personal current checkpoint:
   `projects/dentlink-client-admin-invitation-filter.md`
 
+### Dentlink Admin 주문 Case Preference 배치
+
+- Shared repository: `https://github.com/Innvoaid/dentlink-client`
+- Jira: `DL-16269`
+- Current state: Admin 주문 생성·수정 2~4단계에서 Case Preference를 우측 액션
+  버튼 아래에 노출하도록 수정했다. `feature/DL-16269`의 commit `e6cb4a3fc`이
+  원격과 동기화됐고, 최신 `origin/master`에서 생성한 `release/v1.85.1` 대상
+  PR #4558이 open·review required 상태다. 사용자가 기능과 기본 배치를 로컬에서
+  확인했으며, 마지막 30px 간격 조정은 PR 전 정적 검증과 빌드를 통과했다.
+- Personal current checkpoint:
+  `projects/dentlink-client-admin-case-preference.md`
+
 ### Dentlink 주문 피드백 수집
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
