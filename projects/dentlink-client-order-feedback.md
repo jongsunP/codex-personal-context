@@ -1177,6 +1177,31 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   typecheck와 세 앱 commit hook typecheck를 통과했다. `git diff --check`와 Prettier도
   통과했다.
 
+## 주문 상세 WebView → 네이티브 피드백 상세 연결 — 2026-09-01
+
+- Clinic 주문 상세의 피드백 상세 진입은 실행 환경에 따라 분기한다. 일반 웹은 기존
+  `FeedbackDetailDrawer`를 열고, Dentlink 앱 WebView에서는 웹 drawer를 열지 않고
+  기존 RN postMessage 계약으로 `FeedbackDetailsScreen`에 `orderId`와
+  `entryPoint: order-detail`을 전달한다. Good/Bad 즉시 저장은 기존 웹 동작을 유지하고
+  Amplitude 상세 진입 이벤트는 분기 전에 한 번만 전송한다.
+- 앱 세션과 실제 코드를 대조한 결과 기존 DentlinkWebView의 범용 `NAVIGATION` handler와
+  native route 타입이 위 payload를 지원한다. 별도 app-to-web 메시지는 만들지 않는다.
+  Native 상세 Submit 성공 시 기존 자식 성공 결과 전달 패턴으로 주문 상세 화면에
+  `completedFeedbackOrderId`를 반환하고, 부모가 focus될 때 기존 WebView를 reload해 웹
+  feedback query가 서버 canonical `hasDetails` 상태를 다시 조회한다. 취소·뒤로가기·Submit
+  실패에는 reload하지 않는다. 앱 변경의 commit·push는 앱 세션 책임으로 남아 있다.
+- 웹 제품 commit은 `4a417fda6` (`[DL-15828] feat: 주문상세 네이티브 피드백 상세 연결`)이며
+  `feature/DL-15828`과 원격 branch가 같은 commit에서 clean 상태다. release PR
+  [#4555](https://github.com/Innvoaid/dentlink-client/pull/4555)의 head도 해당 commit으로
+  갱신됐다.
+- 대상 Clinic ESLint는 오류 0개·기존 warning 2개, Clinic typecheck, Prettier,
+  `git diff --check`를 통과했다. commit hook의 Clinic·Lab·Admin typecheck와 push hook의
+  전체 lint 오류 0개·기존 warning 419개, shared config 3 tests·hooks 24 tests·coverage
+  비교도 통과했다. PR #4555의 최신 CodeRabbit 검토도 성공했고 신규 미해결 스레드는
+  0개다. PR은 open·mergeable이며 사람 review는 아직 필요하다. 양쪽 변경을 함께 반영한
+  WebView → native 상세 → Submit → WebView reload 통합 런타임 검증은 아직 수행하지
+  않았다.
+
 ## 현재 남은 확인과 대기 항목
 
 - 최신 Notion·Analytics 문서가 완료 상태가 아니므로 이후 기획·디자인·이벤트 계약
@@ -1190,7 +1215,8 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   중 관련 action을 비활성화하지만 서버 보장은 별도다.
 - develop Clinic·Lab·Admin 배포 완료 확인과 개발서버 통합 QA. UI S3 실패가 피드백
   배포에 영향을 주는지 필요 시 별도 확인
-- Clinic WebView와 native app의 화면, navigation, back, safe-area, deep-link 책임
+- 양쪽 변경 반영 후 실제 대상 주문으로 WebView → native 상세 → Submit 성공 → 주문 상세
+  WebView reload 및 최신 `hasDetails` 반영을 확인하는 통합 QA
 - 실제 피드백 데이터 기반 주문상세·회원상세·CRM drawer 상세 GET 파라미터·결과와
   분리 권한 관리자에서의 노출/403 방지 검증
 - 앱 피드백 알림의 발송 조건, 대상, 문구, deep link, BE/FCM/native 책임
@@ -1215,7 +1241,7 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 6. 새 `develop` 대상 PR #4559의 review·merge와 Clinic·Lab·Admin 개발서버 배포를
    확인한 뒤 개발서버 QA를 이어간다. 스테이징 배포는 `release/v1.85.1 → stage`
    PR #4560의 review·merge·실제 배포를 별도로 확인한다. 피드백의 정식 릴리즈 전달은
-   최신 head `85076f7c4`가 반영된 PR #4555의 사람 review·merge 상태로 추적한다.
+   최신 head `4a417fda6`가 반영된 PR #4555의 사람 review·merge 상태로 추적한다.
 7. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
    API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
 8. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
