@@ -956,8 +956,8 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 
 - `feature/DL-16061` is synchronized with
   `origin/feature/DL-16061` at
-  `b188e1820b19fbb4a05693bb2cd2a6902ce0bc80`.
-- The branch contains the current `origin/develop` and is 27 commits ahead with
+  `f1e6c3a7f6d3fefd90c7e29e5ed66776a3d66f96`.
+- The branch contains the current `origin/develop` and is 28 commits ahead with
   no base commits missing. PR
   [#286](https://github.com/Innvoaid/dentlink-app/pull/286) remains OPEN,
   non-Draft and MERGEABLE.
@@ -984,10 +984,15 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   post-`RNFS.stat` upload-size validation, local WebView host matching,
   infinite-list memoization, MIME-less image analytics classification and
   feedback mutation URL boundary tests.
+- Commit `f1e6c3a` preserves completed server file IDs when cleanup deletion
+  fails and retries them on the next upload and hook unmount. This closes the
+  remaining CodeRabbit review-body finding without changing caller contracts.
 - All prior human and CodeRabbit review threads were answered and resolved.
   The bottom safe-area general PR comment was verified against the shared
   `Layout` inset behavior and answered because general issue comments have no
-  resolve control.
+  resolve control. The manual CodeRabbit review of `b188e18` completed; the
+  final `f1e6c3a` trigger returned a successful skipped status because reviews
+  are disabled for the base branch. No unresolved review thread remains.
 - Changed-file ESLint has zero errors; Prettier and `git diff --check` pass.
   Focused feedback, deep-link, WebView URL and error-handler Jest coverage
   passes 5 suites and 46/46 tests.
