@@ -1114,13 +1114,14 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 회원 상세·CRM은 페이지 진입 권한이 `USER READ`여도 피드백 API가 `ORDER READ`를
   요구하므로 피드백 영역을 `ORDER READ` 권한 경계로 감쌌다. 권한이 분리된 관리자에서
   불필요한 403 호출이 발생하지 않도록 한 조치다.
-- 확인 시점의 개발 Swagger와 generated `OrderFeedbackAdminDto`에는 아직
-  `reviewerUserId`가 없었다. 배포 전까지 app-facing 도메인 타입에 optional 필드를
-  교차 타입으로 연결했으며, Swagger 배포 후 다시 generate하여 공식 generated 필드와
-  대조·정리해야 한다. ID를 `dentistId` 등 다른 값으로 대체하는 fallback은 두지 않는다.
-- 제품 commit은 `cb7a61583` (`[DL-16065] fix: 관리자 피드백 상세 조회 식별자 통일`)이며
+- 개발 Swagger의 generated `OrderFeedbackAdminDto`에 `reviewerUserId?: number`가
+  공식 추가됐다. 새 generated 계약과 동일했던 app-facing 교차 타입을 제거하고 공식
+  generated 타입을 그대로 재노출하도록 정리했다. ID를 `dentistId` 등 다른 값으로
+  대체하는 fallback은 두지 않는다.
+- 제품 commit은 `cb7a61583` (`[DL-16065] fix: 관리자 피드백 상세 조회 식별자 통일`)과
+  `c342882c0` (`[DL-16065] chore: 관리자 피드백 작성자 모델 갱신`)이며
   `feature/DL-15828`과 원격 branch가
-  `cb7a61583f4a0c523b6b7596349f404ec8b0287d`에서 동일한 clean 상태다. 기존 release PR
+  `c342882c0fb8cecfe6fb1895aa7263e84f0a70ec`에서 동일한 clean 상태다. 기존 release PR
   [#4555](https://github.com/Innvoaid/dentlink-client/pull/4555)의 head도 같은 commit으로
   자동 갱신됐고 새 PR은 만들지 않았다.
 - 변경 전 Admin typecheck, 대상 ESLint·Prettier와 `git diff --check`를 통과했다. commit
@@ -1143,8 +1144,7 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - develop Clinic·Lab·Admin 배포 완료 확인과 개발서버 통합 QA. UI S3 실패가 피드백
   배포에 영향을 주는지 필요 시 별도 확인
 - Clinic WebView와 native app의 화면, navigation, back, safe-area, deep-link 책임
-- 개발 Swagger 목록 DTO의 `reviewerUserId` 공식 배포·재생성·임시 도메인 타입 정리,
-  실제 피드백 데이터 기반 주문상세·회원상세·CRM drawer 상세 GET 파라미터·결과와
+- 실제 피드백 데이터 기반 주문상세·회원상세·CRM drawer 상세 GET 파라미터·결과와
   분리 권한 관리자에서의 노출/403 방지 검증
 - 앱 피드백 알림의 발송 조건, 대상, 문구, deep link, BE/FCM/native 책임
 - Analytics 문서에 이후 추가될 이벤트. 현재 7개 웹 이벤트는 구현됐고
@@ -1165,7 +1165,7 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 6. 과거 개발 배포 PR #4546과 임시 통합 환경 정리는 완료됐다. 원본 피드백 branch의
    PR #4554도 develop에 merge됐으므로 Clinic·Lab·Admin 배포 완료 여부와 개발서버
    QA부터 이어간다. UI S3 workflow 실패는 핵심 앱 배포와 구분해 확인한다. 릴리즈
-   반영은 최신 head `cb7a61583`이 반영된 PR #4555의 리뷰·merge 상태를 이어서 확인한다.
+   반영은 최신 head `c342882c0`이 반영된 PR #4555의 리뷰·merge 상태를 이어서 확인한다.
 7. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
    API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
 8. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
