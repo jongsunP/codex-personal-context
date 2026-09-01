@@ -1123,7 +1123,8 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   `feature/DL-15828`과 원격 branch가
   `c342882c0fb8cecfe6fb1895aa7263e84f0a70ec`에서 동일한 clean 상태다. 기존 release PR
   [#4555](https://github.com/Innvoaid/dentlink-client/pull/4555)의 head도 같은 commit으로
-  자동 갱신됐고 새 PR은 만들지 않았다.
+  자동 갱신됐고 새 PR은 만들지 않았다. PR 본문의 과거 주문 상세 스냅샷 설명도 세
+  진입점 모두 `orderId + reviewerUserId` 상세 GET을 사용한다는 현재 계약으로 수정했다.
 - 변경 전 Admin typecheck, 대상 ESLint·Prettier와 `git diff --check`를 통과했다. commit
   hook의 Clinic·Lab·Admin typecheck와 push hook의 전체 lint 오류 0개·기존 warning
   419개, shared config 3 tests·hooks 24 tests·coverage 비교도 통과했다. 실제 피드백
