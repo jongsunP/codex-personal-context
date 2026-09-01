@@ -956,8 +956,8 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 
 - `feature/DL-16061` is synchronized with
   `origin/feature/DL-16061` at
-  `f1e6c3a7f6d3fefd90c7e29e5ed66776a3d66f96`.
-- The branch contains the current `origin/develop` and is 28 commits ahead with
+  `28a12947b49e058b136e602a4f53621b95931509`.
+- The branch contains the current `origin/develop` and is 30 commits ahead with
   no base commits missing. PR
   [#286](https://github.com/Innvoaid/dentlink-app/pull/286) remains OPEN,
   non-Draft and MERGEABLE.
@@ -987,12 +987,23 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - Commit `f1e6c3a` preserves completed server file IDs when cleanup deletion
   fails and retries them on the next upload and hook unmount. This closes the
   remaining CodeRabbit review-body finding without changing caller contracts.
+- Commit `507f2b3` records unmount and superseded upload sessions, moves files
+  completed afterward into the cleanup queue, retries deletion up to three
+  times and blocks post-unmount state/toast updates. Commit `28a1294` then moves
+  completed-file state publication behind the current-session check so a late
+  prior upload cannot pollute the new upload state.
 - All prior human and CodeRabbit review threads were answered and resolved.
   The bottom safe-area general PR comment was verified against the shared
   `Layout` inset behavior and answered because general issue comments have no
   resolve control. The manual CodeRabbit review of `b188e18` completed; the
-  final `f1e6c3a` trigger returned a successful skipped status because reviews
-  are disabled for the base branch. No unresolved review thread remains.
+  subsequent manual reviews of `f1e6c3a` and `507f2b3` completed; the final
+  `28a1294` trigger returned a successful skipped status because reviews are
+  disabled for the base branch. No unresolved review thread remains.
+- The generated contract has multipart completion PATCH and abort DELETE only.
+  If completion succeeds server-side but its response is lost, the app cannot
+  recover `fileId` from `uploadId` or safely assume PATCH replay is idempotent.
+  Full recovery requires a BE idempotency guarantee or lookup endpoint; this
+  limitation is documented in the PR and resolved review rationale.
 - Changed-file ESLint has zero errors; Prettier and `git diff --check` pass.
   Focused feedback, deep-link, WebView URL and error-handler Jest coverage
   passes 5 suites and 46/46 tests.
