@@ -190,9 +190,10 @@ For detailed current state, read:
   최신 제품 commit `8d3c8ad1e`은 원격과 동기화됐고, `release/v1.86.0` 대상 PR
   #4556은 open·mergeable·review required 상태다. Warranty 번역 3개는 실제 Sheet에
   페이지·화면 상태·경로·사용 상태까지 반영됐다. 공통 i18n Sheet 운영 개선은
-  `feature/i18n-sheet-workflow`의 최신 commit `eebf35db3`과 PR #4557로 분리했으며 같은
-  release를 대상으로 한다. 두 PR 모두 CodeRabbit 최종 검토 성공·미해결 thread
-  0개다. 메인 worktree는 clean한 `master`로 복귀시키고 PR merge 전까지 두 feature
-  branch를 유지한다.
+  `feature/i18n-sheet-workflow`의 최신 commit `eebf35db3`과 PR #4557로 분리했다.
+  Warranty PR #4556은 `release/v1.86.0`, i18n 운영 PR #4557은 사용자의 최종 결정에
+  따라 `release/v1.85.1`을 대상으로 한다. 두 PR 모두 CodeRabbit 최종 검토 성공·미해결
+  thread 0개다. 메인 worktree는 clean한 `master`로 복귀시키고 PR merge 전까지 두
+  feature branch를 유지한다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`

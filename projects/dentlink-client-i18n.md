@@ -82,7 +82,9 @@ take precedence if later work changes them.
   (`fix: i18n 시트 최종 검증 복구 범위 보완`)
   - initial consolidated commit: `6cc94d0d5a312fe6c02395375685c9ba5722d467`
 - Release PR: [#4557](https://github.com/Innvoaid/dentlink-client/pull/4557)
-  targets `release/v1.86.0`; last live check was open, mergeable, and review
+  targets `release/v1.85.1`; the base was changed from `release/v1.86.0` after
+  confirming both release refs were the same commit with `0/0` divergence and
+  a clean merge simulation. Last live check was open, mergeable, and review
   required. CodeRabbit passed with zero unresolved review threads.
 - The PR changes only `lab/i18n/catalog/README.md`,
   `lab/scripts/i18n/audit-usage.js`, and
