@@ -847,35 +847,42 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
    then verify the active branch, Jira/Figma/API and closest production pattern.
    Keep shared app commits and pushes behind explicit user authorization.
 
-## DL-16061 Full Breakpoint Reconciliation - 2026-09-01 16:22 KST
+## DL-16061 Full Breakpoint Reconciliation - 2026-09-01 18:31 KST
 
 ### Live delivery state
 
 - `feature/DL-16061` is clean and synchronized with
   `origin/feature/DL-16061` at
-  `99535e86ba8970ed78b4f797cba831584694f4e6`.
+  `8f3ad05fedc4a038c5c035c36901936585aa8df6`.
 - The branch contains the live `origin/develop`
-  `5e8375f34841ea597a0f4a492105aad944c1594d` and is 25 commits ahead with no
+  `5e8375f34841ea597a0f4a492105aad944c1594d` and is 26 commits ahead with no
   base commits missing.
 - The final safety commit `99535e8` removes an invalid React hook call from
   ordinary notification-permission functions and reads the OS version through
   `react-native-device-info` directly. This avoids an `Invalid hook call` in
   the notification permission/token path. The adjacent unused import was also
   removed.
+- Commit `8f3ad05` supports the final backend feedback-link shape with
+  `employerId` in the path, switches the authenticated employer through the
+  existing deep-link side effect, and extends the route and analytics-path
+  tests. The no-employer and `/my/feedback` forms remain compatibility inputs.
 - PR [#286](https://github.com/Innvoaid/dentlink-app/pull/286) is OPEN,
-  non-Draft, MERGEABLE and CLEAN at `99535e8`; Auto PR Labels and CodeRabbit
+  non-Draft and MERGEABLE at `8f3ad05`; Auto PR Labels and CodeRabbit
   are successful. There is still no human approval, merge, staging QA or
   deployment proof.
 
 ### Canonical app contract and document reconciliation
 
-- The current app-owned deep links are `dentlink://feedback` for the native
-  list and `dentlink://feedback?orderId={orderId}` for detail. Development
-  runtime uses the matching `dentlink-dev` scheme. `employerId` is not part of
-  the canonical URL; authenticated employee/employer scope still comes from
-  app state and request headers.
+- The current app-owned deep links are
+  `dentlink://feedback/{employerId}` for the native list and
+  `dentlink://feedback/{employerId}?orderId={orderId}` for detail. Development
+  runtime uses the matching `dentlink-dev` scheme. The route applies the
+  existing `setEmployerId` side effect before the employee/employer-scoped
+  feedback request.
 - `/my/feedback[?orderId=...]` remains a web/legacy compatibility input and is
-  converted to the canonical app route. It is not the canonical app URL.
+  converted to the app feedback route. The earlier no-employer `feedback`
+  shape also remains a compatibility input, not the backend's current
+  canonical link.
 - For `push_click`, feedback URLs with `orderId` map to `1st Feedback`; list
   URLs without `orderId` map to `Order Feedback`. The seven feedback events,
   `feedbackType: Good/Bad`, and app-only `pendingreviews_click` are present.
@@ -887,8 +894,9 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - The only known unimplemented planned app UI is the Office notification rows
   `Case Preference` and `Order Feedback`. The current generated
   `UserPushSettingUpdateDto.pushType` still lacks values for both, so the app
-  must not invent enum values or send guessed PATCH requests. `DL-16035` is
-  still in progress on the BE side.
+  must not invent enum values or send guessed PATCH requests. BE is expected to
+  deploy either both types or only `Order Feedback`; implement only the actual
+  generated contract after deployment.
 - Jira `DL-16066` and the PR description still describe the older canonical
   `/my/feedback` route and older HEAD/test/runtime evidence. `DL-16061` also
   contains older verification counts. Their workflow statuses are still
@@ -898,9 +906,8 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 ### Final verification boundary
 
 - Focused feedback/deep-link repository and utility tests pass: 5 suites,
-  41/41 tests. The final two source files pass Prettier and ESLint with zero
-  errors; four existing `console` warnings remain in `permission.ts`.
-  `git diff --check` passes.
+  43/43 tests. All five files in `8f3ad05` pass Prettier and ESLint with zero
+  errors, and `git diff --check` passes.
 - The broader app Jest command requires an explicit config because the repo
   has two Jest configurations. With `jest.config.js`, existing Detox suites
   are incorrectly included without a Detox worker and `App.test.tsx` has an
@@ -909,10 +916,11 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   feedback/deep-link regression. Keep baseline failures distinct from changed
   file validation.
 - Latest direct Android API 36 and iOS 26.5 simulator checks showed the native
-  list and orderId detail through the canonical development deep links. iOS
-  used the previously installed proof binary plus current Metro JavaScript,
-  not a fresh native build. The simulator still emits the known non-fatal
-  Firebase `messaging/unregistered` warning.
+  list and orderId detail through the earlier no-employer development links.
+  The new employer-path route is covered by focused tests but was not rerun in
+  the emulator or simulator at this checkpoint because Metro and both devices
+  were not running. The earlier iOS proof used the previously installed binary
+  plus current Metro JavaScript, not a fresh native build.
 - Actual backend-generated FCM delivery/tap, mutation-safe POST/PUT/file upload,
   physical camera/permission behavior, fresh iOS native build, human review,
   merge and deployment remain separate gates, not unfinished FE code in this
@@ -920,11 +928,11 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 
 ### Next starting point
 
-1. Wait for the app developer's review of PR #286 and address only verified
-   findings with fresh commit/push authorization.
-2. When BE deploys exact `pushType` values for `Case Preference` and
-   `Order Feedback`, regenerate/review Swagger and add only those notification
-   rows and their existing preference flow.
+1. Ask the app developer to review the latest `8f3ad05` delta in PR #286 and
+   address only verified findings with fresh commit/push authorization.
+2. When BE deploys exact `pushType` values for both notification rows or only
+   `Order Feedback`, regenerate/review Swagger and implement only the delivered
+   rows through the existing preference flow.
 3. When a real feedback notification and safe mutation data exist, verify FCM
    cold/warm/background taps, PUT and file upload/removal. Run Android first,
    then iOS/physical-device checks where platform behavior matters.
