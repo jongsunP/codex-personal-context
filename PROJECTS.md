@@ -162,22 +162,18 @@ For detailed current state, read:
 - Current state: Clinic PC·웹 모바일의 `/my/feedback`, 마이페이지 Quick Links·My
   Office 모달, 목록·상세 drawer·파일 첨부, 주문 상세 배너를 실제 Office 피드백
   GET/POST/PUT API와 React Query cache에 연결했다. 딥링크는
-  `/my/feedback?orderId={orderId}`이며 최신 제품 commit `ba8a9c186`이
-  `origin/feature/DL-15828`과 동일한 clean 상태다. 개발서버 확인용 PR #4541은
-  물론 후속 동기화 PR #4542·#4543도 `develop`에 merge됐다. 이후 원격 `develop`을
-  최신 `master`로 재생성하고, 기존 피드백 상태와 `release/v1.85.0`을 합친 통합
-  branch `feature/DL-15828-develop-v1.85.0-integration` / `bcf55a61c`에서 새
-  `develop` 대상 PR #4546을 merge했으며 사용자가 개발서버 배포를 완료했다. 임시
-  통합 worktree와 로컬 branch는 제거했고 원격 branch는 보존했다. 원본 피드백
-  branch는 변경하지 않았다.
+  `/my/feedback?orderId={orderId}`이며 최신 제품 commit `c342882c0`이
+  `origin/feature/DL-15828`과 동일한 clean 상태다. 원격 `develop`과 `stage`를
+  `origin/master` `4fc3b4877`에서 재생성했고, 피드백 개발서버 반영 PR #4559를
+  `feature/DL-15828 → develop`으로 열었다. release 전달 PR #4555는
+  `release/v1.86.0` 대상 open·review required 상태다.
   2026-08-28 실제
   eligible 주문으로 목록/count, 주문 상세 배너, 딥링크 상세 GET, PC·웹 모바일
   drawer와 Photo/Camera/File 선택 UI를 Chrome에서 확인했다. 실제 Good/Bad POST,
   상세 PUT과 업로드·삭제는 서버 데이터를 바꾸므로 별도 QA가 남아 있다. 첨부 제한은
   현재 최대 5개·총 200MB이나 Notion과 Figma의 일부 문구가 상충해 확정이 필요하다.
-  웹 구현 Jira 카드는 `Ready for Deploy`, 상위는 `진행 중`, 관리자 DL-16065는
-  스펙 미확정으로 `해야 할 일`이다. 정식 release PR은 아직 없다. 앱은 별도
-  `dentlink-app` 저장소·세션에서 진행한다.
+  웹 구현 Jira 카드와 관리자 DL-16065는 `Ready for Deploy`, 상위는 `진행 중`이다.
+  앱은 별도 `dentlink-app` 저장소·세션에서 진행한다.
 - Personal current checkpoint:
   `projects/dentlink-client-order-feedback.md`
 
@@ -191,9 +187,9 @@ For detailed current state, read:
   #4556은 open·mergeable·review required 상태다. Warranty 번역 3개는 실제 Sheet에
   페이지·화면 상태·경로·사용 상태까지 반영됐다. 공통 i18n Sheet 운영 개선은
   `feature/i18n-sheet-workflow`의 최신 commit `eebf35db3`과 PR #4557로 분리했다.
-  Warranty PR #4556은 `release/v1.86.0`, i18n 운영 PR #4557은 사용자의 최종 결정에
-  따라 `release/v1.85.1`을 대상으로 한다. 두 PR 모두 CodeRabbit 최종 검토 성공·미해결
-  thread 0개다. 메인 worktree는 clean한 `master`로 복귀시키고 PR merge 전까지 두
-  feature branch를 유지한다.
+  i18n 운영 PR #4557은 `release/v1.85.1`에 merge됐다. Warranty PR #4556은
+  `release/v1.86.0` 대상 open 상태이며 CodeRabbit 최종 검토 성공·미해결 thread 0개다.
+  원격 `stage`는 `master`와 같은 `4fc3b4877`로 재생성됐지만 release에도 아직 변경이
+  없어 스테이징 PR은 생성 대기 상태다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`

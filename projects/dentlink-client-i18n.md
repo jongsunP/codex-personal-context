@@ -84,8 +84,9 @@ take precedence if later work changes them.
 - Release PR: [#4557](https://github.com/Innvoaid/dentlink-client/pull/4557)
   targets `release/v1.85.1`; the base was changed from `release/v1.86.0` after
   confirming both release refs were the same commit with `0/0` divergence and
-  a clean merge simulation. Last live check was open, mergeable, and review
-  required. CodeRabbit passed with zero unresolved review threads.
+  a clean merge simulation. The PR merged on 2026-09-01 as merge commit
+  `4fa8ce400f889630152f7e1fa6cb7b51b4f98fa6`. CodeRabbit passed with zero
+  unresolved review threads before merge.
 - The PR changes only `lab/i18n/catalog/README.md`,
   `lab/scripts/i18n/audit-usage.js`, and
   `lab/scripts/i18n/export-locales-to-sheet.js`.

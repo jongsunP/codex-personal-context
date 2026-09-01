@@ -1131,6 +1131,22 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   데이터로 주문 상세·회원 상세·CRM 각각의 상세 GET 파라미터와 drawer 결과를 확인하는
   브라우저 QA는 아직 수행하지 않았다.
 
+## develop·stage 환경 브랜치 재생성 — 2026-09-01
+
+- 사용자의 배포 준비 지시에 따라 원격 `develop`과 `stage`를 삭제한 뒤 현재
+  `origin/master` `4fc3b4877458d99439d1474aff03b9eff17ab34a`에서 각각 신규 생성했다. 재생성 후
+  `origin/master`, `origin/develop`, `origin/stage`의 divergence는 모두 `0/0`이다.
+- `feature/DL-15828`의 최신 head
+  `c342882c0fb8cecfe6fb1895aa7263e84f0a70ec`를 새 `develop`에 반영하는 개발서버 PR
+  [#4559](https://github.com/Innvoaid/dentlink-client/pull/4559)를 생성했다. 생성 직후
+  open·mergeable이며 base/head는 `develop ← feature/DL-15828`이다.
+- `release/v1.86.0 → stage` PR도 요청됐지만 두 branch와 `master`가 모두
+  `4fc3b4877`로 동일해 GitHub PR로 만들 변경분이 없다. 피드백 release PR #4555와
+  Warranty PR #4556은 모두 `release/v1.86.0` 대상 open 상태이므로 임의로 merge하지
+  않았다. release에 실제 commit이 들어간 뒤 stage PR을 생성해야 한다.
+- 원격 branch push hook은 전체 lint를 실행했고 오류 없이 기존 warning만 출력했다.
+  이번 단계는 제품 코드 수정 없이 환경 branch와 PR만 조작한 배포 준비 상태다.
+
 ## 현재 남은 확인과 대기 항목
 
 - 최신 Notion·Analytics 문서가 완료 상태가 아니므로 이후 기획·디자인·이벤트 계약
@@ -1163,10 +1179,10 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 5. 대상 데이터가 있는 치과 계정 또는 BE fixture를 확보해 목록·주문상세·상세
    drawer·실제 파일 업로드의 GET/POST/PUT 통합 QA를 수행한다. 실제 모바일 브라우저
    Camera/Photo/File picker도 별도 검증한다.
-6. 과거 개발 배포 PR #4546과 임시 통합 환경 정리는 완료됐다. 원본 피드백 branch의
-   PR #4554도 develop에 merge됐으므로 Clinic·Lab·Admin 배포 완료 여부와 개발서버
-   QA부터 이어간다. UI S3 workflow 실패는 핵심 앱 배포와 구분해 확인한다. 릴리즈
-   반영은 최신 head `c342882c0`이 반영된 PR #4555의 리뷰·merge 상태를 이어서 확인한다.
+6. 새 `develop` 대상 PR #4559의 review·merge와 Clinic·Lab·Admin 개발서버 배포를
+   확인한 뒤 개발서버 QA를 이어간다. 릴리즈 반영은 최신 head `c342882c0`이 반영된
+   PR #4555의 review·merge 상태를 확인하고, `release/v1.86.0`에 실제 변경이 생긴
+   뒤에만 `release/v1.86.0 → stage` PR을 생성한다.
 7. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
    API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
 8. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
