@@ -37,7 +37,7 @@
 - 제품 repository: `/Users/parkjongsun/Repository/dentlink-client`
 - 제품 branch/upstream: `feature/DL-16258` / `origin/feature/DL-16258`
 - 제품 commit:
-  `e5d6d3ad90b2b6bc3013ea43360c654ef759b92e`
+  `e5d6d3ad98b0a0420258f80198943c6f7d7a6244`
   (`[DL-16258] fix: i18n 시트 복구 경로 보완`)
   - 최초 기능 commit: `b3a7163833c3061d57cd05f9206a0d4dd9afd3d9`
   - 영문 교정 commit: `8d3c8ad1ef5247f42fa68084af8008d7b02fa5a9`
