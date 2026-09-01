@@ -949,3 +949,64 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 4. Refresh this context, live Git, Jira/Figma/Notion and deployed Swagger before
    resuming. Do not start another Metro process while the correct app IDE
    terminal is already serving it.
+
+## DL-16061 Order Detail WebView Bridge And Review Closeout - 2026-09-01
+
+### Delivered state
+
+- `feature/DL-16061` is synchronized with
+  `origin/feature/DL-16061` at
+  `b188e1820b19fbb4a05693bb2cd2a6902ce0bc80`.
+- The branch contains the current `origin/develop` and is 27 commits ahead with
+  no base commits missing. PR
+  [#286](https://github.com/Innvoaid/dentlink-app/pull/286) remains OPEN,
+  non-Draft and MERGEABLE.
+- The WebView-to-native navigation contract is the existing `NAVIGATION`
+  message with `screen: "FeedbackDetailsScreen"` and
+  `params: { orderId, entryPoint: "order-detail" }`. The existing
+  `DentlinkWebView` handler passes these params to React Navigation, so no new
+  web-to-app bridge message type was added.
+- After a native detail PUT succeeds from the order-detail entry point, the
+  detail screen uses the established navigation-result pattern to `popTo` the
+  existing `OrderDetailScreen`. The parent consumes a one-time completion param
+  on focus and reloads its WebView so the web-owned feedback banner reads the
+  new server state. Cancel, back and mutation failure do not send completion or
+  reload the WebView. Feedback-list, push and deep-link entry behavior is
+  unchanged.
+- The corresponding Clinic web action still must send the confirmed
+  `NAVIGATION` message when it runs inside the app; ordinary web continues to
+  open its web feedback drawer.
+
+### Review fixes and verification
+
+- Commit `b188e18` also closes verified CodeRabbit findings: safe-area memo
+  dependency, push-preference loading guard, login-dependent device update,
+  post-`RNFS.stat` upload-size validation, local WebView host matching,
+  infinite-list memoization, MIME-less image analytics classification and
+  feedback mutation URL boundary tests.
+- All prior human and CodeRabbit review threads were answered and resolved.
+  The bottom safe-area general PR comment was verified against the shared
+  `Layout` inset behavior and answered because general issue comments have no
+  resolve control.
+- Changed-file ESLint has zero errors; Prettier and `git diff --check` pass.
+  Focused feedback, deep-link, WebView URL and error-handler Jest coverage
+  passes 5 suites and 46/46 tests.
+- Office/Lab typecheck still reports the same ten baseline diagnostics in
+  unrelated existing files. No changed file introduces a new type diagnostic.
+- This closeout is code and static-test proof. The cross-repository WebView
+  action plus native return reload still needs an integrated runtime pass after
+  the web-side change is committed and served. Real FCM, safe POST/PUT/upload
+  data, physical camera permissions, human approval, merge and deployment
+  remain separate gates.
+
+### Next starting point
+
+1. Confirm the matching Clinic web branch commits and serves its app-only
+   `NAVIGATION` action, then test order detail WebView -> native feedback detail
+   -> successful Submit -> refreshed WebView banner. Also verify cancel/back
+   does not reload as a completed save.
+2. Continue PR #286 human review. Do not merge or deploy without the app
+   developer's approval and the normal release decision.
+3. When BE deploys the actual `UserPushSettingUpdateDto.pushType` values,
+   regenerate and review Swagger before adding only the delivered Office
+   notification rows. Do not guess the enum values.
