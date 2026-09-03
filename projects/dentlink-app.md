@@ -3,8 +3,8 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current checkpoint is the final section, **DL-16061 Local Develop Conflict
-Resolution - 2026-09-03**. Earlier PR review and notification design sections
+The current checkpoint is the final section, **DL-16061 Develop Merge Delivery
+And Review - 2026-09-03**. Earlier PR review and notification design sections
 record the preceding implementation and decisions. Earlier dated
 delivery, review, API and runtime results below are historical, not current
 claims. The two new notification rows now exist as disabled presentation;
@@ -18,10 +18,11 @@ their real setting integration still awaits the deployed BE contract.
 - Expect both occasional small app tasks and features whose user flow spans web
   and mobile. For cross-surface work, inspect the relevant web and app code,
   API contracts, release paths, and QA impact together.
-- 통합알림센터의 웹·앱 동기화 문의는 별도 사전 검토 체크포인트
-  `projects/dentlink-unified-notification-center.md`를 읽는다. 2026-09-03 기준
-  최종 FE 공유 요약만 확정됐으며 구현·전용 작업 환경은 아직 시작하지 않았다.
-  기존 피드백 구현이나 개별 푸시 작업의 완료 상태와 섞지 않는다.
+- 통합알림센터 문의는 `projects/dentlink-unified-notification-center.md`를 읽는다.
+  2026-09-03 후속 지침으로 기기 간 실시간 동기화를 제외하고 REST 기반으로
+  변경했다. 읽음·삭제 동기화용 데이터 FCM은 추가하지 않으며 기존 FCM·Notifee
+  사용자 푸시는 유지한다. 구현·전용 작업 환경은 아직 시작하지 않았다. 기존
+  피드백 구현이나 개별 푸시 작업의 완료 상태와 섞지 않는다.
 - Resume from this onboarding checkpoint instead of repeating setup from
   scratch. At the start of future work, sync this personal context and all
   relevant shared repositories, then verify live Git refs and current team
@@ -76,15 +77,14 @@ their real setting integration still awaits the deployed BE contract.
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `919a884557f7d421a946b12adfc337b497ca048f`
-- HEAD remains synchronized with `origin/feature/DL-16061`, but the checkout
-  has a local, uncommitted develop merge as of 2026-09-03 13:02 KST.
-  All conflicts are resolved; 17 files are staged and `MERGE_HEAD` is present.
-  Do not pull, reset, stash or switch branches before inspecting this state.
+- Current HEAD: `c6355a33521c69ed0c3d4cb656245ac7b2ed5e9e`
+- The checkout is clean and synchronized with `origin/feature/DL-16061` after
+  the user explicitly authorized the merge commit/push at 14:26 KST.
+  The pending local merge is complete; no `MERGE_HEAD` or staged changes remain.
 - `origin/develop` is `5ec442a2a20be9dbbad9a7f8532de37e69b60a8d`;
-  committed refs still show thirty-eight commits ahead and three behind until
-  the pending merge is committed. The user requested conflict work; the agent
-  explicitly limited this turn to local resolution, without app commit/push.
+  the feature branch now contains it and is 39 commits ahead / 0 behind.
+  PR #286 is MERGEABLE. This is develop-to-feature integration only; the PR
+  has not been merged into develop and no deployment was performed.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
@@ -1379,3 +1379,28 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   to develop; only the intentional URL default preservation and feature bridge
   integration differ where expected. No further app commit/push authority was
   inferred from the user's general request to finish all possible work.
+
+## DL-16061 Develop Merge Delivery And Review - 2026-09-03
+
+- The user explicitly requested commit, push, memory closeout, and handling
+  subsequent review. Committed the reviewed 17-file merge index as `c6355a3`
+  (`chore: develop 병합 및 피드백 충돌 정리`) and pushed to
+  `origin/feature/DL-16061`. Parents are `919a884` and `5ec442a`; no force push,
+  protected-branch update, PR merge, deployment or native build was performed.
+- GitHub reports PR #286 MERGEABLE. All three previous integration conflicts
+  are resolved remotely; the branch is clean with 39 ahead / 0 behind develop.
+  PR description now explains the integration, intentionally preserved remote
+  development WebView URLs, current validation and remaining QA boundaries.
+- Re-ran the expanded unit test command after commit: 15 suites / 125 tests
+  pass. The earlier 16-file lint, baseline TypeScript, version, generated-format
+  and diff results remain applicable to the identical committed tree. The
+  known unfiltered Jest/Detox/App smoke-test configuration failures remain
+  separate and were not hidden or fixed by unrelated source changes.
+- Automatic review returned SUCCESS with `Review skipped` because this PR
+  targets develop rather than the configured release/default branches.
+  Requested a real incremental review in comment `5520959146`; CodeRabbit
+  acknowledged it in `5520962101` and exact-HEAD status became pending at
+  14:27:47 KST. Do not mistake the initial skipped status or earlier `919a884`
+  zero-finding summary for review of this merge.
+- Review result and final memory delivery are still being finalized in this
+  active turn; replace this line with the actual exact-HEAD completion evidence.
