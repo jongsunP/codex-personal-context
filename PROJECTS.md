@@ -84,13 +84,16 @@ For detailed current state, read:
 ### Dentlink 통합알림센터 — 사전 검토
 
 - Shared repositories: `Innvoaid/dentlink-client`, `Innvoaid/dentlink-app`
-- Scope: Clinic/Lab 웹과 Office/Lab 앱의 REST 기반 알림 조회·읽음·삭제
+- Scope: Clinic/Lab 웹과 Office/Lab 앱의 REST 기반 알림 조회·읽음·삭제 및 공통
+  딥링크의 병원 전환·화면/동작 실행·알림 읽음 연결
 - Current state: 2026-09-03 후속 지침으로 **기기 간 실시간 동기화를 제외**했다.
   현재 기준은 기존 REST 흐름 유지다. 알림 전용 SSE와 읽음·삭제 동기화용 데이터
-  FCM은 추가하지 않으며 기존 배송 SSE·사용자 노출 푸시는 별개로 유지한다. 읽음
-  정책은 PM에게 요청한 상태이며 구현은 아직 시작하지 않았다. 전용 Jira/branch/
-  worktree/세션/release는 미정이다. 별도 작업 환경 생성 전에는 메인 관리 세션에서
-  문의를 이어갈 수 있으며 다른 세션에서도 같은 체크포인트를 읽는다.
+  FCM은 추가하지 않으며 기존 배송 SSE·사용자 노출 푸시는 별개로 유지한다. 웹·앱
+  통합 관리 세션이 개설됐고 별도 프로젝트 폴더/worktree 없이 두 저장소를 함께
+  참조한다. 푸시 클릭 시 읽음 요구와 앱 피드백 세션의 조사 인계를 반영했으며,
+  공통 읽음 구현은 미착수다. 목록 읽음 정책은 PM 답변 대기, 알림 ID 전달 등 BE
+  계약과 전용 Jira/구현 branch/release는 미정이다. 기존 앱 피드백은 별도 세션이
+  계속 담당하며, 현재 확정/미정과 작업 충돌 경계는 아래 체크포인트를 따른다.
 - Personal current checkpoint:
   `projects/dentlink-unified-notification-center.md`
 
