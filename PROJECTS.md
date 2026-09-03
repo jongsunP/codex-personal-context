@@ -200,12 +200,15 @@ For detailed current state, read:
   `release/v1.85.1 -> stage` PR #4566은 `24b5af7b7`로 merge됐다. 사용자가 스테이징
   배포 완료를 알렸으며, 실제 서버 SHA와 화면 QA는 이번 후속 기록에서 별도로 확인하지
   않았다. 운영 배포는 별도 상태다. 로컬 branch/worktree는 정리하지 않았다.
-  이후 사용자가 Warranty를 이번 1.85.1 배포에서 제외한다고 결정했다. 원격 release의
-  마지막 commit `8d0744936`만 revert하면 되며 독립 i18n 운영 개선은 유지한다.
+  이후 사용자가 Warranty를 이번 1.85.1 배포에서 제외한다고 결정했다. 당시 원격 release의
+  마지막 commit `8d0744936`만 되돌렸으며 독립 i18n 운영 개선은 유지했다.
   사용자 지시 후 새 `feature/DL-16258-release-hold`에서 역변경 commit `af496bb34`를
   push하고 같은 release 대상 제외 PR #4567을 생성했다. 결과 tree는 워런티 반영 직전과
-  정확히 같으며 세 앱 타입·다국어 정합성·기본 push hook을 통과했다. 현재 PR은 OPEN으로
-  merge 대기이며 checkout은 새 제외용 branch, clean 상태다. 이미 반영된 stage도
-  제외 PR merge 후 별도 반영·재배포가 필요하며, Warranty 재출시 버전은 미정이다.
+  정확히 같으며 세 앱 타입·다국어 정합성·기본 push hook을 통과했다. 사용자가 #4567을
+  merge해 최신 release는 `b9fba70b4`이며 워런티는 제외됐다. 이어서 사용자 요청대로
+  원격 stage를 삭제하고 최신 master `4fc3b4877`에서 재생성한 뒤, release 전체를
+  전달하는 스테이징 PR #4568을 생성했다. 현재 #4568은 OPEN·MERGEABLE이며 사용자
+  merge·배포 대기다. 로컬 checkout은 제외용 branch, clean 상태이고 develop은
+  변경하지 않았다. Warranty 재출시 버전은 미정이다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`

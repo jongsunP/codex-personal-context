@@ -38,14 +38,14 @@
 
 - 사용자가 Warranty를 이번 배포에서 제외한다고 알렸다. 기존 merge/스테이징 배포
   이력은 유지하되, 다음 배포 대상에서는 기능을 제거해야 한다.
-- 원격을 다시 fetch한 결과 `origin/release/v1.85.1`의 최신 commit은 여전히
+- 제외 검토 당시 `origin/release/v1.85.1`의 최신 commit은
   `8d0744936b12e872c48c6715e3d17a85da070054`이며, Warranty PR #4556의 squash
-  commit 하나가 마지막에 추가된 상태다. 이 commit만 revert하면 직전
-  `9d0e0a1f4f1728969842ab0a2269638ec1d91987`의 제품 상태가 된다.
+  commit 하나가 마지막에 추가된 상태였다. 이 commit만 되돌려 직전
+  `9d0e0a1f4f1728969842ab0a2269638ec1d91987`의 제품 상태로 복구했다.
 - 제외 범위는 Warranty 페이지·진입점·공용 고지·전용 번역 등 해당 commit의 16개
   파일이다. 독립 i18n 운영 개선 PR #4557과 나머지 1.85.1 변경은 유지한다.
-- Warranty commit은 현재 `origin/release/v1.85.1`과 `origin/stage`에만 포함되어
-  있다. `origin/master`와 `origin/release/v1.86.0`은 아직 `4fc3b4877`이다.
+- 제외 검토 당시 Warranty commit은 `origin/release/v1.85.1`과 `origin/stage`에만
+  포함되어 있었다. `origin/master`와 `origin/release/v1.86.0`은 `4fc3b4877`이었다.
 - 사용자 후속 지시로 최신 release의 `8d0744936`에서 새 branch
   `feature/DL-16258-release-hold`를 만들고, 원본 commit의 16개 파일 역변경만 적용했다.
   별도 worktree는 만들지 않았으며 메인 checkout에서 작업했다.
@@ -54,12 +54,36 @@
   로컬 branch/upstream은 `feature/DL-16258-release-hold` /
   `origin/feature/DL-16258-release-hold`, worktree는 clean하다.
 - 제외 PR [#4567](https://github.com/Innvoaid/dentlink-client/pull/4567)을
-  `feature/DL-16258-release-hold -> release/v1.85.1`로 생성했다. OPEN·일반 PR이며
-  head `af496bb34`와 base 이름을 확인했다. PR merge와 자동 CodeRabbit 후속 대응은
-  하지 않았다. 이 PR이 merge돼야 release에서 실제로 제외된다.
-- release에서 제외해도 이미 배포된 stage는 자동으로 바뀌지 않는다. 제외 PR merge 후
-  stage 반영과 재배포는 별도 사용자 지시/확인이 필요하다. 향후 Warranty 재출시 버전은
-  미정이며 원본 `feature/DL-16258`은 보존한다.
+  `feature/DL-16258-release-hold -> release/v1.85.1`로 생성했다. 사용자가
+  2026-09-03 16:05 KST에 merge했으며 GitHub의 MERGED 상태를 확인했다.
+  squash merge commit과 최신 release HEAD는
+  `b9fba70b41b5cd782b298a6204d9c1a96e3b0131`이다. 현재 릴리즈 파일에서는 워런티가
+  제외됐으며 원본 및 제외 commit의 이력은 남아 있다.
+- release에서 제외해도 이미 배포된 스테이징 화면은 자동으로 바뀌지 않는다.
+  향후 Warranty 재출시 버전은 미정이며 원본 `feature/DL-16258`은 보존한다.
+
+### 워런티 제외 후 스테이징 재배포 준비
+
+- 사용자의 명시 지시로 원격 `stage`를 삭제하고 당시 최신 원격 `master`의
+  `4fc3b4877458d99439d1474aff03b9eff17ab34a`에서 재생성했다.
+  - 삭제 전 stage: `24b5af7b74a24fa83125d0dd3e5c934c634a2cce` (PR #4566 merge)
+  - 열린 stage 대상 PR 0개, protected=false, 유효 branch rules=[]를 확인했다.
+  - 삭제 직전 master/stage/release ref가 검사한 SHA와 같은지 재확인한 뒤 ref 삭제와
+    생성을 수행했다. 보호 규칙 우회는 사용하지 않았다.
+- [PR #4568](https://github.com/Innvoaid/dentlink-client/pull/4568)
+  `[배포] 워런티 제외된 release/v1.85.1 스테이징 반영`을 16:09 KST에 생성했다.
+  - head: `release/v1.85.1` / `b9fba70b4`
+  - base: `stage` / `4fc3b4877` (= 당시 최신 `origin/master`)
+  - OPEN·일반 PR, MERGEABLE·CLEAN, 자동 merge 미설정으로 확인했다.
+  - release 전체 9개 commit, 최종 diff 25개 파일(+851/-409)을 전달한다. 커밋 이력에
+    워런티 추가와 제외가 모두 있지만 최종 결과에는 워런티가 없다.
+- 삭제 전 stage와 현재 release의 차이는 워런티 역변경 16개 파일뿐이다. 다른 1.85.1
+  변경은 보존됐다. 실제 release tree는 검증된 제외 commit `af496bb34`의 tree
+  `5ef3ed825237336d8b4538f6d61bc8e77101ff3a`와 같고 `git diff --check`도 통과했다.
+- 이번 전달 작업에서 제품 코드와 로컬 checkout은 변경하지 않았다. 로컬은
+  `feature/DL-16258-release-hold` / `af496bb34`, clean이며 `develop`은 변경하지 않았다.
+- PR #4568의 merge와 스테이징 배포는 사용자에게 남겼다. 배포 실행·서버 SHA·화면 QA는
+  확인하지 않았고, 리뷰나 배포를 자동으로 진행하거나 감시하지 않는다.
 
 ### 제외 변경 검증
 
@@ -158,8 +182,8 @@
 - Lab 모바일 하단 내비게이션에는 법률 문서 푸터 진입점을 새로 만들지 않았다. 과거
   요구와 구현은 Clinic Footer, 주문 최종 단계, 리메이크 최종 단계를 명시했고 Lab의
   기존 푸터는 데스크톱 확장 사이드바에 있다.
-- Warranty는 Git상 아직 1.85.1에 포함되어 있으나 사용자 후속 결정으로 이번 배포에서
-  제외해야 한다. 제외 변경이 반영된 최종 release를 기존 회사 전략대로 `master`와
+- Warranty는 PR #4567 merge로 1.85.1의 현재 파일에서 제외됐다. 제외 변경이 반영된
+  최종 release를 기존 회사 전략대로 `master`와
   이후 활성 release인 `release/v1.86.0`에 순방향 반영한다. Warranty를 1.86.0에
   자동으로 재출시하는 의미는 아니다.
 - PR merge가 로컬 branch 정리 권한을 자동으로 의미하지 않는다. 로컬 정리와 shared
@@ -168,10 +192,10 @@
 
 ## 다음 시작점
 
-1. 제외 PR #4567의 동료 리뷰·사용자 merge를 기다린다. 요청 범위인 코드 변경·검증·
-   commit·push·PR 생성과 개인 컨텍스트 갱신까지 완료했다. 자동으로 merge·리뷰 대응·
-   배포를 진행하지 않는다.
-2. 제외 PR merge 후 stage 반영·재배포·제외 화면 QA를 별도 상태로 확인한다. 이전
+1. 워런티 제외 PR #4567은 merge됐다. 새 스테이징 전달 PR #4568의 사용자 merge와
+   배포를 기다린다. 요청한 stage 재생성·PR 생성까지 완료했으며 자동으로 merge·
+   리뷰 대응·배포를 진행하지 않는다.
+2. PR #4568 merge·스테이징 배포·워런티 제외 화면 QA를 별도 상태로 확인한다. 이전
    PR #4566 merge와 스테이징 배포 완료는 Warranty가 포함된 버전의 기록이다.
 3. 이후 Warranty 재개 요청이 오면 원본 feature와 새 목표 release의 live Git을 비교해
    재적용 방법을 정한다. 이번 제외를 제품 기능 영구 폐기나 원본 branch 정리로 해석하지
