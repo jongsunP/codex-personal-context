@@ -1547,3 +1547,75 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   description, Jira state or unrelated notification-center code was changed.
   Remaining feedback feature boundary is unchanged: connect the disabled
   notification settings after the user announces the actual BE pushType release.
+
+## DL-16061 Notification Settings API Delivery - 2026-09-03
+
+- Supersedes the preceding disabled-placeholder / BE-wait checkpoints. The
+  user announced the two deployed types and explicitly authorized code,
+  commit, push and memory closeout. Development Swagger was checked at
+  18:21 KST and the official generation repeated at 18:25-18:28 KST.
+  `UserPushSettingUpdateDto.pushType` and `PushSettingListDto.type` now expose
+  `USER_CASE_PREFERENCE` and `ORDER_FEEDBACK`. `ORDER_WORKFLOW` is additional
+  older model drift, not a third new feedback UI row.
+- Confirmed existing contracts: GET/POST `/app/users/own/push-preferences`,
+  individual PATCH `/app/users/own/push-settings/{pushSettingId}` with
+  `pushType` and `pushEnable`. The similarly named PATCH with `preferenceId`
+  controls overall/personal-order settings, not an individual row.
+- Office now has functional Case Preference and Order Feedback switches
+  using the existing service/query/UI components. Figma `160:39015` copy,
+  order and compact switches are preserved; the Lab four-row list is unchanged.
+  Missing new Office settings use the existing POST initialization and a
+  fresh GET before using the returned setting IDs. Existing disabled settings
+  are not deliberately enabled by an individual toggle.
+- POST documentation distinguishes adding missing types (new entries true)
+  from an already complete set (all entries true). Enable All therefore
+  refetches after POST and PATCHes any remaining false entries. Failed or
+  partial writes refetch server state and show one existing error toast;
+  optimistic state is cleared and retry remains possible. Local save guards,
+  shared upsert pending state and provider initialization guard prevent the
+  tested duplicate-tap / permission-plus-missing-types initialization paths.
+  Follow-up actions check the original account/employer/employee/service scope.
+- Both rows emit the existing `push_preference_click` with on/off status.
+  Order Feedback reuses `pushType: "Order Feedback"`. Notion lacked a Case
+  Preference property value; the user explicitly approved adding
+  `pushType: "Case Preference"` in the async clarification on this turn.
+  This does not change `push_click`, employer-scoped feedback URLs, WebView
+  bridge, or unified-notification-center/read handling owned by another task.
+- `yarn swagger-typescript-api-dev` was run against a temporary output and
+  then the official target; both Api.ts files match byte-for-byte. Full
+  generated output is committed, never manually edited or partially selected.
+  Incidental generated changes include Admin feedback detail/list contracts,
+  reviewer metadata, system feedback-notification methods/categories, finance
+  manual exchange DTO/method, and comments. No existing field removal or
+  `hasPhoto` change was found, and no new handwritten Admin consumer was added.
+- Delivered two commits on `feature/DL-16061`: `1c56bc6` (generated Swagger
+  models) and `a301e78e4ccc4e2d750623c70dbff9435acaa74b` (five handwritten
+  files: enum.ts, pushPreference.ts, PermissionProvider.tsx,
+  useProfileNotification.ts, ProfileNotificationSection.tsx). Push/readback
+  succeeded at 18:42 KST; worktree clean, upstream 0/0. PR #286 is OPEN,
+  non-Draft, MERGEABLE and points at a301e78. No new CodeRabbit review is
+  claimed; no PR body, Jira, deployment script or native dependency changed.
+- Verification on the final code: 15 Jest suites / 125 tests pass with
+  existing Detox and legacy App smoke exclusions; five-file ESLint/Prettier
+  and diff whitespace checks pass. Temporary, uncommitted mock-transport
+  verification passes 23/23 cases including both switches on/off, analytics,
+  fresh IDs, Enable All, denied OS permission, account change, partial errors,
+  duplicate taps, initialization overlap, UI rows and endpoint shapes.
+  Office and Lab type checks each retain exactly the baseline 11 diagnostics;
+  no new diagnostic remains. Existing ignored Prettier options and deprecated
+  react-test-renderer warnings are unchanged tooling boundaries.
+- No authenticated setting writes, emulator/simulator/device visual QA,
+  native build, Metro start or CodePush release was performed for this delta.
+  The user's earlier CodePush predates these two commits; testing this new
+  behavior on that installed deployment requires a later explicitly authorized
+  deployment. Do not label historic visual checks as proof of this change.
+- Remote develop now contains ancestry-only merge `967ba71b` (#294); the
+  incoming three-dot file diff is empty. It was fetched, not merged here.
+  Do not claim current develop ancestry is fully contained based on the older
+  aa82c4c checkpoint. No further known feedback implementation is blocked by
+  these two push types; resume with live Git and fresh external changes.
+- Sources: https://dev-api.dentlink.io/v3/api-docs; Jira DL-16285 and DL-16229
+  (both read as Ready for Deploy); Figma Lu8GEh1TUU5hOfj2FCPRYn node
+  160:39015; analytics Notion 3c6ce072e82f8001bc20ef404c74059b,
+  pushType 21ece072e82f808ba1cff20e603f89fe and push_preference_click
+  21ece072e82f80ba925ccd44cb43a747; explicit Case Preference user approval.
