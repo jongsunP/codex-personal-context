@@ -3,9 +3,9 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current checkpoint is the final section, **DL-16061 PR Refresh And Review -
-2026-09-03**. The preceding Upload Failure Isolation And Notification Design
-section records the earlier implementation in this session. Earlier dated
+The current checkpoint is the final section, **DL-16061 Account-Scoped Cleanup
+Review - 2026-09-03**. Earlier PR review and notification design sections
+record the preceding implementation and decisions. Earlier dated
 delivery, review, API and runtime results below are historical, not current
 claims. The two new notification rows now exist as disabled presentation;
 their real setting integration still awaits the deployed BE contract.
@@ -76,11 +76,11 @@ their real setting integration still awaits the deployed BE contract.
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `5994f1fca27c165e891f3781bf79fe5952b353b7`
+- Current HEAD: `919a884557f7d421a946b12adfc337b497ca048f`
 - The checkout is clean and synchronized with
-  `origin/feature/DL-16061` as of 2026-09-03 11:52 KST.
+  `origin/feature/DL-16061` as of 2026-09-03 12:46 KST.
 - `origin/develop` is `5ec442a2a20be9dbbad9a7f8532de37e69b60a8d`;
-  the feature branch is thirty-four commits ahead and three commits behind.
+  the feature branch is thirty-eight commits ahead and three commits behind.
   No base merge was authorized or performed in this code/review closeout.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
@@ -1197,3 +1197,122 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   separately obtain authority for develop conflict integration/revalidation.
   Human review and later notification API wiring after actual BE enum release
   are still separate. This is a saved breakpoint, not review-zero or merge-ready.
+
+## DL-16061 Account-Scoped Cleanup Review - 2026-09-03
+
+- User requested work on the outstanding review after the preceding scope
+  question. The app-wide cleanup queue finding is now in scope; develop
+  integration/merge is not included. App `feature/DL-16061` is pushed and clean
+  at `919a884557f7d421a946b12adfc337b497ca048f`.
+- `80c1cb5` moves known failed file deletion and multipart-abort IDs from hook
+  refs to `useCommonStore.pendingFileCleanups`, deduplicated by kind/id/scope.
+  API URL, user, employee, employer and service identify each scope. No token,
+  file content or presigned URL is retained in the queue.
+- Existing hooks process that common queue on mount, next upload, error,
+  unmount, authenticated-state restoration and AppState foreground. Up to
+  three attempts occur per run; concurrent hooks share a per-scope run.
+  Logout and other-account contexts leave the original queue untouched; the
+  matching account can resume it without relying on the old hook instance.
+- Chosen implementation is app-wide in-memory state, one of the original
+  review's alternatives. It survives screen unmount/remount, not complete app
+  process termination. No new native dependency, storage engine, API, generated
+  model or helper/test file was added. Dedicated network-reconnect detection is
+  not installed; the next listed resume event handles recovery.
+- `ScopedRequestConfig` flows through existing file services and queries.
+  The request interceptor rejects stale-context requests before using auth
+  headers. Guarded uploads cannot apply another account's refresh results;
+  cleanup errors skip global logout/refresh side effects and remain queued.
+  Requests without the options preserve their existing behavior. This guard is
+  necessary because merely filtering the queue before Axios dispatch would
+  still permit a later login switch to change the request's credentials.
+- Changed files: `shared/libs/useFileUpload.ts`,
+  `shared/store/useCommonStore.ts`, `shared/services/file.types.ts`,
+  `shared/services/file.service.ts`, `shared/queries/useFileQueries.ts`,
+  `shared/configs/utils/fetcher.ts`, and
+  `apps/office/src/features/feedback/screens/FeedbackDetailsScreen.tsx`.
+- Validation: existing Jest 5 suites / 46 tests pass. A transient source-level
+  harness initially passed 17 checks, including one baseline remount-loss
+  reproduction and 16 checks for the fix: remount, duplicate entries/hooks,
+  account/user/employee/employer/service/environment isolation, logout/relogin, foreground,
+  guarded dispatch, cleanup 401/403, in-flight old-account errors, query/service
+  forwarding, old refresh success/failure, normal and guarded refresh behavior,
+  silent errors and old-upload/new-upload state isolation. It used actual
+  React, Zustand, Axios and interceptors but mocked native modules and network
+  transport; no real API mutation or simulator proof is claimed.
+- Six-file ESLint has zero errors and one pre-existing unused generated-type
+  import warning. Prettier and diff checks pass. Office/Lab each have 11
+  pre-existing TypeScript diagnostics and zero new errors, compared against
+  the six HEAD (`5994f1f`) file versions via an in-memory compiler host.
+- Follow-up review `5097388237` on `80c1cb5` completed at 12:15 KST with no
+  new blocking threads and two nitpicks. Both were verified against the actual
+  source before fixing them in `2f4d6b7`: queue removal uses scope/kind/id value
+  matching, and previous cleanup runs in the background rather than delaying
+  new upload initiation. Scope/session checks and retry behavior are preserved.
+  The transient harness now passes 19/19 including preservation of other queue
+  entries and a new upload completing while the prior cleanup response is held.
+  Related Jest still passes 46/46; the follow-up two files pass lint/format/diff,
+  and Office/Lab again have 11 baseline diagnostics and zero additions against
+  `80c1cb5`. No shared test/helper files or real-network mutations were added.
+- The next review `5097447018` on `2f4d6b7` completed at 12:26 KST with two
+  outside-diff findings. `b30e4a8` addresses them: local filesystem paths always
+  refresh actual file size before max-size/presign/part-range calculation;
+  FeedbackDetailsScreen also refreshes those sizes before aggregate validation
+  and does not silently trust stale size on stat failure. Non-finite, zero and
+  negative filesystem sizes fail before presign.
+- Android `content://` provider URIs intentionally retain valid picker sizes.
+  `useDeviceSystem` passes document URIs directly, while the installed RNFS
+  Android stat implementation requires an accessible `_data`/File path. A
+  blanket RNFS.stat requirement would regress existing document uploads.
+  No speculative copy-to-local flow or new native dependency was introduced.
+- Active BlobUtil tasks are tracked and canceled on hook unmount. Session
+  guards prevent further PUT or completion when stat/presign/part preparation
+  resolves after unmount; existing wait-all-workers logic includes temporary
+  part cleanup and precedes abort. A completion PATCH already in flight cannot be
+  recalled; its returned fileId enters cleanup as before, and lost completion
+  response recovery still requires the known BE contract.
+- Final transient harness passes 32/32: the previous 19 plus refreshed/stale/
+  invalid sizes, content-provider preservation, presign and part byte ranges,
+  unmount during active parts/stat/presign/part preparation/in-flight completion,
+  and the actual feedback size resolver's aggregate/unreadable behavior.
+  All transport/native operations remain mocked. Jest passes 46/46; the latest
+  two-file lint/format/diff checks pass and Office/Lab still have 11 existing
+  diagnostics with zero additions against `2f4d6b7`.
+- Review `5097495166` on `b30e4a8` completed at 12:37 KST and identified a
+  further minor outside-diff race: a newly queued ID could miss the last
+  snapshot of the active cleanup run and wait until another lifecycle trigger.
+  `919a884` records attempted entries with each shared run. Waiters exclude
+  those entries and process only newly pending entries in a separate bounded
+  run, preserving per-scope sharing and no recursive retry expansion.
+  Regression validation reproduces the old behavior and verifies old ID = 3
+  requests, new ID = 3 requests, including multiple waiting hook instances.
+  The harness now passes 34/34, Jest 46/46, latest hook lint/format/diff pass,
+  and Office/Lab have zero new diagnostics against `b30e4a8` (11 each).
+- Final combined validation reran all seven changed files against the starting
+  `5994f1f` versions in memory: Office/Lab 11 baseline and 11 current, zero new
+  diagnostics. Seven-file ESLint has zero errors and the same pre-existing
+  OrderFileUploadDto warning; Prettier and full commit-range diff checks pass.
+  PR verification was consolidated to these latest results instead of a stack
+  of intermediate counts. No native build or device QA was added.
+- Existing review thread `PRRT_kwDOLCkD486ewYJC` was answered and resolved in
+  https://github.com/Innvoaid/dentlink-app/pull/286#discussion_r3920674976.
+  PR body is updated to the new code and explicit process-lifetime boundary.
+  Follow-up body nitpicks were answered in comment `5519824568` and the two
+  outside-diff findings in `5519935908` and `5519992149`. A fourth standalone
+  manual review was requested in comment `5519992257` and completed on
+  `919a884` at 12:44:53 KST. Comment `5519993334` confirms Review finished;
+  the latest summary in `5393229878` explicitly says no actionable comments
+  and names the reviewed range `b30e4a8..919a884`. All 16 review threads are
+  resolved, with no pagination beyond the inspected set. There is no new
+  formal review object for this zero-finding run, so the completion evidence
+  is the exact-HEAD status plus the updated recent-review summary.
+- Develop remains three commits ahead of the feature base with the same three
+  known integration conflicts, reconfirmed with non-mutating merge-tree on
+  the final HEAD. No merge, deployment, Jira/design change or fresh Android/iOS
+  run was performed for this review task.
+- Breakpoint: current requested CodeRabbit work is handled and pushed in four
+  commits (`80c1cb5`, `2f4d6b7`, `b30e4a8`, `919a884`). PR #286 remains OPEN,
+  non-Draft and CONFLICTING; app-developer approval is not inferred from bot
+  completion. Next obtain explicit authority if develop conflict integration
+  is requested, or refresh the real BE pushType contract when it is released.
+  Runtime/real mutation QA and unknown multipart completion-response recovery
+  remain separate from the completed code review scope.

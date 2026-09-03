@@ -69,17 +69,15 @@ For detailed current state, read:
   primary workload, but mobile app work is active and must be developed
   alongside web when a feature or user flow spans both; its task volume may be
   smaller or intermittent.
-- Current state: initial macOS setup and Office development login/Home proof are
-  complete. The active checkout is clean on `feature/DL-16061` at `9f66fa3`
-  and synchronized with its upstream. PR #286 is open, mergeable and Ready for
-  review; CodeRabbit is successful with no unresolved review thread. The
-  deployed feedback API, cache and existing multipart-upload integration are
-  implemented. Android API 36 directly verified Profile, To Review/Reviewed,
-  the completed-order Clinic WebView feedback banner and its native detail and
-  Image Upload landing. The FE code scope is ready for app-developer review.
-  Real POST/PUT/upload mutation QA, physical-device QA, a fresh committed-source
-  Apple Silicon iOS build, and DL-16066 notification/deep-link work remain
-  separate gates.
+- Current state: initial setup and Office native feedback/API/deep-link/WebView
+  integration are implemented. Latest `feature/DL-16061` commit `919a884`
+  includes account-scoped cleanup, file-size checks and upload cancellation
+  from the follow-up reviews.
+  PR #286 remains open with three develop conflicts; do not infer merge-ready
+  from local checks or a resolved review thread. Notification design rows exist
+  but their real setting API mapping awaits BE pushType release. The canonical
+  current review result, Git state and separate runtime proof boundaries are
+  maintained in the personal checkpoint below rather than duplicated here.
 - Personal current checkpoint:
   `projects/dentlink-app.md`
 
