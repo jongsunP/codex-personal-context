@@ -59,11 +59,13 @@
 - 신규 스테이징 전달 PR:
   [#4566](https://github.com/Innvoaid/dentlink-client/pull/4566)
   - head: `release/v1.85.1` / `8d0744936b12e872c48c6715e3d17a85da070054`
-  - base: `stage` / `4fc3b4877458d99439d1474aff03b9eff17ab34a`
-  - 생성 후 OPEN, ready for review, MERGEABLE, auto-merge 미설정을 확인했다.
-  - Warranty뿐 아니라 현재 1.85.1의 전체 변경 8개 commit을 전달한다.
-  - 이번 작업 범위는 PR 생성까지다. PR merge·실제 배포·스테이징 QA는 사용자가
-    별도로 진행하며 완료로 간주하지 않는다. `develop`은 변경하지 않았다.
+  - 생성 당시 base: `stage` / `4fc3b4877458d99439d1474aff03b9eff17ab34a`
+  - 사용자가 2026-09-03 14:58 KST에 merge했으며 GitHub에서 MERGED를 확인했다.
+  - merge commit: `24b5af7b74a24fa83125d0dd3e5c934c634a2cce`
+  - Warranty뿐 아니라 당시 1.85.1의 전체 변경 8개 commit을 전달했다.
+  - 사용자가 후속 메시지에서 스테이징 배포 완료를 알렸다. 배포는 사용자 확인 기준이며,
+    이번 후속 기록에서 배포 workflow나 서버의 실제 SHA를 별도로 검사하지 않았다.
+  - 실제 화면 QA와 운영 배포는 별도 상태다. `develop`은 이번 작업에서 변경하지 않았다.
 
 ## 검증과 상태 경계
 
@@ -85,8 +87,8 @@
   이 PR에 달렸던 Sheet 운영 리뷰는 분리 후 outdated·resolved 상태다.
 - push hook은 전체 앱 lint 오류 0개와 shared config 3건, shared hooks 24건의
   테스트를 통과했다. 전체 lint의 기존 warning은 비차단 baseline이다.
-- 사용자가 코드와 정책 범위를 확인했다. 실제 release 환경 QA와 배포는 아직 완료로
-  간주하지 않는다.
+- 사용자가 코드와 정책 범위를 확인했고 2026-09-03 스테이징 배포 완료도 알렸다.
+  스테이징 기능 QA 및 운영 배포까지 완료한 것으로 확대 해석하지 않는다.
 - 2026-09-03 대상 변경 검토에서 base `9d0e0a1f4`와 Warranty head `8d3c8ad1e`를
   `git merge-tree`로 합쳐 충돌 없음을 확인했다. 추가되는 것은 Warranty commit 2개뿐이며
   기존 1.85.1 번역값은 모두 보존되고 en/ko에 Warranty 키 3개씩만 추가된다.
@@ -116,10 +118,10 @@
 
 ## 다음 시작점
 
-1. 사용자가 이어서 요청할 때 PR #4566과 원격 stage/release 상태를 live로 확인한다.
-   PR 생성만 요청된 현재 상태에서 리뷰·merge·배포를 자동으로 진행하거나 감시하지 않는다.
-2. 사용자가 PR merge와 스테이징 배포를 진행한 뒤, QA 요청이 있으면 실제 Clinic/Lab
-   `/warranty`, 푸터, 주문·리메이크 진입점을 확인한다. 배포와 QA는 각각 별도 증거로 판단한다.
+1. PR #4566 merge와 사용자 기준 스테이징 배포까지 완료됐다. 추가 요청을 기다리며
+   리뷰·배포를 자동으로 진행하거나 감시하지 않는다.
+2. QA 요청이 있으면 실제 Clinic/Lab `/warranty`, 푸터, 주문·리메이크 진입점을 확인한다.
+   배포와 QA는 각각 별도 증거로 판단한다.
 3. 1.85.1 release가 완료되면 `master`와 이후 release로의 반영을 별도 요청 범위에서
    확인한다. 이전 Warranty feature PR을 1.86.0에 다시 만드는 것으로 대체하지 않는다.
 4. 사용자가 정리를 요청하면 로컬 feature branch의 보존 상태를 확인한 뒤 제거하고,

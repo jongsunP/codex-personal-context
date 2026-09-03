@@ -197,7 +197,8 @@ For detailed current state, read:
   동일하다. Clinic/Lab/Admin 타입 검사와 번역 보존 검사를 통과했다. Warranty 번역
   3개의 Sheet 반영은 완료됐으며 공통 i18n 운영 개선 PR #4557도 이미 1.85.1에 포함됐다.
   원격 `stage`를 삭제하고 최신 원격 `master`와 같은 `4fc3b4877`로 재생성했으며,
-  `release/v1.85.1 -> stage` PR #4566이 OPEN·MERGEABLE 상태다. PR merge·실제
-  스테이징 배포·QA는 사용자가 별도로 진행한다. 로컬 branch/worktree는 정리하지 않았다.
+  `release/v1.85.1 -> stage` PR #4566은 `24b5af7b7`로 merge됐다. 사용자가 스테이징
+  배포 완료를 알렸으며, 실제 서버 SHA와 화면 QA는 이번 후속 기록에서 별도로 확인하지
+  않았다. 운영 배포는 별도 상태다. 로컬 branch/worktree는 정리하지 않았다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
