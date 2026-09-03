@@ -3,8 +3,8 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current checkpoint is the final section, **DL-16061 Jira And Task-Scope
-Closeout - 2026-09-03**. Earlier PR review and notification design sections
+The current checkpoint is the final section, **Feedback Session Boundary After
+Notification-Center Handoff - 2026-09-03**. Earlier PR review and notification design sections
 record the preceding implementation and decisions. Earlier dated
 delivery, review, API and runtime results below are historical, not current
 claims. The two new notification rows now exist as disabled presentation;
@@ -21,8 +21,11 @@ their real setting integration still awaits the deployed BE contract.
 - 통합알림센터 문의는 `projects/dentlink-unified-notification-center.md`를 읽는다.
   2026-09-03 후속 지침으로 기기 간 실시간 동기화를 제외하고 REST 기반으로
   변경했다. 읽음·삭제 동기화용 데이터 FCM은 추가하지 않으며 기존 FCM·Notifee
-  사용자 푸시는 유지한다. 구현·전용 작업 환경은 아직 시작하지 않았다. 기존
-  피드백 구현이나 개별 푸시 작업의 완료 상태와 섞지 않는다.
+  사용자 푸시는 유지한다. 사용자가 별도 웹·앱 통합 관리 세션을 개설했다.
+  공통 딥링크·알림센터 읽음 처리는 그 세션이 담당하고, 이 세션은 기존 피드백
+  기능을 담당한다. 현재 별도 worktree 없이 같은 저장소를 참조하므로 공통 파일
+  구현 전 브랜치와 작업 범위를 조율한다. 관리 세션 개설을 구현 완료로 간주하지
+  않으며, 피드백 구현이나 개별 푸시 작업의 완료 상태와 섞지 않는다.
 - Resume from this onboarding checkpoint instead of repeating setup from
   scratch. At the start of future work, sync this personal context and all
   relevant shared repositories, then verify live Git refs and current team
@@ -1491,3 +1494,33 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   through the official command, then connect only the actual new pushType
   rows to existing settings read/write/enable-all behavior. Until then there
   is no identified immediately actionable unfinished feedback implementation.
+
+## Feedback Session Boundary After Notification-Center Handoff - 2026-09-03
+
+- The user created a separate unified-notification-center session and asked
+  for a copyable context handoff. That session owns the new common deep-link
+  hospital/screen/read-receipt work; this session continues the existing
+  DL-15828/DL-16061 feedback scope only. The shared routing files can overlap,
+  so neither session should silently switch the shared checkout or mix new
+  notification-center work into the feedback branch.
+- Read-only investigation found existing employerId-to-employeeId mapping,
+  FCM/Notifee/Linking/Airbridge and deferred navigation. Common notification
+  read handling is not implemented. A proposed URL notificationId must be the
+  REST NotificationDto.id, not orderId or a transport/OS ID. Different create/
+  update notifications landing on the same route need distinct IDs; preserve
+  navigation dedup separately from notification read identity.
+- Development Swagger was inspected at 15:09 KST: existing authenticated
+  PATCH /messages/notifications/read/partial accepts unreadNotificationIds.
+  Employee-Id/Employer-Id context must match the target authorized membership.
+  Query-name/payload mapping, already-read semantics and read-on-navigation-
+  failure policy are not confirmed BE contracts. No new read API or payload
+  field was implemented here. REST-only/no cross-device realtime scope stands.
+- Feedback branch still clean at `c6355a3`. A user-supplied development
+  CodePush log failed at CLI asset validation for the existing 1,549,611-byte
+  ISV video, unchanged from develop. Installed CLI 0.0.15 supports --force to
+  bypass its 500 KiB check; the scripts' --mandatory is unrelated. Explained
+  per-platform --force commands, but did not edit scripts/video or execute a
+  release. A subsequent successful user deployment has not been verified.
+- This handoff does not authorize implementation, branch creation, commits,
+  pushes, PR changes or deployment in the destination session beyond its own
+  current user instructions. No product code/Jira mutation was made here.
