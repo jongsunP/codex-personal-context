@@ -90,10 +90,10 @@ For detailed current state, read:
   현재 기준은 기존 REST 흐름 유지다. 알림 전용 SSE와 읽음·삭제 동기화용 데이터
   FCM은 추가하지 않으며 기존 배송 SSE·사용자 노출 푸시는 별개로 유지한다. 웹·앱
   통합 관리 세션이 개설됐고 별도 프로젝트 폴더/worktree 없이 두 저장소를 함께
-  참조한다. 푸시 클릭 시 읽음 요구와 앱 피드백 세션의 조사 인계를 반영했으며,
-  공통 읽음 구현은 미착수다. 목록 읽음 정책은 PM 답변 대기, 알림 ID 전달 등 BE
-  계약과 전용 Jira/구현 branch/release는 미정이다. 기존 앱 피드백은 별도 세션이
-  계속 담당하며, 현재 확정/미정과 작업 충돌 경계는 아래 체크포인트를 따른다.
+  참조한다. 푸시 클릭 시 읽음 요구를 반영했으며 공통 읽음 구현은 미착수다.
+  읽음 대상은 알림 ID 직접 전달뿐 아니라 여러 정보를 조합해 처리할 가능성도
+  있으며 방식은 미정이다. 목록 읽음 정책은 PM 답변 대기, 구체적인 처리 계약과
+  전용 Jira/구현 branch/release는 미정이다. 상세 상태는 아래 체크포인트를 따른다.
 - Personal current checkpoint:
   `projects/dentlink-unified-notification-center.md`
 
