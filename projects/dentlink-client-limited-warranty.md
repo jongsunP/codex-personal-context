@@ -35,7 +35,61 @@
 
 ## 현재 체크포인트 — 2026-09-03
 
-### 최신 작업: PM 최종 정책 본문 반영 — 제품 미커밋
+### 최신 전달: master 병합·push 및 스테이징 PR #4572 생성
+
+- 사용자 명시 지시: 현재 원본 작업 branch에 최신 원격 master를 반영하고 충돌을
+  해결한 뒤 commit/push한다. 원격 stage를 삭제하고 최신 원격 master에서 재생성한
+  다음 **release가 아닌 `feature/DL-16258 -> stage` PR**을 만든다. PR merge와
+  실제 스테이징 배포는 이번 요청에 포함하지 않는다.
+- 미커밋 정책 수정을 먼저 안전하게 보존했다.
+  - `89bf047c541e30a189c2c9164855ba5867d1196c`
+    `[DL-16258] fix: 최신 워런티 정책 본문 반영`
+- 최신 `origin/master`의 `ddeeb1e868c64f3e1047170f6bc6282a9646ed97`
+  (`Release/v1.85.1 > master (#4569)`)를 병합했다. 충돌은 없었으며 최신 공통 기능과
+  워런티 구현을 모두 보존했다. 기존 commit의 재작성이나 force-push는 하지 않았다.
+  - merge commit: `f7f81e69a2ccf29d8a72cf972b5f7a9d16e28806`
+    `[DL-16258] chore: 최신 master 병합`
+  - 현재 HEAD/upstream: `feature/DL-16258` / `origin/feature/DL-16258`, 모두 `f7f81e69a`.
+    일반 push 완료, 로컬 clean, 별도 branch/worktree 생성·정리 없음.
+- master 대비 차이는 원본 워런티 범위 16개 파일(+449/-6)과 일치한다. 기존 페이지·
+  진입점·고지·번역과 최신 정책 본문만 추가되며, 별도 피드백 작업 등 다른 미배포 feature는
+  포함하지 않는다. master가 feature HEAD의 조상임을 확인했다.
+- i18n 스킬의 표준 전달 검증에서 시트의 워런티 진입점 key 3개가 빠져 있었다.
+  - export 미리보기: local 1,588 / missing 3 / stale 0 / conflicts 0.
+  - `gnb.navigation.limitedWarranty`, `orders.warranty.agreement`,
+    `orders.warranty.policy`를 `pnpm export:i18n -- --write`로 복원했다.
+  - 기존 번역값 충돌 없이 완료됐고 역할별 탭 연결 문제 및 잘못 배치된 확인 요청은 0개다.
+    표준 export의 사용처 메타데이터 동기화도 함께 수행했으며 overwrite 옵션은 쓰지 않았다.
+  - 이후 미리보기의 missing/stale/conflicts 모두 0, `pnpm check:i18n`은 1,588개 key·
+    20개 파일로 통과했다. `pnpm generate:i18n` 재실행 후 제품 diff 추가 없음.
+    정책 본문은 계속 영어 정적 콘텐츠이며 Sheet에 본문 전체를 추가하지 않는다.
+- 병합 후 Notion 원문과 실제 React 렌더링 text block 115개를 다시 대조해 누락/추가/
+  문구 불일치 0개를 확인했다. Clinic/Lab/Admin 전체 타입과 diff 검사를 통과했다.
+  i18n audit는 unresolved 9개(기존), unknown literal 0, Clinic 회귀 후보 0이다.
+- 두 commit의 기본 hook과 일반 push hook을 우회 없이 통과했다. 세 앱 lint의 기존
+  warning과 coverage baseline 차이 표시는 있었지만 hook 실패는 없었다. coverage는
+  기본 비강제 비교 경로이며 강제 임계값 통과로 표현하지 않는다. 앞선 대상 분리 lint와
+  기본 shared/ui 직접 lint의 기존 설정 충돌도 구분한다.
+- 원격 stage 재생성:
+  - 삭제 전 `5cb3ddaf387ebfc4df0cbffcf7abee505863bf27`이며 master와 파일 내용은 같았다.
+    stage에만 있는 이력은 이전 전달 merge #4568 하나였다.
+  - 삭제 직전 master/feature/stage SHA, 열린 stage PR 0개, protected=false,
+    유효 rules=[]를 재확인했다. branch 보호 우회 없이 GitHub ref API로 삭제·재생성했다.
+  - 생성 후 `stage == master == ddeeb1e868c64f3e1047170f6bc6282a9646ed97`를 확인했다.
+- 신규 [PR #4572](https://github.com/Innvoaid/dentlink-client/pull/4572)
+  `[DL-16258] 최신 워런티 정책 스테이징 반영`을 2026-09-03 19:08 KST에 생성했다.
+  - base `stage@ddeeb1e86`, head `feature/DL-16258@f7f81e69a`.
+  - OPEN / 일반 PR / MERGEABLE / CLEAN / 자동 merge 미설정으로 확인했다.
+  - 16개 파일, +449/-6. 표준 PR 템플릿에 원문·검증·미실행 QA 경계를 기록했다.
+- 이번 작업에서 develop/master/release branch를 직접 변경하지 않았다. 종료 직전 원격
+  develop은 `ddeeb1e86`, release/v1.85.1은 `b9fba70b4`, release/v1.86.0은 `506ac2a25`였다.
+  다른 세션의 작업 상태를 이 task에서 수정하지 않는다.
+- **남은 단계:** 사용자 PR merge·스테이징 배포·화면/PM QA. 새로운 production build와
+  브라우저 QA는 이번 전달 작업에서 수행하지 않았다. CodeRabbit 리뷰 처리나 1.86.0 정식
+  release PR은 아직 지시하지 않았으므로 자동으로 진행하지 않는다. Jira·Notion 댓글도
+  수정하지 않았다.
+
+### 이전 구현 단계: PM 최종 정책 본문 반영 — 당시 제품 미커밋
 
 - PM 댓글 [43892](https://innovaid.atlassian.net/browse/DL-16258?focusedCommentId=43892)를
   Jira connector로 직접 읽었다. 최신 Notion과 기존 본문을 전체 대조해 변경 사항을
@@ -244,12 +298,11 @@
 
 ## 다음 시작점
 
-1. 현재 checkout은 `feature/DL-16258` / `8d3c8ad1e`이며 공용 워런티 본문 한 파일에
-   미커밋 변경이 있다. 다른 작업자의 변경을 보존하고 실제 diff부터 확인한다.
-2. 사용자가 로컬에서 Clinic/Lab `/warranty`를 확인할 수 있다. 제품 commit/push/PR은
-   별도 명시 지시가 있을 때 진행한다. PM QA·스테이징 반영도 아직 실행하지 않았다.
-3. 다음 배포 전달이 확정되면 최신 원본 feature와 target release를 비교하고, 원본 squash와
-   제외 commit 이력이 있는 점을 고려해 재적용한다. 기존 미커밋 본문을 잃거나 1.85.1에
-   다시 넣지 않는다. 번역 키 전달과 Sheet 정합성도 그때의 실제 기준으로 재확인한다.
-4. 워런티 제외 PR #4567과 스테이징 전달 PR #4568은 이미 merge 및 사용자 확인 배포
-   이력이 있다. 오늘의 새 본문 구현 완료와 배포 완료를 혼동하지 않는다.
+1. 현재 checkout은 `feature/DL-16258` / `f7f81e69a`, 원격 동일·clean이다. PR #4572는
+   `feature/DL-16258 -> stage`이며 사용자의 merge·배포를 기다린다. 자동 merge/배포하지 않는다.
+2. 사용자가 merge·배포 완료를 알리면 GitHub merge 확인과 사용자 확인 배포를 구분해
+   기록한다. 실제 서버 SHA·브라우저 화면 QA·PM 최종 QA는 별도 증거가 필요하다.
+3. 정식 다음 배포 전달이 확정되면 최신 target release와 master/feature 상태를 다시 비교해
+   별도 PR을 준비한다. 이번 stage PR을 release/v1.86.0 반영 완료로 해석하지 않는다.
+4. 이전 #4568은 워런티 제외 버전이고 새 #4572는 최신 정책이 포함된 워런티 작업 branch
+   전달이다. 기존 제외용 branch·원본 feature 및 관련 worktree는 지시 없이 정리하지 않는다.

@@ -218,11 +218,17 @@ For detailed current state, read:
   운영 배포는 별도 상태다. 해당 배포 작업에서 develop은 변경하지 않았다.
   이후 PM 댓글 43892의 최신 Notion 정책을 확인하고 사용자 지시로 원본
   `feature/DL-16258` / `8d3c8ad1e`에서 본문을 수정했다. 공용
-  `LimitedWarrantyContent.tsx` 한 파일만 미커밋 상태이며 상품 분류·명칭·보증기간과
+  `LimitedWarrantyContent.tsx` 한 파일에서 상품 분류·명칭·보증기간과
   일반 조항을 반영했다. Notion 10개 조항·11개 상품 분류·61개 항목 및 렌더링 문장
   115개를 대조해 누락·불일치 0개, 세 앱 typecheck와 대상 분리 lint·Prettier·diff
-  검사를 통과했다. 기본 lint의 기존 설정 충돌은 별도다. 제품 commit/push/PR,
-  브라우저 QA, 재배포는 하지 않았다. 다음 1.86.0 배포 후보이며 확정 시 최신 release와
-  리버트 이력을 다시 검토한다. 지금은 로컬 확인과 전달 지시를 기다린다.
+  검사를 통과했다. 기본 lint의 기존 설정 충돌은 별도다. 사용자 후속 지시로 본문을
+  `89bf047c5`에 commit하고 최신 master `ddeeb1e86`를 충돌 없이 병합했다. 현재 HEAD는
+  `f7f81e69a`, push 완료·원격 동일·clean이다. Sheet에서 빠진 워런티 진입점 key 3개를
+  표준 export로 복원하고 1,588개 key 정합성을 검증했다. 기본 commit/push hook도 통과했다.
+  원격 stage를 삭제하고 최신 master `ddeeb1e86`에서 재생성한 뒤 작업 branch를 직접
+  전달하는 [PR #4572](https://github.com/Innvoaid/dentlink-client/pull/4572)를 생성했다.
+  `feature/DL-16258 -> stage`, OPEN·MERGEABLE, 16개 파일(+449/-6)이다.
+  PR merge·실제 스테이징 배포·브라우저/PM QA는 아직 하지 않았다. 1.86.0 정식 release
+  전달도 별도이며, 사용자 후속 지시 전까지 대기한다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
