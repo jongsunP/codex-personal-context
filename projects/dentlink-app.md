@@ -1,7 +1,13 @@
-# Dentlink Mobile App setup and current checkpoint - 2026-09-01
+# Dentlink Mobile App setup and current checkpoint - 2026-09-03
 
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
+
+The current code checkpoint is the final dated section, **DL-16061 Upload
+Failure Isolation And Notification Design - 2026-09-03**. Earlier dated
+delivery, review, API and runtime results below are historical, not current
+claims. The two new notification rows now exist as disabled presentation;
+their real setting integration still awaits the deployed BE contract.
 
 ## Project Role And Continuity
 
@@ -69,11 +75,12 @@ This is the current resume source for the first local setup of
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `88066f069ea67bc12cc4ec5e43f647a58afe30b2`
+- Current HEAD: `1ddbdcfc5ed9d16ea92eb23854078bfff662aa2d`
 - The checkout is clean and synchronized with
-  `origin/feature/DL-16061` as of 2026-08-28 15:44 KST.
-- `origin/develop` is `09ca56296de4d83acf81d57851d94a8269d58c20`;
-  the feature branch is fourteen commits ahead and three commits behind.
+  `origin/feature/DL-16061` as of 2026-09-03 11:21 KST.
+- `origin/develop` is `5ec442a2a20be9dbbad9a7f8532de37e69b60a8d`;
+  the feature branch is thirty-two commits ahead and three commits behind.
+  No base merge was authorized or performed in this code-only closeout.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
@@ -1030,3 +1037,69 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 3. When BE deploys the actual `UserPushSettingUpdateDto.pushType` values,
    regenerate and review Swagger before adding only the delivered Office
    notification rows. Do not guess the enum values.
+
+## DL-16061 Upload Failure Isolation And Notification Design - 2026-09-03
+
+### Delivered code and authorization
+
+- The user explicitly authorized commit, push and Git-backed memory closeout.
+  Two purpose-separated commits are pushed to `feature/DL-16061` and visible
+  in PR #286 at `1ddbdcfc5ed9d16ea92eb23854078bfff662aa2d`. App checkout is
+  clean. No PR body/review mutation, Jira update, base merge or deployment was
+  included in this request.
+- `67b4cc0` (`shared/libs/useFileUpload.ts`) consolidates failure UI in the
+  outer upload catch and checks the mounted/current upload session before
+  clearing file IDs or showing delayed errors. An obsolete multipart failure
+  cannot overwrite a newer upload's state or emit a duplicate toast. Existing
+  multipart abort and completed-file cleanup/retry remain in place.
+- `1ddbdcf` (`shared/features/profile/sections/ProfileNotificationSection.tsx`)
+  adds Office-only `Case Preference` and `Order Feedback` rows after LinkTalk,
+  reusing the existing notification row and compact switch. Figma descriptions
+  are `Set Preference for better fit cases` and
+  `Rate cases for better-fit results`. Existing supported rows and Lab stay
+  unchanged; no native code, dependencies or generated models changed.
+
+### Design versus API readiness
+
+- Figma node `160:39015` in file `Lu8GEh1TUU5hOfj2FCPRYn` was read through
+  design context and its screenshot. Profile layout and Pending Reviews
+  already existed; the two notification rows were absent before this change.
+- Both new rows are intentionally disabled and visually off until BE mapping
+  exists. Their displayed value is a UI placeholder, not a claim about actual
+  server notification delivery. They send no PATCH or analytics and stay
+  disabled when Enable All is used. Do not describe them as connected toggles.
+- `https://dev-api.dentlink.io/v3/api-docs`, read at 2026-09-03 11:17 KST,
+  still exposes eight `UserPushSettingUpdateDto.pushType` values:
+  `ORDER_NEW`, `ORDER_APPROVAL`, `ORDER_PENDING`, `ORDER_TRACKING`,
+  `ORDER_EXTRA_FEE`, `CHAT_ORDER`, `CHAT_DENTLINK`, `ORDER_UPDATE`.
+  Neither new notification type is deployed in this contract. No enum or
+  payload name was guessed and no generated file was hand-edited.
+- This setting contract is separate from the already implemented FCM
+  `data.deeplink` routing and `push_click` Amplitude classification. No new
+  FCM field is required merely to draw or wire these preference rows.
+
+### Verification and next start
+
+- Changed-file ESLint, Prettier and `git diff --check` pass. Prettier reports
+  existing unsupported import-order options, not formatting failures.
+- Existing focused feedback/repository/deep-link/WebView/error suites pass
+  46/46. A transient mocked-hook regression harness reproduced the old upload
+  bug against HEAD before the fix and passed seven cases against the fix:
+  stale completion failure, missing ETag, current failure, silent errors,
+  unmount, prior-batch cleanup and delayed toast after a new upload.
+- A transient React component harness passed six notification checks: Office
+  row order/copy, inert pending rows, existing toggle API/analytics, Enable All,
+  unavailable preference query, and Lab isolation. Hooks and rendering
+  primitives were mocked. No new test/support files were left in the app repo.
+- No emulator, simulator, real push/settings mutation or deployment QA was
+  performed in this code-only closeout; do not upgrade earlier runtime proof.
+- Current independently actionable confirmed FE code is complete for this
+  request. After BE deployment, regenerate/review Swagger, replace the pending
+  rows with actual generated-type mappings in the existing setting list, and
+  connect GET `/app/users/own/push-preferences` and PATCH
+  `/app/users/own/push-settings/{pushSettingId}`. Verify defaults/upsert,
+  Enable All, permission/loading/error and analytics behavior at that time.
+- Continue to require new explicit authorization for later app commit/push.
+  Read this checkpoint and live feature Git before resuming; do not treat
+  a design placeholder, code completion, review approval or deployment as
+  interchangeable states.
