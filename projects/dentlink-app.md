@@ -1418,3 +1418,34 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   deployment or new Android/iOS/real-API QA. Existing BE notification pushType
   integration and unknown multipart completion-response recovery stay at the
   previously documented external contract boundaries.
+
+## DL-16061 Whole-Project Status Recheck - 2026-09-03
+
+- Read-only briefing recheck at 14:35-14:41 KST reconfirmed app `c6355a3`
+  clean and pushed, develop `5ec442a` included, and PR #286 OPEN/non-Draft,
+  MERGEABLE/CLEAN with successful checks and all 16 review threads resolved.
+  Human approval, PR merge and deployment have not been inferred.
+- Live development Swagger returned HTTP 200 at 14:35 KST. Its
+  `UserPushSettingUpdateDto.pushType` still has the nine existing order/chat
+  values, with no Case Preference or Order Feedback values. Both Office
+  settings rows already have disabled UI; their actual GET/POST/PATCH state,
+  enable-all behavior and interaction events await the real backend contract.
+- Found the dedicated BE dependency: DL-16285, assigned to Leo, is In Progress
+  (updated 2026-09-03 10:42 KST). Its description covers user control of C.P.
+  and feedback request pushes and specifically mentions C.P. template 127.
+  Recheck this card and deployed Swagger together before implementing the
+  remaining settings connection; do not guess enum spelling from UI labels.
+- Live Jira: DL-16061, DL-16066 and DL-16229 remain Ready for Deploy;
+  DL-16064 is Done. DL-16061's description still says Draft/Share Feedback and
+  14 tests; DL-16066 still names the older `/my/feedback` URL. These are stale
+  descriptions, not the latest code contract. No Jira edit was made in this
+  reporting-only turn; description refresh remains documentation work.
+- Swagger still exposes DELETE/PATCH but no GET for employee/user multipart
+  upload IDs. Unknown-fileId recovery after a lost successful completion
+  response remains the prior BE contract boundary, not an ordinary upload
+  implementation gap. Known cleanup IDs are retained in process memory.
+- This briefing refreshed Git/PR/Jira/Swagger and relevant source code. It did
+  not repeat all Figma/FigJam/Notion design review or Android/iOS runtime QA.
+  Today's 125 passing unit tests and baseline diagnostics belong to the same
+  committed tree; historical visual proof must not be presented as a new
+  runtime test of the upload fixes or develop integration.
