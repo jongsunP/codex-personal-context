@@ -35,7 +35,7 @@
 
 ## 현재 체크포인트 — 2026-09-03
 
-### 최신 전달: master 병합·push 및 스테이징 PR #4572 생성
+### 최신 전달: master 병합·push 및 스테이징 배포 완료
 
 - 사용자 명시 지시: 현재 원본 작업 branch에 최신 원격 master를 반영하고 충돌을
   해결한 뒤 commit/push한다. 원격 stage를 삭제하고 최신 원격 master에서 재생성한
@@ -79,15 +79,21 @@
 - 신규 [PR #4572](https://github.com/Innvoaid/dentlink-client/pull/4572)
   `[DL-16258] 최신 워런티 정책 스테이징 반영`을 2026-09-03 19:08 KST에 생성했다.
   - base `stage@ddeeb1e86`, head `feature/DL-16258@f7f81e69a`.
-  - OPEN / 일반 PR / MERGEABLE / CLEAN / 자동 merge 미설정으로 확인했다.
+  - 생성 당시 OPEN / 일반 PR / MERGEABLE / CLEAN / 자동 merge 미설정으로 확인했다.
   - 16개 파일, +449/-6. 표준 PR 템플릿에 원문·검증·미실행 QA 경계를 기록했다.
+  - 사용자가 2026-09-03 19:15 KST에 merge했으며 GitHub의 MERGED 상태를 확인했다.
+    merge commit과 원격 stage HEAD는 `759a3a4a246525ed2a7e3d73891bee17e93128a5`다.
+  - 사용자가 스테이징 배포 완료도 알렸다. 배포 완료는 사용자 확인 기준으로 기록하며,
+    이번 확인에서 workflow·서버 SHA·브라우저 화면을 독립 검증하지 않았다.
 - 이번 작업에서 develop/master/release branch를 직접 변경하지 않았다. 종료 직전 원격
   develop은 `ddeeb1e86`, release/v1.85.1은 `b9fba70b4`, release/v1.86.0은 `506ac2a25`였다.
   다른 세션의 작업 상태를 이 task에서 수정하지 않는다.
-- **남은 단계:** 사용자 PR merge·스테이징 배포·화면/PM QA. 새로운 production build와
-  브라우저 QA는 이번 전달 작업에서 수행하지 않았다. CodeRabbit 리뷰 처리나 1.86.0 정식
-  release PR은 아직 지시하지 않았으므로 자동으로 진행하지 않는다. Jira·Notion 댓글도
-  수정하지 않았다.
+- 제품 commit/push, PR merge, 사용자 확인 스테이징 배포까지 완료됐다. 종료 확인에서
+  원본 feature는 `f7f81e69a`, 로컬·원격 동일·clean 상태다. 작업 branch는 향후 정식
+  릴리즈 전달을 위해 보존한다. 개인 컨텍스트에 완료 상태를 기록한 뒤 추가 작업 없이 대기한다.
+- **별도 단계:** 화면/PM QA와 1.86.0 정식 release 반영·운영 배포. 새로운 production
+  build와 브라우저 QA는 이번 전달 작업에서 수행하지 않았다. CodeRabbit 리뷰 처리나
+  정식 release PR은 별도 지시 전까지 진행하지 않는다. Jira·Notion 댓글도 수정하지 않았다.
 
 ### 이전 구현 단계: PM 최종 정책 본문 반영 — 당시 제품 미커밋
 
@@ -299,9 +305,10 @@
 ## 다음 시작점
 
 1. 현재 checkout은 `feature/DL-16258` / `f7f81e69a`, 원격 동일·clean이다. PR #4572는
-   `feature/DL-16258 -> stage`이며 사용자의 merge·배포를 기다린다. 자동 merge/배포하지 않는다.
-2. 사용자가 merge·배포 완료를 알리면 GitHub merge 확인과 사용자 확인 배포를 구분해
-   기록한다. 실제 서버 SHA·브라우저 화면 QA·PM 최종 QA는 별도 증거가 필요하다.
+   `feature/DL-16258 -> stage`로 merge됐고 사용자가 스테이징 배포 완료를 알렸다.
+   원격 stage는 `759a3a4a2`로 확인했으며 현재 추가 작업 없이 대기한다.
+2. 실제 서버 SHA·브라우저 화면 QA·PM 최종 QA는 별도 증거가 필요하다. 사용자 확인
+   배포 완료를 화면/정책 QA 또는 운영 배포 완료로 확대 해석하지 않는다.
 3. 정식 다음 배포 전달이 확정되면 최신 target release와 master/feature 상태를 다시 비교해
    별도 PR을 준비한다. 이번 stage PR을 release/v1.86.0 반영 완료로 해석하지 않는다.
 4. 이전 #4568은 워런티 제외 버전이고 새 #4572는 최신 정책이 포함된 워런티 작업 branch

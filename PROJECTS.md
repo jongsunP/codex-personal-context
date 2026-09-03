@@ -227,8 +227,9 @@ For detailed current state, read:
   표준 export로 복원하고 1,588개 key 정합성을 검증했다. 기본 commit/push hook도 통과했다.
   원격 stage를 삭제하고 최신 master `ddeeb1e86`에서 재생성한 뒤 작업 branch를 직접
   전달하는 [PR #4572](https://github.com/Innvoaid/dentlink-client/pull/4572)를 생성했다.
-  `feature/DL-16258 -> stage`, OPEN·MERGEABLE, 16개 파일(+449/-6)이다.
-  PR merge·실제 스테이징 배포·브라우저/PM QA는 아직 하지 않았다. 1.86.0 정식 release
-  전달도 별도이며, 사용자 후속 지시 전까지 대기한다.
+  `feature/DL-16258 -> stage`, 16개 파일(+449/-6)이다. 사용자가 2026-09-03 19:15 KST에
+  merge했고 GitHub MERGED 및 원격 stage `759a3a4a2`를 확인했다. 스테이징 배포 완료는
+  사용자 확인 기준으로 기록했다. 제품은 원격 동일·clean이며 원본 branch를 보존한다.
+  브라우저/PM QA와 1.86.0 정식 release 반영·운영 배포는 별도이며, 추가 작업 없이 대기한다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
