@@ -3,8 +3,9 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current code checkpoint is the final dated section, **DL-16061 Upload
-Failure Isolation And Notification Design - 2026-09-03**. Earlier dated
+The current checkpoint is the final section, **DL-16061 PR Refresh And Review -
+2026-09-03**. The preceding Upload Failure Isolation And Notification Design
+section records the earlier implementation in this session. Earlier dated
 delivery, review, API and runtime results below are historical, not current
 claims. The two new notification rows now exist as disabled presentation;
 their real setting integration still awaits the deployed BE contract.
@@ -75,12 +76,12 @@ their real setting integration still awaits the deployed BE contract.
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `1ddbdcfc5ed9d16ea92eb23854078bfff662aa2d`
+- Current HEAD: `5994f1fca27c165e891f3781bf79fe5952b353b7`
 - The checkout is clean and synchronized with
-  `origin/feature/DL-16061` as of 2026-09-03 11:21 KST.
+  `origin/feature/DL-16061` as of 2026-09-03 11:52 KST.
 - `origin/develop` is `5ec442a2a20be9dbbad9a7f8532de37e69b60a8d`;
-  the feature branch is thirty-two commits ahead and three commits behind.
-  No base merge was authorized or performed in this code-only closeout.
+  the feature branch is thirty-four commits ahead and three commits behind.
+  No base merge was authorized or performed in this code/review closeout.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
@@ -1103,3 +1104,96 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   Read this checkpoint and live feature Git before resuming; do not treat
   a design placeholder, code completion, review approval or deployment as
   interchangeable states.
+
+## DL-16061 PR Refresh And Review - 2026-09-03
+
+- The user explicitly requested app commit/push, memory closeout and PR
+  refresh/review. App HEAD is now `5994f1fca27c165e891f3781bf79fe5952b353b7`
+  on `feature/DL-16061`, equal to its upstream and clean. The session started
+  clean at `1ddbdcf`; new code was added only after validating the follow-up
+  CodeRabbit findings below.
+- PR #286 remains OPEN/non-Draft. Its body now records the latest HEAD,
+  obsolete upload-session failure fix, disabled notification design, accurate
+  validation counts and the boundary between UI placeholders and connected
+  server preferences. The previous mergeable/current-develop claim was removed.
+- Fetched `origin/develop` is `5ec442a2a20be9dbbad9a7f8532de37e69b60a8d`.
+  Feature history is 34 commits ahead and 3 behind. A non-mutating
+  `git merge-tree --write-tree HEAD origin/develop` confirmed conflicts in
+  `shared/configs/i18n/locales/en.ts`, `shared/configs/i18n/textRegistry.ts`
+  and `shared/configs/utils/dentlinkWebURL.ts`. GitHub also reports
+  CONFLICTING/DIRTY. No develop merge or conflict edit was performed; do not
+  describe the PR as merge-ready. GitHub's PR base SHA was stale compared to
+  the separately fetched live branch ref.
+- The old outside-diff review `5076958062` is addressed by `67b4cc0`.
+  General review bodies have no resolve button; implementation evidence and
+  the manual review request are in
+  https://github.com/Innvoaid/dentlink-app/pull/286#issuecomment-5519414222.
+  CodeRabbit's initial conversational response at
+  https://github.com/Innvoaid/dentlink-app/pull/286#issuecomment-5519420314
+  found no new blocker, but its separate incremental review completed at
+  11:35:46 KST with two outside-diff findings in review `5097191737`.
+- Commit `2f76e04` (`fix: 업로드 중단 실패 정리 재시도 보완`) changes only
+  `shared/libs/useFileUpload.ts`: upload-start cleanup now explicitly allows
+  three attempts; failed multipart aborts retain `uploadId` in a separate Set.
+  The existing bounded cleanup loop removes only successful IDs and retries
+  aborts and completed-file deletions at failure, next upload and unmount.
+  File IDs and upload IDs remain distinct; no endpoint, native dependency,
+  persistence layer or caller interface changed.
+- Both new findings are addressed with evidence in
+  https://github.com/Innvoaid/dentlink-app/pull/286#issuecomment-5519513624.
+  CodeRabbit explicitly verified both fixes and found no new blocker in
+  https://github.com/Innvoaid/dentlink-app/pull/286#issuecomment-5519521124.
+  The subsequent formal review of `2f76e04` completed at 11:47:48 KST and
+  raised two new inline findings in review `5097250295`. Conversational bot
+  reassurance is not equivalent to the final formal review/check outcome.
+- Commit `5994f1f` (`fix: multipart 전송 종료 후 중단 처리`) fixes the second
+  finding: `runWithConcurrency` waits for all workers to settle after any
+  worker rejection, then throws the original error. Abort cannot race the
+  remaining part PUT requests or temporary-file cleanup. Reply evidence is
+  https://github.com/Innvoaid/dentlink-app/pull/286#discussion_r3920594072;
+  thread `PRRT_kwDOLCkD486ewYJE` is resolved.
+- One valid review limitation remains OPEN: thread
+  `PRRT_kwDOLCkD486ewYJC`,
+  https://github.com/Innvoaid/dentlink-app/pull/286#discussion_r3920574073.
+  Hook-local IDs cannot survive all cleanup retries failing and the hook
+  disappearing. An account/employer/environment-scoped app-wide or persistent
+  queue would address known-ID recovery but expands the shared upload state
+  architecture and requires a scope decision. Do not falsely resolve this as
+  fixed or conflate it with the separate lost-completion-response BE gap.
+  The explicit deferral explanation is comment `3920589577`. Of 16 total
+  inline review threads, 15 are resolved and this one is unresolved.
+- The review cycle pauses for that scope decision. Auto-review on this base
+  branch is disabled; `5994f1f` has local validation but no completed formal
+  follow-up run. After the decision, handle the queue finding if authorized,
+  request a standalone `@coderabbitai review`, and verify the run plus all
+  threads. A mixed prose/comment command was treated as chat once; a standalone
+  command reliably triggered the formal incremental review.
+- Rerun checks: existing focused Jest suites 46/46, changed-file ESLint,
+  Prettier and `git diff --check` pass. In-memory TypeScript comparison of
+  current code against `28a1294` versions of the two changed files produced
+  Office 11 baseline/current errors and Lab 11 baseline/current errors, with
+  zero new diagnostics. No reset, stash, source replacement or generated
+  model edits were used. This supersedes the older ten-error environment
+  snapshot; whole-project typecheck is not passing.
+- An additional transient actual-hook/React-renderer regression harness
+  passed eight cases with mocked APIs/native modules: normal success, bounded
+  abort retries and one toast, retry next upload, completed-file retry next
+  upload, independent abort/file IDs, queued cleanup on unmount, old-session
+  failure after new success, and late failure after unmount. No persistent
+  test/helper files were added. These are code-level checks, not real upload QA.
+- The next transient hook harness reproduced the abort/active-PUT race on
+  `2f76e04` and passed three cases on `5994f1f`: second worker succeeds, second
+  worker fails, and both workers succeed normally. Abort waits until the other
+  PUT and part-file cleanup settle; normal completed fileId behavior remains.
+  Focused Jest 46/46, lint/format/diff and the Office/Lab baseline comparison
+  were rerun after this last edit with the same passing/no-new-error outcome.
+- The existing upload cleanup queue is hook-local and best effort with bounded
+  deletion retries. It does not guarantee durable cleanup after all retries
+  fail and the hook is gone. Lost multipart completion-response recovery also
+  remains outside the available BE lookup/idempotency contract; no new endpoint
+  or persistence architecture was invented to satisfy an old resolved review.
+- No new emulator/simulator, FCM, API-mutation, merge or deployment proof was
+  added. Next: ask whether to expand to the account-scoped shared cleanup queue;
+  separately obtain authority for develop conflict integration/revalidation.
+  Human review and later notification API wiring after actual BE enum release
+  are still separate. This is a saved breakpoint, not review-zero or merge-ready.
