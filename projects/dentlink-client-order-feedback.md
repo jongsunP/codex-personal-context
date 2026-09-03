@@ -4,7 +4,43 @@
 기록보다 live Git, Jira, Notion, Figma와 배포된 Swagger 상태를 우선한다. 기획
 검토, 구현, 로컬 QA, 앱 검증, release 전달, 스테이징 QA와 배포를 구분한다.
 
-## 최신 체크포인트 — 2026-09-03
+## 최신 체크포인트 — 2026-09-03 개발서버 반영 PR
+
+- 사용자 지시로 최신 `origin/master` `ddeeb1e868c64f3e1047170f6bc6282a9646ed97`을
+  `feature/DL-15828`에 충돌 없이 병합했다. 병합 commit은
+  `b5627921b30a951a0f2e7dda49cd143f90b64cb2`이며 첫 parent는 기존 feature HEAD
+  `263203463`, 두 번째 parent는 위 master다. 원격 feature와 동일하고 worktree는 clean이다.
+- master의 25개 파일 변경을 수용했으며 피드백 기능 파일과 주문상세 native 진입 handler는
+  보존했다. 별도의 기능 수정·배포용 branch·worktree 생성은 하지 않았다. 로컬 master와
+  다른 기능 worktree는 변경하지 않았다.
+- 기존 원격 `develop` `52103746da028cf9deda4c7dea5ac93188cc6362`을 삭제한 뒤 위 원격
+  master와 동일한 SHA로 재생성했다. 보호 규칙 없음과 열린 develop 대상 PR 없음,
+  삭제 직전 master/develop SHA를 확인했다. 삭제 전 SHA와 기존 PR #4559는 이력으로
+  보존하며, 삭제한 commit 객체도 로컬에서 확인했다.
+- 새 개발서버 반영 PR [#4571](https://github.com/Innvoaid/dentlink-client/pull/4571)은
+  `feature/DL-15828 → develop`이며 OPEN이다. 기존 release PR
+  [#4555](https://github.com/Innvoaid/dentlink-client/pull/4555)도 같은 feature HEAD로
+  자동 갱신됐고 대상은 `release/v1.86.0`으로 유지했다. 두 PR 모두 머지하지 않았다.
+- commit hook의 Clinic·Lab·Admin typecheck, `git diff --check`, push hook의 앱 lint와
+  기존 shared 테스트·coverage 검사가 성공했다. 기존 lint warning과 coverage baseline
+  차이는 남아 있으나 hook 실패는 없었다. 자동 리뷰 대기·처리와 배포 상태 감시는 하지 않았다.
+
+### 직전 WebView 진입 문제 진단 근거
+
+- 사용자 확인 환경은 개발서버, 주문은 `9000009221`이다. 실제 개발서버의 buildId
+  `spEJ_mZKNfgmAj6gy-tHQ`, 주문상세 JS `orders/[order_id]-3961fdd7a1132043.js`에는
+  `FeedbackDetailsScreen` 분기가 없고 클릭 시 웹 Drawer만 열었다. feature에는 기존
+  bridge commit `4a417fda6`이 있으므로 코드 결함이 아니라 개발 배포 미반영으로 판정했다.
+- 개발 `/auth/redirect`에 앱 UA를 보낸 검사에서는 `isDentlinkApp: true`, 일반 UA는
+  false였다. Chrome에서 해당 주문의 일반 웹 Edit Drawer 열기·닫기를 확인했으며
+  Good/Bad나 Submit으로 서버 데이터를 변경하지 않았다.
+- 실제 handler·메시지 직렬화·전송 함수를 격리 실행한 8개 분기 검사가 통과했다.
+  웹/App 동시 열림 방지, 정확한 orderId와 entryPoint, Amplitude 1회 호출을 확인했고
+  Good/Bad 저장 handler는 기존 develop과 동일했다. 이는 실기기 메시지 캡처가 아니다.
+- 다음 단계는 사용자가 #4571을 merge한 뒤 새 배포본으로 실제 WebView → native 상세 →
+  Submit → 주문상세 reload를 확인하는 것이다. PR 생성과 실제 배포 완료를 혼동하지 않는다.
+
+## 이전 체크포인트 — 2026-09-03 이벤트 분기 정리
 
 - 작업 브랜치 `feature/DL-15828`의 최신 제품 commit은
   `2632034633079f06e465aec3016e8b9b289ea24b`

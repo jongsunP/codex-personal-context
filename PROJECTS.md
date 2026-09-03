@@ -176,13 +176,16 @@ For detailed current state, read:
 - Current state: Clinic PC·웹 모바일의 `/my/feedback`, 마이페이지 Quick Links·My
   Office 모달, 목록·상세 drawer·파일 첨부, 주문 상세 배너를 실제 Office 피드백
   GET/POST/PUT API와 React Query cache에 연결했다. 딥링크는
-  `/my/feedback?orderId={orderId}`다. 2026-09-03 최신 제품 commit `263203463`을
-  push했고 원격과 동일한 clean 상태다. 주문상세 배너의 Edit 판단을 클릭 이벤트에도
+  `/my/feedback?orderId={orderId}`다. 2026-09-03 최신 master `ddeeb1e86`을 작업 브랜치에
+  충돌 없이 병합한 `b5627921b`를 push했고 원격과 동일한 clean 상태다.
+  주문상세 배너의 Edit 판단을 클릭 이벤트에도
   전달해 Good 단독 평가의 이벤트 오분류를 수정했으며 기존 WebView/native 분기와 저장은
   유지했다. 현재 확정 요구사항에서 추가로 확인된 웹 FE 코드 수정은 모두 처리했다.
   관리자 세 진입점은 `orderId + reviewerUserId` 상세 GET과 ORDER READ 권한을 사용한다.
-  PR #4555는 `release/v1.86.0` 대상 OPEN이며 최신 commit이 반영됐다. develop은
-  PR #4559 반영 이후의 코드리뷰 수정·WebView bridge·이번 이벤트 수정이 미반영 상태다.
+  PR #4555는 `release/v1.86.0` 대상 OPEN이며 최신 commit이 반영됐다. 사용자 지시로
+  원격 develop을 삭제 후 최신 원격 master에서 재생성했고, 작업 브랜치 → develop
+  PR #4571을 생성했다. 기존 개발 배포본에 WebView bridge가 빠진 것을 실제 JS로
+  확인했으며, 새 PR merge·배포 후 실기기 확인은 별도다. PR은 임의로 merge하지 않았다.
   완료 후 취소 주문의 배너 정책은 Notion과 기존 Figma/코드가 충돌하므로 확정 대기이며
   QA·배포·Jira 정리는 이번 코드 작업 범위에서 제외했다. 첨부는 5개·총 200MB를 유지한다.
   앱은 별도 저장소·세션에서 진행하며 신규 알림 설정 DL-16285는 pushType 계약 대기다.
