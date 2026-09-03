@@ -11,8 +11,9 @@
 - 과거 구현 원본: 원격 `frankieTemp/DL-10132`, commit `9f65edae9`
 - DL-16258은 배포 시점 미확정으로 반영되지 않았던 과거 Warranty 작업을 현재
   기준으로 다시 반영하는 작업이다.
-- Jira에 연결된 Notion 정책 문서는 확인 시 삭제 또는 이동된 상태였다. 정책 본문은
-  새로 추측하지 않고 과거 구현의 확정 내용을 사용했다.
+- 최초 복원 때 Jira에 연결된 과거 Notion 문서는 삭제 또는 이동된 상태여서 과거
+  구현의 본문을 사용했다. 2026-09-03 PM의 댓글 43892에 연결된 최종 정책 문서는
+  정상 조회됐으며, 아래 최신 작업부터는 그 문서를 본문의 기준으로 삼는다.
 
 ## 구현 내용
 
@@ -33,6 +34,54 @@
   않는 범위에서 교정했다.
 
 ## 현재 체크포인트 — 2026-09-03
+
+### 최신 작업: PM 최종 정책 본문 반영 — 제품 미커밋
+
+- PM 댓글 [43892](https://innovaid.atlassian.net/browse/DL-16258?focusedCommentId=43892)를
+  Jira connector로 직접 읽었다. 최신 Notion과 기존 본문을 전체 대조해 변경 사항을
+  미리 반영하고, PM의 다음 주 QA 전에 자체 비교 검토까지 해달라는 요청이다.
+  앞선 댓글 43889에는 다음 `1.86.0` 배포 포함 논의가 있다. 사용자는 이를 검토한 뒤
+  원본 작업 branch에서 이어서 구현하도록 지시했으며, 이번에는 제품 commit/push/PR이나
+  재배포를 지시하지 않았다.
+- 기준 문서: [25/06/17 Dentlink Limited Warranty Policy 최종 버전](https://app.notion.com/p/20dce072e82f809db60bce9d68e1c583).
+  MCP로 전체 본문을 조회했고 문서의 마지막 수정 시각은 2026-08-31T08:01:13.270Z다.
+  Jira의 Rovo 검색은 403이었지만 issue 직접 조회는 성공했고 댓글 원문을 확인했다.
+  Notion 댓글 조회는 `not_enabled`여서 Notion 댓글 검토 완료로 기록하지 않는다.
+- 메인 worktree `/Users/parkjongsun/Repository/dentlink-client`에서 기존
+  `feature/DL-16258`로 전환하고 `git pull --ff-only`로 동기화했다. 별도 branch/worktree는
+  만들지 않았다. HEAD/upstream은 `8d3c8ad1ef5247f42fa68084af8008d7b02fa5a9`로 동일하다.
+- 제품 변경은 `shared/ui/src/TermsUI/LimitedWarrantyContent.tsx` 한 파일,
+  95줄 추가·71줄 삭제이며 **unstaged / 미커밋**이다. 다른 디바이스에는 이 코드 diff가
+  자동 전달되지 않는다. 제품 commit/push/PR 생성·수정, Jira·Notion·Sheet 쓰기는 하지 않았다.
+- 변경 내용:
+  - 일반 조항의 잔여 보증기간 기준 표현을 `delivery`에서 `shipment`로 일치시켰다.
+    기존 5조의 출고일 기준 조항 자체는 바뀌지 않는다.
+  - 2조의 대상을 설명하는 문장을 최종 Notion 원문으로 일치시켰다.
+  - 보증 상품 목록을 최종 문서의 순서와 명칭대로 11개 분류·61개 항목으로 재구성했다.
+    `linkAlign`, `No Warranty` 등을 포함하고, 삭제된 항목은 구 목록에서 그대로 유지하지 않았다.
+  - Night Guard/Splint/Retainer 등의 보증기간 변경과 상품 명칭·구성 변경을 반영했다.
+    `Advance Pro Pack: from 35 months onward`도 임의 해석 없이 원문대로 유지했다.
+- 기존 제목 번호·목록 표시 형식을 유지하며 영어 정적 본문만 수정했다. 렌더링 component,
+  공용 Terms renderer, Clinic/Lab 페이지, 진입점, 주문·리메이크 처리, Admin, 기존
+  Terms/Privacy, 번역 JSON/스크립트에는 변경이 없다. Clinic/Lab 페이지는 같은
+  `LimitedWarrantyContent`를 사용하므로 양쪽에 본문이 함께 적용된다.
+- 검증:
+  - Notion 원문에서 10개 조항·18개 문단·11개 상품 분류·61개 항목을 추출하고 실제 TS
+    객체 구조와 일치함을 확인했다. 실제 component를 React 정적 HTML로 렌더링한 뒤
+    115개 text block 전체를 원문과 순서대로 대조해 누락/추가/문구 불일치 0개였다.
+    대조 시 제목 번호·목록 기호·분류 제목의 끝 콜론과 Notion 서식만 정규화했다.
+  - Clinic/Lab/Admin 전체 typecheck, 변경 파일 Prettier, `git diff --check`를 통과했다.
+  - 기본 shared/ui lint는 Storybook plugin 중복 충돌로 실행되지 않았으며 HEAD 원문도
+    동일하게 실패했다. shared/ui의 ESLint 8.38 엔진과 설치된 규칙 간 호환 오류도 확인했다.
+    저장소 설정/패키지를 변경하지 않고 Clinic에 설치된 ESLint 8.57.1과 기존 shared/ui
+    config를 사용해 부모 config cascade만 분리한 대상 검사에서 HEAD·수정본 모두
+    오류 0개·경고 0개였다. 기본 lint 전체 통과로 표현하지 않는다.
+  - 실제 브라우저 화면 QA, production build, i18n Sheet 검사·생성, PM QA는 이번에
+    실행하지 않았다. 과거 검증/배포 이력과 구분한다.
+- 제안 제품 commit: `[DL-16258] fix: 최신 워런티 정책 본문 반영`.
+  지금은 로컬 확인과 명시적인 전달 지시를 기다린다. 이번 `release/v1.85.1` 제외와
+  배포 상태는 그대로이며, 다음 배포가 확정되면 최신 target release 및 역변경 이력을
+  다시 대조해 PR 반영 방법을 결정한다.
 
 ### 후속 결정: 이번 1.85.1 배포에서 제외
 
@@ -195,10 +244,12 @@
 
 ## 다음 시작점
 
-1. 워런티 제외 PR #4567과 스테이징 전달 PR #4568은 merge됐고, 사용자가 스테이징
-   배포 완료를 알렸다. 추가 작업 없이 대기하며 리뷰·배포를 자동으로 진행하지 않는다.
-2. 추후 QA 요청이 오면 실제 워런티 제외 화면과 배포 버전을 확인한다. 이전 PR #4566
-   배포는 Warranty 포함 버전이며 이번 #4568 배포와 구분한다. 운영 배포는 별도다.
-3. 이후 Warranty 재개 요청이 오면 원본 feature와 새 목표 release의 live Git을 비교해
-   재적용 방법을 정한다. 이번 제외를 제품 기능 영구 폐기나 원본 branch 정리로 해석하지
-   않는다.
+1. 현재 checkout은 `feature/DL-16258` / `8d3c8ad1e`이며 공용 워런티 본문 한 파일에
+   미커밋 변경이 있다. 다른 작업자의 변경을 보존하고 실제 diff부터 확인한다.
+2. 사용자가 로컬에서 Clinic/Lab `/warranty`를 확인할 수 있다. 제품 commit/push/PR은
+   별도 명시 지시가 있을 때 진행한다. PM QA·스테이징 반영도 아직 실행하지 않았다.
+3. 다음 배포 전달이 확정되면 최신 원본 feature와 target release를 비교하고, 원본 squash와
+   제외 commit 이력이 있는 점을 고려해 재적용한다. 기존 미커밋 본문을 잃거나 1.85.1에
+   다시 넣지 않는다. 번역 키 전달과 Sheet 정합성도 그때의 실제 기준으로 재확인한다.
+4. 워런티 제외 PR #4567과 스테이징 전달 PR #4568은 이미 merge 및 사용자 확인 배포
+   이력이 있다. 오늘의 새 본문 구현 완료와 배포 완료를 혼동하지 않는다.

@@ -212,7 +212,14 @@ For detailed current state, read:
   원격 stage를 삭제하고 최신 master `4fc3b4877`에서 재생성한 뒤, release 전체를
   전달하는 스테이징 PR #4568을 생성했다. 사용자가 #4568을 `5cb3ddaf3`로 merge했고
   GitHub에서 확인했다. 스테이징 배포 완료는 사용자 확인 기준이며 서버 SHA·화면 QA·
-  운영 배포는 별도 상태다. 로컬 checkout은 제외용 branch, clean 상태이고 develop은
-  변경하지 않았다. Warranty 재출시 버전은 미정이며 현재 추가 작업 없이 대기한다.
+  운영 배포는 별도 상태다. 해당 배포 작업에서 develop은 변경하지 않았다.
+  이후 PM 댓글 43892의 최신 Notion 정책을 확인하고 사용자 지시로 원본
+  `feature/DL-16258` / `8d3c8ad1e`에서 본문을 수정했다. 공용
+  `LimitedWarrantyContent.tsx` 한 파일만 미커밋 상태이며 상품 분류·명칭·보증기간과
+  일반 조항을 반영했다. Notion 10개 조항·11개 상품 분류·61개 항목 및 렌더링 문장
+  115개를 대조해 누락·불일치 0개, 세 앱 typecheck와 대상 분리 lint·Prettier·diff
+  검사를 통과했다. 기본 lint의 기존 설정 충돌은 별도다. 제품 commit/push/PR,
+  브라우저 QA, 재배포는 하지 않았다. 다음 1.86.0 배포 후보이며 확정 시 최신 release와
+  리버트 이력을 다시 검토한다. 지금은 로컬 확인과 전달 지시를 기다린다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
