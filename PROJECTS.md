@@ -207,8 +207,9 @@ For detailed current state, read:
   정확히 같으며 세 앱 타입·다국어 정합성·기본 push hook을 통과했다. 사용자가 #4567을
   merge해 최신 release는 `b9fba70b4`이며 워런티는 제외됐다. 이어서 사용자 요청대로
   원격 stage를 삭제하고 최신 master `4fc3b4877`에서 재생성한 뒤, release 전체를
-  전달하는 스테이징 PR #4568을 생성했다. 현재 #4568은 OPEN·MERGEABLE이며 사용자
-  merge·배포 대기다. 로컬 checkout은 제외용 branch, clean 상태이고 develop은
-  변경하지 않았다. Warranty 재출시 버전은 미정이다.
+  전달하는 스테이징 PR #4568을 생성했다. 사용자가 #4568을 `5cb3ddaf3`로 merge했고
+  GitHub에서 확인했다. 스테이징 배포 완료는 사용자 확인 기준이며 서버 SHA·화면 QA·
+  운영 배포는 별도 상태다. 로컬 checkout은 제외용 branch, clean 상태이고 develop은
+  변경하지 않았다. Warranty 재출시 버전은 미정이며 현재 추가 작업 없이 대기한다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
