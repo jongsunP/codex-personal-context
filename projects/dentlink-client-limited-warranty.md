@@ -46,13 +46,39 @@
   파일이다. 독립 i18n 운영 개선 PR #4557과 나머지 1.85.1 변경은 유지한다.
 - Warranty commit은 현재 `origin/release/v1.85.1`과 `origin/stage`에만 포함되어
   있다. `origin/master`와 `origin/release/v1.86.0`은 아직 `4fc3b4877`이다.
-- 제품 코드, branch, commit, push, PR은 아직 변경하지 않았다. 기존 이력을 reset하거나
-  원본 feature branch를 삭제하지 않고, 최신 release 기준 별도 feature branch에서
-  revert 후 release 대상 PR로 제외하는 방향을 검토했다. branch 생성과 실제 전달은
-  사용자 명시 지시 후 진행한다.
+- 사용자 후속 지시로 최신 release의 `8d0744936`에서 새 branch
+  `feature/DL-16258-release-hold`를 만들고, 원본 commit의 16개 파일 역변경만 적용했다.
+  별도 worktree는 만들지 않았으며 메인 checkout에서 작업했다.
+- 제외 commit: `af496bb345aa4ad28790de699156ebc9cc85635f`
+  (`[DL-16258] fix: 1.85.1 배포에서 워런티 제외`). 해당 commit은 push됐고,
+  로컬 branch/upstream은 `feature/DL-16258-release-hold` /
+  `origin/feature/DL-16258-release-hold`, worktree는 clean하다.
+- 제외 PR [#4567](https://github.com/Innvoaid/dentlink-client/pull/4567)을
+  `feature/DL-16258-release-hold -> release/v1.85.1`로 생성했다. OPEN·일반 PR이며
+  head `af496bb34`와 base 이름을 확인했다. PR merge와 자동 CodeRabbit 후속 대응은
+  하지 않았다. 이 PR이 merge돼야 release에서 실제로 제외된다.
 - release에서 제외해도 이미 배포된 stage는 자동으로 바뀌지 않는다. 제외 PR merge 후
   stage 반영과 재배포는 별도 사용자 지시/확인이 필요하다. 향후 Warranty 재출시 버전은
   미정이며 원본 `feature/DL-16258`은 보존한다.
+
+### 제외 변경 검증
+
+- 결과 tree `5ef3ed825237336d8b4538f6d61bc8e77101ff3a`가 Warranty merge 직전
+  `9d0e0a1f4`의 tree와 정확히 일치한다. 변경은 16개 파일, 6줄 추가·425줄 삭제뿐이며
+  독립 i18n 운영 개선과 나머지 release 파일은 그대로 보존됐다.
+- `git diff --check` 및 Clinic/Lab/Admin 전체 타입 검사를 통과했다. 기본 pre-commit
+  hook에서도 세 앱 타입 검사를 통과했다.
+- `pnpm check:i18n`은 제외 후 1,585개 key·20개 locale JSON으로 통과했다. 제외 전
+  release 상태에서는 gnb/orders en/ko 4개 파일의 stale 오류가 있었다. 현재 공용 시트와
+  제외 후 JSON이 일치하며, 이번 작업에서 시트를 쓰거나 JSON을 일괄 재생성하지 않았다.
+- `pnpm audit:i18n`의 기존 `unresolvedKeyCount=9`는 전후 동일하다.
+  `unknownLiteralCount=0`, `clinicRegressionCandidateCount=0`을 유지했다.
+- 기본 push hook을 우회 없이 통과했다. 앱 lint의 기존 경고는 남아 있고, 공용 설정
+  테스트 3건과 공용 hooks 테스트 24건을 통과했다. coverage 비교는 기본 비강제 경로이며
+  이번 변경으로 별도 테스트 파일이나 검사 artifact를 추가하지 않았다.
+- Warranty component·경로 상수·전용 번역 참조를 소스에서 다시 검색해 남은 참조가
+  없음을 확인했다. 실제 브라우저 화면 QA와 production build는 이번 제외 작업에서는
+  실행하지 않았다.
 
 ### 기존 전달 이력
 
@@ -142,12 +168,11 @@
 
 ## 다음 시작점
 
-1. 사용자의 branch 생성/수정 지시를 받은 뒤 최신 `origin/release/v1.85.1`에서 별도
-   제외용 feature branch를 준비한다. 별도 worktree는 명시 요청 없이 만들지 않는다.
-2. `8d0744936`만 revert하고 다른 1.85.1 변경 및 i18n 운영 코드의 보존을 검증한다.
-   shared repository commit·push·PR은 해당 작업의 명시 승인을 받은 범위에서만 한다.
-3. 제외 PR merge 후 stage 반영·재배포·제외 화면 QA를 별도 상태로 확인한다. 이전
+1. 제외 PR #4567의 동료 리뷰·사용자 merge를 기다린다. 요청 범위인 코드 변경·검증·
+   commit·push·PR 생성과 개인 컨텍스트 갱신까지 완료했다. 자동으로 merge·리뷰 대응·
+   배포를 진행하지 않는다.
+2. 제외 PR merge 후 stage 반영·재배포·제외 화면 QA를 별도 상태로 확인한다. 이전
    PR #4566 merge와 스테이징 배포 완료는 Warranty가 포함된 버전의 기록이다.
-4. 이후 Warranty 재개 요청이 오면 원본 feature와 새 목표 release의 live Git을 비교해
+3. 이후 Warranty 재개 요청이 오면 원본 feature와 새 목표 release의 live Git을 비교해
    재적용 방법을 정한다. 이번 제외를 제품 기능 영구 폐기나 원본 branch 정리로 해석하지
    않는다.

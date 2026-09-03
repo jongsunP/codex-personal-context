@@ -202,7 +202,10 @@ For detailed current state, read:
   않았다. 운영 배포는 별도 상태다. 로컬 branch/worktree는 정리하지 않았다.
   이후 사용자가 Warranty를 이번 1.85.1 배포에서 제외한다고 결정했다. 원격 release의
   마지막 commit `8d0744936`만 revert하면 되며 독립 i18n 운영 개선은 유지한다.
-  아직 제품 코드·branch·PR 변경은 없고 제외 작업의 명시 지시 대기다. 이미 반영된
-  stage도 제외 후 별도 반영·재배포가 필요하며, Warranty 재출시 버전은 미정이다.
+  사용자 지시 후 새 `feature/DL-16258-release-hold`에서 역변경 commit `af496bb34`를
+  push하고 같은 release 대상 제외 PR #4567을 생성했다. 결과 tree는 워런티 반영 직전과
+  정확히 같으며 세 앱 타입·다국어 정합성·기본 push hook을 통과했다. 현재 PR은 OPEN으로
+  merge 대기이며 checkout은 새 제외용 branch, clean 상태다. 이미 반영된 stage도
+  제외 PR merge 후 별도 반영·재배포가 필요하며, Warranty 재출시 버전은 미정이다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
