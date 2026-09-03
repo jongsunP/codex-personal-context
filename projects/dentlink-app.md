@@ -1360,3 +1360,22 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   PR #286 and Jira were not updated, and the remote conflict indication cannot
   clear until the user authorizes the merge commit/push. Next inspect this
   index, obtain app commit/push authorization, then refresh the PR review state.
+- Follow-up final recheck at 13:05 KST: origin refs are unchanged and all 16
+  PR review threads remain resolved (no pagination); remote CodeRabbit is
+  SUCCESS for `919a884`, not for the uncommitted merge. No additional feature
+  defect or code edit was identified in this pass. The merge index is unchanged.
+- Expanded unit coverage passes 15 suites / 125 tests with
+  `yarn test --config jest.config.js --runInBand --watch=false
+  --testPathIgnorePatterns '/e2e/' '__tests__/App.test.tsx'`.
+  The unfiltered command reports 6 failing suites / 22 failing tests, all from
+  known pre-existing test-runner boundaries: five Detox suites require their
+  own worker, and the old App smoke test imports nonexistent root `../App`,
+  which resolves to the app.json metadata object on this case-insensitive Mac.
+  Those tests/config and root app.json are unchanged from HEAD; these are not
+  new merge failures. No Detox device launch succeeded or device QA is claimed.
+- Version validation passes: Office 2.2.3 and Lab 1.0.3 agree across app
+  package.json, Android and Xcode. Both diff checks pass. Generated translation
+  output and incoming order/popup/scanner files were also confirmed identical
+  to develop; only the intentional URL default preservation and feature bridge
+  integration differ where expected. No further app commit/push authority was
+  inferred from the user's general request to finish all possible work.
