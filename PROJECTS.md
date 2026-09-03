@@ -200,5 +200,9 @@ For detailed current state, read:
   `release/v1.85.1 -> stage` PR #4566은 `24b5af7b7`로 merge됐다. 사용자가 스테이징
   배포 완료를 알렸으며, 실제 서버 SHA와 화면 QA는 이번 후속 기록에서 별도로 확인하지
   않았다. 운영 배포는 별도 상태다. 로컬 branch/worktree는 정리하지 않았다.
+  이후 사용자가 Warranty를 이번 1.85.1 배포에서 제외한다고 결정했다. 원격 release의
+  마지막 commit `8d0744936`만 revert하면 되며 독립 i18n 운영 개선은 유지한다.
+  아직 제품 코드·branch·PR 변경은 없고 제외 작업의 명시 지시 대기다. 이미 반영된
+  stage도 제외 후 별도 반영·재배포가 필요하며, Warranty 재출시 버전은 미정이다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`

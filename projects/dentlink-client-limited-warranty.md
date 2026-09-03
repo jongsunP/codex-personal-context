@@ -34,6 +34,28 @@
 
 ## 현재 체크포인트 — 2026-09-03
 
+### 후속 결정: 이번 1.85.1 배포에서 제외
+
+- 사용자가 Warranty를 이번 배포에서 제외한다고 알렸다. 기존 merge/스테이징 배포
+  이력은 유지하되, 다음 배포 대상에서는 기능을 제거해야 한다.
+- 원격을 다시 fetch한 결과 `origin/release/v1.85.1`의 최신 commit은 여전히
+  `8d0744936b12e872c48c6715e3d17a85da070054`이며, Warranty PR #4556의 squash
+  commit 하나가 마지막에 추가된 상태다. 이 commit만 revert하면 직전
+  `9d0e0a1f4f1728969842ab0a2269638ec1d91987`의 제품 상태가 된다.
+- 제외 범위는 Warranty 페이지·진입점·공용 고지·전용 번역 등 해당 commit의 16개
+  파일이다. 독립 i18n 운영 개선 PR #4557과 나머지 1.85.1 변경은 유지한다.
+- Warranty commit은 현재 `origin/release/v1.85.1`과 `origin/stage`에만 포함되어
+  있다. `origin/master`와 `origin/release/v1.86.0`은 아직 `4fc3b4877`이다.
+- 제품 코드, branch, commit, push, PR은 아직 변경하지 않았다. 기존 이력을 reset하거나
+  원본 feature branch를 삭제하지 않고, 최신 release 기준 별도 feature branch에서
+  revert 후 release 대상 PR로 제외하는 방향을 검토했다. branch 생성과 실제 전달은
+  사용자 명시 지시 후 진행한다.
+- release에서 제외해도 이미 배포된 stage는 자동으로 바뀌지 않는다. 제외 PR merge 후
+  stage 반영과 재배포는 별도 사용자 지시/확인이 필요하다. 향후 Warranty 재출시 버전은
+  미정이며 원본 `feature/DL-16258`은 보존한다.
+
+### 기존 전달 이력
+
 - 제품 repository: `/Users/parkjongsun/Repository/dentlink-client`
 - 제품 branch/upstream: `feature/DL-16258` / `origin/feature/DL-16258`
 - 제품 commit:
@@ -110,19 +132,22 @@
 - Lab 모바일 하단 내비게이션에는 법률 문서 푸터 진입점을 새로 만들지 않았다. 과거
   요구와 구현은 Clinic Footer, 주문 최종 단계, 리메이크 최종 단계를 명시했고 Lab의
   기존 푸터는 데스크톱 확장 사이드바에 있다.
-- Warranty는 이제 1.85.1에 포함되어 있다. 완료된 release는 기존 회사 전략대로
-  `master`와 이후 활성 release인 `release/v1.86.0`에 순방향 반영해야 한다.
+- Warranty는 Git상 아직 1.85.1에 포함되어 있으나 사용자 후속 결정으로 이번 배포에서
+  제외해야 한다. 제외 변경이 반영된 최종 release를 기존 회사 전략대로 `master`와
+  이후 활성 release인 `release/v1.86.0`에 순방향 반영한다. Warranty를 1.86.0에
+  자동으로 재출시하는 의미는 아니다.
 - PR merge가 로컬 branch 정리 권한을 자동으로 의미하지 않는다. 로컬 정리와 shared
   repository의 추가 수정·push·PR mutation·merge는 사용자의 명시 요청이 있을 때만
   수행한다.
 
 ## 다음 시작점
 
-1. PR #4566 merge와 사용자 기준 스테이징 배포까지 완료됐다. 추가 요청을 기다리며
-   리뷰·배포를 자동으로 진행하거나 감시하지 않는다.
-2. QA 요청이 있으면 실제 Clinic/Lab `/warranty`, 푸터, 주문·리메이크 진입점을 확인한다.
-   배포와 QA는 각각 별도 증거로 판단한다.
-3. 1.85.1 release가 완료되면 `master`와 이후 release로의 반영을 별도 요청 범위에서
-   확인한다. 이전 Warranty feature PR을 1.86.0에 다시 만드는 것으로 대체하지 않는다.
-4. 사용자가 정리를 요청하면 로컬 feature branch의 보존 상태를 확인한 뒤 제거하고,
-   원격 branch 보존 여부는 그때 지시에 따른다.
+1. 사용자의 branch 생성/수정 지시를 받은 뒤 최신 `origin/release/v1.85.1`에서 별도
+   제외용 feature branch를 준비한다. 별도 worktree는 명시 요청 없이 만들지 않는다.
+2. `8d0744936`만 revert하고 다른 1.85.1 변경 및 i18n 운영 코드의 보존을 검증한다.
+   shared repository commit·push·PR은 해당 작업의 명시 승인을 받은 범위에서만 한다.
+3. 제외 PR merge 후 stage 반영·재배포·제외 화면 QA를 별도 상태로 확인한다. 이전
+   PR #4566 merge와 스테이징 배포 완료는 Warranty가 포함된 버전의 기록이다.
+4. 이후 Warranty 재개 요청이 오면 원본 feature와 새 목표 release의 live Git을 비교해
+   재적용 방법을 정한다. 이번 제외를 제품 기능 영구 폐기나 원본 branch 정리로 해석하지
+   않는다.
