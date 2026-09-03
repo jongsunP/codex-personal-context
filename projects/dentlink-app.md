@@ -1619,3 +1619,20 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   160:39015; analytics Notion 3c6ce072e82f8001bc20ef404c74059b,
   pushType 21ece072e82f808ba1cff20e603f89fe and push_preference_click
   21ece072e82f80ba925ccd44cb43a747; explicit Case Preference user approval.
+
+## DL-16061 WebView Deployment Follow-up - 2026-09-03
+
+- The user observed Order Details remaining above Feedback Details with no
+  native navigation. App and web source inspection confirmed the existing
+  NAVIGATION / FeedbackDetailsScreen / orderId / entryPoint=order-detail
+  contract; no app code was changed during this investigation.
+- The user subsequently identified that the development web server did not
+  contain the feature code and reported that web redeployment was underway.
+  Treat this as the user-confirmed cause, not a newly verified app defect or
+  proof that redeployment/integrated runtime testing has completed.
+- App source remains clean and pushed at a301e78, with the new notification
+  settings already delivered. No additional app-code task is currently
+  identified from this report. After the web deployment, check actual native
+  transition and close/Submit return only if requested; investigate the app
+  bridge if a correctly emitted message still fails to navigate. CodePush
+  and remotely hosted WebView web deployment are separate artifacts.
