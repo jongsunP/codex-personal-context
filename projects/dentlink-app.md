@@ -11,6 +11,10 @@ This is the current resume source for the first local setup of
 - Expect both occasional small app tasks and features whose user flow spans web
   and mobile. For cross-surface work, inspect the relevant web and app code,
   API contracts, release paths, and QA impact together.
+- 통합알림센터의 웹·앱 동기화 문의는 별도 사전 검토 체크포인트
+  `projects/dentlink-unified-notification-center.md`를 읽는다. 2026-09-03 기준
+  최종 FE 공유 요약만 확정됐으며 구현·전용 작업 환경은 아직 시작하지 않았다.
+  기존 피드백 구현이나 개별 푸시 작업의 완료 상태와 섞지 않는다.
 - Resume from this onboarding checkpoint instead of repeating setup from
   scratch. At the start of future work, sync this personal context and all
   relevant shared repositories, then verify live Git refs and current team

@@ -1,0 +1,97 @@
+# Dentlink 통합알림센터 — 사전 검토 체크포인트
+
+최종 갱신: 2026-09-03
+
+## 식별과 현재 상태
+
+- 기능명은 가칭 `통합알림센터`다. 검색어: 통합 알림센터, 웹·앱 알림 동기화,
+  다중 기기 읽음 동기화, unified notification center.
+- 동일 계정으로 Clinic/Lab 웹과 Office/Lab 앱을 여러 기기에서 사용하더라도
+  알림 목록과 읽음·삭제 상태를 일관되게 유지하는 것이 목적이다. Slack처럼 한
+  기기의 변경을 다른 웹·앱에 반영하는 방향이다.
+- 현재는 FE 기술 방향과 정책 검토 내용을 정리한 단계이며 **구현은 시작하지
+  않았다**. 전용 Jira, branch, worktree, 작업 세션과 release 대상은 정해지지 않았다.
+- 기존 피드백 기능이나 해당 기능의 개별 푸시 작업과는 별도의 검토 주제다.
+- 전용 세션/worktree가 생기기 전에는 Dentlink 메인 관리 세션에서 문의를 이어갈
+  수 있다. 다른 세션이나 기기에서도 이 문서를 읽어 동일한 맥락으로 응답한다.
+- 이 문서는 개인 컨텍스트의 단일 체크포인트다. 제품 저장소에는 개인 handoff나
+  transient 검토 문서를 추가하지 않는다.
+
+## 사용자 확정 최종 공유 내용 — 2026-09-03
+
+다음은 구현 명세가 아니라 팀원에게 FE 작업 방향을 간단히 보고하기 위한 최종
+요약이다. 후속 공유에서도 상세 구현 목록·QA·인프라 항목을 불필요하게 늘리지 않는다.
+
+### 웹 — Clinic / Lab
+
+- 기존 Lab 배송·픽업 SSE와 분리된 **알림 전용 SSE를 로그인 중 상시 연결**합니다.
+- **REST + SSE**를 사용합니다. 조회·읽음·삭제 요청은 REST, 다른 기기에서 발생한
+  변경 수신은 SSE가 담당합니다.
+
+### 앱 — Office / Lab
+
+- 기존 FCM 수신·Notifee 알림 표시 구조를 활용하며, **REST + FCM**으로 통신합니다.
+- 동기화 이벤트는 BE가 데이터 전용 FCM으로 전달하고, 앱은 Notifee 표시를 호출하지
+  않아 **OS 푸시 없이 서버의 읽음·삭제 결과만 내부에 반영**합니다. 현재 구조에서
+  가능하지만 처리 로직 추가가 필요합니다.
+- 백그라운드·종료 상태의 수신 제약을 고려하고, 앱 복귀 시 REST로 최신 상태를
+  맞춥니다.
+
+### 공통 검토
+
+- 현재 클릭·스크롤 등 읽음 처리 방식이 달라 **웹·앱의 읽음 기준 통일이 필요**합니다.
+  해당 정책은 PM에게 요청한 상태입니다.
+- 캐시는 부분 갱신을 우선하되, 이벤트 누락·순서 불일치·연결 복구 시 REST로
+  보정합니다.
+- 수신한 이벤트는 이미 서버에서 처리된 결과이므로 읽음·삭제 요청을 다시 보내지
+  않습니다.
+
+## 확정 방향과 미정 사항의 경계
+
+- 위 요약은 사용자가 최종 내용으로 확정했으나, 실제 구현·BE 계약 합의·실기기
+  동작 검증이 완료됐다는 뜻은 아니다.
+- 읽음 기준은 PM 답변 대기다. 클릭/노출/스크롤 중 하나를 임의로 정하거나 기존
+  동작이 그대로 최종 정책이라고 가정하지 않는다.
+- SSE endpoint, FCM 이벤트 식별 방식, 사용자·직원·사업장 범위, 미읽음 상태 값과
+  이벤트 순서/누락 처리 계약은 구현 시작 시 BE와 확인해야 한다. 이전 대화의 예시
+  JSON은 확정된 서버 계약이 아니다.
+- FCM 수신과 Notifee 표시는 구분한다. 데이터 이벤트를 수신했다고 OS 알림을 표시할
+  필요는 없다. 다만 현재 코드가 통합알림센터의 무표시 동기화를 이미 제공하는 것은
+  아니며, 앱이 종료/제한된 모든 상황의 즉시 수신도 보장하지 않는다.
+- 새 OS 푸시를 표시하지 않는 동기화와 **이미 표시된 OS 푸시 삭제**는 다른 문제다.
+  후자는 별도 범위이며 모든 기기의 즉시 회수를 약속하지 않는다.
+- 사용자 요청에 따라 앱 공유 요약에는 SSE 설명을 넣지 않는다.
+
+## 코드 근거와 저장소
+
+2026-09-03에 아래 경로를 읽어 기존 구조를 확인했다. 구현 시작 시 live Git과
+해당 코드가 바뀌었는지 다시 확인한다.
+
+- 웹: `https://github.com/Innvoaid/dentlink-client`
+  - 기본 경로: `~/Repository/dentlink-client`
+  - `clinic/src/components/Notifications/useNotificationsPagination.tsx`
+  - `lab/src/components/Notifications/useNotificationsPagination.tsx`
+  - `shared/ui/src/NotificationUI/NotificationUI.tsx`
+  - `shared/models/src/messages/messages.apis.clinic.ts`, `messages.apis.lab.ts`
+  - `lab/src/components/ServerSentEvent/ServerSentEvent.tsx`
+  - 기존 알림 UI/REST/React Query와 Clinic 타 치과 알림 안내가 있다. Lab SSE는
+    배송·픽업 작업 단위 연결이다. 웹 공통 UI에는 노출·스크롤 기반 읽음 처리가 있다.
+- 앱: `https://github.com/Innvoaid/dentlink-app`
+  - 기본 경로: `~/Repository/dentlink-app`
+  - `shared/configs/utils/fcmHandler.ts`, `notifee.ts`
+  - `shared/navigations/RootNavigator.tsx`
+  - `shared/models/Api.ts`
+  - 기존 FCM 수신/Notifee 표시 및 특정 채팅의 화면 갱신 후 표시 생략 분기가 있다.
+    웹 같은 통합 알림센터 화면·알림 서비스 연동은 아직 없다. 기존 앱 복귀 시 OS
+    badgeCount를 0으로 초기화하는 동작은 실제 구현 시 미읽음 정책과 함께 검토한다.
+- 플랫폼 수신 제약 참고: https://rnfirebase.io/messaging/usage#data-only-messages
+
+## 다음 시작점
+
+1. 개인 컨텍스트를 pull하고 `PROJECTS.md` 및 이 문서를 읽는다. 앱 구현 맥락이
+   필요하면 `projects/dentlink-app.md`도 읽는다.
+2. 사용자의 새 문의에는 위 최종 요약을 기본으로 답하고, PM 정책 답변·Jira·설계가
+   추가되면 기존 내용과 대조하여 확정/미정을 갱신한다.
+3. 실제 작업 지시가 생기면 양쪽 저장소의 현재 코드·BE 계약·정확한 작업 위치를
+   확인한다. 이 메모리화 요청만으로 branch/worktree 생성이나 제품 코드 수정을
+   시작하지 않는다.

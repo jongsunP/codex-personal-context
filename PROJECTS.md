@@ -83,6 +83,19 @@ For detailed current state, read:
 - Personal current checkpoint:
   `projects/dentlink-app.md`
 
+### Dentlink 통합알림센터 — 사전 검토
+
+- Shared repositories: `Innvoaid/dentlink-client`, `Innvoaid/dentlink-app`
+- Scope: Clinic/Lab 웹과 Office/Lab 앱의 다중 기기 알림 목록·읽음·삭제 동기화
+- Current state: 가칭 `통합알림센터`의 FE 공유 요약을 2026-09-03에 사용자와
+  확정했다. 웹은 배송 SSE와 분리한 알림 전용 상시 SSE + REST, 앱은 기존
+  FCM·Notifee 구조에서 OS 표시 없는 데이터 동기화 + REST 방향이다. 읽음 정책은
+  PM에게 요청한 상태이며 구현은 아직 시작하지 않았다. 전용 Jira/branch/worktree/
+  세션/release는 미정이다. 별도 작업 환경 생성 전에는 메인 관리 세션에서 문의를
+  이어갈 수 있으며 다른 세션에서도 같은 체크포인트를 읽는다.
+- Personal current checkpoint:
+  `projects/dentlink-unified-notification-center.md`
+
 ### Dentlink Lab i18n
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`

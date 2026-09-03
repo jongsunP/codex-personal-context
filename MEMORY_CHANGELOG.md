@@ -1,5 +1,14 @@
 # Memory Changelog
 
+## 2026-09-03
+
+- 가칭 `통합알림센터`를 별도 개인 프로젝트 체크포인트와 `PROJECTS.md`에 등록하고
+  앱 체크포인트에서도 연결했다. 전용 세션/worktree 이전에도 어느 세션에서든 같은
+  내용을 재개할 수 있도록 사용자 확정 FE 공유 요약을 보존했다.
+- 웹의 알림 전용 상시 SSE + REST, 앱의 OS 표시 없는 데이터 FCM + REST 방향과
+  PM 읽음 정책 대기를 기록했다. 구현·전용 branch/worktree 생성은 미착수이며,
+  이벤트 수신/플랫폼 제약 검토와 이미 표시된 OS 푸시 삭제를 구분했다.
+
 ## 2026-08-27
 
 - Closed the DL-16061 app FE implementation checkpoint at synchronized head
