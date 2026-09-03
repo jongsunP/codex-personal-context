@@ -1524,3 +1524,26 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - This handoff does not authorize implementation, branch creation, commits,
   pushes, PR changes or deployment in the destination session beyond its own
   current user instructions. No product code/Jira mutation was made here.
+
+## DL-16061 CodePush Script Develop Sync - 2026-09-03
+
+- The user explicitly requested merging develop, committing and pushing.
+  Refreshed origin refs and merged `aa82c4c` into `feature/DL-16061` without
+  conflicts. Merge commit `364030e76b2ca16200af576d33e4556aca17bc8b`
+  (`chore: develop CodePush 강제 배포 옵션 병합`) is pushed; its parents are
+  `c6355a3` and `aa82c4c`. Worktree is clean, upstream divergence is 0/0,
+  and fetched develop is fully included (0 behind / 40 ahead).
+- Only package.json changed: 20 CodePush scripts now include --force on each
+  relevant iOS/Android release command, across development/staging/production.
+  It bypasses the CLI's 500 KiB asset guard, not the feedback attachment
+  policy. Existing targets, mandatory/disabled flags, dependencies, native
+  files and feedback source remain unchanged. No release command was run.
+- Verified that all changes are exactly --force additions, all 20 commands
+  pass shell syntax-only checks, package.json passes Prettier, and the staged
+  diff passes whitespace checks. Prettier emitted only the existing ignored
+  import-order-option warnings. No full app tests or device QA were repeated
+  for this scripts-only merge, and no new CodeRabbit review is claimed.
+- The existing PR receives the pushed branch commit automatically. No PR
+  description, Jira state or unrelated notification-center code was changed.
+  Remaining feedback feature boundary is unchanged: connect the disabled
+  notification settings after the user announces the actual BE pushType release.
