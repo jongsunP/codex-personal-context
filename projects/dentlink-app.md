@@ -3,8 +3,8 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current checkpoint is the final section, **DL-16061 Develop Merge Delivery
-And Review - 2026-09-03**. Earlier PR review and notification design sections
+The current checkpoint is the final section, **DL-16061 Jira And Task-Scope
+Closeout - 2026-09-03**. Earlier PR review and notification design sections
 record the preceding implementation and decisions. Earlier dated
 delivery, review, API and runtime results below are historical, not current
 claims. The two new notification rows now exist as disabled presentation;
@@ -69,6 +69,13 @@ their real setting integration still awaits the deployed BE contract.
   validate Android first and then iOS. Keep app execution in the
   `dentlink-app` IDE window and its integrated Metro terminal rather than the
   web project's IDE.
+- For remaining-task briefings, distinguish unfinished in-scope implementation
+  from normal QA, approval, merge and deployment steps. The user understands
+  those delivery steps and does not count them as missing development tasks.
+  Do not repeatedly list a general pre-existing upload recovery improvement
+  as unfinished feedback work. Defects introduced by the current changes still
+  belong in scope and must not be hidden. The notification-setting BE wait is
+  acknowledged; resume its actual integration when the user reports release.
 
 ## Repository
 
@@ -1449,3 +1456,38 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   Today's 125 passing unit tests and baseline diagnostics belong to the same
   committed tree; historical visual proof must not be presented as a new
   runtime test of the upload fixes or develop integration.
+
+## DL-16061 Jira And Task-Scope Closeout - 2026-09-03
+
+- The user clarified that the remaining-task list should contain concrete
+  feature implementation only. BE notification-setting release is already
+  acknowledged and the user will announce availability. Ordinary QA/review/
+  release steps and general shared-upload response-loss recovery are not
+  unfinished feedback tasks. A regression caused by this change remains in
+  scope; this clarification does not waive real defects or validation honesty.
+- Refreshed personal context and the exact app checkout. App remains clean
+  and synchronized at `c6355a3`, containing develop `5ec442a` (0 behind / 39
+  ahead). There was no code change or additional app commit/push to perform.
+- With explicit authorization, updated DL-16061 and DL-16066 descriptions at
+  14:51 KST: Pending Reviews wording, native/WebView ownership and successful
+  Submit return, current employer-scoped routes, actual analytics mapping,
+  pushed/reviewed status, 125-test evidence and historical runtime boundaries.
+  Preserved unrelated model-drift context and linked BE follow-up DL-16285.
+- Preserved historical comments and added current corrections: DL-16061
+  comment `43884`, DL-16066 `43885`, and DL-16229 `43886`. The analytics comment
+  explicitly supersedes old my/feedback, uncommitted/payload-wait/conflict
+  wording. Kept the original analytics Notion description and web session's
+  historical completion record; did not claim a fresh web-code review.
+- Readback confirmed both updated descriptions and all three comments.
+  DL-16061, DL-16066 and DL-16229 remain Ready for Deploy; no transition,
+  assignee or unrelated-card mutation was made. Jira-description cleanup is
+  now complete, superseding the preceding status-only checkpoint.
+- PR #286 is still OPEN/non-Draft, MERGEABLE/CLEAN, checks successful; all 16
+  threads are resolved with no next page. No new PR review correction or PR
+  mutation was necessary. No fresh test/device run was performed for this
+  documentation-only closeout; earlier same-tree evidence remains labeled.
+- Next development starting point: after the user announces the BE setting
+  release, refresh DL-16285 and deployed Swagger, regenerate/diff the model
+  through the official command, then connect only the actual new pushType
+  rows to existing settings read/write/enable-all behavior. Until then there
+  is no identified immediately actionable unfinished feedback implementation.
