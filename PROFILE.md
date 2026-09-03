@@ -84,6 +84,24 @@ Watchouts:
 - The user tends to go deep in personally interesting domains and automate or
   delegate less interesting areas quickly.
 
+## 실시간 웹 개발 경험과 안내 수준
+
+2026-09-03 사용자 설명 기준이며, 근무 서비스명은 기록하지 않는다.
+
+- 채팅이 주력인 협업 메신저의 웹 팀에서 AngularJS 기반 개발과 WebSocket을 통한
+  읽음 처리·실시간 상태 갱신을 경험했다.
+- 주된 흐름은 REST로 초기 데이터를 조회한 뒤 WebSocket 이벤트로 해당 상태를
+  갱신하는 방식이었다. 당시에는 React Query 같은 서버 상태 관리 도구 없이
+  갱신을 처리했다.
+- Android·iOS는 별도 네이티브 팀이 담당했다. 웹 경험을 근거로 모바일 플랫폼
+  세부 동작까지 익숙하다고 가정하지 않는다.
+- 실시간 동기화의 기본 개념과 구현의 큰 그림은 이해하고 있다. 경험을 설명한
+  목적은 과거와 현재의 비교 설명을 요구한 것이 아니라, 현재 프로젝트에 적용할
+  때 알아야 할 사항과 놓치기 쉬운 부분을 AI가 선제적으로 짚어주길 바라는 것이다.
+- 기본 원리를 반복 강의하지 않되, 현재 라이브러리·프로젝트 구조·플랫폼 제약까지
+  모두 알고 있다고 가정하지 않는다. 필요한 지식을 현재 적용 맥락에서 짧고
+  구체적으로 안내한다.
+
 ## Technology Selection
 
 The user has low loyalty to any specific language, framework, or tool.
