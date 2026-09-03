@@ -3,8 +3,8 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current checkpoint is the final section, **DL-16061 Account-Scoped Cleanup
-Review - 2026-09-03**. Earlier PR review and notification design sections
+The current checkpoint is the final section, **DL-16061 Local Develop Conflict
+Resolution - 2026-09-03**. Earlier PR review and notification design sections
 record the preceding implementation and decisions. Earlier dated
 delivery, review, API and runtime results below are historical, not current
 claims. The two new notification rows now exist as disabled presentation;
@@ -77,11 +77,14 @@ their real setting integration still awaits the deployed BE contract.
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
 - Current HEAD: `919a884557f7d421a946b12adfc337b497ca048f`
-- The checkout is clean and synchronized with
-  `origin/feature/DL-16061` as of 2026-09-03 12:46 KST.
+- HEAD remains synchronized with `origin/feature/DL-16061`, but the checkout
+  has a local, uncommitted develop merge as of 2026-09-03 13:02 KST.
+  All conflicts are resolved; 17 files are staged and `MERGE_HEAD` is present.
+  Do not pull, reset, stash or switch branches before inspecting this state.
 - `origin/develop` is `5ec442a2a20be9dbbad9a7f8532de37e69b60a8d`;
-  the feature branch is thirty-eight commits ahead and three commits behind.
-  No base merge was authorized or performed in this code/review closeout.
+  committed refs still show thirty-eight commits ahead and three behind until
+  the pending merge is committed. The user requested conflict work; the agent
+  explicitly limited this turn to local resolution, without app commit/push.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
@@ -1316,3 +1319,44 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   is requested, or refresh the real BE pushType contract when it is released.
   Runtime/real mutation QA and unknown multipart completion-response recovery
   remain separate from the completed code review scope.
+
+## DL-16061 Local Develop Conflict Resolution - 2026-09-03
+
+- The user's next request was to handle the remaining conflict files.
+  Refreshed both repositories and confirmed the app began clean on `919a884`
+  with `origin/develop` at `5ec442a`. No PR merge or develop branch mutation
+  was performed. `git merge --no-commit --no-ff origin/develop` is in progress
+  locally; there is no new app commit or push.
+- Resolved all three conflicts: `shared/configs/i18n/locales/en.ts`,
+  `shared/configs/i18n/textRegistry.ts`, and
+  `shared/configs/utils/dentlinkWebURL.ts`. The first two now exactly match
+  develop's generated output, including the new disabled-order interpolation
+  and existing 200MB text. No sheet sync or speculative regeneration ran.
+- Preserved develop's new local host allowlist entry and native order
+  restriction/popup behavior, alongside feedback routes and the order-detail
+  completion-result reload. The new order-navigation interceptor only handles
+  `OrderScreen`, so `FeedbackDetailsScreen` still follows the existing bridge.
+- Detected one integration regression in the automatic result: develop sets
+  both Office/Lab development WebViews to `http://10.10.7.44:3000`, failing
+  two existing environment tests. Kept this branch's established remote dev
+  portal/lab URLs instead. Staging/production URLs and exact-host/protocol
+  safeguards are unchanged. Develop's Reactotron debug-host changes were
+  retained; no new local host strategy was invented.
+- Validation: nine existing Jest suites, 67/67 tests pass. Transient
+  source-level checks cover order restrictions versus feedback navigation,
+  cancel versus successful Submit reload, en/ko registry resolution, 200MB
+  preservation, and local-host/protocol routing (11 assertions). Native modules
+  were not executed; no real API mutations, Metro, emulator, simulator or
+  native build was started for this conflict-only task.
+- ESLint over all 16 incoming JS/TS files: zero errors and four warnings,
+  identical to develop. Office/Lab TypeScript each remain at 11 diagnostics,
+  zero additions versus pre-merge HEAD via in-memory compiler-host overrides.
+  URL/order-detail formatting and both diff checks pass. The two generated
+  translation files fail Prettier both before and after; their canonical
+  generated formatting was preserved, not mass-reformatted.
+- Breakpoint at 13:02 KST: 17 staged merge files, no unmerged index entries,
+  no unstaged changes, `MERGE_HEAD=5ec442a2a20be9dbbad9a7f8532de37e69b60a8d`.
+  The work is local only; another device does not have these code changes.
+  PR #286 and Jira were not updated, and the remote conflict indication cannot
+  clear until the user authorizes the merge commit/push. Next inspect this
+  index, obtain app commit/push authorization, then refresh the PR review state.
