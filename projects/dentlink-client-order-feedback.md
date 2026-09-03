@@ -4,6 +4,80 @@
 기록보다 live Git, Jira, Notion, Figma와 배포된 Swagger 상태를 우선한다. 기획
 검토, 구현, 로컬 QA, 앱 검증, release 전달, 스테이징 QA와 배포를 구분한다.
 
+## 최신 체크포인트 — 2026-09-03
+
+- 작업 브랜치 `feature/DL-15828`의 최신 제품 commit은
+  `2632034633079f06e465aec3016e8b9b289ea24b`
+  (`[DL-15828] fix: 주문상세 피드백 버튼과 이벤트 분기 일치`)다.
+  commit·push 후 로컬/원격 HEAD 일치와 clean 상태를 확인했다.
+- 기존 release PR [#4555](https://github.com/Innvoaid/dentlink-client/pull/4555)의 head도
+  `263203463`으로 자동 갱신됐다. PR 본문·Jira·배포 branch는 이번 작업에서 변경하지 않았다.
+- 현재 확정된 요구사항에서 추가로 확인된 웹 FE 코드 수정은 모두 처리했다. 아래의
+  미확정 정책, 앱 전용 작업, 운영·검증 단계와 FE 코드 완료를 혼동하지 않는다.
+- 당일 원격 재점검은 개인 컨텍스트·제품 Git, Jira 부모와 하위 44개 카드·댓글,
+  Notion 기획·알림·Analytics·파일 정책, Figma 디자인 페이지와 최신 댓글,
+  관리자 FigJam, 개발 Swagger를 대상으로 했다. Figma는 MCP metadata/screenshot과
+  실제 Chrome 댓글 패널로 확인했다. 이전 기록은 이 체크포인트와 live 증거보다 후순위다.
+
+### 주문상세 이벤트 분기 수정
+
+- `OrderFeedbackBanner`는 Good 단독 평가도 `Edit` 버튼을 표시하지만 주문상세 handler는
+  `hasDetails`만 보고 `review_detail_click`을 전송하던 불일치를 수정했다.
+- 배너가 계산한 `isEdit`를 `onClickDetail(isEdit)`로 전달해 버튼과 이벤트의 판단을
+  하나로 유지한다. `Edit`은 `review_edit_click`, `Share your feedback`은
+  `review_detail_click`을 전송한다. 조건을 별도 helper나 중복 분기로 늘리지 않았다.
+- 변경 파일은 `clinic/src/components/Feedback/OrderFeedbackBanner.tsx`와
+  `clinic/src/pages/orders/[order_id]/index.tsx` 두 개뿐이다. 기존 UI, Good/Bad POST/PUT,
+  일반 웹 Drawer, WebView의 native NAVIGATION payload와 이벤트 1회 전송 순서는 유지한다.
+- Clinic typecheck, 대상 Prettier, `git diff --check`를 통과했다. 대상 ESLint는 오류 0개,
+  기존 경고 2개이며 HEAD 원문 검사에서도 동일한 경고임을 확인했다.
+- 테스트 파일 추가 없이 실제 소스에서 버튼 callback/상태/handler를 추출해
+  Good·Bad × 상세 유무 × 웹·앱 8개 조합을 격리 실행했다. 이벤트가 navigation 전에
+  1회 발생하며 native `orderId`와 `entryPoint: order-detail`이 정확함을 확인했다.
+  Good/Bad 저장 handler는 수정 전과 동일함도 대조했다. 브라우저의 실제 클릭·서버 저장·
+  Amplitude 적재를 실행한 증거로 해석하지 않는다.
+- commit hook의 Clinic·Lab·Admin typecheck와 push hook의 앱 lint·기존 shared 테스트·
+  coverage 검사도 성공했다. 기존 lint 경고 및 coverage baseline 차이 표시는 있었지만
+  hook 실패는 없었다. 마무리 시 CodeRabbit status는 SUCCESS, 미해결 review thread는
+  0개였으며 PR은 OPEN·MERGEABLE이다. 사람 review·merge는 별도다.
+
+### 계약 및 문서 대조 결과
+
+- 개발 Swagger의 피드백 7개 operation과 관련 DTO 16개의 필드 구성을 generated model에
+  대조해 추가 누락이 없음을 확인했다. `OrderFeedbackAdminDto.reviewerUserId`도 공식
+  schema에 존재한다. 관리자 주문상세·회원상세·CRM은 선택 행의
+  `orderId + reviewerUserId`로 상세 GET을 호출하며 회원/CRM의 `ORDER READ` 경계도 있다.
+- 9월 2일 수정된 Notion은 원주문 또는 리메이크 회차 중 한 번이라도 배포 이후 완료된
+  주문의 피드백 작성·수정 가능성을 설명한다. 목록의 eligibility는 서버가 결정하며
+  FE에서 현재 주문 상태로 다시 걸러내지 않는다.
+- **미확정: 완료 후 취소된 주문의 주문상세 배너.** Notion QA에는 계속 노출한다고
+  적혀 있지만 본문·Figma annotation·현재 코드에는 `COMPLETED`에서만 노출하는 규칙이
+  있다. 사용자 요청에 따라 이번에는 이 조건을 수정하지 않았다. PM이 취소 주문까지
+  배너 노출을 확정하면 조회 gate와 첫 로딩 조건을 함께 검토한다. 작성 가능 여부와
+  주문상세 배너 노출 여부를 같은 정책으로 단정하지 않는다.
+- 첨부는 현재 승인된 5개·총 200MB·파일명 100자 정책을 유지한다. Notion의 과거
+  10개/5MB 문구와 Figma 일부 모바일의 2G 문구가 남아 있어 문서 정리가 필요하지만
+  그 문구만으로 코드 제한을 바꾸지 않는다. 알림 배치 시간도 본문과 QA 표에 과거 수치가
+  혼재하며 BE/PM 확인 대상이지 웹의 임의 변경 근거가 아니다.
+- Jira 웹/관리자/Analytics 카드는 `Ready for Deploy`다. DL-16065 본문·댓글의
+  목록 스냅샷 사용 설명, 일부 FE 카드의 과거 API/UX 미정 설명은 최신 구현보다 오래됐다.
+  Jira가 AI 작성 정리인 부분은 PM/디자인 원문보다 우선하는 요구사항으로 사용하지 않는다.
+- 웹 7개 이벤트 외 신규 웹 이벤트는 확인되지 않았다. Figma의 `pendingreviews_click`은
+  APP 전용이며 앱의 `push_click` 피드백 유형 매핑도 기존 앱 commit에 반영됐다.
+  신규 Case Preferences·Order Feedback 알림 설정은 앱/BE의 DL-16285 진행 범위다.
+  개발 Swagger의 pushType enum에는 두 신규 타입이 아직 없어 추측 구현하지 않는다.
+
+### 전달 상태 참고 — 구현 범위와 별개
+
+- 점검 당시 `origin/develop`은 PR #4559의 merge `52103746d`이며 해당 Clinic·Lab·Admin
+  배포 workflow는 성공했다. UI S3 workflow는 dependency 설치 단계에서 실패했다.
+  이번까지의 `85076f7c4`, `4a417fda6`, `263203463`은 develop에 반영하지 않았다.
+- `origin/master`와 `origin/release/v1.86.0`은 `4fc3b4877`, `origin/stage`는
+  `release/v1.85.1` 반영 merge `c8872b72d`였다. 사용자 지시 없이 변경하지 않는다.
+- 앱 PR #286은 원격 head `28a1294`에서 OPEN이며 최신 develop과 충돌 상태였다.
+  앱 bridge commit은 이미 원격에 있으므로 과거의 미커밋 기록은 현재 상태가 아니다.
+  앱 작업과 충돌 처리는 별도 앱 세션 책임이다.
+
 ## 범위와 자료
 
 - 상위 Jira: [DL-15828](https://innovaid.atlassian.net/browse/DL-15828)
@@ -1220,8 +1294,10 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 실제 피드백 데이터 기반 주문상세·회원상세·CRM drawer 상세 GET 파라미터·결과와
   분리 권한 관리자에서의 노출/403 방지 검증
 - 앱 피드백 알림의 발송 조건, 대상, 문구, deep link, BE/FCM/native 책임
-- Analytics 문서에 이후 추가될 이벤트. 현재 7개 웹 이벤트는 구현됐고
-  앱 전용 `push_click`의 `1st Feedback`, `Order Feedback` 프로퍼티가 남아 있다.
+- 현재 웹 7개 이벤트와 앱 전용 `pendingreviews_click`·피드백 `push_click` 매핑은
+  구현됐다. 이후 새 이벤트와 앱 알림 설정 DL-16285의 신규 pushType 계약은 별도다.
+- 완료 후 취소된 주문상세의 배너 노출 정책은 최신 Notion QA와 기존 본문/Figma가
+  충돌하므로 PM 확인 후에만 변경한다. 현재 확정 범위의 미완료 웹 코드로 집계하지 않는다.
 - Admin 피드백의 `reviewerName`은 설명상 탈퇴 사용자에게 null일 수 있지만 개발
   Swagger schema에는 nullable 선언이 없다. FE generated 파일은 수동 보정하지 말고
   BE Swagger 계약이 수정되면 재생성해 반영한다.
@@ -1238,10 +1314,10 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 5. 대상 데이터가 있는 치과 계정 또는 BE fixture를 확보해 목록·주문상세·상세
    drawer·실제 파일 업로드의 GET/POST/PUT 통합 QA를 수행한다. 실제 모바일 브라우저
    Camera/Photo/File picker도 별도 검증한다.
-6. 새 `develop` 대상 PR #4559의 review·merge와 Clinic·Lab·Admin 개발서버 배포를
-   확인한 뒤 개발서버 QA를 이어간다. 스테이징 배포는 `release/v1.85.1 → stage`
-   PR #4560의 review·merge·실제 배포를 별도로 확인한다. 피드백의 정식 릴리즈 전달은
-   최신 head `4a417fda6`가 반영된 PR #4555의 사람 review·merge 상태로 추적한다.
+6. 배포 요청이 따로 있을 때만 현재 develop과 feature 차이를 확인해 반영한다. PR #4559는
+   이미 병합됐지만 9월 1일 후속 수정과 이번 `263203463`까지 배포됐다는 뜻은 아니다.
+   피드백의 정식 릴리즈 전달은 최신 head가 반영된 PR #4555로 추적한다. 이번 사용자
+   요청은 코드 수정·commit·push·개인 메모리 저장이며 QA·배포·Jira 변경은 제외했다.
 7. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
    API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
 8. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.

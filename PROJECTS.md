@@ -175,18 +175,16 @@ For detailed current state, read:
 - Current state: Clinic PC·웹 모바일의 `/my/feedback`, 마이페이지 Quick Links·My
   Office 모달, 목록·상세 drawer·파일 첨부, 주문 상세 배너를 실제 Office 피드백
   GET/POST/PUT API와 React Query cache에 연결했다. 딥링크는
-  `/my/feedback?orderId={orderId}`이며 최신 제품 commit `c342882c0`이
-  `origin/feature/DL-15828`과 동일한 clean 상태다. 원격 `develop`과 `stage`를
-  `origin/master` `4fc3b4877`에서 재생성했고, 피드백 개발서버 반영 PR #4559를
-  `feature/DL-15828 → develop`으로 열었다. release 전달 PR #4555는
-  `release/v1.86.0` 대상 open·review required 상태다.
-  2026-08-28 실제
-  eligible 주문으로 목록/count, 주문 상세 배너, 딥링크 상세 GET, PC·웹 모바일
-  drawer와 Photo/Camera/File 선택 UI를 Chrome에서 확인했다. 실제 Good/Bad POST,
-  상세 PUT과 업로드·삭제는 서버 데이터를 바꾸므로 별도 QA가 남아 있다. 첨부 제한은
-  현재 최대 5개·총 200MB이나 Notion과 Figma의 일부 문구가 상충해 확정이 필요하다.
-  웹 구현 Jira 카드와 관리자 DL-16065는 `Ready for Deploy`, 상위는 `진행 중`이다.
-  앱은 별도 `dentlink-app` 저장소·세션에서 진행한다.
+  `/my/feedback?orderId={orderId}`다. 2026-09-03 최신 제품 commit `263203463`을
+  push했고 원격과 동일한 clean 상태다. 주문상세 배너의 Edit 판단을 클릭 이벤트에도
+  전달해 Good 단독 평가의 이벤트 오분류를 수정했으며 기존 WebView/native 분기와 저장은
+  유지했다. 현재 확정 요구사항에서 추가로 확인된 웹 FE 코드 수정은 모두 처리했다.
+  관리자 세 진입점은 `orderId + reviewerUserId` 상세 GET과 ORDER READ 권한을 사용한다.
+  PR #4555는 `release/v1.86.0` 대상 OPEN이며 최신 commit이 반영됐다. develop은
+  PR #4559 반영 이후의 코드리뷰 수정·WebView bridge·이번 이벤트 수정이 미반영 상태다.
+  완료 후 취소 주문의 배너 정책은 Notion과 기존 Figma/코드가 충돌하므로 확정 대기이며
+  QA·배포·Jira 정리는 이번 코드 작업 범위에서 제외했다. 첨부는 5개·총 200MB를 유지한다.
+  앱은 별도 저장소·세션에서 진행하며 신규 알림 설정 DL-16285는 pushType 계약 대기다.
 - Personal current checkpoint:
   `projects/dentlink-client-order-feedback.md`
 
