@@ -192,14 +192,12 @@ For detailed current state, read:
 - Jira: `DL-16258`
 - Current state: 과거 `frankieTemp/DL-10132`에서 보류됐던 Warranty 작업을 최신
   `master` 기준 `feature/DL-16258`로 이식하고 현재 프로젝트 관례에 맞게 정리했다.
-  최신 제품 commit `8d3c8ad1e`은 원격과 동기화됐고, `release/v1.86.0` 대상 PR
-  #4556은 open·mergeable·review required 상태다. Warranty 번역 3개는 실제 Sheet에
-  페이지·화면 상태·경로·사용 상태까지 반영됐다. 공통 i18n Sheet 운영 개선은
-  `feature/i18n-sheet-workflow`의 최신 commit `eebf35db3`과 PR #4557로 분리했다.
-  i18n 운영 PR #4557은 `release/v1.85.1`에 merge됐다. Warranty PR #4556은
-  `release/v1.86.0` 대상 open 상태이며 CodeRabbit 최종 검토 성공·미해결 thread 0개다.
-  원격 `stage`는 `master`와 같은 `4fc3b4877`로 재생성됐고, 실제 스테이징 대상인
-  `release/v1.85.1`을 반영하는 PR #4560이 open·mergeable 상태다. Warranty의
-  `release/v1.86.0` 전달은 이 스테이징 배포와 별개다.
+  2026-09-03 사용자가 PR #4556의 대상을 `release/v1.86.0`에서 `release/v1.85.1`로
+  변경하고 merge했다. release commit은 `8d0744936`이며 사전 검토한 병합 결과와
+  동일하다. Clinic/Lab/Admin 타입 검사와 번역 보존 검사를 통과했다. Warranty 번역
+  3개의 Sheet 반영은 완료됐으며 공통 i18n 운영 개선 PR #4557도 이미 1.85.1에 포함됐다.
+  원격 `stage`를 삭제하고 최신 원격 `master`와 같은 `4fc3b4877`로 재생성했으며,
+  `release/v1.85.1 -> stage` PR #4566이 OPEN·MERGEABLE 상태다. PR merge·실제
+  스테이징 배포·QA는 사용자가 별도로 진행한다. 로컬 branch/worktree는 정리하지 않았다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`

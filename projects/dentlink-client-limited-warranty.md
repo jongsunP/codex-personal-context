@@ -32,7 +32,7 @@
 - CodeRabbit이 확인한 정책 본문의 명백한 문법·철자 오류 5곳은 법적 의미를 바꾸지
   않는 범위에서 교정했다.
 
-## 현재 체크포인트 — 2026-09-01
+## 현재 체크포인트 — 2026-09-03
 
 - 제품 repository: `/Users/parkjongsun/Repository/dentlink-client`
 - 제품 branch/upstream: `feature/DL-16258` / `origin/feature/DL-16258`
@@ -43,17 +43,27 @@
 - release 전달 PR:
   [#4556](https://github.com/Innvoaid/dentlink-client/pull/4556)
   - head: `feature/DL-16258`
-  - base: `release/v1.86.0`
-  - 마지막 live 확인: open, ready for review, mergeable, review required
-  - Auto Assign: 성공
-  - CodeRabbit: 재검토 성공, 미해결 review thread 0개
-- 메인 worktree는 clean한 `master`이며 `origin/master`와 동기화됐다.
-- feature branch는 clean하고 원격과 동기화됐으며 PR merge 전이라 로컬과 원격 모두
-  보존했다.
-- 원격 `develop`과 `stage`는 배포 준비 과정에서 `origin/master` `4fc3b4877` 기준으로
-  재생성됐다. 실제 스테이징 대상은 `release/v1.85.1`로 정정됐으며, 해당 release를
-  `stage`에 반영하는 PR #4560이 open·mergeable 상태다. PR #4556의
-  `release/v1.86.0` 전달은 이번 스테이징 배포와 별개다.
+  - base: `release/v1.85.1`
+  - 사용자가 2026-09-03 14:44 KST에 기존 `release/v1.86.0`에서 대상을 변경했다.
+  - 사용자가 2026-09-03 14:51 KST에 merge했으며 GitHub에서 MERGED를 확인했다.
+  - squash merge commit: `8d0744936b12e872c48c6715e3d17a85da070054`
+  - merge 전 CodeRabbit 성공, 미해결 review thread 0개를 확인했다.
+- 메인 worktree의 실제 checkout은 `feature/DL-16269`, HEAD `be31e3596`이며 clean하다.
+  이번 검토·배포 준비에서는 로컬 checkout, 제품 코드, feature branch를 변경하거나
+  정리하지 않았다.
+- 사용자의 명시 요청으로 원격 `stage`를 삭제한 뒤 당시 최신 원격 `master`와 동일한
+  `4fc3b4877458d99439d1474aff03b9eff17ab34a`에서 다시 생성했다.
+  - 삭제 전 stage: `5328a2f97a45eb3d947e8be0feb24818386c979c`
+  - 삭제 전 stage 대상 열린 PR은 없었고, 보호 규칙 우회는 사용하지 않았다.
+  - 이전 stage 반영 PR #4560, #4562, #4565는 이미 merge된 이력이다.
+- 신규 스테이징 전달 PR:
+  [#4566](https://github.com/Innvoaid/dentlink-client/pull/4566)
+  - head: `release/v1.85.1` / `8d0744936b12e872c48c6715e3d17a85da070054`
+  - base: `stage` / `4fc3b4877458d99439d1474aff03b9eff17ab34a`
+  - 생성 후 OPEN, ready for review, MERGEABLE, auto-merge 미설정을 확인했다.
+  - Warranty뿐 아니라 현재 1.85.1의 전체 변경 8개 commit을 전달한다.
+  - 이번 작업 범위는 PR 생성까지다. PR merge·실제 배포·스테이징 QA는 사용자가
+    별도로 진행하며 완료로 간주하지 않는다. `develop`은 변경하지 않았다.
 
 ## 검증과 상태 경계
 
@@ -77,6 +87,15 @@
   테스트를 통과했다. 전체 lint의 기존 warning은 비차단 baseline이다.
 - 사용자가 코드와 정책 범위를 확인했다. 실제 release 환경 QA와 배포는 아직 완료로
   간주하지 않는다.
+- 2026-09-03 대상 변경 검토에서 base `9d0e0a1f4`와 Warranty head `8d3c8ad1e`를
+  `git merge-tree`로 합쳐 충돌 없음을 확인했다. 추가되는 것은 Warranty commit 2개뿐이며
+  기존 1.85.1 번역값은 모두 보존되고 en/ko에 Warranty 키 3개씩만 추가된다.
+- 병합 tree `130c731f6fabc316fe76d9c7caaa205e9c207bd6`를 메모리 내 파일 오버레이로
+  TypeScript compiler에 제공하여 Clinic/Lab/Admin 전체 타입 진단 0건을 확인했다.
+  checkout이나 제품 파일을 수정하지 않았고 `git diff --check`도 통과했다.
+- 실제 squash merge 후 release tree가 위 검증 tree와 동일함을 확인했다. 분리된 i18n
+  운영 PR #4557도 이미 1.85.1에 포함되어 있다. 대상 변경 검토에서 브라우저 화면 QA와
+  production build를 새로 실행한 것은 아니다.
 
 ## 결정과 주의사항
 
@@ -89,15 +108,19 @@
 - Lab 모바일 하단 내비게이션에는 법률 문서 푸터 진입점을 새로 만들지 않았다. 과거
   요구와 구현은 Clinic Footer, 주문 최종 단계, 리메이크 최종 단계를 명시했고 Lab의
   기존 푸터는 데스크톱 확장 사이드바에 있다.
-- PR merge 전에는 로컬 `feature/DL-16258`을 삭제하지 않는다. shared repository의
-  추가 수정·push·PR mutation·merge는 사용자의 명시 요청이 있을 때만 수행한다.
+- Warranty는 이제 1.85.1에 포함되어 있다. 완료된 release는 기존 회사 전략대로
+  `master`와 이후 활성 release인 `release/v1.86.0`에 순방향 반영해야 한다.
+- PR merge가 로컬 branch 정리 권한을 자동으로 의미하지 않는다. 로컬 정리와 shared
+  repository의 추가 수정·push·PR mutation·merge는 사용자의 명시 요청이 있을 때만
+  수행한다.
 
 ## 다음 시작점
 
-1. PR #4556의 동료 review와 merge 상태를 live로 확인한다.
-2. 새 리뷰가 추가되면 현재 코드에 유효한지 검토하고 명시된 권한 범위에서 처리한다.
-3. 동료 승인 후 `release/v1.86.0`에 merge한다. `release/v1.86.0`의 스테이징 반영은
-   이후 사용자가 해당 release 배포를 요청할 때 별도로 진행한다. 실제 Clinic/Lab
-   경로 및 주문·리메이크 진입점 QA도 각각 별도 상태로 확인한다.
-4. merge 후 사용자가 정리를 요청하면 로컬 feature branch를 안전하게 제거하고
+1. 사용자가 이어서 요청할 때 PR #4566과 원격 stage/release 상태를 live로 확인한다.
+   PR 생성만 요청된 현재 상태에서 리뷰·merge·배포를 자동으로 진행하거나 감시하지 않는다.
+2. 사용자가 PR merge와 스테이징 배포를 진행한 뒤, QA 요청이 있으면 실제 Clinic/Lab
+   `/warranty`, 푸터, 주문·리메이크 진입점을 확인한다. 배포와 QA는 각각 별도 증거로 판단한다.
+3. 1.85.1 release가 완료되면 `master`와 이후 release로의 반영을 별도 요청 범위에서
+   확인한다. 이전 Warranty feature PR을 1.86.0에 다시 만드는 것으로 대체하지 않는다.
+4. 사용자가 정리를 요청하면 로컬 feature branch의 보존 상태를 확인한 뒤 제거하고,
    원격 branch 보존 여부는 그때 지시에 따른다.
