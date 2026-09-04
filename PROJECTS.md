@@ -237,7 +237,11 @@ For detailed current state, read:
   43896의 문구 2건과 Portal URL 통일 요청을 최신 Notion에서 확인했다. 최신 release에서
   `feature/DL-16258-warranty-policy-fix`를 만들고 `75a0e18e2`에 commit·push했으며,
   [PR #4576](https://github.com/Innvoaid/dentlink-client/pull/4576)을 같은 release 대상으로
-  생성했다. 8개 파일(+15/-6), OPEN·MERGEABLE이며 Auto Assign 성공·CodeRabbit 진행
-  중이다. 동료 승인·merge·배포·QA는 별도 상태다.
+  생성했다. 8개 파일(+15/-6)이며 Auto Assign·CodeRabbit 성공 후 사용자가 merge했다.
+  최신 release HEAD는 `18e7e925b`다. 이어서 원격 stage를 삭제하고 최신 master
+  `ddeeb1e86`에서 재생성한 뒤, release 전체를 전달하는
+  [PR #4577](https://github.com/Innvoaid/dentlink-client/pull/4577)을 생성했다. 95개
+  파일(+6223/-297), OPEN·MERGEABLE·CLEAN이며 Auto Assign·CodeRabbit 성공 상태다.
+  PR merge·실제 스테이징 배포·화면/PM QA는 별도다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`

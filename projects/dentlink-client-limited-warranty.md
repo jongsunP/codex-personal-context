@@ -327,8 +327,30 @@
   `feature/DL-16258-warranty-policy-fix -> release/v1.86.0`으로 생성했다.
   - head: `75a0e18e2`, base: `6922a9a2c`
   - 8개 파일, 15줄 추가·6줄 삭제
-  - OPEN·일반 PR, MERGEABLE이며 Auto Assign은 성공했다.
-  - CodeRabbit은 진행 중이며 동료 승인·merge·배포·QA는 별도 상태다.
+  - Auto Assign과 CodeRabbit은 성공했다. 사용자가 2026-09-04 15:00 KST에 merge했고
+    GitHub에서 MERGED를 확인했다. release merge commit은
+    `18e7e925b11ddfccbc5e73e92eca50000c2964be`다.
+  - release 배포와 QA는 별도 상태다.
+
+### release/v1.86.0 스테이징 재전달 준비
+
+- 사용자의 명시 요청으로 원격 `stage`를 삭제하고 최신 원격 `master`에서 재생성했다.
+  삭제 전 stage는 `47a19f8afc93e01149b3ad94f9bbae4fd4051bba`였고, 삭제 전 열린 stage 대상
+  PR 0개·protected=false·적용 branch rule 0개를 확인했다.
+- 재생성 후 `origin/stage`와 `origin/master`는 모두
+  `ddeeb1e868c64f3e1047170f6bc6282a9646ed97`로 일치한다. 원격 삭제 push의 pre-push
+  hook이 실행됐지만 작업은 완료됐으며 중복 삭제 없이 live ref를 재확인했다.
+- 최신 `origin/release/v1.86.0`은 PR #4576 merge commit `18e7e925b`다.
+  stage와 release의 merge-tree 및 `git diff --check`가 성공해 충돌이 없음을 확인했다.
+- [PR #4577](https://github.com/Innvoaid/dentlink-client/pull/4577)
+  `[배포] release/v1.86.0 스테이징 반영`을 생성했다.
+  - head: `release/v1.86.0` / `18e7e925b`
+  - base: `stage` / `ddeeb1e86` (= 최신 `master`)
+  - 95개 파일, 6,223줄 추가·297줄 삭제
+  - OPEN·일반 PR, MERGEABLE·CLEAN이며 Auto Assign과 CodeRabbit은 성공했다.
+- 제품 코드·commit·feature push는 이번 배포 준비에서 추가하지 않았다. 현재 로컬은
+  `feature/DL-16258-warranty-policy-fix` / `75a0e18e2`, 원격 동일·clean이다.
+- PR merge, 실제 스테이징 배포와 화면/PM QA는 별도 상태다.
 
 ## 결정과 주의사항
 
@@ -351,12 +373,12 @@
 
 ## 다음 시작점
 
-1. 정식 release 전달 PR #4573은 merge됐고 release HEAD는 `6922a9a2c`다. 후속 문구·링크
-   수정 PR #4576은 OPEN이며 head `75a0e18e2`, base `6922a9a2c`, MERGEABLE이다.
-   Auto Assign·CodeRabbit·동료 승인과 merge는 최신 상태를 다시 확인한다.
+1. 정식 release 전달 PR #4573과 후속 수정 PR #4576은 merge됐고 최신 release HEAD는
+   `18e7e925b`다. 스테이징 전달 PR #4577은 OPEN·MERGEABLE·CLEAN이며 Auto Assign과
+   CodeRabbit이 성공했다. 사용자 별도 지시 전에는 merge하거나 배포하지 않는다.
 2. 실제 서버 SHA·브라우저 화면 QA·PM 최종 QA는 별도 증거가 필요하다. 사용자 확인
    배포 완료를 화면/정책 QA 또는 운영 배포 완료로 확대 해석하지 않는다.
-3. CodeRabbit 리뷰 처리 요청이 오면 #4576의 최신 unresolved thread를 다시 조회해 처리한다.
-   사용자의 별도 요청 전에는 PR을 merge하거나 release를 배포하지 않는다.
+3. #4577 merge 후 실제 스테이징 배포와 화면/PM QA는 사용자 확인 또는 별도 증거가 필요하다.
 4. 이전 #4568은 워런티 제외 버전, #4572는 스테이징 검토 전달, #4573은 1.86.0 정식
-   release 전달, #4576은 PM 댓글 43896의 후속 수정이다. 관련 branch는 지시 없이 정리하지 않는다.
+   release 전달, #4576은 PM 댓글 43896의 후속 수정, #4577은 최신 1.86.0 스테이징 전달이다.
+   관련 branch는 지시 없이 정리하지 않는다.
