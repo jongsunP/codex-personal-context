@@ -1946,3 +1946,19 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   and Amplitude annotations. Exclude superseded variants and web-only UI. Audit
   first and report confirmed mismatches before making another shared/global UI
   change.
+
+## DL-16311 Physical-Device Closeout - 2026-09-04
+
+- The user completed the final runtime check after publishing the current
+  feature branch and confirmed that every DL-16311 Profile UI item now behaves
+  correctly. This includes the 12px card radii, exact Preferences and Quick
+  Links icons, Profile visual alignment, and the root top Safe Area color.
+- The previously reproducible gray-to-white transition lag is closed by user
+  evidence: changing from gray Home/Profile to white Orders/LinkTalk now updates
+  the Safe Area color immediately with the tab transition. No remaining
+  DL-16311 visual defect is known at this breakpoint.
+- This is user-reported physical-device acceptance of commit `6856bcd`; the
+  exact Revopush release number was not independently re-read by Codex at this
+  checkpoint. Product code remains clean and synchronized at that commit.
+- Continue the separate feedback APP Figma audit already in progress. Do not
+  reopen DL-16311 unless a new regression is reproduced.
