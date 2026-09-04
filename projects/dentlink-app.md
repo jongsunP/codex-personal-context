@@ -1963,7 +1963,7 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - Continue the separate feedback APP Figma audit already in progress. Do not
   reopen DL-16311 unless a new regression is reproduced.
 
-## DL-15828 APP Design-to-Code Full Audit - 2026-09-04
+## DL-15828 APP Functional and Major-Visual Audit - 2026-09-04
 
 - Completed the requested breakpoint audit without changing product code.
   Live app Git is clean and synchronized at
@@ -2000,7 +2000,29 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   `967ba71`; no merge was performed. GitHub PR #286 is still open, non-draft,
   mergeable/CLEAN, and its current checks report success. This is branch timing,
   not a missing design implementation.
-- No additional APP FE task is confirmed at this breakpoint. Resume only for a
-  new Figma/Notion/Jira change, a newly deployed API contract, reviewer action,
-  or a reproduced regression. Reconcile those sources and live Git again before
+- No additional major APP FE task is confirmed at this breakpoint. Resume for
+  the pending pixel-level visual audit described below, or for a new
+  Figma/Notion/Jira change, a newly deployed API contract, reviewer action, or
+  a reproduced regression. Reconcile those sources and live Git again before
   modifying code.
+
+## DL-15828 APP Visual-Audit Scope Clarification - 2026-09-04
+
+- The user's reason for requesting the audit was not basic functional
+  completeness: physical QA had exposed subtle design differences such as the
+  wrong Preferences/Quick Links SVGs, card radius, and one-frame Safe Area
+  color lag. Future use of `전수조사` for this feature must prioritize those
+  rendered-detail mismatches.
+- The completed pass proves no large missing APP screen, state, CTA, navigation
+  bridge, attachment policy, analytics event, or Profile integration. No major
+  code task is currently known.
+- It did not compare every icon and every visual property in every current APP
+  frame one by one. Do not describe the pixel-level visual audit as complete.
+- The optional follow-up is an exact current-variant checklist covering SVG
+  path/viewBox/size/color, typography, spacing, padding, alignment, radius,
+  border/background, Safe Area, state variants, and iOS/Android rendering.
+  Compare only APP-owned frames; order-detail content remains web-owned except
+  for the native navigation bridge.
+- No app code changed for this clarification. The functional checkpoint and
+  user-completed QA remain valid; detailed visual inspection can resume later
+  from clean app commit `6856bcd`.
