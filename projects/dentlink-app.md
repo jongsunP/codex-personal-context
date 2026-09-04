@@ -1927,3 +1927,22 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   and APP-owned parts of `주문상세 (앱.웹)`) and comparing only the current
   variants against the native Profile, feedback list/detail, navigation and
   attachment implementation.
+
+## DL-16311 Safe Area Final Timing Fix and APP Audit Start - 2026-09-04
+
+- Live Git confirms `feature/DL-16061` is clean and synchronized with
+  `origin/feature/DL-16061` at `6856bcd455c8cbcebd7fc4329cee806378822dc5`.
+- The final Safe Area timing fix adds a bottom-tab `tabPress` update before the
+  route render: Office Home/Profile select `mono200`, while Orders/LinkTalk and
+  the remaining tabs select white. The centralized `RootNavigator` route
+  derivation remains the fallback for programmatic navigation and deep links.
+  No API, analytics, navigation destination or Lab color behavior changed.
+- The user will perform the next CodePush directly. Codex must not publish or
+  operate Revopush for this checkpoint; CodePush receipt and physical-device
+  confirmation of `6856bcd` remain separate until the user reports them.
+- The next active task is a full design-to-code audit of current APP-owned
+  feedback Figma variants: Office Profile, Pending Reviews list/detail/input,
+  order-detail WebView to native feedback navigation, notification settings,
+  and Amplitude annotations. Exclude superseded variants and web-only UI. Audit
+  first and report confirmed mismatches before making another shared/global UI
+  change.
