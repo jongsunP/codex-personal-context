@@ -1636,3 +1636,48 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   transition and close/Submit return only if requested; investigate the app
   bridge if a correctly emitted message still fails to navigate. CodePush
   and remotely hosted WebView web deployment are separate artifacts.
+
+## Personal Local App Development Loop - 2026-09-04
+
+- The user will now develop the mobile app regularly rather than only observe
+  app-developer work. Keep the team's package scripts as the canonical launch
+  commands, while preparing a repeatable personal workspace around them.
+- When the user asks to start local iOS Office development, prepare the exact
+  `dentlink-app` IDE window, its integrated terminal, the iOS Simulator, Metro,
+  and Reactotron as one working set. Verify the live branch/worktree first,
+  then use `yarn ios-office:dev` from that IDE terminal and confirm both the
+  rendered app and Reactotron connection/log traffic. Use the corresponding
+  Lab command only when the task is explicitly Lab.
+- When the user asks for local Android Office development, use the same pattern
+  with the Android emulator and `yarn android-office:dev`. After the emulator
+  is connected, apply `adb reverse tcp:9090 tcp:9090` before app load/reload;
+  repeat it after an emulator reboot or reconnect. Confirm Reactotron shows an
+  Android connection and Timeline traffic rather than assuming success from a
+  completed build alone.
+- Reactotron is part of the normal local debugging workspace because it covers
+  API/network timeline, AsyncStorage and application logs. React Native
+  DevTools, the device screen and native IDE logs remain complementary rather
+  than interchangeable. Reactotron configuration is imported only in
+  `__DEV__`; a CodePush/release bundle is not evidence of a Reactotron-capable
+  local session.
+- Local debug uses the source from the currently checked-out Git branch through
+  Metro. The `dev`, `staging` and `production` suffixes select API/environment,
+  scheme/flavor and app configuration; they do not select a Git branch.
+  `codepush-force-*:dev` is a remote Development deployment command, not a
+  substitute for `ios-*:dev` or `android-*:dev` local execution.
+- Start Metro only in the integrated terminal of the IDE opened for the exact
+  project. If that IDE has not been prepared, ask the user before starting it
+  elsewhere. Prefer the team's working command path; the current repository's
+  `yarn start` has a known obsolete debugger flag, while `yarn metro-log`
+  starts Metro when it must be run separately.
+- Live proof on 2026-09-04: the already installed Office Android development
+  app was attached to Metro in the `dentlink-app` Cursor terminal, reloaded,
+  and Reactotron displayed one Android 16/API 36 connection plus AsyncStorage
+  Timeline traffic. The required host split is Android `localhost` through
+  ADB reverse and iOS the current Mac LAN address.
+- Current app checkout at this checkpoint is synchronized at `a301e78` but is
+  intentionally dirty. `apps/office/ReactotronConfig.js` has an uncommitted
+  local platform host split (`localhost` for Android and `10.10.7.57` for iOS),
+  and `android/gradle.properties` has the pre-existing Android Studio parallel
+  tooling property. Neither shared-repository change was committed or pushed;
+  preserve and re-evaluate them before future shared-code mutation.
