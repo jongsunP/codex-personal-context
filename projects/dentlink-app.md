@@ -1693,3 +1693,15 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   and `android/gradle.properties` has the pre-existing Android Studio parallel
   tooling property. Neither shared-repository change was committed or pushed;
   preserve and re-evaluate them before future shared-code mutation.
+- Live workflow review on 2026-09-04 confirmed the package scripts use Debug by
+  default and separate `*-release` commands. Office Development CodePush has
+  combined, iOS-only and Android-only commands; choose the narrowest target.
+  Revopush `release-react` defaults `--development` to false, so CodePush is not
+  a Reactotron/`__DEV__` debugging path. The committed Podfile still excludes
+  arm64 for Simulator, and MLImage's arm64 slice is device-only while x86_64 is
+  the Simulator slice. Reuse the installed iOS Development proof app with Metro
+  for ordinary JS work; do not present `yarn ios-office:dev` as a proven clean
+  Apple Silicon rebuild until that native constraint is resolved. The iPhone
+  17 Pro simulator currently contains the arm64
+  `com.innovaid.dentlink.development` proof app, verified directly in its
+  simulator container on 2026-09-04.

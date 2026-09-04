@@ -51,9 +51,22 @@ primary loop:
 iOS Simulator + Development + Debug + local Metro + Reactotron
 ```
 
-Start or reuse `yarn metro-log`, run `yarn ios-office:dev`, and iterate with
-Metro/Fast Refresh. Verify the visible screen and Reactotron network/timeline.
-Do not rebuild Android after every small edit.
+Start or reuse `yarn metro-log`, launch the already installed Office Development
+Simulator app, and iterate with Metro/Fast Refresh. Verify the visible screen
+and Reactotron network/timeline. A native rebuild is not required for each
+JavaScript/TypeScript edit, and Android should not be rebuilt after every small
+edit.
+
+Use `yarn ios-office:dev` when a compatible Development app is absent or a
+native rebuild is actually needed. Current-project inspection on 2026-09-04
+confirms that the committed Podfile still excludes arm64 for Simulator and the
+MLImage framework supplies a device arm64 slice plus a Simulator x86_64 slice.
+The available iOS 26.5 simulators are ARM64, so a clean Apple Silicon native
+Simulator rebuild is not a proven normal path. Reuse the installed proof app
+for the Metro JS loop and treat a required native rebuild as a separate
+maintenance/app-developer boundary until the project fixes that constraint.
+The iPhone 17 Pro simulator was verified on 2026-09-04 to contain the arm64
+`com.innovaid.dentlink.development` proof app.
 
 Start on Android instead when the change is Android-specific, and start on iOS
 when it is iOS-specific. The affected platform outranks the personal default.
@@ -96,16 +109,25 @@ Use Development CodePush when all of these are true:
 - The matching Development binary is already installed on the physical device.
 - The user explicitly asks to publish CodePush.
 
-The routine Office command is:
+Select the narrowest existing Office Development command that matches the
+physical-device target:
 
 ```bash
+# Both iOS and Android Development deployments
 yarn codepush-force-office:dev
+
+# iOS Development only
+yarn codepush-force-office-ios:dev
+
+# Android Development only
+yarn codepush-force-office-android:dev
 ```
 
-It publishes both iOS and Android bundles to the shared Development deployment;
-it is not a private cable transfer to one phone. Confirm scope and current
-source immediately before running it. Do not infer this authorization from
-“실기기에서 보고 싶다”.
+The combined command publishes both iOS and Android bundles; the platform-
+specific commands avoid publishing an unneeded platform. All of them publish
+to a shared Development deployment, not a private cable transfer to one phone.
+Confirm scope and current source immediately before running one. Do not infer
+this authorization from “실기기에서 보고 싶다”.
 
 Use a direct local Debug build on the physical device instead when live Metro,
 Reactotron/network debugging, native-code validation or hardware debugging is
@@ -130,7 +152,9 @@ Interpret a normal user sequence as follows:
    - Retain branch/environment/build/code source; change platform and device.
 3. “둘 다 확인했으니 실기기에서 보게 CodePush 하자”
    - Run the pre-CodePush checkpoint, then publish to Development only because
-     this sentence explicitly authorizes CodePush.
+     this sentence explicitly authorizes CodePush. Use the combined command
+     when both physical platforms are intended, otherwise use the existing
+     platform-specific command.
 4. “실기기에서 네트워크까지 디버깅하자”
    - Prefer a directly connected local Debug build rather than CodePush.
 

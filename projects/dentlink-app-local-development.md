@@ -89,18 +89,32 @@ Metro, Reactotron/network evidence and unresolved errors separately.
    yarn metro-log
    ```
 
-3. In another integrated terminal, run the team's Office Development command:
+3. For ordinary JS/TypeScript work, first reuse the already installed
+   `com.innovaid.dentlink.development` Simulator app and load the current
+   branch through Metro. Launch it from Simulator or, when useful, run:
+
+   ```bash
+   xcrun simctl launch booted com.innovaid.dentlink.development
+   ```
+
+4. Run the team's native Office Development command only when a compatible app
+   is not installed or a native rebuild is actually required:
 
    ```bash
    yarn ios-office:dev
    ```
 
-4. Confirm the Development app launches in Simulator and renders the currently
+   On this Apple Silicon Mac, do not assume this is currently a reliable clean
+   rebuild path. The committed Podfile excludes arm64 from Simulator builds,
+   while MLImage's arm64 slice is an iOS-device binary and its x86_64 slice is
+   the Simulator binary. The installed proof app can support the Metro JS loop,
+   but a fresh native Simulator build remains a separate maintenance boundary.
+5. Confirm the Development app launches in Simulator and renders the currently
    checked-out branch's Metro bundle.
-5. Confirm Reactotron shows an iOS connection and Timeline/network traffic.
+6. Confirm Reactotron shows an iOS connection and Timeline/network traffic.
    If it does not connect, check the current Mac LAN address used by the iOS
    Reactotron configuration, reload the app and verify again.
-6. Leave Simulator, Metro and Reactotron running for the development loop unless
+7. Leave Simulator, Metro and Reactotron running for the development loop unless
    the user asks to close them.
 
 ## Android Office
@@ -154,10 +168,11 @@ For example, before “iOS 시뮬레이터에서 작업하자”, state:
 실행 조합: Office + iOS + Development + Simulator + Debug
 코드: 현재 체크아웃 브랜치 via Metro
 도구: 프로젝트 IDE 터미널 + Simulator + Reactotron
-명령: yarn metro-log, yarn ios-office:dev
+명령: yarn metro-log, 설치된 Development 앱 실행/Reload
+네이티브 재빌드 필요 시에만: yarn ios-office:dev
 ```
 
 The expected result is the Development Office app rendering the current local
 branch in Simulator, with Metro connected and Reactotron receiving iOS
 Timeline/network traffic. Do not report completion until those observable
-parts have been checked.
+parts have been checked. Do not rebuild merely to follow the example literally.
