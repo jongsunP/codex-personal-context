@@ -1785,3 +1785,31 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   retains the same 11 baseline diagnostics and reports no new error in the
   changed file. No emulator, simulator, device, Metro or CodePush runtime QA
   was performed for this small visual-state correction.
+
+## DL-16061 Feature-Branch Development CodePush v125 - 2026-09-04
+
+- The user explicitly authorized publishing the current feedback feature
+  branch to both Office Development CodePush deployments and requested the
+  process remain visible. Preflight confirmed `feature/DL-16061` clean and
+  synchronized at `a693de6cfe335d58490e075f723a9b6b52939178`, Office version
+  `2.2.3`, `.env` byte-identical to the Office Development environment, and no
+  native/dependency/environment-file delta from develop.
+- Opened the exact `dentlink-app` Cursor workspace and used its visible
+  integrated terminal. Published with the narrow platform scripts in sequence:
+  `yarn codepush-force-office-ios:dev`, then
+  `yarn codepush-force-office-android:dev`. The first Android command entry was
+  mistyped by UI automation and failed before invoking a script; the exact
+  command was then entered and completed successfully. No partial Android
+  release resulted from the typo.
+- CLI output confirmed successful mandatory Development releases for
+  `Dentlink-Office-iOS` and `Dentlink-Office-Android`, target binary version
+  `2.2.3`. The existing 1,549,611-byte `isv.mp4` exceeded the 500 KiB advisory
+  limit on both bundles, but the committed `--force` policy allowed completion.
+- Read-only Revopush verification at 17:23-17:24 KST confirmed Development
+  `v125` on both apps: Enabled, Mandatory Yes, rollout 100%, iOS 7.7 MiB and
+  Android 7.68 MiB. This proves publication, not physical-device update receipt
+  or feature QA after installation.
+- Post-release Git verification remains clean and synchronized at `a693de6`;
+  the CodePush commands restored the Development environment file and did not
+  create a product-code change. The Revopush browser was left on the Android
+  application result page for the user to inspect.
