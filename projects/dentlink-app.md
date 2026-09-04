@@ -1962,3 +1962,45 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   checkpoint. Product code remains clean and synchronized at that commit.
 - Continue the separate feedback APP Figma audit already in progress. Do not
   reopen DL-16311 unless a new regression is reproduced.
+
+## DL-15828 APP Design-to-Code Full Audit - 2026-09-04
+
+- Completed the requested breakpoint audit without changing product code.
+  Live app Git is clean and synchronized at
+  `feature/DL-16061` / `6856bcd455c8cbcebd7fc4329cee806378822dc5`.
+- Rechecked the authenticated Figma Design page's four current sections:
+  `주문상세 (앱.웹)`, `마이페이지`, `Pending Reviews 화면`, and
+  `엠플 이벤트`. Current native Profile, feedback list, feedback detail,
+  rating/detail CTA states, attachment picker, scroll FAB, order-detail
+  WebView-to-native route, and native-submit WebView refresh behavior match the
+  APP-owned variants. The user had already completed physical-device QA for
+  DL-16311 at this breakpoint; the audit did not repeat runtime QA.
+- Rechecked Jira DL-15828 and its APP-related children. DL-16061, DL-16064,
+  DL-16066 and DL-16311 are Complete. DL-16229 is Ready for Deploy. Remaining
+  unfinished children visible on the parent are BE, release-note, popup, or QA
+  work and are not a newly missing APP FE implementation.
+- Rechecked the Notion analytics specification linked from DL-16229. App code
+  matches `review_feeback_click` with `feedbackType=Good|Bad`,
+  `review_detail_click`, `review_edit_click`,
+  `reviewdetail_select_reason`, `reviewdetail_add_comments`,
+  `reviewdetail_img_upload`, `reviewdetail_submit_click`,
+  `pendingreviews_click`, and the existing feedback `push_click` classification.
+- The only confirmed source drift is documentation copy: a Figma attachment
+  annotation still says total size up to `2G`, while the previously confirmed
+  product policy and current app implementation are maximum 5 files and total
+  200 MB. Keep the 200 MB implementation; this is not an app-code defect.
+- Static verification: six focused Jest suites pass (49/49 tests),
+  `git diff --check` passes, changed-file ESLint has 0 errors and 15 existing
+  warnings, and all non-generated changed files pass Prettier. Generated
+  `shared/models/Api.ts` and generated `shared/assets/svg/index.ts` retain their
+  generator formatting and were not hand-edited. `yarn typecheck:apps`
+  reproduces the existing 11 repository diagnostics; none points to a feedback
+  feature file changed by this audit.
+- Remote refresh found `origin/develop` one release-merge commit ahead at
+  `967ba71`; no merge was performed. GitHub PR #286 is still open, non-draft,
+  mergeable/CLEAN, and its current checks report success. This is branch timing,
+  not a missing design implementation.
+- No additional APP FE task is confirmed at this breakpoint. Resume only for a
+  new Figma/Notion/Jira change, a newly deployed API contract, reviewer action,
+  or a reproduced regression. Reconcile those sources and live Git again before
+  modifying code.
