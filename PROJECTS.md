@@ -242,7 +242,8 @@ For detailed current state, read:
   `ddeeb1e86`에서 재생성한 뒤, release 전체를 전달하는
   [PR #4577](https://github.com/Innvoaid/dentlink-client/pull/4577)을 생성했다. 95개
   파일(+6223/-297)이며 Auto Assign·CodeRabbit 성공 후 사용자가 merge했다. merge commit과
-  원격 stage는 `52191e590`이다. 사용자가 스테이징 배포 중이라고 알렸으며 완료·서버 SHA·
-  화면/PM QA는 아직 별도다.
+  원격 stage는 `52191e590`이다. 사용자가 Warranty 관련 스테이징 QA 완료를 확인했고,
+  현재 상태를 `release/v1.86.0` 배포 대상으로 유지하기로 했다. 남은 Warranty FE 수정은
+  없으며 실제 운영 배포 완료는 별도다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
