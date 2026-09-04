@@ -68,10 +68,11 @@ their real setting integration still awaits the deployed BE contract.
   as a request to inspect and operate the app directly in the Android emulator
   or iOS simulator. Use the actual Chrome browser only when the user explicitly
   asks for Chrome itself or when Figma, planning, Swagger or another web source
-  must be inspected. When both app platforms matter and no order is specified,
-  validate Android first and then iOS. Keep app execution in the
-  `dentlink-app` IDE window and its integrated Metro terminal rather than the
-  web project's IDE.
+  must be inspected. For ordinary shared app work, use the iOS Simulator as the
+  user's fast primary loop and validate Android at a sensible checkpoint before
+  CodePush; start on the affected platform for platform-specific work. Keep app
+  execution in the `dentlink-app` IDE window and its integrated Metro terminal
+  rather than the web project's IDE.
 - For remaining-task briefings, distinguish unfinished in-scope implementation
   from normal QA, approval, merge and deployment steps. The user understands
   those delivery steps and does not count them as missing development tasks.
@@ -1644,6 +1645,12 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   personal-memory playbook: the user may follow it manually, or Codex may run
   the same sequence when asked. It is not product code and grants no commit,
   push or deployment authority.
+- Master personalized workflow:
+  `projects/dentlink-app-development-guideline.md`. It defines the normal
+  iOS-first local loop, Android checkpoint, explicit Development CodePush gate,
+  physical-device options and stage-by-stage briefing. This supersedes the old
+  blanket Android-first personal default; historical task-specific Android-
+  first QA records remain historical evidence rather than a current rule.
 - The user will now develop the mobile app regularly rather than only observe
   app-developer work. Keep the team's package scripts as the canonical launch
   commands, while preparing a repeatable personal workspace around them.

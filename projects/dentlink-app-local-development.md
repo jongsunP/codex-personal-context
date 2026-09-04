@@ -9,6 +9,8 @@ description: Prepare and verify the repeatable Dentlink local iOS or Android dev
 This is a personal executable memory, not product code. The user may follow it
 manually, or Codex may perform the same sequence with the available computer
 controls. The team's package scripts remain the canonical launch commands.
+Use `projects/dentlink-app-development-guideline.md` for the master progression
+from the iOS local loop through Android verification and Development CodePush.
 
 ## Configuration Model
 
