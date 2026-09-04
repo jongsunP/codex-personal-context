@@ -1880,3 +1880,41 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - Post-publication app Git is clean and synchronized with
   `origin/feature/DL-16061` at `c71cffb`; no environment or product file was
   left modified by the CodePush scripts.
+
+## DL-16311 Profile UI Follow-up Checkpoint - 2026-09-04
+
+- Physical-device review of Staging `v313` exposed two follow-up issues in the
+  just-added Profile alignment work: the Preferences gear did not match the
+  exact Figma asset, and changing between gray Home/Profile and white tabs
+  could visibly flash the root top Safe Area color.
+- Replaced `SvgSystemSettingFilled.svg` with the exact Figma 22x22 asset: the
+  outer gear uses `#A3ADB7` and the inner circle is white. This corrects the
+  earlier 24x24 substitute rather than introducing a second Profile icon.
+- Removed competing Home/Profile focus cleanup writes to the global Safe Area
+  color. `RootNavigator` now derives the final color from the active nested
+  route: Office Home/Profile use `mono200`, and other routes use white. The
+  existing Design Confirmation capture-mode `mono900` override remains
+  unchanged.
+- Delivered and pushed commits `a5807a8` (`fix: Preferences 아이콘 원본 반영`)
+  and `ed0683c` (`fix: Safe Area 전환 깜박임 개선`). The app checkout is clean
+  and synchronized with `origin/feature/DL-16061` at `ed0683c`.
+- Changed-file Prettier and ESLint pass with only three pre-existing
+  `RootNavigator` console warnings. SVG exports, `git diff --check`, and
+  `yarn typecheck:apps` pass. Device receipt and visual confirmation of these
+  two follow-up fixes are not yet recorded.
+- The user directly entered the exact Office iOS Staging CodePush command after
+  UI automation repeatedly omitted a character before script execution.
+  Revopush was refreshed read-only and confirms iOS Staging `v314`, target
+  `2.2.3`, Enabled, Mandatory, rollout 100%, published at 18:50 KST. The failed
+  automated command entries stopped at Yarn script lookup and created no
+  releases.
+- At the last verified point, Android Staging remains `v313`; the follow-up
+  commits are not yet proven published to Android. Recheck Revopush before
+  assuming this is still current.
+- A full audit of all APP-specific frames in the feedback Figma was started
+  only after this breakpoint. The user then explicitly paused the audit, so no
+  audit finding or additional code change should be inferred. Resume by
+  inventorying the Design page sections (`마이페이지`, `Pending Reviews 화면`,
+  and APP-owned parts of `주문상세 (앱.웹)`) and comparing only the current
+  variants against the native Profile, feedback list/detail, navigation and
+  attachment implementation.
