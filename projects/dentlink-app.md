@@ -1688,11 +1688,13 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   Timeline traffic. The required host split is Android `localhost` through
   ADB reverse and iOS the current Mac LAN address.
 - Current app checkout at this checkpoint is synchronized at `a301e78` but is
-  intentionally dirty. `apps/office/ReactotronConfig.js` has an uncommitted
-  local platform host split (`localhost` for Android and `10.10.7.57` for iOS),
-  and `android/gradle.properties` has the pre-existing Android Studio parallel
-  tooling property. Neither shared-repository change was committed or pushed;
-  preserve and re-evaluate them before future shared-code mutation.
+  intentionally dirty only in `apps/office/ReactotronConfig.js`. It has an
+  uncommitted local platform host split (`localhost` for Android and
+  `10.10.7.57` for iOS). The user decided that each developer should temporarily
+  set their own IP while working and never publish it; do not propose a shared
+  environment-variable refactor unless the team later requests one. The
+  unrelated Android Studio `android/gradle.properties` parallel-tooling change
+  was removed on 2026-09-04, restoring that file to HEAD.
 - Live workflow review on 2026-09-04 confirmed the package scripts use Debug by
   default and separate `*-release` commands. Office Development CodePush has
   combined, iOS-only and Android-only commands; choose the narrowest target.
@@ -1705,3 +1707,10 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   17 Pro simulator currently contains the arm64
   `com.innovaid.dentlink.development` proof app, verified directly in its
   simulator container on 2026-09-04.
+- Read-only Chrome inspection of Revopush at 16:08 KST confirmed separate
+  `Dentlink-Office-iOS` and `Dentlink-Office-Android` applications, each with
+  Development, Staging and Production deployments. Both Office Development
+  deployments showed last release `v124`; no site setting, release, key or
+  deployment was changed. The dashboard displayed a Free-plan production-use
+  warning, which is an account/production continuity concern rather than a
+  blocker for defining the user's Development workflow.

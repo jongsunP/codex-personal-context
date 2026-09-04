@@ -78,6 +78,11 @@ Metro, Reactotron/network evidence and unresolved errors separately.
 5. Check whether Metro is already listening on 8081. Reuse it when it belongs
    to this checkout; do not start a duplicate server.
 6. Open Reactotron as part of the normal local workspace.
+7. Treat `ReactotronConfig.js` host edits as temporary per-developer local
+   setup. Set the current developer's Mac address only while needed, never
+   stage/commit/push it, and ensure it is excluded from product commits. Do not
+   introduce a shared environment-based host mechanism unless the team later
+   requests that maintenance.
 
 ## iOS Office
 
@@ -113,7 +118,8 @@ Metro, Reactotron/network evidence and unresolved errors separately.
    checked-out branch's Metro bundle.
 6. Confirm Reactotron shows an iOS connection and Timeline/network traffic.
    If it does not connect, check the current Mac LAN address used by the iOS
-   Reactotron configuration, reload the app and verify again.
+   Reactotron configuration, temporarily set the developer's address locally,
+   reload the app and verify again. Do not publish that personal address.
 7. Leave Simulator, Metro and Reactotron running for the development loop unless
    the user asks to close them.
 

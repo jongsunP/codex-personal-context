@@ -68,6 +68,11 @@ maintenance/app-developer boundary until the project fixes that constraint.
 The iPhone 17 Pro simulator was verified on 2026-09-04 to contain the arm64
 `com.innovaid.dentlink.development` proof app.
 
+No native repair is required for the user's current JS/TypeScript workflow.
+This constraint becomes actionable only if the installed Simulator app is
+removed or a Pod/native module/native configuration change requires a new
+Simulator build.
+
 Start on Android instead when the change is Android-specific, and start on iOS
 when it is iOS-specific. The affected platform outranks the personal default.
 
@@ -142,6 +147,12 @@ A CodePush bundle is normally built with `__DEV__` disabled, so do not expect
 Reactotron to provide the same evidence as the local Debug loop. Use visible
 behavior and the available non-DEV observability instead.
 
+Use the Revopush Applications page as read-only deployment evidence. Check the
+matching `Dentlink-Office-iOS` and/or `Dentlink-Office-Android` application and
+its Development deployment before and after publishing; never reveal or copy
+deployment keys. The CLI result, dashboard release increment and physical-
+device update receipt are separate proofs.
+
 ## Natural-Language Progression
 
 Interpret a normal user sequence as follows:
@@ -168,6 +179,10 @@ Release, store submission and production CodePush are never implied defaults.
   files, app IDs, target binary versions and Revopush deployments.
 - Personalization changes the surrounding order and verification: exact IDE,
   Metro visibility, Reactotron, ADB reverse, device selection and briefings.
+- Each developer may temporarily use their own Mac IP in
+  `ReactotronConfig.js`. Treat that tracked-file edit as local-only and keep it
+  out of every product commit and remote push. Do not create a shared
+  environment-variable refactor unless the team asks for one.
 - Do not duplicate or bypass a package script merely to make the workflow look
   custom. Add a wrapper or change a script only when repeated verified friction
   justifies a team-visible maintenance change and the user authorizes it.
