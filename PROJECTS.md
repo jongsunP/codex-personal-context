@@ -233,6 +233,11 @@ For detailed current state, read:
   사용자 요청으로 원본 branch를 `release/v1.86.0`에 전달하는
   [PR #4573](https://github.com/Innvoaid/dentlink-client/pull/4573)을 생성했다. head는
   `f7f81e69a`, base는 `506ac2a25`이며 Warranty 관련 16개 파일(+449/-6)만 포함하고
-  충돌은 없다. 현재 OPEN이며 CodeRabbit·동료 승인·merge·운영 배포는 별도 상태다.
+  충돌은 없다. 사용자가 #4573을 merge했고 release HEAD는 `6922a9a2c`다. 직후 PM 댓글
+  43896의 문구 2건과 Portal URL 통일 요청을 최신 Notion에서 확인했다. 최신 release에서
+  `feature/DL-16258-warranty-policy-fix`를 만들고 `75a0e18e2`에 commit·push했으며,
+  [PR #4576](https://github.com/Innvoaid/dentlink-client/pull/4576)을 같은 release 대상으로
+  생성했다. 8개 파일(+15/-6), OPEN·MERGEABLE이며 Auto Assign 성공·CodeRabbit 진행
+  중이다. 동료 승인·merge·배포·QA는 별도 상태다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
