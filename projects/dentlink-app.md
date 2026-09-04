@@ -3,12 +3,11 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current checkpoint is the final section, **Feedback Session Boundary After
-Notification-Center Handoff - 2026-09-03**. Earlier PR review and notification design sections
-record the preceding implementation and decisions. Earlier dated
-delivery, review, API and runtime results below are historical, not current
-claims. The two new notification rows now exist as disabled presentation;
-their real setting integration still awaits the deployed BE contract.
+The current checkpoint is the final section, **DL-16311 Profile UI Alignment
+and Staging CodePush - 2026-09-04**. Earlier PR review, notification design and
+delivery sections record the preceding implementation and decisions. Earlier
+dated delivery, review, API and runtime results below are historical, not
+current claims.
 
 ## Project Role And Continuity
 
@@ -88,14 +87,14 @@ their real setting integration still awaits the deployed BE contract.
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `c6355a33521c69ed0c3d4cb656245ac7b2ed5e9e`
+- Current HEAD: `c71cffbbbcc1b79693abd36c7b8a6410045077c5`
 - The checkout is clean and synchronized with `origin/feature/DL-16061` after
-  the user explicitly authorized the merge commit/push at 14:26 KST.
-  The pending local merge is complete; no `MERGE_HEAD` or staged changes remain.
-- `origin/develop` is `5ec442a2a20be9dbbad9a7f8532de37e69b60a8d`;
-  the feature branch now contains it and is 39 commits ahead / 0 behind.
-  PR #286 is MERGEABLE. This is develop-to-feature integration only; the PR
-  has not been merged into develop and no deployment was performed.
+  the user explicitly authorized the Profile UI fix commit and push.
+- `origin/develop` is `967ba71b1f864ce581c999950dd74fbb28eff046`;
+  the feature branch is 46 commits ahead / 1 commit behind by graph. The sole
+  develop-only release merge has the same tree as its feature-side parent, so
+  it introduces no missing product-code change into the current feature
+  checkout. Re-verify this time-sensitive status before future work.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
@@ -1844,3 +1843,40 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   file was changed by the publication. Revopush was left open on the iOS
   Staging result page. Physical-device update receipt and Staging behavior
   remain separate verification steps.
+
+## DL-16311 Profile UI Alignment and Staging CodePush - 2026-09-04
+
+- Figma Profile frame `160:39015` was rechecked at 100% in Dev Mode. The user
+  confirmed a newer design decision that all Office Profile cards use a 12px
+  radius, overriding the older 8px value still visible in the Figma frame.
+- Updated the Office user, Preferences, Notifications and Quick Links cards
+  from `theme.radius.m` to `theme.radius.l`. Home already used the 12px token.
+- Replaced the Quick Links external-window glyph with the exact Figma 22×22
+  asset, including its 5px-radius tile and centered 11×11 filled up-right
+  arrow. Normalized the Preferences filled gear to the current 24px Dentlink
+  icon geometry so it no longer stretches the older irregular viewBox.
+- Home and Office Profile now set the root top Safe Area background to
+  `mono200` while focused and restore white when leaving. Lab Profile remains
+  white. This changes the top safe-area strip only; bottom-tab safe area is
+  unaffected.
+- Delivered app commits `fa03860` (`fix: 프로필 화면 디자인 정합성 개선`) and
+  `7546923` (`fix: 퀵 링크 아이콘 원본 반영`), followed by `c71cffb`
+  (`fix: 퀵 링크 아이콘 전체 에셋 적용`) after the complete Figma SVG was
+  provided. All commits were pushed to `origin/feature/DL-16061`.
+- Changed-file Prettier, ESLint, generated SVG exports and `git diff --check`
+  pass. `yarn typecheck:apps` reproduces the existing 11 diagnostics and adds
+  no error in the changed files. No device/simulator visual QA was claimed at
+  this checkpoint.
+- Used the exact `dentlink-app` Cursor integrated terminal and published the
+  final `c71cffb` checkout with the narrow platform commands
+  `yarn codepush-force-office-ios:staging` and
+  `yarn codepush-force-office-android:staging`. Both CLI releases succeeded;
+  the known 1.48 MiB `isv.mp4` advisory was bypassed by the committed
+  `--force` policy.
+- Fresh Revopush pages verified Staging `v313` for both
+  `Dentlink-Office-iOS` and `Dentlink-Office-Android`: target `2.2.3`, Enabled,
+  Mandatory Yes, rollout 100%, iOS 7.7 MiB and Android 7.68 MiB at 18:36 KST.
+  Publication is proven; device update receipt and visual QA remain separate.
+- Post-publication app Git is clean and synchronized with
+  `origin/feature/DL-16061` at `c71cffb`; no environment or product file was
+  left modified by the CodePush scripts.
