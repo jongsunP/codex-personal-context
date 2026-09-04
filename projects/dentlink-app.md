@@ -1813,3 +1813,8 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   the CodePush commands restored the Development environment file and did not
   create a product-code change. The Revopush browser was left on the Android
   application result page for the user to inspect.
+- The user then confirmed update receipt and the target behavior on both iOS
+  and Android physical devices: changing an individual notification setting no
+  longer makes the other switches flicker, and the setting-change flow behaves
+  normally. This closes the runtime QA gap for the `a693de6` visual-state fix;
+  it does not independently re-verify every other feedback feature flow.
