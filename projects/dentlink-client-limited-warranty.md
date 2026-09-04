@@ -347,10 +347,13 @@
   - head: `release/v1.86.0` / `18e7e925b`
   - base: `stage` / `ddeeb1e86` (= 최신 `master`)
   - 95개 파일, 6,223줄 추가·297줄 삭제
-  - OPEN·일반 PR, MERGEABLE·CLEAN이며 Auto Assign과 CodeRabbit은 성공했다.
+  - Auto Assign과 CodeRabbit은 성공했다. 사용자가 2026-09-04 15:10 KST에 merge했고
+    GitHub에서 MERGED를 확인했다. merge commit과 최신 원격 stage는
+    `52191e5908f6ef4b830b8d6465001935f26b8e5f`다.
 - 제품 코드·commit·feature push는 이번 배포 준비에서 추가하지 않았다. 현재 로컬은
   `feature/DL-16258-warranty-policy-fix` / `75a0e18e2`, 원격 동일·clean이다.
-- PR merge, 실제 스테이징 배포와 화면/PM QA는 별도 상태다.
+- 사용자가 스테이징 배포 중이라고 알렸다. 배포 시작은 사용자 확인 기준이며, 완료·실제
+  서버 SHA·화면/PM QA는 아직 완료로 기록하지 않는다.
 
 ## 결정과 주의사항
 
@@ -374,8 +377,8 @@
 ## 다음 시작점
 
 1. 정식 release 전달 PR #4573과 후속 수정 PR #4576은 merge됐고 최신 release HEAD는
-   `18e7e925b`다. 스테이징 전달 PR #4577은 OPEN·MERGEABLE·CLEAN이며 Auto Assign과
-   CodeRabbit이 성공했다. 사용자 별도 지시 전에는 merge하거나 배포하지 않는다.
+   `18e7e925b`다. 스테이징 전달 PR #4577도 merge됐고 원격 stage는 `52191e590`이다.
+   사용자가 스테이징 배포 중이라고 알렸으며 완료 확인을 기다린다.
 2. 실제 서버 SHA·브라우저 화면 QA·PM 최종 QA는 별도 증거가 필요하다. 사용자 확인
    배포 완료를 화면/정책 QA 또는 운영 배포 완료로 확대 해석하지 않는다.
 3. #4577 merge 후 실제 스테이징 배포와 화면/PM QA는 사용자 확인 또는 별도 증거가 필요하다.

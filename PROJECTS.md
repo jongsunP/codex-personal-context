@@ -241,7 +241,8 @@ For detailed current state, read:
   최신 release HEAD는 `18e7e925b`다. 이어서 원격 stage를 삭제하고 최신 master
   `ddeeb1e86`에서 재생성한 뒤, release 전체를 전달하는
   [PR #4577](https://github.com/Innvoaid/dentlink-client/pull/4577)을 생성했다. 95개
-  파일(+6223/-297), OPEN·MERGEABLE·CLEAN이며 Auto Assign·CodeRabbit 성공 상태다.
-  PR merge·실제 스테이징 배포·화면/PM QA는 별도다.
+  파일(+6223/-297)이며 Auto Assign·CodeRabbit 성공 후 사용자가 merge했다. merge commit과
+  원격 stage는 `52191e590`이다. 사용자가 스테이징 배포 중이라고 알렸으며 완료·서버 SHA·
+  화면/PM QA는 아직 별도다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
