@@ -1896,8 +1896,16 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   existing Design Confirmation capture-mode `mono900` override remains
   unchanged.
 - Delivered and pushed commits `a5807a8` (`fix: Preferences 아이콘 원본 반영`)
-  and `ed0683c` (`fix: Safe Area 전환 깜박임 개선`). The app checkout is clean
-  and synchronized with `origin/feature/DL-16061` at `ed0683c`.
+  and `ed0683c` (`fix: Safe Area 전환 깜박임 개선`). Physical-device review
+  then proved route-state centralization alone was still late: gray
+  Home/Profile to white LinkTalk consistently retained gray for a frame, while
+  white Orders to LinkTalk did not reproduce it.
+- Added a synchronous bottom-tab press update so Home/Profile choose `mono200`
+  and Orders/LinkTalk/Place Order choose white before navigation renders. The
+  RootNavigator derivation remains the fallback for programmatic navigation
+  and deep links. Commit `6856bcd` (`fix: 탭 Safe Area 전환 시점 보완`) was
+  pushed; the app checkout is clean and synchronized with
+  `origin/feature/DL-16061` at `6856bcd`.
 - Changed-file Prettier and ESLint pass with only three pre-existing
   `RootNavigator` console warnings. SVG exports, `git diff --check`, and
   `yarn typecheck:apps` pass. Device receipt and visual confirmation of these
@@ -1909,8 +1917,9 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   automated command entries stopped at Yarn script lookup and created no
   releases.
 - At the last verified point, Android Staging remains `v313`; the follow-up
-  commits are not yet proven published to Android. Recheck Revopush before
-  assuming this is still current.
+  commits are not yet proven published to Android. iOS `v314` also predates
+  `6856bcd`, so the final tab-press timing fix is not yet published to either
+  platform. Recheck Revopush before assuming this is still current.
 - A full audit of all APP-specific frames in the feedback Figma was started
   only after this breakpoint. The user then explicitly paused the audit, so no
   audit finding or additional code change should be inferred. Resume by
