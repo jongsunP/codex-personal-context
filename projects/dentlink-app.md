@@ -1639,6 +1639,11 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 
 ## Personal Local App Development Loop - 2026-09-04
 
+- Canonical reusable checklist:
+  `projects/dentlink-app-local-development.md`. Treat it as an executable
+  personal-memory playbook: the user may follow it manually, or Codex may run
+  the same sequence when asked. It is not product code and grants no commit,
+  push or deployment authority.
 - The user will now develop the mobile app regularly rather than only observe
   app-developer work. Keep the team's package scripts as the canonical launch
   commands, while preparing a repeatable personal workspace around them.
