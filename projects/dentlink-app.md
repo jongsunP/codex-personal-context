@@ -1687,14 +1687,14 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   and Reactotron displayed one Android 16/API 36 connection plus AsyncStorage
   Timeline traffic. The required host split is Android `localhost` through
   ADB reverse and iOS the current Mac LAN address.
-- Current app checkout at this checkpoint is synchronized at `a301e78` but is
-  intentionally dirty only in `apps/office/ReactotronConfig.js`. It has an
-  uncommitted local platform host split (`localhost` for Android and
-  `10.10.7.57` for iOS). The user decided that each developer should temporarily
-  set their own IP while working and never publish it; do not propose a shared
-  environment-variable refactor unless the team later requests one. The
-  unrelated Android Studio `android/gradle.properties` parallel-tooling change
-  was removed on 2026-09-04, restoring that file to HEAD.
+- Current app checkout is clean and synchronized at `a301e78` after the user
+  explicitly requested discarding all local changes on 2026-09-04. The
+  temporary Office Reactotron platform/IP split and the unrelated Android
+  Studio `android/gradle.properties` parallel-tooling change were both removed,
+  restoring the tracked files to HEAD. The personal rule remains: temporarily
+  set each developer's own Reactotron IP only while needed and never publish
+  that local edit; do not propose a shared environment-variable refactor unless
+  the team later requests one.
 - Live workflow review on 2026-09-04 confirmed the package scripts use Debug by
   default and separate `*-release` commands. Office Development CodePush has
   combined, iOS-only and Android-only commands; choose the narrowest target.
