@@ -283,6 +283,23 @@
   운영 PR #4557도 이미 1.85.1에 포함되어 있다. 대상 변경 검토에서 브라우저 화면 QA와
   production build를 새로 실행한 것은 아니다.
 
+### release/v1.86.0 정식 전달 PR 생성
+
+- 사용자의 명시 요청으로 원격 `feature/DL-16258`을 `release/v1.86.0`에 전달하는
+  [PR #4573](https://github.com/Innvoaid/dentlink-client/pull/4573)을 생성했다.
+  제목은 `[DL-16258] 최신 워런티 정책 release/v1.86.0 반영`이다.
+  - head: `feature/DL-16258` / `f7f81e69a2ccf29d8a72cf972b5f7a9d16e28806`
+  - base: `release/v1.86.0` / `506ac2a25ff6ffb41a9d95287e07540c2fdf8222`
+  - 변경 범위: Warranty 관련 16개 파일, 449줄 추가·6줄 삭제
+- 동일 head/base의 기존 PR은 없었다. `git diff --check`를 통과했고 임시 merge tree 생성도
+  성공하여 충돌이 없음을 확인했다. GitHub도 `MERGEABLE`로 판정했다.
+- 생성 직후 Auto Assign 검사는 성공했고 CodeRabbit은 진행 중이다. GitHub의
+  `mergeStateStatus=BLOCKED`는 이 대기 상태이며 코드 충돌을 뜻하지 않는다.
+- 이번 전달에서는 제품 코드·commit·push를 추가하지 않았다. 로컬 메인 checkout은
+  `master` / `4fc3b4877`, clean이며 `origin/master`보다 10개 commit 뒤인 상태를 관찰했지만
+  checkout이나 pull은 수행하지 않았다. PR은 푸시된 원격 feature branch를 기준으로 생성했다.
+- PR merge, CodeRabbit 처리, release 배포와 QA는 아직 완료로 기록하지 않는다.
+
 ## 결정과 주의사항
 
 - 오래된 branch 자체를 재사용하지 않고 최신 `master`에서 새 Jira branch를 만들어
@@ -304,12 +321,12 @@
 
 ## 다음 시작점
 
-1. 현재 checkout은 `feature/DL-16258` / `f7f81e69a`, 원격 동일·clean이다. PR #4572는
-   `feature/DL-16258 -> stage`로 merge됐고 사용자가 스테이징 배포 완료를 알렸다.
-   원격 stage는 `759a3a4a2`로 확인했으며 현재 추가 작업 없이 대기한다.
+1. 정식 release 전달 PR #4573은 `feature/DL-16258 -> release/v1.86.0`으로 OPEN이며
+   head `f7f81e69a`, base `506ac2a25`다. 병합 가능하지만 CodeRabbit 결과와 동료 승인은
+   별도 대기 상태다. 기존 PR #4572의 stage merge·사용자 확인 배포 이력은 그대로 유지한다.
 2. 실제 서버 SHA·브라우저 화면 QA·PM 최종 QA는 별도 증거가 필요하다. 사용자 확인
    배포 완료를 화면/정책 QA 또는 운영 배포 완료로 확대 해석하지 않는다.
-3. 정식 다음 배포 전달이 확정되면 최신 target release와 master/feature 상태를 다시 비교해
-   별도 PR을 준비한다. 이번 stage PR을 release/v1.86.0 반영 완료로 해석하지 않는다.
-4. 이전 #4568은 워런티 제외 버전이고 새 #4572는 최신 정책이 포함된 워런티 작업 branch
-   전달이다. 기존 제외용 branch·원본 feature 및 관련 worktree는 지시 없이 정리하지 않는다.
+3. CodeRabbit 리뷰 처리 요청이 오면 #4573의 최신 unresolved thread를 다시 조회해 처리한다.
+   사용자의 별도 요청 전에는 PR을 merge하거나 release를 배포하지 않는다.
+4. 이전 #4568은 워런티 제외 버전, #4572는 스테이징 검토 전달, #4573은 1.86.0 정식
+   release 전달이다. 기존 제외용 branch·원본 feature 및 관련 worktree는 지시 없이 정리하지 않는다.

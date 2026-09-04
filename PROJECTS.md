@@ -230,6 +230,9 @@ For detailed current state, read:
   `feature/DL-16258 -> stage`, 16개 파일(+449/-6)이다. 사용자가 2026-09-03 19:15 KST에
   merge했고 GitHub MERGED 및 원격 stage `759a3a4a2`를 확인했다. 스테이징 배포 완료는
   사용자 확인 기준으로 기록했다. 제품은 원격 동일·clean이며 원본 branch를 보존한다.
-  브라우저/PM QA와 1.86.0 정식 release 반영·운영 배포는 별도이며, 추가 작업 없이 대기한다.
+  사용자 요청으로 원본 branch를 `release/v1.86.0`에 전달하는
+  [PR #4573](https://github.com/Innvoaid/dentlink-client/pull/4573)을 생성했다. head는
+  `f7f81e69a`, base는 `506ac2a25`이며 Warranty 관련 16개 파일(+449/-6)만 포함하고
+  충돌은 없다. 현재 OPEN이며 CodeRabbit·동료 승인·merge·운영 배포는 별도 상태다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
