@@ -1755,3 +1755,33 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   confirmed FE code scope there is no known blocker or missing implementation
   before QA. Development BE availability and the separately deployed WebView
   order-detail bridge remain runtime prerequisites, not unfinished app code.
+
+## DL-16061 Notification Settings UX Follow-up - 2026-09-04
+
+- Resumed from remote and fast-forwarded `feature/DL-16061` from `a301e78` to
+  `cabe4a5`. The incoming app-developer commit adds service-specific required
+  push-type calculation, tests, and a repeated-initialization guard; it was
+  preserved as the new base rather than overwritten.
+- Reviewed the Feedback Details unsaved-change popup. The exact `Leave this
+  page?` / `Changes you made may not be saved.` interaction already exists in
+  `CasePreferenceScreen`, with a similar guard in `DesignConfirmationScreen`.
+  Figma and the original feedback Notion requirement do not explicitly demand
+  it, but it follows an established app pattern, so the user decided to keep it
+  and no popup code was changed.
+- Fixed the Profile notification-setting flicker where changing one row made
+  every switch temporarily render with disabled colors during mutation and
+  background refetch. The request/account/upsert guards still block duplicate
+  or conflicting interaction, while only the initial unavailable query state
+  uses the visible disabled styling. Other switch values and colors remain
+  stable during a single-row save.
+- Delivered commit `a693de6` (`fix: 알림 설정 스위치 깜박임 방지`) with only
+  `shared/features/profile/sections/ProfileNotificationSection.tsx`; push to
+  `origin/feature/DL-16061` succeeded. Final worktree and upstream status must
+  still be refreshed live when resuming.
+- Changed-file ESLint, Prettier and diff whitespace checks pass. The focused
+  push-preference Jest suite passes 3/3 after explicitly selecting
+  `jest.config.js`; the unqualified test command first stopped on the
+  repository's pre-existing duplicate Jest configuration. `typecheck:apps`
+  retains the same 11 baseline diagnostics and reports no new error in the
+  changed file. No emulator, simulator, device, Metro or CodePush runtime QA
+  was performed for this small visual-state correction.
