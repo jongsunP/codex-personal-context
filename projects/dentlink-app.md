@@ -1714,3 +1714,44 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   deployment was changed. The dashboard displayed a Free-plan production-use
   warning, which is an account/production continuity concern rather than a
   blocker for defining the user's Development workflow.
+
+## DL-16061 Feature-Branch Development CodePush Readiness - 2026-09-04
+
+- Live Git was refreshed before the assessment. `feature/DL-16061` is clean and
+  synchronized with `origin/feature/DL-16061` at
+  `a301e78e4ccc4e2d750623c70dbff9435acaa74b`. PR #286 remains OPEN,
+  non-Draft, MERGEABLE/CLEAN; human approval and merge remain separate gates.
+- Compared with current `origin/develop` `967ba71b`, the branch reports 42
+  commits ahead and one behind. The single develop-only commit is the
+  `Release/office/v2.2.3 -> main (#294)` merge. Both of its parents are already
+  ancestors of the feature branch and every file changed by that merge has
+  identical content on the feature branch, so there is no missing develop code
+  that blocks feature-branch QA.
+- The PR comparison contains 54 files with 5,514 additions and 376 deletions.
+  It includes the complete confirmed feedback FE scope plus shared upload,
+  profile notification, permission, navigation/deep-link, API and generated
+  model changes. It contains no iOS/Android native file, dependency lockfile,
+  Office version or environment-file change. The shared `useFileUpload` delta
+  can affect existing Office chat/order/profile/design-confirmation upload
+  flows, so those are side-effect QA surfaces even though no known code defect
+  or incomplete confirmed FE requirement remains.
+- Current Office version is `2.2.3`; `.env` matches the Office Development
+  environment. Read-only release-bundle verification produced both iOS and
+  Android bundles and successfully converted each with Hermes. The existing
+  shared `isv.mp4` is 1,549,611 bytes and exceeds the CLI's 500 KiB asset guard;
+  the current `--force` scripts intentionally bypass that pre-existing warning.
+- The planned delivery loop is valid: publish the clean feature branch to the
+  shared Office Development CodePush deployment for QA, apply QA fixes on the
+  feature branch, merge it into develop, then publish develop as the final
+  integrated Development CodePush. A later develop release supersedes the
+  temporary feature-branch release; CodePush itself does not merge Git state.
+- CodePush packages the local working tree, including any uncommitted files,
+  rather than a PR object. Reconfirm the exact branch, clean status, Office
+  Development environment and matching `2.2.3` installed binary before every
+  publication. The combined command publishes mandatory iOS first and Android
+  second, so a second-platform failure can leave a temporary partial release;
+  prefer the platform-specific commands when staged verification is desired.
+- No CodePush release was executed during this readiness assessment. Within the
+  confirmed FE code scope there is no known blocker or missing implementation
+  before QA. Development BE availability and the separately deployed WebView
+  order-detail bridge remain runtime prerequisites, not unfinished app code.
