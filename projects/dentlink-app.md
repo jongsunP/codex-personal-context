@@ -1818,3 +1818,29 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   longer makes the other switches flicker, and the setting-change flow behaves
   normally. This closes the runtime QA gap for the `a693de6` visual-state fix;
   it does not independently re-verify every other feedback feature flow.
+
+## DL-16061 Feature-Branch Staging CodePush v312 - 2026-09-04
+
+- After explicitly reviewing the expected missing-BE behavior, the user
+  authorized publishing the same feedback feature commit to both Office
+  Staging CodePush deployments. Preflight confirmed
+  `feature/DL-16061` clean and synchronized at
+  `a693de6cfe335d58490e075f723a9b6b52939178`, target version `2.2.3`.
+- Used the exact `dentlink-app` Cursor integrated terminal and the narrow
+  platform commands in sequence: `yarn codepush-force-office-ios:staging`
+  and `yarn codepush-force-office-android:staging`. Both CLI releases
+  completed successfully as mandatory Staging updates. The known 1.48 MiB
+  `isv.mp4` advisory was bypassed by the committed `--force` option.
+- Read-only Revopush verification at 17:39-17:40 KST confirmed Staging `v312`
+  for both `Dentlink-Office-iOS` and `Dentlink-Office-Android`: target `2.2.3`,
+  Enabled, Mandatory Yes, rollout 100%, iOS 7.7 MiB and Android 7.68 MiB. The
+  previous `v311` entry is Disabled on both platforms.
+- The user stated that the feedback backend was not yet available in Staging
+  and accepted the resulting degraded feedback flow. Current app code is
+  expected to keep the app alive: Profile omits the pending count on query
+  error, list/detail show retry UX, and push detail returns with an error toast.
+  This is code-path analysis, not yet real Staging 404 or feature QA evidence.
+- Post-release app Git remains clean and synchronized at `a693de6`; no product
+  file was changed by the publication. Revopush was left open on the iOS
+  Staging result page. Physical-device update receipt and Staging behavior
+  remain separate verification steps.
