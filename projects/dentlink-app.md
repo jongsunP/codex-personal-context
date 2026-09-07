@@ -2026,3 +2026,63 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - No app code changed for this clarification. The functional checkpoint and
   user-completed QA remain valid; detailed visual inspection can resume later
   from clean app commit `6856bcd`.
+
+## DL-15828 Staging QA Entry Breakpoint - 2026-09-07
+
+- This checkpoint was created before fixing newly filed QA cards. The user
+  reports that the feature is already available for Staging QA, and Jira now
+  has active QA work under DL-15828. Treat deployed-artifact QA and Git branch
+  integration as separate states.
+- Live app Git is clean and synchronized at
+  `feature/DL-16061` / `6856bcd455c8cbcebd7fc4329cee806378822dc5`.
+  The branch is 51 commits ahead and one release-merge commit behind
+  `origin/develop`. GitHub PR #286 is open, non-draft, MERGEABLE/CLEAN, with
+  successful visible checks, but its exact head commit is not contained by a
+  remote develop or release branch. No app code, commit, push, merge or PR
+  mutation was made during this audit.
+- Rechecked the current Notion PRD, Figma APP feedback section, Jira children,
+  generated push types and the feature code. The implemented product contract
+  remains intact: native Profile entry/count and notification settings,
+  native feedback list/detail, rating POST then optional detail PUT,
+  5 attachments / 200 MB, deep-link and order-detail WebView bridge,
+  Amplitude events, and server-owned questions/options.
+- The Notion PRD was last edited on 2026-09-07 and marks the main Clinic/app
+  QA rows as reflected. Source-copy drift remains: one Notion screen note says
+  maximum 10 uploads and one Figma attachment annotation says 2G, while the
+  QA table, confirmed decision and app implementation remain maximum 5 files
+  and total 200 MB. Do not change app limits from those stale annotations.
+- Focused verification passed: six Jest suites / 49 tests, feedback-related
+  changed-file ESLint with zero errors, and `git diff --check` against
+  `origin/develop`. `yarn typecheck:apps` still reports the same 11 known
+  repository diagnostics; none is in a native feedback feature file and no new
+  diagnostic was introduced by this checkpoint.
+- Jira's currently filed QA queue is deliberately not fixed in this audit:
+  - DL-16324: Mobile Web/App Share Feedback UI alignment. The screenshot calls
+    out native header/tab spacing and tab background; app code is in scope.
+  - DL-16325: remove the 16px gap between the Share Feedback tab and info
+    banner; app and web surfaces should each be checked.
+  - DL-16330: native tab switching always shows a spinner. Current code swaps
+    the entire list for `LoadingSpinner` while a newly keyed tab query is
+    loading, so this is a direct app QA item.
+  - DL-16322: category image should be shown instead of the observed thumbnail.
+    App currently renders the API `categoryThumbnailUrl`; determine with live
+    payload/design whether this is app rendering or server data before changing
+    the mapper.
+  - DL-16321 and DL-16327 concern rating-dependent copy in the order-detail
+    feedback banner. Order-detail content is WebView-owned, so handle in the
+    Clinic web repository unless the native bridge itself is reproduced as the
+    cause.
+  - DL-16323 explicitly concerns Mobile Web button sizing and is not an app
+    repository task.
+- PR #286's body is operationally stale: it cites older head `c6355a3`, older
+  merge/test evidence, says the two notification switches are disabled pending
+  Swagger, and says Staging QA has not started. The current code already has
+  generated `USER_CASE_PREFERENCE` and `ORDER_FEEDBACK` push types and active
+  settings integration. Refresh the PR description before final review/merge,
+  but do not confuse this documentation cleanup with a product-code defect.
+- Next safe starting point: refresh personal context and app Git again, then
+  process the direct app QA cards one at a time, beginning with DL-16324,
+  DL-16325 and DL-16330. For each card compare the attached Jira evidence with
+  the exact current Figma APP frame, apply a minimal fix, and verify iOS and
+  Android where the visual/runtime issue requires it. Keep WebView-owned cards
+  in the Clinic web workstream.
