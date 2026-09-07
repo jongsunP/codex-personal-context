@@ -2254,3 +2254,31 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   deployment history for recovery, but that history must not be copied into a
   normal implementation comment. The only exception is when deployment itself
   is the reported defect or the card's explicit investigation scope.
+
+## DL-15828 App FE Closeout And Rating Design Resolution - 2026-09-07 18:48 KST
+
+- Rechecked the previously unresolved feedback-detail rating design directly in
+  Figma Dev Mode. Older nodes `160:42255` and `160:42284` retain both the list
+  card's Bad/Good actions and the form's rating question, including a visibly
+  inconsistent state where the form rating is selected while the card actions
+  remain unselected.
+- The adjacent, newer feedback-detail/upload state at node `160:42313` removes
+  the order-card rating actions and keeps one rating question in the form. This
+  resolves the apparent contradiction without a product-code change.
+- The current app already follows that resolved structure:
+  `FeedbackDetailsScreen` renders `FeedbackOrderSummary` as information only
+  and renders the server-canonical `RATING` question once in the form. The
+  Bad/Good card actions remain only in `FeedbackOrderCard` on the feedback
+  list, where they belong.
+- Therefore the duplicate rating controls are stale Figma-frame residue, not an
+  app defect. No app source, Jira card, PR or deployment was changed during
+  this reconciliation. If the design file is curated later, remove or mark the
+  older duplicate-control frames as obsolete.
+- Live app Git at closeout: `feature/DL-16061`, HEAD/upstream
+  `eab70df808b49db05801c83bffd1ba2d055b8dc6`, clean and synchronized. The
+  currently confirmed app FE scope is complete. Resume only for a newly filed
+  QA defect, a confirmed API/product/design change, or the remaining normal QA
+  and delivery gates.
+- The user confirmed that the web session owns the cleanup of today's seven
+  DL-15828 child-card comments. Do not repeat those Jira edits in the app
+  session.
