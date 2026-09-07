@@ -2188,3 +2188,54 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   at a time. Keep the current Metro / Simulator / emulator / Reactotron setup if
   the session is still active; use CodePush and physical devices only for the
   later staging QA gate.
+
+## DL-15828 App QA Fixes and Staging CodePush - 2026-09-07 18:29 KST
+
+- Completed the direct app QA queue and the two confirmed pre-QA visual
+  findings on `/Users/parkjongsun/Repository/dentlink-app`, branch
+  `feature/DL-16061`. The remote head is
+  `eab70df808b49db05801c83bffd1ba2d055b8dc6` and the worktree/upstream are
+  clean and synchronized.
+- Pushed two scoped commits:
+  - `1460303`: feedback design and tab-transition fixes.
+  - `eab70df`: feedback attachment helper-copy deduplication.
+- App changes now:
+  - Resolve the original category `imageUrl` from the existing catalog query by
+    `categoryId` once per list/detail screen, with the purple artwork fallback.
+  - Remove the Figma-absent feedback-card outer border, use the gray tab
+    background, and remove only the To Review tab-to-banner top gap while
+    preserving the banner-to-card spacing.
+  - Keep both To Review and Reviewed infinite-query caches prepared, show the
+    full loader only for initial entry, use only the selected tab's data, and
+    perform later tab refreshes in the background. The existing rating overlay,
+    pagination synchronization and server-canonical cache contracts remain.
+  - Do not append the shared chat sheet's generic `: 200MB` suffix when the
+    feedback screen already supplies its complete custom limit sentence;
+    default chat behavior is unchanged.
+- Verification: focused feedback suites pass 18/18; the broader non-E2E/non-App
+  unit set passes 16 suites / 128 tests; changed-file ESLint, Prettier and
+  `git diff --check` pass. `yarn typecheck:apps` still reports 11 diagnostics,
+  all in unchanged baseline files and none in this change set.
+- The package-owned command `yarn codepush-force-office:staging` ran from the
+  exact `dentlink-app` Cursor terminal. Office 2.2.3 was released successfully
+  to both iOS and Android Staging as mandatory enabled label `v316`; the
+  standard Slack staging notification also succeeded. This proves command and
+  Revopush history, not physical-device uptake or runtime QA.
+- Jira child cards `DL-16321`, `DL-16322`, `DL-16324`, `DL-16325`, and
+  `DL-16330` have implementation/verification comments and are all
+  `Ready for Deploy`. `DL-15828` was deliberately not commented on or changed.
+  The WebView-owned `DL-16321` was closed to deploy-ready based on verified web
+  commit `0c7f95a64`; no duplicate native order-detail banner was added.
+- PR #286 automatically points to `eab70df`; it is open, non-draft,
+  mergeable/CLEAN, has successful CodeRabbit status, and has zero unresolved
+  review threads. No PR-body mutation was authorized in this checkpoint.
+- `origin/develop` currently points at release merge `967ba71`, which is not a
+  graph ancestor of the feature head, but that merge's tree equals its
+  `aa82c4c` parent already contained by this feature. There is no missing
+  develop product-code delta for this CodePush; avoid a graph-only merge unless
+  a later integration gate requires it.
+- Remaining design reconciliation only: Figma node `160:42255` contains
+  internally conflicting duplicate rating controls and stale question copy.
+  It was intentionally not copied into code; keep the current server-canonical
+  question/answer UI until design/product clarifies that node. The next product
+  step is staging/physical-device QA and any newly filed QA cards.
