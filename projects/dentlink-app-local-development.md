@@ -72,9 +72,13 @@ Metro, Reactotron/network evidence and unresolved errors separately.
    existing local changes.
 3. Confirm Office versus Lab. Use Development and Debug unless the user
    explicitly requests another environment or Release.
-4. Use the IDE opened for that exact project. Run Metro and launch commands in
-   its integrated terminal; if the IDE is not prepared, ask before starting
-   them elsewhere.
+4. Use the IDE opened for that exact project. Before every terminal or UI
+   input, reconfirm the IDE window belongs to the selected repository/worktree
+   and the verified branch. If another project IDE is focused, do not type or
+   click through it; switch to the exact Dentlink app IDE and verify it again.
+   Run Metro and launch commands in that IDE's integrated terminal so the user
+   can see the work; if the IDE is not prepared, ask before starting them
+   elsewhere.
 5. Check whether Metro is already listening on 8081. Reuse it when it belongs
    to this checkout; do not start a duplicate server.
 6. Open Reactotron as part of the normal local workspace.

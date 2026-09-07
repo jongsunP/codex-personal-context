@@ -2086,3 +2086,50 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   the exact current Figma APP frame, apply a minimal fix, and verify iOS and
   Android where the visual/runtime issue requires it. Keep WebView-owned cards
   in the Clinic web workstream.
+
+## DL-15828 Pre-QA Detailed Visual Audit - 2026-09-07 16:02 KST
+
+- This is the requested independent design audit before processing the filed
+  Jira QA cards. No product code, PR or Jira state was changed. Live app Git is
+  clean and synchronized at `feature/DL-16061` /
+  `6856bcd455c8cbcebd7fc4329cee806378822dc5`.
+- The audit used the exact `dentlink-app` IDE and its visible terminals. Android
+  Development ran on `Dentlink_API_36` with Metro from this checkout and the
+  data-rich `e2e.clinic@dentlink.app` account. Runtime inspection covered the
+  Office Profile, To Review, Reviewed, long-list scrolling, feedback detail,
+  attachment picker and leave-page confirmation. No rating POST or detail PUT
+  was sent because this pass was visual and non-mutating.
+- Current Figma APP frames were compared for Profile, first/list/rated/reviewed
+  feedback states, feedback detail and attachment/error states. Profile card
+  radii, Preferences and Quick Links icons, notification rows, Pending Reviews
+  entry and Safe Area behavior remain consistent with the previously accepted
+  DL-16311 implementation.
+- Two additional rendered-detail mismatches were independently confirmed:
+  1. `FeedbackOrderCard` adds a `mono300` one-pixel outer border, while the
+     current Figma card uses a white fill on the gray list background without
+     that border.
+  2. The feedback attachment sheet renders
+     `Up to 5 files, total size up to 200MB: 200MB` because the feedback screen
+     supplies a complete limit sentence and the reused chat sheet appends its
+     generic `: 200MB` suffix.
+- Existing filed QA observations were also reproduced or confirmed without
+  fixing them: native header/tab spacing and background (DL-16324), the 16px
+  tab-to-info-banner gap (DL-16325), the full spinner on a cold tab query
+  (DL-16330), and API `categoryThumbnailUrl` rendering for the category-image
+  report (DL-16322). WebView-owned order-detail copy/button cards remain in the
+  Clinic web workstream.
+- iOS was retried beyond the earlier `No script URL provided` screen. An arm64
+  Simulator build reaches final linking but fails because the vendored
+  `MLImage.framework` arm64 object is built for physical iOS, not
+  `iOS-simulator`. The repository's intended x86_64 Simulator build succeeds,
+  but the installed iOS 26.5 arm64 Simulator rejects the x86_64 app because it
+  has no matching architecture. Therefore Android runtime is proven at this
+  checkpoint, but iOS runtime is not; resolving that requires a compatible
+  Simulator-native MLImage binary/project maintenance or a compatible runtime,
+  not a DL-15828 JS/TS feature change.
+- Next safe starting point: when the user explicitly asks to begin QA-card
+  handling, refresh Git and source documents again, then process the direct app
+  cards individually. Also triage the two independent visual mismatches above
+  alongside the QA queue. Do not describe iOS Simulator runtime as verified
+  until the native architecture constraint is resolved and the actual app
+  screen is inspected.
