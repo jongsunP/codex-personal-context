@@ -90,6 +90,11 @@ Confirm the emulator in ADB, apply `adb reverse tcp:9090 tcp:9090`, run
 `yarn android-office:dev`, and verify both the screen and Reactotron traffic.
 Fix cross-platform differences before remote deployment.
 
+For ordinary JS/TS work, launch the configured AVD directly from the exact
+`dentlink-app` IDE's integrated terminal so only the emulator is opened. Do not
+open the full Android Studio UI unless AVD management, native Android code,
+Gradle configuration or other Android tooling is actually required.
+
 ### 4. Pre-CodePush Checkpoint
 
 Before CodePush:

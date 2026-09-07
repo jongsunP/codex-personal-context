@@ -129,8 +129,17 @@ Metro, Reactotron/network evidence and unresolved errors separately.
 
 ## Android Office
 
-1. Boot or select the intended Android emulator and confirm it appears in
-   `adb devices`.
+1. For ordinary JS/TS work, boot or select the intended Android emulator from
+   the exact `dentlink-app` IDE's integrated terminal. Prefer launching the AVD
+   directly so the full Android Studio UI does not open unnecessarily:
+
+   ```bash
+   "$ANDROID_HOME/emulator/emulator" -avd Dentlink_API_36
+   ```
+
+   Open Android Studio only when AVD management, native Android code, Gradle
+   configuration or another Android-specific tool is actually required. After
+   boot, confirm the emulator appears in `adb devices`.
 2. Apply the Reactotron reverse tunnel after the emulator connects:
 
    ```bash
