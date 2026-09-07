@@ -1417,3 +1417,31 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   카드의 실제 재현 증거와 위 코드 원인을 대조한 뒤 최소 수정하는 것이다. 앱 전용
   카드는 dentlink-app 세션에서 처리하고, 공유 모바일 UI 카드는 웹·앱 결과를 각각
   검증한다.
+
+## 웹 디자인 QA 수정 브레이크포인트 — 2026-09-07
+
+- `origin/release/v1.86.0`의 `3e150a892`에서 `fix/DL-15828-qa`를 만들어 QA 전
+  전수 점검에서 확인한 항목과 실제 웹 QA 카드를 함께 처리했다. 제품 commit은
+  `0c7f95a64` (`[DL-15828] fix: 피드백 디자인 QA 이슈 수정`)이며 로컬과
+  `origin/fix/DL-15828-qa`가 동일한 clean 상태다.
+- DL-16322는 피드백 목록·상세 이미지를 주문 thumbnail이 아니라 `categoryId`로
+  카테고리 API의 `imageUrl`에 매칭하도록 수정했다. DL-16323은 모바일 상세의
+  Bad/Good 버튼 폭을 동일하게 맞췄고, DL-16325는 탭과 안내 띠배너 사이 간격만
+  0으로 줄이면서 띠배너와 카드 사이 16px은 유지했다.
+- DL-16327은 주문 상세 배너 문구를 Good/Bad rating으로, CTA를 상세 작성 여부로
+  독립 결정하도록 수정해 Bad + 상세 작성 상태도 `Let's make it better.` + Edit로
+  표시한다. DL-16324의 웹 범위는 모바일 헤더와 탭 사이 8px 간격을 반영했다.
+  Figma 최신 빈 상태 문구도 `No reviews to show` / `Orders will appear here when
+  available.`로 통일했다.
+- Jira에서 웹 단독 DL-16322·DL-16323·DL-16325·DL-16327은 `Ready for Deploy`로
+  전환하고 구현·검증·미배포 상태를 댓글로 남겼다. DL-16324는 웹 범위만 완료됐고
+  앱 배경·spinner 범위가 남아 `진행 중`을 유지했다. DL-16321·DL-16330은 앱 전용이라
+  웹 세션에서 상태를 변경하지 않았다. QA 부모 DL-16315와 상위 DL-15828도 진행 중을
+  유지했다.
+- 재검증에서 Clinic typecheck, 대상 ESLint·Prettier, `git diff --check`, Clinic
+  production build를 통과했다. 대상 ESLint 오류는 0개였고 Prettier의 import-order
+  옵션 warning은 기존 설정 warning이다. 제품 저장소에는 추가 미커밋 변경이 없다.
+- 현재 완료 범위는 코드 수정과 원격 feature branch 반영까지다. PR·release 반영·배포
+  및 수정본 스테이징 런타임 QA는 아직 수행하지 않았으므로 Jira 카드를 `완료`로
+  전환하지 않는다. 다음 시작점은 `fix/DL-15828-qa`의 release PR 준비이며, 배포 후
+  각 카드의 실제 화면을 재검증한 뒤에만 완료 여부를 판단한다.
