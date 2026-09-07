@@ -1357,3 +1357,63 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 7. 앱 병행 상태는 `projects/dentlink-app.md`에서 재개한다. WebView/native bridge,
    API 또는 알림 계약이 생기면 양 문서와 양 저장소의 책임 경계를 함께 갱신한다.
 8. shared 저장소의 commit, push, PR은 사용자의 명시 지시가 있을 때만 수행한다.
+
+## QA 카드 처리 전 최종 브레이크포인트 — 2026-09-07
+
+- 개인 컨텍스트를 `git pull --ff-only`, 제품 저장소를 `git fetch --all --prune`으로
+  다시 갱신했다. 피드백 worktree는 branch를 점유하지 않는 detached HEAD이며
+  `HEAD = origin/release/v1.86.0 = 3e150a892cf18230fe5a98857bb3ed4ef9c785a5`에서
+  clean이다. 로컬 `release/v1.86.0` branch는 메인 worktree가 같은 commit으로
+  소유한다.
+- 기능 PR #4555는 `d980889c6`으로 release에 merge됐고, 후속 E2E 다국어·상태 흐름
+  보완 PR #4582와 #4583도 각각 `a96a37d56`, `3e150a892`로 release에 merge됐다.
+  `origin/stage`는 #4577 merge commit `52191e590`이며 release보다 뒤지만, 두 branch의
+  제품 피드백 코드에는 차이가 없고 이후 차이는 E2E·테스트 설정뿐이다. 따라서 현재
+  스테이징 QA 대상 제품 코드는 정식 피드백 구현을 포함한다.
+- 최신 개발 Swagger를 직접 다시 받아 확인했다. Clinic은 주문별 GET/POST/PUT과
+  To Review/Own 목록 GET, Admin은 필터 목록 GET과 `orderId + userId` 상세 GET을
+  제공한다. `OrderFeedbackAdminDto.reviewerUserId`, 질문/답변/FILE과
+  `FeedbackFileDto(fileId/name/url/type/size)`도 live Swagger와 generated model이
+  일치한다. Admin 주문상세·회원상세·CRM은 선택 행의 `orderId + reviewerUserId`로
+  공통 상세 GET을 호출하고 회원/CRM 피드백 영역에는 `ORDER READ` 권한 경계가 있다.
+- Figma의 전체 피드백 목록/상세, 주문상세, 마이페이지, 카드 비교, 빈 상태,
+  Amplitude 노드를 metadata와 실제 screenshot으로 다시 대조했다. 웹 7개 Amplitude
+  이벤트, `/my/feedback?orderId=...`, 목록 presentation overlay, PC pagination,
+  모바일 infinite scroll, 파일 업로드 5개·200MB 구현은 기존 결정과 일치한다.
+- QA 카드 처리 전에 코드 원인까지 특정된 항목은 다음과 같다. 아직 이 점검에서는
+  제품 코드를 수정하거나 Jira 상태를 변경하지 않았다.
+  - DL-16327: `OrderFeedbackBanner`가 `hasDetails`를 rating보다 먼저 판단해 Bad에
+    상세 답변이 있으면 Good 문구인 `Glad to hear!`를 표시한다. Figma에는 상세가 있는
+    Bad도 `Let's make it better.`와 Edit 조합으로 명시돼 있어 rating과 CTA 상태를
+    분리해야 한다.
+  - DL-16323: 모바일 상세 rating 영역에서 첫 버튼만 `flex: 1`, 다음 버튼은 auto라
+    Bad/Good 폭이 달라지는 코드가 직접 원인이다. 두 버튼을 같은 flex 규칙으로
+    맞추는 범위다.
+  - DL-16325: 피드백 페이지의 탭 아래 목록 영역에 `padding-top: 16px`가 있어 안내
+    띠배너와 탭 사이 간격이 생긴다. 카드 간격은 유지하고 해당 상단 간격만 조정하는
+    범위다.
+  - DL-16322: 웹 adapter와 카드 UI는 이미 서버의 `categoryThumbnailUrl`만 사용하고
+    첨부 파일 thumbnail을 카드 이미지로 쓰지 않는다. 실제 잘못된 이미지가 어느
+    응답 필드에서 왔는지 또는 앱 표시 문제인지 네트워크 payload와 런타임을 보고
+    귀속해야 한다.
+  - DL-16324는 모바일 웹·앱 screenshot 기반 UI 카드라 양쪽 실제 화면을 Figma와
+    나란히 대조해야 한다. DL-16321과 DL-16330은 명시적으로 앱 전용이다.
+- Jira `DL-15828`은 진행 중이고 기존 FE 구현 카드들은 완료 상태다. Amplitude
+  `DL-16229`는 Ready for Deploy다. QA 부모 `DL-16315`는 진행 중이며 위 QA 하위
+  카드들은 2026-09-07 확인 시 해야 할 일 상태다. PM의 상위 카드 최신 댓글에는
+  1차 디자인 QA 종료가 기록돼 있다.
+- 문서 정본 사이 남은 계약 충돌도 유지한다. Notion 상단 최신 첨부 정책과 FE는
+  5개·총 200MB지만 Figma 모바일 문구에는 2G가 남아 있고, Notion 하단의 오래된
+  개발 요구사항에는 10개·5MB가 남아 있다. 완료 후 취소 주문의 주문상세 배너 유지
+  여부도 Notion QA 표와 현재 본문/Figma/구현이 충돌하므로 QA 수정과 섞지 않고 PM
+  확인 후 처리한다.
+- 정적 검증은 Next route type을 먼저 생성한 뒤 Clinic typecheck와 Admin typecheck,
+  피드백 관련 ESLint, 대상 Prettier, `git diff --check`를 통과했다. ESLint 오류는 0개,
+  기존 주문상세 warning 3개만 확인됐다. 스테이징 피드백 E2E spec 4개가 정상 수집됨도
+  확인했다. 이번 점검에서 E2E를 재실행하거나 실제 POST/PUT/upload를 발생시키지는
+  않았다. 브라우저 스테이징 직접 확인은 Browser Use 보안 정책 확인 실패로 차단됐고,
+  사용자 수행 중인 스테이징 QA를 대체하는 런타임 증거로 간주하지 않는다.
+- 다음 시작점은 `origin/release/v1.86.0`에서 QA 수정 branch를 별도로 만들어 각 Jira
+  카드의 실제 재현 증거와 위 코드 원인을 대조한 뒤 최소 수정하는 것이다. 앱 전용
+  카드는 dentlink-app 세션에서 처리하고, 공유 모바일 UI 카드는 웹·앱 결과를 각각
+  검증한다.
