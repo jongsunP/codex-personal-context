@@ -178,6 +178,54 @@ master-related work, while each feature session owns edits, checks, commits,
 pushes, and PR work inside only its assigned worktree and only within the
 user's authorization boundaries.
 
+## Worktree And Session Improvement Backlog
+
+Treat the user's AI-assisted development workflow as a durable personal skill
+that should be reviewed and improved over time, independently of any one
+product feature or Jira card.
+
+The current operating model is intentional and valid:
+
+- Map one substantial feature responsibility to one branch, one worktree, and
+  one dedicated Codex project/session scope.
+- Keep the long-lived main checkout and its session responsible for repository
+  administration, shared branch synchronization, release ownership when
+  appropriate, and requested worktree lifecycle management.
+- Keep implementation ownership in the assigned feature worktree so parallel
+  AI work does not mix code state or task context.
+- This is the default isolation model, not a temporary workaround. Do not
+  replace it merely because another tool offers cloud sandboxes or automatic
+  branch creation.
+
+The following are recorded improvement candidates. They are not instructions
+to implement immediately:
+
+1. Maintain a lightweight worktree registry containing path, purpose, current
+   branch or detached revision, base, intended PR target, owning session, and
+   lifecycle state.
+2. Keep one active writing session per worktree. Additional sessions may
+   inspect or review the same feature, but simultaneous writers require an
+   explicit coordination decision.
+3. Give each checked-out release branch a single owning worktree. Other
+   worktrees that only need the same release revision should prefer a detached
+   `origin/release/...` checkout.
+4. Consider a small, non-mutating preflight command or script that reports the
+   exact path, branch, upstream, dirty state, ahead/behind counts, worktree
+   ownership, base, and intended PR target before work starts.
+5. Standardize closeout checks around remote preservation or merge evidence,
+   dirty state, squash-merge-aware tree verification, personal-context update,
+   and safe branch/worktree cleanup.
+6. Track non-Git resources that can still collide across worktrees, especially
+   development-server ports, `.env.local`, Playwright outputs, test accounts,
+   dependency/build caches, and long-running processes.
+
+Keep these candidates as a living improvement backlog. Do not create scripts,
+manifests, or new process requirements solely because they appear here. When
+the user chooses to try one, evaluate the real benefit and operating cost,
+then promote, revise, or remove it based on actual use. Record meaningful
+changes in `MEMORY_CHANGELOG.md` so the evolution of the workflow remains
+recoverable across devices and future AI sessions.
+
 ## Dentlink Release-Train Branch Strategy
 
 Treat the following as Dentlink's default company branch strategy:

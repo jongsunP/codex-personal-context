@@ -1,5 +1,18 @@
 # Memory Changelog
 
+## 2026-09-07
+
+- Confirmed that the user's organically developed mapping of one substantial
+  feature to one branch, worktree, and dedicated Codex project/session is the
+  default personal AI-development isolation model, with the long-lived main
+  checkout/session acting as repository and release coordinator.
+- Added a separate, non-immediate AI workflow improvement backlog covering a
+  lightweight worktree registry, one active writer per worktree, single
+  release-branch ownership, non-mutating startup preflight, standardized
+  closeout, and non-Git runtime-resource collision management. These are
+  candidates to evaluate over time, not changes that should be applied merely
+  because they were recorded.
+
 ## 2026-09-03
 
 - 가칭 `통합알림센터`를 별도 개인 프로젝트 체크포인트와 `PROJECTS.md`에 등록하고
