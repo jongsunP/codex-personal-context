@@ -356,6 +356,24 @@
   기능·최신 정책 문구·Portal URL의 스테이징 검증이 완료됐으며, 현 상태를
   `release/v1.86.0` 배포 대상으로 유지하면 된다고 판단했다. 실제 운영 배포는 별도다.
 
+### 로컬 작업 branch 정리 — 2026-09-07
+
+- `git fetch origin --prune` 후 최신 `origin/release/v1.86.0`은 `a96a37d56`이며,
+  Warranty 본체 merge `6922a9a2c`(#4573)와 최종 정책 수정 merge `18e7e925b`(#4576)을
+  모두 조상으로 포함하는 것을 live Git에서 확인했다.
+- release의 실제 파일에서 Clinic/Lab `/warranty` 페이지, 공용 Portal Warranty 링크,
+  `(b) storage;`, `BREACH OF THIS LIMITED WARRANTY` 최종 문구를 재확인했다. 구 문구는
+  남아 있지 않다.
+- 메인 checkout을 `master` / `ddeeb1e868c64f3e1047170f6bc6282a9646ed97`로 전환했고
+  `origin/master`와 동일·clean 상태다.
+- 다음 Warranty 관련 로컬 branch만 삭제했다:
+  `feature/DL-16258`, `feature/DL-16258-release-hold`,
+  `feature/DL-16258-warranty-policy-fix`, `frankieTemp/DL-10132`.
+- 같은 이름의 원격 branch 4개는 모두 그대로 보존했다. 별도 피드백 worktree
+  `/Users/parkjongsun/Repository/dentlink-client-order-feedback`와 다른 로컬 branch,
+  원격 branch, PR에는 손대지 않았다.
+- Warranty FE 수정과 로컬 정리는 완료됐다. 운영 배포 완료만 별도 상태다.
+
 ## 결정과 주의사항
 
 - 오래된 branch 자체를 재사용하지 않고 최신 `master`에서 새 Jira branch를 만들어

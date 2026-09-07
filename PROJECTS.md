@@ -244,6 +244,9 @@ For detailed current state, read:
   파일(+6223/-297)이며 Auto Assign·CodeRabbit 성공 후 사용자가 merge했다. merge commit과
   원격 stage는 `52191e590`이다. 사용자가 Warranty 관련 스테이징 QA 완료를 확인했고,
   현재 상태를 `release/v1.86.0` 배포 대상으로 유지하기로 했다. 남은 Warranty FE 수정은
-  없으며 실제 운영 배포 완료는 별도다.
+  없으며 실제 운영 배포 완료는 별도다. 2026-09-07 live Git에서 최신 release
+  `a96a37d56`에 #4573·#4576이 모두 포함되고 최종 본문·Portal 링크가 유지된 것을
+  재확인했다. 메인 checkout을 clean `master` / `ddeeb1e86`로 전환하고 Warranty 관련
+  로컬 branch 4개를 정리했으며, 대응 원격 branch는 보존했다.
 - Personal current checkpoint:
   `projects/dentlink-client-limited-warranty.md`
