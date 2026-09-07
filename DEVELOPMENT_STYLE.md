@@ -156,6 +156,14 @@ applying them.
   revision, real-data verification, and live analytics delivery as distinct
   completion states. A commit or successful push proves only the states that
   were actually checked.
+- Keep Jira implementation comments stable and scoped to the card: summarize
+  the implemented change and, when useful, its concise verification evidence.
+  Do not write transient deployment wording such as pending deployment,
+  staging deployment complete, a CodePush label, or a PR deployment state in
+  those comments. Use the card's current workflow status plus live deployment
+  evidence to determine delivery state instead. Record deployment details in a
+  comment only when the deployment itself is the card's defect or investigation
+  subject.
 - When the user asks only whether a feature is complete or what functionality
   remains, report actionable product-development work only. Do not mix in PR
   integration, deployment revision, real-data regression QA, live analytics

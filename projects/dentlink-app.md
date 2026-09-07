@@ -2239,3 +2239,18 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   It was intentionally not copied into code; keep the current server-canonical
   question/answer UI until design/product clarifies that node. The next product
   step is staging/physical-device QA and any newly filed QA cards.
+
+### Jira QA Comment Convention Correction - 2026-09-07 18:39 KST
+
+- The user confirmed that the web session already corrected the seven DL-15828
+  child-card comments handled today. Do not repeat that Jira mutation from the
+  app session.
+- Going forward, a QA/development child-card comment should briefly describe
+  only the implemented work and any durable verification evidence. Do not add
+  time-sensitive statements such as deployment pending, not yet deployed,
+  staging deployed, or a CodePush/PR deployment state.
+- The card's current workflow status and live deployment evidence are the
+  source of truth for deployment progress. Personal checkpoints may retain
+  deployment history for recovery, but that history must not be copied into a
+  normal implementation comment. The only exception is when deployment itself
+  is the reported defect or the card's explicit investigation scope.
