@@ -2133,3 +2133,58 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   alongside the QA queue. Do not describe iOS Simulator runtime as verified
   until the native architecture constraint is resolved and the actual app
   screen is inspected.
+
+## DL-15828 Pre-QA Runtime and Design Audit Completion - 2026-09-07 17:28 KST
+
+- Revalidated the exact workspace and runtime combination at
+  `/Users/parkjongsun/Repository/dentlink-app`, branch `feature/DL-16061`, HEAD
+  `6856bcd455c8cbcebd7fc4329cee806378822dc5`. The branch and upstream are
+  synchronized and the product worktree remains clean. No product code, PR or
+  Jira mutation was made during this pass.
+- Used the exact `dentlink-app` Cursor window and its visible terminals. Metro
+  ran from this checkout, Android Studio stayed closed, and the
+  `Dentlink_API_36` emulator was started directly. `android-office:dev` built,
+  installed and launched successfully on Android 16 / API 36.
+- iOS runtime is now proven for the normal JS/TS loop: the already-installed
+  `Dentlink-Dev` Development app on the iPhone 17 Pro / iOS 26.5 Simulator
+  connected to Metro from this feature checkout and rendered the current
+  feedback screens. This does not overturn the separate fresh native-build
+  architecture constraint recorded above; it proves the intended installed
+  app + Metro workflow only.
+- Reactotron simultaneously showed two live connections: iOS 26.5 and Android
+  16. Android used `adb reverse tcp:9090 tcp:9090`; iOS connected through its
+  existing local configuration. No tracked Reactotron configuration was
+  changed.
+- Runtime visual coverage on both platforms included Profile, notification
+  rows, Quick Links / Pending Reviews, To Review, Reviewed, feedback detail and
+  the Photo / Camera / File picker. Android also loaded the Clinic Order Details
+  WebView. The Dev web deployment did not expose a feedback banner on the
+  inspected order, so the WebView-to-native feedback click could not be
+  re-proven in this environment; this is a runtime-data/deployed-web limitation,
+  not evidence of an app bridge defect.
+- Current Figma APP frames were rechecked. Profile layout, 12px cards,
+  Preferences and Quick Links icons, notification rows and Safe Area behavior
+  match the accepted implementation. No new large structural mismatch was
+  found.
+- Confirmed visual follow-ups before Jira QA-card handling:
+  1. List cards still show a one-pixel `mono300` outer border while the current
+     Figma To Review/Reviewed cards appear borderless.
+  2. The attachment picker duplicates the limit suffix as
+     `Up to 5 files, total size up to 200MB: 200MB`; the complete feedback
+     sentence is followed by the reused chat sheet's generic suffix.
+  3. Figma node `160:42255` models compact rating chips and an order-summary
+     OptionCard that also contains rating actions, while the runtime detail uses
+     two full-width rating buttons and a summary-only card. Treat this as a
+     design-product reconciliation item before changing code because the same
+     Figma node also retains the stale copy `How was this order?`, whereas the
+     confirmed app/API wording is `How was your experience?`.
+- Focused feedback tests passed: two suites and 18 tests. `git diff --check`
+  passed. `yarn typecheck:apps` still reports the repository's known errors in
+  unrelated shared files; none of those error files differs from the feature
+  branch's merge base, so this audit introduced no new type error.
+- Next safe starting point: when the user explicitly starts QA-card work,
+  refresh Git and source documents, reconcile the detail-layout design item,
+  then process direct app cards and the two confirmed minor visual defects one
+  at a time. Keep the current Metro / Simulator / emulator / Reactotron setup if
+  the session is still active; use CodePush and physical devices only for the
+  later staging QA gate.
