@@ -97,6 +97,11 @@ scratch details.
   Preserve the user's intent, remove emotional or defensive framing, cite a
   concrete comparable example when available, and make the conclusion or
   question easy for a nondeveloper to evaluate.
+- Treat QA-card comments as answers to the nondeveloper who reported the issue,
+  not as developer changelogs. Lead with the confirmed outcome, relate it to a
+  familiar existing product behavior when useful, and state what the reporter
+  should now observe. Omit internal query, cache, hook, file, and implementation
+  details unless they are necessary to explain a remaining limitation.
 - Preserve project continuity.
 - Keep the personal project checkpoint updated when work changes project state.
 - Prefer remote-pushed Git context over local-only notes for durable progress

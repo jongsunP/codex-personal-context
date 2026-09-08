@@ -2,6 +2,10 @@
 
 ## 2026-09-08
 
+- Clarified that QA-card comments are user-facing answers for the nondeveloper
+  reporter, not internal engineering changelogs: state the outcome, use a
+  familiar product comparison when useful, and describe the expected visible
+  behavior without unnecessary implementation terminology.
 - Replaced the exact-IDE-terminal preference with an on-demand visible Codex
   terminal rule: Codex owns command execution, the user owns the IDE, and the
   terminal is opened only while commands are active.

@@ -2256,6 +2256,11 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   deployment history for recovery, but that history must not be copied into a
   normal implementation comment. The only exception is when deployment itself
   is the reported defect or the card's explicit investigation scope.
+- QA comments are answers to the nondeveloper reporter rather than engineering
+  changelogs. State the confirmed resolution, cite a familiar comparable app
+  behavior when it helps explain the decision, and describe what the reporter
+  should now see. Avoid query, cache, hook, file and pagination terminology
+  unless a remaining limitation cannot be explained without it.
 
 ## DL-15828 App FE Closeout And Rating Design Resolution - 2026-09-07 18:48 KST
 
@@ -2306,6 +2311,11 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - Jira `DL-16352` and `DL-16353` now contain durable implementation-only
   comments and are `Ready for Deploy`. Their comments intentionally omit
   time-sensitive deployment language.
+- The existing `DL-16330` comment was rewritten for its QA audience: it now
+  explains that Feedback tabs follow the familiar GNB behavior, previously
+  loaded content appears immediately, background refresh continues, and the
+  full-screen spinner is limited to the first load. Its `READY FOR QA` status
+  was left unchanged.
 - `DL-16349` required no code change. The app order detail is WebView-owned and
   comparable existing web-owned actions such as patient information save,
   dentist change, order cancellation and approval already display web Toasts
