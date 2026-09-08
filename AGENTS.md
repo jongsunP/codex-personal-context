@@ -38,6 +38,11 @@
 - For development work, CTO handoffs, implementation notes, decision records,
   and cross-session summaries, include as much detail as the work requires.
 - Explain important engineering decisions clearly when detail is necessary.
+- For every project, treat Jira and other QA-card comments as answers to the
+  nondeveloper who reported the issue, not as engineering changelogs. State the
+  confirmed outcome, use a familiar comparable product behavior as evidence
+  when useful, and explain what the reporter should now observe. Omit internal
+  implementation terminology unless it is needed to explain a real limitation.
 - Follow the truthfulness and uncertainty-calibration rules in
   `AI_WORKFLOW.md` for all Codex work.
 

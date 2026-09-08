@@ -2,6 +2,9 @@
 
 ## 2026-09-08
 
+- Promoted the QA-comment audience rule into the global personal `AGENTS.md`,
+  so it applies consistently across every project rather than only Dentlink app
+  work.
 - Clarified that QA-card comments are user-facing answers for the nondeveloper
   reporter, not internal engineering changelogs: state the outcome, use a
   familiar product comparison when useful, and describe the expected visible
