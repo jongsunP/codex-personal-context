@@ -1462,14 +1462,16 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 스테이징에서 `08_orderFeedback.spec.ts` 전체 10개를 재실행해 10/10 통과했고,
   테스트가 생성한 온보딩 병원도 global teardown에서 정상 삭제됐다. E2E TypeScript,
   대상 ESLint, TS 파일 Prettier, 테스트 수집, `git diff --check`도 통과했다.
-- commit은 `8623128b3` (`[DL-15828] test: 피드백 E2E 시나리오 확장`)이며 로컬과
-  `origin/fix/DL-15828-feedback-e2e-coverage`가 동일한 clean 상태다. commit hook의
+- 구현 commit은 `8623128b3` (`[DL-15828] test: 피드백 E2E 시나리오 확장`)이다.
+  commit hook의
   Clinic·Lab·Admin typecheck를 통과했다. 첫 push는 로컬 coverage baseline 부재로
   중단됐으나 공식 `pnpm coverage:baseline`으로 shared 기준선을 생성한 뒤 재실행해
   전체 lint 0 errors·기존 warning 410건, shared config 3건·hook 24건, coverage 변화
   없음으로 정상 push했다.
 - [PR #4589](https://github.com/Innvoaid/dentlink-client/pull/4589)는
-  `fix/DL-15828-feedback-e2e-coverage -> release/v1.86.0`으로 생성했고 확인 시점에
-  OPEN·Ready for review·MERGEABLE이다. Auto Assign은 성공했고 CodeRabbit은 진행
-  중이다. Vercel status는 팀 초대 링크를 대상으로 FAILURE지만 이번 변경은 E2E와
-  문서만 포함한다. merge·release 반영·배포는 아직 완료로 기록하지 않는다.
+  `fix/DL-15828-feedback-e2e-coverage -> release/v1.86.0`으로 squash merge됐다.
+  release merge commit은 `8d982d898`이며 구현 branch `8623128b3`과 최종 tree가
+  동일함을 확인했다.
+- 메인 checkout의 로컬 `release/v1.86.0`을 `8d982d898`로 fast-forward했다. 피드백
+  worktree는 같은 `origin/release/v1.86.0`에 detached HEAD로 남겨 다음 QA 작업에
+  사용할 수 있고 clean이다. 머지된 임시 branch는 로컬과 원격에서 삭제했다.
