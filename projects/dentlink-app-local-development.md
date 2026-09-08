@@ -72,13 +72,11 @@ Metro, Reactotron/network evidence and unresolved errors separately.
    existing local changes.
 3. Confirm Office versus Lab. Use Development and Debug unless the user
    explicitly requests another environment or Release.
-4. Use the IDE opened for that exact project. Before every terminal or UI
-   input, reconfirm the IDE window belongs to the selected repository/worktree
-   and the verified branch. If another project IDE is focused, do not type or
-   click through it; switch to the exact Dentlink app IDE and verify it again.
-   Run Metro and launch commands in that IDE's integrated terminal so the user
-   can see the work; if the IDE is not prepared, ask before starting them
-   elsewhere.
+4. Run commands in a Codex-managed terminal rooted at the selected repository
+   or worktree so the user can see the work. Open that terminal only while
+   commands are running and close it when command work is complete. Do not type
+   into, control, or depend on an IDE terminal; the user manages the IDE
+   separately.
 5. Check whether Metro is already listening on 8081. Reuse it when it belongs
    to this checkout; do not start a duplicate server.
 6. Open Reactotron as part of the normal local workspace.
@@ -91,7 +89,7 @@ Metro, Reactotron/network evidence and unresolved errors separately.
 ## iOS Office
 
 1. Boot or select the intended iOS Simulator.
-2. In an integrated terminal, start visible Metro logs when Metro is not
+2. In a visible Codex terminal, start Metro logs when Metro is not
    already running:
 
    ```bash
@@ -130,7 +128,7 @@ Metro, Reactotron/network evidence and unresolved errors separately.
 ## Android Office
 
 1. For ordinary JS/TS work, boot or select the intended Android emulator from
-   the exact `dentlink-app` IDE's integrated terminal. Prefer launching the AVD
+   a visible Codex terminal rooted at `dentlink-app`. Prefer launching the AVD
    directly so the full Android Studio UI does not open unnecessarily:
 
    ```bash
@@ -146,9 +144,9 @@ Metro, Reactotron/network evidence and unresolved errors separately.
    adb reverse tcp:9090 tcp:9090
    ```
 
-3. In an integrated terminal, start `yarn metro-log` when the correct Metro is
+3. In a visible Codex terminal, start `yarn metro-log` when the correct Metro is
    not already running.
-4. In another integrated terminal, run:
+4. In another visible Codex terminal, run:
 
    ```bash
    yarn android-office:dev
@@ -186,7 +184,7 @@ For example, before “iOS 시뮬레이터에서 작업하자”, state:
 ```text
 실행 조합: Office + iOS + Development + Simulator + Debug
 코드: 현재 체크아웃 브랜치 via Metro
-도구: 프로젝트 IDE 터미널 + Simulator + Reactotron
+도구: 필요할 때만 여는 Codex 터미널 + Simulator + Reactotron
 명령: yarn metro-log, 설치된 Development 앱 실행/Reload
 네이티브 재빌드 필요 시에만: yarn ios-office:dev
 ```

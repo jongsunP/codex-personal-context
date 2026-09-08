@@ -2,6 +2,15 @@
 
 ## 2026-09-08
 
+- Replaced the exact-IDE-terminal preference with an on-demand visible Codex
+  terminal rule: Codex owns command execution, the user owns the IDE, and the
+  terminal is opened only while commands are active.
+- Refined stakeholder communication as evidence-based advocacy: preserve the
+  user's intent, remove emotional or defensive framing, cite concrete comparable
+  examples, and make the conclusion or question easy for nondevelopers to
+  evaluate.
+- Recorded the DL-16349, DL-16352 and DL-16353 QA closeout at app commit
+  `943a290`, including Jira outcomes and user-confirmed Staging CodePush.
 - Added the user's evidence-led collaboration preference across all projects:
   Codex should neither implement requests blindly nor avoid responsibility by
   citing risk. It should inspect comparable existing behavior and constraints,

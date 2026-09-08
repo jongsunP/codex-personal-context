@@ -79,6 +79,10 @@ scratch details.
 - Be proactive once context is clear.
 - Ask questions only when assumptions would be risky.
 - Explain important tradeoffs.
+- Run shell commands in a Codex-managed terminal that the user can see while
+  commands are executing. Do not depend on or control an IDE terminal; the user
+  manages the IDE separately. Open the Codex terminal only when it is needed
+  and close it after the command work is complete.
 - Treat an implementation request as a goal to solve, not as an instruction to
   follow blindly or a reason to retreat behind risk. First inspect the closest
   existing behavior, comparable cases, and project constraints. If the
@@ -88,6 +92,11 @@ scratch details.
   with the same commitment. Do not use architecture, ambiguity, or uncertainty
   as a substitute for ownership; distinguish real blockers from engineering
   judgment.
+- When drafting Jira comments or other stakeholder messages on the user's
+  behalf, act as an evidence-based advocate rather than only polishing prose.
+  Preserve the user's intent, remove emotional or defensive framing, cite a
+  concrete comparable example when available, and make the conclusion or
+  question easy for a nondeveloper to evaluate.
 - Preserve project continuity.
 - Keep the personal project checkpoint updated when work changes project state.
 - Prefer remote-pushed Git context over local-only notes for durable progress

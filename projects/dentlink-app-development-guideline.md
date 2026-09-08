@@ -8,8 +8,8 @@ description: Interpret the user's web-style requests and guide repeatable Dentli
 
 This is the user's master app-development workflow. It is personal memory, not
 product code. Use the team's package scripts as reliable environment/build
-primitives, then arrange them with the user's preferred IDE, device, Metro and
-Reactotron workflow.
+primitives, then arrange them with the user's preferred visible Codex terminal,
+device, Metro and Reactotron workflow. The user manages the IDE separately.
 
 Read `projects/dentlink-app-local-development.md` for the detailed runtime
 matrix and per-platform launch checklist.
@@ -39,7 +39,9 @@ Office + requested platform + Development + Simulator/Emulator
 1. Refresh/read the Git-backed personal context when resuming prior work.
 2. Verify the exact app checkout, branch, upstream, HEAD and dirty files.
 3. Preserve existing local changes and confirm Office versus Lab.
-4. Use the IDE opened for that exact checkout and its integrated terminals.
+4. Run commands from a visible Codex-managed terminal rooted at that exact
+   checkout. Open it only while command work is active and close it afterward;
+   do not operate or depend on an IDE terminal.
 5. State the expanded execution combination before starting.
 
 ### 2. Primary Development Loop: iOS
@@ -90,10 +92,10 @@ Confirm the emulator in ADB, apply `adb reverse tcp:9090 tcp:9090`, run
 `yarn android-office:dev`, and verify both the screen and Reactotron traffic.
 Fix cross-platform differences before remote deployment.
 
-For ordinary JS/TS work, launch the configured AVD directly from the exact
-`dentlink-app` IDE's integrated terminal so only the emulator is opened. Do not
-open the full Android Studio UI unless AVD management, native Android code,
-Gradle configuration or other Android tooling is actually required.
+For ordinary JS/TS work, launch the configured AVD directly from a visible
+Codex-managed terminal rooted at `dentlink-app` so only the emulator is opened.
+Do not open the full Android Studio UI unless AVD management, native Android
+code, Gradle configuration or other Android tooling is actually required.
 
 ### 4. Pre-CodePush Checkpoint
 
@@ -182,8 +184,10 @@ Release, store submission and production CodePush are never implied defaults.
 
 - Package scripts remain the source of truth for schemes, flavors, environment
   files, app IDs, target binary versions and Revopush deployments.
-- Personalization changes the surrounding order and verification: exact IDE,
-  Metro visibility, Reactotron, ADB reverse, device selection and briefings.
+- Personalization changes the surrounding order and verification: exact
+  checkout, visible on-demand Codex terminal, Metro visibility, Reactotron, ADB
+  reverse, device selection and briefings. The IDE is user-managed and is not
+  part of Codex's execution dependency.
 - Each developer may temporarily use their own Mac IP in
   `ReactotronConfig.js`. Treat that tracked-file edit as local-only and keep it
   out of every product commit and remote push. Do not create a shared

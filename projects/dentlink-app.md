@@ -3,11 +3,10 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current checkpoint is the final section, **DL-16311 Profile UI Alignment
-and Staging CodePush - 2026-09-04**. Earlier PR review, notification design and
-delivery sections record the preceding implementation and decisions. Earlier
-dated delivery, review, API and runtime results below are historical, not
-current claims.
+The current checkpoint is the final section, **DL-15828 QA Follow-up Closeout -
+2026-09-08**. Earlier PR review, notification design and delivery sections
+record the preceding implementation and decisions. Earlier dated delivery,
+review, API and runtime results below are historical, not current claims.
 
 ## Project Role And Continuity
 
@@ -69,9 +68,10 @@ current claims.
   asks for Chrome itself or when Figma, planning, Swagger or another web source
   must be inspected. For ordinary shared app work, use the iOS Simulator as the
   user's fast primary loop and validate Android at a sensible checkpoint before
-  CodePush; start on the affected platform for platform-specific work. Keep app
-  execution in the `dentlink-app` IDE window and its integrated Metro terminal
-  rather than the web project's IDE.
+  CodePush; start on the affected platform for platform-specific work. Run app
+  commands in a visible, on-demand Codex terminal rooted at the exact app
+  checkout; the user manages the IDE separately and Codex must not operate its
+  terminal.
 - For remaining-task briefings, distinguish unfinished in-scope implementation
   from normal QA, approval, merge and deployment steps. The user understands
   those delivery steps and does not count them as missing development tasks.
@@ -87,11 +87,11 @@ current claims.
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `c71cffbbbcc1b79693abd36c7b8a6410045077c5`
+- Current HEAD: `943a29038603f6b815477498efa0a5addb7fb3b2`
 - The checkout is clean and synchronized with `origin/feature/DL-16061` after
-  the user explicitly authorized the Profile UI fix commit and push.
+  the user explicitly authorized the 2026-09-08 QA fix commit and push.
 - `origin/develop` is `967ba71b1f864ce581c999950dd74fbb28eff046`;
-  the feature branch is 46 commits ahead / 1 commit behind by graph. The sole
+  the feature branch is 54 commits ahead / 1 commit behind by graph. The sole
   develop-only release merge has the same tree as its feature-side parent, so
   it introduces no missing product-code change into the current feature
   checkout. Re-verify this time-sensitive status before future work.
@@ -1653,12 +1653,13 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - The user will now develop the mobile app regularly rather than only observe
   app-developer work. Keep the team's package scripts as the canonical launch
   commands, while preparing a repeatable personal workspace around them.
-- When the user asks to start local iOS Office development, prepare the exact
-  `dentlink-app` IDE window, its integrated terminal, the iOS Simulator, Metro,
-  and Reactotron as one working set. Verify the live branch/worktree first,
-  then use `yarn ios-office:dev` from that IDE terminal and confirm both the
-  rendered app and Reactotron connection/log traffic. Use the corresponding
-  Lab command only when the task is explicitly Lab.
+- When the user asks to start local iOS Office development, open a visible
+  Codex-managed terminal for the exact `dentlink-app` checkout, plus the iOS
+  Simulator, Metro, and Reactotron as one working set. Verify the live
+  branch/worktree first, then use `yarn ios-office:dev` only when a native
+  rebuild is needed and confirm both the rendered app and Reactotron
+  connection/log traffic. The user manages the IDE separately. Use the
+  corresponding Lab command only when the task is explicitly Lab.
 - When the user asks for local Android Office development, use the same pattern
   with the Android emulator and `yarn android-office:dev`. After the emulator
   is connected, apply `adb reverse tcp:9090 tcp:9090` before app load/reload;
@@ -1676,11 +1677,12 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   scheme/flavor and app configuration; they do not select a Git branch.
   `codepush-force-*:dev` is a remote Development deployment command, not a
   substitute for `ios-*:dev` or `android-*:dev` local execution.
-- Start Metro only in the integrated terminal of the IDE opened for the exact
-  project. If that IDE has not been prepared, ask the user before starting it
-  elsewhere. Prefer the team's working command path; the current repository's
-  `yarn start` has a known obsolete debugger flag, while `yarn metro-log`
-  starts Metro when it must be run separately.
+- Start Metro only in a visible Codex-managed terminal rooted at the exact
+  checkout. Open the terminal while it is active and close it after command
+  work is complete; do not use or depend on an IDE terminal. Prefer the team's
+  working command path; the current repository's `yarn start` has a known
+  obsolete debugger flag, while `yarn metro-log` starts Metro when it must be
+  run separately.
 - Live proof on 2026-09-04: the already installed Office Android development
   app was attached to Metro in the `dentlink-app` Cursor terminal, reloaded,
   and Reactotron displayed one Android 16/API 36 connection plus AsyncStorage
@@ -2282,3 +2284,33 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - The user confirmed that the web session owns the cleanup of today's seven
   DL-15828 child-card comments. Do not repeat those Jira edits in the app
   session.
+
+## DL-15828 QA Follow-up Closeout - 2026-09-08
+
+- Live app Git is `feature/DL-16061` at
+  `943a29038603f6b815477498efa0a5addb7fb3b2`, clean, synchronized with
+  `origin/feature/DL-16061`, and ahead/behind `0/0`.
+- Commit `943a290` (`fix: 프로필과 피드백 화면 디자인 보정`) contains
+  three Office-only style corrections: Profile header-to-content spacing to
+  20px, Share Feedback tab background to white, and info-banner-to-first-card
+  spacing to 20px.
+- Changed-file ESLint, Prettier check, `git diff --check`, and the two focused
+  feedback Jest suites passed; 18/18 tests passed. Review found no functional
+  or native-boundary side effect in this three-line style delta.
+- The user directly ran the Office Staging CodePush and confirmed successful
+  completion. This is user-confirmed publication evidence; the exact release
+  labels and physical-device uptake were not independently captured in this
+  checkpoint.
+- Jira `DL-16352` and `DL-16353` now contain durable implementation-only
+  comments and are `Ready for Deploy`. Their comments intentionally omit
+  time-sensitive deployment language.
+- `DL-16349` required no code change. The app order detail is WebView-owned and
+  comparable existing web-owned actions such as patient information save,
+  dentist change, order cancellation and approval already display web Toasts
+  inside the app. A concise evidence-based Jira comment records that precedent,
+  and the card is `Complete`.
+- New standing terminal rule supersedes the older IDE-terminal preference:
+  Codex runs commands in a visible Codex-managed terminal rooted at the exact
+  checkout, opens it only while commands are executing, and closes it after
+  command work. The user manages the IDE separately; Codex must not control or
+  depend on the IDE terminal.
