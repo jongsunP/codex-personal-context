@@ -2372,6 +2372,9 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   publication does not prove physical-device receipt or runtime behavior.
 - No Jira or PR text mutation was part of this closeout. The session audit
   found no additional durable feedback/runtime/QA convention that was missing
-  from this project checkpoint. The user's next action is physical-device
-  Staging verification of detail push entry, back-to-Home, list push entry and
-  the unchanged normal list/order-detail flows.
+  from this project checkpoint.
+- After the `v318` Staging publication, the user confirmed on a deployed app
+  that the changed feedback deep-link behavior works normally. This closes the
+  user-owned runtime confirmation for this checkpoint. The user did not state
+  a platform-by-platform evidence split, so retain the iOS/Android publication
+  proof separately and do not infer separate device coverage.
