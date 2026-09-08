@@ -2309,6 +2309,11 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   dentist change, order cancellation and approval already display web Toasts
   inside the app. A concise evidence-based Jira comment records that precedent,
   and the card is `Complete`.
+- Computer-use text injection into the Cursor terminal dropped the `h` from
+  `codepush` twice, while the repository script itself was valid and the user's
+  directly entered command completed successfully. Treat this as an observed
+  UI-input failure with an unconfirmed root cause, not as a Yarn or repository
+  defect.
 - New standing terminal rule supersedes the older IDE-terminal preference:
   Codex runs commands in a visible Codex-managed terminal rooted at the exact
   checkout, opens it only while commands are executing, and closes it after
