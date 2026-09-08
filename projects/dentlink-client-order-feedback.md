@@ -1445,3 +1445,31 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   및 수정본 스테이징 런타임 QA는 아직 수행하지 않았으므로 Jira 카드를 `완료`로
   전환하지 않는다. 다음 시작점은 `fix/DL-15828-qa`의 release PR 준비이며, 배포 후
   각 카드의 실제 화면을 재검증한 뒤에만 완료 여부를 판단한다.
+
+## 피드백 E2E 커버리지 확장 — 2026-09-08
+
+- 최신 `release/v1.86.0` `169ce0d90`에서
+  `fix/DL-15828-feedback-e2e-coverage`를 사용해 Clinic 피드백 E2E를 기존 4개에서
+  10개 시나리오로 확장했다. 제품 코드는 변경하지 않았다.
+- Completed 이전 주문상세 미노출, 완료 후 주문상세와 To Review 노출, Bad 즉시
+  저장과 Reviewed 전환, 상세 키워드·코멘트·파일 저장, 재조회와 Good 수정,
+  주문상세 배너·상세 진입, `orderId` 직접 진입과 닫기를 한 serial 흐름에서 검증한다.
+- 최종 코드리뷰에서 Completed 이전 미노출 검사가 주문 상세 로딩 전에 공허하게
+  통과할 수 있음을 발견했다. 주문 상세 GET 성공과 환자명 렌더를 기다린 뒤 검사하도록
+  보완했다. API 응답·목록·locator 헬퍼는
+  `e2e/clinic/steps/feedback/feedback-test-helpers.ts`로 분리해 spec을 500줄 이하로
+  유지했고, README에 개별 테스트가 아닌 전체 spec 실행 조건을 명시했다.
+- 스테이징에서 `08_orderFeedback.spec.ts` 전체 10개를 재실행해 10/10 통과했고,
+  테스트가 생성한 온보딩 병원도 global teardown에서 정상 삭제됐다. E2E TypeScript,
+  대상 ESLint, TS 파일 Prettier, 테스트 수집, `git diff --check`도 통과했다.
+- commit은 `8623128b3` (`[DL-15828] test: 피드백 E2E 시나리오 확장`)이며 로컬과
+  `origin/fix/DL-15828-feedback-e2e-coverage`가 동일한 clean 상태다. commit hook의
+  Clinic·Lab·Admin typecheck를 통과했다. 첫 push는 로컬 coverage baseline 부재로
+  중단됐으나 공식 `pnpm coverage:baseline`으로 shared 기준선을 생성한 뒤 재실행해
+  전체 lint 0 errors·기존 warning 410건, shared config 3건·hook 24건, coverage 변화
+  없음으로 정상 push했다.
+- [PR #4589](https://github.com/Innvoaid/dentlink-client/pull/4589)는
+  `fix/DL-15828-feedback-e2e-coverage -> release/v1.86.0`으로 생성했고 확인 시점에
+  OPEN·Ready for review·MERGEABLE이다. Auto Assign은 성공했고 CodeRabbit은 진행
+  중이다. Vercel status는 팀 초대 링크를 대상으로 FAILURE지만 이번 변경은 E2E와
+  문서만 포함한다. merge·release 반영·배포는 아직 완료로 기록하지 않는다.
