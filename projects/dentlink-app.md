@@ -2331,3 +2331,47 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   checkout, opens it only while commands are executing, and closes it after
   command work. The user manages the IDE separately; Codex must not control or
   depend on the IDE terminal.
+
+## DL-15828 Feedback Detail Deep-Link Direct Entry - 2026-09-08
+
+- The reported UX issue was that a feedback-detail push link visibly mounted
+  the native feedback list before opening detail. This looked like an
+  intermediate-screen bug and was not required by a confirmed product policy;
+  the earlier list-first implementation only supplied list fallback/back
+  behavior when detail loading failed.
+- Commit `21ba68a80646ac4293962e1c4e2263f109a2802d`
+  (`fix: 피드백 상세 딥링크 직접 진입`) is pushed to
+  `feature/DL-16061`. A valid external feedback URL with `orderId` now builds
+  the navigation stack as `BottomTabNavigator -> FeedbackDetailsScreen`, so
+  the list is neither mounted nor shown between Home and detail.
+- This applies to every valid external feedback-detail URL, not only URLs that
+  already contain `landBy=push`. On Android the raw Intent URL can be handled
+  before the matching FCM event adds `landBy=push`; the later FCM event is
+  deduplicated and only completes analytics. Restricting direct entry to
+  `landBy=push` would therefore leave the original list flash possible.
+- Feedback list links still open `FeedbackListScreen`. Missing, invalid or
+  non-positive detail `orderId` leaves the user on Home. The existing
+  employee/employer context switch still completes before feedback navigation
+  and the canonical detail query.
+- Direct detail entry is identified as `entryPoint: "deep-link"`. Back, close,
+  successful Submit and detail-load failure all return to Home for this entry
+  context; load failure also keeps the existing error Toast. Normal
+  Profile-to-list-to-detail navigation and order-detail WebView-to-native
+  detail navigation retain their existing return targets and behavior.
+- Focused feedback/deep-link/WebView suites pass 4 suites and 46/46 tests.
+  Changed-file ESLint, Prettier and `git diff --check` pass. Office/Lab
+  typecheck still reports 11 diagnostics, all in unchanged baseline files and
+  none in the five changed files. An independent diff review found no defect;
+  actual push lifecycle/back-stack behavior remains physical-device QA rather
+  than code-level proof.
+- The package-owned `yarn codepush-force-office:staging` command completed
+  successfully for Office 2.2.3 on both platforms. Revopush history confirms
+  mandatory enabled Staging label `v318` for both Dentlink-Office-iOS and
+  Dentlink-Office-Android. The known forced-release warning remains for
+  `shared/assets/videos/isv.mp4` (1.48 MiB over the 500 KiB recommendation);
+  publication does not prove physical-device receipt or runtime behavior.
+- No Jira or PR text mutation was part of this closeout. The session audit
+  found no additional durable feedback/runtime/QA convention that was missing
+  from this project checkpoint. The user's next action is physical-device
+  Staging verification of detail push entry, back-to-Home, list push entry and
+  the unchanged normal list/order-detail flows.
