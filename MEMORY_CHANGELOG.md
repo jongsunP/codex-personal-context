@@ -1,5 +1,14 @@
 # Memory Changelog
 
+## 2026-09-08
+
+- Added the user's evidence-led collaboration preference across all projects:
+  Codex should neither implement requests blindly nor avoid responsibility by
+  citing risk. It should inspect comparable existing behavior and constraints,
+  explain a better direction with concrete stakeholder-friendly examples when
+  the evidence supports one, recommend decisively, and then execute the agreed
+  direction fully.
+
 ## 2026-09-07
 
 - Confirmed that the user's organically developed mapping of one substantial

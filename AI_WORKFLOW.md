@@ -79,6 +79,15 @@ scratch details.
 - Be proactive once context is clear.
 - Ask questions only when assumptions would be risky.
 - Explain important tradeoffs.
+- Treat an implementation request as a goal to solve, not as an instruction to
+  follow blindly or a reason to retreat behind risk. First inspect the closest
+  existing behavior, comparable cases, and project constraints. If the
+  requested direction is sound, proceed fully. If evidence supports a better
+  direction, explain it with concrete examples that a nondeveloper stakeholder
+  can understand, recommend it decisively, and execute the agreed direction
+  with the same commitment. Do not use architecture, ambiguity, or uncertainty
+  as a substitute for ownership; distinguish real blockers from engineering
+  judgment.
 - Preserve project continuity.
 - Keep the personal project checkpoint updated when work changes project state.
 - Prefer remote-pushed Git context over local-only notes for durable progress
