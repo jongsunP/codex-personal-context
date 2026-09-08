@@ -1475,3 +1475,19 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 메인 checkout의 로컬 `release/v1.86.0`을 `8d982d898`로 fast-forward했다. 피드백
   worktree는 같은 `origin/release/v1.86.0`에 detached HEAD로 남겨 다음 QA 작업에
   사용할 수 있고 clean이다. 머지된 임시 branch는 로컬과 원격에서 삭제했다.
+
+## release/v1.86.0 스테이징 재전달 준비 — 2026-09-08
+
+- 사용자 지시에 따라 기존 원격 `stage` `b73dfc3fd`를 삭제하고 최신 원격
+  `master` `ddeeb1e86`에서 다시 생성했다. 삭제 직전 stage 대상·stage head의 열린
+  PR은 모두 0개였고, branch protection과 적용 ruleset도 없음을 확인했다.
+- 재생성 후 `origin/stage = origin/master = ddeeb1e86`이며 최신
+  `origin/release/v1.86.0`은 피드백 E2E 확장 PR #4589까지 포함한 `8d982d898`이다.
+  stage와 release의 merge-tree 및 `git diff --check`가 성공해 충돌이 없음을
+  확인했다. 전달 diff는 108개 파일, 7,131줄 추가·579줄 삭제다.
+- [PR #4591](https://github.com/Innvoaid/dentlink-client/pull/4591)
+  `[배포] release/v1.86.0 스테이징 반영`을 생성했다. 확인 시점에 OPEN·Ready for
+  review·MERGEABLE이며 Auto Assign과 CodeRabbit은 성공했다. Vercel status는 팀 초대
+  링크를 대상으로 FAILURE지만 코드 검증 실패로 확인된 것은 아니다.
+- 이번 단계는 환경 branch 재생성과 배포 PR 준비까지다. PR merge, 실제 스테이징
+  배포, 배포 revision 및 화면 QA는 아직 완료로 기록하지 않는다.
