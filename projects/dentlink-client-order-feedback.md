@@ -1520,7 +1520,7 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
 - 검증은 Clinic·Lab·Admin typecheck, 대상 ESLint·Prettier, `git diff --check`, E2E
   TypeScript와 10개 테스트 수집을 통과했다. 로컬 DEV API 기반 피드백 E2E 전체도
   10/10 통과했다. 테스트 범위는 주문 생성·상태 전환·주문상세 및 목록 노출,
-  Good/Bad POST, 상세 PUT·재조회·수정, 직접 URL 진입을 포함한다.
+  Bad 신규 POST, 상세 PUT·Good 수정·재조회, 직접 URL 진입을 포함한다.
 - 2026-09-11 최종 live Git에서 `origin/release/v1.86.0`, `origin/develop`,
   `origin/stage` 모두 주문상세의 `isReviewable === true` gate와 generated
   `isReviewable?: boolean`을 포함함을 재확인했다. `origin/master`는 여전히
@@ -1537,3 +1537,19 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   기준으로 필요한 repository별 branch/worktree를 만든다. 앱 후속은 같은 기능
   세션에서 함께 처리할 수 있으며, 앱의 상세 Git·QA 상태 정본은
   `projects/dentlink-app.md`를 따른다.
+
+## E2E 범위 재확인 — 2026-09-11
+
+- FE 최상위 세션에서 release `0e0878ef1`의 spec/helper와 수집 결과를 확인했다.
+  피드백은 전체 109개 중 10개 serial 테스트다. 실제 테스트는 재실행하지 않았다.
+- 신규 저장은 Bad POST이고 Good은 기존 피드백의 PUT 수정이다. 과거 Completed
+  주문의 `isReviewable=false/undefined` 미노출·GET 미발생과 Good 최초 POST는
+  직접 검증하지 않는다. 첨부 5개·200MB 경계, 업로드 실패 복구, 목록 추가 페이지,
+  잘못된 직접진입·타 병원 전환도 이 10개에 포함되지 않는다.
+- spec 종료는 기본 팀 복원이며 생성한 주문·피드백·첨부 삭제는 없다. 별도 온보딩
+  병원 teardown 성공을 피드백 데이터 전체 정리로 해석하지 않는다.
+- 9/8 staging 및 9/11 로컬 DEV API 10/10은 당시 실행 근거다. 이후 CI에서는
+  develop의 Completed 후 배너 미노출, 직전 stage의 주문 생성 중 치과의사 선택
+  타임아웃이 관찰됐다. 최신 stage는 global setup 실패로 피드백을 실행하지 못했다.
+  run 링크·집계와 CI 성공 오표시 문제는 `projects/dentlink-client-e2e.md`를 따른다.
+- 제품 코드, 테스트 코드, Jira, PR 또는 배포는 이번 조사에서 변경하지 않았다.

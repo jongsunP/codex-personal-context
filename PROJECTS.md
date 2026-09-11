@@ -54,9 +54,12 @@ For detailed current state, read:
 - Local workspace: `/Users/parkjongsun/repository/dentlink-client`
 - Use this main workspace unless the user explicitly requests another
   worktree.
-- Release target: `release/v1.79.0`
-- Current state: PR #4411 merged; wait for staging deployment, then run the
-  final local and staging E2E matrix.
+- Current inspected release: `release/v1.86.0`. The 2026-09-11 audit collects
+  109 tests in 16 files, including ten feedback tests. Recent dev/stage CI
+  processes failed despite successful workflow indicators; latest staging
+  failed in global setup and incorrectly reported `All tests passed`.
+  No full suite was rerun. Next work is accurate CI failure reporting and
+  diagnosis of current failures; feedback/native gaps are separate scopes.
 - Personal current checkpoint and history:
   `projects/dentlink-client-e2e.md`
 

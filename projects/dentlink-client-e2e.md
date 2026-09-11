@@ -1,6 +1,65 @@
-# Dentlink E2E staging-verification wait checkpoint - 2026-07-22
+# Dentlink E2E Current Audit - 2026-09-11
 
-This is the current resume source and supersedes every checkpoint below.
+This read-only audit supersedes older current-state claims below. No product
+file was changed and no actual test, server or CI workflow was started.
+
+- Web checkout: clean `release/v1.86.0` / `0e0878ef1`, live remote identical,
+  main checkout only. Use `/Users/parkjongsun/Repository/dentlink-client`.
+- Both development and staging `playwright test --list --project=clinic`
+  collect **109 tests in 16 files**: signup/validation 24, sign-in 3, onboarding
+  22, orders 26, Lab shipment 6, Lab status 12, LinkTalk 1, billing 5, feedback
+  10. Collection success is not a test pass. `clinic` includes Lab/Admin flows
+  but does not cover every web/Admin or native feature.
+- Local E2E starts Clinic/Lab/Admin at 3100/3105/3102 with `.next-e2e`;
+  staging uses deployed sites. Actual local/staging runs must remain sequential
+  because auth artifacts are shared. Three Default Scanner tests explicitly
+  skip; Referral/BP settings add two conditional skips. Other missing setup
+  conditions can skip further groups, including all ten feedback tests.
+
+## Recent CI Evidence — 2026-09-11
+
+| Run | Commit | Actual result | Feedback |
+| --- | --- | --- | --- |
+| [develop 34554799750](https://github.com/Innvoaid/dentlink-client/actions/runs/34554799750/job/103128701283), 12:04 KST complete | `01bfc93` | 85 passed, 4 failed, 5 skipped, 15 subsequent tests not run | Test 4: Completed-order feedback question not visible |
+| [prior stage 34555286833](https://github.com/Innvoaid/dentlink-client/actions/runs/34555286833/job/103132256089), 12:24 complete | `516c971` | 87 passed, 3 failed, 5 skipped, 14 subsequent tests not run | Test 1: dentist selection timeout in Lab order creation |
+| [latest stage 34564023735](https://github.com/Innvoaid/dentlink-client/actions/runs/34564023735/job/103156513198), 14:20 complete | `28e5e0b` | Global setup failed before test bodies; report 0/0/0 | Not run |
+
+- Each Playwright process exited 1 despite automatic workflow/job success.
+  Latest stage timed out clicking Sign in at `e2e/clinic/utils/signin.ts:80`
+  from global setup. Root cause remains unclassified. Other observed failures
+  include ISV option waits, Lab shipment patient GET waits, and an access-request
+  account login API 400. These symptoms do not establish product regressions.
+- Automatic dev/stage workflows use `continue-on-error: true` without final
+  failure propagation. Parsing checks `.stats.unexpected` only, ignoring
+  global errors and zero executions; latest stage incorrectly sent
+  `All tests passed`. Flaky counts are omitted. Manual stage E2E has a final
+  failed-count gate but retains the zero-count global-error gap.
+- These three workflow files match the inspected release/develop/stage refs.
+  Automatic runs include the full Clinic suite and feedback. Artifacts are
+  retained for seven days. No workflow was dispatched or rerun during this audit.
+
+## Feature And Execution Boundaries
+
+- Feedback uses ten stateful serial tests; run the complete spec. Historical
+  9/8 staging and 9/11 local DEV API 10/10 results are prior-run evidence, not
+  proof that later CI passed. Current coverage and data-cleanup gaps are in
+  `projects/dentlink-client-order-feedback.md`.
+- Native app Detox exists: five files, 21 declarations, no dedicated feedback
+  UI E2E, and static Android configuration mismatches. Its current success was
+  not verified. App feedback's 53/53 Jest evidence is not native E2E. Details
+  remain in `projects/dentlink-app.md`.
+- Next work: correct CI failure reporting, classify current whole-suite
+  failures, then address targeted feedback/native gaps in their authorized
+  scopes. The repeated-run criterion remains two consecutive local and two
+  consecutive staging full passes with current skip reasons explained.
+- Old worktree names, `codex/` branch examples, IDE-terminal requirements and
+  v1.79 expected counts below are historical; use the current common guidance.
+
+---
+
+## Historical staging-verification wait checkpoint - 2026-07-22
+
+The following is historical evidence, not the current release state.
 
 - Use `/Users/parkjongsun/repository/dentlink-client`, not a dedicated E2E
   worktree, unless the user explicitly requests another worktree.

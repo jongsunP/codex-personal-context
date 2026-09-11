@@ -3,8 +3,9 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current checkpoint is the final section, **FE Handoff Acceptance And
-Develop Integration - 2026-09-11**. Earlier PR review, notification design and
+The current product checkpoint is **FE Handoff Acceptance And Develop
+Integration - 2026-09-11**; the later E2E audit adds verification boundaries.
+Earlier PR review, notification design and
 delivery sections record the preceding implementation and decisions. Earlier
 dated delivery, review, API and runtime results below are historical, not
 current claims.
@@ -2512,3 +2513,21 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - Next work is the remaining QA workflow, release/Production coordination,
   or a newly confirmed defect or requirement. Use the feature-based session
   model in the common guidance, retaining separate Git boundaries for web/app.
+
+## Native E2E Inventory Audit - 2026-09-11
+
+- Read-only inspection at clean `feature/DL-16061` / `a8f3a6c` found Detox in
+  five files with 21 test declarations: Profile 5, order list 2, ISV order 6,
+  LinkTalk 5, Support 3. Office iOS/Android configurations exist; dedicated
+  feedback native UI E2E and Lab build configurations do not.
+- Feedback repository tests mock HTTP; deep-link tests inspect returned routes
+  rather than executing native screens. The handoff's six suites / 53 tests
+  are Jest code-level proof, not a native E2E pass.
+- Static Detox mismatch: Android development commands select
+  `android.dev.debug`, but configurations define `android.att.dev.debug`.
+  Emulator configurations also reference absent `android.debug` and
+  `android.release` app entries. Current successful execution is not established.
+- Tracked workflows do not run Jest/Detox. Existing root/package Jest config
+  overlap and historical App/Detox worker failures remain separate from the
+  focused feedback results. No tests, builds or devices were run in this audit;
+  product files were unchanged. Repairs/new E2E require their own work scope.
