@@ -7,6 +7,9 @@
 - Read `SESSION_WORKFLOW.md` for session start, resume, wrap-up, and
   repository-boundary rules.
 - Prefer documented context over AI memory.
+- Codex is the user's active development and repository-management agent.
+  `claude-personal-context` is a remote archive, not an active context source;
+  do not read or restore it unless the user explicitly asks.
 - When this user says `메모리`, treat the Git-backed
   `codex-personal-context` repository as the default meaning. Local Codex
   runtime memory under `~/.codex` is secondary and is not sufficient for

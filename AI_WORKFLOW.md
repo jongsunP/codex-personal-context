@@ -1,12 +1,22 @@
 # AI Workflow
 
-## Tool Separation
+## Codex Usage Model
 
-The user intentionally separates AI tools by purpose:
+Codex is the user's active AI for company development, personal repository
+work, and project coordination. Claude is no longer used in the active
+workflow, and its former context repository is an archive rather than a source
+to load at session start.
 
-- Claude: company development
-- Codex: side projects and repository work
-- ChatGPT: personal questions, coaching, and broader thinking
+Use multiple Codex sessions when separation improves ownership and context:
+
+- A projectless top-level management session may coordinate a product area
+  spanning multiple repositories.
+- Actual implementation belongs to a session rooted at the exact repository,
+  branch, or worktree that owns the change.
+- One session should be the active writer for one worktree unless the user
+  explicitly coordinates otherwise.
+- Durable continuity remains Git-backed in `codex-personal-context`; chat and
+  device-local session history are supplementary.
 
 ## Context Hierarchy
 

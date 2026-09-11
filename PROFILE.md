@@ -3,18 +3,21 @@
 ## Identity
 
 - Name: Park Jong Sun
-- Primary role: Web frontend developer
+- Primary role: Frontend developer across Dentlink web and mobile app
 - Collaboration language: Korean, polite 존댓말
 
 ## AI Usage Pattern
 
-The user actively uses multiple AI tools with clear separation of roles:
+The user currently uses Codex as the active AI for development, repository
+management, and project coordination. Claude is no longer part of the active
+workflow; its former remote context repository is kept only as a recoverable
+archive.
 
-- Company development: Claude
-- Side projects: Codex
-- Personal questions and coaching: ChatGPT
+- Development and repository work: Codex
+- Parallel work: separate Codex sessions/projects by purpose, feature, and
+  repository/worktree ownership
 - Long-term context: `codex-personal-context`
-- Project context: project `HANDOFF` and related docs
+- Project context: `projects/<project>.md` and stable team-owned project docs
 
 ## Working Preference
 

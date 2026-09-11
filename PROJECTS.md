@@ -60,15 +60,32 @@ For detailed current state, read:
 - Personal current checkpoint and history:
   `projects/dentlink-client-e2e.md`
 
+### Dentlink Frontend Coordination
+
+- Shared repositories:
+  - Web/Admin: `https://github.com/Innvoaid/dentlink-client`
+  - Mobile app: `https://github.com/Innvoaid/dentlink-app`
+- Session model: one projectless Dentlink FE top-level management session for
+  cross-repository intake and coordination; implementation remains in the
+  exact repository/branch/worktree session that owns each change.
+- No combined product folder or dedicated coordination worktree is required.
+- Current transition: Claude is no longer used, the former local Claude
+  context checkout was removed, and the existing web/app sessions should hand
+  off their verified state before the new top-level session becomes the main
+  coordination point.
+- Personal coordination checkpoint: `projects/dentlink-fe.md`
+- Detailed implementation checkpoints remain in their existing web and app
+  project files and must be verified against live Git.
+
 ### Dentlink Mobile App
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-app`
 - Main local checkout: `/Users/parkjongsun/Repository/dentlink-app`
 - Repository default branch: `main`; active feature base/PR target: `develop`
-- Role: ongoing product-development scope connected to Dentlink web. Web is the
-  primary workload, but mobile app work is active and must be developed
-  alongside web when a feature or user flow spans both; its task volume may be
-  smaller or intermittent.
+- Role: ongoing frontend product-development scope alongside Dentlink web.
+  The user currently owns both web and app work; cross-platform features are
+  coordinated together while implementation and Git state remain repository
+  specific.
 - Current state: initial setup and Office native feedback/API/deep-link/WebView
   integration are implemented. Latest `feature/DL-16061` commit `919a884`
   includes account-scoped cleanup, file-size checks and upload cancellation

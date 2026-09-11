@@ -24,6 +24,9 @@ Do not store secrets or private customer data here.
 ## Project Checkpoints
 
 - Action Sports Journal: `projects/action-sports-journal-app.md`
+- Dentlink frontend coordination: `projects/dentlink-fe.md`
+- Dentlink web order feedback: `projects/dentlink-client-order-feedback.md`
+- Dentlink mobile app: `projects/dentlink-app.md`
 
 Use `PROJECTS.md` for repository paths and the broader project index.
 

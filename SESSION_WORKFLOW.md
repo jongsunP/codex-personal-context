@@ -127,10 +127,43 @@ This separation exists to reduce context contamination. It does not need to be
 rigid, but important implementation work and strategic decisions should be
 summarized into durable docs before being reused elsewhere.
 
+## Dentlink Frontend Top-Level Session Model
+
+Dentlink frontend work spans `dentlink-client` and `dentlink-app`. Manage this
+as a hierarchy of Codex responsibilities rather than forcing the whole product
+into one checkout.
+
+- Keep one projectless Dentlink FE top-level management session with no
+  dedicated product folder or worktree. It owns work intake, web/app impact
+  classification, shared product and API decisions, priority, release and
+  deployment tracking, implementation-session prompts, and final closeout.
+- The top-level session may inspect both repositories, but it must not treat
+  them as one Git repository or edit them from an ambiguous working directory.
+  Before a mutation, confirm the exact repository and authorization boundary.
+- Perform actual implementation in a repository-bound feature session rooted
+  at the exact branch or worktree. A cross-platform feature may therefore use
+  one web implementation session and one app implementation session while the
+  top-level session keeps the shared outcome aligned.
+- A main-checkout session may still act as a repository administrator when
+  branch, worktree, release, or cleanup work needs a concrete checkout. This is
+  a repository-level helper role beneath the Dentlink FE top-level session, not
+  the durable cross-repository authority.
+- At handoff or closeout, each implementation or repository session updates its
+  own personal checkpoint and reports the verified current state to the
+  top-level session. The top-level checkpoint links those records and stores
+  only cross-repository decisions and coordination state rather than copying
+  their full histories.
+
+This session hierarchy does not require a combined product repository, parent
+workspace, or new worktree. Its portable source of truth is
+`projects/dentlink-fe.md` plus the relevant web and app checkpoint files.
+
 ## Main Worktree And Feature Session Model
 
 For repositories where the user keeps a long-lived main worktree, treat its
-Codex session as the repository administrator and `master` management session.
+Codex session as the repository administrator and `master` management session
+when that role is needed. For Dentlink this is subordinate to the frontend
+top-level coordination model above.
 That session may keep `master` synchronized, inspect repository-wide state,
 create and remove worktrees and branches, prepare new feature environments,
 and handle work that explicitly belongs to the main worktree. Do not mix an

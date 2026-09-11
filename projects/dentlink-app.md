@@ -10,9 +10,9 @@ review, API and runtime results below are historical, not current claims.
 
 ## Project Role And Continuity
 
-- Dentlink web remains the user's primary workload, while the connected mobile
-  app is also an ongoing product-development scope. It is not inactive or
-  optional; "secondary" describes relative task volume and priority only.
+- The user currently owns frontend work across both Dentlink web and mobile
+  app. Do not treat the app as an optional or secondary scope merely because
+  the user's earlier workload and experience were web-centered.
 - Expect both occasional small app tasks and features whose user flow spans web
   and mobile. For cross-surface work, inspect the relevant web and app code,
   API contracts, release paths, and QA impact together.
@@ -39,8 +39,9 @@ review, API and runtime results below are historical, not current claims.
 ## User Background And Guidance Style
 
 - The user is an experienced frontend developer working primarily with React
-  and TypeScript. Assume familiarity with components, hooks, state, API flows,
-  types, styling, review, and web delivery; do not teach these from zero.
+  and TypeScript who now handles both Dentlink web and app work. Assume
+  familiarity with components, hooks, state, API flows, types, styling,
+  review, and web delivery; do not teach these from zero.
 - The knowledge gap is the mobile ecosystem around otherwise familiar React
   code. Explain unfamiliar concepts by mapping them to web equivalents, then
   focus on the mobile-specific difference and the practical consequence.
@@ -48,11 +49,10 @@ review, API and runtime results below are historical, not current claims.
   boundary; cross-platform or platform-specific; Metro-refreshable or requires
   a native rebuild; simulator-verifiable or needs a physical device; and safe
   for the user to implement or better handed to the app developer.
-- The user's intended scope is supporting app functionality connected to a
-  web-led feature. The app developer owns deep native work, signing, release
-  and store deployment, and final specialist review. Ask before implementation
-  when a requested change crosses that boundary or carries material platform
-  risk.
+- The user's current scope includes web and app frontend delivery. Deep native
+  work, signing, store deployment, and final platform-specialist review may
+  still require the app developer. Ask before implementation when a requested
+  change crosses that boundary or carries material platform risk.
 - Guide in context while doing the work: explain permissions, lifecycle,
   navigation, storage, networking, push, deep links, build variants, and
   device/simulator constraints only as they become relevant. Keep explanations

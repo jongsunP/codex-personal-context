@@ -1,5 +1,20 @@
 # Memory Changelog
 
+## 2026-09-11
+
+- Replaced the former Claude/company and Codex/side-project split with Codex as
+  the active development, repository-management, and project-coordination
+  agent. The remote `claude-personal-context` repository remains an archive,
+  while its clean local checkout was removed.
+- Added a Dentlink FE session hierarchy: one projectless top-level management
+  session coordinates work spanning `dentlink-client` and `dentlink-app`, and
+  actual implementation remains owned by exact repository/branch/worktree
+  sessions with one active writer per worktree.
+- Kept repository main-checkout sessions as optional repository-administration
+  helpers beneath the cross-repository top-level session, and added
+  `projects/dentlink-fe.md` as the portable coordination checkpoint without
+  creating a combined product folder or worktree.
+
 ## 2026-09-08
 
 - Promoted the QA-comment audience rule into the global personal `AGENTS.md`,

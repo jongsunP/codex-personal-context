@@ -59,7 +59,7 @@ when relevant.
 - `SESSION_WORKFLOW.md`: start, resume, wrap-up, session-role, and repository
   boundary rules
 - `PROFILE.md`: stable user profile
-- `AI_WORKFLOW.md`: how the user separates AI tools and context
+- `AI_WORKFLOW.md`: Codex session ownership and context operating model
 - `DEVELOPMENT_STYLE.md`: coding and product collaboration preferences
 - `DECISION_FRAMEWORK.md`: preferred structure for decisions
 - `FITNESS.md`: fitness and action sports context
