@@ -1,12 +1,13 @@
-# Dentlink Mobile App setup and current checkpoint - 2026-09-03
+# Dentlink Mobile App setup and current checkpoint - 2026-09-11
 
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current checkpoint is the final section, **DL-15828 QA Follow-up Closeout -
-2026-09-08**. Earlier PR review, notification design and delivery sections
-record the preceding implementation and decisions. Earlier dated delivery,
-review, API and runtime results below are historical, not current claims.
+The current checkpoint is the final section, **Dentlink App Session Final
+Handoff - 2026-09-11 15:07 KST**. Earlier PR review, notification design and
+delivery sections record the preceding implementation and decisions. Earlier
+dated delivery, review, API and runtime results below are historical, not
+current claims.
 
 ## Project Role And Continuity
 
@@ -87,11 +88,10 @@ review, API and runtime results below are historical, not current claims.
 - Repository default branch: `main`
 - Active feature base and PR target: `develop`
 - Current branch: `feature/DL-16061`
-- Current HEAD: `943a29038603f6b815477498efa0a5addb7fb3b2`
-- The checkout is clean and synchronized with `origin/feature/DL-16061` after
-  the user explicitly authorized the 2026-09-08 QA fix commit and push.
+- Current HEAD: `a8f3a6cbb81c218b7ab16bed8e7d4b71fab45dd7`
+- The checkout is clean and synchronized with `origin/feature/DL-16061`.
 - `origin/develop` is `967ba71b1f864ce581c999950dd74fbb28eff046`;
-  the feature branch is 54 commits ahead / 1 commit behind by graph. The sole
+  the feature branch is 56 commits ahead / 1 commit behind by graph. The sole
   develop-only release merge has the same tree as its feature-side parent, so
   it introduces no missing product-code change into the current feature
   checkout. Re-verify this time-sensitive status before future work.
@@ -2402,3 +2402,79 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
 - Jira was inspected but not mutated in this follow-up. Its live state was
   `CHECK REQUEST` at inspection; re-read the card before any future comment or
   workflow transition.
+
+## Dentlink App Session Final Handoff - 2026-09-11 15:07 KST
+
+- Live product repository verification used
+  `/Users/parkjongsun/Repository/dentlink-app` after an origin fetch. The
+  checkout is `feature/DL-16061` at
+  `a8f3a6cbb81c218b7ab16bed8e7d4b71fab45dd7`, tracks
+  `origin/feature/DL-16061`, is ahead/behind `0/0`, and has no tracked or
+  untracked change. The remote branch resolves to the same commit.
+- The repository has one registered worktree, the main checkout above. Local
+  branches are the active feature and `main`; local `main` has no unique commit
+  but is nine commits behind `origin/main`. Preserve both branches and the sole
+  worktree. The feature is still open in PR #286 and is not contained by
+  `develop`, `main`, or a release branch, so there is no safe cleanup target at
+  this handoff.
+- `origin/develop` and `origin/main` are both
+  `967ba71b1f864ce581c999950dd74fbb28eff046`. The feature is 56 commits ahead
+  and one release-merge commit behind `origin/develop`. That develop-only merge
+  has the same tree as its already-contained parent `aa82c4c`, so the graph is
+  behind without a missing product tree delta. Reconcile again at the actual
+  merge gate rather than merging only to remove that graph count.
+- GitHub PR #286 is open, non-draft, targets `develop`, and points to exact head
+  `a8f3a6c`. GitHub reports `MERGEABLE/CLEAN`; Auto PR Labels and the current
+  CodeRabbit status check pass, and all 16 review threads are resolved. There
+  is no formal human approval. The latest human review is `COMMENTED`, and a
+  green latest-head CodeRabbit status must not be overstated as a new formal
+  full review of every commit after its last submitted review.
+- The confirmed Office app scope is implemented: Profile entry/count and push
+  preferences; native feedback infinite list and shared detail screen;
+  immediate Good/Bad POST with current-screen presentation state; complete
+  detail PUT; server-canonical questions/options; maximum five attachments and
+  200 MB total using the existing upload stack; feedback analytics; employer
+  switching and feedback list/detail deep links; direct detail deep-link entry;
+  order-detail WebView-to-native navigation and successful-submit refresh; and
+  the accepted Profile, Safe Area, icon, card, tab, loading, image, spacing and
+  attachment-copy QA corrections. No confirmed in-scope app FE implementation
+  remains at this handoff.
+- Live Jira read-only verification: DL-16061, DL-16064, DL-16066, DL-16311,
+  DL-16322, DL-16324, DL-16325, DL-16330, DL-16349, DL-16352 and DL-16362 are
+  complete. DL-16229 and DL-16353 are `READY FOR QA`; DL-16353's code and user
+  Staging check are complete but its Jira workflow is not closed. Parent
+  DL-15828 remains in progress at 76% because it includes BE and wider QA
+  scope; that is not evidence of unfinished app FE implementation. DL-16385 is
+  an order-detail WebView/BE `isReviewable` contract item, not a missing native
+  implementation.
+- Current-HEAD code checks: six focused Jest suites pass 53/53 tests;
+  branch-changed non-generated JS/TS ESLint has zero errors and 15 warnings;
+  relevant non-generated Prettier checks and `git diff --check` pass. Office
+  and Lab typechecks each report the same 11 known repository diagnostics in
+  unchanged non-feedback files. Full-repository `yarn lint` is not a clean gate
+  because it also scans generated Android assets and existing repository lint
+  debt; do not misreport the focused pass as a whole-repository pass.
+- Current runtime state at handoff is intentionally idle: no Metro listener,
+  Reactotron listener/app, connected Android device/emulator, or booted iOS
+  Simulator. The latest reusable runtime evidence remains the 2026-09-07
+  current-feature Android build/install and installed iOS Development app plus
+  Metro checks, with Reactotron connected on both. A fresh iOS native build
+  still has the documented MLImage Simulator-architecture constraint; this
+  does not block the installed-app plus Metro JS/TS loop.
+- Revopush live history confirms Office 2.2.3 Staging mandatory/enabled label
+  `v319` on both iOS and Android at 100% rollout. Live metrics show installs on
+  both platforms. The user separately confirmed the deployed header-to-tab fix
+  and previously confirmed the v318 direct-detail behavior, but did not state a
+  platform-by-platform functional QA split. This proves publication, uptake,
+  and user-observed behavior separately; it does not prove every mutation,
+  camera/file picker, FCM lifecycle, or production runtime path.
+- The feature head is not in a Git release branch, and no evidence ties this
+  exact feature head to the current Production CodePush. Review/approval,
+  merge, release integration and wider device QA therefore remain normal
+  delivery gates rather than missing implementation.
+- Next starting point for the projectless Dentlink FE management session:
+  pull personal context, fetch the app repository, verify PR #286 and live Jira,
+  then resume app code only for a new QA card, reviewer finding, or confirmed
+  API/design/product change. For the present work, finish DL-16229 and DL-16353
+  QA workflow as evidence allows, obtain app review approval, and coordinate
+  merge/release without deleting `feature/DL-16061` beforehand.
