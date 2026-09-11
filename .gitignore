@@ -20,3 +20,6 @@
 !setup-local-codex.sh
 !projects/
 !projects/**/*.md
+!skills/
+!skills/dentlink-web-e2e/
+!skills/dentlink-web-e2e/SKILL.md

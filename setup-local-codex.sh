@@ -19,6 +19,7 @@ SYNC_PATHS=(
   "VEHICLE.md"
   "projects/action-sports-journal-app.md"
   "projects/README.md"
+  "skills/dentlink-web-e2e/SKILL.md"
 )
 
 if [[ ! -f "$REPO_ROOT/AGENTS.md" ]]; then

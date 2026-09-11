@@ -58,8 +58,10 @@ For detailed current state, read:
   109 tests in 16 files, including ten feedback tests. Recent dev/stage CI
   processes failed despite successful workflow indicators; latest staging
   failed in global setup and incorrectly reported `All tests passed`.
-  No full suite was rerun. Next work is accurate CI failure reporting and
-  diagnosis of current failures; feedback/native gaps are separate scopes.
+  No full suite was rerun. Current improvement is web-only, including feedback:
+  reliable full-suite staging execution usable by a PM, accurate CI reporting,
+  and diagnosis of current failures. No fixed pass count defines completion;
+  native app E2E is deferred.
 - Personal current checkpoint and history:
   `projects/dentlink-client-e2e.md`
 

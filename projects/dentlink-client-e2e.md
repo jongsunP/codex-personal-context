@@ -16,6 +16,50 @@ file was changed and no actual test, server or CI workflow was started.
   skip; Referral/BP settings add two conditional skips. Other missing setup
   conditions can skip further groups, including all ten feedback tests.
 
+## Operating Purpose And Current Scope — clarified 2026-09-11
+
+- This improvement covers web E2E, including feedback. Native app E2E is
+  excluded from the current work.
+- The operating goal is for a PM to run the full suite against the deployed
+  staging release before production delivery and trust the result within the
+  tested coverage. Local development and focused checks support that workflow;
+  final staging whole-suite evidence is still required.
+- Reliability means expected behavior passes and real deviations are detected
+  under equivalent, explicit preconditions. Correctly rejecting invalid input
+  can be a passing test. A test's own setup, leftover account/data/session
+  state, or execution order must not create unexplained outcome changes.
+- Compare the execution boundaries relevant to the observed problem: focused
+  versus whole-suite runs, UI Reload, runner stop/restart, and local versus
+  staging. Record tested and deployed versions; real version/configuration
+  differences can justify different results and must be explained.
+- There is no fixed run count, including no two-pass minimum, that defines
+  completion. Choose sufficient evidence for the change and the failure modes,
+  reproduce the original trigger, verify correction and affected whole-suite
+  behavior, and disclose unresolved instability. Repeating until green is not
+  evidence that a problem is resolved. Historical two-run checks below are
+  examples of evidence collected at that time, not a current gate.
+- Preserve the intent of existing port isolation (3100/3105/3102), auth/team
+  preparation, runner ownership, and cleanup. Inspect whether those measures
+  work before retaining or changing them; their history does not make the
+  implementation immutable. PM execution should have predictable preparation
+  and cleanup rather than require undocumented manual repair.
+- Diagnose product, test, and environment causes from current UI, API, and
+  trace evidence. A pass on retry does not establish a test-code fault; it can
+  expose an intermittent product or server defect. Do not weaken assertions,
+  retry until green, or add skips to hide the cause.
+- Report pass, product/test failure, execution/setup error, allowed skip,
+  unexpected nonexecution, and flaky results accurately. Intentional unset
+  scenarios need explicit reasons. A zero-test/setup failure is not success.
+- For this work, IDE visibility is for reviewing edited files and diffs.
+  Codex may execute and iterate in its own terminal; visible test UI is useful
+  but is not a prerequisite when headless execution with artifacts is better.
+- Current personal skill source: `skills/dentlink-web-e2e/SKILL.md`, installed
+  by `setup-local-codex.sh`. The shared repository's legacy
+  `.claude/skills/e2e/SKILL.md` still contains a two-pass completion gate,
+  retry-success-equals-test-bug diagnosis, and a three-attempt stop rule.
+  Those rules are superseded for this task. Align that team-owned file during
+  authorized product work; it was not changed in this personal-context update.
+
 ## Recent CI Evidence — 2026-09-11
 
 | Run | Commit | Actual result | Feedback |
@@ -48,10 +92,11 @@ file was changed and no actual test, server or CI workflow was started.
   UI E2E, and static Android configuration mismatches. Its current success was
   not verified. App feedback's 53/53 Jest evidence is not native E2E. Details
   remain in `projects/dentlink-app.md`.
-- Next work: correct CI failure reporting, classify current whole-suite
-  failures, then address targeted feedback/native gaps in their authorized
-  scopes. The repeated-run criterion remains two consecutive local and two
-  consecutive staging full passes with current skip reasons explained.
+- Next work: correct CI failure reporting, classify and address current
+  whole-suite reliability failures, then fill targeted web feedback gaps.
+  Use the operating purpose above to select validation evidence. Native app
+  work is deferred. Product implementation and runtime validation have not
+  started; a new work branch/worktree has not been authorized or created.
 - Old worktree names, `codex/` branch examples, IDE-terminal requirements and
   v1.79 expected counts below are historical; use the current common guidance.
 
@@ -90,7 +135,7 @@ The following is historical evidence, not the current release state.
 - Jira: `DL-15560`
 - Release target: `release/v1.79.0`
 
-## E2E Policy
+## Historical E2E Policy — superseded by the current operating purpose above
 
 - 원래 통과하는 시나리오는 실행 시점이나 반복 횟수와 무관하게 안정적으로 통과해야 한다.
 - 원래 실패해야 하는 시나리오는 계속 실패해야 한다.

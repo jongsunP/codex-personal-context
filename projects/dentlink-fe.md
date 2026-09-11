@@ -121,3 +121,8 @@ Detailed implementation history remains in the relevant existing project file.
 - Keep accurate CI result reporting, actual suite stability, feedback coverage
   and native Detox readiness as separate work items. Current CI success
   indicators overstate actual E2E success.
+- The user subsequently limited this improvement to web, including feedback;
+  app E2E is deferred. Its goal is trustworthy full-suite staging execution
+  usable by a PM before production delivery. Fixed pass counts are neither the
+  objective nor a minimum completion gate. Current policy and the revised
+  personal skill are tracked in `projects/dentlink-client-e2e.md`.

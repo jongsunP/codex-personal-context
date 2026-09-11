@@ -36,6 +36,14 @@ Trust context in this order:
 
 If there is conflict, ask or follow the more explicit and more recent source.
 
+Use history, checkpoints, and skills to understand the intent behind a
+procedure. A past run count or successful workaround is not automatically a
+permanent requirement or completion criterion. When the user clarifies the
+goal, update the relevant maintained guidance and skills within the authorized
+scope; preserve historical evidence with a clear superseded label. Judge the
+current work by evidence that supports its purpose, not by mechanical replay
+of an old checklist.
+
 Remote state has priority over local-only state. Before relying on local
 project or context files, pull the relevant repository when possible. If local
 state differs from remote state, do not assume local is correct unless the user
