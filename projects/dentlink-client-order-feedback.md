@@ -1491,3 +1491,47 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   링크를 대상으로 FAILURE지만 코드 검증 실패로 확인된 것은 아니다.
 - 이번 단계는 환경 branch 재생성과 배포 PR 준비까지다. PR merge, 실제 스테이징
   배포, 배포 revision 및 화면 QA는 아직 완료로 기록하지 않는다.
+
+## `isReviewable` 반영과 세션 최종 종료 — 2026-09-11
+
+- 과거 완료 주문을 별도 마이그레이션 없이 피드백 대상에서 제외하기 위해 주문상세의
+  피드백 조회·노출 gate를 `status === "COMPLETED"`에서 서버 정본인
+  `OrderDto.isReviewable === true`로 변경했다. BE 확인상 피드백 작성 후에도
+  `isReviewable`은 `true`를 유지하고, `true`인 주문의 피드백 상세 GET은 200을 보장한다.
+- 개발 Swagger 전체 생성 결과에는 피드백과 무관한 광범위한 변경이 포함돼 해당 drift는
+  제외하고, 실제 필요한 generated contract인
+  `shared/models/src/data-contracts.ts`의 `isReviewable?: boolean`만 반영했다. Clinic
+  주문상세는 이 필드를 사용하며 다른 order status fallback은 두지 않는다.
+- 변경 branch `fix/DL-16385-order-feedback-reviewable`의 제품 commit은
+  `7a657b2bbe3033bedd81d20d852669ac419b441d`다. release PR
+  [#4600](https://github.com/Innvoaid/dentlink-client/pull/4600)은
+  `606a7b73b20ea8b801cc7b1ca7beae3f0e0f004f`로 merge됐다. 이후 release head는
+  `0e0878ef1c5b1cc2dbec44c57a740e0e072cdad7`까지 진행됐고 #4600을 포함한다.
+- 개발서버는 기존 develop을 보존한 통합 branch로 PR
+  [#4602](https://github.com/Innvoaid/dentlink-client/pull/4602)를 만들었고
+  `01bfc93e8ac23aff4e5a6dbe1d3ce82be3f3baa9`로 merge됐다. 이 통합 branch가 제품
+  commit을 직접 포함했으므로 #4600의 선행 merge 여부와 무관하게 동일 수정이 들어갔다.
+- 첫 stage 전달은 #4600보다 먼저 실행돼 수정이 빠졌으므로 stage를 최신 master에서 다시
+  만들고 release 전체를 전달한 PR
+  [#4603](https://github.com/Innvoaid/dentlink-client/pull/4603)을 merge했다. 최종 정리
+  시점의 `origin/stage`는 `28e5e0b1ef5ba43c620350e90eaa0fc751db7791`이며 squash 이력
+  형태와 무관하게 `isReviewable` 코드와 generated 필드를 직접 확인했다. 사용자 확인상
+  개발·스테이징 배포 작업은 처리됐다.
+- 검증은 Clinic·Lab·Admin typecheck, 대상 ESLint·Prettier, `git diff --check`, E2E
+  TypeScript와 10개 테스트 수집을 통과했다. 로컬 DEV API 기반 피드백 E2E 전체도
+  10/10 통과했다. 테스트 범위는 주문 생성·상태 전환·주문상세 및 목록 노출,
+  Good/Bad POST, 상세 PUT·재조회·수정, 직접 URL 진입을 포함한다.
+- 2026-09-11 최종 live Git에서 `origin/release/v1.86.0`, `origin/develop`,
+  `origin/stage` 모두 주문상세의 `isReviewable === true` gate와 generated
+  `isReviewable?: boolean`을 포함함을 재확인했다. `origin/master`는 여전히
+  `ddeeb1e868c64f3e1047170f6bc6282a9646ed97`의 v1.85.1 기준이므로 v1.86.0 운영 반영은
+  release·개발·스테이징 상태와 별도로 확인해야 한다.
+- 세션 종료 시 제품 메인 checkout은
+  `/Users/parkjongsun/Repository/dentlink-client`, local `release/v1.86.0` / remote
+  `origin/release/v1.86.0`과 동일한 `0e0878ef1`에서 clean이다. 전용 worktree
+  `/Users/parkjongsun/Repository/dentlink-client-order-feedback`와 세션용 로컬 작업
+  branch는 제거했다. 원격 이력은 보존했다.
+- 현재 알려진 추가 웹 FE 구현은 없다. 새 QA 카드나 기획·디자인·Swagger 변경이 생기면
+  메인 Dentlink 세션에서 개인 컨텍스트와 live Git/Jira/Notion/Figma/Swagger를 다시
+  reconcile하고, 실제 배포 대상 branch를 기준으로 새 작업 branch/worktree를 만든다.
+  앱 후속은 `dentlink-app`의 별도 세션과 체크포인트를 따른다.

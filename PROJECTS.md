@@ -169,26 +169,20 @@ For detailed current state, read:
 ### Dentlink 주문 피드백 수집
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Dedicated worktree:
-  `/Users/parkjongsun/Repository/dentlink-client-order-feedback`
-- Branch: `feature/DL-15828`
+- Dedicated worktree: 없음. 2026-09-11 최종 정리에서 제거했다.
+- Current checkout: `/Users/parkjongsun/Repository/dentlink-client`
+- Current release branch: `release/v1.86.0`
 - Jira: parent `DL-15828`
-- Current state: Clinic PC·웹 모바일의 `/my/feedback`, 마이페이지 Quick Links·My
-  Office 모달, 목록·상세 drawer·파일 첨부, 주문 상세 배너를 실제 Office 피드백
-  GET/POST/PUT API와 React Query cache에 연결했다. 딥링크는
-  `/my/feedback?orderId={orderId}`다. 2026-09-03 최신 master `ddeeb1e86`을 작업 브랜치에
-  충돌 없이 병합한 `b5627921b`를 push했고 원격과 동일한 clean 상태다.
-  주문상세 배너의 Edit 판단을 클릭 이벤트에도
-  전달해 Good 단독 평가의 이벤트 오분류를 수정했으며 기존 WebView/native 분기와 저장은
-  유지했다. 현재 확정 요구사항에서 추가로 확인된 웹 FE 코드 수정은 모두 처리했다.
-  관리자 세 진입점은 `orderId + reviewerUserId` 상세 GET과 ORDER READ 권한을 사용한다.
-  PR #4555는 `release/v1.86.0` 대상 OPEN이며 최신 commit이 반영됐다. 사용자 지시로
-  원격 develop을 삭제 후 최신 원격 master에서 재생성했고, 작업 브랜치 → develop
-  PR #4571을 생성했다. 기존 개발 배포본에 WebView bridge가 빠진 것을 실제 JS로
-  확인했으며, 새 PR merge·배포 후 실기기 확인은 별도다. PR은 임의로 merge하지 않았다.
-  완료 후 취소 주문의 배너 정책은 Notion과 기존 Figma/코드가 충돌하므로 확정 대기이며
-  QA·배포·Jira 정리는 이번 코드 작업 범위에서 제외했다. 첨부는 5개·총 200MB를 유지한다.
-  앱은 별도 저장소·세션에서 진행하며 신규 알림 설정 DL-16285는 pushType 계약 대기다.
+- Current state: DL-15828 웹 구현·관리자 조회·WebView/native 진입·Amplitude·QA 수정과
+  피드백 E2E 10개가 `release/v1.86.0`에 반영돼 있다. 주문상세 피드백 조회·노출 gate는
+  과거 주문을 제외하기 위해 `status === COMPLETED`가 아니라 서버의
+  `OrderDto.isReviewable === true`를 정본으로 사용한다. 이 후속 수정은 PR #4600으로
+  release에, PR #4602로 develop에, release 재전달 PR #4603 이후 stage에 반영됐다.
+  2026-09-11 live Git에서 세 원격 branch의 코드와 generated contract를 재확인했다.
+  사용자 확인상 개발·스테이징 배포 작업은 처리됐으며, 원격 master는 아직
+  `release/v1.85.1` 기준이므로 v1.86.0 운영 반영은 별도 단계다. 현재 알려진 추가 웹 FE
+  구현은 없고 새 QA·기획·디자인·Swagger 변경이 생기면 메인 checkout에서 live 상태를
+  재확인한 뒤 새 작업 branch/worktree를 준비한다. 앱은 별도 저장소·세션 범위다.
 - Personal current checkpoint:
   `projects/dentlink-client-order-feedback.md`
 
