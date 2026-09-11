@@ -14,8 +14,9 @@ workflow; its former remote context repository is kept only as a recoverable
 archive.
 
 - Development and repository work: Codex
-- Parallel work: separate Codex sessions/projects by purpose, feature, and
-  repository/worktree ownership
+- Parallel work: organize Codex sessions primarily by purpose and feature,
+  regardless of device; preserve exact repository/worktree ownership inside
+  each session
 - Long-term context: `codex-personal-context`
 - Project context: `projects/<project>.md` and stable team-owned project docs
 

@@ -140,10 +140,15 @@ into one checkout.
 - The top-level session may inspect both repositories, but it must not treat
   them as one Git repository or edit them from an ambiguous working directory.
   Before a mutation, confirm the exact repository and authorization boundary.
-- Perform actual implementation in a repository-bound feature session rooted
-  at the exact branch or worktree. A cross-platform feature may therefore use
-  one web implementation session and one app implementation session while the
-  top-level session keeps the shared outcome aligned.
+- Organize additional implementation sessions by feature, not by device or
+  repository. One feature session may coordinate and implement both web and app
+  portions across their separate repositories. It must confirm the exact path,
+  branch, and worktree before every repository mutation and keep the two Git
+  histories independent.
+- The top-level session may directly handle a small, clearly scoped change when
+  that is simpler and the exact repository boundary is confirmed. Create
+  separate web/app or repository-specific sessions only when parallelism,
+  change size, runtime isolation, or ownership risk makes the split useful.
 - A main-checkout session may still act as a repository administrator when
   branch, worktree, release, or cleanup work needs a concrete checkout. This is
   a repository-level helper role beneath the Dentlink FE top-level session, not
@@ -188,12 +193,14 @@ cleanup.
    children, comments, and accessible linked sources together with the closest
    current production code. Report the understood scope, evidence gaps, and
    only the questions that materially affect implementation.
-4. Create one dedicated `feature/<Jira>` branch and one sibling worktree from
-   the requested or default base, then push the new branch and set its correct
-   upstream when the user requests remote setup.
-5. Create or open a separate Codex project and session rooted at that feature
-   worktree. Treat that session as the sole implementation scope for the
-   feature.
+4. In each affected repository, create the dedicated `feature/<Jira>` branch
+   and sibling worktree needed for that repository from the requested or
+   default base. Push and set upstream only when the user requests remote
+   setup.
+5. Create or open one Codex session for the logical feature and explicitly
+   assign every affected repository/worktree to it. The same feature session
+   may own both web and app work; do not create separate sessions solely because
+   the repositories or execution devices differ.
 6. From the main session, give the feature session a copyable startup prompt
    containing the user's common working style, personal-context read order,
    repository and permission boundaries, validation/reporting rules, exact
@@ -206,10 +213,11 @@ cleanup.
    worktree is clean and its commits are preserved remotely or merged before
    removing the local worktree and branch.
 
-The main session remains responsible for repository-level coordination and
-master-related work, while each feature session owns edits, checks, commits,
-pushes, and PR work inside only its assigned worktree and only within the
-user's authorization boundaries.
+The Dentlink FE top-level session remains responsible for cross-feature
+coordination. Each feature session owns edits, checks, commits, pushes, and PR
+work only inside its explicitly assigned repository/worktrees and within the
+user's authorization boundaries. A main-checkout session may assist with
+repository administration when needed.
 
 ## Worktree And Session Improvement Backlog
 
@@ -219,13 +227,14 @@ product feature or Jira card.
 
 The current operating model is intentional and valid:
 
-- Map one substantial feature responsibility to one branch, one worktree, and
-  one dedicated Codex project/session scope.
-- Keep the long-lived main checkout and its session responsible for repository
-  administration, shared branch synchronization, release ownership when
-  appropriate, and requested worktree lifecycle management.
-- Keep implementation ownership in the assigned feature worktree so parallel
-  AI work does not mix code state or task context.
+- Map one substantial logical feature to one dedicated Codex feature-session
+  scope, with a separate branch/worktree for each affected repository.
+- Keep long-lived main checkouts available for repository administration,
+  shared branch synchronization, release ownership when appropriate, and
+  requested worktree lifecycle management; they are not permanent session
+  boundaries.
+- Keep implementation ownership in the worktrees assigned to that feature
+  session so parallel AI work does not mix code state or task context.
 - This is the default isolation model, not a temporary workaround. Do not
   replace it merely because another tool offers cloud sandboxes or automatic
   branch creation.
@@ -412,7 +421,11 @@ the same repository does not make it part of that session's scope. Do not move
 implementation or Git operations across that boundary unless the user
 explicitly redirects the session after the target path is confirmed.
 
-Assume project-internal Codex sessions are local-device-bound. For remote work
+Assume project-internal Codex sessions are local-device-bound technically, but
+do not use the device as the unit of work organization. Preserve one logical
+feature scope across devices through Git-backed checkpoints, and reconstruct or
+continue that feature context on the available device rather than creating an
+office session and a home session as separate responsibilities. For remote work
 continuity, treat Git-backed documents as the durable source of truth, not the
 current device's local session state.
 

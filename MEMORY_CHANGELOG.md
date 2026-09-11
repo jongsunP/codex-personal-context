@@ -8,12 +8,20 @@
   while its clean local checkout was removed.
 - Added a Dentlink FE session hierarchy: one projectless top-level management
   session coordinates work spanning `dentlink-client` and `dentlink-app`, and
-  actual implementation remains owned by exact repository/branch/worktree
-  sessions with one active writer per worktree.
+  actual implementation is organized by logical feature rather than device or
+  repository. One feature session may own both web and app changes while each
+  repository keeps its exact branch/worktree and one active writer.
 - Kept repository main-checkout sessions as optional repository-administration
   helpers beneath the cross-repository top-level session, and added
   `projects/dentlink-fe.md` as the portable coordination checkpoint without
   creating a combined product folder or worktree.
+- Clarified that the top-level session may directly handle a small scoped
+  change, while extra repository-specific sessions are created only when size,
+  parallelism, runtime isolation, or ownership risk justifies them.
+- Clarified that the lasting unit of session ownership is a feature or
+  responsibility, not a device or repository. One feature session may handle
+  both web and app repositories while preserving their exact Git boundaries;
+  the top-level session may also complete small, well-scoped changes directly.
 
 ## 2026-09-08
 

@@ -65,17 +65,18 @@ For detailed current state, read:
 - Shared repositories:
   - Web/Admin: `https://github.com/Innvoaid/dentlink-client`
   - Mobile app: `https://github.com/Innvoaid/dentlink-app`
-- Session model: one projectless Dentlink FE top-level management session for
-  cross-repository intake and coordination; implementation remains in the
-  exact repository/branch/worktree session that owns each change.
+- Session model: one projectless Dentlink FE top-level management session plus
+  feature-based sessions when useful. A feature session may handle both web and
+  app repositories; session identity is not divided by device or repository,
+  while each Git mutation still targets an exact branch/worktree.
 - No combined product folder or dedicated coordination worktree is required.
 - Current transition: Claude is no longer used, the former local Claude
   context checkout was removed, and the existing web/app sessions should hand
   off their verified state before the new top-level session becomes the main
   coordination point.
 - Personal coordination checkpoint: `projects/dentlink-fe.md`
-- Detailed implementation checkpoints remain in their existing web and app
-  project files and must be verified against live Git.
+- Detailed repository checkpoints remain in their existing web and app project
+  files and must be verified against live Git.
 
 ### Dentlink Mobile App
 
@@ -199,7 +200,8 @@ For detailed current state, read:
   사용자 확인상 개발·스테이징 배포 작업은 처리됐으며, 원격 master는 아직
   `release/v1.85.1` 기준이므로 v1.86.0 운영 반영은 별도 단계다. 현재 알려진 추가 웹 FE
   구현은 없고 새 QA·기획·디자인·Swagger 변경이 생기면 메인 checkout에서 live 상태를
-  재확인한 뒤 새 작업 branch/worktree를 준비한다. 앱은 별도 저장소·세션 범위다.
+  재확인한 뒤 새 작업 branch/worktree를 준비한다. 앱은 별도 Git 저장소 경계를
+  유지하지만, 같은 DL-15828 기능 세션에서 웹과 함께 처리할 수 있다.
 - Personal current checkpoint:
   `projects/dentlink-client-order-feedback.md`
 

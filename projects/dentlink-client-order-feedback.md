@@ -1532,6 +1532,8 @@ Dentlink의 시간 기반 산정인 `1 point = 6 planned work hours`를 적용�
   `/Users/parkjongsun/Repository/dentlink-client-order-feedback`와 세션용 로컬 작업
   branch는 제거했다. 원격 이력은 보존했다.
 - 현재 알려진 추가 웹 FE 구현은 없다. 새 QA 카드나 기획·디자인·Swagger 변경이 생기면
-  메인 Dentlink 세션에서 개인 컨텍스트와 live Git/Jira/Notion/Figma/Swagger를 다시
-  reconcile하고, 실제 배포 대상 branch를 기준으로 새 작업 branch/worktree를 만든다.
-  앱 후속은 `dentlink-app`의 별도 세션과 체크포인트를 따른다.
+  Dentlink FE 최상위 또는 DL-15828 기능 세션에서 개인 컨텍스트와 live
+  Git/Jira/Notion/Figma/Swagger를 다시 reconcile하고, 실제 배포 대상 branch를
+  기준으로 필요한 repository별 branch/worktree를 만든다. 앱 후속은 같은 기능
+  세션에서 함께 처리할 수 있으며, 앱의 상세 Git·QA 상태 정본은
+  `projects/dentlink-app.md`를 따른다.

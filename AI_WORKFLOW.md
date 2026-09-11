@@ -10,9 +10,14 @@ to load at session start.
 Use multiple Codex sessions when separation improves ownership and context:
 
 - A projectless top-level management session may coordinate a product area
-  spanning multiple repositories.
-- Actual implementation belongs to a session rooted at the exact repository,
-  branch, or worktree that owns the change.
+  spanning multiple repositories and may implement a small, clearly scoped
+  change after confirming the exact target checkout.
+- Create additional sessions primarily by feature or responsibility, not by
+  device or repository. One feature session may own coordinated web and app
+  work across multiple repositories.
+- Inside any session, every mutation still belongs to an explicitly confirmed
+  repository, branch, or worktree. Do not blur Git histories merely because
+  the same feature session owns both surfaces.
 - One session should be the active writer for one worktree unless the user
   explicitly coordinates otherwise.
 - Durable continuity remains Git-backed in `codex-personal-context`; chat and

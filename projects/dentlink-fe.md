@@ -17,13 +17,18 @@ Detailed implementation history remains in the relevant existing project file.
 - The Dentlink FE top-level session is projectless and owns intake, web/app
   scope classification, shared decisions, priorities, release/deployment
   coordination, handoff prompts, and closeout.
-- Code changes are performed only in a session rooted at the exact product
-  repository, branch, or worktree that owns them.
-- A feature spanning web and app may use separate implementation sessions for
-  each repository. The top-level session coordinates the shared outcome but
-  does not combine Git histories or write from an ambiguous directory.
+- Sessions are created primarily for a feature or responsibility, not for a
+  device or repository. One feature session may inspect and implement both its
+  web and app portions across the two product repositories.
+- Every code or Git mutation must still name and confirm the exact product
+  repository, branch, and worktree. A shared feature scope does not combine Git
+  histories or permit writing from an ambiguous directory.
+- The top-level session may directly implement a small, clearly scoped change.
+  Split out repository-specific or parallel sessions only when scope, runtime,
+  ownership, or collision risk justifies it.
 - Keep one active writing session per worktree. Repository main-checkout
-  sessions are optional helpers for branch/worktree/release administration.
+  sessions are optional helpers for branch/worktree/release administration,
+  not permanent web-versus-app session boundaries.
 - Shared repository mutations still require the user's explicit authorization.
 
 ## Context Routing
@@ -48,9 +53,10 @@ Detailed implementation history remains in the relevant existing project file.
   `release/v1.86.0` at `0e0878ef1`, synchronized with its remote. Its only
   local branches are `master` at `ddeeb1e86` and `release/v1.86.0`, both at
   0/0 divergence, and its only registered worktree is the main checkout.
-- The existing app session must refresh `projects/dentlink-app.md`, verify live
-  app Git and delivery state, and provide a final handoff before being replaced
-  by the top-level coordination session.
+- The app-specific session completed its live Git, PR, Jira, validation and
+  delivery audit on 2026-09-11. Its final handoff is recorded in
+  `projects/dentlink-app.md`; the product repository remained unchanged during
+  the handoff and personal context was the only authorized write target.
 - The local `claude-personal-context` checkout was removed after confirming it
   had no local-only changes, commits, stash, or worktrees. Its GitHub repository
   remains available for optional future recovery.
@@ -73,8 +79,19 @@ Detailed implementation history remains in the relevant existing project file.
 
 - On 2026-09-11 the user delivered the prepared prompts to both the new
   projectless Dentlink FE top-level session and the existing app session.
+- After prompt delivery, the user clarified that future sessions are organized
+  by feature rather than by device or repository. The current rule in this
+  checkpoint supersedes earlier prompt wording that implied web and app
+  implementation sessions should be split by default.
 - This former `dentlink-client` management session can now close. Its repository
   cleanup and cross-repository operating-rule migration are complete.
-- The app session must still finish its own live-state reconciliation and
-  personal-context push. After that finishes, the top-level session should pull
-  `codex-personal-context` again before treating the app checkpoint as current.
+- The web and app session handoffs are complete. The new projectless Dentlink
+  FE top-level session should pull `codex-personal-context` again and use the
+  repository-specific project files as its starting evidence.
+- For app work, first re-fetch `/Users/parkjongsun/Repository/dentlink-app` and
+  verify PR #286, Jira, branch and runtime state. The preserved app starting
+  point is `feature/DL-16061` at `a8f3a6c`; resume implementation only for a
+  new QA card, reviewer finding, or confirmed product/API/design change.
+- Keep current delivery gates separate: app implementation is complete, while
+  DL-16229 and DL-16353 remain `READY FOR QA`, PR #286 has no human approval and
+  is not merged, and the feature branch must remain until integration finishes.
