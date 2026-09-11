@@ -131,3 +131,8 @@ Detailed implementation history remains in the relevant existing project file.
   to task `웹 E2E 신뢰성 개선`; exact IDs and the worktree checkpoint are recorded
   in `projects/dentlink-client-e2e.md`. This top-level session keeps coordination
   ownership and hands the agreed implementation/validation scope to that task.
+- Handoff is complete: the full prompt was delivered automatically and the
+  dedicated task is active. The user's copy is for reference, not a second
+  submission. This main session can remain on coordination standby while web
+  E2E work continues there. Scope/release decisions and eventual cleanup return
+  here; implementation completion and passing runtime results are not implied.

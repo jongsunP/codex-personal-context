@@ -95,8 +95,8 @@ file was changed and no actual test, server or CI workflow was started.
 - Next work: correct CI failure reporting, classify and address current
   whole-suite reliability failures, then fill targeted web feedback gaps.
   Use the operating purpose above to select validation evidence. Native app
-  work is deferred. Product implementation and runtime validation have not
-  started; the authorized worktree preparation is recorded below.
+  work is deferred. The initial audit did not implement or run the suite;
+  ongoing implementation and validation now belong to the task below.
 - Old worktree names, `codex/` branch examples, IDE-terminal requirements and
   v1.79 expected counts below are historical; use the current common guidance.
 
@@ -107,8 +107,9 @@ file was changed and no actual test, server or CI workflow was started.
   is `feature/e2e-reliability`.
 - Created `/Users/parkjongsun/Repository/dentlink-client-e2e` from the live
   `origin/release/v1.86.0` at
-  `0e0878ef1c5b1cc2dbec44c57a740e0e072cdad7`. The new checkout is clean and has
-  no upstream; no product commit, push, PR, deployment, or runtime run occurred.
+  `0e0878ef1c5b1cc2dbec44c57a740e0e072cdad7`. At creation the checkout was
+  clean with no upstream; preparation did not commit/push product code,
+  mutate a PR, deploy, or run E2E.
 - The main checkout remains on `release/v1.86.0`. The new worktree is the
   implementation target; the top-level session remains coordinator.
 - The user registered the exact worktree as Codex project
@@ -116,13 +117,13 @@ file was changed and no actual test, server or CI workflow was started.
 - Created task `웹 E2E 신뢰성 개선`, ID
   `01a08f83-fae9-7343-8998-218ce4a9cfec`, host `local`, directly in the saved
   worktree using environment `local`. No duplicate worktree was created.
-- The task first checks Git read-only while the top-level session records
-  the handoff. The complete startup prompt is then delivered as a follow-up
-  message, authorizing the agreed implementation and local/staging validation
-  scope. Product commit/push, PR mutations, environment changes, and deployment
-  remain separately authorized operations.
-- The startup prompt is also supplied to the user in a copyable code block.
-- The new worktree still needs its own dependency/browser preparation. Do not
+- The task completed its read-only Git acceptance check. The complete startup
+  prompt was delivered automatically as a follow-up and the implementation
+  turn is active at top-level closeout. The user also received a copyable
+  reference copy and does not need to send it again. Product commit/push,
+  PR mutations, environment changes, and deployment remain separately
+  authorized operations. No new E2E result is claimed by this handoff.
+- At handoff the worktree needed its own dependency/browser preparation. Do not
   copy node_modules, auth, build caches, or reports from another checkout.
   Tracked environment files are already present; the main checkout's ignored
   `lab/.env.local` needs an explicit necessity/override assessment before use.
@@ -130,6 +131,14 @@ file was changed and no actual test, server or CI workflow was started.
   `reuseExistingServer` can silently point tests at another checkout. Local and
   staging runs share auth artifacts, and different worktrees can still share
   server account/team state and onboarding locks.
+- The user confirmed the future synchronization model: after v1.86 reaches
+  master, a still-active E2E branch can integrate the latest master under an
+  explicit synchronization instruction, check its intended PR release, and
+  revalidate. A completed/merged feature branch is not reused for new work.
+- The top-level session is now a coordination standby checkpoint. Continue
+  implementation and runtime work in `웹 E2E 신뢰성 개선`; return to the main
+  session for cross-feature decisions, integration/release coordination, or
+  final handoff and explicitly requested cleanup.
 
 ---
 
