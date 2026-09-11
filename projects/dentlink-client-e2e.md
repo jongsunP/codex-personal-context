@@ -96,9 +96,36 @@ file was changed and no actual test, server or CI workflow was started.
   whole-suite reliability failures, then fill targeted web feedback gaps.
   Use the operating purpose above to select validation evidence. Native app
   work is deferred. Product implementation and runtime validation have not
-  started; a new work branch/worktree has not been authorized or created.
+  started; the authorized worktree preparation is recorded below.
 - Old worktree names, `codex/` branch examples, IDE-terminal requirements and
   v1.79 expected counts below are historical; use the current common guidance.
+
+## Dedicated Worktree Preparation — 2026-09-11
+
+- The user approved an independently named branch and a dedicated worktree,
+  Codex project, and feature session. No Jira is assigned; the selected branch
+  is `feature/e2e-reliability`.
+- Created `/Users/parkjongsun/Repository/dentlink-client-e2e` from the live
+  `origin/release/v1.86.0` at
+  `0e0878ef1c5b1cc2dbec44c57a740e0e072cdad7`. The new checkout is clean and has
+  no upstream; no product commit, push, PR, deployment, or runtime run occurred.
+- The main checkout remains on `release/v1.86.0`. The new worktree is the
+  implementation target; the top-level session remains coordinator.
+- Codex project registration is awaiting the user: there is no project-add
+  tool, and Computer Use explicitly blocks controlling the Codex app. After
+  the user adds this exact path, use its returned project ID to create one
+  feature task with environment `local`, directly in this saved worktree.
+  Do not create another automatic worktree from the management project.
+- Intended project/task title: `웹 E2E 신뢰성 개선`. The startup prompt is
+  prepared for automatic delivery and a copyable code-block handoff.
+- The new worktree still needs its own dependency/browser preparation. Do not
+  copy node_modules, auth, build caches, or reports from another checkout.
+  Tracked environment files are already present; the main checkout's ignored
+  `lab/.env.local` needs an explicit necessity/override assessment before use.
+- Check ownership of 3100/3105/3102 before starting local servers:
+  `reuseExistingServer` can silently point tests at another checkout. Local and
+  staging runs share auth artifacts, and different worktrees can still share
+  server account/team state and onboarding locks.
 
 ---
 

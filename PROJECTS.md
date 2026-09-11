@@ -51,9 +51,9 @@ For detailed current state, read:
 ### Dentlink E2E Stabilization
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Local workspace: `/Users/parkjongsun/repository/dentlink-client`
-- Use this main workspace unless the user explicitly requests another
-  worktree.
+- Authorized E2E worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`
+  on `feature/e2e-reliability`, created from `release/v1.86.0`. Its dedicated
+  Codex project/task registration is being prepared; detailed status below.
 - Current inspected release: `release/v1.86.0`. The 2026-09-11 audit collects
   109 tests in 16 files, including ten feedback tests. Recent dev/stage CI
   processes failed despite successful workflow indicators; latest staging

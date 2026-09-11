@@ -126,3 +126,7 @@ Detailed implementation history remains in the relevant existing project file.
   usable by a PM before production delivery. Fixed pass counts are neither the
   objective nor a minimum completion gate. Current policy and the revised
   personal skill are tracked in `projects/dentlink-client-e2e.md`.
+- The user approved a dedicated web E2E worktree/project/task. The worktree
+  has been created; project registration needs a user UI action because the
+  available tools cannot add a Codex project. This top-level session keeps
+  coordination ownership; implementation will belong to the dedicated task.
