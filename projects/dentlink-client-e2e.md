@@ -1,29 +1,173 @@
-# Dentlink E2E Current Audit - 2026-09-11
+# Dentlink E2E Reliability Checkpoint - 2026-09-11
 
-This read-only audit supersedes older current-state claims below. No product
-file was changed and no actual test, server or CI workflow was started.
+This is the implementation and verification closeout checkpoint. It
+supersedes the initial read-only audit and older execution rules below.
+The final working copy passed the identified staging full suite. Local whole-suite,
+affected-scope and onboarding UI evidence are recorded separately below.
 
-- Web checkout: clean `release/v1.86.0` / `0e0878ef1`, live remote identical,
-  main checkout only. Use `/Users/parkjongsun/Repository/dentlink-client`.
-- Both development and staging `playwright test --list --project=clinic`
-  collect **109 tests in 16 files**: signup/validation 24, sign-in 3, onboarding
-  22, orders 26, Lab shipment 6, Lab status 12, LinkTalk 1, billing 5, feedback
-  10. Collection success is not a test pass. `clinic` includes Lab/Admin flows
-  but does not cover every web/Admin or native feature.
-- Local E2E starts Clinic/Lab/Admin at 3100/3105/3102 with `.next-e2e`;
-  staging uses deployed sites. Actual local/staging runs must remain sequential
-  because auth artifacts are shared. Three Default Scanner tests explicitly
-  skip; Referral/BP settings add two conditional skips. Other missing setup
-  conditions can skip further groups, including all ten feedback tests.
+## Current Implementation And Verification — completed authorized scope
+
+- Active worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`.
+  Branch: `feature/e2e-reliability`; HEAD:
+  `0e0878ef1c5b1cc2dbec44c57a740e0e072cdad7`. The implementation is uncommitted
+  working-copy changes, not changes contained in that HEAD. Product commit,
+  push, PR mutation and deployment are not authorized and have not been done.
+- The current Clinic project collects **109 tests in 16 files**. It includes
+  Clinic scenarios plus supporting Lab/Admin flows; it does not establish
+  coverage of every web/Admin or native feature. Local tests use isolated
+  Clinic/Lab/Admin ports 3100/3105/3102 and `.next-e2e`; staging uses the deployed
+  sites. Run local and staging sequentially because auth/account state is shared.
+- Source manifests identify the final working-copy digest as
+  `26c507f75e76b480153a9a73a82a3ba212e6d89ad024d1fe1a751846381ab397`
+  across 23 changed/new product-repository files. Final local signup, staging
+  signup and staging full runs used this unchanged digest. Earlier local full
+  and first staging full runs used
+  `71f771bba26538024181b4c9b259896b56752cd8da062f550031a319ea525a9f`,
+  before the final signup-wait correction; the local full suite was not rerun
+  after that one-function change. Its complete 16-test consumer scope was
+  reverified locally instead. Uncommitted implementation remains in this
+  worktree; personal context preserves its evidence, not a transferable code diff.
+
+### Implemented Changes
+
+- Three CI workflows now use a shared verdict helper that compares runner
+  process outcome, JSON report results/aggregates and the collected test list.
+  Setup errors, zero execution, missing results, serial follow-up nonexecution,
+  unapproved skips and flaky outcomes fail the gate. Five exclusions are allowed
+  only by exact file, test title and reason: Referral 1, BP 1 and the dedicated
+  unset-Default-Scanner scenarios 3. Missing mandatory signup, shipment or
+  feedback setup now throws instead of skipping a group.
+- Version evidence records the source commit and Clinic/Lab/Admin BUILD_IDs
+  before and after execution, and binds the report to the same environment,
+  API target and site URLs. Version changes, unavailable evidence and a
+  different-origin redirect fail the gate. The shared tracked environment
+  configuration is used by development and staging CI. The verdict/version
+  regression suite passed **27 tests**; independent review findings were
+  addressed. The new CI workflows have not yet been run remotely.
+- The reproduced global sign-in failure came from selecting `Sign in` when
+  the actual submit button is `Log in`; the helper now clicks the scoped login
+  form submit control. The DEV ISV catalog lacks `NaturalI`, so its DEV preset
+  was corrected while the staging preset was preserved. API diagnostics were
+  strengthened to expose relevant request/response failures.
+- Onboarding retains its 22 existing serial scenarios but creates a fresh
+  office in the file's `beforeAll` for each execution attempt. Global setup
+  owns default authentication and the runner lock; exact `ownerRunId` plus
+  `attemptId` metadata identifies the file attempt. The parent teardown can
+  recover its own worker's leftover attempt, while another runner's metadata
+  is protected. Cleanup failure preserves metadata and fails explicitly;
+  ambiguous HTTP/schema failures cannot be mistaken for confirmed absence.
+  Prefix/age-based bulk office deletion was removed. Browser-close failure
+  releases the runner lock/environment ownership and retains the original error.
+- An actual UI run exposed HTTP 401 in the active-office check because the
+  helper sent a quoted local-storage token. It now normalizes the token exactly
+  as the product fetcher does. Saved token values were not logged. Completed
+  onboarding state and missing required preparation now produce setup/assertion
+  failures instead of suppressing execution with skips.
+- The first staging whole-suite run exposed a separate signup preparation
+  timeout: send/verify API responses succeeded and the UI showed `Verified`,
+  but a nested `codeInput.isDisabled()` inside a poll waited 90 seconds for an
+  input removed on verification success. The helper now asserts the persistent
+  `Verified` button directly, without adding retry or increasing timeout.
+  Error/unsuccessful verification still fails. A six-case isolated regression,
+  product-code review and real 16-test consumer runs verified the correction.
+- The shared E2E README/skill/references and personal skill source plus installed
+  copy now follow the operating purpose below: no fixed pass-count gate,
+  retry-success diagnosis shortcut, three-fix stop rule or blanket reload/timeout
+  workaround. The objective does not prescribe an operator's job role.
+
+### Runtime Evidence
+
+| Run | Result and interpretation |
+| --- | --- |
+| `local-baseline` | Global sign-in setup failed; 0 test bodies executed. This reproduced the setup defect and is not a test pass. |
+| `local-full-1` | 98 passed, 2 ISV failures, 5 allowed skips, 4 serial follow-up tests not run. This failed run led to the DEV catalog/preset correction. |
+| Final local focused (`local-isv-final`) | 11 passed, 3 allowed skips; 0 failure, flaky, nonexecution or report errors; all 14 collected results accounted for. |
+| `local-full-final` | **104 passed, 5 allowed skips**; 0 failure, flaky, nonexecution, interruption, unapproved skip or setup/report errors. All **109** collected results accounted for; 8.0 minutes; source hash unchanged. This precedes the final signup-wait correction. |
+| First staging full (`staging-full-final`) | 93 passed, 1 signup preparation failure, 5 allowed skips, 10 serial follow-up tests not run; 0 flaky. The gate correctly failed. Versions and source digest were stable. |
+| Final local signup (`local-signup-final`) | **16/16 passed**, no skips/failures/flaky; the two complete specs consuming the corrected helper. |
+| Final staging signup (`staging-signup-final`) | **16/16 passed**, no skips/failures/flaky; source/version checks passed. |
+| Final staging full (`staging-full-after-signup`) | **104 passed, 5 allowed skips**, 0 failure/flaky/extra nonexecution/interruption/preparation or report errors; all **109** planned results accounted for; **3.6 minutes**; source/version checks passed. |
+
+The same onboarding UI runner also exercised the relevant execution boundaries:
+
+| UI boundary | Evidence |
+| --- | --- |
+| First fixed run | 22/22 passed; fresh office 1628 deleted with HTTP 200. |
+| Run All again in the same runner | 22/22 passed; fresh office 1629 deleted with HTTP 200. |
+| Final fixed-code Reload | 22/22 passed; fresh office 1631 deleted with HTTP 200. |
+
+- An intermediate Reload had 22 passing leaf results, but an intervening lint
+  edit reset the UI aggregate to zero. Keep that observation separate from the
+  final unchanged-code Reload evidence above. These runs exercise observed
+  lifecycle failure modes; their count is not a completion threshold.
+- After the later UI runner was stopped, no onboarding metadata/lock or owned
+  local server ports remained. Worker termination/failure recovery boundaries
+  also received browser-free stub regression checks; a real forced worker crash
+  was not part of these recorded UI passes.
+- E2E TypeScript, changed-file formatting/lint and diff checks passed. Browser-free
+  regressions separately covered lifecycle ownership, the quoted-token request
+  and fail-closed cleanup/global-close handling. These are supporting evidence,
+  not substitutes for the recorded runtime runs.
+- The first staging failure was initially missed in partial progress-log tails;
+  the final aggregate corrected that statement. Subsequent progress checks read
+  cumulative result rows across the whole log. Treat final structured reports
+  and their plan/version checks as authoritative, not the last visible tests.
+
+### Staging Version Evidence And Next Starting Point
+
+- `staging-full-final` started with version evidence captured at
+  `2026-09-11T09:08:59.818Z` (18:08:59 KST): Clinic
+  `t0PqFwz3pmJ2r2XI8QnpJ`, Lab `h89hRMxK80RwI58M-iIMe`, Admin
+  `GGdLJ50HcBrXPLB2m4kp0`. The Clinic BUILD_ID matches the known deployment
+  from [CI run 34564023735](https://github.com/Innvoaid/dentlink-client/actions/runs/34564023735)
+  at `28e5e0b`. This deployed product revision is distinct from the uncommitted
+  test working copy at HEAD `0e0878ef1`; Lab/Admin BUILD_IDs identify their
+  deployments without claiming an independently verified source commit.
+- Final whole-suite snapshots at `2026-09-11T09:24:33.566Z` and
+  `2026-09-11T09:28:08.987Z` (18:24:33–18:28:08 KST) contain those same three
+  BUILD_IDs. They bracket the actual test run and match its environment/API/site
+  metadata and source digest. This establishes starting/ending version equality,
+  not continuous version monitoring. Final teardown left no onboarding meta/lock
+  or owned local server ports.
+- Authorized implementation and runtime verification are complete. The product
+  working copy is ready for review; committing/pushing it, creating/updating a PR,
+  integration/deployment and exercising the new workflows remotely remain separate
+  steps requiring explicit authorization. Do not rerun the same matrix solely to
+  reach a fixed pass count; new code, failures or a changed deployment justify
+  proportionate revalidation.
+- The feedback spec's ten scenarios cover initial Bad feedback, changing it to
+  Good, attachment persistence, rereading saved feedback and direct-URL entry.
+  `isReviewable: false/undefined`, an initial Good POST and attachment-failure
+  recovery are additional coverage candidates, not validated cases implied by
+  the ten existing tests. Run the complete stateful feedback spec.
+- The corrected signup-wait helper also has two one-off `clinic-scripts`
+  consumers for permanent-account/environment setup. They were not run as
+  regression tests. Current JSON does not reliably label every hook failure;
+  the first staging preparation diagnosis came from trace/source evidence,
+  while the automated gate retained failed + follow-up-not-run classification.
+  Explicit preparation annotations are a possible follow-up, not implemented
+  automatic cause inference.
+- Detailed local evidence is under
+  `/tmp/dentlink-e2e-reliability-20260911/`: `local-baseline.log`,
+  `local-full-1.log`, `local-isv-final-verdict.json`,
+  `local-full-final-verdict.json`, corresponding `*-source.json` files and
+  runtime logs, `ci-verdict-tests.log`, `local-onboarding-ui.log`, and
+  `staging-full-final-*`, `local-signup-final-*`, `staging-signup-final-*`,
+  `staging-full-after-signup-*`, `signup-verification-diagnosis.json` and
+  `verification-summary.md`. Each final run has plan/report/verdict/source
+  artifacts, and staging runs also have before/after version snapshots.
+  These are temporary local artifacts; the sanitized facts above are the durable
+  checkpoint. Do not copy raw traces, credentials, tokens or account data into
+  personal context.
 
 ## Operating Purpose And Current Scope — clarified 2026-09-11
 
 - This improvement covers web E2E, including feedback. Native app E2E is
   excluded from the current work.
-- The operating goal is for a PM to run the full suite against the deployed
-  staging release before production delivery and trust the result within the
-  tested coverage. Local development and focused checks support that workflow;
-  final staging whole-suite evidence is still required.
+- The operating goal is to verify the full suite against the identified
+  staging release before production delivery and provide trustworthy results
+  within the tested coverage. Local development and focused checks support that
+  workflow; final staging whole-suite evidence is required for delivery decisions.
 - Reliability means expected behavior passes and real deviations are detected
   under equivalent, explicit preconditions. Correctly rejecting invalid input
   can be a passing test. A test's own setup, leftover account/data/session
@@ -41,7 +185,7 @@ file was changed and no actual test, server or CI workflow was started.
 - Preserve the intent of existing port isolation (3100/3105/3102), auth/team
   preparation, runner ownership, and cleanup. Inspect whether those measures
   work before retaining or changing them; their history does not make the
-  implementation immutable. PM execution should have predictable preparation
+  implementation immutable. Suite execution should have predictable preparation
   and cleanup rather than require undocumented manual repair.
 - Diagnose product, test, and environment causes from current UI, API, and
   trace evidence. A pass on retry does not establish a test-code fault; it can
@@ -54,13 +198,31 @@ file was changed and no actual test, server or CI workflow was started.
   Codex may execute and iterate in its own terminal; visible test UI is useful
   but is not a prerequisite when headless execution with artifacts is better.
 - Current personal skill source: `skills/dentlink-web-e2e/SKILL.md`, installed
-  by `setup-local-codex.sh`. The shared repository's legacy
-  `.claude/skills/e2e/SKILL.md` still contains a two-pass completion gate,
-  retry-success-equals-test-bug diagnosis, and a three-attempt stop rule.
-  Those rules are superseded for this task. Align that team-owned file during
-  authorized product work; it was not changed in this personal-context update.
+  by `setup-local-codex.sh`; source and installed copy are aligned. During this
+  implementation, the shared `.claude/skills/e2e/SKILL.md` and references were
+  also aligned with this purpose. The initial audit's two-pass, retry-success
+  and three-attempt-rule findings below are resolved in the current working copy.
 
-## Recent CI Evidence — 2026-09-11
+## Initial Read-Only Audit — historical snapshot from 2026-09-11
+
+This audit preceded the dedicated worktree and implementation above. It did
+not change product files or start tests, servers or CI workflows. Its defects
+and preparation state are historical observations, not current operating rules.
+
+- At audit time the web checkout was clean `release/v1.86.0` / `0e0878ef1`,
+  identical to its remote, and the main checkout was the only worktree.
+- Development and staging collection each found 109 tests in 16 files:
+  signup/validation 24, sign-in 3, onboarding 22, orders 26, Lab shipment 6,
+  Lab status 12, LinkTalk 1, billing 5 and feedback 10. Collection itself was
+  not runtime verification.
+- Then-current missing preparation could skip additional groups, including
+  all ten feedback tests. This was a defect: required preparation now throws,
+  and only the five explicitly approved exclusions can pass the final gate.
+- The shared legacy skill then prescribed a two-pass gate, treated retry success
+  as proof of a test bug and stopped after three fix attempts. Those operating
+  rules have since been corrected in the current implementation above.
+
+### CI Evidence Captured By The Initial Audit
 
 | Run | Commit | Actual result | Feedback |
 | --- | --- | --- | --- |
@@ -69,16 +231,18 @@ file was changed and no actual test, server or CI workflow was started.
 | [latest stage 34564023735](https://github.com/Innvoaid/dentlink-client/actions/runs/34564023735/job/103156513198), 14:20 complete | `28e5e0b` | Global setup failed before test bodies; report 0/0/0 | Not run |
 
 - Each Playwright process exited 1 despite automatic workflow/job success.
-  Latest stage timed out clicking Sign in at `e2e/clinic/utils/signin.ts:80`
-  from global setup. Root cause remains unclassified. Other observed failures
+  That latest stage run timed out clicking Sign in at `e2e/clinic/utils/signin.ts:80`
+  from global setup. Its cause was unclassified at audit time; the current local
+  reproduction and locator correction are recorded above. Other observed failures
   include ISV option waits, Lab shipment patient GET waits, and an access-request
   account login API 400. These symptoms do not establish product regressions.
-- Automatic dev/stage workflows use `continue-on-error: true` without final
-  failure propagation. Parsing checks `.stats.unexpected` only, ignoring
-  global errors and zero executions; latest stage incorrectly sent
-  `All tests passed`. Flaky counts are omitted. Manual stage E2E has a final
-  failed-count gate but retains the zero-count global-error gap.
-- These three workflow files match the inspected release/develop/stage refs.
+- At audit time automatic dev/stage workflows used `continue-on-error: true`
+  without final failure propagation. Parsing checked `.stats.unexpected` only,
+  ignoring global errors and zero executions; latest stage incorrectly sent
+  `All tests passed`. Flaky counts were omitted. Manual stage E2E had a final
+  failed-count gate but retained the zero-count global-error gap. The current
+  working copy corrects these gaps; it has not been integrated or deployed.
+- Those three workflow files matched the inspected release/develop/stage refs.
   Automatic runs include the full Clinic suite and feedback. Artifacts are
   retained for seven days. No workflow was dispatched or rerun during this audit.
 
@@ -92,11 +256,11 @@ file was changed and no actual test, server or CI workflow was started.
   UI E2E, and static Android configuration mismatches. Its current success was
   not verified. App feedback's 53/53 Jest evidence is not native E2E. Details
   remain in `projects/dentlink-app.md`.
-- Next work: correct CI failure reporting, classify and address current
-  whole-suite reliability failures, then fill targeted web feedback gaps.
-  Use the operating purpose above to select validation evidence. Native app
-  work is deferred. The initial audit did not implement or run the suite;
-  ongoing implementation and validation now belong to the task below.
+- The initial audit proposed correcting CI reporting and investigating
+  whole-suite reliability. Current implementation, completed local evidence and
+  the pending staging verdict are recorded at the top of this checkpoint.
+  Additional feedback coverage remains separately scoped; native app work is
+  deferred. Use the operating purpose above to select validation evidence.
 - Old worktree names, `codex/` branch examples, IDE-terminal requirements and
   v1.79 expected counts below are historical; use the current common guidance.
 

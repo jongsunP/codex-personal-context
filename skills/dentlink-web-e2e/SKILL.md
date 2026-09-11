@@ -7,8 +7,8 @@ description: Diagnose, improve, and verify Dentlink web E2E reliability across l
 
 ## Purpose and sources
 
-Enable a PM to run the full staging suite before production delivery and trust
-its result within the tested coverage. Develop and diagnose locally, then
+Make the full staging suite a trustworthy basis for production delivery
+decisions within the tested coverage. Develop and diagnose locally, then
 verify the identified deployed staging version as a whole.
 
 Read `projects/dentlink-client-e2e.md` in the user's Git-backed
