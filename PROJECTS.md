@@ -53,7 +53,8 @@ For detailed current state, read:
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
 - Authorized E2E worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`
   on `feature/e2e-reliability`, created from `release/v1.86.0`. Its dedicated
-  Codex project/task registration is being prepared; detailed status below.
+  Codex project is `dentlink-client-e2e`; the implementation task is
+  `웹 E2E 신뢰성 개선`. Detailed ownership and startup status are in the checkpoint.
 - Current inspected release: `release/v1.86.0`. The 2026-09-11 audit collects
   109 tests in 16 files, including ten feedback tests. Recent dev/stage CI
   processes failed despite successful workflow indicators; latest staging

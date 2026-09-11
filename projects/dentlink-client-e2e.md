@@ -111,13 +111,17 @@ file was changed and no actual test, server or CI workflow was started.
   no upstream; no product commit, push, PR, deployment, or runtime run occurred.
 - The main checkout remains on `release/v1.86.0`. The new worktree is the
   implementation target; the top-level session remains coordinator.
-- Codex project registration is awaiting the user: there is no project-add
-  tool, and Computer Use explicitly blocks controlling the Codex app. After
-  the user adds this exact path, use its returned project ID to create one
-  feature task with environment `local`, directly in this saved worktree.
-  Do not create another automatic worktree from the management project.
-- Intended project/task title: `웹 E2E 신뢰성 개선`. The startup prompt is
-  prepared for automatic delivery and a copyable code-block handoff.
+- The user registered the exact worktree as Codex project
+  `dentlink-client-e2e`, ID `602e3503-5579-4d51-9f9a-28f4633d1fba`.
+- Created task `웹 E2E 신뢰성 개선`, ID
+  `01a08f83-fae9-7343-8998-218ce4a9cfec`, host `local`, directly in the saved
+  worktree using environment `local`. No duplicate worktree was created.
+- The task first checks Git read-only while the top-level session records
+  the handoff. The complete startup prompt is then delivered as a follow-up
+  message, authorizing the agreed implementation and local/staging validation
+  scope. Product commit/push, PR mutations, environment changes, and deployment
+  remain separately authorized operations.
+- The startup prompt is also supplied to the user in a copyable code block.
 - The new worktree still needs its own dependency/browser preparation. Do not
   copy node_modules, auth, build caches, or reports from another checkout.
   Tracked environment files are already present; the main checkout's ignored

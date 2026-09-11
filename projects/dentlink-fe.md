@@ -127,6 +127,7 @@ Detailed implementation history remains in the relevant existing project file.
   objective nor a minimum completion gate. Current policy and the revised
   personal skill are tracked in `projects/dentlink-client-e2e.md`.
 - The user approved a dedicated web E2E worktree/project/task. The worktree
-  has been created; project registration needs a user UI action because the
-  available tools cannot add a Codex project. This top-level session keeps
-  coordination ownership; implementation will belong to the dedicated task.
+  and project `dentlink-client-e2e` are registered. Implementation is assigned
+  to task `웹 E2E 신뢰성 개선`; exact IDs and the worktree checkpoint are recorded
+  in `projects/dentlink-client-e2e.md`. This top-level session keeps coordination
+  ownership and hands the agreed implementation/validation scope to that task.
