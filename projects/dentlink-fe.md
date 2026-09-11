@@ -71,7 +71,10 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Next Starting Point
 
-Create the new projectless Dentlink FE top-level Codex session, give it the
-prepared startup prompt, then give the existing app session the handoff prompt.
-The top-level session should not treat app status as current until that app
-handoff has been written and verified.
+- On 2026-09-11 the user delivered the prepared prompts to both the new
+  projectless Dentlink FE top-level session and the existing app session.
+- This former `dentlink-client` management session can now close. Its repository
+  cleanup and cross-repository operating-rule migration are complete.
+- The app session must still finish its own live-state reconciliation and
+  personal-context push. After that finishes, the top-level session should pull
+  `codex-personal-context` again before treating the app checkpoint as current.
