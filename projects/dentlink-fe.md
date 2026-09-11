@@ -105,3 +105,8 @@ Detailed implementation history remains in the relevant existing project file.
   No formal human approval is recorded, and release/Production inclusion is
   not confirmed. Preserve existing branch/worktree state until the user asks
   for cleanup; do not reuse the completed feature branch for new work.
+- On 2026-09-11 the existing unified-notification-center session aligned its
+  role beneath this top-level session, retaining one web/app feature scope.
+  It remains in planning with no assigned implementation branch or release;
+  detailed decisions and verified state stay in
+  `projects/dentlink-unified-notification-center.md`.

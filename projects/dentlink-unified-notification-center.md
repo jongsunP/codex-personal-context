@@ -1,6 +1,6 @@
 # Dentlink 통합알림센터 — 사전 검토 체크포인트
 
-최종 갱신: 2026-09-03 — 읽음 대상 식별 방식과 브리핑 범위 보완
+최종 갱신: 2026-09-11 — Dentlink FE 최상위 운영 체계에 기능 세션 역할 정렬
 
 ## 식별과 현재 상태
 
@@ -14,17 +14,57 @@
 - 현재는 FE 기술 방향과 정책 검토 내용을 정리한 단계이며 **구현은 시작하지
   않았다**. 전용 Jira, 구현 branch와 release 대상은 정해지지 않았다.
 - 통합알림센터와 공통 딥링크의 병원 전환·화면/동작 실행·알림센터 읽음 연결은
-  이 세션에서 담당한다. 기존 앱 피드백 기능은 별도 피드백 세션이 계속 담당한다.
-  공통 알림 읽음 처리는 아직 구현하지 않았다.
-- 2026-09-03 이 통합알림센터 세션을 **웹·앱 통합 관리 세션으로 개설했다**.
-  Clinic/Lab 웹과 Office/Lab 앱을 함께 검토하고, 결정과 진행 기록은 이 문서에서
-  관리한다. 다른 세션이나 기기에서도 이 문서를 읽어 동일한 맥락으로 응답한다.
+  이 세션에서 담당한다. 공통 알림 읽음 처리는 아직 구현하지 않았다.
+- 2026-09-03 개설한 기존 세션을 유지하며, 2026-09-11부터 **Dentlink FE 최상위
+  세션 아래의 통합알림센터 기능 세션**으로 역할을 정렬했다. Clinic/Lab 웹과
+  Office/Lab 앱을 함께 검토하고 승인된 범위에서 구현·검증한다. 웹·앱이라는
+  이유만으로 세션을 나누지 않는다.
+- 최상위 세션은 신규 업무 접수, 기능 간 우선순위·공통 계약, 작업 위치·release
+  판단과 진행·배포·정리를 조율한다. 공통 운영 정본은 `SESSION_WORKFLOW.md`,
+  조율 상태는 `projects/dentlink-fe.md`, 이 기능의 상세 결정·진행은 이 문서에 둔다.
 - **별도 프로젝트 폴더나 worktree 없이** `~/Repository/dentlink-client`와
   `~/Repository/dentlink-app` 두 저장소를 함께 참조한다. 관리 세션 개설은 구현
   착수를 의미하지 않으며, 기존 REST 기반 확정 방향과 PM 읽음 정책 등 미정 사항은
   그대로 유지한다.
 - 이 문서는 개인 컨텍스트의 단일 체크포인트다. 제품 저장소에는 개인 handoff나
   transient 검토 문서를 추가하지 않는다.
+
+## 최신 운영 정렬과 검증 — 2026-09-11
+
+- 개인 컨텍스트를 `git pull --ff-only`하고 사용자 지정 순서로 공통 지침,
+  `projects/dentlink-fe.md`, 웹·앱 체크포인트와 이 문서를 대조했다. 9/3 이후 이
+  세션의 후속 구현·정책 확정은 없으며 기존 조사·결정·미정 사항을 보존한다.
+  `claude-personal-context`는 활성 정본으로 사용하지 않는다.
+- 아래 상태는 이번 읽기 검증 시점의 참조 위치다. 통합알림센터 구현 위치로
+  배정된 것은 아니며, 현재 branch/HEAD를 새 작업의 base로 임의 사용하지 않는다.
+  - 웹: `/Users/parkjongsun/Repository/dentlink-client`, `release/v1.86.0`,
+    HEAD `0e0878ef1c5b1cc2dbec44c57a740e0e072cdad7`,
+    upstream `origin/release/v1.86.0`, ahead/behind `0/0`, clean·미추적 없음.
+  - 앱: `/Users/parkjongsun/Repository/dentlink-app`, `feature/DL-16061`,
+    HEAD `a8f3a6cbb81c218b7ab16bed8e7d4b71fab45dd7`,
+    upstream `origin/feature/DL-16061`, ahead/behind `0/0`, clean·미추적 없음.
+  - 각 저장소의 등록 worktree는 위 main checkout 하나뿐이다. 필요한 원격
+    branch만 fetch했으며 제품 파일·checkout branch는 변경하지 않았다.
+- 현재 앱 PR #286의 `develop` squash merge를 GitHub에서 확인했다.
+  merge 시각은 2026-09-11 15:09:46 KST,
+  commit은 `c205fe0752e06c17866bc3873c94a5b6e2e492c2`다. 위 feature HEAD와
+  결과 tree가 같고, 현재 `origin/develop`
+  `f75d7d9b27a3bb32e69726dd6e6f8792c756a710`에 포함된다. 상세 이력·QA·배포
+  상태는 `projects/dentlink-app.md`를 따른다. 완료 branch는 재사용하지 않는다.
+- 웹의 기존 알림 REST 읽음 호출과 앱 공통 service/query/libs의 알림센터 읽음
+  미연결 상태를 코드로 대조했다. 이번에 완료한 것은 운영·문서 정렬과 제한된
+  Git·코드 검증이다. 새 기능 구현·테스트·사용자 QA·리뷰·배포를 수행하지 않았다.
+  9/3 Swagger 확인은 당시 기록으로 보존하며, 실제 구현 시 필요한 계약을 다시 확인한다.
+- 문서 변경 전 personal-context는 clean이었다. 앱 task 목록에서 이 기능 세션은
+  active, 최상위 `메인세션`은 idle이며 다른 활성 제품 작성 세션은 확인되지 않았다.
+  이는 당시 관찰이며, 구현 전 정확한 worktree·활성 작성자를 다시 확인한다.
+- 한 worktree에는 활성 작성 세션을 하나만 둔다. 딥링크·인증·병원 전환 등 공통
+  파일의 작업이 겹치면 최상위와 범위·작성자를 조율한다. 신규 일반 branch는
+  `feature/<Jira>`이고, 작은 작업의 별도 worktree 필요 여부는 생성 전에 사용자에게
+  확인한다. 현재 전용 Jira·구현 branch·base/PR 대상·release는 미정이다.
+- 이번 정렬을 막는 미해결 운영 충돌은 없다. 목록 읽음 기준, 읽음 대상 식별·
+  전달 방식, 실패·대상 삭제·재요청 정책은 기존 미정 상태이며 후속 결정 대상이다.
+  ID 직접 전달과 여러 정보 조합 중 어느 방식도 임의 확정하지 않는다.
 
 ## 현재 사용자 확정 방향 — REST 기반
 
@@ -132,7 +172,10 @@
 앱 피드백 세션의 조사 결과를 기존 계획과 대조해 반영했다. 기존 피드백 작업을
 재시작하거나 알림센터 구현을 완료한 기록이 아니다.
 
-### 현재 Git과 작업 경계
+### 당시 Git과 작업 경계 — 역사 기록
+
+아래 Git·PR 상태는 2026-09-03 조사 당시 기록이다. 현재 위치·역할은 위 9/11
+운영 정렬을 따르며, 과거 branch/HEAD를 신규 작업에 재사용하지 않는다.
 
 - 앱 `~/Repository/dentlink-app`: `feature/DL-16061`,
   `c6355a33521c69ed0c3d4cb656245ac7b2ed5e9e`. 이번 fetch 후 원격과 같은 clean
@@ -184,9 +227,9 @@
   `pushTitle`을 붙여 전달한다. 별도 FCM data 필드를 선택한다면 URL만 넘기는
   경계에서 읽음 처리에 필요한 정보를 명시적으로 보존해야 한다.
 - `RootNavigator.tsx`는 로그인·CodePush·navigation 준비 후 보관한 URL을 다시
-  처리한다. Airbridge query 전달 허용 목록에는 notificationId가 없고, 피드백
-  `goFeedbackFromDeepLink`도 유효한 orderId와 landBy만 화면에 전달한다. URL에
-  notificationId만 붙여도 이후 읽음 처리까지 자동 연결되는 구조가 아니다.
+  처리한다. 9/3 조사 당시 Airbridge와 피드백 이동의 읽음 정보 보존은 연결되지
+  않았다. 피드백 이동 자체는 9/8 상세 직접 진입으로 변경됐으므로 아래 최신
+  보호 동작을 따른다. 읽음 대상 식별·정보 보존은 별도로 계약을 확인한다.
 - URL/경로 기반 이동 중복 방지와 읽음 대상별 처리를 분리해야 한다. 같은
   화면으로 오는 서로 다른 알림을 버리지 않고, 같은 알림의 FCM/Linking/Notifee
   중복 콜백에 따른 읽음 중복 요청은 제어한다. 이 처리는 제외된 실시간 동기화용
@@ -228,15 +271,20 @@
   screen navigation으로 덮어쓰지 않는다. Airbridge query 전달과 로그인 전 보관·
   재진입 경로도 공통 범위에서 확인한다.
 - 피드백 정본은 목록 `dentlink://feedback/{employerId}`, 상세
-  `dentlink://feedback/{employerId}?orderId={orderId}`다. native 목록에서 상세 GET
-  성공 후 native 상세를 열며 주문 상세 WebView로 보내지 않는다. 기존 목록/상세/back,
-  WebView → native 상세 → Submit 후 WebView 갱신 흐름을 유지한다.
+  `dentlink://feedback/{employerId}?orderId={orderId}`다. **9/3의 목록 경유 설명은
+  9/8 직접 진입 변경으로 대체됐다.** 유효한 외부 상세 URL은 목록 없이 native
+  상세를 직접 열며 해당 진입의 뒤로/닫기/Submit 성공/조회 실패는 Home으로 돌아간다.
+  9/11 `shared/configs/utils/deepLink.ts`와 `useNavigationConfig.ts`에서 직접
+  진입 stack을 확인했다. 사용자 정상 동작 확인은 최신 앱 체크포인트에 기록돼
+  있으며 이번에 재실행한 QA는 아니다. 기존 다른 진입 경로의 복귀 동작을 보존한다.
 - 이미 구현된 피드백 Amplitude `push_click` 분류는 알림 읽음 ID 계약이나 수신
   설정 API의 pushType과 별개다. 기존 피드백 기능·설정 후속 작업은 피드백 세션의
   `projects/dentlink-app.md`를 따른다.
-- 서버 실행이 필요하면 해당 프로젝트 IDE 터미널을 사용한다. 준비된 IDE가 없으면
-  별도 실행 전에 사용자에게 묻는다. 이번 인계 반영은 제품 구현·커밋·푸시·배포
-  권한을 추가하지 않는다.
+- 터미널은 최신 `AI_WORKFLOW.md`에 따라 정확한 checkout의 사용자에게 보이는
+  Codex 관리 터미널을 사용하고, 작업에 필요할 때 열어 명령 작업 후 닫는다.
+  과거 IDE 터미널 규칙은 대체됐으며 사용자가 관리하는 IDE 터미널을 조작하거나
+  의존하지 않는다. 운영 정렬은 제품 구현·커밋·푸시·branch/worktree·PR·배포
+  권한을 추가하지 않는다. 기존 명시적 권한은 보존하고 일반적인 진행 지시로 확대하지 않는다.
 
 ## 방향 변경 이력 — 2026-09-03
 
@@ -250,14 +298,20 @@
 
 ## 다음 시작점
 
-1. 개인 컨텍스트를 pull하고 `PROJECTS.md` 및 이 문서를 읽는다. 사용자 안내 수준은
-   `PROFILE.md`의 실시간 웹 개발 경험을 참고하고, 앱 구현 맥락이 필요하면
-   `projects/dentlink-app.md`도 읽는다.
+1. 개인 컨텍스트를 pull하고 최신 공통 지침, `PROJECTS.md`,
+   `projects/dentlink-fe.md`, 관련 웹·앱 체크포인트와 이 문서를 읽는다.
 2. REST 기반과 이번 공통 딥링크 인계를 함께 기준으로 삼는다. PM의 목록 읽음
    정책, 읽음 대상 식별·정보 전달·처리 계약과 재요청·실패 정책, Jira·설계가
    추가되면 확정/미정을 갱신한다.
-3. 실제 구현 지시가 생기면 양쪽 저장소의 live Git·코드·Swagger와 정확한 작업
-   브랜치·파일 범위를 확인하고 피드백 세션과의 충돌을 피한다. 로그인·소속 전환·
-   이동/동작·읽음 처리 정보 보존·REST 읽음 순서를 기존 특수 경로까지 포함해 대조한다.
-4. 현재는 조사·계획 반영 단계다. 별도 폴더/worktree 없이 두 저장소를 참조하며,
-   이 인계만으로 제품 코드 수정이나 branch/worktree 생성을 시작하지 않는다.
+3. 실제 구현 지시가 생기면 최상위와 정확한 작업 위치·base/PR 대상·release·
+   공통 파일 작성 범위를 조율한다. 변경 전 각 저장소의 branch·HEAD·upstream·
+   ahead/behind·dirty/미추적·worktree·활성 작성자를 확인하고, 필요한 Git·코드·
+   Swagger를 대조한다. 로그인·소속 전환·이동/동작·읽음 연결과 최신 직접 진입
+   동작을 함께 보존하며 완료된 기능을 다시 시작하지 않는다.
+4. 현재는 조사·계획 단계다. 별도 폴더/worktree 없이 두 저장소를 참조하며,
+   이번 운영 정렬만으로 제품 코드 수정이나 branch/worktree 생성을 시작하지 않는다.
+5. 의미 있는 마무리에는 이 문서의 상세 기록을 정리해 개인 컨텍스트만 commit·push한다.
+   최상위에는 기능 범위·결정, 웹/앱 작업 위치·Git 상태, 구현/검증 근거, 미정·질문,
+   공통 변경 영향, 남은 작업·다음 시작점을 요약한다. `projects/dentlink-fe.md`에는
+   기능 간 결정·조율 상태만 두며 상세 이력을 복제하지 않는다. 구현·코드 검증·
+   사용자 QA·review·merge·release 포함·배포·운영 확인은 각각 구분한다.
