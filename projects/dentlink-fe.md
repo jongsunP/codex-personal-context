@@ -114,51 +114,34 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## E2E Coordination Checkpoint — 2026-09-11
 
-- The initial read-only audit found CI success indicators overstating actual
-  E2E success. It is now followed by implementation and runtime verification;
-  the audit's no-run/no-edit statements describe only that earlier phase.
-  Detailed current evidence and historical CI results are in
-  `projects/dentlink-client-e2e.md`.
-- Keep accurate CI result reporting, actual suite stability and feedback
-  coverage as separate evidence. Native Detox readiness remains outside this
-  improvement's scope.
-- The user subsequently limited this improvement to web, including feedback;
-  app E2E is deferred. Its goal is trustworthy full-suite staging verification
-  as a basis for production delivery decisions. Fixed pass counts are neither the
-  objective nor a minimum completion gate. Current policy and the revised
-  personal skill are tracked in `projects/dentlink-client-e2e.md`.
-- The user approved a dedicated web E2E worktree/project/task. The worktree
-  and project `dentlink-client-e2e` are registered. Implementation is assigned
-  to task `웹 E2E 신뢰성 개선`; exact IDs and the worktree checkpoint are recorded
-  in `projects/dentlink-client-e2e.md`. This top-level session keeps coordination
-  ownership and hands the agreed implementation/validation scope to that task.
-- Handoff is complete: the full prompt was delivered automatically, and the
-  dedicated task has now completed its authorized implementation/runtime scope.
-  Scope/release decisions, integration and eventual cleanup return to this
-  coordination session under the corresponding authorization.
-- The dedicated task has uncommitted implementation on
-  `feature/e2e-reliability` at HEAD `0e0878ef1`: three CI workflow gates and
-  version evidence, fail-closed preparation/cleanup, fresh onboarding attempts
-  per file execution, and evidence-based sign-in/DEV ISV corrections. CI helper
-  regressions passed 27 tests and independent review findings were addressed.
-  Product commit/push/PR/deployment remain unauthorized and have not occurred.
-- Local full-suite evidence is **104 passed / 5 allowed skips**, with
-  all 109 collected results accounted for and no failure, flaky result,
-  unexpected nonexecution or setup/report error. Onboarding's 22 scenarios
-  also passed first execution, same-runner Run All and a final fixed-code Reload,
-  with exact office cleanup verified. Full counts and evidence limits remain in
-  the detailed E2E checkpoint rather than being duplicated here.
-- The first staging full run correctly failed on signup preparation (93 passed,
-  1 failure, 5 allowed skips, 10 follow-up tests not run). Trace evidence identified
-  a test wait on an input removed after successful verification. A one-function
-  correction passed its complete 16-test consumer scope locally and on staging.
-- **Final staging whole-suite verification passed: 104 passed / 5 allowed skips**,
-  no failure/flaky/extra nonexecution or setup/report errors, all 109 planned
-  results accounted for. Clinic/Lab/Admin BUILD_IDs and source evidence matched
-  at the run's boundaries. This completes the authorized implementation/runtime
-  scope; the product remains uncommitted and the new workflows have not been run
-  remotely. Integration and delivery still need separate authorization.
-- Operating guidance and the personal skill source/installed copy are aligned
-  with the role-neutral objective and no fixed pass-count gate. Feedback's
-  existing ten scenarios and additional coverage candidates are explicitly
-  separated in the E2E checkpoint; no expansion of native E2E is implied.
+- Detailed current state is in `projects/dentlink-client-e2e.md`. The dedicated
+  worktree is `/Users/parkjongsun/Repository/dentlink-client-e2e`, branch
+  `feature/e2e-reliability`, HEAD `0e0878ef1`; 30 changed/new files remain
+  uncommitted. Product commit/push/PR/deployment have not been authorized or done.
+- Scope is web with supporting Clinic/Lab/Admin flows, including feedback;
+  native app E2E is excluded. The objective is role-neutral, trustworthy full
+  staging verification within the registered coverage, without a fixed pass count.
+- After the earlier defect-fix closeout, the user required implementable operating
+  integration to be completed. Official local/staging/deployed-dev/headed commands
+  and all three CI workflows now use one runner for collection, version/source
+  evidence, verdict and per-run artifacts. Focused/UI diagnostic evidence is
+  separated from full staging verification.
+- Retained regression checks now pass **100/100**, including lifecycle ownership,
+  signup transition, false-success prevention, interruption/owned-process cleanup
+  and source-rename detection. Independent review findings were resolved. Type,
+  formatting and diff checks passed.
+- Official local full passed **104 + 5 allowed exclusions**, with all 109 results
+  accounted for and clean teardown. This precedes only the final source-digest
+  rename correction. The correction passed its real-Git regression and the
+  subsequent final staging full run; exact source versions are in the E2E file.
+- Final official staging full passed **104 + 5 allowed exclusions**, with no
+  failure/flaky/extra nonexecution/global errors. Final source digest is
+  `6b8a0e35265a09fbc54d19aba51e1ecf0bf784abe95bb37b5f8ee255d0fbd75f`;
+  Clinic/Lab/Admin BUILD_IDs stayed stable at the execution boundaries. Both
+  environments' onboarding meta/locks and owned local server listeners were absent
+  after completion.
+- The prior deferred implementation/verification items are complete. Remaining
+  delivery gates are explicitly authorized product Git/PR integration and actual
+  remote CI execution. The new workflows have not run remotely. Use the official
+  runner for future evidence; do not require the old temporary wrapper or repeat
+  the same matrix merely to accumulate passes.

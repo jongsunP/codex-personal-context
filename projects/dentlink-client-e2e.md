@@ -1,11 +1,124 @@
 # Dentlink E2E Reliability Checkpoint - 2026-09-11
 
-This is the implementation and verification closeout checkpoint. It
-supersedes the initial read-only audit and older execution rules below.
-The final working copy passed the identified staging full suite. Local whole-suite,
-affected-scope and onboarding UI evidence are recorded separately below.
+The latest completed scope includes the official execution path, retained
+regressions, operational documentation and real full-suite verification below.
+The earlier closeout covered defect fixes/runtime evidence but left implementable
+runner integration work. The user required that work to be completed now rather
+than deferred as an operating task. This section supersedes earlier completion
+claims and source digests; historical evidence remains below.
 
-## Current Implementation And Verification — completed authorized scope
+## Current Implementation And Verification — official runner
+
+- Worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`, branch
+  `feature/e2e-reliability`, HEAD `0e0878ef1c5b1cc2dbec44c57a740e0e072cdad7`.
+  There are **30 changed/new files**, all uncommitted. Product commit, push, PR
+  mutation and deployment are not authorized and have not occurred. The branch
+  still has no upstream; do not pull an invented tracking branch or mutate the
+  main checkout. Personal context records evidence, not a transferable product
+  code diff.
+- The objective remains role-neutral: identify the deployed staging version,
+  verify all registered web scenarios, and use the result within its tested
+  coverage to support production delivery decisions. Native app E2E is excluded.
+  The Clinic project contains 109 tests in 16 files with supporting Lab/Admin
+  flows; this is not coverage of every product feature.
+
+### Official execution and retained evidence
+
+- `pnpm e2e:clinic` (local), `pnpm e2e:clinic:stg` (staging),
+  `pnpm e2e:clinic:dev` (deployed development), and both headed commands now use
+  `scripts/e2e-run.cjs`. The three CI workflows use this same runner and run
+  `pnpm e2e:check` before browser installation. CI integration has been statically
+  checked but has **not been exercised remotely**.
+- Each invocation creates a new ignored `e2e-runs/<timestamp-uniqueid>/` folder.
+  `summary.md`, `verdict.json`, `run.json`, plan/report JSON, source manifests,
+  remote version snapshots, HTML, traces/screenshots and private logs are retained
+  together. Existing output folders cannot be overwritten. Local artifacts are
+  not automatically deleted; CI retention remains seven days. Never copy raw
+  traces, credentials, tokens or account data into personal context.
+- The runner collects the selected inventory, verifies remote versions before
+  account-mutating tests, executes Playwright, verifies ending versions/source,
+  and produces one exit status and human-readable summary. Zero/missing/incomplete
+  results, setup/global errors, unexpected nonexecution/skips, flaky outcomes,
+  wrong/changed versions and source changes fail the gate. Five exact exclusions
+  remain separate: Referral 1, BP 1 and unset-Default-Scanner account scenarios 3.
+- Spec/grep selection is recorded as `focused`; only passing full staging sets
+  `staging_full_verified=true`. Reporter/output/project/config and other bypass
+  options are protected. UI commands remain diagnostic, supporting multiple
+  selections and Reload; use official CLI/headed results for the final verdict.
+- Source manifests identify HEAD and changed/untracked file contents. A real Git
+  regression found that rename detection could conflate a staged rename with a
+  restored original. `--no-renames` now records the deleted original explicitly.
+- First interruption requests normal cleanup; a second interruption or 30-second
+  grace expiry stops the owned CLI and verified descendant process groups.
+  Separate detached servers/browser groups are tracked by PID, parent PID, group
+  and start time. Unrelated/reused processes are protected. Unverified cleanup
+  remains a failed operational result. Tests cover this with real isolated Node
+  processes; a forced interruption of the real browser E2E was not performed.
+- `e2e/README.md`, the shared E2E skill and spec-writer reference document the
+  commands, scope, interpretation and evidence retention without prescribing an
+  operator's job role. Stateful serial specs must run as whole files.
+
+### Verification and scope limits
+
+- `pnpm e2e:check`: **100/100 passed** — verdict/version 27, runner 23,
+  onboarding lifecycle 28, signup success transition 5, process ownership/cleanup
+  17. These tests are stored in the repository, including three real Node process
+  fixtures and actual installed-Playwright report fixtures. No product API or
+  browser is required for this command.
+- E2E TypeScript, changed-file formatting and `git diff --check` passed.
+  Independent reviews covered CI wiring, interruption, process ownership and the
+  rename regression; actionable findings were fixed and confirmed.
+- A real official CLI run with a deliberately nonmatching grep collected zero
+  cases, exited 1 and retained a failure summary without executing test bodies:
+  `e2e-runs/2026-09-11T10-19-07-277Z-829c293e/`.
+- Initial official staging full passed 104 + 5 allowed exclusions with stable
+  versions/source at `e2e-runs/2026-09-11T10-19-50-605Z-5332dc23/`.
+  This preceded the final process-cleanup and source-rename changes.
+- **Official local full: 104 passed / 5 allowed exclusions**, zero failures,
+  flaky outcomes, extra nonexecution or global/report errors; gate passed,
+  all 109 planned results accounted for; 7.4 minutes.
+  Source digest `9051b1563c5bc27a6775039ff7df7da7190c33e8078a8867da09f709b8f20ec6` was unchanged during this run.
+  This includes process cleanup integration and precedes only the final
+  `--no-renames` source-identification correction plus its regression test.
+  The correction does not change product scenarios; it was verified by the
+  real-Git regression and the subsequent final staging full run.
+- **Final official staging full: 104 passed / 5 allowed exclusions**, zero
+  failures, flaky outcomes, extra nonexecution or global/report errors; gate and
+  `staging_full_verified` passed; all 109 planned results accounted for;
+  3.6 minutes. Final working-copy digest:
+  `6b8a0e35265a09fbc54d19aba51e1ecf0bf784abe95bb37b5f8ee255d0fbd75f` across 30 files, unchanged before/after.
+- Final staging snapshots at `2026-09-11T10:40:46.597Z` and
+  `2026-09-11T10:44:23.410Z` bracket the actual execution. Clinic BUILD_ID
+  `t0PqFwz3pmJ2r2XI8QnpJ`, Lab
+  `h89hRMxK80RwI58M-iIMe`, Admin
+  `GGdLJ50HcBrXPLB2m4kp0` were unchanged. This is boundary
+  equality, not continuous deployment monitoring. Earlier evidence ties this
+  Clinic ID to deployment run 34564023735 / commit 28e5e0b; Lab/Admin source SHAs
+  are not independently claimed.
+- After completion, both development/staging onboarding meta and lock paths were
+  absent. No listener remained on owned ports 3100/3105/3102. The main checkout's
+  unrelated server was not stopped.
+- Read the actual results at:
+  - `/Users/parkjongsun/Repository/dentlink-client-e2e/e2e-runs/2026-09-11T10-32-08-960Z-343e4b0e/summary.md`
+  - `/Users/parkjongsun/Repository/dentlink-client-e2e/e2e-runs/2026-09-11T10-40-45-910Z-9dffd9d1/summary.md`
+  - Regression log: `/tmp/dentlink-e2e-reliability-20260911/official-regression-final.log`
+
+### Next starting point
+
+The previously deferred implementation items 1–3 are now completed: official
+execution, retained regressions, and operating guidance with actual verification.
+Use the official commands for future runs; the old `/tmp/dentlink-e2e-reliability-20260911/run-suite.cjs` wrapper
+is historical and is no longer required. Do not rerun to reach a fixed pass count.
+New code, a changed deployment or a new failure warrants proportionate validation.
+
+Remaining delivery gates are product commit/push/PR and actual remote CI adoption,
+subject to explicit authorization. Do not imply those have occurred. Additional
+feature coverage and the five excluded setup cases remain separately identified
+coverage/maintenance work, not failures silently counted as passes.
+
+---
+
+## Earlier Implementation And Verification — before official runner integration
 
 - Active worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`.
   Branch: `feature/e2e-reliability`; HEAD:
