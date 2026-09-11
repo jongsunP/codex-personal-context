@@ -3,8 +3,8 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current checkpoint is the final section, **Dentlink App Session Final
-Handoff - 2026-09-11 15:07 KST**. Earlier PR review, notification design and
+The current checkpoint is the final section, **FE Handoff Acceptance And
+Develop Integration - 2026-09-11**. Earlier PR review, notification design and
 delivery sections record the preceding implementation and decisions. Earlier
 dated delivery, review, API and runtime results below are historical, not
 current claims.
@@ -90,11 +90,13 @@ current claims.
 - Current branch: `feature/DL-16061`
 - Current HEAD: `a8f3a6cbb81c218b7ab16bed8e7d4b71fab45dd7`
 - The checkout is clean and synchronized with `origin/feature/DL-16061`.
-- `origin/develop` is `967ba71b1f864ce581c999950dd74fbb28eff046`;
-  the feature branch is 56 commits ahead / 1 commit behind by graph. The sole
-  develop-only release merge has the same tree as its feature-side parent, so
-  it introduces no missing product-code change into the current feature
-  checkout. Re-verify this time-sensitive status before future work.
+- PR #286 was squash-merged into `develop` at 15:09:46 KST on 2026-09-11 as
+  `c205fe0752e06c17866bc3873c94a5b6e2e492c2`, whose tree exactly matches the
+  feature HEAD. `origin/develop` is now
+  `f75d7d9b27a3bb32e69726dd6e6f8792c756a710`, including subsequent PR #295.
+  `origin/main` and `origin/release/office/v2.2.3` remain at `967ba71`.
+  Preserve the current checkout until the user explicitly requests cleanup;
+  do not reuse this completed feature branch for new work.
 - This first feature was intentionally implemented in the existing checkout.
   For a later substantial feature, use a dedicated feature worktree/session
   only when the user requests it; for a tiny task, ask first.
@@ -2478,3 +2480,35 @@ notification label `Case Preference`; a source-file wording cleanup is enough.
   API/design/product change. For the present work, finish DL-16229 and DL-16353
   QA workflow as evidence allows, obtain app review approval, and coordinate
   merge/release without deleting `feature/DL-16061` beforehand.
+
+## FE Handoff Acceptance And Develop Integration - 2026-09-11
+
+- The FE top-level session accepted the final app handoff after pulling the
+  clean personal-context `main` at `7eb5368` and reading this checkpoint and
+  `projects/dentlink-fe.md`.
+- Live verification found a change after the 15:07 handoff: PR
+  [#286](https://github.com/Innvoaid/dentlink-app/pull/286) was merged by
+  `jongsunP` at 15:09:46 KST. Its squash commit is
+  `c205fe0752e06c17866bc3873c94a5b6e2e492c2`; a direct tree diff against
+  `a8f3a6cbb81c218b7ab16bed8e7d4b71fab45dd7` is empty. The original feature
+  SHA is not an ancestor of develop because of squash integration, not because
+  its product changes were omitted.
+- After fetch, both the tracking ref and live remote `develop` resolve to
+  `f75d7d9b27a3bb32e69726dd6e6f8792c756a710`, which also contains subsequent
+  PR #295. `main` and `release/office/v2.2.3` remain at
+  `967ba71b1f864ce581c999950dd74fbb28eff046`; release and Production inclusion
+  are not established by the develop merge.
+- The local feature checkout remains clean, synchronized with its feature
+  upstream at `0/0`, and is the sole worktree. No product file, local branch,
+  worktree, PR, Jira issue, or deployment was changed by the accepting session.
+  Cleanup still requires an explicit user request and fresh preservation and
+  ownership checks; new work must not reuse the completed feature branch.
+- All 16 CodeRabbit threads remain resolved. No formal human `APPROVED`
+  review is recorded; PR merge and formal approval are separate facts.
+- Live Jira rechecks confirm DL-16061 is complete, while DL-16229 and DL-16353
+  remain `READY FOR QA`. The other implementation, test, Staging publication,
+  installation and runtime evidence is accepted from the final handoff above;
+  it was not rerun during acceptance.
+- Next work is the remaining QA workflow, release/Production coordination,
+  or a newly confirmed defect or requirement. Use the feature-based session
+  model in the common guidance, retaining separate Git boundaries for web/app.

@@ -92,6 +92,16 @@ Detailed implementation history remains in the relevant existing project file.
   verify PR #286, Jira, branch and runtime state. The preserved app starting
   point is `feature/DL-16061` at `a8f3a6c`; resume implementation only for a
   new QA card, reviewer finding, or confirmed product/API/design change.
-- Keep current delivery gates separate: app implementation is complete, while
-  DL-16229 and DL-16353 remain `READY FOR QA`, PR #286 has no human approval and
-  is not merged, and the feature branch must remain until integration finishes.
+- The top-level session accepted the app handoff and rechecked live state.
+  The earlier transition handoffs came from the former web session;
+  `DENTLINK_APP_FINAL_HANDOFF` came from the former app session. Keep their
+  repository ownership distinct. Ask the user when a substantive conflict or
+  unanswered decision remains after comparing the evidence.
+  After the 15:07 handoff, PR #286 was merged into app `develop` at 15:09:46
+  KST. Its squash result exactly preserves the feature tree. Detailed Git and
+  review evidence is in the latest section of `projects/dentlink-app.md`.
+- Keep current delivery gates separate: app implementation and develop
+  integration are complete; DL-16229 and DL-16353 remain `READY FOR QA`.
+  No formal human approval is recorded, and release/Production inclusion is
+  not confirmed. Preserve existing branch/worktree state until the user asks
+  for cleanup; do not reuse the completed feature branch for new work.

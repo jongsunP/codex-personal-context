@@ -87,15 +87,13 @@ For detailed current state, read:
   The user currently owns both web and app work; cross-platform features are
   coordinated together while implementation and Git state remain repository
   specific.
-- Current state: initial setup and Office native feedback/API/deep-link/WebView
-  integration are implemented. Latest `feature/DL-16061` commit `919a884`
-  includes account-scoped cleanup, file-size checks and upload cancellation
-  from the follow-up reviews.
-  PR #286 remains open with three develop conflicts; do not infer merge-ready
-  from local checks or a resolved review thread. Notification design rows exist
-  but their real setting API mapping awaits BE pushType release. The canonical
-  current review result, Git state and separate runtime proof boundaries are
-  maintained in the personal checkpoint below rather than duplicated here.
+- Current state: confirmed Office feedback, notification settings, deep-link,
+  WebView integration and QA fixes are implemented. PR #286 was squash-merged
+  into `develop` on 2026-09-11 after the final app handoff. The preserved local
+  feature checkout is clean at `a8f3a6c`; cleanup requires a user request.
+  DL-16229 and DL-16353 remain `READY FOR QA`, and release/Production inclusion
+  is a separate gate. Current Git, review, Staging and runtime evidence is
+  maintained in the personal checkpoint below.
 - Personal current checkpoint:
   `projects/dentlink-app.md`
 
