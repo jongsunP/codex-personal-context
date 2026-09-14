@@ -114,6 +114,25 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## E2E Coordination Checkpoint — 2026-09-14
 
+- Current delivery supersedes the pre-merge review state below: the user merged
+  E2E PR [#4606](https://github.com/Innvoaid/dentlink-client/pull/4606) into
+  `release/v1.86.0` at 16:51:06 KST, squash commit
+  `c506661e612b7105a7c8b73f32b96f39ee10b41c`.
+- The user then authorized remote `stage` deletion/recreation from remote
+  `master` and a release-to-stage PR. The E2E session used exact leases to delete
+  old stage `28e5e0b1e` and recreate it at master `ddeeb1e86`, verified both refs,
+  and created [PR #4607](https://github.com/Innvoaid/dentlink-client/pull/4607),
+  `[Release] v1.86.0 스테이징 재배포`, `release/v1.86.0 -> stage`. The full release
+  comparison is 16 commits/188 files, with no merge conflicts and a resulting
+  tree identical to release. No local checkout/worktree/protection was changed.
+- The user (`jongsunP`) merged #4607 at 16:55:48 KST while final verification was
+  underway. Remote stage is now `2ce6c29d412f47976f74326b2202bca4b2c123af`.
+  Exact-SHA deployment workflows started at 16:55:51 KST: Office/Clinic
+  `34820155085`, Lab `34820155047`, Admin `34820155051`; all were **in progress**
+  when checked. The agent did not merge or dispatch workflows. Actual deployment
+  completion and new post-deployment E2E results still require verification.
+- The following implementation/review evidence predates those merges and is
+  retained with its original source and deployment boundaries.
 - Detailed current state is in `projects/dentlink-client-e2e.md`. Worktree
   `/Users/parkjongsun/Repository/dentlink-client-e2e`, branch
   `feature/e2e-reliability`, HEAD `f267c4924`, clean and synchronized with

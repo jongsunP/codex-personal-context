@@ -1,15 +1,45 @@
 # Dentlink E2E Reliability Checkpoint - 2026-09-14
 
-## Current Follow-up — CodeRabbit review and local server logs
+## Current Delivery — release integrated and staging deployment started
+
+- The user merged E2E PR [#4606](https://github.com/Innvoaid/dentlink-client/pull/4606)
+  into `release/v1.86.0` at 2026-09-14 16:51:06 KST. Its squash commit is
+  `c506661e612b7105a7c8b73f32b96f39ee10b41c`, including the reviewed local-log follow-up.
+- The user explicitly authorized deleting remote `stage`, recreating it from
+  current remote `master`, and opening `release/v1.86.0 -> stage`. The old stage
+  `28e5e0b1ef5ba43c620350e90eaa0fc751db7791` was deleted with an exact lease;
+  stage was recreated with a must-not-exist lease at master
+  `ddeeb1e868c64f3e1047170f6bc6282a9646ed97`. Both remote refs were verified equal
+  before PR creation. Push hooks passed without bypass; only a command-local SSH
+  push URL override was used. No local checkout, sibling worktree or protection changed.
+- Created [PR #4607](https://github.com/Innvoaid/dentlink-client/pull/4607),
+  `[Release] v1.86.0 스테이징 재배포`, with release head `c506661e6` and stage base
+  `ddeeb1e86`. It contains the complete release: 16 commits and 188 changed files,
+  including other service changes as well as E2E. An independent merge-tree check
+  had no conflicts and exactly matched the release tree. All three app path
+  filters were covered. This is merge evidence, not runtime QA.
+- During final verification, the user (`jongsunP`) had already merged #4607 at
+  16:55:48 KST. Live remote `stage` is now merge commit
+  `2ce6c29d412f47976f74326b2202bca4b2c123af`; master and release remain unchanged.
+  The agent did not merge the PR or dispatch a workflow.
+- Exact-merge-SHA Actions started at 16:55:51 KST and were **in progress** when
+  checked: Office/Clinic run `34820155085`, Lab `34820155047`, Admin `34820155051`.
+  Deployment completion and post-deployment E2E results remain unverified. The
+  earlier staging results below belong to their recorded sources/deployments.
+- Next: inspect those exact Actions and their actual deployment/E2E outcomes.
+  The E2E worktree remains clean on `feature/e2e-reliability` at `f267c4924`;
+  preserve it and the user's existing local UI unless cleanup is requested.
+
+## Completed Follow-up — CodeRabbit review and local server logs
 
 - The user requested the complete CodeRabbit review cycle for PR
   [#4606](https://github.com/Innvoaid/dentlink-client/pull/4606), then also
   authorized fixing repetitive local `e2e:clinic:ui` web-server output. The user
   confirmed their own local UI tests passed before requesting the log improvement.
 - Current product HEAD is `f267c4924440cfd620edd0f92d92a36d48608a2b`, clean and
-  synchronized with `origin/feature/e2e-reliability`. PR #4606 still targets
-  `release/v1.86.0`, with the same title and 49-file overall scope. Team review,
-  release merge, deployment and actual remote E2E CI remain separate gates.
+  synchronized with `origin/feature/e2e-reliability`. At this checkpoint, PR #4606
+  targeted `release/v1.86.0`, with the same title and 49-file overall scope.
+  Subsequent release integration and staging progress are recorded above.
 - Commit `99f4780c8c555520589c64f90d45ffd1e421b14b`
   (`test: 배포 준비 실패와 온보딩 오류 진단 보완`) fixed both valid minor findings:
   DEV/STG E2E wait steps now reject empty BUILD_ID before curl/sleep, and the
@@ -59,7 +89,7 @@
   **zero unresolved threads**. This requested review cycle is complete. Vercel
   remains failure with `Deployment was blocked`; this is separate from the
   earlier explicit author-access failure and E2E results. Human approval, merge,
-  deployment and remote E2E execution are not claimed completed.
+  deployment and remote E2E execution were not completed at that checkpoint.
 
 ## Initial Delivery — committed, pushed and release PR opened
 
@@ -69,7 +99,7 @@
   contains all 49 approved files. `feature/e2e-reliability` is clean and tracks
   `origin/feature/e2e-reliability`, with no ahead/behind difference.
 - PR [#4606](https://github.com/Innvoaid/dentlink-client/pull/4606),
-  **웹 E2E 실행과 결과 검증 신뢰성 개선**, is open and non-draft. Its base is
+  **웹 E2E 실행과 결과 검증 신뢰성 개선**, was open and non-draft at creation. Its base was
   `release/v1.86.0` at `1e0754789fd5d3ed250990e05c4582a820b30abe`; its head matches
   the commit above. The release gained one unrelated service wording change
   since this worktree's base. A merge-tree simulation succeeded without conflict;
