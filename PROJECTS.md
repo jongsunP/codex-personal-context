@@ -194,7 +194,8 @@ For detailed current state, read:
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
 - Dedicated worktree: 없음. 2026-09-11 최종 정리에서 제거했다.
 - Current checkout: `/Users/parkjongsun/Repository/dentlink-client`
-- Current release branch: `release/v1.86.0`
+- Current local branch: `master`만 유지. 2026-09-14 원격 master와 동기화하고
+  병합 완료된 로컬 `release/v1.86.0`을 삭제했다. 원격 release는 보존했다.
 - Jira: parent `DL-15828`
 - Current state: DL-15828 웹 구현·관리자 조회·WebView/native 진입·Amplitude·QA 수정과
   피드백 E2E 10개가 `release/v1.86.0`에 반영돼 있다. 주문상세 피드백 조회·노출 gate는
@@ -202,8 +203,9 @@ For detailed current state, read:
   `OrderDto.isReviewable === true`를 정본으로 사용한다. 이 후속 수정은 PR #4600으로
   release에, PR #4602로 develop에, release 재전달 PR #4603 이후 stage에 반영됐다.
   2026-09-11 live Git에서 세 원격 branch의 코드와 generated contract를 재확인했다.
-  사용자 확인상 개발·스테이징 배포 작업은 처리됐으며, 원격 master는 아직
-  `release/v1.85.1` 기준이므로 v1.86.0 운영 반영은 별도 단계다. 현재 알려진 추가 웹 FE
+  이후 PR #4608로 v1.86.0 release가 master에 통합됐고 2026-09-14 live Git에서
+  release/master의 동일 tree를 확인했다. 배포·E2E 최종 근거는
+  `projects/dentlink-client-e2e.md`에 기록돼 있다. 현재 알려진 추가 웹 FE
   구현은 없고 새 QA·기획·디자인·Swagger 변경이 생기면 메인 checkout에서 live 상태를
   재확인한 뒤 새 작업 branch/worktree를 준비한다. 앱은 별도 Git 저장소 경계를
   유지하지만, 같은 DL-15828 기능 세션에서 웹과 함께 처리할 수 있다.

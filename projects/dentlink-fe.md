@@ -112,17 +112,24 @@ Detailed implementation history remains in the relevant existing project file.
   detailed decisions and verified state stay in
   `projects/dentlink-unified-notification-center.md`.
 
-## Local Repository Housekeeping Audit — 2026-09-14
+## Local Repository Housekeeping Completed — 2026-09-14
 
 - A read-only web/app Git audit confirmed no extra registered worktrees in
   either repository. Web E2E's local feature branch and retired directory are
-  absent; web retains only local `master` and `release/v1.86.0` in its main
-  checkout, both behind their remotes with no local-only commits.
+  absent. At audit time web retained local `master` and `release/v1.86.0`,
+  both behind their remotes with no local-only commits.
 - After that audit the user authorized cleanup. App now has only local `main`,
   clean and synchronized with `origin/main`; completed local `feature/DL-16061`
   was deleted after verifying its remote and squash-merge preservation.
   Exact evidence is in `projects/dentlink-app.md`. Each product has only its
-  main checkout. The remote feature was retained; no web branch was changed.
+  main checkout. The remote app feature was retained.
+- The user then explicitly requested that web retain only local `master`.
+  After confirming the local and remote release commits were included in
+  `origin/master`, web `master` was fast-forwarded and local `release/v1.86.0`
+  was deleted. Web now has only clean, synchronized `master`; the remote release
+  remains preserved. Detailed web evidence is in
+  `projects/dentlink-client-order-feedback.md`. No extra worktree remains in
+  either product repository.
 
 ## E2E Coordination Checkpoint — 2026-09-14
 
@@ -133,9 +140,10 @@ Detailed implementation history remains in the relevant existing project file.
   evidence remains in the detailed checkpoint; raw local paths are historical.
   No owned server, 3100/3105/3102 listener or account/auth/onboarding lock remained.
   Shared caches/skills, unrelated stashes and remote refs were preserved.
-- Only the main product checkout remains: clean local `release/v1.86.0` at
-  `0e0878ef1` (behind remote by 2); local master remains `ddeeb1e86`. Refresh
-  before new work. The completion prompt was delivered to this `메인세션`
+- At E2E retirement, the remaining main checkout was clean local
+  `release/v1.86.0` at `0e0878ef1`, with master at `ddeeb1e86`; the later
+  housekeeping checkpoint above supersedes that local branch state.
+  The completion prompt was delivered to this `메인세션`
   (`01a08f0c-2057-7852-ae8d-0cf950a91fd3`), which explicitly acknowledged
   reading canonical commit `5d9cd1b` and receiving the handoff at 19:04:42 KST.
   It is idle with no additional task or document mutation. The user will remove the old E2E app

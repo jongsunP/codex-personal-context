@@ -4,7 +4,26 @@
 기록보다 live Git, Jira, Notion, Figma와 배포된 Swagger 상태를 우선한다. 기획
 검토, 구현, 로컬 QA, 앱 검증, release 전달, 스테이징 QA와 배포를 구분한다.
 
-## 최신 체크포인트 — 2026-09-03 개발서버 반영 PR
+## 최신 체크포인트 — 2026-09-14 웹 master 복귀와 로컬 release 정리
+
+- 사용자가 웹은 로컬 `master`만 남기도록 명시적으로 요청했다.
+- `/Users/parkjongsun/Repository/dentlink-client`에서 원격 fetch 후 로컬 release
+  `0e0878ef1c5b1cc2dbec44c57a740e0e072cdad7`과 원격 release
+  `c506661e612b7105a7c8b73f32b96f39ee10b41c`가 모두 최신 `origin/master`의
+  조상이며 고유 커밋이 0개임을 확인했다. 원격 release와 master의 tree도 동일했다.
+- 로컬 `master`를 `ddeeb1e86`에서
+  `de2ffdd9e3025cb758632788cd6086c170e4974e`로 fast-forward하고 로컬
+  `release/v1.86.0`을 `git branch -d`로 삭제했다. 최종 상태는
+  `HEAD = master = origin/master`, ahead/behind `0/0`, clean이다.
+- 로컬 branch는 `master` 하나, 등록된 worktree는 위 기본 checkout 하나뿐이다.
+  원격 `release/v1.86.0`은 `c506661e6`에 보존했고 기존 stash와 비추적·ignored
+  로컬 자산은 정리하지 않았다. 제품 commit·push·PR·배포 변경은 하지 않았다.
+- `master`의 release 통합은 PR #4608로 확인됐다. 이 정리는 추가 기능 QA나
+  신규 배포 증거가 아니며, E2E 최종 검증·배포 이력은
+  `projects/dentlink-client-e2e.md`를 참조한다. 신규 작업은 최신 원격과 실제 배포
+  대상 release를 다시 확인하고 새 작업 branch/worktree에서 시작한다.
+
+## 이전 체크포인트 — 2026-09-03 개발서버 반영 PR
 
 - 사용자 지시로 최신 `origin/master` `ddeeb1e868c64f3e1047170f6bc6282a9646ed97`을
   `feature/DL-15828`에 충돌 없이 병합했다. 병합 commit은
