@@ -7,13 +7,16 @@ description: Diagnose, improve, and verify Dentlink web E2E reliability across l
 
 ## Purpose and sources
 
-Make the full staging suite a trustworthy basis for production delivery
-decisions within the tested coverage. Develop and diagnose locally, then
-verify the identified deployed staging version as a whole.
+Make the full set of currently registered web scenarios on staging a
+trustworthy basis for production delivery decisions within that coverage.
+Develop and diagnose locally, then verify the identified deployed staging
+version as a whole. This does not mean all product features or native apps.
 
 Read `projects/dentlink-client-e2e.md` in the user's Git-backed
 `codex-personal-context` for current scope, evidence, and environment details.
-Locate the exact product checkout and use its current code/configuration.
+Locate the exact product checkout and read its `e2e/README.md`, the canonical
+execution, isolation, artifact, and verdict contract; verify it against the
+current `package.json`, runner, and Playwright configuration.
 Historical checkpoints and legacy repository skills provide context; revise
 procedures when the user's goal or current evidence requires it. This skill
 does not authorize branch, worktree, commit, push, PR, or deployment mutations.
@@ -46,6 +49,38 @@ does not authorize branch, worktree, commit, push, PR, or deployment mutations.
 
 ## Execution and reporting
 
+Use the official commands from that checkout:
+
+- `pnpm e2e:clinic`: local full suite against the development API.
+- `pnpm e2e:clinic:stg`: full suite on the deployed staging environment.
+- `pnpm e2e:clinic:dev`: full suite on the deployed development environment.
+- `pnpm e2e:clinic:headed` / `pnpm e2e:clinic:headed:stg`: the same local or
+  staging runner and verdict, with a visible browser.
+- `pnpm e2e:check`: browser-free runner, verdict, lifecycle, and helper
+  regressions.
+
+Adding a spec path or `--grep` records a `focused` run. Use a whole serial spec
+when its tests share state. Keep the runner's reporter/output/config options;
+consult the README for accepted arguments. Read the new run's
+`e2e-runs/<run>/summary.md` and `verdict.json`, then its reports/traces for
+causes. `staging_full_verified` is true only for a passing full staging run.
+`pnpm e2e:clinic:ui` / `pnpm e2e:clinic:ui:stg` are diagnostic sessions with
+selection and Reload; their green UI counts do not replace that verdict.
+
+Official and direct Playwright configuration reject targets outside the
+documented local/development/staging URL roots. This checks configured inputs
+and version fetches, not every subsequent browser request or a remote app's
+embedded API configuration. Runs mutate real test-server data, including when
+the frontend is local. Cleanup covers explicit scenario targets and owned
+onboarding artifacts, not all server changes.
+
+Auth files are separated by run under `e2e/.auth/runs/<runId>/`. Account locks
+block overlapping API/account use on the same host before login; CI concurrency
+coordinates only the configured repository/group. Neither is a distributed
+lock across developer machines and other CI runners. Coordinate shared account
+use, and preserve unverified lock/meta ownership instead of deleting artifacts
+to force progress. Use the README for current recovery and UI Reload details.
+
 Use focused runs for diagnosis, then verify affected whole-suite behavior and
 the original reexecution trigger. Select additional runs according to remaining
 uncertainty and risk. Staging evidence applies to the deployed version only.
@@ -54,7 +89,9 @@ do not chase absolute reliability through unbounded repetitions.
 
 For CI reporting changes, exercise success and failure paths, including setup
 errors, empty/incomplete reports, unexpected nonexecution, and flaky results.
-Allowed skips need a documented reason; report them separately from passes.
+Allowed skips must match the registered file, full title, and exact reason in
+`scripts/e2e-verdict.cjs`; report them separately from passes. Missing required
+setup and serial follow-up tests that never ran are not allowed exclusions.
 
 Let the user inspect changed files/diffs in the same work folder. Execute
 autonomously in a controllable terminal. Show the test UI when useful; use

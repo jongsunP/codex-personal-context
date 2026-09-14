@@ -1,4 +1,142 @@
-# Dentlink E2E Reliability Checkpoint - 2026-09-11
+# Dentlink E2E Reliability Checkpoint - 2026-09-14
+
+## Current Completed Scope — safety and documentation alignment
+
+The user authorized implementation and verification of the remaining safeguards
+after asking whether all documentation and service side effects were covered.
+The September 11 completion below applies to that tested implementation; it did
+not establish complete documentation alignment, production-target rejection, or
+concurrent-run isolation. This follow-up supersedes that broader completion claim.
+
+- Live worktree remains `/Users/parkjongsun/Repository/dentlink-client-e2e`,
+  branch `feature/e2e-reliability`, HEAD `0e0878ef1c5b1cc2dbec44c57a740e0e072cdad7`.
+  Product changes remain uncommitted. The branch has no upstream; the attempted
+  fast-forward pull could not select a tracking branch. Do not invent one.
+- Read-only audit found no Clinic/Lab/Admin/shared feature-code, dependency,
+  lockfile, or production workflow changes. DEV/STG E2E runs after deployment;
+  failing its new final gate fails the workflow without rolling back deployment.
+- Existing limitations: environment overrides could select production; auth
+  artifacts were shared across runs; the local onboarding lock did not protect
+  overlapping main/Lab/Admin accounts. Real test API state is changed and order,
+  shipment, and feedback scenarios do not fully roll back their changes.
+- New artifact-directory omission: `e2e-runs/` was Git-ignored but not excluded
+  from local Docker build context or its builder-stage `COPY . .`.
+- Documentation gaps included Scanner prerequisites, exact allowed-skip reasons,
+  the root guide's dev-only CI statement, README auth/fixture descriptions, and
+  the personal skill's official runner entry points.
+- Authorized follow-up: implement target rejection and run/account isolation,
+  exclude execution artifacts from Docker, align maintained docs and skill copies,
+  then run proportionate regressions and identified staging full-suite verification.
+  Product behavior and data deletion scope must not be expanded incidentally.
+  Distributed account locking across separate hosts is not available from local
+  filesystem locks; report the actual local/CI coordination boundary.
+
+### Implemented safeguards and maintained guidance
+
+- The runner, direct Playwright configuration/UI, and version capture validate
+  exact local/DEV/STG URL roots before collection or account login. Local uses
+  localhost 3100/3105/3102 plus DEV API. Remote DEV now defaults to the deployed
+  DEV sites rather than ordinary development ports. Explicit invalid overrides,
+  mixed environments, production/unknown hosts, credentials, query strings,
+  alternate ports and API paths are rejected. Version redirects are checked
+  before following them. Error output does not expose supplied URL secrets.
+- Runner preparation causes now precede downstream missing-report diagnostics.
+  A missing source snapshot is `source_unverified`, not a claimed source change.
+- Every official run gets a fresh auth ID shared by collection and execution.
+  Direct/UI config initializes an ID and retains it for Reload in that process.
+  Clinic, onboarding, Lab shipment/status/feedback use
+  `e2e/.auth/runs/<runId>/`; actual run directories have mode 0700.
+- Same-host locks protect each normalized API/account pair plus the exact auth
+  directory. Overlapping accounts are blocked even when the onboarding account
+  differs. Partial acquisition releases only owned locks. Existing exact meta is
+  preserved for recovery; ambiguous noncanonical legacy artifacts block login
+  instead of being guessed or deleted. Normalized v2 artifacts remain separable.
+- Lock-release failures now attempt all releases and propagate an aggregate
+  failure while preserving preparation, browser-close, and cleanup causes. This
+  fixes the cross-review finding where a leftover lock could accompany green
+  teardown and block another run in the same UI process.
+- `.dockerignore` excludes E2E auth, report/trace output and `.next-e2e` builds.
+  Static checks covered 17 generated paths and preserved source paths; an actual
+  Docker build was not run and final image tracing is not claimed.
+- README, shared skill/references and root `claude.md` now agree on commands,
+  fixtures/auth, exact allowed skips, Scanner prerequisites, CI, data effects,
+  recovery and isolation limits. Personal skill source and installed copy match.
+  Both personal copies passed the actual `quick_validate.py` using a temporary
+  isolated Python environment with PyYAML. The shared `.claude` skill retains its
+  existing platform-specific `argument-hint`; its YAML/body were checked without
+  treating the Codex validator's different allowed-key schema as a defect.
+
+### Verification — 2026-09-14
+
+- Final source digest:
+  `a1eb1d23385928c34c5d3d7a7c2be3b4d04752f4681c709e67c88e3e80b7b366`,
+  **35 changed/new product files**, all uncommitted, same HEAD as above. This
+  digest was unchanged across the real local, staging and deployed-DEV checks
+  and rechecked after completion. No Clinic/Lab/Admin/shared source changes.
+- `pnpm e2e:check`: **127/127 passed** (runner 26, verdict/version 33,
+  lifecycle/config 46, signup 5, process-tree 17). E2E TypeScript, affected-file
+  formatting, Markdown and diff checks passed. Lint passed for the main changed
+  lifecycle/config/consumer files. Four empty-function lint findings in
+  `order-setup.ts` were verified against HEAD as pre-existing; only its auth-path
+  import/constant changed. Independent cross-review has no remaining findings.
+- Real production-API negative checks: official runner and direct config both
+  exited 1 before collection/account login. The final runner evidence has
+  `status=unsafe_target`, `collection=null`, `execution=null`, gate false, and no
+  source-change claim. Evidence:
+  `e2e-runs/safety-rejected-api-final-20260914/`.
+- **Official local full: 104 passed + 5 allowed exclusions**, zero failures,
+  flaky outcomes, unapproved skips, extra nonexecution or global/report errors;
+  109 planned/reported, gate true, 435.3 seconds. Evidence:
+  `e2e-runs/2026-09-14T02-26-31-502Z-bdfae997/`.
+- During that real local run, a separate official deployed-DEV signin run was
+  rejected by the existing account lock before login: 3 collected, 0 executed,
+  one setup error, gate false. All seven original account locks retained the
+  local owner's PID, and the local full run completed successfully. Evidence:
+  `e2e-runs/2026-09-14T02-32-47-833Z-470b5b09/`.
+- **Official staging full: 104 passed + 5 allowed exclusions**, zero failures,
+  flaky outcomes, unapproved skips, extra nonexecution or global/report errors;
+  109 planned/reported, gate and `staging_full_verified` true, 212.3 seconds.
+  Evidence: `e2e-runs/2026-09-14T02-34-11-869Z-4005ec0d/`.
+  Version snapshots at `2026-09-14T02:34:12.679Z` and
+  `2026-09-14T02:37:45.490Z` bracketed execution with unchanged BUILD_IDs:
+  Clinic `t0PqFwz3pmJ2r2XI8QnpJ`, Lab `h89hRMxK80RwI58M-iIMe`,
+  Admin `GGdLJ50HcBrXPLB2m4kp0`. This is boundary equality, not continuous
+  monitoring or independent Lab/Admin source-commit attribution.
+- After the DEV lock was released, deployed-DEV signin **3/3 passed** with a
+  separate auth directory. It briefly overlapped the end of the staging run
+  (DEV report start 02:37:42.920Z, staging ended 02:37:45.553Z), and both passed.
+  This is a focused cross-environment check, not two concurrent full suites.
+  Evidence: `e2e-runs/2026-09-14T02-37-41-979Z-e813db27/`; full-staging flag false.
+- Final checks found no onboarding meta, account/auth/onboarding locks or reclaim
+  files, and no listeners on owned ports 3100/3105/3102. Three separate real auth
+  directories remained with mode 0700, ignored and Docker-excluded. Auth files
+  are retained private state, not claimed to have been deleted.
+- Regression/type/format and negative-run logs are under
+  `/tmp/dentlink-e2e-safety-20260914/`. Never copy raw credentials, tokens or
+  private traces into personal context.
+
+### Remaining boundary and next starting point
+
+The approved safeguard, documentation and local/staging verification scope is
+complete. User implementation did not require a service feature change or wider
+data deletion. Local API/account locks and configured CI concurrency do not
+provide a distributed lock across machines; coordinate shared test-account use.
+Target checks cover configured inputs and version requests, not every later
+browser request or a deployed application's embedded API settings. UI lifecycle
+and forced-interruption regressions were checked with controlled fixtures; a new
+real Playwright UI Reload/forced-browser-interruption sequence was not run here.
+
+Product commit/push/PR and deployment have not been performed. Actual remote CI
+execution of this code remains a delivery gate after authorized product Git
+integration; read-only GitHub checks found no queued/running jobs during this
+verification. Do not count local invocation of the official runner as remote CI.
+Five documented exclusions and broader feature coverage remain separate from
+this completed scope. Use this source digest and these September 14 artifacts,
+not the historical September 11 evidence below, for the current implementation.
+
+---
+
+## Historical Closeout — 2026-09-11 official runner
 
 The latest completed scope includes the official execution path, retained
 regressions, operational documentation and real full-suite verification below.
