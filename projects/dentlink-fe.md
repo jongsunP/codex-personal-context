@@ -116,8 +116,12 @@ Detailed implementation history remains in the relevant existing project file.
 
 - Detailed current state is in `projects/dentlink-client-e2e.md`. Worktree
   `/Users/parkjongsun/Repository/dentlink-client-e2e`, branch
-  `feature/e2e-reliability`, HEAD `0e0878ef1`, no upstream. All 49 changed/new
-  product files remain uncommitted. No product Git/PR/deployment mutation.
+  `feature/e2e-reliability`, HEAD `ec96beeda`, clean and synchronized with
+  `origin/feature/e2e-reliability`. The user authorized committing/pushing all
+  49 approved files and creating open, non-draft
+  [PR #4606](https://github.com/Innvoaid/dentlink-client/pull/4606) into
+  `release/v1.86.0`. Remote PR head matches; merge-tree simulation against
+  release `1e0754789` succeeded without conflict. No merge or deployment.
 - The user approved completing all discussed follow-ups, asking for the design
   best suited to the existing workflow rather than unconditional UI parity.
   Manual operation remains local frontend with DEV API, or deployed staging
@@ -135,8 +139,10 @@ Detailed implementation history remains in the relevant existing project file.
   the local/staging batch runner contract. Do not treat this as a new manual DEV
   workflow or a claim that every UI action is observed.
 - The ten new E2E scripts remain `.js` CommonJS. No further script files or
-  dependencies were added in this follow-up. Latest source digest:
+  dependencies were added in this follow-up. Verified pre-commit source digest:
   `671bb59c6f5c2a52b34c089e03c0dbcec42aada4b4fa4a273dea8d78647ee9d8`.
+  All 49 committed file contents match that snapshot; the commit changes HEAD
+  and therefore the runner's digest, so the digest is historical run evidence.
   Regressions **211/211**, syntax **10/10**, E2E types, formatting, references,
   skills and independent code/side-effect review passed. Service app paths and
   existing DEV/STG build/deploy jobs are unchanged; CI changes concern E2E jobs.
@@ -162,5 +168,14 @@ Detailed implementation history remains in the relevant existing project file.
   host-local, not distributed. Registration/assertion meaning still requires
   requirement/code review. Maintained guides and shared/personal skills use one
   authoring and execution contract; the personal installed skill matches its source.
-- Remaining delivery gates are separately authorized product Git/PR integration
-  and actual remote CI execution. No new workflow has run remotely.
+- Commit/push hooks passed all three app type/lint checks (existing lint
+  warnings), shared tests **27/27** and unchanged coverage. Missing ignored
+  local coverage baseline was prepared with the existing command. The HTTPS
+  workflow-scope rejection was resolved using already-authorized SSH identity
+  with a command-only push URL override; no hook was bypassed or persistent
+  remote/auth configuration changed.
+- Initial PR checks: Auto Assign and Vercel Preview Comments succeeded,
+  CodeRabbit was reviewing, and Vercel deployment failed because author
+  `jongsunP` needs project access. PR was `MERGEABLE` but `BLOCKED`; refresh
+  before review follow-up. Team review, release merge, deployment and actual
+  remote E2E CI are still separate gates. No remote E2E run was started here.
