@@ -3,7 +3,7 @@
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current local Git checkpoint is **Local Branch And Worktree Audit -
+The current local Git checkpoint is **Local Branch Cleanup Completed -
 2026-09-14** below. **FE Handoff Acceptance And Develop Integration -
 2026-09-11** preserves earlier delivery context; the E2E audit adds verification boundaries.
 Earlier PR review, notification design and
@@ -11,7 +11,28 @@ delivery sections record the preceding implementation and decisions. Earlier
 dated delivery, review, API and runtime results below are historical, not
 current claims.
 
-## Local Branch And Worktree Audit - 2026-09-14
+## Local Branch Cleanup Completed - 2026-09-14
+
+- The user authorized cleanup after the read-only audit below. Rechecked the
+  clean feature checkout, absence of extra worktrees/active writing tasks, and
+  exact local/remote feature preservation before changing local Git state.
+- Switched the main app checkout to `main` and fast-forwarded it from
+  `51aeb15` to `e0f4d5dd996a691b32a5ba288d826abb039105ce` using `--ff-only`.
+  It is clean, tracks `origin/main`, and has 0/0 divergence.
+- Deleted only local `feature/DL-16061` with `git branch -d`. Git warned that
+  the original feature SHA is not an ancestor of HEAD because PR #286 was
+  squash-merged. Before deletion, its tree was verified identical to squash
+  `c205fe0`, which is an ancestor of current main; the remote feature remains
+  unchanged at `a8f3a6cbb81c218b7ab16bed8e7d4b71fab45dd7`.
+- Only local branch `main` and the main worktree
+  `/Users/parkjongsun/Repository/dentlink-app` remain. No stash existed or was
+  created. No product commit/push, remote deletion, PR change, test run, or
+  deployment was performed. Existing ignored runtime/build files were retained.
+- Future app work starts by checking this main checkout and the current
+  feature base/target; do not restore the completed feature branch as an active
+  implementation branch.
+
+## Previous Local Branch And Worktree Audit - 2026-09-14
 
 - Read-only audit after fetching origin found only the main app worktree at
   `/Users/parkjongsun/Repository/dentlink-app`. It is checked out on
@@ -52,10 +73,9 @@ current claims.
   scratch. At the start of future work, sync this personal context and all
   relevant shared repositories, then verify live Git refs and current team
   documentation.
-- The app team's verified feature base is `origin/develop`. The first active
-  feature now intentionally uses the main local checkout on
-  `feature/DL-16061`, so always verify the exact live branch before editing and
-  do not assume this path is still on `main`.
+- The app team's verified feature base is `origin/develop`. The main local
+  checkout returned to `main` after the completed feedback feature was cleaned
+  up. Always verify the live checkout and current base/target before new work.
 - For a very small localized task, confirm whether a dedicated worktree is
   necessary before creating one. Use a dedicated feature worktree/session for
   larger work when requested.

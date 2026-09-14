@@ -118,11 +118,11 @@ Detailed implementation history remains in the relevant existing project file.
   either repository. Web E2E's local feature branch and retired directory are
   absent; web retains only local `master` and `release/v1.86.0` in its main
   checkout, both behind their remotes with no local-only commits.
-- App still has the completed `feature/DL-16061` checked out. Its remote and
-  squash-merge preservation are verified, so it is a local cleanup candidate;
-  exact evidence and its default-branch synchronization state are recorded in
-  `projects/dentlink-app.md`. No product deletion, switch, pull, or reset was
-  performed. The user's question was status-only.
+- After that audit the user authorized cleanup. App now has only local `main`,
+  clean and synchronized with `origin/main`; completed local `feature/DL-16061`
+  was deleted after verifying its remote and squash-merge preservation.
+  Exact evidence is in `projects/dentlink-app.md`. Each product has only its
+  main checkout. The remote feature was retained; no web branch was changed.
 
 ## E2E Coordination Checkpoint — 2026-09-14
 
