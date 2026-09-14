@@ -1,5 +1,58 @@
 # Dentlink E2E Reliability Checkpoint - 2026-09-14
 
+## Local Retirement — completed 2026-09-14 19:03 KST; handoff ready
+
+- The user authorized removing this task's local branch, worktree and disposable
+  artifacts, preserving necessary history, then delivering a completion prompt
+  to the existing `메인세션` (`01a08f0c-2057-7852-ae8d-0cf950a91fd3`). The user will
+  remove this E2E task/project in the app themselves after handoff.
+- Pre-removal audit: feature HEAD and live remote feature both `f267c4924`, with
+  no tracked changes or non-ignored untracked files. All 49 changed files
+  (39 modified, 10 added) match master `de2ffdd9e3` and release `c506661e6` in
+  content and mode. The new 10 E2E scripts are `.js`; no unique code is at risk.
+- Disposable worktree data totals about 12 GB, including 20 run directories,
+  Playwright reports/traces, build caches, node_modules and generated auth states.
+  No auth lock, cleanup meta or recovery file remained. All environment files
+  are tracked; no unique ignored environment override was found.
+- Before retiring raw reports, re-read the two canonical verdicts: full staging
+  run `2026-09-14T06-26-44-006Z-ca2c46d1` passed 104 + 5 allowed exclusions,
+  109 planned/reported, no failure/flaky/nonexecution, source unchanged,
+  `staging_full_verified=true`. Focused onboarding run
+  `2026-09-14T07-13-44-755Z-9990a977` passed 22/22, source unchanged and
+  `staging_full_verified=false`. Their source hashes and BUILD_IDs remain below.
+- The formerly running user local UI run
+  `2026-09-14T07-30-59-150Z-08c062a8` had already closed at 16:45:35 KST:
+  selection 104 passed + 5 allowed exclusions, no lifecycle issue, native exit 0.
+  Its session correctly returned `source_changed` / exit 1 after source changed
+  during the session; it does not verify the closing source or an entire release.
+- The reusable personal skill source and installed copy still match SHA-256
+  `cd79fcebdc094418ed1e67b5ad9ef009fb631c68565d9d2caa55794cffc39019` and are retained.
+- Cleanup completed: removed local `feature/e2e-reliability` with `git branch -d`
+  and removed `/Users/parkjongsun/Repository/dentlink-client-e2e` through Git's
+  worktree command. `--force` was used only to include the audited disposable
+  ignored files; tracked and non-ignored files were clean. Removed the exact 12
+  owned temporary directories and 41 files under `/tmp`, including stage reset
+  logs and PR text. Raw local run/trace/log paths below are now historical and
+  no longer exist; curated verdicts, source/BUILD_IDs and remote CI/PR links remain.
+- Verified worktree directory, Git worktree metadata and local feature branch
+  are absent. Only `/Users/parkjongsun/Repository/dentlink-client` remains as a
+  product worktree, clean on `release/v1.86.0` at `0e0878ef1` (behind remote by 2).
+  No current-task stash existed; all 148 unrelated existing stashes were retained.
+  Remote feature, master, release and stage refs were verified unchanged.
+- Process audit found zero owned E2E/Playwright/Next servers, zero listeners on
+  3100/3105/3102, and zero OS-level account/auth/onboarding locks. No process needed
+  termination. Codex app/tool processes, shared browser/transform caches,
+  unrelated or ownership-uncertain OS temp entries and reusable skills were kept.
+- Local main `master` is still `ddeeb1e86` while remote master is `de2ffdd9e3`.
+  Refresh and verify the main checkout before new work; this task did not switch
+  it, reset it or remove shared release/master branches. The retained remote
+  feature branch is outside this explicitly local cleanup request.
+- Handoff is prepared for existing `메인세션`
+  `01a08f0c-2057-7852-ae8d-0cf950a91fd3`. The user will delete E2E task
+  `01a08f83-fae9-7343-8998-218ce4a9cfec` and saved project
+  `602e3503-5579-4d51-9f9a-28f4633d1fba` themselves. Do not recreate the retired
+  worktree or resume implementation merely because this record is read.
+
 ## Current Completion — master and production, 2026-09-14 18:59 KST
 
 - The user confirmed that this work reached master and production. Live GitHub

@@ -114,6 +114,18 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## E2E Coordination Checkpoint — 2026-09-14
 
+- Local retirement completed around 19:03 KST on explicit user request. Removed
+  the clean E2E worktree and local `feature/e2e-reliability`, about 12 GB of
+  disposable worktree data, and 12 owned `/tmp` directories plus 41 files.
+  All 49 changed files matched master/release before deletion. Curated QA
+  evidence remains in the detailed checkpoint; raw local paths are historical.
+  No owned server, 3100/3105/3102 listener or account/auth/onboarding lock remained.
+  Shared caches/skills, unrelated stashes and remote refs were preserved.
+- Only the main product checkout remains: clean local `release/v1.86.0` at
+  `0e0878ef1` (behind remote by 2); local master remains `ddeeb1e86`. Refresh
+  before new work. Handoff is prepared for this `메인세션`
+  (`01a08f0c-2057-7852-ae8d-0cf950a91fd3`). The user will remove the old E2E app
+  task/project themselves; do not create replacements or reopen completed work.
 - Latest completion update around 18:59 KST supersedes the pending states below:
   the user confirmed master and production delivery. Live verification found
   [PR #4608](https://github.com/Innvoaid/dentlink-client/pull/4608) merged into
