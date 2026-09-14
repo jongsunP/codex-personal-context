@@ -1,6 +1,67 @@
 # Dentlink E2E Reliability Checkpoint - 2026-09-14
 
-## Current Delivery — committed, pushed and release PR opened
+## Current Follow-up — CodeRabbit review and local server logs
+
+- The user requested the complete CodeRabbit review cycle for PR
+  [#4606](https://github.com/Innvoaid/dentlink-client/pull/4606), then also
+  authorized fixing repetitive local `e2e:clinic:ui` web-server output. The user
+  confirmed their own local UI tests passed before requesting the log improvement.
+- Current product HEAD is `f267c4924440cfd620edd0f92d92a36d48608a2b`, clean and
+  synchronized with `origin/feature/e2e-reliability`. PR #4606 still targets
+  `release/v1.86.0`, with the same title and 49-file overall scope. Team review,
+  release merge, deployment and actual remote E2E CI remain separate gates.
+- Commit `99f4780c8c555520589c64f90d45ffd1e421b14b`
+  (`test: 배포 준비 실패와 온보딩 오류 진단 보완`) fixed both valid minor findings:
+  DEV/STG E2E wait steps now reject empty BUILD_ID before curl/sleep, and the
+  onboarding shared page attaches the existing API monitor with beforeEach reset
+  and afterEach failure annotation. Both threads were answered with validation
+  and resolved. CodeRabbit completed that revision successfully with zero
+  unresolved threads. No existing build/deploy job or service code changed.
+- Review-fix validation: actual workflow shell before/after comparisons passed
+  eight empty/matching/mismatched boundaries; shared-page real hook/monitor
+  isolation verified 401/403/5xx/network diagnostics, masking, reset isolation,
+  timeout and unchanged passing verdict. Regressions were **211/211**, and
+  staging onboarding passed **22/22** with no skip/flaky/nonexecution and stable
+  targets/source. Evidence: `e2e-runs/2026-09-14T07-13-44-755Z-9990a977/`, source
+  `f3622c096aa7a33af053325456d9421f4a872067bef038aec70da151be440cd8` before commit.
+  This was focused evidence, not a new whole-suite deployment verdict.
+- Commit `f267c4924` (`test: 로컬 웹 서버 로그를 실행별 파일로 분리`) adds local-only
+  `webservers/{clinic,lab,admin}.log` under each run. The runner creates directory
+  0700/files 0600, rejects preparation failure, clears inherited log overrides,
+  and records paths in run/session manifests, initial output and summaries.
+  The existing webServer commands append stdout/stderr to these files and emit
+  only path notices. UI Reload preserves earlier raw logs; URL readiness,
+  nonzero startup exits, test verdict and owned-process cleanup remain intact.
+- Cause: Next 16.2.7 forwards browser console warnings/errors to server stderr;
+  Playwright 1.60 forwards that stderr through its native UI reporter/stdio
+  channel. Redirecting the outer launcher alone cannot quiet the UI. This change
+  preserves raw evidence without modifying ChannelTalk/service behavior or
+  adding commands/scripts/dependencies. Direct Playwright retains its prior
+  output behavior; remote development/staging has no local-server log setup.
+- Log validation: **219/219** regressions, E2E TypeScript, JS syntax, formatting,
+  skills and independent review passed. Actual isolated native UI with synthetic
+  HTTP servers verified path-only UI output, raw stdout/stderr preservation,
+  quoted paths, Stop, Reload append/restart, startup failure and owned-server
+  termination. Evidence: `/tmp/dentlink-ui-webserver-log-PbhjMF/`.
+  Product APIs were not used for this log-only validation. The user's existing
+  local UI/servers were left running; recheck their ownership before real runs.
+  A new launcher invocation is needed to apply the new log environment.
+- Both follow-up commits passed all three app type/lint hooks (existing warnings),
+  shared tests **27/27** and coverage comparison. SSH was used with the same
+  command-only push URL override; no hook was bypassed. The tested changed-file
+  contents matched each resulting commit. Log-change pre-commit source digest:
+  `dad18fe37d08d92e142cfb451637861e5c990be144730cec1e3aeb80cf069c8c`.
+- Shared README/skill and the personal skill source/installed copy are aligned.
+  The final PR description distinguishes the initial whole-staging evidence,
+  review-fix focused staging evidence, and isolated log/UI evidence.
+- Final live verification: CodeRabbit status for exact head `f267c4924` is
+  **success / Review completed**, and the complete paginated thread listing has
+  **zero unresolved threads**. This requested review cycle is complete. Vercel
+  remains failure with `Deployment was blocked`; this is separate from the
+  earlier explicit author-access failure and E2E results. Human approval, merge,
+  deployment and remote E2E execution are not claimed completed.
+
+## Initial Delivery — committed, pushed and release PR opened
 
 - The user explicitly authorized committing/pushing the completed changes and
   creating a PR into `release/v1.86.0`. Commit

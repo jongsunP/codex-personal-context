@@ -80,6 +80,13 @@ reporter/output/config options; consult the README for accepted arguments. Read 
 `e2e-runs/<run>/summary.md` and `verdict.json`, then its reports/traces for
 causes. `staging_full_verified` is true only for a passing full staging run.
 
+Local official CLI/headed/UI runs preserve raw server stdout/stderr in
+`webservers/{clinic,lab,admin}.log` within that run's directory.
+The test output announces their paths; UI Reload appends without discarding
+earlier server output. Inspect these private logs for startup/request failures;
+quiet test output does not establish absence of server warnings. Remote runs
+have no local web servers. See the README for the diagnostic artifact contract.
+
 `pnpm e2e:clinic:ui` / `pnpm e2e:clinic:ui:stg` use that same runner through
 `--environment local|staging --ui`, with shared environment, target, auth ID,
 and owned-process shutdown safeguards. Native selection and Reload remain

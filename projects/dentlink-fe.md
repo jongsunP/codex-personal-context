@@ -116,12 +116,26 @@ Detailed implementation history remains in the relevant existing project file.
 
 - Detailed current state is in `projects/dentlink-client-e2e.md`. Worktree
   `/Users/parkjongsun/Repository/dentlink-client-e2e`, branch
-  `feature/e2e-reliability`, HEAD `ec96beeda`, clean and synchronized with
+  `feature/e2e-reliability`, HEAD `f267c4924`, clean and synchronized with
   `origin/feature/e2e-reliability`. The user authorized committing/pushing all
   49 approved files and creating open, non-draft
   [PR #4606](https://github.com/Innvoaid/dentlink-client/pull/4606) into
   `release/v1.86.0`. Remote PR head matches; merge-tree simulation against
   release `1e0754789` succeeded without conflict. No merge or deployment.
+- The subsequently requested CodeRabbit cycle fixed two valid minor findings
+  in `99f4780c8`: empty BUILD_ID now fails before DEV/STG deployment waits;
+  onboarding's shared page uses the existing API monitor/reset/failure hooks.
+  Both threads were answered/resolved, that review completed successfully, and
+  focused staging onboarding **22/22** plus **211/211** regressions passed.
+- The user also confirmed local UI tests worked and requested quieter logs.
+  `f267c4924` preserves local server stdout/stderr in private per-run
+  `webservers/{clinic,lab,admin}.log`, announces paths, and appends through UI
+  Reload. CLI/headed/UI share this behavior; remote and direct Playwright paths
+  retain their intended behavior. No service/ChannelTalk code or dependency
+  changed. **219/219**, types and isolated native UI logging/Stop/Reload/startup
+  failure checks passed. Existing user-run local UI was left running and needs
+  a fresh launcher invocation for the new log environment. Source-qualified
+  details and evidence are in the E2E checkpoint.
 - The user approved completing all discussed follow-ups, asking for the design
   best suited to the existing workflow rather than unconditional UI parity.
   Manual operation remains local frontend with DEV API, or deployed staging
@@ -174,8 +188,9 @@ Detailed implementation history remains in the relevant existing project file.
   workflow-scope rejection was resolved using already-authorized SSH identity
   with a command-only push URL override; no hook was bypassed or persistent
   remote/auth configuration changed.
-- Initial PR checks: Auto Assign and Vercel Preview Comments succeeded,
-  CodeRabbit was reviewing, and Vercel deployment failed because author
-  `jongsunP` needs project access. PR was `MERGEABLE` but `BLOCKED`; refresh
-  before review follow-up. Team review, release merge, deployment and actual
-  remote E2E CI are still separate gates. No remote E2E run was started here.
+- Final CodeRabbit verification on exact head `f267c4924`: **success / Review
+  completed**, **zero unresolved threads**. The requested review cycle is complete.
+  Initial Vercel failure required author project access; the final head reports
+  `Deployment was blocked`. PR remains `MERGEABLE` but `BLOCKED`. Team review,
+  release merge, deployment and actual remote E2E CI remain separate gates.
+  No remote E2E run was started here.
