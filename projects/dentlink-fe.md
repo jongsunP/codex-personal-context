@@ -118,6 +118,13 @@ Detailed implementation history remains in the relevant existing project file.
   worktree is `/Users/parkjongsun/Repository/dentlink-client-e2e`, branch
   `feature/e2e-reliability`, HEAD `0e0878ef1`; 49 changed/new files remain
   uncommitted. Product commit/push/PR/deployment have not been performed.
+- The user's latest extension decision is applied: only the ten new E2E scripts
+  were renamed to `.js`, retaining CommonJS and the existing project convention.
+  Package/config/CI/guidance/skill references match. Syntax 10/10, the updated
+  regression command 187/187, type and reference checks passed. Latest digest:
+  `396631c7a55efe9b11b1d96f042ff522478d9af175119f8ff75ecfb821e3a775`.
+  The real runtime results below precede this rename and retain their own source
+  digests; no extra full staging run was requested or made for extension-only work.
 - Scope is web with supporting Clinic/Lab/Admin flows, including feedback;
   native app E2E is excluded. The objective is role-neutral, trustworthy full
   staging verification within the registered coverage, without a fixed pass count.

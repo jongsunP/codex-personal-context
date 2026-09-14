@@ -103,7 +103,7 @@ do not chase absolute reliability through unbounded repetitions.
 For CI reporting changes, exercise success and failure paths, including setup
 errors, empty/incomplete reports, unexpected nonexecution, and flaky results.
 Allowed skips must match the registered file, full title, and exact reason in
-`scripts/e2e-verdict.cjs`; report them separately from passes. Missing required
+`scripts/e2e-verdict.js`; report them separately from passes. Missing required
 setup and serial follow-up tests that never ran are not allowed exclusions.
 
 Let the user inspect changed files/diffs in the same work folder. Execute

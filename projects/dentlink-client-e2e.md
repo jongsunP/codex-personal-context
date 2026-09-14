@@ -2,6 +2,40 @@
 
 ## Current Completed Scope — sustainable authoring and result contract
 
+### Latest decision — E2E scripts use .js CommonJS
+
+The user explicitly requested renaming only the ten newly added
+`scripts/e2e-*.cjs` files, including the five test files, to `.js`. CommonJS
+implementation is retained. The decision follows the existing `.js` CommonJS
+scripts: root package.json has no `type`, scripts/package.json is absent, and no
+current Node/Playwright compatibility constraint requires the new extension.
+This is a project-continuity choice, not a claim that .cjs is unsupported.
+
+- All ten file names, mutual require/require.resolve and CLI/help references,
+  package commands/test glob, Playwright import, three CI commands, maintained
+  guides and both personal skill copies now use `.js`. The README records the
+  convention. Unrelated .cjs/.mjs files and explicit temporary CommonJS fixtures
+  were not renamed; historical run artifacts were not rewritten.
+- A pre-change content/hash snapshot verified preservation of the existing
+  uncommitted work. Script contents differ only by the intended filename-reference
+  substitutions. Current source has no remaining reference to those old names.
+- `node --check`: **10/10 passed**. Updated `pnpm e2e:check`: **187/187 passed**.
+  E2E TypeScript, formatting, diff checks, direct runner help, document links and
+  both personal skill validators passed. Independent review found no module or
+  test-discovery compatibility problem. Existing service code and dependencies
+  remain unchanged, and the prior four order-helper lint errors are baseline.
+- Current source digest is
+  `396631c7a55efe9b11b1d96f042ff522478d9af175119f8ff75ecfb821e3a775`,
+  still **49 changed/new product files**, uncommitted on the same branch and HEAD.
+  The real local/staging/DEV results below were obtained immediately before this
+  extension-only follow-up. Their original source digests remain recorded. Per
+  the user's explicit verification scope, no full staging rerun was added solely
+  for this rename; the original runtime verification plan was already completed.
+- Product commit/push/PR/deployment authorization was not expanded. The remaining
+  delivery boundary is still shared-repository integration and actual remote CI.
+
+### Reliability review and implementation
+
 The user asked whether agent/skill-based authoring would keep the same reliability
 principles over time, and explicitly prioritized a sound foundation over speed.
 The prior completion statement was too broad: this deeper review found additional
@@ -70,7 +104,7 @@ evidence below remains valid for its recorded source digest, not these new edits
   the pagination row-count expression with the already validated and identical
   `listBody.totalElements`, removing a lint warning. The regression suite and type
   checks were rerun successfully. Do not claim the two source digests are equal.
-  Final worktree: **49 changed/new files**, source
+  Worktree before the extension follow-up: **49 changed/new files**, source
   `fe488e06259cc16ce40d0c9b842a5d658dbe88984676cc3594681e91c2c2f53c`.
 - Maintained Markdown, local links and diagnostic shell syntax were checked.
   Both personal skill source and installed copy passed the actual skill validator
@@ -273,7 +307,7 @@ claims and source digests; historical evidence remains below.
 
 - `pnpm e2e:clinic` (local), `pnpm e2e:clinic:stg` (staging),
   `pnpm e2e:clinic:dev` (deployed development), and both headed commands now use
-  `scripts/e2e-run.cjs`. The three CI workflows use this same runner and run
+  `scripts/e2e-run.js` (renamed in the latest follow-up above). The three CI workflows use this same runner and run
   `pnpm e2e:check` before browser installation. CI integration has been statically
   checked but has **not been exercised remotely**.
 - Each invocation creates a new ignored `e2e-runs/<timestamp-uniqueid>/` folder.
