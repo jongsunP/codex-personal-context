@@ -1,14 +1,36 @@
-# Dentlink Mobile App setup and current checkpoint - 2026-09-11
+# Dentlink Mobile App setup and current checkpoint - 2026-09-14
 
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current product checkpoint is **FE Handoff Acceptance And Develop
-Integration - 2026-09-11**; the later E2E audit adds verification boundaries.
+The current local Git checkpoint is **Local Branch And Worktree Audit -
+2026-09-14** below. **FE Handoff Acceptance And Develop Integration -
+2026-09-11** preserves earlier delivery context; the E2E audit adds verification boundaries.
 Earlier PR review, notification design and
 delivery sections record the preceding implementation and decisions. Earlier
 dated delivery, review, API and runtime results below are historical, not
 current claims.
+
+## Local Branch And Worktree Audit - 2026-09-14
+
+- Read-only audit after fetching origin found only the main app worktree at
+  `/Users/parkjongsun/Repository/dentlink-app`. It is checked out on
+  `feature/DL-16061` at `a8f3a6c`, clean with no non-ignored untracked files,
+  synchronized 0/0 with its preserved remote branch.
+- PR #286 is merged; the feature tree exactly matches its squash result
+  `c205fe0752e06c17866bc3873c94a5b6e2e492c2`. That squash is now contained in
+  `origin/develop`, `origin/main`, and `origin/release/office/v2.2.3.73`.
+  This verifies code preservation/integration, not a fresh deployment or QA run.
+- `feature/DL-16061` is a completed local branch cleanup candidate. It is the
+  currently checked-out branch, so actual deletion requires a prior checkout
+  switch and the user's explicit cleanup instruction. No deletion or switch
+  was performed for this status question.
+- The other local branch is `main` at `51aeb15`, 15 commits behind origin with
+  no local-only commits. Keep it as the default branch; being behind is a
+  synchronization issue, not evidence that it is unnecessary.
+- There is no extra registered worktree and no app-path active writing task
+  in the current task inventory; `통합알림센터세션` is idle. Recheck ownership
+  and dirty state immediately before any requested cleanup.
 
 ## Project Role And Continuity
 

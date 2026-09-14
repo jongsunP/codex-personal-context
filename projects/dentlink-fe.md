@@ -112,6 +112,18 @@ Detailed implementation history remains in the relevant existing project file.
   detailed decisions and verified state stay in
   `projects/dentlink-unified-notification-center.md`.
 
+## Local Repository Housekeeping Audit — 2026-09-14
+
+- A read-only web/app Git audit confirmed no extra registered worktrees in
+  either repository. Web E2E's local feature branch and retired directory are
+  absent; web retains only local `master` and `release/v1.86.0` in its main
+  checkout, both behind their remotes with no local-only commits.
+- App still has the completed `feature/DL-16061` checked out. Its remote and
+  squash-merge preservation are verified, so it is a local cleanup candidate;
+  exact evidence and its default-branch synchronization state are recorded in
+  `projects/dentlink-app.md`. No product deletion, switch, pull, or reset was
+  performed. The user's question was status-only.
+
 ## E2E Coordination Checkpoint — 2026-09-14
 
 - Local retirement completed around 19:03 KST on explicit user request. Removed
