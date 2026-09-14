@@ -123,8 +123,10 @@ Detailed implementation history remains in the relevant existing project file.
   Shared caches/skills, unrelated stashes and remote refs were preserved.
 - Only the main product checkout remains: clean local `release/v1.86.0` at
   `0e0878ef1` (behind remote by 2); local master remains `ddeeb1e86`. Refresh
-  before new work. Handoff is prepared for this `메인세션`
-  (`01a08f0c-2057-7852-ae8d-0cf950a91fd3`). The user will remove the old E2E app
+  before new work. The completion prompt was delivered to this `메인세션`
+  (`01a08f0c-2057-7852-ae8d-0cf950a91fd3`), which explicitly acknowledged
+  reading canonical commit `5d9cd1b` and receiving the handoff at 19:04:42 KST.
+  It is idle with no additional task or document mutation. The user will remove the old E2E app
   task/project themselves; do not create replacements or reopen completed work.
 - Latest completion update around 18:59 KST supersedes the pending states below:
   the user confirmed master and production delivery. Live verification found
