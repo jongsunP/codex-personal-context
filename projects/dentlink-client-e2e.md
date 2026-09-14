@@ -1,6 +1,92 @@
 # Dentlink E2E Reliability Checkpoint - 2026-09-14
 
-## Current Completed Scope — sustainable authoring and result contract
+## Current Completed Scope — command scope and UI execution contract
+
+The user approved completing all discussed but unfinished follow-ups. Their UI
+question was an engineering review request: assess why UI differed and choose
+the direction best supported by the existing workflow, trustworthy results and
+maintenance cost. Do not reinterpret it as an unconditional demand to make UI
+identical to batch execution. Manual operation remains local frontend plus DEV
+API, or the deployed staging frontend plus STG API.
+
+- Removed the unrequested `e2e:clinic:dev` package alias and current manual-use
+  guidance. Existing DEV deployment CI predates this work; its internal
+  `--environment development` compatibility and improved verdict remain.
+- Both local/staging UI commands now use `e2e-run.js --ui`, sharing environment
+  initialization, exact targets, fresh auth ID and owned-process interruption
+  protection with CLI/headed. No new script file or service dependency was added.
+- Native UI selection, Run All, Stop and Reload are preserved. Each observed
+  selection archives native JSON in `runs/<id>/`, then uses the common verdict
+  classifier for passes, expected failures, allowed exclusions, nonexecution and
+  other failures. Successful selection wording never claims full deployment QA.
+  Later reruns do not overwrite prior failures or reports. Native HTML/trace
+  outputs can still be refreshed; archived JSON is not an immutable attachment copy.
+- UI setup/teardown writes a private, append-only lifecycle journal. A native
+  UI exit 0 cannot hide observed setup/cleanup failures, incomplete cleanup or
+  absent evidence. UI session `session_closed` is a session status, not a full
+  test verdict. Stop retains session account locks; Reload/close performs global
+  cleanup. Sessions with no recorded tests do not pass.
+- Source state is recorded before/after UI sessions; changes prevent treating
+  older selection results as verification of closing source. Boundary comparison
+  does not trace intermediate edit/revert history. Config/module errors before
+  reporter creation may appear only in native UI; recorded selections do not
+  claim complete observation of all UI actions. Release proof remains the full
+  batch contract with independent inventory and deployed-version evidence.
+- Installed Playwright 1.60 investigation justified these boundaries: reporter
+  onBegin is not awaited, setup/teardown has separate UI lifetime/reporters, and
+  UI green counts do not reflect a reporter's final failed override. Actual
+  isolated UI reproduced Reload continuing after teardown failure. UI also
+  forwards CLI reporter comma text as one reporter name, so UI reporters are
+  configured as an array in Playwright config; batch config remains unchanged.
+- Current source digest is
+  `671bb59c6f5c2a52b34c089e03c0dbcec42aada4b4fa4a273dea8d78647ee9d8`.
+  Branch `feature/e2e-reliability`, HEAD `0e0878ef1`, no upstream, 49 changed/new
+  product files, still uncommitted. Product commit/push/PR/deployment is not
+  authorized by this follow-up. Product app paths, dependencies, and the existing
+  DEV/STG build/deploy jobs remain unchanged.
+
+### Follow-up verification
+
+- Browser-free regressions **211/211**, syntax **10/10**, E2E TypeScript,
+  formatting, references and independent side-effect review passed. Shared guide
+  and skills agree, and the personal skill source/installed copy match and pass
+  validation. Existing formatter-option warnings remain baseline.
+- Isolated real Playwright UI covered two successful runs, expected failure,
+  unapproved skip, Stop after entering the test body, Reload cleanup failure and
+  session interruption. Five distinct JSON reports were retained; later cleanup
+  success did not erase failure. Source snapshots and process cleanup were also
+  checked. Latest evidence:
+  `/tmp/dentlink-ui-runner-integration-7V6MVI/integration-summary.json`.
+- Real staging native UI: **25/25 login/onboarding**, **3/3 selected rerun**,
+  **3/3 after Reload**. Native window close completed with process/session exit 0,
+  `session_closed`, two complete setup/teardown attempts, no recorded issue and
+  unchanged source. Evidence:
+  `e2e-runs/2026-09-14T06-17-07-533Z-57a543bf/`.
+- Real local native UI: **25/25 login/onboarding** and **3/3 after Reload**.
+  Native window close completed with process/session exit 0, `session_closed`,
+  two complete setup/teardown attempts, unchanged source and no recorded issue.
+  All local E2E listeners on 3100/3105/3102 were absent after closure. Evidence:
+  `e2e-runs/2026-09-14T06-20-36-152Z-0b65a9af/`.
+- Final batch staging: **104 passed + 5 allowed exclusions**, all 109 planned
+  and reported, 104 executed, zero failure/expected-failure/flaky/nonexecution,
+  no verdict issue, gate and `staging_full_verified` true, exit 0. Evidence:
+  `e2e-runs/2026-09-14T06-26-44-006Z-ca2c46d1/`,
+  `2026-09-14T06:26:44.007Z` to `2026-09-14T06:30:27.225Z`.
+  Source remained `671bb59c6f5c2a52b34c089e03c0dbcec42aada4b4fa4a273dea8d78647ee9d8`.
+  Stable Clinic/Lab/Admin BUILD_IDs were `t0PqFwz3pmJ2r2XI8QnpJ`,
+  `h89hRMxK80RwI58M-iIMe`, `GGdLJ50HcBrXPLB2m4kp0` respectively.
+- Real staging UI, local UI and final full staging were sequential. Final
+  account/auth/onboard lock and reclaim files: **0**; onboarding recovery meta:
+  **0**; listeners on 3100/3105/3102: **0**. Private auth and result artifacts
+  remain available; they were not claimed deleted. No product source changed
+  during these runs, and all three used separate private auth directories.
+
+All approved follow-up implementation, proportionate verification and maintained
+documentation/skills are complete within these evidence boundaries. Product
+Git/PR integration and actual remote CI execution remain separate delivery
+gates. Future runs must establish their own source, target version and scope.
+
+## Previous Completed Scope — sustainable authoring and result contract
 
 ### Latest decision — E2E scripts use .js CommonJS
 
@@ -342,8 +428,7 @@ claims and source digests; historical evidence remains below.
 ### Verification and scope limits
 
 - `pnpm e2e:check`: **100/100 passed** — verdict/version 27, runner 23,
-  onboarding lifecycle 28, signup success transition 5, process ownership/cleanup
-  17. These tests are stored in the repository, including three real Node process
+  onboarding lifecycle 28, signup success transition 5, process ownership/cleanup 17. These tests are stored in the repository, including three real Node process
   fixtures and actual installed-Playwright report fixtures. No product API or
   browser is required for this command.
 - E2E TypeScript, changed-file formatting and `git diff --check` passed.
@@ -471,24 +556,24 @@ coverage/maintenance work, not failures silently counted as passes.
 
 ### Runtime Evidence
 
-| Run | Result and interpretation |
-| --- | --- |
-| `local-baseline` | Global sign-in setup failed; 0 test bodies executed. This reproduced the setup defect and is not a test pass. |
-| `local-full-1` | 98 passed, 2 ISV failures, 5 allowed skips, 4 serial follow-up tests not run. This failed run led to the DEV catalog/preset correction. |
-| Final local focused (`local-isv-final`) | 11 passed, 3 allowed skips; 0 failure, flaky, nonexecution or report errors; all 14 collected results accounted for. |
-| `local-full-final` | **104 passed, 5 allowed skips**; 0 failure, flaky, nonexecution, interruption, unapproved skip or setup/report errors. All **109** collected results accounted for; 8.0 minutes; source hash unchanged. This precedes the final signup-wait correction. |
-| First staging full (`staging-full-final`) | 93 passed, 1 signup preparation failure, 5 allowed skips, 10 serial follow-up tests not run; 0 flaky. The gate correctly failed. Versions and source digest were stable. |
-| Final local signup (`local-signup-final`) | **16/16 passed**, no skips/failures/flaky; the two complete specs consuming the corrected helper. |
-| Final staging signup (`staging-signup-final`) | **16/16 passed**, no skips/failures/flaky; source/version checks passed. |
-| Final staging full (`staging-full-after-signup`) | **104 passed, 5 allowed skips**, 0 failure/flaky/extra nonexecution/interruption/preparation or report errors; all **109** planned results accounted for; **3.6 minutes**; source/version checks passed. |
+| Run                                              | Result and interpretation                                                                                                                                                                                                                               |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `local-baseline`                                 | Global sign-in setup failed; 0 test bodies executed. This reproduced the setup defect and is not a test pass.                                                                                                                                           |
+| `local-full-1`                                   | 98 passed, 2 ISV failures, 5 allowed skips, 4 serial follow-up tests not run. This failed run led to the DEV catalog/preset correction.                                                                                                                 |
+| Final local focused (`local-isv-final`)          | 11 passed, 3 allowed skips; 0 failure, flaky, nonexecution or report errors; all 14 collected results accounted for.                                                                                                                                    |
+| `local-full-final`                               | **104 passed, 5 allowed skips**; 0 failure, flaky, nonexecution, interruption, unapproved skip or setup/report errors. All **109** collected results accounted for; 8.0 minutes; source hash unchanged. This precedes the final signup-wait correction. |
+| First staging full (`staging-full-final`)        | 93 passed, 1 signup preparation failure, 5 allowed skips, 10 serial follow-up tests not run; 0 flaky. The gate correctly failed. Versions and source digest were stable.                                                                                |
+| Final local signup (`local-signup-final`)        | **16/16 passed**, no skips/failures/flaky; the two complete specs consuming the corrected helper.                                                                                                                                                       |
+| Final staging signup (`staging-signup-final`)    | **16/16 passed**, no skips/failures/flaky; source/version checks passed.                                                                                                                                                                                |
+| Final staging full (`staging-full-after-signup`) | **104 passed, 5 allowed skips**, 0 failure/flaky/extra nonexecution/interruption/preparation or report errors; all **109** planned results accounted for; **3.6 minutes**; source/version checks passed.                                                |
 
 The same onboarding UI runner also exercised the relevant execution boundaries:
 
-| UI boundary | Evidence |
-| --- | --- |
-| First fixed run | 22/22 passed; fresh office 1628 deleted with HTTP 200. |
+| UI boundary                      | Evidence                                               |
+| -------------------------------- | ------------------------------------------------------ |
+| First fixed run                  | 22/22 passed; fresh office 1628 deleted with HTTP 200. |
 | Run All again in the same runner | 22/22 passed; fresh office 1629 deleted with HTTP 200. |
-| Final fixed-code Reload | 22/22 passed; fresh office 1631 deleted with HTTP 200. |
+| Final fixed-code Reload          | 22/22 passed; fresh office 1631 deleted with HTTP 200. |
 
 - An intermediate Reload had 22 passing leaf results, but an intervening lint
   edit reset the UI aggregate to zero. Keep that observation separate from the
@@ -618,11 +703,11 @@ and preparation state are historical observations, not current operating rules.
 
 ### CI Evidence Captured By The Initial Audit
 
-| Run | Commit | Actual result | Feedback |
-| --- | --- | --- | --- |
-| [develop 34554799750](https://github.com/Innvoaid/dentlink-client/actions/runs/34554799750/job/103128701283), 12:04 KST complete | `01bfc93` | 85 passed, 4 failed, 5 skipped, 15 subsequent tests not run | Test 4: Completed-order feedback question not visible |
-| [prior stage 34555286833](https://github.com/Innvoaid/dentlink-client/actions/runs/34555286833/job/103132256089), 12:24 complete | `516c971` | 87 passed, 3 failed, 5 skipped, 14 subsequent tests not run | Test 1: dentist selection timeout in Lab order creation |
-| [latest stage 34564023735](https://github.com/Innvoaid/dentlink-client/actions/runs/34564023735/job/103156513198), 14:20 complete | `28e5e0b` | Global setup failed before test bodies; report 0/0/0 | Not run |
+| Run                                                                                                                               | Commit    | Actual result                                               | Feedback                                                |
+| --------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------------------------------------------------------- | ------------------------------------------------------- |
+| [develop 34554799750](https://github.com/Innvoaid/dentlink-client/actions/runs/34554799750/job/103128701283), 12:04 KST complete  | `01bfc93` | 85 passed, 4 failed, 5 skipped, 15 subsequent tests not run | Test 4: Completed-order feedback question not visible   |
+| [prior stage 34555286833](https://github.com/Innvoaid/dentlink-client/actions/runs/34555286833/job/103132256089), 12:24 complete  | `516c971` | 87 passed, 3 failed, 5 skipped, 14 subsequent tests not run | Test 1: dentist selection timeout in Lab order creation |
+| [latest stage 34564023735](https://github.com/Innvoaid/dentlink-client/actions/runs/34564023735/job/103156513198), 14:20 complete | `28e5e0b` | Global setup failed before test bodies; report 0/0/0        | Not run                                                 |
 
 - Each Playwright process exited 1 despite automatic workflow/job success.
   That latest stage run timed out clicking Sign in at `e2e/clinic/utils/signin.ts:80`

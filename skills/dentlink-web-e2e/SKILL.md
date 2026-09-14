@@ -66,19 +66,45 @@ Use the official commands from that checkout:
 
 - `pnpm e2e:clinic`: local full suite against the development API.
 - `pnpm e2e:clinic:stg`: full suite on the deployed staging environment.
-- `pnpm e2e:clinic:dev`: full suite on the deployed development environment.
 - `pnpm e2e:clinic:headed` / `pnpm e2e:clinic:headed:stg`: the same local or
   staging runner and verdict, with a visible browser.
 - `pnpm e2e:check`: browser-free runner, verdict, lifecycle, and helper
   regressions.
 
-Adding a spec path or `--grep` records a `focused` run. Use a whole serial spec
-when its tests share state. Keep the runner's reporter/output/config options;
-consult the README for accepted arguments. Read the new run's
+These user-facing environments are local frontend/development API and staging.
+Existing development CI retains the runner's internal development support.
+
+Adding a spec path or `--grep` to a batch command records a `focused` run.
+Use a whole serial spec when its tests share state. Keep the runner's
+reporter/output/config options; consult the README for accepted arguments. Read the new run's
 `e2e-runs/<run>/summary.md` and `verdict.json`, then its reports/traces for
 causes. `staging_full_verified` is true only for a passing full staging run.
-`pnpm e2e:clinic:ui` / `pnpm e2e:clinic:ui:stg` are diagnostic sessions with
-selection and Reload; their green UI counts do not replace that verdict.
+
+`pnpm e2e:clinic:ui` / `pnpm e2e:clinic:ui:stg` use that same runner through
+`--environment local|staging --ui`, with shared environment, target, auth ID,
+and owned-process shutdown safeguards. Native selection and Reload remain
+available. Stop interrupts the current selection; account locks remain held
+for the session.
+
+Each recorded selection's `runs/<id>/report.json` and `runs/<id>/run.json` preserve its
+results and common classification of passes, failures, expected failures,
+allowed exclusions, nonexecution, and flaky tests. `session.json`,
+`lifecycle.jsonl`, and `summary.md` track session state and global setup/teardown.
+Recorded failed selections or failed/incomplete lifecycle evidence fail the session;
+later success does not erase earlier failures. `session_closed` means normal
+closure, not passing tests; `no_tests` means no recorded selection and is not
+success. Native JSON/HTML/trace output can be replaced by subsequent selections;
+preserved per-selection JSON does not preserve every earlier attachment.
+`source-before.json` and `source-after.json` compare session boundary snapshots;
+a remaining difference yields `source_changed`, so do not combine earlier
+selections into full verification of current source. This does not track every
+intermediate edit and revert. Config/module load errors before reporter creation
+may appear only in the UI; check those displays too. `session_closed` or exit
+code zero does not prove every UI action/error was observed or full scope ran.
+These records lack independent full collection, before/after deployed
+versions, and full cleanup evidence, so they are not a release verdict. Use the
+README's UI section for artifact boundaries and the staging batch verdict for
+the production delivery decision within registered coverage.
 
 Official and direct Playwright configuration reject targets outside the
 documented local/development/staging URL roots. This checks configured inputs
