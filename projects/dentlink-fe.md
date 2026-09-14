@@ -116,7 +116,7 @@ Detailed implementation history remains in the relevant existing project file.
 
 - Detailed current state is in `projects/dentlink-client-e2e.md`. The dedicated
   worktree is `/Users/parkjongsun/Repository/dentlink-client-e2e`, branch
-  `feature/e2e-reliability`, HEAD `0e0878ef1`; 35 changed/new files remain
+  `feature/e2e-reliability`, HEAD `0e0878ef1`; 49 changed/new files remain
   uncommitted. Product commit/push/PR/deployment have not been performed.
 - Scope is web with supporting Clinic/Lab/Admin flows, including feedback;
   native app E2E is excluded. The objective is role-neutral, trustworthy full
@@ -126,24 +126,37 @@ Detailed implementation history remains in the relevant existing project file.
   After a follow-up audit, the user approved exact target checks, per-run auth,
   shared-account locking, Docker artifact exclusion and documentation alignment.
   No Clinic/Lab/Admin/shared feature code, dependency or production workflow changed.
-- Retained regressions now pass **127/127**. Type, changed-file formatting and
-  independent cross-review passed. Four pre-existing empty-function lint findings
-  in the auth-path-only order helper remain distinguished from changed-code errors.
-- New official local and staging full runs each passed **104 + 5 allowed
-  exclusions**, with all 109 planned results accounted for, no failure/flaky/extra
-  nonexecution/global errors, and clean teardown. Final source digest in both:
-  `a1eb1d23385928c34c5d3d7a7c2be3b4d04752f4681c709e67c88e3e80b7b366`.
-  Staging Clinic/Lab/Admin BUILD_IDs stayed stable at the execution boundaries.
-- Real invalid-target commands stopped before login. A deployed-DEV run attempted
+- The user's subsequent sustainability review found further gaps despite that
+  completion statement: missing root-agent authoring routes, Playwright expected
+  failures counted as passes, config grep reducing a supposedly full run, and
+  required scenario cleanup failures being ignored. These were corrected with
+  root/skill routing to one authoring contract, strict verdict/scope evidence,
+  exact paginated Request Access cleanup and observable team/context cleanup.
+  Deployed DEV Lab shipment data now follows `E2E_ENV`.
+- Retained regressions now pass **187/187**, including actual installed Playwright
+  fixtures. E2E type, script/document formatting and diff checks passed. Actual
+  local and staging follow-up full runs each passed **104 + 5 allowed exclusions**,
+  all 109 collected/reported, no failure/flaky/nonexecution/global errors. The final
+  staging run verified source `fe488e06259cc16ce40d0c9b842a5d658dbe88984676cc3594681e91c2c2f53c`
+  and unchanged Clinic/Lab/Admin BUILD_IDs. The local digest differs only by the
+  subsequent pagination type-expression lint cleanup; exact evidence is in the
+  detailed E2E checkpoint. No remaining actionable finding from cross-review.
+- Deployed DEV shipment focused verification also passed **6/6** on the final
+  source, without being labeled full staging verification. After the sequential
+  local/staging/DEV runs, no owned E2E lock/meta or local listener remained.
+- Previous real invalid-target commands stopped before login. A deployed-DEV run attempted
   during local execution was blocked by the shared account lock; after release,
-  DEV signin 3/3 passed while briefly overlapping the end of staging. Final meta,
+  DEV signin 3/3 passed while briefly overlapping the end of staging. That phase's final meta,
   account/auth/onboarding locks and owned local server listeners were absent.
 - Maintained README/shared guidance and the personal skill now match the code;
   the installed personal skill matches its Git source and both passed the actual
   validator. Coverage means currently registered web scenarios. Tests still mutate
   real test-server data, cleanup is scoped, and local locks/CI concurrency do not
-  constitute distributed locking across machines.
-- Approved implementation/documentation and local/staging validation are complete.
-  Remaining delivery gates are authorized product Git/PR integration and actual
+  constitute distributed locking across machines. Requirement/assertion meaning
+  and removal from registration remain code/scope review responsibilities;
+  consistent plan/report counts do not establish complete product coverage.
+- Remaining delivery gates are authorized product Git/PR integration and actual
   remote CI execution. New workflows have not run remotely. Detailed source,
   artifacts, evidence boundaries and historical results are in the E2E checkpoint.
+  The current worktree's implementation, maintained instructions, review and
+  available runtime verification are complete within that documented scope.

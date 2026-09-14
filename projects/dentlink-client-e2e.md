@@ -1,6 +1,115 @@
 # Dentlink E2E Reliability Checkpoint - 2026-09-14
 
-## Current Completed Scope — safety and documentation alignment
+## Current Completed Scope — sustainable authoring and result contract
+
+The user asked whether agent/skill-based authoring would keep the same reliability
+principles over time, and explicitly prioritized a sound foundation over speed.
+The prior completion statement was too broad: this deeper review found additional
+false-success paths and instruction-discovery gaps. The September 14 safety-phase
+evidence below remains valid for its recorded source digest, not these new edits.
+
+- Product HEAD and branch remain unchanged; changes are uncommitted and there is
+  no upstream. No product commit, push, PR or deployment is authorized by this
+  review. No Clinic/Lab/Admin/shared feature source or dependency change is made.
+- `AGENTS.md`, root README and `claude.md` route E2E work to the canonical
+  `e2e/README.md` authoring/change procedure. Existing shared writer/inventory
+  references and the personal skill use that same contract. No new skill adapter
+  or duplicate rule document is introduced.
+- Authoring maps requirements to files, full test titles and meaningful UI/API
+  assertions, then checks actual collected/executed evidence and reports added,
+  removed and excluded scope. Discover current specs/helpers instead of using
+  stale fixed lists. Current conversation input and available tools are supported;
+  `$ARGUMENTS` or a particular Claude agent API is not a prerequisite.
+- Actual installed Playwright reproduced `test.fail()` counting a broken
+  assertion as an expected outcome with process exit 0. The release verdict now
+  counts active expected-failure declarations separately, never as passes, and
+  blocks with `expected_failure`. Correct assertions of error handling still pass.
+- Actual installed Playwright reproduced config/project grep filtering both plan
+  and execution while the official runner labeled it full. A small scope reporter
+  captures resolved Clinic filters for both phases; full runs require valid,
+  current evidence and unfiltered settings. CLI selection remains focused.
+- Required Request Access pending-employee cleanup and default-team restoration
+  now propagate failures. Request Access validates all pages (100 rows per page,
+  at most 20 pages), stable totals, complete rows and distinct IDs before choosing
+  the exact single pending employee. Partial/invalid evidence causes no deletion.
+  Context cleanup still runs and independent failure
+  causes remain visible. Remote DEV Lab shipment material selection follows
+  `E2E_ENV`, rather than the `NODE_ENV=staging` used to disable local servers.
+- Existing `tryWithdrawE2eAccountViaApi` is a best-effort auxiliary cleanup, not
+  proof of successful withdrawal. Step 2/3 validation does not create an account;
+  full signup has a separate asserted withdrawal flow. Its absence/authentication
+  ambiguity is not resolved by inventing an API contract or expanding deletion.
+- Runtime gates verify the registered execution contract, not whether all product
+  requirements were authored or assertions are semantically correct. Registration
+  changes such as deletion, testIgnore or conditional definitions require scope
+  review. Local account locks are not distributed locks across separate hosts.
+- Package changes connect official E2E commands to the common runner and add DEV
+  and regression-check commands. UI remains a selection/Reload diagnostic surface
+  with target/isolation safeguards; its green counts do not replace full verdicts.
+
+### Follow-up verification — 2026-09-14
+
+- **187/187 regression checks passed** after the final edit: runner 36,
+  verdict/version 35, lifecycle/signup 99, process-tree 17. E2E TypeScript,
+  script/document formatting and diff checks passed. All changed TS consumers
+  were linted; the four existing `no-empty-function` errors in order-setup remain
+  baseline. The new Request Access non-null warning was removed and that spec
+  passed ESLint with `--max-warnings=0`.
+- Independent reviews found and then verified the fixes for expected failures,
+  config filtering, cleanup error propagation and Request Access pagination.
+  Scope reporting and all changed cleanup consumers have no remaining actionable
+  review finding within the inspected scope.
+- **Official local full: 104 passed + 5 allowed exclusions**, all 109 planned
+  and reported, zero failure/flaky/nonexecution/global errors, gate true,
+  473.1 seconds. Evidence:
+  `e2e-runs/2026-09-14T05-16-33-868Z-70138db3/`,
+  `2026-09-14T05:16:33.869Z` to `2026-09-14T05:24:28.412Z`.
+  Source was unchanged within the run:
+  `db7a1ac6f71ef62edd9cf2e2550b56f83d6d32ae8b6ae774eda8d45238578659`.
+- After local verification, the only product edit replaced `expectedTotal!` in
+  the pagination row-count expression with the already validated and identical
+  `listBody.totalElements`, removing a lint warning. The regression suite and type
+  checks were rerun successfully. Do not claim the two source digests are equal.
+  Final worktree: **49 changed/new files**, source
+  `fe488e06259cc16ce40d0c9b842a5d658dbe88984676cc3594681e91c2c2f53c`.
+- Maintained Markdown, local links and diagnostic shell syntax were checked.
+  Both personal skill source and installed copy passed the actual skill validator
+  and matched exactly; the shared Claude frontmatter was checked separately.
+- **Official staging full: 104 passed + 5 allowed exclusions**, all 109 planned
+  and reported, zero failure/flaky/nonexecution/global errors, gate and
+  `staging_full_verified` true, 220.7 seconds. Evidence:
+  `e2e-runs/2026-09-14T05-25-12-819Z-221222e9/`,
+  `2026-09-14T05:25:12.820Z` to `2026-09-14T05:28:54.729Z`.
+  Final source `fe488e06259cc16ce40d0c9b842a5d658dbe88984676cc3594681e91c2c2f53c`
+  was unchanged; scope evidence from both collection and execution is valid.
+  Clinic/Lab/Admin boundary BUILD_IDs remained respectively
+  `t0PqFwz3pmJ2r2XI8QnpJ`, `h89hRMxK80RwI58M-iIMe`,
+  `GGdLJ50HcBrXPLB2m4kp0`. This checks the two boundaries, not continuous
+  monitoring or backend build identity.
+- **Deployed DEV shipment focused: 6/6 passed**, covering the corrected catalog
+  branch through order creation, shipment/pickup creation, cancellation and
+  shipment editing. Evidence:
+  `e2e-runs/2026-09-14T05-29-07-632Z-72a77578/`,
+  `2026-09-14T05:29:07.646Z` to `2026-09-14T05:29:40.479Z`, 31.0 seconds.
+  Final source was unchanged, scope is focused, and `staging_full_verified` is
+  false as intended. DEV boundary BUILD_IDs remained Clinic
+  `swqceb-QF-_KF8-FWiBLA`, Lab `EMsE1YefjnEWt3b1tnLyJ`, Admin
+  `08egjyCFC1uTRVbpVX4HQ`. This is not a whole DEV suite result.
+- Local full, staging full and DEV focused were run sequentially. Final
+  account/auth/onboarding lock and reclaim files and onboarding metadata were
+  absent; no listener remained on 3100/3105/3102. Private auth/run artifacts remain
+  available for diagnosis rather than being claimed deleted. Final source digest
+  and unchanged service/dependency paths were rechecked after all runs.
+
+The authorized implementation, maintained instructions, independent review and
+available local/staging/affected-DEV verification are complete for this scope.
+Product changes are still local and uncommitted; product Git/PR integration and
+actual remote CI adoption remain separate delivery gates. No remote workflow,
+product push/PR or production deployment has been performed. Subsequent releases
+must run the official full staging contract against their own identified version;
+these retained results are not evidence for future deployments or missing coverage.
+
+## Previous Completed Scope — safety and documentation alignment
 
 The user authorized implementation and verification of the remaining safeguards
 after asking whether all documentation and service side effects were covered.

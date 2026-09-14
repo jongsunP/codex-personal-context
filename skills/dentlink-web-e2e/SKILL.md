@@ -1,6 +1,6 @@
 ---
 name: dentlink-web-e2e
-description: Diagnose, improve, and verify Dentlink web E2E reliability across local development and full-suite staging runs, including feedback, repeat execution, setup state, and CI result reporting. Use for this web testing workflow, not native app E2E.
+description: Add or modify Dentlink web E2E scenarios and helpers, diagnose failures, and verify reliability across local development and full-suite staging runs, including feedback, repeat execution, setup state, and CI result reporting. Use for web test authoring and maintenance, not native app E2E.
 ---
 
 # Dentlink Web E2E
@@ -16,15 +16,21 @@ Read `projects/dentlink-client-e2e.md` in the user's Git-backed
 `codex-personal-context` for current scope, evidence, and environment details.
 Locate the exact product checkout and read its `e2e/README.md`, the canonical
 execution, isolation, artifact, and verdict contract; verify it against the
-current `package.json`, runner, and Playwright configuration.
-Historical checkpoints and legacy repository skills provide context; revise
+current `package.json`, runner, and Playwright configuration. For additions or
+changes, follow its "테스트 추가·변경 절차" and the linked
+`.claude/skills/e2e/references/02-spec-writer.md` authoring guidance; discover
+current helpers through `01-function-inventory.md`. Use the current request
+and available tools, without requiring Claude-specific arguments or tools.
+Historical checkpoints and examples provide context; revise
 procedures when the user's goal or current evidence requires it. This skill
 does not authorize branch, worktree, commit, push, PR, or deployment mutations.
 
 ## Reliability decisions
 
 - Expected behavior should pass; deviations should be detected. Expected error
-  handling is a pass when correctly asserted. Setup failure, no execution, and
+  handling must be asserted so the test itself passes. Declaring expected
+  failure with `test.fail()` is blocked as `expected_failure`, not a pass or
+  allowed exclusion. Setup failure, no execution, and
   intentionally unset scenarios must remain distinguishable from success.
 - Pick evidence that tests the actual failure mechanism. There is no fixed
   pass count or two-run minimum for completion. Do not repeat until green or
@@ -48,6 +54,13 @@ does not authorize branch, worktree, commit, push, PR, or deployment mutations.
   demonstrated purpose; improve them when evidence warrants it.
 
 ## Execution and reporting
+
+For authoring, use the README's requirement-to-title/assertion mapping and
+confirm intended cases in the actual plan/report. Report added, removed, or
+excluded coverage. Collection-only inspection is diagnostic; use the README's
+direct Playwright examples, including the local URL overrides. Collection
+consistency, document checks, or delegation do not establish assertion meaning;
+review the code and verify actual behavior and affected regressions.
 
 Use the official commands from that checkout:
 
