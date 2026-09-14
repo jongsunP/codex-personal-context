@@ -1,6 +1,36 @@
 # Dentlink E2E Reliability Checkpoint - 2026-09-14
 
-## Session Closeout — 2026-09-14 16:59 KST
+## Current Completion — master and production, 2026-09-14 18:59 KST
+
+- The user confirmed that this work reached master and production. Live GitHub
+  verification found [PR #4608](https://github.com/Innvoaid/dentlink-client/pull/4608),
+  `Release/v1.86.0 -> master`, merged at 18:08:24 KST as
+  `de2ffdd9e3025cb758632788cd6086c170e4974e`, the current remote master.
+  E2E squash commit `c506661e6` is an ancestor. `package.json`,
+  `playwright.config.ts` and `scripts/e2e-run.js` match final feature head
+  `f267c4924` byte-for-byte; squash integration does not make that original
+  feature commit an ancestor.
+- Production tags `prd/clinic/v1.86.0`, `prd/lab/v1.86.0` and
+  `prd/admin/v1.86.0` point to `c506661e6`. Their deployment Actions completed
+  successfully: Office/Clinic `34826131930`, Lab `34826221699`, Admin
+  `34826256088`. The user owns the production deployment. The Ohio tag also
+  exists at that source; no matching branch-filtered run was returned, so no
+  separate Ohio Actions result is asserted.
+- The three stage Actions from the previous checkpoint now all report success.
+  No new scenario report or live production behavior was examined in this
+  completion update; existing detailed QA evidence retains its source scope.
+- Separately, master run `34826324855` (`UI S3 Environment Deployment Workflow`)
+  failed at `Install dependencies`. This is distinct from the three successful
+  app production deployments and E2E verdicts. It was not diagnosed or changed
+  in this delivery-record update; do not describe every repository check as green.
+- The agreed E2E improvement is delivered and closed, with no newly identified
+  E2E implementation task. Reopen on a concrete new requirement or failure.
+  Product worktree remains clean at `f267c4924`; no product code, branch,
+  worktree, process or deployment was changed in this update.
+- The sections below are historical checkpoints. Earlier pending staging and
+  release-integration statements are superseded by this completion record.
+
+## Previous Session Closeout — 2026-09-14 16:59 KST
 
 - The user confirmed that they performed the merges and initiated staging
   deployment, then requested session closeout and durable memory maintenance.
@@ -25,7 +55,7 @@
   Personal progress is canonical here, with a short coordination entry in
   `projects/dentlink-fe.md`; no additional shared-project session document is needed.
 
-## Current Delivery — release integrated and staging deployment started
+## Previous Delivery — release integrated and staging deployment started
 
 - The user merged E2E PR [#4606](https://github.com/Innvoaid/dentlink-client/pull/4606)
   into `release/v1.86.0` at 2026-09-14 16:51:06 KST. Its squash commit is
