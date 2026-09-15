@@ -33,11 +33,13 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Context Routing
 
-- FE improvement planning uses one [meeting document](dentlink-fe-meeting.md)
+- FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.
-  The user retired the Notion pages and duplicate PDFs on 2026-09-15; older
-  Notion and PDF links below are historical, not current sharing destinations.
+  The user selected Notion as the final source on 2026-09-15 for cross-device
+  access and team editing. Fetch that page before edits; local
+  `dentlink-fe-meeting.md` contains only a link. Older Notion history pages and
+  PDFs remain retired and must not be restored as current meeting documents.
 - Read `projects/dentlink-client-order-feedback.md` and other matching
   `dentlink-client` checkpoints for web/Admin implementation history.
 - Read `projects/dentlink-app.md` for app implementation, runtime, build, and
