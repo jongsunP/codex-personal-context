@@ -336,6 +336,11 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## FE Opportunity Planning — Breakpoint 2, 2026-09-15
 
+Current dedicated planning and demo checkpoint:
+[FE opportunity planning](dentlink-fe-opportunities.md). The user approved
+record reorganization and presentation-ready prototypes for candidates 1–4.
+That document now owns the detailed history, evidence and demo progress.
+
 - Added a new top-level Notion breakpoint with 12 recommended candidates in
   name/function/category/FE-scope order. Readback confirmed all 12 rows and
   unchanged previous content, six images and the archive child-page link.
@@ -350,3 +355,47 @@ Detailed implementation history remains in the relevant existing project file.
   Rank is a planning recommendation, not a selected implementation scope.
 - Product code remains unchanged. Resume from breakpoint 2; no more detail
   needs adding to prior histories unless the user asks.
+
+## FE Opportunity Planning — Four Demos and Presentation Materials, 2026-09-15
+
+- Detailed canonical checkpoint remains [FE opportunity planning](dentlink-fe-opportunities.md).
+  Only BP2 candidates 1–4 were refined: global map → US region → individual
+  shipment, 3D carousel/enlargement, lab space/process, and order-scoped file
+  exploration. The original 41 candidates and 12-row shortlist are preserved.
+  No actual product implementation candidate has been selected.
+- Completed four interactive sample demos, a nine-page team PDF, 14 real UI
+  screenshots, and a 58.93-second 1920×1080/30fps silent MP4 with the final
+  shipping-playback correction. Artifacts are under
+  `/Users/parkjongsun/Documents/ChatGPT/FE/deliverables/`: PDF
+  `FE-4개-후보-시연-검토.pdf` and MP4 `Dentlink-FE-시연-둘러보기.mp4`.
+  The MP4 combines static scene overviews with real shipping/model capture
+  sequences; it is not a continuous recording of all 24 actions. Final decode
+  and frame/caption review passed; separate full playback in a player was not
+  recorded as verified.
+- Browser/WebMCP verification covers all 24 steps, three invalid-input
+  rejections with state preservation, four 390px-wide screens without
+  horizontal overflow, corrected 3D enlargement clipping, and order 101→102
+  selection/preview cleanup. PDF and selected ZIP generated actual browser
+  download events and local saved files; PDF bytes match, and the ZIP contains
+  exactly the two requested GLBs with matching bytes and CRC. All 66 fixed
+  sample ZIP subsets also passed CRC verification. Selection download then
+  prepared-ZIP save is a two-step flow, not a general live compression service.
+- Final 3D asset is a directly generated, nonclinical synthetic arch with 14
+  teeth and gingiva. Four materials are variants of the same synthetic shape.
+  The initially researched CC0 stand model was not adopted; it is not the
+  source of the final arch. No comparison or approval-round UI was included.
+- Team sharing uses PDF/MP4. The new web demo is for the personal account:
+  https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site .
+  Private deployment and online key states were confirmed. Final materials:
+  https://app.notion.com/p/3dcce072e82f81abbeabe933ba4ff128 . Existing team
+  space content is an input/reference, not a newly created team feature.
+  An online selected ZIP matched both final GLBs byte for byte and passed CRC.
+  VP9 WebM was added for in-app playback after an MP4 playback crash; the WebM
+  reached its final 0:58 screen locally. The original MP4 remains for sharing.
+- For FE completion with existing data, review order-file exploration first,
+  shipment exploration next. For company demonstration, emphasize shipping
+  and space. These are different evaluation axes, not an approved roadmap.
+  Real operating APIs, permissions, cross-order completeness, shared-lab
+  process/handoff integration and physical-device performance remain separate
+  verification gates. Use team feedback to select a product problem and
+  bounded scope within the four candidates.
