@@ -289,3 +289,40 @@ Detailed implementation history remains in the relevant existing project file.
 - Candidate evidence is pinned to web master `de2ffdd9e` and app main `e0f4d5d`.
   Runtime usage, actual response completeness, and current Jira prioritization
   remain unverified; refresh only the sources needed for the next decision.
+
+## FE Opportunity Planning — History 4 and Discussion Pause, 2026-09-15
+
+- The team-sharing source remains [FE 9월 프로젝트](https://app.notion.com/p/3dcce072e82f80f8984ddd01b9554b26).
+  After explicit approval, reorganized it into a concise current summary,
+  six collapsible image samples with current interpretations, and collapsible
+  histories 4 → 3 → 2 → breakpoint 1. Old recommendations and mistaken
+  interpretations remain historical, with corrections in history 4.
+- Notion readback verified every previous history's text, all original table
+  rows (including 41 candidates and seven collaboration-dependent ideas), all
+  six image storage paths, and the original prompt attachment. Ten native
+  toggles retain nested content. Browser visual inspection required sign-in;
+  preservation and structure were verified through the connected Notion tool.
+- Current direction prioritizes visible product/business value led by FE;
+  internal quality and automation remain eligible, with no duration limit.
+  Samples 1+2 are one team-originated zoomable shipping experience: globe/global
+  situation → region → individual shipment details. Actual shipment-to-order,
+  coordinates and complete global-query coverage remain unverified.
+- Sample 3 is an existing 3D viewer enhancement, now framed as carousel/model
+  selection and enlargement. Separate order-scoped fetched-file browsing from
+  complete chat attachment search and cross-order file management, whose APIs
+  and persistence may require BE work. Sample 4 is retained without further
+  development at the user's request.
+- Sample 5 overlaps the [existing team spatial demo](https://innova-lab-spatial-studio.tata951193.chatgpt.site/),
+  which already includes floor exploration and a 13-step workflow simulation.
+  Further discussion should examine real order/process/handoff information
+  and the other teammate's ongoing shared-lab work; its API and scope have not
+  been inspected. Sample 6 meant guided sales/training scenarios, but its
+  static image did not convey that well; a first-order demo already exists.
+- Six generated static PNGs and prompts are also local under
+  `/Users/parkjongsun/Documents/ChatGPT/FE/samples/2026-09-15-fe-concepts/`.
+  They contain fictional data and do not prove product implementation.
+- User requested organization, preparation and then waiting. No feature or
+  implementation scope is selected. Resume with the Notion current summary,
+  select the next discussion candidate/user/scenario, and verify only the
+  needed data and existing functionality before refining it. No product code,
+  product Git/PR change, or new implementation thread was created.
