@@ -1,5 +1,13 @@
 # Memory Changelog
 
+## 2026-09-15
+
+- Recorded the user's Notion `FE 9월 프로젝트` page as the ongoing location for
+  Dentlink FE opportunity planning. Preserved the first breakpoint's completion,
+  the removal of the two-week constraint, and Mapbox as a next-discussion
+  reference in `projects/dentlink-fe.md`; the detailed candidate list stays in
+  Notion without duplication in personal context.
+
 ## 2026-09-11
 
 - Replaced the former Claude/company and Codex/side-project split with Codex as

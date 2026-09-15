@@ -33,6 +33,10 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Context Routing
 
+- FE improvement ideas and follow-up planning are now maintained in the user's
+  [FE 9월 프로젝트](https://app.notion.com/p/3dcce072e82f80f8984ddd01b9554b26)
+  Notion page. Keep the detailed candidate lists there; this checkpoint stores
+  only the recovery pointer and coordination decisions.
 - Read `projects/dentlink-client-order-feedback.md` and other matching
   `dentlink-client` checkpoints for web/Admin implementation history.
 - Read `projects/dentlink-app.md` for app implementation, runtime, build, and
@@ -265,3 +269,23 @@ Detailed implementation history remains in the relevant existing project file.
   `Deployment was blocked`. PR remains `MERGEABLE` but `BLOCKED`. Team review,
   release merge, deployment and actual remote E2E CI remain separate gates.
   No remote E2E run was started here.
+
+## FE Opportunity Planning — Breakpoint 1, 2026-09-15
+
+- The user designated the Notion page linked above as the ongoing planning
+  location and asked to preserve the current classified list before further
+  discussion. Breakpoint 1 was written and read back: 41 candidates across five
+  categories, seven collaboration-dependent ideas, four external references,
+  seven preliminary recommendation groups, and the feasibility boundaries.
+- The user removed the original two-week limit and welcomes ideas beyond the
+  examples of refactoring, E2E, design systems, shipping, maps, and 3D spaces.
+  The list is an exploratory checkpoint, not a selected implementation scope.
+- The user clarified that the map example was inspired by ideas involving
+  [Mapbox](https://www.mapbox.com/). Preserve that as context for the next
+  discussion; Mapbox evaluation or re-ranking was not requested at this break.
+- Resume by reading the Notion breakpoint and discussing the user's next
+  direction. No product code, test execution, new implementation task, or
+  product Git/PR mutation was performed for this capture.
+- Candidate evidence is pinned to web master `de2ffdd9e` and app main `e0f4d5d`.
+  Runtime usage, actual response completeness, and current Jira prioritization
+  remain unverified; refresh only the sources needed for the next decision.
