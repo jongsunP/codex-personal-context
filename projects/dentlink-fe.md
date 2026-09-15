@@ -33,10 +33,11 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Context Routing
 
-- FE improvement ideas and follow-up planning are now maintained in the user's
-  [FE 9월 프로젝트](https://app.notion.com/p/3dcce072e82f80f8984ddd01b9554b26)
-  Notion page. Keep the detailed candidate lists there; this checkpoint stores
-  only the recovery pointer and coordination decisions.
+- FE improvement planning uses one [meeting document](dentlink-fe-meeting.md)
+  and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
+  See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.
+  The user retired the Notion pages and duplicate PDFs on 2026-09-15; older
+  Notion and PDF links below are historical, not current sharing destinations.
 - Read `projects/dentlink-client-order-feedback.md` and other matching
   `dentlink-client` checkpoints for web/Admin implementation history.
 - Read `projects/dentlink-app.md` for app implementation, runtime, build, and
