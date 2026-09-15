@@ -326,3 +326,10 @@ Detailed implementation history remains in the relevant existing project file.
   select the next discussion candidate/user/scenario, and verify only the
   needed data and existing functionality before refining it. No product code,
   product Git/PR change, or new implementation thread was created.
+- Follow-up: the user found the history text itself too long. Condensed the
+  four main-page histories to 6/3/3/3 bullets (about 92% less text, excluding
+  links/markup), retaining current summary and six images. All four complete
+  historical records, the 41-item list, source tables and prompt attachment
+  were preserved and read back in the child page
+  [FE 아이디어 · 상세 원문 보관](https://app.notion.com/p/3dcce072e82f8115b208d586b76c6d66).
+  Resume from the short main-page history; open the archive only for details.
