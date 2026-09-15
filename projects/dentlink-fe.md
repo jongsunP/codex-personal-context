@@ -333,3 +333,20 @@ Detailed implementation history remains in the relevant existing project file.
   were preserved and read back in the child page
   [FE 아이디어 · 상세 원문 보관](https://app.notion.com/p/3dcce072e82f8115b208d586b76c6d66).
   Resume from the short main-page history; open the archive only for details.
+
+## FE Opportunity Planning — Breakpoint 2, 2026-09-15
+
+- Added a new top-level Notion breakpoint with 12 recommended candidates in
+  name/function/category/FE-scope order. Readback confirmed all 12 rows and
+  unchanged previous content, six images and the archive child-page link.
+- First four to refine: global shipment overview-to-detail exploration, 3D
+  carousel/enlargement UX, lab space/process visualization using the team's
+  existing spatial demo and shared-lab work, and order-scoped file browsing.
+  Shipping and real spatial/process integration remain conditional on data;
+  the user explicitly requested retaining the lab-space candidate.
+- Other shortlisted work: saved views/continuous order navigation, failed
+  downloads, upload preflight, key-screen/3D performance, web E2E scenario
+  coverage, design-system cleanup, QA capture, and PR validation automation.
+  Rank is a planning recommendation, not a selected implementation scope.
+- Product code remains unchanged. Resume from breakpoint 2; no more detail
+  needs adding to prior histories unless the user asks.
