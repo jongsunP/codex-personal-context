@@ -273,132 +273,16 @@ Detailed implementation history remains in the relevant existing project file.
   release merge, deployment and actual remote E2E CI remain separate gates.
   No remote E2E run was started here.
 
-## FE Opportunity Planning — Breakpoint 1, 2026-09-15
+## FE Opportunity Planning — Final Meeting and Demo, 2026-09-15
 
-- The user designated the Notion page linked above as the ongoing planning
-  location and asked to preserve the current classified list before further
-  discussion. Breakpoint 1 was written and read back: 41 candidates across five
-  categories, seven collaboration-dependent ideas, four external references,
-  seven preliminary recommendation groups, and the feasibility boundaries.
-- The user removed the original two-week limit and welcomes ideas beyond the
-  examples of refactoring, E2E, design systems, shipping, maps, and 3D spaces.
-  The list is an exploratory checkpoint, not a selected implementation scope.
-- The user clarified that the map example was inspired by ideas involving
-  [Mapbox](https://www.mapbox.com/). Preserve that as context for the next
-  discussion; Mapbox evaluation or re-ranking was not requested at this break.
-- Resume by reading the Notion breakpoint and discussing the user's next
-  direction. No product code, test execution, new implementation task, or
-  product Git/PR mutation was performed for this capture.
-- Candidate evidence is pinned to web master `de2ffdd9e` and app main `e0f4d5d`.
-  Runtime usage, actual response completeness, and current Jira prioritization
-  remain unverified; refresh only the sources needed for the next decision.
-
-## FE Opportunity Planning — History 4 and Discussion Pause, 2026-09-15
-
-- The team-sharing source remains [FE 9월 프로젝트](https://app.notion.com/p/3dcce072e82f80f8984ddd01b9554b26).
-  After explicit approval, reorganized it into a concise current summary,
-  six collapsible image samples with current interpretations, and collapsible
-  histories 4 → 3 → 2 → breakpoint 1. Old recommendations and mistaken
-  interpretations remain historical, with corrections in history 4.
-- Notion readback verified every previous history's text, all original table
-  rows (including 41 candidates and seven collaboration-dependent ideas), all
-  six image storage paths, and the original prompt attachment. Ten native
-  toggles retain nested content. Browser visual inspection required sign-in;
-  preservation and structure were verified through the connected Notion tool.
-- Current direction prioritizes visible product/business value led by FE;
-  internal quality and automation remain eligible, with no duration limit.
-  Samples 1+2 are one team-originated zoomable shipping experience: globe/global
-  situation → region → individual shipment details. Actual shipment-to-order,
-  coordinates and complete global-query coverage remain unverified.
-- Sample 3 is an existing 3D viewer enhancement, now framed as carousel/model
-  selection and enlargement. Separate order-scoped fetched-file browsing from
-  complete chat attachment search and cross-order file management, whose APIs
-  and persistence may require BE work. Sample 4 is retained without further
-  development at the user's request.
-- Sample 5 overlaps the [existing team spatial demo](https://innova-lab-spatial-studio.tata951193.chatgpt.site/),
-  which already includes floor exploration and a 13-step workflow simulation.
-  Further discussion should examine real order/process/handoff information
-  and the other teammate's ongoing shared-lab work; its API and scope have not
-  been inspected. Sample 6 meant guided sales/training scenarios, but its
-  static image did not convey that well; a first-order demo already exists.
-- Six generated static PNGs and prompts are also local under
-  `/Users/parkjongsun/Documents/ChatGPT/FE/samples/2026-09-15-fe-concepts/`.
-  They contain fictional data and do not prove product implementation.
-- User requested organization, preparation and then waiting. No feature or
-  implementation scope is selected. Resume with the Notion current summary,
-  select the next discussion candidate/user/scenario, and verify only the
-  needed data and existing functionality before refining it. No product code,
-  product Git/PR change, or new implementation thread was created.
-- Follow-up: the user found the history text itself too long. Condensed the
-  four main-page histories to 6/3/3/3 bullets (about 92% less text, excluding
-  links/markup), retaining current summary and six images. All four complete
-  historical records, the 41-item list, source tables and prompt attachment
-  were preserved and read back in the child page
-  [FE 아이디어 · 상세 원문 보관](https://app.notion.com/p/3dcce072e82f8115b208d586b76c6d66).
-  Resume from the short main-page history; open the archive only for details.
-
-## FE Opportunity Planning — Breakpoint 2, 2026-09-15
-
-Current dedicated planning and demo checkpoint:
-[FE opportunity planning](dentlink-fe-opportunities.md). The user approved
-record reorganization and presentation-ready prototypes for candidates 1–4.
-That document now owns the detailed history, evidence and demo progress.
-
-- Added a new top-level Notion breakpoint with 12 recommended candidates in
-  name/function/category/FE-scope order. Readback confirmed all 12 rows and
-  unchanged previous content, six images and the archive child-page link.
-- First four to refine: global shipment overview-to-detail exploration, 3D
-  carousel/enlargement UX, lab space/process visualization using the team's
-  existing spatial demo and shared-lab work, and order-scoped file browsing.
-  Shipping and real spatial/process integration remain conditional on data;
-  the user explicitly requested retaining the lab-space candidate.
-- Other shortlisted work: saved views/continuous order navigation, failed
-  downloads, upload preflight, key-screen/3D performance, web E2E scenario
-  coverage, design-system cleanup, QA capture, and PR validation automation.
-  Rank is a planning recommendation, not a selected implementation scope.
-- Product code remains unchanged. Resume from breakpoint 2; no more detail
-  needs adding to prior histories unless the user asks.
-
-## FE Opportunity Planning — Four Demos and Presentation Materials, 2026-09-15
-
-- Detailed canonical checkpoint remains [FE opportunity planning](dentlink-fe-opportunities.md).
-  Only BP2 candidates 1–4 were refined: global map → US region → individual
-  shipment, 3D carousel/enlargement, lab space/process, and order-scoped file
-  exploration. The original 41 candidates and 12-row shortlist are preserved.
-  No actual product implementation candidate has been selected.
-- Completed four interactive sample demos, a nine-page team PDF, 14 real UI
-  screenshots, and a 58.93-second 1920×1080/30fps silent MP4 with the final
-  shipping-playback correction. Artifacts are under
-  `/Users/parkjongsun/Documents/ChatGPT/FE/deliverables/`: PDF
-  `FE-4개-후보-시연-검토.pdf` and MP4 `Dentlink-FE-시연-둘러보기.mp4`.
-  The MP4 combines static scene overviews with real shipping/model capture
-  sequences; it is not a continuous recording of all 24 actions. Final decode
-  and frame/caption review passed; separate full playback in a player was not
-  recorded as verified.
-- Browser/WebMCP verification covers all 24 steps, three invalid-input
-  rejections with state preservation, four 390px-wide screens without
-  horizontal overflow, corrected 3D enlargement clipping, and order 101→102
-  selection/preview cleanup. PDF and selected ZIP generated actual browser
-  download events and local saved files; PDF bytes match, and the ZIP contains
-  exactly the two requested GLBs with matching bytes and CRC. All 66 fixed
-  sample ZIP subsets also passed CRC verification. Selection download then
-  prepared-ZIP save is a two-step flow, not a general live compression service.
-- Final 3D asset is a directly generated, nonclinical synthetic arch with 14
-  teeth and gingiva. Four materials are variants of the same synthetic shape.
-  The initially researched CC0 stand model was not adopted; it is not the
-  source of the final arch. No comparison or approval-round UI was included.
-- Team sharing uses PDF/MP4. The new web demo is for the personal account:
-  https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site .
-  Private deployment and online key states were confirmed. Final materials:
-  https://app.notion.com/p/3dcce072e82f81abbeabe933ba4ff128 . Existing team
-  space content is an input/reference, not a newly created team feature.
-  An online selected ZIP matched both final GLBs byte for byte and passed CRC.
-  VP9 WebM was added for in-app playback after an MP4 playback crash; the WebM
-  reached its final 0:58 screen locally. The original MP4 remains for sharing.
-- For FE completion with existing data, review order-file exploration first,
-  shipment exploration next. For company demonstration, emphasize shipping
-  and space. These are different evaluation axes, not an approved roadmap.
-  Real operating APIs, permissions, cross-order completeness, shared-lab
-  process/handoff integration and physical-device performance remain separate
-  verification gates. Use team feedback to select a product problem and
-  bounded scope within the four candidates.
+- Current scope, evidence, deployment and recovery are owned by
+  [the FE opportunity checkpoint](dentlink-fe-opportunities.md).
+- Team materials are one Notion meeting document and one public demo app.
+  Preserve the two ranking axes: practical FE value and visible business value.
+  The four demos illustrate the latter; no production task has been selected.
+- Final refinement is deployed to the existing Site: real map detail, lab-space
+  interiors, distinct synthetic dental models and order-context file browsing.
+  The current gallery has 14 fresh screenshots and a 59-second silent slideshow.
+- Historical breakpoint pages, local meeting bodies and PDF bundles are retired.
+  Prior history is recoverable from Git; do not restore old links or duplicate
+  detailed progress here. Fetch the current Notion before subsequent edits.
