@@ -372,7 +372,7 @@ Detailed implementation history remains in the relevant existing project file.
   blocker after the user's merge; no access-policy change was made here.
   Next step is team release delivery and actual Amplitude receipt verification.
 
-## Amplitude Environment Consistency — Follow-up PR, 2026-09-18
+## Amplitude Environment Consistency — Merged and Cleaned Up, 2026-09-18
 
 - Following the merge above, [DL-16472 comment 44076](https://innovaid.atlassian.net/browse/DL-16472?focusedCommentId=44076)
   reported that staging received `welcome_view` but not `[Amplitude] Page Viewed`.
@@ -384,7 +384,7 @@ Detailed implementation history remains in the relevant existing project file.
   original rationale was not established. The prior pageview fix preserved it.
 - The user authorized a new branch from `release/v1.87.0`, implementation,
   commit, push and another PR. [PR #4615](https://github.com/Innvoaid/dentlink-client/pull/4615)
-  is open from `feature/DL-16474-amplitude-env` to `release/v1.87.0`.
+  was created from `feature/DL-16474-amplitude-env` to `release/v1.87.0`.
   Base: `7aaa5b8e306d136458b650db2527e298f505043c`.
   Head: `f6a81010dca9fca028cafe82c83a37e455af129d`,
   `fix: Amplitude 환경별 이벤트 수집 기준 통일`. One commit, ten changed files.
@@ -420,16 +420,30 @@ Detailed implementation history remains in the relevant existing project file.
   settings remained active. Disabled cases imported/initialized/sent nothing.
   External requests and business API calls were zero. Next route events, Replay
   and transport were test doubles; this does not prove live ingestion, real
-  Replay recording or deployment environment injection. Temporary harness:
-  `/tmp/dl-16474-env-runtime.cjs`; it is not a cross-device artifact.
-- Product worktree `/Users/parkjongsun/Repository/dentlink-client-amplitude-env`
-  is clean and tracks the pushed branch. Main checkout remains clean `master`
-  at `de2ffdd9e3025cb758632788cd6086c170e4974e`. The independent DLDS worktree
-  and `feature/DL-16466` were untouched. Keep the new branch/worktree until the
-  PR is merged and cleanup is requested.
+  Replay recording or deployment environment injection. Historical temporary
+  harness `/tmp/dl-16474-env-runtime.cjs` was removed during post-merge cleanup;
+  it is not a local or cross-device artifact now.
+- The user merged PR #4615 on 2026-09-18 at 19:09:31 KST. Squash commit
+  `08b74ee9084605ccde8cc19ef0bda836db132a59` is the verified release head.
+  Its complete Git tree equals the original PR head, and all ten changed files
+  have identical blobs. CodeRabbit completed successfully on the final head;
+  review threads total zero, unresolved zero. Its review body contains one
+  nonblocking suggestion to log Replay failures. The user requested verification
+  and cleanup only, so no additional code change or review response was made.
+- Cleanup completed at the user's request: removed the remote branch using an
+  exact-head lease and normal push hooks, then removed the clean dedicated
+  `/Users/parkjongsun/Repository/dentlink-client-amplitude-env` worktree, local
+  feature branch and nine task-specific temporary harness/draft/log files.
+  The main `/Users/parkjongsun/Repository/dentlink-client` checkout remains clean
+  `master` at `de2ffdd9e3025cb758632788cd6086c170e4974e`, synchronized with
+  `origin/master`. The independent DLDS worktree and `feature/DL-16466` were
+  untouched. No amplitude follow-up branch/worktree or `/tmp/dl-16474-env*`
+  artifact remains. Task is complete; wait for the user's next instruction.
 - At PR creation, GitHub reported `MERGEABLE` with overall `BLOCKED` status:
   Vercel's `dentlink-dlos` preview says `Deployment was blocked`; no more specific
   current cause was established. Auto Assign succeeded and CodeRabbit was in
-  progress. No CodeRabbit review cycle, merge, deployment or Jira/Slack comment
-  was performed. Next: team review/merge, deploy with the new build-time flags,
-  then confirm staging pageviews and `welcome_view` in the matching project.
+  progress. CodeRabbit later completed as recorded above; the Vercel status
+  remained blocked on the merged PR. The agent did not merge, deploy or post
+  Jira/Slack comments. Deployment with the new build-time flags and confirmation
+  of staging pageviews plus `welcome_view` remain team-side follow-up; they were
+  not verified by this cleanup.
