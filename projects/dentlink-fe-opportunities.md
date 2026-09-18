@@ -6,7 +6,7 @@
 - **최신 회의 원본:** [FE 2차 회의 결과 · 디자인시스템과 AI 화면 제작](https://app.notion.com/p/3dfce072e82f812c843afed105630c98). 페이지 ID `3dfce072-e82f-812c-843a-fed105630c98`. 오늘 회의 결론과 후속 구체화는 이 문서를 기준으로 합니다.
 - **이전 기록:** [1차 전체 아이디어](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca) → [2차 회의 전 검토안](https://app.notion.com/p/3dece072e82f818299d9c781d5696953) → 위 최종 회의 결과. 이전 본문을 보존하고 2차 검토안 상단에 새 결론 링크만 추가했습니다. 기존 후보·작은 병행 업무를 모두 실행하는 결정은 아닙니다.
 - 세 문서 위치는 `DEV Team / Development Documents`, data source `26366594-1ec5-423c-b7c3-35abe1e047f2`입니다. 새 페이지 Tags는 FE·FE Planning·AI, 날짜는 2026-09-18입니다.
-- **Jira:** [DL-16437 · FE 작업 아이데이션](https://innovaid.atlassian.net/browse/DL-16437)이 상위 작업이며 [DL-16466 · 디자인시스템 정비](https://innovaid.atlassian.net/browse/DL-16466)가 하위 작업입니다. 둘 다 조회 당시 진행 중, 하위 DL-16464(1차 작업 리스트 선정 및 논의)·DL-16465(2차 작업 리스트 정리)는 완료였습니다. DL-16466 설명에는 실질적인 상세 요구가 아직 없었습니다. 이번 요청에서는 Jira를 읽고 문서에 연결했으며 Jira 본문·상태·댓글은 변경하지 않았습니다.
+- **Jira:** [DL-16437 · FE 작업 아이데이션](https://innovaid.atlassian.net/browse/DL-16437)이 상위 작업이며 [DL-16466 · 디자인시스템 정비](https://innovaid.atlassian.net/browse/DL-16466)가 하위 작업입니다. 둘 다 조회 당시 진행 중, 하위 DL-16464(1차 작업 리스트 선정 및 논의)·DL-16465(2차 작업 리스트 정리)는 완료였습니다. 처음에는 조회·Notion 연결만 했으나, 사용자가 Jira도 필요한 정리를 하라는 의미였다고 밝혀 **두 작업의 설명을 회의 결론에 맞게 업데이트했습니다.** 상위에는 목적·선택 과제·진행 순서·다음 논의, 하위에는 DLDS 정비 방향·DLOS 참고 기준·구체화할 사항을 담고 새 Notion으로 연결했습니다. 제목·담당자·상태·작업 계층은 유지했습니다.
 - **FE 자체 아이데이션:** 1·2차 회의 참석자는 FE 팀원들입니다. PM·디자이너·운영팀은 도구의 사용자 또는 필요시 확인할 상대입니다. 개인 진행 이력은 이 Git 체크포인트, 팀 공유 본문은 Notion에 둡니다.
 - [dentlink-fe-meeting.md](dentlink-fe-meeting.md)는 최신·이전 Notion과 Jira의 바로가기입니다. `/Users/parkjongsun/Documents/ChatGPT/FE/FE-업무-검토-회의자료.md`는 이 파일의 심볼릭 링크이며 별도 본문을 관리하지 않습니다.
 - 기존 [Dentlink Experience Studio](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site)는 앞선 시각화 후보의 데모입니다. 이번 선택 과제의 구현 결과가 아니며 이번 기록 작업에서는 수정하지 않았습니다.
@@ -50,6 +50,7 @@
 
 ### 이번 기록의 검증과 이전 코드 관찰
 
+- **후속 Jira 정리:** 기존 DL-16437의 FE 자체 업무 발굴 목적을 유지하면서 2차 회의 결론과 DS → AI 핵심 → 조건부 에디터 순서를 반영했습니다. 비어 있던 DL-16466 설명에 Figma 기준·props/기본값·전체 확인 페이지·Storybook 대체 검토와 다음 구체화 항목을 작성했습니다. 재조회에서 두 설명이 의도한 본문과 일치하고 제목·담당자·상태·상하위 관계가 그대로임을 확인했습니다. 별도 댓글·새 작업·일정은 추가하지 않았습니다. 세부 회의 기록과 후속 논의의 원본은 새 Notion으로 유지합니다.
 - 새 Notion은 회의 결론 → 단계별 방향 → 회의 메모 6개 표 → 앞으로 구체화할 부분 → 이전 논의의 5개 섹션으로 작성했습니다. 재조회와 별도 내용 검토에서 메모 누락·과잉 확정이 없음을 확인했습니다. 이전 Notion은 결론 링크만 추가했고 후보 본문은 변경 없이 보존된 것을 확인했습니다.
 - 이번에는 개인 저장소를 `git pull --ff-only`로 동기화하고 Notion·Jira를 조회했습니다. 제품 코드·Sites는 수정하거나 실행하지 않았습니다. runtime memory에도 최신 해석을 담은 작은 보충 기록을 남깁니다.
 - **이전 읽기 전용 코드 관찰(현재 Git 상태 아님):** 당시 web checkout은 `feature/amplitude-pageview-tracking`, HEAD `de2ffdd9e3025cb758632788cd6086c170e4974e`, `clinic/src/common/hooks/useAmplitudeInit.ts` 수정 상태였습니다. 기존 TextInput 사용, `shared/ui/src/index.ts`의 DLDS·일부 v2 export, 기존/v2 InputBase 기본값과 Storybook 예시를 확인했습니다. 이 경로·기본값 차이는 사용자의 DLOS/v2 의미와 별개이며 차이만으로 결함이나 마이그레이션 정책을 단정하지 않습니다. 후속 구현 때 최신 저장소를 다시 확인합니다.
