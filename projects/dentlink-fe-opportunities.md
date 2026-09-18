@@ -1,6 +1,6 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 기준 — 2026-09-18 DLDS 정비 · 회귀 검증 · 원격 체크포인트
+## 현재 기준 — 2026-09-18 DLDS Figma 대조 · 추가 구현 · 원격 체크포인트
 
 - **선택 과제는 하나:** 실제 덴트링크 컴포넌트를 기반으로 AI가 우리 UI에 맞는 화면을 만들고, PM·디자이너와 FE가 그 결과를 함께 활용하는 환경을 만듭니다. **DLDS 정비 → AI 프롬프트·하네스 정비(핵심) → 필요하고 가능하면 덴트링크 에디터 개발** 순서입니다. 핵심 AI 단계는 **Figma 시안이 나오기 전 기획·디자인 단계에서 비개발자가 프롬프트로 작업하는 환경**을 목표로 합니다.
 - **최신 회의 원본:** [FE 2차 회의 결과 · 디자인시스템과 AI 화면 제작](https://app.notion.com/p/3dfce072e82f812c843afed105630c98). 페이지 ID `3dfce072-e82f-812c-843a-fed105630c98`. 오늘 회의 결론과 후속 구체화는 이 문서를 기준으로 합니다.
@@ -10,9 +10,26 @@
 - **FE 자체 아이데이션:** 1·2차 회의 참석자는 FE 팀원들입니다. PM·디자이너·운영팀은 도구의 사용자 또는 필요시 확인할 상대입니다. 개인 진행 이력은 이 Git 체크포인트, 팀 공유 본문은 Notion에 둡니다.
 - [dentlink-fe-meeting.md](dentlink-fe-meeting.md)는 최신·이전 Notion과 Jira의 바로가기입니다. `/Users/parkjongsun/Documents/ChatGPT/FE/FE-업무-검토-회의자료.md`는 이 파일의 심볼릭 링크이며 별도 본문을 관리하지 않습니다.
 - 기존 [Dentlink Experience Studio](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site)는 앞선 시각화 후보의 데모입니다. 이번 선택 과제의 구현 결과가 아니며 이번 기록 작업에서는 수정하지 않았습니다.
-- 사용자가 실제 착수를 승인했고, 제공한 Figma를 현재 DLDS 기준으로 사용하며 master에서 작업 브랜치를 만들도록 확인했습니다. **스텝 1 실제 컴포넌트 정비와 28개 항목(공통 기준1+컴포넌트 예제27)의 로컬 카탈로그까지 확장했습니다. DLOS 원본 PR의 페이지 구조와 외형도 적용했습니다.** 전체 DLDS 정비·전체 서비스 회귀 검증·AI 하네스 구현 완료를 뜻하지 않습니다. 제품 커밋 `ad3b55d6a4f6c3f54e1b36ae39aa041a86f309bf`를 `origin/feature/DL-16466`에 푸시했고 원격 SHA·upstream 일치를 확인했습니다. 작업 트리는 clean입니다. 아래 최신 체크포인트를 기준으로 복구하며 이전 미커밋/미승인 기록은 당시 이력입니다. PR·병합·배포는 하지 않았습니다.
+- 사용자가 실제 착수를 승인했고, 제공한 Figma를 현재 DLDS 기준으로 사용하며 master에서 작업 브랜치를 만들도록 확인했습니다. **스텝 1 실제 컴포넌트 정비와 28개 항목(공통 기준1+컴포넌트 예제27)의 로컬 카탈로그까지 확장했습니다. DLOS 원본 PR의 페이지 구조와 외형도 적용했습니다.** 전체 DLDS 정비·전체 서비스 회귀 검증·AI 하네스 구현 완료를 뜻하지 않습니다. 최신 제품 커밋 `a01200443dee0c017ece2ceb6418d2751f9db515`를 `origin/feature/DL-16466`에 푸시했고 원격 SHA 일치를 확인했습니다. Figma 17페이지의 대응 코드·누락 상태를 조사하고 추가 구현·109개 UI 테스트·Clinic/Admin 2개 실제 화면 검증을 마쳤습니다. 작업 트리는 clean입니다. 아래 최신 체크포인트를 기준으로 복구하며 이전 미커밋/미승인 기록은 당시 이력입니다. PR·병합·배포는 하지 않았습니다.
 
 - **로컬 실행 인계(2026-09-18):** 사용자가 직접 실행해 보겠다고 하여 Codex가 켠 localhost5177 서버를 종료하고 포트가 닫힌 것을 확인했습니다. 이후 서버를 임의로 다시 켜지 않습니다. 전용 worktree 루트에 `pnpm dev:ui` 명령을 추가했고 루트 README와 `shared/ui/README.md`에 설치·접속·종료·포트 중복 안내를 남겼습니다. 명령은 `pnpm --filter @dentlink/ui dev --host 127.0.0.1 --port 5177 --strictPort`와 같습니다. 후속 정비 중 이 worktree의5177 서버(PID64780)가 다시 실행 중이었고 Codex는 조작하지 않았습니다. 마지막 포트 점검에서는5177 리스너도 없었습니다. Codex가 새로 켠 검증용5187은 종료했습니다. 다음 세션에서는 프로세스·작업 경로를 재확인합니다.
+
+## 스텝 1 Figma 전체 목록 대조와 추가 정비 — 2026-09-18
+
+- **최신 사용자 요청:** Codex가 스스로 할 수 있는 작업을 계속 진행하고 DLDS Figma에 있는 것이 실제로 다 구현됐는지/누락은 있는지 확인한다. 이전 대기는 사용자 승인·기술적 장애가 아니라 앞선 커밋/푸시 체크포인트였다. 이 후속 지시에도 Step1 안에서 작업하며 AI 하네스·에디터 단계로 넘어가지 않는다. 기존 최종 커밋·푸시·메모리 정리 승인은 유효하다.
+- **제품 상태:** 전용 worktree `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`, 최신 `a01200443dee0c017ece2ceb6418d2751f9db515` — `feat: DLDS 디자인 누락 상태와 키보드 사용성 보완`, 35파일(+2487/-223). 원격 SHA 일치·clean 확인. master 원본은 수정하지 않았으며 PR·병합·배포 없음.
+- **Figma 대조:** 확정 파일 `syQbfe4vTWUz87SYqa5Kvx`의 Core `1:28` + 개별 16페이지 metadata를 실제 source/catalog에 연결했다. 16개 모두 대응 코드는 있지만 모든 상태·픽셀·반응형 정합 완료를 뜻하지 않는다. 실제 수치 구현에는 해당 node design context와 스크린샷을 확인했다. 카탈로그는 Foundation1+실제 컴포넌트27의 28개를 유지한다.
+- **팀 소유 기준 문서:** `shared/ui/DESIGN_COVERAGE.md`에 17페이지 매핑, Core Tab/Modal/기반 규칙, 반영 범위·원본 간 차이·남은 예제/검증을 정리했고 README에 연결했다. `shared/ui/design-audit/figma-icons.tsv`는 Figma 395 symbol의 node/분류/대응 source를 기록한다. 임시 원본 `/tmp/dlds-figma-audit/*.xml`·`/tmp/dlds-icon-coverage-report.md`는 다음 세션에서 존재를 가정하지 않는다.
+- **아이콘 판정:** glyph368/이름 중복 제외358종 중 정규화 이름 대응226종, 이름 변경·실제 누락 여부 확인 대상132종. 132종을 미구현 확정으로 표현하면 안 된다. 직접 대응 중17종의 viewBox 차이, 로고18변형 전체 대응도 남아 있다. Admin app icon4개는 이름·크기·manifest 연결 확인. Figma 도형·색상 전수 픽셀 검증은 하지 않았다.
+- **추가 구현:** Checkbox `indeterminate`(native mixed/aria/선택 이벤트)와 `selectionNumber`(0 포함 장식 숫자); Tabs optional compact46px/regular54px(폰트·배지·아이콘·underline), 생략 시 기존52px; Toast `actions`와 호출부가 소유하는 닫기/표시 시간. 기존 API 기본값·customIcon 우선순위·폼 값 보존. Input 카드에 한 줄/여러 줄/비밀번호·아이콘·우측 문구·로딩을 추가했다.
+- **기반 규칙:** Figma의 white/gray×100/200/300 shadow6개와 border0.5/1/2px 토큰을 추가하고 Modal/Dropdown/Input의 같은 값을 연결했다. Foundation/Inspector에서 확인 가능. Layout 열·간격·여백 안내를 추가했으나 기존 제품 breakpoint/화면을 일괄 이전하지 않았다.
+- **사용성/결함 수정:** Calendar grid 방향키·Home/End·PageUp/Down·Shift 연도 이동·Enter/Space 선택·월 경계 포커스. 수동 기간 입력이 기존 weekend/holiday/min/max 제한을 우회하던 문제를 수정했고 끝 날짜 제외·양 끝 날짜에 제한을 적용하는 기존 정책은 유지했다. ButtonGroup 전체 disabled 무시 및 PasswordInput disabled 중 보기/지우기 작동을 수정하고 비밀번호 아이콘을 키보드 가능한 button으로 바꿨다. Modal은 이미 처리된 Escape를 존중하며 Admin SmsSend/대량 LinkTalk 확인 Popup은 부모 작성창과 Escape를 분리한다.
+- **검증:** `pnpm test:ui` 14파일109개 PASS. catalog strict TS/lint/build PASS. 커밋 hook Clinic/Lab/Admin 전체 타입 PASS. push hook 세 앱 lint 오류0(기존229/189/410경고), shared config/hooks27tests·master 대비 coverage 변화0 PASS. 독립 diff 리뷰 actionable regression0. 전체 UI 독립 타입의 기존 오류 집합은 이번에 재실행하지 않았으며 이전579→578 기록과 구분한다.
+- **실제 브라우저:** 검증용5187에서 Compact46/font16/icon18/underline2, Regular54/font18/icon20, 좁은 화면/1440desktop 배치, Checkbox mixed 키보드 해제/숫자, Toast action callback, PasswordInput 키보드 보기·disabled 차단, Calendar 방향키/Enter/월 이동을 확인했다. 콘솔 오류·경고0. 실제 모바일 기기/스크린리더 검증을 뜻하지 않는다.
+- **실제 서비스:** 정식 runner `pnpm e2e:clinic e2e/clinic/specs/09_sharedUi.spec.ts` 2/2 PASS. Clinic Export: 날짜 오류 복구·legacy Dropdown Escape 후 모달/날짜/Paid/focus 유지·닫기/초기화. Admin `/messages/sms`: 가상 수신자0·초안→확인 팝업→Escape→입력 내용 유지→취소. service worker 차단 + Admin 브라우저 쓰기 abort 가드; 실제 발송 버튼 클릭0·쓰기 요청 시도0 검증. 실제 메시지는 보내지 않았다.
+- **E2E 증거:** `e2e-runs/2026-09-18T09-22-45-022Z-4412ae3b/{summary.md,verdict.json,run.json,report.json}`. 18:22:45~18:23:32 KST 약48초, 실패/flaky/retry/skip/미실행/전역오류0. 실행 당시 HEAD ad3b55d6a+작업 사본 SHA `ddda2cc3ed6ad94f5508d611b0b850c0571b4271da3bc3576b0cf42ee17a3a24`, source_unchanged=true. 이후 코드 변경 없이 문서 설명·TSV 빈 칸만 정리하여 커밋. 이전20+4 E2E와 별도 실행이며 staging_full_verified=false. 기존 styled DOM prop/DataTable deprecated 경고는 남는다.
+- **정리:** 검증용5187 및 E2E3100/3105/3102 서버 종료, 임시 CUA 탭 닫음/viewport복구. 사용자5177 서버는 조작하지 않았다. Jira DL-16466 설명에 커밋·대조 문서·검증·남은 범위를 갱신하고 진행 중 유지. Notion 회의 방향·기존 Sites 데모는 변경하지 않았다.
+- **다음 시작:** Step1 전체 완료 아님. ① 아이콘132 후보/로고18변형의 시각적 대응 및 실제 누락 확정 ② 기존 API로 가능한 Button 로딩/아이콘, Segment 장식, Popup 이미지·버튼 방향 등의 예제 ③ Medium500 vs400·full1000px vs50%·Calendar46 vs40 적용 범위 ④ Modal/Popup 전체 focus trap/복귀·실제 모바일/스크린리더. Checkbox 원본 일부 mixed-hover/disabled glyph가 check인 불일치는 선택 의미를 위해 minus 유지. 전역 기준 변경은 영향 근거 없이 밀어붙이지 않되, 가능한 조사·호환 보완·검증은 Codex가 계속 수행할 수 있다.
 
 ## 스텝 1 회귀 검증과 커밋 — 2026-09-18
 

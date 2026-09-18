@@ -37,8 +37,10 @@ Detailed implementation history remains in the relevant existing project file.
   an editor only if useful later. Use the [latest meeting](https://app.notion.com/p/3dfce072e82f812c843afed105630c98)
   and [implementation checkpoint](dentlink-fe-opportunities.md). Step 1 is in
   `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`,
-  pushed at `ad3b55d6a` on 2026-09-18. Component tests70 and local focused E2E24
-  passed; this is not whole-Step-1 completion or staging/deployment proof.
+  pushed at `a01200443` on 2026-09-18. Figma17 pages mapped; missing states,
+  calendar keyboard/constraints and disabled/overlay fixes added. UI tests109
+  and latest Clinic/Admin focused E2E2 passed (earlier checkpoint E2E24 is
+  separate). This is not whole-Step-1 completion or staging/deployment proof.
   The user authorized this task's final product commit/push and Git memory
   closeout; Codex owns feasible QA/fixes and asks only for needed decisions.
   PR/merge/deploy remain separate. See the detailed checkpoint for remaining
