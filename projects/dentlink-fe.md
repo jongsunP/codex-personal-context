@@ -361,11 +361,73 @@ Detailed implementation history remains in the relevant existing project file.
   The production August count was not established as caused solely by this gap.
 - Cleanup first removed nine obsolete experiments/drafts/logs, then removed
   the remaining four harnesses, two validation logs and the cleanup log after
-  merge. No `/tmp/dentlink-amplitude*`, `/tmp/dentlink-welcome*` or
-  `/tmp/dl-16474*` artifacts remain. Remote branch deletion used an exact SHA
+  merge. At that checkpoint, no `/tmp/dentlink-amplitude*`, `/tmp/dentlink-welcome*`
+  or `/tmp/dl-16474*` artifacts remained. Remote branch deletion used an exact SHA
   lease and normal push hooks; local deletion followed verified squash-result
   equivalence, release ancestry and preservation of the PR head in GitHub.
 - Before merge, Vercel reported that Git author `jongsunP` needed project
   access to create deployments. That historical check is not a current open-PR
   blocker after the user's merge; no access-policy change was made here.
   Next step is team release delivery and actual Amplitude receipt verification.
+
+## Amplitude Environment Consistency — Follow-up PR, 2026-09-18
+
+- Following the merge above, [DL-16472 comment 44076](https://innovaid.atlassian.net/browse/DL-16472?focusedCommentId=44076)
+  reported that staging received `welcome_view` but not `[Amplitude] Page Viewed`.
+  Staging deployment `d1ee5acec501ee2fbd27b4e0cd80a0e32b8ebde5` succeeded in
+  [workflow 35322222932](https://github.com/Innvoaid/dentlink-client/actions/runs/35322222932).
+  Code review confirmed that automatic capture and Office pageviews still had
+  a production-only condition, while explicit events ran in staging. This
+  restriction predated DL-16474 (2025-08-11 commit `6757ac2f9`, PR #3061); its
+  original rationale was not established. The prior pageview fix preserved it.
+- The user authorized a new branch from `release/v1.87.0`, implementation,
+  commit, push and another PR. [PR #4615](https://github.com/Innvoaid/dentlink-client/pull/4615)
+  is open from `feature/DL-16474-amplitude-env` to `release/v1.87.0`.
+  Base: `7aaa5b8e306d136458b650db2527e298f505043c`.
+  Head: `f6a81010dca9fca028cafe82c83a37e455af129d`,
+  `fix: Amplitude 환경별 이벤트 수집 기준 통일`. One commit, ten changed files.
+  Jira remains [DL-16474](https://innovaid.atlassian.net/browse/DL-16474).
+- `NEXT_PUBLIC_AMPLITUDE_ENABLED=true` plus a nonblank environment key now
+  controls shared SDK loading, Track/Identify/Group, queueing and both app hooks.
+  Disabled environments do not import the SDK or retain direct-event calls.
+  Office and Lab production/staging/development retain their distinct existing
+  keys, with both automatic and explicit collection enabled. The optional DEV
+  preference question had no reply; the stated default preserves existing
+  direct-event use and enables automatic collection consistently. These are
+  build-time Next.js settings, not runtime consent/toggle controls.
+- `NEXT_PUBLIC_AMPLITUDE_SESSION_REPLAY_ENABLED` remains independent: Office
+  production only, Lab all three environments, matching prior behavior. Global
+  collection off also disables Replay. Office production cookie domain and
+  pageview snapshot/remote-config duplicate defenses are preserved. Actual SDK
+  keys are trimmed. Lab now awaits the actual init promise before queue flush;
+  its existing Replay initialization order is retained. Admin has no configured
+  Amplitude init/key and gains no new collection. Welcome exposure is unchanged;
+  Lab's existing `replaceState` pageview limitation was not rewritten here.
+- Verification passed: all three app type and lint hooks; lint had zero errors
+  and 222/189/410 existing warnings. Shared coverage hook passed 45 tests,
+  including 18 new shared-helper regression tests. Changed-file lint, formatting
+  and diff checks passed. Fresh worktree dependencies were installed with the
+  frozen lockfile, and `next typegen` generated ignored app type entrypoints;
+  no lockfile or generated tracked files changed. Coverage used the existing
+  ignored baseline copied from the main checkout.
+- Real SDK 2.43.0 local harness passed seven scenarios: Office staging/prod/dev,
+  disabled collection, Replay enabled, and Lab staging enabled/disabled. Office
+  initial/push/replace pageviews occur once per navigation, counters and click
+  IDs remain linked, and `welcome_view` coexists. Actual RemoteConfig subscription
+  received `pageViews:true` without duplicate Office pageviews; other remote
+  settings remained active. Disabled cases imported/initialized/sent nothing.
+  External requests and business API calls were zero. Next route events, Replay
+  and transport were test doubles; this does not prove live ingestion, real
+  Replay recording or deployment environment injection. Temporary harness:
+  `/tmp/dl-16474-env-runtime.cjs`; it is not a cross-device artifact.
+- Product worktree `/Users/parkjongsun/Repository/dentlink-client-amplitude-env`
+  is clean and tracks the pushed branch. Main checkout remains clean `master`
+  at `de2ffdd9e3025cb758632788cd6086c170e4974e`. The independent DLDS worktree
+  and `feature/DL-16466` were untouched. Keep the new branch/worktree until the
+  PR is merged and cleanup is requested.
+- At PR creation, GitHub reported `MERGEABLE` with overall `BLOCKED` status:
+  Vercel's `dentlink-dlos` preview says `Deployment was blocked`; no more specific
+  current cause was established. Auto Assign succeeded and CodeRabbit was in
+  progress. No CodeRabbit review cycle, merge, deployment or Jira/Slack comment
+  was performed. Next: team review/merge, deploy with the new build-time flags,
+  then confirm staging pageviews and `welcome_view` in the matching project.
