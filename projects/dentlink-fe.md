@@ -287,12 +287,19 @@ Detailed implementation history remains in the relevant existing project file.
   Prior history is recoverable from Git; do not restore old links or duplicate
   detailed progress here. Fetch the current Notion before subsequent edits.
 
-## Office Welcome Analytics — PR Finalized, 2026-09-18
+## Office Welcome Analytics — Merged and Cleaned Up, 2026-09-18
 
-- [PR #4613](https://github.com/Innvoaid/dentlink-client/pull/4613) targets
-  `release/v1.87.0` from `feature/DL-16474`; remote head is
-  `92c57f299e94568720ea1630d457104fb76ed378`. The current checkout is
-  `/Users/parkjongsun/Repository/dentlink-client`, clean and synchronized.
+- The user merged [PR #4613](https://github.com/Innvoaid/dentlink-client/pull/4613)
+  into `release/v1.87.0` at 2026-09-18 16:30:38 KST. Squash commit:
+  `f2e956f341a3f4b37a65813a272dddfea3e11080`; original PR head:
+  `92c57f299e94568720ea1630d457104fb76ed378`. Both changed files have identical
+  Git blobs in the original head and merge result; current release
+  `7aaa5b8e306d136458b650db2527e298f505043c` also preserves them.
+- Post-merge cleanup is complete. `/Users/parkjongsun/Repository/dentlink-client`
+  is back on clean `master` at `de2ffdd9e3025cb758632788cd6086c170e4974e`,
+  synchronized with `origin/master`. Local and remote `feature/DL-16474` and
+  its remote-tracking ref are deleted; the old amplitude branch is also absent.
+  The separate active DLDS worktree and `feature/DL-16466` remain intact.
 - Jira is [DL-16474](https://innovaid.atlassian.net/browse/DL-16474),
   `[FE] 웰컴 앰플리튜드 이벤트 수정`. At the user's subsequent request, the
   remote and local branch were renamed from `feature/amplitude-pageview-tracking`
@@ -300,7 +307,7 @@ Detailed implementation history remains in the relevant existing project file.
   so #4611 is closed and #4613 replaces it with identical three commits, title,
   target, assignee and requested reviewer. Both PR bodies link to each other;
   earlier review history stays on #4611 and does not transfer as new approval.
-- The branch retains `7ef67797b` for Office-wide `[Amplitude] Page Viewed`
+- The delivered commits include `7ef67797b` for Office-wide `[Amplitude] Page Viewed`
   collection after Next route completion, covering missed `replace` navigation.
   The added `26f08b9df` records `welcome_view` once per welcome-page mount via
   the existing `AMP_Track` queue; rerenders and StrictMode do not duplicate it,
@@ -328,28 +335,25 @@ Detailed implementation history remains in the relevant existing project file.
   External requests and business mutations were zero. Next completion events,
   surrounding UI and Replay were test doubles; this is not full browser/Replay
   or live ingestion proof. SDK upgrades need the same remote/config checks.
-- Temporary evidence: `/tmp/dentlink-amplitude-remote-regression.cjs`,
+- Historical temporary evidence: `/tmp/dentlink-amplitude-remote-regression.cjs`,
   `/tmp/dentlink-amplitude-defaultTracking-product-audit.cjs`, original
   `/tmp/dentlink-amplitude-hook-check.cjs` and welcome-event harness. Hook source
   SHA-256: `b3f79eb6b86fea5402350f2767a778054bb24d03ed28d5eab5551a6dfc8af551`.
-  These temporary scripts are not cross-device artifacts.
+  These scripts and their logs were removed after merge at the user's cleanup
+  request; they are not available locally or as cross-device artifacts.
 - The user confirmed both common collection and `welcome_view` belong in this
   delivery, and explicitly limited the final work to PR completion; the team
-  handles deployment. Three commits are pushed and PR #4613 is updated/open
-  against `release/v1.87.0`. Review, merge, deployment and live Amplitude receipt
-  remain separate steps; no CodeRabbit follow-up or release mutation was done.
+  handles deployment. The three commits are now included by the user's squash
+  merge into `release/v1.87.0`. Deployment and live Amplitude receipt remain
+  separate steps; the agent did not merge, deploy or run a CodeRabbit cycle.
   The production August count was not established as caused solely by this gap.
-- User-requested cleanup completed: removed nine superseded experiment,
-  reproduction, PR-draft and earlier-log files from `/tmp`. Kept the four final
-  validation harnesses and latest commit/push logs for the open review; their
-  dependencies do not reference the deleted files. The old branch name is
-  absent from local branches, remote branches and remote-tracking refs. No
-  abandoned local feature branch remains to delete. Active `feature/DL-16474`
-  is retained for PR follow-up, clean and synchronized at `92c57f299`; `master`
-  and the separate active DLDS worktree/`feature/DL-16466` were left intact.
-- PR status at cleanup: #4613 open, `REVIEW_REQUIRED`/`BLOCKED`, CodeRabbit
-  review in progress. Vercel reports that Git author `jongsunP` needs project
-  access to create deployments; this is separate from passed local checks.
-  Next steps are team/code review, resolution of the Vercel access requirement,
-  team release delivery and actual Amplitude receipt verification. No merge,
-  deployment, automatic review handling or access-policy change was performed.
+- Cleanup first removed nine obsolete experiments/drafts/logs, then removed
+  the remaining four harnesses, two validation logs and the cleanup log after
+  merge. No `/tmp/dentlink-amplitude*`, `/tmp/dentlink-welcome*` or
+  `/tmp/dl-16474*` artifacts remain. Remote branch deletion used an exact SHA
+  lease and normal push hooks; local deletion followed verified squash-result
+  equivalence, release ancestry and preservation of the PR head in GitHub.
+- Before merge, Vercel reported that Git author `jongsunP` needed project
+  access to create deployments. That historical check is not a current open-PR
+  blocker after the user's merge; no access-policy change was made here.
+  Next step is team release delivery and actual Amplitude receipt verification.
