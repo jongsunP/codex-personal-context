@@ -37,14 +37,16 @@ Detailed implementation history remains in the relevant existing project file.
   an editor only if useful later. Use the [latest meeting](https://app.notion.com/p/3dfce072e82f812c843afed105630c98)
   and [implementation checkpoint](dentlink-fe-opportunities.md). Step 1 is in
   `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`,
-  pushed at `a01200443` on 2026-09-18. Figma17 pages mapped; missing states,
-  calendar keyboard/constraints and disabled/overlay fixes added. UI tests109
-  and latest Clinic/Admin focused E2E2 passed (earlier checkpoint E2E24 is
-  separate). This is not whole-Step-1 completion or staging/deployment proof.
-  The user authorized this task's final product commit/push and Git memory
-  closeout; Codex owns feasible QA/fixes and asks only for needed decisions.
-  PR/merge/deploy remain separate. See the detailed checkpoint for remaining
-  design policy, Admin/mobile and accessibility verification.
+  pushed at `7ddd6ac09` on 2026-09-18. Additional Button/Popup/Segment/Slider
+  examples, opt-in modal focus management, optional 46px calendar dates and
+  narrow-gallery clipping fixes are verified. UI128 and latest Clinic/Admin
+  focused E2E2 passed; earlier runs are separate. Font400/500 interpretation
+  now distinguishes Clinic/Lab Medium-file registration from Admin Regular.
+  Icon follow-up directly checked19 of132 candidates;113 still need comparison.
+  Whole Step1, real-device/screen-reader, staging and deployment are not complete.
+  The user reauthorized autonomous feasible work plus product commit/push and
+  Git memory closeout after the usage interruption. PR/merge/deploy and the AI
+  harness remain separate. Use the detailed checkpoint for remaining scope.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.

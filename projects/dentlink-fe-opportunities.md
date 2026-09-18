@@ -1,6 +1,6 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 기준 — 2026-09-18 DLDS Figma 대조 · 추가 구현 · 원격 체크포인트
+## 현재 기준 — 2026-09-18 DLDS 중단 복구 · 추가 정비 · 원격 체크포인트
 
 - **선택 과제는 하나:** 실제 덴트링크 컴포넌트를 기반으로 AI가 우리 UI에 맞는 화면을 만들고, PM·디자이너와 FE가 그 결과를 함께 활용하는 환경을 만듭니다. **DLDS 정비 → AI 프롬프트·하네스 정비(핵심) → 필요하고 가능하면 덴트링크 에디터 개발** 순서입니다. 핵심 AI 단계는 **Figma 시안이 나오기 전 기획·디자인 단계에서 비개발자가 프롬프트로 작업하는 환경**을 목표로 합니다.
 - **최신 회의 원본:** [FE 2차 회의 결과 · 디자인시스템과 AI 화면 제작](https://app.notion.com/p/3dfce072e82f812c843afed105630c98). 페이지 ID `3dfce072-e82f-812c-843a-fed105630c98`. 오늘 회의 결론과 후속 구체화는 이 문서를 기준으로 합니다.
@@ -10,9 +10,24 @@
 - **FE 자체 아이데이션:** 1·2차 회의 참석자는 FE 팀원들입니다. PM·디자이너·운영팀은 도구의 사용자 또는 필요시 확인할 상대입니다. 개인 진행 이력은 이 Git 체크포인트, 팀 공유 본문은 Notion에 둡니다.
 - [dentlink-fe-meeting.md](dentlink-fe-meeting.md)는 최신·이전 Notion과 Jira의 바로가기입니다. `/Users/parkjongsun/Documents/ChatGPT/FE/FE-업무-검토-회의자료.md`는 이 파일의 심볼릭 링크이며 별도 본문을 관리하지 않습니다.
 - 기존 [Dentlink Experience Studio](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site)는 앞선 시각화 후보의 데모입니다. 이번 선택 과제의 구현 결과가 아니며 이번 기록 작업에서는 수정하지 않았습니다.
-- 사용자가 실제 착수를 승인했고, 제공한 Figma를 현재 DLDS 기준으로 사용하며 master에서 작업 브랜치를 만들도록 확인했습니다. **스텝 1 실제 컴포넌트 정비와 28개 항목(공통 기준1+컴포넌트 예제27)의 로컬 카탈로그까지 확장했습니다. DLOS 원본 PR의 페이지 구조와 외형도 적용했습니다.** 전체 DLDS 정비·전체 서비스 회귀 검증·AI 하네스 구현 완료를 뜻하지 않습니다. 최신 제품 커밋 `a01200443dee0c017ece2ceb6418d2751f9db515`를 `origin/feature/DL-16466`에 푸시했고 원격 SHA 일치를 확인했습니다. Figma 17페이지의 대응 코드·누락 상태를 조사하고 추가 구현·109개 UI 테스트·Clinic/Admin 2개 실제 화면 검증을 마쳤습니다. 작업 트리는 clean입니다. 아래 최신 체크포인트를 기준으로 복구하며 이전 미커밋/미승인 기록은 당시 이력입니다. PR·병합·배포는 하지 않았습니다.
+- 사용자가 실제 착수를 승인했고 제공한 Figma를 현재 DLDS 기준으로 사용합니다. **스텝1 실제 컴포넌트 정비와 DLOS 원본 구조를 참고한28개 항목 카탈로그를 진행 중입니다.** 최신 제품 커밋 `7ddd6ac0969c73be5a853d06fa8f6001c24795b6`을 `origin/feature/DL-16466`에 푸시했고 원격 SHA 일치·clean을 확인했습니다. 추가 예제, 선택형 모달 포커스·46px 달력, 좁은 카탈로그 잘림 보완과 폰트·아이콘 후속 조사를 마쳤습니다. 공통 UI128개·Clinic/Admin focused E2E2개 통과입니다. 아래 최신 체크포인트로 복구합니다. 전체1단계·제품 전체 회귀·AI 하네스 완료가 아니며 PR·병합·배포는 하지 않았습니다.
 
 - **로컬 실행 인계(2026-09-18):** 사용자가 직접 실행해 보겠다고 하여 Codex가 켠 localhost5177 서버를 종료하고 포트가 닫힌 것을 확인했습니다. 이후 서버를 임의로 다시 켜지 않습니다. 전용 worktree 루트에 `pnpm dev:ui` 명령을 추가했고 루트 README와 `shared/ui/README.md`에 설치·접속·종료·포트 중복 안내를 남겼습니다. 명령은 `pnpm --filter @dentlink/ui dev --host 127.0.0.1 --port 5177 --strictPort`와 같습니다. 후속 정비 중 이 worktree의5177 서버(PID64780)가 다시 실행 중이었고 Codex는 조작하지 않았습니다. 마지막 포트 점검에서는5177 리스너도 없었습니다. Codex가 새로 켠 검증용5187은 종료했습니다. 다음 세션에서는 프로세스·작업 경로를 재확인합니다.
+
+## 스텝 1 중단 복구·예제·모달 포커스·달력 크기 — 2026-09-18
+
+- **재개 의도/권한:** 사용자가 토큰 부족으로 중단됐다고 알리고, 기존 작업에 이어 Codex가 독립적으로 할 수 있는 구현·검증을 최대한 진행한 뒤 제품 커밋·푸시·Git 메모리를 정리하도록 재확인했다. 이전 a01200443와 개인20dfec4는 이미 원격에 저장됐으며 그 다음 미커밋 변경을 보존해 이어갔다. AI 하네스/에디터로 범위를 넘기지 않았다.
+- **제품:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`, `7ddd6ac0969c73be5a853d06fa8f6001c24795b6` — `feat: DLDS 모달 포커스와 달력 크기 옵션 및 예제 보강`. 28파일(+2241/-764; TSV 새 추적열로396행 변경 포함). 정상 hooks를 거쳐 SSH push 성공, origin SHA 일치·clean. 기존 master checkout은 변경하지 않았다. PR/merge/deploy 없음.
+- **카탈로그:** 실제 Button 기존/권장 구현에 로딩+문구/로딩만/좌우 아이콘/아이콘만 조합, Segment 선택 항목 장식, Slider 좌우 문구, Popup 이미지·아이콘과1버튼/가로2버튼/세로2버튼 추가. 사용 코드·props 설명 동기화. 새 가짜 제품 UI가 아니라 기존컴포넌트의 실제 props/children 조합이다.
+- **Modal/Popup:** `trapFocus=false` 기본을 유지하는 선택형 API를 추가했다. 초기 초점·Tab/Shift+Tab 순환·닫기 후 복귀·숨김/비활성 제외·명시적 Portal 소유범위·중첩창/StrictMode를 검증했다. `ariaLabel`, `initialFocusRef`, `returnFocusRef`, `focusScopeRefs` 제공. 부모의 trap이 opt-out 자식의 autoFocus를 뺏는 commit 경합도 재현·수정했다. 기존 Popup stopEscapePropagation 기본false 유지. 카탈로그와 Admin SmsSend의 발송 확인 Popup 한곳만 opt-in; 검색 Portal이 있는 부모 작성Modal은 일괄 활성화하지 않았다. 임의 Drawer/iframe/배경 스크린리더 격리까지 완성했다고 보지 않는다.
+- **Calendar:** 단독 CalendarPicker/CalendarRangePicker에 `daySize?:40|46`, 기본40 유지. 46px은 안쪽너비338px 이상(7×46+16) 계약이며 자동축소/가로스크롤 없음. 기존 DateField/DateRangeFieldV2 팝업에는 신규 옵션을 노출하지 않았다. 카탈로그는 실제 가용너비에 따라46 선택 가능 여부를 표시하고 좁아지면 선택값·사용코드를40으로 갱신한다. 320px에서 기존 날짜 열이 잘리던 카탈로그 겹친여백도 보완했다. 46px의 전체 간격까지 Figma와 일치한다는 뜻은 아니다.
+- **폰트 해석 정정:** theme.medium400과 FigmaMedium500의 숫자 차이가 제품 전체의 시각 차이는 아니다. Clinic/Lab은 동일 Pretendard-Medium.woff2를CSS400에 등록하고 카탈로그400/500도같은파일이다. Admin은400Regular/500Medium을 나누므로 다르게 평가해야 한다. 실제font파일동일SHA·Regular/Medium일부glyph윤곽차이는 확인했으나 모든 실행페이지의최종폰트로딩은 미측정. 정적참조1482곳은 실제시각변경1482건이 아니다. 기본값·새Typography API를 임의변경하지 않고 README/DESIGN_COVERAGE를 정정했다.
+- **아이콘:** 기존 미확인132종 중19종의 Figma 원본/기존SVG를 추가대조. 색상제외도형대응11종·잘못된후보배제5종·의미만대응3종,113종직접대조남음. 기존이름대응226은 유지, 추가11을완전구현율에합산하지않음. TSV에19종의후속상태/후보/도형중첩/근거4열을추가. spinner/arrow접두어를이름만보고같은자산으로연결하면안되는반례확인. viewBox17종은배율3/잘린자산2/부모frame조합2/비정사각형2/국기8로구분. 기존자산·색·viewBox·export변경없음.
+- **검증:** `pnpm test:ui`16파일128개 PASS(109+focus14+daySize5). catalog strict TS/lint/build/diff PASS. commit hook Clinic/Lab/Admin전체타입 PASS. push hook3앱lint오류0·기존경고229/189/410, shared27tests·coverage변화0 PASS. 독립리뷰추가회귀발견0. 신규검증을기존전체UI단독타입의기존오류해소나스테이징증명으로해석하지않음.
+- **브라우저:** preview5187에서 Modal/Popup 초기초점·Tab순환·Escape/확인후trigger복귀,390px 이미지/세로버튼·아이콘/1버튼을확인. Calendar375/400px 실제46×46·5/6주·마커·기간연결띠·선택/키보드,320px 실제40·선택유지·7열잘림없음·가로넘침없음. 콘솔오류/경고0. 실휴대폰/스크린리더검증과구분.
+- **실서비스 E2E:** `pnpm e2e:clinic e2e/clinic/specs/09_sharedUi.spec.ts`2/2 PASS, 로컬FE+DEV API. Clinic Export 날짜오류복구·legacy선택/Escape·초기화와 Admin 확인Popup accessible name/description·초기취소focus·Tab/ShiftTab·Escape복귀·초안보존. 실제확인버튼활성화/문자발송없음, Admin쓰기요청시도0. `e2e-runs/2026-09-18T10-03-10-631Z-7d2ff877/{summary.md,verdict.json}`; source `c3007f185d9bfcf1b5792a399bba930cd6d28c2cd601ec1b1ca17fa0f35790ca`, source_unchanged=true. 실패/flaky/skip/미실행/중단/전역오류0. 이전체크포인트2건/24건과별도실행. 기존styled DOMprop경고는서버로그에남음.
+- **정리:** DL-16466 진행현황을최신커밋/결과/남은범위로갱신했고반환본문일치확인. Notion 회의 원본/Storybook 유지, 새문서중복추가없음. 검증용5187·E2E3100/3105/3102 종료, 임시CUA탭닫기/viewport복구. 사용자5177재실행/조작없음. 사용자실행은전용worktree루트 `pnpm dev:ui`, 검사 `pnpm test:ui`.
+- **남은 범위/다음 시작점:** 아직직접대조하지않은아이콘113종·로고/상태별시각정합, 선택형focus/daySize의제품소비자별적용, 실제휴대폰Drawer/스크린리더가남음. 전역글자굵기/반경/기본달력크기를이번에일괄전환하지않았다. 다음재개는이커밋을pull하고실사용처/디자인차이를구분해이어간다. 핵심AI하네스는아직미착수이며이단계완료로넘겨짚지않는다.
 
 ## 스텝 1 Figma 전체 목록 대조와 추가 정비 — 2026-09-18
 
