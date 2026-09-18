@@ -12,7 +12,7 @@
 - 기존 [Dentlink Experience Studio](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site)는 앞선 시각화 후보의 데모입니다. 이번 선택 과제의 구현 결과가 아니며 이번 기록 작업에서는 수정하지 않았습니다.
 - 사용자가 실제 착수를 승인했고, 제공한 Figma를 현재 DLDS 기준으로 사용하며 master에서 작업 브랜치를 만들도록 확인했습니다. **스텝 1 실제 컴포넌트 정비와 28개 항목(공통 기준1+컴포넌트 예제27)의 로컬 카탈로그까지 확장했습니다. DLOS 원본 PR의 페이지 구조와 외형도 적용했습니다.** 전체 DLDS 정비·전체 서비스 회귀 검증·AI 하네스 구현 완료를 뜻하지 않습니다. 제품 변경은 로컬 미커밋 상태이며 제품 commit/push/PR/배포는 수행하지 않았습니다.
 
-- **로컬 실행 인계(2026-09-18):** 사용자가 직접 실행해 보겠다고 하여 Codex가 켠 localhost5177 서버를 종료하고 포트가 닫힌 것을 확인했습니다. 이후 서버를 임의로 다시 켜지 않습니다. 전용 worktree 루트에 `pnpm dev:ui` 명령을 추가했고 루트 README와 `shared/ui/README.md`에 설치·접속·종료·포트 중복 안내를 남겼습니다. 명령은 `pnpm --filter @dentlink/ui dev --host 127.0.0.1 --port 5177 --strictPort`와 같습니다. 후속 정비 마지막 확인에서 이 worktree의5177 서버(PID64780)가 다시 실행 중이었고 그대로 유지했습니다. Codex가 새로 켠 검증용5187은 종료했습니다. 다음 세션에서는 프로세스·작업 경로를 재확인합니다.
+- **로컬 실행 인계(2026-09-18):** 사용자가 직접 실행해 보겠다고 하여 Codex가 켠 localhost5177 서버를 종료하고 포트가 닫힌 것을 확인했습니다. 이후 서버를 임의로 다시 켜지 않습니다. 전용 worktree 루트에 `pnpm dev:ui` 명령을 추가했고 루트 README와 `shared/ui/README.md`에 설치·접속·종료·포트 중복 안내를 남겼습니다. 명령은 `pnpm --filter @dentlink/ui dev --host 127.0.0.1 --port 5177 --strictPort`와 같습니다. 후속 정비 중 이 worktree의5177 서버(PID64780)가 다시 실행 중이었고 Codex는 조작하지 않았습니다. 마지막 포트 점검에서는5177 리스너도 없었습니다. Codex가 새로 켠 검증용5187은 종료했습니다. 다음 세션에서는 프로세스·작업 경로를 재확인합니다.
 
 ## 스텝별 실행 준비 — 2026-09-18
 
@@ -33,7 +33,7 @@
 - **기존 Dropdown:** 실제 Admin·Clinic 사용처를 확인해 legacy를 제거하지 않았습니다. placeholder/0/undefined 표시, 선택 지우기(onSelect 빈 문자열), disabled 항목, 검색 목록 갱신/모바일 재열기, 키보드 열기/닫기를 정비했습니다. ChartDropdown은 Portal DOM 연결 뒤 초기 포커스, 선택 후 복귀, 외부 포커스/disabled 시 닫기를 보완했습니다. ListItem의 실제 disabled·type=button·isItemClick 중복 호출도 수정했습니다. EmptyDataInfo/PaginationButtonUI는 leaf import만 좁혔으며 pagination onMount는 유지했습니다.
 - **검증:** 카탈로그 strict tsc·lint0·production build·diff-check 통과. 전체 UI HEAD 비교579→578, 새 진단0(기존 DropdownFinder unused e1건 감소). 임시 Vitest66/66 = 기간17+날짜14+modern Dropdown11+Tooltip2+Slider/Stepper9+legacy/Chart13. 임시 설정은 `/private/tmp/dlds-dropdown-check`, `/private/tmp/dlds-range-check`, `/private/tmp/dlds-legacy-check`; shared/hooks에서 pnpm exec vitest run --config ... 로 실행했습니다. 제품 저장소에 CI 테스트로 편입된 것은 아닙니다. legacy 기존 lint 경고14건 유지.
 - **브라우저:** production preview5187에서 28개 수록·검색·상태 보존·현재 사용 코드 갱신·Props/Tokens 키보드 탭 이동·그룹 링크·기간 팝업/잘못된 연도 확정 차단/취소·Chart 키보드 선택 및 포커스 복귀·legacy 지우기·Modal 본문 변경/Escape·Toast 화면 위치·390px 패널 닫기를 확인했습니다. 가로 넘침/브라우저 오류 없음. CUA fill(빈문자열)은 검색·날짜에서 값 제거가 되지 않았지만 일반 Backspace는 정상이며, 실제 wrapper/예제의 테스트에서도 정상임을 확인했습니다.
-- **작업 상태:** product `feature/DL-16466`/HEAD de2ffdd9e, 미커밋. 제품 commit/push/PR/deploy 없음. DL-16466 Jira 진행 현황만28개/검증/남은 범위로 갱신, 회의 Notion은 유지했습니다. 사용자 실행용5177 서버는 유지, Codex 검증용5187만 종료했습니다.
+- **작업 상태:** product `feature/DL-16466`/HEAD de2ffdd9e, 미커밋. 제품 commit/push/PR/deploy 없음. DL-16466 Jira 진행 현황만28개/검증/남은 범위로 갱신, 회의 Notion은 유지했습니다. 사용자 실행용5177 서버는 조작하지 않았고, Codex 검증용5187만 종료했습니다. 마지막 포트 점검에서는5177/5187 모두 리스너가 없었으므로 재확인 후 pnpm dev:ui로 실행합니다.
 - **남은 범위:** Figma Medium500↔theme400, full1000px↔50%, 달력셀46↔40의 적용 범위와 spacing/shadow/border 기준 연결; 날짜 그리드 키보드, 수동 날짜의 휴일/주말/허용 기간 제한; Modal/Popup focus trap·중첩 Escape; 실제 휴대폰 Drawer/스크린리더; Clinic/Lab/Admin 사용 화면 회귀. 이번 완료는 추가 정비분이며 전체1단계나 AI 하네스 완료가 아닙니다.
 
 ## 스텝 1 날짜·수량·공통 기준 통합 — 2026-09-18
