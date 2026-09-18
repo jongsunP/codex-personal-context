@@ -1,6 +1,6 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 기준 — 2026-09-18 DLOS 구조 적용 · 카탈로그 28개 항목
+## 현재 기준 — 2026-09-18 DLDS 정비 · 회귀 검증 · 원격 체크포인트
 
 - **선택 과제는 하나:** 실제 덴트링크 컴포넌트를 기반으로 AI가 우리 UI에 맞는 화면을 만들고, PM·디자이너와 FE가 그 결과를 함께 활용하는 환경을 만듭니다. **DLDS 정비 → AI 프롬프트·하네스 정비(핵심) → 필요하고 가능하면 덴트링크 에디터 개발** 순서입니다. 핵심 AI 단계는 **Figma 시안이 나오기 전 기획·디자인 단계에서 비개발자가 프롬프트로 작업하는 환경**을 목표로 합니다.
 - **최신 회의 원본:** [FE 2차 회의 결과 · 디자인시스템과 AI 화면 제작](https://app.notion.com/p/3dfce072e82f812c843afed105630c98). 페이지 ID `3dfce072-e82f-812c-843a-fed105630c98`. 오늘 회의 결론과 후속 구체화는 이 문서를 기준으로 합니다.
@@ -10,9 +10,23 @@
 - **FE 자체 아이데이션:** 1·2차 회의 참석자는 FE 팀원들입니다. PM·디자이너·운영팀은 도구의 사용자 또는 필요시 확인할 상대입니다. 개인 진행 이력은 이 Git 체크포인트, 팀 공유 본문은 Notion에 둡니다.
 - [dentlink-fe-meeting.md](dentlink-fe-meeting.md)는 최신·이전 Notion과 Jira의 바로가기입니다. `/Users/parkjongsun/Documents/ChatGPT/FE/FE-업무-검토-회의자료.md`는 이 파일의 심볼릭 링크이며 별도 본문을 관리하지 않습니다.
 - 기존 [Dentlink Experience Studio](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site)는 앞선 시각화 후보의 데모입니다. 이번 선택 과제의 구현 결과가 아니며 이번 기록 작업에서는 수정하지 않았습니다.
-- 사용자가 실제 착수를 승인했고, 제공한 Figma를 현재 DLDS 기준으로 사용하며 master에서 작업 브랜치를 만들도록 확인했습니다. **스텝 1 실제 컴포넌트 정비와 28개 항목(공통 기준1+컴포넌트 예제27)의 로컬 카탈로그까지 확장했습니다. DLOS 원본 PR의 페이지 구조와 외형도 적용했습니다.** 전체 DLDS 정비·전체 서비스 회귀 검증·AI 하네스 구현 완료를 뜻하지 않습니다. 제품 변경은 로컬 미커밋 상태이며 제품 commit/push/PR/배포는 수행하지 않았습니다.
+- 사용자가 실제 착수를 승인했고, 제공한 Figma를 현재 DLDS 기준으로 사용하며 master에서 작업 브랜치를 만들도록 확인했습니다. **스텝 1 실제 컴포넌트 정비와 28개 항목(공통 기준1+컴포넌트 예제27)의 로컬 카탈로그까지 확장했습니다. DLOS 원본 PR의 페이지 구조와 외형도 적용했습니다.** 전체 DLDS 정비·전체 서비스 회귀 검증·AI 하네스 구현 완료를 뜻하지 않습니다. 제품 커밋 `ad3b55d6a4f6c3f54e1b36ae39aa041a86f309bf`를 `origin/feature/DL-16466`에 푸시했고 원격 SHA·upstream 일치를 확인했습니다. 작업 트리는 clean입니다. 아래 최신 체크포인트를 기준으로 복구하며 이전 미커밋/미승인 기록은 당시 이력입니다. PR·병합·배포는 하지 않았습니다.
 
 - **로컬 실행 인계(2026-09-18):** 사용자가 직접 실행해 보겠다고 하여 Codex가 켠 localhost5177 서버를 종료하고 포트가 닫힌 것을 확인했습니다. 이후 서버를 임의로 다시 켜지 않습니다. 전용 worktree 루트에 `pnpm dev:ui` 명령을 추가했고 루트 README와 `shared/ui/README.md`에 설치·접속·종료·포트 중복 안내를 남겼습니다. 명령은 `pnpm --filter @dentlink/ui dev --host 127.0.0.1 --port 5177 --strictPort`와 같습니다. 후속 정비 중 이 worktree의5177 서버(PID64780)가 다시 실행 중이었고 Codex는 조작하지 않았습니다. 마지막 포트 점검에서는5177 리스너도 없었습니다. Codex가 새로 켠 검증용5187은 종료했습니다. 다음 세션에서는 프로세스·작업 경로를 재확인합니다.
+
+## 스텝 1 회귀 검증과 커밋 — 2026-09-18
+
+- **사용자 진행 방식:** 가능한 작업·검증·문제 수정은 Codex가 직접 진행하고 판단이 필요한 질문만 한다. 사용자에게 화면 전체의 수동 검사를 넘기지 않는다. 사이드 이펙트를 최대한 자동·실제 화면에서 확인하되 필요시 사람/실기기 검증을 후속으로 병행한다. 이번 작업의 최종 제품 커밋·푸시·Git 메모리 정리까지 명시 승인했으며 완료 후 대기한다. PR·merge·배포까지 승인한 것은 아니다.
+- **제품 체크포인트:** `feature/DL-16466`, `ad3b55d6a4f6c3f54e1b36ae39aa041a86f309bf` — `feat: DLDS 카탈로그와 공통 컴포넌트 정비 및 회귀 검증 추가`. 105파일(+7750/-1046), 28개 카탈로그 항목과 실제 공통 UI 정비, 테스트/CI/개발 안내를 포함한다. `origin/feature/DL-16466` 원격 push·upstream 연결 완료, 원격 SHA와 일치, clean.
+- **추가 수정:** 실제 Forms/FormComponentWithError는 errorFocused에 오류 문구를 전달한다. InputBase가 이 문자열을 aria-invalid에 노출하지 않도록 boolean으로 정규화하고, 실제 wrapper를 사용한 오류 발생/해제·명시적 aria 우선순위 2건을 추가했다. 추가 Button·입력·Tab·Chip·overlay 소비자 독립 리뷰에서는 다른 구체적 새 회귀를 발견하지 못했다.
+- **반복 검증:** `pnpm test:ui`로 실제 컴포넌트·hook·portal을 검사하는 8파일 70건 통과. 제품 모듈 mock 없이 jsdom 미지원 스크롤 API만 대체한다. 임시 66건에서 중복/치수/helper 직접 검사를 정리하고 overlay 및 실제 폼 wrapper 검사를 보강했다. PR용 `.github/workflows/ui_regression.yml`에 테스트·카탈로그 strict tsc·lint·build를 연결했다. 로컬에서 같은 명령을 통과했으며 GitHub CI 실행은 별도다.
+- **정적 검사:** catalog strict tsc/lint/build 통과, 새 테스트/설정/InputBase lint 오류·경고0, diff --check 통과. 커밋 hook의 Clinic/Lab/Admin 전체 타입 검사도 통과. 전체 UI 독립 타입 검사에는 기존 579→578 오류가 남지만 새 진단0이다. 앱 타입 검사 통과와 UI 단독 기존 진단은 서로 다른 검사다.
+- **실제 서비스 검증 1:** 로컬 frontend + DEV API, `crown`/`04_labShipment`/`08_orderFeedback` 20건 통과(4.2분). 환자 정보→주문 완료, 배송·픽업 생성/취소/수정, 승인·완료 후 피드백 저장·파일·재조회·수정·직접 진입까지 확인했다. 실패/재시도/flaky/skip/미실행/전역오류0. 증거 `e2e-runs/2026-09-18T08-38-17-378Z-46d3c5be/summary.md`; source snapshot `fd0d69fb25f69f9f78540896b7b279fe5a0dd01b6af3093e7141bf303d6d66d9`, 실행 전후 동일.
+- **실제 서비스 검증 2:** InputBase 추가 수정 뒤 `01_signin` + 신규 `09_sharedUi` 4건 통과(58.4초). 로그인 성공/실패와 결제 내역 Export의 불완전 날짜 차단·Today로 복구·키보드 Dropdown 진입·선택/포커스·부모 스크롤 잠금·닫기 후 재열기 초기화를 검증했다. 신규 테스트는 실제 결제/유효 Export/데이터 변경을 수행하지 않는다. 증거 `e2e-runs/2026-09-18T08-44-39-913Z-aa9fb3a3/summary.md`; snapshot `8cabc0b8db08ec2158ac6d8143db9ff317f4eee8c62c2456393fe64dfb2eb730`, 실행 전후 동일. 두 실행은 서로 다른 작업 사본 시점이므로 한 번의 전체 실행으로 표현하지 않는다.
+- **브라우저/환경:** CUA로 실제 로컬 Clinic 로그인 화면 desktop/390px 레이아웃·콘솔 오류0 확인. E2E용3100/3105/3102와 기존5177 모두 종료 상태 확인. CUA viewport 임시 설정 해제. 로컬 QA widget `/api/qa-users`500 및 기존 styled prop 경고는 DLDS 통과 범위와 분리하며 widget 연동 완료로 보지 않는다.
+- **Git hook 복구:** 새 worktree에 없던 `.husky/_/husky.sh`는 정상 `pnpm exec husky install`로 준비했다. 첫 push는 ignored coverage-baseline 파일 누락으로 차단됐다. clean master 원본(`de2ffdd9e`)에서 기존 shared coverage27건을 새로 실행하고 결과 경로만 전용 worktree에 맞춰 baseline을 생성했다. 원본의 오래된 baseline은 덮어쓰지 않았다. configs/hooks 총 coverage 변화0, 훅 우회 없음. 앱 lint는 오류0(Clinic229/Lab189/Admin410 기존 경고). 최종 push hook 전체 통과. HTTPS OAuth에 workflow 권한이 없어 첫 원격 전송이 거절됐으며, 기존 SSH 인증 `jongsunP`와 저장소 접근을 확인해 명령 단위 push URL만 사용했다. 권한·persistent remote URL·hook을 바꾸지 않았고 원격 SHA 일치까지 확인했다.
+- **정리 완료:** Jira DL-16466의 진행 현황을 커밋 링크·검증 결과·남은 범위로 갱신했고 상태는 진행 중을 유지했다. Notion 회의 방향/AI 단계/기존 데모는 변경하지 않았다. 제품 원본 master와 전용 worktree 모두 clean, Git 메모리도 커밋·푸시한 뒤 사용자 요청대로 대기한다.
+- **남은 범위:** Step1 전체 완료 아님. Figma Medium500 vs theme400, full1000px vs50%, Calendar46 vs40의 적용 범위; spacing/shadow/border 공통화; 날짜 grid 키보드 탐색; 모달 focus trap/복귀·중첩 Escape 정책; Admin 주요 소비 화면과 실제 휴대폰/스크린리더. 지금까지의 로컬 focused24건은 전체 서비스/스테이징 배포 검증이 아니다. 사용자가 일일이 수동 확인해야 한다는 의미가 아니며 Codex가 가능한 범위부터 계속 검증한다.
 
 ## 스텝별 실행 준비 — 2026-09-18
 
@@ -21,10 +35,15 @@
 - **3단계 · 조건부:** 2단계에서 확인한 불편과 필요에 따라 요소 선택·직접 조작·부분 수정 등 범위를 정합니다. 2단계로 목적을 달성하면 별도 에디터 없이 종료할 수 있습니다. 사용 도구·전달 형식·신규 UI 검토 절차·정량 품질 기준·기간은 각 단계 시작 시 실제 범위를 기준으로 구체화합니다.
 - **확정 디자인 기준:** [000 DLDS · Core+Component](https://www.figma.com/design/syQbfe4vTWUz87SYqa5Kvx/000-DLDS?node-id=1-28). 사용자가 2026-09-18 이 파일을 기준으로 승인했습니다. MCP로 페이지 목록 17개·Core 영역·Button/Input 개별 페이지와 대표 상태/수치를 읽었습니다. 별도 추가 자료 없이 대조를 시작했습니다. DLOS URL은 정리 방식 참고이며 `shared/ui/src/v2`와 연결하지 않습니다.
 - **초기 작업 경계(당시 상태):** 제품 원본 `/Users/parkjongsun/Repository/dentlink-client`의 `feature/amplitude-pageview-tracking` / `7ef67797b`는 clean 그대로 유지했습니다. 사용자 branch 승인 후 origin fetch 및 최신 master `de2ffdd9e`에서 `feature/DL-16466`, 전용 worktree `/Users/parkjongsun/Repository/dentlink-client-dlds`를 만들었습니다. 새 branch는 upstream을 연결하지 않았고 원격 branch를 만들지 않았습니다. 의존성은 frozen lockfile·offline·ignore-scripts로 설치했으며 lockfile 변경이 없습니다.
-- **다음 시작점:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`의 미커밋 변경을 보존하고 카탈로그28개 항목(공통 기준1+컴포넌트 예제27)을 확인합니다. 기존/Chart Dropdown·기간 선택 Calendar의 기본 동작 정비는 반영했습니다. 남은 대상은 글자 굵기/radius/날짜 셀 등 공통 기준 차이의 적용 범위, 실제 모바일 Drawer·스크린리더와 Modal/Popup 전체 focus/중첩 Escape 정책, Clinic/Lab/Admin 사용 화면 회귀입니다. `shared/ui/README.md`에 현재 범위·차이·후속 검증이 있습니다. 전체 DLDS 완료나 AI 하네스 착수로 보고하지 않습니다.
+- **다음 시작점:** 전용 worktree `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`의 아래 최신 커밋/원격 상태부터 확인합니다. 스텝 1의 기준 차이 적용 범위·접근성·Admin 및 모바일 실제 화면 검증이 남아 있으며, AI 하네스 단계는 시작하지 않았습니다.
 - **기록 동기화:** 기존 Notion과 Jira DL-16437/DL-16466의 Figma 미확인 문구를 확정 원본 링크로 갱신했습니다. DL-16466에는 첫 정비분·검증·남은 범위·로컬 미커밋 상태를 반영하고 진행 중 상태를 유지했습니다. Notion 회의 방향과 과거 메모는 유지합니다. 실제 작업 세부 범위는 Jira, 개인 작업 경계·검증 이력은 이 Git 체크포인트를 따릅니다.
 
 ## 스텝 1 회귀 검증 진행 방식 확정 — 2026-09-18
+
+### 사용자 추가 승인
+
+- 가능한 구현·검증·수정은 Codex가 스스로 이어가고, 방향이나 판단이 필요한 사항만 질문한다. 사이드 이펙트는 최대한 자동·브라우저 검증하되 필요하면 후속 실기기·사람 검토를 병행한다.
+- 사용자가 이번 DLDS 작업의 중간 체크포인트 또는 마무리 **제품 코드 커밋·푸시를 명시적으로 승인**했다. 최종에는 제품 커밋·푸시, 진행 상황과 검증 한계의 Git 메모리 정리까지 수행하고 대기한다. PR 생성·병합·배포 승인으로 확대하지 않는다. 아래 이전 커밋·푸시 미승인 기록보다 이 승인이 우선한다.
 
 - 사용자에게 현황을 정리했습니다: 기존69개 수정+신규21개(카탈로그15 포함)=90개 파일, 실제 동작 수정도 포함되어 전체1단계 완료가 아닙니다. 카탈로그/컴포넌트 단위 검증과 Clinic·Lab·Admin 실제 화면 검증을 구분합니다.
 - **사용자 승인:** 변경 범위를 추가로 넓히기 전에 **Codex가 사용처를 찾아 실제 화면 검증·발견 문제 수정·반복 회귀 테스트 정착을 수행**합니다. 사용자가 모든 화면을 일일이 확인하는 방식이 아닙니다. 디자인 기준 선택 또는 Codex가 접근할 수 없는 실기기/환경이 필요한 경우에만 구체적인 비교안·차단 사유와 함께 확인을 요청합니다.

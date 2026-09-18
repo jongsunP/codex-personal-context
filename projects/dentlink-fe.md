@@ -33,6 +33,16 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Context Routing
 
+- The selected FE project is DLDS cleanup → AI prompt/harness refinement →
+  an editor only if useful later. Use the [latest meeting](https://app.notion.com/p/3dfce072e82f812c843afed105630c98)
+  and [implementation checkpoint](dentlink-fe-opportunities.md). Step 1 is in
+  `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`,
+  pushed at `ad3b55d6a` on 2026-09-18. Component tests70 and local focused E2E24
+  passed; this is not whole-Step-1 completion or staging/deployment proof.
+  The user authorized this task's final product commit/push and Git memory
+  closeout; Codex owns feasible QA/fixes and asks only for needed decisions.
+  PR/merge/deploy remain separate. See the detailed checkpoint for remaining
+  design policy, Admin/mobile and accessibility verification.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.
