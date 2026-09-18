@@ -287,29 +287,51 @@ Detailed implementation history remains in the relevant existing project file.
   Prior history is recoverable from Git; do not restore old links or duplicate
   detailed progress here. Fetch the current Notion before subsequent edits.
 
-## Office Welcome Analytics — PR Created, 2026-09-18
+## Office Welcome Analytics — PR Finalized, 2026-09-18
 
 - [PR #4611](https://github.com/Innvoaid/dentlink-client/pull/4611) targets
   `release/v1.87.0` from `feature/amplitude-pageview-tracking`; remote head is
-  `26f08b9df39c40dbafba1f7232798e9644513d59`. The current checkout is
+  `92c57f299e94568720ea1630d457104fb76ed378`. The current checkout is
   `/Users/parkjongsun/Repository/dentlink-client`, clean and synchronized.
+- Jira is [DL-16474](https://innovaid.atlassian.net/browse/DL-16474),
+  `[FE] 웰컴 앰플리튜드 이벤트 수정`. The existing PR title and Issue section
+  now include the ticket; the branch name was retained to preserve the PR.
 - The branch retains `7ef67797b` for Office-wide `[Amplitude] Page Viewed`
   collection after Next route completion, covering missed `replace` navigation.
   The added `26f08b9df` records `welcome_view` once per welcome-page mount via
   the existing `AMP_Track` queue; rerenders and StrictMode do not duplicate it,
   while leaving and revisiting records a new visit. Only the existing
   `useAmplitudeInit.ts` and welcome page were changed.
+- Final follow-up `92c57f299` adds 23 lines to common initialization. SDK 2.43
+  remote configuration can override local `pageViews.trackOn`, reproducing
+  duplicate automatic/manual pageviews. A plugin registered before init sets
+  `defaultTracking.pageViews.trackOn` after the remote merge and before builtin
+  plugin installation. Other remote settings remain active. This prevents
+  automatic pageview creation itself, preserving the click/pageview ID link;
+  filtering already-created automatic events would allow an ID overwrite race.
 - Source: [product thread](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1789705299279979)
   and [welcome_view definition](https://app.notion.com/p/3dfce072e82f80bf9b5ed5076608579c).
   PM requested both the common collection improvement and the separate event
   for 1.87.0. Welcome exposure and approval/Get Started behavior remain unchanged;
   not every new member necessarily visits welcome.
-- Checks passed: all three app type/lint hooks (existing lint warnings),
-  coverage hook, formatting and diff checks. Earlier common-pageview checks
-  passed 10 real-SDK local scenarios and 47 existing tests. The new actual-page,
-  wrapper and SDK harness passed normal/StrictMode, delayed readiness, rerender,
-  revisit and coexistence of both events, with no external network requests.
-  Next navigation events and surrounding UI dependencies were simulated.
-- PR creation is complete. Review, merge, deployment and live Amplitude receipt
-  remain pending; no CodeRabbit follow-up or release mutation was requested.
+- Final checks passed: all three app type/lint hooks (228/189/410 existing
+  warnings, zero errors), coverage hook with 27 shared tests, changed-file
+  lint/format and diff checks. Real-SDK local scenarios passed 26/26: remote
+  config 8, original hook 10, welcome normal/StrictMode 2, cache/follow-up remote
+  response 6. Remote checks did not override `fetchRemoteConfig`; they asserted
+  actual config subscription, one pageview per navigation, counters, click IDs,
+  welcome event coexistence and preservation of other remote capture options.
+  External requests and business mutations were zero. Next completion events,
+  surrounding UI and Replay were test doubles; this is not full browser/Replay
+  or live ingestion proof. SDK upgrades need the same remote/config checks.
+- Temporary evidence: `/tmp/dentlink-amplitude-remote-regression.cjs`,
+  `/tmp/dentlink-amplitude-defaultTracking-product-audit.cjs`, original
+  `/tmp/dentlink-amplitude-hook-check.cjs` and welcome-event harness. Hook source
+  SHA-256: `b3f79eb6b86fea5402350f2767a778054bb24d03ed28d5eab5551a6dfc8af551`.
+  These temporary scripts are not cross-device artifacts.
+- The user confirmed both common collection and `welcome_view` belong in this
+  delivery, and explicitly limited the final work to PR completion; the team
+  handles deployment. Three commits are pushed and PR #4611 is updated/open
+  against `release/v1.87.0`. Review, merge, deployment and live Amplitude receipt
+  remain separate steps; no CodeRabbit follow-up or release mutation was done.
   The production August count was not established as caused solely by this gap.
