@@ -1,6 +1,6 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 기준 — 2026-09-18 스텝 1 착수 전 준비 완료
+## 현재 기준 — 2026-09-18 스텝 1 첫 정비분 구현
 
 - **선택 과제는 하나:** 실제 덴트링크 컴포넌트를 기반으로 AI가 우리 UI에 맞는 화면을 만들고, PM·디자이너와 FE가 그 결과를 함께 활용하는 환경을 만듭니다. **DLDS 정비 → AI 프롬프트·하네스 정비(핵심) → 필요하고 가능하면 덴트링크 에디터 개발** 순서입니다. 핵심 AI 단계는 **Figma 시안이 나오기 전 기획·디자인 단계에서 비개발자가 프롬프트로 작업하는 환경**을 목표로 합니다.
 - **최신 회의 원본:** [FE 2차 회의 결과 · 디자인시스템과 AI 화면 제작](https://app.notion.com/p/3dfce072e82f812c843afed105630c98). 페이지 ID `3dfce072-e82f-812c-843a-fed105630c98`. 오늘 회의 결론과 후속 구체화는 이 문서를 기준으로 합니다.
@@ -10,17 +10,27 @@
 - **FE 자체 아이데이션:** 1·2차 회의 참석자는 FE 팀원들입니다. PM·디자이너·운영팀은 도구의 사용자 또는 필요시 확인할 상대입니다. 개인 진행 이력은 이 Git 체크포인트, 팀 공유 본문은 Notion에 둡니다.
 - [dentlink-fe-meeting.md](dentlink-fe-meeting.md)는 최신·이전 Notion과 Jira의 바로가기입니다. `/Users/parkjongsun/Documents/ChatGPT/FE/FE-업무-검토-회의자료.md`는 이 파일의 심볼릭 링크이며 별도 본문을 관리하지 않습니다.
 - 기존 [Dentlink Experience Studio](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site)는 앞선 시각화 후보의 데모입니다. 이번 선택 과제의 구현 결과가 아니며 이번 기록 작업에서는 수정하지 않았습니다.
-- 현재 완료된 일은 **회의 결과·단계별 작업 범위·준비 자료·완료 기준·Jira 추적 정리**입니다. 사용자는 정리가 끝난 뒤 스텝 1부터 시작할 예정이라고 했으므로 이번에는 제품 구현에 착수하지 않았습니다. 준비 완료는 조사·착수 순서가 정리됐다는 뜻이며, Figma 기준 확정·전수 대조·구현·품질 검증이 끝났다는 의미가 아닙니다.
+- 사용자가 실제 착수를 승인했고, 제공한 Figma를 현재 DLDS 기준으로 사용하며 master에서 작업 브랜치를 만들도록 확인했습니다. **스텝 1 첫 정비분과 실제 컴포넌트 6종의 로컬 카탈로그를 구현했습니다.** 전체 DLDS 정비·전체 서비스 회귀 검증·AI 하네스 구현 완료를 뜻하지 않습니다. 제품 변경은 로컬 미커밋 상태이며 제품 commit/push/PR/배포는 수행하지 않았습니다.
 
 ## 스텝별 실행 준비 — 2026-09-18
 
 - **1단계 · DL-16466:** 실제 공개 컴포넌트·사용 화면·테마·기존 Storybook을 확인 → 기준 Figma 파일·페이지·상태 연결 → 유지/정비/추가 확인 목록 작성 → props·기본값 영향·카탈로그 범위·검증 방법과 구현 순서 결정 → 해당 범위부터 구현합니다. 결과물은 기준/변경 목록·정비 코드·사용 예시·전체 확인 페이지입니다. 정적 검사, 기본 상호작용·접근성, 기존 사용 화면 영향을 확인하고 남은 차이를 기록해 AI 단계에 넘깁니다.
 - **2단계 · DL-16471:** 1단계에서 사용할 컴포넌트·규칙·예시와 기본 동작 검증이 준비된 범위로 시작합니다. 대표 기획·디자인 요청과 평가 기준을 정하고 하네스를 구성합니다. 비개발자의 요청·확인·수정, 실제 컴포넌트 사용, 디자인·코드 품질과 FE 코드 전달을 검증하고 작업 절감 효과를 평가합니다. 결과물은 반복 사용 환경·안내·대표 요청/결과/검증 기록입니다.
 - **3단계 · 조건부:** 2단계에서 확인한 불편과 필요에 따라 요소 선택·직접 조작·부분 수정 등 범위를 정합니다. 2단계로 목적을 달성하면 별도 에디터 없이 종료할 수 있습니다. 사용 도구·전달 형식·신규 UI 검토 절차·정량 품질 기준·기간은 각 단계 시작 시 실제 범위를 기준으로 구체화합니다.
-- **미확인 준비 자료:** 현재 Notion·Jira와 제한된 저장소 검색에서 DLDS 기준 Figma 원본 링크를 찾지 못했습니다. 작업 기준 파일·페이지·상태는 스텝 1 첫 대조에서 확정해야 합니다. DLOS URL은 정리 방식 참고이며 누락된 Figma 원본을 대신하지 않습니다. 사용자는 전부 먼저 확정하라고 요구한 것이 아니라 시작 전 진행 준비를 요청했습니다. 코드 현황 조사는 시작할 수 있고, 디자인 의존 변경은 기준을 확보한 뒤 진행합니다.
-- **읽기 전용 출발점 확인:** 제품 `/Users/parkjongsun/Repository/dentlink-client`는 다른 작업의 `feature/amplitude-pageview-tracking`, HEAD `7ef67797b`, clean입니다. 이 요청에서는 pull/checkout/변경하지 않았습니다. `AGENTS.md:7`은 Styled Components·transient prop·공용 컴포넌트 확장 관례를 설명하고, `shared/ui/package.json:2`의 패키지는 `@dentlink/ui`, 진입점은 `shared/ui/src/index.ts:1`입니다. `shared/ui/.storybook/main.ts:4`에서 기존 카탈로그 기반을 확인했습니다. 패키지 lint/build/storybook/build-storybook 스크립트가 있으나 실행·통과를 검증한 것은 아닙니다. README 구조 설명은 2023년 기준이므로 실제 export/workspace를 우선합니다.
-- **다음 시작점:** 사용자가 스텝 1 시작을 지시하면 최신 Git 상태·작업 경계와 디자인 출처를 다시 확인하고 컴포넌트/사용 화면/기준 대조부터 시작합니다. 다른 작업 브랜치에서 임의로 DS 코드를 수정하지 않습니다. 기존 `shared/ui/src/v2` 폴더는 사용자의 DLOS/v2 명칭과 연결하지 않습니다.
-- **기록 검증:** Notion의 회의 메모 6개 표와 이전 논의를 보존하면서 단계별 결과·완료 기준, 스텝 1 시작 순서와 기준 Figma 미확인을 반영했습니다. 재조회로 예상 본문과 일치, 단계 링크·상위/하위 관계·상태를 확인했습니다. 완료된 회의 작업 2개는 변경하지 않았습니다. 팀 공유 원본은 기존 Notion 하나, 실행 상태는 Jira, 개인 복구 기록은 이 Git 메모리로 유지합니다.
+- **확정 디자인 기준:** [000 DLDS · Core+Component](https://www.figma.com/design/syQbfe4vTWUz87SYqa5Kvx/000-DLDS?node-id=1-28). 사용자가 2026-09-18 이 파일을 기준으로 승인했습니다. MCP로 페이지 목록 17개·Core 영역·Button/Input 개별 페이지와 대표 상태/수치를 읽었습니다. 별도 추가 자료 없이 대조를 시작했습니다. DLOS URL은 정리 방식 참고이며 `shared/ui/src/v2`와 연결하지 않습니다.
+- **작업 경계:** 제품 원본 `/Users/parkjongsun/Repository/dentlink-client`의 `feature/amplitude-pageview-tracking` / `7ef67797b`는 clean 그대로 유지했습니다. 사용자 branch 승인 후 origin fetch 및 최신 master `de2ffdd9e`에서 `feature/DL-16466`, 전용 worktree `/Users/parkjongsun/Repository/dentlink-client-dlds`를 만들었습니다. 새 branch는 upstream을 연결하지 않았고 원격 branch를 만들지 않았습니다. 의존성은 frozen lockfile·offline·ignore-scripts로 설치했으며 lockfile 변경이 없습니다.
+- **다음 시작점:** 위 전용 worktree의 미커밋 변경과 실행 중인 localhost를 먼저 확인합니다. Dropdown(신/구), Chip·Tabs·SegmentControl, Modal·Popup·Tooltip·Toast, Calendar·Slider·Stepper 및 전체 토큰/아이콘을 순서대로 대조·정비·카탈로그에 확장합니다. `shared/ui/README.md`는 팀용 사용 기준과 남은 범위를 기록합니다. 기존 카탈로그 6종을 전체 완료로 보고하지 않습니다.
+- **기록 동기화:** 기존 Notion과 Jira DL-16437/DL-16466의 Figma 미확인 문구를 확정 원본 링크로 갱신했습니다. DL-16466에는 첫 정비분·검증·남은 범위·로컬 미커밋 상태를 반영하고 진행 중 상태를 유지했습니다. Notion 회의 방향과 과거 메모는 유지합니다. 실제 작업 세부 범위는 Jira, 개인 작업 경계·검증 이력은 이 Git 체크포인트를 따릅니다.
+
+## 스텝 1 첫 정비분 — 2026-09-18
+
+- **구현:** Vite 진입점과 `src/catalog`에 Button(기존/권장 비교), TextInput, Checkbox, Radio, Switch, Typography 6종을 구성했습니다. 검색·props 조작·상태 비교·설정 기반 코드 복사·Figma 상세 링크를 제공합니다. 제품 컴포넌트를 직접 import하고 같은 테마·Pretendard를 씁니다. 기존 Storybook과 public export는 유지합니다.
+- **코드 정비:** 버튼 색상 별칭/기본값 처리 4곳을 공통화했습니다. 권장 Button 좌우 여백을 Figma의 10px로, Radio small을16px/내부8px로 맞췄습니다. Checkbox의 `defaultChecked + disabled` 표현을 native `:checked` 기준으로 수정했고 사각형 size 18/24/32px를 지원합니다. 기존 사각형 호출 26개는 small 또는 생략이어서 기본18px을 보존했습니다. Typography text-transform 타입을 맞추고 기초 컴포넌트의 barrel 순환 참조를 줄였습니다.
+- **동작·접근성:** InputBase의 라벨 fallback, 오류 상태 및 caption/error 설명 연결을 추가했습니다. 사용자 지정 aria 속성은 보존합니다. Button/Checkbox/Radio/Switch 키보드 focus-visible을 보강했습니다. Vite에서 체크 아이콘이 표시되지 않던 동적 import에 실제 `.tsx` 확장자를 지정하고 기존 캐시·언마운트 보호를 유지했습니다.
+- **검증:** 카탈로그 대상 tsc·변경 범위 ESLint·Prettier·git diff --check·Vite production build 통과. 버튼 스타일480조합+size7종의 기존 기본값/alias/상태 우선순위 동일 확인. 전체 UI TypeScript는 HEAD baseline과 초기정비 비교에서579건으로 동일하고 새 진단0건이었습니다(기존 생성파일/다른컴포넌트 오류). 기본 lint의 Storybook plugin중복은 기존문제로, 해당 패키지 config를 명시한 변경파일 검사로 분리했습니다.
+- **브라우저:** CUA localhost5177에서 버튼 클릭/disabled/구현전환/코드복사, 체크박스 controlled 및 defaultChecked disabled·사각18/24/32, Radio small16/dot8·상호배제·disabled, Switch변경·large56×36, TextInput입력·오류설명·disabled, 검색과 390px/desktop Typography24→44px 확인. 변경컴포넌트 리뷰에서도 신규 blocker를 찾지 못했습니다. 제품 실서비스 페이지 전체 회귀 QA는 아직 아닙니다.
+- **발견한 기준 차이:** Figma S버튼 안내문16px vs 실제 인스턴스/원본14px이어서 코드14px 유지. 기존 public Button 기본높이52px, 권장 refactor40px로 다르며 전역교체하지 않았습니다. Typography의 variant DOM속성을 쓰는 E2E selector가 있어 스타일props 제거는 소비자와 함께 후속 검토합니다.
+- **실행/산출물:** `pnpm --filter @dentlink/ui dev --host 127.0.0.1 --port 5177 --strictPort`, 현재 [로컬 카탈로그](http://127.0.0.1:5177). 새 기기에서는 이 로컬 프로세스/미커밋 제품 변경이 자동 복구되지 않습니다. 임시 빌드/검증로그는 `/tmp/dlds-*`에 있으며 제품 저장소에는 개인 QA보고서나 새 테스트 파일을 남기지 않았습니다.
 
 ## 아이데이션 2차 팀 회의 결론 · 사용자 확인 — 2026-09-18
 
