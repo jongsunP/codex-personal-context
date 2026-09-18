@@ -286,3 +286,30 @@ Detailed implementation history remains in the relevant existing project file.
 - Historical breakpoint pages, local meeting bodies and PDF bundles are retired.
   Prior history is recoverable from Git; do not restore old links or duplicate
   detailed progress here. Fetch the current Notion before subsequent edits.
+
+## Office Welcome Analytics — PR Created, 2026-09-18
+
+- [PR #4611](https://github.com/Innvoaid/dentlink-client/pull/4611) targets
+  `release/v1.87.0` from `feature/amplitude-pageview-tracking`; remote head is
+  `26f08b9df39c40dbafba1f7232798e9644513d59`. The current checkout is
+  `/Users/parkjongsun/Repository/dentlink-client`, clean and synchronized.
+- The branch retains `7ef67797b` for Office-wide `[Amplitude] Page Viewed`
+  collection after Next route completion, covering missed `replace` navigation.
+  The added `26f08b9df` records `welcome_view` once per welcome-page mount via
+  the existing `AMP_Track` queue; rerenders and StrictMode do not duplicate it,
+  while leaving and revisiting records a new visit. Only the existing
+  `useAmplitudeInit.ts` and welcome page were changed.
+- Source: [product thread](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1789705299279979)
+  and [welcome_view definition](https://app.notion.com/p/3dfce072e82f80bf9b5ed5076608579c).
+  PM requested both the common collection improvement and the separate event
+  for 1.87.0. Welcome exposure and approval/Get Started behavior remain unchanged;
+  not every new member necessarily visits welcome.
+- Checks passed: all three app type/lint hooks (existing lint warnings),
+  coverage hook, formatting and diff checks. Earlier common-pageview checks
+  passed 10 real-SDK local scenarios and 47 existing tests. The new actual-page,
+  wrapper and SDK harness passed normal/StrictMode, delayed readiness, rerender,
+  revisit and coexistence of both events, with no external network requests.
+  Next navigation events and surrounding UI dependencies were simulated.
+- PR creation is complete. Review, merge, deployment and live Amplitude receipt
+  remain pending; no CodeRabbit follow-up or release mutation was requested.
+  The production August count was not established as caused solely by this gap.
