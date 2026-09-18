@@ -289,13 +289,17 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Office Welcome Analytics — PR Finalized, 2026-09-18
 
-- [PR #4611](https://github.com/Innvoaid/dentlink-client/pull/4611) targets
-  `release/v1.87.0` from `feature/amplitude-pageview-tracking`; remote head is
+- [PR #4613](https://github.com/Innvoaid/dentlink-client/pull/4613) targets
+  `release/v1.87.0` from `feature/DL-16474`; remote head is
   `92c57f299e94568720ea1630d457104fb76ed378`. The current checkout is
   `/Users/parkjongsun/Repository/dentlink-client`, clean and synchronized.
 - Jira is [DL-16474](https://innovaid.atlassian.net/browse/DL-16474),
-  `[FE] 웰컴 앰플리튜드 이벤트 수정`. The existing PR title and Issue section
-  now include the ticket; the branch name was retained to preserve the PR.
+  `[FE] 웰컴 앰플리튜드 이벤트 수정`. At the user's subsequent request, the
+  remote and local branch were renamed from `feature/amplitude-pageview-tracking`
+  to `feature/DL-16474`. GitHub closes an open PR when its head branch is renamed,
+  so #4611 is closed and #4613 replaces it with identical three commits, title,
+  target, assignee and requested reviewer. Both PR bodies link to each other;
+  earlier review history stays on #4611 and does not transfer as new approval.
 - The branch retains `7ef67797b` for Office-wide `[Amplitude] Page Viewed`
   collection after Next route completion, covering missed `replace` navigation.
   The added `26f08b9df` records `welcome_view` once per welcome-page mount via
@@ -331,7 +335,7 @@ Detailed implementation history remains in the relevant existing project file.
   These temporary scripts are not cross-device artifacts.
 - The user confirmed both common collection and `welcome_view` belong in this
   delivery, and explicitly limited the final work to PR completion; the team
-  handles deployment. Three commits are pushed and PR #4611 is updated/open
+  handles deployment. Three commits are pushed and PR #4613 is updated/open
   against `release/v1.87.0`. Review, merge, deployment and live Amplitude receipt
   remain separate steps; no CodeRabbit follow-up or release mutation was done.
   The production August count was not established as caused solely by this gap.
