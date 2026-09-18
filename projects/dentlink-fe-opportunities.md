@@ -1,6 +1,6 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 기준 — 2026-09-18 스텝 1 첫 정비분 구현
+## 현재 기준 — 2026-09-18 스텝 1 추가 정비 · 카탈로그 24개 항목
 
 - **선택 과제는 하나:** 실제 덴트링크 컴포넌트를 기반으로 AI가 우리 UI에 맞는 화면을 만들고, PM·디자이너와 FE가 그 결과를 함께 활용하는 환경을 만듭니다. **DLDS 정비 → AI 프롬프트·하네스 정비(핵심) → 필요하고 가능하면 덴트링크 에디터 개발** 순서입니다. 핵심 AI 단계는 **Figma 시안이 나오기 전 기획·디자인 단계에서 비개발자가 프롬프트로 작업하는 환경**을 목표로 합니다.
 - **최신 회의 원본:** [FE 2차 회의 결과 · 디자인시스템과 AI 화면 제작](https://app.notion.com/p/3dfce072e82f812c843afed105630c98). 페이지 ID `3dfce072-e82f-812c-843a-fed105630c98`. 오늘 회의 결론과 후속 구체화는 이 문서를 기준으로 합니다.
@@ -10,7 +10,7 @@
 - **FE 자체 아이데이션:** 1·2차 회의 참석자는 FE 팀원들입니다. PM·디자이너·운영팀은 도구의 사용자 또는 필요시 확인할 상대입니다. 개인 진행 이력은 이 Git 체크포인트, 팀 공유 본문은 Notion에 둡니다.
 - [dentlink-fe-meeting.md](dentlink-fe-meeting.md)는 최신·이전 Notion과 Jira의 바로가기입니다. `/Users/parkjongsun/Documents/ChatGPT/FE/FE-업무-검토-회의자료.md`는 이 파일의 심볼릭 링크이며 별도 본문을 관리하지 않습니다.
 - 기존 [Dentlink Experience Studio](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site)는 앞선 시각화 후보의 데모입니다. 이번 선택 과제의 구현 결과가 아니며 이번 기록 작업에서는 수정하지 않았습니다.
-- 사용자가 실제 착수를 승인했고, 제공한 Figma를 현재 DLDS 기준으로 사용하며 master에서 작업 브랜치를 만들도록 확인했습니다. **스텝 1 첫 정비분과 실제 컴포넌트 6종의 로컬 카탈로그를 구현했습니다.** 전체 DLDS 정비·전체 서비스 회귀 검증·AI 하네스 구현 완료를 뜻하지 않습니다. 제품 변경은 로컬 미커밋 상태이며 제품 commit/push/PR/배포는 수행하지 않았습니다.
+- 사용자가 실제 착수를 승인했고, 제공한 Figma를 현재 DLDS 기준으로 사용하며 master에서 작업 브랜치를 만들도록 확인했습니다. **스텝 1 실제 컴포넌트 정비와 17종의 로컬 카탈로그까지 확장했습니다.** 전체 DLDS 정비·전체 서비스 회귀 검증·AI 하네스 구현 완료를 뜻하지 않습니다. 제품 변경은 로컬 미커밋 상태이며 제품 commit/push/PR/배포는 수행하지 않았습니다.
 
 ## 스텝별 실행 준비 — 2026-09-18
 
@@ -19,8 +19,29 @@
 - **3단계 · 조건부:** 2단계에서 확인한 불편과 필요에 따라 요소 선택·직접 조작·부분 수정 등 범위를 정합니다. 2단계로 목적을 달성하면 별도 에디터 없이 종료할 수 있습니다. 사용 도구·전달 형식·신규 UI 검토 절차·정량 품질 기준·기간은 각 단계 시작 시 실제 범위를 기준으로 구체화합니다.
 - **확정 디자인 기준:** [000 DLDS · Core+Component](https://www.figma.com/design/syQbfe4vTWUz87SYqa5Kvx/000-DLDS?node-id=1-28). 사용자가 2026-09-18 이 파일을 기준으로 승인했습니다. MCP로 페이지 목록 17개·Core 영역·Button/Input 개별 페이지와 대표 상태/수치를 읽었습니다. 별도 추가 자료 없이 대조를 시작했습니다. DLOS URL은 정리 방식 참고이며 `shared/ui/src/v2`와 연결하지 않습니다.
 - **작업 경계:** 제품 원본 `/Users/parkjongsun/Repository/dentlink-client`의 `feature/amplitude-pageview-tracking` / `7ef67797b`는 clean 그대로 유지했습니다. 사용자 branch 승인 후 origin fetch 및 최신 master `de2ffdd9e`에서 `feature/DL-16466`, 전용 worktree `/Users/parkjongsun/Repository/dentlink-client-dlds`를 만들었습니다. 새 branch는 upstream을 연결하지 않았고 원격 branch를 만들지 않았습니다. 의존성은 frozen lockfile·offline·ignore-scripts로 설치했으며 lockfile 변경이 없습니다.
-- **다음 시작점:** 위 전용 worktree의 미커밋 변경과 실행 중인 localhost를 먼저 확인합니다. Dropdown(신/구), Chip·Tabs·SegmentControl, Modal·Popup·Tooltip·Toast, Calendar·Slider·Stepper 및 전체 토큰/아이콘을 순서대로 대조·정비·카탈로그에 확장합니다. `shared/ui/README.md`는 팀용 사용 기준과 남은 범위를 기록합니다. 기존 카탈로그 6종을 전체 완료로 보고하지 않습니다.
+- **다음 시작점:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`의 미커밋 변경을 보존하고 카탈로그24개 항목(공통 기준1+컴포넌트23)을 확인합니다. 남은 대상은 기존/Chart Dropdown·기간 선택 Calendar, 글자 굵기/radius/날짜 셀 등 공통 기준 차이의 적용 범위, 실제 모바일 Drawer·스크린리더와 Modal/Popup 전체 focus/중첩 Escape 정책, Clinic/Lab/Admin 사용 화면 회귀입니다. `shared/ui/README.md`에 현재 범위·차이·후속 검증이 있습니다. 전체 DLDS 완료나 AI 하네스 착수로 보고하지 않습니다.
 - **기록 동기화:** 기존 Notion과 Jira DL-16437/DL-16466의 Figma 미확인 문구를 확정 원본 링크로 갱신했습니다. DL-16466에는 첫 정비분·검증·남은 범위·로컬 미커밋 상태를 반영하고 진행 중 상태를 유지했습니다. Notion 회의 방향과 과거 메모는 유지합니다. 실제 작업 세부 범위는 Jira, 개인 작업 경계·검증 이력은 이 Git 체크포인트를 따릅니다.
+
+## 스텝 1 날짜·수량·공통 기준 통합 — 2026-09-18
+
+- **현재 작업 상태:** 전용 worktree `dentlink-client-dlds`/`feature/DL-16466`, base/HEAD `de2ffdd9e` 그대로이며 제품 변경은 미커밋입니다. 최종 확인 때 원본 `dentlink-client`는 별도 작업 종료 후 master/de2ffdd9e로 돌아와 있었습니다. 원본 체크아웃은 이 작업에서 수정하지 않았습니다. 실행은 localhost5177이며 호스팅·제품 커밋/push/PR은 하지 않았습니다.
+- **추가 코드:** DateField의 형식별 파싱·disabled/inputProps.disabled·빈 문자열 초기화·onlyCalendar를 보완하고 달력 조작의 불필요한 form 제출을 막았습니다. 날짜 입력 순수 함수를 `configs/utils/dateInput.ts`로 원문 그대로 분리하고 기존 export를 유지했습니다. 좁은 폭에서 월·연도가 글자 중간에 끊기지 않도록 월 이동 버튼을 다음 줄로 보냅니다.
+- **수량/선택:** Slider의 초기값·step/범위 보정·min=max 트랙, Stepper 직접 입력 콜백·0↔1 경계 버튼·외부0초기화를 수정했습니다. 새 `defaultCount`를 권장하되 오타 `defalutCount`도 유지합니다. Stepper small 버튼32/입력40/아이콘18, medium48/아이콘20, outlined gray300으로 Figma에 맞췄습니다. ChipSelectGroup은 선택 상태·키보드·PC40/모바일37px, Core 빨간 점4px을 유지하며 class 기반 스타일을 정리했습니다. Badge는 흰색 토큰만 연결했습니다.
+- **카탈로그/공통 기준:** 기존17종에 날짜 입력·달력·Slider·Stepper·ChipSelectGroup·Icon을 더해 컴포넌트23종, Foundation1개를 합친24개 항목입니다. Theme 색상96개·원본 팔레트·radius·breakpoint를 직접 읽고 IconType과 같은 실제 아이콘411개를 검색/선택합니다. Figma 색상89개를 대조해 redViolet 빈 값7개를 채웠습니다. 날짜 예제는 지연 로드하여 최종 main chunk458.52kB, 날짜91.95kB로 분리했습니다. 제품 앱의 라우트나 배포 설정은 변경하지 않았습니다.
+- **검증:** 대상 strict tsc/ESLint/diff check/production build 통과. 전체 UI HEAD 비교 baseline579/current579/added0/resolved0. 임시 회귀는 Dropdown11+Tooltip2+날짜14+Slider/Stepper9=36건 통과. ChipSelect는 독립 Chromium에서 클릭·Enter·Space·form0·치수·숫자0/개수0/빨간점4 확인. CUA 통합 화면에서 날짜19/09/2026→2026-09-19, 초기화/disabled, 달력선택, Slider step3/max10→9, Stepper0↔1/직접입력/32px, Icon검색/선택코드, 팔레트9색·390px가로넘침없음·달력제목 수정 확인했습니다. 이전6/17종 검증은 아래 기록을 이어받습니다.
+- **기준 차이/미완료:** Figma Medium500 vs theme400, Figma full1000px vs 원형50%, Figma 달력 기본셀46 vs 코드40, 별도 Chip페이지 별표8 vs Core점4를 구분했습니다. 전역 값을 일괄 교체하지 않았습니다. 날짜 수동입력의 업무상 제한·기간 달력·날짜 셀 키보드·전체 focus trap·실제 휴대폰/제품 페이지는 후속 검증입니다. 간격/그림자/테두리의 공통 토큰 정비도 남았습니다.
+- **기록:** DL-16466 진행 현황에24항목·실제 수정·검증36건·남은 범위를 반영했습니다. Notion 회의 방향은 그대로입니다. 팀 문서는 `shared/ui/README.md`, 개인 이력은 이 파일로 분리합니다. 제품 미커밋 변경은 다른 기기에서 이 메모리 저장소만 pull해도 복구되지 않습니다.
+
+## 스텝 1 추가 정비 — 2026-09-18
+
+- **사용자 재확인:** 기존 master 기반 전용 worktree에서 계속 진행합니다. 실제 서비스의 공통 컴포넌트 코드를 수정하고 확인 페이지가 해당 코드를 직접 import합니다. 현재 localhost5177만 실행하며 호스팅은 하지 않았습니다. 검증은 CUA의 Codex 내장 브라우저를 사용했고 사용자가 열어둔 Chrome은 필요하지 않아 조작하지 않았습니다.
+- **Git 상태:** 구현 worktree/branch/base는 그대로입니다. origin/master를 fetch하여 HEAD와 동일한 `de2ffdd9e` 확인. 원본 worktree는 다른 작업으로 `26f08b9df`까지 진행된 것을 확인했으며 수정하지 않았습니다. UI의 누락된 `react-device-detect` 직접 의존성을 기존 workspace 버전으로 추가했고 lockfile은 해당 importer 3줄만 변경했습니다(첫 정비 때와 달리 이번에는 의존성 선언 변경 있음).
+- **실제 코드 정비:** Dropdown 3종의 falsy 값, disabled clear/닫기, 최신 outside callback, id/오류 연결, 화살표·Home/End·Escape/선택 후 focus 복귀를 보완했습니다. Tabs/Segment의 form 제출 방지, CategoryTab 버튼, Chip 키보드 클릭·삭제를 정비했습니다. 기존 `.chip > svg` 소비자를 위해 구조를 보존했습니다. Segment 최신 Core 기준 외곽32/40/52px·기본 글자14/14/16px, 명시 textVariant는 유지합니다.
+- **Overlay/공통 코드:** Modal Escape가 최신 onClose를 사용하고 자신의 backdrop만 처리합니다. 취소 전용 footer와 inline Portal을 수정했습니다. Modal/DropdownDrawer는 공유 bodyScrollLock으로 마지막 owner만 원래 overflow/height/scroll을 복구하고 재열림 전 예약 복원을 취소합니다. RN 메시지 생성 함수는 코드 그대로 `configs/utils/rnPostMessage.ts`로 분리하고 기존 export를 유지했습니다. Popup 모바일335/title20·desktop360/title22, Toast font700와 확인된 상태 색상, 숨김 시 pointer-events를 적용했습니다. Tooltip focus/Escape와 안정적인 callback을 보강하고 NONE은 Escape를 소비하지 않도록 했습니다.
+- **카탈로그:** 6→17종. 실제 상태 예시·현재 설정 코드에 Dropdown3종, Tabs/CategoryTab/SegmentControl/Chip, Modal/Popup/Tooltip/Toast를 추가했습니다. 데모값은 QA용이며 제품 API를 호출하지 않습니다. 모바일 grid의 min-content 가로 넘침을 수정하고 inline 메뉴가 카드에서 잘리지 않도록 했습니다. Generic Chip과 ChipSelectGroup Figma의 차이는 명시합니다.
+- **검증:** catalog strict TypeScript, 변경 파일 ESLint, Vite production build, diff check 통과. 최종 전체 UI를 HEAD 소스로 비교한 결과 baseline579/current579/added0/resolved0입니다(기존 오류는 남음). Dropdown11+Tooltip2 임시 jsdom 회귀13개 통과(후속 날짜 검증으로 총27개까지 확장). Modal 잠금은 desktop/iOS mock, 두 owner 양쪽 해제 순서·중복 해제·재열림/rAF취소 검증. 임시 테스트는 `/private/tmp/dlds-dropdown-check`; 실행은 `cd shared/hooks && pnpm exec vitest run --config /private/tmp/dlds-dropdown-check/vitest.config.mjs`입니다. `/tmp` 별칭으로 config 전달하면 Vite의 실경로 로딩 실패가 있었고 `/private/tmp`로 해결됐습니다.
+- **브라우저 검증:** Select0→키보드진입/선택/포커스복귀, Combo검색/선택/disabled값유지, Filter다중선택/Escape/칩키보드삭제, Tabs/Category Enter·Space·폼제출0, Segment3크기/글자/다중선택, Chip삭제시부모클릭0, Modal취소전용·최신값Escape·배경autoClose·scroll복원, Popup desktop/mobile치수·확인, Tooltip포커스/Escape, Toast표시·자동닫힘·숨김pointernone을 확인했습니다. 390px 가로넘침 수정후 page375≤viewport390 확인. 실제 휴대폰 UA의 Drawer·화면리더 및 전체 제품 회귀 검증은 아닙니다.
+- **리뷰/기록:** 독립 리뷰에서 발견한 중첩 scroll 복원, Tooltip NONE Escape, 카탈로그 다른 컴포넌트 예시/복사코드 차이를 수정했습니다. DL-16466 진행 현황을 17종·실제 변경·검증·남은 범위로 갱신하고 진행 중 유지. Notion의 회의 방향은 변경하지 않았습니다. 제품 코드는 여전히 미커밋이며 push/PR/배포 없음. 로컬 미커밋 코드는 다른 기기에서 Git 메모리만 pull해도 복구되지 않습니다.
 
 ## 스텝 1 첫 정비분 — 2026-09-18
 
