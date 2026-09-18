@@ -10,7 +10,7 @@
 - **FE 자체 아이데이션:** 1·2차 회의 참석자는 FE 팀원들입니다. PM·디자이너·운영팀은 도구의 사용자 또는 필요시 확인할 상대입니다. 개인 진행 이력은 이 Git 체크포인트, 팀 공유 본문은 Notion에 둡니다.
 - [dentlink-fe-meeting.md](dentlink-fe-meeting.md)는 최신·이전 Notion과 Jira의 바로가기입니다. `/Users/parkjongsun/Documents/ChatGPT/FE/FE-업무-검토-회의자료.md`는 이 파일의 심볼릭 링크이며 별도 본문을 관리하지 않습니다.
 - 기존 [Dentlink Experience Studio](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site)는 앞선 시각화 후보의 데모입니다. 이번 선택 과제의 구현 결과가 아니며 이번 기록 작업에서는 수정하지 않았습니다.
-- 사용자가 실제 착수를 승인했고, 제공한 Figma를 현재 DLDS 기준으로 사용하며 master에서 작업 브랜치를 만들도록 확인했습니다. **스텝 1 실제 컴포넌트 정비와 17종의 로컬 카탈로그까지 확장했습니다.** 전체 DLDS 정비·전체 서비스 회귀 검증·AI 하네스 구현 완료를 뜻하지 않습니다. 제품 변경은 로컬 미커밋 상태이며 제품 commit/push/PR/배포는 수행하지 않았습니다.
+- 사용자가 실제 착수를 승인했고, 제공한 Figma를 현재 DLDS 기준으로 사용하며 master에서 작업 브랜치를 만들도록 확인했습니다. **스텝 1 실제 컴포넌트 정비와 24개 항목(공통 기준1+컴포넌트23)의 로컬 카탈로그까지 확장했습니다.** 전체 DLDS 정비·전체 서비스 회귀 검증·AI 하네스 구현 완료를 뜻하지 않습니다. 제품 변경은 로컬 미커밋 상태이며 제품 commit/push/PR/배포는 수행하지 않았습니다.
 
 ## 스텝별 실행 준비 — 2026-09-18
 
@@ -18,7 +18,7 @@
 - **2단계 · DL-16471:** 1단계에서 사용할 컴포넌트·규칙·예시와 기본 동작 검증이 준비된 범위로 시작합니다. 대표 기획·디자인 요청과 평가 기준을 정하고 하네스를 구성합니다. 비개발자의 요청·확인·수정, 실제 컴포넌트 사용, 디자인·코드 품질과 FE 코드 전달을 검증하고 작업 절감 효과를 평가합니다. 결과물은 반복 사용 환경·안내·대표 요청/결과/검증 기록입니다.
 - **3단계 · 조건부:** 2단계에서 확인한 불편과 필요에 따라 요소 선택·직접 조작·부분 수정 등 범위를 정합니다. 2단계로 목적을 달성하면 별도 에디터 없이 종료할 수 있습니다. 사용 도구·전달 형식·신규 UI 검토 절차·정량 품질 기준·기간은 각 단계 시작 시 실제 범위를 기준으로 구체화합니다.
 - **확정 디자인 기준:** [000 DLDS · Core+Component](https://www.figma.com/design/syQbfe4vTWUz87SYqa5Kvx/000-DLDS?node-id=1-28). 사용자가 2026-09-18 이 파일을 기준으로 승인했습니다. MCP로 페이지 목록 17개·Core 영역·Button/Input 개별 페이지와 대표 상태/수치를 읽었습니다. 별도 추가 자료 없이 대조를 시작했습니다. DLOS URL은 정리 방식 참고이며 `shared/ui/src/v2`와 연결하지 않습니다.
-- **작업 경계:** 제품 원본 `/Users/parkjongsun/Repository/dentlink-client`의 `feature/amplitude-pageview-tracking` / `7ef67797b`는 clean 그대로 유지했습니다. 사용자 branch 승인 후 origin fetch 및 최신 master `de2ffdd9e`에서 `feature/DL-16466`, 전용 worktree `/Users/parkjongsun/Repository/dentlink-client-dlds`를 만들었습니다. 새 branch는 upstream을 연결하지 않았고 원격 branch를 만들지 않았습니다. 의존성은 frozen lockfile·offline·ignore-scripts로 설치했으며 lockfile 변경이 없습니다.
+- **초기 작업 경계(당시 상태):** 제품 원본 `/Users/parkjongsun/Repository/dentlink-client`의 `feature/amplitude-pageview-tracking` / `7ef67797b`는 clean 그대로 유지했습니다. 사용자 branch 승인 후 origin fetch 및 최신 master `de2ffdd9e`에서 `feature/DL-16466`, 전용 worktree `/Users/parkjongsun/Repository/dentlink-client-dlds`를 만들었습니다. 새 branch는 upstream을 연결하지 않았고 원격 branch를 만들지 않았습니다. 의존성은 frozen lockfile·offline·ignore-scripts로 설치했으며 lockfile 변경이 없습니다.
 - **다음 시작점:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`의 미커밋 변경을 보존하고 카탈로그24개 항목(공통 기준1+컴포넌트23)을 확인합니다. 남은 대상은 기존/Chart Dropdown·기간 선택 Calendar, 글자 굵기/radius/날짜 셀 등 공통 기준 차이의 적용 범위, 실제 모바일 Drawer·스크린리더와 Modal/Popup 전체 focus/중첩 Escape 정책, Clinic/Lab/Admin 사용 화면 회귀입니다. `shared/ui/README.md`에 현재 범위·차이·후속 검증이 있습니다. 전체 DLDS 완료나 AI 하네스 착수로 보고하지 않습니다.
 - **기록 동기화:** 기존 Notion과 Jira DL-16437/DL-16466의 Figma 미확인 문구를 확정 원본 링크로 갱신했습니다. DL-16466에는 첫 정비분·검증·남은 범위·로컬 미커밋 상태를 반영하고 진행 중 상태를 유지했습니다. Notion 회의 방향과 과거 메모는 유지합니다. 실제 작업 세부 범위는 Jira, 개인 작업 경계·검증 이력은 이 Git 체크포인트를 따릅니다.
 
