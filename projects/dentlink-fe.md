@@ -339,3 +339,17 @@ Detailed implementation history remains in the relevant existing project file.
   against `release/v1.87.0`. Review, merge, deployment and live Amplitude receipt
   remain separate steps; no CodeRabbit follow-up or release mutation was done.
   The production August count was not established as caused solely by this gap.
+- User-requested cleanup completed: removed nine superseded experiment,
+  reproduction, PR-draft and earlier-log files from `/tmp`. Kept the four final
+  validation harnesses and latest commit/push logs for the open review; their
+  dependencies do not reference the deleted files. The old branch name is
+  absent from local branches, remote branches and remote-tracking refs. No
+  abandoned local feature branch remains to delete. Active `feature/DL-16474`
+  is retained for PR follow-up, clean and synchronized at `92c57f299`; `master`
+  and the separate active DLDS worktree/`feature/DL-16466` were left intact.
+- PR status at cleanup: #4613 open, `REVIEW_REQUIRED`/`BLOCKED`, CodeRabbit
+  review in progress. Vercel reports that Git author `jongsunP` needs project
+  access to create deployments; this is separate from passed local checks.
+  Next steps are team/code review, resolution of the Vercel access requirement,
+  team release delivery and actual Amplitude receipt verification. No merge,
+  deployment, automatic review handling or access-policy change was performed.
