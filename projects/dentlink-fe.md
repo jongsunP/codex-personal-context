@@ -36,17 +36,19 @@ Detailed implementation history remains in the relevant existing project file.
 - The selected FE project is DLDS cleanup → AI prompt/harness refinement →
   an editor only if useful later. Use the [latest meeting](https://app.notion.com/p/3dfce072e82f812c843afed105630c98)
   and [implementation checkpoint](dentlink-fe-opportunities.md). Step 1 is in
-  `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`,
-  pushed at `7ddd6ac09` on 2026-09-18. Additional Button/Popup/Segment/Slider
-  examples, opt-in modal focus management, optional 46px calendar dates and
-  narrow-gallery clipping fixes are verified. UI128 and latest Clinic/Admin
-  focused E2E2 passed; earlier runs are separate. Font400/500 interpretation
-  now distinguishes Clinic/Lab Medium-file registration from Admin Regular.
-  Icon follow-up directly checked19 of132 candidates;113 still need comparison.
-  Whole Step1, real-device/screen-reader, staging and deployment are not complete.
-  The user reauthorized autonomous feasible work plus product commit/push and
-  Git memory closeout after the usage interruption. PR/merge/deploy and the AI
-  harness remain separate. Use the detailed checkpoint for remaining scope.
+  `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`.
+  Latest implementation `0fa829542` adds 41 original-backed icons (452 total),
+  viewport/scroll and keyboard fixes; documentation-only HEAD `f0d23995d` clarifies
+  opt-in Modal/Popup vs default DropdownDrawer focus management. UI 162, icon
+  generation 1, catalog checks and three-app types passed. Official local FE+DEV
+  E2E 7 passed at the implementation commit after reproducing and fixing a real
+  tablet Escape/focus race. Generic UI tsc still has the same 578 baseline errors,
+  with no new diagnostics. Remaining icon originals (67) and logo variants (18) need
+  Figma access; MCP is quota-limited and the browser requires login. Whole Step1,
+  real-device/screen-reader, staging and deployment are not complete. The user
+  explicitly requests autonomous feasible work through product commit/push and
+  Git memory closeout. PR/merge/deploy and AI harness remain separate. See the
+  detailed checkpoint for source hashes, failed-run diagnosis and remaining scope.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.

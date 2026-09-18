@@ -1,6 +1,6 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 기준 — 2026-09-18 DLDS 중단 복구 · 추가 정비 · 원격 체크포인트
+## 현재 기준 — 2026-09-18 DLDS 추가 자산·작은 화면·키보드 정비 및 검증
 
 - **선택 과제는 하나:** 실제 덴트링크 컴포넌트를 기반으로 AI가 우리 UI에 맞는 화면을 만들고, PM·디자이너와 FE가 그 결과를 함께 활용하는 환경을 만듭니다. **DLDS 정비 → AI 프롬프트·하네스 정비(핵심) → 필요하고 가능하면 덴트링크 에디터 개발** 순서입니다. 핵심 AI 단계는 **Figma 시안이 나오기 전 기획·디자인 단계에서 비개발자가 프롬프트로 작업하는 환경**을 목표로 합니다.
 - **최신 회의 원본:** [FE 2차 회의 결과 · 디자인시스템과 AI 화면 제작](https://app.notion.com/p/3dfce072e82f812c843afed105630c98). 페이지 ID `3dfce072-e82f-812c-843a-fed105630c98`. 오늘 회의 결론과 후속 구체화는 이 문서를 기준으로 합니다.
@@ -10,9 +10,37 @@
 - **FE 자체 아이데이션:** 1·2차 회의 참석자는 FE 팀원들입니다. PM·디자이너·운영팀은 도구의 사용자 또는 필요시 확인할 상대입니다. 개인 진행 이력은 이 Git 체크포인트, 팀 공유 본문은 Notion에 둡니다.
 - [dentlink-fe-meeting.md](dentlink-fe-meeting.md)는 최신·이전 Notion과 Jira의 바로가기입니다. `/Users/parkjongsun/Documents/ChatGPT/FE/FE-업무-검토-회의자료.md`는 이 파일의 심볼릭 링크이며 별도 본문을 관리하지 않습니다.
 - 기존 [Dentlink Experience Studio](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site)는 앞선 시각화 후보의 데모입니다. 이번 선택 과제의 구현 결과가 아니며 이번 기록 작업에서는 수정하지 않았습니다.
-- 사용자가 실제 착수를 승인했고 제공한 Figma를 현재 DLDS 기준으로 사용합니다. **스텝1 실제 컴포넌트 정비와 DLOS 원본 구조를 참고한28개 항목 카탈로그를 진행 중입니다.** 최신 제품 커밋 `7ddd6ac0969c73be5a853d06fa8f6001c24795b6`을 `origin/feature/DL-16466`에 푸시했고 원격 SHA 일치·clean을 확인했습니다. 추가 예제, 선택형 모달 포커스·46px 달력, 좁은 카탈로그 잘림 보완과 폰트·아이콘 후속 조사를 마쳤습니다. 공통 UI128개·Clinic/Admin focused E2E2개 통과입니다. 아래 최신 체크포인트로 복구합니다. 전체1단계·제품 전체 회귀·AI 하네스 완료가 아니며 PR·병합·배포는 하지 않았습니다.
+- 사용자가 실제 착수와 자율 진행·제품 커밋·푸시·Git 메모리 정리를 승인했습니다. **1단계 실제 컴포넌트 정비와 DLOS 구조를 참고한 28개 항목 카탈로그를 진행 중입니다.** 최신 제품 HEAD는 `f0d23995d616109739d35348ca31e45404da38a5`(설명 보완), 구현 커밋은 `0fa8295423e9c21ec01c8a6dc928d02c9a0cd16f`입니다. 신규 아이콘 41개, 작은 화면의 선택 목록·팝업·안내 및 키보드 복귀를 보완했습니다. 공통 UI 162개·아이콘 생성 1개·최종 구현 커밋의 서비스 E2E 7개 통과입니다. **전체 1단계 완료는 아닙니다.** 추가 Figma 원본 접근, 일부 상태 대조와 실기기·스크린리더 검증이 남습니다. AI 하네스·에디터·PR·병합·배포는 진행하지 않았습니다.
+- **로컬 실행:** 전용 worktree 루트에서 `pnpm dev:ui` → `http://127.0.0.1:5177`. 설치·접속·종료·포트 중복 안내는 루트 README와 `shared/ui/README.md`에 있습니다. 회귀 검사는 `pnpm test:ui`입니다. Codex의 검증용 5187/5188과 E2E 3100/3105/3102는 종료했습니다. 사용자 5177 서버는 재실행·조작하지 않았고 마지막 점검에서는 리스너가 없었습니다. 다음 재개 시 프로세스 소유자와 경로를 다시 확인합니다.
 
-- **로컬 실행 인계(2026-09-18):** 사용자가 직접 실행해 보겠다고 하여 Codex가 켠 localhost5177 서버를 종료하고 포트가 닫힌 것을 확인했습니다. 이후 서버를 임의로 다시 켜지 않습니다. 전용 worktree 루트에 `pnpm dev:ui` 명령을 추가했고 루트 README와 `shared/ui/README.md`에 설치·접속·종료·포트 중복 안내를 남겼습니다. 명령은 `pnpm --filter @dentlink/ui dev --host 127.0.0.1 --port 5177 --strictPort`와 같습니다. 후속 정비 중 이 worktree의5177 서버(PID64780)가 다시 실행 중이었고 Codex는 조작하지 않았습니다. 마지막 포트 점검에서는5177 리스너도 없었습니다. Codex가 새로 켠 검증용5187은 종료했습니다. 다음 세션에서는 프로세스·작업 경로를 재확인합니다.
+## 스텝 1 자율 추가 정비·최종 검증 — 2026-09-18
+
+### 저장 상태와 범위
+
+- **최신 지시:** 사용자가 없어도 독립적으로 가능한 작업을 최대한 진행하고, 질문이 꼭 필요한 경우에만 확인하며 마지막에 제품 커밋·푸시·Git 메모리까지 마무리합니다. 단순 중간 체크포인트에서 작업을 종료하지 않습니다. 이 기록은 현재 1단계의 후속이며 AI 하네스·에디터 착수로 범위를 넓히지 않았습니다.
+- **제품:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`. 구현 `0fa8295423e9c21ec01c8a6dc928d02c9a0cd16f` — `feat: DLDS 자산과 작은 화면 및 키보드 동작 정비`(133파일, +4606/-714; SVG41개와 생성 TSX41개 포함). 후속 `f0d23995d616109739d35348ca31e45404da38a5`는 README의 포커스 적용 범위 한 문장만 바로잡습니다. 정상 hooks를 거쳐 두 커밋을 푸시했고 원격 HEAD 일치·clean을 확인했습니다.
+- 원본 `/Users/parkjongsun/Repository/dentlink-client`의 master `de2ffdd9e3025cb758632788cd6086c170e4974e`는 clean을 유지했습니다. PR 생성·병합·배포·기존 Storybook 삭제는 하지 않았습니다. 개인 컨텍스트의 동시 작업인 Amplitude PR4615 정리 기록(이전 HEAD `1914b09`)을 보존했습니다.
+
+### 구현과 근거
+
+- **아이콘:** 기존 미확인 132종을 추가 조사하여 41종의 Figma 원본 기반 자산을 추가하고 24종은 기존 도형과 대응함을 확인했습니다(9종은 회전 조건 필요). 67종은 원본 확인이 남습니다. 기존 411개 TSX는 바꾸지 않아 전체 452개, SVG 원본은 427개입니다. 이름만 대응한 기존 226종을 전수 도형 검증 완료로 세지 않습니다. TSV의 제한 상태 69행은 고유 67종 외 이름 없는 Component1·같은 이름 다른 node를 포함하므로 숫자를 혼용하지 않습니다.
+- **자산 재현성:** `shared/icons/figma-provenance.json`에 원본 node·해시·프레임 근거를 기록했습니다. spinner/loading/hand 3종은 확인된 24px 부모 프레임에 원본을 배치했고 SVGR가 내부 SVG에 host props를 덮어쓰던 문제를 해당 자산만 보정했습니다. 신규 41개 생성 코드의 불필요한 React import를 제거했습니다. 재생성 41개 동일·기존 원본 기반 386개 재생성 diff0·기존 411개 byte 변경0. 생성 검사를 CI에 연결했습니다. SVG/React SSR의 24·48px 래스터 82비교 최대 평균 RGBA 오차는 1.8294/255(SVGO 반올림)이었으며 브라우저 전수 픽셀 일치의 증거로 보지 않습니다.
+- **로고:** `figma-logos.tsv`에 18개 변형을 구분했습니다. 직접 후보 5개(가로2·심볼3), 후보 없는 13개이며 원본 대조가 막혀 정확한 도형 일치 완료는 0개입니다. MonoBlack 이름과 실제 gray fill 차이도 기록했습니다.
+- **상태·버튼:** Radio 테두리·hover·checked 색상, Switch disabled cursor, Stepper의 활성 상태 hover를 정비했습니다. Slider의 `sideButtonVariant="icon"`은 24px 아이콘+8px 여백의 40px 버튼을 제공하며 기존 plain 기본 간격은 유지합니다. 기존 제품 Slider 2곳을 임의 전환하지 않았습니다.
+- **선택 목록:** 기존 DOM 배치를 유지하면서 화면 안 너비·높이 제한과 위/아래 배치, 중첩 스크롤 복원을 처리했습니다. 키보드로 초점이 이동한 경우에만 해당 항목을 보이게 하고 사용자 수동 스크롤은 빼앗지 않습니다. modern/legacy/Chart, 긴 이름·30개 목록, disabled/값/콜백을 검증했습니다. DropdownDrawer는 기본 focus trap·스크롤 잠금, Modal·Popup은 선택형 `trapFocus`입니다. Admin의 v2 DropdownBase도 disabled/form 제출/Escape/객체 콜백을 보존합니다.
+- **팝업·안내:** Tooltip의 화면 경계·긴 내용·키보드 설명 연결·내부 터치 스크롤, Toast의 실제 상단 여백/하단 위치를 보완했습니다. Popup `scrollContent=false` 기본을 유지하고 켠 경우 본문만 스크롤하며 하단 버튼을 유지합니다. Modal·Popup Tab/Shift+Tab 이동은 대상이 보이도록 스크롤하고 초기·복귀 초점은 기존 preventScroll을 유지합니다.
+- **실서비스에서 발견한 초점 결함:** Clinic 태블릿에서 Paid 선택 후 재열기→Escape 시 초점이 사라지는 문제를 공식 E2E로 재현했습니다. 첫 수정의 단위 테스트만으로 해결된 것으로 판단하지 않았으며 재실행에서 실패를 확인했습니다. React 18 commit/focus 보정 순서와 실제 이벤트를 조사하여 legacy close를 `setIsShow(false)` 후 `focusTrigger()` 순서로 맞췄습니다. 닫기 먼저 예약 후 초점을 옮기는 기존 성공 선택 경로와 일치시켰고 공통 hook 전체 변경은 피했습니다. 임시 진단 코드는 제거하고 기존 강한 단언을 유지했습니다.
+
+### 검증과 제약
+
+- **자동 검사:** 공통 UI 22파일 162개, 아이콘 생성 1개, catalog strict 타입·lint·Vite production build 통과. Clinic/Lab/Admin 전체 타입 검사도 정상 커밋 hook으로 통과했습니다. UI 패키지 일반 타입 검사는 기존 578건과 정확히 동일하며 신규 진단 0건입니다. 전체 UI 단독 build/type가 성공했다고 표현하지 않습니다. catalog main chunk 약 517kB 경고는 남습니다.
+- **저장 hooks:** 세 앱 lint 오류0(기존 경고229/189/410), shared configs3+hooks24=27개 테스트 및 coverage 검사 통과. hooks coverage는 기준과 같지만 configs에는 기존 기준 대비 dateInput/rnPostMessage 추가·일부 증가가 표시돼 전체 coverage 무변경으로 기록하지 않습니다. hooks를 우회하지 않았습니다. Tooltip Set 순회의 Clinic ES5 타입 오류는 Array.from으로 고치고 세 앱 전체 타입 검사를 다시 통과했습니다.
+- **최종 서비스 E2E:** `pnpm e2e:clinic e2e/clinic/specs/03_orders/crown.spec.ts e2e/clinic/specs/09_sharedUi.spec.ts`. 최종 구현 커밋 `0fa8295423e9c21ec01c8a6dc928d02c9a0cd16f`에서 7/7 PASS, 실패/flaky/skip/미실행/중단/전역오류0. `e2e-runs/2026-09-18T11-12-46-153Z-fd8acde6/{summary.md,verdict.json,run.json}`. source SHA `3d458e947a73f92cc30375be63419467d810f070e964dd175de7cde13f591a87`, source_unchanged=true. 후속 f0d23995d는 README 한 줄만 바뀌어 실행 코드가 동일합니다. 로컬 FE+DEV API 검증이며 staging_full_verified=false. Admin은 실제 문자 발송·쓰기 시도0 가드를 유지했습니다.
+- **실패·수정 이력:** `10-53-17-090Z-df305627` 및 `11-01-55-439Z-8a5d3be0`의 full 7은 각각 6pass/1fail. 진단 `11-04-49-266Z-3b80148c`의 태블릿 1fail 후 원인 수정, `11-07-05-273Z-1ae42649` focused1/1 및 `11-09-23-793Z-2e34cdb7` full7/7, 위 최종 커밋 full7/7로 검증했습니다. 통과할 때까지 원인 없이 반복한 것으로 요약하지 않습니다.
+- **브라우저:** 320×480/568, 720×360, 960×360 등의 작은 화면에서 Popup 긴 본문·버튼 고정, Toast 상단80/하단12, Dropdown End/Home·수동 PageDown, Tooltip 내부 스크롤·Escape·aria 설명, Modal Shift+Tab 대상 버튼 스크롤을 확인했습니다. 실제 24/48px 아이콘 크기와 상태 색상도 확인했습니다. 최종 서버 재시작 후 새 런타임 오류는 없었으나 기존 styled DOM prop 경고는 남습니다. QA widget `/api/qa-users` 500은 별도 기존 로컬 설정 문제로, 전체 네트워크 오류0이라고 하지 않습니다. 태블릿 E2E는 touch/UA 에뮬레이션이며 실기기·스크린리더 증명이 아닙니다.
+- **접근 한계:** 추가 Figma MCP는 Professional Dev seat 호출 한도에 도달했습니다. 제공된 DLDS URL을 브라우저에서도 확인했지만 로그인 화면이었고 인증 우회·계정 추측을 하지 않았습니다. 이미 확보한 원본과 공식 API 결과로만 적용했습니다. 미확인 67종 중 66종은 호출 한도, quote 1종은 부모 프레임 배치 근거 부족입니다. 로고 18개 변형과 Checkbox 일부 hover/표식·Stepper 일부 크기/화살표·Slider track/thumb 세부 시각 정합도 남습니다.
+- **호환 범위:** Clinic/Lab의 Medium 파일=CSS400, Admin Regular400/Medium500 차이, 기존 full 반경과 Calendar 기본40px은 전역 변경하지 않았습니다. 신규 선택형 props를 전체 제품에 자동 적용하지 않았습니다. Figma mixed 원본의 일부 hover/disabled check와 enabled minus 불일치는 선택 의미를 보존해 minus를 유지했습니다.
+- **정리/다음 시작:** DL-16466 진행 현황을 이 결과로 갱신하고 반환 본문 일치·진행 중 상태를 확인했습니다. Notion 회의 본문과 Sites는 그대로입니다. 자체 서버5187/5188, E2E3100/3105/3102는 종료했고 임시 브라우저 탭 닫기·viewport 복구를 마쳤습니다. 다음에는 Git을 갱신하고 인증된 Figma 또는 원본 접근이 가능해지면 남은 도형·상태 비교를 이어갑니다. 실기기/스크린리더 및 선택형 API 소비 화면 적용은 별도 증거가 필요합니다. 전체1단계·제품 전체 회귀·AI 하네스 완료로 넘겨짚지 않습니다.
 
 ## 스텝 1 중단 복구·예제·모달 포커스·달력 크기 — 2026-09-18
 
