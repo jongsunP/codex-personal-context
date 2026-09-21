@@ -37,26 +37,25 @@ Detailed implementation history remains in the relevant existing project file.
   an editor only if useful later. Use the [latest meeting](https://app.notion.com/p/3dfce072e82f812c843afed105630c98)
   and [implementation checkpoint](dentlink-fe-opportunities.md). Step 1 is in
   `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`.
-  Latest implementation `0fa829542` adds 41 original-backed icons (452 total),
-  viewport/scroll and keyboard fixes; documentation-only HEAD `f0d23995d` clarifies
-  opt-in Modal/Popup vs default DropdownDrawer focus management. UI 162, icon
-  generation 1, catalog checks and three-app types passed. Official local FE+DEV
-  E2E 7 passed at the implementation commit after reproducing and fixing a real
-  tablet Escape/focus race. Generic UI tsc still has the same 578 baseline errors,
-  with no new diagnostics. Remaining icon originals (67) and logo variants (18) need
-  Figma comparison. On 2026-09-21 official metadata and one previously blocked
-  node screenshot succeeded; the old quota block is historical, not confirmed
-  current. See the 2026-09-21 resume checkpoint before continuing. Whole Step1,
-  real-device/screen-reader, staging and deployment are not complete. The user
-  explicitly requests autonomous feasible work through product commit/push and
-  Git memory closeout. PR/merge/deploy and AI harness remain separate. See the
-  detailed checkpoint for source hashes, failed-run diagnosis and remaining scope.
-  Resume DLDS/DL-16466 with the saved order: remaining Figma comparison → actual
-  consumer-screen audit → evidence-based fixes/regression → Step1 handoff to AI.
-  These follow-ups are not started. The user prioritizes resumability across
-  usage interruptions/days/devices over finishing in one run. Save concrete next
-  items and verified product/context commits at meaningful intermediate points,
-  not only the end. Refresh account usage; historical 56% is not current quota.
+  Latest implementation remains `0fa829542` (41 new icons, 452 total and UI fixes).
+  Audit-only HEAD `01d49c3cb` completes the requested remaining Figma comparison:
+  69 icon nodes, 18 logo variants, 18 component states; 105 nodes and 119 original
+  SVGs with hashes/layout reference are saved in the product design-audit folder.
+  The old Figma quota block is resolved. Of 67 unresolved icon names, 2 map to
+  existing pins and 65 are addition/composition candidates, not mandatory new
+  features. Logos: 2 reusable, 10 need adjustments, 6 vertical compositions.
+  Concrete Checkbox, Stepper, Slider and mobile Tooltip differences are recorded;
+  no runtime code changed in this audit. Earlier UI162/icon1/service E2E7 results
+  belong to the implementation checkpoint, not a fresh whole-product QA run.
+  Generic UI tsc has 578 baseline errors. Whole Step1, actual-device/screen-reader,
+  staging and deployment remain open. The user requested only follow-up 1 this
+  turn; follow-ups 2 (consumer screens/fonts) and 3 (fixes/regression) are unstarted.
+  Resume at 2 after reading the 2026-09-21 checkpoint in
+  `projects/dentlink-fe-opportunities.md`; don't repeat the completed source audit.
+  Explicit product commit/push and Git memory authorization continues, while
+  PR/merge/deploy and AI harness remain separate. Prioritize recoverability across
+  usage interruptions/days/devices; latest observed account-wide weekly usage was
+  60% on Sep21 11:44 KST, not a current or task-specific quota.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.
