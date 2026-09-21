@@ -1,5 +1,13 @@
 # Memory Changelog
 
+## 2026-09-21
+
+- 사용자의 구현 전 별도 메모리 요청에 따라 `projects/dentlink-client-lbx.md`를
+  추가하고 프로젝트 목록·FE 기록에서 연결했다. 최신 UI/폼 합의, 환경별 IDS 정책,
+  Mother 상태 필터, Office 없는 기존 픽업 UI와 outbound 이동, `isConsolidated`
+  반영 확인과 별도 Baby 대상 주문 API 대기를 기록했다. 구현 미착수와 실제 업무
+  요청 없는 모의 성공 흐름 원칙을 유지하며 초기 미결 사항의 후속 결정을 구분했다.
+
 ## 2026-09-15
 
 - Recorded the user's Notion `FE 9월 프로젝트` page as the ongoing location for

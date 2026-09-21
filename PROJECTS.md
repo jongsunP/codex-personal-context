@@ -85,6 +85,16 @@ For detailed current state, read:
 - Detailed repository checkpoints remain in their existing web and app project
   files and must be verified against live Git.
 
+### Dentlink Admin LBX — DL-16279 / DL-16387
+
+- Shared repository: `https://github.com/Innvoaid/dentlink-client`
+- Scope: 기존 Admin 배송 목록·상세 확장, Baby/Mother 생성과 LBX 픽업생성 모달.
+- 2026-09-21: 요구사항과 기존 UI 재사용 기준 정리 완료, 구현 미착수.
+  `isConsolidated`는 개발 Swagger/생성 코드 반영 확인; Baby 생성 대상 주문은
+  별도 신규 API 대기. 이후 구현도 실제 요청 없이 모의 성공 흐름으로 진행한다.
+- Dedicated personal checkpoint:
+  [projects/dentlink-client-lbx.md](projects/dentlink-client-lbx.md)
+
 ### Dentlink Mobile App
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-app`

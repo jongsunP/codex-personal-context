@@ -44,12 +44,17 @@ Detailed implementation history remains in the relevant existing project file.
   inspection. No implementation, product Git changes, new branch/worktree,
   Jira/PR changes, test run or deployment is authorized by this intake.
   The startup prompt was delivered automatically; the user need not paste it.
-  Parent Jira read succeeded: LBX is a shipping-cost-reduction test project;
-  DL-16387 appears as a completed subtask. Its direct detail request returned
-  HTTP 504, so the new task must verify the body/comments before making scope
-  conclusions. The task started and acknowledged the analysis-only boundary.
-- Detailed LBX findings belong to that feature task's checkpoint once verified;
-  this main task retains scope coordination. Existing DLDS work stays paused.
+  The initial direct detail request returned HTTP 504; that was an intake-time
+  limitation, not the current feature status. The later feature review and user
+  clarifications are now recorded in the dedicated checkpoint below. The Jira
+  UI-draft subtask's completed status does not establish FE implementation.
+- On 2026-09-21 the user requested a separate pre-implementation LBX memory:
+  [dentlink-client-lbx.md](dentlink-client-lbx.md) is its canonical checkpoint.
+  UI/flow requirements are settled; `isConsolidated` is present in DEV Swagger
+  and generated code, while a separate Baby-eligible-order API is pending.
+  Implementation is unstarted and future work must simulate success without
+  sending real business requests. This main file retains coordination only.
+  Existing DLDS work stays paused.
 - The selected FE project is DLDS cleanup → AI prompt/harness refinement →
   an editor only if useful later. Use the [latest meeting](https://app.notion.com/p/3dfce072e82f812c843afed105630c98)
   and [implementation checkpoint](dentlink-fe-opportunities.md). Step 1 is in
