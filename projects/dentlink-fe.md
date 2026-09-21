@@ -51,10 +51,11 @@ Detailed implementation history remains in the relevant existing project file.
 - On 2026-09-21 the user requested a separate pre-implementation LBX memory:
   [dentlink-client-lbx.md](dentlink-client-lbx.md) is its canonical checkpoint.
   UI/flow requirements are settled; `isConsolidated` is present in DEV Swagger
-  and generated code, while a separate Baby-eligible-order API is pending.
-  The user subsequently authorized local implementation; the Admin additions
-  are now uncommitted in the product checkout. Only the pending eligible-order
-  API has a temporary boundary. Product reads and writes use normal APIs;
+  and generated code. The separate Baby-eligible-order endpoint is now confirmed
+  as GET /admin/orders/shippable with required labId and officeId. Its real API
+  connection replaces the sample order data, including pagination aggregation.
+  The user authorized local implementation; the Admin additions remain
+  uncommitted in the product checkout. Product reads and writes use normal APIs;
   the user clarified that only test-time mutation requests must not reach the
   server. Product mock transport was removed. This file retains coordination only.
   Existing DLDS work stays paused.

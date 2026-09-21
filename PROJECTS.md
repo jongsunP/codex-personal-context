@@ -90,8 +90,8 @@ For detailed current state, read:
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`
 - Scope: 기존 Admin 배송 목록·상세 확장, Baby/Mother 생성과 LBX 픽업생성 모달.
 - 2026-09-21: 기존 Admin 목록·상세/모달 로컬 구현, 제품 미커밋.
-  `isConsolidated`는 개발 Swagger/생성 코드 반영 확인; Baby 생성 대상 주문은
-  별도 신규 API 한 곳만 임시 연결부로 대기. 제품 API는 모두 정상 연결하며,
+  `isConsolidated` 반영과 `GET /admin/orders/shippable` 명세를 확인하고
+  Baby 대상 주문까지 실제 API로 연결해 예시 데이터를 제거했다. 제품 API는 정상 연결하며,
   테스트할 때만 생성·수정 요청의 실제 서버 전송을 피한다.
 - Dedicated personal checkpoint:
   [projects/dentlink-client-lbx.md](projects/dentlink-client-lbx.md)

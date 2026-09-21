@@ -5,18 +5,17 @@
 - **사용자의 구현 지시 후 기존 Admin 목록·상세와 Baby/Mother/LBX 픽업 모달을
   구현했다.** 제품 코드는 아직 로컬 미커밋 상태이며 제품 commit/push/PR/배포는
   하지 않았다. 이전의 구현 미착수 체크포인트보다 이 상태가 우선한다.
-- `GET /admin/shipments`의 `isConsolidated` 필터는 개발 서버 Swagger와 로컬
-  생성 코드 모두에서 확인됐다. 남은 백엔드 보충은 **Baby 생성 대상 주문 조회용
-  별도 신규 API**다. 기존 `POST /admin/orders/search`를 확장하는 방식은 채택하지 않는다.
-- 신규 주문 API의 단일 연결부는
-  `admin/src/services/shipment/consolidation.orders.ts`다. 사용자는 빈 목록이 아니라
-  **Office 선택 후 API 응답처럼 사용할 목데이터**를 원한다고 정정했다. 현재
-  예시 주문 5개를 제공하며 복수 선택·정상 생성 payload까지 이어진다. 미확정
-  endpoint는 만들지 않았고 API가 나오면 해당 함수 한 곳만 교체한다.
+- `isConsolidated`에 이어 Baby 대상 주문 API도 개발 Swagger에서 확인했다.
+  사용자 안내대로 **`GET /admin/orders/shippable`**이며 `labId`와 `officeId`가
+  모두 필수다. Lab의 shippable DTO와 페이지 응답 구조를 재사용한다.
+- `admin/src/services/shipment/consolidation.orders.ts`를 실제 Admin GET으로
+  교체하고 예시 주문 5개를 제거했다. 여러 페이지를 모두 모아 기존 로컬 검색과
+  복수 선택 UI에 제공하며 기공소/Office 변경 시 진행 중 조회를 취소한다.
+  기존 임시 주문 캐시가 남지 않도록 query key도 분리했다.
 - **사용자가 요청 금지의 의미를 명확히 정정했다:** 제품의 조회·생성·수정 코드는
   실제 API에 정상 연결한다. Codex가 테스트를 위해 생성·수정 요청을 실제 서버에
   보내지 말라는 뜻이다. 조회는 정상 수행하고 제품 코드에서 API를 막지 않는다.
-  임시 처리는 **아직 없는 Baby 생성 대상 주문 조회 API 한 곳뿐**이다.
+  신규 주문 조회까지 연결해 현재 제품에 임시 주문 데이터는 없다.
 - 초기에 이 제한을 넓게 해석해 만든 제품 모의 transport/fixtures는 모두 제거했다.
   별도 QA 스크립트의 네트워크 fixture는 `/tmp`에만 두며 제품에 포함하지 않는다.
 - 현재 범위는 Admin이다. 별도 Lab/Clinic 페이지나 네이티브 앱 기능은 추가하지 않는다.
@@ -75,8 +74,8 @@
 1. 환경 정책에 따른 기공소와 해당 Office를 선택한다. Office는 ID 직접 입력이
    아니라 **이름 검색/선택 → ID 보관** 방식이다.
 2. 선택한 기공소·Office의 **Baby 생성 가능 주문**을 별도 신규 API로 조회하고
-   여러 주문을 선택한다. API 전에는 연결부에서 예시 주문 5개를 반환한다.
-   미확정 경로·응답을 합의된 계약인 것처럼 만들지 않는다.
+   여러 주문을 선택한다. 현재 `GET /admin/orders/shippable?labId=...&officeId=...`에
+   연결됐으며 대상 여부는 서버 응답을 따른다.
 3. Mother 번호 목록 조회에 `statuses: ["AVAILABLE", "BABY_REGISTERED"]`를 적용한다.
 4. `motherNumber`, `labId`, `officeId`, `orderIds`로 Baby 생성 계약을 구성한다.
 5. 성공 흐름은 모달을 닫고 기존 배송 목록으로 돌아간다. 목록 반영은 기존 재조회
@@ -106,7 +105,7 @@
 2026-09-21 이 대화에서 개발 서버의
 [OpenAPI 명세](https://dev-api.dentlink.io/v3/api-docs)를 읽기 전용 GET으로 조회해
 HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며 업무 API를 호출한
-실동작 검증이나 운영 배포 확인은 아니다. 이 메모리 저장 턴에서는 재호출하지 않았다.
+실동작 검증이나 운영 배포 확인은 아니다. 신규 shippable 연결 시 명세를 재조회했다.
 
 | 기능 | 계약 | 핵심 내용 |
 | --- | --- | --- |
@@ -115,7 +114,7 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 | Baby 생성 | `POST /admin/shipments/consolidations/babies` | `motherNumber`, `labId`, `officeId`, `orderIds`; 응답에 `shipmentId`, `trackingCode`, `pieceTrackingNumber` |
 | Mother 생성 | `POST /admin/shipments/consolidations/mothers/{motherNumber}/waybill` | body 없음; 응답에 `motherNumber`, `closedAt`, `documents` |
 | Baby 픽업 | `POST /admin/shipments/consolidations/pickups` | `labId`, `shipmentIds`, `pickup`; 응답에 `pickupRequestNumber` |
-| Baby 생성 대상 주문 | **별도 신규 API 대기** | 정확한 경로·method·입출력은 미확인; 기존 `/admin/orders/search` 확장안은 사용하지 않음 |
+| Baby 생성 대상 주문 | `GET /admin/orders/shippable` | 필수 `labId`, `officeId`; 선택 `patientName`, `orderId`, `page`, `size`, `sort`; `ShippableOrderDto[]`와 페이지 메타데이터 |
 
 - `isConsolidated`는 로컬 `shared/models/src/Admin.ts`에도
   `isConsolidated?: boolean`으로 반영됐다. 일반 목록의 Baby만 보기와 픽업 대상
@@ -176,8 +175,8 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
   실제 API에 연결한다. Baby/Mother/픽업 생성 wrapper도 정상 HTTP 호출 코드다.
 - 제품에 요청 차단용 Axios interceptor/adapter, fixture 데이터나 모의 저장소를
   넣지 않는다. 테스트를 수행할 때만 생성·수정 요청의 실제 서버 전송을 피한다.
-- 아직 없는 주문 조회 API만 임시 연결부를 둔다. API가 나오면 정확한 계약을
-  확인해 이 함수를 실제 조회로 교체한다. 기존 `/admin/orders/search`로 대체하지 않는다.
+- 주문 조회도 실제 shippable GET으로 연결했다. 기존 `/admin/orders/search`는 사용하지
+  않는다. 빈 목록·오류를 예시 데이터로 대체하지 않는다.
 - 로컬 자동 UI 검증은 별도 Playwright context에서 요청을 관측하고 테스트 fixture로
   응답한다. 이는 테스트 도구에만 있는 처리이며 실제 서버 연동 QA 증거는 아니다.
 - Lab 픽업 hook을 통째로 가져오면 Lab API/SSE가 실행되므로 UI primitive와 검증
@@ -189,7 +188,8 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
   `admin/src/lib/Shipment/useShipmentFields.tsx`,
   `admin/src/components/DataGrid/DataFilters.tsx`,
   `shared/models/src/shipment/shipment.apis.admin.ts`,
-  `shared/models/src/shipment/shipment.types.ts`.
+  `shared/models/src/shipment/shipment.types.ts`,
+  `shared/models/src/order/order.apis.admin.ts`, `order.types.ts`.
 - 신규: `admin/src/components/Shipment/ConsolidationBabyForm.tsx`,
   `ConsolidationMotherForm.tsx`, `ConsolidationPickupForm.tsx`,
   `admin/src/lib/Shipment/useConsolidationForm.ts`,
@@ -229,7 +229,7 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - 사용자는 Swagger 생성 스크립트를 실행했다고 알렸다. 현재 수정된 제품 파일은
   `shared/models/src/Admin.ts`, `Lab.ts`, `Office.ts`, `data-contracts.ts` 4개다.
   생성 diff에는 LBX 외 변경도 섞여 있다. 위 4개 생성 파일의 사용자 변경
-  1968 insertions / 268 deletions를 보존했고 FE 구현/모달 보완은 별도 16개 파일에 있다.
+  1968 insertions / 268 deletions를 보존했고 FE 구현/모달 보완은 별도 18개 파일에 있다.
 - 생성 파일을 덮어쓰거나 되돌리지 않았고, 이 작업의 feature branch/worktree도
   만들지 않았다. 개인 메모리 작업 때문에 제품 저장소를 commit/push하지 않는다.
 - 코드/타입/로컬 UI 검증과 실제 백엔드 연동·배포 증거를 구분한다. 테스트에서
@@ -282,13 +282,28 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - 예시 주문은 실제 적격 주문이 아니다. 생성 wrapper에 별도 요청 차단을 추가하지
   않았으며, 테스트의 POST 성공 응답만 브라우저 외부 QA route에서 대체했다.
 
+### 신규 shippable 연결 검증 — 2026-09-21
+
+- 개발 OpenAPI 읽기 전용 조회로 실제 Admin 경로, 필수 labId/officeId 및 Lab과
+  동일한 DTO/페이지 응답을 확인했다. 업무 주문 API의 서버 결과를 검증한 것은 아니다.
+- Admin 전체 타입 검사 통과. 변경 5개 파일 ESLint 오류 0, 기존 수기 order wrapper의
+  미사용 import 경고 2개는 그대로다. Prettier 및 diff 검사도 통과했다.
+- 네트워크 없는 wrapper/adapter 검증: GET 경로·필수 query·모든 페이지·중복 제거·
+  이름 없는 주문·빈 응답·오류·AbortSignal 전달을 확인했다.
+- 브라우저 fixture 검증 3개 통과: 3페이지 5개 주문 전체 표시와 마지막 페이지 검색/선택,
+  Office 변경 시 선택 초기화/빈 목록, 생성·수정 요청 및 런타임 오류/중복 key 경고 0건.
+  첫 실행은 입력 value를 텍스트 노드로 찾은 테스트 locator만 실패했고 이를 수정했다.
+- 증거: `/tmp/dentlink-lbx-qa/2026-09-21T10-02-25-971Z-development-26827/report.json`.
+  검사 스크립트는 `/tmp/dentlink-lbx-qa/shippable-unit.cjs`, `shippable-browser.cjs`다.
+  테스트용 서버 3004는 종료했고 기존 사용자 서버 3002는 건드리지 않았다.
+
 ## 남은 일과 다음 시작점
 
 1. 재개 시 개인 컨텍스트와 제품 Git을 갱신하되 현재 사용자 생성 변경과 구현
    미커밋 변경을 보존한다. 이 기능을 아직 미착수로 취급하지 않는다.
-2. Baby 대상 주문용 별도 API가 나오면 명세/생성 코드를 확인하고
-   `consolidation.orders.ts`의 목 응답 함수만 실제 조회/응답 변환으로 교체한다.
-   현재 예시 주문으로 UI 흐름은 확인했고 실제 적격 주문 연동이 남았다.
+2. Baby 대상 주문 API는 실제 GET 연결까지 완료했다. 실제 업무 데이터 조회/생성의
+   서버 결과 검증과 사용자 화면 확인이 남았다. 테스트 fixture 통과를 실연동
+   성공으로 취급하지 않는다. 생성·수정 실전송 테스트는 여전히 하지 않는다.
 3. 조회·생성 wrapper에 임시 차단을 다시 넣지 않는다. Codex의 검증에서 생성·수정
    실전송을 피하라는 조건을 제품 기능 제한으로 확대하지 않는다.
 4. 실제 연동 확인과 제품 commit/push/PR/배포는 각각 허용된 범위에서 진행한다.
@@ -300,14 +315,19 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - 기공소 고정은 모든 환경이 아니라 **prd IDS 129만**, 나머지 환경은 제한을 풀었다.
 - Baby 필터의 임시 명칭 `isLbxBaby`는 **`isConsolidated`**로 확정·명세 반영됐다.
 - Mother 무상 대체 사유서 공백은 추가 요구가 아니라 **범위 제외**로 해소됐다.
-- 주문 목록은 기존 Admin 검색도 검토했으나 최종적으로 **별도 신규 API**를 기다린다.
+- 주문 목록은 기존 Admin 검색도 검토했으나 최종적으로 별도 신규
+  `GET /admin/orders/shippable`로 확정해 연결했다.
 - 픽업의 Office 선택/받는 그룹 필터 제안은 사용자 정정으로 폐기했다. 기존 기공소
   픽업 UI와 `isConsolidated + shipperId` 조회를 사용하고 기존 outbound 화면으로 이어진다.
 - 따라서 초기의 필터명·문서 종류·픽업 Office/독자 규칙 관련 미결 기록보다 이 파일의
-  최신 합의가 우선한다. 현재 남은 백엔드 보충은 Baby 생성 대상 주문 조회 하나다.
+  최신 합의가 우선한다. 마지막으로 기다리던 Baby 대상 주문 API도 명세와 연결이 확인됐다.
 - 구현 중 사용자가 실제 요청 제한을 세 차례 정정했다. **제품 API는 정상 연결,
   테스트 시 생성·수정 실전송만 피함, 임시는 미완성 주문 API 한 곳뿐**이라는 최종
   지시가 이전의 모든 요청 차단/모의 성공 흐름 해석보다 우선한다.
 - 후속 모달 피드백: 크기 통일/확대, 내부 라벨 겹침 제거, 운영 IDS를 검색 UI와
   같은 고정 입력 형태로 표시, 주문 조회는 빈 응답 대신 목데이터, Mother는 검색 없는
   선택형 드롭다운, 불필요한 빈 목록 안내 제거. 이 요청에 맞춰 수정/검증했다.
+
+- 신규 API 사용자 안내 후 개발 OpenAPI를 확인해 `labId`/`officeId` 필수 query와
+  페이지 응답을 확인했다. 기존 generated 변경은 보존하고 수기 Admin wrapper와
+  params type을 추가해 주문 예시 데이터를 실제 GET으로 교체했다.
