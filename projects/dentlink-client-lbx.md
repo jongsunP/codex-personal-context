@@ -196,6 +196,13 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
   표시를 적용했다. 제출 중에는 모달 닫기와 재진입에 의한 중복 요청도 방지한다.
 - 기존 공유 filter switch가 검색 전 입력값을 반영하지 않는 문제를 수정했다.
   switch만 현재 입력 state를 읽도록 최소 변경했고 다른 필터 형식은 유지했다.
+- 후속 사용자 제보의 React 중복 key 경고도 수정했다. 펼친 배송 필터의 ID 입력과
+  이름 검색이 동일한 `shipperId`/`receiverId`를 사용하므로 렌더 key를
+  `field + label`로 구분했다. API 검색 field와 요청 파라미터는 유지한다.
+  별도 브라우저 검증에서 필터 펼침/접기 반복, ID 검색, 초기화, 입력란 중복/누락
+  없음과 duplicate-key console 경고 0건을 확인했다. GET 6개를 테스트에서만
+  응답했고 생성·수정 요청은 0건이었다. 증거는
+  `/tmp/dentlink-lbx-qa/2026-09-21T09-26-25-469Z-development-95210/report.json`이다.
 - Mother 목록 컬럼은 너비 140px와 빈 React fragment로 값 없는 칸의 기본 `-`
   대체 표시를 피했다. 상세에는 기존 필드 정의를 통해 네 항목이 표시된다.
 - Mother 상태 배열은 `statuses=AVAILABLE&statuses=BABY_REGISTERED`처럼 반복
