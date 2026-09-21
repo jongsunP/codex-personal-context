@@ -1,17 +1,23 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-09-21, 구현 시작 전
+## 현재 체크포인트 — 2026-09-21, 로컬 구현
 
-- **요구사항·화면·재사용 기준 정리 완료, FE 구현 미착수.** 사용자는 작업을
-  시작하기 전에 이 기능만의 별도 메모리를 요청했다. 이번 요청은 개인 컨텍스트
-  저장이며 제품 구현 착수나 제품 Git 변경의 승인이 아니다.
+- **사용자의 구현 지시 후 기존 Admin 목록·상세와 Baby/Mother/LBX 픽업 모달을
+  구현했다.** 제품 코드는 아직 로컬 미커밋 상태이며 제품 commit/push/PR/배포는
+  하지 않았다. 이전의 구현 미착수 체크포인트보다 이 상태가 우선한다.
 - `GET /admin/shipments`의 `isConsolidated` 필터는 개발 서버 Swagger와 로컬
   생성 코드 모두에서 확인됐다. 남은 백엔드 보충은 **Baby 생성 대상 주문 조회용
   별도 신규 API**다. 기존 `POST /admin/orders/search`를 확장하는 방식은 채택하지 않는다.
-- 신규 API 실제 연결을 제외한 화면·폼·성공 흐름은 작업 가능한 상태다. 주문 선택
-  UI도 모의 데이터로 먼저 구성할 수 있다. 추가 기획·디자인 결정을 기다리는 상태는 아니다.
-- 구현이 승인되더라도 당분간 **실제 업무 네트워크 요청을 보내지 않는다.**
-  합의된 요청·응답 계약을 기준으로 성공을 가정한 모의 흐름을 만든다.
+- 신규 주문 API의 단일 연결부는
+  `admin/src/services/shipment/consolidation.orders.ts`다. 현재 빈 목록과 준비 중
+  상태를 제공하며 미확정 endpoint를 만들거나 가짜 주문 ID를 생성 요청에 넣지 않는다.
+  주문 다중 선택과 제출 payload는 구현되어 해당 함수와 준비 상태만 교체하면 된다.
+- **사용자가 요청 금지의 의미를 명확히 정정했다:** 제품의 조회·생성·수정 코드는
+  실제 API에 정상 연결한다. Codex가 테스트를 위해 생성·수정 요청을 실제 서버에
+  보내지 말라는 뜻이다. 조회는 정상 수행하고 제품 코드에서 API를 막지 않는다.
+  임시 처리는 **아직 없는 Baby 생성 대상 주문 조회 API 한 곳뿐**이다.
+- 초기에 이 제한을 넓게 해석해 만든 제품 모의 transport/fixtures는 모두 제거했다.
+  별도 QA 스크립트의 네트워크 fixture는 `/tmp`에만 두며 제품에 포함하지 않는다.
 - 현재 범위는 Admin이다. 별도 Lab/Clinic 페이지나 네이티브 앱 기능은 추가하지 않는다.
 
 ## 출처, 작업 위치와 권한
@@ -29,8 +35,8 @@
   `01a0c2c0-3e4d-7a42-867d-9c80f3fee241`.
 - 개인 기록의 정본은 이 파일이다. FE 전체 기록은 [dentlink-fe.md](dentlink-fe.md)에
   연결만 유지한다. 공유 제품 저장소에 개인 세션 기록을 만들지 않는다.
-- 이번까지 제품 코드 수정, 브랜치/worktree 생성, 제품 commit/push, PR/Jira 변경,
-  테스트·빌드·배포는 수행하지 않았다. 이후 구현 요청과 Git/배포 권한을 구분한다.
+- 사용자는 코드 구현과 로컬 검증을 승인했다. 브랜치/worktree 생성, 제품
+  commit/push, PR/Jira 변경과 배포는 하지 않았다. 구현과 Git/배포 권한을 구분한다.
 
 ## 환경별 기공소 정책
 
@@ -66,8 +72,8 @@
 1. 환경 정책에 따른 기공소와 해당 Office를 선택한다. Office는 ID 직접 입력이
    아니라 **이름 검색/선택 → ID 보관** 방식이다.
 2. 선택한 기공소·Office의 **Baby 생성 가능 주문**을 별도 신규 API로 조회하고
-   여러 주문을 선택한다. API 전에는 모의 목록을 쓸 수 있으며 미확정 경로·응답을
-   합의된 계약인 것처럼 만들지 않는다.
+   여러 주문을 선택한다. API 전에는 연결부에서 빈 목록을 반환하고 준비 중임을
+   표시한다. 미확정 경로·응답을 합의된 계약인 것처럼 만들지 않는다.
 3. Mother 번호 목록 조회에 `statuses: ["AVAILABLE", "BABY_REGISTERED"]`를 적용한다.
 4. `motherNumber`, `labId`, `officeId`, `orderIds`로 Baby 생성 계약을 구성한다.
 5. 성공 흐름은 모달을 닫고 기존 배송 목록으로 돌아간다. 목록 반영은 기존 재조회
@@ -161,45 +167,92 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - API/모델 연결은 현재 프로젝트의 `shared/models/src/shipment/`와 Admin query/hook
   패턴을 따른다. 생성 파일에 필드가 있다고 수기 API wrapper/types까지 연결된 것은 아니다.
 
-## 실제 요청을 보내지 않는 구현 기준
+## 제품 연결과 테스트 기준 — 사용자 정정 반영
 
-- 계약에 맞는 모의 응답으로 입력 → 선택 → 생성 성공 → 모달 닫기/화면 이동 →
-  목록·상세 표시까지 일관되게 구성한다. 생성 버튼의 요청만 차단해서는 부족하다.
-- 이 기능 흐름의 이름 검색·목록 자동 조회·재조회·픽업 후 도착 화면까지 실제 요청이
-  나가지 않도록 기존 데이터 경계에서 모의 응답을 적용한다.
-- `EmployerFindDropdownList`는 mount/검색어 변경 때 자동 조회한다. UI `disabled`만으로
-  네트워크가 차단되지 않는다. Lab 픽업 hook의 API/SSE도 그대로 실행하지 않는다.
-- 새 주문 API가 나오면 이름·필드·대상 주문 조건을 확인해 해당 연결부를 맞춘다.
-  API가 배포됐다는 이유만으로 모의 응답을 실요청으로 전환하지 않는다.
-- 업무 API 실요청 금지와 공개 Swagger 명세의 읽기 확인은 구분한다. 이번 대화에서
-  사용자가 요청한 배포 확인은 명세만 조회했다.
+- 제품의 기공소/Office 조회, Mother 번호 조회, 배송 조회와 상세/픽업 조회는 기존
+  실제 API에 연결한다. Baby/Mother/픽업 생성 wrapper도 정상 HTTP 호출 코드다.
+- 제품에 요청 차단용 Axios interceptor/adapter, fixture 데이터나 모의 저장소를
+  넣지 않는다. 테스트를 수행할 때만 생성·수정 요청의 실제 서버 전송을 피한다.
+- 아직 없는 주문 조회 API만 임시 연결부를 둔다. API가 나오면 정확한 계약을
+  확인해 이 함수를 실제 조회로 교체한다. 기존 `/admin/orders/search`로 대체하지 않는다.
+- 로컬 자동 UI 검증은 별도 Playwright context에서 요청을 관측하고 테스트 fixture로
+  응답한다. 이는 테스트 도구에만 있는 처리이며 실제 서버 연동 QA 증거는 아니다.
+- Lab 픽업 hook을 통째로 가져오면 Lab API/SSE가 실행되므로 UI primitive와 검증
+  패턴만 재사용하고 데이터/생성은 Admin 계약으로 연결했다.
+
+## 구현 파일과 동작
+
+- 기존 변경: `admin/src/pages/shipments/index.tsx`,
+  `admin/src/lib/Shipment/useShipmentFields.tsx`,
+  `admin/src/components/DataGrid/DataFilters.tsx`,
+  `shared/models/src/shipment/shipment.apis.admin.ts`,
+  `shared/models/src/shipment/shipment.types.ts`.
+- 신규: `admin/src/components/Shipment/ConsolidationBabyForm.tsx`,
+  `ConsolidationMotherForm.tsx`, `ConsolidationPickupForm.tsx`,
+  `admin/src/lib/Shipment/useConsolidationForm.ts`,
+  `admin/src/services/shipment/consolidation.query.ts`, `consolidation.orders.ts`.
+- 모달 3개는 기존 DataForm/검색/ComboboxDropdown을 재사용한다. 기공소·Office
+  변경 시 하위 선택을 초기화하고 필수값/선택 목록 검증, 중복 클릭 방지와 오류
+  표시를 적용했다. 제출 중에는 모달 닫기와 재진입에 의한 중복 요청도 방지한다.
+- 기존 공유 filter switch가 검색 전 입력값을 반영하지 않는 문제를 수정했다.
+  switch만 현재 입력 state를 읽도록 최소 변경했고 다른 필터 형식은 유지했다.
+- Mother 목록 컬럼은 너비 140px와 빈 React fragment로 값 없는 칸의 기본 `-`
+  대체 표시를 피했다. 상세에는 기존 필드 정의를 통해 네 항목이 표시된다.
+- Mother 상태 배열은 `statuses=AVAILABLE&statuses=BABY_REGISTERED`처럼 반복
+  쿼리로 직렬화한다. 성공 시 관련 목록/상세/query cache를 재조회하고 픽업은 기존
+  `/pickup/outbound`로 이동한다. 기존 픽업 페이지 자체를 새로 작성하지 않았다.
 
 ## 제품 Git 상태와 검증 경계
 
-- 2026-09-21 저장 시점에 로컬 제품 checkout은 `master`, HEAD
-  `de2ffdd9e3025cb758632788cd6086c170e4974e`였다. 저장 턴에서 제품 원격을 fetch/pull한
-  것은 아니므로 이를 최신 원격 배포 SHA로 간주하지 않는다.
+- 2026-09-21 구현 시 로컬 제품 checkout은 `master`, HEAD
+  `de2ffdd9e3025cb758632788cd6086c170e4974e`였다. 시작 시 개인 컨텍스트와 제품
+  저장소를 `git pull --ff-only`로 갱신했고 당시 제품은 Already up to date였다.
 - 사용자는 Swagger 생성 스크립트를 실행했다고 알렸다. 현재 수정된 제품 파일은
   `shared/models/src/Admin.ts`, `Lab.ts`, `Office.ts`, `data-contracts.ts` 4개다.
-  생성 diff에는 LBX 외 변경도 섞여 있으며 이 변경을 FE 구현 완료로 보지 않는다.
+  생성 diff에는 LBX 외 변경도 섞여 있다. 위 4개 생성 파일의 사용자 변경
+  1968 insertions / 268 deletions를 보존했고 FE 구현은 별도 11개 파일에 있다.
 - 생성 파일을 덮어쓰거나 되돌리지 않았고, 이 작업의 feature branch/worktree도
   만들지 않았다. 개인 메모리 작업 때문에 제품 저장소를 commit/push하지 않는다.
-- 확인한 것은 Jira/사용자 요구사항, 기존 UI/코드 구조, 생성된 모델,
-  개발 Swagger 계약이다. 제품 FE 코드 수정·테스트·빌드·LBX 생성 호출·연동 QA·
-  배포 완료 증거는 없다.
+- 코드/타입/로컬 UI 검증과 실제 백엔드 연동·배포 증거를 구분한다. 테스트에서
+  실제 서버로 LBX 생성·수정 요청을 보내지 않았다. 운영 build/배포/실연동 QA는
+  이번 완료 범위가 아니다.
+
+### 최종 로컬 검증
+
+- Admin 전체 `tsc --noEmit --incremental false --pretty false`: exit 0, 진단 0.
+- 구현 11개 파일 ESLint: exit 0, 오류 0. 기존 `DataFilters.tsx`의 미사용 변수와
+  effect dependency 경고 5개는 남아 있으며 이번 변경이 만든 경고는 없다.
+- 구현 파일 Prettier 검사와 `git diff --check`: 통과. 사용자의 generated 파일은
+  포맷팅·재생성하지 않았다.
+- 별도 Playwright 테스트의 개발 조건 10개 + 운영 환경 변수 조건 10개, **20개 통과**.
+  목록/상세 빈칸, Mother 번호 표시, 필터 on/off/Reset/URL 복원, IDS 고정/다른
+  기공소 선택, 주문 API 준비 안내/빈 선택/필수 검증, Mother 상태 필터와 문서,
+  픽업 Office 없음/복수 선택/기존 목록·상세/새로고침 재조회를 확인했다.
+- Mother POST 응답을 테스트에서 잠시 보류하고 Esc/X/취소와 연속 클릭을 확인했다.
+  처리 중 모달은 유지됐으며 POST는 한 번만 발생했다. 테스트 PDF 4종도 다운로드했다.
+- 제품 코드의 정상 GET/POST 요청을 테스트 route에서만 응답했다. 개발 38회,
+  운영 조건 35회를 테스트 내부 처리했고 실제 업무 서버 전송과 런타임 예외는 0건이다.
+  운영 서버·실사용자 데이터에 대한 검증이 아니다. 외부 폰트 CSS는 테스트에서 차단했다.
+- **Baby 생성 성공의 최종 UI 검증은 미완성 주문 API 때문에 대기**다. 주문 다중 선택과
+  payload는 구현되어 있지만 실제 적격 주문을 조회할 수 없어 완료로 표시하지 않는다.
+- 로컬 증거:
+  `/tmp/dentlink-lbx-qa/2026-09-21T09-10-46-220Z-development-81988/report.json`,
+  `/tmp/dentlink-lbx-qa/2026-09-21T09-10-46-220Z-production-81989/report.json`.
+  테스트 스크립트/fixture/스크린샷은 `/tmp/dentlink-lbx-qa/`에만 있으며 다른 장치로
+  전송되는 체크포인트가 아니다. 제품 저장소에 테스트 전용 모의 코드가 들어있지 않다.
+- 검증용 Next 서버 3004/3005와 테스트 브라우저는 종료했다. 기존 사용자 3002
+  서버와 다른 DLDS worktree는 건드리지 않았다.
 
 ## 남은 일과 다음 시작점
 
-1. 사용자가 구현을 지시하면 개인 컨텍스트를 먼저 동기화하고 이 파일을 읽는다.
-   제품의 정확한 branch/worktree와 사용자 생성 변경을 확인하고 보존한다.
-2. Baby 대상 주문용 별도 API가 나왔는지 최신 명세를 확인한다. 아직 없어도 그
-   연결부 외 화면·폼·모의 성공 흐름은 진행할 수 있다.
-3. 기존 Admin 코드 구조와 기공소 픽업 UI를 재사용해 위 목록·상세·모달을 구현한다.
-   새로운 UI 설계, 픽업 Office 선택, Mother 무상 대체 사유서를 다시 요구하지 않는다.
-4. prd IDS 고정/비운영 기공소 선택, Mother 번호 상태 필터, 값 없는 칸의 빈 표시,
-   배송 다중 선택, 기존 픽업 목록·상세 이동을 모의 응답으로 검증한다.
-5. 구현 범위에 맞는 검사와 화면 검증에서 실제 업무 요청이 나가지 않는지도 확인한다.
-   제품 commit/push/PR/실연동/배포는 각각 사용자가 허용한 범위에서 진행한다.
+1. 재개 시 개인 컨텍스트와 제품 Git을 갱신하되 현재 사용자 생성 변경과 구현
+   미커밋 변경을 보존한다. 이 기능을 아직 미착수로 취급하지 않는다.
+2. Baby 대상 주문용 별도 API가 나오면 명세/생성 코드를 확인하고
+   `consolidation.orders.ts`의 함수와 준비 상태만 교체한다. 미완성이라 현재
+   Baby 생성의 전체 실제 주문 선택 흐름은 완료되지 않았다.
+3. 조회·생성 wrapper에 임시 차단을 다시 넣지 않는다. Codex의 검증에서 생성·수정
+   실전송을 피하라는 조건을 제품 기능 제한으로 확대하지 않는다.
+4. 실제 연동 확인과 제품 commit/push/PR/배포는 각각 허용된 범위에서 진행한다.
 
 ## 결정 이력 — 2026-09-21
 
@@ -213,3 +266,6 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
   픽업 UI와 `isConsolidated + shipperId` 조회를 사용하고 기존 outbound 화면으로 이어진다.
 - 따라서 초기의 필터명·문서 종류·픽업 Office/독자 규칙 관련 미결 기록보다 이 파일의
   최신 합의가 우선한다. 현재 남은 백엔드 보충은 Baby 생성 대상 주문 조회 하나다.
+- 구현 중 사용자가 실제 요청 제한을 세 차례 정정했다. **제품 API는 정상 연결,
+  테스트 시 생성·수정 실전송만 피함, 임시는 미완성 주문 API 한 곳뿐**이라는 최종
+  지시가 이전의 모든 요청 차단/모의 성공 흐름 해석보다 우선한다.

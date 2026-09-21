@@ -52,8 +52,11 @@ Detailed implementation history remains in the relevant existing project file.
   [dentlink-client-lbx.md](dentlink-client-lbx.md) is its canonical checkpoint.
   UI/flow requirements are settled; `isConsolidated` is present in DEV Swagger
   and generated code, while a separate Baby-eligible-order API is pending.
-  Implementation is unstarted and future work must simulate success without
-  sending real business requests. This main file retains coordination only.
+  The user subsequently authorized local implementation; the Admin additions
+  are now uncommitted in the product checkout. Only the pending eligible-order
+  API has a temporary boundary. Product reads and writes use normal APIs;
+  the user clarified that only test-time mutation requests must not reach the
+  server. Product mock transport was removed. This file retains coordination only.
   Existing DLDS work stays paused.
 - The selected FE project is DLDS cleanup → AI prompt/harness refinement →
   an editor only if useful later. Use the [latest meeting](https://app.notion.com/p/3dfce072e82f812c843afed105630c98)
