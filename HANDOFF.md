@@ -25,7 +25,7 @@ Do not store secrets or private customer data here.
 
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
-- Dentlink DLDS / design-system Step 1 / DL-16466 resume: `projects/dentlink-fe-opportunities.md` (read the current resume checkpoint first)
+- Dentlink DLDS / design-system Step 1 / DL-16466 resume: `projects/dentlink-fe-opportunities.md` (read the current resume checkpoint first) — user-paused 2026-09-21; Figma comparison done; next is actual consumer-screen audit, only after resume request.
 - Dentlink web order feedback: `projects/dentlink-client-order-feedback.md`
 - Dentlink mobile app: `projects/dentlink-app.md`
 

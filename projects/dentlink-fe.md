@@ -50,6 +50,8 @@ Detailed implementation history remains in the relevant existing project file.
   Generic UI tsc has 578 baseline errors. Whole Step1, actual-device/screen-reader,
   staging and deployment remain open. The user requested only follow-up 1 this
   turn; follow-ups 2 (consumer screens/fonts) and 3 (fixes/regression) are unstarted.
+  Paused explicitly by the user on 2026-09-21; do not continue until asked.
+  Product 01d49c3cb is remote-verified and clean.
   Resume at 2 after reading the 2026-09-21 checkpoint in
   `projects/dentlink-fe-opportunities.md`; don't repeat the completed source audit.
   Explicit product commit/push and Git memory authorization continues, while
