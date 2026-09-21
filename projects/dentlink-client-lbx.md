@@ -9,9 +9,10 @@
   생성 코드 모두에서 확인됐다. 남은 백엔드 보충은 **Baby 생성 대상 주문 조회용
   별도 신규 API**다. 기존 `POST /admin/orders/search`를 확장하는 방식은 채택하지 않는다.
 - 신규 주문 API의 단일 연결부는
-  `admin/src/services/shipment/consolidation.orders.ts`다. 현재 빈 목록과 준비 중
-  상태를 제공하며 미확정 endpoint를 만들거나 가짜 주문 ID를 생성 요청에 넣지 않는다.
-  주문 다중 선택과 제출 payload는 구현되어 해당 함수와 준비 상태만 교체하면 된다.
+  `admin/src/services/shipment/consolidation.orders.ts`다. 사용자는 빈 목록이 아니라
+  **Office 선택 후 API 응답처럼 사용할 목데이터**를 원한다고 정정했다. 현재
+  예시 주문 5개를 제공하며 복수 선택·정상 생성 payload까지 이어진다. 미확정
+  endpoint는 만들지 않았고 API가 나오면 해당 함수 한 곳만 교체한다.
 - **사용자가 요청 금지의 의미를 명확히 정정했다:** 제품의 조회·생성·수정 코드는
   실제 API에 정상 연결한다. Codex가 테스트를 위해 생성·수정 요청을 실제 서버에
   보내지 말라는 뜻이다. 조회는 정상 수행하고 제품 코드에서 API를 막지 않는다.
@@ -41,6 +42,8 @@
 ## 환경별 기공소 정책
 
 - **prd: IDS, `labId=129` 하드코딩·고정.** UI도 IDS 선택 상태로 사용한다.
+- Baby/픽업 모두 운영에서는 같은 검색 입력 UI에 **`IDS (129)`를 disabled로 고정**한다.
+  초기의 일반 텍스트 표시를 후속 사용성 요청에 따라 입력 UI로 맞췄다.
 - **그 외 환경: 기공소 제한 없음.** 기존 이름 검색·선택 UI로 기공소를 선택한다.
 - 코드의 운영 환경 구분 관례는 `NEXT_PUBLIC_ENV === "production"`이다.
 - 선택/고정한 기공소 ID가 Baby 생성과 픽업 조회·요청에 반영된다.
@@ -72,8 +75,8 @@
 1. 환경 정책에 따른 기공소와 해당 Office를 선택한다. Office는 ID 직접 입력이
    아니라 **이름 검색/선택 → ID 보관** 방식이다.
 2. 선택한 기공소·Office의 **Baby 생성 가능 주문**을 별도 신규 API로 조회하고
-   여러 주문을 선택한다. API 전에는 연결부에서 빈 목록을 반환하고 준비 중임을
-   표시한다. 미확정 경로·응답을 합의된 계약인 것처럼 만들지 않는다.
+   여러 주문을 선택한다. API 전에는 연결부에서 예시 주문 5개를 반환한다.
+   미확정 경로·응답을 합의된 계약인 것처럼 만들지 않는다.
 3. Mother 번호 목록 조회에 `statuses: ["AVAILABLE", "BABY_REGISTERED"]`를 적용한다.
 4. `motherNumber`, `labId`, `officeId`, `orderIds`로 Baby 생성 계약을 구성한다.
 5. 성공 흐름은 모달을 닫고 기존 배송 목록으로 돌아간다. 목록 반영은 기존 재조회
@@ -191,6 +194,10 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
   `ConsolidationMotherForm.tsx`, `ConsolidationPickupForm.tsx`,
   `admin/src/lib/Shipment/useConsolidationForm.ts`,
   `admin/src/services/shipment/consolidation.query.ts`, `consolidation.orders.ts`.
+- 후속 모달 보완으로 `admin/src/components/EmployerFindDropdownList/EmployerFindDropdownList.tsx`와
+  `shared/ui/src/ShippingPickupUI/CommonUI/`의 DatePicker/Email/PhoneNumber/PickupPlace
+  4개 컴포넌트도 수정했다. `isLabel` 선택 prop의 기본값은 기존과 같고 Admin LBX에서만
+  false를 전달해 표의 항목명과 내부 라벨/placeholder가 겹치지 않게 했다.
 - 모달 3개는 기존 DataForm/검색/ComboboxDropdown을 재사용한다. 기공소·Office
   변경 시 하위 선택을 초기화하고 필수값/선택 목록 검증, 중복 클릭 방지와 오류
   표시를 적용했다. 제출 중에는 모달 닫기와 재진입에 의한 중복 요청도 방지한다.
@@ -208,6 +215,11 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - Mother 상태 배열은 `statuses=AVAILABLE&statuses=BABY_REGISTERED`처럼 반복
   쿼리로 직렬화한다. 성공 시 관련 목록/상세/query cache를 재조회하고 픽업은 기존
   `/pickup/outbound`로 이동한다. 기존 픽업 페이지 자체를 새로 작성하지 않았다.
+- 모달 3개는 폭 900px, 최소 높이 720px 기준으로 통일했다. 높이는 화면 높이에서
+  108px을 뺀 값으로 제한해 작은 화면에서는 본문을 스크롤할 수 있다.
+- Baby/Mother 번호 선택은 API 응답 목록을 쓰는 **검색 없는 SelectDropdown**이다.
+  'Baby가 연결된 Mother 번호가 없습니다' 등의 상시 빈 목록 안내를 제거했다.
+  조회 실패 및 필수 선택 오류는 유지한다.
 
 ## 제품 Git 상태와 검증 경계
 
@@ -217,14 +229,14 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - 사용자는 Swagger 생성 스크립트를 실행했다고 알렸다. 현재 수정된 제품 파일은
   `shared/models/src/Admin.ts`, `Lab.ts`, `Office.ts`, `data-contracts.ts` 4개다.
   생성 diff에는 LBX 외 변경도 섞여 있다. 위 4개 생성 파일의 사용자 변경
-  1968 insertions / 268 deletions를 보존했고 FE 구현은 별도 11개 파일에 있다.
+  1968 insertions / 268 deletions를 보존했고 FE 구현/모달 보완은 별도 16개 파일에 있다.
 - 생성 파일을 덮어쓰거나 되돌리지 않았고, 이 작업의 feature branch/worktree도
   만들지 않았다. 개인 메모리 작업 때문에 제품 저장소를 commit/push하지 않는다.
 - 코드/타입/로컬 UI 검증과 실제 백엔드 연동·배포 증거를 구분한다. 테스트에서
   실제 서버로 LBX 생성·수정 요청을 보내지 않았다. 운영 build/배포/실연동 QA는
   이번 완료 범위가 아니다.
 
-### 최종 로컬 검증
+### 초기 로컬 검증 — 모달 사용성 보완 전
 
 - Admin 전체 `tsc --noEmit --incremental false --pretty false`: exit 0, 진단 0.
 - 구현 11개 파일 ESLint: exit 0, 오류 0. 기존 `DataFilters.tsx`의 미사용 변수와
@@ -240,8 +252,9 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - 제품 코드의 정상 GET/POST 요청을 테스트 route에서만 응답했다. 개발 38회,
   운영 조건 35회를 테스트 내부 처리했고 실제 업무 서버 전송과 런타임 예외는 0건이다.
   운영 서버·실사용자 데이터에 대한 검증이 아니다. 외부 폰트 CSS는 테스트에서 차단했다.
-- **Baby 생성 성공의 최종 UI 검증은 미완성 주문 API 때문에 대기**다. 주문 다중 선택과
-  payload는 구현되어 있지만 실제 적격 주문을 조회할 수 없어 완료로 표시하지 않는다.
+- 이 초기 검증 당시에는 주문 연결부가 빈 목록이어서 Baby 생성 성공을 확인하지
+  못했다. 이후 사용자 요청으로 목데이터를 제공하고 아래 후속 UI 검증을 완료했다.
+  실제 적격 주문 API 연동 검증은 계속 대기다.
 - 로컬 증거:
   `/tmp/dentlink-lbx-qa/2026-09-21T09-10-46-220Z-development-81988/report.json`,
   `/tmp/dentlink-lbx-qa/2026-09-21T09-10-46-220Z-production-81989/report.json`.
@@ -250,13 +263,32 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - 검증용 Next 서버 3004/3005와 테스트 브라우저는 종료했다. 기존 사용자 3002
   서버와 다른 DLDS worktree는 건드리지 않았다.
 
+### 후속 모달 사용성 검증 — 2026-09-21
+
+- Admin 전체 타입 검사 exit 0. 수정한 Admin 6개 및 공유 UI 4개 파일 ESLint 오류·경고 0,
+  Prettier/diff 검사 통과. 루트와 공유 UI의 Storybook lint plugin 중복 로딩 때문에
+  각 영역의 설정으로 나누어 검사했다. 공유 UI는 `--no-eslintrc --config shared/ui/.eslintrc.cjs`
+  사용. DatePicker에 남아 있던 불필요한 string 타입 표기 3개도 제거했다.
+- 개발/운영 조건 각 5개 + 기타 픽업 위치 1개, **후속 UI 검증 11개 통과**.
+  세 모달 공통 크기, 검색 focus 시 라벨 겹침 없음, 운영 고정 입력, Office 후
+  예시 주문 복수 선택, Mother 검색 입력 없음/상태별 목록/빈 안내 제거를 확인했다.
+- Baby 생성 payload, Mother 생성, 픽업의 Office 제외/기공소 Baby 복수 선택/날짜시간/
+  전화/이메일/기타 위치와 기존 목록·상세 이동을 테스트 응답으로 검증했다.
+  실제 서버 생성·수정 요청은 0건, 런타임 예외와 중복 key 경고도 0건이다.
+- 최종 증거:
+  `/tmp/dentlink-lbx-qa/2026-09-21T09-48-09-829Z-development-14109/report.json`,
+  `/tmp/dentlink-lbx-qa/2026-09-21T09-48-11-543Z-production-14140/report.json`,
+  `/tmp/dentlink-lbx-qa/2026-09-21T09-50-02-216Z-development-15747/report.json`.
+- 예시 주문은 실제 적격 주문이 아니다. 생성 wrapper에 별도 요청 차단을 추가하지
+  않았으며, 테스트의 POST 성공 응답만 브라우저 외부 QA route에서 대체했다.
+
 ## 남은 일과 다음 시작점
 
 1. 재개 시 개인 컨텍스트와 제품 Git을 갱신하되 현재 사용자 생성 변경과 구현
    미커밋 변경을 보존한다. 이 기능을 아직 미착수로 취급하지 않는다.
 2. Baby 대상 주문용 별도 API가 나오면 명세/생성 코드를 확인하고
-   `consolidation.orders.ts`의 함수와 준비 상태만 교체한다. 미완성이라 현재
-   Baby 생성의 전체 실제 주문 선택 흐름은 완료되지 않았다.
+   `consolidation.orders.ts`의 목 응답 함수만 실제 조회/응답 변환으로 교체한다.
+   현재 예시 주문으로 UI 흐름은 확인했고 실제 적격 주문 연동이 남았다.
 3. 조회·생성 wrapper에 임시 차단을 다시 넣지 않는다. Codex의 검증에서 생성·수정
    실전송을 피하라는 조건을 제품 기능 제한으로 확대하지 않는다.
 4. 실제 연동 확인과 제품 commit/push/PR/배포는 각각 허용된 범위에서 진행한다.
@@ -276,3 +308,6 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - 구현 중 사용자가 실제 요청 제한을 세 차례 정정했다. **제품 API는 정상 연결,
   테스트 시 생성·수정 실전송만 피함, 임시는 미완성 주문 API 한 곳뿐**이라는 최종
   지시가 이전의 모든 요청 차단/모의 성공 흐름 해석보다 우선한다.
+- 후속 모달 피드백: 크기 통일/확대, 내부 라벨 겹침 제거, 운영 IDS를 검색 UI와
+  같은 고정 입력 형태로 표시, 주문 조회는 빈 응답 대신 목데이터, Mother는 검색 없는
+  선택형 드롭다운, 불필요한 빈 목록 안내 제거. 이 요청에 맞춰 수정/검증했다.
