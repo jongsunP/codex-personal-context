@@ -81,6 +81,7 @@ For detailed current state, read:
   off their verified state before the new top-level session becomes the main
   coordination point.
 - Personal coordination checkpoint: `projects/dentlink-fe.md`
+- Selected DLDS / AI harness project and resume checkpoint: `projects/dentlink-fe-opportunities.md`. When resuming DLDS or DL-16466, start with its latest resume section.
 - Detailed repository checkpoints remain in their existing web and app project
   files and must be verified against live Git.
 

@@ -44,11 +44,19 @@ Detailed implementation history remains in the relevant existing project file.
   E2E 7 passed at the implementation commit after reproducing and fixing a real
   tablet Escape/focus race. Generic UI tsc still has the same 578 baseline errors,
   with no new diagnostics. Remaining icon originals (67) and logo variants (18) need
-  Figma access; MCP is quota-limited and the browser requires login. Whole Step1,
+  Figma comparison. On 2026-09-21 official metadata and one previously blocked
+  node screenshot succeeded; the old quota block is historical, not confirmed
+  current. See the 2026-09-21 resume checkpoint before continuing. Whole Step1,
   real-device/screen-reader, staging and deployment are not complete. The user
   explicitly requests autonomous feasible work through product commit/push and
   Git memory closeout. PR/merge/deploy and AI harness remain separate. See the
   detailed checkpoint for source hashes, failed-run diagnosis and remaining scope.
+  Resume DLDS/DL-16466 with the saved order: remaining Figma comparison → actual
+  consumer-screen audit → evidence-based fixes/regression → Step1 handoff to AI.
+  These follow-ups are not started. The user prioritizes resumability across
+  usage interruptions/days/devices over finishing in one run. Save concrete next
+  items and verified product/context commits at meaningful intermediate points,
+  not only the end. Refresh account usage; historical 56% is not current quota.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.
