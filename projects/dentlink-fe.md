@@ -33,6 +33,23 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Context Routing
 
+- On 2026-09-21 the user requested a new task in the existing
+  `메인 프로젝트 폴더` (`/Users/parkjongsun/Documents/ChatGPT/FE`) for
+  [DL-16279 — LBX 작업](https://innovaid.atlassian.net/browse/DL-16279).
+  Created `DL-16279 요구사항 검토`, task
+  `01a0c2c0-3e4d-7a42-867d-9c80f3fee241`, using the saved local folder.
+  Its first scope is understanding
+  [DL-16387 — 어드민 UI 초안 작업](https://innovaid.atlassian.net/browse/DL-16387),
+  related requirements and the existing implementation through read-only
+  inspection. No implementation, product Git changes, new branch/worktree,
+  Jira/PR changes, test run or deployment is authorized by this intake.
+  The startup prompt was delivered automatically; the user need not paste it.
+  Parent Jira read succeeded: LBX is a shipping-cost-reduction test project;
+  DL-16387 appears as a completed subtask. Its direct detail request returned
+  HTTP 504, so the new task must verify the body/comments before making scope
+  conclusions. The task started and acknowledged the analysis-only boundary.
+- Detailed LBX findings belong to that feature task's checkpoint once verified;
+  this main task retains scope coordination. Existing DLDS work stays paused.
 - The selected FE project is DLDS cleanup → AI prompt/harness refinement →
   an editor only if useful later. Use the [latest meeting](https://app.notion.com/p/3dfce072e82f812c843afed105630c98)
   and [implementation checkpoint](dentlink-fe-opportunities.md). Step 1 is in
