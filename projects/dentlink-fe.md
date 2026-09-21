@@ -54,8 +54,10 @@ Detailed implementation history remains in the relevant existing project file.
   and generated code. The separate Baby-eligible-order endpoint is now confirmed
   as GET /admin/orders/shippable with required labId and officeId. Its real API
   connection replaces the sample order data, including pagination aggregation.
-  The user authorized local implementation; the Admin additions remain
-  uncommitted in the product checkout. Product reads and writes use normal APIs;
+  The user authorized a separate feature branch and commit/push at closeout:
+  feature/DL-16387, commit 458ca7153, pushed and clean. Work stops today; the next session must
+  review the full implementation and cross-screen UI/UX before deployment.
+  No PR, merge or deployment was requested today. Product reads and writes use normal APIs;
   the user clarified that only test-time mutation requests must not reach the
   server. Product mock transport was removed. This file retains coordination only.
   Existing DLDS work stays paused.

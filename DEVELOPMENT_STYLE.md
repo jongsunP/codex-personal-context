@@ -298,6 +298,12 @@ relative complexity.
   answer is a rollback or a smaller project-aligned correction.
 - After feedback, review in three scopes: today's edits, the affected app or
   feature, then the full branch/shared blast radius.
+- Before deployment, review the completed feature as a whole, including UI/UX,
+  instead of relying only on field-by-field fixes and type/lint checks. Compare
+  related screens and modals for layout, prerequisite guidance, loading/error/
+  empty states, selection resets, disabled controls, submit eligibility, and
+  success/failure transitions. The same state should behave consistently across
+  the feature. Record this review as the next step when work pauses before deployment.
 - Run type/lint after a coherent edit set instead of after every small change.
   Run builds when requested or when the risk justifies them.
 - Report existing warnings separately from failures and state test gaps rather
