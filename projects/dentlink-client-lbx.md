@@ -218,8 +218,8 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - 모달 3개는 폭 900px, 최소 높이 720px 기준으로 통일했다. 높이는 화면 높이에서
   108px을 뺀 값으로 제한해 작은 화면에서는 본문을 스크롤할 수 있다.
 - Baby/Mother 번호 선택은 API 응답 목록을 쓰는 **검색 없는 SelectDropdown**이다.
-  'Baby가 연결된 Mother 번호가 없습니다' 등의 상시 빈 목록 안내를 제거했다.
-  조회 실패 및 필수 선택 오류는 유지한다.
+  상시 빈 목록 안내를 제거했고, 최신 사용자 요청으로 **빈 목록 문구는 드롭다운
+  내부에 표시**한다. 조회 실패 및 필수 선택 오류는 유지한다.
 
 ## 제품 Git 상태와 검증 경계
 
@@ -229,7 +229,7 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - 사용자는 Swagger 생성 스크립트를 실행했다고 알렸다. 현재 수정된 제품 파일은
   `shared/models/src/Admin.ts`, `Lab.ts`, `Office.ts`, `data-contracts.ts` 4개다.
   생성 diff에는 LBX 외 변경도 섞여 있다. 위 4개 생성 파일의 사용자 변경
-  1968 insertions / 268 deletions를 보존했고 FE 구현/모달 보완은 별도 18개 파일에 있다.
+  1968 insertions / 268 deletions를 보존했고 FE 구현/모달 보완은 별도 21개 파일에 있다.
 - 생성 파일을 덮어쓰거나 되돌리지 않았고, 이 작업의 feature branch/worktree도
   만들지 않았다. 개인 메모리 작업 때문에 제품 저장소를 commit/push하지 않는다.
 - 코드/타입/로컬 UI 검증과 실제 백엔드 연동·배포 증거를 구분한다. 테스트에서
@@ -296,6 +296,28 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 - 증거: `/tmp/dentlink-lbx-qa/2026-09-21T10-02-25-971Z-development-26827/report.json`.
   검사 스크립트는 `/tmp/dentlink-lbx-qa/shippable-unit.cjs`, `shippable-browser.cjs`다.
   테스트용 서버 3004는 종료했고 기존 사용자 서버 3002는 건드리지 않았다.
+
+### 모달 상태·제출 조건 통일 — 2026-09-21
+
+- Baby/Mother 번호 목록이 비면 드롭다운 내부에 '선택할 수 있는 Mother 번호가
+  없습니다.'를 표시한다. 조회 중/오류와 빈 목록을 구분하고 검색 없는 선택 UI를 유지한다.
+- Baby는 기공소·Office·복수 주문·Mother가 현재 조회 목록에 존재하고 필수 조회가
+  완료됐을 때만 활성화된다. Mother는 현재 목록에 존재하는 번호 선택 후 활성화된다.
+- 픽업은 배송 선택과 기존 일시/위치/연락처 검증이 모두 유효해야 활성화된다.
+  기타 위치·연락처를 비우면 다시 비활성화한다. 조회/더 보기 중에는 제출을 막고
+  불러오는 상태를 표시한다. 제출 중 spinner/중복 방지/실패 시 입력 유지 흐름은 유지한다.
+- `DataForm.confirmDisabled`를 기존 BaseForm disabled로 전달하고 공용
+  SelectDropdown/ComboboxDropdown에 선택적 `emptyMessage`를 추가했다. 데스크톱
+  빈 목록은 두 드롭다운 모두 짧은 안내 영역으로 표시한다. 모바일 기존 간격은 유지한다.
+- Admin 전체 타입 검사, 변경 6개 파일 ESLint, Prettier와 diff 검사 통과.
+  생성 코드 4개 사용자 변경은 그대로 보존했다. 제품 commit/push/배포는 하지 않았다.
+- 별도 브라우저 fixture 검증 7개 통과: 두 Mother 빈 목록, Baby 필수 선택/초기화,
+  Mother 선택 전후 버튼, 조회 중/오류, 픽업 빈 목록, 픽업 필수값 입력/삭제,
+  생성·수정 요청과 런타임 예외/중복 key 경고 0건. 실제 백엔드 QA는 아니다.
+- 초기 테스트 2회는 기존 영문 Others와 readonly input을 잘못 찾은 locator 실패였고
+  테스트만 정확한 레이블/placeholder로 수정했다. 최종 증거:
+  `/tmp/dentlink-lbx-qa/2026-09-21T10-08-28-243Z-development-32099/report.json`.
+  스크립트는 `/tmp/dentlink-lbx-qa/form-state-browser.cjs`에만 있다.
 
 ## 남은 일과 다음 시작점
 
