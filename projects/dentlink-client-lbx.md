@@ -380,6 +380,9 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 
 ## 2026-09-22 개발 서버 검증용 develop PR
 
+- 이후 사용자 요청으로 개발용 worktree는 clean 상태와 원격 HEAD 일치를 확인한 뒤 제거했다.
+  로컬 `feature/DL-16387-develop` 브랜치, 원격 브랜치, PR #4624는 유지한다.
+  이후 개발용 수정은 필요 시 기존 제품 checkout에서 해당 브랜치로 전환해 작업한다.
 - 원래 `release/v1.87.0` 대상 PR #4623은 변경하지 않았다. 개발용 브랜치는
   별도 worktree `/Users/parkjongsun/Repository/dentlink-client-lbx-develop`에서
   `origin/develop` (`b15c2c492`)을 출발점으로 만들었다.
