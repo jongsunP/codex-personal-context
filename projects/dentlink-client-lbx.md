@@ -1,11 +1,15 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-09-22, release/v1.87.0 대상 PR 생성 / 배포 전 전체 검토 대기
+## 현재 체크포인트 — 2026-09-22, 릴리스·개발 대상 PR 각각 생성 / 배포 전 전체 검토 대기
 
 - `feature/DL-16387`를 `release/v1.87.0`에 맞춰 갱신하고
   [PR #4623](https://github.com/Innvoaid/dentlink-client/pull/4623)을 열었다.
   원격과 로컬 HEAD는 `a7c45172d51f98fb837b52551bbd2c9aa4106a1d`로 일치하며
   제품 작업 트리는 clean이다. PR은 열려 있고 병합·배포는 하지 않았다.
+- 개발 서버 검증용으로 `origin/develop`에서 별도 `feature/DL-16387-develop`
+  브랜치를 만들고 [PR #4624](https://github.com/Innvoaid/dentlink-client/pull/4624)를
+  열었다. HEAD `5beef2133946c97df8bc18856c35d4684cddc860`, 원격과 일치하며
+  작업 트리는 clean이다. 릴리스 PR #4623과 개발 PR #4624 모두 OPEN이다.
 - 2026-09-21 구현 후 요청받은 배송 필터 위치·LBX 명칭·픽업 연락처 초기 오류
   표시를 수정했다. 전체 UI·UX/실제 흐름 검토는 여전히 배포 전 필수 다음 작업이다.
   실제 서버로 LBX 생성·수정 테스트 요청을 보내지 않는 조건도 유지한다.
@@ -373,6 +377,27 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
   실제 생성·수정 API 요청과 배포 전 전체 UI·UX 검토는 수행하지 않았다.
 - [PR #4623](https://github.com/Innvoaid/dentlink-client/pull/4623)은
   `feature/DL-16387` → `release/v1.87.0`, OPEN. 원격 HEAD와 작업 트리 clean 확인.
+
+## 2026-09-22 개발 서버 검증용 develop PR
+
+- 원래 `release/v1.87.0` 대상 PR #4623은 변경하지 않았다. 개발용 브랜치는
+  별도 worktree `/Users/parkjongsun/Repository/dentlink-client-lbx-develop`에서
+  `origin/develop` (`b15c2c492`)을 출발점으로 만들었다.
+- 릴리스 병합 커밋은 제외하고 LBX 기능/후속 수정 커밋만 cherry-pick했다.
+  `develop`의 생성 API 파일은 필요한 타입이 이미 있어 대량 생성 diff가 PR에 남지 않았다.
+  `Admin.ts`에는 `isConsolidated` 필드만 추가하고, `data-contracts.ts`는
+  기존 예시 주석을 유지해 충돌을 해결했다.
+- `develop`의 DLOS Button API에 맞게 배송 문서 다운로드 버튼을 조정했다.
+  새 worktree의 Clinic/Lab 타입 검사를 위해 PNG ambient 타입 선언을 보완했다.
+  개발용 브랜치 커밋: `044dea007`, `f7e384e6d`, `5beef2133`.
+- Clinic/Lab/Admin 타입 검사, 변경 파일 ESLint/Prettier, pre-push 전체 lint와
+  공용 coverage 검사가 통과했다. 기존 전체 lint 경고는 남아 있지만 오류 0이다.
+  worktree에 없는 Git 제외 `coverage-baseline.json`은 기존 checkout의 같은
+  기준 파일(2026-04-23)을 복사해 검사했고 새 기준을 생성하지 않았다.
+- [PR #4624](https://github.com/Innvoaid/dentlink-client/pull/4624)는
+  `feature/DL-16387-develop` → `develop`, OPEN. 실제 개발 서버 배포,
+  DLOS 리디자인 UI 전체 확인, LBX 생성·수정 API 실제 요청은 수행하지 않았다.
+  두 PR의 향후 보완을 혼동하지 않도록 대상 브랜치별로 갱신해야 한다.
 
 ## 남은 일과 다음 시작점 — 배포 전 전체 검토부터
 
