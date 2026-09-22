@@ -33,6 +33,18 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Context Routing
 
+- On 2026-09-22 the user requested a separate task for
+  [DL-16443 — 관리자 피드백 리스트 페이지](https://innovaid.atlassian.net/browse/DL-16443).
+  Created `DL-16443 관리자 피드백 목록`, task
+  `01a0c83d-bef3-7c43-962d-9f6b2158695b`, in the existing FE project.
+  It owns the web Admin `/feedbacks` list/filter and CS 관리 menu, using the
+  newly added API contract and existing Admin patterns; detail is deferred.
+  The user authorized creating `feature/DL-16443` from current master in the
+  existing web main checkout. At intake that checkout was clean on LBX
+  `feature/DL-16387` with one local-only commit and an active LBX writing task.
+  The new task was instructed to do read-only preparation until LBX releases
+  checkout ownership, then reverify Git and create the requested branch.
+  No product branch or file was changed by this top-level task.
 - On 2026-09-21 the user requested a new task in the existing
   `메인 프로젝트 폴더` (`/Users/parkjongsun/Documents/ChatGPT/FE`) for
   [DL-16279 — LBX 작업](https://innovaid.atlassian.net/browse/DL-16279).
