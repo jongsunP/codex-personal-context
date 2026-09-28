@@ -113,8 +113,10 @@ Detailed implementation history remains in the relevant existing project file.
 
 - 2026-09-28 사용자 요청으로 통합알림센터의 선행 작업인
   [DL-16317 권한관리](https://innovaid.atlassian.net/browse/DL-16317)를 별도 준비한다.
-  `권한관리 프로젝트 폴더`와 초기화 후 대기용 프롬프트를 준비했으며, 앱의 프로젝트
-  등록을 기다리고 있다. 신규 task 생성·전달과 실제 업무 착수는 아직 하지 않았다.
+  앱 프로젝트 `권한관리 프로젝트 폴더`에 task `권한관리 초기 설정`
+  (`01a0e6fa-384c-7671-abb8-53d33c42c738`)를 생성해 프롬프트를 전달했다.
+  공통 지침 읽기 완료와 idle 대기를 확인했고 실제 업무는 미착수다. 중복 폴더를 정리해
+  등록 경로인 `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트 폴더 2` 하나만 사용한다.
   자세한 시작 상태는 [권한관리 체크포인트](dentlink-permission-management.md)에 둔다.
 - On 2026-09-22 the user requested a separate task for
   [DL-16443 — 관리자 피드백 리스트 페이지](https://innovaid.atlassian.net/browse/DL-16443).
