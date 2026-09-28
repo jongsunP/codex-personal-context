@@ -33,7 +33,7 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## 로컬 환경·메모리 정리 — 2026-09-28
 
-- **후속 DLDS:** 아래 환경 정리 이후 사용자의 재개 요청으로 사용 방식·영향 확인을 마쳤습니다. 현재는 다음 구현 단계 전 대기이며 자세한 상태는 [DLDS 체크포인트](dentlink-fe-opportunities.md)를 봅니다. 아래의 일시중단/HEAD는 당시 기록입니다.
+- **후속 DLDS:** 아래 환경 정리 이후 사용자의 재개 요청으로 사용 방식·영향 확인을 마쳤습니다. 이어서② 남은 구현·수정을 마쳤고③ 실제 소비 화면 재검증 전 대기입니다. 자세한 상태는 [DLDS 체크포인트](dentlink-fe-opportunities.md)를 봅니다. 아래의 일시중단/HEAD는 당시 기록입니다.
 
 - 후속 DL-16534 QA의 Rating 클릭 개선과 작성자 이름 검색은 PR #4636으로
   release/v1.87.0 `ae1145676`에 병합됐다. 사용자 요청에 따라 로컬
@@ -147,18 +147,18 @@ Detailed implementation history remains in the relevant existing project file.
   PR #4623은 미병합 종료됐고 작업 브랜치를 보존한 채 대기한다.
   제품 API는 정상 연결하며 실제 서버 생성·수정 요청은 테스트에서 실행하지 않는다.
 - DLDS의 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의
-  **2026-09-28 절**이 정본입니다. 사용자가 재개를 요청하되 후속 순서를
-  ① 기존 사용 방식·영향 확인 → ② 남은 구현·수정 → ③ 수정 후 재검증으로
-  나누고 **①만 실행**하도록 했습니다. 대표 화면·폰트·사용 계약 확인을 마쳤고,
-  Tooltip 키보드 접근 및 중첩 Calendar/Portal Escape 문제를 기록했습니다.
-  공식 수정 전 local E2E3개는 통과했으며 실행 코드는 수정하지 않았습니다.
-  전용 worktree `dentlink-client-dlds`, `feature/DL-16466`의 문서 HEAD는
-  `1a6518147cdaf9ff082da69221b03fc7264b0ce2`입니다. ②·③은 다음 요청부터
-  진행합니다. 전체 DLDS 정비는 미완료이며,
-  AI 프롬프트·하네스와 에디터는 미착수입니다.
-  재개 시 두 Git을 pull하고 제품 DESIGN_COVERAGE와 위 정본의 다음 작업을
-  확인합니다. 완료된105개 node Figma 조사를 반복하지 않습니다. PR·병합·배포는
-  별도 범위이며 환경·인증·로컬 로그는 Git으로 이동하지 않습니다.
+  **2026-09-28 최상단 절**이 정본입니다. 후속 순서
+  ① 기존 사용 방식·영향 확인 → ② 남은 구현·수정 → ③ 수정 후 재검증 중
+  **①·②를 마쳤고③은 다음 요청부터** 진행합니다. Tooltip 안내 접근,
+  중첩/Portal 준비 중 Escape·메뉴 초점 복귀, Checkbox·Stepper·Slider·Tooltip
+  원본 상태와 신규 아이콘64개·로고16개를 반영했습니다.
+  `dentlink-client-dlds`, `feature/DL-16466`, HEAD
+  `6a841dada60a7c5d93a4aaa6d83a9566fc3a9583`. UI189·아이콘2·최종focused E2E3
+  통과이며 제품 전체·실기기 재검증과 구분합니다. 전체 DLDS 정비는 미완료,
+  AI 하네스·에디터·PR·병합·배포는 별도입니다.
+  재개 시 두 Git을 pull하고 제품 DESIGN_COVERAGE와 위 정본의③ 목록을
+  따릅니다. 완료된105개 node Figma 조사를 반복하지 않으며 환경·인증·로컬
+  로그는 Git으로 이동하지 않습니다.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.

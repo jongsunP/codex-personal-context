@@ -1,7 +1,50 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
 
-## 현재 체크포인트 — 2026-09-28 · 사용 방식·영향 확인 완료, 수정 전 대기
+## 현재 체크포인트 — 2026-09-28 · ② 남은 구현·수정 완료, ③ 재검증 대기
+
+### 범위와 저장 상태
+
+- **최신 요청:** “다음 2단계 진행”. 이번 번호는 **① 기존 사용 방식·영향 확인 → ② 남은 구현·수정 → ③ 수정 후 재검증**입니다. 전체 프로젝트의 DLDS 정비→AI 하네스→에디터 번호와 구분합니다.
+- **① 완료 / ② 확인된 구현 범위 완료 / ③ 미착수:** 구현에 필요한 unit·카탈로그·문제 화면의 제한된 확인은 수행했습니다. 전체 소비 화면·기기별 재검증을 대신하지 않습니다. 전체 DLDS 정비 완료나 AI 하네스 착수로 해석하지 않습니다.
+- **제품:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`, 이번 구현 HEAD `6a841dada60a7c5d93a4aaa6d83a9566fc3a9583`. 시작 HEAD `1a6518147cdaf9ff082da69221b03fc7264b0ce2`. 기존 자율 구현·제품 commit/push·Git 메모리 정리 승인을 적용했으며 PR·병합·배포는 하지 않았습니다.
+- **저장 확인:** 정상 commit hooks의 세 앱 타입 검사와 push hooks의 앱 lint·공유 coverage 검사를 통과해 제품을 푸시했습니다. 로컬 HEAD·origin 추적·원격 실조회 SHA 일치, ahead/behind0/0·clean을 확인했습니다. Jira DL-16466에 현재 구현·검증·후속③과 커밋을 반영하고 반환 본문 일치·진행 중 상태를 확인했습니다. Notion 회의 본문·Sites는 변경하지 않았습니다.
+- **정본:** 제품 `shared/ui/DESIGN_COVERAGE.md`, `README.md`, `design-audit/FIGMA_REMAINING_AUDIT.md`와 아이콘/로고 TSV·provenance. 개인 재개 상태는 이 파일이 정본입니다. Figma 원본105node·SVG119개 snapshot은 변경하지 않았습니다.
+
+### 반영한 구현
+
+- **Checkbox:** 일반 hover와 선택형 `checkmarkOnly`24px 추가. customIcon·부분 선택·숫자 우선, native disabled/readOnly/콜백, 기존 기본 크기와 소비 class 보존.
+- **Stepper·Slider:** text/small만32px(문자24px·버튼32px), input/small40px·기본48px 유지. Slider native16px thumb·그림자·track 안쪽7px 끝점·최소 활성선4px 반영. 기존 사진 회전 범위(-180~180/step5)·콜백·plain 버튼 유지.
+- **Tooltip:** 선택형 BASIC/HELP280px·radius6·opacity.9·padding12/12x16·무화살표, 아이콘/닫기/도움말 링크 카탈로그 조합 추가. INFO/TEXT/NONE·명시폭·기본300px 유지. disabled 자식을 키보드 진입점으로 오인하지 않게 수정하고 Clinic 결제 이력에 `triggerAriaLabel`을 지정했습니다.
+- **Modal/Popup/PopupMenu:** 실제 React 부모·자식 관계의 Escape를 자식부터 처리하고, 같은 native event 중 자식이 즉시 unmount돼도 부모까지 닫히지 않게 했습니다. fixed Portal 메뉴의 Escape·열기 버튼 복귀 추가. 마지막 조사에서 발견한 **isOpen commit 뒤 Portal DOM 준비 전** 공백도 `openScopes`와 기존 focus scope 분리로 보완했습니다. 닫힘/숨김 자식 제외·StrictMode·legacy 비중첩 sibling 계약·trapFocus=false 기본값은 유지합니다.
+- **자산:** 원본 아이콘64개+로고16개 신규 export, 총532개. 로고18변형 중2개는 기존 재사용. 기본 도형3개는 CSS 조합/provenance로 제공합니다. 기존 SVG427개·TSX452개와 snapshot 바이트 보존. 5개 node의 축약 배치 누락은 같은 snapshot의 referenceLayout로 복원하고 provenance에 근거·행렬·해시 기록. 기존 제품 로고 사용처는 교체하지 않았습니다.
+- **카탈로그:** 기존28항목 안에 신규 상태·props·코드 예시·로고18변형/원본 비율과 기본 도형을 연결했습니다. 공통 폰트·radius.full·달력 daySize·focus trap의 전역 기본값은 바꾸지 않았습니다. 좌우 화살표 묶음의 용도는 여전히 미확정이므로 수량 Stepper로 임의 통합하지 않았습니다.
+
+### 검증과 한계
+
+- 최종 UI **189개/22파일**, 아이콘 원본 연결·재생성 **2개** 통과. 전체 원본 SVG507개를 재생성한 TSX와 저장본 byte 일치. 원본/생성물80개×1배/2배 래스터160회 및 비교판 확인. 색/좌표 반올림 차이는 기존 원본과 구분해 기록했습니다.
+- 카탈로그 strict 타입·scoped lint·Vite build 통과. 새 코드에 대해 Clinic/Lab/Admin 타입과 push hooks를 실행했습니다. 일반 UI `tsc`의 과거 baseline578건은 이번에 재측정하지 않았고 passing proof로 쓰지 않습니다. 기존 build chunk warning·PopupMenu hook dependency warning 등은 새 통과 범위와 구분합니다.
+- 카탈로그 Chromium에서 Checkbox 기본/hover·Stepper text32/input40(transition 종료 후), Tooltip BASIC/HELP 크기·닫기/링크·disabled 안내, Slider Arrow/Home/End·중앙 클릭·끝점 drag, 로고18개 렌더링 확인. 이는 모든 소비 화면·브라우저 엔진 검증이 아닙니다.
+- 실제 Clinic 결제 이력: 이름 있는 disabled 안내10개가 보인 표본에서 Tab 진입/안내 표시/Escape 닫기·native disabled 유지 확인. My Office: Leave를 실행하지 않고 Escape로 메뉴만 닫기/trigger 복귀, 다음 Escape 부모 닫기 확인. Admin 방문 요청: 달력2→1/2026-09-29 선택값·Done활성 유지, 다음1→0, 다시 열면 날짜 비움/Done비활성 확인. 실제 저장·전송·탈퇴 요청은 하지 않았습니다.
+- 위 수동 조사에서는 쓰기 요청을 차단했으며 Admin 조회 POST `/admin/chats/search`도3회 차단되어 Network Error2개가 기록됐습니다. 네트워크 전체 정상·무경고 결과가 아닙니다. 마지막 Portal 공백 수정은 실제 Modal/DateField/Portal 회귀test에서 수정 전 실패/수정 후 통과를 확인했습니다.
+- 최종 공식 focused E2E3개: `2026-09-28T06-00-29-021Z-0242b297`; 실패/flaky/skip/미실행/전역오류0, 실행 전후 source 일치 `79ae1bafbbdecdf22244539658e62fc27b9274a93257cbd4235c2fc395749ac5`. Clinic Export desktop/tablet와 Admin SMS 확인창이며 local FE+DEV API입니다. 이전 run `2026-09-28T05-52-14-971Z-b86eff62`도3pass였으나 최종 Portal 수정 전 결과이므로 최종 근거와 구분합니다.
+
+### 다음 시작점 — ③ 수정 후 실제 화면 재검증
+
+1. 개인 컨텍스트와 위 제품 branch를 pull하고 status/HEAD를 확인합니다. 이 체크포인트와 제품 DESIGN_COVERAGE를 먼저 읽고, 완료된 Figma105node 조사를 반복하지 않습니다.
+2. 변경된 공통 UI의 실제 Clinic/Lab/Admin 화면을 대표 조합과 상태별로 확인합니다. 사진 편집 Slider의 값·drag·끝점·모바일, Checkbox 옵션/비활성/hover, 주문 NUMBER·Lab 추가비용 Stepper, Tooltip 기존 명시폭/TEXT/NONE/강제 안내, Modal/Popup/Calendar/Portal의 빠른 열기·닫기/값 유지/포커스 회귀를 봅니다.
+3. 앱별 폰트400/500/600·다국어 줄바꿈, 반경/Calendar40·선택형46·모바일 Drawer, sandbox iframe, 선택형 focus trap 적용 범위를 이어서 확인합니다. 폰트400→500·radius50%→1000px·daySize40→46·trapFocus 전역 전환을 전제하지 않습니다.
+4. Clinic DSO `/organizations/billings`는 이전 계정403으로 실제92일 범위 UI 미검증입니다. 접근 가능 환경만 요청하며 나머지 검증을 진행할 수 있습니다. 실휴대폰·스크린리더·다른 브라우저 엔진은 증거를 별도로 기록합니다.
+5. 발견한 회귀만 근거에 맞게 수정·검증하고 전체 DLDS1단계의 완료/의사결정 필요 항목을 정리합니다. AI 프롬프트·하네스와 에디터는 별도 요청/단계로 남깁니다.
+
+### 재개 환경
+
+- 카탈로그: 이 코드가 있는 체크아웃 루트에서 `pnpm dev:ui` → `http://127.0.0.1:5177`. 명령과 종료법은 shared/ui/README.md에 있습니다. 이번에 띄운 카탈로그·제품 서버/브라우저·계정 잠금은 종료·해제했습니다.
+- 검사: `pnpm test:ui`, `pnpm --filter @dentlink/icons test`, `pnpm --filter @dentlink/ui exec tsc -p tsconfig.catalog.json`, 필요 시 공식 E2E runner. 계정은 동시 사용을 피하고 인증값을 출력하지 않습니다.
+- Git은 코드·기록만 옮깁니다. `/tmp/dlds-step2`, `/tmp/dlds-icons-0928`, `/tmp/dlds-overlay-race-0928`, `e2e-runs`, `.env`, node_modules, 로그인, 실행 프로세스는 다른 기기로 자동 이동하지 않습니다. 개인 데이터/인증을 Git에 넣지 않습니다.
+
+
+## 이전 기록 — 2026-09-28 · ① 사용 방식·영향 확인 완료
 
 ### 현재 범위와 저장 위치
 
