@@ -35,12 +35,12 @@ Detailed implementation history remains in the relevant existing project file.
 
 - **후속 DLDS:** 아래 환경 정리 이후 사용자의 재개 요청으로 사용 방식·영향 확인을 마쳤습니다. 현재는 다음 구현 단계 전 대기이며 자세한 상태는 [DLDS 체크포인트](dentlink-fe-opportunities.md)를 봅니다. 아래의 일시중단/HEAD는 당시 기록입니다.
 
-- 후속 DL-16534 QA 요청으로 웹에 `feature/DL-16534`와
-  `/Users/parkjongsun/Repository/dentlink-client-feedback-qa`가 새로 생성됐다.
-  Rating 클릭 개선과 작성자 이름 검색은 `9aea3d0e0`로 push했고
-  release/v1.87.0 대상 PR #4636이 OPEN이다. PM 정정으로 의사명은 제외하고 작성자
-  필터를 추가했으며 나머지 백엔드 작업은 이번 배포 필수가 아니다.
-  이 worktree는 clean이지만 진행 중인 QA 환경이므로 정리 대상이 아니다. 상세 상태는
+- 후속 DL-16534 QA의 Rating 클릭 개선과 작성자 이름 검색은 PR #4636으로
+  release/v1.87.0 `ae1145676`에 병합됐다. 사용자 요청에 따라 로컬
+  `feature/DL-16534`와 `/Users/parkjongsun/Repository/dentlink-client-feedback-qa`를
+  정리했다. 원격 feature는 보존했고 기본 checkout/LBX 및 DLDS는 변경하지 않았다.
+  PM 정정으로 의사명은 제외했으며 나머지 백엔드 작업은 이번 배포 필수가 아니다.
+  새 worktree는 꼭 필요한 경우에만 생성하며 기존 checkout을 우선한다. 상세 상태는
   [피드백 QA 체크포인트](dentlink-client-order-feedback.md)를 참조한다.
   아래 목록은 이 후속 작업 이전 정리 시점의 기록이다.
 - 사용자가 LBX 외 작업까지 로컬 브랜치·worktree·메모리를 확인하고 불필요한 항목을
@@ -68,6 +68,13 @@ Detailed implementation history remains in the relevant existing project file.
   LBX와 DLDS는 사용자의 재개 지시가 있을 때만 이어간다.
 
 ## Release Stage Checkpoint — 2026-09-28
+
+- **최신 전달:** 사용자 요청으로 원격 stage(`7c4255f7b`)를 삭제하고 원격 master
+  `de2ffdd9e`에서 다시 생성했다. 최신 release/v1.87.0 `ae1145676`을 새 stage로
+  전달하는 [PR #4637](https://github.com/Innvoaid/dentlink-client/pull/4637)을
+  생성했다. 전체 릴리즈 19개 commit/86개 file이며 직전 stage 이후 QA #4635/#4636을
+  포함한다. PR 병합·스테이징 배포는 미실행이다. 이전 stage는 local recovery ref
+  `refs/codex-backup/stage-20260928-7c4255f7b9fd`로 보존했다. 아래는 이전 전달 이력이다.
 
 - 후속 종료 확인: 사용자가 PR #4634를 병합했고 stage는
   `7c4255f7b9fd8efb2cc87978ed26ac8ef49a85e2`다. release `c07fc181a`와 tree가

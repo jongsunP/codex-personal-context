@@ -165,6 +165,12 @@ workspace, or new worktree. Its portable source of truth is
 
 ## Main Worktree And Feature Session Model
 
+Prefer a suitable existing checkout. Do not create a separate worktree unless
+it is necessary for the actual work and isolation constraints. In particular,
+a small QA fix or a new Jira ticket is not by itself a reason to create one.
+Check existing checkout ownership and the user's recorded worktree preference
+first; do not automatically create another checkout just for convenience.
+
 For repositories where the user keeps a long-lived main worktree, treat its
 Codex session as the repository administrator and `master` management session
 when that role is needed. For Dentlink this is subordinate to the frontend
@@ -228,16 +234,17 @@ product feature or Jira card.
 The current operating model is intentional and valid:
 
 - Map one substantial logical feature to one dedicated Codex feature-session
-  scope, with a separate branch/worktree for each affected repository.
+  scope, with a separate branch for each affected repository. Create a separate
+  worktree only when required under the checkout preference above.
 - Keep long-lived main checkouts available for repository administration,
   shared branch synchronization, release ownership when appropriate, and
   requested worktree lifecycle management; they are not permanent session
   boundaries.
 - Keep implementation ownership in the worktrees assigned to that feature
   session so parallel AI work does not mix code state or task context.
-- This is the default isolation model, not a temporary workaround. Do not
-  replace it merely because another tool offers cloud sandboxes or automatic
-  branch creation.
+- Keep this ownership model without treating it as mandatory worktree creation.
+  Do not change the user's checkout preference merely because another tool
+  offers cloud sandboxes or automatic branch creation.
 
 The following are recorded improvement candidates. They are not instructions
 to implement immediately:

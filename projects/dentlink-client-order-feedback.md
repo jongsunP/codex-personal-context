@@ -4,7 +4,36 @@
 기록보다 live Git, Jira, Notion, Figma와 배포된 Swagger 상태를 우선한다. 기획
 검토, 구현, 로컬 QA, 앱 검증, release 전달, 스테이징 QA와 배포를 구분한다.
 
-## 최신 체크포인트 — 2026-09-28 DL-16534 작성자 필터 후속 반영
+## 최신 체크포인트 — 2026-09-28 DL-16534 병합·정리 및 stage PR 전달
+
+- 사용자가 Jira 댓글과 PR 병합 완료를 알리고 이번 작업의 worktree/branch 정리,
+  원격 stage 삭제 → 원격 master 기준 재생성 → release/v1.87.0을 stage로 향하는
+  PR 생성을 요청했다. 별도 워크트리는 반드시 필요한 경우만 만들고 기존 메모리
+  지침을 지키라고 재확인했다. 공통 SESSION_WORKFLOW에 기존 checkout 우선 원칙을
+  명확히 했으며, 이번 소규모 QA에서 생성 전 사용자 확인을 생략한 점을 인정했다.
+- PR #4636은 2026-09-28 14:26 KST에 release/v1.87.0의
+  `ae1145676f5f327912f7e920689fb2dfe6d0b2aa`로 병합됐다. feature 최종
+  `9aea3d0e0`와 release의 피드백 페이지 blob은 동일하며, feature 변경과 squash
+  merge의 부모 대비 변경도 완전히 일치한다. Jira 댓글 완료는 사용자 보고다.
+- `/Users/parkjongsun/Repository/dentlink-client-feedback-qa`는 clean이고 사용 중인
+  프로세스가 없음을 확인해 제거했다. 앱 관리 대상이 아닌 수동 worktree여서
+  `git worktree remove`를 사용했다. 로컬 `feature/DL-16534`도 `git branch -d`로
+  제거했다. 원격 feature 브랜치는 보존했다. 다른 작업인 기본 checkout/LBX와 DLDS는
+  변경하지 않았다. 이 QA 작업의 checkout/branch를 다음 시작 경로로 사용하지 않는다.
+- 열린 stage 대상 PR이 없고 branch 보호/rules도 없음을 확인했다. 원격 stage
+  `7c4255f7b9fd8efb2cc87978ed26ac8ef49a85e2`를 삭제한 뒤 원격 master와 같은
+  `de2ffdd9e3025cb758632788cd6086c170e4974e`로 재생성했다. 이전 stage는
+  local recovery ref `refs/codex-backup/stage-20260928-7c4255f7b9fd`로 보존했다.
+- [PR #4637](https://github.com/Innvoaid/dentlink-client/pull/4637)을
+  `release/v1.87.0 → stage`로 생성했다. head는 `ae1145676`, base는 `de2ffdd9e`다.
+  master에서 stage를 재생성했으므로 릴리즈 전체 19개 commit/86개 file이며 직전
+  스테이징 결과 이후 추가분은 #4635와 #4636이다. PR 생성 과정에서 새 제품 코드나
+  worktree를 만들지 않았다. 기존 QA 검증과 실제 새 배포/화면 QA는 구분한다.
+- 다음 단계는 PR #4637 검토·병합과 사용자의 스테이징 배포다. 이 실행에서는 PR을
+  병합하거나 배포하지 않았다. CodeRabbit 자동 감시나 세션 보관도 시작하지 않는다.
+  아래 PM 범위 결정과 검증 이력은 유지한다.
+
+## 이전 체크포인트 — 2026-09-28 DL-16534 작성자 필터 후속 반영
 
 - [DL-16534](https://innovaid.atlassian.net/browse/DL-16534) 검토 후 사용자가 백엔드
   수정 없이 가능한 부분만 구현하고, 백엔드 의존 항목은 PM에게 전달할 답글을 채팅에
