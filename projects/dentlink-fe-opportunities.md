@@ -1,15 +1,53 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
 
-## 현재 체크포인트 — 2026-09-28 · 기존 사용 방식·영향 확인 진행 중
+## 현재 체크포인트 — 2026-09-28 · 사용 방식·영향 확인 완료, 수정 전 대기
 
-- **최신 요청:** 사용자가 작업 재개를 요청했습니다. 이번에는 아래 새 3단계 중 **1단계만** 진행합니다. 이전의 ‘1번 Figma 대조’와 번호를 혼동하지 않습니다. 원본 대조는9/21에 완료했고 이번1단계의 입력 자료입니다.
-- **1단계 · 기존 사용 방식·영향 확인: 진행 중.** Clinic/Lab/Admin 실제 사용 코드·폰트·화면과 Modal/Popup/Calendar/Tooltip 및 남은 Checkbox/Stepper/Slider 정비의 영향을 확인합니다. 제품 실행 코드 수정 없이 근거와 다음 수정 범위를 정리합니다.
-- **2단계 · 남은 구현·수정: 미착수, 후속 작업으로 남김.** 1단계 영향 조사와 기존 Figma 대조를 바탕으로 컴포넌트·아이콘·로고·카탈로그를 보완합니다. 이번 요청에서 실행하지 않습니다.
-- **3단계 · 수정 후 재검증: 미착수, 후속 작업으로 남김.** 2단계 결과의 디자인 정합·자동검사·실제 화면 회귀를 확인합니다. 이번에는 수정 전의 기준 상태를 확인하므로3단계완료로표현하지않습니다.
-- **제품 기준:** 전용 worktree `/Users/parkjongsun/Repository/dentlink-client-dlds`, branch `feature/DL-16466`, HEAD `01d49c3cbaf3590076a078a9531e2ddceb5be2a7`, 9/28 pull완료·clean. 원본105node/SVG119개는제품Git에보관. 개인컨텍스트는시작시 `7aa76f9`까지동기화.
-- **바로 다음 작업:** 컴포넌트 사용처·폰트 조사를 병행하고 공식 로컬 검사/브라우저로 대표 화면을 확인합니다. 다른 feature worktree가 존재하므로 포트·계정잠금·프로세스소유권을확인하고다른작업에영향을주지않습니다.
-- **중단·재개:** 이절을최신정본으로읽고실제완료항목과미확인항목부터이어갑니다. 아래9/21일시중단기록은이요청으로해제됐지만2·3단계진행승인으로확대하지않습니다. 로그·환경/인증·node_modules는기기마다별도로준비합니다. 최종결과와재개항목은이절을갱신하고커밋·푸시합니다.
+### 현재 범위와 저장 위치
+
+- **최신 요청:** “우선 1단계 진행”, 나머지는 중단·다른 기기에서도 알 수 있게 기록. 이번 번호는 **① 기존 사용 방식·영향 확인 → ② 남은 구현·수정 → ③ 수정 후 재검증**입니다. 과거 ‘1번 Figma 대조’ 또는 전체 프로젝트의 ‘디자인시스템 1단계’와 혼동하지 않습니다.
+- **① 완료 범위:** Clinic/Lab/Admin·공유 UI의 정적 사용처 조사와 아래 대표 화면의 수정 전 기준 확인을 마쳤습니다. 모든 제품 화면·상태의 전수 검증을 뜻하지 않습니다. Figma 원본105개 node 조사는 반복하지 않았습니다.
+- **② 미착수 / ③ 미착수:** 다음 작업으로 남깁니다. 이번 요청은 실행 코드 수정까지 포함하지 않으므로 이 지점에서 대기합니다. 전체 DLDS 정비와 AI 하네스·에디터는 완료되지 않았습니다.
+- **제품:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`. 조사 기준 `01d49c3cbaf3590076a078a9531e2ddceb5be2a7`; 원본 구현은 `0fa829542`입니다. 이번 문서 저장 HEAD는 `1a6518147cdaf9ff082da69221b03fc7264b0ce2`이며 로컬·추적 브랜치·원격 실조회 SHA 일치와 clean을 확인했습니다. 제품 실행 코드·테스트·기본값은 변경하지 않았고 감사 MD2개만 갱신했습니다.
+- **팀 기술 근거:** 제품 `shared/ui/DESIGN_COVERAGE.md`의 「현재 사용처와 변경 영향」에 사용 계약·화면 결과·문제·미검증 조건을 기록하고 `shared/ui/design-audit/FIGMA_REMAINING_AUDIT.md`에서 연결했습니다. 임시 보고서가 없어도 수정 범위를 복구할 수 있습니다.
+- **동기화:** 시작 시 두 저장소 pull 완료. 종료 전 개인 컨텍스트를 다시 pull하여 다른 QA 작업의 `099df56`까지 보존했습니다. 조사 시 `origin/master=de2ffdd9e`가 현 브랜치의 조상이었고 새 master 통합 필요는 없었습니다. 이후 작업 시 원격을 새로 확인합니다.
+
+### 확인 결과
+
+- **폰트:** 세 앱 로그인 화면을1440×1000 Chromium148에서 시각 확인하고 CDP로 실제 선택된 폰트를 확인했습니다. Clinic/Lab의 Typography400·Button500은 모두 Pretendard-Medium, Admin은 Typography400=Regular·Button500=Medium입니다. 공통 medium400→500을 숫자만 보고 일괄 변경하지 않습니다. Admin600·전체 다국어 줄바꿈은 미검증입니다.
+- **정적 사용 계약:** Stepper 직접2곳은 NUMBER 옵션 기본48px/min0와 Lab 추가비용 input/S40px/min1로, text/S32 정비는 이 조합에 한정할 수 있습니다. Slider 직접2곳은 사진 회전(-180~180/5도). Checkbox는 notHoverStyle·disabled·상위 클릭 담당 소비와 `.checkbox-ui` 의존성을 유지해야 합니다. Tooltip은 명시폭200/204/280·강제 안내·TEXT/NONE이 혼재합니다. 기존 로고 슬롯·radius.full 원형을 일괄 교체하지 않습니다.
+- **실제 동작 확인:** Clinic 사진 편집의0/5/-180/180/175와 감소 버튼170이 이미지 회전각과 일치하고 끝점 버튼이 비활성화됐습니다. Lab 라벨 생성 내 날짜는40px·과거/주말 제한·선택값 반영·Escape 달력만 닫기/부모 유지가 확인됐습니다. Clinic 모바일390×844 주문 날짜 필터는 가로 넘침 없음·40px·하단 버튼 표시, Escape 미적용/Done 적용 후 재열기 유지가 확인됐습니다.
+- **재현한 수정 후보1 — disabled Checkbox Tooltip:** Clinic `/billing/payment-history`에서 hover 안내는 보이지만 Tab 순회(60회)·focus로는 접근할 수 없습니다. wrapper tabindex 없음, disabled input을 기존 키보드 진입점으로 오인합니다. native disabled/선택 차단을 유지하며 이름 있는 진입점과 enabled 자식 중복 Tab 방지가 필요합니다.
+- **재현한 수정 후보2 — 중첩 Escape:** Admin `/pickup/inbound/[기존 ID]`의 요청 가능 상태→픽업 방문 요청→Date에서 열린 창2개가 Escape 한 번에0개로 닫힙니다. 날짜 선택 후 동일하게 닫고 재열면 날짜가 비고 Done이 비활성화됩니다. 첫 Escape2→1/부모 값 유지, 다음1→0/reset 한 번이 목표입니다.
+- **같이 다룰 Portal:** Clinic `/my`→My Office→더보기의 Leave는 `.modal` 밖/#modal-root 안에 있습니다. Leave 초점에서 Escape하면 부모도 닫히고 opener로 복귀하지 않았습니다. 실제 Leave는 실행하지 않았습니다. 메뉴를 부모가 소유한 자식 overlay로 연결하고 메뉴만 닫기/초점 복귀를 검토합니다. focusScopeRefs 추가만으로 해결되지 않습니다.
+- **기존 결함과 회귀 구분:** 위 Tooltip·Modal·PopupMenu 원인은 기준 `de2ffdd9`에도 있습니다. 관련 소비/PopupMenu 파일이 바뀌지 않았고 base Modal은 모든 Escape에 onClose를 호출했습니다. **정적 비교상 기존 결함 유지**이며 base 브라우저 재실행은 하지 않았습니다. legacy 비중첩 sibling의 동시 닫기 검사 계약은 보존하고 중첩 관계만 좁혀 수정합니다.
+- **iframe 제약:** Admin `/notifications/email` 기존 기록의 sandbox iframe 표시·초점 진입 확인. iframe에 초점이 있으면 Escape가 부모에 전달되지 않고 부모 Close 버튼은 정상입니다. 전역 focus trap만으로 iframe 내부까지 해결된다고 보지 않습니다. sandbox 완화는 하지 않습니다.
+
+### 검사와 한계
+
+- 공식 명령 `pnpm e2e:clinic e2e/clinic/specs/09_sharedUi.spec.ts`: **3 passed**, fail/flaky/skip/nonexecution/globalError0. Clinic Export desktop·tablet 모바일 UA와 Admin SMS 확인창입니다. **수정 전 local focused** 검사이며 staging 전체 또는 후속③ 결과가 아닙니다.
+- 실행 `e2e-runs/2026-09-28T05-00-46-176Z-294ea760`, HEAD01d49c3cb, source hash `d60a3d97c7e705c67e3fe361c44cc51d34b9285c8c7d45749e792792d1507a91`, 실행 전후 동일. 요약은 제품 감사 문서에도 남겼습니다. 서버/업무 데이터 준비는 공식 runner 절차이며, 테스트에서 주문·결제·배송 생성이나 실제 SMS/유효 Export 제출은 하지 않았습니다.
+- 추가 브라우저 조사는 공식 테스트 수에 합산하지 않습니다. 테스트 계정 잠금과 소유 서버3100/3105/3102를 사용했고 업무 변경 요청을 차단했습니다. 이 과정에서 Admin 읽기용 POST `/admin/chats/search`도2회 차단되어 Network Error1건이 발생했습니다. 제품 결함으로 판정하지 않았습니다. 로컬 QA 위젯500·styled-components/i18n 경고도 있어 ‘무오류/무경고 전체 검증’으로 보고하지 않습니다.
+- **화면 미확인 조건:** Clinic DSO `/organizations/billings`는 현재 계정403. DateRangeFieldV2의 최대92일 등 코드는 확인했으나 실제 화면은 미확인입니다. Stepper 조건부 NUMBER/추가비용 입력 화면, 모바일 사진 회전·포인터 드래그, Admin600, 로고/아이콘 전체 소비, 실기기/스크린리더는 범위 밖으로 남깁니다. 확인된 좁은 수정의 착수를 막는 미결 질문은 현재 없습니다.
+- `/tmp/dlds-0928-*` 정적 보고서, `/tmp/dlds-0928/` 진단 스크립트·스크린샷·CDP 측정과 로컬 e2e-runs는 보조 자료입니다. 계정·고객 데이터·로그·인증 상태를 Git에 올리지 않았습니다. 다른 기기는 문서의 경로/재현 절차로 재확보합니다.
+
+### 다음 시작점 — ② 남은 구현·수정
+
+사용자가 후속 진행을 요청하면 두 Git을 pull하고 최신 체크포인트·제품 diff를 확인한 뒤 다음 순서로 시작합니다. **완료한 원본 대조나 대표 화면 점검을 처음부터 반복하지 않습니다.**
+
+1. **재현 문제의 좁은 수정:** Tooltip disabled 진입점, Calendar/Modal 중첩 Escape와 My Office Portal 메뉴의 소유 관계·복귀를 먼저 다룹니다. `trapFocus` 전역 true 또는 모든 legacy 창의 닫기 정책 변경으로 해결하지 않습니다. base의 `shared/ui/tests/overlay-focus.test.tsx` 비중첩 sibling 계약과 기존 Dropdown/Drawer/SMS Popup을 보존합니다.
+2. **남은 Figma 차이 구현:** Checkbox 일반 hover·선택형 checkmark-only, Stepper text/small32px, Slider 그림자·끝점/활성선과 실제 range 일치, 모바일 Tooltip Basic/Help를 기존 소비와 호환되게 보완합니다. 기존 명시값·업무 콜백·옵션 기본값을 보존합니다.
+3. **아이콘·로고·카탈로그:** 확보된 원본/TSV를 기준으로 추가/조합 후보65종과 로고 조정10·세로 조합6을 처리합니다.65종을 무조건 새 기능65개로 치환하지 않고 재사용/조합/API 제공을 구분합니다. 기존 export를 덮어쓰지 않습니다. 카탈로그·생성 검증·사용 예시도 실제 구현 범위에 맞게 갱신합니다.
+4. **좁히지 못한 기본값은 별도 판단:** medium 굵기, radius.full, daySize46, scrollContent, 전역 trapFocus·로고 치환은 자동 적용하지 않습니다. DSO 전용 계정 등 접근이 꼭 필요한 시점에만 구체적 도움을 요청합니다.
+
+**③ 수정 후 재검증은② 뒤에 별도로 남아 있습니다.** 새 문제 재현 검사→수정→소비 화면 재확인, UI/아이콘/카탈로그 및 변경 영향에 맞는 앱 타입·공식 E2E를 수행합니다. 일반 UI tsc의 기존578건은 성공으로 표시하지 않습니다. 필요한 실기기/스크린리더·staging 검증과 사람의 디자인 판단은 별도 상태로 보고합니다.
+
+### 종료·재개 원칙
+
+- 이번에 띄운 서버·브라우저·계정 잠금은 종료했고3100/3105/3102 리스너와 해당 진단 잠금이 없음을 확인했습니다. 다른 worktree/사용자 서버는 건드리지 않았습니다.
+- 제품 문서 커밋·푸시를 마쳤습니다. 정상 hooks에서 세 앱 타입 통과, 앱 lint는 기존 경고와 함께 오류0, 기존 coverage 검사 완료입니다. 이를 새 전체 UI 회귀 통과로 표현하지 않습니다. 개인 체크포인트·FE 라우팅·HANDOFF도 이 상태로 커밋·푸시하고, 개인 메모리의 최신 SHA는 `git log -1`로 확인합니다.
+- Jira·Notion·Sites·PR·병합·배포·AI 하네스 구현은 이번 요청에서 변경하지 않았습니다. 기존 제품 커밋·푸시 허용은 이어지지만, 이번① 한정 요청을② 자동 착수로 확대하지 않습니다.
+- “DLDS 이어서”, “2단계 남은 구현 시작”으로 재개하면 이절을 우선 읽습니다. 아래9/21 일시중단은 과거 기록이며 이번①만 해제·완료됐습니다.②·③은 누락이 아니라 명시적 후속 작업입니다. 새 기기의 경로·환경/인증·node_modules·서버는 별도 준비하고 오래된 SHA로 reset하지 않습니다.
 
 
 ## 재개 체크포인트 — 2026-09-21

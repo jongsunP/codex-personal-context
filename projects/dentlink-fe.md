@@ -33,6 +33,8 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## 로컬 환경·메모리 정리 — 2026-09-28
 
+- **후속 DLDS:** 아래 환경 정리 이후 사용자의 재개 요청으로 사용 방식·영향 확인을 마쳤습니다. 현재는 다음 구현 단계 전 대기이며 자세한 상태는 [DLDS 체크포인트](dentlink-fe-opportunities.md)를 봅니다. 아래의 일시중단/HEAD는 당시 기록입니다.
+
 - 후속 DL-16534 QA 요청으로 웹에 `feature/DL-16534`와
   `/Users/parkjongsun/Repository/dentlink-client-feedback-qa`가 새로 생성됐다.
   Rating 클릭 개선과 작성자 이름 검색은 `9aea3d0e0`로 push했고
@@ -129,31 +131,19 @@ Detailed implementation history remains in the relevant existing project file.
   저장됐지만, 2026-09-28 사용자가 백엔드 문제로 이번 배포에서 제외했다.
   PR #4623은 미병합 종료됐고 작업 브랜치를 보존한 채 대기한다.
   제품 API는 정상 연결하며 실제 서버 생성·수정 요청은 테스트에서 실행하지 않는다.
-- The selected FE project is DLDS cleanup → AI prompt/harness refinement →
-  an editor only if useful later. Use the [latest meeting](https://app.notion.com/p/3dfce072e82f812c843afed105630c98)
-  and [implementation checkpoint](dentlink-fe-opportunities.md). Step 1 is in
-  `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`.
-  Latest implementation remains `0fa829542` (41 new icons, 452 total and UI fixes).
-  Audit-only HEAD `01d49c3cb` completes the requested remaining Figma comparison:
-  69 icon nodes, 18 logo variants, 18 component states; 105 nodes and 119 original
-  SVGs with hashes/layout reference are saved in the product design-audit folder.
-  The old Figma quota block is resolved. Of 67 unresolved icon names, 2 map to
-  existing pins and 65 are addition/composition candidates, not mandatory new
-  features. Logos: 2 reusable, 10 need adjustments, 6 vertical compositions.
-  Concrete Checkbox, Stepper, Slider and mobile Tooltip differences are recorded;
-  no runtime code changed in this audit. Earlier UI162/icon1/service E2E7 results
-  belong to the implementation checkpoint, not a fresh whole-product QA run.
-  Generic UI tsc has 578 baseline errors. Whole Step1, actual-device/screen-reader,
-  staging and deployment remain open. The user requested only follow-up 1 this
-  turn; follow-ups 2 (consumer screens/fonts) and 3 (fixes/regression) are unstarted.
-  Paused explicitly by the user on 2026-09-21; do not continue until asked.
-  Product 01d49c3cb is remote-verified and clean.
-  Resume at 2 after reading the 2026-09-21 checkpoint in
-  `projects/dentlink-fe-opportunities.md`; don't repeat the completed source audit.
-  Explicit product commit/push and Git memory authorization continues, while
-  PR/merge/deploy and AI harness remain separate. Prioritize recoverability across
-  usage interruptions/days/devices; latest observed account-wide weekly usage was
-  60% on Sep21 11:44 KST, not a current or task-specific quota.
+- DLDS의 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의
+  **2026-09-28 절**이 정본입니다. 사용자가 재개를 요청하되 후속 순서를
+  ① 기존 사용 방식·영향 확인 → ② 남은 구현·수정 → ③ 수정 후 재검증으로
+  나누고 **①만 실행**하도록 했습니다. 대표 화면·폰트·사용 계약 확인을 마쳤고,
+  Tooltip 키보드 접근 및 중첩 Calendar/Portal Escape 문제를 기록했습니다.
+  공식 수정 전 local E2E3개는 통과했으며 실행 코드는 수정하지 않았습니다.
+  전용 worktree `dentlink-client-dlds`, `feature/DL-16466`의 문서 HEAD는
+  `1a6518147cdaf9ff082da69221b03fc7264b0ce2`입니다. ②·③은 다음 요청부터
+  진행합니다. 전체 DLDS 정비는 미완료이며,
+  AI 프롬프트·하네스와 에디터는 미착수입니다.
+  재개 시 두 Git을 pull하고 제품 DESIGN_COVERAGE와 위 정본의 다음 작업을
+  확인합니다. 완료된105개 node Figma 조사를 반복하지 않습니다. PR·병합·배포는
+  별도 범위이며 환경·인증·로컬 로그는 Git으로 이동하지 않습니다.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.
