@@ -53,6 +53,22 @@ Avoid wrappers that only rename existing JSX, unexplained percentage widths,
 arbitrary fixed heights, duplicated state abstractions, and new patterns that
 appear nowhere else in the app.
 
+## Project-Aligned Naming
+
+- For UI labels, page names, categories, and documentation, first use the
+  names already defined in the project, design system, requirements, or the
+  relevant reference. Preserve the meaning; do not present a reference name
+  as an official project term without evidence.
+- If no defined name exists, prefer a short, familiar description using the
+  project's existing vocabulary. Do not invent terminology that needs a
+  separate explanation when a plain project-aligned name is available.
+- When a genuinely new name is needed or the choice changes the meaning or
+  classification, show the proposed name and its reason to the user for review
+  before adopting it. Routine use of clear existing terms needs no extra check.
+- A display-name correction does not by itself require renaming internal
+  folders, public APIs, routes, or symbols. Preserve compatibility and change
+  those only when the task requires it.
+
 ## Existing UI First
 
 - Use existing Button `size`, `variant`, `color`, `width`, and state props

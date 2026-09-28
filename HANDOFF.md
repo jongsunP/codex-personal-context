@@ -25,7 +25,7 @@ Do not store secrets or private customer data here.
 
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
-- Dentlink DLDS / DL-16466: `projects/dentlink-fe-opportunities.md`의 2026-09-28 최신 체크포인트. 제품 ca567f7df, UI196·복사 코드41·focused E2E4 통과. 최신 사용자 결정으로 아이콘 추가 전수 대조는 제외하고 누락만 대상으로 한다. 카탈로그 명칭 설명·메모리 반영 후 대기하며 추가 개발은 재개 요청 전에 시작하지 않는다. 보조 UI 경계·권한/실기기 조건은 별도이며 전체 DLDS 완료·AI 하네스 착수와 구분한다.
+- Dentlink DLDS / DL-16466: `projects/dentlink-fe-opportunities.md`의 2026-09-28 최신 체크포인트. 제품4622b54e5. 저장 Figma 목록의 아이콘 존재 누락0 확인·`DLDS 컴포넌트 모음` 명칭 통일 완료. 아이콘 시각 전수 대조는 제외하고 보고 후 대기한다. 남은 보조 UI 경계·권한/데이터·실기기 조건은 상세 체크포인트를 따르며 전체 DLDS 완료·AI 하네스 착수와 구분한다.
 - Dentlink web order feedback: `projects/dentlink-client-order-feedback.md`
 - Dentlink mobile app: `projects/dentlink-app.md`
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md` — 백엔드 문제로 이번 배포 제외, PR #4623 미병합 종료. 재개 지시까지 작업 브랜치 보존·대기.

@@ -68,7 +68,8 @@ For detailed current state, read:
 - DLDS는 사용자 재개 요청에 따라 대표 사용 화면 검증과 범용 UI 경계·모음 페이지
   보완까지 진행했다. 전체 완료 여부·남은 범위는 최신 체크포인트를 따른다.
 - 최신 지시로 아이콘 추가 전수 대조는 제외하며 누락만 대상으로 한다.
-  명칭 설명·메모리 반영 후 대기 중이고 추가 작업은 재개 요청 후 진행한다.
+  저장 Figma 목록의 누락 확인·컴포넌트 모음 명칭 정리 후 대기 중이다.
+  추가 작업은 재개 요청 후 진행한다.
   기존 `dentlink-client-dlds` worktree를 보존하며 AI 하네스는 아직 미착수다.
 - [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
 - 회의 바로가기: [projects/dentlink-fe-meeting.md](projects/dentlink-fe-meeting.md)
