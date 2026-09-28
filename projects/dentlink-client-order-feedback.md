@@ -6,6 +6,10 @@
 
 ## 최신 체크포인트 — 2026-09-28 DL-16443 리뷰 조치 완료
 
+- 후속 확인: PR #4625는 `c07fc181a810d6528b948d792c956fb77cb1d5b6`로
+  `release/v1.87.0`에 병합됐다. 원격 master 기반 stage 재생성과 릴리즈 전달
+  [PR #4634](https://github.com/Innvoaid/dentlink-client/pull/4634) 생성도 완료했다.
+  stage PR은 미병합이며 상세 이력은 [FE 통합 체크포인트](dentlink-fe.md)를 참조한다.
 - 사용자가 최종 리뷰 후 **조치 전체**를 승인하여 코드 수정·검증·commit/push와
   CodeRabbit 답변·resolve를 진행했다. 메뉴 직접 설정, 현재 백엔드 계약을 요구사항으로
   사용, develop 제외, release 병합은 이후 진행한다는 기존 결정을 유지한다.
@@ -39,8 +43,8 @@
   [근거 코멘트](https://github.com/Innvoaid/dentlink-client/pull/4625#issuecomment-5774169100).
   팀 관리자의 초대 또는 기존 멤버 계정의 GitHub 연결 확인 후 Preview 재검증이 필요하다.
   계정 권한/빌링 변경이나 운영 배포로 우회하지 않았다.
-- 다음 시작점: Vercel 권한 문제 확인, 사용자가 계획한 release 병합·배포와 실제 환경 QA.
-  코드 리뷰 조치는 완료했지만 merge/배포까지 완료한 상태는 아니다.
+- 다음 시작점: Vercel 권한 문제 확인, stage 전달 PR 검토·병합·배포와 실제 환경 QA.
+  코드 리뷰와 release 반영은 완료했지만 stage 배포까지 완료한 상태는 아니다.
 
 ## 이전 체크포인트 — 2026-09-28 DL-16443 배포 전 최종 코드 검토
 

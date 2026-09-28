@@ -31,6 +31,23 @@ Detailed implementation history remains in the relevant existing project file.
   not permanent web-versus-app session boundaries.
 - Shared repository mutations still require the user's explicit authorization.
 
+## Release Stage Checkpoint — 2026-09-28
+
+- 사용자 요청 순서대로 웹 저장소의 원격 `stage`를 삭제하고, 원격 `master`
+  `de2ffdd9e3025cb758632788cd6086c170e4974e`에서 새 원격 `stage`를 만들었다.
+  생성 후 `git ls-remote`에서 두 브랜치의 SHA 일치를 확인했다.
+- 삭제 전 `stage`는 `0272910a6d3c055d92941df294567a2922550be3`이었다.
+  열린 stage 대상 PR·브랜치 보호 규칙은 없었고, 기존 커밋은 제품 로컬 ref
+  `refs/codex-backup/stage-20260928-0272910a6d3c`에 보존했다.
+- [PR #4634](https://github.com/Innvoaid/dentlink-client/pull/4634)를
+  `release/v1.87.0 → stage`로 생성하고 이 task에 첨부했다. 생성 당시 release는
+  `c07fc181a810d6528b948d792c956fb77cb1d5b6`, PR은 OPEN·MERGEABLE이다.
+  원격 master 대비 17개 커밋/83개 파일이며, DL-16443 최종 수정도 포함돼 있다.
+- 실행 경로는 `/Users/parkjongsun/Repository/dentlink-client-feedback-review`이고
+  checkout은 `feature/DL-16443 / 1babe908f` clean 상태를 유지했다.
+  다른 작업의 checkout·로컬 branch는 바꾸지 않았다. PR merge나 별도 배포 실행은
+  하지 않았다. 다음 단계는 통합 PR 검토·병합 및 실제 stage 배포/QA 확인이다.
+
 ## Context Routing
 
 - On 2026-09-22 the user requested a separate task for
