@@ -97,8 +97,8 @@ For detailed current state, read:
 
 ### Dentlink 주문 피드백 수집 / 관리자 피드백 목록
 
-- DL-15828과 후속 DL-16443의 계약·구현·QA·release/stage 전달 이력을 관리한다.
-  DL-16443 전용 worktree와 로컬 전달 브랜치는 2026-09-28 정리됐다.
+- DL-15828과 후속 DL-16443·DL-16534의 계약·구현·QA·release/stage 전달 이력을 관리한다.
+  DL-16443·DL-16534 전용 worktree와 로컬 전달 브랜치는 2026-09-28 정리됐다.
 - 배포 완료와 실제 화면 QA는 별도로 확인한다.
 - [projects/dentlink-client-order-feedback.md](projects/dentlink-client-order-feedback.md)
 

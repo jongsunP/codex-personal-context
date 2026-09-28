@@ -4,7 +4,38 @@
 기록보다 live Git, Jira, Notion, Figma와 배포된 Swagger 상태를 우선한다. 기획
 검토, 구현, 로컬 QA, 앱 검증, release 전달, 스테이징 QA와 배포를 구분한다.
 
-## 최신 체크포인트 — 2026-09-28 DL-16534 병합·정리 및 stage PR 전달
+## 최신 체크포인트 — 2026-09-28 FE 작업 종료·stage 병합, 배포 결과 확인 대기
+
+- 사용자가 PR #4637 병합 후 재배포 실행을 알리고 메모리 정리와 작업 마무리를 요청했다.
+  이번 FE 구현·PR 전달·로컬 환경 정리는 완료됐다. 다만 아래 배포 workflow는 직접
+  확인한 시점에 진행 중이므로 배포 성공과 실제 화면 반영까지 완료했다고 기록하지 않는다.
+- [PR #4637](https://github.com/Innvoaid/dentlink-client/pull/4637)은 2026-09-28
+  14:44 KST에 stage `bf955dfe2ee0dfbe8a41e9a51da354c5149e0c85`로 병합됐다.
+  병합 시 release/v1.87.0은 추가 Popup QA #4639를 포함한
+  `bb5bff410760e462acdff77583f82e98e8b06b56`이다. stage와 release의 전체 tree가
+  `442d7d29d27e773b40db147e98c7f20c717c2d04`로 동일하고, 피드백 페이지는 최종 QA
+  `9aea3d0e0`와 blob이 같아 이번 수정이 보존됐다.
+- 위 stage SHA의 배포는 Admin
+  [36383203554](https://github.com/Innvoaid/dentlink-client/actions/runs/36383203554),
+  Office [36383203565](https://github.com/Innvoaid/dentlink-client/actions/runs/36383203565),
+  Lab [36383203608](https://github.com/Innvoaid/dentlink-client/actions/runs/36383203608)이다.
+  직접 조회 시 세 개 모두 `in_progress`이고 Admin은 Docker image build/push 단계였다.
+  이때 STG `/feedbacks`에는 기존 숫자형 `작성자 ID` 필터와 버튼이 아닌 Rating이
+  표시돼 새 화면 반영은 아직 확인되지 않았다. 이전 성공 run이나 사용자 실행 보고를
+  이 새 run의 성공 증거로 대신하지 않는다.
+- PM [댓글 44192](https://innovaid.atlassian.net/browse/DL-16534?focusedCommentId=44192)는
+  현재 공유한 스펙으로 우선 운영하고 추후 피드백에 따라 개선하기로 확정했다.
+  작성자명 유지/이름 검색 선택·Rating 동작이 이번 완료 범위이며 전체 키워드,
+  담당 기공소 정보/필터, 완료일 기간 필터는 이번 배포 필수 항목이 아니다.
+  Jira 상태는 `Ready for Deploy`; Codex가 상태나 댓글을 변경하지 않았다.
+- 로컬 `feature/DL-16534`와 QA worktree는 앞서 제거했고 잔여 파일 변경도 없다.
+  LBX/DLDS 등 다른 작업은 보존했다. 기존 checkout 우선 및 꼭 필요한 경우에만
+  worktree 생성 원칙은 SESSION_WORKFLOW.md를 따른다.
+- 재확인할 경우 위 정확한 run ID의 성공 여부를 먼저 보고, 배포 후 작성자 이름 검색·
+  계정 선택/userId 적용·Rating 상세 열기·일반 셀 클릭 시 미열림·주문번호 이동을
+  확인한다. 자동 감시나 추가 구현은 시작하지 않고 이번 구현 세션은 여기서 마무리한다.
+
+## 이전 체크포인트 — 2026-09-28 DL-16534 병합·정리 및 stage PR 전달
 
 - 사용자가 Jira 댓글과 PR 병합 완료를 알리고 이번 작업의 worktree/branch 정리,
   원격 stage 삭제 → 원격 master 기준 재생성 → release/v1.87.0을 stage로 향하는

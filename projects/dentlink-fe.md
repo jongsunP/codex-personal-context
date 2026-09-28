@@ -69,6 +69,14 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Release Stage Checkpoint — 2026-09-28
 
+- **최신 종료 확인:** PR #4637은 stage `bf955dfe2`로 병합됐고 추가 Popup QA를
+  포함한 release/v1.87.0 `bb5bff410`과 전체 tree가 같다. 사용자가 재배포를 실행했다.
+  확인 시 Admin 36383203554/Office 36383203565/Lab 36383203608은 모두 진행 중이며
+  STG 피드백 화면도 기존 버전이었다. FE 구현·병합·로컬 정리는 완료했고 배포 성공 및
+  새 화면 반영만 미확정으로 남긴다. 정확한 run 링크와 다음 확인 항목은
+  [피드백 종료 기록](dentlink-client-order-feedback.md)에 있다. PM은 현재 스펙 우선
+  운영에 동의했고 백엔드 의존 개선은 이번 배포 필수가 아니다. 아래는 이전 전달 이력이다.
+
 - **최신 전달:** 사용자 요청으로 원격 stage(`7c4255f7b`)를 삭제하고 원격 master
   `de2ffdd9e`에서 다시 생성했다. 최신 release/v1.87.0 `ae1145676`을 새 stage로
   전달하는 [PR #4637](https://github.com/Innvoaid/dentlink-client/pull/4637)을
