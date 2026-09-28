@@ -1,6 +1,21 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-09-28, 배포 전 전체 검토 완료 / CodeRabbit 미해결 0
+## 현재 체크포인트 — 2026-09-28, 백엔드 문제로 이번 배포에서 LBX 제외 / PR #4623 종료
+
+- **최신 사용자 결정: LBX 백엔드에 문제가 발생하여 이번 배포에서 제외하고 사용자가 PR을 취소했다.** GitHub에서 [PR #4623](https://github.com/Innvoaid/dentlink-client/pull/4623)의 `CLOSED`, `mergedAt=null`, 종료 시각 2026-09-28 11:35:40 KST를 확인했다. 배포 보류가 아래의 기존 준비 완료 판정보다 우선한다. 백엔드 문제의 구체적인 원인/해결 조건은 아직 전달받지 않았다.
+- 이전 요청의 CodeRabbit 리뷰·충돌 처리 중 최신 결정을 받아 후속 리뷰 대기를 중단했다. 기존 `feature/DL-16387` 체크아웃과 원격 브랜치는 보존한다. 별도 worktree, develop 변경, PR 재개/병합, 배포는 하지 않았다.
+- 최신 `origin/release/v1.87.0` **`c07fc181a810d6528b948d792c956fb77cb1d5b6`**을 feature 브랜치에 반영했다. 제품 HEAD는 **`347909945b091324e7134673525203de14e122fd`**, 커밋 제목은 `chore: 릴리스 변경 반영 및 LBX 타입 충돌 해결`이며 push 완료했다. 부모는 기존 feature `5cab2e5ae`와 release `c07fc181a`이다.
+- 실제 충돌은 `shared/models/src/data-contracts.ts` 한 파일의 세 블록이었다. 제조 옵션의 예시 JSON은 release를 유지하고 Mother 문서의 enum과 예시는 최신 **`COURIER_INVOICE`**를 유지했다. 최종 파일은 release 버전에서 이 enum/예시 두 줄만 변경한 결과와 완전히 동일함을 대조했다. LBX 폼·조회·제출 구현은 직전 검토본과 같다.
+- PR 종료 확인 전 GitHub `MERGEABLE`을 확인했다. base는 `release/v1.87.0`이며 최신 release가 feature HEAD의 조상이다. PR 설명에도 릴리스 반영과 타입 보존 내용을 추가했다. 이는 **release 변경을 feature에 반영한 것**이며 LBX PR을 release에 병합한 것이 아니다.
+- Clinic·Lab·Admin 타입 검사 및 commit/push hooks 통과. 앱 lint는 기존 경고 223/189/410개, 오류 0; shared configs 21개 + hooks 32개 및 coverage check 통과. 독립 계약/코드 검토에서 추가 확정 결함은 없었다.
+- release의 공용 `DataTableRow` 변경과 LBX의 교차 영향을 확인하기 위해 데스크톱·모바일 배송/픽업 목록 **4/4 fixture 회귀 검증 통과**. Mother 값/빈칸, 첫 행 초기 펼침, 다른 행 접힘/펼침, 객체형 수신인, 상세 링크·실제 화면 이동을 확인했다. 런타임/중복 key 오류 및 처리되지 않은 fixture 요청 0개. 실행 전후 HEAD와 빈 tracked diff 동일.
+- 이번 회귀는 브라우저 fixture 검증이며 실제 API 조회·인증·생성·수정 요청 0건이다. 아래 이전 전체 검토의 실제 DEV 조회 및 37+2 UI 상태 검증과 구분한다. 초기 모바일 두 실패는 기존 첫 행 자동 펼침을 빠뜨린 테스트 기대값 오류였고 별도 보존 후 올바른 기대값으로 최종 4개를 재실행했다.
+- CodeRabbit 마지막 확인은 최신 `347909945` 재검토 `PENDING`, 기존 전체 스레드 4개 resolved/미해결 0개다. 사용자의 배포 제외·PR 종료 결정에 따라 watcher를 종료했으며, 이 최신 커밋에 대한 CodeRabbit 완료를 주장하지 않는다. 직전 `5cab2e5ae`의 재검토 완료 기록은 아래에 유지한다.
+- Vercel 최신 check는 `FAILURE`, 설명은 **`Deployment was blocked`**이다. 이전 커밋에서 확인한 Vercel 팀/작성자 접근 권한 오류 이력은 아래와 같으며, 최신 차단 원인을 별도로 확정하거나 권한/배포 설정을 바꾸지는 않았다. 충돌 해결·로컬 검증 성공과 Vercel 실패를 구분한다.
+- 증거 루트: `/tmp/dentlink-lbx-conflict-review-20260928`. `SUMMARY.md`, `final-smoke/report.json`, desktop/mobile 스크린샷 4개, `commit-checks.log`, `push-checks.log`, `final-review-threads.json`에 결과를 보존했다. 검토용 3102 서버 종료 및 이번에 생성한 `admin/.next-lbx-conflict-review`만 정리했고 제품 작업 트리는 clean이다.
+- 다음 시작점: **사용자가 LBX 재개를 지시하기 전까지 보류한다.** 재개 시 백엔드 문제 해결과 변경된 계약, 새 배포 대상 브랜치를 먼저 확인하고 보존된 `feature/DL-16387`을 최신 기준에 맞춘다. 필요한 범위의 실제 조회/UI 회귀 검증 및 새 CodeRabbit 결과를 확인한다. 실제 서버 생성 검증·PR 재개/생성·병합·배포는 별도 사용자 지시를 따른다.
+
+## 이전 체크포인트 — 2026-09-28, 배포 전 전체 검토 완료 / CodeRabbit 미해결 0
 
 ### 이번 요청의 범위와 현재 코드
 
