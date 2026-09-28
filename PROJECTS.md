@@ -83,6 +83,13 @@ For detailed current state, read:
 - 완료한 기능 브랜치와 별도 worktree는 정리됐으며 현재 로컬에는 `main`만 있다.
 - [projects/dentlink-app.md](projects/dentlink-app.md)
 
+### Dentlink 권한관리 — DL-16317
+
+- 통합알림센터의 선행 작업. 현재는 별도 프로젝트·세션 초기 설정 준비만 승인됐다.
+- 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트 폴더`.
+- 앱 프로젝트 등록과 새 task 생성은 대기 중이며 분석·구현은 미착수다.
+- 체크포인트: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
+
 ### Dentlink 통합알림센터 — 사전 검토
 
 - 웹·앱의 REST 조회/읽음/삭제와 딥링크 연결을 다룬다. 별도 알림 SSE·silent FCM
