@@ -4,7 +4,41 @@
 기록보다 live Git, Jira, Notion, Figma와 배포된 Swagger 상태를 우선한다. 기획
 검토, 구현, 로컬 QA, 앱 검증, release 전달, 스테이징 QA와 배포를 구분한다.
 
-## 최신 체크포인트 — 2026-09-28 DL-16443 종료 및 로컬 정리
+## 최신 체크포인트 — 2026-09-28 DL-16534 FE 가능 범위 로컬 수정
+
+- [DL-16534](https://innovaid.atlassian.net/browse/DL-16534) 검토 후 사용자가 백엔드
+  수정 없이 가능한 부분만 구현하고, 백엔드 의존 항목은 PM에게 전달할 답글을 채팅에
+  작성해 달라고 요청했다. Jira 댓글 게시·제품 commit/push·PR·배포는 요청받지 않았다.
+- DL-16443 종료 후 세션 보관 호출은 사용자에 의해 중단됐다. 이후 이 QA 후속 작업이
+  시작됐으므로 현재 세션을 보관하거나 새 checkout을 정리하지 않는다.
+- 제품 기본 checkout/LBX와 DLDS는 보존했다. 전용 checkout은
+  `/Users/parkjongsun/Repository/dentlink-client-feedback-qa`, branch는
+  `feature/DL-16534`, base/HEAD는 release/v1.87.0의
+  `c07fc181a810d6528b948d792c956fb77cb1d5b6`다. 앱 worktree 도구가 제품 ref를
+  찾지 못해 제품 repo에서 수동 worktree를 만들었다. 원격 upstream은 설정하지 않았다.
+- `admin/src/pages/feedbacks/index.tsx` 한 파일에 미커밋 수정이 있다. Rating을
+  밑줄 있는 native button으로 표시하고 클릭 시 기존 상세 패널을 연다. 행 전체 클릭은
+  제거해 일반 셀·여백 클릭으로 패널이 열리지 않게 했다. Enter/Space와 focus-visible
+  사용이 가능하다. 주문번호·작성자 링크, 필터·조회·페이지네이션은 유지했다.
+- Admin tsc(noEmit, incremental false), 변경 파일 ESLint/Prettier, diff check가
+  통과했다. 별도 읽기 전용 코드 검토에서도 신규 결함을 찾지 못했다. 변경 후 실제
+  브라우저/배포 검증은 수행하지 않았다. 의존성은 기존 설치를 재사용하되 workspace
+  패키지는 이 checkout 소스를 가리키게 연결했다.
+- 수정 전 STG 실화면에서는 주문번호 클릭으로 `/orders/7000011859` 이동, Good 클릭
+  상세 패널 열림을 확인했다. 최초 작성 일시 1week 검색은 날짜 query와 결과 5개·1/1
+  페이지를 확인했다. 이 authored-date 필터는 이미 요청사항을 충족한다.
+- DEV/STG Admin·Office Swagger 검토 결과 백엔드 보완 항목은 아래 세 가지다.
+  1. 검색용 전체 키워드 선택지 조회. 현재는 주문 조건·작성 버전에 종속된 응답만 있다.
+     과거 피드백 검색에 필요한 이전 버전 코드도 고려해야 한다. 임의 하드코딩이나
+     현재 페이지 키워드를 전체 선택지로 사용하는 방식은 적용하지 않았다.
+  2. 담당 기공소·주문 의사명 목록 정보와 각 검색 조건. 현재 작성자명은 의사명과 다르다.
+  3. 주문 완료일 기간 검색 조건. 최초 완료일 표시는 있지만 검색 query는 없다.
+- 다음 시작점: 위 로컬 diff를 확인하고, 제품 commit/push/PR 지시가 있으면
+  `feature/DL-16534`에서 release/v1.87.0을 대상으로 전달한다. 백엔드 계약이 보완되면
+  나머지 UI/필터를 구현한다. 현재 로컬 코드는 개인 컨텍스트 Git에 포함되지 않으므로
+  다른 기기에서 이어갈 경우 제품 diff 전달 또는 재구현이 필요하다.
+
+## 이전 체크포인트 — 2026-09-28 DL-16443 종료 및 로컬 정리
 
 - 사용자가 stage 병합·배포 실행을 알리고 이 작업의 로컬 브랜치·메모리 정리와 세션
   보관을 요청했다. 코드 작업은 종료하며 추가 구현이나 배포 감시를 자동으로 시작하지 않는다.

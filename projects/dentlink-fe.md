@@ -33,6 +33,11 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## 로컬 환경·메모리 정리 — 2026-09-28
 
+- 후속 DL-16534 QA 요청으로 웹에 `feature/DL-16534`와
+  `/Users/parkjongsun/Repository/dentlink-client-feedback-qa`가 새로 생성됐다.
+  Rating 클릭 개선 한 파일이 미커밋 상태이며 정리 대상이 아니다. 상세 상태는
+  [피드백 QA 체크포인트](dentlink-client-order-feedback.md)를 참조한다.
+  아래 목록은 이 후속 작업 이전 정리 시점의 기록이다.
 - 사용자가 LBX 외 작업까지 로컬 브랜치·worktree·메모리를 확인하고 불필요한 항목을
   정리한 뒤 대기하도록 요청했다. 아래 목록은 이번 live Git/경로 점검 결과다.
 - 웹 기본 checkout은 `feature/DL-16387 / 347909945`, DLDS 전용 worktree는
