@@ -35,7 +35,9 @@ Detailed implementation history remains in the relevant existing project file.
 
 - 후속 DL-16534 QA 요청으로 웹에 `feature/DL-16534`와
   `/Users/parkjongsun/Repository/dentlink-client-feedback-qa`가 새로 생성됐다.
-  Rating 클릭 개선은 `458c263b1`로 push했고 release/v1.87.0 대상 PR #4636이 OPEN이다.
+  Rating 클릭 개선과 작성자 이름 검색은 `9aea3d0e0`로 push했고
+  release/v1.87.0 대상 PR #4636이 OPEN이다. PM 정정으로 의사명은 제외하고 작성자
+  필터를 추가했으며 나머지 백엔드 작업은 이번 배포 필수가 아니다.
   이 worktree는 clean이지만 진행 중인 QA 환경이므로 정리 대상이 아니다. 상세 상태는
   [피드백 QA 체크포인트](dentlink-client-order-feedback.md)를 참조한다.
   아래 목록은 이 후속 작업 이전 정리 시점의 기록이다.
