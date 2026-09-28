@@ -4,7 +4,38 @@
 기록보다 live Git, Jira, Notion, Figma와 배포된 Swagger 상태를 우선한다. 기획
 검토, 구현, 로컬 QA, 앱 검증, release 전달, 스테이징 QA와 배포를 구분한다.
 
-## 최신 체크포인트 — 2026-09-14 웹 master 복귀와 로컬 release 정리
+## 최신 체크포인트 — 2026-09-28 DL-16443 관리자 목록 현황 확인
+
+- 사용자 요청은 현재 상황 확인이다. 제품 코드·branch 전환·테스트·서버 실행·PR·Jira 변경은
+  하지 않고 개인 컨텍스트 pull, 제품 fetch, 코드·GitHub·Jira·DEV API를 읽기 전용으로 확인했다.
+- `/Users/parkjongsun/Repository/dentlink-client`는 `feature/DL-16443`,
+  `f9b11e06670a14c2e79258b9147217b254744c05`에서 clean이며 원격과 ahead/behind 0/0이다.
+  이전 task 생성 시점 기록보다 이 live 상태가 우선한다.
+- `/feedbacks` 목록, 주문번호·작성자 ID·Rating·키워드 코드·최초 작성 기간 필터,
+  페이지 크기/페이지 이동, 오류 재시도, ORDER/READ 권한이 구현돼 있다. 초기 상세 제외 범위
+  이후의 9월 22일 커밋에는 기존 상세 패널·상세 API 재사용, 행 클릭, 작성자 유저 상세 링크,
+  주문번호 주문 상세 링크까지 추가돼 있다. 이 구현을 초기 범위만 근거로 되돌리지 않는다.
+- [PR #4625](https://github.com/Innvoaid/dentlink-client/pull/4625)는
+  `feature/DL-16443 → release/v1.87.0`, OPEN·APPROVED·MERGEABLE이다.
+  CodeRabbit check는 SUCCESS, Vercel check는 FAILURE이며 mergeStateStatus는 UNSTABLE이다.
+  실패 원인과 미해결 리뷰 스레드는 이번 현황 확인에서 조사하지 않았다.
+- 개발 전달 PR #4626, #4627은 9월 22일 merge 이력이 있지만, **현재 `origin/develop`
+  `1d0140ca3`에는 `admin/src/pages/feedbacks/index.tsx`가 없다.** 현재
+  `origin/release/v1.87.0` `df67270e6`에도 없다. 과거 merge를 현재 개발/릴리즈 포함으로
+  해석하지 않는다. 빠진 원인과 실제 배포본은 미확인이다.
+- DEV `GET /admin/menus`와 본인 permissions에는 `/feedbacks`가 존재하지만 위치가
+  **주문관리 > 피드백**이다. Jira의 **CS 관리 > 피드백**과 다르다. 메뉴는 서버 데이터로
+  구성되며 프런트 정적 메뉴 추가로 해결하는 구조가 아니다.
+- DEV Swagger와 실제 목록 응답은 여전히 `firstReviewedAt`만 제공한다. 전체 38건,
+  첫 페이지 10건 조회 200/0000 및 최초 작성 시각 내림차순을 확인했다. 현재 화면도
+  `최초 작성 일시`를 표시한다. Jira의 수정 시각 표시·수정 후 최상단 노출은 미확인이다.
+- Jira DL-16443은 진행 중, fixVersion 없음이다. 이번 확인에서는 화면 QA·테스트를
+  재실행하지 않았다. TCP listener 목록에 Dentlink/Node 개발 서버가 없고 3002도 비어 있다.
+  macOS 및 다른 앱 서비스만 확인됐으며 종료할 개발 서버는 없었다.
+- 다음 시작점: 현재 개발 브랜치의 기능 누락 경위, 메뉴 위치 정책, 수정 시각/정렬 계약을
+  먼저 확인한다. 이후 명시적으로 승인된 범위에서 코드·전달·화면 검증을 진행한다.
+
+## 이전 체크포인트 — 2026-09-14 웹 master 복귀와 로컬 release 정리
 
 - 사용자가 웹은 로컬 `master`만 남기도록 명시적으로 요청했다.
 - `/Users/parkjongsun/Repository/dentlink-client`에서 원격 fetch 후 로컬 release
