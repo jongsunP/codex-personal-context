@@ -1,6 +1,51 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-09-22, 릴리스·개발 대상 PR 각각 생성 / 배포 전 전체 검토 대기
+## 현재 체크포인트 — 2026-09-28, 배포 전 전체 검토 완료 / CodeRabbit 미해결 0
+
+### 이번 요청의 범위와 현재 코드
+
+- 사용자 요청: develop·미병합 여부는 논외로 두고 **합의한 전체 요구사항·UI/UX·실제 조회 흐름과 CodeRabbit/코드 전반을 배포 전에 최종 검토**한다.
+- 제품은 기존 `/Users/parkjongsun/Repository/dentlink-client` 체크아웃의 `feature/DL-16387`을 사용했다. 불필요한 worktree를 추가하지 않았다.
+- 릴리스 대상은 [PR #4623](https://github.com/Innvoaid/dentlink-client/pull/4623), base `release/v1.87.0`이다. develop 브랜치/PR 조작, 병합, 배포는 실행하지 않았다.
+- 제품 보완 커밋 `8a5a367a2af837a9ebe1770c24fd4d0391925d22`에 이어 최종 커밋 **`5cab2e5ae20eadda5362c4cdd72ac2c650c8276b`** (`fix: 드롭다운 접근성 연결과 문서 타입 예시 정정`)을 push했다. 로컬/원격 HEAD 일치, 작업 트리 clean 확인.
+- 사용자의 CodeRabbit 검토 요청에 따른 전체 처리 권한으로 유효 지적 수정·검증·commit/push·답변/resolve를 수행했다. 기존 모바일 검색 접근성 스레드 `PRRT_kwDOJnA7-86kooEC`는 처리 완료했다. **최신 `5cab2e5ae` CodeRabbit 재검토 SUCCESS, 전체 스레드 4개 모두 resolved, 미해결 0개를 최종 재조회로 확인했다.**
+
+### 요구사항 및 발견 사항 처리
+
+- 최신 사용자 합의 → Jira DL-16387 텍스트 → 예시 화면 순으로 28개 계약/화면 항목을 대조했다. 필수 API 미정 항목은 없다.
+- 최신 개발 Swagger에서 Baby 생성 주소는 **단수 `POST /admin/shipments/consolidations/baby`**임을 확인했다. 제품 wrapper는 이미 맞게 연결되어 있었다.
+- Mother 문서 enum이 `LABEL`에서 **`COURIER_INVOICE`**로 바뀌어 기존 화면에 빈 다운로드 버튼이 생길 수 있는 문제를 수정했다. 최신 타입을 동기화하고 새 값/기존 LABEL을 label로 표시하며 미지정 타입은 파일명 또는 문서 다운로드로 표시한다.
+- CodeRabbit 지적: `isLabel=false`인 기공소 검색의 모바일 drawer 검색창에 접근성 이름을 전달했다. Office/주문/배송 모바일 trigger와 검색창에도 placeholder/검색 안내를 연결했다.
+- 실제 재현 후 수정: 열린 드롭다운이 백그라운드 재조회로 disabled되어도 메뉴가 남는 문제, 드롭다운 Escape가 전체 생성 모달까지 닫는 문제.
+- 처리 중 clear/키워드/옵션 변경을 차단하고, Tab으로 옵션 접근 및 포커스 이탈 시 닫힘을 지원했다. 기존 `useOutsideHandler` 소비자의 기본 Tab/Escape 동작은 유지했다. 회귀 테스트 8개를 추가했다.
+- CodeRabbit 후속 지적 3개 중 모바일 `aria-controls` 자기 참조 제거와 DTO `@example`의 최신 enum 정합성을 수정했다. 동일 document 리스너까지 Escape를 막자는 지적은 ChartDropdown의 실제 Clinic 소비 구조와 LBX의 window 부모 Modal 리스너를 검토하고 미적용 근거를 답변했다. 전역 capture 우선 소비로 바꾸는 범위 확장은 하지 않았다.
+- 독립 코드 리뷰에서 최종 diff의 추가 확정 결함은 없었다. 중간 Combobox blur containment 지적은 전체 JSX 확인 후 오판으로 정정했고 불필요한 변경을 남기지 않았다.
+
+### 검증 증거
+
+- **실제 DEV 조회**: 새 run의 Admin 인증으로 직접 GET 23회 및 브라우저 GET 23회 전부 HTTP 200. 인증 POST 외 업무 쓰기 요청/시도 0건.
+- Mother의 Baby용 AVAILABLE+BABY_REGISTERED 및 Mother용 BABY_REGISTERED 상태 필터, 기공소→Office 16건→대상 Office의 shippable 주문 1건, `isConsolidated=true + shipperId`의 배송 1건, 배송 상세 consolidation, 기존 픽업 목록·상세를 확인했다.
+- 실제 로컬 화면+DEV 데이터 확인 10개: 배송목록, Baby 의존 조회, 세 모달 초기 submit 비활성, 픽업 초기 연락처 오류 없음/기공소 조회, 배송 및 픽업 상세 등. 런타임 오류 0건.
+- **UI 상태/제출 fixture**: 개발 bundle 35/35, 운영 production build의 IDS129 고정 분기 2/2, 총 **37/37 통과**. 이 전체 실행과 운영 빌드는 `8a5a367a2` 기준이며 실패/미실행 0, 전후 HEAD와 빈 tracked diff 동일. 최종 `5cab2e5ae`의 변경은 접근성 속성 1줄·DTO 예시 1줄이며 3앱 타입 검사 및 push hooks를 다시 통과했다. 후속 접근성 UI 2/2도 통과했으며 별도 `final-followup`으로 기록했다. desktop의 실제 listbox/trigger ID 연결 및 모바일 Combo·Select의 잘못된 자기참조 제거/검색·선택을 확인했다.
+- 목록의 접힌 Mother/Baby 필터와 실제 query, 상세의 값 표시/빈칸/문서 링크, 3개 모달 선행 선택·로딩·빈 목록·오류·검색 결과 없음·재시도·선택 초기화·복수 선택·페이지 추가 조회, 생성 실패/재시도/성공 후 이동, 중복 제출/처리 중 닫기·clear 차단을 포함했다.
+- 1440×1000 및 1366×768에서 모달/입력/제출 영역을 시각 확인했다. 390×844 모바일 emulation에서 검색 drawer의 접근성 이름/안내/선택과 viewport를 확인했다. Admin 전체 모바일 레이아웃 재설계나 모든 브라우저/OS 검증은 아니다.
+- 운영 분기는 `.env.production` 및 `NEXT_PUBLIC_ENV=production`으로 **Admin production build 성공 후 next start**한 localhost에서 검증했다. 실제 운영 API는 전부 fixture 차단하여 호출하지 않았다. IDS (129) disabled 표시, 검색 요청 없음, Office/shippable/배송 query가 129를 사용하는 것 확인.
+- Clinic·Lab·Admin 타입 검사 통과. 변경 파일 lint/Prettier/diff 검사 통과. commit/push hooks 정상 실행: 전체 앱 lint는 기존 경고 222/189/410개, 오류 0; shared configs 21개 + hooks 32개 테스트 및 coverage check 통과.
+- 공용 UI의 일반 ESLint 명령은 기존 root/subpackage Storybook/react-hooks 중복 설정 문제로 실패한다. 제품 설정을 임의 수정하지 않고 루트 config를 명시해 변경 파일 검사를 통과했다.
+- **Vercel 미리보기는 계정 권한으로 실패**한다. 최신 커밋 status의 실제 설명은 `Git author jongsunP must have access to the project on Vercel to create deployments.`이다. 로컬 Admin 운영 빌드 성공과 구분하며 권한 변경이나 별도 배포를 시도하지 않았다.
+
+### 증거 위치와 경계
+
+- 로컬 결과 루트: `/tmp/dentlink-lbx-final-review-20260928`.
+- 계약 대조: `contracts.md`, `contract-spec.json`; 실조회: `lbx-live-1790560854011-f18a16e6/summary.json`; UI: `final-development/report.json`, `final-production/report.json`, `README.md`, `SUMMARY.md`; 운영 빌드: `admin-production-build.log`; push: `push-checks.log`.
+- 초기 harness 실패(PWA 차단/Workbox 충돌, locator 및 fixture 경로 누락)와 수정 전 실제 dropdown 실패는 별도 run에 보존했다. 최종 통과와 혼합하지 않는다. 서비스워커 차단은 테스트 context에만 적용하며 제품 기능은 변경하지 않았다.
+- 기존 Employer 검색은 HTTP 오류를 별도 오류문구 대신 No Result로 표시한다. 미선택/submit 차단과 다음 검색 시 복구를 확인했으며 기존 검색 UI 전반을 재설계하지 않았다.
+- **실제 서버 생성·수정, 배송사 접수/발급 결과는 사용자 지시에 따라 실행하지 않았다.** 테스트의 생성 성공은 실제 거래 성공 증거가 아니다. 제품 코드는 실제 API를 그대로 호출한다.
+- 검토용 dev/prod 서버를 종료하고 이번에 만든 `.next-lbx-final`/`.next-lbx-build`/`.next-lbx-followup`만 정리했다. 다른 서버·checkout은 건드리지 않았다.
+- 최종 판정: 요청한 요구사항·코드·전체 UI/UX 상태·실제 조회 흐름의 배포 전 프론트 검토는 완료했으며, 검토 범위의 미해결 코드 이슈는 없다. Vercel 권한 오류와 실제 서버 생성/배송사 처리 미실행은 별도 경계로 유지한다.
+- 다음 시작점: 새 API/코드 변경이 없다면 이번 검토를 근거로 사용자의 별도 배포 지시를 따른다. 실제 생성 검증은 새로운 사용자 지시가 있을 때만 실행한다. 임시 산출물과 인증 상태는 기기 간 전달되지 않으므로 위 검증 범위/커밋 기록을 정본으로 삼고 필요 시 새 run으로 재검증한다.
+
+## 이전 체크포인트 — 2026-09-22, 릴리스·개발 대상 PR 각각 생성 / 배포 전 전체 검토 대기
 
 - `feature/DL-16387`를 `release/v1.87.0`에 맞춰 갱신하고
   [PR #4623](https://github.com/Innvoaid/dentlink-client/pull/4623)을 열었다.
@@ -120,7 +165,7 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
 | --- | --- | --- |
 | 배송 목록 | `GET /admin/shipments` | 선택적 boolean query `isConsolidated`; `shipperId`, `receiverId`, `motherNumber` 등 기존 필터 유지 |
 | Mother 번호 조회 | `GET /admin/shipments/consolidations/mother-numbers` | query 이름은 복수형 `statuses`; `AVAILABLE`, `BABY_REGISTERED`, `USED` |
-| Baby 생성 | `POST /admin/shipments/consolidations/babies` | `motherNumber`, `labId`, `officeId`, `orderIds`; 응답에 `shipmentId`, `trackingCode`, `pieceTrackingNumber` |
+| Baby 생성 | `POST /admin/shipments/consolidations/baby` | `motherNumber`, `labId`, `officeId`, `orderIds`; 응답에 `shipmentId`, `trackingCode`, `pieceTrackingNumber` |
 | Mother 생성 | `POST /admin/shipments/consolidations/mothers/{motherNumber}/waybill` | body 없음; 응답에 `motherNumber`, `closedAt`, `documents` |
 | Baby 픽업 | `POST /admin/shipments/consolidations/pickups` | `labId`, `shipmentIds`, `pickup`; 응답에 `pickupRequestNumber` |
 | Baby 생성 대상 주문 | `GET /admin/orders/shippable` | 필수 `labId`, `officeId`; 선택 `patientName`, `orderId`, `page`, `size`, `sort`; `ShippableOrderDto[]`와 페이지 메타데이터 |
@@ -135,7 +180,7 @@ HTTP 200과 아래 계약을 확인했다. 이는 **명세 반영 확인**이며
   `documents`, `shipmentIds`가 있다. 일반 배송의 consolidation은 null이다.
 - 상세의 `consolidation.shipmentIds`는 같은 Mother에 연결된 **다른 배송 ID**이며
   조회 중인 배송 자체는 제외한다. 화면에서 현재 배송을 임의로 중복 추가하지 않는다.
-- Mother 문서 타입은 `LABEL`, `COMMERCIAL_INVOICE`, `PACKING_LIST`, `DECLARATION`이다.
+- 2026-09-28 최신 Mother 문서 타입은 `COURIER_INVOICE`, `COMMERCIAL_INVOICE`, `PACKING_LIST`, `DECLARATION`이다. 기존 `LABEL`은 화면 표시만 호환한다.
   생성 전 문서 목록은 비어 있고 생성 시각은 null일 수 있다.
 - `PickupDto`는 `pickupDate`, `pickupTime`, `locationType`, `location`,
   `contactPhone`, `contactEmail` 필드를 가진다. 현재 타입의 optional/null 선언과
