@@ -1,7 +1,61 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
 
-## 현재 체크포인트 — 2026-09-28 · ② 남은 구현·수정 완료, ③ 재검증 대기
+## 현재 체크포인트 — 2026-09-28 · ③ 대표 사용 화면 재검증·수정 완료
+
+### 현재 상태와 저장 위치
+
+- 최신 요청 **“남은것들 진행해줘”**에 따라 후속 ① 사용 방식·영향 확인 → ② 구현 → **③ 수정 후 재검증**을 진행했습니다. 대표 소비 화면·키보드·모바일 에뮬레이션·Firefox/WebKit을 확인하고 발견한 문제를 수정했습니다. 전체 서비스 전수·실기기·staging 검증 완료는 아닙니다.
+- 제품: `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`, **`bd7f83ec3fd8bba22f4e0c52ece4801f2d9e407b`**. 직전 구현은 `6a841dada60a7c5d93a4aaa6d83a9566fc3a9583`입니다. 정상 hooks로 커밋·푸시하고 원격 일치·clean을 확인했습니다. 기존 사용자 승인에 따른 제품 commit/push와 Git 메모리 정리입니다. PR·병합·배포는 하지 않았습니다.
+- 팀 정본: `shared/ui/DESIGN_COVERAGE.md`의 「수정 후 대표 화면·브라우저 검증」. README·tests/README·Figma 감사 문서도 갱신했습니다. 로컬 카탈로그는 저장소 루트에서 `pnpm dev:ui` → `http://127.0.0.1:5177`입니다.
+- Jira DL-16466 현재 진행 절에 이번 결과·커밋·남은 조건을 반영하고 진행 중 상태를 유지했습니다. Notion·Sites·AI 하네스·에디터는 변경하지 않았습니다.
+
+### 이번 수정
+
+- **모바일 Tooltip:** 숨긴 헤더의 0×0 wrapper가 Tab에 남는 문제를 실제 Clinic에서 재현했습니다. 표시 영역과 자식의 초점 가능 여부를 확인하고 resize·ResizeObserver로 갱신합니다. NONE/본문 없음에는 observer를 만들지 않습니다.
+- **WebKit Tooltip 링크:** 트리거 초점 → 내부 링크 pointerdown → blur(relatedTarget=null) → unmount로 click이 빠졌습니다. 내부 pointer 조작 중에만 blur 닫기를 보류했습니다. 수정 전 실패와 수정 후 WebKit·Firefox 클릭 성공을 확인했습니다.
+- **안내 이름:** Tooltip의 아이콘·상태·비활성 입력·차트 구역에 기존 문구/번역으로 `triggerAriaLabel`을 연결했습니다. 전체 서비스 접근성이나 스크린리더 검증 완료를 뜻하지 않습니다.
+- **데스크톱 사진 편집:** 기존 master에도 Modal onClose가 없고 X가 클릭용 Icon이어서 Escape/키보드 닫기가 안 됐습니다. 기존 초기화 함수와 번역된 native Close 버튼을 연결했습니다. `autoClose=false`로 배경 클릭은 기존처럼 유지했습니다.
+- 공통 폰트·반경·daySize·trapFocus 기본값, 기존 자산·제품 로고 사용처는 바꾸지 않았습니다.
+
+### 실제 화면 확인
+
+| 대상 | 확인한 결과와 경계 |
+| --- | --- |
+| Clinic 사진 편집 | 데스크톱1440×1000·모바일390×844에서 −180~180/5도, 방향키/Home/End·중앙 클릭·끝점 드래그·증감 버튼과 이미지 회전 일치. 끝점 버튼 비활성·모바일 넘침 없음. 새 Escape·X Enter 닫기와 재열기 시 파일/각도 초기화 확인. Save 미실행. |
+| Clinic 안내·Portal 메뉴 | SMS204px·결제 불가200px의 이름/focus/Escape·초점 유지, native disabled 유지. 숨긴 헤더의 빈 Tab 제거와1440↔390 전환 확인. My Office 메뉴는 Escape로 메뉴만 닫고 열기 버튼 복귀, 다음 Escape로 부모 닫힘. Leave 미실행. |
+| Lab 추가금 | Others 선택 후 수량40px/min1. 1→증가2→직접6→감소5→0입력 후 blur에서1로 보정. 요청 미실행. |
+| Lab NUMBER 옵션 | 실제48px/readOnly/min0 렌더 확인. 해당 기존 주문은 수정 불가 안내층이 조작을 막습니다. 강제 클릭·안내층 제거는 하지 않았습니다. 제작 중 표본14건에는 NUMBER 상품이 없었습니다. 실제 소비 콜백은 남기고 공통 Stepper 콜백/readOnly/disabled는 unit·카탈로그 검사로 구분합니다. |
+| Lab 배송 날짜 | 라벨 생성→픽업 일정 등록→날짜40px·과거/주말 제한·선택 반영. 달력을 다시 열어 Escape하면 부모 날짜/체크 유지. 최종 생성 미실행. |
+| Clinic 모바일 주문 날짜 | Order Dates는 별도 자식 창이 아닌 **Filter Drawer 하나의 탭**입니다. Escape로 Filter 전체 닫기·미확정 날짜 미적용이 정상입니다. Done 후 재열기 선택 유지, 날짜40px·390px 넘침 없음. |
+| Admin 방문 요청 | 날짜 선택 자체는 달력을 닫습니다. 선택 후 다시 열고 Escape하면 부모1개·날짜2026-09-29·Done 활성 유지. 다음 Escape 후 재열면 날짜 초기화. 제출 미실행. |
+| Admin 폰트·이메일 | 공휴일 달력 CSS600 제목/한글 요일의 실제 폰트가 Pretendard-SemiBold임을 CDP로 확인. sandbox="" iframe 초점의 Escape는 부모로 전달되지 않고 부모 Close는 정상. sandbox 완화 없음. |
+| Firefox150.0.2 / WebKit26.4 | 카탈로그 Checkbox hover·Stepper32/40/입력/readOnly/disabled/폼 미제출·Slider 키보드/클릭/드래그·Tooltip BASIC/HELP/INFO/닫기/링크·로고18 확인, pageerror0. WebKit320/390px 터치 에뮬레이션에서 range 끝점 탭·감소 버튼·넘침 없음. 실기기·터치 드래그 검증은 아님. |
+
+기존 SVG427개·기존 dist 바이트와 export 보존도 재검산했습니다. 신규80개는 제품 로고에 자동 적용되지 않았습니다. 서로 다른 신규 로고 변형의 gradient ID는 파일명 prefix로 구분됩니다. Clinic/Lab CSS400=Medium·Admin400=Regular/500=Medium은 이전 실제 측정과 현재 선언 보존을 함께 근거로 하며, 이번에 모든 굵기·언어를 새로 측정한 것은 아닙니다.
+
+### 최종 검증 근거
+
+- UI **193개/23파일**, 카탈로그 strict 타입·Vite build, E2E 전체 타입 검사 통과. Tooltip2·사진 편집2 회귀는 수정 전 실패→수정 후 통과했습니다. 아이콘 실행 코드는 직전2개 통과 이후 그대로여서 재실행하지 않았습니다.
+- 공식 **local focused E2E4개 통과**: `e2e-runs/2026-09-28T06-40-43-648Z-a4ef7e8a`. 실패/flaky/skip/미실행/전역 오류0. 실행 전후 source 동일: `396eada7857dc13405793eb0090e7be2ff5009206110ed2da38faa726925503f`. 실행 당시 HEAD는 부모6a841dada이며 이 작업 사본 hash가 실제 코드 근거입니다. 이후 문서 외 실행 코드 변경은 없습니다.
+- `09_sharedUi.spec.ts` 기존3개(Clinic Export desktop/tablet·Admin SMS)에 모바일 프로필 Tooltip1개를 추가했습니다. 프로필 설정 write 차단·요청0건 assertion을 포함합니다. staging 전체나 배포 증거가 아닙니다.
+- 정상 commit hooks의 세 앱 타입과 push hooks의 앱 lint·coverage 통과. scoped shared lint의 Members 조건부 Hook5·DataTable 빈 callback4 및 경고는 HEAD와 동일한 기존 진단입니다. 일반 UI tsc의 과거578 baseline은 이번에 재측정하지 않았고 성공 근거로 사용하지 않습니다.
+- 수동 조사는 업무 write를 차단했습니다. 초기 조회 POST 차단(`/admin/chats/search`, `/lab/orders/search`)은 코드 확인 뒤 정확한 조회 경로만 허용했습니다. 채팅 읽음 POST2건은 차단했습니다. Network Error2건·로컬 QA 위젯500·기존 경고는 별도이며 네트워크 전체 정상으로 보고하지 않습니다. 실제 저장·전송·읽음 변경은 실행하지 않았습니다.
+
+### 남은 조건과 다음 시작점
+
+1. **권한·데이터:** DSO `/organizations/billings`는 같은 계정에서 `/403`으로 이동합니다.92일 범위·카테고리 안내의 실화면이 남습니다. 수정 가능한 NUMBER 옵션 주문 또는 승인된 테스트 데이터가 있으면 실제48px 소비의 값 변경을 확인합니다.
+2. **별도 환경:** 실휴대폰·스크린리더·전체 다국어 줄바꿈·staging 전체 회귀. 브라우저 에뮬레이션으로 완료 표시하지 않습니다.
+3. **범위·디자인 판단:** Figma4010:2156 좌우 화살표 묶음의 용도는 미확정입니다. 기존 이름 대응 아이콘226종의 전체 도형/색 대조는 기존 감사 범위 밖입니다. 전역 medium500/radius1000/daySize46/trapFocus 전환은 필수 잔여 구현으로 간주하지 않고 기존 계약을 유지합니다.
+4. **이후:** 남은 조건과 DLDS1단계 완료 범위를 확정한 뒤, 정리된 컴포넌트·규칙·예시를 DL-16471 AI 프롬프트·하네스 단계의 입력으로 연결합니다. 하네스 구현은 미착수입니다. 완료한105node 감사나③대표 QA를 처음부터 반복하지 않습니다.
+
+### 다른 기기에서 재개
+
+두 Git을 pull → 제품 branch/HEAD·원격 일치·dirty 확인 → 이 절과 DESIGN_COVERAGE의 미확인 조건부터 시작합니다. 아래 과거 절의③미착수/일시중단은 현재 상태가 아닙니다. 소유 서버5177/3100/3102/3105·브라우저·계정 잠금은 종료했고 사용자 프로세스는 건드리지 않았습니다.
+
+`/tmp/dlds-phase3`, e2e-runs, 스크린샷·인증·.env·node_modules·이번에 설치한 Playwright Firefox/WebKit은 Git으로 이동하지 않습니다. 팀 문서와 영구 회귀 테스트로 재현하며, 비공개 화면·로그를 Git/공개 문서에 복사하지 않습니다.
+
+## 이전 기록 — 2026-09-28 · ② 남은 구현·수정 완료, ③ 재검증 전
 
 ### 범위와 저장 상태
 

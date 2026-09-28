@@ -33,7 +33,7 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## 로컬 환경·메모리 정리 — 2026-09-28
 
-- **후속 DLDS:** 아래 환경 정리 이후 사용자의 재개 요청으로 사용 방식·영향 확인을 마쳤습니다. 이어서② 남은 구현·수정을 마쳤고③ 실제 소비 화면 재검증 전 대기입니다. 자세한 상태는 [DLDS 체크포인트](dentlink-fe-opportunities.md)를 봅니다. 아래의 일시중단/HEAD는 당시 기록입니다.
+- **후속 DLDS:** 아래 환경 정리 이후 사용자의 재개 요청으로 사용 방식·영향 확인을 마쳤습니다. 이어서② 구현과③ 대표 소비 화면 재검증·발견 문제 수정을 마쳤습니다. 권한·데이터·실기기 제한은 별도로 남았습니다. 자세한 상태는 [DLDS 체크포인트](dentlink-fe-opportunities.md)를 봅니다. 아래의 일시중단/HEAD는 당시 기록입니다.
 
 - 후속 DL-16534 QA의 Rating 클릭 개선과 작성자 이름 검색은 PR #4636으로
   release/v1.87.0 `ae1145676`에 병합됐다. 사용자 요청에 따라 로컬
@@ -146,19 +146,7 @@ Detailed implementation history remains in the relevant existing project file.
   저장됐지만, 2026-09-28 사용자가 백엔드 문제로 이번 배포에서 제외했다.
   PR #4623은 미병합 종료됐고 작업 브랜치를 보존한 채 대기한다.
   제품 API는 정상 연결하며 실제 서버 생성·수정 요청은 테스트에서 실행하지 않는다.
-- DLDS의 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의
-  **2026-09-28 최상단 절**이 정본입니다. 후속 순서
-  ① 기존 사용 방식·영향 확인 → ② 남은 구현·수정 → ③ 수정 후 재검증 중
-  **①·②를 마쳤고③은 다음 요청부터** 진행합니다. Tooltip 안내 접근,
-  중첩/Portal 준비 중 Escape·메뉴 초점 복귀, Checkbox·Stepper·Slider·Tooltip
-  원본 상태와 신규 아이콘64개·로고16개를 반영했습니다.
-  `dentlink-client-dlds`, `feature/DL-16466`, HEAD
-  `6a841dada60a7c5d93a4aaa6d83a9566fc3a9583`. UI189·아이콘2·최종focused E2E3
-  통과이며 제품 전체·실기기 재검증과 구분합니다. 전체 DLDS 정비는 미완료,
-  AI 하네스·에디터·PR·병합·배포는 별도입니다.
-  재개 시 두 Git을 pull하고 제품 DESIGN_COVERAGE와 위 정본의③ 목록을
-  따릅니다. 완료된105개 node Figma 조사를 반복하지 않으며 환경·인증·로컬
-  로그는 Git으로 이동하지 않습니다.
+- DLDS 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의 **2026-09-28 최상단 절**입니다. 후속① 사용 영향·② 구현·③ 대표 사용 화면 재검증과 발견 문제 수정을 마쳤습니다. 모바일 Tooltip의 빈 Tab·WebKit 내부 링크·아이콘 안내 이름, 데스크톱 사진 편집 Escape/Close를 보완했습니다. `dentlink-client-dlds`, `feature/DL-16466`, HEAD `bd7f83ec3fd8bba22f4e0c52ece4801f2d9e407b`. UI193·local focused E2E4·Firefox/WebKit 카탈로그 통과. DSO 권한·수정 가능한 NUMBER 주문·실기기/스크린리더·staging 전수는 별도이며 전체 DLDS 완료로 표시하지 않습니다. 다음은 남은 조건과1단계 완료 범위를 확정한 뒤 AI 하네스 입력 정리입니다. AI 하네스·에디터·PR·병합·배포는 미착수입니다. 재개 시 두 Git을 pull하고 완료한105node 감사/대표QA를 반복하지 않습니다.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.
