@@ -4,7 +4,40 @@
 기록보다 live Git, Jira, Notion, Figma와 배포된 Swagger 상태를 우선한다. 기획
 검토, 구현, 로컬 QA, 앱 검증, release 전달, 스테이징 QA와 배포를 구분한다.
 
-## 최신 체크포인트 — 2026-09-28 DL-16443 관리자 목록 현황 확인
+## 최신 체크포인트 — 2026-09-28 DL-16443 배포 전 최종 코드 검토
+
+- 사용자는 메뉴 위치는 직접 설정하고, 현재 백엔드 계약/응답을 요구사항으로 확정했다.
+  수정 시각 표시나 별도 정렬을 추가하지 않는다. `develop`은 검토 범위에서 제외하며,
+  release 병합은 코드 검토/수정 완료 후 진행할 계획이다. 아래 이전 기록의 다음 시작점을
+  이 결정으로 대체한다.
+- 요청은 **CodeRabbit 리뷰 및 전체 PR 코드 검토만**이다. 제품 코드 수정, commit/push,
+  리뷰 답글·resolve, merge, 배포는 하지 않았다.
+- [PR #4625](https://github.com/Innvoaid/dentlink-client/pull/4625)의 변경 4개 파일과
+  관련 필터·권한·상세 패널·공통 테이블 소비자를 검토했다. 고정 head는
+  `f9b11e06670a14c2e79258b9147217b254744c05`, 원격 release/v1.87.0은
+  `df67270e6bc00037068c9dacf9688b46560b3f1d`이며 `git ls-remote`로 확인했다.
+- 수정 권고 1건(P2): 페이지의 `Number(query.orderId/userId)`가 소수를 허용한다.
+  Search는 브라우저 form 검증 없이 URL로 전달하며, DEV API에 각각 `1.5`를 보내면
+  HTTP 400/code 1000이 재현됐다. 재시도도 같은 잘못된 필터를 사용한다. 정수 검증과
+  유효하지 않은 입력 안내가 필요하다. 정상 page=0/size=10은 200/0000이다.
+- CodeRabbit 미해결 스레드는 2개다. 숫자 파라미터 지적 중 위 소수 ID 문제는 유효하다.
+  음수 page/size는 실제 API가 0/기본 크기로 정상화하므로 실패를 재현하지 못했다.
+  공통 DataTable의 rowIndex 전달 및 nullish fallback 제안은 현재 사용처에서 신규 회귀가
+  확인되지 않았다. 일반 셀의 `|| "-"`는 PR 이전부터 존재한다. 세미콜론 제거 제안은
+  저장소 Prettier `semi: true`와 충돌한다. 이들을 배포 결함으로 확대하지 않는다.
+- 검토 도중 기본 checkout이 다른 작업에 의해 `feature/DL-16387 / 90302a936`으로
+  전환됐다. 이후 PR SHA의 소스를 별도 임시 archive로 추출하고 workspace 의존성도
+  그 snapshot을 가리키게 연결하여 Admin·Clinic·Lab tsc를 모두 재검증했다(통과).
+  대상 ESLint/Prettier, diff check가 통과했고 현재 원격 release와 merge-tree 충돌이 없다.
+  다른 작업의 checkout과 미커밋 파일은 변경하지 않았다. 새 개발 서버를 띄우지 않았다.
+- PR은 OPEN·APPROVED·MERGEABLE, CodeRabbit check SUCCESS다. Vercel FAILURE의
+  표시 사유는 `Deployment was blocked`이며 구체적 차단 원인은 미확인이다.
+  정적 검토·타입 검사·API 재현 결과이며 실제 화면 E2E/배포 완료 증거는 아니다.
+- 다음 시작점: 숫자 ID 검증 수정이 승인되면 PR branch의 사용 가능한 checkout에서
+  해당 문제를 처리하고 관련 검증을 한다. CodeRabbit 스레드 처리와 Vercel 차단 확인,
+  release 병합·배포는 각각 실제 완료 여부를 확인한다.
+
+## 이전 체크포인트 — 2026-09-28 DL-16443 관리자 목록 현황 확인
 
 - 사용자 요청은 현재 상황 확인이다. 제품 코드·branch 전환·테스트·서버 실행·PR·Jira 변경은
   하지 않고 개인 컨텍스트 pull, 제품 fetch, 코드·GitHub·Jira·DEV API를 읽기 전용으로 확인했다.
