@@ -69,6 +69,21 @@ appear nowhere else in the app.
   meaningful duplication, or provide reuse; otherwise keep the direct project
   primitive.
 
+## Design-System Boundaries
+
+- Keep design-system UI independent of business domains. Order forms, payment
+  workflows, chat panels, and other business-specific composites belong to the
+  feature or domain layer and must not be classified as design-system primitives.
+- Business components may compose generic UI through props, callbacks, and
+  children. Generic UI must not import business components or own domain API
+  calls, permissions, business states, or workflow rules.
+- A component living under a shared `ui` directory does not automatically make
+  it part of the design system. Define the catalog and AI-generation component
+  scope explicitly; preserve compatibility while planning any folder/export
+  separation rather than assuming it is already complete.
+- Use domain-neutral catalog categories and sample content. Prefer names from
+  the design source; identify any added grouping as a catalog convention.
+
 ## Interaction Components
 
 - Treat dropdown trigger, portaled menu, outside click, Escape, focus restore,
