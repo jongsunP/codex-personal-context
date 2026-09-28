@@ -1,7 +1,41 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
 
-## 현재 체크포인트 — 2026-09-28 · 아이콘 누락 점검·DLDS 컴포넌트 모음 명칭 정리
+## 현재 체크포인트 — 2026-09-28 · 자율 보조 UI 정비·검증·저장 완료
+
+### 요청·저장 상태
+
+- **최신 요청:** 스스로 진행 가능한 작업을 마치고 제품 commit/push·메모리화 후 다음 할 일을 브리핑. 직전 대기를 해제해 아래 정비를 수행했고 마무리 후 대기합니다. 아이콘 시각 추가 대조 제외·공통 명명 원칙은 그대로 적용합니다.
+- **제품:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`, **`85002472fe6823da903138cbc577d0883bf72d0c`**. 정상 hooks로 커밋·푸시, HEAD/추적/원격 실조회 SHA 일치·clean 확인. 직전은4622b54e5, 범용 UI 경계/실제 화면 구현은ca567f7df·bd7f83ec3입니다.
+- **Jira:** DL-16466의 「현재 진행 · 2026.09.28」만 새 결과·커밋·남은 조건으로 갱신하고 반환 본문 일치 확인. 상태 **진행 중** 유지. 원래 목표·Notion 링크·이전 검증 기록은 보존했습니다. Notion·Sites·AI 하네스·에디터·PR·병합·배포는 변경하지 않았습니다.
+
+### 이번에 마친 작업
+
+- **RadioGroup:** 혼합 UI index와 EnumMaps 업무 모델 의존을 직접 import·동일 구조의 로컬 props 타입으로 교체하고 `@dentlink/ui/dlds`에 공개했습니다. 기존 name·value·list·문자열/숫자 callback·선택 비교를 유지합니다. icon 필드는 타입 호환만 유지하며 새로 표시하지 않습니다. Clinic/Admin 기존 사용처의 import나 폼을 변경하지 않았습니다.
+- **ListItemGroup:** Checkbox/Radio 직접 import, 사용하지 않는 Typography/theme/주석·스타일 제거. DataListFilter는 props를 type import로 참조합니다. padding/checkedColor/notBorderBottom 공개 타입은 호환용으로 유지하며 현재 표시 효과가 없음을 문서화했습니다. 기존 단일 defaultChecked·다중 checked 계약은 보존했습니다.
+- **공개 범위 판단:** ListItemGroup은 현재 제품 JSX 소비가 없고 고정 name·중첩 label·단일/다중 선택 모델 차이가 있어 새 DLDS 공개 경로에 넣지 않습니다. 새 코드는 RadioGroup 또는 Radio/Checkbox를 조합합니다. 미사용 컴포넌트의 새 기능·그룹 API를 임의 설계하지 않습니다. 이는 확정된 필수 잔여 구현이 아닙니다.
+- **모음 페이지:** 기존 Radio 항목 안에 Radio/RadioGroup 전환, 문자열/숫자0 선택과 사용 코드·값 타입을 연결했습니다. RadioGroup 미지원 size/disabled는 해당 모드에서 숨기고 기존 Radio 설정을 유지합니다. Button Spinner 안내, SelectDropdown/ChartDropdown 콜백·SegmentControl name 필수 설명을 실제 API에 맞췄습니다. 새 상위 명칭/업무 컴포넌트는 추가하지 않았습니다.
+
+### 검증·한계
+
+- UI **200개/24파일 통과**(새 RadioGroup4개: 문자열/숫자0 callback·native form 값·외부 초기화·서로 다른 name의 독립성). 공개 dlds 경로에서 실제 컴포넌트를 가져와 검증합니다. 초기 테스트는 현재 Vitest2에 없는 matcher 때문에 실패했으며 기존 지원 matcher로 바로잡아 전체 통과했습니다.
+- **Chromium1440px / WebKit390px:** Group 문자열/숫자0·1 선택, 좌우 방향키, 코드 갱신, 기존 Radio small/disabled 전환 보존, 가로 넘침0·pageerror0. Chromium의 실제 clipboard 문자열/숫자 코드2개가 표시와 일치하고 각각 strict TypeScript 진단0. 초기 수동 스크립트의 중복 code 선택·desktop에 없는 Close 선택은 도구 선택자를 수정한 것으로 제품 결함과 구분합니다.
+- 컴포넌트 모음 strict 타입·Vite build, 변경 TS/TSX scoped lint0오류/0경고, 정상 commit hooks Clinic/Lab/Admin 타입, 정상 push hooks 앱 lint·공유 coverage 통과. 기존 앱 lint·Vite chunk/tsconfig 경고는 남습니다. 일반 UI tsc578 baseline이나 전체 서비스 정상 판정으로 확장하지 않습니다.
+- 독립 코드 리뷰: dlds runtime 정적 그래프89→90모듈, 신규 RadioGroup만 추가. 업무 models/API 및 UI/config/hook 혼합 root 유입0·미해결0. Icon의 동적 자산 경로는 이번 변경과 별개이며 재감사하지 않았습니다.
+- 이전 local focused E2E4와 복사41 검증은 직전 구현의 증거입니다. 이번 의존 정리/예제 변경에서는 제품 API·사용 화면 로직을 변경하지 않아 전체 서비스 E2E를 반복하지 않았습니다. 제품 데이터 생성·수정·전송도 하지 않았습니다.
+
+### 남은 것과 다음 시작점
+
+1. **현재 확인된 범위에서 추가 판단 없이 수행할 코드 정리는 완료했습니다.** 아래 환경/적용 결정과 전체 DLDS 마감을 구분합니다. 목록 수나 모든 Figma 변형의 완전 일치를 보장하는 선언은 하지 않습니다.
+2. **실제 소비의 검증 조건:** DSO 접근403 해소, 수정 가능한 NUMBER 옵션 주문/승인된 데이터. 실휴대폰·스크린리더·전체 다국어 및 staging 회귀는 배포 전 검증 범위로 따로 확보합니다. 접근제어 우회·실데이터 생성으로 해결하지 않습니다.
+3. **선택 적용:** 전역 폰트/반경/달력46px/focus trap 일괄 전환, 기존 Button 일괄 교체, 물리적 폴더 이전은 확정된 필수 구현이 아닙니다. 필요할 때 적용 화면·호환 계약을 먼저 결정합니다. 아이콘 시각 추가 대조는 사용자 결정으로 제외하고, 이전 누락 점검 결과를 유지합니다.
+4. **추천 다음 순서:** DLDS1단계 결과와 남은 QA의 마감 범위 확인 → DL-16471 AI 프롬프트·하네스 작업으로 연결. 실제 컴포넌트 진입점/토큰·사용 계약·샘플 코드·명명/업무 경계는 준비됐지만, 비개발자용 실행 환경·입력 최소정보·재질문 규칙·새 UI 처리·결과 평가 기준은 다음 단계에서 구체화합니다. 이번에는 하네스 구현을 시작하지 않았습니다.
+
+재개 시 개인 컨텍스트→제품 branch를 pull하고 현재 HEAD/dirty 확인 후 이 절부터 시작합니다. 완료된 Figma 감사·아이콘 누락 검사·대표 소비 전체를 목적 없이 반복하지 않습니다. 로컬 모음은 제품 루트 `pnpm dev:ui` → `http://127.0.0.1:5177`이며 새 RadioGroup은 Radio 항목의 ‘속성 바꾸기 → 구현’에서 봅니다. 회귀는 `pnpm test:ui`입니다.
+
+이번 소유 QA5187 서버·브라우저는 종료했고 사용자 서버는 건드리지 않았습니다. `/tmp/dlds-support-*`의 브라우저/복사 진단·로그는 기기 전용입니다. Git에는 실제 수정 코드·회귀4개·사용/검증 문서를 저장했으며 인증·node_modules·실행 프로세스는 다른 기기로 자동 이동하지 않습니다.
+
+## 이전 체크포인트 — 2026-09-28 · 아이콘 누락 점검·DLDS 컴포넌트 모음 명칭 정리
 
 ### 저장 상태
 
