@@ -133,10 +133,17 @@ Dentlink frontend work spans `dentlink-client` and `dentlink-app`. Manage this
 as a hierarchy of Codex responsibilities rather than forcing the whole product
 into one checkout.
 
-- Keep one projectless Dentlink FE top-level management session with no
-  dedicated product folder or worktree. It owns work intake, web/app impact
-  classification, shared product and API decisions, priority, release and
-  deployment tracking, implementation-session prompts, and final closeout.
+- Keep one Dentlink FE top-level management session in a personal coordination
+  folder, with no dedicated product checkout or worktree. It continuously owns
+  cross-feature oversight, work intake, web/app impact classification, shared
+  product and API decisions, priority, release/deployment tracking,
+  implementation-session prompts, and final closeout.
+- The main session maintains the Git-backed personal context and, when needed,
+  sets up or organizes project folders and sessions. Verify actual folders,
+  registered project paths, session membership, and execution directories
+  separately; preserve existing history and active product work. Detailed
+  checkpoints stay in the feature files, with shared decisions and routing in
+  `projects/dentlink-fe.md`. Existing authorization boundaries still apply.
 - The top-level session may inspect both repositories, but it must not treat
   them as one Git repository or edit them from an ambiguous working directory.
   Before a mutation, confirm the exact repository and authorization boundary.

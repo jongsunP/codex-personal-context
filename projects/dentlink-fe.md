@@ -14,9 +14,18 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Session Ownership
 
-- The Dentlink FE top-level session is projectless and owns intake, web/app
-  scope classification, shared decisions, priorities, release/deployment
-  coordination, handoff prompts, and closeout.
+- 메인세션은 항상 Dentlink FE 전체를 감독·조율하는 최상위 세션이다.
+  신규 업무 접수, 웹·앱 영향 범위, 공통 결정·우선순위, 진행 상태,
+  release·배포 단계, 구현 세션 인계와 마무리를 관리한다.
+- Git-backed `codex-personal-context`를 관리하며 세션 간 결정·진행 기록을
+  정제·동기화한다. 상세 이력은 기능별 문서에, 공통 결정과 조율 상태는 이 문서에 둔다.
+  의미 있는 정리 시 개인 컨텍스트를 커밋·푸시한다.
+- 필요한 경우 프로젝트 폴더와 세션의 설정·연결·이동·정리를 맡는다.
+  실제 폴더, 앱의 표시 이름·연결 경로, 기존 세션 소속·실행 경로를 각각 확인하고
+  기존 세션 이력과 진행 중인 제품 작업을 보존한다.
+- 메인세션의 폴더는 `/Users/parkjongsun/Documents/ChatGPT/메인 프로젝트`다.
+  개인 조율·자료용 폴더이며 전용 제품 저장소나 worktree를 연결하지 않는다.
+  위 상시 역할은 2026-09-28 사용자가 재확인한 운영 원칙이다.
 - Sessions are created primarily for a feature or responsibility, not for a
   device or repository. One feature session may inspect and implement both its
   web and app portions across the two product repositories.

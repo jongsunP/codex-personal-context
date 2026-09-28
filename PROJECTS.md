@@ -54,8 +54,9 @@ For detailed current state, read:
   [Mobile app](https://github.com/Innvoaid/dentlink-app).
 - 기본 경로: `/Users/parkjongsun/Repository/dentlink-client`,
   `/Users/parkjongsun/Repository/dentlink-app`.
-- FE 최상위 세션은 프로젝트 간 조율을 맡고, 기능별 세션은 정확한 저장소·브랜치
-  경계 안에서 작업한다. 별도 통합 제품 저장소는 없다.
+- FE 메인세션은 전체 감독·조율, Git-backed 개인 컨텍스트 관리와 필요시
+  프로젝트 폴더·세션 설정을 맡는다. 기능별 세션은 정확한 저장소·브랜치 경계
+  안에서 작업하며 별도 통합 제품 저장소는 없다.
 - 현재 로컬 브랜치/worktree 목록과 정리 결과:
   [projects/dentlink-fe.md](projects/dentlink-fe.md)의 2026-09-28 정리 체크포인트.
 - 이 색인은 세부 상태를 중복 보관하지 않는다. 과거 SHA, PR 상태, QA·배포 이력은
