@@ -35,7 +35,8 @@ Detailed implementation history remains in the relevant existing project file.
 
 - 후속 DL-16534 QA 요청으로 웹에 `feature/DL-16534`와
   `/Users/parkjongsun/Repository/dentlink-client-feedback-qa`가 새로 생성됐다.
-  Rating 클릭 개선 한 파일이 미커밋 상태이며 정리 대상이 아니다. 상세 상태는
+  Rating 클릭 개선은 `458c263b1`로 push했고 release/v1.87.0 대상 PR #4636이 OPEN이다.
+  이 worktree는 clean이지만 진행 중인 QA 환경이므로 정리 대상이 아니다. 상세 상태는
   [피드백 QA 체크포인트](dentlink-client-order-feedback.md)를 참조한다.
   아래 목록은 이 후속 작업 이전 정리 시점의 기록이다.
 - 사용자가 LBX 외 작업까지 로컬 브랜치·worktree·메모리를 확인하고 불필요한 항목을
