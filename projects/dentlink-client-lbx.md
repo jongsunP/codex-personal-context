@@ -13,6 +13,8 @@
 - CodeRabbit 마지막 확인은 최신 `347909945` 재검토 `PENDING`, 기존 전체 스레드 4개 resolved/미해결 0개다. 사용자의 배포 제외·PR 종료 결정에 따라 watcher를 종료했으며, 이 최신 커밋에 대한 CodeRabbit 완료를 주장하지 않는다. 직전 `5cab2e5ae`의 재검토 완료 기록은 아래에 유지한다.
 - Vercel 최신 check는 `FAILURE`, 설명은 **`Deployment was blocked`**이다. 이전 커밋에서 확인한 Vercel 팀/작성자 접근 권한 오류 이력은 아래와 같으며, 최신 차단 원인을 별도로 확정하거나 권한/배포 설정을 바꾸지는 않았다. 충돌 해결·로컬 검증 성공과 Vercel 실패를 구분한다.
 - 증거 루트: `/tmp/dentlink-lbx-conflict-review-20260928`. `SUMMARY.md`, `final-smoke/report.json`, desktop/mobile 스크린샷 4개, `commit-checks.log`, `push-checks.log`, `final-review-threads.json`에 결과를 보존했다. 검토용 3102 서버 종료 및 이번에 생성한 `admin/.next-lbx-conflict-review`만 정리했고 제품 작업 트리는 clean이다.
+- 사용자 후속 정리 요청까지 처리했다. 제품 `fetch --prune` 및 현재 브랜치 `pull --ff-only` 후 `feature/DL-16387`의 로컬/원격 `347909945` 일치(ahead/behind 0/0), 미커밋 파일 없음 확인. 미병합 작업은 재개를 위해 로컬·원격 모두 보존하며 현재 체크아웃도 유지한다. LBX 검토용 서버/watcher가 없고 `.next-lbx-final`, `.next-lbx-build`, `.next-lbx-followup`, `.next-lbx-conflict-review`가 모두 정리된 것을 재확인했다. 검증 로그/스크린샷은 증거로 남겼다.
+- 이미 완료된 개발서버 전달 PR #4624는 2026-09-22 병합됨을 확인했다. squash 결과 `792bb396f5d895587644117ea8cdcc45c8717f35`와 전달 브랜치 `b95a27a36830268e58d0c916e65ec337855c0d22`의 전체 트리가 동일하고 원격 `origin/feature/DL-16387-develop`에 보존된 것을 확인하여 **로컬 `feature/DL-16387-develop` 참조만 삭제**했다. 원격 브랜치/develop 환경은 변경하지 않았다. 다른 작업의 DLDS worktree/브랜치와 master도 그대로 유지한다.
 - 다음 시작점: **사용자가 LBX 재개를 지시하기 전까지 보류한다.** 재개 시 백엔드 문제 해결과 변경된 계약, 새 배포 대상 브랜치를 먼저 확인하고 보존된 `feature/DL-16387`을 최신 기준에 맞춘다. 필요한 범위의 실제 조회/UI 회귀 검증 및 새 CodeRabbit 결과를 확인한다. 실제 서버 생성 검증·PR 재개/생성·병합·배포는 별도 사용자 지시를 따른다.
 
 ## 이전 체크포인트 — 2026-09-28, 배포 전 전체 검토 완료 / CodeRabbit 미해결 0
