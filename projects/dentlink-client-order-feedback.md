@@ -4,7 +4,45 @@
 기록보다 live Git, Jira, Notion, Figma와 배포된 Swagger 상태를 우선한다. 기획
 검토, 구현, 로컬 QA, 앱 검증, release 전달, 스테이징 QA와 배포를 구분한다.
 
-## 최신 체크포인트 — 2026-09-28 DL-16443 배포 전 최종 코드 검토
+## 최신 체크포인트 — 2026-09-28 DL-16443 리뷰 조치 완료
+
+- 사용자가 최종 리뷰 후 **조치 전체**를 승인하여 코드 수정·검증·commit/push와
+  CodeRabbit 답변·resolve를 진행했다. 메뉴 직접 설정, 현재 백엔드 계약을 요구사항으로
+  사용, develop 제외, release 병합은 이후 진행한다는 기존 결정을 유지한다.
+- 기본 checkout은 LBX가 수정 중이므로 건드리지 않았다. 이 작업의 checkout은
+  `/Users/parkjongsun/Repository/dentlink-client-feedback-review`, branch는
+  `feature/DL-16443`이다. 앱 worktree 도구가 대상 ref를 찾지 못해 해당 제품 저장소에서
+  별도 worktree를 만들었다. 향후 이 경로와 live worktree 점유 상태를 먼저 확인한다.
+- 최신 제품 commit은 `1babe908fed7e9eceec6206213c7f6ed466c8613`
+  (`fix: 피드백 숫자 필터 검증과 테이블 렌더링 보완`)이며 원격과 일치하고 clean이다.
+  변경은 `admin/src/pages/feedbacks/index.tsx`,
+  `shared/ui/src/DataTable/DataTableRow.tsx` 2개 파일이다.
+- ID는 1 이상의 안전한 정수만 허용한다. 잘못된 ID는 요청을 차단하고 입력 안내를
+  표시하므로 필터가 몰래 빠진 전체 목록을 보여주지 않는다. 정상 재검색/Reset으로
+  다시 조회된다. page/size도 정수·최솟값을 검증해 잘못된 값은 0/10으로 복구한다.
+- 공통 테이블은 접힌 행 renderer에도 rowIndex를 전달하고 접힌 행/일반 셀 모두
+  nullish fallback으로 0·false·빈 문자열을 보존한다. 기존 빈 문자열 renderer는
+  이제 '-' 대신 빈칸을 표시하는 의도된 계약 정리다.
+- Admin·Clinic·Lab 타입 검사, 대상 ESLint/Prettier, diff check 및 실제 소스를 실행한
+  40개 분기 검증이 통과했다. 별도 검토에서도 추가 기능 결함은 확인되지 않았다.
+  commit/push hook의 세 앱 검사와 기존 shared 테스트 27개/coverage check도 통과했다.
+  새 경로의 ignored coverage baseline 누락은 기존 baseline(2026-04-23)의 수치를
+  유지하고 경로만 맞춰 복원했다. baseline을 새 결과로 덮어쓰거나 hook을 우회하지 않았다.
+  shared UI 단독 ESLint의 기존 중복 plugin 설정 충돌은 해당 패키지 설정을 명시해
+  검사했다. 실제 브라우저 E2E나 배포를 수행한 증거는 아니다.
+- [PR #4625](https://github.com/Innvoaid/dentlink-client/pull/4625)의 두 CodeRabbit
+  스레드에 수정 근거를 답변하고 resolve했다. 최신 commit의 CodeRabbit status는
+  SUCCESS/Review completed, 미해결 스레드는 0개다. PR 설명의 행 클릭·검증 내용도
+  최신 구현에 맞췄다. 현재 원격 release와 merge-tree 충돌이 없다.
+- Vercel Preview는 여전히 `Deployment was blocked`다. 원인은 봇이 명시한
+  `jongsunP`의 `innovaid` Vercel 팀 멤버십/연결 문제이며 코드 빌드 오류가 아니다.
+  [근거 코멘트](https://github.com/Innvoaid/dentlink-client/pull/4625#issuecomment-5774169100).
+  팀 관리자의 초대 또는 기존 멤버 계정의 GitHub 연결 확인 후 Preview 재검증이 필요하다.
+  계정 권한/빌링 변경이나 운영 배포로 우회하지 않았다.
+- 다음 시작점: Vercel 권한 문제 확인, 사용자가 계획한 release 병합·배포와 실제 환경 QA.
+  코드 리뷰 조치는 완료했지만 merge/배포까지 완료한 상태는 아니다.
+
+## 이전 체크포인트 — 2026-09-28 DL-16443 배포 전 최종 코드 검토
 
 - 사용자는 메뉴 위치는 직접 설정하고, 현재 백엔드 계약/응답을 요구사항으로 확정했다.
   수정 시각 표시나 별도 정렬을 추가하지 않는다. `develop`은 검토 범위에서 제외하며,
