@@ -4,7 +4,34 @@
 기록보다 live Git, Jira, Notion, Figma와 배포된 Swagger 상태를 우선한다. 기획
 검토, 구현, 로컬 QA, 앱 검증, release 전달, 스테이징 QA와 배포를 구분한다.
 
-## 최신 체크포인트 — 2026-09-28 DL-16443 리뷰 조치 완료
+## 최신 체크포인트 — 2026-09-28 DL-16443 종료 및 로컬 정리
+
+- 사용자가 stage 병합·배포 실행을 알리고 이 작업의 로컬 브랜치·메모리 정리와 세션
+  보관을 요청했다. 코드 작업은 종료하며 추가 구현이나 배포 감시를 자동으로 시작하지 않는다.
+- PR #4625는 release/v1.87.0의 `c07fc181a810d6528b948d792c956fb77cb1d5b6`에,
+  PR #4634는 stage의 `7c4255f7b9fd8efb2cc87978ed26ac8ef49a85e2`에 병합됐다.
+  release와 stage의 tree는 동일하다. 최종 수정 `1babe908f`의 페이지·테이블·타입 및
+  Admin.findFeedbacks operation이 release 결과에 보존됐음을 확인했다.
+- 배포 완료 여부는 사용자 보고와 자동화 상태를 구분한다. 종료 시점 직접 조회한
+  Lab [36370312669](https://github.com/Innvoaid/dentlink-client/actions/runs/36370312669),
+  Admin [36370312690](https://github.com/Innvoaid/dentlink-client/actions/runs/36370312690),
+  Office [36370312672](https://github.com/Innvoaid/dentlink-client/actions/runs/36370312672)는
+  모두 위 stage SHA에서 `in_progress`였다. 성공 완료·실제 화면 QA를 새로 확인한 것은 아니다.
+- 로컬 `feature/DL-16443`, `feature/DL-16443-develop`, `feature/DL-16443-develop-2`를
+  정리했다. 각 local/remote SHA 일치와 관련 PR #4625/#4626/#4627의 MERGED 상태를
+  확인하고 `git branch -d`로 삭제했다. 원격 feature 브랜치는 보존했다.
+- `/Users/parkjongsun/Repository/dentlink-client-feedback-review`는 clean이며 사용하는
+  프로세스가 없음을 확인한 뒤 제거했다. 이 경로는 앱 관리 worktree가 아닌 수동 생성
+  worktree여서 `git worktree remove`를 사용했다. 이 세션의 임시 코드 export·검증 로그도
+  정리했다. 다른 작업의 기본 checkout/LBX 브랜치와 DLDS worktree, master는 유지했다.
+- 기존 stage 복구 ref `refs/codex-backup/stage-20260928-0272910a6d3c`는 보존했다.
+  기존 stage commit이 현재 remote branch의 조상으로 확인되지 않아 유일한 복구 지점을
+  삭제하지 않았다. 이는 작업 branch가 아닌 복구용 ref다.
+- 검증 이력·확정 요구사항·Vercel Preview 권한 문제는 아래 기록을 유지한다. 필요시 다음
+  세션은 이 문서와 현재 원격 release/stage 및 위 배포 run을 확인하고 새 작업을 시작한다.
+  종료된 checkout 경로나 삭제된 local feature 브랜치를 그대로 재사용하지 않는다.
+
+## 이전 체크포인트 — 2026-09-28 DL-16443 리뷰 조치 완료
 
 - 후속 확인: PR #4625는 `c07fc181a810d6528b948d792c956fb77cb1d5b6`로
   `release/v1.87.0`에 병합됐다. 원격 master 기반 stage 재생성과 릴리즈 전달

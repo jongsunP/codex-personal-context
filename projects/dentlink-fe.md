@@ -33,6 +33,16 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Release Stage Checkpoint — 2026-09-28
 
+- 후속 종료 확인: 사용자가 PR #4634를 병합했고 stage는
+  `7c4255f7b9fd8efb2cc87978ed26ac8ef49a85e2`다. release `c07fc181a`와 tree가
+  동일하다. 스테이징 배포를 실행했으며 종료 시점 Lab/Admin/Office 배포 run은 모두
+  `in_progress`였다. 정확한 run 링크와 QA 경계는
+  [피드백 종료 체크포인트](dentlink-client-order-feedback.md)를 참조한다.
+- 사용자 요청으로 DL-16443 local branch 3개, 전용 수동 worktree와 임시 검증 파일을
+  정리했다. 원격 브랜치, 기존 stage 복구 ref, 다른 진행 작업의 LBX/DLDS 환경은 보존했다.
+  개인 체크포인트를 원격에 저장한 뒤 DL-16443 세션을 보관하며, 이 세션에서 새 작업이나
+  자동 배포 감시를 시작하지 않는다. 아래는 stage PR 생성 당시의 이력이다.
+
 - 사용자 요청 순서대로 웹 저장소의 원격 `stage`를 삭제하고, 원격 `master`
   `de2ffdd9e3025cb758632788cd6086c170e4974e`에서 새 원격 `stage`를 만들었다.
   생성 후 `git ls-remote`에서 두 브랜치의 SHA 일치를 확인했다.
@@ -54,8 +64,11 @@ Detailed implementation history remains in the relevant existing project file.
   [DL-16443 — 관리자 피드백 리스트 페이지](https://innovaid.atlassian.net/browse/DL-16443).
   Created `DL-16443 관리자 피드백 목록`, task
   `01a0c83d-bef3-7c43-962d-9f6b2158695b`, in the existing FE project.
-  It owns the web Admin `/feedbacks` list/filter and CS 관리 menu, using the
-  newly added API contract and existing Admin patterns; detail is deferred.
+  It owned the web Admin `/feedbacks` list/filter and CS 관리 menu, using the
+  newly added API contract and existing Admin patterns. Detail was deferred at
+  intake, then the existing drawer and navigation links were added. This task
+  closed on 2026-09-28 after review fixes, release/stage merges and local cleanup;
+  see `dentlink-client-order-feedback.md` for the final state and deployment evidence.
   The user authorized creating `feature/DL-16443` from current master in the
   existing web main checkout. At intake that checkout was clean on LBX
   `feature/DL-16387` with one local-only commit and an active LBX writing task.
