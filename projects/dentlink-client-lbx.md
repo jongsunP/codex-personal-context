@@ -100,9 +100,11 @@
   따른다. 실제로 없는 기능만 새로 만들고 폼·모달·검색·테이블을 최대한 재사용한다.
 - 제품 저장소: `https://github.com/Innvoaid/dentlink-client`
 - 읽기 검토한 제품 체크아웃: `/Users/parkjongsun/Repository/dentlink-client`
-- 현재 작업 폴더: `/Users/parkjongsun/Documents/ChatGPT/FE` — 제품 저장소가 아니다.
-- 기능 작업: `DL-16279 요구사항 검토`, task ID
-  `01a0c2c0-3e4d-7a42-867d-9c80f3fee241`.
+- 현재 등록된 컨텍스트 폴더: `/Users/parkjongsun/Documents/ChatGPT/LBX 프로젝트`
+  — 제품 저장소가 아니다. 2026-09-28 사용자가 폴더와 프로젝트 연결을 정리했다.
+- 기능 작업: **LBX세션**(생성 당시 `DL-16279 요구사항 검토`), task ID
+  `01a0c2c0-3e4d-7a42-867d-9c80f3fee241`. 기록된 cwd에는 옛 `FE`가 남아 있어
+  재개 시 명령의 workdir에 새 컨텍스트 폴더 또는 제품 checkout을 명시한다.
 - 개인 기록의 정본은 이 파일이다. FE 전체 기록은 [dentlink-fe.md](dentlink-fe.md)에
   연결만 유지한다. 공유 제품 저장소에 개인 세션 기록을 만들지 않는다.
 - 사용자는 코드 구현/로컬 검증에 이어 종료 시 **별도 브랜치 생성과 commit/push**를

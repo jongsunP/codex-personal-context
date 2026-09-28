@@ -86,7 +86,7 @@ For detailed current state, read:
 ### Dentlink 권한관리 — DL-16317
 
 - 통합알림센터의 선행 작업. 현재는 별도 프로젝트·세션 초기 설정 준비만 승인됐다.
-- 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트 폴더 2`.
+- 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
 - 앱 표시 이름은 `권한관리 프로젝트 폴더`. 새 task 초기 설정은 완료했고 분석·구현은 대기 중이다.
 - 체크포인트: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 

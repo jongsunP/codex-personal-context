@@ -31,6 +31,34 @@ Detailed implementation history remains in the relevant existing project file.
   not permanent web-versus-app session boundaries.
 - Shared repository mutations still require the user's explicit authorization.
 
+## 프로젝트 폴더 정렬 — 2026-09-28
+
+- 사용자가 디바이스 폴더와 앱 프로젝트의 연결 경로를 수동으로 정리했다.
+  아래 다섯 실제 디렉터리와 기존 세션의 프로젝트 소속을 live 조회로 확인했다.
+  공통 상위 경로는 `/Users/parkjongsun/Documents/ChatGPT`다.
+
+| 폴더 | 기존 세션 | 프로젝트 ID |
+| --- | --- | --- |
+| `메인 프로젝트` | 메인세션 | `4a13e754-960d-4ca3-b716-8f7a19311b64` |
+| `권한관리 프로젝트` | 권한관리세션 | `52bd24fb-ff53-41fb-a9df-f074b3e608ec` |
+| `통합알림센터 프로젝트` | 통합알림센터세션 | `1e576f21-c172-461f-8580-ff4be7fa6810` |
+| `LBX 프로젝트` | LBX세션 | `5daeeb0b-4d4a-4f10-83c1-8ad41fe934ab` |
+| `디자인시스템정비 프로젝트` | 디자인시스템정비세션 | `a047bc64-579f-4993-ab3e-1526d8f47f39` |
+
+- 앱 표시 이름은 조회 당시 위 폴더명 뒤에 각각 ` 폴더`가 붙어 있다. 표시 이름과
+  디바이스 경로는 별도 값이며, 실제 연결 경로는 위 표와 일치한다.
+- **기존 세션의 기록된 cwd는 자동 변경되지 않았다.** 메인·LBX·디자인시스템은
+  옛 `FE`, 권한관리는 `권한관리 프로젝트 폴더 2`, 통합알림센터는 옛
+  `통합알림센터`가 남아 있다. 옛 디렉터리는 없으며 이 메인세션에서도 workdir을
+  생략한 명령은 경로 없음으로 실패했다. 새 `메인 프로젝트`를 명시하면 실행된다.
+  재개 시 각 세션은 새 컨텍스트 폴더 또는 정확한 제품 checkout을 절대 경로로
+  명시한다. 프로젝트 이동만으로 기존 cwd까지 갱신됐다고 보고하지 않는다.
+- 폴더는 개인 세션·자료용이다. 웹·앱 제품 저장소와 DLDS worktree는 이동하거나
+  합치지 않았고 제품 코드·Git 상태를 변경하지 않았다. 기존 세션 이력을 유지하며
+  이 정리로 권한관리 분석이나 다른 기능 구현을 재개하지 않는다.
+- 권한관리 `START_PROMPT.md`와 현재 경로를 가리키는 개인 문서를 갱신했다.
+  아래 과거 체크포인트의 옛 폴더명은 당시 이력으로 보존한다.
+
 ## 로컬 환경·메모리 정리 — 2026-09-28
 
 - **후속 DLDS:** 아래 환경 정리 이후 사용자의 재개 요청으로 사용 방식·영향 확인을 마쳤습니다. 이어서② 구현과③ 대표 소비 화면 재검증·발견 문제 수정을 마쳤습니다. 권한·데이터·실기기 제한은 별도로 남았습니다. 자세한 상태는 [DLDS 체크포인트](dentlink-fe-opportunities.md)를 봅니다. 아래의 일시중단/HEAD는 당시 기록입니다.
@@ -113,10 +141,11 @@ Detailed implementation history remains in the relevant existing project file.
 
 - 2026-09-28 사용자 요청으로 통합알림센터의 선행 작업인
   [DL-16317 권한관리](https://innovaid.atlassian.net/browse/DL-16317)를 별도 준비한다.
-  앱 프로젝트 `권한관리 프로젝트 폴더`에 task `권한관리 초기 설정`
-  (`01a0e6fa-384c-7671-abb8-53d33c42c738`)를 생성해 프롬프트를 전달했다.
-  공통 지침 읽기 완료와 idle 대기를 확인했고 실제 업무는 미착수다. 중복 폴더를 정리해
-  등록 경로인 `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트 폴더 2` 하나만 사용한다.
+  앱 프로젝트 `권한관리 프로젝트 폴더`에 기존 task `권한관리세션`
+  (`01a0e6fa-384c-7671-abb8-53d33c42c738`, 생성 당시 이름 `권한관리 초기 설정`)이 있다.
+  시작 프롬프트 전달·공통 지침 읽기 완료와 idle 대기를 확인했고 실제 업무는 미착수다.
+  중복 폴더 정리 후 사용자가 등록 경로를
+  `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`로 변경했다.
   자세한 시작 상태는 [권한관리 체크포인트](dentlink-permission-management.md)에 둔다.
 - On 2026-09-22 the user requested a separate task for
   [DL-16443 — 관리자 피드백 리스트 페이지](https://innovaid.atlassian.net/browse/DL-16443).

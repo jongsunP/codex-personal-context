@@ -1,8 +1,14 @@
 # Dentlink 통합알림센터 — 사전 검토 체크포인트
 
-최종 갱신: 2026-09-11 — Dentlink FE 최상위 운영 체계에 기능 세션 역할 정렬
+최종 갱신: 2026-09-28 — 컨텍스트 폴더 연결 갱신. 제품 정책·구현 상태는 이전 기록 유지.
 
 ## 식별과 현재 상태
+
+- 2026-09-28 사용자가 컨텍스트 폴더와 앱 연결을
+  `/Users/parkjongsun/Documents/ChatGPT/통합알림센터 프로젝트`로 변경했다.
+  기존 **통합알림센터세션** `01a065e6-afb2-75a0-b465-61c3e488a894`과 이력을 유지한다.
+  기존 task의 기록된 cwd는 옛 `통합알림센터`이므로 재개 시 명령의 workdir에
+  새 컨텍스트 폴더 또는 정확한 제품 checkout을 명시한다. 분석·구현은 재개하지 않았다.
 
 - 기능명은 가칭 `통합알림센터`다. 검색어: 통합 알림센터, 웹·앱 알림 동기화,
   다중 기기 읽음 동기화, unified notification center.
@@ -22,10 +28,10 @@
 - 최상위 세션은 신규 업무 접수, 기능 간 우선순위·공통 계약, 작업 위치·release
   판단과 진행·배포·정리를 조율한다. 공통 운영 정본은 `SESSION_WORKFLOW.md`,
   조율 상태는 `projects/dentlink-fe.md`, 이 기능의 상세 결정·진행은 이 문서에 둔다.
-- **별도 프로젝트 폴더나 worktree 없이** `~/Repository/dentlink-client`와
-  `~/Repository/dentlink-app` 두 저장소를 함께 참조한다. 관리 세션 개설은 구현
-  착수를 의미하지 않으며, 기존 REST 기반 확정 방향과 PM 읽음 정책 등 미정 사항은
-  그대로 유지한다.
+- 위 폴더는 세션 컨텍스트용이며 제품 checkout이 아니다. 별도 제품 worktree 없이
+  `~/Repository/dentlink-client`와 `~/Repository/dentlink-app` 두 저장소를 참조한다.
+  관리 세션 개설은 구현 착수를 의미하지 않으며, 기존 REST 기반 확정 방향과
+  PM 읽음 정책 등 미정 사항은 그대로 유지한다.
 - 이 문서는 개인 컨텍스트의 단일 체크포인트다. 제품 저장소에는 개인 handoff나
   transient 검토 문서를 추가하지 않는다.
 

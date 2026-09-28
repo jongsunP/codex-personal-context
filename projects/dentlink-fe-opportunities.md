@@ -5,6 +5,14 @@
 
 ### 현재 상태와 저장 위치
 
+- **2026-09-28 세션 폴더 정렬:** 기존 **디자인시스템정비세션**
+  `01a0a2eb-da08-7131-aaaf-6c14f0cfc204`은
+  `/Users/parkjongsun/Documents/ChatGPT/디자인시스템정비 프로젝트`에 연결됐다.
+  프로젝트 ID는 `a047bc64-579f-4993-ab3e-1526d8f47f39`다. 기존 세션의 기록된 cwd는
+  옛 `FE`로 남아 있으므로 명령은 새 컨텍스트 폴더 또는 아래 제품 worktree를
+  workdir로 명시한다. 세션 이력과 제품 worktree를 보존했으며 폴더 정리로 구현을
+  재개하지 않는다.
+
 - **최신 요청은 현재 상태 저장·커밋·푸시·메모리화 후 브리핑입니다.** 두 저장소를 다시 pull하고 제품 `bd7f83ec3`의 로컬·원격 일치와 미커밋 변경 없음을 확인했습니다. 이번 마무리에서는 추가 구현이나 테스트를 시작하지 않았습니다. 다음 진행 요청 시 아래 남은 조건부터 이어갑니다.
 - 직전 구현 요청 **“남은것들 진행해줘”**에 따라 후속 ① 사용 방식·영향 확인 → ② 구현 → **③ 수정 후 재검증**을 진행했습니다. 대표 소비 화면·키보드·모바일 에뮬레이션·Firefox/WebKit을 확인하고 발견한 문제를 수정했습니다. 전체 서비스 전수·실기기·staging 검증 완료는 아닙니다.
 - 제품: `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`, **`bd7f83ec3fd8bba22f4e0c52ece4801f2d9e407b`**. 직전 구현은 `6a841dada60a7c5d93a4aaa6d83a9566fc3a9583`입니다. 정상 hooks로 커밋·푸시하고 원격 일치·clean을 확인했습니다. 기존 사용자 승인에 따른 제품 commit/push와 Git 메모리 정리입니다. PR·병합·배포는 하지 않았습니다.
@@ -215,7 +223,7 @@
 - 세 문서 위치는 `DEV Team / Development Documents`, data source `26366594-1ec5-423c-b7c3-35abe1e047f2`입니다. 새 페이지 Tags는 FE·FE Planning·AI, 날짜는 2026-09-18입니다.
 - **Jira 단계:** 상위 [DL-16437 · 디자인시스템 정비 · AI 하네스 기반 화면 제작](https://innovaid.atlassian.net/browse/DL-16437), [1단계 DL-16466 · DLDS 디자인시스템 정비](https://innovaid.atlassian.net/browse/DL-16466), [2단계 DL-16471 · AI 프롬프트·하네스 정비](https://innovaid.atlassian.net/browse/DL-16471)로 정리했습니다. 사용자 허용에 따라 상위·1단계 제목을 변경하고 2단계를 새 하위 작업으로 등록했습니다. 상위와 1단계는 기존 진행 중 상태, 2단계는 해야 할 일, DL-16464·DL-16465는 완료를 유지합니다. 에디터는 2단계 결과를 보고 진행 여부를 정하므로 별도 구현 카드로 확정하지 않았습니다. 각 단계 Jira 상단에 최신 Notion을 연결했습니다.
 - **FE 자체 아이데이션:** 1·2차 회의 참석자는 FE 팀원들입니다. PM·디자이너·운영팀은 도구의 사용자 또는 필요시 확인할 상대입니다. 개인 진행 이력은 이 Git 체크포인트, 팀 공유 본문은 Notion에 둡니다.
-- [dentlink-fe-meeting.md](dentlink-fe-meeting.md)는 최신·이전 Notion과 Jira의 바로가기입니다. `/Users/parkjongsun/Documents/ChatGPT/FE/FE-업무-검토-회의자료.md`는 이 파일의 심볼릭 링크이며 별도 본문을 관리하지 않습니다.
+- [dentlink-fe-meeting.md](dentlink-fe-meeting.md)는 최신·이전 Notion과 Jira의 바로가기입니다. `/Users/parkjongsun/Documents/ChatGPT/메인 프로젝트/FE-업무-검토-회의자료.md`는 이 파일의 심볼릭 링크이며 별도 본문을 관리하지 않습니다.
 - 기존 [Dentlink Experience Studio](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site)는 앞선 시각화 후보의 데모입니다. 이번 선택 과제의 구현 결과가 아니며 이번 기록 작업에서는 수정하지 않았습니다.
 - 사용자가 실제 착수와 자율 진행·제품 커밋·푸시·Git 메모리 정리를 승인했습니다. **1단계 실제 컴포넌트 정비와 DLOS 구조를 참고한 28개 항목 카탈로그를 진행 중입니다.** 최신 제품 HEAD는 `f0d23995d616109739d35348ca31e45404da38a5`(설명 보완), 구현 커밋은 `0fa8295423e9c21ec01c8a6dc928d02c9a0cd16f`입니다. 신규 아이콘 41개, 작은 화면의 선택 목록·팝업·안내 및 키보드 복귀를 보완했습니다. 공통 UI 162개·아이콘 생성 1개·최종 구현 커밋의 서비스 E2E 7개 통과입니다. **전체 1단계 완료는 아닙니다.** 추가 Figma 원본 접근, 일부 상태 대조와 실기기·스크린리더 검증이 남습니다. AI 하네스·에디터·PR·병합·배포는 진행하지 않았습니다.
 - **로컬 실행:** 전용 worktree 루트에서 `pnpm dev:ui` → `http://127.0.0.1:5177`. 설치·접속·종료·포트 중복 안내는 루트 README와 `shared/ui/README.md`에 있습니다. 회귀 검사는 `pnpm test:ui`입니다. Codex의 검증용 5187/5188과 E2E 3100/3105/3102는 종료했습니다. 사용자 5177 서버는 재실행·조작하지 않았고 마지막 점검에서는 리스너가 없었습니다. 다음 재개 시 프로세스 소유자와 경로를 다시 확인합니다.
