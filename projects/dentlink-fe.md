@@ -352,149 +352,16 @@ Detailed implementation history remains in the relevant existing project file.
   Prior history is recoverable from Git; do not restore old links or duplicate
   detailed progress here. Fetch the current Notion before subsequent edits.
 
-## Office Welcome Analytics — Merged and Cleaned Up, 2026-09-18
+## DL-16474 Amplitude — Closed, 2026-09-28
 
-- The user merged [PR #4613](https://github.com/Innvoaid/dentlink-client/pull/4613)
-  into `release/v1.87.0` at 2026-09-18 16:30:38 KST. Squash commit:
-  `f2e956f341a3f4b37a65813a272dddfea3e11080`; original PR head:
-  `92c57f299e94568720ea1630d457104fb76ed378`. Both changed files have identical
-  Git blobs in the original head and merge result; current release
-  `7aaa5b8e306d136458b650db2527e298f505043c` also preserves them.
-- Post-merge cleanup is complete. `/Users/parkjongsun/Repository/dentlink-client`
-  is back on clean `master` at `de2ffdd9e3025cb758632788cd6086c170e4974e`,
-  synchronized with `origin/master`. Local and remote `feature/DL-16474` and
-  its remote-tracking ref are deleted; the old amplitude branch is also absent.
-  The separate active DLDS worktree and `feature/DL-16466` remain intact.
-- Jira is [DL-16474](https://innovaid.atlassian.net/browse/DL-16474),
-  `[FE] 웰컴 앰플리튜드 이벤트 수정`. At the user's subsequent request, the
-  remote and local branch were renamed from `feature/amplitude-pageview-tracking`
-  to `feature/DL-16474`. GitHub closes an open PR when its head branch is renamed,
-  so #4611 is closed and #4613 replaces it with identical three commits, title,
-  target, assignee and requested reviewer. Both PR bodies link to each other;
-  earlier review history stays on #4611 and does not transfer as new approval.
-- The delivered commits include `7ef67797b` for Office-wide `[Amplitude] Page Viewed`
-  collection after Next route completion, covering missed `replace` navigation.
-  The added `26f08b9df` records `welcome_view` once per welcome-page mount via
-  the existing `AMP_Track` queue; rerenders and StrictMode do not duplicate it,
-  while leaving and revisiting records a new visit. Only the existing
-  `useAmplitudeInit.ts` and welcome page were changed.
-- Final follow-up `92c57f299` adds 23 lines to common initialization. SDK 2.43
-  remote configuration can override local `pageViews.trackOn`, reproducing
-  duplicate automatic/manual pageviews. A plugin registered before init sets
-  `defaultTracking.pageViews.trackOn` after the remote merge and before builtin
-  plugin installation. Other remote settings remain active. This prevents
-  automatic pageview creation itself, preserving the click/pageview ID link;
-  filtering already-created automatic events would allow an ID overwrite race.
-- Source: [product thread](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1789705299279979)
-  and [welcome_view definition](https://app.notion.com/p/3dfce072e82f80bf9b5ed5076608579c).
-  PM requested both the common collection improvement and the separate event
-  for 1.87.0. Welcome exposure and approval/Get Started behavior remain unchanged;
-  not every new member necessarily visits welcome.
-- Final checks passed: all three app type/lint hooks (228/189/410 existing
-  warnings, zero errors), coverage hook with 27 shared tests, changed-file
-  lint/format and diff checks. Real-SDK local scenarios passed 26/26: remote
-  config 8, original hook 10, welcome normal/StrictMode 2, cache/follow-up remote
-  response 6. Remote checks did not override `fetchRemoteConfig`; they asserted
-  actual config subscription, one pageview per navigation, counters, click IDs,
-  welcome event coexistence and preservation of other remote capture options.
-  External requests and business mutations were zero. Next completion events,
-  surrounding UI and Replay were test doubles; this is not full browser/Replay
-  or live ingestion proof. SDK upgrades need the same remote/config checks.
-- Historical temporary evidence: `/tmp/dentlink-amplitude-remote-regression.cjs`,
-  `/tmp/dentlink-amplitude-defaultTracking-product-audit.cjs`, original
-  `/tmp/dentlink-amplitude-hook-check.cjs` and welcome-event harness. Hook source
-  SHA-256: `b3f79eb6b86fea5402350f2767a778054bb24d03ed28d5eab5551a6dfc8af551`.
-  These scripts and their logs were removed after merge at the user's cleanup
-  request; they are not available locally or as cross-device artifacts.
-- The user confirmed both common collection and `welcome_view` belong in this
-  delivery, and explicitly limited the final work to PR completion; the team
-  handles deployment. The three commits are now included by the user's squash
-  merge into `release/v1.87.0`. Deployment and live Amplitude receipt remain
-  separate steps; the agent did not merge, deploy or run a CodeRabbit cycle.
-  The production August count was not established as caused solely by this gap.
-- Cleanup first removed nine obsolete experiments/drafts/logs, then removed
-  the remaining four harnesses, two validation logs and the cleanup log after
-  merge. At that checkpoint, no `/tmp/dentlink-amplitude*`, `/tmp/dentlink-welcome*`
-  or `/tmp/dl-16474*` artifacts remained. Remote branch deletion used an exact SHA
-  lease and normal push hooks; local deletion followed verified squash-result
-  equivalence, release ancestry and preservation of the PR head in GitHub.
-- Before merge, Vercel reported that Git author `jongsunP` needed project
-  access to create deployments. That historical check is not a current open-PR
-  blocker after the user's merge; no access-policy change was made here.
-  Next step is team release delivery and actual Amplitude receipt verification.
-
-## Amplitude Environment Consistency — Merged and Cleaned Up, 2026-09-18
-
-- Following the merge above, [DL-16472 comment 44076](https://innovaid.atlassian.net/browse/DL-16472?focusedCommentId=44076)
-  reported that staging received `welcome_view` but not `[Amplitude] Page Viewed`.
-  Staging deployment `d1ee5acec501ee2fbd27b4e0cd80a0e32b8ebde5` succeeded in
-  [workflow 35322222932](https://github.com/Innvoaid/dentlink-client/actions/runs/35322222932).
-  Code review confirmed that automatic capture and Office pageviews still had
-  a production-only condition, while explicit events ran in staging. This
-  restriction predated DL-16474 (2025-08-11 commit `6757ac2f9`, PR #3061); its
-  original rationale was not established. The prior pageview fix preserved it.
-- The user authorized a new branch from `release/v1.87.0`, implementation,
-  commit, push and another PR. [PR #4615](https://github.com/Innvoaid/dentlink-client/pull/4615)
-  was created from `feature/DL-16474-amplitude-env` to `release/v1.87.0`.
-  Base: `7aaa5b8e306d136458b650db2527e298f505043c`.
-  Head: `f6a81010dca9fca028cafe82c83a37e455af129d`,
-  `fix: Amplitude 환경별 이벤트 수집 기준 통일`. One commit, ten changed files.
-  Jira remains [DL-16474](https://innovaid.atlassian.net/browse/DL-16474).
-- `NEXT_PUBLIC_AMPLITUDE_ENABLED=true` plus a nonblank environment key now
-  controls shared SDK loading, Track/Identify/Group, queueing and both app hooks.
-  Disabled environments do not import the SDK or retain direct-event calls.
-  Office and Lab production/staging/development retain their distinct existing
-  keys, with both automatic and explicit collection enabled. The optional DEV
-  preference question had no reply; the stated default preserves existing
-  direct-event use and enables automatic collection consistently. These are
-  build-time Next.js settings, not runtime consent/toggle controls.
-- `NEXT_PUBLIC_AMPLITUDE_SESSION_REPLAY_ENABLED` remains independent: Office
-  production only, Lab all three environments, matching prior behavior. Global
-  collection off also disables Replay. Office production cookie domain and
-  pageview snapshot/remote-config duplicate defenses are preserved. Actual SDK
-  keys are trimmed. Lab now awaits the actual init promise before queue flush;
-  its existing Replay initialization order is retained. Admin has no configured
-  Amplitude init/key and gains no new collection. Welcome exposure is unchanged;
-  Lab's existing `replaceState` pageview limitation was not rewritten here.
-- Verification passed: all three app type and lint hooks; lint had zero errors
-  and 222/189/410 existing warnings. Shared coverage hook passed 45 tests,
-  including 18 new shared-helper regression tests. Changed-file lint, formatting
-  and diff checks passed. Fresh worktree dependencies were installed with the
-  frozen lockfile, and `next typegen` generated ignored app type entrypoints;
-  no lockfile or generated tracked files changed. Coverage used the existing
-  ignored baseline copied from the main checkout.
-- Real SDK 2.43.0 local harness passed seven scenarios: Office staging/prod/dev,
-  disabled collection, Replay enabled, and Lab staging enabled/disabled. Office
-  initial/push/replace pageviews occur once per navigation, counters and click
-  IDs remain linked, and `welcome_view` coexists. Actual RemoteConfig subscription
-  received `pageViews:true` without duplicate Office pageviews; other remote
-  settings remained active. Disabled cases imported/initialized/sent nothing.
-  External requests and business API calls were zero. Next route events, Replay
-  and transport were test doubles; this does not prove live ingestion, real
-  Replay recording or deployment environment injection. Historical temporary
-  harness `/tmp/dl-16474-env-runtime.cjs` was removed during post-merge cleanup;
-  it is not a local or cross-device artifact now.
-- The user merged PR #4615 on 2026-09-18 at 19:09:31 KST. Squash commit
-  `08b74ee9084605ccde8cc19ef0bda836db132a59` is the verified release head.
-  Its complete Git tree equals the original PR head, and all ten changed files
-  have identical blobs. CodeRabbit completed successfully on the final head;
-  review threads total zero, unresolved zero. Its review body contains one
-  nonblocking suggestion to log Replay failures. The user requested verification
-  and cleanup only, so no additional code change or review response was made.
-- Cleanup completed at the user's request: removed the remote branch using an
-  exact-head lease and normal push hooks, then removed the clean dedicated
-  `/Users/parkjongsun/Repository/dentlink-client-amplitude-env` worktree, local
-  feature branch and nine task-specific temporary harness/draft/log files.
-  The main `/Users/parkjongsun/Repository/dentlink-client` checkout remains clean
-  `master` at `de2ffdd9e3025cb758632788cd6086c170e4974e`, synchronized with
-  `origin/master`. The independent DLDS worktree and `feature/DL-16466` were
-  untouched. No amplitude follow-up branch/worktree or `/tmp/dl-16474-env*`
-  artifact remains. Task is complete; wait for the user's next instruction.
-- At PR creation, GitHub reported `MERGEABLE` with overall `BLOCKED` status:
-  Vercel's `dentlink-dlos` preview says `Deployment was blocked`; no more specific
-  current cause was established. Auto Assign succeeded and CodeRabbit was in
-  progress. CodeRabbit later completed as recorded above; the Vercel status
-  remained blocked on the merged PR. The agent did not merge, deploy or post
-  Jira/Slack comments. Deployment with the new build-time flags and confirmation
-  of staging pageviews plus `welcome_view` remain team-side follow-up; they were
-  not verified by this cleanup.
+- Completed: Office pageview collection, `welcome_view`, and Office/Lab
+  environment-consistent collection. [PR #4613](https://github.com/Innvoaid/dentlink-client/pull/4613)
+  and [PR #4615](https://github.com/Innvoaid/dentlink-client/pull/4615) were both
+  merged into `release/v1.87.0` on 2026-09-18. Validation and cleanup are complete.
+- On 2026-09-28, the user requested retirement of this finished session and its
+  working memory. Detailed checkpoints were removed; recover implementation
+  history from the merged PRs or this repository's Git history only if needed.
+  Related local/remote branches, dedicated worktrees and task temporary files
+  are absent. Do not resume this as pending work or restore the old worktree.
+- Deployment and live event receipt were outside this session's verified scope;
+  they are not an active agent task. Other project work/checkouts are independent.
