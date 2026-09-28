@@ -1,7 +1,46 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
 
-## 현재 체크포인트 — 2026-09-28 · ③ 대표 사용 화면 재검증·수정 완료
+## 현재 체크포인트 — 2026-09-28 · 범용 UI 경계·컴포넌트 모음 페이지 보완
+
+### 저장 상태
+
+- 사용자 요청: Feedback 이름을 판단해 정리하고 미작업된 부분을 이어서 구현. 기존 자율 QA·수정·제품 commit/push·Git 메모리 승인 범위로 진행했습니다. PR·병합·배포는 제외입니다.
+- 제품 worktree `/Users/parkjongsun/Repository/dentlink-client-dlds`, 브랜치 `feature/DL-16466`, **`ca567f7df6a46856c06b1542846e37a9dce4de94`**. 정상 hooks로 커밋·푸시했고 로컬·추적 브랜치·실제 원격 SHA 일치와 clean을 확인했습니다. 이전 구현은 `bd7f83ec3`입니다.
+- Jira [DL-16466](https://innovaid.atlassian.net/browse/DL-16466)의 현재 진행 절을 갱신했습니다. 상태는 진행 중이며 전체 1단계 완료가 아닙니다. Notion·Sites·AI 하네스·에디터는 변경하지 않았습니다.
+- 카탈로그란 DLOS처럼 컴포넌트를 모아 보고, 속성·동작을 바꾸고, 사용 코드를 복사하는 페이지입니다. 사용자가 용어를 질문했으므로 대화에서는 **컴포넌트 모음 페이지**로 쉽게 설명합니다. 별도 제품 화면이나 호스팅을 뜻하지 않습니다.
+
+### 구현과 판단
+
+- **Feedback → Overlays:** Figma Core 및 최상위 metadata에는 Feedback 공식 그룹이 없었습니다. Modal·Popup·Tooltip·Toast를 묶는 중립적인 탐색 이름으로 정리했습니다. 기존 `component-*` 링크는 유지합니다. 주문·배송·결제·직원 권한 샘플과 주문 이탈 그림을 범용 항목·분류·도형 예제로 바꿨습니다.
+- **범용 공개 경로:** `@dentlink/ui/dlds`에 검증된 범용 컴포넌트만 명시적으로 export합니다. `Button`은 Button.refactor, `LegacyButton`은 기존 Button입니다. 기존 root와 업무별 진입점·기본값은 보존했습니다. `EllipsisTypography`의 hook import도 직접 경로로 좁혔습니다. 제품 AGENTS·UI README에 업무 도메인 독립 원칙을 추가했습니다.
+- **분리의 한계:** `shared/ui` 전체 폴더를 이전하거나 모든 범용 API를 옮긴 것은 아닙니다. 기존 `RadioGroup`은 UI/models 혼합 barrel, `ListItemGroup`은 미완성 구현·혼합 의존성이 있어 새 경로에 넣지 않았습니다. 기존 소비는 그대로이며 실제 이전 필요성과 영향은 별도 검토합니다. 주문폼·링크톡은 DLDS 목록에서 제외됩니다.
+- **빠진 예제:** 검색형 Combobox의 단일/다중·최대 선택 수·선택 해제·지우기를 실제 API와 연결했습니다. 모드 전환 때 검색어만 초기화하고 선택값은 유지합니다. 좌우48px 버튼을1px 겹친 **95×48px 화살표 조합**은 Figma `4010:2156`의 enabled 원본과 대조했습니다. 각 콜백과 비활성은 사용하는 화면에서 정하며 Stepper나 Pagination 동작으로 단정하지 않습니다. 기존 아이콘을 예제 안에서만 위치 보정하고 전역 자산은 유지했습니다.
+- **복사 코드:** 새 공개 경로로 통일하고 useState import·상태/핸들러 선언·Popup 이미지·날짜 Date[] 타입을 보완했습니다. JSX/Hook 조각형 예제이며 모두 독립 페이지 파일이라는 뜻은 아닙니다.
+- **발견·수정:** 모바일 UA에서 `drawer-root` 누락으로 페이지가 중단돼 HTML root를 추가했습니다. WebKit Close 이후 `useOverlayFocus` cleanup의 복귀를 React `restoreSelection`이 다시 덮어 닫힌 Drawer에 초점이 남는 현상을 이벤트/호출 stack으로 재현했습니다. 동기 복귀는 유지하고 화면 갱신 뒤 닫힌 scope/body에만 남은 초점을 복구합니다. 다른 입력·새 창의 초점은 가져오지 않습니다. DropdownPrimitive에서 먼저 초점을 빼는 시도는 원인이 아니어서 최종 변경에 포함하지 않았습니다.
+
+### 검증
+
+- UI **196개/23파일 통과**. 새 회귀3개는 닫힌 Drawer 복귀·다른 입력 보존·새 Modal 보존입니다. 초기 새 테스트가 cleanup 중간의 동기 복귀를 fireEvent 반환 뒤 요구해 실패했으며, 실제 React commit 이후 계약을 검사하도록 바로잡았습니다. 브라우저의 수정 전 실패와 수정 후 복귀를 별도로 확인했습니다.
+- **Chromium148:** Overlays 분류, 검색·다중 선택·limit·초기화·disabled·긴 목록, 화살표95×48·48px·Tab/ShiftTab·Enter/Space·비활성·폼 제출0, Inspector와 복사 내용 전환을 확인했습니다. 새 모듈 runtime export46개 및 업무 export 제외, 페이지 오류/외부 API 요청0입니다.
+- **WebKit26.4/iPhone UA390px:** Drawer 최대2개·해제·검색·지우기·결과 없음, Close/Escape 복귀·재열기 내부 초점·다른 Select 복귀, 화살표 치수·클릭/Enter/Space·개별/양쪽 disabled·폼 제출0, pageerror0. iPhone UA native Tab이 버튼을 건너뛰는 환경 관찰은 성공으로 세지 않습니다. 실휴대폰·스크린리더 검증은 별도입니다.
+- 화면과 실제 클립보드 전달값 **41개(기본28+변형13)**를 일치 확인하고 strict TypeScript 검사0오류. JSX/Hook은 함수 본문, Foundation CSS는 styled template, 완결형 화살표 코드는 그대로 검사했습니다.
+- 공개 진입점의 타입 제거 후 runtime 의존89개에서 업무 UI/models API/혼합 UI·config·hook barrel 유입0. 동적 아이콘532개는 React import뿐입니다. 기존 package exports6개 보존·Clinic 경로 해석 확인.
+- 공식 **local focused E2E4개 통과**: `e2e-runs/2026-09-28T09-08-54-637Z-e3cf7c3e`. 실패·flaky·skip·미실행·전역 오류0. source `911968d52bcfbd7d99333c873d500a5d00800ff983b535a8822f0bba7e048492`, 실행 전후 동일. 실행 당시 HEAD는 부모 bd7f83ec3이며 작업 사본으로 새 구현을 검증했습니다. 이후 제품 변경은 검증 설명뿐입니다. 실제 주문·배송·사진 저장·문자 발송은 하지 않았습니다.
+- 카탈로그 strict 타입·Vite build, 정상 commit hooks의 Clinic/Lab/Admin 타입, 정상 push hooks의 앱 lint·공통 coverage 통과. Scoped UI lint는 오류0/기존 EllipsisTypography dependency 경고1. Vite chunk 크기·기존 tsconfig paths 위치·앱 기존 경고는 남아 있으며 전체 UI tsc578 baseline을 성공 근거로 쓰지 않습니다.
+
+### 남은 범위와 재개
+
+1. **기존 이름 대응 아이콘226종** 전체 도형·색상 대조는 아직입니다. `shared/ui/design-audit/figma-icons.tsv`의 이름 대응을 검증 완료로 세지 않습니다. 기존105node 감사·신규 아이콘/로고·화살표 예제 검증을 다시 처음부터 반복할 필요는 없습니다.
+2. 기존 보조 UI의 혼합 의존 관계·폴더 이전 여부는 사용처를 보고 판단합니다. 새 공개 경로가 안전해졌다는 것과 물리적 패키지 분리 완료를 구분합니다. 기존 Button 일괄 전환, 입력 달력46px 확대, 폰트·radius·trapFocus 전역 기본값 변경은 자동 진행하지 않습니다.
+3. 실제 소비의 남은 조건: DSO 권한403, 수정 가능한 NUMBER 옵션 주문, 실휴대폰·스크린리더·전체 다국어·staging 전수. 아래 이전 기록의 구체적 접근·데이터 제약을 유지합니다.
+4. 전체 DLDS 정비의 완료 범위를 정리한 뒤 AI 프롬프트·하네스 단계로 이어갑니다. 아직 AI 하네스·에디터를 구현하지 않았습니다.
+
+재개 시 개인 컨텍스트와 위 제품 브랜치를 `git pull --ff-only`로 갱신하고 현재 HEAD/dirty를 확인합니다. 사용자 세션 폴더는 `/Users/parkjongsun/Documents/ChatGPT/디자인시스템정비 프로젝트`이며 제품은 별도 worktree입니다. 모음 페이지는 제품 루트의 `pnpm dev:ui` → `http://127.0.0.1:5177`입니다. 이 실행 방법은 package script·README에 저장돼 있습니다.
+
+이번 QA 전용5187 서버와 에이전트 브라우저는 종료했습니다. 시작 시 사용자5177 서버는 있었으나 QA 시점에는 이미 종료돼 있었고 사용자의 프로세스를 종료하지 않았습니다. 공식 E2E 서버는 runner가 정리했습니다. `/tmp/dlds-*` 스크린샷/진단, e2e-runs, 인증·node_modules·실행 프로세스는 다른 기기로 자동 이전되지 않습니다. 원격 Git의 코드·문서·이 체크포인트로 재현합니다.
+
+## 이전 체크포인트 — 2026-09-28 · ③ 대표 사용 화면 재검증·수정 완료
 
 ### 현재 상태와 저장 위치
 

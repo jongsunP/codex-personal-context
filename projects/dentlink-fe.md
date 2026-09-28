@@ -191,7 +191,7 @@ Detailed implementation history remains in the relevant existing project file.
   저장됐지만, 2026-09-28 사용자가 백엔드 문제로 이번 배포에서 제외했다.
   PR #4623은 미병합 종료됐고 작업 브랜치를 보존한 채 대기한다.
   제품 API는 정상 연결하며 실제 서버 생성·수정 요청은 테스트에서 실행하지 않는다.
-- DLDS 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의 **2026-09-28 최상단 절**입니다. 후속① 사용 영향·② 구현·③ 대표 사용 화면 재검증과 발견 문제 수정을 마쳤습니다. 모바일 Tooltip의 빈 Tab·WebKit 내부 링크·아이콘 안내 이름, 데스크톱 사진 편집 Escape/Close를 보완했습니다. `dentlink-client-dlds`, `feature/DL-16466`, HEAD `bd7f83ec3fd8bba22f4e0c52ece4801f2d9e407b`. UI193·local focused E2E4·Firefox/WebKit 카탈로그 통과. DSO 권한·수정 가능한 NUMBER 주문·실기기/스크린리더·staging 전수는 별도이며 전체 DLDS 완료로 표시하지 않습니다. 다음은 남은 조건과1단계 완료 범위를 확정한 뒤 AI 하네스 입력 정리입니다. AI 하네스·에디터·PR·병합·배포는 미착수입니다. 재개 시 두 Git을 pull하고 완료한105node 감사/대표QA를 반복하지 않습니다.
+- DLDS 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의 **2026-09-28 최상단 절**입니다. 범용 UI 공개 경로 `@dentlink/ui/dlds`, Overlays 분류와 중립적 예제, Combobox 다중 선택·95px 화살표 조합, 복사 코드와 모바일 Drawer 복귀를 보완했습니다. `dentlink-client-dlds`, `feature/DL-16466`, HEAD `ca567f7df6a46856c06b1542846e37a9dce4de94`, 정상 commit/push·원격 일치·clean 확인. UI196·복사 코드41·local focused E2E4·Chromium/WebKit 모바일 확인 통과. 기존 아이콘226종 전수·보조 UI 경계·권한/데이터·실기기 조건은 별도입니다. 이전 대표 소비 확인은 아래 기록을 보존하며 전체 DLDS 완료로 표시하지 않습니다. AI 하네스·에디터·PR·병합·배포는 미착수입니다. 재개 시 두 Git을 pull하고 완료된 원본/대표QA를 반복하지 않습니다.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.
