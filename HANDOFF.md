@@ -25,7 +25,7 @@ Do not store secrets or private customer data here.
 
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
-- Dentlink DLDS / DL-16466: `projects/dentlink-fe-opportunities.md`의 2026-09-28 최신 체크포인트. 제품85002472f, 자율 보조 UI 정비·모음 예제·사용 안내 완료. UI200·브라우저2엔진·복사 코드2종·타입/빌드/hooks 통과, 커밋·푸시·clean 확인 후 대기한다. 아이콘 시각 전수 대조 제외. 다음은 권한/데이터/실기기 QA와1단계 마감 범위 확인 후 AI 하네스이며 아직 구현하지 않았다.
+- Dentlink DLDS / DL-16466: **사용자 로컬 QA 결과 대기**. `projects/dentlink-fe-opportunities.md`의 2026-09-28 최상단 절을 따른다. 제품85002472f 정비·자동/대표 검증·푸시 완료. 사용자가 이번 브랜치의 실제 Clinic/Lab/Admin 화면을 확인한다. 결과 전 추가 개발/QA·하네스 자동 착수 금지. 결과 수신 후 재현→필요 수정·검증→저장→1단계 마감/2단계 진입 확인 순서다.
 - Dentlink web order feedback: `projects/dentlink-client-order-feedback.md`
 - Dentlink mobile app: `projects/dentlink-app.md`
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md` — 백엔드 문제로 이번 배포 제외, PR #4623 미병합 종료. 재개 지시까지 작업 브랜치 보존·대기.

@@ -69,7 +69,8 @@ For detailed current state, read:
   보완까지 진행했다. 전체 완료 여부·남은 범위는 최신 체크포인트를 따른다.
 - 최신 지시로 아이콘 추가 전수 대조는 제외하며 누락만 대상으로 한다.
   누락 확인·명칭 정리에 이어 보조 UI 의존성·사용 예제 정비와 검증을 마쳤다.
-  현재 조건에서 가능한 정비를 저장한 뒤 대기하며, 남은 QA 조건/1단계 마감 범위를 확인한다.
+  **현재는 사용자 로컬 QA 결과 대기**다. 사용자가 이번 브랜치의 실제 Clinic/Lab/Admin을
+  확인하며, 결과 후 필요한 수정·검증과1단계 마감/2단계 진입을 이어간다.
   기존 `dentlink-client-dlds` worktree를 보존하며 AI 하네스는 아직 미착수다.
 - [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
 - 회의 바로가기: [projects/dentlink-fe-meeting.md](projects/dentlink-fe-meeting.md)

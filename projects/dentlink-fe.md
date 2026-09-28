@@ -191,7 +191,7 @@ Detailed implementation history remains in the relevant existing project file.
   저장됐지만, 2026-09-28 사용자가 백엔드 문제로 이번 배포에서 제외했다.
   PR #4623은 미병합 종료됐고 작업 브랜치를 보존한 채 대기한다.
   제품 API는 정상 연결하며 실제 서버 생성·수정 요청은 테스트에서 실행하지 않는다.
-- DLDS 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의 **2026-09-28 최상단 절**입니다. `dentlink-client-dlds`, `feature/DL-16466`, 제품85002472f를 정상 커밋·푸시하고 원격 일치·clean 확인했습니다. RadioGroup 범용 공개·ListItemGroup 불필요 의존/미사용 코드·모음 예제/사용 안내 정리를 완료했습니다. UI200·Chromium/WebKit·복사 코드2종·타입/빌드/hooks 통과. 아이콘 시각 대조 제외·공통 명명 원칙은 유지합니다. 추가 자율 정비 항목은 처리했고 남은 권한/데이터/실기기 QA와1단계 마감 범위 확인 후 AI 하네스가 다음입니다. Jira 진행 절 갱신·진행 중 유지, 하네스·에디터·PR·병합·배포 미착수이며 보고 후 대기합니다.
+- DLDS 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의 **2026-09-28 최상단 절**입니다. `dentlink-client-dlds`, `feature/DL-16466`, 제품85002472f를 정상 커밋·푸시하고 원격 일치·clean 확인했습니다. RadioGroup 범용 공개·ListItemGroup 불필요 의존/미사용 코드·모음 예제/사용 안내 정리를 완료했습니다. UI200·Chromium/WebKit·복사 코드2종·타입/빌드/hooks 통과. 아이콘 시각 대조 제외·공통 명명 원칙은 유지합니다. **사용자 로컬 QA 결과 대기**로 인계했습니다. 사용자가 이번 브랜치의 실제 Clinic/Lab/Admin 화면을 확인하며 Codex는 결과 전 추가 작업을 시작하지 않습니다. 결과 수신→문제 재현·수정·검증→저장→1단계 마감/2단계 진입 확인 순서입니다. 남은 권한/데이터/실기기 조건은 구분합니다. Jira 진행 절 갱신·진행 중 유지, 하네스·에디터·PR·병합·배포 미착수이며 보고 후 대기합니다.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.
