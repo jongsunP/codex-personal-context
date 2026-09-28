@@ -1,15 +1,25 @@
-# Dentlink Mobile App setup and current checkpoint - 2026-09-14
+# Dentlink Mobile App setup and current checkpoint - 2026-09-28
 
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current local Git checkpoint is **Local Branch Cleanup Completed -
-2026-09-14** below. **FE Handoff Acceptance And Develop Integration -
+The current local Git checkpoint is **Local Audit And Sync - 2026-09-28** below. **FE Handoff Acceptance And Develop Integration -
 2026-09-11** preserves earlier delivery context; the E2E audit adds verification boundaries.
 Earlier PR review, notification design and
 delivery sections record the preceding implementation and decisions. Earlier
 dated delivery, review, API and runtime results below are historical, not
 current claims.
+
+## Local Audit And Sync - 2026-09-28
+
+- 사용자 전체 로컬 정리 요청으로 확인했다. 기본 `dentlink-app` checkout과 로컬
+  `main`만 있고 별도 worktree·stash·미커밋 파일은 없다.
+- `fetch --prune`으로 원격에서 이미 삭제된 두 추적 ref
+  (`origin/feature/DL-16292`, `origin/wip/transfer`)를 정리했다. 원격은 변경하지 않았다.
+- clean 상태에서 `pull --ff-only`로 `e0f4d5d`부터
+  `7403721151f3d2135799a995bccdd2214783822d`까지 갱신했다. 로컬/원격 0/0·clean 확인.
+- 이번 작업은 동기화와 정리이며 구현·새 QA·배포 완료 증거가 아니다. 다음 기능 작업의
+  base/target은 재개 시 확인한다. 이전 기능 전달·삭제 이력은 아래에 유지한다.
 
 ## Local Branch Cleanup Completed - 2026-09-14
 

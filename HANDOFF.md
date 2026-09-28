@@ -28,6 +28,7 @@ Do not store secrets or private customer data here.
 - Dentlink DLDS / design-system Step 1 / DL-16466 resume: `projects/dentlink-fe-opportunities.md` (read the current resume checkpoint first) — user-paused 2026-09-21; Figma comparison done; next is actual consumer-screen audit, only after resume request.
 - Dentlink web order feedback: `projects/dentlink-client-order-feedback.md`
 - Dentlink mobile app: `projects/dentlink-app.md`
+- Dentlink Admin LBX: `projects/dentlink-client-lbx.md` — 백엔드 문제로 이번 배포 제외, PR #4623 미병합 종료. 재개 지시까지 작업 브랜치 보존·대기.
 
 Use `PROJECTS.md` for repository paths and the broader project index.
 

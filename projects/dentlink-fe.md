@@ -31,6 +31,32 @@ Detailed implementation history remains in the relevant existing project file.
   not permanent web-versus-app session boundaries.
 - Shared repository mutations still require the user's explicit authorization.
 
+## 로컬 환경·메모리 정리 — 2026-09-28
+
+- 사용자가 LBX 외 작업까지 로컬 브랜치·worktree·메모리를 확인하고 불필요한 항목을
+  정리한 뒤 대기하도록 요청했다. 아래 목록은 이번 live Git/경로 점검 결과다.
+- 웹 기본 checkout은 `feature/DL-16387 / 347909945`, DLDS 전용 worktree는
+  `feature/DL-16466 / 01d49c3cb`다. 둘 다 원격과 0/0·clean이며 보류/중단 중인
+  미병합 작업이라 보존한다. 로컬 `master / de2ffdd9e`도 원격과 일치한다.
+  이 셋 외 웹 로컬 branch와 추가 worktree는 없고, prune할 worktree 메타데이터도 없다.
+- 앱은 기본 checkout의 `main` 하나뿐이다. clean 확인 후 `git pull --ff-only`로
+  `e0f4d5d` → `7403721151f3d2135799a995bccdd2214783822d`를 반영했다.
+  원격과 0/0·clean이다. fetch --prune으로 원격에서 이미 삭제된
+  `origin/feature/DL-16292`, `origin/wip/transfer`의 로컬 추적 참조만 정리했다.
+- FE 프로젝트 폴더의 `.internal/research`, 회의자료 심볼릭 링크 및 로컬 전용
+  `demo-studio`(`main / 4d12ae2`, clean, 원격 없음)는 자료/데모로 보존했다.
+  FE·통합알림센터의 프로젝트용 Git 메타데이터도 유지했다. FE의 이 자료들은 바깥
+  Git 저장소에서 untracked로 보이며 제품의 미커밋 변경과 구분한다.
+- `~/.codex/worktrees`에 추가 Git checkout은 없다. 제품의 다른 등록 worktree도 없다.
+  웹의 기존 stash **148개**는 미반영 여부를 판정하지 않았으므로 삭제하지 않았다.
+  stage 복구 ref `refs/codex-backup/stage-20260928-0272910a6d3c`는 이전 stage를
+  보존하는 복구 지점이므로 유지한다. 나이가 오래됐다는 이유로 자료를 제거하지 않았다.
+- `PROJECTS.md`의 오래된 경로·진행 상황 복제를 줄여 프로젝트별 정본 링크 중심으로
+  정리했고, LBX 보류/앱 현재 HEAD/Case Preference PR 병합 상태를 맞췄다.
+  각 프로젝트의 과거 결정과 검증 이력은 삭제하지 않았다. `HANDOFF.md`에 LBX 경로를 추가했다.
+- 제품 구현·테스트·PR/원격 브랜치 변경·배포는 하지 않았다. 정리 완료 후 대기하며,
+  LBX와 DLDS는 사용자의 재개 지시가 있을 때만 이어간다.
+
 ## Release Stage Checkpoint — 2026-09-28
 
 - 후속 종료 확인: 사용자가 PR #4634를 병합했고 stage는
@@ -90,19 +116,11 @@ Detailed implementation history remains in the relevant existing project file.
   limitation, not the current feature status. The later feature review and user
   clarifications are now recorded in the dedicated checkpoint below. The Jira
   UI-draft subtask's completed status does not establish FE implementation.
-- On 2026-09-21 the user requested a separate pre-implementation LBX memory:
-  [dentlink-client-lbx.md](dentlink-client-lbx.md) is its canonical checkpoint.
-  UI/flow requirements are settled; `isConsolidated` is present in DEV Swagger
-  and generated code. The separate Baby-eligible-order endpoint is now confirmed
-  as GET /admin/orders/shippable with required labId and officeId. Its real API
-  connection replaces the sample order data, including pagination aggregation.
-  The user authorized a separate feature branch and commit/push at closeout:
-  feature/DL-16387, commit 458ca7153, pushed and clean. Work stops today; the next session must
-  review the full implementation and cross-screen UI/UX before deployment.
-  No PR, merge or deployment was requested today. Product reads and writes use normal APIs;
-  the user clarified that only test-time mutation requests must not reach the
-  server. Product mock transport was removed. This file retains coordination only.
-  Existing DLDS work stays paused.
+- LBX 최신 상태는 [dentlink-client-lbx.md](dentlink-client-lbx.md)가 정본이다.
+  구현·배포 전 검토와 release 충돌 해결까지 `feature/DL-16387 / 347909945`에
+  저장됐지만, 2026-09-28 사용자가 백엔드 문제로 이번 배포에서 제외했다.
+  PR #4623은 미병합 종료됐고 작업 브랜치를 보존한 채 대기한다.
+  제품 API는 정상 연결하며 실제 서버 생성·수정 요청은 테스트에서 실행하지 않는다.
 - The selected FE project is DLDS cleanup → AI prompt/harness refinement →
   an editor only if useful later. Use the [latest meeting](https://app.notion.com/p/3dfce072e82f812c843afed105630c98)
   and [implementation checkpoint](dentlink-fe-opportunities.md). Step 1 is in

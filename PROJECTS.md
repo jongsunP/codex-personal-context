@@ -48,238 +48,87 @@ For detailed current state, read:
 - Stable team-owned project documentation when relevant:
   project-local `README.md`, `AGENTS.md`, and architecture/product docs
 
-### Dentlink E2E Stabilization
-
-- Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Authorized E2E worktree: `/Users/parkjongsun/Repository/dentlink-client-e2e`
-  on `feature/e2e-reliability`, created from `release/v1.86.0`. Its dedicated
-  Codex project is `dentlink-client-e2e`; the implementation task is
-  `웹 E2E 신뢰성 개선`. Detailed ownership and startup status are in the checkpoint.
-- Current inspected release: `release/v1.86.0`. The 2026-09-11 audit collects
-  109 tests in 16 files, including ten feedback tests. Recent dev/stage CI
-  processes failed despite successful workflow indicators; latest staging
-  failed in global setup and incorrectly reported `All tests passed`.
-  No full suite was rerun. Current improvement is web-only, including feedback:
-  reliable full-suite staging execution usable by a PM, accurate CI reporting,
-  and diagnosis of current failures. No fixed pass count defines completion;
-  native app E2E is deferred.
-- Personal current checkpoint and history:
-  `projects/dentlink-client-e2e.md`
-
 ### Dentlink Frontend Coordination
 
-- Shared repositories:
-  - Web/Admin: `https://github.com/Innvoaid/dentlink-client`
-  - Mobile app: `https://github.com/Innvoaid/dentlink-app`
-- Session model: one projectless Dentlink FE top-level management session plus
-  feature-based sessions when useful. A feature session may handle both web and
-  app repositories; session identity is not divided by device or repository,
-  while each Git mutation still targets an exact branch/worktree.
-- No combined product folder or dedicated coordination worktree is required.
-- Current transition: Claude is no longer used, the former local Claude
-  context checkout was removed, and the existing web/app sessions should hand
-  off their verified state before the new top-level session becomes the main
-  coordination point.
-- Personal coordination checkpoint: `projects/dentlink-fe.md`
-- Selected DLDS / AI harness project and resume checkpoint: `projects/dentlink-fe-opportunities.md`. When resuming DLDS or DL-16466, start with its latest resume section.
-- Detailed repository checkpoints remain in their existing web and app project
-  files and must be verified against live Git.
+- Shared repositories: [Web/Admin](https://github.com/Innvoaid/dentlink-client),
+  [Mobile app](https://github.com/Innvoaid/dentlink-app).
+- 기본 경로: `/Users/parkjongsun/Repository/dentlink-client`,
+  `/Users/parkjongsun/Repository/dentlink-app`.
+- FE 최상위 세션은 프로젝트 간 조율을 맡고, 기능별 세션은 정확한 저장소·브랜치
+  경계 안에서 작업한다. 별도 통합 제품 저장소는 없다.
+- 현재 로컬 브랜치/worktree 목록과 정리 결과:
+  [projects/dentlink-fe.md](projects/dentlink-fe.md)의 2026-09-28 정리 체크포인트.
+- 이 색인은 세부 상태를 중복 보관하지 않는다. 과거 SHA, PR 상태, QA·배포 이력은
+  각 프로젝트의 최신 체크포인트에서 확인하고 재개 시 live Git과 대조한다.
+
+### Dentlink DLDS / AI 화면 제작 — DL-16437 / DL-16466 / DL-16471
+
+- 실제 컴포넌트 정비 → AI 프롬프트·하네스 정비 → 필요시 에디터 순서다.
+- DLDS는 사용자 요청으로 중단 중이다. Figma 대조 이후 실제 사용 화면 점검은
+  재개 지시가 있어야 시작한다. 기존 `dentlink-client-dlds` worktree를 보존한다.
+- [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
+- 회의 바로가기: [projects/dentlink-fe-meeting.md](projects/dentlink-fe-meeting.md)
 
 ### Dentlink Admin LBX — DL-16279 / DL-16387
 
-- Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Scope: 기존 Admin 배송 목록·상세 확장, Baby/Mother 생성과 LBX 픽업생성 모달.
-- 2026-09-21: Admin LBX 구현을 `feature/DL-16387`, `458ca7153`에 커밋·푸시.
-  오늘 종료, 다음 재개 시 **배포 전 전체 UI·UX/기능 흐름 검토**부터 진행.
-  `isConsolidated` 반영과 `GET /admin/orders/shippable` 명세를 확인하고
-  Baby 대상 주문까지 실제 API로 연결해 예시 데이터를 제거했다. 제품 API는 정상 연결하며,
-  테스트할 때만 생성·수정 요청의 실제 서버 전송을 피한다.
-- Dedicated personal checkpoint:
-  [projects/dentlink-client-lbx.md](projects/dentlink-client-lbx.md)
+- 기존 배송 목록·상세 확장, LBX Baby/Mother 생성 및 픽업 생성.
+- 백엔드 문제로 이번 배포에서 제외했다. PR #4623은 미병합 종료됐으며
+  `feature/DL-16387`은 재개를 위해 보존한다. 테스트 중 실제 생성·수정 요청 금지.
+- [projects/dentlink-client-lbx.md](projects/dentlink-client-lbx.md)
 
 ### Dentlink Mobile App
 
-- Shared repository: `https://github.com/Innvoaid/dentlink-app`
-- Main local checkout: `/Users/parkjongsun/Repository/dentlink-app`
-- Repository default branch: `main`; active feature base/PR target: `develop`
-- Role: ongoing frontend product-development scope alongside Dentlink web.
-  The user currently owns both web and app work; cross-platform features are
-  coordinated together while implementation and Git state remain repository
-  specific.
-- Current state: confirmed Office feedback, notification settings, deep-link,
-  WebView integration and QA fixes are implemented. PR #286 was squash-merged
-  into `develop` on 2026-09-11 after the final app handoff. The preserved local
-  feature checkout is clean at `a8f3a6c`; cleanup requires a user request.
-  DL-16229 and DL-16353 remain `READY FOR QA`, and release/Production inclusion
-  is a separate gate. Current Git, review, Staging and runtime evidence is
-  maintained in the personal checkpoint below.
-- Personal current checkpoint:
-  `projects/dentlink-app.md`
+- 웹과 함께 관리하는 FE 제품 범위다. 기본 checkout은 `dentlink-app`, 기본
+  브랜치는 `main`이다. 기능 시작 기준/PR 대상은 매번 확인한다.
+- 완료한 기능 브랜치와 별도 worktree는 정리됐으며 현재 로컬에는 `main`만 있다.
+- [projects/dentlink-app.md](projects/dentlink-app.md)
 
 ### Dentlink 통합알림센터 — 사전 검토
 
-- Shared repositories: `Innvoaid/dentlink-client`, `Innvoaid/dentlink-app`
-- Scope: Clinic/Lab 웹과 Office/Lab 앱의 REST 기반 알림 조회·읽음·삭제 및 공통
-  딥링크의 병원 전환·화면/동작 실행·알림 읽음 연결
-- Current state: 2026-09-03 후속 지침으로 **기기 간 실시간 동기화를 제외**했다.
-  현재 기준은 기존 REST 흐름 유지다. 알림 전용 SSE와 읽음·삭제 동기화용 데이터
-  FCM은 추가하지 않으며 기존 배송 SSE·사용자 노출 푸시는 별개로 유지한다. 기존
-  세션은 2026-09-11 Dentlink FE 최상위 아래의 통합알림센터 기능 세션으로 정렬했다.
-  별도 프로젝트 폴더/worktree 없이 웹·앱 두 저장소를 함께 참조한다. 푸시 클릭 시
-  읽음 요구를 반영했으며 공통 읽음 구현은 미착수다.
-  읽음 대상은 알림 ID 직접 전달뿐 아니라 여러 정보를 조합해 처리할 가능성도
-  있으며 방식은 미정이다. 목록 읽음 정책은 PM 답변 대기, 구체적인 처리 계약과
-  전용 Jira/구현 branch/release는 미정이다. 상세 상태는 아래 체크포인트를 따른다.
-- Personal current checkpoint:
-  `projects/dentlink-unified-notification-center.md`
+- 웹·앱의 REST 조회/읽음/삭제와 딥링크 연결을 다룬다. 별도 알림 SSE·silent FCM
+  기반 실시간 동기화는 제외됐다. 공통 구현은 미착수이며 전용 worktree가 없다.
+- [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
+
+### Dentlink E2E Stabilization
+
+- 웹 E2E 실행 신뢰성·CI 판정 개선과 검증 이력이다. 전용
+  `dentlink-client-e2e` worktree와 로컬 브랜치는 2026-09-14 정리됐다.
+- [projects/dentlink-client-e2e.md](projects/dentlink-client-e2e.md)
+
+### Dentlink 주문 피드백 수집 / 관리자 피드백 목록
+
+- DL-15828과 후속 DL-16443의 계약·구현·QA·release/stage 전달 이력을 관리한다.
+  DL-16443 전용 worktree와 로컬 전달 브랜치는 2026-09-28 정리됐다.
+- 배포 완료와 실제 화면 QA는 별도로 확인한다.
+- [projects/dentlink-client-order-feedback.md](projects/dentlink-client-order-feedback.md)
 
 ### Dentlink Lab i18n
 
-- Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Current state: the complete i18n implementation and operating documentation
-  are in `master` through `Release/v1.84.0 -> master` (`8e05cbb84`), and the
-  user confirmed production deployment. Live verification on 2026-08-25 found
-  `master` clean and synchronized with `origin/master`, with the required Lab
-  locale, provider, manifest, Sheet client, and i18n skill files present.
-- Local closeout: the dedicated
-  `/Users/parkjongsun/Repository/dentlink-client-i18n` worktree and local
-  `feature/i18n` / `feature/i18n-maintenance` branches were deleted on
-  2026-08-25. Matching remote branches were intentionally preserved. There is
-  no active dedicated i18n worktree.
-- Future i18n changes must start on a fresh feature branch from the current
-  release-plan base, not from either historical i18n branch. Dentlink's exact
-  staging-server branch is `stage`, not `staging`.
-- Personal current checkpoint and resume instructions:
-  `projects/dentlink-client-i18n.md`
+- 다국어 구현과 운영 절차. 완료한 전용 worktree·로컬 브랜치는 정리됐다.
+- [projects/dentlink-client-i18n.md](projects/dentlink-client-i18n.md)
 
-### Dentlink DSO Dashboard
+### Dentlink DSO Dashboard — DL-15223
 
-- Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Dedicated worktree:
-  `/Users/parkjongsun/Repository/dentlink-client-dso`
-- Current local branch: `feature/DL-15906-DL-15937-develop`
-- Jira: `DL-15223`
-- Current state: 백엔드 대기였던 DL-15906과 DL-15937 API까지 Clinic/Admin에
-  반영해 FE 개발 범위를 완료했다. release 전달 PR #4490, develop 전달 PR #4491,
-  `release/v1.83.0 -> stage` PR #4492가 모두 merge됐다. 사용자 확인 기준 릴리즈
-  준비와 스테이징·개발서버 배포가 진행 중이며, 배포 완료 후 최종 QA 1회를 통과하면
-  DL-15223 DSO 작업을 종료하는 단계다. 현재 알려진 추가 FE 개발 항목은 없다.
-- Personal current checkpoint, decisions, and prioritized TODO list:
-  `projects/dentlink-client-dso.md`
+- 완료한 구현과 QA 이력. 전용 worktree·로컬 브랜치는 정리됐다.
+- [projects/dentlink-client-dso.md](projects/dentlink-client-dso.md)
 
 ### Dentlink 홈 LinkTalk 미확인 필터
 
-- Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Jira: parent `DL-14984`, FE subtask `DL-16002`
-- Current state: 기존 구현 PR #4513은 `release/v1.85.0`에 merge됐다. QA 후속
-  DL-16226 미읽음 카운트 동기화와 DL-16227 Case Preference 빈 상태 안내는
-  PR #4544로 `release/v1.85.0`에 merge됐다. 원격 `stage`는 최신 `master`로
-  재생성했으며 배포 PR #4545가 `release/v1.85.0`에서 `stage` 대상으로 열려 있다.
-  전용 worktree와 관련 로컬 feature 브랜치는 제거했고 원격 PR head는 보존했다.
-- Personal current checkpoint:
-  `projects/dentlink-client-linktalk-unread.md`
+- DL-16002 및 후속 QA 이력. 전용 worktree·로컬 브랜치는 정리됐다.
+- [projects/dentlink-client-linktalk-unread.md](projects/dentlink-client-linktalk-unread.md)
 
-### Dentlink Admin Invitation 필터
+### Dentlink Admin Invitation 필터 — DL-16004
 
-- Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Jira: `DL-16004`
-- Current state: Admin 이메일 알림과 CRM 필터에 Invitation 옵션을 추가했고 사용자
-  로컬 기능 확인을 완료했다. PR #4512는 `release/v1.84.0`에 merge됐다. 전용
-  worktree와 로컬 feature 브랜치는 제거했고 원격 브랜치는 보존했다.
-- Personal current checkpoint:
-  `projects/dentlink-client-admin-invitation-filter.md`
+- 완료한 구현과 QA 이력. 전용 worktree·로컬 브랜치는 정리됐다.
+- [projects/dentlink-client-admin-invitation-filter.md](projects/dentlink-client-admin-invitation-filter.md)
 
-### Dentlink Admin 주문 Case Preference 배치
+### Dentlink Admin 주문 Case Preference 배치 — DL-16269
 
-- Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Jira: `DL-16269`
-- Current state: Admin 주문 생성·수정 2~4단계에서 Case Preference를 우측 액션
-  버튼 아래에 노출하도록 수정했다. `feature/DL-16269`의 CodeRabbit 후속 commit
-  `be31e3596`까지 원격과 동기화됐고, 최신 `origin/master`에서 생성한
-  `release/v1.85.1` 대상 PR #4558은 open·review required 상태다. CodeRabbit
-  재검토는 성공했고 unresolved thread는 0개다. 사용자가 기능과 기본 배치 및 마지막
-  30px 간격을 포함한 최종 화면 노출을 로컬에서 확인했다.
-- Personal current checkpoint:
-  `projects/dentlink-client-admin-case-preference.md`
+- PR #4558 병합 확인. 현재 전용 worktree·로컬 브랜치는 없다.
+- [projects/dentlink-client-admin-case-preference.md](projects/dentlink-client-admin-case-preference.md)
 
-### Dentlink 주문 피드백 수집
+### Dentlink Limited Warranty — DL-16258
 
-- Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Dedicated worktree: 없음. 2026-09-11 최종 정리에서 제거했다.
-- Current checkout: `/Users/parkjongsun/Repository/dentlink-client`
-- Current local branch: `master`만 유지. 2026-09-14 원격 master와 동기화하고
-  병합 완료된 로컬 `release/v1.86.0`을 삭제했다. 원격 release는 보존했다.
-- Jira: parent `DL-15828`
-- Current state: DL-15828 웹 구현·관리자 조회·WebView/native 진입·Amplitude·QA 수정과
-  피드백 E2E 10개가 `release/v1.86.0`에 반영돼 있다. 주문상세 피드백 조회·노출 gate는
-  과거 주문을 제외하기 위해 `status === COMPLETED`가 아니라 서버의
-  `OrderDto.isReviewable === true`를 정본으로 사용한다. 이 후속 수정은 PR #4600으로
-  release에, PR #4602로 develop에, release 재전달 PR #4603 이후 stage에 반영됐다.
-  2026-09-11 live Git에서 세 원격 branch의 코드와 generated contract를 재확인했다.
-  이후 PR #4608로 v1.86.0 release가 master에 통합됐고 2026-09-14 live Git에서
-  release/master의 동일 tree를 확인했다. 배포·E2E 최종 근거는
-  `projects/dentlink-client-e2e.md`에 기록돼 있다. 현재 알려진 추가 웹 FE
-  구현은 없고 새 QA·기획·디자인·Swagger 변경이 생기면 메인 checkout에서 live 상태를
-  재확인한 뒤 새 작업 branch/worktree를 준비한다. 앱은 별도 Git 저장소 경계를
-  유지하지만, 같은 DL-15828 기능 세션에서 웹과 함께 처리할 수 있다.
-- Personal current checkpoint:
-  `projects/dentlink-client-order-feedback.md`
-
-### Dentlink Limited Warranty
-
-- Shared repository: `https://github.com/Innvoaid/dentlink-client`
-- Jira: `DL-16258`
-- Current state: 과거 `frankieTemp/DL-10132`에서 보류됐던 Warranty 작업을 최신
-  `master` 기준 `feature/DL-16258`로 이식하고 현재 프로젝트 관례에 맞게 정리했다.
-  2026-09-03 사용자가 PR #4556의 대상을 `release/v1.86.0`에서 `release/v1.85.1`로
-  변경하고 merge했다. release commit은 `8d0744936`이며 사전 검토한 병합 결과와
-  동일하다. Clinic/Lab/Admin 타입 검사와 번역 보존 검사를 통과했다. Warranty 번역
-  3개의 Sheet 반영은 완료됐으며 공통 i18n 운영 개선 PR #4557도 이미 1.85.1에 포함됐다.
-  원격 `stage`를 삭제하고 최신 원격 `master`와 같은 `4fc3b4877`로 재생성했으며,
-  `release/v1.85.1 -> stage` PR #4566은 `24b5af7b7`로 merge됐다. 사용자가 스테이징
-  배포 완료를 알렸으며, 실제 서버 SHA와 화면 QA는 이번 후속 기록에서 별도로 확인하지
-  않았다. 운영 배포는 별도 상태다. 로컬 branch/worktree는 정리하지 않았다.
-  이후 사용자가 Warranty를 이번 1.85.1 배포에서 제외한다고 결정했다. 당시 원격 release의
-  마지막 commit `8d0744936`만 되돌렸으며 독립 i18n 운영 개선은 유지했다.
-  사용자 지시 후 새 `feature/DL-16258-release-hold`에서 역변경 commit `af496bb34`를
-  push하고 같은 release 대상 제외 PR #4567을 생성했다. 결과 tree는 워런티 반영 직전과
-  정확히 같으며 세 앱 타입·다국어 정합성·기본 push hook을 통과했다. 사용자가 #4567을
-  merge해 최신 release는 `b9fba70b4`이며 워런티는 제외됐다. 이어서 사용자 요청대로
-  원격 stage를 삭제하고 최신 master `4fc3b4877`에서 재생성한 뒤, release 전체를
-  전달하는 스테이징 PR #4568을 생성했다. 사용자가 #4568을 `5cb3ddaf3`로 merge했고
-  GitHub에서 확인했다. 스테이징 배포 완료는 사용자 확인 기준이며 서버 SHA·화면 QA·
-  운영 배포는 별도 상태다. 해당 배포 작업에서 develop은 변경하지 않았다.
-  이후 PM 댓글 43892의 최신 Notion 정책을 확인하고 사용자 지시로 원본
-  `feature/DL-16258` / `8d3c8ad1e`에서 본문을 수정했다. 공용
-  `LimitedWarrantyContent.tsx` 한 파일에서 상품 분류·명칭·보증기간과
-  일반 조항을 반영했다. Notion 10개 조항·11개 상품 분류·61개 항목 및 렌더링 문장
-  115개를 대조해 누락·불일치 0개, 세 앱 typecheck와 대상 분리 lint·Prettier·diff
-  검사를 통과했다. 기본 lint의 기존 설정 충돌은 별도다. 사용자 후속 지시로 본문을
-  `89bf047c5`에 commit하고 최신 master `ddeeb1e86`를 충돌 없이 병합했다. 현재 HEAD는
-  `f7f81e69a`, push 완료·원격 동일·clean이다. Sheet에서 빠진 워런티 진입점 key 3개를
-  표준 export로 복원하고 1,588개 key 정합성을 검증했다. 기본 commit/push hook도 통과했다.
-  원격 stage를 삭제하고 최신 master `ddeeb1e86`에서 재생성한 뒤 작업 branch를 직접
-  전달하는 [PR #4572](https://github.com/Innvoaid/dentlink-client/pull/4572)를 생성했다.
-  `feature/DL-16258 -> stage`, 16개 파일(+449/-6)이다. 사용자가 2026-09-03 19:15 KST에
-  merge했고 GitHub MERGED 및 원격 stage `759a3a4a2`를 확인했다. 스테이징 배포 완료는
-  사용자 확인 기준으로 기록했다. 제품은 원격 동일·clean이며 원본 branch를 보존한다.
-  사용자 요청으로 원본 branch를 `release/v1.86.0`에 전달하는
-  [PR #4573](https://github.com/Innvoaid/dentlink-client/pull/4573)을 생성했다. head는
-  `f7f81e69a`, base는 `506ac2a25`이며 Warranty 관련 16개 파일(+449/-6)만 포함하고
-  충돌은 없다. 사용자가 #4573을 merge했고 release HEAD는 `6922a9a2c`다. 직후 PM 댓글
-  43896의 문구 2건과 Portal URL 통일 요청을 최신 Notion에서 확인했다. 최신 release에서
-  `feature/DL-16258-warranty-policy-fix`를 만들고 `75a0e18e2`에 commit·push했으며,
-  [PR #4576](https://github.com/Innvoaid/dentlink-client/pull/4576)을 같은 release 대상으로
-  생성했다. 8개 파일(+15/-6)이며 Auto Assign·CodeRabbit 성공 후 사용자가 merge했다.
-  최신 release HEAD는 `18e7e925b`다. 이어서 원격 stage를 삭제하고 최신 master
-  `ddeeb1e86`에서 재생성한 뒤, release 전체를 전달하는
-  [PR #4577](https://github.com/Innvoaid/dentlink-client/pull/4577)을 생성했다. 95개
-  파일(+6223/-297)이며 Auto Assign·CodeRabbit 성공 후 사용자가 merge했다. merge commit과
-  원격 stage는 `52191e590`이다. 사용자가 Warranty 관련 스테이징 QA 완료를 확인했고,
-  현재 상태를 `release/v1.86.0` 배포 대상으로 유지하기로 했다. 남은 Warranty FE 수정은
-  없으며 실제 운영 배포 완료는 별도다. 2026-09-07 live Git에서 최신 release
-  `a96a37d56`에 #4573·#4576이 모두 포함되고 최종 본문·Portal 링크가 유지된 것을
-  재확인했다. 메인 checkout을 clean `master` / `ddeeb1e86`로 전환하고 Warranty 관련
-  로컬 branch 4개를 정리했으며, 대응 원격 branch는 보존했다.
-- Personal current checkpoint:
-  `projects/dentlink-client-limited-warranty.md`
+- 정책 변경·배포 제외·재전달을 포함한 상세 이력은 체크포인트에 보존한다.
+  관련 로컬 브랜치는 정리됐으며 과거 전달 상태를 현재 작업 지시로 해석하지 않는다.
+- [projects/dentlink-client-limited-warranty.md](projects/dentlink-client-limited-warranty.md)

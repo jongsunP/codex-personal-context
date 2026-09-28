@@ -17,7 +17,14 @@
   Case Preference 패널을 전달한다. Clinic/Lab은 prop을 전달하지 않는다.
 - 버튼 영역과 C.P 패널 사이의 실제 간격은 30px이다.
 
-## 현재 체크포인트 — 2026-09-01
+## 로컬 정리 상태 재확인 — 2026-09-28
+
+- 전체 정리 요청으로 GitHub를 재조회해 PR #4558이 2026-09-01 14:56:24 KST에
+  `368b085fe6c9c3d996fa1f148da5054f992727d5`로 MERGED됐음을 확인했다.
+- 현재 전용 worktree 및 로컬 `feature/DL-16269`는 없다. 추가 삭제는 하지 않았다.
+- 아래 OPEN·branch 정보는 당시 이력이다. 이번 확인은 새 화면 QA나 배포 확인이 아니다.
+
+## 이전 체크포인트 — 2026-09-01
 
 - 메인 checkout: `/Users/parkjongsun/Repository/dentlink-client`
 - branch/upstream: `feature/DL-16269` / `origin/feature/DL-16269`
