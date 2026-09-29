@@ -70,9 +70,9 @@ For detailed current state, read:
   보완까지 진행했다. 전체 완료 여부·남은 범위는 최신 체크포인트를 따른다.
 - 최신 지시로 아이콘 추가 전수 대조는 제외하며 누락만 대상으로 한다.
   누락 확인·명칭 정리에 이어 보조 UI 의존성·사용 예제 정비와 검증을 마쳤다.
-  **사용자 로컬 QA 문제 1(E2E 셀렉터 영향)을 접수했고 아직 수정 전**이다.
-  피드백 Retry/요구사항 외 UI 조사는 별도 세션으로 분리하며, 여기서는 DLDS 문제를
-  확인·수정한 뒤1단계 마감/2단계 진입 여부를 결정한다.
+  **사용자 수동 QA 진행 중이며 문제 1(E2E 셀렉터 영향)만 기록·대기**한다.
+  사용자 완료 보고와 다음 지시 전에는 조사·수정·재실행하지 않는다.
+  피드백 Retry/요구사항 외 UI 조사는 별도 세션으로 분리했다.
   기존 `dentlink-client-dlds` worktree를 보존하며 AI 하네스는 아직 미착수다.
 - [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
 - 회의 바로가기: [projects/dentlink-fe-meeting.md](projects/dentlink-fe-meeting.md)

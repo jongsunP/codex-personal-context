@@ -48,8 +48,8 @@ Detailed implementation history remains in the relevant existing project file.
   원래 LBX 로컬·원격 브랜치는 보존하며 보류 상태를 유지한다.
 - 조사→문제·근거·수정안 보고→사용자 승인 후 수정이다. 확인되지 않은 요구사항을
   임의로 보완하지 않는 공통 지침을 AGENTS/DEVELOPMENT_STYLE에 반영한다.
-- 디자인시스템정비세션은 사용자 QA 문제1인 Password E2E 셀렉터 충돌을 접수했다.
-  이번 세션 분리·지침 저장 후 해당 문제로 복귀하며 아직 코드 수정/재실행 전이다.
+- 디자인시스템정비세션은 사용자 QA 문제1인 Password E2E 셀렉터 충돌만 기록했다.
+  사용자가 수동 확인 중이므로 완료 보고와 다음 지시까지 조사·수정·재실행 없이 대기한다.
   상세와 나머지 미확인 범위는 [DLDS 정본](dentlink-fe-opportunities.md)을 따른다.
 - 아래 기기 복구 표의 QA 대기 상태는 이번 보고 전 저장 시점의 기록이다.
 
