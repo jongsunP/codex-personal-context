@@ -2,6 +2,8 @@
 
 ## 현재 체크포인트 — 2026-09-29 · DLDS 변경 정리 마감
 
+- **실서비스 화면 QA 대기:** 사용자가 `feature/DL-16466`의 Clinic·Lab·Admin 화면을 확인할 때, 변경 영향이 클 수 있는 Calendar·DatePicker 등 날짜 선택 UI와 Modal·Popup을 집중해서 본다. 날짜 선택·표시, 팝업 열기·닫기와 중첩 동작을 살피고, 다른 변경 화면도 한 번씩 확인한다. 이전에 보고한 “큰 이상 없음”은 이 전체 화면 QA 완료를 뜻하지 않는다.
+- **PR #4643의 현재 판단:** 2026-09-29 조회 시 [PR #4643](https://github.com/Innvoaid/dentlink-client/pull/4643)은 `[WIP] 임시 DLDS 코드비교용` Draft이며 `master`와 충돌한다. `git merge-tree`에서 `clinic/src/components/PaymentMethod/PaymentMethodView/PaymentMethodDetailInfoSection.tsx`와 `shared/ui/src/Popup/Popup.tsx`의 충돌을 확인했다. Vercel 검사는 실패로 표시되고 연결 URL은 팀 초대 페이지여서 코드 빌드 실패로 단정하지 않는다. CodeRabbit 검사는 성공으로 표시된다. 현재 브랜치는 clean이고 원격 HEAD `812886171`과 일치한다. 충돌 해결과 그 후의 검증, 사용자 실제 화면 QA, 알려진 E2E 선택자 문제 확인 전에는 최종 PR·1단계 완료로 보지 않는다. 이번 확인에서 제품 코드는 수정하지 않았다.
 - **`shared/ui/tests/`와 `shared/ui/DESIGN_COVERAGE.md`: 유지.** 테스트는 실제 공통 UI의 입력·선택·포커스·중첩 창 동작을 검사하며 로컬 `pnpm test:ui`로 실행한다. 대조 문서는 Figma 대응, 기존 사용 계약, 확인/미확인 범위의 팀 근거다. 현재 문서 압축이나 테스트 재구성은 하지 않고, 구체적인 오류나 유지보수 문제가 확인될 때만 재검토한다.
 - **Button 여백:** 12→10px 변경으로 버튼 크기·간격이 달라질 수 있다. 추후 디자이너 문의나 실제 화면 차이가 나오면 해당 사용처만 확인한다. 현재 확인된 오류로 보거나 수정하지 않는다.
 - **Admin 팝업 닫기:** Escape 키로 닫히는 것은 시각적 차이가 아니라 동작 변화다. 현재 문제로 판단하지 않고, 관련 문의가 있을 때 확인한다.
