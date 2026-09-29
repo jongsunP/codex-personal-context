@@ -1,5 +1,36 @@
 # Dentlink 요구사항 외 UI 변경 조사
 
+## 현재 체크포인트 — 2026-09-29, 승인한 피드백 UI 정리 완료
+
+- 사용자는 조사 범위를 **최근 피드백 기능의 눈에 띄는 추가 UI**로 한정했다.
+  hover·focus·disabled 등 세부 디자인이나 제품 전체 조사는 종료했다.
+  최종 지시는 해당 작업만 수정·커밋·푸시하고 `release/v1.88.0` 대상 PR을 만든 뒤
+  마무리하는 것이며, 아래 과거의 “수정 승인 대기” 기록을 대체한다.
+- 승인된 4곳을 정리했다: Clinic 목록 오류 영역·Retry, Clinic 상세의 필수 RATING
+  문항 누락 안내 영역, Admin 상세의 오류·로딩 안내 영역, Admin 전체 목록 오류·Retry.
+  목록에 데이터가 없으면 기존 empty를 사용하고 재조회 실패 시 기존 데이터를 유지한다.
+  Clinic 필수 문항 누락은 기존 상세 조회 실패 토스트·닫힘 경로로 처리한다.
+  Admin 상세는 선택한 목록 데이터 또는 조회한 상세를 사용하며 데이터가 없으면 열지 않는다.
+- 제거에 따른 부작용을 막기 위해 Clinic 목록의 자동 이전 페이지 이동은 조회 성공 시에만
+  허용하고, 이미 데이터가 있는 상세는 재조회 오류 때문에 닫거나 작성 내용을 정리하지 않는다.
+  저장 실패 토스트·공통 오류 처리·세부 스타일은 유지했다. 다른 기능은 수정하지 않았다.
+- 제품: `/Users/parkjongsun/Repository/dentlink-client`,
+  `feature/ui-requirements-audit`, 커밋 **`8fcdce71ff8bb8b94b7ba395bb1ba16ac39b57f3`**.
+  원격 같은 브랜치로 push 완료, working tree clean을 확인했다.
+  [PR #4642](https://github.com/Innvoaid/dentlink-client/pull/4642)는
+  `release/v1.88.0` 대상 OPEN이며 위 커밋 1개와 피드백 관련 8개 파일만 포함한다.
+- 검증: Clinic 회귀 테스트 5건, Admin 실제 query/컴포넌트의 임시 렌더 검증 6건 통과
+  (API 및 화면 shell mock, 초기 오류·재조회 캐시·선택 변경·빈 패널 조건).
+  Clinic·Lab·Admin type/lint, shared 테스트 45건과 `coverage:check`, `git diff --check` 통과.
+  lint 경고는 남아 있으며 실서버 오류 주입·브라우저 E2E·배포 후 검증은 하지 않았다.
+  정상 commit/push hook을 실행했고 우회하지 않았다.
+- 제품 변경 파일: Admin `AdminFeedbackDetailDrawer.tsx`, `pages/feedbacks/index.tsx`;
+  Clinic `FeedbackPageContent.tsx`, `FeedbackDetailDrawer.tsx`,
+  `FeedbackDetailDrawerController.tsx`, `feedback.query.ts` 및 관련 회귀 테스트 2개.
+- **이 세션의 승인 범위는 완료했다.** 추가 조사·다른 항목 수정·리뷰 대응·병합·배포를
+  자동으로 시작하지 않는다. 후속 작업은 사용자의 새 지시가 있을 때 해당 PR부터 확인한다.
+  아래는 승인 전 조사 이력이며 미완료 작업 목록이나 추가 조치 지시가 아니다.
+
 ## 사용자 조사 목적 재확인 — 2026-09-29
 
 - 사용자는 문구 목록이나 일반 버그 목록이 아니라 **Figma/요구사항/사용자 결정에 없는
