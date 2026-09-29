@@ -2,6 +2,7 @@
 
 ## 현재 체크포인트 — 2026-09-29 · DLDS 전용 PR 검사 제거 결정
 
+- 사용자 재확인에 따라 아이콘 생성·Figma 감사 관련 6개 파일의 개별 역할과 보관 판단을 제품 `shared/ui/README.md`에 표로 명시했다. 현재 삭제 대상은 없고, 검사 의존 파일과 조사 이력을 구분했다. 제품 `feature/DL-16466`의 `812886171`로 커밋·푸시했으며 정상 hooks를 통과했다. 이 작업에서 E2E 파일은 수정하거나 실행하지 않았다.
 - 사용자는 별도로 요청하지 않았던 `.github/workflows/ui_regression.yml`을 제품 저장소에서 제거하기로 결정했다. 제품 `feature/DL-16466`의 `be034cc10`으로 제거·README 수정·원격 푸시 완료. DLDS 모음·테스트·로컬 실행 스크립트는 유지했다. 기존 `develop` Chromatic과 `master`/`develop` UI S3 Storybook 빌드 워크플로는 변경하지 않았다. 세 앱 commit 타입 검사와 push hook이 통과했다.
 - 다시 팀과 PR 자동 검사를 도입하기로 하면 [보관한 워크플로 원본](dentlink-ui-regression-workflow-reference.md)을 출발점으로 사용한다. 이 파일은 개인 컨텍스트의 참고 자료일 뿐 실행되지 않는다. 당시 범위는 `shared/**` 등의 PR마다 아이콘 테스트·UI 테스트·DLDS 모음 타입/lint/빌드였고, 재도입 전 실행 범위·CI 시간·팀 합의를 다시 검토한다.
 
