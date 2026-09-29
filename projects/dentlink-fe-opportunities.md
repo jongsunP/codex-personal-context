@@ -4,9 +4,16 @@
 ## 현재 체크포인트 — 2026-09-29 · 사용자 수동 확인에서 큰 이상 없음, E2E 문제 기록·대기
 
 - **저장·재개 기준:** 제품 `/Users/parkjongsun/Repository/dentlink-client-dlds`의
-  `feature/DL-16466`은 `git pull --ff-only` 결과 최신이며,
-  HEAD·upstream 모두 `85002472fe6823da903138cbc577d0883bf72d0c`이고
-  작업 폴더가 깨끗하다. 현재 세션에서는 제품 코드를 수정하지 않았다.
+  `feature/DL-16466`은 아이콘 자료 설명 커밋 `98291e609`까지 원격에 저장했다.
+  이전 구현 커밋 `85002472f` 이후 제품 실행 코드·아이콘 그림·사용처는 수정하지 않았다.
+- **아이콘 파일의 역할·보관 이유:** `shared/icons/figma-provenance.json`의 첫머리와
+  `shared/ui/README.md`의 원본 아이콘·로고 절에 기록했다. provenance는 Figma
+  node·해시·원본 frame의 근거이며 현재 SVGR 설정과 생성 검사에서 직접 읽는다.
+  `figma-source-snapshot-2026-09-21.json`은 일부 생성 검사의 원본 근거이고,
+  TSV/대조 문서는 판정 이력이다. SVG와 생성 TSX는 실제 사용 가능한 자산이다.
+  완료 후 일괄 삭제할 임시 파일로 취급하지 않으며, 정리 시 참조·검사·원본
+  추적의 필요성을 함께 검토한다. JSON 파싱·아이콘 검사2개·정상 commit/push hooks
+  통과. 기존 baseline lint 경고는 이번 문서 수정과 구분한다.
 
 - **최신 사용자 확인:** 수동으로 살펴본 화면에서 큰 이상은 발견하지 못했다고 보고했다.
   확인한 화면·환경의 상세 범위나 전체 QA 완료 여부는 아직 전달되지 않았다.
