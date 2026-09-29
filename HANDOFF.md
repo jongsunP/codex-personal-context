@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS / DL-16466: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 사용자 수동 QA 진행 중. E2E 문제1만 기록하고 완료 보고·다음 지시까지 대기한다.
+  — 사용자 수동 확인에서 큰 이상 없음. E2E 문제1만 기록하고 다음 지시까지 대기한다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
