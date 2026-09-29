@@ -51,6 +51,10 @@
   project vocabulary; ask for review before introducing an ambiguous new name.
 - Follow the truthfulness and uncertainty-calibration rules in
   `AI_WORKFLOW.md` for all Codex work.
+- Follow **Requirement And Design Scope** in `DEVELOPMENT_STYLE.md`: do not
+  silently add user-visible UI, copy, or behavior outside confirmed requirements.
+  Present the evidence and proposed change for user approval first; an existing
+  project pattern or an AI-authored ticket is not itself a requirement.
 
 ## Permission Preference
 

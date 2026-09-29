@@ -35,7 +35,10 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS / DL-16466: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 사용자 로컬 QA 결과 대기. 최신 체크포인트와 2026-09-29 기기 복구 절을 읽는다.
+  — 사용자 QA 문제1인 E2E 셀렉터 영향 접수·수정 전. 최신 체크포인트를 읽는다.
+- Dentlink 요구사항 외 UI 변경 조사:
+  [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
+  — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
 - Dentlink web order feedback: `projects/dentlink-client-order-feedback.md`
 - Dentlink mobile app: `projects/dentlink-app.md`
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md` — 백엔드 문제로 이번 배포 제외, PR #4623 미병합 종료. 재개 지시까지 작업 브랜치 보존·대기.

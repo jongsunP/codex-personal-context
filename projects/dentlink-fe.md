@@ -40,6 +40,19 @@ Detailed implementation history remains in the relevant existing project file.
   not permanent web-versus-app session boundaries.
 - Shared repository mutations still require the user's explicit authorization.
 
+## 요구사항 외 UI 조사 세션 분리 — 2026-09-29 후속
+
+- 사용자 요청으로 피드백 Retry에서 시작한 조사를 별도 세션에 맡긴다.
+  [조사 정본](dentlink-client-ui-requirements-audit.md)의 제품 `dentlink-client`
+  기본 checkout에서 master 기준 `feature/ui-requirements-audit`를 사용한다.
+  원래 LBX 로컬·원격 브랜치는 보존하며 보류 상태를 유지한다.
+- 조사→문제·근거·수정안 보고→사용자 승인 후 수정이다. 확인되지 않은 요구사항을
+  임의로 보완하지 않는 공통 지침을 AGENTS/DEVELOPMENT_STYLE에 반영한다.
+- 디자인시스템정비세션은 사용자 QA 문제1인 Password E2E 셀렉터 충돌을 접수했다.
+  이번 세션 분리·지침 저장 후 해당 문제로 복귀하며 아직 코드 수정/재실행 전이다.
+  상세와 나머지 미확인 범위는 [DLDS 정본](dentlink-fe-opportunities.md)을 따른다.
+- 아래 기기 복구 표의 QA 대기 상태는 이번 보고 전 저장 시점의 기록이다.
+
 ## 다른 기기에서 이어가기 — 2026-09-29
 
 - 사용자가 현재 살아 있는 각 기능 세션의 상태를 정리해 신규/다른 기기의 첫 대화가

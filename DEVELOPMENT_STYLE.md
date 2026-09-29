@@ -53,6 +53,27 @@ Avoid wrappers that only rename existing JSX, unexplained percentage widths,
 arbitrary fixed heights, duplicated state abstractions, and new patterns that
 appear nowhere else in the app.
 
+## Requirement And Design Scope
+
+- Implement the user's confirmed requirements and design. Before adding or
+  changing user-visible controls, copy, layout, or interaction outside that
+  scope, explain the missing requirement, evidence, reason, and concrete proposal
+  and obtain user approval. This also applies to error/retry, empty/loading,
+  confirmation, automatic navigation/closing, and mock-driven states.
+- Reusing a project component or a familiar UX pattern is implementation
+  evidence, not evidence that this screen was requested to have that behavior.
+  Do not silently fill a design gap with a preferred UX and present it as specified.
+- Separate original PM/design/user sources from Codex-authored Jira descriptions,
+  plans, and checklists. An AI-authored document cannot retroactively authorize
+  the AI's own addition. State when the original source or approval is unavailable.
+- Audit suspected additions before changing them. Missing evidence is not proof
+  that an existing behavior is wrong; distinguish confirmed deviations, additions
+  needing a decision, and unavailable evidence. Report impact and a proposed
+  correction, then wait for the user's approval when investigation-only was asked.
+- Apply this rule within the user's existing authorization. Internal implementation
+  choices that preserve confirmed UI and behavior do not need repeated approval.
+  Do not remove error handling or accessibility behavior wholesale as an audit fix.
+
 ## Project-Aligned Naming
 
 - For UI labels, page names, categories, and documentation, first use the
