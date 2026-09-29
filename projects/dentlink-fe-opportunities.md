@@ -1,7 +1,14 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
+## 현재 체크포인트 — 2026-09-29 · DLDS 모음 코드 위치 정리
 
-## 현재 체크포인트 — 2026-09-29 · 사용자 수동 확인에서 큰 이상 없음, E2E 문제 기록·대기
+- 제품 `dentlink-client-dlds`의 `feature/DL-16466`에서 `a4d264c34`를 커밋·원격 푸시했다. `shared/ui/src/catalog/`와 `src/main.tsx`를 `shared/ui/dlds-gallery/`로 옮기고, 내부 `Catalog` 명칭과 타입 설정을 모음 화면에 맞게 바꿨다. Vite 진입점·CI·README의 경로도 갱신했다. 주문 데이터 API 등 별개 의미의 `catalog`는 유지했다.
+- 모음 타입·lint·Vite 빌드, UI 회귀 24파일 200개, 세 앱 commit 타입 hook과 push hook을 통과했다. 로컬 Vite 서버에서 새 진입 파일 HTTP 200을 확인하고 서버를 종료했다. 기존 앱 lint 경고와 빌드 크기 경고는 남는다.
+- HTTPS OAuth 인증에는 `workflow` 권한이 없어 CI 파일 포함 푸시가 거부됐고, 등록된 SSH 인증으로 같은 커밋을 정상 푸시했다. PR·병합·배포는 하지 않았다.
+- 사용자의 수동 화면 점검 결과와 E2E Password 선택자 충돌, 별도 피드백 Retry 조사 경계는 아래 기록대로 유지한다. 이 경로 정리만으로 DLDS 1단계나 전체 QA가 완료된 것은 아니다.
+
+
+## 이전 체크포인트 — 2026-09-29 · 사용자 수동 확인에서 큰 이상 없음, E2E 문제 기록·대기
 
 - **저장·재개 기준:** 제품 `/Users/parkjongsun/Repository/dentlink-client-dlds`의
   `feature/DL-16466`은 아이콘 자료 설명 커밋 `98291e609`까지 원격에 저장했다.
