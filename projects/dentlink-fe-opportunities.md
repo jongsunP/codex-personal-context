@@ -1,6 +1,11 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 체크포인트 — 2026-09-29 · DLDS 모음 코드 위치 정리
+## 현재 체크포인트 — 2026-09-29 · DLDS 전용 PR 검사 제거 결정
+
+- 사용자는 별도로 요청하지 않았던 `.github/workflows/ui_regression.yml`을 제품 저장소에서 제거하기로 결정했다. 제품 `feature/DL-16466`의 `be034cc10`으로 제거·README 수정·원격 푸시 완료. DLDS 모음·테스트·로컬 실행 스크립트는 유지했다. 기존 `develop` Chromatic과 `master`/`develop` UI S3 Storybook 빌드 워크플로는 변경하지 않았다. 세 앱 commit 타입 검사와 push hook이 통과했다.
+- 다시 팀과 PR 자동 검사를 도입하기로 하면 [보관한 워크플로 원본](dentlink-ui-regression-workflow-reference.md)을 출발점으로 사용한다. 이 파일은 개인 컨텍스트의 참고 자료일 뿐 실행되지 않는다. 당시 범위는 `shared/**` 등의 PR마다 아이콘 테스트·UI 테스트·DLDS 모음 타입/lint/빌드였고, 재도입 전 실행 범위·CI 시간·팀 합의를 다시 검토한다.
+
+## 이전 체크포인트 — 2026-09-29 · DLDS 모음 코드 위치 정리
 
 - 제품 `dentlink-client-dlds`의 `feature/DL-16466`에서 `a4d264c34`를 커밋·원격 푸시했다. `shared/ui/src/catalog/`와 `src/main.tsx`를 `shared/ui/dlds-gallery/`로 옮기고, 내부 `Catalog` 명칭과 타입 설정을 모음 화면에 맞게 바꿨다. Vite 진입점·CI·README의 경로도 갱신했다. 주문 데이터 API 등 별개 의미의 `catalog`는 유지했다.
 - 모음 타입·lint·Vite 빌드, UI 회귀 24파일 200개, 세 앱 commit 타입 hook과 push hook을 통과했다. 로컬 Vite 서버에서 새 진입 파일 HTTP 200을 확인하고 서버를 종료했다. 기존 앱 lint 경고와 빌드 크기 경고는 남는다.
