@@ -9,12 +9,12 @@
 - **Admin 팝업 닫기:** Escape 키로 닫히는 것은 시각적 차이가 아니라 동작 변화다. 현재 문제로 판단하지 않고, 관련 문의가 있을 때 확인한다.
 - **Icon 이름 전환:** 새 아이콘을 읽는 동안 잠깐 빈자리가 보이는 변화는 아래 「Icon 이름 전환 시 표시 방식」에 이미 기록되어 있다. 중복 기록이나 수정은 하지 않는다.
 
-### DLDS 작업 완료를 가정한 파일 정리 후보 — 조사만, 삭제 전
+### DLDS 작업 완료 후 파일 정리 판단 — 조사만, 삭제 전
 
-- **판단 기준:** 아이콘·로고 SVG와 생성된 TSX는 제품 에셋으로 남긴다. 하지만 이번 일회성 Figma 대조 이력까지 디자인시스템의 상시 관리 대상으로 삼지는 않는다. `origin/master...feature/DL-16466`의 신규 파일과 참조를 정적으로 확인했으며, 아래는 작업 완료 후 정리할 후보이지 지금 삭제 승인이나 완료 판정이 아니다.
-- **정리 후보 6개:** `shared/ui/design-audit/{figma-icons.tsv,figma-logos.tsv,FIGMA_REMAINING_AUDIT.md,figma-source-snapshot-2026-09-21.json}`, `shared/icons/tests/generation.test.mjs`, `shared/icons/figma-provenance.json`. 앞의 TSV 2개와 감사 문서는 당시 판정 기록이다. 스냅샷은 원본 보존 자료이며 아이콘 생성 테스트가 일부 읽는다. 테스트·provenance는 원본 해시·재생성 확인용이다. 아이콘·로고 원본과의 지속 대조를 하지 않기로 한다면 영구 보관 필요성은 낮다.
-- **삭제 전 필요한 정리:** 감사 문서에만 있는 컴포넌트 판단은 `shared/ui/DESIGN_COVERAGE.md`에 필요한 만큼 보존한다. `shared/icons/svgr.config.js`는 현재 `figma-provenance.json`을 `postinstall`·`generate` 시 직접 읽으므로, provenance를 없애려면 신규 에셋의 생성 결과를 보존하는 방식으로 생성 설정을 먼저 바꿔 검증해야 한다. `shared/icons/package.json`의 테스트 스크립트와 `shared/ui/{README.md,DESIGN_COVERAGE.md,tests/README.md}`, 컴포넌트 모음의 참조도 함께 정리한다. 파일만 지우면 생성/문서 링크가 깨진다.
-- **그 외:** 신규 SVG·TSX 에셋, 제품 컴포넌트/hook·공개 진입점, `dlds-gallery/`, `shared/ui/tests/`, `DESIGN_COVERAGE.md`, 실제 화면 E2E는 제품 사용·모음·회귀 검증에 연결돼 있다. 이번 정적 조사에서는 이 6개 외에 완료 후 삭제가 명확한 신규 파일을 찾지 못했다. 전체 구현/QA 완료나 전 파일의 무결성을 검증했다는 뜻은 아니다.
+- **최종 권고:** 아이콘·로고 SVG와 생성된 TSX는 제품 에셋으로 유지한다. `shared/icons/tests/generation.test.mjs`는 `postinstall` 생성 결과와 중첩 SVG 표시가 깨지지 않는지 보는 회귀 테스트로 유지하되, 일회성 Figma 원본 대조에 묶인 부분은 간소화한다. `origin/master...feature/DL-16466`의 신규 파일과 참조를 정적으로 확인한 결과이며, 지금 삭제하거나 작업 완료로 판정한 것은 아니다.
+- **완료 후 정리 권고 5개:** `shared/ui/design-audit/{figma-icons.tsv,figma-logos.tsv,FIGMA_REMAINING_AUDIT.md,figma-source-snapshot-2026-09-21.json}`와 `shared/icons/figma-provenance.json`. TSV·감사 문서·스냅샷은 당시 Figma 대조 근거이고, provenance는 그 원본 추적과 현재 생성 설정의 에셋 목록을 겸한다. 아이콘·로고를 이후에도 Figma 원본과 지속 대조하지 않는다면 조사 자료를 제품 저장소에 영구 보관할 필요는 낮다.
+- **삭제 전 필요한 정리:** 감사 문서에만 있는 컴포넌트 판단은 `shared/ui/DESIGN_COVERAGE.md`에 필요한 만큼 보존한다. `shared/icons/svgr.config.js`는 지금 provenance를 `postinstall`·`generate`에서 직접 읽으므로, 생성 결과를 유지할 간결한 설정으로 바꾼 뒤 재생성을 검증해야 한다. 유지할 생성 테스트는 스냅샷·provenance가 없어도 생성된 코드와 핵심 SVG 동작을 검사하도록 조정한다. `shared/ui/{README.md,DESIGN_COVERAGE.md,tests/README.md}`와 컴포넌트 모음의 링크·설명도 함께 정리한다. 파일만 삭제하면 생성·검사가 깨진다.
+- **그 외 유지:** 신규 SVG·TSX 에셋, 제품 컴포넌트/hook·공개 진입점, `dlds-gallery/`, `shared/ui/tests/`, `DESIGN_COVERAGE.md`, 실제 화면 E2E는 제품 사용·모음·회귀 검증에 연결돼 있다. 이번 정적 조사에서는 위 5개 외에 완료 후 삭제가 명확한 신규 파일을 찾지 못했다. 전체 구현/QA 완료나 전 파일의 무결성을 검증했다는 뜻은 아니다.
 
 - 사용자 재확인에 따라 아이콘 생성·Figma 감사 관련 6개 파일의 개별 역할과 보관 판단을 제품 `shared/ui/README.md`에 표로 명시했다. 현재 삭제 대상은 없고, 검사 의존 파일과 조사 이력을 구분했다. 제품 `feature/DL-16466`의 `812886171`로 커밋·푸시했으며 정상 hooks를 통과했다. 이 작업에서 E2E 파일은 수정하거나 실행하지 않았다.
 - 사용자는 별도로 요청하지 않았던 `.github/workflows/ui_regression.yml`을 제품 저장소에서 제거하기로 결정했다. 제품 `feature/DL-16466`의 `be034cc10`으로 제거·README 수정·원격 푸시 완료. DLDS 모음·테스트·로컬 실행 스크립트는 유지했다. 기존 `develop` Chromatic과 `master`/`develop` UI S3 Storybook 빌드 워크플로는 변경하지 않았다. 세 앱 commit 타입 검사와 push hook이 통과했다.
