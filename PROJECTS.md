@@ -57,8 +57,9 @@ For detailed current state, read:
 - FE 메인세션은 전체 감독·조율, Git-backed 개인 컨텍스트 관리와 필요시
   프로젝트 폴더·세션 설정을 맡는다. 기능별 세션은 정확한 저장소·브랜치 경계
   안에서 작업하며 별도 통합 제품 저장소는 없다.
-- 현재 로컬 브랜치/worktree 목록과 정리 결과:
-  [projects/dentlink-fe.md](projects/dentlink-fe.md)의 2026-09-28 정리 체크포인트.
+- 현재 열린 기능 세션과 다른 기기의 첫 대화에서 읽을 체크포인트:
+  [projects/dentlink-fe.md](projects/dentlink-fe.md)의 **다른 기기에서 이어가기** 절.
+  과거 로컬 브랜치/worktree 정리 이력도 같은 문서에 보존한다.
 - 이 색인은 세부 상태를 중복 보관하지 않는다. 과거 SHA, PR 상태, QA·배포 이력은
   각 프로젝트의 최신 체크포인트에서 확인하고 재개 시 live Git과 대조한다.
 
@@ -91,9 +92,10 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- 통합알림센터의 선행 작업. 현재는 별도 프로젝트·세션 초기 설정 준비만 승인됐다.
+- 통합알림센터의 선행 작업. 초기 설정과 Office API 4개 사용처 조사를 마쳤으며,
+  권한관리 본 요구사항 분석·설계·구현은 미착수·사용자 지시 대기다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
-- 앱 표시 이름은 `권한관리 프로젝트 폴더`. 새 task 초기 설정은 완료했고 분석·구현은 대기 중이다.
+- 앱 표시 이름은 `권한관리 프로젝트 폴더`. 기존 `권한관리세션`을 유지한다.
 - 체크포인트: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 
 ### Dentlink 통합알림센터 — 사전 검토

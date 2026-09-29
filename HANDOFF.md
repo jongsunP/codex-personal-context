@@ -10,25 +10,39 @@ Do not store secrets or private customer data here.
 
 ## Resume Order
 
-1. Pull `/Users/parkjongsun/Repository/codex-personal-context`.
+1. Clone `https://github.com/jongsunP/codex-personal-context` if missing, or pull
+   the existing checkout. The preferred location is `~/Repository/codex-personal-context`;
+   use the actual path on the current device.
 2. Run `./setup-local-codex.sh` when local Codex guidance may be stale.
 3. Read `AGENTS.md`, `BOOTSTRAP.md`, `SESSION_WORKFLOW.md`, and
    `DEVELOPMENT_STYLE.md`.
-4. Read the relevant personal checkpoint under `projects/`.
-5. Pull the shared project repository and verify branch, HEAD, remote
-   divergence, worktree, and recent commits.
-6. Read stable team-owned project documentation relevant to the task.
-7. Reconcile any stale checkpoint with verified live Git and current explicit
-   user instructions before continuing.
+4. Read `PROJECTS.md` and the relevant personal checkpoint under `projects/`.
+   For Dentlink, start with the active-session links in `projects/dentlink-fe.md`.
+5. Restoring context alone does not resume implementation, QA, or servers, or
+   authorize product Git changes. Preserve each checkpoint's waiting/hold state.
+   When product work is authorized, prepare the appropriate repository and verify
+   branch, HEAD, remote divergence, dirty state, worktree ownership, and commits.
+   Refresh product Git within the existing authorization and repository boundaries.
+6. Read stable team-owned project documentation relevant to the authorized task.
+7. Reconcile stale checkpoints with live evidence before continuing. Local project
+   registrations, chat IDs/transcripts, absolute paths, credentials, untracked
+   environment files, dependencies, servers, and temporary evidence are not restored
+   by pulling this repository. Follow each checkpoint's device-specific preparation
+   notes and use the actual local paths; never record secrets here.
 
 ## Project Checkpoints
 
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
-- Dentlink DLDS / DL-16466: **사용자 로컬 QA 결과 대기**. `projects/dentlink-fe-opportunities.md`의 2026-09-28 최상단 절을 따른다. 제품85002472f 정비·자동/대표 검증·푸시 완료. 사용자가 이번 브랜치의 실제 Clinic/Lab/Admin 화면을 확인한다. 결과 전 추가 개발/QA·하네스 자동 착수 금지. 결과 수신 후 재현→필요 수정·검증→저장→1단계 마감/2단계 진입 확인 순서다.
+- Dentlink DLDS / DL-16466: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
+  — 사용자 로컬 QA 결과 대기. 최신 체크포인트와 2026-09-29 기기 복구 절을 읽는다.
 - Dentlink web order feedback: `projects/dentlink-client-order-feedback.md`
 - Dentlink mobile app: `projects/dentlink-app.md`
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md` — 백엔드 문제로 이번 배포 제외, PR #4623 미병합 종료. 재개 지시까지 작업 브랜치 보존·대기.
+- Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
+  — Office API 4개 사용처 조사 완료. 권한관리 본 작업 미착수·지시 대기.
+- Dentlink 통합알림센터: [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
+  — REST 방향·사전 조사 완료. 권한관리 선행, 미정 정책 확인과 재개 지시 대기.
 
 Use `PROJECTS.md` for repository paths and the broader project index.
 

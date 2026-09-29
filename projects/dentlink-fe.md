@@ -40,6 +40,37 @@ Detailed implementation history remains in the relevant existing project file.
   not permanent web-versus-app session boundaries.
 - Shared repository mutations still require the user's explicit authorization.
 
+## 다른 기기에서 이어가기 — 2026-09-29
+
+- 사용자가 현재 살아 있는 각 기능 세션의 상태를 정리해 신규/다른 기기의 첫 대화가
+  현재 업무를 파악하도록 지시했다. 기존 세션·대기/보류 상태를 유지하며 각 담당
+  세션이 본인 체크포인트를 정리하고 개인 컨텍스트에 commit/push했다.
+  메인세션은 네 문서의 저장과 공통 색인 연결을 확인했다.
+
+| 기존 세션 | 저장 시점의 상태 | 개인 정본 |
+| --- | --- | --- |
+| 권한관리세션 | Office API 4개 사용처 조사 완료. 권한관리 본 요구사항·설계·구현 미착수·지시 대기 | [권한관리](dentlink-permission-management.md) |
+| LBX세션 | 백엔드 문제로 보류. 작업 브랜치 보존, 재개 시 계약·배포 대상 재확인 | [LBX](dentlink-client-lbx.md) |
+| 디자인시스템정비세션 | 코드 정비와 자동/대표 검증 저장. 사용자 실제 Clinic/Lab/Admin 로컬 QA 결과 대기 | [DLDS](dentlink-fe-opportunities.md) |
+| 통합알림센터세션 | REST 방향·사전 조사 완료. 권한관리 선행, 미정 정책과 재개 지시 대기. 구현 미착수 | [통합알림센터](dentlink-unified-notification-center.md) |
+
+- 각 개인 기록의 원격 보존 확인: 권한관리 `f778f98`, LBX `976d93b`, DLDS
+  `b2d428c`, 통합알림센터 `a5f2883`. 제품 코드의 commit·push를 이번 기록 작업에서
+  실행한 것이 아니다. Git/PR/검증·배포의 상세 근거와 한계는 위 기능별 정본에 둔다.
+- 새 기기에서는 개인 컨텍스트 clone/pull → `BOOTSTRAP.md`의 초기 설정·공통 지침
+  → `PROJECTS.md`/`HANDOFF.md` → 이 표의 해당 정본 순서로 읽는다. 기존 대화나
+  Codex 프로젝트가 없어도 저장된 목적·결정·진행 상태·남은 일·다음 시작점을 복구한다.
+- 문서를 읽는 것만으로 제품 pull·구현·QA·서버 실행이나 보류 해제를 승인하지 않는다.
+  각 기능의 재개 조건과 실제 사용자 지시를 먼저 확인한다. 구현 재개 시에는 그 기기의
+  정확한 제품 저장소·branch·HEAD·dirty·worktree 소유권과 최신 원격 상태를 대조한다.
+- 실제 폴더/앱 등록/세션 ID/대화 전체는 자동 복원되지 않는다. 아래 절대 경로는 현재
+  기기의 배치 참고값이다. 인증·로컬 전용 환경파일·의존성·서버·미추적 산출물은 별도
+  준비 대상이며, Git 추적 제품 파일·회귀 테스트·검증 요약과 구분한다.
+  LBX의 과거 `/tmp` 원본 부재 등 알려진 제약도 각 정본에 기록했다.
+- 앞으로도 의미 있는 상태 변화는 담당 정본에 정리·원격 보존하고, 메인세션은 색인과
+  공통 결정을 관리한다. 여러 세션이 동일 개인 컨텍스트 checkout을 사용할 때는
+  읽기 확인은 병행할 수 있지만 파일 수정·stage·commit·push 차례는 조율한다.
+
 ## 프로젝트 폴더 정렬 — 2026-09-28
 
 - 사용자가 디바이스 폴더와 앱 프로젝트의 연결 경로를 수동으로 정리했다.
@@ -152,7 +183,8 @@ Detailed implementation history remains in the relevant existing project file.
   [DL-16317 권한관리](https://innovaid.atlassian.net/browse/DL-16317)를 별도 준비한다.
   앱 프로젝트 `권한관리 프로젝트 폴더`에 기존 task `권한관리세션`
   (`01a0e6fa-384c-7671-abb8-53d33c42c738`, 생성 당시 이름 `권한관리 초기 설정`)이 있다.
-  시작 프롬프트 전달·공통 지침 읽기 완료와 idle 대기를 확인했고 실제 업무는 미착수다.
+  초기 설정 이후 Office API 4개 사용처 조사까지 진행했으며 2026-09-29 개인 정본에
+  반영했다. 권한관리 본 요구사항 분석·설계·구현은 미착수이고 추가 지시를 기다린다.
   중복 폴더 정리 후 사용자가 등록 경로를
   `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`로 변경했다.
   자세한 시작 상태는 [권한관리 체크포인트](dentlink-permission-management.md)에 둔다.
@@ -191,7 +223,11 @@ Detailed implementation history remains in the relevant existing project file.
   저장됐지만, 2026-09-28 사용자가 백엔드 문제로 이번 배포에서 제외했다.
   PR #4623은 미병합 종료됐고 작업 브랜치를 보존한 채 대기한다.
   제품 API는 정상 연결하며 실제 서버 생성·수정 요청은 테스트에서 실행하지 않는다.
-- DLDS 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의 **2026-09-28 최상단 절**입니다. `dentlink-client-dlds`, `feature/DL-16466`, 제품85002472f를 정상 커밋·푸시하고 원격 일치·clean 확인했습니다. RadioGroup 범용 공개·ListItemGroup 불필요 의존/미사용 코드·모음 예제/사용 안내 정리를 완료했습니다. UI200·Chromium/WebKit·복사 코드2종·타입/빌드/hooks 통과. 아이콘 시각 대조 제외·공통 명명 원칙은 유지합니다. **사용자 로컬 QA 결과 대기**로 인계했습니다. 사용자가 이번 브랜치의 실제 Clinic/Lab/Admin 화면을 확인하며 Codex는 결과 전 추가 작업을 시작하지 않습니다. 결과 수신→문제 재현·수정·검증→저장→1단계 마감/2단계 진입 확인 순서입니다. 남은 권한/데이터/실기기 조건은 구분합니다. Jira 진행 절 갱신·진행 중 유지, 하네스·에디터·PR·병합·배포 미착수이며 보고 후 대기합니다.
+- DLDS 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의 최상단 현재 상태와
+  2026-09-29 기기 복구 절을 따른다. **사용자 실제 Clinic/Lab/Admin 로컬 QA 결과 대기**다.
+  결과 수신 후 필요한 수정·검증과 1단계 마감/2단계 진입을 확인한다. 결과 전 추가
+  구현·반복 QA·하네스를 시작하지 않는다. 제품 HEAD·검증 수치·남은 환경 조건은
+  기능 정본에 두고 이 조율 문서에 계속 복제하지 않는다.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
   See [the current checkpoint](dentlink-fe-opportunities.md) for scope and recovery.
