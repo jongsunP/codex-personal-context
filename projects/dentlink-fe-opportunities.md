@@ -1,6 +1,10 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 체크포인트 — 2026-09-29 · DLDS 전용 PR 검사 제거 결정
+## 현재 체크포인트 — 2026-09-29 · DLDS 변경 정리 판단
+
+- **`ListItemGroup.tsx`: 유지, 추가 조치 없음.** 삭제된 부분은 기존에 주석 처리된 JSX/CSS와 렌더링되지 않던 스타일이다. Checkbox/Radio 렌더링·선택 콜백은 남아 있고 `padding`·`checkedColor`·`notBorderBottom`은 이전에도 동작하지 않았다. 타입은 호환성 때문에 유지한다. 저장소 내 직접 렌더링 사용처는 Storybook 예제뿐이다.
+- **`shared/ui/tests/`와 `shared/ui/DESIGN_COVERAGE.md`: 유지.** 테스트는 실제 공통 UI의 입력·선택·포커스·중첩 창 동작을 검사하며 로컬 `pnpm test:ui`로 실행한다. 대조 문서는 Figma 대응, 기존 사용 계약, 확인/미확인 범위의 팀 근거다. 문서 중 반복되는 수정 전·후 QA 설명은 추후 압축할 수 있으나 지금 삭제하지 않는다.
+- **브랜치 정적 점검:** `origin/master`와 비교한 변경에서 추가로 즉시 삭제할 것이 명확한 파일은 찾지 못했다. 공통 Button 여백 12→10px, Admin 팝업 Escape 닫기, Icon 이름 전환 중 빈 표시, 새 `@dentlink/ui/dlds` 공개 경로의 채택 범위는 유지/조정 판단 후보로 남긴다. 모든 서비스 화면의 실제 동작을 다시 검증한 결론은 아니며, 이번 점검에서 제품 코드를 수정하거나 E2E 다음 단계로 진행하지 않았다.
 
 - 사용자 재확인에 따라 아이콘 생성·Figma 감사 관련 6개 파일의 개별 역할과 보관 판단을 제품 `shared/ui/README.md`에 표로 명시했다. 현재 삭제 대상은 없고, 검사 의존 파일과 조사 이력을 구분했다. 제품 `feature/DL-16466`의 `812886171`로 커밋·푸시했으며 정상 hooks를 통과했다. 이 작업에서 E2E 파일은 수정하거나 실행하지 않았다.
 - 사용자는 별도로 요청하지 않았던 `.github/workflows/ui_regression.yml`을 제품 저장소에서 제거하기로 결정했다. 제품 `feature/DL-16466`의 `be034cc10`으로 제거·README 수정·원격 푸시 완료. DLDS 모음·테스트·로컬 실행 스크립트는 유지했다. 기존 `develop` Chromatic과 `master`/`develop` UI S3 Storybook 빌드 워크플로는 변경하지 않았다. 세 앱 commit 타입 검사와 push hook이 통과했다.
