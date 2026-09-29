@@ -15,18 +15,20 @@
   허용하고, 이미 데이터가 있는 상세는 재조회 오류 때문에 닫거나 작성 내용을 정리하지 않는다.
   저장 실패 토스트·공통 오류 처리·세부 스타일은 유지했다. 다른 기능은 수정하지 않았다.
 - 제품: `/Users/parkjongsun/Repository/dentlink-client`,
-  `feature/ui-requirements-audit`, 커밋 **`8fcdce71ff8bb8b94b7ba395bb1ba16ac39b57f3`**.
+  `feature/ui-requirements-audit`, 현재 커밋 **`b57a4b014024b1f4a447cb7089d4e3309d8e4439`**.
   원격 같은 브랜치로 push 완료, working tree clean을 확인했다.
   [PR #4642](https://github.com/Innvoaid/dentlink-client/pull/4642)는
-  `release/v1.88.0` 대상 OPEN이며 위 커밋 1개와 피드백 관련 8개 파일만 포함한다.
+  `release/v1.88.0` 대상 OPEN이며 피드백 관련 기존 파일 6개 변경만 포함한다.
 - 검증: Clinic 회귀 테스트 5건, Admin 실제 query/컴포넌트의 임시 렌더 검증 6건 통과
   (API 및 화면 shell mock, 초기 오류·재조회 캐시·선택 변경·빈 패널 조건).
+  Clinic 검증용 테스트 파일 2개는 이번 작업의 기존 코드 간소화 목적에 맞춰
+  후속 커밋에서 삭제했고 PR 변경 파일에서 제외했다.
   Clinic·Lab·Admin type/lint, shared 테스트 45건과 `coverage:check`, `git diff --check` 통과.
   lint 경고는 남아 있으며 실서버 오류 주입·브라우저 E2E·배포 후 검증은 하지 않았다.
   정상 commit/push hook을 실행했고 우회하지 않았다.
 - 제품 변경 파일: Admin `AdminFeedbackDetailDrawer.tsx`, `pages/feedbacks/index.tsx`;
   Clinic `FeedbackPageContent.tsx`, `FeedbackDetailDrawer.tsx`,
-  `FeedbackDetailDrawerController.tsx`, `feedback.query.ts` 및 관련 회귀 테스트 2개.
+  `FeedbackDetailDrawerController.tsx`, `feedback.query.ts`.
 - **이 세션의 승인 범위는 완료했다.** 추가 조사·다른 항목 수정·리뷰 대응·병합·배포를
   자동으로 시작하지 않는다. 후속 작업은 사용자의 새 지시가 있을 때 해당 PR부터 확인한다.
   아래는 승인 전 조사 이력이며 미완료 작업 목록이나 추가 조치 지시가 아니다.
