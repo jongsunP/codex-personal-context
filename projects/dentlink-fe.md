@@ -48,9 +48,10 @@ Detailed implementation history remains in the relevant existing project file.
   복귀했다. LBX 로컬·원격 브랜치는 보존하며 보류 상태를 유지한다.
 - 확인되지 않은 요구사항을 임의로 보완하지 않는 공통 지침은
   AGENTS/DEVELOPMENT_STYLE에 반영돼 있다.
-- 디자인시스템정비세션은 사용자 QA 문제1인 Password E2E 셀렉터 충돌만 기록했다.
-  사용자가 수동 확인 중이므로 완료 보고와 다음 지시까지 조사·수정·재실행 없이 대기한다.
-  상세와 나머지 미확인 범위는 [DLDS 정본](dentlink-fe-opportunities.md)을 따른다.
+- 디자인시스템정비세션은 사용자 수동 QA의 “전체적으로 괜찮아 보임” 결과를 접수하고,
+  재개 승인 후 Password E2E 선택자 수정·16건 재검증과 조사 자료5개 정리를 마쳤다.
+  다음은 AI 프롬프트·하네스 논의이며 구현은 미착수다. 상세와 남은 확인 범위는
+  [DLDS 정본](dentlink-fe-opportunities.md)을 따른다.
 - 아래 기기 복구 표의 QA 대기 상태는 이번 보고 전 저장 시점의 기록이다.
 
 ## 다른 기기에서 이어가기 — 2026-09-29
@@ -236,10 +237,10 @@ Detailed implementation history remains in the relevant existing project file.
   저장됐지만, 2026-09-28 사용자가 백엔드 문제로 이번 배포에서 제외했다.
   PR #4623은 미병합 종료됐고 작업 브랜치를 보존한 채 대기한다.
   제품 API는 정상 연결하며 실제 서버 생성·수정 요청은 테스트에서 실행하지 않는다.
-- DLDS 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의 최상단 현재 상태와
-  2026-09-29 기기 복구 절을 따른다. **사용자 실제 Clinic/Lab/Admin 로컬 QA 결과 대기**다.
-  결과 수신 후 필요한 수정·검증과 1단계 마감/2단계 진입을 확인한다. 결과 전 추가
-  구현·반복 QA·하네스를 시작하지 않는다. 제품 HEAD·검증 수치·남은 환경 조건은
+- DLDS 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의 최상단 현재 상태를
+  따른다. **QA 결과 접수 후 E2E·자료 정리를 마쳤고, AI 프롬프트·하네스 논의 대기**다.
+  사용자 수동 QA를 전체 화면 무결함 판정으로 확대하지 않으며 하네스 구현은 아직
+  시작하지 않는다. 제품 HEAD·검증 수치·남은 환경 조건은
   기능 정본에 두고 이 조율 문서에 계속 복제하지 않는다.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).

@@ -1,6 +1,35 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 체크포인트 — 2026-10-01 · 수동 QA 결과 접수·다음 진행 논의
+## 현재 체크포인트 — 2026-10-01 · DLDS 후속 정리 완료·AI 프롬프트/하네스 논의 대기
+
+- **진행 승인과 현재 단계:** 사용자가 추천 순서대로 E2E 수정·검증 → 조사 자료 정리 → 검사·커밋·푸시·메모리 저장을 승인했다. 확인된 DLDS 구현과 이번 후속 정리를 마쳤으며, 다음 사용자 논의는 **AI 프롬프트·하네스 단계**다. 하네스·에디터 구현은 아직 시작하지 않는다. 날짜·모달 등의 대표 검증을 처음부터 전수 반복하거나 아이콘 추가 전수 대조를 재개하지 않았다.
+- **수동 QA 결과:** 사용자가 전체적으로 눌러보았을 때 괜찮아 보였다고 보고했다. 모든 화면·상태의 무결함을 확정한 결과는 아니다. 이 결과와 이전 대표 화면·브라우저 검증을 1단계 마감 근거로 사용하며, 이후 구체적인 증상이 나오면 해당 사용처를 확인한다.
+- **제품 저장 상태:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16466`. `3f12af1da`(회원가입 선택자·날짜 테스트 보완), `56bc1be5ce975c6726637be51347911d730410ba`(조사 자료 정리)를 정상 hooks로 커밋·원격 푸시했다. 최종 로컬·추적·원격 HEAD 일치, 미커밋 변경 없음과 E2E 전용 서버 종료를 확인했다. 기존 비교용 [PR #4643](https://github.com/Innvoaid/dentlink-client/pull/4643)은 의도적인 Draft이며, 제목·상태·대상·충돌·리뷰를 별도 변경하지 않았다. 병합·배포·Jira/Notion/Sites 변경도 하지 않았다.
+
+### 완료한 수정·정리
+
+- **알려진 Password E2E 문제 해결:** `e2e/clinic/steps/auth/signup-step1.ts`의 `getByLabel("Password")`에 `exact: true`를 지정했다. 입력과 `Show password`/`Clear password` 버튼이 함께 매칭되던 문제를 해결하며 제품 표시나 접근성 이름은 바꾸지 않는다. 소비자인 회원가입 전체·Step2/3 검증2파일을 모두 실행했다.
+- **최종 검사에서 발견한 날짜 테스트 보완:** `shared/ui/tests/overlay-focus.test.tsx`의 부모 창/달력 Escape2건은 빈 달력이 실행 월을 열지만 고정된9월21일을 찾고 있어10월1일 실행에서 실패했다. 해당 사례에서 Date만2026-09-18로 고정하고 종료 시 복원했다. 실제 타이머·제품 달력 동작은 변경하지 않았다. 처음198통과/2실패 → 보완 후200통과다.
+- **일회성 자료5개 삭제 완료:** `shared/icons/figma-provenance.json`, `shared/ui/design-audit/{figma-icons.tsv,figma-logos.tsv,FIGMA_REMAINING_AUDIT.md,figma-source-snapshot-2026-09-21.json}`. 감사 문서에만 있던 Checkbox·Stepper·Slider·Tooltip 상태 근거는 `shared/ui/DESIGN_COVERAGE.md`에 필요한 만큼 보존했다. README·tests 안내·모음 화면의 삭제 파일 참조도 정리했다.
+- **계속 필요한 생성 설정·테스트 유지:** `svgr.config.js`의 기존 automatic JSX 대상121개는 같은 정적 목록으로 옮겨 provenance 의존을 제거했다. `generation.test.mjs`는 Figma 해시/스냅샷 대신 실제 SVG 재생성·공개 export와 중첩 SVG viewport/host props를 검사한다. SVG507개 재생성은 저장 TSX와 바이트 동일이며 에셋·dist·export·사용처 변경0이다. 전체532개 중 나머지25개는 원본 SVG 없이 남은 기존 TSX/동적 Icon 이름이며 이번 생성 검사나 신규 공개 export 대상이 아니다.
+- **유지하는 파일·범위:** `shared/ui/tests/`, `DESIGN_COVERAGE.md`, 실제 SVG/TSX·진입점·모음 페이지·로컬 스크립트·제품 E2E는 유지한다. ListItemGroup 추가 작업, 전역 UI 기본값 변경, 버튼 여백·Icon 전환·Escape의 새 디자인 수정은 하지 않았다. 기존 사용자가 실행한 Clinic/Lab 개발 서버를 종료하지 않았다.
+
+### 최종 검증과 한계
+
+- 공식 **local focused E2E16개 통과**, `e2e-runs/2026-10-01T05-06-18-025Z-31a9ebed`. `00_signup.spec.ts`와 `00_signup_step2_3_validation.spec.ts` 전체를 실행했다. 실패·flaky·skip·미실행·중단·전역 오류0, gate_passed=true. 실행 당시 부모 HEAD는812886171이며 작업 사본 source `153d8b63036358ae818aba3b2545359f7e8251636c3a2472f1dbed73dc07e788`, 실행 전후 동일이다. 이후 변경은 테스트 날짜 고정과 검증 설명뿐이며 제품 실행 코드는 그대로다. 로컬 FE+DEV API 근거로, staging 전체·배포 검증은 아니다.
+- 공통 UI **24파일200개**, 아이콘 생성 **2개** 통과. E2E TypeScript, 모음 strict TypeScript·scoped ESLint·Vite build 통과. 정상 commit hooks의 Clinic/Lab/Admin 타입 및 push hooks의 앱 lint·공통 coverage를 통과했다. 앱의 기존 lint 경고와 모음 chunk 크기 경고는 남으며 전체 서비스 무경고 판정은 아니다.
+- 9월29일 중단된 사용자 실행의 보존 오류는 Password2건과 Insta Smile Vision2건이다. ISV 두 trace의 `/catalogs/category`는200/13항목이지만 `Insta Smile Vision`·`INSTA_DESIGN`이 없었다. 카테고리 선택 전 데이터 전제 실패로, DLDS UI 회귀 근거가 아니다. 당시 전체 실행의 최종 결과는 미확정이며 이번에 ISV 서버 데이터나 테스트 기대값을 변경하지 않았다.
+- 기존 미확인 조건인 DSO 권한/92일 날짜 범위, 수정 가능한 NUMBER 옵션 주문, 실휴대폰·스크린리더·전체 다국어·staging 전수는 유지한다. 지금 확정된 추가 UI 구현 누락이나 하네스 논의의 필수 선행 실패로 취급하지 않는다. Button12→10px 여백, Icon A→B 로딩 빈자리, Popup Escape 닫기는 디자이너 문의 시 찾을 참고 기록이며 새 오류 판정은 없다.
+
+### 다음 시작점 — AI 프롬프트·하네스 논의
+
+1. 다른 기기는 개인 컨텍스트와 제품 `feature/DL-16466`을 `git pull --ff-only`하고 위 HEAD/dirty를 확인한다. 로컬 인증·환경변수·node_modules·브라우저·e2e-runs·/tmp·실행 서버는 Git으로 이전되지 않는다. 제품 코드·팀 문서와 이 체크포인트로 이어간다.
+2. **실제 덴트링크 컴포넌트를 기반으로, Figma 링크가 나오기 전 PM·디자이너가 자연어로 우리 UI 수준의 화면을 만들고 FE가 이어받는 환경**이라는 기존 목표를 다시 논의한다. AI가 읽을 DLDS 자료/실제 컴포넌트, 요구 누락 시 재질문, 허용할 구성과 신규 UI 처리, 실행/검증 순서·공유 방식을 정한다.
+3. DLDS 정비 → **AI 프롬프트·하네스 정비가 핵심** → 가능하면 에디터 순서를 유지한다. 대상 화면이나 편집 범위를 임의로 확정하거나 범용 에디터 개발을 먼저 시작하지 않는다. 새로운 구현은 이 논의 후 사용자 지시로 착수한다.
+
+아래는 당시의 이전 체크포인트다. 최신 상태와 파일 보관 판단은 이 최상단 절을 우선한다.
+
+## 이전 체크포인트 — 2026-10-01 · 수동 QA 결과 접수·다음 진행 논의
 
 - **사용자 수동 QA 결과 접수:** 사용자가 전체적으로 눌러보았을 때 괜찮아 보였다고 보고했다. 모든 부분을 전수 확인해 무결함을 확정했다는 의미는 아니다. Calendar·DatePicker와 Modal·Popup을 중점 확인 대상으로 안내한 상태였으며, 실제 확인한 경로·환경별 상세 결과는 아직 없다. 이전의 QA 결과 미수신 상태를 이 결과로 갱신한다.
 - **현재 실행 경계:** 이번 요청은 추가 QA 필요성과 다음 진행 순서에 관한 의견 요청이다. 제품 코드 수정·테스트·화면 QA를 시작하지 않았다. 다른 기기에서도 이 결과를 읽고 사용자의 실행 지시부터 이어간다. 2026-10-01 확인한 제품 `feature/DL-16466`의 로컬·원격 HEAD는 `812886171`로 일치하고 clean이다.
