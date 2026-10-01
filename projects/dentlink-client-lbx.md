@@ -1,10 +1,8 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-> 2026-09-29 checkout 사용 변경: 사용자 요청으로 기본 `dentlink-client` 폴더는
-> master 기준 `feature/ui-requirements-audit`의 별도 조사 세션에 배정했다.
-> LBX `feature/DL-16387`의 로컬·원격 `347909945`는 그대로 보존했으며 보류 상태다.
-> 아래 기존 checkout 기록은 당시 상태다. LBX 재개 시 현재 소유권과 dirty를 확인하고
-> 조사 세션의 작업을 덮어쓰거나 브랜치를 임의 전환하지 않는다.
+> 2026-10-01: 피드백 조사 브랜치 정리 후 기본 `dentlink-client` checkout은
+> `master`로 복귀했다. LBX `feature/DL-16387`의 로컬·원격 브랜치는 보존하며
+> 백엔드 문제로 보류 상태다. 재개 시 현재 checkout·브랜치·dirty를 다시 확인한다.
 
 ## 현재 체크포인트 — 2026-09-29, 백엔드 문제로 보류 유지 / 다른 기기 인수인계
 

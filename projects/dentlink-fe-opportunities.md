@@ -63,9 +63,9 @@
 - 같은 실행의 Insta Smile Vision 실패는 카테고리 API200 응답에 해당 항목이 없다는
   별도 데이터 전제 문제다. 셀렉터 회귀와 합치지 않는다. 당시 UI 세션은 종료 전이어서
   전체 실패/성공 판정을 확정하지 않았다. caught timeout 로그도 최종 실패와 구분한다.
-- **피드백 Retry 조사는 분리:** [별도 조사 정본](dentlink-client-ui-requirements-audit.md)을
-  사용하는 새 세션에서 master 기준 조사→보고→승인 후 수정을 담당한다. 이 DLDS
-  세션에서는 해당 UI 제거/변경을 하지 않는다.
+- **피드백 Retry 정리 완료:** [완료 기록](dentlink-client-ui-requirements-audit.md)의
+  PR #4642가 `release/v1.88.0`에 병합됐다. 이 DLDS 세션의 후속 작업 범위에는
+  포함하지 않는다.
 - **다음 시작점:** 사용자 지시가 오면 Password 선택자 충돌을 해당 E2E에서
   수정·재검증하고, Insta Smile Vision은 데이터 전제 문제인지 별도로 판단한다.
   그 결과와 수동 확인 범위를 합쳐 DLDS 1단계 마감 여부를 정리한 뒤에만

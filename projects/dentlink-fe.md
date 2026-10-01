@@ -40,14 +40,14 @@ Detailed implementation history remains in the relevant existing project file.
   not permanent web-versus-app session boundaries.
 - Shared repository mutations still require the user's explicit authorization.
 
-## 요구사항 외 UI 조사 세션 분리 — 2026-09-29 후속
+## 피드백 요구사항 외 UI 정리 완료 — 2026-10-01
 
-- 사용자 요청으로 피드백 Retry에서 시작한 조사를 별도 세션에 맡긴다.
-  [조사 정본](dentlink-client-ui-requirements-audit.md)의 제품 `dentlink-client`
-  기본 checkout에서 master 기준 `feature/ui-requirements-audit`를 사용한다.
-  원래 LBX 로컬·원격 브랜치는 보존하며 보류 상태를 유지한다.
-- 조사→문제·근거·수정안 보고→사용자 승인 후 수정이다. 확인되지 않은 요구사항을
-  임의로 보완하지 않는 공통 지침을 AGENTS/DEVELOPMENT_STYLE에 반영한다.
+- 사용자 승인 범위의 피드백 UI 4곳을 정리한 [PR #4642](https://github.com/Innvoaid/dentlink-client/pull/4642)가
+  `release/v1.88.0`에 병합됐다. [완료 기록](dentlink-client-ui-requirements-audit.md)을 따른다.
+- 작업용 로컬 `feature/ui-requirements-audit`는 삭제했고 기본 checkout은 `master`로
+  복귀했다. LBX 로컬·원격 브랜치는 보존하며 보류 상태를 유지한다.
+- 확인되지 않은 요구사항을 임의로 보완하지 않는 공통 지침은
+  AGENTS/DEVELOPMENT_STYLE에 반영돼 있다.
 - 디자인시스템정비세션은 사용자 QA 문제1인 Password E2E 셀렉터 충돌만 기록했다.
   사용자가 수동 확인 중이므로 완료 보고와 다음 지시까지 조사·수정·재실행 없이 대기한다.
   상세와 나머지 미확인 범위는 [DLDS 정본](dentlink-fe-opportunities.md)을 따른다.

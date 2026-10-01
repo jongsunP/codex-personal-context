@@ -72,15 +72,15 @@ For detailed current state, read:
   누락 확인·명칭 정리에 이어 보조 UI 의존성·사용 예제 정비와 검증을 마쳤다.
   **사용자가 수동 확인한 범위에서 큰 이상은 발견하지 못했다.** 알려진 문제 1인
   E2E 셀렉터 영향만 기록했으며, 다음 지시 전에는 조사·수정·재실행하지 않는다.
-  피드백 Retry/요구사항 외 UI 조사는 별도 세션으로 분리했다.
+  피드백 Retry/요구사항 외 UI 정리는 PR #4642 병합으로 완료됐다.
   기존 `dentlink-client-dlds` worktree를 보존하며 AI 하네스는 아직 미착수다.
 - [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
 - 회의 바로가기: [projects/dentlink-fe-meeting.md](projects/dentlink-fe-meeting.md)
 
-### Dentlink 요구사항 외 UI 변경 조사
+### Dentlink 피드백 요구사항 외 UI 정리 — 완료
 
-- `dentlink-client` 기본 checkout의 master 기준 별도 브랜치에서 조사·보고한다.
-- 제품 수정은 항목별 사용자 승인 후이며 DLDS/E2E 수정과 분리한다.
+- 승인된 피드백 UI 4곳 정리를 PR #4642로 `release/v1.88.0`에 병합했다.
+- 작업용 로컬 브랜치를 삭제했고 기본 checkout은 `master`로 복귀했다.
 - [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
 
 ### Dentlink Admin LBX — DL-16279 / DL-16387
