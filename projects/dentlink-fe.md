@@ -57,6 +57,9 @@ Detailed implementation history remains in the relevant existing project file.
   [PR #4648](https://github.com/Innvoaid/dentlink-client/pull/4648)로 전달했다.
   `feature/e2e-group-guide` → `release/v1.88.0`, 현재 CodeRabbit 상태는 성공이며
   최종 승인·병합은 대기 중이다. 사용자 QA 완료와 PR 병합 상태를 구분한다.
+- 문서 작업용 `dentlink-client-e2e-docs` worktree와 로컬 `feature/e2e-group-guide`는
+  사용자 지시에 따라 정리했다. 동일 커밋을 가진 원격 브랜치와 PR #4648은 보존하며,
+  기본 checkout과 진행 중인 DLDS worktree는 유지한다.
 
 ## 피드백 요구사항 외 UI 정리 완료 — 2026-10-01
 

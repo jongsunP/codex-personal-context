@@ -22,7 +22,7 @@
   **`release/v1.88.0` 대상 PR**로 전달한다. release 직접 수정·푸시나 PR merge는 포함하지 않는다.
 - 사용자 테스트 checkout과 분리하기 위해 문서 작업은
   `/Users/parkjongsun/Repository/dentlink-client-e2e-docs`,
-  `feature/e2e-group-guide`에서 진행한다. 기준 release는
+  `feature/e2e-group-guide`에서 진행했다. 기준 release는
   `a35043bb4ee8fdeee10f631115434d39f9566611`이며, 사용자 기본 checkout은 그대로 유지했다.
   과거 폐기한 `dentlink-client-e2e` / `feature/e2e-reliability`를 재사용한 것이 아니다.
 - 제품 E2E README에 고정 그룹·사용자 계정·임시 치과의 구분을 추가했고,
@@ -33,7 +33,7 @@
   (`docs: E2E 고정 그룹과 계정 준비 안내 정리`)을 푸시했고,
   [PR #4648](https://github.com/Innvoaid/dentlink-client/pull/4648)
   **E2E 고정 그룹과 계정 준비 문서 정리**를 `release/v1.88.0` 대상으로 생성했다.
-  문서/주석 3개 파일만 변경했고 PR은 미병합이다. 작업 branch/worktree는 보존한다.
+  문서/주석 3개 파일만 변경했고 PR은 미병합이다. 원격 브랜치와 PR은 보존한다.
 - 검증: Clinic/Lab/Admin type 통과, lint 오류 0·기존 경고 807개,
   shared configs/hooks 테스트 45/45 및 coverage 변화 없음. 새 worktree에 필요한
   Next 자동 생성 타입과 동일한 release 서비스 소스의 coverage baseline을 준비한 뒤
@@ -44,7 +44,15 @@
   `mergedAt`은 null이다. **CodeRabbit 상태는 SUCCESS**다. Vercel preview는
   커밋 작성자 `jongsunP`의 프로젝트 접근 권한 부족으로 실패했다. 권한을 변경하거나
   배포를 재시도하지 않았다. 오늘 정리 범위의 완료와 PR 최종 승인·병합은 구분하며,
-  branch/worktree는 미병합 상태로 보존한다.
+  원격 브랜치와 PR은 보존한다.
+- 완료 정리에서 PR 미병합을 이유로 로컬 worktree·브랜치까지 보존한 판단을 정정했다.
+  사용자 지적·정리 지시에 따라 위 문서 worktree와 로컬 `feature/e2e-group-guide`를
+  삭제했다. 삭제 전 로컬·원격 HEAD가 모두 `48821fe9815f262637b0c7d853c3bc15beaa6b40`임을
+  확인했고, 미커밋·미추적 변경과 해당 경로의 실행 프로세스가 없었다. ignored 파일은
+  의존성·자동 생성 타입·빌드/coverage 산출물뿐이었다. 기본 checkout과 DLDS worktree는 유지했다.
+  추가 작업이 필요하면 `origin/feature/e2e-group-guide`에서 checkout을 다시 만들 수 있다.
+  원격에 커밋이 보존되고 로컬에 보존할 변경·파일·실행 작업이 없다면, PR이 열려 있다는
+  이유만으로 작업용 로컬 브랜치·worktree를 남기지 않는다.
 
 ## 고정 테스트 그룹 정리 — 2026-10-01
 
