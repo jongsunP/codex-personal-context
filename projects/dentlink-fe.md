@@ -47,6 +47,13 @@ Detailed implementation history remains in the relevant existing project file.
   임시 치과 정책은 [E2E 정본](dentlink-client-e2e.md)의 최신 절을 따른다.
 - 정리 후 서버 재조회·전체 E2E 통과는 미확인이다. 조사 중 발견한 픽업 대상 선택
   문제는 미수정 후속 사항으로 보존하며, 별도 구현·실행은 시작하지 않았다.
+- 사용자가 로컬·STG UI E2E를 직접 확인하며 결과를 기다린다. 제품 E2E 문서·스킬
+  정비는 별도로 승인됐다. 이번 후속 제품 변경은 `release/v1.88.0`에서 신규 브랜치를
+  만들어 커밋·푸시하고 같은 release로 PR을 제출한다. 상세 작업 위치·검증·PR은
+  [E2E 정본](dentlink-client-e2e.md)의 최신 절을 따른다.
+- 문서·스킬·구 준비 스크립트 주석 정정은
+  [PR #4648](https://github.com/Innvoaid/dentlink-client/pull/4648)로 전달했다.
+  `feature/e2e-group-guide` → `release/v1.88.0`, 미병합이며 사용자 E2E 결과 대기를 유지한다.
 
 ## 피드백 요구사항 외 UI 정리 완료 — 2026-10-01
 

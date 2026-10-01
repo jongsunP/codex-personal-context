@@ -1,5 +1,36 @@
 # Dentlink E2E Reliability Checkpoint - 2026-10-01
 
+## 사용자 QA 대기와 후속 수정 기준 — 2026-10-01
+
+- 사용자가 `pnpm e2e:clinic:ui`와 `pnpm e2e:clinic:ui:stg`를 직접 실행해 확인한다.
+  Codex는 결과를 기다리며, 이 대기 중 E2E를 대신 실행하거나 픽업 등 실행 코드를
+  선제 수정하지 않는다. 필요한 그룹·계정·매핑·상품 설정이 유지됐다면 이번 미사용
+  그룹 DB 정리와 무관하게 기존 시나리오가 동작해야 한다는 것이 확인할 기대 동작이다.
+- 사용자는 개인 컨텍스트뿐 아니라 제품 저장소의 E2E 문서·관련 스킬도 필요한
+  부분을 정리하도록 승인했다. 현재 제품 변경의 기준은 **`release/v1.88.0`**이다.
+  수정이 필요하면 최신 release에서 신규 feature 브랜치를 만들고, 변경을 커밋·푸시한 뒤
+  **`release/v1.88.0` 대상 PR**로 전달한다. release 직접 수정·푸시나 PR merge는 포함하지 않는다.
+- 사용자 테스트 checkout과 분리하기 위해 문서 작업은
+  `/Users/parkjongsun/Repository/dentlink-client-e2e-docs`,
+  `feature/e2e-group-guide`에서 진행한다. 기준 release는
+  `a35043bb4ee8fdeee10f631115434d39f9566611`이며, 사용자 기본 checkout은 그대로 유지했다.
+  과거 폐기한 `dentlink-client-e2e` / `feature/e2e-reliability`를 재사용한 것이 아니다.
+- 제품 E2E README에 고정 그룹·사용자 계정·임시 치과의 구분을 추가했고,
+  저장소 E2E 스킬 및 구 준비 스크립트의 주석에서 Request Access 전용 치과를
+  필수로 생성하는 오안내를 정정했다. 스크립트 실행 본문은 변경하지 않았다.
+  개인 E2E 스킬 정본·설치 사본은 동일하며 이미 README로 연결되므로 변경하지 않는다.
+- 제품 커밋 `48821fe9815f262637b0c7d853c3bc15beaa6b40`
+  (`docs: E2E 고정 그룹과 계정 준비 안내 정리`)을 푸시했고,
+  [PR #4648](https://github.com/Innvoaid/dentlink-client/pull/4648)
+  **E2E 고정 그룹과 계정 준비 문서 정리**를 `release/v1.88.0` 대상으로 생성했다.
+  문서/주석 3개 파일만 변경했고 PR은 미병합이다. 작업 branch/worktree는 보존한다.
+- 검증: Clinic/Lab/Admin type 통과, lint 오류 0·기존 경고 807개,
+  shared configs/hooks 테스트 45/45 및 coverage 변화 없음. 새 worktree에 필요한
+  Next 자동 생성 타입과 동일한 release 서비스 소스의 coverage baseline을 준비한 뒤
+  commit/push hooks를 우회 없이 통과했다. 문서 링크·앵커, 스킬 YAML 유지,
+  스크립트 실행 본문 동일 여부 및 `git diff --check`를 확인했다.
+  이 결과는 사용자 DB 정리 후 브라우저 E2E 통과를 뜻하지 않는다.
+
 ## 고정 테스트 그룹 정리 — 2026-10-01
 
 - 사용자는 매핑을 이전하고 아래 고정 E2E 그룹만 유지하는 방향을 확인한 뒤
