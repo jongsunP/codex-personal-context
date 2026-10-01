@@ -40,6 +40,14 @@ Detailed implementation history remains in the relevant existing project file.
   not permanent web-versus-app session boundaries.
 - Shared repository mutations still require the user's explicit authorization.
 
+## 웹 E2E 그룹 정리 인계 — 2026-10-01
+
+- 사용자는 DEV/STG별 E2E Clinic·E2E Lab 한 쌍씩, 총 고정 그룹 4개를 유지하고
+  매핑을 이전하는 방향에 따라 정리 완료를 보고했다. 상세 그룹 ID·계정 역할·
+  임시 치과 정책은 [E2E 정본](dentlink-client-e2e.md)의 최신 절을 따른다.
+- 정리 후 서버 재조회·전체 E2E 통과는 미확인이다. 조사 중 발견한 픽업 대상 선택
+  문제는 미수정 후속 사항으로 보존하며, 별도 구현·실행은 시작하지 않았다.
+
 ## 피드백 요구사항 외 UI 정리 완료 — 2026-10-01
 
 - 사용자 승인 범위의 피드백 UI 4곳을 정리한 [PR #4642](https://github.com/Innvoaid/dentlink-client/pull/4642)가
