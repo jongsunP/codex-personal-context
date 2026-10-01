@@ -72,7 +72,8 @@ For detailed current state, read:
   누락 확인·명칭 정리에 이어 보조 UI 의존성·사용 예제 정비와 검증을 마쳤다.
   **사용자 수동 QA는 전체적으로 괜찮아 보인다는 결과이며 전수 무결함 판정은 아니다.**
   재개 승인에 따라 Password E2E 선택자 수정·16건 재검증과 조사 자료5개 정리를
-  마쳤다. 다음은 **AI 프롬프트·하네스 단계 논의**이며 구현은 아직 시작하지 않는다.
+  마쳤다. **2단계 AI 프롬프트·하네스의 작업 기준을 합의**했으며,
+  다음은 DLDS 사용 기준·실행 기본 환경·첫 실험 준비다. 구현은 아직 미착수다.
   피드백 Retry/요구사항 외 UI 정리는 PR #4642 병합으로 완료됐다.
   기존 `dentlink-client-dlds` worktree를 보존하며 AI 하네스는 아직 미착수다.
 - [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)

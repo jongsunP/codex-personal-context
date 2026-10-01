@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS / DL-16466: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 사용자 수동 QA 결과 접수, E2E 수정·재검증과 자료 정리 완료. AI 프롬프트·하네스 논의 대기.
+  — 1단계 우선 완료·2단계 작업 기준 합의. 다음은 DLDS 사용 기준·실행 기본 환경·첫 실험 준비.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
