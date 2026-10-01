@@ -40,20 +40,23 @@ Detailed implementation history remains in the relevant existing project file.
   not permanent web-versus-app session boundaries.
 - Shared repository mutations still require the user's explicit authorization.
 
-## 웹 E2E 그룹 정리 인계 — 2026-10-01
+## 웹 E2E 계정·문서 정리 완료 — 2026-10-01
 
 - 사용자는 DEV/STG별 E2E Clinic·E2E Lab 한 쌍씩, 총 고정 그룹 4개를 유지하고
   매핑을 이전하는 방향에 따라 정리 완료를 보고했다. 상세 그룹 ID·계정 역할·
   임시 치과 정책은 [E2E 정본](dentlink-client-e2e.md)의 최신 절을 따른다.
-- 정리 후 서버 재조회·전체 E2E 통과는 미확인이다. 조사 중 발견한 픽업 대상 선택
-  문제는 미수정 후속 사항으로 보존하며, 별도 구현·실행은 시작하지 않았다.
-- 사용자가 로컬·STG UI E2E를 직접 확인하며 결과를 기다린다. 제품 E2E 문서·스킬
-  정비는 별도로 승인됐다. 이번 후속 제품 변경은 `release/v1.88.0`에서 신규 브랜치를
+- 사용자 확인 결과 **STG 전체 성공**, **DEV는 다른 개발자의 진행 중인 ISV 변경에
+  따른 ISV 실패만 존재**한다. 사용자 판단에 따라 오늘 계정·문서 정리는 완료로 처리한다.
+  해당 ISV 변경이 master에 반영되면 E2E 정합성을 다시 확인하는 후속 사항으로 남긴다.
+- 조사 중 발견한 픽업 대상 선택 문제는 미수정 별도 사항이며 이번 완료 범위를
+  자동으로 확장하지 않는다. 상세 검증 한계·후속 시작점은 E2E 정본을 따른다.
+- 제품 E2E 문서·스킬 정비는 별도로 승인됐다. 이번 제품 변경은 `release/v1.88.0`에서 신규 브랜치를
   만들어 커밋·푸시하고 같은 release로 PR을 제출한다. 상세 작업 위치·검증·PR은
   [E2E 정본](dentlink-client-e2e.md)의 최신 절을 따른다.
 - 문서·스킬·구 준비 스크립트 주석 정정은
   [PR #4648](https://github.com/Innvoaid/dentlink-client/pull/4648)로 전달했다.
-  `feature/e2e-group-guide` → `release/v1.88.0`, 미병합이며 사용자 E2E 결과 대기를 유지한다.
+  `feature/e2e-group-guide` → `release/v1.88.0`, 현재 CodeRabbit 상태는 성공이며
+  최종 승인·병합은 대기 중이다. 사용자 QA 완료와 PR 병합 상태를 구분한다.
 
 ## 피드백 요구사항 외 UI 정리 완료 — 2026-10-01
 
