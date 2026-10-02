@@ -1,60 +1,48 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 체크포인트 — 2026-10-02 · Figma 원본 master 독립 시험 진행 중
+## 현재 체크포인트 — 2026-10-02 · Figma 원본 master 독립 시험 완료·방향 논의 대기
 
-- **승인 범위:** 임시 브레이크포인트 `d8ba412` 이후 원본 master 독립 시험·결과 코드 활용 검증·기존 팀 문서 정리를 재개했다. 사용자가 약1시간 자리를 비우며 사용량 소진/세션 초기화에 대비한 단계별 원격 저장을 요청했다. 실제 제품 하네스/에디터 구현·PR/병합/배포·계정 초기화는 이번 범위가 아니다.
-- **제품 원본:** `dentlink-client-dlds`, `feature/DL-16471`, **`e7b7148a53a684e78ed25301e8d4eb541fc06c19`**, pull 후 clean. 이번 제품 코드 변경0이다. 주 저장소는 release 브랜치이므로 전환하지 않았다.
-- **독립 시험 출처:** fetch한 `origin/master` **`9bed1f7bd753e229478302413c0ec9a7e7a11dc2`**(2026-09-28 release/v1.87.0). 기존 Codex `ai-preview`·`dlds-gallery`·신규 `dlds.ts`가 없는 원본이다. 개인 폴더 `figma-code-layers/master-trial/dentlink-client-master/`의3,460파일/58,314,729bytes를 준비했다. 환경변수9개·설치/빌드 파일·에이전트 설정 디렉터리·일부 테스트/생성물 등635경로를 제외했다. 기존 소스의 루트 AGENTS.md/claude.md는 남는다. 새 UI/preview를 로컬 사본에 추가하지 않았다.
-- **다른 기기에서 사본 복구:** [master 소스 출처와 제외 목록](dentlink-figma-master-source.md)에 전체635경로와 해시 계산법을 원격 보존한다. 기준 SHA를 `git archive`로 새 개인 폴더에 추출하고 `excluded_paths`를 제외한다. 결과3,460파일/58,314,729bytes, tree SHA256 `53e4a5f28de4f51dca033571909d8bcbdf85f246a5f81e8c250f20eee79b4fef`를 확인한다. 다른 SHA는 민감 설정 검사를 다시 해야 하며, 설치/클라우드 설정/로그인까지 복원되는 것은 아니다.
-- **브라우저 제어 복구:** 이전 Chrome 탭은 AX/스크린샷 갱신 불일치·`noWindowsAvailable`·`elementHasNoFrame`로 시험하지 못했다. Mac 잠금 여부를 비동기 문의했으나 답변 전 새 시크릿 탭에서 같은 Figma 파일을 열어 제어와 화면 갱신을 복구했다. 잠금이나 Figma 기능 결함으로 원인을 확정하지 않는다. 예전 탭 대신 현재 새 탭을 사용한다.
-- **현재 Figma 진행:** file key **`2OR0Gj7NUFEEeYBjQg5Y6v`**, 새 페이지 **`Code layers · master` / `234:2`**, 새 Code layer **`234:4`**. 새 페이지에서 master 사본을 browse→Chrome3,460파일 확인으로 업로드했고, Figma가 업로드 완료 후3개 Next.js 앱의 실행 대상과 standalone 배포 처리 방식을 재질문했다. 전체 앱 대신 독립 React/Vite 빈 미리보기·기존 앱 구조 보존으로 답변을 제출했다. **Version2 설정 완료**를 관찰했고3m35s 작업·bootstrap/deploy/deploy-preview 검증 성공·42 modules build와 실제 빈 Running 미리보기를 확인했다. 이어 영어 자연어 요청으로 **Version3 Team notification form**을 생성했다. Figma는 기존 TextInput·Checkbox·Button·Typography/Theme 재사용과 verifier 성공을 보고했고, 다운로드 ZIP 감사에서 기존 master 소스 변경0·App.tsx만 V2 대비 변경을 확인했다. 그러나 iframe와 직접 cloud preview 모두 흰 화면이며 Chrome Console에 `Uncaught SyntaxError: Unexpected token '<'`가 `/@fs/workspaces/...WithProvider.tsx:2`에서 발생했다. 화면 실행 성공은 아직 아니다. **Version4**에서 Figma가 preview의 JSX 변환, 특정 index 역참조용 bridge, favicon을 수정했다(기존 shared/app 보존). 새로고침한 직접 cloud preview에 실제 폼이 표시됐고, 이름 비움→저장 disabled/오류, 이름 FE Trial·이메일 비움·알림 해제→저장 결과 FE Trial/Not provided/Off를 CUA로 확인했다. Figma는 별도 Chromium의375px overflow0·console/pageerror0 검증도 보고했다. **Version5**의 이메일 필수/형식 검증·375px Save 전폭 후속 수정 완료(43s)와 **Version6**의 Annotate for agent 제목 요소 선택→문구만 수정 완료(2s)를 확인했다. V5→V6 ZIP diff는 App.tsx 제목1줄만 변경이며 나머지 파일/검증/레이아웃 동일이다. 현재 최종 제목은 Team notification preferences다. 이전 연락처 예제 `222:24317`과 분리한다.
-- **다운로드 확인:** Files → File actions → Download code로 `master-trial/master-empty-v2.zip`을 저장했다. Chrome 완료와 파일32,721,786bytes·4512ZIP entries를 확인했고 `.figma/make/preview/{index.html,src/App.tsx,src/main.tsx}`와 실행 설정이 포함된다. V2는 빈 화면용 코드이며, 새 폼 **master-form-v3.zip**(32,723,828bytes), 후속 **master-required-v5.zip**, 최종 **master-final-v6.zip**(32,724,721bytes, SHA256 `d0df2a57d1e936907bb47d6392eb8a3e7453fd3bec4f449ed56ac81a352bed52`)도 다운로드했다. V2는 기존3,460파일 모두 바이트 동일/추가16개로, preview·Figma 실행 설정·mise·Git LFS hook만 추가됐다. V3는 V2 대비 App.tsx만 변경했다. V5 재감사에서 원본3,460개 수정/삭제0, preview adapter만 추가/변경된 것을 확인했다. adapter의 Icon은 원본 동적 Icon 대신 기존 SvgSignCheck를 직접 연결하므로 모든 의존성 동작이100% 동일한 시험은 아니다. 입력·Checkbox·Button 컨트롤은 기존 구현을 재사용하며 소스는 보존된다. 빈 화면 캡처 `master-trial/evidence/00-empty-preview.png`와 V3 실제 오류 `01-v3-blank-runtime-error.png`, V4 실제 표시 `02-v4-form-rendered.png`·저장 `03-v4-form-saved.png`를 로컬 보존했다. ZIP에 포함된 Figma deploy/deploy-preview 스크립트는 로컬 검증에서 실행하지 않는다.
-- **초기 설정 고려:** 원본 `shared/ui/index.html`의 `/src/main.tsx`는 없다. Figma가 빈 React 진입점과 실행 설정을 준비하는 노력을 실제 시험에 포함한다. pnpm8.6.9·기존 ThemeProvider/GlobalStyles·아이콘 생성 및 husky 조건을 확인한다. API/인증/환경변수 없는 독립 UI이며, 비슷한 가짜 컴포넌트를 새로 만드는 것으로 재사용 성공을 대신하지 않는다.
-- **팀 문서 반영 완료:** 기존 [FE 논의안 · Figma 코드 기능과 AI 하네스 방향](https://app.notion.com/p/3ecce072e82f81f3bb89fbf5729da06c)을 약1,800자로 정리했고 재조회로 본문과 변경 시각2026-10-02T02:51:43.138Z를 확인했다. 이전 연결/기존 예제 실행의 의미, 관찰한1GB·환경변수 제한, 원본 폴더약30GB→feature 소스 사본약60.7MB, 독립 시험 미완료, 참고 자료, DLDS 계속/축소/보류 제안을 구분했다. 새 문서·Jira/Sites는 만들거나 수정하지 않았다. 독립 시험 결과가 나오면 같은 문서에 짧게 반영한다.
-- **외부 근거:** WooWacon ClayDesign 세션856은10월28일 예정이며 공개 영상값은 비어 있다. 직접 참고한 김상국의 컨텍스트 엔지니어링 기술블로그는 **26459**다. 해당 글은 ClayDesign 전체 구현 공개가 아니며, json-render 공개 코드는 구성/검증 방식의 참고다.1GB/환경변수 제한은 이번 업로드 UI 관찰로만 적는다.
-- **남은 범위:** 최종 결과 코드 FE 별도 사본 설치/타입/빌드·실제 화면 실행 확인 → 같은 Notion의 결과·후속 방향 정리 → 개인 체크포인트 commit/push 후 브리핑·대기. 도구 도입 결정이나 자체 하네스 구현을 자동으로 이어가지 않는다.
+- **이번 완료 범위:** 원본 master 사본의 빈 화면에서 Figma가 새 폼을 생성하고, 후속 프롬프트·요소 선택 수정·ZIP 다운로드·별도 로컬 실행까지 시험했다. 기존 팀 Notion 한 페이지에 결과/제약/후속 방향을 반영하고 재조회했다. 제품 하네스/에디터 구현·제품 PR/병합/배포·계정 초기화는 하지 않았다.
+- **제품 저장 상태:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16471`, **`e7b7148a53a684e78ed25301e8d4eb541fc06c19`**. 시작 시 pull과 종료 시 clean을 확인했으며 제품 코드 변경/커밋/푸시는0이다. 주 저장소의 release 브랜치는 전환하지 않았다. 기존 Codex 연락처 예제(`pnpm dev:ai-preview`,5178)와 이번 Figma 생성 시험은 다른 결과다.
+- **독립 시험 출처:** 고정한 `origin/master` **`9bed1f7bd753e229478302413c0ec9a7e7a11dc2`**(2026-09-28 release/v1.87.0). 기존 Codex `ai-preview`·`dlds-gallery`·신규 `dlds.ts`가 없는 정비 전 원본이다. 개인 폴더의3,460파일/58,314,729bytes 소스 사본을 사용했고 설치/빌드/민감 설정 등635경로를 제외했다. 루트 AGENTS.md/claude.md는 원본대로 남는다. [출처·제외 목록·복구 설정](dentlink-figma-master-source.md)에 전체 목록과 해시 계산법을 원격 보존한다.
+- **실제 Figma 결과:** [시험 화면](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v/?node-id=234-4&code-node-id=234-4), file key `2OR0Gj7NUFEEeYBjQg5Y6v`, 페이지 **Code layers · master /234:2**, Code layer **234:4**, Cloud main / **Version6**. 최종 제목은 **Team notification preferences**다. 이전 연락처 연결 시험의 node `222:24317`과 분리한다. 최종 Browser 미리보기로 복귀하고 Annotate for agent를 껐다.
+- **팀 공유 자료:** [FE 논의안 · Figma 코드 기능과 AI 하네스 방향](https://app.notion.com/p/3ecce072e82f81f3bb89fbf5729da06c). 약2,200자로 기존 페이지를 정리하고 **2026-10-02T03:44:52.954Z** 변경 시각과 실제 본문을 재조회했다. 새 Notion/Jira/Sites는 만들거나 수정하지 않았다.
+- **판단:** 작은 폼에서는 기존 컴포넌트로 생성·수정·코드 전달이 가능했다. FE의 초기 실행 환경과 검사 설정 지원이 필요했고, 실제 제품 적용이나 대표 화면 전체 품질까지 증명한 결과는 아니다. 자체 에디터를 바로 계속 만들기보다 정비한 DLDS 대표 화면의 반복 품질과 FE 인계 후 수정량을 비교한 뒤 팀에서 계속/축소/보류를 정하는 제안이다.
 
-### 독립 시험 요청과 재개 순서
+### 실제 시험 이력과 확인 근거
 
-- **제출한 초기 설정 답변:** Figma의3앱 선택 질문에 아래 custom response를 보냈고, 배포 구조 질문에는 `Preserve runtime architecture`를 선택해 Submit했다. Version2 빈 미리보기 완료 후 새 UI 요청을 별도로 제출했다.
+| 단계 | 직접 확인한 결과 |
+| --- | --- |
+| V1/V2 초기 설정 | master3,460파일 업로드 후3개 Next.js 앱 중 실행 대상/배포 방식을 재질문했다. 독립 React/Vite 빈 미리보기와 원본 앱 보존으로 답변했고, 빈 Running 화면·코드 다운로드까지 확인했다. 기존 master 파일은 모두 바이트 동일했다. |
+| V3 새 폼 생성 | 완성 JSX를 넘기지 않고 자연어로 이름·이메일·알림·저장 폼을 요청했다. TextInput·Checkbox·Button·Typography를 실제 소스에서 참조했고 App.tsx만 변경했다. 그러나 verifier 성공과 달리 실제 화면은 흰색이었고 `Unexpected token '<'` 오류를 확인했다. |
+| V4 실행 오류 수정 | 실제 오류를 Figma에 전달해 미리보기의 JSX 변환과 일부 index 역참조 bridge를 수정했다. 기존 앱/shared 소스는 보존했다. 실제 화면 표시·이름 필수·저장 값을 확인했다. |
+| V5 후속 프롬프트 | 이메일을 필수로 변경하고 빈값/형식 오류 시 저장 차단·blur 오류·375px Save 전폭 배치를 요청했다. 실제 동작을 확인했다. |
+| V6 요소 선택 수정 | Annotate for agent에서 제목을 선택해 문구만 변경했다. V5→V6 ZIP diff는 App.tsx 제목 한 줄뿐이며 다른 필드/검증/레이아웃은 동일했다. |
+| FE 로컬 활용 | 최종 ZIP을 별도 사본에 설치하고 Vite 빌드·설정 보완 후 타입 검사·실제 브라우저 입력/검증/저장 동작을 확인했다. 기존 master3,460파일 모두 보존했고 최종 ZIP3,477파일과 설치 후 소스 바이트가 일치했다. |
 
-> clinic/lab/admin 전체 앱이 아니라, 업로드한 원본 컴포넌트를 사용하는 독립 React/Vite 미리보기로 시험합니다. 기존 앱·공통 컴포넌트 소스는 바꾸지 말고 클라우드 사본에 별도 진입점과 실행 설정만 준비해 주세요. 기존 ThemeProvider/Theme, GlobalStyles, 폰트를 연결하고 아이콘 생성 등 필요한 준비를 수행해 주세요. 지금은 빈 화면까지만 만들고 새 UI는 다음 요청에서 생성합니다. 실제 API·로그인·환경변수는 연결하지 않습니다. 기존 shared/ui/index.html은 src/main.tsx가 없으니 그대로 앱 진입점으로 쓰지 마세요. 새로운 배포나 Next.js static export 전환은 요청하지 않습니다. 독립 Vite 미리보기의 필요한 검증만 진행해 주세요.
+- **최종 브라우저 검증:** 제목, 이메일 빈값/invalid→Save disabled+blur 오류, 가상 입력값/알림Off→저장 결과 일치를 확인했다. 새로고침 후 샘플 초기값으로 돌아가며 저장 결과는 사라진다. 클라우드와 별도 로컬에서 확인했다. Chrome375×667 에뮬레이션으로 배치와 버튼 전폭을 봤지만 실기기 QA는 아니다. Console 오류 표시0을 확인했으나 기존 공통 prop 경고/Issues는 남아 무경고 판정은 아니다.
+- **재사용의 정확한 범위:** 입력·체크박스·버튼·문자 컴포넌트는 원본 구현이다. 미리보기 adapter의 Icon은 기존 `SvgSignCheck`를 직접 연결하므로 원래 `Icon.tsx`의 동적 로딩까지 동일하게 시험한 것은 아니다. 모양만 비슷한 새 컨트롤로 바꾼 것은 아니다.
+- **로컬 확인:** Node22.23.3 / pnpm8.6.9 / Vite4.3.2. Frozen install과56 modules 빌드 통과(494ms). ZIP에.git가 없어 root prepare의 husky가 실패했고 해당 사본에만 `HUSKY=0`을 적용했다. optional canvas2.11.2의mac arm64 바이너리/prebuild 실패는 있었지만 이 폼은 canvas를 사용하지 않는다.
+- **타입 검사:** ZIP에는 독립 preview용 검사 설정이 없었다. FE가 별도 설정으로 React/DOM/alias/dependency types를 연결한 후 App·main·bridge와 도달하는 import를 strict 모드로 검사해 통과했다. 전체 제품 타입 검사나 다운로드 즉시 완성된 검사 workflow라는 뜻은 아니다. 재현 설정은 위 출처 문서에 보존했다.
+- **초기 제어 문제:** 이전 Chrome 탭의 AX/스크린샷 불일치·`noWindowsAvailable`·`elementHasNoFrame`는 새 시크릿 탭으로 같은 파일을 열어 해결했다. Mac 잠금이나 Figma 기능 오류로 원인을 확정하지 않는다. 한글 native typeText 누락/paste timeout 때문에 영어로 동일 요구를 제출했으며, Figma 한국어 이해 능력의 평가가 아니다.
 
-- **새 폼 생성 요청(제출 완료):** 한글 native typeText는 글자가 빠지고 paste는 clipboard 읽기 timeout이어서 해당 미완성 텍스트는 보내지 않았다. 영어로 같은 요구를 정상 입력해 Send했으며 작업 시작을 확인했다. 이는 제어 도구 입력 문제이며 Figma의 한국어 이해 능력 판정이 아니다.
+### 팀 문서에 반드시 구분한 제약과 방향
 
-> Create a new Team notification settings form in this empty preview. Include a required Name input, optional Email input, Receive notifications checkbox, and Save button. Block saving when Name is empty. On save, show the entered values and checkbox state below the form using local React state only. Use the real existing TextInput, Checkbox, Button, and theme from this uploaded repository. Do not recreate lookalike controls or modify existing apps/shared component sources. Make the form usable on desktop and narrow mobile widths. After implementation, report the existing component imports and verify the preview. Use sample values only; no API, authentication, or persistent storage.
+- **업로드 UI1GB 제한:** 원본 폴더약30GB를 그대로 올리지 못했다. 이번 master는 설치/빌드/민감 설정을 뺀약58.3MB **일회성 소스 사본**이다. 앞선 feature 연결 시험의약60.7MB와 구분한다. 최초 폴더 드롭 미반응의 단일 원인을 용량으로 확정하지 않는다.
+- **미확인 범위:** Git 저장소 자동 동기화, 실제 API/권한/업무 데이터, 완성 화면의 Figma 디자인 일치, 대표 화면 전체/반복 품질, 팀의 베타 접근·AI 크레딧 조건은 확인하지 않았다. 환경변수 미지원은 실제 업로드 UI 안내다. 이 결과로 원본 서비스 전체 연결이나 제품 적용 완료를 주장하지 않는다.
+- **계속할 기준 제안:** 실제 DLDS/허용값, 부족한 요구 재질문, 생성 결과 실행·검증 기준은 유지한다. 다음 후보는 정비한 DLDS의 대표 화면 생성·반복 수정과 FE 인계 후 수정량 비교다. 자체 하네스·에디터의 계속/축소/보류는 사용자/FE팀 논의 뒤 결정하며 자동으로 구현하지 않는다.
+- **외부 참고:** [WooWacon ClayDesign 세션856](https://woowacon.com/sessions/856)은2026-10-28 예정이고 공개 영상값이 비어 있음을 확인했다. 전체 발표 자료는 아직 확인하지 못했다. 대신 발표자 김상국의 [컨텍스트 엔지니어링 글26459](https://techblog.woowahan.com/26459/)에서 디자인시스템 지식 제공과 실행·검증의 구분을 참고했다. ClayDesign 전체 구현 공개는 아니다. [json-render](https://github.com/vercel-labs/json-render)는 등록한 컴포넌트·속성 규칙→JSON→React 화면의 공개 참고이며 Dentlink 완성 도구가 아니다.
+- **문서 목적:** 새롭게 확인한 사실/제약과 DLDS의 다음 방향을 FE팀에 짧게 공유한다. 공식 매뉴얼·장문 히스토리가 목적은 아니다. 회의 자료는 기존 Notion 한 페이지를 갱신하며 개인 진행/복구 기록은 이 저장소에만 남긴다.
 
-- **실제 오류 수정 요청(제출 완료):** Version3의 verifier 성공과 별개로 직접 Chrome preview에서 `Unexpected token '<'`를 확인했다. Figma agent에게 모듈 serving/TSX 변환·JSX runtime 진단, preview/setup만 수정, 기존 제품/shared 보존, 실제 브라우저 렌더링 증거를 요청했다. Codex가 로컬 제품 코드를 고친 것은 아니다.
+### 결과 자료와 초기화·다른 기기 재개
 
-- **후속 수정(완료):** V5는 이메일 필수/형식 검증·blur 오류·375px Save 전폭 요구를 반영했다. V6는 Annotate for agent에서 Notification settings 제목을 선택, Team notification preferences로 문구만 변경하라는 note를 Add annotation→Apply로 전달했다. ZIP diff는 제목1줄만 변경이다. API/다른 UI/source 변경은 없다.
-- **최종 직접 CUA 확인:** V6 제목 실제 표시, Email빈값·invalid→Save disabled+blur 오류, FE Trial Final/fe-trial@example.com/알림Off→Save 결과 표시를 확인했다. DevTools 375×667 emulation에서 입력·버튼 표시/전폭 배치를 확인 후 device toolbar를 원복했다. console error표시0이지만 기존공통 prop 등 경고/Issues가 있으며 무경고 판정은 아니다. 최종 saved와mobile 스크린샷 `05-v6-final-saved.png`, `06-v6-mobile-375.png`를 로컬 저장했다.
-- **코드 추출 위치 확인:** Code editor의 Files → File actions → **Download code** 메뉴를 확인했다. Version2 빈 화면 및 Version3 폼 ZIP 다운로드를 완료했다. 코드의 기존 컨트롤 참조·소스 보존과 최종 cloud 런타임을 확인했다. FE 별도 환경 활용 검증은 진행 중이다.
-- **독립 로컬 검증 진행 중:** master-required-v5.zip을 private `master-trial/export-v5/`에 안전 추출(3,477파일)했다. 로컬 기본Node24와 구분해Node22.23.3·pnpm8.6.9로 frozen install을 실행했다. ZIP에.git가 없어root prepare의husky install이 실패한 것을 확인했고 해당 사본 설치에만 HUSKY=0으로 재시도 중이다. optional canvas2.11.2의mac arm64 prebuilt404/pkg-config없음도 관찰했으며 최종 install/build 성공 여부는 아직 확인 전이다. 원본 source/lock·제품repo를 변경하지 않는다.
-- **FE 활용 검증:** UI를 통한 코드 추출이 실제로 되는지 확인 → 별도 개인 폴더에서 원본 대비 변경·기존 컴포넌트 import/재구현·공통 소스 변경·빌드 설정 확인 → 설치/타입/빌드 및 가상 입력·저장·반응형 동작 확인. 단순 화면 실행과 실제 FE 제품 인계의 준비 수준을 구분한다. 제품 checkout·PR에는 반영하지 않는다.
-
-### 팀 공유 문서의 목적 — 사용자 최종 보완
-
-- **새로 발견한 사실과 실제 제약을 짧게 공유하고, 앞으로 DLDS를 어떻게 진행할지 FE팀이 논의하는 자료**다. 공식 매뉴얼처럼 기능 설명·절차·장문의 배경을 늘리지 않는다.
-- **1GB 업로드 제한과 사본 사용은 반드시 남긴다.** 원본 폴더는 약30GB라 그대로 업로드하지 못했고, 설치·빌드 파일과 환경변수 등은 제외한 `feature/DL-16471`의 약60.7MB 소스 사본으로 실행했다. 성공 결과만으로 원본 전체 저장소를 그대로 연결할 수 있다거나 실제 서비스 전체가 동작했다고 쓰지 않는다. 최초 드롭 미반응의 단일 원인도 용량으로 확정하지 않는다.
-- Upload folder의 **일회성 사본 실행**과 GitHub 저장소 연결·자동 동기화는 구분한다. 이번에는 후자를 시험하지 않았다. 복사본 준비·실행 설정이 필요했다는 점과 환경변수 미지원 안내 등 실제 관찰한 조건은 도입 판단에 필요한 제한으로 적는다.
-- 문서 흐름은 **확인한 결과·제약 → 도움되는 외부 사례/참조 코드 → DLDS에서 계속/축소/확인할 일**이다. 우아콘·관련 블로그·공개 코드처럼 유용한 자료는1~2개로 간단히 소개하며, 공식 설명·직접 확인·미확인·추천을 섞지 않는다. 앞서 기록한 참고 링크를 재사용한다.
-- **우아콘을 조사했던 흐름도 남긴다.** 2026-10-01 조사에서는 [ClayDesign 세션 소개](https://woowacon.com/sessions/856)를 확인했지만 행사는 아직 개최 전이었고, 발표 전체 슬라이드·영상·공개 코드는 발견하지 못했다. 대신 발표자 김상국의 [컨텍스트 엔지니어링 글](https://techblog.woowahan.com/26459/)에서 실제 디자인시스템 지식 제공과 하네스의 실행·검증 역할을 구분한 내용을 참고했다. 이 관련 기술블로그가 DLDS 방향을 잡는 데 도움이 됐다는 맥락을 짧게 소개한다. 해당 글을 ClayDesign 전체 내부 구현이나 완성 소스의 공개로 설명하지 않으며, 발표 자료 공개 상태는 필요할 때 다시 확인한다.
-
-### 재개하면 진행할 범위와 순서
-
-1. 개인 컨텍스트를 pull하고 제품 브랜치·원격 상태와 Figma 접속 상태를 다시 확인한다. 독립 시험 기준 SHA는 위9bed1f7로 고정하며, 최신 master로 바꾸려면 시험 출처를 새로 기록한다. 기존 DLDS/AI 예제가 포함되지 않은 원본 기준인지도 확인하고 시험 출처를 남긴다.
-2. **원본 master 소스의 별도 사본·별도 Code layer**로 시험한다. 현재 `feature/DL-16471` 업로드 사본이나 연락처 예제를 새 시험의 출발 화면으로 재사용하지 않는다. 제품 worktree를 reset/switch/수정하지 않고 개인 작업 폴더에서 설치 산출물·민감 설정을 제외해 준비한다.
-3. 빈 시험 화면에서 자연어로 작은 입력 폼을 처음부터 만들고, 한 번의 후속 요청과 요소 선택 수정을 시험한다. 요청·변경 전후 화면/코드와 실패·제약을 남겨 Figma가 새로 한 일을 구분한다.
-4. 실제 기존 컴포넌트를 사용하는지, 비슷한 UI를 새 코드로 중복 생성하는지 확인한다. 결과 코드 추출/반환 방법을 확인하고 별도 사본에서 FE가 실행·수정·재사용할 수 있는지 검증한다. 버튼/메뉴가 있다고 활용 가능하다고 단정하지 않는다.
-5. 독립 시험 결과를 먼저 판단하고, 필요한 경우 정비한 DLDS가 추가로 도움이 되는지 비교 범위를 정한다. Notion 한 페이지에 확인 사실·제약·짧은 참고 자료·DLDS 방향 제안을 반영한다.
-6. **후속 방향을 결정할 수 있는 근거와 팀 공유 자료까지 준비한 뒤 브리핑·대기한다.** 하네스/에디터 구현이나 도입 결정을 자동으로 이어가지 않는다. 현재 계정·저장소·문서 접근으로 시험을 시작할 사전 자료는 충분하며, 실제 접근 제한 등 해결에 필요한 경우에만 질문한다.
-
-### 저장 상태와 다른 기기에서의 복구
-
-- **제품:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16471`, HEAD **`e7b7148a53a684e78ed25301e8d4eb541fc06c19`**. 이번 저장 시 working tree clean·추적 브랜치와0 ahead/0 behind를 확인했다. 제품 코드는 추가 변경·커밋·푸시하지 않았다. master 독립 시험 기준은 위9bed1f7이며 제품 브랜치와 구분한다.
-- **현재 Figma 시험:** file key `2OR0Gj7NUFEEeYBjQg5Y6v`, 페이지 `234:2` / Code layer node-id/code-node-id **`234-4`**, Cloud main / **Version6**. 현재 새 시크릿 탭과 직접 preview에서 최종 폼이 동작하며 후속 이메일 검증·제목 요소 선택 수정까지 마쳤다. 제품 Git branch와 Figma Cloud main은 다른 사본이다. 이전 **`222:24317`**은 연락처 예제의 연결 시험이며 이번 생성 시험의 출발점이 아니다. 브라우저 세션은 기기 간 이동되지 않으므로 재개 때 다시 확인한다.
-- **로컬 자료:** `/Users/parkjongsun/Documents/ChatGPT/디자인시스템정비 프로젝트/figma-code-layers/`의 `dentlink-client/`, `upload-source.json`, `evidence/figma-dlds-ready.png`가 존재한다. metadata의 출처는 위 feature 브랜치이며4,258파일/60,773,615bytes다. 이 사본을 원본 master 기준으로 혼동하지 않는다.
-- **이동 가능한 것:** 제품 브랜치의 저장 코드와 이 개인 컨텍스트를 원격 Git에서 복구할 수 있다. 브라우저 로그인·로컬 사본·스크린샷·실행 서버는 Git으로 이동하지 않는다. 새 기기에서는 계정 접속을 다시 확인하고 필요한 사본을 재생성한다. 인증정보·환경변수·고객 데이터는 개인 체크포인트에 저장하지 않는다.
+- **로컬 자료 루트:** `/Users/parkjongsun/Documents/ChatGPT/디자인시스템정비 프로젝트/figma-code-layers/master-trial/`.
+- **최종 ZIP:** `master-final-v6.zip`,32,724,721bytes, SHA256 **`d0df2a57d1e936907bb47d6392eb8a3e7453fd3bec4f449ed56ac81a352bed52`**. V2/V3/V5 ZIP도 이 폴더에 보존했다. **`export-v5/`라는 폴더명은 유지했지만 내용은 최종Version6**이다.
+- **검증 자료:** `local-validation-v6.json`, `typecheck-v6.config.json`, 설치/빌드/타입 로그, `evidence/00-empty-preview.png`~`07-local-v6-saved.png`. 스크린샷·ZIP·설치 폴더는 로컬만 있고 Git에 올리지 않았다. 최종 ZIP은 Figma Version6의 Files→File actions→Download code로 다시 받을 수 있다.
+- **원본 재구성:** 위 출처 문서의 기준 SHA/excluded_paths로 git archive 사본을 준비하고3,460파일/58,314,729bytes와 tree SHA256 **`53e4a5f28de4f51dca033571909d8bcbdf85f246a5f81e8c250f20eee79b4fef`**를 확인한다. 다른 SHA를 사용할 때는 민감 설정 검사를 다시 한다. 결과 추출/로컬 실행의 명령과 portable 타입 설정도 그 문서에 보존했다.
+- **서버 정리:** 이번 private 로컬 검증용5180만 종료하고 포트 종료를 확인했다. 기존 사용자5177/5178·제품 앱 서버는 건드리지 않았다. Figma 최종 미리보기는 남겨뒀다. 로컬 서버/로그인/브라우저 세션은 기기 간 이동되지 않는다.
+- **사용량/초기화:** 사용자가 약1시간 자리를 비우며 사용량 소진 후 초기화도 고려한다고 했다. 중간 milestone을 개인 Git으로 여러 차례 commit/push했으며 최종 결과/다음 시작점도 원격 저장한다. 계정 사용량 초기화는 자동 실행하지 않았고, 초기화 후 동일 브라우저 세션 유지나 무중단 진행을 보장하지 않는다.
+- **현재 대기:** 독립 시험과 팀 문서 정리는 완료다. 다음은 사용자의 결과 확인과 FE팀 방향 논의다. 사용자가 이어가면 개인 컨텍스트 pull→제품 `feature/DL-16471` 상태/Figma Version6 접근 확인→대표 화면 비교 범위 및 하네스/에디터 방향 합의부터 시작한다. **같은 독립 시험을 처음부터 반복하거나 제품 하네스 구현을 임의로 재개하지 않는다.**
 
 아래는 당시 이력이다. 최신 재개 범위는 위 절을 따른다. 특히 기존 연락처 예제의 Ask for changes를 다음 시험으로 삼았던 추천은 **원본 master 기반 독립 시험을 먼저 하자는 최신 방향으로 대체**한다.
 

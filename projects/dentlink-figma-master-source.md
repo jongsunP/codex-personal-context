@@ -2584,3 +2584,83 @@
   "tree_sha256_algorithm": "Sort relative paths; concatenate each relative path + NUL + SHA256(file bytes) + newline using UTF-8; SHA256 the complete bytes."
 }
 ```
+
+## 최종 Version6 코드의 로컬 재현 — 2026-10-02
+
+- Figma file `2OR0Gj7NUFEEeYBjQg5Y6v`, Code layer `234:4`, Cloud main /Version6. Files→File actions→Download code로 받는다. 최종 ZIP32,724,721bytes /SHA256 `d0df2a57d1e936907bb47d6392eb8a3e7453fd3bec4f449ed56ac81a352bed52`다. 같은 버전의 재다운로드라도 ZIP 메타데이터에 따라 파일 컨테이너 해시는 달라질 수 있으니 최종 제목/소스와 버전도 확인한다.
+- ZIP3,477파일이며 원본 master3,460파일이 바이트 동일하다. 로컬 `export-v5/`의 이름과 달리 내용은 최종V6다. V5→V6는 App.tsx 제목 한 줄만 변경했다. 제품 worktree로 덮어쓰지 않고 별도 개인 폴더에 추출한다.
+- Node22.23.3 /pnpm8.6.9 /Vite4.3.2로 frozen install·56modules Vite build·아래 설정의 타입 검사·실제 UI 저장을 확인했다. `.git`가 없는 추출본의 husky prepare 때문에 설치에만 HUSKY=0을 적용했다. optional canvas 바이너리 실패가 있었으며 이 폼에서 canvas는 사용하지 않는다.
+- 타입 설정은 **다운로드에 기본 포함된 것이 아니라 FE가 검증용으로 보완한 것**이다. App/main/bridge와 도달하는 import를 검사하며 제품 전체 검사와 다르다. `__EXPORT_ROOT__`를 추출 폴더의 절대 경로로 치환한 JSON을 추출 폴더의 바로 위에 `typecheck-v6.config.json`로 저장하면 아래 명령과 같다. 환경과 의존성이 바뀌면 그대로 통과한다고 보장하지 않는다.
+- Figma deploy/deploy-preview는 외부 업로드 스크립트여서 로컬에서 실행하지 않았다. 아래 Vite build/dev만 사용했다. private5180 서버는 검증 후 종료했고 기존 사용자 서버는 유지했다.
+
+추출 폴더에서 실행한 명령:
+
+```sh
+HUSKY=0 npx --yes --package=node@22 -c 'pnpm install --frozen-lockfile'
+npx --yes --package=node@22 node scripts/generate-icon-type.js
+npx --yes --package=node@22 -c 'pnpm --dir shared/ui exec vite build --config ../../.figma/make/vite.config.mjs'
+npx --yes --package=node@22 -c 'pnpm --dir shared/ui exec tsc --project ../../../typecheck-v6.config.json --pretty false'
+PORT=5180 npx --yes --package=node@22 -c 'bash .figma/make/dev'
+```
+
+Portable 타입 검사 설정(경로 치환 후 사용):
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "baseUrl": "__EXPORT_ROOT__",
+    "typeRoots": [
+      "__EXPORT_ROOT__/shared/ui/node_modules/@types",
+      "__EXPORT_ROOT__/node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ],
+    "paths": {
+      "react": [
+        "__EXPORT_ROOT__/shared/ui/node_modules/@types/react/index.d.ts"
+      ],
+      "react/*": [
+        "__EXPORT_ROOT__/shared/ui/node_modules/@types/react/*"
+      ],
+      "react-dom": [
+        "__EXPORT_ROOT__/shared/ui/node_modules/@types/react-dom/index.d.ts"
+      ],
+      "react-dom/*": [
+        "__EXPORT_ROOT__/shared/ui/node_modules/@types/react-dom/*"
+      ],
+      "styled-components": [
+        "__EXPORT_ROOT__/shared/ui/node_modules/styled-components/dist/index.d.ts"
+      ],
+      "@dentlink/config": [
+        "__EXPORT_ROOT__/shared/configs/index.ts"
+      ],
+      "@dentlink/config/*": [
+        "__EXPORT_ROOT__/shared/configs/*"
+      ],
+      "@ui/*": [
+        "__EXPORT_ROOT__/shared/ui/src/*"
+      ]
+    },
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ]
+  },
+  "files": [
+    "__EXPORT_ROOT__/.figma/make/preview/src/App.tsx",
+    "__EXPORT_ROOT__/.figma/make/preview/src/main.tsx",
+    "__EXPORT_ROOT__/.figma/make/preview/src/ui-bridge.ts",
+    "__EXPORT_ROOT__/shared/ui/node_modules/vite/client.d.ts"
+  ]
+}
+```
