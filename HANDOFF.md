@@ -34,8 +34,8 @@ Do not store secrets or private customer data here.
 
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
-- Dentlink DLDS / DL-16466: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 1단계 우선 완료·2단계 연락처 예제 검증 이후, 원본 master의 Figma Code layers 독립 생성/후속 프롬프트/요소 선택/ZIP→로컬 실행·타입·빌드 시험을 완료했다. Figma234:4/Version6. 기존 Notion에 확인 결과·1GB/초기 FE 설정/adapter 제약·외부 참고·DLDS 방향을 반영하고 재조회했다. 제품 `feature/DL-16471`은 변경 없이 clean. 다음은 대표 DLDS 화면 비교와 하네스·에디터 계속/축소/보류의 사용자/FE팀 논의이며 구현 대기다.
+- Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
+  — 2026-10-02 FE 회의 완료. Figma는 참고만 하며 다음은 **빈 페이지 → 자연어 요청 → 실제 DLDS 기반 화면·FE가 활용할 코드 생성** 검증을 구체화한다. 기존 DLDS 정비 1단계와 새 AI 생성의 첫 성공 기준을 구분한다. 스키마·소스 범위·실행 환경은 미정이고 에디터는 이후 확장이다. 최신 결론은 같은 Notion에 반영했고 이전 Figma 시험은 기록으로 보존했다. 제품 `feature/DL-16471`은 이번 저장 작업에서 변경하지 않았다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
