@@ -1,15 +1,19 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-02 웹 선행 구현·회귀 검증
+## 현재 상태 — 2026-10-02 웹 선행 구현·검증·원격 보존 후 대기
 
 - 사용자가 분석 이후 **판단이 꼭 필요한 사항 외에는 추천대로 스스로 구현을 진행**하라고
   지시했다. 앞선 분석 전용 제한은 이번 제품 코드 수정 지시로 해제됐다.
-  웹부터 현재 Jira/Figma의 확정된 표시와 진입 제어를 준비했다. 제품 commit/push/PR/
-  merge/배포 및 Jira 댓글·상태 변경은 별도로 승인되지 않아 실행하지 않았다.
+  웹부터 현재 Jira/Figma의 확정된 표시와 진입 제어를 준비했다. 이후 **작업 완료 시
+  commit/push·메모리화·Jira 정리 후 대기**하라고 명시 승인했다. 해당 권한관리 작업의
+  완료 단위에는 이 지시를 유지하며 같은 승인을 다시 요청하지 않는다.
+  제품 PR 생성·merge·배포는 포함되지 않는다. 현재 작업분 마무리를 완료하고 대기한다.
 - 작업 위치는 `/Users/parkjongsun/Repository/dentlink-client-permission`,
-  branch `feature/DL-16317`, base/HEAD
-  `9bed1f7bd753e229478302413c0ec9a7e7a11dc2`다. **49개 로컬 변경(기존 36·신규 13)**,
-  upstream·제품 커밋 없음. 아래 구현은 아직 제품 원격 Git에서 복구할 수 없다.
+  branch/upstream `feature/DL-16317 / origin/feature/DL-16317`,
+  base `9bed1f7bd753e229478302413c0ec9a7e7a11dc2`,
+  **HEAD/원격 `f5a068e5000e266d6dde5af9c126038fd4158ea2`**, clean이다.
+  이번 **49개 변경(기존 36·신규 13)을 두 커밋으로 원격에 보존**했고 로컬 파일·커밋
+  내용이 검증 당시 49개 파일의 SHA-256과 동일함을 확인했다.
   기존 웹 checkout과 DLDS 작업 위치, 앱 checkout은 수정하지 않았다.
 - 개인 컨텍스트를 `git pull --ff-only`로 먼저 갱신했다. permission worktree에
   `pnpm install --frozen-lockfile`을 완료했고 제품 package/lockfile은 변경하지 않았다.
@@ -18,6 +22,34 @@
   미확정이라 기존 `EDITOR`에 Member 제한을 연결하지 않았다. 공용 UI의 optional
   표시·행동 입력과 Storybook 예시를 준비하고 기본 동작을 유지했다.
   Clinic의 EDITOR 표시명 Manager 변경, 도움말과 기존 HOC 오류 수정은 실사용 코드에 있다.
+
+### 이번 마무리 결과
+
+- 제품 커밋 두 개:
+  - `5ffe7e0549d7cb57ab58a7daeed4b934e9ebaa2a` —
+    `fix: 소속과 권한 변경 시 접근 상태 갱신` (HOC·회귀 2개 파일).
+  - `f5a068e5000e266d6dde5af9c126038fd4158ea2` —
+    `feat: 권한별 웹 화면 제한을 위한 UI 조건 추가` (UI·상태 예시·회귀 47개 파일).
+- `git push -u origin feature/DL-16317` 성공. `git ls-remote`와 upstream/HEAD의
+  동일 SHA, 제품 worktree clean을 확인했다. PR 생성·merge·배포는 하지 않았다.
+- 필수 pre-commit의 Clinic/Lab/Admin type, pre-push의 세 서비스 lint 및 shared
+  테스트·coverage 검사까지 실행했다. 세 서비스 lint는 오류 0(기존 경고 각각
+  Clinic 223·Lab 189·Admin 410), shared/configs 21·shared/hooks 24개 테스트 통과.
+- 최초 push는 **새 worktree의 무시된 `coverage-baseline.json` 부재**로 실패했다.
+  검사 대상 shared/configs·hooks와 관련 모델/의존성에 feature 변경이 없음을 확인하고,
+  coverage에 포함된 **64개 파일이 시작 commit과 byte 단위로 동일**함을 확인했다.
+  그 검사 결과로 `pnpm coverage:baseline`을 실행한 뒤 필수 훅을 다시 통과해 push했다.
+  baseline·coverage는 ignored 로컬 검증 산출물이며 제품 커밋에 넣지 않았다.
+  기존 기준보다 coverage가 개선됐다는 주장이나 훅 우회는 하지 않았다.
+- Jira 댓글 작성 후 재조회 확인:
+  [FE DL-16319 댓글 44240](https://innovaid.atlassian.net/browse/DL-16319?focusedCommentId=44240)에
+  선행 UI·기존 오류 보완·92개 검증·잔여 범위를 기록했고,
+  [상위 DL-16317 댓글 44241](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44241)에는
+  FE 결과를 연결하고 전체 잔여 범위를 짧게 정리했다.
+  두 티켓 모두 **진행 중(10016)**을 유지했다. 전체 구현/실연동은 미완료라 완료나
+  Ready for Deploy로 전환하지 않았다. Codex 대기를 Jira ON HOLD로 해석하지 않는다.
+- 개인 컨텍스트의 이 체크포인트를 갱신하고 commit/push한다. 다른 세션의 기록이나
+  제품 코드는 이 마무리 작업에 섞지 않는다. 다음 사용자 지시 전 추가 개발·PR/배포는 하지 않는다.
 
 ### 구현한 범위
 
@@ -69,8 +101,9 @@
 
 ### 남은 작업과 다음 시작점
 
-1. 기존 permission worktree의 로컬 변경을 먼저 확인한다. 새 worktree를 만들거나
-   제품 원격에 구현이 저장됐다고 추정하지 않는다. 제품 commit/push는 명시 지시가 필요하다.
+1. 개인 컨텍스트와 `origin/feature/DL-16317`을 갱신하고 위 기존 permission worktree를
+   재사용한다. 제품 HEAD/원격/clean을 실시간 확인한다. 이번 구현은 원격에 보존됐으며
+   후속 동일 권한관리 작업의 완료 단위에도 사용자의 commit/push·Jira 정리 승인을 유지한다.
 2. 상세·사이드패널·Draft·Remake·LinkTalk/첨부·승인/삭제의 표시/실행 handler 경로를
    최신 정책과 대조해 다음 선행 범위로 진행한다. 현재 모든 non-GET 차단 완료가 아니다.
 3. BE 명세가 나오면 실제 역할/관계 응답을 UI 조건에 연결하고 서버 목록·카운트·Draft
