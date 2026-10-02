@@ -6,7 +6,8 @@
 - **제품 저장 상태:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16471`, **`e7b7148a53a684e78ed25301e8d4eb541fc06c19`**. 시작 시 pull과 종료 시 clean을 확인했으며 제품 코드 변경/커밋/푸시는0이다. 주 저장소의 release 브랜치는 전환하지 않았다. 기존 Codex 연락처 예제(`pnpm dev:ai-preview`,5178)와 이번 Figma 생성 시험은 다른 결과다.
 - **독립 시험 출처:** 고정한 `origin/master` **`9bed1f7bd753e229478302413c0ec9a7e7a11dc2`**(2026-09-28 release/v1.87.0). 기존 Codex `ai-preview`·`dlds-gallery`·신규 `dlds.ts`가 없는 정비 전 원본이다. 개인 폴더의3,460파일/58,314,729bytes 소스 사본을 사용했고 설치/빌드/민감 설정 등635경로를 제외했다. 루트 AGENTS.md/claude.md는 원본대로 남는다. [출처·제외 목록·복구 설정](dentlink-figma-master-source.md)에 전체 목록과 해시 계산법을 원격 보존한다.
 - **실제 Figma 결과:** [시험 화면](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v/?node-id=234-4&code-node-id=234-4), file key `2OR0Gj7NUFEEeYBjQg5Y6v`, 페이지 **Code layers · master /234:2**, Code layer **234:4**, Cloud main / **Version6**. 최종 제목은 **Team notification preferences**다. 이전 연락처 연결 시험의 node `222:24317`과 분리한다. 최종 Browser 미리보기로 복귀하고 Annotate for agent를 껐다.
-- **팀 공유 자료:** [FE 논의안 · Figma 코드 기능과 AI 하네스 방향](https://app.notion.com/p/3ecce072e82f81f3bb89fbf5729da06c). 약2,200자로 기존 페이지를 정리하고 **2026-10-02T03:44:52.954Z** 변경 시각과 실제 본문을 재조회했다. 새 Notion/Jira/Sites는 만들거나 수정하지 않았다.
+- **팀 공유 자료:** [FE 논의안 · Figma 코드 기능과 AI 하네스 방향](https://app.notion.com/p/3ecce072e82f81f3bb89fbf5729da06c). 사용자 최종 보완에 따라 중간 과정/이전 Codex 연락처 예제 비교/시험 단계 표를 제거하고 **최종 결과·사용 제약·논의 방향·참고**만 약1,250자로 남겼다. **2026-10-02T04:34:33.614Z** 변경 시각과 본문을 재조회했다. 새 Notion/Jira/Sites는 만들거나 수정하지 않았다.
+- **이번 범위 설명:** 사용자가 완료 여부를 묻는 대상은 이번 Figma 시험/팀 자료 정리다. 전체 하네스/에디터 미완료를 매번 부연하지 않는다. 팀 자료에는 중간 과정이나 과거 예제 출처 비교를 남기지 않고 최종 결론을 우선한다. Figma 링크는 파일에 저장된 Code layer의 클라우드 실행 미리보기이며 기존 DLDS 로컬 서버와 구분한다. 로컬 실행은 다운로드한 결과의 별도 활용 검증이다.
 - **판단:** 작은 폼에서는 기존 컴포넌트로 생성·수정·코드 전달이 가능했다. FE의 초기 실행 환경과 검사 설정 지원이 필요했고, 실제 제품 적용이나 대표 화면 전체 품질까지 증명한 결과는 아니다. 자체 에디터를 바로 계속 만들기보다 정비한 DLDS 대표 화면의 반복 품질과 FE 인계 후 수정량을 비교한 뒤 팀에서 계속/축소/보류를 정하는 제안이다.
 
 ### 실제 시험 이력과 확인 근거
