@@ -1,6 +1,171 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-09-29 복구 체크포인트
+## 현재 상태 — 2026-10-02 웹 착수 준비·분석 완료
+
+- 사용자는 권한관리 착수를 요청했으며 이번 단계는 **master 기준 신규 웹
+  branch/worktree 준비 + Jira/하위 티켓/연결 문서/Figma/현행 코드 조사 + 계획 브리핑**이다.
+  **제품 구현은 아직 하지 말라는 명시 조건**이 있다. 이 조건을 유지하고 다음 구현
+  지시를 기다린다. 제품 commit/push/PR/merge/배포, Jira 댓글·상태 변경도 하지 않았다.
+- 개인 컨텍스트 `git pull --ff-only` 후 공통 지침과 이 체크포인트를 읽었다.
+  웹 원격은 `git fetch --prune origin`으로 갱신했다. 기존 제품 checkout의 branch는
+  전환하지 않고 별도 작업 위치를 준비했다.
+- 웹 전용 작업 위치: `/Users/parkjongsun/Repository/dentlink-client-permission`.
+  branch **`feature/DL-16317`**, base/HEAD
+  **`origin/master / 9bed1f7bd753e229478302413c0ec9a7e7a11dc2`**.
+  clean, upstream 없음, 제품 수정·commit·push 없음.
+- 앱 worktree/branch는 만들지 않았다. 현지 앱 checkout은 `main /
+  19f68100f7ce40e40c15d2d1e82c2e9737ca296a`이며 현재 Office 전용 `src` 구조다.
+  웹 먼저 진행한다는 사용자 방향에 맞추며 앱의 base를 master로 추정하지 않는다.
+- 기존 웹 기본 checkout은 `release/v1.88.0 /
+  3a4b1b2cf0632a683f5961488351d3863ea3e1c9`, 별도 DLDS worktree는
+  `feature/DL-16471`이다. 둘 다 권한관리 작업 위치로 재사용하지 않는다.
+- 이 채팅은 제품 Git 바깥 컨텍스트 폴더에 연결돼 있어 앱 `create_worktree`가
+  `Not a git repository`로 실패했다. 실제 웹 저장소에서 직접
+  `git -c branch.autoSetupMerge=false worktree add -b feature/DL-16317
+  /Users/parkjongsun/Repository/dentlink-client-permission origin/master`를 실행했다.
+  앱 managed attachment가 아닌 Git worktree이며 중복 생성하지 않는다.
+
+### 확인한 자료와 정본 경계
+
+- 상위 [DL-16317](https://innovaid.atlassian.net/browse/DL-16317): 본문·댓글 6개·관계·remote links.
+  **직접 하위 19개 전부** 본문·댓글·관계·remote links를 읽었다. 추가 하위·issue links·
+  remote links는 없었다. 연결 문서는 상위 본문과 TC 티켓에 있다.
+- **최종 화면 기준:** [Figma Design WF](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=1-6).
+  페이지 metadata뿐 아니라 Office 역할/드롭다운, PC·모바일 목록/필터, Draft·주문1단계,
+  Pickup, 의사변경 경고, 상세·사이드패널 하위 화면과 설명을 읽었다.
+  큰 frame이 sparse metadata만 반환하면 실제 하위 instance/frame의 design context로
+  내려갔다. 주요 화면 screenshot도 확인했다.
+- 연결 [구 FigJam Member 범위](https://www.figma.com/board/U9Qpm6ACzjGFKyrCoaAuvA?node-id=68-463)는
+  보조 근거다. 새 Design과 차이가 있는 규칙을 새 요구사항으로 자동 채택하지 않는다.
+- [기획 5-4 권한표](https://app.notion.com/p/innovaid/3c7ce072e82f811184a8e647444f01fd?source=copy_link#98f5af8127554b148e279f483c727836),
+  [8-1 권한 TC](https://app.notion.com/p/innovaid/3c7ce072e82f811184a8e647444f01fd?source=copy_link#e984570de2224ebdba3fd667a893cd51)의
+  **TC 27행**과 토론 6개를 확인했다. 문서 제목은 `[공통] 알림센터 개편`, 상태 작성 중,
+  last edited 2026-09-29다. 권한에 해당하는 영역만 본 작업 근거로 사용한다.
+- 연결 [8/20 피드백 회의](https://app.notion.com/p/3c1ce072e82f8037bb9cdbfa32266882)와
+  [leo 링크톡 자동발송 목록](https://app.notion.com/p/3d1ce072e82f80cbbe61f505afe96d0c)도 읽었다.
+  전자는 초기 명칭·배경, 후자는 시스템 발송 목록이며 신규 권한 API 명세가 아니다.
+- Notion 전체 응답의 `truncated=true`는 알림 현황의 지원하지 않는 Drive embed 1개에
+  해당하며 그 내용은 읽지 못했다. 권한표와 TC 텍스트는 읽었다. 알림센터의 별도
+  Sheet/Drive/Slack/회의 참고자료까지 권한관리 구현 범위로 확대하지 않는다.
+- 디자인의 Authority 도움말 목적지 `https://portal.dentlink.io/help/articles/20`은
+  웹 도구로 접근 실패했다. 링크 목적지는 확인했지만 게시물 본문은 미확인이다.
+  운영 admin 사용자 페이지는 권한정책 문서가 아니므로 실제 운영 데이터에 접근하지 않았다.
+
+| Jira 하위 작업 | 확인 상태와 의미 |
+| --- | --- |
+| DL-16319 FE | 해야 할 일. 본문·댓글에 구현 계획/명세 없음 |
+| DL-16320 BE API List up / DL-16543 BE 접근 가드 / DL-16564 BE 기획 분석·설계 | 진행 중. 본문은 null 또는 공백, 댓글·연결 명세 없음. 실제 endpoint/응답/enum/오류 계약 확인 불가 |
+| DL-16405 기획 / DL-16411 기획검토 공수산정 / DL-16318 디자인 | 완료. 구현 완료를 뜻하지 않음 |
+| DL-16427 Office / DL-16428 Order List / DL-16429 Order Board / DL-16430 주문1단계 / DL-16431 Patient | 완료. 웹 PC·모바일 디자인 작업이며 코드 완료 증거 없음 |
+| DL-16432 앱 프로필 / DL-16433 앱 Orders / DL-16434 앱 주문1단계 | 완료. 앱 디자인 작업이며 코드 완료 증거 없음 |
+| DL-16544 TC 작성 | 완료. 연결 Notion TC를 읽음; 최신 Design과 일부 조건 불일치 |
+| DL-16545 내부 릴리즈 노트 / DL-16589 기획 변경 반영 | 해야 할 일 |
+| DL-16595 기공소 디자인 | 진행 중. 치과 Member 정책을 Lab에 그대로 적용하지 않음 |
+
+### 현재 이해한 요구사항
+
+1. **기존 화면의 조건 제한이 중심이며 웹부터 선행 개발 가능**하다. 공용 UI는 이미
+   목록·필터값·handler를 props로 받으므로 표시와 사용 가능 조건을 추가하고 샘플 상태로
+   확인한 다음 실제 서버 계약에 연결할 수 있다. API 없이 문서만 준비할 수 있다는
+   판단은 지나치게 좁다. 새 페이지나 별도 권한 엔진을 전제하지 않는다.
+2. 기획은 **기존 `EDITOR(DB)/Member(화면)` → Manager**, 새 의사 Member 추가,
+   Billing Manager/Admin 유지 방향이다. 현재 API 타입은 `OWNER / PAYMENT_MANAGER /
+   EDITOR / VIEWER`이다. 표시명과 실제 enum·데이터 전환 규칙은 별개이므로 `MANAGER`,
+   `MEMBER` wire 값을 임의로 넣거나 기존 EDITOR에 새 Member 제한을 연결하지 않는다.
+3. **Member는 조회 전용이 아니다.** 허용된 대상에서 기존 주문 처리 기능을 쓰는 역할이다.
+   역할만으로 모든 non-GET을 막지 않고 조회/클릭/수정/삭제/전송 등 행동별로 제한한다.
+4. 새 Design의 Member 목록은 My Orders/My Patients 토글 및 해당 Dentist 필터를
+   제거하고 모바일 필터 표현을 조정한다. Board의 Dentist 필터도 제거한다.
+5. **주문1단계는 일반 목록과 조회 범위가 다르다.** Member도 병원 전체 환자·Case를
+   선택할 수 있고 Draft는 담당 의사 미지정 또는 본인인 항목만 노출한다
+   ([설명 node107:23961](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=107-23961)).
+6. Pickup은 내 주문이 아니면 주문번호 링크를 없애되 환자 공유 Case의 주문에는 클릭
+   예외가 있다 ([설명 node107:21457](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=107-21457)).
+   타의사 주문이라는 이유만으로 모든 링크를 막으면 최신 Design과 다르다.
+7. 담당 의사 변경 모달은 접근을 잃을 수 있다는 경고와 모바일 높이 제한이 그려져 있다.
+   경고 표현을 준비할 수 있으나 실제 변경 후 이동/유지/재조회는 정책 및 API 계약에
+   맞춰야 한다. placeholder `팝업/CTA`는 완성된 문구·화면으로 간주하지 않는다.
+
+### 문서 차이·API 연결 전 확인점
+
+- **환자 목록:** 새 Design43:44977은 현재 담당 환자, 구 FigJam359:10333은 한 번이라도
+  담당 주문이 있었던 환자를 노출한다. TC15는 미결이다. 사용자 지정 최신 Design을
+  기준으로 계획하되 이 차이를 기록하고 실연동 전 동일 정책으로 맞춘다. 과거 참여 규칙이
+  최신 Design에 확정돼 있다고 설명하지 않는다. 주문1단계의 전체 환자 범위는 별도다.
+- **조회와 행동:** 구 TC12/13의 타의사 direct URL·Pickup 일괄 차단은 새 Pickup 공유
+  예외와 맞춰야 한다. 공유 대상 상세/채팅/승인/다운로드/Remake의 행동 범위를
+  클릭 허용만 보고 확대하지 않는다. 구 TC20/21의 담당 변경 후 접근 소멸도 대조 대상이다.
+- **역할과 관계 계약:** 실제 역할 enum·기존 계정/VIEWER 매핑, 현재 담당·환자공유·
+  기공소 관계를 판단할 응답, ID의 의미, 허용 필터·카운트·Draft 범위가 필요하다.
+  신규 사전조회 API인지 기존 DTO 추가인지 아직 정하지 않는다.
+- **오류·갱신 계약:** 직접 링크 접근 거절, 담당/권한 변경 후 상태와 이동, 세션 즉시 반영,
+  소속 전환 시 cache 재조회 범위를 맞춘다. 현재 `403/code2131`은 Office 전환 용도라
+  모든 403을 새 권한 부족으로 일괄 처리하면 안 된다.
+- GET은 서버가 허용한 응답을 렌더링하는 방향이 맞다. FE에서 페이지별 목록을 다시
+  잘라 전체 수·페이지네이션을 바꾸지 않는다. 다만 숨긴 필터의 URL 잔여 조건과
+  조회 범위별 필드 누락/변경을 고려해야 하며 GET 처리까지 완전히 무변경이라고 단정하지 않는다.
+- Notion 알림센터 Inbox·수신 설정 신설·치과 전환 배지·발송 DB 개편은 별도 기능이다.
+  권한에 따른 알림 수신 원칙과 연관돼 있어도 본 작업에 알림센터 전체를 포함하지 않는다.
+
+### 제안한 웹 선행 순서 — 아직 구현하지 않음
+
+| 단계 | 범위 | 완료 기준/경계 |
+| --- | --- | --- |
+| 1. Clinic 확정 UI | Office 권한 표시·도움말·옵션 표현, Orders/Patients/Board PC·모바일 필터, 주문1단계 표현, 의사변경 경고 | 기존 UI에 조건 입력을 분리해 샘플 상태 확인. 실제 역할 enum/저장값/신규 endpoint 임의 작성 금지 |
+| 2. Clinic 행동 조건 | 목록·Pickup 클릭, 상세·사이드패널, Draft 삭제/이어쓰기, Remake·생성·수정·승인·LinkTalk/첨부 진입 | 역할·대상 관계·주문 상태를 구분. 버튼뿐 아니라 메뉴/팝업/직접URL/실행 handler 경로 목록 대조 |
+| 3. API 연동 | 생성 모델 갱신, 실제 역할/행동 조건 연결, 서버 목록·카운트·Draft 응답, 거절·변경 후 갱신 | 명세+실제 응답 확인 후 연결. 동일 사용자의 소속 전환과 이전 권한/담당 상태 cache 점검 |
+| 4. Lab·앱 확장 | Lab 디자인 확정 부분, Clinic/Lab sharedUI, 앱 네이티브 화면·LinkTalk | Lab 기존 가격/타기공소 제한 보존. 앱 상세 WebView는 웹 재사용되지만 네이티브 채팅은 별도 검증 |
+
+현행 코드 근거(이번 master snapshot):
+
+- `clinic/src/components/OfficeMemberList/OfficeMemberAuthorityChip.tsx:15`: 역할 라벨/칩의
+  하드코딩이 있어 enum 추가 시 함께 수정해야 한다. unknown 역할을 그대로 넣으면 칩
+  설정 접근이 깨질 수 있다. 역할 옵션 일부는 코드 조회 API에 연결돼 있다.
+- `clinic/src/common/hocs/withAuthorization.tsx:16`: 현재 페이지 역할 확인만 하며
+  담당·참여·공유 관계를 판단하지 않는다.
+- `shared/ui/src/OrderListUI/OrderListLayer/OrderListLayerDesktop.tsx:28`,
+  `shared/ui/src/PatientListUI/PatientListLayerDesktop.tsx:19`: 목록과 UI 제어 props 구조라
+  API와 분리한 표시 조건 선행 가능.
+- `clinic/src/lib/Order/useOrderDetail.ts:135`,
+  `clinic/src/lib/OrderForm/OrderProfileForm/useOrderProfileCreateForm.tsx:58`,
+  `clinic/src/lib/Remake/select/useRemakeSelectCreate.tsx:48`,
+  `clinic/src/lib/LinkTalk/useLinkTalk.tsx:118`: 상세/주문/Draft/Remake/채팅 실행 경로가
+  분산돼 있다. Remake 버튼은 즉시 Draft mutation을 호출할 수 있다.
+- `lab/src/atoms/common.ts:21`, `lab/src/lib/Order/useOrderDetail.ts:261`,
+  `shared/ui/src/OrderDetailUI/OrderDetailLayout/OrderDetailLayout.tsx:185`: 기존 Lab
+  EDITOR 가격 제한과 현재 기공소/주문 기공소 불일치 제한은 서로 다른 조건이다.
+  후자가 과거 참여 여부를 뜻하지 않는다. Clinic 공용 화면 수정 시 보존한다.
+- `shared/ui/src/FileListDownloadUI/FileListDownloadUI.tsx:138`,
+  `shared/ui/src/LinkTalkUI/parts/LinkTalkListItem/LinkTalkListItem.tsx:95`: 개별/전체 파일,
+  채팅 표시/답장/프로필 경로를 함께 점검할 필요가 있다. 익명화 응답은 아직 미확정이며
+  프론트에서 이름만 가린 결과를 데이터 접근 제한 완료로 부르지 않는다.
+- 앱 `src/features/orderList/screens/OrderDetailScreen.tsx:48,282,307`: 상세는 웹 경로
+  WebView를 사용하지만 네이티브 LinkTalk(288~301행)는 별도다. 로컬 Lab 앱 checkout은
+  확인되지 않아 같은 공용 앱 구조라고 추정하지 않는다.
+
+### 산정·검증·다음 시작점
+
+- 이전 사용자가 채택한 **전체 6~9영업일(구현·연동·검증)**은 조건부 가산정으로 유지한다.
+  기획·디자인 확정 및 BE API 설계 시점 기준이며 BE 대기와 배포는 포함하지 않는다.
+  이번 조사만으로 새 최종 일정이나 특정 배포일을 약속하지 않는다. Lab 확정 범위와
+  최종 API가 확인될 때 선행 완료분을 반영해 남은 일정을 갱신한다.
+- 검증 계획: Admin/Manager/Billing Manager/새 Member의 노출·행동, 본인/타인/공유
+  대상, Draft 미지정/본인/타인, 직접 URL·Pickup·사이드패널·채팅/파일·승인/Remake,
+  담당/권한/소속 변경 후 상태, 기존 Lab 제한, PC·모바일 웹을 확인한다.
+- 이번 단계는 **정적 코드 및 외부 문서/디자인 조사**다. 제품 코드 수정, 의존성 설치,
+  환경 파일 복사, 서버·브라우저·실기기 실행, 빌드/테스트, 실제 업무 API 요청은 하지 않았다.
+  따라서 런타임 권한 차단·BE 정책 시행·배포 완료 증거는 없다.
+- 다음 구현 지시가 오면 개인 컨텍스트와 Git/요구사항 변경을 확인하고 위 웹 worktree를
+  재사용한다. **Clinic의 Office 권한 표시와 Orders/Patients/Board 필터 UI부터** 시작하는
+  것이 제안 순서다. 실제 역할 연결은 BE 계약 대조 뒤 수행한다.
+- 상세 Jira/Notion 원문 및 Figma 확인 이미지는 임시
+  `/tmp/dentlink-permission-planning`에 있다. 이 임시 폴더는 기기 간 이전·영구 보존을
+  보장하지 않는다. 복구 근거는 이 기록과 원본 Jira/Notion/Figma/Git이다.
+
+## 이전 상태 — 2026-09-29 복구 체크포인트
+
+아래 기록은 당시 조사 이력이다. 현재 상태·승인 범위·작업 위치·다음 시작점은
+상단의 2026-10-02 기록을 따른다.
 
 - 목적: 통합알림센터에 앞서 진행할 [DL-16317 권한관리](https://innovaid.atlassian.net/browse/DL-16317)를 담당한다.
   FE 전체 조율은 [dentlink-fe.md](dentlink-fe.md), 통합알림센터의 별도 기록은
@@ -102,7 +267,7 @@ fetch/pull/checkout은 하지 않았다. 아래 값은 확인 시점의 상태�
 - 앞으로 현재 버전의 API 사용 여부를 판단할 때는 허용된 범위에서 제품 Git을 갱신하고
   달라진 코드를 대조한다. 다른 기능 브랜치를 임의 전환하거나 재사용하지 않는다.
 
-## 새 디바이스 복구와 다음 시작점
+## 이전 복구 절차 — 2026-09-29 이력
 
 1. `https://github.com/jongsunP/codex-personal-context`를 clone하거나 기존 사본에서
    `git pull --ff-only` 후 공통 지침과 이 문서를 읽는다. 이 파일이 작업 상태의 정본이다.
