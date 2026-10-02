@@ -259,10 +259,11 @@ Detailed implementation history remains in the relevant existing project file.
   PR #4623은 미병합 종료됐고 작업 브랜치를 보존한 채 대기한다.
   제품 API는 정상 연결하며 실제 서버 생성·수정 요청은 테스트에서 실행하지 않는다.
 - DLDS 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의 최상단 현재 상태를
-  따른다. **2026-10-02 FE 회의 후 Figma는 참고만 하고, 빈 페이지에서 실제 DLDS 기반
-  화면·FE가 활용할 코드를 생성하는 첫 검증을 구체화할 단계**다. 기존 DLDS 정비·QA
-  기록은 유지하고 새 검증의 성공으로 혼합하지 않는다. 스키마·소스 범위·실행 환경은
-  미정이며 에디터는 이후 확장이다. 제품 HEAD·검증 수치·남은 환경 조건은
+  따른다. **2026-10-02 Figma 이전 로컬 작업으로 복귀해 빈 페이지 연락처 생성·후속 수정·
+  독립 반복과 실제 DLDS·화면/동작 검증을 진행했고 생성 스킬과 소스목록을 저장**했다.
+  기존 DLDS 정비·QA와 새 생성 실증을 구분하며 전체 하네스·비개발자 서비스는 아직
+  완료가 아니다. 다음은 화면 구성 기준을 갖춘 복합 화면·실제 비개발자→FE 인계
+  시험이며 에디터는 이후 확장이다. 제품 HEAD·검증 수치·남은 환경 조건은
   기능 정본에 두고 이 조율 문서에 계속 복제하지 않는다.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
