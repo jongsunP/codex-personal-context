@@ -1,10 +1,11 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-02 웹·앱 추가 제어 선행 구현 후 대기
+## 현재 상태 — 2026-10-02 웹 저장·앱 부모 전달 추가 보완 후 대기
 
 - 사용자가 반복해서 “혼자 할 수 있는 게 더 있으면 계속하고, 다 되면 이전처럼
   마무리”하라고 지시했다. 기존 추천대로 진행·제품 commit/push·Git 메모리·Jira
-  정리 승인을 유지해 웹 주문 메모와 치과 앱 채팅·Draft·신규 Case 표시까지 추가했다.
+  정리 승인을 유지했다. 직전 메모·앱 채팅/Draft/Case 준비 이후 다시 검토해,
+  환자·Case 검증 후 저장 확인, 앱 숨긴 필터의 건수 정렬·환자 단계·채팅 부모 전달을 보완했다.
   실제 API 연결에 필요한 계약과 계약 없이 준비할 수 있는 UI/실행 조건을 구분했다.
   PR 생성·merge·배포·CodePush는 하지 않았다.
 - **신규 Member 실연동은 아직 미완료다.** 기존 EDITOR에 새 Member 제한을 적용하거나
@@ -17,8 +18,9 @@
 - 웹: `/Users/parkjongsun/Repository/dentlink-client-permission`,
   `feature/DL-16317 / origin/feature/DL-16317`.
   master base `9bed1f7bd753e229478302413c0ec9a7e7a11dc2`.
-  **HEAD/원격 `e8dd7dafb1f7d2abbff253dcd503ef7938d4dd97`**, clean.
-  최신 `feat: 주문 메모의 권한별 표시 및 실행 조건 보완` — 7개 파일.
+  **HEAD/원격 `53f1f9a0f4987114e2ea518ea2ea94894613b4c3`**, clean.
+  최신 `fix: 환자와 케이스 저장 전 제한 조건 재확인` — 제품 4·통합 테스트 1개 파일.
+  이전 메모 커밋 `e8dd7dafb1f7d2abbff253dcd503ef7938d4dd97`도 보존했다.
   이전 상세·채팅·Draft 커밋 `3b045e4882284c925c3fc43724f97ebc85a874bb`와
   `5ffe7e0549d7cb57ab58a7daeed4b934e9ebaa2a`·
   `f5a068e5000e266d6dde5af9c126038fd4158ea2`도 같은 branch에 있다.
@@ -26,14 +28,16 @@
   `feature/DL-16317 / origin/feature/DL-16317`.
   앱에는 master가 없어 실제 기본 브랜치 main의
   `19f68100f7ce40e40c15d2d1e82c2e9737ca296a`에서 별도 Git worktree를 만들었다.
-  **HEAD/원격 `9ed78d31be81c71679592999c410fd77ec37e66c`**, clean.
-  최신 커밋은 `4ad003cda4e53d5830b7d3ddb8d5df39c2a19d1f`
-  `feat: 앱 채팅의 권한별 표시 및 실행 조건 추가` — 12개 파일과
-  `9ed78d31be81c71679592999c410fd77ec37e66c`
-  `feat: 앱 임시저장과 담당 의사 선택 제어 조건 추가` — 6개 파일이다.
+  **HEAD/원격 `1dc7a361b06baa000edaca5361ec5fae26a7dabe`**, clean.
+  최신 커밋 `cbf1a89105d2c32fca6f872598e45e431f15f23c`
+  `fix: 앱 권한별 목록 정렬과 환자 필터 표시 보완` — 제품 2·기존 테스트 2개 파일과
+  `1dc7a361b06baa000edaca5361ec5fae26a7dabe`
+  `feat: 앱 채팅 화면의 권한 제어 조건 연결` — 제품 1·통합 테스트 1개 파일이다.
+  이전 채팅 `4ad003cda4e53d5830b7d3ddb8d5df39c2a19d1f`,
+  Draft/Case `9ed78d31be81c71679592999c410fd77ec37e66c`도 보존했다.
   이전 필터 커밋 `340faa64be55a5ed873ec5ede1383bd6f36687b5`도 보존했다.
 - 두 제품의 검증 당시 파일·커밋 내용·원격 SHA 일치를 확인했다.
-  최신 추가 웹 7·앱 18개 파일은 SHA-256 snapshot과 HEAD 내용이 모두 일치했다.
+  최신 추가 웹 5·앱 6개 파일은 SHA-256 snapshot과 HEAD 내용이 모두 일치했다.
   기존 웹 checkout·DLDS·앱 main checkout은 수정하지 않았다.
   앱 의존성은 원본 main의 기존 node_modules를 로컬 symlink로 재사용했다.
   symlink는 로컬 info/exclude로 무시되며 package/lockfile·Jest 설정은 변경하지 않았다.
@@ -46,23 +50,27 @@
 | 범위 | 구현과 보존한 경계 |
 | --- | --- |
 | 웹 주문 상세·사이드패널 | `canPerformOrderActions`로 제목·삭제·취소·상태·배송일·담당 변경 등을 표시/실행 제어. `canEditPatient`, Case별 `canEditCaseTitle(case)`는 별도로 제어. 이미 열린 팝업·비동기 GET 후 실행·Case 전환 뒤 오래된 submit도 최신 조건으로 차단 |
+| 웹 환자·Case 저장 | 실제 submit 두 번째 optional `canSubmit(validatedId)`를 RHF onValid의 mutate 직전에 호출. SidePanel에서 mounted·현재 권한·편집 대상/현재 form ID·version을 재확인. 검증 중 제한 또는 대상 변경→복귀, unmount가 과거 저장을 재개하지 않음. 기존 guard 없는 호출·성공 callback/refetch와 주문 변경 권한 독립 유지 |
 | Credit·승인·추가금 | `canUpdateCredit`의 수동/자동 업데이트 경계를 normal·Remake Summary에 전달. Pending Approval·Remake History의 변경 진입과 Lab 추가금 생성/취소도 제어. 가격·이력·도움말과 순수 디자인 파일 미리보기는 유지 |
 | 웹 LinkTalk | `isReadOnly`로 전송·답장·업로드·재전송·수정·삭제·POST 번역 재시도 제어. `isSystemMessageActionEnabled`는 template별 CTA 입력. 상세 Layout의 실제 clone 경계도 조건 전달. DESIGN/AUTO 순수 미리보기와 기존 input hidden/disabled·Lab 타기공소 조건 보존 |
 | 웹 Draft | `canContinueDraft`, `canDeleteDraft(orderId)`로 카드·연필·삭제 UI와 실제 부모 handler 제어. 목록/카운트/서버 GET 범위는 바꾸지 않고 SYSTEM_DRAFT의 기존 삭제 제한 유지 |
 | 웹 Lab 메모 | Layout TabMemo에서 주문 변경 조건을 자식의 `canEditMemo`와 합쳐 전달. 입력·수정·삭제·첨부·임시 파일 삭제 진입과 실제 Lab handler 제어. 열린 편집기·파일 선택의 이전 callback과 unmount 이후 실행 차단. 조회·다운로드와 기존 undefined upload props 동작 유지 |
-| 치과 앱 목록 | OrderSearchForm의 내 주문·내 환자·담당 의사 필터 표시 입력과 BottomSheet Dentist 탭 조건. 숨김 후 이전 toggle/chip/tab/선택 callback 차단. 열린 Dentist→Status, 저장된 imperative present에도 최신 조건 적용. 숨긴 외부 selectedDentists를 Done/Reset이 덮거나 지우지 않음 |
-| 치과 앱 주문 1단계 환자 | OrderPatientListSection의 내 환자 토글 표시 입력과 이전 callback 차단. 제공된 전체 환자·검색·선택·신규 등록·Next·다음 페이지 유지. Member 판단·조회 범위는 하드코딩하지 않음 |
-| 치과 앱 native LinkTalk | MessageList/입력/메뉴/useMessage에 `isReadOnly` 전달. 전송·답장·업로드·재전송·POST 번역 재시도 차단. 시스템 메시지의 `isSystemMessageActionEnabled`는 별도 조건. DESIGN/AUTO 비동기 응답은 권한 또는 메시지/주문 변경·unmount 후 이전 작업을 재개하지 않음. 복사·원문·파일 열람과 허용된 순수 미리보기 유지 |
+| 치과 앱 목록 | OrderSearchForm의 내 주문·내 환자·담당 의사 필터 표시 입력과 BottomSheet Dentist 탭 조건. 숨김 후 이전 toggle/chip/tab/선택 callback 차단. 열린 Dentist→Status, 저장된 imperative present에도 최신 조건 적용. 숨긴 외부 selectedDentists를 Done/Reset이 덮거나 지우지 않음. 내 주문/환자 토글이 숨겨진 행의 건수는 Figma대로 우측 정렬 |
+| 치과 앱 주문 1단계 환자 | OrderScreen의 optional `isShowMyPatientOnly=true`를 OrderPatientListSection까지 전달. 자식의 이전 callback 차단 유지. 제공된 전체 환자·검색·선택·신규 등록·Next·다음 페이지 유지. Member 판단·조회 범위는 하드코딩하지 않음 |
+| 치과 앱 native LinkTalk | ChatDetailScreen의 optional `isReadOnly=false`를 실제 useMessage·MessageInput·MessageList에 함께 전달. 부모 `isSystemMessageActionEnabled=true`는 leaf 타입의 bool/template predicate를 그대로 List에 전달. 전송·답장·업로드·재전송·POST 번역 재시도 차단. 시스템 메시지의 `isSystemMessageActionEnabled`는 별도 조건. DESIGN/AUTO 비동기 응답은 권한 또는 메시지/주문 변경·unmount 후 이전 작업을 재개하지 않음. 복사·원문·파일 열람과 허용된 순수 미리보기 유지 |
 | 치과 앱 Draft | OrderScreen과 카드에 `canContinueDraft(draft)`, `canDeleteDraft(draft)` 전달. 실제 이어하기·삭제, scanner GET 이후 복원도 최신 조건 확인. false→true 전환이 과거 응답을 되살리지 않고 unmount·다른 주문 시작 시 무효화. SYSTEM_DRAFT 삭제 금지와 일반 진행 주문 편집 보존 |
 | 치과 앱 신규 Case | Screen에서 `isShowAssignedDentist` 전달해 담당 의사 영역 전체와 sheet 숨김. 이전 찾기/변경/선택 callback·100ms 지연 실행과 unmount 이후 호출 차단. 기존 선택값·Next 검증 유지. 담당 의사 자동 지정이나 저장 payload 변경은 하지 않음 |
 
 - 입력/메뉴/파일 선택의 남아 있는 callback을 제어한 것이며 이미 시작된 HTTP·S3
-  업로드를 취소하거나 서버 권한을 보장하지 않는다. RHF 검증 이후 서버 변경 직전의
-  확정 관계 확인은 실제 API 연동 시 보완한다. 주문 변경·환자/Case 수정·채팅·Feedback
+  업로드를 취소하거나 서버 권한을 보장하지 않는다. 환자·Case 폼은 검증 후에도 준비된
+  조건을 재확인하며, 실제 서버 관계 응답 연결과 나머지 주문 취소/상태/추가금 폼의 최종
+  mutation 경계는 API 연동 시 함께 확인한다. 주문 변경·환자/Case 수정·채팅·Feedback
   권한은 구분하며 모든 non-GET을 한 조건으로 막지 않는다.
 - 앱 OrderDetail은 기존 웹 상세 WebView를 사용하고 native 채팅은 별도다.
-  native UI/hook의 입력은 준비했지만 ChatDetailScreen·role/store/route에서 실제 관계
-  응답을 주입하는 연결은 남았다. `isDifferentLab=false` 익명 표시 상수는 권한이 아니다.
+  native UI/hook과 ChatDetailScreen의 조건 전달까지 준비했지만 실제 관계 응답을
+  주입하는 연결은 남았다. 기존 ConfirmBanner와 승인/CP 직접 화면의 허용 행동은
+  별도 정책 경계라 채팅 template 제한만으로 숨기거나 차단하지 않았다.
+  `isDifferentLab=false` 익명 표시 상수는 권한이 아니다.
 - 앱 신규 Case의 Member 디자인은 담당 의사 영역 전체가 없는 것으로 확인했다.
   일반 Draft가 PROFILE/PRODUCT/OPTION 이후로 복원되는 경우까지 담당 고정을 보장하려면
   응답·복원 정책이 필요하다. 자동 profile 변경·자기 자신 지정·1단계 강제 이동을 만들지 않았다.
@@ -70,41 +78,56 @@
 
 ### 검증과 자료 재확인
 
-- **웹 Clinic 전체 Jest 21 suites / 149 tests 통과.** 이전 142개에 새 Memo 회귀 7개 추가.
-  실제 shared 컴포넌트와 Lab handler를 확인하고 기존 upload props 기본 동작도 검증했다.
+- **웹 Clinic 전체 Jest 22 suites / 159 tests 통과.** 직전 149개에 실제 RHF/Yup/
+  React Query mutation·공용 SidePanel을 사용한 검증 후 저장 회귀 10개를 추가했다.
+  guard 없는 정상 호출, 기본 UI 저장, revoke→복귀·대상 변경→복귀·form ID 불일치·
+  양쪽 unmount를 확인했다. 직전 Memo 회귀 7개와 기존 upload props 검증도 유지했다.
 - 웹 Clinic/Lab/Admin 전체 type 통과. 정상 pre-commit과 pre-push도 통과해 push했다.
   세 서비스 lint 오류 0이며 shared/configs 21·shared/hooks 24개 테스트와 기존
   coverage baseline 검사 통과. 이번 push에 훅 우회나 baseline 재설정은 없었다.
-- sharedUI 전체 type은 변경 전/후 **579개 기존 진단의 메시지 집합이 동일**하다.
-  신규 Memo scoped lint는 오류 0·기존 경고 5개. 이전 sharedUI LinkTalk scoped lint의
-  기존 8 errors/49 warnings도 새 오류로 소개하지 않는다. 전체 sharedUI lint/type
-  성공으로 표현하지 않는다. 변경 파일 Prettier·diff check 통과.
-- **앱 features 전체 Jest 14 suites / 95 tests 통과.** 권한 관련 57개는 기존 필터 10개,
-  새 native 채팅 24개, Draft·부모 실행·신규 Case 23개다. 앱 전체 테스트 통과는 아니다.
-  이번 추가 18개 파일 scoped ESLint 오류/경고 0, Prettier·diff check 통과.
+- 이번 Clinic 변경 2개 파일 scoped lint 오류/경고 0, shared 변경 3개 파일 scoped lint
+  오류 0·기존 경고 28개가 동일했다. Clinic TS program의 변경 5파일 진단 0,
+  실제 필수 훅 Clinic/Lab/Admin type 통과, Prettier·diff check 통과.
+  직전 Memo 단위에서 sharedUI 전체 type의 579개 기존 진단 메시지 집합은 동일했고,
+  과거 LinkTalk scoped lint 8 errors/49 warnings도 기존 문제였다.
+  이번 sharedUI 전체 lint/type가 성공했다고 표현하지 않는다.
+- **앱 features 전체 Jest 15 suites / 100 tests 통과.** 권한 관련 62개는 직전 필터/
+  native 채팅/Draft/Case 57개와 새 부모 환자 단계 2개·실제 채팅 화면 통합 3개다.
+  기존 order/patient 필터 회귀 2개에 숨김/복원 시 정렬 검사도 보완했다.
+  실제 ChatDetailScreen/useMessage/MessageInput/MessageList로 이전 전송·재전송·파일
+  callback 차단, 새 메시지·읽음·refresh 유지, 재허용 후 전송, template별 CTA 판정과
+  기존 ConfirmBanner 진입 보존을 검증했다. 앱 전체 테스트 통과는 아니다.
+  이번 추가 6개 파일 scoped ESLint 오류/경고 0, Prettier·diff check 통과.
   전체 tsc는 main 기준의 기존 **18개 오류 출력과 완전히 동일**하다.
-  새 테스트를 포함한 별도 TS program의 해당 파일 진단도 0이다.
+  새 채팅 통합 테스트를 포함한 별도 TS program의 해당 파일 진단도 0이다.
   앱 전체 타입 검사가 통과했다고 쓰지 않는다. StrictMode의 기존 RN findNodeHandle
   경고는 숨기거나 설정을 바꾸지 않았다. 제품 변경을 서로 독립 검토했다.
-- 검증 로그: `/tmp/dentlink-permission-phase3-clinic-jest-all.log`,
-  `/tmp/dentlink-permission-phase3-app-features-jest-all.log`,
-  `/tmp/dentlink-permission-phase3-app-type-final.log`.
-  검증 snapshot: `/tmp/dentlink-permission-phase3-web-digest.json`,
-  `/tmp/dentlink-permission-phase3-app-digest.json`.
+- 최신 검증 로그: `/tmp/dentlink-permission-phase4-clinic-jest-all.log`,
+  `/tmp/dentlink-permission-phase4-app-features-jest-all.log`,
+  `/tmp/dentlink-permission-phase4-app-type-final.log`.
+  최신 검증 snapshot: `/tmp/dentlink-permission-phase4-web-digest.json`,
+  `/tmp/dentlink-permission-phase4-app-digest.json`.
+  웹 정상 필수 commit/push 로그는 `/tmp/dentlink-permission-phase4-web-{commit,push}.log`.
 - 로그인 Member 실계정·브라우저/실기기·시뮬레이터·제품 build/배포 검증은 하지 않았다.
   기존 Storybook 환경 문제와 i18n Sheet 미동기화는 아래 이전 기록대로 남았다.
   이번 추가분에는 새 UI 문구/i18n key가 없다.
-- BE DL-16320/16543을 이번에 다시 읽었고 신규 역할·관계 API 계약은 여전히 미확인이다.
-  직전 추가 단위에서 BE DL-16564·Lab 디자인 DL-16595와 DEV
-  `https://dev-api.dentlink.io/v3/api-docs` 937 paths도 확인했다.
+- 상위 Jira의 하위 티켓 19개 목록과 FE DL-16319·BE DL-16320/16543·Lab 디자인
+  DL-16595를 다시 읽었다. 신규 역할·관계 API 계약과 Lab 확정 디자인은 여전히 미확인이다.
+  DEV `https://dev-api.dentlink.io/v3/api-docs`를 이번에 다시 받아 937 paths와
+  직전 대비 path 추가/삭제 0, authority enum이 기존 4종임을 확인했다.
+  `/tmp/dentlink-permission-phase4-swagger.json`은 익명 DEV 확인본이며 운영 증거는 아니다.
   invitation/employee wire enum은 기존 OWNER/PAYMENT_MANAGER/EDITOR/VIEWER다.
   기존 메뉴/domain 접근 API와 새 Member·담당/공유/과거 관계 행동 계약을 구분한다.
   AuthorityTypeDto의 key는 string이므로 서버 표시명 응답과 확정 wire 계약도 구분한다.
 - 현재 Jira 디자인 Figma `2OR0Gj7NUFEEeYBjQg5Y6v`, WF page `1:6`,
   App section `36:34356`을 다시 읽었다. 신규 Case Member `56:17363`에 담당 의사
-  영역이 없는 것이 확인되어 이번 앱 표시 입력의 근거로 사용했다.
-- FE DL-16319의 기존 댓글 44240과 상위 DL-16317 댓글 44241을 22:01 KST에 갱신하고
-  재조회했다. 웹 149개·앱 관련 기능 95개 검증과 준비/실연동 경계를 기록했다.
+  영역이 없는 것이 확인되어 기존 앱 표시 입력의 근거로 사용했다.
+  이번 WF metadata는 직전 XML과 동일했다. Orders/Patients 건수 행
+  `36:42271`/`36:42294`의 우측 정렬을 확인했고 Orders 행의 design context도 읽었다.
+  App Home `141:30768` 설명은 내 주문+담당 환자의 주문 범위이므로 myOrdersOnly=true나
+  FE 임의 필터링으로 대체하지 않는다. 서버 조회 범위 계약을 받아야 한다.
+- FE DL-16319의 기존 댓글 44240과 상위 DL-16317 댓글 44241을 22:35 KST에 갱신하고
+  재조회했다. 웹 159개·앱 관련 기능 100개 검증과 준비/실연동 경계를 기록했다.
   두 티켓은 진행 중(10016)을 유지했다. 대기를 ON HOLD나 전체 완료로 바꾸지 않았다.
   개인 컨텍스트도 이 기록만 commit/push해 다음 세션에 보존한다.
 
@@ -115,10 +138,14 @@
 2. 기존 optional UI 조건을 실제 응답에 연결하고, 목록·카운트·Draft 서버 조회 범위,
    직접 URL·소속/권한 변경·담당 변경 후 이동/재조회·거절 응답·캐시 갱신을 검증한다.
    현재/과거 담당 환자와 공유 Case의 허용 행동·FOLLOW_UP 담당 관계 정책을 맞춘다.
-3. 앱 native 채팅의 실제 응답 연결, 담당 의사 자동 지정과 일반 Draft의 전체 복원 정책,
+3. 앱 native 채팅의 실제 응답 연결, Home 담당 환자 조회 범위, 담당 의사 자동 지정과
+   일반 Draft의 전체 복원 정책,
    기타 화면과 Lab의 확정 디자인 범위를 반영한다. 앱 Lab 코드 checkout은 현지에서
    확인되지 않았으며 Office 정책을 Lab에 복제하지 않는다. 웹 Lab 신규 Remake 생성/
-   직접 진입 등도 실제 관계 조건과 함께 후속 감사한다. 웹 Lab Memo 입력 준비는 완료다.
+   직접 진입 등도 실제 관계 조건과 함께 후속 감사한다. Lab Remake 목록/선택/info/
+   additional은 상세 flag와 별도 페이지이며, 목록에는 관계 판단 데이터가 부족하다.
+   승인·CP 직접 화면과 주문 폼의 최종 mutation 조건도 이 단계에서 함께 맞춘다.
+   웹 Lab Memo 입력 준비는 완료다.
 4. 실제 API 상태별 화면 QA·번역 검토를 보완한다. 현재 구현과 자동 테스트를
    신규 Member 정책 시행·전체 권한관리 완료로 해석하지 않는다.
 5. 현재 자료로 확정 가능한 이번 추가 선행 단위는 제품 원격·Jira·Git 개인 메모리
