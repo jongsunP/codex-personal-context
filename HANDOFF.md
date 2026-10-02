@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-02 Figma 이전 작업으로 복귀. **빈 페이지 연락처 AI 생성·후속 수정·독립 반복**과 실제 DLDS/타입·lint·빌드·브라우저 검증을 진행했고 `dlds-screen` 스킬·소스목록·새 미리보기를 제품 `feature/DL-16471`에 저장했다. Figma 로컬 사본은 휴지통 정리했다. 다음은 화면 구성 기준을 갖춘 복합 화면·실제 비개발자→FE 인계 시험이며 에디터는 이후다. 필요한 경우만 묻고 나머지는 추천으로 자율 진행한다. 코드·메모리·Jira 정리 후 대기하라는 최신 지시를 적용하며 후속 구현은 사용자 재개 요청 때 진행한다. 정확한 HEAD·저장/검증/재개 방법은 기능 정본을 따른다.
+  — 2026-10-02 연락처 첫 생성·수정·독립 반복에 이어 **실제 화면 기준을 제공한 My Profile 일부의 빈 페이지 생성·후속 수정·PC/모바일 검증**을 진행했다. 제품 feature/DL-16471에 생성 UI·재실행 검사·FE 연결 방법을 저장하고 Notion·Jira·Git 메모리를 정리했다. 다음은 실제 PM·디자이너의 요청·수정과 FE 인계/필요 수정량 검증이며 전체 하네스·비개발자 서비스·에디터 완료는 아니다. 현재 정리 후 대기, 재개 시 기능 정본의 최신 HEAD·실행/검증 방법을 따른다. Figma 추가 시험은 하지 않는다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
