@@ -7,7 +7,8 @@
 - **독립 시험 출처:** fetch한 `origin/master` **`9bed1f7bd753e229478302413c0ec9a7e7a11dc2`**(2026-09-28 release/v1.87.0). 기존 Codex `ai-preview`·`dlds-gallery`·신규 `dlds.ts`가 없는 원본이다. 개인 폴더 `figma-code-layers/master-trial/dentlink-client-master/`의3,460파일/58,314,729bytes를 준비했다. 환경변수9개·설치/빌드 파일·에이전트 설정 디렉터리·일부 테스트/생성물 등635경로를 제외했다. 기존 소스의 루트 AGENTS.md/claude.md는 남는다. 새 UI/preview를 로컬 사본에 추가하지 않았다.
 - **다른 기기에서 사본 복구:** [master 소스 출처와 제외 목록](dentlink-figma-master-source.md)에 전체635경로와 해시 계산법을 원격 보존한다. 기준 SHA를 `git archive`로 새 개인 폴더에 추출하고 `excluded_paths`를 제외한다. 결과3,460파일/58,314,729bytes, tree SHA256 `53e4a5f28de4f51dca033571909d8bcbdf85f246a5f81e8c250f20eee79b4fef`를 확인한다. 다른 SHA는 민감 설정 검사를 다시 해야 하며, 설치/클라우드 설정/로그인까지 복원되는 것은 아니다.
 - **브라우저 제어 복구:** 이전 Chrome 탭은 AX/스크린샷 갱신 불일치·`noWindowsAvailable`·`elementHasNoFrame`로 시험하지 못했다. Mac 잠금 여부를 비동기 문의했으나 답변 전 새 시크릿 탭에서 같은 Figma 파일을 열어 제어와 화면 갱신을 복구했다. 잠금이나 Figma 기능 결함으로 원인을 확정하지 않는다. 예전 탭 대신 현재 새 탭을 사용한다.
-- **현재 Figma 진행:** file key **`2OR0Gj7NUFEEeYBjQg5Y6v`**, 새 페이지 **`Code layers · master` / `234:2`**, 새 Code layer **`234:4`**. 새 페이지에서 master 사본을 browse→Chrome3,460파일 확인으로 업로드했고, Figma가 업로드 완료 후3개 Next.js 앱의 실행 대상과 standalone 배포 처리 방식을 재질문했다. 전체 앱 대신 독립 React/Vite 빈 미리보기·기존 앱 구조 보존으로 답변을 제출했고 자동 설정이 다시 진행 중이다. 초기 프리뷰에는 Failed가 표시됐으며 아직 설정 완료나 새 UI 생성 결과는 없다. 이전 연락처 예제 `222:24317`과 분리한다.
+- **현재 Figma 진행:** file key **`2OR0Gj7NUFEEeYBjQg5Y6v`**, 새 페이지 **`Code layers · master` / `234:2`**, 새 Code layer **`234:4`**. 새 페이지에서 master 사본을 browse→Chrome3,460파일 확인으로 업로드했고, Figma가 업로드 완료 후3개 Next.js 앱의 실행 대상과 standalone 배포 처리 방식을 재질문했다. 전체 앱 대신 독립 React/Vite 빈 미리보기·기존 앱 구조 보존으로 답변을 제출했다. **Version2 설정 완료**를 관찰했고3m35s 작업·bootstrap/deploy/deploy-preview 검증 성공·42 modules build와 실제 빈 Running 미리보기를 확인했다. 이어 새 폼 생성 요청을 영어로 제출해 Figma 에이전트가 Applying changes 작업 중이다. 새 폼 결과는 아직 확인 전이다. 이전 연락처 예제 `222:24317`과 분리한다.
+- **다운로드 확인:** Files → File actions → Download code로 `master-trial/master-empty-v2.zip`을 저장했다. Chrome 완료와 파일32,721,786bytes·4512ZIP entries를 확인했고 `.figma/make/preview/{index.html,src/App.tsx,src/main.tsx}`와 실행 설정이 포함된다. 아직 이 단계의 빈 화면용 코드이며 새 폼 결과 ZIP이 아니다. 원본 대비 실제 변경 범위를 읽기 전용으로 검토 중이다. 빈 화면 캡처는 `master-trial/evidence/00-empty-preview.png`에 로컬 보존했다.
 - **초기 설정 고려:** 원본 `shared/ui/index.html`의 `/src/main.tsx`는 없다. Figma가 빈 React 진입점과 실행 설정을 준비하는 노력을 실제 시험에 포함한다. pnpm8.6.9·기존 ThemeProvider/GlobalStyles·아이콘 생성 및 husky 조건을 확인한다. API/인증/환경변수 없는 독립 UI이며, 비슷한 가짜 컴포넌트를 새로 만드는 것으로 재사용 성공을 대신하지 않는다.
 - **팀 문서 반영 완료:** 기존 [FE 논의안 · Figma 코드 기능과 AI 하네스 방향](https://app.notion.com/p/3ecce072e82f81f3bb89fbf5729da06c)을 약1,800자로 정리했고 재조회로 본문과 변경 시각2026-10-02T02:51:43.138Z를 확인했다. 이전 연결/기존 예제 실행의 의미, 관찰한1GB·환경변수 제한, 원본 폴더약30GB→feature 소스 사본약60.7MB, 독립 시험 미완료, 참고 자료, DLDS 계속/축소/보류 제안을 구분했다. 새 문서·Jira/Sites는 만들거나 수정하지 않았다. 독립 시험 결과가 나오면 같은 문서에 짧게 반영한다.
 - **외부 근거:** WooWacon ClayDesign 세션856은10월28일 예정이며 공개 영상값은 비어 있다. 직접 참고한 김상국의 컨텍스트 엔지니어링 기술블로그는 **26459**다. 해당 글은 ClayDesign 전체 구현 공개가 아니며, json-render 공개 코드는 구성/검증 방식의 참고다.1GB/환경변수 제한은 이번 업로드 UI 관찰로만 적는다.
@@ -15,13 +16,16 @@
 
 ### 독립 시험 요청과 재개 순서
 
-- **제출한 초기 설정 답변:** Figma의3앱 선택 질문에 아래 custom response를 보냈고, 배포 구조 질문에는 `Preserve runtime architecture`를 선택해 Submit했다. 새 UI 생성 요청은 아직 보내지 않았다.
+- **제출한 초기 설정 답변:** Figma의3앱 선택 질문에 아래 custom response를 보냈고, 배포 구조 질문에는 `Preserve runtime architecture`를 선택해 Submit했다. Version2 빈 미리보기 완료 후 새 UI 요청을 별도로 제출했다.
 
 > clinic/lab/admin 전체 앱이 아니라, 업로드한 원본 컴포넌트를 사용하는 독립 React/Vite 미리보기로 시험합니다. 기존 앱·공통 컴포넌트 소스는 바꾸지 말고 클라우드 사본에 별도 진입점과 실행 설정만 준비해 주세요. 기존 ThemeProvider/Theme, GlobalStyles, 폰트를 연결하고 아이콘 생성 등 필요한 준비를 수행해 주세요. 지금은 빈 화면까지만 만들고 새 UI는 다음 요청에서 생성합니다. 실제 API·로그인·환경변수는 연결하지 않습니다. 기존 shared/ui/index.html은 src/main.tsx가 없으니 그대로 앱 진입점으로 쓰지 마세요. 새로운 배포나 Next.js static export 전환은 요청하지 않습니다. 독립 Vite 미리보기의 필요한 검증만 진행해 주세요.
 
-- **다음 생성 요청 초안(미제출):** 기존 연락처 예제와 눈으로 구분되는 ‘팀 알림 설정’ 소형 폼을 이름·이메일·알림 수신 체크박스·저장 버튼으로 새로 생성한다. 실제 API 없이 가상 입력의 로컬 상태만 확인하며 기존 입력/선택/버튼과 테마를 실제 import해 쓰도록 요청한다. 필요한 요구가 모호하면 먼저 질문하고 없는 UI를 임의로 제품 규칙으로 추가하지 않도록 한다. 구체적 JSX/완성 화면을 답으로 주지 않는다.
+- **새 폼 생성 요청(제출 완료):** 한글 native typeText는 글자가 빠지고 paste는 clipboard 읽기 timeout이어서 해당 미완성 텍스트는 보내지 않았다. 영어로 같은 요구를 정상 입력해 Send했으며 작업 시작을 확인했다. 이는 제어 도구 입력 문제이며 Figma의 한국어 이해 능력 판정이 아니다.
+
+> Create a new Team notification settings form in this empty preview. Include a required Name input, optional Email input, Receive notifications checkbox, and Save button. Block saving when Name is empty. On save, show the entered values and checkbox state below the form using local React state only. Use the real existing TextInput, Checkbox, Button, and theme from this uploaded repository. Do not recreate lookalike controls or modify existing apps/shared component sources. Make the form usable on desktop and narrow mobile widths. After implementation, report the existing component imports and verify the preview. Use sample values only; no API, authentication, or persistent storage.
+
 - **후속 수정 초안(미제출):** 이메일 필수 검증과 모바일 세로 배치 변경, 제목 요소만 선택한 문구 변경을 요청해 선택 범위와 나머지 코드 보존을 비교한다.
-- **코드 추출 위치 확인:** Code editor의 Files → File actions → **Download code** 메뉴를 확인했다. 실제 다운로드와 생성 결과 검증은 아직 하지 않았다.
+- **코드 추출 위치 확인:** Code editor의 Files → File actions → **Download code** 메뉴를 확인했다. Version2 빈 화면 코드 ZIP 다운로드는 완료했고 새 폼 코드 추출/검증은 아직 하지 않았다.
 - **FE 활용 검증:** UI를 통한 코드 추출이 실제로 되는지 확인 → 별도 개인 폴더에서 원본 대비 변경·기존 컴포넌트 import/재구현·공통 소스 변경·빌드 설정 확인 → 설치/타입/빌드 및 가상 입력·저장·반응형 동작 확인. 단순 화면 실행과 실제 FE 제품 인계의 준비 수준을 구분한다. 제품 checkout·PR에는 반영하지 않는다.
 
 ### 팀 공유 문서의 목적 — 사용자 최종 보완
@@ -44,7 +48,7 @@
 ### 저장 상태와 다른 기기에서의 복구
 
 - **제품:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16471`, HEAD **`e7b7148a53a684e78ed25301e8d4eb541fc06c19`**. 이번 저장 시 working tree clean·추적 브랜치와0 ahead/0 behind를 확인했다. 제품 코드는 추가 변경·커밋·푸시하지 않았다. master 독립 시험 기준은 위9bed1f7이며 제품 브랜치와 구분한다.
-- **현재 Figma 시험:** file key `2OR0Gj7NUFEEeYBjQg5Y6v`, 페이지 `234:2` / Code layer node-id/code-node-id **`234-4`**, Cloud main / Version1. 현재 새 시크릿 탭에서 독립 Vite 초기 설정 중이다. 이전 **`222:24317`**은 연락처 예제의 연결 시험이며 이번 생성 시험의 출발점이 아니다. 브라우저 세션은 기기 간 이동되지 않으므로 재개 때 다시 확인한다.
+- **현재 Figma 시험:** file key `2OR0Gj7NUFEEeYBjQg5Y6v`, 페이지 `234:2` / Code layer node-id/code-node-id **`234-4`**, Cloud main / Version1. 현재 새 시크릿 탭에서 Version2 빈 Vite 미리보기 설정을 마치고 새 폼 생성 작업 중이다. 이전 **`222:24317`**은 연락처 예제의 연결 시험이며 이번 생성 시험의 출발점이 아니다. 브라우저 세션은 기기 간 이동되지 않으므로 재개 때 다시 확인한다.
 - **로컬 자료:** `/Users/parkjongsun/Documents/ChatGPT/디자인시스템정비 프로젝트/figma-code-layers/`의 `dentlink-client/`, `upload-source.json`, `evidence/figma-dlds-ready.png`가 존재한다. metadata의 출처는 위 feature 브랜치이며4,258파일/60,773,615bytes다. 이 사본을 원본 master 기준으로 혼동하지 않는다.
 - **이동 가능한 것:** 제품 브랜치의 저장 코드와 이 개인 컨텍스트를 원격 Git에서 복구할 수 있다. 브라우저 로그인·로컬 사본·스크린샷·실행 서버는 Git으로 이동하지 않는다. 새 기기에서는 계정 접속을 다시 확인하고 필요한 사본을 재생성한다. 인증정보·환경변수·고객 데이터는 개인 체크포인트에 저장하지 않는다.
 

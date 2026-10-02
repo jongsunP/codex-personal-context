@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS / DL-16466: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 1단계 우선 완료·2단계 첫 DLDS 연락처 예제와 Figma Code layers 연결·실행 시험까지 완료. `feature/DL-16471`, `pnpm dev:ai-preview`5178. 원본 master 사본의 독립 시험을 재개했고 새 Figma 페이지234:2/Code layer234:4에서 업로드·자동 초기 설정 중이다. 기존 Notion에 확인 사실·1GB 등 제약·외부 참고·DLDS 방향을 반영하고 재조회했다. 다음은 새 UI 생성·수정·FE 코드 활용의 실제 결과 확인이며 도입 결정·하네스 후속 구현은 아직 하지 않았다.
+  — 1단계 우선 완료·2단계 첫 DLDS 연락처 예제와 Figma Code layers 연결·실행 시험까지 완료. `feature/DL-16471`, `pnpm dev:ai-preview`5178. 원본 master 사본의 독립 시험을 재개했고 새 Figma 페이지234:2/Code layer234:4에서 Version2 빈 미리보기 설정을 마쳤고 새 폼 생성 요청을 제출했다. 기존 Notion에 확인 사실·1GB 등 제약·외부 참고·DLDS 방향을 반영하고 재조회했다. 다음은 새 UI 생성·수정·FE 코드 활용의 실제 결과 확인이며 도입 결정·하네스 후속 구현은 아직 하지 않았다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
