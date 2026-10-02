@@ -74,7 +74,7 @@ For detailed current state, read:
   재개 승인에 따라 Password E2E 선택자 수정·16건 재검증과 조사 자료5개 정리를
   마쳤다. **2단계 사용 기준·실험 초안에 이어 첫 DLDS 연락처 수정 화면의 생성·수정·로컬 미리보기 검증**을
   마쳤다. 기존 worktree의 `feature/DL-16471`, `pnpm dev:ai-preview`5178에서 확인한다.
-  기존 도구로 목표를 대체할 수 있는지와 Figma 활용/병행/자체 개발 방향으로 Notion FE 논의안을 정리했다. 다음은 활용할 도구·계속/축소할 작업·보류할 개발의 팀 합의이며 방향·실험은 미정이다. 비개발자용 AI 입력 서비스·완성된 하네스는 아직 없다.
+  기존 도구의 대체 가능성에 관한 Notion 논의안에 이어 Figma Code layers 연결·기존 예제 실행을 시험했다. 현재는 임시 브레이크포인트로 재개 대기 중이며, 다음은 원본 master 사본의 독립 생성·수정·FE 재사용 시험이다. 최신 결과·제약·DLDS 방향의 Notion 반영과 도입 결정은 아직 남는다. 비개발자용 AI 입력 서비스·완성된 하네스는 아직 없다.
   피드백 Retry/요구사항 외 UI 정리는 PR #4642 병합으로 완료됐다.
   기존 `dentlink-client-dlds` worktree를 보존하며 정확한 저장 상태와 다음 시작점은 체크포인트를 따른다.
 - [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)

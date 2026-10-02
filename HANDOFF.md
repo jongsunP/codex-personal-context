@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS / DL-16466: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 1단계 우선 완료·2단계 첫 DLDS 연락처 화면 생성/수정/로컬 검증 완료. `feature/DL-16471`, `pnpm dev:ai-preview`5178. 기존 도구의 대체 가능성·Figma 활용/병행/자체 개발 선택지로 Notion FE 논의안 수정. 다음은 활용할 도구·계속/축소할 작업·보류할 개발의 팀 합의; 도입/실험은 미결정. 비개발자용 AI 입력 서비스는 아직 없음.
+  — 1단계 우선 완료·2단계 첫 DLDS 연락처 예제와 Figma Code layers 연결·실행 시험까지 완료. `feature/DL-16471`, `pnpm dev:ai-preview`5178. 임시 브레이크포인트로 저장·재개 대기 중이다. 다음은 원본 master 사본의 별도 Code layer에서 새 화면 생성·수정·FE 재사용을 독립 시험하고, 확인 사실·1GB 등 제약·DLDS 방향을 기존 Notion에 짧게 반영하는 것이다. Notion 최신 결과 반영·도입 결정·하네스 후속 구현은 아직 미완료다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
