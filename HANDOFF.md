@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-02 연락처·My Profile 생성에 이어 **검색/주문일 필터 빈 생성·비동기 FE 인계 시험**을 완료했다. 제품 feature/DL-16471의7d14639ba에 필터56/Profile56 브라우저 검사·검색8/인계14 테스트·새 진입점·FE 연결 안내를 저장하고 Notion/Jira/Git 메모리를 정리했다. 실제 API·비개발자 실사용·FE 수정량 감소는 별도다. 현재 대기, 재개 시 기능 정본의 최신 HEAD·실행/검증 방법을 따른다. Figma 추가 시험·전체 에디터 확대는 하지 않는다.
+  — 2026-10-02 **브라우저 자연어 요청 → 실제 DLDS 코드 생성·검사·미리보기·후속 수정·TSX 다운로드** 로컬 환경을 추가했다. 제품 feature/DL-16471의fa46e3438, 실제 연락처 신규/후속 생성·PC1280/휴대폰320·다운로드, 작업/API 계약32개·기존22개 검사를 확인하고 Jira·Notion·Git 메모리를 정리했다. `pnpm dev:ai-preview` → `/ai-generation.html`. Mac Codex 설치·기존 로그인/사용량이 필요하며 임시 출력/인증/서버 상태는 Git으로 옮겨지지 않는다. 다음 실제 PM·디자이너 사용·FE 보정량 확인을 기다린다. 제품/API·공유 배포·전체 에디터·Figma 추가시험은 별도다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
