@@ -1,6 +1,23 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 체크포인트 — 2026-10-02 · 기존 도구 대체 가능성과 프로젝트 방향으로 FE 논의안 수정
+## 현재 체크포인트 — 2026-10-02 · Figma Code layers 실제 DLDS 연결·실행 시험
+
+- **이번 승인:** 사용자가 Chrome 시크릿 Figma 계정에 접속한 뒤, 기능 확인만 하던 범위를 실제 코드 연결·설정 시험으로 확대했다. 하단 `{ }` 메뉴와 오른쪽 **Code layer / Create a code layer / Clone repository / Upload folder**를 직접 확인했으므로 실제 기능은 **Figma Design Code layers**로 확정했다. Local Make로 혼동하지 않는다.
+- **업로드 과정:** 사용자가 원본 `dentlink-client` 폴더를 드롭했을 때 폴더 표시 없이 Upload가 비활성이었다. 원본 디스크 사용량 약30GB, DLDS worktree 약8GB를 확인했고, UI의1GB 제한을 넘는다는 사실을 확인했다. 이것만으로 최초 드롭 미반응의 단일 원인을 확정하지는 않는다. `feature/DL-16471`의 tracked 소스 복사본에서 설치/빌드/실행 기록·환경변수9개·MCP 연결 설정·E2E 계정 관련 파일 등을 제외해 **4,258파일 / 60,773,615bytes(약60.7MB)**를 준비했다. browse로 폴더 선택→Chrome 업로드 확인→Figma의 자동 처리로 소스를 가져왔다.
+- **실제 결과:** 현재 디자인 파일에 Code layer **222:24317**이 생겼고, Code editor의 **Cloud main / Version1**에서 기존 `shared/ui/ai-preview` 연락처 화면을 실행했다. 실제 DLDS와 테마·폰트를 사용하는 기존 샘플이며 이미지 재현이나 새로 만든 가짜 UI가 아니다. 수정 모달 열기→샘플 번호를4155550188로 변경→저장 후 표시 반영을 AX와 최종 화면에서 확인했다. 실제 계정·API·인증·데이터 저장은 연결하지 않았다.
+- **Figma 자동 설정:** Figma 에이전트가 클라우드 복사본에 `.figma/make/{install,dev,deploy,deploy-preview,dev.json}`을 준비했다. 처음에는 실행 설정이 없었고 배포 검증에서 생성된 `icons/dist/icon-type`이 누락됐지만 자동 설정이 빌드 전 아이콘 생성으로 수정했다. UI 결과에 `verify-bootstrap`, `verify-deploy`, `verify-deploy-preview` 성공이 표시됐으며 미리보기 실제 실행·수정·저장은 Codex가 별도로 확인했다. 배포 설정 검증 성공을 제품 서비스 배포나 전체 앱 QA로 해석하지 않는다.
+- **연결의 의미와 남은 검증:** Upload folder는 **일회성 소스 복사본**이다. GitHub Clone·OAuth 권한 설정·원본 저장소 push·자동 동기화는 하지 않았다. Figma 오른쪽/하단의 `main`은 클라우드 복사본의 상태이며 제품 `feature/DL-16471`이 바뀐 것이 아니다. 자연어로 새 화면 생성·후속 수정·요소 선택·DLDS 재사용/FE 수정량·코드 인계 품질은 아직 시험하지 않았으므로 자체 하네스/에디터를 완전히 대체한다고 결론내리지 않는다. 다음은 이 화면의 왼쪽 **Ask for changes**에서 작은 요청으로 실제 편집 품질을 확인하는 것이다.
+- **환경 조건:** Code layers 업로드 UI는 웹 코드만 지원하고 환경변수는 지원하지 않는다고 안내했다. 실제 서비스 전체 실행과 이번 환경변수 없는 DLDS 샘플 실행은 다르다. 원본 `dentlink-client`는 release/v1.88.0이었고 정비한 DLDS/샘플은 별도 worktree `feature/DL-16471`에 있으므로 시험에는 후자를 사용했다.
+- **저장/접속:** 제품 `/Users/parkjongsun/Repository/dentlink-client-dlds`는 pull 후 `e7b7148a53a684e78ed25301e8d4eb541fc06c19`, clean을 확인했으며 이번에 제품 코드를 수정·커밋·푸시하지 않았다. Figma file key `2OR0Gj7NUFEEeYBjQg5Y6v`, node-id/code-node-id `222-24317`; 현재 Chrome 시크릿 Code editor를 열어 두었다. 로컬 업로드 복사본과 출처 메타데이터는 개인 작업 폴더 `figma-code-layers/`에 있으며 최종 화면은 `evidence/figma-dlds-ready.png`에 저장했다. 브라우저 계정 세션·로컬 복사본·실행 서버는 Git으로 다른 기기에 전달되지 않는다.
+
+### 팀 공유용 문서 지침 — 사용자 추가 요청
+
+- 목적은 Figma 소개가 아니라 **DLDS 과제에 이미 외부 제품/참조 코드가 있는지와 우리가 계속할/줄일 작업의 방향을 FE팀에서 논의하는 것**이다.
+- **짧은 실험 과정·결과 → 외부 도구/참고 자료 → DLDS 방향과 논의점**으로 정말 간단히 작성한다. 예: 원본30GB/업로드1GB 제한, 소스 복사본60.7MB로 실제 DLDS 실행 성공. 상세는 필요할 때 보완한다.
+- Figma 외에도 팀에 도움이 되는 원문/코드1~2개를 덧붙인다. [우아콘 ClayDesign](https://woowacon.com/sessions/856)은 컴포넌트·토큰·규격과 검증을 AI에 연결하는 사례다. [우아한공방 챗봇 개발기](https://techblog.woowahan.com/26319/)는 관련 기술 설명·코드 스니펫을 제공하나 ClayDesign 완성 소스가 공개된 것으로 쓰지 않는다. [Vercel Labs json-render](https://github.com/vercel-labs/json-render)는 등록한 React 컴포넌트와 props 스키마를 제한한 자연어→JSON→UI 생성·렌더의 공개 구현 참고다. Dentlink에 맞는 TSX 출력/제품 연결까지 완성됐다는 뜻은 아니다.
+- 이번 추가 메시지는 **문서 작성 지침**으로 받아 기록했다. 현재 Notion의 기능 미확정/미시험 표현은 이번 실험 전 작성된 내용이므로 다음 문서 정리 요청 시 이 결과로 맞춘다. 이번에는 Notion/Jira를 임의 수정하거나 팀이 도입 방향을 정한 것으로 기록하지 않는다.
+
+## 이전 체크포인트 — 2026-10-02 · 기존 도구 대체 가능성과 프로젝트 방향으로 FE 논의안 수정
 
 - **최신 보완 · Code layers와 실제 접속 확인:** 사용자가 한국어 [Code layers 글](https://www.figma.com/ko-kr/blog/code-on-the-figma-canvas/)과 **`{ }` 메뉴에서 Clone repository를 봤다**는 단서를 추가했다. 공식 설명은 기존 코드 가져오기→실행→디자인/프롬프트 변경→저장소 전달 흐름이므로 사용자의 개념 이해와 맞는다. 다만 로컬 Make도 복제를 제공하므로 아직 실제 기능은 확정하지 않았다. 같은 Notion을 Code layers와 프로젝트의 대체/병행/자체 개발 중심으로 다시 정리하고, 직접 접속 시 화면 확인(기능명·사용 가능 여부·연결/편집/전달 메뉴)과 회의 후 실제 샘플 연결 시험을 구분했다. 재조회로 선택지·확인 항목·미확정 표현·기존 링크를 확인했다. 디자이너 계정으로 접속해 보면 도움이 되는지에 답했으며, 실제 계정 접속/저장소 연결/Figma 실험은 아직 요청받거나 실행하지 않았다. 다음 입력은 실제 사용 화면 확인 요청이나 FE 회의 결정이며, 자료 작성으로 제품 구현을 재개하지 않는다.
 - **사용자 의도 보완:** FE 회의 목적은 Figma 기능 소개가 아니다. 우리가 목표로 하는 경험이 이미 출시된 도구에 있는지, 활용하면 자체 개발을 대체할 수 있는지, Figma와 현재 작업을 함께 쓴다면 무엇을 이어갈지를 논의하는 것이다. 기능 사용 시험 여부만 묻는 자료로 좁히지 않는다.
