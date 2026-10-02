@@ -1,6 +1,90 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-02 웹 착수 준비·분석 완료
+## 현재 상태 — 2026-10-02 웹 선행 구현·회귀 검증
+
+- 사용자가 분석 이후 **판단이 꼭 필요한 사항 외에는 추천대로 스스로 구현을 진행**하라고
+  지시했다. 앞선 분석 전용 제한은 이번 제품 코드 수정 지시로 해제됐다.
+  웹부터 현재 Jira/Figma의 확정된 표시와 진입 제어를 준비했다. 제품 commit/push/PR/
+  merge/배포 및 Jira 댓글·상태 변경은 별도로 승인되지 않아 실행하지 않았다.
+- 작업 위치는 `/Users/parkjongsun/Repository/dentlink-client-permission`,
+  branch `feature/DL-16317`, base/HEAD
+  `9bed1f7bd753e229478302413c0ec9a7e7a11dc2`다. **49개 로컬 변경(기존 36·신규 13)**,
+  upstream·제품 커밋 없음. 아래 구현은 아직 제품 원격 Git에서 복구할 수 없다.
+  기존 웹 checkout과 DLDS 작업 위치, 앱 checkout은 수정하지 않았다.
+- 개인 컨텍스트를 `git pull --ff-only`로 먼저 갱신했다. permission worktree에
+  `pnpm install --frozen-lockfile`을 완료했고 제품 package/lockfile은 변경하지 않았다.
+  Node 24.4.1, pnpm 8.6.9. 선택적 구버전 canvas 설치 경고는 있었지만 설치는 성공했다.
+- **실제 신규 Member 시행은 아직 아니다.** BE 역할 enum·권한 API·응답/오류 계약이
+  미확정이라 기존 `EDITOR`에 Member 제한을 연결하지 않았다. 공용 UI의 optional
+  표시·행동 입력과 Storybook 예시를 준비하고 기본 동작을 유지했다.
+  Clinic의 EDITOR 표시명 Manager 변경, 도움말과 기존 HOC 오류 수정은 실사용 코드에 있다.
+
+### 구현한 범위
+
+| 범위 | 변경과 경계 |
+| --- | --- |
+| Office | Clinic의 기존 EDITOR 표시를 Manager로 변경, 디자인의 분홍 칩·Authority 도움말 적용. 목적지는 `https://portal.dentlink.io/help/articles/20`. OWNER/Billing Manager/VIEWER wire 값은 유지. 미지의 enum은 중립 표시로 처리해 깨짐 방지 |
+| Orders/Patients/Board | PC·모바일에 `isShowMyOrderOnly`, `isShowMyPatientOnly`, `isShowDentistFilter` 조건 준비. Member 모바일의 검색+52px outline 필터/적용 표시, 열린 Dentist 탭 숨김 전환 및 숨긴 외부 필터값 보존. Board 필터는 기존 구성 그대로 작은 공용 컴포넌트로 추출 |
+| 주문1단계 | 환자 My Only 표시 조건과 `fixedDentist` 입력 준비. 새 Case(`purpose=NEW`)에서 담당 변경/Assign Myself 진입을 막고 입력 초기화·Draft reset·제출 직전 지정 의사를 복원. 기존 Case(`FOLLOW_UP`) 담당 값은 임의로 덮지 않음 |
+| 담당 의사 변경 | PC·모바일 상세에서 경고 조건을 모달로 전달. 문구는 최신 디자인의 `Changing the dentist will remove your access to this order.`. 기존 모달의 높이 제한 재사용. Lab en/ko locale에 대응 key 추가 |
+| Pickup | `canOpenOrder(row)` 조건을 Today/Reschedule/Scheduled/Past PC·모바일과 Today 라벨 모달까지 전달. false는 일반 주문번호 텍스트와 클릭 handler 제거, 기본/true는 기존 링크. 환자 공유 예외는 서버 조건을 전달할 수 있도록 행별 입력이며 담당자 비교를 하드코딩하지 않음 |
+| 기존 HOC | 권한·activeEmployeeId 변경/로그아웃 시 이전 승인 상태로 보호 페이지가 계속 보이는 문제 수정. 비동기 결과를 token+employeeId에 결부하고 오래된 조회 결과를 무시. null 프로필과 응답 id 불일치 방어. 응답 id 생략 및 정상 token refresh의 같은 소속 profile 유지 동작은 보존. 기존 /403·code2131 Office 전환 정책 변경 없음 |
+
+주요 신규 파일과 진입점:
+
+- `clinic/src/components/OfficeMemberList/office-member-authority.ts`,
+  `OfficeMemberAuthorityHelp.tsx`, `useAuthorityTypeQuery.ts`.
+- `shared/ui/src/OrderKanbanUI/OrderKanbanFilters.tsx`와 Clinic Board 호출부.
+- `shared/ui/src/Order/OrderForm/OrderProfileForm/useFixedOrderDentist.ts` 및
+  `OrderProfileForm.tsx`의 내부 Next → 복원 → 부모 RHF 제출 경계.
+- `shared/ui/src/OrderUI/DentistFind/extras/ModalSearchDentist.tsx`와 상세 제목 PC·모바일.
+- `shared/ui/src/PickupUI/PickupUI.type.ts`의 `PickupOrderAccessPropsType` 및 하위 전달.
+- 기존 주문1단계 Story 보완, Orders/Patients/Board/담당 변경/Pickup 상태 Story 추가.
+  별도의 신규 제품 화면이나 권한 엔진, API 계약·역할 enum을 만들지 않았다.
+
+### 검증 결과와 한계
+
+- Clinic 전체 Jest **14 suites / 92 tests 통과**. 신규 회귀 31개:
+  HOC 12, 필터 6, 담당 고정 4, Pickup 9. 서버 정책과 실제 로그인 Member 검증은 아니다.
+- Clinic/Lab/Admin 전체 `type` **모두 통과**. 새 worktree의 무시된 Next 이미지 타입
+  파일이 없어 생긴 최초 PNG 오류는 Clinic/Lab `next typegen`으로 정리했다.
+  제품 타입 설정은 수정하지 않았다.
+- Clinic 변경 파일 ESLint, Prettier 및 `git diff --check` 통과.
+  sharedUI는 기존 root/UI eslint-plugin-storybook 중복 resolve로 기본 명령이 실패했다.
+  정본 UI 설정을 단독 지정한 변경 파일 검사는 **오류 0·경고 39**이며 기존 any/Hook
+  경고와 Story export 경고가 있다. 전체 sharedUI 타입 명령은 기존 hook/icon 오류가
+  남아 있으므로 별도로 전체 성공했다고 쓰지 않는다.
+- **Storybook 시각 검증 미완료:** 기준선의 Storybook core/addon 버전 불일치,
+  react-device-detect resolve, config/models 순환 import 및 prebundle entry 문제를
+  겪었다. 임시 설정만 사용했으며 제품 deps/config를 고치지 않았다. 추가 환경 우회를
+  중단하고 실제 컴포넌트를 렌더링한 Jest로 클릭과 상태를 검증했다. 임시 서버·브라우저 종료.
+- Lab 신규 경고 문구는 en/ko JSON에 있으며 추가 key의 누락은 없다. 전체 i18n 검사는
+  **기준선 실패 + 신규 key 시트 미동기화**를 구분한다. 변경 전 HEAD 대비 Sheet는
+  `orders.detail.approval.fabrication.readyInHours` 값 차이와 `orders.filters.category`
+  누락이 이미 있었다. `audit:i18n`의 `account.auth.actions.logIn` 누락도 HEAD에서 확인했다.
+  신규 경고 key의 Sheet 반영/PM 번역 검토는 남았고 외부 Sheet 쓰기는 하지 않았다.
+  관련 없는 번역값을 권한 작업에 섞어 수정하지 않았다.
+- 제품 build/배포, 로그인 브라우저·실기기, 신규 Member 실계정 및 업무 API 연동은
+  실행하지 않았다. Type/Jest 성공을 실제 권한 정책 시행으로 설명하지 않는다.
+
+### 남은 작업과 다음 시작점
+
+1. 기존 permission worktree의 로컬 변경을 먼저 확인한다. 새 worktree를 만들거나
+   제품 원격에 구현이 저장됐다고 추정하지 않는다. 제품 commit/push는 명시 지시가 필요하다.
+2. 상세·사이드패널·Draft·Remake·LinkTalk/첨부·승인/삭제의 표시/실행 handler 경로를
+   최신 정책과 대조해 다음 선행 범위로 진행한다. 현재 모든 non-GET 차단 완료가 아니다.
+3. BE 명세가 나오면 실제 역할/관계 응답을 UI 조건에 연결하고 서버 목록·카운트·Draft
+   범위와 직접 URL/변경 후 거절·캐시 갱신을 검증한다. 현재/과거 담당 환자, 공유 Case의
+   행동 범위, FOLLOW_UP 생성 시 담당 관계는 아래 기존 미확정점과 함께 대조한다.
+4. Lab 확정 디자인과 네이티브 앱 작업은 별도 다음 단계다. 현재 모바일 대응은 웹의
+   반응형 UI이며 네이티브 앱 완료가 아니다. 기존 Lab 가격/타기공소 조건을 보존한다.
+5. Storybook 기준선 및 i18n 시트 미동기화가 정리되면 상태별 화면 QA와 번역 검토를
+   보완한다. 현재 확정 UI/입력 준비를 실제 신규 Member 배포 완료로 표현하지 않는다.
+
+## 이전 분석 — 2026-10-02 웹 착수 준비·분석 완료
+
+아래는 최초 분석 단계 기록이다. 이후 사용자가 구현을 지시했으므로 현재 승인 범위와
+제품 변경·검증·다음 시작점은 위 선행 구현 기록을 따른다.
 
 - 사용자는 권한관리 착수를 요청했으며 이번 단계는 **master 기준 신규 웹
   branch/worktree 준비 + Jira/하위 티켓/연결 문서/Figma/현행 코드 조사 + 계획 브리핑**이다.
