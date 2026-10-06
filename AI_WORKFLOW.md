@@ -9,9 +9,11 @@ to load at session start.
 
 Use multiple Codex sessions when separation improves ownership and context:
 
-- A projectless top-level management session may coordinate a product area
-  spanning multiple repositories and may implement a small, clearly scoped
-  change after confirming the exact target checkout.
+- A top-level management session coordinates a product area across separate
+  repositories. For Dentlink, actual implementation belongs in feature
+  sessions by default, including small tasks. Follow the size/continuation
+  routing rule in `SESSION_WORKFLOW.md`; direct main-session implementation
+  is an exception when the user chooses it.
 - Create additional sessions primarily by feature or responsibility, not by
   device or repository. One feature session may own coordinated web and app
   work across multiple repositories.

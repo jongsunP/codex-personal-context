@@ -32,9 +32,12 @@ Detailed implementation history remains in the relevant existing project file.
 - Every code or Git mutation must still name and confirm the exact product
   repository, branch, and worktree. A shared feature scope does not combine Git
   histories or permit writing from an ambiguous directory.
-- The top-level session may directly implement a small, clearly scoped change.
-  Split out repository-specific or parallel sessions only when scope, runtime,
-  ownership, or collision risk justifies it.
+- 2026-10-06 사용자 지침: 구현은 작은 작업도 별도 기능 세션이 기본이며,
+  메인세션은 접수·분류·조율·마감을 맡는다. 짧은 작업은 현재 폴더에서 세션만,
+  규모가 있고 여러 차례 이어갈 작업은 전용 폴더·worktree·세션으로 분리한다.
+  판단이 불명확하거나 작업 충돌·필수 결정이 있을 때만 사용자에게 확인한다.
+  상세 운영 정본은 [SESSION_WORKFLOW.md](../SESSION_WORKFLOW.md#new-work-intake-and-session-routing)이며,
+  메인세션 직접 구현은 사용자가 선택하는 예외다. 기존 작업 이력은 이 지침으로 재배치하지 않는다.
 - Keep one active writing session per worktree. Repository main-checkout
   sessions are optional helpers for branch/worktree/release administration,
   not permanent web-versus-app session boundaries.
@@ -324,8 +327,10 @@ Detailed implementation history remains in the relevant existing project file.
    then verify exact path, branch, HEAD, upstream, dirty state, and worktree.
 4. Classify each new request as web, app, or shared before deciding the owning
    implementation session and release target.
-5. Do not create a worktree for a very small change without first asking the
-   user, and do not reuse a completed feature branch.
+5. Apply the canonical size/continuation routing rule: separate feature session
+   by default, with a dedicated folder/worktree for substantial continuing
+   work. Resolve unclear scope or ownership only when necessary, and do not
+   reuse a completed feature branch.
 6. Reconcile Jira, Notion, Figma, Swagger, and live code when the new request
    depends on them; do not re-fetch every external source without a task-driven
    reason.

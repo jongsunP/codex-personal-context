@@ -147,15 +147,15 @@ into one checkout.
 - The top-level session may inspect both repositories, but it must not treat
   them as one Git repository or edit them from an ambiguous working directory.
   Before a mutation, confirm the exact repository and authorization boundary.
-- Organize additional implementation sessions by feature, not by device or
+- Route implementation to a separate feature session by default, including
+  small tasks. The user strongly prefers the main session to remain the
+  intake and coordination center. Direct implementation in the main session
+  is an exception when the user chooses it, not the default for small changes.
+- Organize implementation sessions by feature, not by device or
   repository. One feature session may coordinate and implement both web and app
   portions across their separate repositories. It must confirm the exact path,
   branch, and worktree before every repository mutation and keep the two Git
   histories independent.
-- The top-level session may directly handle a small, clearly scoped change when
-  that is simpler and the exact repository boundary is confirmed. Create
-  separate web/app or repository-specific sessions only when parallelism,
-  change size, runtime isolation, or ownership risk makes the split useful.
 - A main-checkout session may still act as a repository administrator when
   branch, worktree, release, or cleanup work needs a concrete checkout. This is
   a repository-level helper role beneath the Dentlink FE top-level session, not
@@ -170,13 +170,48 @@ This session hierarchy does not require a combined product repository, parent
 workspace, or new worktree. Its portable source of truth is
 `projects/dentlink-fe.md` plus the relevant web and app checkpoint files.
 
+### New Work Intake And Session Routing
+
+This is the user's standing Dentlink routing preference, clarified on
+2026-10-06. It replaces the older default of handling small changes in the
+main session or asking about checkout separation for every small task.
+
+1. When the user submits a new work link to the main session, inspect the
+   linked requirements, relevant comments, and necessary current code/Git
+   state. Classify the product scope, expected continuation, dependencies,
+   and checkout ownership before choosing the working arrangement.
+2. For a small, bounded task expected to finish in one focused work cycle,
+   create a separate feature session in the existing main project folder.
+   Use a suitable existing product checkout; a new project folder or worktree
+   is not the default. Complete and close out the work in that feature session.
+3. For a substantial task expected to continue across multiple work cycles,
+   plan a dedicated project folder, product worktree, and feature session.
+   Sustained implementation, design/API dependencies, and ongoing parallel
+   ownership justify this separation. A single extra message, test rerun, or
+   ordinary PR wait does not by itself turn a small task into a large project.
+4. Explain the selected arrangement briefly and proceed within the user's
+   authorization. Ask only when scope, duration, checkout conflicts, or a
+   required product Git decision is unclear. Do not ask the user to choose
+   the same already-established small-task arrangement each time. If scope
+   grows, reassess the arrangement and preserve the existing session history.
+5. A project folder organizes sessions and personal materials; a product
+   worktree isolates code and Git state. They are separate concepts. Keep one
+   active writing session per product worktree, and keep web/app Git histories
+   independent. A folder decision never authorizes overwriting another task.
+
+The routing preference does not itself authorize product commits, pushes,
+PR changes, merges, deployment, or environment-branch changes. Apply existing
+authorization rules to product changes and branch/worktree creation; ask only
+for genuinely missing authority or decisions. An explicit per-task instruction
+such as "same folder, session only" takes priority over this default.
+
 ## Main Worktree And Feature Session Model
 
-Prefer a suitable existing checkout. Do not create a separate worktree unless
-it is necessary for the actual work and isolation constraints. In particular,
-a small QA fix or a new Jira ticket is not by itself a reason to create one.
-Check existing checkout ownership and the user's recorded worktree preference
-first; do not automatically create another checkout just for convenience.
+For Dentlink, apply New Work Intake And Session Routing above: prefer a
+suitable existing checkout for short tasks and a dedicated worktree for
+substantial continuing work. Outside Dentlink, follow the recorded project
+preference and actual isolation needs. A new Jira ticket alone is not a reason
+to create a worktree; check existing ownership before assigning a writer.
 
 For repositories where the user keeps a long-lived main worktree, treat its
 Codex session as the repository administrator and `master` management session
@@ -184,18 +219,17 @@ when that role is needed. For Dentlink this is subordinate to the frontend
 top-level coordination model above.
 That session may keep `master` synchronized, inspect repository-wide state,
 create and remove worktrees and branches, prepare new feature environments,
-and handle work that explicitly belongs to the main worktree. Do not mix an
-independent feature implementation into the main worktree merely because the
-main session created or manages its branch.
+and handle work that explicitly belongs to the main worktree. A small feature
+session may use that checkout when it has sole writing ownership and an
+approved task branch. Do not mix independent active implementations there.
 
 For each substantial new feature, use this flow when the user requests it:
 
-Before applying this dedicated-worktree flow, assess the verified change
-surface. When the task is clearly very small and localized, first ask the user
-whether to work on a `feature/<Jira>` branch in the main checkout without a
-separate worktree. Do not create the worktree until the user answers. If a
-dedicated worktree has already been created, keep it unless the user asks for
-cleanup.
+First assess the verified scope using the routing rule above. A small task
+does not require a repeated folder/worktree preference question. If its
+existing checkout is unavailable or shared with an active writer, resolve
+that conflict before writing. Preserve existing worktrees and session history
+unless their move or cleanup is authorized.
 
 1. Verify that the main worktree is clean and fetch the remote. For ordinary
    new Dentlink feature work, use the current `origin/master` commit as the
@@ -219,12 +253,16 @@ cleanup.
    repository and permission boundaries, validation/reporting rules, exact
    worktree/branch/upstream/HEAD state, and any relevant local-environment
    warnings.
-7. Leave Jira requirements, Figma nodes, and the actual implementation request
-   for the user to provide directly in the feature session. Do not invent them
-   in the bootstrap prompt.
-8. After delivery is merged and the user asks for cleanup, verify the feature
-   worktree is clean and its commits are preserved remotely or merged before
-   removing the local worktree and branch.
+7. Pass the user's original request, source links, verified requirements,
+   unresolved questions, and authorization scope to the feature session.
+   Deliver the startup prompt directly when the user has requested the
+   handoff; do not require them to paste the same information again. If manual
+   delivery is needed, provide the prompt in a copyable code block.
+8. At authorized cleanup, verify saved commits, dirty/untracked/ignored files,
+   owned processes, and session ownership before removing a local worktree or
+   branch. An open PR alone does not require keeping a disposable local
+   checkout when its commits are preserved remotely. Keep remote branches and
+   PRs unless their change is separately authorized.
 
 The Dentlink FE top-level session remains responsible for cross-feature
 coordination. Each feature session owns edits, checks, commits, pushes, and PR
@@ -240,9 +278,9 @@ product feature or Jira card.
 
 The current operating model is intentional and valid:
 
-- Map one substantial logical feature to one dedicated Codex feature-session
-  scope, with a separate branch for each affected repository. Create a separate
-  worktree only when required under the checkout preference above.
+- Map each Dentlink implementation task to a feature-session scope by default,
+  with a separate branch for each affected repository. Choose project folders
+  and worktrees using the size/continuation rule above.
 - Keep long-lived main checkouts available for repository administration,
   shared branch synchronization, release ownership when appropriate, and
   requested worktree lifecycle management; they are not permanent session

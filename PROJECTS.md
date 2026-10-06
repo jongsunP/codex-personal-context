@@ -57,6 +57,8 @@ For detailed current state, read:
 - FE 메인세션은 전체 감독·조율, Git-backed 개인 컨텍스트 관리와 필요시
   프로젝트 폴더·세션 설정을 맡는다. 기능별 세션은 정확한 저장소·브랜치 경계
   안에서 작업하며 별도 통합 제품 저장소는 없다.
+- 신규 작업의 세션·폴더·worktree 선택은
+  [SESSION_WORKFLOW.md의 업무 접수 기준](SESSION_WORKFLOW.md#new-work-intake-and-session-routing)을 따른다.
 - 현재 열린 기능 세션과 다른 기기의 첫 대화에서 읽을 체크포인트:
   [projects/dentlink-fe.md](projects/dentlink-fe.md)의 **다른 기기에서 이어가기** 절.
   과거 로컬 브랜치/worktree 정리 이력도 같은 문서에 보존한다.
