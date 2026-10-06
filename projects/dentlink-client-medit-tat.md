@@ -8,7 +8,19 @@
 - 상위 조율 정본: [Dentlink FE](dentlink-fe.md). 제품 저장소에 개인 인계문을 추가하지 않는다.
 - Jira/Notion 댓글 작성·상태 변경, 제품 branch 생성·commit·push·PR·merge·배포는 별도 명시 승인 범위를 따른다.
 
-## 현재 체크포인트 — 2026-10-06: 사용자 댓글 등록 후 최종 확인
+## 현재 체크포인트 — 2026-10-06: v1.88.0 PR 전달
+
+- 사용자가 개발 완료 여부를 확인한 뒤 제품 commit/push 및 `release/v1.88.0` 대상 PR 생성을 명시 승인했고, "1.88.0으로 그대로 진행해"라고 재확정했다. 상위 Jira DL-16613의 v1.89.0 일정은 변경하지 않았다. merge·배포는 승인 범위에 없다.
+- 제품 `feature/DL-16615`의 최종 commit은 **`1b0c7a44d9d8f39c55e741c30c1521e4dad75e0e`**, 메시지는 `fix: 미국 Medit 주문의 RX 날짜 보정`이다. 원격 push 완료, upstream과 ahead/behind **0/0**, checkout clean이다.
+- [PR #4660](https://github.com/Innvoaid/dentlink-client/pull/4660): **OPEN / 일반 PR**, base `release/v1.88.0`, head `feature/DL-16615`. 이번 commit 1개, 수정 파일 4개만 포함하며 로컬 Codex 작업에 PR artifact를 연결했다. merge 충돌은 없으나 자동 체크·팀 리뷰가 남아 있다.
+- 원본 Medit RX 미리보기는 [#3752](https://github.com/Innvoaid/dentlink-client/pull/3752) / `8e030bdc4`로 master와 v1.88.0 모두에 들어 있다. API·원본 의존성 차이는 없으며 v1.88.0의 추가 차이는 MeditPreview DLOS 전환이다. master 고유 LinkTalk hotfix #4657은 release #4658과 동일 patch다.
+- master 기준 최초 구현 commit `eb8ba45a5`를 전달 단계에서 최신 `origin/release/v1.88.0` **`faaa1498189e3e584cfc6fce215ce97feca156f7`** 위로 옮겼다. `MeditPreview.tsx` 첫 import 충돌만 DataGrid와 DateFormat을 함께 유지해 해결했다. DLOS Typography/colors, DataGrid.DataList 및 기존 스타일·표 동작을 보존했고 무관한 master commit은 PR에 포함하지 않았다.
+- release 기준 최종 검증: Admin·Clinic·Lab `pnpm type`, `pnpm check:admin-dlos`(현재 60/baseline 60), 실제 소스 날짜 함수·React/RHF 기반 **73건**, 변경 Admin 파일 lint 오류 0/기존 경고 3, Prettier/diff 검사 모두 성공. 독립 리뷰에서도 추가 수정이 필요한 문제를 발견하지 못했다.
+- push hook도 성공했다. Clinic·Lab·Admin 전체 lint는 오류 없이 기존 경고가 있으며, DLOS guard 테스트 **5건**, shared/configs **21건**과 shared/hooks **32건**, coverage 검사 통과다. 생성된 coverage는 제품 commit에 포함하지 않았고 checkout은 clean이다.
+- 생성 직후 GitHub Admin DLOS guard·CodeRabbit은 진행 중, Auto Assign/Vercel Preview Comments는 성공이다. `dentlink-dlos` Vercel preview 상태는 **Deployment was blocked**로 실패다. GitHub 상태·봇 댓글에서 이 상태를 확인했고 배포 상세는 비로그인 상태에서 404/로그인 안내라 세부 차단 사유는 확인하지 못했다. 코드 빌드 실패나 권한 문제로 단정하지 않는다.
+- 개발·로컬 검증·사용자 PM 댓글·PR 전달까지 완료했다. **실제 Admin 테스트 주문 제출·재조회와 조립된 릴리즈 QA는 남아 있다.** 운영 주문 변경, Jira/Notion 추가 댓글·상태 변경, merge·배포는 실행하지 않았다.
+
+## 이전 체크포인트 — 2026-10-06: 사용자 댓글 등록 후 최종 확인
 
 - 사용자가 최종 댓글을 직접 등록했다고 알려 Jira·Notion을 다시 조회했다. [Notion 토론](https://app.notion.com/p/3ecce072e82f80bca54ffcb137f57c97?d=b21ce072e82f83e8b1a383f5b767255c&pvs=42)에 **2026-10-06 11:47 KST** Frankie의 답변이 등록돼 있다. 기존 질문과 답변 총 2개이며 추가 요청·답변은 없다. fetch 본문은 댓글 1개라는 이전 요약을 반환했지만 get_comments의 실제 토론 조회에서 2개를 확인했다.
 - 등록된 댓글: "기존 FE에는 `delivery_request_at`을 병원 국가코드별로 보정하는 처리가 없었습니다. 이번에는 본문에서 요청한 미국 Medit 주문에만 US 조건을 추가해, Admin 초기값과 미리보기 날짜를 RX에 맞췄습니다." 기존 처리와 이번 변경의 히스토리를 유지하고 BE 확인 요청 문장은 사용자 판단으로 제외했다. 실제 코드의 범위와 일치한다.
@@ -42,7 +54,7 @@
 
 ### 변경 제품 파일
 
-- `admin/src/components/Order/OrderAdditional.tsx`: 원본 기반 납기 보정과 공용 폼 연결.
+- `admin/src/components/Order/OrderAdditional.tsx`: 원본 기반 날짜 보정과 공용 폼 연결.
 - `admin/src/components/Order/OrderForm.tsx`: 기존 플랫폼 원본을 추가정보 단계로 전달.
 - `admin/src/components/Order/MeditPreview.tsx`: RX Delivery 날짜 표시.
 - `shared/ui/src/Order/OrderForm/OrderAdditionalInfoForm.tsx`: 입력값 보호 및 최신값으로 최소일 비교.
@@ -79,8 +91,8 @@
 
 ## 다음 시작점
 
-1. 변경 파일 4개를 보존하고 원격/base/checkout 소유권을 재확인한다. 사용자 요청 없는 제품 commit/push/PR은 진행하지 않는다. 2026-10-06 갱신한 AGENTS/SESSION_WORKFLOW에 따라 승인된 일반 신규 구현의 master 기준/로컬 feature 준비는 다시 질문하지 않는다.
-2. Admin 실제 앱의 테스트 데이터로 RX·TAT·수동 변경·최소일·재진입 상호작용을 QA한다. 운영 주문 수정/제출은 검증용으로 실행하지 않는다.
-3. 전체 자동매핑/Clinic까지 목표라면 서버 측 스캐너 수집 계약·수정 담당을 확인한다. 현재 코드를 전체 결함 해결/운영 반영으로 보고하지 않는다.
-4. iTero는 국가코드가 표시 형식에 쓰이는 것, 실제 IANA 타임존과 서버 정규화를 구분한다. 이 댓글의 서버 보장 여부는 미확인이다.
-5. v1.89.0 release 브랜치와 전달 대상이 확정되면 최신 target diff·병합 결과를 검증하고 별도 승인 범위의 전달을 진행한다.
+1. 제품 `feature/DL-16615` / `1b0c7a44d9d8f39c55e741c30c1521e4dad75e0e`와 [PR #4660](https://github.com/Innvoaid/dentlink-client/pull/4660)의 원격 head·target·check·리뷰 상태를 다시 확인한다. 목표 릴리즈는 사용자 확정 **v1.88.0**이다.
+2. Admin 실제 앱의 테스트 데이터로 RX·TAT·수동 변경·최소일·재진입·제출·재조회를 QA한다. 운영 주문 수정/제출을 검증용으로 실행하지 않는다. 73건의 격리 검증을 전체 앱 QA로 취급하지 않는다.
+3. CodeRabbit 리뷰 처리 요청이 오면 AGENTS의 전체 리뷰 사이클 권한을 적용한다. 그 외에는 팀 리뷰·승인을 기다린다. merge·배포는 별도 승인 범위다.
+4. Vercel `dentlink-dlos` preview 차단은 로그인이 필요한 상세 확인 사항이다. 현재 상태를 코드 실패로 단정하거나 사용자 승인 없이 배포 설정을 바꾸지 않는다.
+5. 팀이 PR을 v1.88.0에 병합한 뒤 조립된 staging 릴리즈에서 QA한다. 서버 자동수집·Clinic 보정 확대와 iTero 변경은 이번 PR 범위에 포함하지 않는다.
