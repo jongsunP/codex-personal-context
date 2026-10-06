@@ -17,15 +17,21 @@
   OPEN/non-draft/MERGEABLE/CLEAN 및 자동 제목/본문/라벨 검사 성공 확인.
 - worktree `/Users/parkjongsun/Repository/dentlink-lab-app-patient-list`, base f33283339,
   Remake `0b7a94a288bcc1bdfbc26c1be3a2c4f9fff9cd8e` + 환자/API/i18n
-  `5debbe0d3edd692fa96022db568b338e5fe08efb`,2커밋·19파일. HEAD/원격 일치·clean 확인.
+  `5debbe0d3edd692fa96022db568b338e5fe08efb` + 최종 색상 `4f4e9c1` + 주문수 한줄 보정
+  `14949c6afd77530852c166b317a667f4b30dd049`,4커밋·19파일. HEAD/원격 일치·clean·0/0 확인.
 - 최종 카드의3정보줄·두 주문 수·생일 숨김·header Remake·상태/카테고리/의사·내부12px,
   실제 SVG 원본과 전역 Remake 배지3사용처를 반영했다. DEV 배포12필드와 최근 주문 이동을 연결했다.
+- 23시 최신 Figma에서 문구/icon primary600을 확인해 공용 Remake를 최소 보정했다.
+  실제375dp 기기에서 주문 수 라벨 두줄/긴EN 잘림을 발견해 환자 화면 전용으로 보정했다.
+  한국어14px 한줄·343×248 카드/목록gap14를 유지하며 긴EN은 라벨만 말줄임하고 두9자리 숫자를 보존한다.
 - 앱 번역 시트 양 영역314~319행에 신규6문구를 등록해 en/ko/registry를 생성했다.
   기존313행과 PM 이름/요청 상태를 보존했다. connector readback 및 승인 liveCSV283문구 검사 통과.
   CLI live check는 ADC scope403으로 실패했으며 시트 등록 실패와 구분한다.
 - renderer10·변경 lint/Prettier/diff·최신 Android Metro bundle 통과. type4오류는 baseline/final SHA동일·신규0.
-  이전 Android 개발 빌드/설치는 성공했으나 AVD system service timeout으로 최종 실화면 QA는 미검증이다.
-  다음에는 실제 기기의 긴 문구/그림자/검색/최근 주문 이동 및 STG 새 계약을 검증한다.
+  fresh Android36 AVD와 기존 development APK+최신Metro에서 이전 system timeout을 재현하지 않았고
+  정상 로그인·DEV763건 중10행 카드·검색1행·recentOrderId 기반 실제 주문 상세 이동/로딩을 확인했다.
+  한국어 기본 실데이터와 긴문구/EN/9자리/Remake 기기 합성 fixture를 구분한다.
+  최종 native APK 재빌드나 STG 통합 QA 완료로 표현하지 않는다. STG 실제 응답은23:31에도 이전 계약이다.
 - 사용자 후속 승인으로 앱 PR까지 생성했다. merge/배포는 제외한다. 전체 정본은
   [DL-16652](dentlink-patient-list-design.md)이며 아래 초기 준비/번역 절차는 당시에 확인한 이력이다.
 

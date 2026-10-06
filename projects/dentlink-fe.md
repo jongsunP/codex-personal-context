@@ -93,6 +93,14 @@ Detailed implementation history remains in the relevant existing project file.
   [#318](https://github.com/Innvoaid/dentlink-app/pull/318)→develop. merge/배포는 하지 않았다.
   4시간 예약 확인은 취소돼 heartbeat PAUSED다. 새 번역 양 시트 반영 완료, 실기QA·STG·Vercel 접근
   및 기존 번역 차이/CLI scope 한계는 기능 정본에 기록했다. 현재 HEAD/QA는 위 정본을 live 대조한다.
+- 23시 재점검에서 웹 pagination 스타일 리뷰를 수정·푸시(`1c8298079`)했고 CodeRabbit 실제 검토
+  SUCCESS·미해결0개를 확인했다. 최신 Figma 앱 Remake 문구도 primary600으로 변경돼 두 앱을
+  최소 보정·푸시했다. STG 실제 응답은 이전 계약이어서 새 API 선배포 후 UI 배포 조건을 PR에
+  명시했다. 웹 Vercel 차단은 계속되며 사람 리뷰·병합·배포 대기와 구현 완료를 구분한다.
+- Lab Android 실데이터 검색/최근 주문 이동과 합성 긴문구·Remake·KO/EN/눌림 QA를 완료했고
+  실제 기기에서 발견한 count 줄바꿈/잘림을 `14949c6`으로 추가 보정했다. Office는 own immutable
+  의존성을 설치해 기존 로컬 불일치를 해소하고 정상 새APK 빌드·로그인/목록·iOS bundle을 확인했다.
+  Office 실제 Remake 사례는 가시0건으로 미검증이다. 최신 head/한계는 기능 정본·Jira44302에 기록했다.
 
 ## DL-16596 타기공소 주문 조회 가드 세션 — 2026-10-06
 

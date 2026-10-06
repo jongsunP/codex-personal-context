@@ -21,13 +21,22 @@
   상세는 웹View의 /orders/:id이므로 웹 공용 Remake 변경을 사용한다. 회차 선택 탭은 제외했다.
 - worktree `/Users/parkjongsun/Repository/dentlink-app-patient-remake`, `feature/DL-16652`.
   base origin/develop `52966b80f7b5fae20b14ad530f2ae7e0ce79a1d3`, HEAD/원격
-  `ed604e6b1671714499afcd14f628f00591105f8e`, clean·0/0 확인.
+  `ffcdc736a327e0fbe0293aa0d4d868ca6561b216`, clean·0/0 확인. 최초 `ed604e6` 후 최신 Figma 색상만 보정했다.
 - [PR #318](https://github.com/Innvoaid/dentlink-app/pull/318) → develop, OPEN/non-draft/MERGEABLE/CLEAN.
-  공통 배지·16px 원본 SVG·자동 export3파일만 포함한다. 자동 제목/본문/라벨 및 CodeRabbit 상태 성공 확인.
-- 배경/테두리/여백 없는 reset16+text14/21 primary700+gap4, icon primary600으로 통일했다.
+  공통 배지·16px 원본 SVG·자동 export3파일만 포함한다. 자동 제목/본문/라벨 검사는 성공했다.
+  CodeRabbit SUCCESS는 develop 자동 리뷰 제외에 따른 skip이며 실제 리뷰 완료로 표현하지 않는다.
+- 배경/테두리/여백 없는 reset16+text14/21+gap4, **text/icon primary600**으로 통일했다.
+  23시 원본의 Default/Pressed/Long/Short/main 색상 변경을 확인해 primary700에서 최소 보정했다.
   기존 Remake 문구·번역은 유지하며 신규 시트 행이 없다.
-- renderer3/lint0/Prettier/diff와 Android·iOS Metro bundle 통과. type18오류는 baseline/final byte동일·신규0.
-  실제 device/native build/배포는 미실행이다. product runtime/서명 설정은 바꾸지 않았다.
+- renderer3/lint0/Prettier/diff와 Android·iOS Metro bundle 통과. 최초 shared node_modules에서는
+  Datadog2.14.8이 현재 manifest와 달랐고 baseline/final 타입18개가 동일했다.
+  전용 checkout에 immutable 의존성을 설치해 Datadog3.7.0/RN0.82.1을 맞췄으며 primary 공유
+  의존성과 product manifest/lock/환경/서명은 보존했다. 새 환경의 baseline/final 타입6개도 byte동일·신규0이다.
+- 정상 developmentDebug APK2.2.4/code134 재빌드(1m50s)·fresh Android36 AVD 설치 후 표준
+  index.bundle/Metro8090으로 실제 로그인·Home·주문 목록과5회 scroll을 확인했다. 가시 Remake0여서
+  **Office 실제 주문의 새 배지 표시 자체는 미검증**이며 renderer3과 Lab 합성 기기 배지를 대체 증거로
+  혼동하지 않는다. 새 의존성 기준 iOS Metro bundle exit0/75assets다. 실물/iOS native QA·배포는 미실행이다.
+- 본인 Metro8090·AVD5582를 종료하고 임시 AVD를 삭제했으며 기존 adb 서버와 다른 runtime은 보존했다.
 - 기존 primary와 권한관리 worktree는 보존했다. 앱 PR 미생성 지시는 이후 사용자 PR 승인으로 변경됐다.
   병합·배포는 하지 않았다. 제품 공통 정본은 [DL-16652](dentlink-patient-list-design.md)다.
 

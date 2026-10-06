@@ -1,11 +1,13 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 현재 상태 — 2026-10-06 최종 디자인 구현·3개 저장소 PR 전달
+## 현재 상태 — 2026-10-06 23시 재점검·추가 수정
 
 - [Jira DL-16652](https://innovaid.atlassian.net/browse/DL-16652): `[FE] 기공소 환자 목록 디자인 변경`.
   확정 요구사항 본문과 fixVersion `v1.88.0`을 등록했다. 부모 DL-16596에는 댓글을 남기지 않는다.
-  댓글44299에 세 PR·확인 결과·검토/배포/실기QA 대기를 남겼다. status는 진행 중으로 유지해
+  댓글44299에 최초 세 PR·확인 결과·검토/배포/실기QA 대기를 남겼다. status는 진행 중으로 유지해
   개발·PR 전달을 배포/QA 완료로 표시하지 않았고 본문·댓글·버전·상태 readback을 확인했다.
+  23:43 댓글44302에 최신 보정·Android 실화면 결과·Office 실제 Remake 사례 미확인·STG 선배포/
+  Vercel 조건을 추가했다. 부모 카드에는 쓰지 않았다.
 - 환자 목록은 웹 Lab·Lab 앱에 구현했다. 추가 구두 확정으로 **Remake 배지만 웹 전체·Lab 앱·
   Office 앱의 모든 사용처**에 적용했다. Office 환자 목록과 기존 공통 테이블은 변경하지 않았다.
 - 세 제품의 독립 Git에서 commit/push와 PR 생성을 완료했다. OPEN/non-draft·MERGEABLE 및
@@ -15,9 +17,16 @@
 
 | 제품 | branch / HEAD | PR / base |
 | --- | --- | --- |
-| 웹 | `feature/DL-16652` / `b29821879bbd3c33aa6cfedca34e9f2516fd8cef` | [#4665](https://github.com/Innvoaid/dentlink-client/pull/4665) → `release/v1.88.0` |
-| Lab 앱 | `feature/DL-16652` / `5debbe0d3edd692fa96022db568b338e5fe08efb` | [#2](https://github.com/Innvoaid/dentlink-lab-app/pull/2) → `develop` |
-| Office 앱 | `feature/DL-16652` / `ed604e6b1671714499afcd14f628f00591105f8e` | [#318](https://github.com/Innvoaid/dentlink-app/pull/318) → `develop` |
+| 웹 | `feature/DL-16652` / `1c82980797fc0cf8e728f0aed77250e956336f8d` | [#4665](https://github.com/Innvoaid/dentlink-client/pull/4665) → `release/v1.88.0` |
+| Lab 앱 | `feature/DL-16652` / `14949c6afd77530852c166b317a667f4b30dd049` | [#2](https://github.com/Innvoaid/dentlink-lab-app/pull/2) → `develop` |
+| Office 앱 | `feature/DL-16652` / `ffcdc736a327e0fbe0293aa0d4d868ca6561b216` | [#318](https://github.com/Innvoaid/dentlink-app/pull/318) → `develop` |
+
+- 사용자 재점검 지시에 따라 최신 API·Figma 댓글/속성·시트·PR을 직접 다시 확인했다.
+  웹 리뷰의 자체 DOM 클래스 스타일을 styled component로 분리해 동작/수치는 보존했다.
+  실제 DEV 계약과 STG 배포 전제에 답변한 리뷰 thread를 해결했고 최신 head CodeRabbit SUCCESS·
+  미해결0개를 확인했다. 사람 리뷰는 REVIEW_REQUIRED이며 병합하지 않았다.
+- 최신 Figma는 앱 Remake 문구도 primary600으로 바뀌어 두 앱의 공용 배지 한 속성씩 보정했다.
+  18시의 앱 primary700 기록은 아래 최신 값으로 대체한다. 웹은 이미 primary600이었다.
 
 ## 사용자 확정 디자인·댓글·승인
 
@@ -39,8 +48,9 @@
   main/hover 문구 충돌은 main을 기준으로 두고 hover 때 문구 변경 동작을 만들지 않았다.
 - 실제 원본 SVG 형상을 대조했다. 웹 local SVG5개와 일치하는 기존 아이콘, Lab 원본 SVG8개와
   화면 local adapter를 사용한다. 완료/제작 대기 등의 fractional root·회전·색을 보존했다.
-- Remake는 배경/테두리/여백 없는 reset16+문구14/21+gap4다. 웹 text/icon primary600,
-  앱 text primary700/icon primary600. 회차 선택 탭·버튼·필터·인쇄 설명은 배지가 아니므로 제외했다.
+- Remake는 배경/테두리/여백 없는 reset16+문구14/21+gap4다. **웹·두 앱 text/icon 모두 primary600**이다.
+  23:09 KST 원본에서 Default/Pressed/Long/Short/main의 문구가 #8D6EFF로 일치하고 기본형 내부
+  간격도12로 수정됐음을 확인했다. 회차 선택 탭·버튼·필터·인쇄 설명은 배지가 아니므로 제외했다.
 - IN_PROGRESS일 때만 DESIGN/READY_FOR_FABRICATION/IN_FABRICATION 상세 상태를 적용하고
   Remake는 `isRemake`로 독립 표시한다. detailStatus의 REMAKE만으로 배지를 추론하지 않는다.
 - 관련 Figma 댓글 #15~#19와 작업 댓글을 읽기 전용 검토했다. #15 최근 주문 이동, #16 우리 기공소의
@@ -50,11 +60,13 @@
   전역 Remake와 #19 gap8/12는 이후 사용자가 구두 답변으로 **모든 사용처·12px**를 확정했다.
   서면 답변 대기 상태를 유지하지 않는다. 반복되는 최종 값을 우선하는 원칙과 작은 모호함을
   자율 처리한 뒤 모아서 설명하는 선호를 `DEVELOPMENT_STYLE.md`에 저장했다.
+- 23시 댓글 재검토에서 #18 디자이너 답변은 모든 사용처를 재확인했고 #19는 답글 없이 원본12px가
+  반영됐다. 새 #20 Member/담당 의사 권한 질문은 다른 작업 범위여서 환자 디자인 변경에 추가하지 않았다.
 - 최초4시간 후 확인 heartbeat `dl-16652-4`는 취소 지시로 **PAUSED**다. STG Swagger 재조회도 제외했다.
 - 웹 commit/push·메모리·Jira·release PR과 앱 commit/push 승인 뒤 사용자가 **앱도 PR 생성**으로
   확대했다. merge·배포·환경/서명 변경은 승인 범위가 아니다.
 
-## API 확인 — 2026-10-06 18:02 KST
+## API 확인 — 2026-10-06 DEV23:03~04·STG23:31 KST
 
 - DEV Swagger HTTP200, 실제 인증 `/lab/patients/consolidate` HTTP200/code0000·763행에서 새12필드를
   확인했다. endpoint는 유지한다. `officeId`, `officeName`, `patientName`, `birthDate`, `totalOrderCount`,
@@ -64,6 +76,11 @@
   있다. 최근 주문 제외 정책으로 확대 해석하지 않는다. 실제 birthDate null(DEV57/STG66)도 숨김 처리했다.
 - STG **실제 인증 endpoint** HTTP200·686행은 이전10필드·orderId/케이스 계약이며 새7필드가 없다.
   배포 완료로 보고하지 않는다. 이전 필드를 임의 fallback하지 않았다. STG Swagger는 재조회하지 않았다.
+  23:31:36 KST 최종 실제 재확인에서도686행/10필드·새7필드 각0행으로 동일했다.
+- DEV recentOrderId는763행 모두 양수/nonnull이고 이전orderId는0행이다. 새7필드는 전체 행에
+  존재하며 null이 없다. DEV Swagger의 DTO12필드·상태/상세 enum·응답 alias와 생성 선언이 일치한다.
+  **STG/운영 새 API 선배포 및 실제 응답 검증 후 UI를 배포해야 한다.** PR 본문과
+  [리뷰 답변](https://github.com/Innvoaid/dentlink-client/pull/4665#discussion_r4196245137)에 남겼다.
 - 공식 Swagger generator 임시 생성 결과에서 해당 Lab 선언/alias만 자동 추출했다.
   Office/Admin 기존 DTO 및 release의 무관한 생성 선언을 보존했다.
 
@@ -84,23 +101,27 @@
   Design In Progress로 구분했다. t() 문구는 스캐너가 놓쳐 직접 대조·등록했다.
 - live `yarn i18n:check`는 ADC `403 ACCESS_TOKEN_SCOPE_INSUFFICIENT`로 읽기 단계에서 실패했다.
   CLI 검사가 통과했다고 보고하지 않는다. connector의 실제 시트 등록·readback은 완료했다.
+- 23시 connector bounded readback에서 웹10개/앱6개의 en/ko 값이 생성 리소스와 정확히 일치했다.
+  읽기 전용 CLI GET도 403 scope 부족을 재현했다. 인증 scope를 변경하거나 재로그인하지 않았다.
 - Office는 기존 Remake 문구/registry/ko 리소스를 사용하므로 신규 번역 행이 없다.
 
 ## 작업 공간·커밋
 
 - 웹 `/Users/parkjongsun/Repository/dentlink-client-patient-list`, base origin/master `6b79c9756`.
-  공용 Remake `51f891f93` + 환자/API/i18n `b29821879`,2커밋·14파일.
+  공용 Remake `51f891f93` + 환자/API/i18n `b29821879` + pagination 스타일 분리 `1c8298079`,3커밋·14파일.
   PR은 release `faaa1498189e3e584cfc6fce215ce97feca156f7`을 향한 해당14파일만 포함한다.
 - Lab `/Users/parkjongsun/Repository/dentlink-lab-app-patient-list`, base origin/develop `f33283339`.
-  공용 Remake `0b7a94a288bcc1bdfbc26c1be3a2c4f9fff9cd8e` + 환자/API/i18n `5debbe0`,2커밋·19파일.
+  공용 Remake `0b7a94a288bcc1bdfbc26c1be3a2c4f9fff9cd8e` + 환자/API/i18n `5debbe0` +
+  최종 색상 `4f4e9c1` + 실제 기기 주문수 배치 보정 `14949c6`,4커밋·19파일.
 - Office `/Users/parkjongsun/Repository/dentlink-app-patient-remake`, base origin/develop
-  `52966b80f7b5fae20b14ad530f2ae7e0ce79a1d3`. `ed604e6`,1커밋·3파일(공통 배지·16원본SVG·자동export).
+  `52966b80f7b5fae20b14ad530f2ae7e0ce79a1d3`. `ed604e6` + 최종 색상 `ffcdc73`,
+  2커밋·3파일(공통 배지·16원본SVG·자동export).
 - 각 HEAD·원격 SHA 일치/clean을 확인했다. 기존 main·권한관리·가드·DLDS checkout은 보존했다.
   앱 feature→develop 규칙 및 각 release 통합 상태를 확인했다. 웹 일정이 앱 base를 바꾸지 않는다.
 
 ## 검증·한계
 
-- 웹 Lab·Clinic·Admin 타입 및2커밋의 필수 pre-commit 검사 통과. Clinic ignored next-env는
+- 웹 Lab·Clinic·Admin 타입 및3커밋의 필수 pre-commit 검사 통과. Clinic ignored next-env는
   표준 next typegen으로 준비했고 tracked 설정 변경은 없다. 변경 lint 오류0/기존 any경고1·Prettier·diff 통과.
 - 필수 push hook 전체 제품 lint는 기존 warnings/오류0, config21+hook24 테스트 통과.
   baseline 누락으로 최초 push 중단 후 검사 패키지가 origin/master와 동일함을 확인해 공식
@@ -113,22 +134,47 @@
   업무 화면 전체 이동 QA가 아니다. Remake21/icon16/gap4·다른 상태25 유지 확인.
   독립 read-only 리뷰에서 웹14파일의 추가 확정 결함·요구 누락은 발견되지 않았다.
 - Lab renderer10·변경 lint/Prettier/diff·최신 Android Metro bundle 통과. type4오류는 기준/최종
-  SHA 동일(Icon2/Tooltip1/MessageText1), 신규0. 이전 Android 개발 빌드/설치는 성공했으나 AVD
-  system service timeout으로 splash 이후 카드/검색/이동 QA 실패. 최종 기기 font/ellipsis/shadow/navigation은 미검증이다.
-- Office renderer3·lint0/Prettier/diff·Android/iOS Metro bundle 통과. type18오류는 기준/최종 byte동일,
-  신규0. 기기/native build·배포는 미실행이다. Metro 성공을 실제 기기 화면 실행으로 대체하지 않는다.
+  SHA 동일(Icon2/Tooltip1/MessageText1), 신규0. fresh Android36 AVD5580으로 이전 system timeout을
+  해소했고 기존 development APK+최신Metro8088에서 정상 로그인·실제 DEV10행/전체763명·검색1행·
+  recentOrderId 기반 OrderDetailScreen/WebView 주문 상세 로딩을 확인했다.
+- 실제375dp 화면에서 주문수 라벨 두줄로 높이가 늘어나는 결함을 찾아 환자 전용 배치를 보정했다.
+  KO14px/21dp 한줄·카드343×248·목록gap14를 확인했고 EN/양쪽9자리 fixture는 라벨만말줄임,
+  숫자153px 자연폭 보존/카드 내부 오른쪽 경계690px를 확인했다. 공용 Typography/API는 그대로다.
+  실제 데이터 QA와 긴문구/EN/Remake 등의 기기 합성 fixture를 구분하며 독립 리뷰에서 추가 확정
+  결함은 없었다. 최종 native APK 재빌드나 실물 iOS/기기 전체 QA 완료로 표현하지 않는다.
+- Office renderer3·lint0/Prettier/diff·Android/iOS Metro bundle 통과. 최초 shared deps의 type18오류는
+  기준/최종 byte동일이었다. 실제 실행 조사에서 설치 Datadog2.14.8과 manifest3.7.0 불일치를 확인해
+  own worktree에 immutable 의존성을 설치하고 primary 공유 deps·제품 설정을 보존했다.
+  새 deps Datadog3.7.0/RN0.82.1에서 기준/최종 타입6개 byte동일·신규0, renderer3/lint0 재검증 통과다.
+  정상 개발APK2.2.4/code134 재빌드·AVD5582 설치 후 표준index.bundle으로 로그인 화면을 확인했다.
+  이전APK의 apps/office/index.bundle404·낡은deps의 Datadog 오류는 최신 정상 환경에서 해소됐다.
+- Office 실제 로그인·Home·주문 목록5회 scroll까지 정상, 가시Remake0여서 실제 주문의 새 배지
+  표시 자체는 미검증이다. renderer3/3과 Lab 기기 합성 배지 검증을 Office 실제 사례로 바꾸어
+  표현하지 않는다. 새 deps iOS Metro bundle exit0/75assets다. 실물/iOS native QA·배포는 미실행이다.
 - 앱 PR 자동 제목/본문/라벨 검사는 성공. 웹 Vercel은 **작성자 jongsunP의 innovaid 팀 접근 확인**으로
   차단됐다([봇 댓글](https://github.com/Innvoaid/dentlink-client/pull/4665#issuecomment-6013252346)).
   실제 팀 미가입인지 GitHub 계정 연결 미인식인지는 미확인이다. 코드 빌드 실패로 단정하지 않는다.
-  접근 신청·프로젝트 설정·배포 재시도는 하지 않았다. CodeRabbit은 마지막 확인에서 pending이다.
+  접근 신청·프로젝트 설정·배포 재시도는 하지 않았다. 최신 웹 head도23:05 Vercel
+  `Deployment was blocked`다. 최신 상세 원인은 인증 없이 확인할 수 없었으며 기존 팀 접근/계정
+  연결 안내와 같은 원인이라고 단정하지 않는다. 웹 CodeRabbit은 최신 head23:12 SUCCESS·
+  미해결0개다. Office CodeRabbit SUCCESS는 develop 자동 리뷰 제외에 따른 skip이며 실제 리뷰
+  완료로 해석하지 않는다. 앱 자동 라벨은 최신 head 성공이다.
 
 ## 다음 시작점·보존
 
 - 4시간 예약 재확인은 취소됐다. 사용자가 재개하면 세 PR/head/CI를 live 확인하고 요청된 디자인
-  수정에 대응한다. STG 새 계약 전환 후 실제 연동, 두 앱 기기 화면 QA, 웹 Vercel 접근 확인이 남는다.
+  수정에 대응한다. STG/운영 새 계약 선배포 후 실제 통합 연동, Office 실제 Remake 사례,
+  실물/iOS native QA 및 웹 Vercel 접근 확인이 남는다. 완료된 Android 실행·Lab 검색/이동 QA는 다시
+  미완료로 되돌리지 않는다. 사람 리뷰 후 병합/배포는 별도 승인·전제 확인 단계다.
 - 기존 orders 번역 차이와 ADC scope는 별도 기존 문구/인증 문제다. 신규 기능의 시트 등록을
   다시 미완료로 되돌리지 않는다. 다른 작업/PM 원문을 확인해 처리한다.
+- 직접 처리 가능한 리뷰·최신 디자인·이 화면의 실제 실행 결함은 승인 범위에서 수정한다.
+  STG/운영 backend 선배포, Vercel 팀 접근/계정 연결, ADC scope 변경은 외부 담당/계정 조치가 필요하다.
+  기존 앱 타입 오류·다른 기능 orders 시트 차이는 기술적 불가능이 아니라 이번 작업 범위 밖이다.
+  미검증 runtime과 실제 실패한 CLI 검사를 완료라고 표현하지 않는다.
 - 자료는 현재 기기 `/Users/parkjongsun/.codex/visualizations/2026/10/06/01a11038-d621-7fb3-ad4e-58d01fbb9a6a/DL-16652/`
-  의 final-review/final-delivery에 원본 캡처·합성 화면·집계·검사 로그로 보존했다. 실환자 화면/토큰/
+  의 final-review/final-delivery/current-review에 원본 캡처·합성 화면·집계·검사 로그로 보존했다. 실환자 화면/토큰/
   비밀번호를 Git에 저장하지 않는다. local-only 자료이며 Git 정본은 결과·링크·다음 시작점을 전달한다.
-- Root QA Next3007과 이번 Lab Metro/AVD는 종료했고 다른 세션 runtime은 보존했다.
+- Root QA Next3007·Lab8088/AVD5580·Office8090/AVD5582를 종료했다. 두 임시 AVD userdata는
+  삭제했고 기존 adb 서버·다른 세션 runtime·primary 공유 의존성은 보존했다. Office own node_modules는
+  manifest/lock과 맞는 독립 설치다. 실제 데이터 캡처/XML은 삭제했고 보존한 앱 화면은 합성 자료다.
