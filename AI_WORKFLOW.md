@@ -172,8 +172,9 @@ scratch details.
 - Give the user's child issue a concrete title that identifies the work;
   a title containing only `FE` or `[FE]` is not sufficient.
 - Use the description for requirements and preparation needed before work
-  when useful. Do not replace it with a personal progress log merely to tidy
-  the issue.
+  when useful. Keep an existing description when its requirements and scope
+  are already sufficient. Do not replace it with a personal progress log merely
+  to tidy the issue.
 - For work in progress, record confirmed progress, verification, remaining
   work, and any current pause in a concise comment. Keep the issue's status
   distinct from Codex's personal waiting state.
