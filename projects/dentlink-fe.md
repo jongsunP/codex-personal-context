@@ -38,6 +38,10 @@ Detailed implementation history remains in the relevant existing project file.
   판단이 불명확하거나 작업 충돌·필수 결정이 있을 때만 사용자에게 확인한다.
   상세 운영 정본은 [SESSION_WORKFLOW.md](../SESSION_WORKFLOW.md#new-work-intake-and-session-routing)이며,
   메인세션 직접 구현은 사용자가 선택하는 예외다. 기존 작업 이력은 이 지침으로 재배치하지 않는다.
+- 2026-10-06 사용자 추가 지침: 새 작업 세션은 별도 지정이 없으면 메인세션과 같은
+  모델·추론 수준을 명시하고 실제 적용값도 확인한다. 같은 설정을 사용할 수 없으면
+  사용 가능한 최고 등급을 선택하며, 상세 정본은
+  [모델·추론 기본값](../AI_WORKFLOW.md#new-session-model-and-reasoning-default)이다.
 - Keep one active writing session per worktree. Repository main-checkout
   sessions are optional helpers for branch/worktree/release administration,
   not permanent web-versus-app session boundaries.

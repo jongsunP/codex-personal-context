@@ -198,6 +198,10 @@ main session or asking about checkout separation for every small task.
    worktree isolates code and Git state. They are separate concepts. Keep one
    active writing session per product worktree, and keep web/app Git histories
    independent. A folder decision never authorizes overwriting another task.
+6. Apply [New Session Model And Reasoning Default](AI_WORKFLOW.md#new-session-model-and-reasoning-default)
+   before creating the session: explicitly pass the selected `model` and
+   `thinking`, then verify the actual applied values. A small task or a new
+   project folder does not justify reducing the model or reasoning level.
 
 The routing preference does not itself authorize product commits, pushes,
 PR changes, merges, deployment, or environment-branch changes. Apply existing
@@ -250,6 +254,8 @@ unless their move or cleanup is authorized.
    assign every affected repository/worktree to it. The same feature session
    may own both web and app work; do not create separate sessions solely because
    the repositories or execution devices differ.
+   For a new session, explicitly select and verify its model and reasoning
+   under the canonical default in `AI_WORKFLOW.md`.
 6. From the main session, give the feature session a copyable startup prompt
    containing the user's common working style, personal-context read order,
    repository and permission boundaries, validation/reporting rules, exact

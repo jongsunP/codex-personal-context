@@ -60,6 +60,11 @@
 
 - The user prefers Codex to proceed proactively and request required approvals directly when tools need elevated permissions.
 - Still follow Codex/system permission prompts when they appear.
+- When creating a delegated work session, follow **New Session Model And
+  Reasoning Default** in `AI_WORKFLOW.md`: explicitly select the main session's
+  verified model and reasoning level, or the highest available combination
+  when that is unavailable. Do not silently use lower app defaults; verify
+  the actual applied settings after creation.
 - Shared project code, commits, pushes, and PR mutations require the user's
   explicit authorization. Personal memory maintenance in
   `codex-personal-context` is different: at meaningful session closeout, commit

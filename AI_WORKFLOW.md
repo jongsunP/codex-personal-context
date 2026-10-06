@@ -25,6 +25,34 @@ Use multiple Codex sessions when separation improves ownership and context:
 - Durable continuity remains Git-backed in `codex-personal-context`; chat and
   device-local session history are supplementary.
 
+### New Session Model And Reasoning Default
+
+This is the user's standing preference for newly delegated work sessions,
+confirmed on 2026-10-06. It applies across projects unless the user explicitly
+selects a different model or reasoning level for the task.
+
+- Prefer the main/coordinating session's verified current model **and**
+  reasoning level. Read the actual session settings; do not assume that a
+  new session inherits them or permanently hardcode today's model name.
+- When the same combination is unavailable or cannot be established, select
+  the highest-capability model available at the destination and its highest
+  supported reasoning level. Check current supported combinations rather
+  than inferring capability from a model name or list order.
+- Explicitly pass both `model` and `thinking` when creating a work session.
+  Omitting them applies the user's app defaults, which may differ from the
+  main session. The user's standing instruction authorizes this selection;
+  do not ask again for each already-authorized new session.
+- Do not lower model capability or reasoning to save time or cost, or because
+  a task appears small, unless the user asks. For internal delegated agents,
+  preserve the main session's settings when inheritance is supported.
+- After creation, verify the actual applied model and reasoning using
+  available session metadata. Distinguish the requested settings from the
+  verified settings if verification is temporarily unavailable. If the tool
+  cannot apply the required combination, report the limitation instead of
+  silently using a lower/default setting.
+- This creation default does not change existing sessions or global app
+  settings without a separate user request.
+
 ## Context Hierarchy
 
 Trust context in this order:
