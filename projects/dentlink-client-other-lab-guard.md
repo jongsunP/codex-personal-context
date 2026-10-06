@@ -1,6 +1,6 @@
 # 타기공소 주문 조회 가드 — DL-16596
 
-## 2026-10-06 구현 및 PR 체크포인트
+## 2026-10-06 구현 및 PR 체크포인트 (디자인 승인 제한은 아래 재검토로 정정)
 
 - 메인 세션: `01a08f0c-2057-7852-ae8d-0cf950a91fd3`. 위임 범위는 구현·검증·commit/push·release/v1.88.0 대상 PR·임시 worktree 정리. merge/deploy/Jira/Notion 변경 제외.
 - PR: https://github.com/Innvoaid/dentlink-client/pull/4662
@@ -28,3 +28,16 @@ Lab 6개 파일만 변경. `useOrderExtraFeeForm.ts`에서 활성 직원·기공
 - release 통합 QA와 사용자 최종 확인 필요. merge/deploy 미실행. 일반 PR 생성 범위이므로 CodeRabbit 자동 리뷰 사이클 미실행.
 - 원격 전달 브랜치와 PR에서 재개. 다른 MEDIT/DLDS/권한 worktree는 수정하지 않음.
 - 로컬 QA 탭 닫음,3116/3117 서버 중지. 임시 worktree는 추적/비추적 변경 없음 및 생성된 ignored 산출물만 있음을 확인 후 제거. 개인 체크포인트는 이 파일만 기록하며 프로젝트 index 연결은 메인 세션 담당.
+
+
+## 2026-10-06 사용자 요구사항 재검토 — 수정 대기
+
+사용자가 같은 기능 세션에서 의도를 재확인했습니다. 타기공소 주문 상세의 extra-fee GET 및 lastReadMessageId 읽음 POST는 불필요하므로 차단하고, 디자인 확인 데이터는 보여야 합니다. 기존 디자인 확인 동작에 새 타기공소 제한을 추가하라는 요구는 없었습니다.
+
+- live PR #4662는 OPEN, head `df13137567a86192f4d9c0062bd83f35b772b2a4`, base release/v1.88.0. 제품코드/PR은 이번 조사에서 변경하지 않았습니다.
+- 원래 사용자 요청·메인 인계·Jira DL-16596/16597을 다시 대조. 디자인 확인 siblings/recent/files 조회 차단은 새로 넣지 않았습니다.
+- **확인된 범위 밖 변경:** `useOrderApprovalPage.ts`에 activeEmployee/주문 기공소 일치로 canApprove를 제한하고 handleApprove를 차단함. 이를 위해 원래 없던 useOrderShowQuery 호출도 추가. 승인 페이지는 해당 조건으로 승인 모달을 숨김. 타기공소와 주문정보 로딩/실패 시 기존 승인 UI·요청이 바뀜.
+- 위 승인 제한은 기존 정책 유지라는 인계를 신규 제한 요구로 확대 해석한 결과. 이전 체크포인트의 승인 제한 완료 및 이를 정당화하는 QA 기록은 구현 사실의 기록이며 요구 충족 근거로 사용하면 안 됩니다.
+- 임시 harness도 foreign approve blocked를 기대값으로 검사했고, 로컬 fixture의 design files는 비어 있었습니다. 따라서 검사 통과·스크린샷으로 요구 충족이나 실제 디자인 파일 표시까지 증명하지 못함.
+- 수정 방향: 승인 페이지의 신규 조건부 modal 변경 원복, hook의 신규 소유 조건·추가 주문조회·handleApprove 조건 원복. 기존 디자인 조회/승인 흐름 및 요구된403+1018 서버 메시지 처리는 유지. extra-fee와 chat read 차단은 유지.
+- 현재 요청은 작업 재확인이므로 감사 결과를 보고하고 제품 수정은 대기. 임시 worktree는 여전히 제거된 상태이며 다음 수정 시 원격 PR head에서 안전하게 복원해야 함.
