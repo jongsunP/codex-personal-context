@@ -127,6 +127,11 @@ This separation exists to reduce context contamination. It does not need to be
 rigid, but important implementation work and strategic decisions should be
 summarized into durable docs before being reused elsewhere.
 
+Keep results in the working session and its Git-backed personal checkpoint.
+Do not automatically send progress or completion messages to a main or
+coordinating session. Send them only when the user explicitly requests that
+transfer. This user preference was confirmed on 2026-10-06.
+
 ## Dentlink Frontend Top-Level Session Model
 
 Dentlink frontend work spans `dentlink-client` and `dentlink-app`. Manage this
@@ -161,10 +166,10 @@ into one checkout.
   a repository-level helper role beneath the Dentlink FE top-level session, not
   the durable cross-repository authority.
 - At handoff or closeout, each implementation or repository session updates its
-  own personal checkpoint and reports the verified current state to the
-  top-level session. The top-level checkpoint links those records and stores
-  only cross-repository decisions and coordination state rather than copying
-  their full histories.
+  own personal checkpoint. It does not automatically message the top-level
+  session; that session can read the Git-backed checkpoint when needed.
+  The top-level checkpoint links those records and stores only cross-repository
+  decisions and coordination state rather than copying their full histories.
 
 This session hierarchy does not require a combined product repository, parent
 workspace, or new worktree. Its portable source of truth is
