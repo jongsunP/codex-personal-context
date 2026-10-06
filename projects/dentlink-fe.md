@@ -42,6 +42,10 @@ Detailed implementation history remains in the relevant existing project file.
   sessions are optional helpers for branch/worktree/release administration,
   not permanent web-versus-app session boundaries.
 - Shared repository mutations still require the user's explicit authorization.
+- 웹 신규 작업의 기준은 최신 `origin/master`로 확정돼 있다. Jira 예정 릴리즈나
+  현재 checkout이 release라는 이유로 master 기준을 다시 묻지 않는다. 해당 release에
+  이미 반영한 작업의 후속 수정·QA만 release 기반 예외이며, 상세 정본은
+  [브랜치 전략](../SESSION_WORKFLOW.md#dentlink-release-train-branch-strategy)을 따른다.
 
 ## DL-16615 MEDIT TAT 수정 세션 접수 — 2026-10-06
 
@@ -53,6 +57,10 @@ Detailed implementation history remains in the relevant existing project file.
   본문은 [Notion Medit TAT](https://app.notion.com/p/innovaid/Medit-TAT-3ecce072e82f80bca54ffcb137f57c97)로
   연결된다. 10월 2일 Jira 댓글에서 Notion 댓글 확인을 요청했으므로 본문과 댓글 모두
   실제 코드와 대조하도록 전달했다. 과거 release 기준을 이번 작업에 자동 적용하지 않는다.
+- 사용자는 DL-16613의 예정 v1.89.0과 release 브랜치 부재가 DL-16615의 구현 기준에
+  영향을 주지 않는다고 확인했다. 신규 작업이므로 최신 `origin/master`에서
+  `feature/DL-16615`를 준비하는 기준을 재질문하지 않는다. 예정 배포 대상과 구현 기준은 별개다.
+  사용자가 신규 세션에 직접 응답해 전달했으므로 메인세션에서는 중복 메시지를 보내지 않는다.
 - 시작 프롬프트는 자동 전달됐으며 개인 컨텍스트·Git·요구사항 확인을 시작한 상태를
   확인했다. 제품 구현·검증 완료를 뜻하지 않는다. 메인세션은 제품 코드·branch·PR을
   변경하지 않았으며 상세 조사·작업 진행은 신규 세션이 담당한다.

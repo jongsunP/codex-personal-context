@@ -231,10 +231,12 @@ existing checkout is unavailable or shared with an active writer, resolve
 that conflict before writing. Preserve existing worktrees and session history
 unless their move or cleanup is authorized.
 
-1. Verify that the main worktree is clean and fetch the remote. For ordinary
-   new Dentlink feature work, use the current `origin/master` commit as the
-   default base unless the user explicitly names another base; synchronize the
-   local `master` only through a fast-forward-only path.
+1. Verify that the assigned checkout is clean and fetch the remote. For
+   ordinary new `dentlink-client` work, use the latest `origin/master` under
+   Dentlink Release-Train Branch Strategy below. The base is already decided
+   by the user's standing instruction; an upcoming release version does not
+   require another confirmation. Synchronize local `master` only through a
+   fast-forward-only path. Other repositories use their own documented base.
 2. Confirm that the requested feature branch and folder do not already exist.
 3. Before creating or editing anything, inspect the Jira card, its parent,
    children, comments, and accessible linked sources together with the closest
@@ -322,11 +324,36 @@ recoverable across devices and future AI sessions.
 
 ## Dentlink Release-Train Branch Strategy
 
-Treat the following as Dentlink's default company branch strategy:
+Treat the following as the branch strategy for the Dentlink web repository
+`dentlink-client`. Do not apply its `master` name to `dentlink-app`, which has
+its own documented branch and delivery flow.
 
 - `master` is the latest shared base and the final accumulator of completed
   releases. Active release work may not yet be present in `master`, so do not
   equate it with the union of every in-progress change.
+- **Ordinary new work always starts from the latest fetched `origin/master`.**
+  This is a standing user decision, reaffirmed on 2026-10-06, not an open
+  question to ask again for each task. Prepare the authorized task's
+  `feature/<Jira>` branch from that commit, regardless of whether the current
+  clean checkout happens to be on an older release.
+- A Jira fixVersion or parent issue's planned release (for example v1.89.0)
+  is scheduling metadata that may change; it does not select the feature base.
+  The planned release branch may not exist yet. Do not wait for it, create it,
+  or ask whether master is acceptable just for that reason. Implementation
+  base and eventual delivery PR target are separate decisions.
+- Use a release revision as the base only for follow-up changes to work
+  already integrated into that release, or QA fixes arising from that release.
+  Verify the actual integration/QA context and create a task branch from the
+  relevant release; a planned release label alone does not qualify. Honor an
+  explicit task-specific base override from the user.
+- For an already-authorized implementation task, do not turn this settled
+  base choice or its routine local feature-branch preparation into another
+  generic approval question. Read-only or setup-only requests do not authorize
+  implementation beyond their stated scope.
+  Ask when there is a real conflict such as an occupied or dirty checkout,
+  an existing task branch, or uncertainty about which release produced the QA.
+  This rule does not authorize commits, pushes, PR mutations, merges, or
+  release/develop/stage changes beyond the user's existing authorization.
 - `feature/*` branches are the only normal implementation branches.
 - `release/vX.Y.Z` branches are deployment-only release trains cut from
   `master`; they are not feature-development branches.
@@ -421,9 +448,11 @@ the strategy must be replaced. When helping with Dentlink branches:
 - Accept the strategy as legitimate when its scheduled-release and staging-QA
   needs justify it, while explaining concrete risks without presenting them as
   proof that the strategy itself is invalid.
-- Before creating a feature branch or PR, verify the intended release version,
-  the live base and target heads, their merge base, and whether the target has
-  diverged from `master`.
+- Before creating an ordinary new feature branch, verify the latest
+  `origin/master` and checkout ownership; the planned release is not a blocker.
+  At delivery/PR preparation, verify the actual intended release version,
+  live base and target heads, their merge base, and target divergence from
+  `master`. Do not move that delivery-stage decision into a startup approval.
 - For a feature created from `master` but delivered to a release branch, check
   the target-release diff and merged-result behavior; local feature validation
   alone does not prove the final release combination.

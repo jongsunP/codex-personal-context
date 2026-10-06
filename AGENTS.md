@@ -65,6 +65,12 @@
   `codex-personal-context` is different: at meaningful session closeout, commit
   and push its curated history automatically so the next session or device can
   recover it.
+- For authorized Dentlink web implementation, follow **Dentlink Release-Train
+  Branch Strategy** in `SESSION_WORKFLOW.md`: ordinary new work uses the latest
+  `origin/master`. Do not repeat a base/local-feature-preparation approval
+  question merely because a planned release is named or does not exist yet.
+  Release-based follow-up/QA is the documented exception. This does not widen
+  read-only requests or commit/push/PR/deployment authorization.
 - When the user asks to `CodeRabbit 리뷰 확인` or equivalent, treat that
   wording as explicit authorization for the complete review cycle on the
   current PR: inspect every unresolved CodeRabbit thread, verify each finding
