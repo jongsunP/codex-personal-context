@@ -8,11 +8,18 @@
 - 상위 조율 정본: [Dentlink FE](dentlink-fe.md). 제품 저장소에 개인 인계문을 추가하지 않는다.
 - Jira/Notion 댓글 작성·상태 변경, 제품 branch 생성·commit·push·PR·merge·배포는 별도 명시 승인 범위를 따른다.
 
-## 현재 체크포인트 — 2026-10-06: Admin 폼 보정 구현·로컬 검증
+## 현재 체크포인트 — 2026-10-06: 사용자 댓글 등록 후 최종 확인
 
-### 사용자 재검토 요청 후 보완
+- 사용자가 최종 댓글을 직접 등록했다고 알려 Jira·Notion을 다시 조회했다. [Notion 토론](https://app.notion.com/p/3ecce072e82f80bca54ffcb137f57c97?d=b21ce072e82f83e8b1a383f5b767255c&pvs=42)에 **2026-10-06 11:47 KST** Frankie의 답변이 등록돼 있다. 기존 질문과 답변 총 2개이며 추가 요청·답변은 없다. fetch 본문은 댓글 1개라는 이전 요약을 반환했지만 get_comments의 실제 토론 조회에서 2개를 확인했다.
+- 등록된 댓글: "기존 FE에는 `delivery_request_at`을 병원 국가코드별로 보정하는 처리가 없었습니다. 이번에는 본문에서 요청한 미국 Medit 주문에만 US 조건을 추가해, Admin 초기값과 미리보기 날짜를 RX에 맞췄습니다." 기존 처리와 이번 변경의 히스토리를 유지하고 BE 확인 요청 문장은 사용자 판단으로 제외했다. 실제 코드의 범위와 일치한다.
+- Jira DL-16615는 여전히 **해야 할 일**, fixVersions 없음이며 기존 Notion 댓글 확인 요청 1개다. 상위 DL-16613은 **v1.89.0 / 2026-10-26** 대상이다. Codex는 Jira·Notion 댓글·상태를 변경하지 않았다.
+- 제품은 `feature/DL-16615`, HEAD/base `6b79c9756cc56313fe833aad463bddb1f8c385fa`, 아래 4개 파일의 미커밋 변경이다. 미국 Medit OFFICE_SCANNER DRAFT의 원본 RX 날짜를 Admin 초기값에 적용하고, 미국 Medit 미리보기를 같은 날짜 기준으로 맞춘다. iTero 날짜 변환은 추가하지 않았다.
+- 최종 코드·독립 리뷰와 검증을 다시 수행했다. Admin/Clinic/Lab 타입 검사 성공, 소스 날짜 함수·실제 React/RHF 기반 **73건** 성공, 변경 Admin 파일 lint 오류 0/기존 경고 3, 포맷/diff 검사 성공이다. 테스트의 leaf 컴포넌트는 대체했으므로 전체 앱 제출·재조회 QA는 여전히 미확인이다.
+- 현재 단계는 **승인된 FE 구현·로컬 검증 및 PM 댓글 답변 완료**다. 남은 것은 실제 Admin 테스트 주문 제출·재조회 QA와 별도 승인 범위의 제품 commit/push/PR 전달이다. 서버 자동수집·Clinic 보정 확대는 이번 Admin 구현에 포함하지 않았다.
 
-- 사용자가 기존 방향을 유지한 주석 추가, 이후 구현 재검토·직접 보완과 PM용 댓글 재정리를 요청했다. Notion 본문과 전체 댓글을 다시 읽었고, 현재 토론은 같은 iTero 확인 요청 1건이다. 외부 댓글은 등록하지 않았다.
+### 사용자 재검토 요청 후 보완 이력
+
+- 사용자가 기존 방향을 유지한 주석 추가, 이후 구현 재검토·직접 보완과 PM용 댓글 재정리를 요청했다. 이 시점에 Notion 본문과 전체 댓글을 다시 읽었고, 토론은 iTero 확인 요청 1건이었다. Codex는 외부 댓글을 등록하지 않았다.
 - 초기 구현의 `formOrder` 복제로 RX 원본이 늦게 도착하면 날짜 외 comment·플랫폼명·디자인 선택도 초기화될 수 있어, 원본 `order`를 유지하고 `initialDeliveryRequestAt` prop과 Admin 날짜 전용 effect로 분리했다.
 - RHF dirty 판정 대신 주문 ID·사용자 편집 여부를 추적한다. 날짜 선택·비우기·impression 변경 뒤 원본이 도착해도 선택을 보존하며, 다른 주문으로 이동하거나 재진입하면 해당 주문 초기값을 사용한다. 최소일 제한은 유지한다. OFFICE/LAB의 최소일 비교는 기존 watch 값 사용을 유지했다.
 - 이전 주문의 플랫폼 원본을 사용하지 않도록 주문 ID와 MEDIT 여부를 확인한다. SSR 경로의 orderId는 실제로 문자열이므로 `Number(orderId)`와 API의 숫자 ID를 비교한다. 날짜 보정 memo에도 플랫폼 원본 객체를 dependency로 포함했다.
@@ -20,6 +27,8 @@
 - 최신 소스에서 날짜 함수를 추출하고 실제 React/RHF를 JSDOM에 mount해 **73건**을 통과했다. 브라우저 시간대 4종, 잘못된/누락된 원본, US/플랫폼/상태 제외, 늦은 원본과 다른 입력값 보호, 날짜 선택·비우기, 최소일, 주문 이동·재진입, SSR 문자열 ID, 미리보기 US/기존 표시를 포함한다. 화면 leaf는 대체했으므로 전체 앱 제출·재조회 QA 증거는 아니다. 이전 60건 기록은 아래 조사 이력이다.
 - 재검토 후 Admin/Clinic/Lab 타입 검사 성공, 변경 Admin 파일 lint 오류 0/기존 경고 3, 포맷/diff 검사 성공이다. 제품 commit/push/PR은 실행하지 않았다.
 - PM 댓글의 정확한 범위: 기존 FE에는 Medit/iTero의 `delivery_request_at`을 병원 국가코드에 맞춰 별도 보정하는 처리가 없었다. 이번 미국 Medit Admin 초기값·미리보기에만 US 조건과 RX 날짜 보정을 추가했다. iTero의 국가코드별 초기 저장 정책은 FE 코드에서 보장할 수 없어 서버 확인 대상이다. 기존 캘린더 조회에는 국가코드, 현재 날짜 기준에는 officeZoneId가 사용되므로 "국가코드 관련 처리 자체가 전혀 없었다"고 쓰지 않는다. Admin KR 또는 서버 오류를 원인으로 단정하지 않는다.
+
+### 최초 구현·검증 이력
 
 - 사용자가 기존 checkout에서 `origin/master` 기준 `feature/DL-16615` 생성 후 구현·검증을 승인했다.
 - 기본 checkout에 해당 브랜치를 만들었다. HEAD/base는 `6b79c9756cc56313fe833aad463bddb1f8c385fa`, 수정 파일 4개, 제품 commit/push/PR 없음이다. 원격 feature/upstream은 아직 없다.
@@ -42,7 +51,7 @@
 
 - [DL-16615](https://innovaid.atlassian.net/browse/DL-16615): 해야 할 일, fixVersions 없음, 하위 작업/이슈 링크 없음.
 - [상위 DL-16613](https://innovaid.atlassian.net/browse/DL-16613)은 **v1.89.0 / 2026-10-26** 대상이다. 상위의 iTero 환자명·Medit 설명 수정은 이 기능의 구현 범위에 포함하지 않는다.
-- [Notion Medit TAT](https://app.notion.com/p/3ecce072e82f80bca54ffcb137f57c97) 본문과 전체 블록·해결된 토론 포함 댓글을 읽었다. 조회 결과 토론 1개, 댓글 1개, 답변 없음이다.
+- [Notion Medit TAT](https://app.notion.com/p/3ecce072e82f80bca54ffcb137f57c97) 본문과 전체 블록·해결된 토론 포함 댓글을 읽었다. 최초 조회 결과는 토론 1개, 댓글 1개, 답변 없음이었다. 현재 사용자 답변 등록은 최상단 체크포인트를 따른다.
 - 본문: 미국 Medit 주문의 요청일이 최소 영업일 10일보다 이후일 때 RX 표시일보다 하루 앞서 매핑됨. RX 날짜와 맞추기를 요청한다.
 - 원본 예시 `dateDesiredDelivery = 2026-10-19T19:00:39Z`. 한국 10/20 04:00, LA 10/19 12:00이다. 본문은 Medit RX가 한국 시간 기준으로 보인다고 설명하며 FE 수정 필요라고 적었다.
 - 10/2 댓글: `request_type=OFFICE_SCANNER`, `upload_platform_name=ITERO` 주문의 `delivery_request_at`이 병원 국가코드에 맞게 설정되는지 확인 요청. iTero 날짜 수정 정책이 결정됐다는 답변은 없다.
