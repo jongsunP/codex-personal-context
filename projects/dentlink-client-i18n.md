@@ -4,6 +4,38 @@ This is the durable delivery checkpoint for the Dentlink Lab i18n, operational
 Sheet, and cross-service Pretendard work. Live Git and Google Sheet state still
 take precedence if later work changes them.
 
+## 저장소 에이전트 지침 PR — 2026-10-06
+
+- 사용자 후속 지시로 개인 지침을 공유 웹 저장소의 기본 에이전트 진입점에도 반영했다.
+  승인된 Lab 정적 문구·i18n 변경에는 별도 번역 요청 없이 리소스·해당 시트·검증을 포함한다.
+- [PR #4666](https://github.com/Innvoaid/dentlink-client/pull/4666):
+  `feature/lab-i18n-workflow` → `release/v1.88.0`, OPEN·non-Draft·미병합.
+  HEAD는 `99da42b65016523eec5953bbf4c1743dcc86fa9d`, 원격 feature와 local이 동일·clean이다.
+- 작업 worktree: `/Users/parkjongsun/Repository/dentlink-client-i18n-guide`.
+  최초 구현은 최신 `origin/master` `6b79c9756` 기준이며, master에만 있던 관리자 변경을
+  PR에 섞지 않도록 이번 지침 커밋만 전달 기준 `origin/release/v1.88.0` `faaa1498189e3e584cfc6fce215ce97feca156f7`에 재배치했다.
+  최종 release 대비 0 behind/1 ahead, 지침 7개 파일·39 추가/4 삭제만 포함한다.
+- 팀 정본은 `lab/i18n/catalog/README.md` 한 곳이다. `AGENTS.md`, `claude.md`,
+  `.cursorrules`, `lab/README.md`, Codex·Claude i18n 스킬이 자동 적용 계기와 정본으로 연결된다.
+  기존 PM 검토·번역·다른 미병합 feature의 Sheet 행 보존, 인증·충돌·필수 검토가 남은 경우의
+  미완료 보고, 웹·앱 분리와 단순 확인·문서 작업의 쓰기 예외를 명시했다.
+- 두 스킬 quick_validate, 지침 파일·상대 링크 검사, diff --check, 최종 전달 기준의
+  Clinic·Lab·Admin 타입 검사와 기존 push hook을 모두 통과했다.
+  hook의 세 앱 lint는 오류 0·기존 경고 223/186/393개이며, Admin DLOS guard와 공유 테스트
+  53개(21+32), coverage 비교도 통과했다. 별도 기능/E2E 실행이나 실제 Sheet 쓰기는 하지 않았다.
+- 최초 commit hook은 새 worktree의 Next 생성 타입 파일이 없어 PNG 선언 해석에 실패했다.
+  각 앱의 설치된 Next CLI `typegen`으로 ignored 생성 파일을 준비한 뒤 같은 검사를 통과했다.
+  테스트 준비를 위해 기존 checkout의 ignored coverage baseline을 복사했다.
+  최종 의존성은 release의 frozen lockfile로 설치했으며 lockfile·제품 코드·번역 JSON·시트는 변경하지 않았다.
+- PR 조회 시 REVIEW_REQUIRED/BLOCKED, CodeRabbit PENDING이다. Vercel은
+  `Git author jongsunP must have access to the project on Vercel to create deployments.`로
+  실패했다. 로컬 검증 성공과 원격 preview·사람 승인·리뷰·merge·배포를 구분한다.
+- 이번 변경은 웹 저장소의 팀 지침에 한정된다. Lab 앱 저장소의 지침 수정·앱 PR은 하지 않았다.
+  merge·배포·제품 branch 삭제는 수행하지 않았고 worktree·feature를 보존했다.
+- 다음 시작점: 최신 release·PR HEAD와 리뷰를 재확인한다. 실제로 지침이 들어 있는
+  branch/checkout을 동기화해야 새 기본 규칙이 적용된다. 기존 작업 브랜치에 자동으로 전파됐다고
+  보지 않으며, 완료된 feature는 새 업무에 재사용하지 않는다.
+
 ## 기공소 번역 작업 기본 범위 — 2026-10-06
 
 - 사용자 확정: 승인된 기공소 기능 구현에 정적 UI 문구의 추가·변경·삭제가 있으면
@@ -13,7 +45,7 @@ take precedence if later work changes them.
 - 확인한 웹 정본은 `lab/README.md`, `lab/i18n/catalog/README.md`,
   `.codex/skills/i18n/SKILL.md`, `lab/i18n/i18n.manifest.json`과 연결된 스크립트다.
   기존 팀 가이드에 절차와 도구는 있지만, 모든 기능 세션에서 끝까지 수행하는
-  개인 공통 지침은 불명확해 이번에 명시했다. 제품 파일·실제 시트는 이번에 변경하지 않았다.
+  개인 공통 지침은 불명확해 명시했다. 이 최초 확인 단계에서는 제품 파일·실제 시트를 변경하지 않았다.
 - 웹 절차: 기존 key·문구 확인 → 코드와 `en`/`ko` JSON 반영 → `pnpm audit:i18n`과
   `pnpm export:i18n` 미리보기 → `pnpm export:i18n -- --write` 실제 반영·read-back
   → PM 문구 검토 → `pnpm generate:i18n` → `pnpm check:i18n`·사용처 감사·화면 검증.

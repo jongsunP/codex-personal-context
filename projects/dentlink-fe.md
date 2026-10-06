@@ -65,23 +65,34 @@ Detailed implementation history remains in the relevant existing project file.
   [SESSION_WORKFLOW.md](../SESSION_WORKFLOW.md#dentlink-lab-translation-work)를 따른다.
 - 시트 쓰기·PM 검토·재생성·검증 완료를 각각 구분하며, 필요한 인증·검토가 없으면
   미완료로 남긴다. 이번에는 기존 절차 확인과 개인 지침 저장만 했으며 실제 번역·시트는 변경하지 않았다.
+- 사용자 후속 승인으로 웹 공통 에이전트 진입점·스킬·운영 가이드 7개 파일에 지침을 반영하고
+  [PR #4666](https://github.com/Innvoaid/dentlink-client/pull/4666)을 `release/v1.88.0` 대상으로 생성했다.
+  HEAD `99da42b6`, 로컬 타입·필수 push 검사 통과, 미병합·사람 승인/CodeRabbit 대기이며
+  Vercel은 작성자 프로젝트 접근 권한으로 실패했다. 상세 Git·검증·다음 시작점은
+  [웹 i18n 정본](dentlink-client-i18n.md)에 두고 앱 팀 지침 변경과 구분한다.
 
 ## DL-16652 기공소 환자목록 디자인·API 대응 — 2026-10-06
 
 - 사용자 요청으로 기존 메인 프로젝트 폴더 안에 **DL-16652 기공소 환자목록 디자인 변경**
   세션 `01a11038-d621-7fb3-ad4e-58d01fbb9a6a`(local)을 생성하고 확정 요구와 작업 공간을 자동 전달했다.
-  대상은 **웹 Lab과 기공소 네이티브 앱만**이며 Office는 제외한다.
+  환자 목록 대상은 **웹 Lab과 기공소 네이티브 앱**이며, 이후 전역 Remake 확정으로
+  Office 앱에는 Remake 배지만 추가 적용했다.
   생성 설정은 메인과 같은 `gpt-6.1-sol / ultra`이며 실제 실행 메타데이터에서도 확인했다.
 - 웹 `origin/master`와 새 Lab 앱 `origin/develop`에서 각각 `feature/DL-16652`
   worktree를 준비했다. 기존 작성 세션의 checkout을 전환하거나 변경하지 않았다.
-- 디자인은 지정된 Figma의 Tobe를 기준으로 하고 변경 예정 API 캡처를 대조한다.
+- 최종 Figma와 구두 확정(카드 내부12px·모든 Remake 배지 변경)을 적용하고 DEV 배포 계약을 대조했다.
   주문목록처럼 최근 주문 상태·상세 상태와 `isRemake`를 별도로 표시한다.
   이번 표는 해당 화면 전용이며 기존 공통 테이블 변경·공식 디자인시스템 편입은 하지 않는다.
 - 상위 DL-16596은 참고 관계이며 기존 타기공소 가드 PR과 별도 작업이다.
-  BE 작업 중이므로 예정 계약·현재 Swagger·실제 응답 검증을 구분한다.
+  DEV 새12필드는 실제 응답으로 확인했고 STG 실제 endpoint는 이전 계약이다. STG Swagger는 제외한다.
 - 진행 결과는 기능 세션과 [개인 정본](dentlink-patient-list-design.md)에 둔다.
   사용자 지시에 따라 메인세션으로 자동 진행·완료 메시지를 보내지 않는다.
-  제품 commit/push/PR/merge/배포는 이번 접수에서 승인되지 않았다.
+  이후 사용자 승인으로3제품 commit/push·PR까지 완료했다. 웹
+  [#4665](https://github.com/Innvoaid/dentlink-client/pull/4665)→release/v1.88.0, Lab 앱
+  [#2](https://github.com/Innvoaid/dentlink-lab-app/pull/2)·Office 앱
+  [#318](https://github.com/Innvoaid/dentlink-app/pull/318)→develop. merge/배포는 하지 않았다.
+  4시간 예약 확인은 취소돼 heartbeat PAUSED다. 새 번역 양 시트 반영 완료, 실기QA·STG·Vercel 접근
+  및 기존 번역 차이/CLI scope 한계는 기능 정본에 기록했다. 현재 HEAD/QA는 위 정본을 live 대조한다.
 
 ## DL-16596 타기공소 주문 조회 가드 세션 — 2026-10-06
 
