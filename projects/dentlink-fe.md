@@ -61,8 +61,10 @@ Detailed implementation history remains in the relevant existing project file.
   최신 `origin/master / 6b79c9756cc56313fe833aad463bddb1f8c385fa`에서
   `feature/DL-16596`, `/Users/parkjongsun/Repository/dentlink-client-other-lab-guard`를 준비했다.
   인계 시 clean·기준 대비 0/0, upstream·원격 feature·PR 없음이다. 활성 작성자는 신규 세션 하나다.
-- 확정 경로를 전달하고 구현·검증 진행을 지시했다. 제품 commit/push/PR/merge/배포는
-  아직 별도 승인되지 않았다. 완료 후 유일한 변경·자료의 보존과 실행 프로세스를 확인해
+- 확정 경로를 전달하고 구현·검증 진행을 지시했다. 이후 사용자가 완료 시 제품
+  **commit·push·`release/v1.88.0` 대상 PR 생성**까지 명시 승인해 담당 세션에 전달했다.
+  `origin/master` 구현 기준과 release 전달 대상을 구분하며 관련 없는 변경의 포함 여부를 검증한다.
+  merge·환경 branch 변경·배포는 승인되지 않았다. 완료 후 유일한 변경·자료의 보존과 실행 프로세스를 확인해
   임시 worktree를 정리하며, 기존 MEDIT·DLDS·권한관리 checkout을 섞거나 삭제하지 않는다.
 
 ## DL-16615 MEDIT TAT 수정 세션 접수 — 2026-10-06
