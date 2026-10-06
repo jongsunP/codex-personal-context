@@ -366,7 +366,8 @@ Detailed implementation history remains in the relevant existing project file.
   다음은 사용자(FE)와 Codex의 생성·후속 수정·코드 재사용/보정량 검증이다.
   다른 팀원은 현재 제외하며, 작업 완료 후 실제 서비스로 사용할 단계 전에는
   PM·디자이너에게 시험/검토를 요청하지 않는다.
-  이번에는 개인 기록을 저장했고 제품 추가 구현/생성은 실행하지 않았다. 정확한 HEAD·검증 수치·
+  이번에는 개인 기록과 다음 순서를 저장했고 제품 추가 구현/생성은 실행하지 않았다.
+  사용자가 다음에 이어서 진행하기로 했으므로 재개 요청까지 대기한다. 정확한 HEAD·검증 수치·
   남은 환경 조건은 기능 정본에 두고 이 조율 문서에는 복제하지 않는다.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).
