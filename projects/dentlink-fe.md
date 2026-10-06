@@ -101,6 +101,11 @@ Detailed implementation history remains in the relevant existing project file.
   실제 기기에서 발견한 count 줄바꿈/잘림을 `14949c6`으로 추가 보정했다. Office는 own immutable
   의존성을 설치해 기존 로컬 불일치를 해소하고 정상 새APK 빌드·로그인/목록·iOS bundle을 확인했다.
   Office 실제 Remake 사례는 가시0건으로 미검증이다. 최신 head/한계는 기능 정본·Jira44302에 기록했다.
+- 10월7일 자율 재점검에서 추가 디자인/리뷰 수정은 없었다. 두 앱의 잠금 버전 독립 Pods를 준비해
+  정식 iOS Debug 빌드·새 시뮬레이터 설치/실행·미인증 초기 안내 렌더까지 확인했다.
+  로그인 이후 iOS UI는 Xcode27 DeviceHub 자동 제어 연결 제한으로 미검증이며 임시 환경은 정리했다.
+  STG 실제 API00:36은 이전 형식, 웹 Vercel·사람 리뷰는 대기다. Jira44303/기능 정본에 확인 결과와
+  불가 사유를 기록하고 추가 수정·예약 재점검·미승인 병합/배포 없이 외부 조건 해소까지 대기한다.
 
 ## DL-16596 타기공소 주문 조회 가드 세션 — 2026-10-06
 

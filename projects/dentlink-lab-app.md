@@ -11,7 +11,7 @@
 - 신규 작업은 정확한 앱을 먼저 구분하고 제품별 branch·worktree·API·runtime·release를 확인한다.
   웹의 `origin/master` 전략이나 Office 설정을 그대로 적용하지 않는다.
 
-## DL-16652 최종 디자인 전달 — 2026-10-06
+## DL-16652 최종 디자인 전달 — 2026-10-06~07
 
 - [PR #2](https://github.com/Innvoaid/dentlink-lab-app/pull/2), feature/DL-16652→develop,
   OPEN/non-draft/MERGEABLE/CLEAN 및 자동 제목/본문/라벨 검사 성공 확인.
@@ -31,7 +31,15 @@
   fresh Android36 AVD와 기존 development APK+최신Metro에서 이전 system timeout을 재현하지 않았고
   정상 로그인·DEV763건 중10행 카드·검색1행·recentOrderId 기반 실제 주문 상세 이동/로딩을 확인했다.
   한국어 기본 실데이터와 긴문구/EN/9자리/Remake 기기 합성 fixture를 구분한다.
-  최종 native APK 재빌드나 STG 통합 QA 완료로 표현하지 않는다. STG 실제 응답은23:31에도 이전 계약이다.
+  최종 native APK 재빌드나 STG 통합 QA 완료로 표현하지 않는다. STG 실제 응답은10월7일00:36에도 이전 계약이다.
+- 10월7일 잠금 버전 immutable deps·Ruby3.4.10/Bundler2.6.9/CocoaPods1.16.2와 독립 공식 index/cache로
+  canonical deployment Pods를 설치했다(124dependencies/163Pods·lock byte동일·설정 hash 불변).
+  정식 DentlinkLabDevelopment Debug simulator 빌드1.0.4(151) 성공 후 신규 SE3/iOS26.5에서 정상 설치·실행·
+  Metro8088 연결·미인증 KO 알림 안내 렌더(375×667pt)를 확인했다. 제품 코드 수정은 필요하지 않았다.
+- Xcode27 DeviceHub의 자동 제어 연결 실패/공식 simctl 입력 기능 부재로 iOS 실제 환자·검색·이동과
+  합성 카드 UI는 미검증이다. 기존 Android 실제/합성 확인 결과와 구분하며 실제 기기도 연결0대다.
+  비공식 입력/SDK/인증 우회 없이 own sim·Metro·본인 생성 root.env를 정리했고14949c6 clean/원격 동일하다.
+  PR2 본문 검증 결과 갱신/readback·자동 검사 SUCCESS·artifact 연결까지 확인했다.
 - 사용자 후속 승인으로 앱 PR까지 생성했다. merge/배포는 제외한다. 전체 정본은
   [DL-16652](dentlink-patient-list-design.md)이며 아래 초기 준비/번역 절차는 당시에 확인한 이력이다.
 

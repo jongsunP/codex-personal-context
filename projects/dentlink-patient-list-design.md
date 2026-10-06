@@ -1,6 +1,15 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 현재 상태 — 2026-10-06 23시 재점검·추가 수정
+## 현재 상태 — 2026-10-07 자율 재점검·iOS 확인
+
+- 사용자 최신 지시: 스스로 처리 가능한 후속 작업은 처리하고, 없으면 대기한다. 불가한 항목은
+  이유를 알리고 대기한다. 기존 commit/push·PR·Jira·개인 Git 기록 승인은 유지하며 병합·배포는 제외한다.
+- 23:50 KST Figma 재검토에서 카드12px·전역 Remake primary600·관련 댓글 답변은 동일했다.
+  00:34 PR head/자동검사와 00:39 세 PR 리뷰 스레드를 재조회해 추가 요구·미해결 의견0개를 확인했다.
+- 두 전용 worktree에 잠금 버전의 독립 Ruby/gems/Pods를 준비했다.
+  Office 정식 Debug arm64 빌드·iOS26.5 새 시뮬레이터 설치/실행·미인증 알림 안내 화면을 확인했다.
+  Lab도 정식 Debug 빌드·iOS26.5 새 SE3 설치/실행·미인증 KO 알림 안내 화면을 확인했다.
+  DeviceHub UI 연결 제한은 아래 검증 결과에서 구분한다.
 
 - [Jira DL-16652](https://innovaid.atlassian.net/browse/DL-16652): `[FE] 기공소 환자 목록 디자인 변경`.
   확정 요구사항 본문과 fixVersion `v1.88.0`을 등록했다. 부모 DL-16596에는 댓글을 남기지 않는다.
@@ -8,6 +17,9 @@
   개발·PR 전달을 배포/QA 완료로 표시하지 않았고 본문·댓글·버전·상태 readback을 확인했다.
   23:43 댓글44302에 최신 보정·Android 실화면 결과·Office 실제 Remake 사례 미확인·STG 선배포/
   Vercel 조건을 추가했다. 부모 카드에는 쓰지 않았다.
+  10월7일00:50 댓글44303에 두 앱 iOS 정식 빌드 성공·자동 제어 연결 제한·STG00:36 응답·
+  외부 조건 대기를 기록했다. 댓글44302의 Office 설명은 가시 화면의 확인 범위로 정정했고
+  status 진행 중/fixVersion v1.88.0 및 두 댓글 readback을 확인했다.
 - 환자 목록은 웹 Lab·Lab 앱에 구현했다. 추가 구두 확정으로 **Remake 배지만 웹 전체·Lab 앱·
   Office 앱의 모든 사용처**에 적용했다. Office 환자 목록과 기존 공통 테이블은 변경하지 않았다.
 - 세 제품의 독립 Git에서 commit/push와 PR 생성을 완료했다. OPEN/non-draft·MERGEABLE 및
@@ -66,7 +78,7 @@
 - 웹 commit/push·메모리·Jira·release PR과 앱 commit/push 승인 뒤 사용자가 **앱도 PR 생성**으로
   확대했다. merge·배포·환경/서명 변경은 승인 범위가 아니다.
 
-## API 확인 — 2026-10-06 DEV23:03~04·STG23:31 KST
+## API 확인 — DEV 2026-10-06 23:03~04·STG 2026-10-07 00:36 KST
 
 - DEV Swagger HTTP200, 실제 인증 `/lab/patients/consolidate` HTTP200/code0000·763행에서 새12필드를
   확인했다. endpoint는 유지한다. `officeId`, `officeName`, `patientName`, `birthDate`, `totalOrderCount`,
@@ -76,7 +88,8 @@
   있다. 최근 주문 제외 정책으로 확대 해석하지 않는다. 실제 birthDate null(DEV57/STG66)도 숨김 처리했다.
 - STG **실제 인증 endpoint** HTTP200·686행은 이전10필드·orderId/케이스 계약이며 새7필드가 없다.
   배포 완료로 보고하지 않는다. 이전 필드를 임의 fallback하지 않았다. STG Swagger는 재조회하지 않았다.
-  23:31:36 KST 최종 실제 재확인에서도686행/10필드·새7필드 각0행으로 동일했다.
+  2026-10-07 00:36:55 KST 실제 endpoint 한 번 재확인에서도 HTTP200/code0000·686행,
+  old orderId686행·새7필드 각0행/new7Complete0행으로 동일했다. Swagger/DEV 재조회는 하지 않았다.
 - DEV recentOrderId는763행 모두 양수/nonnull이고 이전orderId는0행이다. 새7필드는 전체 행에
   존재하며 null이 없다. DEV Swagger의 DTO12필드·상태/상세 enum·응답 alias와 생성 선언이 일치한다.
   **STG/운영 새 API 선배포 및 실제 응답 검증 후 UI를 배포해야 한다.** PR 본문과
@@ -142,6 +155,17 @@
   숫자153px 자연폭 보존/카드 내부 오른쪽 경계690px를 확인했다. 공용 Typography/API는 그대로다.
   실제 데이터 QA와 긴문구/EN/Remake 등의 기기 합성 fixture를 구분하며 독립 리뷰에서 추가 확정
   결함은 없었다. 최종 native APK 재빌드나 실물 iOS/기기 전체 QA 완료로 표현하지 않는다.
+- 10월7일 Lab canonical immutable JS deps·Ruby3.4.10/Bundler2.6.9/CocoaPods1.16.2를 독립 준비하고
+  `pod install --deployment --repo-update`로124dependencies/163Pods를 설치했다. 공식 index/cache만
+  준비했으며 source/7개 config/lock hash 불변·Podfile.lock=Manifest.lock byte동일이다.
+  정식 DentlinkLabDevelopment Debug generic simulator 빌드가 성공했다(1.0.4/151·arm64+x86_64).
+  신규 SE3/iOS26.5에
+  boot/install/launch·표준 RCT_jsLocation localhost:8088/최신 Metro·미인증 KO 알림 안내 렌더를
+  확인했다(750×1334px/375×667pt). iOS 실제 환자·검색·이동/합성 카드 UI는 미검증이다.
+  이미 확인된 DeviceHub 연결 실패를 반복하거나 비공식 입력/인증 주입을 하지 않았다.
+  own app/Metro8088/새 sim을 정리하고 본인 생성 root.env만 원복했다. HEAD14949c6 clean/원격 동일하다.
+  PR2 본문에 native 성공/로그인 이후 UI 미검증을 반영하고 readback·develop/OPEN/MERGEABLE/CLEAN·
+  자동 검사 SUCCESS·artifact 연결을 확인했다. 추가 제품 커밋은 필요하지 않았다.
 - Office renderer3·lint0/Prettier/diff·Android/iOS Metro bundle 통과. 최초 shared deps의 type18오류는
   기준/최종 byte동일이었다. 실제 실행 조사에서 설치 Datadog2.14.8과 manifest3.7.0 불일치를 확인해
   own worktree에 immutable 의존성을 설치하고 primary 공유 deps·제품 설정을 보존했다.
@@ -150,7 +174,19 @@
   이전APK의 apps/office/index.bundle404·낡은deps의 Datadog 오류는 최신 정상 환경에서 해소됐다.
 - Office 실제 로그인·Home·주문 목록5회 scroll까지 정상, 가시Remake0여서 실제 주문의 새 배지
   표시 자체는 미검증이다. renderer3/3과 Lab 기기 합성 배지 검증을 Office 실제 사례로 바꾸어
-  표현하지 않는다. 새 deps iOS Metro bundle exit0/75assets다. 실물/iOS native QA·배포는 미실행이다.
+  표현하지 않는다. 10월6일 새 deps iOS Metro bundle exit0/75assets를 확인했고,
+  아래10월7일 정식 native build/startup 결과와 구분한다. 실물/로그인 이후 iOS UI·배포는 미실행이다.
+- 10월7일 Office canonical Pods 설치·정식 DentlinkDevelopment Debug arm64 빌드가 성공했다.
+  iOS26.5 own iPhone16에 2.2.4(151)을 설치/실행하고 표준 Metro8090 bundle 오류0,
+  미인증 EN 알림 안내 화면 렌더를 공식 simctl screenshot으로 확인했다. 로그인 이후 UI는 미검증이다.
+  현재 Xcode27은 DeviceHub(com.apple.dt.Devices)를 사용한다. Cua 공식 앱 경로 선택35초 timeout,
+  running bundle ID 재선택5초 timeout/window0이며 공식 simctl io에는 tap/type 기능이 없다.
+  비공식 HID·추가 UI 라이브러리·SDK/설정 패치 없이 현재 도구로 로그인 진행은 불가하다.
+  authstore notfound/loggedIn false여서 iOS QA group binding·실제 Office Remake도 미확인이다.
+  등록된 실물 iPhone2대는 tunnel disconnected/shutdown이라 연결된 물리 기기0대다.
+- Office의 정상 Pods/build가 생성한 pbxproj와 원래 없던 ignored root.env만 원복했다.
+  own iOS sim 삭제·Metro8090 종료/포트 free, 원본 env/lock/설정 불변·ffcdc73 clean/원격 동일이다.
+  PR318 본문에 native 성공과 UI 제한을 반영/readback했으며 미해결 리뷰0개·실제 CodeRabbit skip이다.
 - 앱 PR 자동 제목/본문/라벨 검사는 성공. 웹 Vercel은 **작성자 jongsunP의 innovaid 팀 접근 확인**으로
   차단됐다([봇 댓글](https://github.com/Innvoaid/dentlink-client/pull/4665#issuecomment-6013252346)).
   실제 팀 미가입인지 GitHub 계정 연결 미인식인지는 미확인이다. 코드 빌드 실패로 단정하지 않는다.
@@ -164,7 +200,7 @@
 
 - 4시간 예약 재확인은 취소됐다. 사용자가 재개하면 세 PR/head/CI를 live 확인하고 요청된 디자인
   수정에 대응한다. STG/운영 새 계약 선배포 후 실제 통합 연동, Office 실제 Remake 사례,
-  실물/iOS native QA 및 웹 Vercel 접근 확인이 남는다. 완료된 Android 실행·Lab 검색/이동 QA는 다시
+  실물/iOS 로그인 이후 UI 및 웹 Vercel 접근 확인이 남는다. 완료된 Android 실행·Lab 검색/이동 QA는 다시
   미완료로 되돌리지 않는다. 사람 리뷰 후 병합/배포는 별도 승인·전제 확인 단계다.
 - 기존 orders 번역 차이와 ADC scope는 별도 기존 문구/인증 문제다. 신규 기능의 시트 등록을
   다시 미완료로 되돌리지 않는다. 다른 작업/PM 원문을 확인해 처리한다.
@@ -172,9 +208,16 @@
   STG/운영 backend 선배포, Vercel 팀 접근/계정 연결, ADC scope 변경은 외부 담당/계정 조치가 필요하다.
   기존 앱 타입 오류·다른 기능 orders 시트 차이는 기술적 불가능이 아니라 이번 작업 범위 밖이다.
   미검증 runtime과 실제 실패한 CLI 검사를 완료라고 표현하지 않는다.
+- 10월7일 자율 재점검에서는 추가 제품 수정이 필요하지 않았다. 정식 iOS native 빌드는 두 앱에서
+  성공했지만 로그인 이후 UI는 DeviceHub 자동 제어 연결 제한으로 미검증이다. 정상 입력 도구 연결
+  또는 실제 기기 연결이 가능해지면 이어간다. STG 새 계약·Vercel·사람 리뷰 조건이 해결될 때까지
+  예약 재점검이나 미승인 병합/배포를 진행하지 않고 대기한다.
 - 자료는 현재 기기 `/Users/parkjongsun/.codex/visualizations/2026/10/06/01a11038-d621-7fb3-ad4e-58d01fbb9a6a/DL-16652/`
   의 final-review/final-delivery/current-review에 원본 캡처·합성 화면·집계·검사 로그로 보존했다. 실환자 화면/토큰/
   비밀번호를 Git에 저장하지 않는다. local-only 자료이며 Git 정본은 결과·링크·다음 시작점을 전달한다.
 - Root QA Next3007·Lab8088/AVD5580·Office8090/AVD5582를 종료했다. 두 임시 AVD userdata는
   삭제했고 기존 adb 서버·다른 세션 runtime·primary 공유 의존성은 보존했다. Office own node_modules는
   manifest/lock과 맞는 독립 설치다. 실제 데이터 캡처/XML은 삭제했고 보존한 앱 화면은 합성 자료다.
+- 10월7일 두 own iOS sim·Metro8088/8090도 정리했다. 기존 simulator/adb/shared deps/DeviceHub·
+  CoreSimulator service는 보존했다. 두 앱 iOS startup 캡처는 인증 전 공개 안내 화면이며 PHI가 없다.
+  보존한 iOS build log는 env dictionary를 가리고 민감 env값 잔존0을 내부 확인한 것이다.

@@ -14,7 +14,7 @@
   `origin/main` 대비 1커밋 뒤이며 권한관리 worktree도 존재한다. 아래 2026-09-28의
   단일 worktree·로컬 동기화 상태는 당시 기록이며 현재 상태로 재사용하지 않는다.
 
-## DL-16652 Office Remake 전달 — 2026-10-06
+## DL-16652 Office Remake 전달 — 2026-10-06~07
 
 - 사용자가 디자이너 구두 답변으로 웹·앱 모든 Remake 배지 사용처의 변경을 확정했다.
   Office 환자 목록은 바꾸지 않았고 OrderListRemakeBadge→OrderOfficeListItem의 배지만 변경했다.
@@ -35,8 +35,22 @@
 - 정상 developmentDebug APK2.2.4/code134 재빌드(1m50s)·fresh Android36 AVD 설치 후 표준
   index.bundle/Metro8090으로 실제 로그인·Home·주문 목록과5회 scroll을 확인했다. 가시 Remake0여서
   **Office 실제 주문의 새 배지 표시 자체는 미검증**이며 renderer3과 Lab 합성 기기 배지를 대체 증거로
-  혼동하지 않는다. 새 의존성 기준 iOS Metro bundle exit0/75assets다. 실물/iOS native QA·배포는 미실행이다.
+  혼동하지 않는다. 10월6일 새 의존성 기준 iOS Metro bundle exit0/75assets를 확인했고,
+  아래10월7일 정식 native build/startup 확인과 구분한다. 실물/로그인 이후 iOS UI·배포는 미실행이다.
 - 본인 Metro8090·AVD5582를 종료하고 임시 AVD를 삭제했으며 기존 adb 서버와 다른 runtime은 보존했다.
+- 10월7일 잠금 버전 Ruby3.4.10/Bundler2.7.2/CocoaPods1.16.2를 독립 설치하고 canonical
+  `pod install --deployment --repo-update`를 완료했다. stale AmplitudeSessionReplay0.12.8 index를
+  공식 목록 갱신으로 해결했으며 버전/lock/SDK/서명/영구 설정은 바꾸지 않았다.
+- 정식 DentlinkDevelopment Debug arm64 빌드가 성공했다. 2.2.4(151)을 own iPhone16/iOS26.5에
+  정상 설치·실행하고 표준 Metro8090과 미인증 EN 알림 안내 화면을 확인했다.
+  현재 resolved target/runtime 모두 arm64여서 과거 x86_64 불일치는 이번 target에 적용되지 않는다.
+- Xcode27 DeviceHub의 Cua 공식경로/bundle ID 선택이 각각35초/5초 timeout/window0으로 실패했다.
+  공식 simctl io는 tap/type를 제공하지 않아 현재 도구로 실제 로그인은 진행 불가다.
+  iOS authstore 없음/loggedIn false, QA group binding·주문 목록·실제 Remake는 미확인이다.
+  등록된 물리 iPhone2대도 disconnected/shutdown으로 연결 기기0대다. 제품 실패로 표현하지 않는다.
+- 본인 생성 pbxproj와 ignored root.env를 원복하고 own iOS sim·Metro8090을 정리했다.
+  원래 env/lock/설정 불변·ffcdc73 clean/원격 동일, PR318 iOS 결과 본문 반영/readback과
+  미해결 리뷰0개를 확인했다. 추가 제품 수정·커밋은 필요하지 않았다.
 - 기존 primary와 권한관리 worktree는 보존했다. 앱 PR 미생성 지시는 이후 사용자 PR 승인으로 변경됐다.
   병합·배포는 하지 않았다. 제품 공통 정본은 [DL-16652](dentlink-patient-list-design.md)다.
 
