@@ -68,7 +68,8 @@ For detailed current state, read:
 ### Dentlink 타기공소 주문 조회 가드 — DL-16596
 
 - 웹 Lab 추가금·채팅 읽음 요청 차단과 오류 표시의 정정 구현·검증을 마치고
-  [PR #4662](https://github.com/Innvoaid/dentlink-client/pull/4662)로 `release/v1.88.0`에 전달했다.
+  [PR #4663](https://github.com/Innvoaid/dentlink-client/pull/4663)로 `release/v1.88.0`에 전달했다.
+  현재 브랜치는 `feature/DL-16596`이며 이전 #4662는 브랜치 이름 변경 후 미병합 종료됐다.
 - 디자인 조회·기존 승인 흐름을 유지한다. 담당 DL-16640은 Ready for Deploy다.
 - 임시 worktree는 정리했다. PR 리뷰·병합과 실제 STG 디자인 자료 권한·사용자·release QA는 남았다.
 - [projects/dentlink-client-other-lab-guard.md](projects/dentlink-client-other-lab-guard.md)
