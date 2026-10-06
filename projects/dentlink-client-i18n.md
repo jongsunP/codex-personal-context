@@ -4,6 +4,33 @@ This is the durable delivery checkpoint for the Dentlink Lab i18n, operational
 Sheet, and cross-service Pretendard work. Live Git and Google Sheet state still
 take precedence if later work changes them.
 
+## 기공소 번역 작업 기본 범위 — 2026-10-06
+
+- 사용자 확정: 승인된 기공소 기능 구현에 정적 UI 문구의 추가·변경·삭제가 있으면
+  코드의 번역 적용, 영문·한국어 리소스, 해당 운영 스프레드시트 반영과 검증을
+  한 작업으로 처리한다. 통상 시트 동기화를 별도 요청이 있을 때까지 미루지 않는다.
+  공통 정본은 [SESSION_WORKFLOW.md](../SESSION_WORKFLOW.md#dentlink-lab-translation-work)다.
+- 확인한 웹 정본은 `lab/README.md`, `lab/i18n/catalog/README.md`,
+  `.codex/skills/i18n/SKILL.md`, `lab/i18n/i18n.manifest.json`과 연결된 스크립트다.
+  기존 팀 가이드에 절차와 도구는 있지만, 모든 기능 세션에서 끝까지 수행하는
+  개인 공통 지침은 불명확해 이번에 명시했다. 제품 파일·실제 시트는 이번에 변경하지 않았다.
+- 웹 절차: 기존 key·문구 확인 → 코드와 `en`/`ko` JSON 반영 → `pnpm audit:i18n`과
+  `pnpm export:i18n` 미리보기 → `pnpm export:i18n -- --write` 실제 반영·read-back
+  → PM 문구 검토 → `pnpm generate:i18n` → `pnpm check:i18n`·사용처 감사·화면 검증.
+  변경 JSON과 생성 resource map은 기능 코드와 함께 관리한다.
+- 웹 기본 시트는 manifest의 `1iuncwk8EIi8ycbc36a0dMn-ZkxaqqMHy1jvyT6ubpq0`이며,
+  `개발자 영역`·`비개발자 영역`을 같은 문구 ID로 유지한다. 각 작업 때 live 설정을 다시 확인한다.
+  신규 key의 코드 사용처 메타데이터는 기존 export 경로가 자동 생성한다.
+- 기존 PM 수정과 로컬 값이 충돌하면 Sheet 정본과 작업 요구를 먼저 대조한다.
+  일상 작업에서 `--overwrite-existing`으로 강제 덮어쓰지 않는다.
+  preview의 stale 항목에 다른 미병합 기능의 key가 있으면 일괄 삭제하지 않는다.
+- 시트 쓰기에는 편집 인증이 필요하다. 인증·충돌·필요한 PM 검토 때문에 막힌 단계는
+  미완료로 보고한다. 로컬 JSON 반영, 시트 반영, PM 검토, 재생성·검증 완료를 구분한다.
+- 적용은 웹 Lab과 Lab에서 쓰는 공유 UI 정적 문구 범위다. 실제 데이터·서버 응답을
+  새로 번역하는 범위로 확대하지 않는다. 공유 UI 변경 시 Clinic·Admin 영어 fallback도 확인한다.
+- 기공소 네이티브 앱은 별도 저장소·시트·명령을 사용하므로
+  [Lab 앱 번역 지침](dentlink-lab-app.md#번역과-스프레드시트-작업--2026-10-06)을 따른다.
+
 ## Current Delivery State
 
 - Shared repository: `https://github.com/Innvoaid/dentlink-client`

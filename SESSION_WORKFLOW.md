@@ -224,6 +224,37 @@ authorization rules to product changes and branch/worktree creation; ask only
 for genuinely missing authority or decisions. An explicit per-task instruction
 such as "same folder, session only" takes priority over this default.
 
+## Dentlink Lab Translation Work
+
+This is the user's standing preference, confirmed on 2026-10-06. For authorized
+Lab implementation that adds, changes, or removes frontend static UI copy,
+automatically include the relevant i18n resources, translation spreadsheet,
+and verification in the same task. Do not wait for a separate translation or
+routine Sheet-sync request. This applies to web Lab and the separate Lab app.
+
+- Read [web Lab i18n](projects/dentlink-client-i18n.md) for `dentlink-client`
+  and [Lab app](projects/dentlink-lab-app.md) for `dentlink-lab-app`.
+  Follow each product's live operating guide, scripts, and Sheet configuration;
+  they use different spreadsheets and generation workflows.
+- Compare the actual changed copy with existing keys and Sheet rows. A scanner
+  finding no new strings, or a successful build, does not prove that all
+  translation work or Sheet synchronization is complete.
+- Preview the intended Sheet changes, preserve PM edits and review requests,
+  and synchronize only the approved task's changes. Do not remove another
+  active feature's rows just because the current checkout lacks its keys.
+- Routine synchronization is included in the authorized implementation scope.
+  Keep PM wording review and product decisions under their existing ownership;
+  do not mark unreviewed text approved or force-reset existing translations.
+- Verify the Sheet result, generated resources, and the affected UI. If editor
+  authentication, a conflicting translation, or required PM review is missing,
+  record that step as pending and continue independent work. Do not call the
+  translation work complete based only on local resources or a passing check.
+- Include this requirement when preparing Lab feature-session prompts. Existing
+  product commit, push, PR, merge, and deployment authorization remains separate.
+
+This is a Codex work requirement. The presence of scripts does not imply that
+every code edit, app launch, or CI run automatically writes the spreadsheet.
+
 ## Main Worktree And Feature Session Model
 
 For Dentlink, apply New Work Intake And Session Routing above: prefer a

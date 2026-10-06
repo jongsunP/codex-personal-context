@@ -56,6 +56,16 @@ Detailed implementation history remains in the relevant existing project file.
   이미 반영한 작업의 후속 수정·QA만 release 기반 예외이며, 상세 정본은
   [브랜치 전략](../SESSION_WORKFLOW.md#dentlink-release-train-branch-strategy)을 따른다.
 
+## 기공소 번역 작업의 기본 범위 — 2026-10-06
+
+- 승인된 기공소 작업에서 정적 UI 문구가 바뀌면 i18n 리소스·운영 스프레드시트
+  반영·검증까지 한 작업으로 처리하며 신규 기능 세션 프롬프트에도 포함한다.
+- 웹 Lab과 Lab 앱의 시트·생성 절차는 다르다. 상세는 [웹 i18n](dentlink-client-i18n.md)과
+  [Lab 앱](dentlink-lab-app.md)에 두고 공통 정본은
+  [SESSION_WORKFLOW.md](../SESSION_WORKFLOW.md#dentlink-lab-translation-work)를 따른다.
+- 시트 쓰기·PM 검토·재생성·검증 완료를 각각 구분하며, 필요한 인증·검토가 없으면
+  미완료로 남긴다. 이번에는 기존 절차 확인과 개인 지침 저장만 했으며 실제 번역·시트는 변경하지 않았다.
+
 ## DL-16652 기공소 환자목록 디자인·API 대응 — 2026-10-06
 
 - 사용자 요청으로 기존 메인 프로젝트 폴더 안에 **DL-16652 기공소 환자목록 디자인 변경**

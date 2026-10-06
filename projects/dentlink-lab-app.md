@@ -23,6 +23,33 @@
 - 의존성 설치·Metro·네이티브 빌드·시뮬레이터·실기기·테스트·배포는 아직 수행하지 않았다.
   Office 앱의 설치 앱·빌드 증거를 Lab 앱 검증으로 대체하지 않는다.
 
+## 번역과 스프레드시트 작업 — 2026-10-06
+
+- 승인된 Lab 앱 기능 구현에서 정적 UI 문구가 바뀌면 i18n과 운영 스프레드시트까지
+  기본 작업 범위에 포함한다. 공통 정본은
+  [SESSION_WORKFLOW.md](../SESSION_WORKFLOW.md#dentlink-lab-translation-work)다.
+- 실제 절차는 저장소 `README.md`의 번역 동기화 (Lab), `package.json`,
+  `scripts/sync-lab-i18n.js`, `scripts/lab-i18n-code-scanner.js`를 확인한다.
+- 앱 시트는 `src/configs/i18n/index.ts`의 `LAB_I18N_SPREADSHEET_ID`를 따른다.
+  확인 당시 기본값은 [기공소 앱 번역 시트](https://docs.google.com/spreadsheets/d/1ZnPl5a3P3dKtxDTadLX56aTmuJ58TrpZiRcXDexdLbw)이며
+  `개발자 영역`·`비개발자 영역`을 함께 관리한다. 웹 Lab 번역 시트와 혼용하지 않는다.
+- 신규 문구 절차: 실제 변경 문구·기존 key 대조 → `yarn i18n-google-sheet:dry-run`
+  → 누락·충돌 확인 후 `yarn i18n-google-sheet`로 시트 반영 → PM 문구 확인
+  → `yarn i18n`으로 `src/configs/i18n/locales/{en,ko}.ts`·`textRegistry.ts` 생성
+  → `yarn i18n:check`와 변경 문구·화면 검증. 기존 문구 수정은 대응하는 시트 행과
+  PM 검토 절차를 확인하며, 삭제는 다른 사용처가 없는지 먼저 대조한다.
+- 새 문구 스캐너는 미커밋·미추적 `src` 변경의 일부 literal만 수집한다.
+  `t(key, { defaultValue })` 또는 변수·Map 문구가 누락될 수 있으므로 실제 diff와
+  시트 행을 직접 대조해 보완한다. 스캐너가 0개를 찾았다고 번역 완료로 판단하지 않는다.
+- 생성은 `PM 확인여부=확인`인 행만 포함한다. 미확인 문구를 임의 승인하지 않으며
+  새 key가 제외되어도 `i18n:check`가 성공할 수 있으므로 대상 문구의 생성 여부를 별도로 확인한다.
+- iOS·Android 실행 명령의 자동 `i18n` 호출은 시트에서 리소스를 생성하는 단계다.
+  코드의 신규 문구를 시트에 등록하거나 PM 확인을 대신하는 자동화는 아니다.
+- 시트 편집 인증, PM 검토 또는 충돌 해결이 필요하면 해당 단계는 미완료로 남긴다.
+  `yarn i18n`은 인증이 있을 때 시트의 정리·검수 상태도 갱신할 수 있으므로 결과를 확인한다.
+  생성 리소스만 수동 변경한 상태를 시트 동기화 완료로 보고하지 않는다.
+- 이번 확인에서는 제품 파일·시트를 수정하거나 번역 명령을 실행하지 않았다.
+
 ## 규칙과 다음 시작점
 
 - 작업 checkout의 `AGENTS.md`를 읽고 기존 `src` 구조와 Styled Components 규칙을 따른다.
