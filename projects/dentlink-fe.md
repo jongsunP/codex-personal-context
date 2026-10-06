@@ -40,6 +40,20 @@ Detailed implementation history remains in the relevant existing project file.
   not permanent web-versus-app session boundaries.
 - Shared repository mutations still require the user's explicit authorization.
 
+## DL-16615 MEDIT TAT 수정 세션 접수 — 2026-10-06
+
+- 사용자 요청에 따라 새 폴더 없이 기존 `메인 프로젝트`에
+  **DL-16615 MEDIT TAT 수정** 세션을 생성했다.
+  세션 ID: `01a10eae-2ff7-7b43-a9e2-11a3b93cc782`, host: `local`.
+- [Jira DL-16615](https://innovaid.atlassian.net/browse/DL-16615)는 상위 DL-16613
+  “스캐너 주문 수정 사항”의 하위 작업이며 접수 시 “해야 할 일”, fixVersions 미지정이다.
+  본문은 [Notion Medit TAT](https://app.notion.com/p/innovaid/Medit-TAT-3ecce072e82f80bca54ffcb137f57c97)로
+  연결된다. 10월 2일 Jira 댓글에서 Notion 댓글 확인을 요청했으므로 본문과 댓글 모두
+  실제 코드와 대조하도록 전달했다. 과거 release 기준을 이번 작업에 자동 적용하지 않는다.
+- 시작 프롬프트는 자동 전달됐으며 개인 컨텍스트·Git·요구사항 확인을 시작한 상태를
+  확인했다. 제품 구현·검증 완료를 뜻하지 않는다. 메인세션은 제품 코드·branch·PR을
+  변경하지 않았으며 상세 조사·작업 진행은 신규 세션이 담당한다.
+
 ## 웹 E2E 계정·문서 정리 완료 — 2026-10-01
 
 - 사용자는 DEV/STG별 E2E Clinic·E2E Lab 한 쌍씩, 총 고정 그룹 4개를 유지하고
