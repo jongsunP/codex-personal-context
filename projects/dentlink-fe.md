@@ -261,9 +261,11 @@ Detailed implementation history remains in the relevant existing project file.
 - DLDS 최신 상태는 [구현 체크포인트](dentlink-fe-opportunities.md)의 최상단을 따른다.
   **2026-10-02 연락처 첫 생성·독립 반복에 이어 My Profile 일부의 빈 페이지 생성·
   후속 수정·PC/모바일 검증을 마치고 재실행 검사·FE 연결 방법을 저장**했다.
-  전체 하네스·비개발자 서비스는 아직 완료가 아니다. 다음은 실제 PM·디자이너
-  요청·수정과 FE 인계/필요 수정량 시험이다. 현재 코드·문서·Jira·Git 메모리
-  정리 후 대기이며 추가 구현은 사용자 재개 요청 때 진행한다. 정확한 HEAD·검증 수치·
+  전체 하네스·비개발자 서비스는 아직 완료가 아니다. 2026-10-06 사용자 결정으로
+  다음은 사용자(FE)와 Codex의 생성·후속 수정·코드 재사용/보정량 검증이다.
+  다른 팀원은 현재 제외하며, 작업 완료 후 실제 서비스로 사용할 단계 전에는
+  PM·디자이너에게 시험/검토를 요청하지 않는다.
+  이번에는 개인 기록을 저장했고 제품 추가 구현/생성은 실행하지 않았다. 정확한 HEAD·검증 수치·
   남은 환경 조건은 기능 정본에 두고 이 조율 문서에는 복제하지 않는다.
 - FE improvement planning uses one [Notion meeting document](https://app.notion.com/p/3dcce072e82f81628aa6fe5e28c833ca)
   and one [demo app](https://dentlink-experience-studio.parkjongsunfrankie.chatgpt.site).

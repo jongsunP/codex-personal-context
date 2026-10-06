@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-02 **브라우저 자연어 요청 → 실제 DLDS 코드 생성·검사·미리보기·후속 수정·TSX 다운로드** 로컬 환경을 추가했다. 제품 feature/DL-16471의fa46e3438, 실제 연락처 신규/후속 생성·PC1280/휴대폰320·다운로드, 작업/API 계약32개·기존22개 검사를 확인하고 Jira·Notion·Git 메모리를 정리했다. `pnpm dev:ai-preview` → `/ai-generation.html`. Mac Codex 설치·기존 로그인/사용량이 필요하며 임시 출력/인증/서버 상태는 Git으로 옮겨지지 않는다. 사용자 결정으로 추가 구현·검사·생성을 중단했다. 다음 실제 팀원의 화면 품질·수정 편의성·FE 보정량 결과 또는 재개 지시를 받은 뒤 범위를 정한다. 확인용 로컬 서버5178은 유지하고 자동 작업은 하지 않는다. 제품/API·공유 배포·전체 에디터·Figma 추가시험은 별도다.
+  — 2026-10-06 **다음 진행은 사용자(FE)와 Codex의 생성·수정·코드 재사용 검증**으로 정리했다. 다른 팀원은 지금 참여 대상에서 제외하며, 작업 완료 후 실제 서비스로 사용할 단계 전에는 PM·디자이너에게 시험/검토를 요청하지 않는다. 제품 `feature/DL-16471`의 `fa46e3438`과 원격이 일치하고 clean이며, 브라우저 요청→실제 DLDS 생성·검사·미리보기·수정·TSX 다운로드의 기술 시험은 저장돼 있다. 현재 로컬5178은 꺼져 있다. 이번에는 개인 기록만 저장했다. 재개 시 `pnpm dev:ai-preview` → `/ai-generation.html`을 사용하고 화면 품질·수정 후 동작 보존·FE 보정량을 확인한다. 제품/API·공유 배포·전체 에디터·Figma 추가시험은 별도다. 정확한 상태·환경·외부 문서 차이는 기능 체크포인트를 따른다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
