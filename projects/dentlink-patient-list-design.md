@@ -1,189 +1,134 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 현재 상태 — 2026-10-06 최종 디자인 재검토 완료·구현 보정 필요
+## 현재 상태 — 2026-10-06 최종 디자인 구현·3개 저장소 PR 전달
 
-- 사용자 요청은 기공소 웹·기공소 네이티브 앱만 대상이다. Office 웹·Office 앱은 제외한다.
-- Jira: https://innovaid.atlassian.net/browse/DL-16652
-  제목 `[FE] 기공소 환자 목록 디자인 변경`, 본문 없음·해야 할 일·fixVersion 미지정.
-  부모 DL-16596은 참고 관계다. 타기공소 주문 가드 수정과 별도 기능/브랜치로 진행한다.
-- 기존 메인 프로젝트 폴더에서 새 기능 세션을 시작한다. 새 프로젝트 폴더는 만들지 않는다.
-  세션 이름·ID는 [FE 조율 색인](dentlink-fe.md)의 DL-16652 절에서 확인한다.
-- 기능 세션에서 웹 Lab 표와 Lab 앱 카드를 구현하고 DEV API 계약·호출·화면 흐름을 대조했다.
-  제품 코드는 양 worktree의 미커밋 변경으로 남아 있다. 제품 commit/push·PR·merge·배포는 미실행이다.
-  웹 브라우저 검증과 Android 개발 빌드는 통과했으며, 앱 실제 화면·검색·이동 QA와 iOS 빌드는 미확인이다.
-- 사용자가 디자인 확정을 알리고 Figma 최종 재검토를 요청했다. 17:25~17:30 KST 원본과 현재 소스를
-  읽기 전용으로 대조했으며 제품 코드는 변경하지 않았다. 이전 구현에는 아래 최종 디자인 보정이 필요하다.
-  이전 검사 통과는 수정 전 구현에 관한 결과이며 최종안과의 화면 일치를 뜻하지 않는다.
-- 사용자 지시: 기능 세션에서 직접 진행하며 메인세션으로 자동 진행/완료 메시지를 보내지 않는다.
-  의미 있는 체크포인트는 이 Git-backed 정본에 저장한다.
+- [Jira DL-16652](https://innovaid.atlassian.net/browse/DL-16652): `[FE] 기공소 환자 목록 디자인 변경`.
+  확정 요구사항 본문과 fixVersion `v1.88.0`을 등록했다. 부모 DL-16596에는 댓글을 남기지 않는다.
+  댓글44299에 세 PR·확인 결과·검토/배포/실기QA 대기를 남겼다. status는 진행 중으로 유지해
+  개발·PR 전달을 배포/QA 완료로 표시하지 않았고 본문·댓글·버전·상태 readback을 확인했다.
+- 환자 목록은 웹 Lab·Lab 앱에 구현했다. 추가 구두 확정으로 **Remake 배지만 웹 전체·Lab 앱·
+  Office 앱의 모든 사용처**에 적용했다. Office 환자 목록과 기존 공통 테이블은 변경하지 않았다.
+- 세 제품의 독립 Git에서 commit/push와 PR 생성을 완료했다. OPEN/non-draft·MERGEABLE 및
+  해당 기능 diff만 포함함을 확인했고 기능 세션에 artifact로 연결했다. 병합·배포는 하지 않았다.
+- 기능 세션 `01a11038-d621-7fb3-ad4e-58d01fbb9a6a`(local), `gpt-6.1-sol / ultra`.
+  결과는 이 Git 정본에 저장하며 메인세션으로 자동 진행/완료 메시지를 보내지 않는다.
 
-## 사용자 확정 UI 범위
-
-- Figma: https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v/0108.-%EC%B9%98%EA%B3%BC-%EB%8B%B4%EB%8B%B9-%ED%99%98%EC%9E%90-%EC%A0%9C%ED%95%9C-%EA%B6%8C%ED%95%9C-%EC%B6%94%EA%B0%80?node-id=325-31483&m=dev
-- 지정 Section `325:31483`의 실제 이름은 `기공소 Patients`다. Asis와 Tobe를 구분한다.
-  웹 Tobe `325:31918`, hover `325:32058`, 앱 `Patient_Tobe / 325:32222`가 있다.
-  카드 UI 비교 Section은 `325:34735`다. 상세 동작·폰트·간격·색은 원본 디자인 컨텍스트에서 확인한다.
-- Figma 변경 설명: 전체 케이스/케이스 상태 대신 전체 주문수·내 기공소 주문수와 주문상태를 표시하고
-  케이스 관련 정보를 제거한다. 주문목록의 상태 표시 개념을 가져간다.
-- 새 표/카드 모양은 **이번 화면에서만 사용**한다. 필요하면 `ui` 경로에 둘 수 있지만
-  공식 공통 컴포넌트화·디자인시스템 등록·기존 테이블의 전역 변경을 작업 목표로 삼지 않는다.
-  적합한 기존 토큰·기본 UI는 재사용하며 요구 범위 밖 화면/동작을 추가하지 않는다.
-- 이전 앱 주문 수 배치는 사용자가 **우선 권장안으로 진행하고 디자인은 추후 변경될 수 있다**고 확정했다.
-  질문 당시 `Patient_Tobe`는 최근 주문 제목 오른쪽에 `주문 수`를 표시했고, 비교안은 본문 별도 행이었다.
-  구현은 제목 오른쪽 `labOrderCount`, 상단 치과명 행 오른쪽 `totalOrderCount`를 유지한다.
-  작업 중 Figma가 변경됐다. 17:16 KST 재확인한 main에는 환자 정보 외부 세 번째 줄에 두 주문 수가 있으며
-  header 주문 수가 없다. 이는 당시 승인 배치와 다르므로 실시간 디자인을 따라 추가 UI를 넣지 않았다.
-  이후 사용자의 최종 디자인 확정으로 아래 새 원본이 디자인 기준이 됐다. 이전 header-right 주문 수는
-  현재 코드의 역사적 기준이며 최종 구현 목표가 아니다.
-
-## 최종 Figma 검토 — 2026-10-06 17:25~17:30 KST
-
-- 웹 기준: main `325:31918`, hover `325:32058`, table/header `325:32003`, row master `325:29068`.
-- 앱 기준: main `325:32222`의 새 카드 `395:61562`, `395:61691`, `395:62320`, `395:62507`, `395:62568`.
-  모두 Patient set `325:26018`으로 연결된다. Default master `325:26017`, Short `325:26170`,
-  Long `325:26100`, Pressed `325:34395`. 예전 main 카드 `325:32233/32234`는 최종 기준에서 제외한다.
-- 비교 Section `325:34735`와 main의 구조가 일치한다. 이전 중복 header·본문 주문 수 행은 사라졌다.
-  API 계약·최근 주문 이동 요구가 바뀌었다는 근거는 없으며 이번은 디자인/소스 검토만 수행했다.
-
-### 현재 구현에서 보정할 항목
-
-| 대상 | 최종 원본 | 현재 코드 |
+| 제품 | branch / HEAD | PR / base |
 | --- | --- | --- |
-| 앱 환자 정보 | 왼쪽 4×64px primary300 선/정보 gap8, 환자/생일·치과·두 주문 수의 3줄 | 선 없음, 총 주문 수는 치과 행 오른쪽 |
-| 앱 주문 수 | 세 번째 줄 `총 주문 수 N \| 우리 기공소 주문 수 N`; 우리 수 강조 | 우리 수가 최근 주문 header 오른쪽에 있음 |
-| 앱 최근 주문 header | `우리 기공소 최근 주문`, Remake는 오른쪽 flat 아이콘+문구 | 제목에 `현황` 추가, Remake는 본문 상태 옆 bordered chip |
-| 생일 없는 웹/앱 | 생년월일 줄/영역과 관련 구분선 숨김 | `birthDate || '-'`로 placeholder 강제 표시 |
-| 웹 표시개수 버튼 | main `325:31999`: 문구 body1 16px, icon slot 18px | 문구 body2 14px, icon 16px |
-| 웹 일부 상태/Remake | 최종 원본에서 제작중·디자인·제작대기·완료·임시주문서·Remake icon 16px | 화면에서 공용 StatusChip 기본 14px 사용 |
+| 웹 | `feature/DL-16652` / `b29821879bbd3c33aa6cfedca34e9f2516fd8cef` | [#4665](https://github.com/Innvoaid/dentlink-client/pull/4665) → `release/v1.88.0` |
+| Lab 앱 | `feature/DL-16652` / `5debbe0d3edd692fa96022db568b338e5fe08efb` | [#2](https://github.com/Innvoaid/dentlink-lab-app/pull/2) → `develop` |
+| Office 앱 | `feature/DL-16652` / `ed604e6b1671714499afcd14f628f00591105f8e` | [#318](https://github.com/Innvoaid/dentlink-app/pull/318) → `develop` |
 
-- 웹 DOB 숨김은 row master의 `dob` boolean 및 Sophia `325:32042`/Olivia `325:32046`에서
-  DOB wrapper/text `325:29078/29079`가 제거된 context로 확인했다. 단순 샘플 빈 문자열을 근거로 추측한 것이 아니다.
-- 웹 검토중 아이콘은 원본 `267:39993`에서 14px로 현재와 같다. 공용 chip을 전역 16px로 바꾸지 않고
-  화면에서 원본으로 확인한 상태별 iconSize를 전달하는 경계를 유지한다.
-- Remake는 앱 네 master 모두 배경/테두리 없음, icon 16px primary600, 문구 14px/21px primary700,
-  gap 4px다. isRemake에 따른 노출 의미는 유지한다.
-- 앱 정보의 치과명은 mono900, 주문 수 숫자는 14px bold이며 총 수 mono800/우리 수 primary600이다.
-  현재 숫자는 medium이고 색이 다르다. 상태 아이콘은 디자인 mono600/완료 blue500이지만 현재 글자색과
-  같은 색을 전달한다. 이 부분은 화면 props/구성으로 보정하며 공용 컴포넌트를 전역 변경하지 않는다.
-- 앱 `Status`/`Remake` 원문은 Typography→textRegistry→ko locale 경로에서 이미 `상태`/`리메이크`로
-  번역된다. 영문 소스 literal만으로 문구 불일치라고 판단하지 않는다. 확정 제목 차이는 `현황` 접미사다.
-- 원본 이름 max215/본문 label100·value180은 고정 화면의 측정값이다. 구현은 프로젝트의 유동 폭과
-  말줄임으로 대응하며 실제 긴 데이터 geometry를 보정 후 확인한다. 그림자는 원본 두 효과와 현재
-  한 효과가 다르고 일부 상태 SVG 형상·자간의 실제 렌더 일치는 이번 정적 검토에서 확정하지 않았다.
-- 카드 width343, padding14, radius12, 카드 사이 gap14와 Pressed primary100 `#F9F8FF`는 원본 기준이다.
-  최근 주문 section radius8/header padding12 12 8/body padding10 12·행 gap6도 현재와 일치한다.
-  Typography/font weight는 원본의 숫자만으로 결함을 단정하지 않는다. 웹은 Pretendard-Medium을 CSS400으로
-  등록하므로 Figma Medium500과 단순 숫자 비교만으로 실제 글꼴 두께 불일치를 확정하지 않았다.
+## 사용자 확정 디자인·댓글·승인
 
-### 디자인 내부 확인 사항
+- [Figma 기공소 Patients](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=325-31483&m=dev):
+  웹 main `325:31918`, hover `325:32058`, row `325:29068`, header `325:32003`.
+  앱 main `325:32222`의 새 카드 `395:61562`, `395:61691`, `395:62320`, `395:62507`, `395:62568`
+  및 Patient set `325:26018`을 기준으로 했다. 예전 main 카드·중간 배치는 역사적 기준이다.
+- 새 표/카드는 **이번 환자 화면 전용**이다. 다른 테이블/상태 UI의 전역 변경·공식 디자인시스템 편입은
+  요청 범위가 아니다. Remake의 전역 변경만 사용자 구두 확정으로 추가 승인됐다.
+- 환자명/생일, 전체 주문 수·우리 기공소 주문 수와 최근 주문의 상태·카테고리·담당 의사를 표시한다.
+  생일이 없으면 날짜와 구분선을 숨긴다. 항목 선택은 `recentOrderId`로 이동하며 ID가 없으면 이동하지 않는다.
+- 앱 정보는 왼쪽4×64px 선과 환자·치과·두 주문 수의3줄이다. 총 수 mono800/우리 수 primary600 bold14.
+  최근 주문 header 오른쪽 Remake, 본문 상태·카테고리·담당 의사3줄로 최종 배치를 반영했다.
+- 카드 width343 기준/padding14/radius12/카드 간 gap14/**내부 gap12**/높이248px,
+  최근 주문 section radius8/header padding12 12 8/body padding10 12/gap6, pressed primary100.
+  기본·긴 문구·생일 없음·눌림에 gap12을 적용해 누를 때 크기가 변하지 않는다.
+- 웹 열260/250/120/130/KO150/240/240+남는 공간, EN 상태200. 행70/header35+34/상태23/Remake21,
+  footer64/검색 offset44/표시 개수 body1 16·icon18, 생일 없음·긴 문구·hover·가로 스크롤을 맞췄다.
+  main/hover 문구 충돌은 main을 기준으로 두고 hover 때 문구 변경 동작을 만들지 않았다.
+- 실제 원본 SVG 형상을 대조했다. 웹 local SVG5개와 일치하는 기존 아이콘, Lab 원본 SVG8개와
+  화면 local adapter를 사용한다. 완료/제작 대기 등의 fractional root·회전·색을 보존했다.
+- Remake는 배경/테두리/여백 없는 reset16+문구14/21+gap4다. 웹 text/icon primary600,
+  앱 text primary700/icon primary600. 회차 선택 탭·버튼·필터·인쇄 설명은 배지가 아니므로 제외했다.
+- IN_PROGRESS일 때만 DESIGN/READY_FOR_FABRICATION/IN_FABRICATION 상세 상태를 적용하고
+  Remake는 `isRemake`로 독립 표시한다. detailStatus의 REMAKE만으로 배지를 추론하지 않는다.
+- 관련 Figma 댓글 #15~#19와 작업 댓글을 읽기 전용 검토했다. #15 최근 주문 이동, #16 우리 기공소의
+  최근 접수 주문, #17 취소 표시·Remake 병행을 확인했다. 스캐너 임시 주문 제외 정책 답변은 없어
+  프런트에서 제외 필터를 만들지 않았다. 댓글 작성/해결은 하지 않았다.
+- [#18](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=325-31918&m=dev#1954124763)의
+  전역 Remake와 #19 gap8/12는 이후 사용자가 구두 답변으로 **모든 사용처·12px**를 확정했다.
+  서면 답변 대기 상태를 유지하지 않는다. 반복되는 최종 값을 우선하는 원칙과 작은 모호함을
+  자율 처리한 뒤 모아서 설명하는 선호를 `DEVELOPMENT_STYLE.md`에 저장했다.
+- 최초4시간 후 확인 heartbeat `dl-16652-4`는 취소 지시로 **PAUSED**다. STG Swagger 재조회도 제외했다.
+- 웹 commit/push·메모리·Jira·release PR과 앱 commit/push 승인 뒤 사용자가 **앱도 PR 생성**으로
+  확대했다. merge·배포·환경/서명 변경은 승인 범위가 아니다.
 
-- 앱 Default는 높이244/내부gap8, Pressed·Long·Short는 높이248/gap12다.
-  실제 main 첫 카드 `395:61562`와 나머지 네 카드에서도 이 4px 차이가 확인된다.
-  정적 variant 차이이며 실제 누를 때 높이가 바뀌는 동작/전환 시간은 지정돼 있지 않다.
-- 웹 main 제목은 `우리 기공소 주문 현황`과 `최근 …` 하위 열명이며, hover는
-  `우리 기공소 최근 주문 현황`과 `상태/카테고리/담당 의사`다. hover 시 문구 변경 요구로 추정하지 않는다.
-  구조·색·정렬 검토는 각 원본을 구분하고 기본 문구는 main을 기준으로 둔다.
-- 이번은 원본/소스 대조이며 새 브라우저·앱 runtime QA는 실행하지 않았다. 구현 보정 후 해당 화면 QA가 필요하다.
-- 웹 열 폭260/250/120/130/150/240, 70px 행, 헤더35+34px, Lab icon14, count 중앙 정렬,
-  hover primary200/primary100은 소스상 일치한다. 마지막 담당의사 열은 현재 가변 폭인 반면 원본은
-  240px 뒤 여백을 남겨 완전한 폭 일치로 판정하지 않았다.
+## API 확인 — 2026-10-06 18:02 KST
 
-## 백엔드 계약 — 2026-10-06 DEV 실확인·STG 이전 응답
+- DEV Swagger HTTP200, 실제 인증 `/lab/patients/consolidate` HTTP200/code0000·763행에서 새12필드를
+  확인했다. endpoint는 유지한다. `officeId`, `officeName`, `patientName`, `birthDate`, `totalOrderCount`,
+  `labOrderCount`, `recentOrderId`, `recentOrderStatus`, `recentOrderDetailStatus`, `recentCategoryName`,
+  `recentDentistName`, `isRemake`다.
+- 전체 주문 수는 타기공소 포함, 우리 주문 수는 해당 Lab만이며 DRAFT·DELETED 제외 설명은 주문 수에만
+  있다. 최근 주문 제외 정책으로 확대 해석하지 않는다. 실제 birthDate null(DEV57/STG66)도 숨김 처리했다.
+- STG **실제 인증 endpoint** HTTP200·686행은 이전10필드·orderId/케이스 계약이며 새7필드가 없다.
+  배포 완료로 보고하지 않는다. 이전 필드를 임의 fallback하지 않았다. STG Swagger는 재조회하지 않았다.
+- 공식 Swagger generator 임시 생성 결과에서 해당 Lab 선언/alias만 자동 추출했다.
+  Office/Admin 기존 DTO 및 release의 무관한 생성 선언을 보존했다.
 
-`PatientConsolidateListLabDto`는 DEV Swagger와 실제 인증 응답에서 확인한 12개 필드다.
-초기 캡처 정보와 배포 상태를 분리해서 확인했다.
+## 번역 시트와 생성 파일
 
-| 필드 | 캡처의 의미 |
-| --- | --- |
-| `officeId`, `officeName` | 치과 ID·이름 |
-| `patientName`, `birthDate` | 환자명·생년월일 |
-| `totalOrderCount` | 타기공소 주문 포함 전체 주문수, DRAFT·DELETED 제외 |
-| `labOrderCount` | 우리 기공소 주문수, DRAFT·DELETED 제외 |
-| `recentOrderId` | 우리 기공소 최근 주문 ID |
-| `recentOrderStatus` | 최근 주문 기본 상태 |
-| `recentOrderDetailStatus` | 최근 주문 상세 상태, IN_PROGRESS 하위 구분 |
-| `recentCategoryName` | 최근 주문 카테고리명 |
-| `recentDentistName` | 최근 주문 담당 의사명 |
-| `isRemake` | 최근 주문 리메이크 여부 |
+- 웹 [i18n 시트](https://docs.google.com/spreadsheets/d/1iuncwk8EIi8ycbc36a0dMn-ZkxaqqMHy1jvyT6ubpq0):
+  양 영역1591~1600행에 patients fields7+status3을 등록했다. 환자 화면의 검토중/디자인 진행중 문구를
+  분리했다. 기존 PM 값·수식·서식·검증은 보존했고 bounded readback 및 en/ko patients 생성 일치를 확인했다.
+- 전체 `pnpm check:i18n`은 **기존 en/ko orders.json만 stale**로 실패한다. 환자 리소스는 일치한다.
+  기존 제작 자동 진행 문구 차이·사용 중 orders.filters.category 시트 누락은 다른 작업이므로
+  기존 행/키를 삭제·덮어써 이번 검사를 억지로 통과시키지 않았다.
+- Lab [앱 번역 시트](https://docs.google.com/spreadsheets/d/1ZnPl5a3P3dKtxDTadLX56aTmuJ58TrpZiRcXDexdLbw):
+  양 영역314~319행에 총/우리 주문 수·우리 최근 주문·담당 의사·디자인 진행중·카테고리6개 등록.
+  기존1~313행·PM 확인자·요청/개발 상태를 보존했다. 사용자 확정 Figma 문구 승인 근거를 사용하되
+  PM 이름은 만들지 않았다. live connector readback→CSV snapshot→공식 generator로 en/ko/registry 생성,
+  로컬 snapshot의283문구 검사는 통과했다.
+- 기존 Category 미확인 행과 Design in Progress 기존 번역은 유지하고 신규 영문은 Order Category,
+  Design In Progress로 구분했다. t() 문구는 스캐너가 놓쳐 직접 대조·등록했다.
+- live `yarn i18n:check`는 ADC `403 ACCESS_TOKEN_SCOPE_INSUFFICIENT`로 읽기 단계에서 실패했다.
+  CLI 검사가 통과했다고 보고하지 않는다. connector의 실제 시트 등록·readback은 완료했다.
+- Office는 기존 Remake 문구/registry/ko 리소스를 사용하므로 신규 번역 행이 없다.
 
-- 주문목록과 같은 의미: status를 기본으로 하고 IN_PROGRESS일 때만 detailStatus의
-  DESIGN/READY_FOR_FABRICATION/IN_FABRICATION 표시를 적용한다. 추가 Remake는 `isRemake`로 표시한다.
-  detailStatus의 REMAKE/REMAKE_ROLLBACK만으로 Remake 표시를 추론하지 않는다.
-- DEV `/v3/api-docs` 및 인증한 `/lab/patients/consolidate`가 HTTP 200이며 새 DTO를 반환했다.
-  DEV 전체 763행에서 새 필드 계약을 확인했다. 현재 데이터에는 DRAFT/DELETED가 없지만
-  최근 주문에서 두 상태를 제외한다는 계약은 없다. 제외 설명은 주문 수 필드에만 있다.
-- STG 인증 endpoint는 HTTP 200이지만 orderId·totalCaseCount·recentCaseTitle·caseStatus·
-  latestAssignedDentistName이 있는 이전 DTO를 반환했다(686행). STG Swagger는 404였다.
-  이전 필드를 새 필드로 임의 fallback하지 않는다. STG 전환 후 별도 실연동 QA가 필요하다.
-- 모델 생성·서비스/쿼리·화면 데이터 흐름을 각각 확인한다. UI 검증·fixture 검증·실제 API 연동 QA를 구분한다.
+## 작업 공간·커밋
 
-## 작업 공간과 승인
+- 웹 `/Users/parkjongsun/Repository/dentlink-client-patient-list`, base origin/master `6b79c9756`.
+  공용 Remake `51f891f93` + 환자/API/i18n `b29821879`,2커밋·14파일.
+  PR은 release `faaa1498189e3e584cfc6fce215ce97feca156f7`을 향한 해당14파일만 포함한다.
+- Lab `/Users/parkjongsun/Repository/dentlink-lab-app-patient-list`, base origin/develop `f33283339`.
+  공용 Remake `0b7a94a288bcc1bdfbc26c1be3a2c4f9fff9cd8e` + 환자/API/i18n `5debbe0`,2커밋·19파일.
+- Office `/Users/parkjongsun/Repository/dentlink-app-patient-remake`, base origin/develop
+  `52966b80f7b5fae20b14ad530f2ae7e0ce79a1d3`. `ed604e6`,1커밋·3파일(공통 배지·16원본SVG·자동export).
+- 각 HEAD·원격 SHA 일치/clean을 확인했다. 기존 main·권한관리·가드·DLDS checkout은 보존했다.
+  앱 feature→develop 규칙 및 각 release 통합 상태를 확인했다. 웹 일정이 앱 base를 바꾸지 않는다.
 
-| 제품 | worktree | branch | 초기 기준/HEAD |
-| --- | --- | --- | --- |
-| 웹 Lab | `/Users/parkjongsun/Repository/dentlink-client-patient-list` | `feature/DL-16652` | `origin/master / 6b79c9756cc56313fe833aad463bddb1f8c385fa` |
-| Lab 앱 | `/Users/parkjongsun/Repository/dentlink-lab-app-patient-list` | `feature/DL-16652` | `origin/develop / f33283339d339b3c6d39fe2735a8420f2c1a5ae1` |
+## 검증·한계
 
-- 준비 당시 양 worktree 모두 초기 기준 대비 0/0·clean이었다. 현재도 초기 HEAD를 유지하며
-  각 worktree에 8개 파일의 미커밋 변경만 있다. upstream·원격 feature·PR 없음.
-  저장소별 Git은 독립이며 작성 세션은 신규 기능 세션 하나다. 기존 가드·권한관리·DLDS checkout은 보존한다.
-- 사용자가 승인한 것은 신규 세션/worktree 준비와 디자인·API 대응 구현·검증이다.
-  제품 commit·push·PR·merge·환경 branch 변경·배포는 별도 지시를 받아 수행한다.
-- 새 세션 모델·추론은 메인과 같은 `gpt-6.1-sol / ultra`를 명시하고 생성 후 실제 적용값을 확인한다.
+- 웹 Lab·Clinic·Admin 타입 및2커밋의 필수 pre-commit 검사 통과. Clinic ignored next-env는
+  표준 next typegen으로 준비했고 tracked 설정 변경은 없다. 변경 lint 오류0/기존 any경고1·Prettier·diff 통과.
+- 필수 push hook 전체 제품 lint는 기존 warnings/오류0, config21+hook24 테스트 통과.
+  baseline 누락으로 최초 push 중단 후 검사 패키지가 origin/master와 동일함을 확인해 공식
+  coverage:baseline으로 ignored 로컬 기준을 생성했다. delta0·재검사/push 성공, hook bypass 없음.
+- 최종 synthetic11상태:70px행, 상세 gating/isRemake, 누락 생일/ID·0건·긴 문구, 검색 초기화·페이지·
+  표시 개수·키보드 이동·1100px 스크롤·EN geometry 통과. count null/undefined는 소스 ?? 확인,
+  fixture count는0건이다. 실제 DEV10행은7표시 필드를 응답과 대조했고 상태/detail/ID/DOB는 synthetic으로 보완했다.
+  pageerror0은 console warning0을 뜻하지 않으며 정식 staging 전체 E2E 판정은 아니다.
+- Remake default/dark/desktop/mobile/shipping5맥락은 임시 페이지의 실제 컴포넌트 측정이다.
+  업무 화면 전체 이동 QA가 아니다. Remake21/icon16/gap4·다른 상태25 유지 확인.
+  독립 read-only 리뷰에서 웹14파일의 추가 확정 결함·요구 누락은 발견되지 않았다.
+- Lab renderer10·변경 lint/Prettier/diff·최신 Android Metro bundle 통과. type4오류는 기준/최종
+  SHA 동일(Icon2/Tooltip1/MessageText1), 신규0. 이전 Android 개발 빌드/설치는 성공했으나 AVD
+  system service timeout으로 splash 이후 카드/검색/이동 QA 실패. 최종 기기 font/ellipsis/shadow/navigation은 미검증이다.
+- Office renderer3·lint0/Prettier/diff·Android/iOS Metro bundle 통과. type18오류는 기준/최종 byte동일,
+  신규0. 기기/native build·배포는 미실행이다. Metro 성공을 실제 기기 화면 실행으로 대체하지 않는다.
+- 앱 PR 자동 제목/본문/라벨 검사는 성공. 웹 Vercel은 **작성자 jongsunP의 innovaid 팀 접근 확인**으로
+  차단됐다([봇 댓글](https://github.com/Innvoaid/dentlink-client/pull/4665#issuecomment-6013252346)).
+  실제 팀 미가입인지 GitHub 계정 연결 미인식인지는 미확인이다. 코드 빌드 실패로 단정하지 않는다.
+  접근 신청·프로젝트 설정·배포 재시도는 하지 않았다. CodeRabbit은 마지막 확인에서 pending이다.
 
-## 구현과 변경 파일
+## 다음 시작점·보존
 
-- 웹: `lab/src/components/PatientList/PatientListLayerDesktop.tsx`를 화면 전용으로 추가했다.
-  그룹 header·전체/우리 기공소 주문 수·환자명/생년월일·최근 주문 상태/카테고리/담당의사·hover를 적용했다.
-  공용 기본 UI·StatusChip을 재사용하고 Remake는 `isRemake`일 때만 표시한다.
-  DELETED는 공용 chip이 지원하지 않아 이 화면에서 기존 `orderStatusDisplayName` 용어로 표시한다.
-  KO 표 폭과 70px 행을 유지하고, EN 상세 상태가 옆 열을 침범하지 않도록 EN 상태 열만 넓혔다.
-  기존 검색·페이지 이동을 유지하며 클릭/Enter/Space는 `recentOrderId`로 이동한다.
-- 웹 나머지 변경: `lab/src/pages/patients/index.tsx`, `lab/src/lib/PatientList/usePatientList.tsx`,
-  `lab/src/i18n/locales/{en,ko}/patients.json`, `shared/models/src/data-contracts.ts`,
-  `shared/models/src/patient/{patient.types.ts,patient.apis.lab.ts}`.
-  공용 기존 Patient DTO와 Office/Admin API 응답 alias는 보존했다.
-- 앱: `src/features/orderList/components/OrderPatientListItem.tsx`를 승인된 카드 배치로 변경했다.
-  화면 전용 상태 구성에서 기존 OrderStatusLabelMap·Icon·Typography·theme을 재사용한다.
-  IN_PROGRESS 상세 상태 gating, isRemake, 0·누락값, 긴 데이터 ellipsis, pressed 색, 최근 주문 이동을 적용했다.
-- 앱 나머지 변경: `src/features/orderList/tabs/OrderPatientTabScreen.tsx`, `src/models/Api.ts`,
-  `src/queries/useCommonServiceQueries.ts`, `src/services/{patient.service.ts,patient.types.ts}`,
-  `src/assets/svg/{index.ts,SvgObjectLabFilled.svg}`. stale myPatientOnly 전달을 제거하고 officeId 계약을 연결했다.
-- 양 제품의 생성 모델은 공식 Swagger generator를 임시 경로에 실행한 결과에서 해당 Lab 선언/alias만
-  자동 추출했다. 무관한 전체 생성 drift나 생성 파일의 수기 필드 편집은 넣지 않았다.
-- 앱 신규 문구는 Figma Korean을 좁은 `useTranslation` defaultValue로 사용했다.
-  Google 번역 시트·생성 registry·환경·서명·lockfile·공식 공용 디자인시스템은 변경하지 않았다.
-
-## 검증·미확인·다음 작업
-
-- 웹 확인: DEV 인증 조회·실제 브라우저 10행 표시, 열 폭/hover·콘솔 pageerror 없음.
-  임시 합성 데이터 브라우저 검증에서 IN_PROGRESS 3종 상세상태, 다른 기본 상태의 상세값 무시,
-  isRemake 독립 표시, DELETED, 0/누락값·긴문자열, 표시 개수 변경, 페이지 이동, 검색 시 page/size 초기화,
-  검색 결과 없음, 1100px viewport의 표 가로스크롤, 키보드 recentOrderId 이동을 확인했다.
-  Remake 포함 행 높이 70px, EN Show100rows 문구/아이콘과 상태 칩의 열 내부 표시도 실측했다.
-- 웹 검사: Lab·Clinic·Admin `tsc --noEmit` 통과, 변경 파일 ESLint/Prettier·diffcheck 통과.
-  전체 Lab lint는 error 0·기존 warning 189다. 정식 staging E2E 전체 suite 판정은 아니다.
-- 번역: `pnpm check:i18n`은 en/ko orders와 patients가 원본 시트와 다르다고 실패했다.
-  orders는 이번 변경 파일이 아니며, patients는 신규 문구의 시트 반영이 남아 있다.
-  PM 시트나 무관한 번역을 자동 덮어쓰지 않았다. 시트 반영 후 재생성·check가 필요하다.
-- 앱 검사: 변경 파일 ESLint/Prettier·diffcheck와 임시 renderer 3개 검사가 통과했다.
-  전체 typecheck의 Icon 2개·Tooltip 1개·MessageText 1개 오류는 변경 전후 출력이 완전히 동일하다.
-- Android `assembleDevelopmentDebug` arm64가 3분 2초·1084 tasks로 성공했고 APK 설치도 성공했다.
-  이번 생성 AVD의 splash까지 관찰했으나 activity/screencap system service timeout이 cold boot 뒤에도
-  반복됐고 Metro bundle 요청이 없어 실제 카드·검색·이동 실연동 QA는 확인하지 못했다.
-  이번 Metro 8088·AVD는 종료했으며 기존 Office runtime은 보존했다. iOS 빌드는 미실행이다.
-- 다음 시작: 현재 기기에서 두 feature worktree의 미커밋 diff를 먼저 확인한다.
-  사용자가 최종안 반영을 지시하면 위 보정과 디자인 내부 차이의 적용 기준을 확인해 화면 범위에서 수정한다.
-  앱 실행 가능한 device에서 DEV 실화면 QA, STG 새 DTO 전환 확인, 번역 시트 반영을 진행한다.
-  디자인 변경은 새 승인 기준을 대조하며 적용한다. 제품 commit/push/PR은 사용자 지시 후 수행한다.
-  개인 정본 Git 기록은 코드 자체를 원격으로 보존하지 않는다.
-
-## 참고 자료와 다음 시작점
-
-- 보존한 API 캡처: `/Users/parkjongsun/.codex/visualizations/2026/10/06/01a08f0c-2057-7852-ae8d-0cf950a91fd3/DL-16652-backend-fields.png`
-- Figma 개요 캡처: 같은 경로의 `DL-16652-figma-reference.png`. 파일은 현재 기기 자료이며 Git은 위 필드·링크를 전달한다.
-- 현재 기기 QA 자료: `/Users/parkjongsun/.codex/visualizations/2026/10/06/01a11038-d621-7fb3-ad4e-58d01fbb9a6a/DL-16652/`.
-  웹 fixture 캡처/측정, 타입/lint/i18n log, 최초·변경 후 Figma 앱 캡처, Android build/renderer/type log를 보존했다.
-  최초 Figma 캡처의 파일 저장 시각은 최초 취득 시각이 아니며, 최초 취득은 17:06 변경 관찰 이전이다.
-  자료는 local-only이며 Git은 확인 결과와 다음 시작점만 전달한다.
-- 최종 디자인 재검토 원본 캡처는 같은 경로의 `final-review/`에 보존했다.
+- 4시간 예약 재확인은 취소됐다. 사용자가 재개하면 세 PR/head/CI를 live 확인하고 요청된 디자인
+  수정에 대응한다. STG 새 계약 전환 후 실제 연동, 두 앱 기기 화면 QA, 웹 Vercel 접근 확인이 남는다.
+- 기존 orders 번역 차이와 ADC scope는 별도 기존 문구/인증 문제다. 신규 기능의 시트 등록을
+  다시 미완료로 되돌리지 않는다. 다른 작업/PM 원문을 확인해 처리한다.
+- 자료는 현재 기기 `/Users/parkjongsun/.codex/visualizations/2026/10/06/01a11038-d621-7fb3-ad4e-58d01fbb9a6a/DL-16652/`
+  의 final-review/final-delivery에 원본 캡처·합성 화면·집계·검사 로그로 보존했다. 실환자 화면/토큰/
+  비밀번호를 Git에 저장하지 않는다. local-only 자료이며 Git 정본은 결과·링크·다음 시작점을 전달한다.
+- Root QA Next3007과 이번 Lab Metro/AVD는 종료했고 다른 세션 runtime은 보존했다.

@@ -11,7 +11,25 @@
 - 신규 작업은 정확한 앱을 먼저 구분하고 제품별 branch·worktree·API·runtime·release를 확인한다.
   웹의 `origin/master` 전략이나 Office 설정을 그대로 적용하지 않는다.
 
-## 초기 로컬 준비 — 2026-10-06
+## DL-16652 최종 디자인 전달 — 2026-10-06
+
+- [PR #2](https://github.com/Innvoaid/dentlink-lab-app/pull/2), feature/DL-16652→develop,
+  OPEN/non-draft/MERGEABLE/CLEAN 및 자동 제목/본문/라벨 검사 성공 확인.
+- worktree `/Users/parkjongsun/Repository/dentlink-lab-app-patient-list`, base f33283339,
+  Remake `0b7a94a288bcc1bdfbc26c1be3a2c4f9fff9cd8e` + 환자/API/i18n
+  `5debbe0d3edd692fa96022db568b338e5fe08efb`,2커밋·19파일. HEAD/원격 일치·clean 확인.
+- 최종 카드의3정보줄·두 주문 수·생일 숨김·header Remake·상태/카테고리/의사·내부12px,
+  실제 SVG 원본과 전역 Remake 배지3사용처를 반영했다. DEV 배포12필드와 최근 주문 이동을 연결했다.
+- 앱 번역 시트 양 영역314~319행에 신규6문구를 등록해 en/ko/registry를 생성했다.
+  기존313행과 PM 이름/요청 상태를 보존했다. connector readback 및 승인 liveCSV283문구 검사 통과.
+  CLI live check는 ADC scope403으로 실패했으며 시트 등록 실패와 구분한다.
+- renderer10·변경 lint/Prettier/diff·최신 Android Metro bundle 통과. type4오류는 baseline/final SHA동일·신규0.
+  이전 Android 개발 빌드/설치는 성공했으나 AVD system service timeout으로 최종 실화면 QA는 미검증이다.
+  다음에는 실제 기기의 긴 문구/그림자/검색/최근 주문 이동 및 STG 새 계약을 검증한다.
+- 사용자 후속 승인으로 앱 PR까지 생성했다. merge/배포는 제외한다. 전체 정본은
+  [DL-16652](dentlink-patient-list-design.md)이며 아래 초기 준비/번역 절차는 당시에 확인한 이력이다.
+
+## 초기 로컬 준비 — 2026-10-06 (전달 전 이력)
 
 - DL-16652 웹·기공소 앱 작업 요청으로 원격을 새로 clone했다. 기본 `main`은
   `f33283339d339b3c6d39fe2735a8420f2c1a5ae1`, `origin/main`과 동기화·clean이다.

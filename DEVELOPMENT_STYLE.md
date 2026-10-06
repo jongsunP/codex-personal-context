@@ -73,6 +73,15 @@ appear nowhere else in the app.
 - Apply this rule within the user's existing authorization. Internal implementation
   choices that preserve confirmed UI and behavior do not need repeated approval.
   Do not remove error handling or accessibility behavior wholesale as an audit fix.
+- Within authorized implementation, finish routine design decisions autonomously
+  and report remaining ambiguities together after the work is ready. Prefer the
+  confirmed design and source evidence rather than asking about every small value.
+- When the same element has a repeated value across several final design examples
+  and only one example differs, use the repeated value unless there is evidence
+  that the exception is intentional. A lone mismatch may be a designer mistake;
+  record the judgment and recheck if the designer supplies a new explanation.
+  On 2026-10-06, the user explicitly chose 12px for the Lab patient card's internal
+  gap because several examples used 12px and only the basic example used 8px.
 
 ## Project-Aligned Naming
 

@@ -8,15 +8,33 @@
   (`3b0ea8d`)가 포함돼 있다. 현재 `APP_SERVICE_TYPE=OFFICE`, 환자목록 API는
   `/office/patients/consolidate`다. 과거 공용 `shared/features` 또는 Lab 빌드를 현재 경로로 사용하지 않는다.
 - 기공소 앱은 [dentlink-lab-app.md](dentlink-lab-app.md)의 별도 저장소·runtime·release를 따른다.
-  DL-16652는 웹 Lab·Lab 앱만 대상이며 Office 코드에는 적용하지 않는다.
+  DL-16652 환자 목록은 웹 Lab·Lab 앱만 대상이다. 이후 확정된 **전역 Remake 배지**만
+  Office에도 적용했으며 아래 최신 전달 기록을 따른다.
 - 이 확인에서 Office 저장소는 fetch만 했다. 기본 checkout은 `main / 19f6810`,
   `origin/main` 대비 1커밋 뒤이며 권한관리 worktree도 존재한다. 아래 2026-09-28의
   단일 worktree·로컬 동기화 상태는 당시 기록이며 현재 상태로 재사용하지 않는다.
 
+## DL-16652 Office Remake 전달 — 2026-10-06
+
+- 사용자가 디자이너 구두 답변으로 웹·앱 모든 Remake 배지 사용처의 변경을 확정했다.
+  Office 환자 목록은 바꾸지 않았고 OrderListRemakeBadge→OrderOfficeListItem의 배지만 변경했다.
+  상세는 웹View의 /orders/:id이므로 웹 공용 Remake 변경을 사용한다. 회차 선택 탭은 제외했다.
+- worktree `/Users/parkjongsun/Repository/dentlink-app-patient-remake`, `feature/DL-16652`.
+  base origin/develop `52966b80f7b5fae20b14ad530f2ae7e0ce79a1d3`, HEAD/원격
+  `ed604e6b1671714499afcd14f628f00591105f8e`, clean·0/0 확인.
+- [PR #318](https://github.com/Innvoaid/dentlink-app/pull/318) → develop, OPEN/non-draft/MERGEABLE/CLEAN.
+  공통 배지·16px 원본 SVG·자동 export3파일만 포함한다. 자동 제목/본문/라벨 및 CodeRabbit 상태 성공 확인.
+- 배경/테두리/여백 없는 reset16+text14/21 primary700+gap4, icon primary600으로 통일했다.
+  기존 Remake 문구·번역은 유지하며 신규 시트 행이 없다.
+- renderer3/lint0/Prettier/diff와 Android·iOS Metro bundle 통과. type18오류는 baseline/final byte동일·신규0.
+  실제 device/native build/배포는 미실행이다. product runtime/서명 설정은 바꾸지 않았다.
+- 기존 primary와 권한관리 worktree는 보존했다. 앱 PR 미생성 지시는 이후 사용자 PR 승인으로 변경됐다.
+  병합·배포는 하지 않았다. 제품 공통 정본은 [DL-16652](dentlink-patient-list-design.md)다.
+
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current scope checkpoint is **앱 저장소 분리 및 업무 범위 — 2026-10-06** above.
+The current scope checkpoints are **앱 저장소 분리 및 업무 범위** and **DL-16652 Office Remake 전달** above.
 **Local Audit And Sync - 2026-09-28** below is historical. **FE Handoff Acceptance And Develop Integration -
 2026-09-11** preserves earlier delivery context; the E2E audit adds verification boundaries.
 Earlier PR review, notification design and
