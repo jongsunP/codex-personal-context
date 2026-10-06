@@ -65,6 +65,13 @@ For detailed current state, read:
 - 이 색인은 세부 상태를 중복 보관하지 않는다. 과거 SHA, PR 상태, QA·배포 이력은
   각 프로젝트의 최신 체크포인트에서 확인하고 재개 시 live Git과 대조한다.
 
+### Dentlink 타기공소 주문 조회 가드 — DL-16596
+
+- 웹 Lab API 요청·조회 가드 구현·검증을 마치고
+  [PR #4662](https://github.com/Innvoaid/dentlink-client/pull/4662)로 `release/v1.88.0`에 전달했다.
+- 임시 worktree는 정리했다. PR 리뷰·병합과 실제 STG 디자인 자료 권한·사용자·release QA는 남았다.
+- [projects/dentlink-client-other-lab-guard.md](projects/dentlink-client-other-lab-guard.md)
+
 ### Dentlink DLDS / AI 화면 제작 — DL-16437 / DL-16466 / DL-16471
 
 - 실제 컴포넌트 정비 → AI 프롬프트·하네스 정비 → 필요시 에디터 순서다.

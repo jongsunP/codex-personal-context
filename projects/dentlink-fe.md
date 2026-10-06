@@ -49,6 +49,21 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## DL-16596 타기공소 주문 조회 가드 세션 — 2026-10-06
 
+- **구현·검증·PR 전달 및 임시 worktree 정리 완료.** 상세 정본은
+  [타기공소 주문 조회 가드](dentlink-client-other-lab-guard.md)다.
+  [PR #4662](https://github.com/Innvoaid/dentlink-client/pull/4662)는
+  `feature/DL-16596-v1.88.0` → `release/v1.88.0`, head
+  `df13137567a86192f4d9c0062bd83f35b772b2a4`이며 Lab 6개 파일만 포함함을 live 조회로 확인했다.
+  master 구현 후 무관한 변경을 제외한 release 전달 브랜치를 사용했다.
+- 담당 세션은 Clinic/Lab/Admin 타입·필수 push 검사·공유 테스트 53개 및 실제 로컬 Lab/fixture
+  검증 통과를 보고했다. 실제 STG 디자인 파일 접근·사용자 QA·release 통합 QA는 남았다.
+  PR은 `OPEN`, 미병합·최종 리뷰 필요다. 확인 시 CodeRabbit은 `PENDING`이며,
+  Vercel은 작성자 `jongsunP`의 프로젝트 접근 권한 부족으로 preview 생성에 실패했다.
+  PR 생성 완료를 리뷰·merge·배포 완료로 확대하지 않는다.
+- 임시 worktree 경로와 등록이 제거됐고 원격 PR head가 보존돼 있음을 live 확인했다.
+  담당 세션은 QA 탭·3116/3117 서버 정리도 보고했다. 로컬 원본 `feature/DL-16596`과
+  전달 `feature/DL-16596-v1.88.0`은 보존돼 있으며, 원격 전달 브랜치·PR도 유지한다.
+  담당 상세 기록은 개인 컨텍스트 `da86579`에 보존됐고 메인세션이 이 색인을 연결한다.
 - 사용자가 [DL-16596](https://innovaid.atlassian.net/browse/DL-16596)의 웹 구현·검증을
   별도 세션에 맡기도록 지시했다. 범위는 타기공소 주문의 extra-fee 조회·채팅 읽음
   요청 차단, 디자인 컨펌 이력 조회, HTTP 403 + code 1018의 서버 메시지 빨간색 표시 가드다.
