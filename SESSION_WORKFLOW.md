@@ -134,9 +134,19 @@ transfer. This user preference was confirmed on 2026-10-06.
 
 ## Dentlink Frontend Top-Level Session Model
 
-Dentlink frontend work spans `dentlink-client` and `dentlink-app`. Manage this
-as a hierarchy of Codex responsibilities rather than forcing the whole product
-into one checkout.
+Dentlink frontend work spans `dentlink-client` (Web/Admin), `dentlink-app`
+(Office native app), and `dentlink-lab-app` (Lab native app). The Office/Lab app
+repositories were separated in September 2026, and the user confirmed this
+ongoing routing rule on 2026-10-06. Manage them as a hierarchy of Codex
+responsibilities rather than forcing the whole product into one checkout.
+
+- For every app request, identify Office, Lab, or both before assigning code.
+  Read `projects/dentlink-app.md` for Office and `projects/dentlink-lab-app.md`
+  for Lab. Do not use the former combined app layout as current guidance.
+- Lab native work belongs in `Innvoaid/dentlink-lab-app`, not the Office-only
+  `Innvoaid/dentlink-app`. A web responsive change does not prove native-app
+  delivery. Verify each repository's current base, API, runtime, and release
+  independently; do not apply the web `origin/master` rule to either app.
 
 - Keep one Dentlink FE top-level management session in a personal coordination
   folder, with no dedicated product checkout or worktree. It continuously owns
@@ -149,7 +159,7 @@ into one checkout.
   separately; preserve existing history and active product work. Detailed
   checkpoints stay in the feature files, with shared decisions and routing in
   `projects/dentlink-fe.md`. Existing authorization boundaries still apply.
-- The top-level session may inspect both repositories, but it must not treat
+- The top-level session may inspect the relevant repositories, but it must not treat
   them as one Git repository or edit them from an ambiguous working directory.
   Before a mutation, confirm the exact repository and authorization boundary.
 - Route implementation to a separate feature session by default, including
@@ -159,7 +169,7 @@ into one checkout.
 - Organize implementation sessions by feature, not by device or
   repository. One feature session may coordinate and implement both web and app
   portions across their separate repositories. It must confirm the exact path,
-  branch, and worktree before every repository mutation and keep the two Git
+  branch, and worktree before every repository mutation and keep their Git
   histories independent.
 - A main-checkout session may still act as a repository administrator when
   branch, worktree, release, or cleanup work needs a concrete checkout. This is

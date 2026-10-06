@@ -1,9 +1,23 @@
-# Dentlink Mobile App setup and current checkpoint - 2026-09-28
+# Dentlink Office App setup and current checkpoint
+
+## 앱 저장소 분리 및 업무 범위 — 2026-10-06
+
+- 사용자 확정: Office/Lab 앱이 최근 별도 저장소로 분리됐다. 앞으로도 모든 앱 업무에서
+  제품을 먼저 구분하며 이 문서는 **Office 앱 `Innvoaid/dentlink-app`**의 정본이다.
+- live `origin/develop`에 2026-09-30의 `[DL-16313] 치과 & 기공소 git repository 분리 (#310)`
+  (`3b0ea8d`)가 포함돼 있다. 현재 `APP_SERVICE_TYPE=OFFICE`, 환자목록 API는
+  `/office/patients/consolidate`다. 과거 공용 `shared/features` 또는 Lab 빌드를 현재 경로로 사용하지 않는다.
+- 기공소 앱은 [dentlink-lab-app.md](dentlink-lab-app.md)의 별도 저장소·runtime·release를 따른다.
+  DL-16652는 웹 Lab·Lab 앱만 대상이며 Office 코드에는 적용하지 않는다.
+- 이 확인에서 Office 저장소는 fetch만 했다. 기본 checkout은 `main / 19f6810`,
+  `origin/main` 대비 1커밋 뒤이며 권한관리 worktree도 존재한다. 아래 2026-09-28의
+  단일 worktree·로컬 동기화 상태는 당시 기록이며 현재 상태로 재사용하지 않는다.
 
 This is the current resume source for the first local setup of
 `Innvoaid/dentlink-app`.
 
-The current local Git checkpoint is **Local Audit And Sync - 2026-09-28** below. **FE Handoff Acceptance And Develop Integration -
+The current scope checkpoint is **앱 저장소 분리 및 업무 범위 — 2026-10-06** above.
+**Local Audit And Sync - 2026-09-28** below is historical. **FE Handoff Acceptance And Develop Integration -
 2026-09-11** preserves earlier delivery context; the E2E audit adds verification boundaries.
 Earlier PR review, notification design and
 delivery sections record the preceding implementation and decisions. Earlier

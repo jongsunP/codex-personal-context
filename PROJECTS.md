@@ -51,9 +51,11 @@ For detailed current state, read:
 ### Dentlink Frontend Coordination
 
 - Shared repositories: [Web/Admin](https://github.com/Innvoaid/dentlink-client),
-  [Mobile app](https://github.com/Innvoaid/dentlink-app).
+  [Office app](https://github.com/Innvoaid/dentlink-app),
+  [Lab app](https://github.com/Innvoaid/dentlink-lab-app).
 - 기본 경로: `/Users/parkjongsun/Repository/dentlink-client`,
-  `/Users/parkjongsun/Repository/dentlink-app`.
+  `/Users/parkjongsun/Repository/dentlink-app`,
+  `/Users/parkjongsun/Repository/dentlink-lab-app`.
 - FE 메인세션은 전체 감독·조율, Git-backed 개인 컨텍스트 관리와 필요시
   프로젝트 폴더·세션 설정을 맡는다. 기능별 세션은 정확한 저장소·브랜치 경계
   안에서 작업하며 별도 통합 제품 저장소는 없다.
@@ -64,6 +66,13 @@ For detailed current state, read:
   과거 로컬 브랜치/worktree 정리 이력도 같은 문서에 보존한다.
 - 이 색인은 세부 상태를 중복 보관하지 않는다. 과거 SHA, PR 상태, QA·배포 이력은
   각 프로젝트의 최신 체크포인트에서 확인하고 재개 시 live Git과 대조한다.
+
+### Dentlink 기공소 환자목록 디자인·API 대응 — DL-16652
+
+- 웹 Lab·기공소 네이티브 앱의 Figma 디자인 및 변경 예정 API 대응이다. Office는 제외한다.
+- 기존 메인 프로젝트 폴더의 별도 기능 세션과 제품별 `feature/DL-16652` worktree를 사용한다.
+- 이번 화면 전용 표이며 기존 공통 테이블이나 공식 디자인시스템의 변경은 아니다.
+- [projects/dentlink-patient-list-design.md](projects/dentlink-patient-list-design.md)
 
 ### Dentlink 타기공소 주문 조회 가드 — DL-16596
 
@@ -105,12 +114,17 @@ For detailed current state, read:
   `feature/DL-16387`은 재개를 위해 보존한다. 테스트 중 실제 생성·수정 요청 금지.
 - [projects/dentlink-client-lbx.md](projects/dentlink-client-lbx.md)
 
-### Dentlink Mobile App
+### Dentlink Office App
 
-- 웹과 함께 관리하는 FE 제품 범위다. 기본 checkout은 `dentlink-app`, 기본
-  브랜치는 `main`이다. 기능 시작 기준/PR 대상은 매번 확인한다.
-- 완료한 기능 브랜치와 별도 worktree는 정리됐으며 현재 로컬에는 `main`만 있다.
+- `dentlink-app`은 앱 저장소 분리 이후 Office 전용이다. 기본 checkout은 `main`이며
+  기능 시작 기준/PR 대상과 작업 공간은 매번 live Git으로 확인한다.
 - [projects/dentlink-app.md](projects/dentlink-app.md)
+
+### Dentlink Lab App
+
+- 기공소 네이티브 앱은 별도 저장소 `Innvoaid/dentlink-lab-app`을 사용한다.
+  기본 checkout은 `/Users/parkjongsun/Repository/dentlink-lab-app`의 `main`이다.
+- [projects/dentlink-lab-app.md](projects/dentlink-lab-app.md)
 
 ### Dentlink 권한관리 — DL-16317
 

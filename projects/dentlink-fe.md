@@ -7,7 +7,12 @@ Detailed implementation history remains in the relevant existing project file.
 ## Scope
 
 - Web/Admin repository: `/Users/parkjongsun/Repository/dentlink-client`
-- Mobile app repository: `/Users/parkjongsun/Repository/dentlink-app`
+- Office app repository: `/Users/parkjongsun/Repository/dentlink-app`
+- Lab app repository: `/Users/parkjongsun/Repository/dentlink-lab-app`
+  (https://github.com/Innvoaid/dentlink-lab-app)
+- 2026-10-06 사용자 확정: 앱은 최근 Office/Lab 저장소로 분리됐다. 앞으로 앱 업무는
+  제품을 먼저 구분하고 [Office 앱](dentlink-app.md) 또는 [Lab 앱](dentlink-lab-app.md)의
+  정본과 실제 Git을 확인한다. 웹 반응형과 네이티브 앱 적용도 구분한다.
 - Durable context: `/Users/parkjongsun/Repository/codex-personal-context`
 - Active AI workflow: Codex only. The remote `claude-personal-context`
   repository is retained only as an archive and is not loaded by default.
@@ -50,6 +55,21 @@ Detailed implementation history remains in the relevant existing project file.
   현재 checkout이 release라는 이유로 master 기준을 다시 묻지 않는다. 해당 release에
   이미 반영한 작업의 후속 수정·QA만 release 기반 예외이며, 상세 정본은
   [브랜치 전략](../SESSION_WORKFLOW.md#dentlink-release-train-branch-strategy)을 따른다.
+
+## DL-16652 기공소 환자목록 디자인·API 대응 — 2026-10-06
+
+- 사용자 요청으로 기존 메인 프로젝트 폴더 안에 별도 기능 세션을 준비한다.
+  대상은 **웹 Lab과 기공소 네이티브 앱만**이며 Office는 제외한다.
+- 웹 `origin/master`와 새 Lab 앱 `origin/develop`에서 각각 `feature/DL-16652`
+  worktree를 준비했다. 기존 작성 세션의 checkout을 전환하거나 변경하지 않았다.
+- 디자인은 지정된 Figma의 Tobe를 기준으로 하고 변경 예정 API 캡처를 대조한다.
+  주문목록처럼 최근 주문 상태·상세 상태와 `isRemake`를 별도로 표시한다.
+  이번 표는 해당 화면 전용이며 기존 공통 테이블 변경·공식 디자인시스템 편입은 하지 않는다.
+- 상위 DL-16596은 참고 관계이며 기존 타기공소 가드 PR과 별도 작업이다.
+  BE 작업 중이므로 예정 계약·현재 Swagger·실제 응답 검증을 구분한다.
+- 진행 결과는 기능 세션과 [개인 정본](dentlink-patient-list-design.md)에 둔다.
+  사용자 지시에 따라 메인세션으로 자동 진행·완료 메시지를 보내지 않는다.
+  제품 commit/push/PR/merge/배포는 이번 접수에서 승인되지 않았다.
 
 ## DL-16596 타기공소 주문 조회 가드 세션 — 2026-10-06
 
