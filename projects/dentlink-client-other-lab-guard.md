@@ -2,7 +2,7 @@
 
 ## 현재 상태 — 2026-10-06 정정 개발 완료, 배포·통합 QA 대기
 
-- PR #4662: https://github.com/Innvoaid/dentlink-client/pull/4662 (OPEN, base `release/v1.88.0`, branch `feature/DL-16596-v1.88.0`). 최신 head `e112d12c098d6231a6200110b9fc3a7074a2ae8d`, commit `fix: 디자인 확인의 기존 승인 흐름 유지`, 원격 push 완료.
+- PR #4663: https://github.com/Innvoaid/dentlink-client/pull/4663 (OPEN, base `release/v1.88.0`, branch `feature/DL-16596`). 이전 PR #4662는 브랜치명 변경으로 CLOSED. 최신 head `e112d12c098d6231a6200110b9fc3a7074a2ae8d`, commit `fix: 디자인 확인의 기존 승인 흐름 유지`, 원격 push 완료.
 - 최종 목적: 타기공소 extra-fee GET 및 lastReadMessageId 읽음 POST 차단. 채팅 메시지·디자인 확인 데이터 조회 및 기존 승인 흐름 유지. HTTP403 AND code1018이면 서버 message 그대로 기존 빨간 ERROR 토스트 표시.
 - 디자인 확인의 신규 소유기공소 조건, handleApprove 가드, 조건부 모달, 추가 orderShow GET을 제거했습니다. 승인 페이지는 release base와 완전히 같고, 해당 hook의 base 대비 차이는 최근 조회의403/1018 오류 표시뿐입니다. PR 최종 diff는 Lab5파일. PR 본문도 최종 범위·검증으로 갱신했습니다.
 - 검증: Clinic/Lab/Admin 타입 검사, push 필수 lint·Admin DLOS guard·공유53테스트·공유 커버리지 변화 없음 통과. 기존 lint 경고 존재. 독립 읽기 리뷰도 정정 범위 일치 확인.
@@ -11,8 +11,17 @@
 - QA 증거: `/tmp/dl-16596-verify/runtime-correction.log`, `api-correction.log`, `commit-correction.log`, `push-correction.log`. 화면 `/Users/parkjongsun/.codex/visualizations/2026/10/06/01a10f22-340a-7703-b5e6-2fc0d0f313cd/qa/design-correction.png`.
 - Jira 라이브 담당 확인: 사용자 Frankie 담당은 DL-16640 하나. 제목·설명에 최종 결과/PR/남은 QA 기록, 전환12로 `Ready for Deploy` 변경 후 재조회 확인. 부모DL-16596(Yoonie), 다른 하위DL-16597/16598/16634(Leo)은 진행 중 유지. 사용자 지시에 따라 상위 댓글 없음.
 - 남은 일: 실제 STG 디자인 파일 권한·사용자 QA·release 통합 QA 및 승인된 이후 merge/배포. 이번에는 merge/deploy와 CodeRabbit 리뷰 사이클을 수행하지 않았습니다.
-- 로컬: 원격 보존 및 clean/비추적없음/생성된 ignored 산출물만 확인 후 임시 worktree 제거.3116/3117 QA 서버 중지, 만든 QA 탭 종료. 다른 제품 checkout/작업은 그대로. PR 브랜치와 로컬 원본 브랜치, worktree 밖 QA 증거는 보존.
+- 로컬: 원격 보존 및 clean/비추적없음/생성된 ignored 산출물만 확인 후 임시 worktree 제거.3116/3117 QA 서버 중지, 만든 QA 탭 종료. 다른 제품 checkout/작업은 그대로. 최신 `feature/DL-16596` 로컬·원격 브랜치와 worktree 밖 QA 증거는 보존. 초기 로컬 원본과 `-v1.88.0` 이름은 아래 정리 이력에 따라 제거.
 - 다음 시작점: 위 원격 PR head에서 이어서 QA. 과거 체크포인트의 승인 제한은 잘못된 구현 이력이며 최종 요구로 재사용하지 않습니다.
+
+
+## 2026-10-06 브랜치 이름·PR 정리
+
+- 사용자 요청에 따라 초기 로컬 `feature/DL-16596` (3d9e91f27)을 삭제하고 최신 전달 브랜치를 로컬·GitHub 모두 `feature/DL-16596`로 변경. 최종 SHA e112d12c098d6231a6200110b9fc3a7074a2ae8d 그대로, 코드/커밋 추가 없음. 현재 해당 기능 브랜치는 로컬·원격 각각 하나이며 upstream 정상.
+- GitHub는 열린 PR의 head 브랜치 이름 변경 시 PR을 닫으므로 #4662가 자동 종료됨. 동일5파일·commit/base로 #4663 생성, 이전PR을 References에 연결. 담당 jongsunP와 리뷰어 chajju/inkyookoh 유지 확인. 현재 세션 첨부도 #4663으로 교체.
+- PR 템플릿의 Description/Issue/Changes/Task List/References/To Reviewers 6섹션 순서,4개 체크박스,br구분자 일치 검증. CodeRabbit 자동 요약은 별도 부가 영역.
+- DL-16640의 PR 링크도 #4663으로 갱신. 상태는 Ready for Deploy 유지, 부모 댓글·다른 담당 카드 변경 없음.
+- 다른 작업자의 checkout/branch를 전환하거나 수정하지 않았고 임시 worktree도 생성하지 않음. 다음 시작점은 `origin/feature/DL-16596` 및 PR #4663.
 
 
 ## 2026-10-06 구현 및 PR 체크포인트 (디자인 승인 제한은 아래 재검토로 정정)
