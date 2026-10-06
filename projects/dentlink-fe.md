@@ -47,6 +47,24 @@ Detailed implementation history remains in the relevant existing project file.
   이미 반영한 작업의 후속 수정·QA만 release 기반 예외이며, 상세 정본은
   [브랜치 전략](../SESSION_WORKFLOW.md#dentlink-release-train-branch-strategy)을 따른다.
 
+## DL-16596 타기공소 주문 조회 가드 세션 — 2026-10-06
+
+- 사용자가 [DL-16596](https://innovaid.atlassian.net/browse/DL-16596)의 웹 구현·검증을
+  별도 세션에 맡기도록 지시했다. 범위는 타기공소 주문의 extra-fee 조회·채팅 읽음
+  요청 차단, 디자인 컨펌 이력 조회, HTTP 403 + code 1018의 서버 메시지 빨간색 표시 가드다.
+  Jira 하위 DL-16597·DL-16598·DL-16634·DL-16640과 서버/FE 역할은 담당 세션에서 대조한다.
+- 기존 `메인 프로젝트`에 **DL-16596 타기공소 주문 조회 가드** 세션
+  `01a10f22-340a-7703-b5e6-2fc0d0f313cd`(local)를 생성하고 요청·근거·코드 조사 결과를
+  자동 전달했다. 새 프로젝트 폴더는 만들지 않는다.
+- 기본 checkout의 MEDIT 작성 세션과 충돌해 사용자에게 작업 공간을 확인했고,
+  **임시 worktree로 병행한 뒤 작업 완료 시 정리**하도록 승인받았다. 원격 갱신 후
+  최신 `origin/master / 6b79c9756cc56313fe833aad463bddb1f8c385fa`에서
+  `feature/DL-16596`, `/Users/parkjongsun/Repository/dentlink-client-other-lab-guard`를 준비했다.
+  인계 시 clean·기준 대비 0/0, upstream·원격 feature·PR 없음이다. 활성 작성자는 신규 세션 하나다.
+- 확정 경로를 전달하고 구현·검증 진행을 지시했다. 제품 commit/push/PR/merge/배포는
+  아직 별도 승인되지 않았다. 완료 후 유일한 변경·자료의 보존과 실행 프로세스를 확인해
+  임시 worktree를 정리하며, 기존 MEDIT·DLDS·권한관리 checkout을 섞거나 삭제하지 않는다.
+
 ## DL-16615 MEDIT TAT 수정 세션 접수 — 2026-10-06
 
 - 사용자 요청에 따라 새 폴더 없이 기존 `메인 프로젝트`에
