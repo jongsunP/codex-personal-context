@@ -8,7 +8,20 @@
 - 상위 조율 정본: [Dentlink FE](dentlink-fe.md). 제품 저장소에 개인 인계문을 추가하지 않는다.
 - Jira/Notion 댓글 작성·상태 변경, 제품 branch 생성·commit·push·PR·merge·배포는 별도 명시 승인 범위를 따른다.
 
-## 현재 체크포인트 — 2026-10-06: v1.88.0 PR 전달
+## 현재 체크포인트 — 2026-10-06: 검토 완료 및 Jira·로컬 정리
+
+- 사용자가 검토 종료 후 담당 하위 Jira의 현재 상태·처리 내용, 개인 메모리의 진행상황, 임시 worktree 정리를 승인했다. 상위 카드 댓글은 지금 필요 없다고 명시했다.
+- [PR #4660](https://github.com/Innvoaid/dentlink-client/pull/4660)은 **OPEN**, base `release/v1.88.0`, head `feature/DL-16615` / **`1b0c7a44d9d8f39c55e741c30c1521e4dad75e0e`** 그대로다. CodeRabbit **SUCCESS / 미해결 0개**, Admin DLOS guard·Auto Assign·Vercel Preview Comments 성공이다. 팀 승인 `REVIEW_REQUIRED`, merge 미실행, `dentlink-dlos` Vercel preview의 Deployment was blocked 상태는 남아 있다.
+- CodeRabbit의 1개 지적은 보정한 날짜가 브라우저 자정으로 직렬화돼 서버에서 하루 이동할 수 있다는 내용이었다. 실제 보정 함수·Admin `getParsedData`·공용 날짜 유틸·API request interceptor로 **4개 브라우저 시간대 × 3개 날짜 형식 + header 확인 16건**을 추가 검증했다. 보정값은 기존 캘린더에서 같은 날짜를 직접 선택한 값과 동일하게 제출되며, `zone-id` 기준 날짜를 유지한다. 기존 React/RHF·날짜 검증 73건도 유지한다.
+- 특정 순간을 새로 고정하는 것이 아니라 RX의 달력 날짜를 기존 폼에 넣는 처리이므로 새 Seoul/병원 시간대 직렬화 정책을 추가하지 않았다. 서버 날짜 정규화 계약이나 실제 저장 성공을 FE 검증만으로 단정하지 않는다. 실제 제출·재조회 QA는 계속 남겨 뒀다.
+- [검토 근거 답변](https://github.com/Innvoaid/dentlink-client/pull/4660#discussion_r4191650683)을 등록하고 thread를 해결했다. CodeRabbit은 [후속 답변](https://github.com/Innvoaid/dentlink-client/pull/4660#discussion_r4191653832)에서 지적을 철회하고 기존 제출 경로 유지에 동의했다. 그 후 현재 head의 review completion과 미해결 0개를 다시 확인했다. 제품 코드 변경·추가 commit/push는 없으며 PR 설명에 제출 직렬화 검증 16건만 추가했다.
+- [Jira DL-16615](https://innovaid.atlassian.net/browse/DL-16615)는 조회 당시 이미 **진행 중 / v1.88.0 / 2026-10-12**였다. 12:00 KST PM 댓글에 이번 10/12 배포로 잡겠다는 안내가 추가돼 있었으며, 버전·담당자·요구사항 본문은 Codex가 변경하지 않았다.
+- Jira workflow의 **요구사항에 대해 개발 완료** transition(id 12)을 사용해 **Ready for Deploy**로 변경했다. statusCategory는 여전히 **진행 중**, resolution은 null이다. 전체 QA·배포 완료로 처리하지 않았다.
+- 담당 하위 카드에 [댓글 44296](https://innovaid.atlassian.net/browse/DL-16615?focusedCommentId=44296)을 **13:54 KST** 등록했다. 기존 국가코드별 날짜 보정 부재와 이번 US Medit Admin 초기값·RX 미리보기 보정 이력, v1.88.0 PR, 개발·검토·로컬 검증 완료 및 승인·병합·실제 제출/재조회·릴리즈 QA 대기를 짧게 기록했다. 상위 DL-16613과 Notion에는 추가 댓글·상태 변경을 하지 않았다.
+- 로컬 `dentlink-client` checkout은 **clean**, upstream과 동일하며 진행 중인 `feature/DL-16615`를 유지한다. 현재 기능에서 만든 임시 worktree는 없고 task artifact도 PR만 있다. DLDS·권한관리·other-lab-guard의 별도 진행 중 checkout 3개는 소유 작업이 다르므로 유지했다. 삭제한 worktree·branch·파일은 없다.
+- 현재 완료 범위는 **개발·로컬 검증·CodeRabbit 검토·PR 전달·Jira 개발 완료 단계 정리**다. 다음은 팀 승인·병합, 실제 Admin 테스트 주문 제출·재조회, 조립된 v1.88.0 staging QA다. merge·배포는 별도 승인 범위다.
+
+## 이전 체크포인트 — 2026-10-06: v1.88.0 PR 전달
 
 - 사용자가 개발 완료 여부를 확인한 뒤 제품 commit/push 및 `release/v1.88.0` 대상 PR 생성을 명시 승인했고, "1.88.0으로 그대로 진행해"라고 재확정했다. 상위 Jira DL-16613의 v1.89.0 일정은 변경하지 않았다. merge·배포는 승인 범위에 없다.
 - 제품 `feature/DL-16615`의 최종 commit은 **`1b0c7a44d9d8f39c55e741c30c1521e4dad75e0e`**, 메시지는 `fix: 미국 Medit 주문의 RX 날짜 보정`이다. 원격 push 완료, upstream과 ahead/behind **0/0**, checkout clean이다.
@@ -93,6 +106,6 @@
 
 1. 제품 `feature/DL-16615` / `1b0c7a44d9d8f39c55e741c30c1521e4dad75e0e`와 [PR #4660](https://github.com/Innvoaid/dentlink-client/pull/4660)의 원격 head·target·check·리뷰 상태를 다시 확인한다. 목표 릴리즈는 사용자 확정 **v1.88.0**이다.
 2. Admin 실제 앱의 테스트 데이터로 RX·TAT·수동 변경·최소일·재진입·제출·재조회를 QA한다. 운영 주문 수정/제출을 검증용으로 실행하지 않는다. 73건의 격리 검증을 전체 앱 QA로 취급하지 않는다.
-3. CodeRabbit 리뷰 처리 요청이 오면 AGENTS의 전체 리뷰 사이클 권한을 적용한다. 그 외에는 팀 리뷰·승인을 기다린다. merge·배포는 별도 승인 범위다.
+3. CodeRabbit 검토는 현재 head에서 완료·미해결 0개다. 새 지적이 생기면 현재 코드·기존 패턴에 대조하고 필요한 범위만 처리한다. 지금은 팀 리뷰·승인을 기다린다. merge·배포는 별도 승인 범위다.
 4. Vercel `dentlink-dlos` preview 차단은 로그인이 필요한 상세 확인 사항이다. 현재 상태를 코드 실패로 단정하거나 사용자 승인 없이 배포 설정을 바꾸지 않는다.
 5. 팀이 PR을 v1.88.0에 병합한 뒤 조립된 staging 릴리즈에서 QA한다. 서버 자동수집·Clinic 보정 확대와 iTero 변경은 이번 PR 범위에 포함하지 않는다.

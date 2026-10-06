@@ -88,6 +88,12 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## DL-16615 MEDIT TAT 수정 세션 접수 — 2026-10-06
 
+- 최신 전달 상태: [PR #4660](https://github.com/Innvoaid/dentlink-client/pull/4660)은
+  `release/v1.88.0` 대상 OPEN이며 CodeRabbit 검토 완료·미해결 0개다.
+  담당 하위 Jira는 Ready for Deploy(개발 완료/진행 중 category)로 정리하고 처리 댓글을 등록했다.
+  팀 승인·병합·실제 Admin 제출/재조회·릴리즈 QA는 남아 있다. 현재 기능의 임시 worktree는 없다.
+  상세 이력·검증·다음 시작점은 [Medit TAT 체크포인트](dentlink-client-medit-tat.md)를 따른다.
+
 - 사용자 요청에 따라 새 폴더 없이 기존 `메인 프로젝트`에
   **DL-16615 MEDIT TAT 수정** 세션을 생성했다.
   세션 ID: `01a10eae-2ff7-7b43-a9e2-11a3b93cc782`, host: `local`.
