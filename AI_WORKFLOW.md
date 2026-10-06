@@ -164,6 +164,22 @@ scratch details.
   verify it against the remote and local project Git state unless the user
   explicitly asks for a narrower source.
 
+## Jira Work Updates
+
+- When a task has parent and child issues, organize work updates on the child
+  issue assigned to the user. Do not comment on a parent issue unless the user
+  explicitly requests it.
+- Give the user's child issue a concrete title that identifies the work;
+  a title containing only `FE` or `[FE]` is not sufficient.
+- Use the description for requirements and preparation needed before work
+  when useful. Do not replace it with a personal progress log merely to tidy
+  the issue.
+- For work in progress, record confirmed progress, verification, remaining
+  work, and any current pause in a concise comment. Keep the issue's status
+  distinct from Codex's personal waiting state.
+- Apply the nondeveloper-facing QA/comment style above. Change titles,
+  descriptions, or comments only within the user's authorized scope.
+
 ## Truthfulness And Uncertainty Calibration
 
 This applies to all Codex work for the user, across projects and sessions.

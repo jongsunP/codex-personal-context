@@ -46,6 +46,9 @@
   confirmed outcome, use a familiar comparable product behavior as evidence
   when useful, and explain what the reporter should now observe. Omit internal
   implementation terminology unless it is needed to explain a real limitation.
+- For Jira work updates, follow **Jira Work Updates** in `AI_WORKFLOW.md`:
+  use the user's assigned child issue and comment on a parent only when the
+  user explicitly requests it.
 - For names and terminology, follow **Project-Aligned Naming** in
   `DEVELOPMENT_STYLE.md`: prefer defined project/reference terms or simple
   project vocabulary; ask for review before introducing an ambiguous new name.
