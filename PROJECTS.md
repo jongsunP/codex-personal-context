@@ -103,8 +103,10 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- 통합알림센터의 선행 작업. 초기 설정과 Office API 4개 사용처 조사를 마쳤으며,
-  권한관리 본 요구사항 분석·설계·구현은 미착수·사용자 지시 대기다.
+- 통합알림센터의 선행 작업. 웹·치과 앱의 권한 UI/행동 제어 사전 구현을
+  `feature/DL-16317`에 보존했다. 신규 Member/담당·공유·과거 참여의 실제 API
+  연동과 기공소 잔여 범위는 미완료다. 2026-10-06 현황을 재확인했으며 구현 중단을
+  유지한다. 사용자 재개 지시와 매핑 가능한 API 응답 설계가 다음 착수 기준이다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
 - 앱 표시 이름은 `권한관리 프로젝트 폴더`. 기존 `권한관리세션`을 유지한다.
 - 체크포인트: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
