@@ -1,5 +1,20 @@
 # 타기공소 주문 조회 가드 — DL-16596
 
+## 현재 상태 — 2026-10-06 정정 개발 완료, 배포·통합 QA 대기
+
+- PR #4662: https://github.com/Innvoaid/dentlink-client/pull/4662 (OPEN, base `release/v1.88.0`, branch `feature/DL-16596-v1.88.0`). 최신 head `e112d12c098d6231a6200110b9fc3a7074a2ae8d`, commit `fix: 디자인 확인의 기존 승인 흐름 유지`, 원격 push 완료.
+- 최종 목적: 타기공소 extra-fee GET 및 lastReadMessageId 읽음 POST 차단. 채팅 메시지·디자인 확인 데이터 조회 및 기존 승인 흐름 유지. HTTP403 AND code1018이면 서버 message 그대로 기존 빨간 ERROR 토스트 표시.
+- 디자인 확인의 신규 소유기공소 조건, handleApprove 가드, 조건부 모달, 추가 orderShow GET을 제거했습니다. 승인 페이지는 release base와 완전히 같고, 해당 hook의 base 대비 차이는 최근 조회의403/1018 오류 표시뿐입니다. PR 최종 diff는 Lab5파일. PR 본문도 최종 범위·검증으로 갱신했습니다.
+- 검증: Clinic/Lab/Admin 타입 검사, push 필수 lint·Admin DLOS guard·공유53테스트·공유 커버리지 변화 없음 통과. 기존 lint 경고 존재. 독립 읽기 리뷰도 정정 범위 일치 확인.
+- 임시 실제 React Query harness의 잘못된 승인 차단 기대값을 고쳤습니다. 타기공소·직원 미확정 상태에서도 디자인 데이터/파일과 기존 승인 흐름이 유지됨을 검사. extra-fee/채팅 읽음/정확한 오류조건 회귀도 통과.
+- 실제 Chrome 로컬 Lab + fixture: 타기공소 extra-fee GET/read POST0건, 디자인 이력 화면 진입 및 siblings GET 유지, 비어 있지 않은 파일 목록·이미지 미리보기 로딩( naturalWidth 확인 )·승인 모달 열기/취소 확인. 파일은 프로젝트 정적 이미지를 이용한 로컬 샘플이며 실제 STG 파일이나 서버 승인을 증명하지 않습니다.
+- QA 증거: `/tmp/dl-16596-verify/runtime-correction.log`, `api-correction.log`, `commit-correction.log`, `push-correction.log`. 화면 `/Users/parkjongsun/.codex/visualizations/2026/10/06/01a10f22-340a-7703-b5e6-2fc0d0f313cd/qa/design-correction.png`.
+- Jira 라이브 담당 확인: 사용자 Frankie 담당은 DL-16640 하나. 제목·설명에 최종 결과/PR/남은 QA 기록, 전환12로 `Ready for Deploy` 변경 후 재조회 확인. 부모DL-16596(Yoonie), 다른 하위DL-16597/16598/16634(Leo)은 진행 중 유지. 사용자 지시에 따라 상위 댓글 없음.
+- 남은 일: 실제 STG 디자인 파일 권한·사용자 QA·release 통합 QA 및 승인된 이후 merge/배포. 이번에는 merge/deploy와 CodeRabbit 리뷰 사이클을 수행하지 않았습니다.
+- 로컬: 원격 보존 및 clean/비추적없음/생성된 ignored 산출물만 확인 후 임시 worktree 제거.3116/3117 QA 서버 중지, 만든 QA 탭 종료. 다른 제품 checkout/작업은 그대로. PR 브랜치와 로컬 원본 브랜치, worktree 밖 QA 증거는 보존.
+- 다음 시작점: 위 원격 PR head에서 이어서 QA. 과거 체크포인트의 승인 제한은 잘못된 구현 이력이며 최종 요구로 재사용하지 않습니다.
+
+
 ## 2026-10-06 구현 및 PR 체크포인트 (디자인 승인 제한은 아래 재검토로 정정)
 
 - 메인 세션: `01a08f0c-2057-7852-ae8d-0cf950a91fd3`. 위임 범위는 구현·검증·commit/push·release/v1.88.0 대상 PR·임시 worktree 정리. merge/deploy/Jira/Notion 변경 제외.
@@ -30,7 +45,7 @@ Lab 6개 파일만 변경. `useOrderExtraFeeForm.ts`에서 활성 직원·기공
 - 로컬 QA 탭 닫음,3116/3117 서버 중지. 임시 worktree는 추적/비추적 변경 없음 및 생성된 ignored 산출물만 있음을 확인 후 제거. 개인 체크포인트는 이 파일만 기록하며 프로젝트 index 연결은 메인 세션 담당.
 
 
-## 2026-10-06 사용자 요구사항 재검토 — 수정 대기
+## 이력: 2026-10-06 사용자 요구사항 재검토 — 이후 정정 완료
 
 사용자가 같은 기능 세션에서 의도를 재확인했습니다. 타기공소 주문 상세의 extra-fee GET 및 lastReadMessageId 읽음 POST는 불필요하므로 차단하고, 디자인 확인 데이터는 보여야 합니다. 기존 디자인 확인 동작에 새 타기공소 제한을 추가하라는 요구는 없었습니다.
 
@@ -40,4 +55,4 @@ Lab 6개 파일만 변경. `useOrderExtraFeeForm.ts`에서 활성 직원·기공
 - 위 승인 제한은 기존 정책 유지라는 인계를 신규 제한 요구로 확대 해석한 결과. 이전 체크포인트의 승인 제한 완료 및 이를 정당화하는 QA 기록은 구현 사실의 기록이며 요구 충족 근거로 사용하면 안 됩니다.
 - 임시 harness도 foreign approve blocked를 기대값으로 검사했고, 로컬 fixture의 design files는 비어 있었습니다. 따라서 검사 통과·스크린샷으로 요구 충족이나 실제 디자인 파일 표시까지 증명하지 못함.
 - 수정 방향: 승인 페이지의 신규 조건부 modal 변경 원복, hook의 신규 소유 조건·추가 주문조회·handleApprove 조건 원복. 기존 디자인 조회/승인 흐름 및 요구된403+1018 서버 메시지 처리는 유지. extra-fee와 chat read 차단은 유지.
-- 현재 요청은 작업 재확인이므로 감사 결과를 보고하고 제품 수정은 대기. 임시 worktree는 여전히 제거된 상태이며 다음 수정 시 원격 PR head에서 안전하게 복원해야 함.
+- 당시 요청은 작업 재확인이므로 감사 결과를 보고하고 제품 수정은 대기했음. 임시 worktree는 여전히 제거된 상태이며 다음 수정 시 원격 PR head에서 안전하게 복원해야 함.
