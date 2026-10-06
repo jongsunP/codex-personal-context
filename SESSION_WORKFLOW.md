@@ -346,8 +346,8 @@ recoverable across devices and future AI sessions.
 ## Dentlink Release-Train Branch Strategy
 
 Treat the following as the branch strategy for the Dentlink web repository
-`dentlink-client`. Do not apply its `master` name to `dentlink-app`, which has
-its own documented branch and delivery flow.
+`dentlink-client`. Do not apply its `master` name to `dentlink-app` or
+`dentlink-lab-app`; each app has its own documented branch and delivery flow.
 
 - `master` is the latest shared base and the final accumulator of completed
   releases. Active release work may not yet be present in `master`, so do not

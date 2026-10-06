@@ -33,7 +33,7 @@ Detailed implementation history remains in the relevant existing project file.
   위 상시 역할은 2026-09-28 사용자가 재확인한 운영 원칙이다.
 - Sessions are created primarily for a feature or responsibility, not for a
   device or repository. One feature session may inspect and implement both its
-  web and app portions across the two product repositories.
+  web and app portions across the relevant separate product repositories.
 - Every code or Git mutation must still name and confirm the exact product
   repository, branch, and worktree. A shared feature scope does not combine Git
   histories or permit writing from an ambiguous directory.
@@ -58,8 +58,10 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## DL-16652 기공소 환자목록 디자인·API 대응 — 2026-10-06
 
-- 사용자 요청으로 기존 메인 프로젝트 폴더 안에 별도 기능 세션을 준비한다.
+- 사용자 요청으로 기존 메인 프로젝트 폴더 안에 **DL-16652 기공소 환자목록 디자인 변경**
+  세션 `01a11038-d621-7fb3-ad4e-58d01fbb9a6a`(local)을 생성하고 확정 요구와 작업 공간을 자동 전달했다.
   대상은 **웹 Lab과 기공소 네이티브 앱만**이며 Office는 제외한다.
+  생성 설정은 메인과 같은 `gpt-6.1-sol / ultra`이며 실제 실행 메타데이터에서도 확인했다.
 - 웹 `origin/master`와 새 Lab 앱 `origin/develop`에서 각각 `feature/DL-16652`
   worktree를 준비했다. 기존 작성 세션의 checkout을 전환하거나 변경하지 않았다.
 - 디자인은 지정된 Figma의 Tobe를 기준으로 하고 변경 예정 API 캡처를 대조한다.
@@ -375,8 +377,8 @@ Detailed implementation history remains in the relevant existing project file.
   PDFs remain retired and must not be restored as current meeting documents.
 - Read `projects/dentlink-client-order-feedback.md` and other matching
   `dentlink-client` checkpoints for web/Admin implementation history.
-- Read `projects/dentlink-app.md` for app implementation, runtime, build, and
-  deployment history.
+- Read `projects/dentlink-app.md` for Office app implementation, runtime,
+  build, and deployment history, and `projects/dentlink-lab-app.md` for Lab app work.
 - Read `projects/dentlink-unified-notification-center.md` when that cross-web/app
   feature resumes.
 - Keep repository-specific branch, commit, QA, and blocker detail in those
@@ -405,7 +407,7 @@ Detailed implementation history remains in the relevant existing project file.
 
 1. Pull `codex-personal-context` and read the common guidance plus this file.
 2. Read the relevant web and app checkpoints before relying on prior chat.
-3. Fetch/pull both product repositories only as required by the current task,
+3. Fetch/pull the relevant product repositories only as required by the current task,
    then verify exact path, branch, HEAD, upstream, dirty state, and worktree.
 4. Classify each new request as web, app, or shared before deciding the owning
    implementation session and release target.
