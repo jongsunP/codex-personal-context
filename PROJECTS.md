@@ -81,8 +81,9 @@ For detailed current state, read:
   [PR #4663](https://github.com/Innvoaid/dentlink-client/pull/4663)로 `release/v1.88.0`에 전달했다.
   현재 브랜치는 `feature/DL-16596`이며 이전 #4662는 브랜치 이름 변경 후 미병합 종료됐다.
 - 디자인 조회·기존 승인 흐름을 유지한다. 담당 DL-16640은 Ready for Deploy다.
-- 승인 리뷰 제안을 반영했고 최신 head `4e89d5610`의 CodeRabbit 검토 성공·미해결0건을 확인했다. PR은 충돌 없이 병합 가능하다.
-- 임시 worktree는 정리했다. 병합·배포와 실제 STG 디자인 자료 권한·release QA는 남았다. 릴리즈의 기존 제조 주문 타입 오류는 별도 범위 확인 대기다.
+- 승인 리뷰 제안을 반영하고 최신 release `dd9f1f544`를 통합했다. head `e2d33db83`의 필수 로컬 검사·통합 관련38테스트가 통과했고 CodeRabbit 최종 검토 SUCCESS·새 지적/미해결0건을 확인했다.
+- 이전 제조 주문 타입 오류는 최신 release에서 수정되어 통합 후 해소됐다. GitHub APPROVED/MERGEABLE이며 Vercel 프리뷰 실패는 필수 머지 조건이 아니다. 보호 설정 변경 없음.
+- 임시 worktree는 정리했다. 머지 준비 완료를 사용자에게 보고하고 대기하며, 사용자 merge·배포 및 실제 STG 디자인 자료 권한·배포 후 QA는 남았다.
 - [projects/dentlink-client-other-lab-guard.md](projects/dentlink-client-other-lab-guard.md)
 
 ### Dentlink DLDS / AI 화면 제작 — DL-16437 / DL-16466 / DL-16471

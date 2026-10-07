@@ -1,19 +1,23 @@
 # 타기공소 주문 조회 가드 — DL-16596
 
-## 현재 상태 — 2026-10-07 리뷰 처리·push 완료, 배포·통합 QA 대기
+## 현재 상태 — 2026-10-07 머지 준비 완료·사용자 보고 후 대기
 
-- PR #4663 OPEN: https://github.com/Innvoaid/dentlink-client/pull/4663. head `4e89d56101139595816f9b45c7b4faa7b918dd86`, branch `feature/DL-16596`, base `release/v1.88.0`. 원격 push 완료, 현재 checkout clean. 이전 #4662는 브랜치명 정리로 종료한 이력입니다.
-- 승인 리뷰(inkyookoh)의 권한 설정 분리 제안을 반영. `lab/src/lib/Order/orderAccess.config.ts`의 자기/그 외 기공소 주문 권한 상수와 `getOrderAccess`를 추가금 및 LinkTalk에서 사용. 읽음 권한 이름은 `canMarkChatAsRead`. 기존 SSR 문자열 orderId 비교, 직원 저장 ID/응답 ID 일치, 기공소 ID finite/positive/strict 비교, DENTLINK 지원톡 예외를 유지했습니다.
-- 타기공소 extra-fee GET·채팅 읽음 POST 차단은 유지합니다. 채팅 메시지·디자인 확인 데이터 조회와 기존 승인 흐름도 유지. CodeRabbit 문서화 경고에 맞춰 디자인 확인 hook 설명 추가, 해당 동작 수정 없음.
-- 최신 release의 `skipGlobalErrorToast` mutation 정책을 Provider에 보존했습니다. 403/1018은 서버 message 그대로 ERROR 토스트, 다른 오류는 기존 handler로 전달. 화면이 오류를 직접 표시하도록 설정한 mutation은 전역 토스트 생략을 먼저 적용합니다.
-- PR diff는 Lab7파일. queryMeta.ts는 현재 release와 동일한 설정입니다. 최신 target `19c91c49691bdcf161e4610aa3e43b158f9de5c2`과 merge-tree 충돌 0, GitHub MERGEABLE 확인. 릴리즈 전체 merge는 수행하지 않았으며 제조 주문 등 무관한 코드/커밋은 추가하지 않았습니다.
-- 최종 변경 검증: Clinic/Lab/Admin 타입 검사, 세 앱 lint(오류0·기존 경고), Admin DLOS guard, 공유53테스트 및 커버리지 감소 없음, Prettier/diff 검사 통과. 실제 React Query 임시 harness의 권한 구·신 판정23,328 경계값 비교 및 extra-fee/채팅/디자인 확인/정확한4031018 회귀 통과. mutation의 권한 오류/일반 오류와 각 skip 조건4가지도 통과. release Provider의 기존 테스트는 변경하지 않습니다.
-- 담당자 승인 리뷰에 반영/검증 결과를 답변했고 PR 템플릿의 본문·파일 수·검증·남은 사항을 갱신했습니다. 최종 head 4e89d5610의 CodeRabbit SUCCESS/Review completed, 문서화 검사100%, 미해결 스레드0건을 라이브 재조회로 확인. queryMeta 화살표 함수→function 스타일 제안1건은 release와 동일한 파일·기존 권한 config의 화살표 형태·강제 규칙 부재를 확인해 미적용 근거 댓글로 답변했습니다. 관련 댓글: https://github.com/Innvoaid/dentlink-client/pull/4663#issuecomment-6029807902
-- 기존 release 타입 오류: 전체 release 반영 시 제조 주문 취소 카드에서4건 실패. `OrderCancelCard`의 history, `getCancelInfo`의 OrderHistory/occurredAt, 취소 fixture만 남은 history를 timeline/createdAt으로 옮기는 누락입니다. target 자체의 파일/계약과 대조해 확인. 이번 PR 범위 밖이므로 사용자에게 함께 수정 여부를 질문했고 답변 대기입니다. hooks 우회 없음.
-- Vercel 최신 프리뷰는 Deployment was blocked 실패 상태. 이전 멤버십 안내 댓글도 있으나 최신 상세 로그는 로그인 필요로 원인 확인 불가. merge/deploy 미수행. 실제 STG 디자인 자료 권한·파일 및 release 통합 QA는 남아 있습니다. 사용자 직접 두 API 확인은2026-10-06의 별도 증거이며 새 head의 사용자 재검증으로 확대하지 않습니다.
-- 로컬: `/Users/parkjongsun/Repository/dentlink-client`의 기능 브랜치에서 진행. 새 임시 worktree 없음, 다른 worktree 미변경. 검증 증거 `/tmp/dl-16596-verify/runtime-review-final.log`, `commit-review*.log`, `push-review-final.log`, `provider-candidate-merge.log`. 임시 Vercel 탭은 닫았습니다. 메인 세션으로 결과 전달하지 않습니다.
-- Jira DL-16640(Frankie 담당)에 리뷰 반영·검증·남은 통합 QA를 댓글로 기록했고 Ready for Deploy를 유지했습니다. 설명/다른 담당 하위/상위 카드는 변경하지 않았습니다.
-- 다음 시작점: 최신 head에서 실제 STG/릴리즈 QA. 제조 주문 기존 타입 오류 수정은 사용자 범위 답변을 먼저 확인합니다.
+- 사용자 요청: 본인이 머지할 수 있는 단계까지 준비한 뒤 현재 세션에 보고하고 대기. merge/deploy는 하지 않습니다. 메인 세션으로 자동 전달하지 않습니다.
+- PR #4663 OPEN: https://github.com/Innvoaid/dentlink-client/pull/4663. head `e2d33db83b0f11b4dd86891a86e58b275db683fa`, branch `feature/DL-16596`, base `release/v1.88.0`. 원격 push 완료, 제품 checkout clean.
+- 최신 target `dd9f1f54477f839f881b6f2117e0fb9965451a41`을 `096b84a5b` (`chore: 최신 릴리즈 변경 통합`)로 충돌 없이 merge했습니다. 이후 `e2d33db83` (`style: 링크톡 변경 파일 포맷 정리`)로 기존 두 줄 포맷을 정리했습니다. merge commit은 기능 브랜치에 release를 통합한 것이며 PR merge가 아닙니다.
+- 이전 target `19c91c496`의 제조 주문 타입 오류4곳은 최신 release의 `ce8a9a102`에서 이미 수정되어 있었습니다. 취소 카드·getCancelInfo·두 fixture의 timeline/createdAt 계약을 확인했고 별도 제조 주문 변경은 하지 않았습니다. 이전 범위 확인 질문은 이번 머지 준비 요청으로 해소했습니다.
+- PR diff는 최신 release 대비 Lab6파일. queryMeta 설정 및 release Provider 테스트는 target과 같아 PR 변경에 포함되지 않습니다. 독립 정적 리뷰에서6기능파일이 통합 전 구현과 같음(마지막 포맷만 차이), 관련 직원·주문 타입과 디자인 확인 페이지·서비스 계약에 회귀 없음 확인.
+- 요구사항 유지: 타기공소 extra-fee GET·lastReadMessageId 읽음 POST만 차단. 채팅 메시지 조회, 디자인 확인 데이터·파일 조회 및 기존 승인 버튼·모달·요청 흐름 유지. 새 소유 조건이나 orderShow GET 없음. DENTLINK 지원톡 예외 유지.
+- 승인 리뷰(inkyookoh)의 제안대로 `orderAccess.config.ts`의 자기/그 외 기공소 주문 권한과 `getOrderAccess`를 추가금/LinkTalk에서 사용합니다. 권한명 `canViewExtraFee`·`canMarkChatAsRead`. 직원 저장 ID/응답 ID, 기공소 ID finite/positive/strict 판정과 SSR 문자열 주문 ID 비교 유지.
+- 오류 처리: HTTP403 AND code1018의 서버 message를 기존 ERROR 토스트로 표시. 다른 오류는 기존 handler. release의 `skipGlobalErrorToast` mutation 정책을 먼저 적용합니다. 디자인 확인 hook 설명 추가는 동작 변경 없음.
+- 통합 검증: Clinic/Lab/Admin 타입 검사, push 필수 lint(오류0·기존 경고223/186/393), Admin DLOS guard/테스트, 공유53테스트·커버리지 감소 없음 통과. 실제 통합 tree에서 제조 주문 상세·취소 카드·Provider 기존38테스트 통과. 변경6파일 Prettier 및 diff 검사 통과. hook 우회 없음.
+- 실제 React Query 임시 harness: 권한 구·신23,328 경계값 일치, 추가금/채팅/디자인 파일 데이터·승인 흐름/정확한4031018 회귀 통과. mutation 권한/일반 오류와 각 토스트 생략4조건도 통과. 사용자 직접 두API 확인은2026-10-06의 별도 증거이며 새 head 사용자 재검증으로 확대하지 않습니다.
+- 최종 head e2d33db83의 CodeRabbit SUCCESS(03:04:22 UTC), recent review 새 지적0건, 검토 coverage가 정확히 e2d33db83임을 확인했습니다. 전체 미해결 스레드0건·문서화100%·pre-merge검사5개 통과. queryMeta 함수 스타일 제안은 release와 동일·강제 규칙 없음 근거로 답변했고 최신 PR diff에는 해당 파일이 없습니다. 관련 댓글: https://github.com/Innvoaid/dentlink-client/pull/4663#issuecomment-6029807902
+- GitHub 라이브 APPROVED/MERGEABLE 확인. 보호 설정은 strict=true지만 필수 contexts/checks가 모두 비어 있고 추가 ruleset/활성 branch rule 없음. jongsunP ADMIN, 관리자 보호 강제 꺼짐. 보호 설정을 바꾸거나 실패 체크를 우회 처리하지 않았습니다. 최종 fetch에서도 target dd9f1f544가 head의 조상이고 변경 없음을 확인했습니다. GitHub의 UNSTABLE은 선택적 Vercel 실패가 남은 상태이며 필수 머지 차단과 구별합니다.
+- Vercel 프리뷰는 Deployment was blocked 실패. 팀 가입/계정 연결 접근 조건 안내를 확인했고 코드 빌드 실패 증거는 없습니다. 필수 머지 체크가 아니므로 사용자 직접 merge를 차단하지 않습니다. 최신 preview: https://vercel.com/innovaid-2c855104/dentlink-dlos/2iuE4iFf26EBSsvmgV3KGfdEcWVN
+- 담당 Jira DL-16640(Frankie)은 Ready for Deploy 유지. 기존 진행 댓글44316을 최종 릴리즈 통합·검사/리뷰 완료·머지 준비 완료·남은 배포 후 QA로 갱신하고 저장 결과를 확인했습니다. 상위/다른 담당 카드 변경 없음.
+- 로컬: `/Users/parkjongsun/Repository/dentlink-client`의 기능 브랜치 clean. 이번 임시 worktree 없음, 다른 worktree 미변경. 검증 증거 `/tmp/dl-16596-verify/`의 release-integration-tests.log, runtime-release-integration.log, commit-release-integration.log, push-release-integration.log, commit-review-format.log, push-review-format.log. QA 서버·탭은 이전 정리 상태 유지. PR 본문6섹션/4체크박스·최종6파일/head/검증 갱신 확인. feature/DL-16596 브랜치는 로컬·원격 각1개입니다.
+- 남은 일/다음 시작점: 머지 준비 완료를 사용자에게 보고하고 대기합니다. 사용자가 PR merge한 뒤 실제 STG 디자인 자료 권한 및 배포 후 통합 QA. 새 요청 없이 merge/deploy하지 않습니다.
 
 ## 2026-10-06 정정 개발 완료·두 API 사용자 확인 이력
 
