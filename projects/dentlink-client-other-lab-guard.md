@@ -1,6 +1,21 @@
 # 타기공소 주문 조회 가드 — DL-16596
 
-## 현재 상태 — 2026-10-06 정정 개발 완료·두 API 사용자 확인, 배포·통합 QA 대기
+## 현재 상태 — 2026-10-07 리뷰 처리·push 완료, 배포·통합 QA 대기
+
+- PR #4663 OPEN: https://github.com/Innvoaid/dentlink-client/pull/4663. head `4e89d56101139595816f9b45c7b4faa7b918dd86`, branch `feature/DL-16596`, base `release/v1.88.0`. 원격 push 완료, 현재 checkout clean. 이전 #4662는 브랜치명 정리로 종료한 이력입니다.
+- 승인 리뷰(inkyookoh)의 권한 설정 분리 제안을 반영. `lab/src/lib/Order/orderAccess.config.ts`의 자기/그 외 기공소 주문 권한 상수와 `getOrderAccess`를 추가금 및 LinkTalk에서 사용. 읽음 권한 이름은 `canMarkChatAsRead`. 기존 SSR 문자열 orderId 비교, 직원 저장 ID/응답 ID 일치, 기공소 ID finite/positive/strict 비교, DENTLINK 지원톡 예외를 유지했습니다.
+- 타기공소 extra-fee GET·채팅 읽음 POST 차단은 유지합니다. 채팅 메시지·디자인 확인 데이터 조회와 기존 승인 흐름도 유지. CodeRabbit 문서화 경고에 맞춰 디자인 확인 hook 설명 추가, 해당 동작 수정 없음.
+- 최신 release의 `skipGlobalErrorToast` mutation 정책을 Provider에 보존했습니다. 403/1018은 서버 message 그대로 ERROR 토스트, 다른 오류는 기존 handler로 전달. 화면이 오류를 직접 표시하도록 설정한 mutation은 전역 토스트 생략을 먼저 적용합니다.
+- PR diff는 Lab7파일. queryMeta.ts는 현재 release와 동일한 설정입니다. 최신 target `19c91c49691bdcf161e4610aa3e43b158f9de5c2`과 merge-tree 충돌 0, GitHub MERGEABLE 확인. 릴리즈 전체 merge는 수행하지 않았으며 제조 주문 등 무관한 코드/커밋은 추가하지 않았습니다.
+- 최종 변경 검증: Clinic/Lab/Admin 타입 검사, 세 앱 lint(오류0·기존 경고), Admin DLOS guard, 공유53테스트 및 커버리지 감소 없음, Prettier/diff 검사 통과. 실제 React Query 임시 harness의 권한 구·신 판정23,328 경계값 비교 및 extra-fee/채팅/디자인 확인/정확한4031018 회귀 통과. mutation의 권한 오류/일반 오류와 각 skip 조건4가지도 통과. release Provider의 기존 테스트는 변경하지 않습니다.
+- 담당자 승인 리뷰에 반영/검증 결과를 답변했고 PR 템플릿의 본문·파일 수·검증·남은 사항을 갱신했습니다. 최종 head 4e89d5610의 CodeRabbit SUCCESS/Review completed, 문서화 검사100%, 미해결 스레드0건을 라이브 재조회로 확인. queryMeta 화살표 함수→function 스타일 제안1건은 release와 동일한 파일·기존 권한 config의 화살표 형태·강제 규칙 부재를 확인해 미적용 근거 댓글로 답변했습니다. 관련 댓글: https://github.com/Innvoaid/dentlink-client/pull/4663#issuecomment-6029807902
+- 기존 release 타입 오류: 전체 release 반영 시 제조 주문 취소 카드에서4건 실패. `OrderCancelCard`의 history, `getCancelInfo`의 OrderHistory/occurredAt, 취소 fixture만 남은 history를 timeline/createdAt으로 옮기는 누락입니다. target 자체의 파일/계약과 대조해 확인. 이번 PR 범위 밖이므로 사용자에게 함께 수정 여부를 질문했고 답변 대기입니다. hooks 우회 없음.
+- Vercel 최신 프리뷰는 Deployment was blocked 실패 상태. 이전 멤버십 안내 댓글도 있으나 최신 상세 로그는 로그인 필요로 원인 확인 불가. merge/deploy 미수행. 실제 STG 디자인 자료 권한·파일 및 release 통합 QA는 남아 있습니다. 사용자 직접 두 API 확인은2026-10-06의 별도 증거이며 새 head의 사용자 재검증으로 확대하지 않습니다.
+- 로컬: `/Users/parkjongsun/Repository/dentlink-client`의 기능 브랜치에서 진행. 새 임시 worktree 없음, 다른 worktree 미변경. 검증 증거 `/tmp/dl-16596-verify/runtime-review-final.log`, `commit-review*.log`, `push-review-final.log`, `provider-candidate-merge.log`. 임시 Vercel 탭은 닫았습니다. 메인 세션으로 결과 전달하지 않습니다.
+- Jira DL-16640(Frankie 담당)에 리뷰 반영·검증·남은 통합 QA를 댓글로 기록했고 Ready for Deploy를 유지했습니다. 설명/다른 담당 하위/상위 카드는 변경하지 않았습니다.
+- 다음 시작점: 최신 head에서 실제 STG/릴리즈 QA. 제조 주문 기존 타입 오류 수정은 사용자 범위 답변을 먼저 확인합니다.
+
+## 2026-10-06 정정 개발 완료·두 API 사용자 확인 이력
 
 - PR #4663: https://github.com/Innvoaid/dentlink-client/pull/4663 (OPEN, base `release/v1.88.0`, branch `feature/DL-16596`). 이전 PR #4662는 브랜치명 변경으로 CLOSED. 최신 head `e112d12c098d6231a6200110b9fc3a7074a2ae8d`, commit `fix: 디자인 확인의 기존 승인 흐름 유지`, 원격 push 완료.
 - 최종 목적: 타기공소 extra-fee GET 및 lastReadMessageId 읽음 POST 차단. 채팅 메시지·디자인 확인 데이터 조회 및 기존 승인 흐름 유지. HTTP403 AND code1018이면 서버 message 그대로 기존 빨간 ERROR 토스트 표시.
