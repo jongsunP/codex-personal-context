@@ -4,6 +4,39 @@ This is the durable delivery checkpoint for the Dentlink Lab i18n, operational
 Sheet, and cross-service Pretendard work. Live Git and Google Sheet state still
 take precedence if later work changes them.
 
+## CodeRabbit 리뷰 처리 — 2026-10-07
+
+- 사용자 요청으로 [PR #4666](https://github.com/Innvoaid/dentlink-client/pull/4666)의
+  모든 리뷰·댓글·스레드를 확인했다. 미해결 CodeRabbit 지적 1건을 실제 export·audit 코드와 대조해 반영했다.
+- `writeCanonicalSheet`는 최초에 읽은 두 운영 탭으로 전체 값을 작성하며, 실패하면 같은
+  이전 스냅샷으로 복구한다. 현재 잠금·동시 변경 감지가 없어 작업 도중 생긴 PM 편집을
+  사후 read-back·스냅샷 복구만으로 보호하지 못한다는 지적이 타당했다.
+- `lab/i18n/catalog/README.md`에 export `--write`와 audit `--write-sheet` 실행 전 최초 조회부터
+  최종 검증·필요한 복구 결과 확인까지 양쪽 운영 탭의 편집·다른 동기화를 중지하는 기준을 추가했다.
+  중지 구간을 확보할 수 없으면 쓰기를 보류하고, 복구 실패 시에도 대조·복구·검증 완료 전까지
+  편집 중지를 유지한다. 없는 자동 잠금 기능을 있는 것으로 안내하지 않는다.
+- 수정 commit/HEAD: `67e95af9f8b15bf251ec06ed063578941c97ebf5`,
+  `docs: 번역 시트 동기화 중 동시 편집 방지 절차 보완`.
+  `feature/lab-i18n-workflow`와 원격은 0/0·clean이며 worktree는 기존
+  `/Users/parkjongsun/Repository/dentlink-client-i18n-guide`를 유지한다.
+  PR 전체는 release 대비 지침 7개 파일·41 추가/4 삭제이고, 이번 수정은 운영 가이드 2개 항목뿐이다.
+- Clinic·Lab·Admin 타입 검사, 기존 commit/push hook, 세 앱 lint 오류 0,
+  Admin DLOS guard와 공유 테스트 53개(21+32), coverage 비교, diff --check를 통과했다.
+  기존 lint 경고 223/186/393개는 유지된다. 이번에는 스킬·제품 코드·번역 리소스·실제 시트를
+  수정하지 않았으며 별도 기능/E2E 테스트나 Sheet 동기화는 수행하지 않았다.
+- 해당 스레드에 수정 근거를 답변하고 해결 처리했으며 PR 본문도 현재 보호 기준에 맞췄다.
+  Draft 상태를 유지한 채 `@coderabbitai review`로 최신 커밋의 리뷰를 요청했다.
+  2026-10-07 11:21 KST에 최신 HEAD의 CodeRabbit SUCCESS·Review finished와
+  최종 검토 coverage의 해당 HEAD·reviewed 표기를 확인했다. 새 지적은 없고 모든 미해결 스레드는 0개다.
+- 재리뷰 요청 당시 Draft였고 후속 조회에서는 OPEN·non-Draft·미병합을 확인했다.
+  이 세션은 Draft 전환 명령을 수행하지 않았다. `chajju`의 승인 리뷰는 이전 HEAD `99da42b6`에
+  2026-10-07 09:34 KST에 제출되었으며 최신 수정 커밋에 대한 별도 사람 승인을 뜻하지 않는다.
+  최신 Vercel 실패는 `Deployment was blocked`이며 GitHub 진단에 상세 원인은 제공되지 않는다.
+  이전 HEAD에는 작성자의 Vercel 팀 접근 권한 실패 이력이 있다. Auto Assign·Vercel Preview Comments는 성공했다.
+  merge·배포·branch/worktree 삭제는 하지 않았다.
+- 다음 시작점: 최신 PR HEAD·CodeRabbit 완료/미해결 스레드·사람 리뷰·Vercel 접근 상태를
+  구분해 확인한다. 현재 branch에 팀 지침이 존재하는 것과 release/master 반영·운영 적용은 별개다.
+
 ## 저장소 에이전트 지침 PR — 2026-10-06
 
 - 사용자 후속 지시로 개인 지침을 공유 웹 저장소의 기본 에이전트 진입점에도 반영했다.
