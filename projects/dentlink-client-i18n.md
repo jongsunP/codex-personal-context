@@ -4,6 +4,28 @@ This is the durable delivery checkpoint for the Dentlink Lab i18n, operational
 Sheet, and cross-service Pretendard work. Live Git and Google Sheet state still
 take precedence if later work changes them.
 
+## 사용자 머지 준비 확인 — 2026-10-07 11:25 KST
+
+- 사용자 요청에 따라 [PR #4666](https://github.com/Innvoaid/dentlink-client/pull/4666)이
+  현재 HEAD 그대로 일반 머지 가능한 상태임을 live GitHub 정책과 merge 후보로 확인했다.
+  OPEN·non-Draft·MERGEABLE·reviewDecision APPROVED, CodeRabbit 최신 HEAD 검토 완료·미해결 0건이다.
+- feature HEAD는 `67e95af9f8b15bf251ec06ed063578941c97ebf5`, 최신 release/v1.88.0 base는
+  `19c91c49691bdcf161e4610aa3e43b158f9de5c2`다. feature는 base보다 2 ahead/4 behind이나
+  GitHub가 두 SHA를 부모로 하는 정상 merge 후보 `defabd81dc2c16f5c583516088dd177c946e5313`을 생성했다.
+  최신 base와 merge 후보 차이는 동일한 지침 7개 파일·41 추가/4 삭제뿐이고 새 release 커밋은 이 경로와 겹치지 않는다.
+- release 보호 규칙은 승인 1명·Code Owner 승인 설정이며 기존 승인을 취소하지 않는다
+  (`dismiss_stale_reviews=false`, `require_last_push_approval=false`). 현재 release에는 CODEOWNERS 정의가 없고
+  기존 `chajju` 승인과 aggregate APPROVED가 유효하다. 최신 HEAD에 대한 별도 사람 재승인을 받은 것으로 기록하지 않는다.
+- required status 설정은 strict=true지만 `contexts=[]`, `checks=[]`이고 적용되는 branch rules/rulesets도 없다.
+  배포 환경 승인 요구도 없다. 실패한 Vercel은 현재 필수 머지 검사가 아니므로 일반 머지를 막지 않는다.
+  GitHub 상태 UNSTABLE은 live schema상 실패한 commit status가 있지만 머지 가능한 상태이며
+  BEHIND·BLOCKED와 구분한다. 모든 검사가 성공한 CLEAN 상태라고 보고하지 않는다.
+- Vercel의 `Deployment was blocked` 경고는 남아 있다. 상세 원인은 GitHub 제공 진단에 없으며
+  이전 작성자 접근 권한 실패 이력과 구분한다. 실패 상태를 성공으로 바꾸거나 보호 규칙을 완화하지 않았다.
+- 추가 제품 수정·feature 갱신·CI 재실행은 필요하지 않아 수행하지 않았다. 기존 검증 결과와 현재
+  머지 후보·정책을 확인했으며 실제 merge·배포는 사용자에게 남기고 대기한다.
+  머지 시점에 base·HEAD·승인·필수 조건이 바뀌면 다시 확인한다.
+
 ## CodeRabbit 리뷰 처리 — 2026-10-07
 
 - 사용자 요청으로 [PR #4666](https://github.com/Innvoaid/dentlink-client/pull/4666)의

@@ -69,7 +69,8 @@ Detailed implementation history remains in the relevant existing project file.
   [PR #4666](https://github.com/Innvoaid/dentlink-client/pull/4666)을 `release/v1.88.0` 대상으로 생성했다.
   2026-10-07 CodeRabbit의 동시 시트 편집 지적 1건을 운영 지침에 반영하고 HEAD `67e95af9f`를 푸시했다.
   타입·필수 push 검사 통과, 최신 커밋의 CodeRabbit 재리뷰 완료·미해결 0건, OPEN·non-Draft·미병합이다.
-  사람 승인은 이전 HEAD에 제출되었고 최신 Vercel은 배포 차단으로 실패했다(상세 원인 미제공). 상세는
+  11:25 KST에 최신 release와 GitHub merge 후보·보호 규칙을 확인해 일반 머지 요건 충족을 확인했다.
+  기존 사람 승인은 현 정책상 유효하며 Vercel 실패는 비필수 검사 경고다. 실제 머지는 사용자가 수행한다. 상세는
   [웹 i18n 정본](dentlink-client-i18n.md)에 두고 앱 팀 지침 변경과 구분한다.
 
 ## DL-16652 기공소 환자목록 디자인·API 대응 — 2026-10-06
