@@ -1,6 +1,17 @@
 # 타기공소 주문 조회 가드 — DL-16596
 
-## 현재 상태 — 2026-10-07 머지 준비 완료·사용자 보고 후 대기
+## 현재 상태 — 2026-10-07 release 반영·로컬 정리 완료·대기
+
+- 사용자 직접 PR #4663 머지 완료 보고 후 GitHub 라이브 MERGED 확인. https://github.com/Innvoaid/dentlink-client/pull/4663. 2026-10-07 15:11:45 KST, `release/v1.88.0` squash commit `9baeca42f0ba955ed562f3a7550955cd00c907ed`.
+- 검증한 최종 feature head `e2d33db83b0f11b4dd86891a86e58b275db683fa`와 머지 commit의 전체 tree diff0 확인. `origin/release/v1.88.0`에 squash commit 포함 확인. 코드·테스트의 별도 변경은 없고 기존 검증 결과를 유지합니다.
+- 정리: 제품 main checkout을 최신 `master` `6b79c9756cc56313fe833aad463bddb1f8c385fa`로 전환·ff-only pull. 완료한 로컬 `feature/DL-16596`을 삭제했고 checkout clean/upstream 일치. 이 기능용 임시 worktree 없음. 다른 DLDS/환자 목록/권한3worktree 및 브랜치는 미변경.
+- 원격 `feature/DL-16596`은 e2d33db83으로 보존. SESSION_WORKFLOW의 원격 branch/PR 별도 변경 승인 규칙에 따라 원격 branch 삭제와 PR 변경은 하지 않았습니다. 실제 복구·후속 QA 기준은 병합된 release commit이며 새 작업은 최신 master, 이 release의 후속 QA는 해당 release에서 새 feature로 시작합니다.
+- 임시 검증 서버3116/3117 listening 없음 확인. `/tmp/dl-16596-verify/` 및 기존 QA 화면은 증거로 보존, 공용 의존성·build cache는 삭제하지 않습니다.
+- Jira 담당 DL-16640의 기존 댓글44316을 release 반영·검증한 코드 동일·남은 배포 후 확인으로 갱신하고 저장 결과 확인. 현재 Ready for Deploy 유지. 다음 전환은 Staging 배포→READY FOR QA(16)이며 배포 증거가 없어 진행하지 않았습니다. 상위/타 담당 카드 변경 없음.
+- 확인 범위: 타기공소 extra-fee GET·읽음 POST 차단, 채팅/디자인 자료 조회 및 기존 승인 흐름 유지, 정확한403/1018 ERROR 토스트. 최종 타입·lint/필수검사·기존38테스트·harness/23,328경계값·CodeRabbit SUCCESS/미해결0 확인 이력은 아래에 보존.
+- 남은 일: 실제 STG 디자인 자료 접근 권한과 release 배포 후 통합 QA, 이후 production/forward propagation. release 포함과 배포·QA 완료를 구별합니다. Codex는 배포/추가 merge/QA를 자동 시작하지 않고 사용자 요청을 기다립니다. 메인 세션 결과 전달 없음.
+
+## 2026-10-07 머지 준비 완료·검증 이력
 
 - 사용자 요청: 본인이 머지할 수 있는 단계까지 준비한 뒤 현재 세션에 보고하고 대기. merge/deploy는 하지 않습니다. 메인 세션으로 자동 전달하지 않습니다.
 - PR #4663 OPEN: https://github.com/Innvoaid/dentlink-client/pull/4663. head `e2d33db83b0f11b4dd86891a86e58b275db683fa`, branch `feature/DL-16596`, base `release/v1.88.0`. 원격 push 완료, 제품 checkout clean.
