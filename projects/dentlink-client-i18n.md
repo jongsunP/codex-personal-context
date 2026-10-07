@@ -4,6 +4,27 @@ This is the durable delivery checkpoint for the Dentlink Lab i18n, operational
 Sheet, and cross-service Pretendard work. Live Git and Google Sheet state still
 take precedence if later work changes them.
 
+## 머지 완료·작업 공간 정리 — 2026-10-07
+
+- 사용자가 [PR #4666](https://github.com/Innvoaid/dentlink-client/pull/4666)을 직접 머지했다.
+  GitHub MERGED, mergedBy `jongsunP`, 2026-10-07 11:37:18 KST,
+  squash merge commit `dd9f1f54477f839f881b6f2117e0fb9965451a41`을 live 확인했다.
+- `origin/release/v1.88.0`에 해당 commit이 포함되고, 지침 7개 파일의 내용이 feature 최종 HEAD
+  `67e95af9f8b15bf251ec06ed063578941c97ebf5`와 동일함을 검증했다. squash 머지라 feature HEAD가
+  release의 ancestor가 아닌 것은 정상이며 결과 tree와 PR merge 근거로 확인했다.
+- 사용자 정리 지시에 따라 전용 worktree
+  `/Users/parkjongsun/Repository/dentlink-client-i18n-guide`와 로컬 `feature/lab-i18n-workflow`를
+  삭제했다. tracked 변경·미추적 파일·사용자 자료/인증 파일·사용 중인 프로세스가 없었고,
+  ignored 의존성·Next 생성물·TS 캐시·coverage/baseline도 작업 공간과 함께 정리했다.
+  원격 feature는 최종 HEAD를 보존하며 다른 제품·작업 checkout은 변경하지 않았다.
+- 최신 CodeRabbit 검토 완료·미해결 0건과 기존 타입·필수 hook·공유 53개 테스트 통과는
+  머지 전 검증 결과다. 이번 정리에서 추가 제품 코드·번역·시트 변경이나 배포는 하지 않았다.
+- 완료 범위는 웹 공유 에이전트 지침·i18n 운영 기준의 release 반영과 로컬 작업 공간 정리다.
+  master 반영·스테이징/운영 배포·실제 시트 동기화 완료로 확대하지 않는다. Lab 앱 지침 PR도 이번 범위가 아니다.
+- 다음 시작점: 신규 작업이 생기면 최신 Git과 실제 적용 지침을 확인하고 새 feature에서 시작한다.
+  release에 후속 수정이 필요하면 최신 release에서 신규 후속 branch를 만든다. 완료된 feature는 재사용하지 않는다.
+  현재 추가 구현·리뷰·머지 준비 작업은 없고 사용자 요청까지 대기한다.
+
 ## 사용자 머지 준비 확인 — 2026-10-07 11:25 KST
 
 - 사용자 요청에 따라 [PR #4666](https://github.com/Innvoaid/dentlink-client/pull/4666)이
