@@ -22,7 +22,18 @@
 - 최신 번역 지침 전달은 문서 전용 #5이며 [전달 기록](dentlink-lab-app-i18n.md)을 따른다.
   공통 정책 정리 당시 제품 변경은 없었으며 아래 최신 사용자 승인 작업과 구분한다.
 
-## DL-16652 현재 확인 — 2026-10-08 Staging CodePush 양 플랫폼 배포
+## DL-16652 현재 확인 — 2026-10-08 검토 중 아이콘 결함 조사
+
+- 사용자 iOS Staging 실물 제보의 ‘검토 중’ NEW 아이콘 누락은 환자 카드의 흰 배경과
+  SvgTeethFilled path 고정 white가 원인이다. root color를 SVG 변환/native renderer가 덮어쓰지 않는다.
+  같은 카드 코드의 Android도 영향을 받는다. 다른 상태 SVG12개 확인에서 같은 white 대비 원인은 없다.
+- Lab/Office 일반 주문목록은 보라색 원 위 white라 같은 문제가 없고 Office #318은 Remake만 변경했다.
+  실제 양 제품 기기 화면은 사용자 확인과 구분한다. 이전 QA에서 NEW 실색 확인을 놓쳤다.
+- 제품 수정/PR/배포/Jira는 아직 하지 않았다. Staging v31은 배포 완료지만 이 결함은 미수정이다.
+  공용 teeth를 보존하고 Lab 환자 카드 범위에 한정해 앱 Figma 근거대로 보정하는 것이 다음 시작점이다.
+  정본은 [DL-16652](dentlink-patient-list-design.md)다.
+
+## 이전 확인 — 2026-10-08 Staging CodePush 양 플랫폼 배포
 
 - 사용자 병합 #5=768814e1/15:21:32·#6=f000ae2c/15:22:06 KST를 확인했다.
   최신 release/v1.0.4@f000ae2c의 tree31a50be7은 기존 모의통합과 동일하며 소스 새 변경은 없다.

@@ -23,7 +23,17 @@
   `origin/main` 대비 1커밋 뒤이며 권한관리 worktree도 존재한다. 아래 2026-09-28의
   단일 worktree·로컬 동기화 상태는 당시 기록이며 현재 상태로 재사용하지 않는다.
 
-## DL-16652 현재 확인 — 2026-10-08 클리닉 사용자 병합
+## DL-16652 현재 확인 — 2026-10-08 검토 중 아이콘 양 앱 비교
+
+- 사용자 Lab 실물 제보에 따라 Office도 읽기 전용으로 확인했다. 최신 release/v2.2.4@a00efb1e와
+  기존81584b82의 OrderProgressStatus/SvgTeethFilled/Icon/PatientCard/KO 리소스는 byte 동일하다.
+- 검토 중 NEW는 보라색 primary600 원(24px) 위 흰색 teeth(12px)라 Lab 새 환자 카드의
+  흰 배경/고정 white 결함과 다르다. Office 환자 카드는 별도 caseStatus 텍스트 배지다.
+  #318은 Remake 3파일만 변경해 검토 중 아이콘은 손대지 않았다. Office 소스에 같은 대비 결함 근거는 없다.
+- 실제 Office 기기 화면은 사용자 확인 중이며 이번 조사에서 제품 코드/PR/배포/Jira는 변경하지 않았다.
+  기공소 카드 결함과 보정 시작점은 [DL-16652 정본](dentlink-patient-list-design.md)에 둔다.
+
+## 이전 확인 — 2026-10-08 클리닉 사용자 병합
 
 - 사용자가 #318을 병합했다고 알렸고 live MERGED를 확인했다. merge
   bf9e897ef72d37190cc52c84cd796ce2ec6a0e3c, 15:02:42 KST다.

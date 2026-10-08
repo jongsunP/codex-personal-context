@@ -2,6 +2,11 @@
 
 ## 2026-10-08
 
+- 사용자 Lab iOS 실물 ‘검토 중’ 아이콘 제보를 양 앱 코드와 실제 SVG 변환/native paint 경로로 조사했다.
+  Lab환자카드 NEW의 bgwhite/pathwhite가 직접원인이고 동일Android도영향받는다. Office 일반주문은
+  보라색 원위white로대비유지·PR318Remake만변경이며 같은결함근거없다. 카드SVG12개도확인했다.
+  이전QA가NEW실색검증을놓쳤다. 조사만완료/제품수정·배포·Jira미실행이며 v31배포와결함미수정을구분했다.
+  정본/제품/FE에Lab카드범위최소보정다음시작점을남겼다. 실제기기확인은사용자가진행중이다.
 - 사용자 Lab 문서5/기능6 병합768814e1/f000ae2c를 확인하고 명시 승인된 Staging CodePush를 실행했다.
   최신release1.0.4@f000ae2c/tree31a50be7·clean detached기존worktree에서 플랫폼별 명령을순차실행해
   iOS v31/15:25:36·Android v31/15:26:36 업로드 성공/CLIexit0·서버history readback을 확인했다.

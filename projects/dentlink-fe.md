@@ -4,7 +4,16 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 인계 — 2026-10-08 Lab 사용자 병합·Staging CodePush 완료
+## 현재 인계 — 2026-10-08 Lab 검토 중 아이콘 제보 조사
+
+- Lab Staging 실물 제보의 검토 중 NEW는 환자 카드 흰 배경에 고정 white SVG가 원인이다.
+  실제 SVG 변환/native paint 경로까지 확인했고 같은 Android 코드도 영향받는다. Office 일반주문은
+  보라색 원 위 white이고 #318은 Remake만 변경해 동일 대비 결함 근거는 없다.
+- 조사만 완료했고 제품/PR/배포/Jira는 추가 변경하지 않았다. v31 업로드 완료와 결함 미수정을 구분한다.
+  다음은 Lab 카드 범위의 아이콘 보정이며 실제 기기 화면은 사용자 확인 중이다.
+  [DL-16652 정본](dentlink-patient-list-design.md)을 우선한다. 메인세션 메시지는 보내지 않았다.
+
+## 이전 인계 — 2026-10-08 Lab 사용자 병합·Staging CodePush 완료
 
 - Lab 문서5=768814e1와 기능6=f000ae2c를 사용자께서 병합했다. 최신 release/v1.0.4@f000ae2c/tree31a50be7을
   확인하고 기존 worktree를 clean detached release로 전환해 승인된 iOS/Android Staging CodePush를 실행했다.

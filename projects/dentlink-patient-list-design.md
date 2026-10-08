@@ -1,6 +1,28 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 최신 확인 — 2026-10-08 Lab 사용자 병합·양 플랫폼 Staging CodePush 완료
+## 최신 확인 — 2026-10-08 Staging 실물 제보: 검토 중 아이콘 누락 원인 확정
+
+- 사용자가 iOS Lab 실물에서 새 환자목록 디자인 반영을 확인했고, ‘검토 중’ 아이콘만 없는 듯 보인다고
+  제보했다. 양 앱 확인을 요청했고 본인은 실물 확인을 계속한다. 이 실물 결과는 사용자 관찰이며 root의 기기 재현은 아니다.
+- ‘검토 중’은 NEW→In Review→order.statuses.inReview다. 승인 대기와 다르다.
+  배포 f000ae2의 OrderPatientListItem.tsx:42는 NEW에 SvgTeethFilled를 사용해 root color=mono800을 전달한다.
+  SvgTeethFilled.svg:2는 path fill=white가 고정이고 상태 칩 background=white다. 흰색 위 흰색이 직접 원인이다.
+- 실제 react-native-svg-transformer/SVGR 결과도 white를 유지한다. 설치 라이브러리의 brush 추출과
+  iOS native renderer는 solid white와 currentColor를 구분해 root color가 고정 fill을 덮어쓰지 않는다.
+  mask/clip/opacity/16px 정수 slot의 크기 잘림 문제가 아니다. 동일 카드 코드의 Android도 같은 조건이다.
+- 카드 상태 SVG12개를 확인했고 고정 white는 NEW 치아만이다. 다른 상태는 currentColor 또는 유색 fill이다.
+  기존 QA6상태/카드 테스트에서 NEW 실색 렌더링을 검증하지 못한 누락이며 전체 상태 시각검증 완료로 재사용하지 않는다.
+- Lab/Office의 일반 OrderProgressStatus NEW는 primary600 원 안 white teeth여서 같은 대비 문제가 없다.
+  Office 최신 release a00efb1e와 이전81584b82의 관련 파일은 byte 동일이며 #318은 Remake 3파일만 변경했다.
+  Office 환자카드는 caseStatus 텍스트 배지로 NEW 치아 경로를 사용하지 않는다. Office 실기 화면 확인은 사용자 확인 중이다.
+- 최소 수정 방향은 **기공소 환자 카드 전용 치아 아이콘의 채색**이다. 공용 SVG를 회색으로 고정하면
+  기존 주문목록의 흰색 표시를 바꿀 수 있으므로 보존해야 한다. 캐시 Figma web14px/#959595는 앱16px의
+  정확한 원본 근거로 전용하지 않았다. 앱 Figma 색/형상은 보정 전에 확인한다.
+- 이번 요청에서는 조사만 완료했다. 제품 코드/테스트/PR/배포/Jira는 변경하지 않았다.
+  Staging v31 배포 완료와 아이콘 결함 미수정 상태를 구분한다. 다음 시작점은 Lab 환자 카드 NEW의
+  디자인 근거 확인→최소 보정→관련 색 렌더링 확인→승인 범위의 전달/재배포이며 클리닉 재작업 근거는 없다.
+
+## 이전 확인 — 2026-10-08 Lab 사용자 병합·양 플랫폼 Staging CodePush 완료
 
 - 사용자가 Lab 문서 #5와 기능 #6을 병합했고 직접 Staging CodePush iOS/Android 배포를 승인했다.
   live MERGED: #5 `768814e1b5a9642df1979998cc89289c4d5f0759`/15:21:32 KST,
