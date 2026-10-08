@@ -19,6 +19,8 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## 앱 release·제품별 Jira 정책 — 2026-10-08
 
+- 사용자가 이 방향을 지속적인 업무 운영 기준으로 유지하기로 재확인했다.
+  정책·온보딩 정리는 완료됐으며 신규 요청에서 적용한다. 아래 Lab 선행 통합은 별도 미완료 항목이다.
 - 사용자 확정: 앱 PR은 각 제품의 기존 최신 유효 release를 기본 대상으로 하며,
   같은 바이너리의 호환 CodePush마다 release를 새로 만들지 않는다. feature 시작 기준·PR 대상과
   Git 태그·OTA 업로드/활성화/설치·스토어 심사/출시는 별도 판단·상태로 관리한다.

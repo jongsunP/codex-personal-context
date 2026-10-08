@@ -2,6 +2,8 @@
 
 ## 2026-10-08
 
+- 사용자가 앱 release·제품별 Jira 운영 방향의 지속 적용을 재확인해 FE 정본에 기록했다.
+  지침 정리는 완료하고 Lab PR #2/#3의 선행 통합 과제는 미완료로 유지했다. 이번 정리에 새 작업 공간은 없다.
 - 사용자 앱 release 정책과 제품별 Jira 카드 지침을 공통 AGENTS/SESSION_WORKFLOW/AI_WORKFLOW에 저장했다.
   앱은 기존 최신 유효 release를 PR 대상으로 우선하고 호환 CodePush마다 새 release를 만들지 않는다.
   웹·Office·Lab의 실제 영향에 따라 카드를 재사용/생성하며 완료·QA·배포를 독립 관리한다.
