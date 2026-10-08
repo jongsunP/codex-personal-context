@@ -32,9 +32,17 @@
 - 실제 Clinic 로컬 페이지는 로그인 화면까지 확인했으며 Codex가 실계정 주문 데이터·실제 상세 이동 QA를 완료한 근거는 없다. 이번 요청은 병합 확인과 종료이므로 로그인 QA를 추가 실행하지 않았다. 합성 컴포넌트 검증을 실계정 QA 완료로 보고하지 않는다. staging QA·배포도 미확인이다.
 - 검증 이미지: 개인 세션 폴더의 `DL-16655-before.jpg`, `DL-16655-after.jpg`(합성 데이터)는 보존했다. 임시 Vite 서버3119·실행 세션·harness는 이전에 정리했다. 이번 종료에서 소유 Clinic DEV 서버3118(exec session41439)을 종료했고 listener·PID76474/76504/76516가 없는 것을 확인했다. 로그인 대기 탭도 현재 Chrome 목록에 없다. 제품 node_modules·기존 ignored 캐시·다른 기능 worktree와 브라우저 탭은 보존했다.
 
+## Git 커밋 목록 차이 질의 메모 — 2026-10-08
+
+- 사용자는 커밋 목록에 다른 작성자 이력이 보이지만 Files changed에는 그 수정이 없는 경우의 판단과 개선 방법을 질문했다. 이번 PR은 대상 release의 기존 반영 여부와 실제 병합 전후 차이를 확인했으며, 새로 추가된 코드는 DL-16655 정렬 1파일뿐이므로 코드상 문제없다. 다른 작성자 흔적은 커밋 목록과 squash 공동 작성자 표기에 남았다.
+- master 기준 기능 브랜치를 release에 전달할 때, 같은 변경이 각 브랜치에 서로 다른 커밋으로 반영되어 이력이 갈라지면 기존 수정 커밋도 PR 목록에 보일 수 있다. 이 현상만으로 Git 사용 실수라고 판단하지 않는다. 이번 결과를 “Files changed에 안 보이면 항상 안전하다”로 일반화하지 않으며, 대상 브랜치의 기존 반영 여부·실제 diff·병합 결과를 함께 확인한다. 실행 QA·배포 완료의 증거와도 구분한다.
+- 개선 아이디어: PR 생성 전 커밋 목록·파일 차이·예상 병합 결과를 확인하고, 기존 이력이 노출될 때는 전달 보고와 PR 설명에 이유를 명시하면 사용자 혼동을 줄일 수 있다.
+- 커밋 목록까지 분리할 필요가 있을 때는 대상 release 기반의 PR용 전달 브랜치에 의도한 작업 커밋만 cherry-pick하고 의존성·diff·릴리스 조합을 재검증하는 방안을 검토할 수 있다. 신규 구현의 master 기준은 유지하며, 목록 노출만으로 매번 전달 브랜치 재구성을 의무화하지 않는다. 관련 없는 실제 변경 유입 시 전달 브랜치를 분리하는 기존 규칙은 [SESSION_WORKFLOW.md](../SESSION_WORKFLOW.md#dentlink-release-train-branch-strategy)에 있다.
+- 사용자 지시는 **Git 관련 내용은 메모만 저장**하는 것이다. 위 개선 아이디어는 검토안으로 기록했으며 브랜치 전략·병합 정책·자동화 변경, 제품 브랜치 재구성·이력 재작성은 적용하지 않았다. 참고: [GitHub 병합 방식](https://docs.github.com/en/pull-requests/reference/pull-request-merges), [Git cherry-pick](https://git-scm.com/docs/git-cherry-pick).
+
 ## 종료 상태와 다음 시작점
 
 1. DL-16655 구현·전달과 사용자 병합 확인은 완료했다. 기본 checkout은 `feature/DL-16655`/`80207a234`·upstream 동일·clean으로 보존하며 새 worktree나 브랜치 삭제는 수행하지 않았다. 원격 feature·병합 PR·release squash 커밋에 변경이 보존되어 있다.
 2. 재개 요청 시 개인 컨텍스트와 제품 remote를 갱신하고 실제 release·PR·checkout 소유·미커밋 상태를 먼저 확인한다. 추가 QA가 요청될 때만 Clinic 서버와 실계정 검증을 다시 준비한다.
 3. staging QA·배포·Jira 정리 여부는 별도 요청 및 실제 증거로 확인한다. CodeRabbit 자동 리뷰 확인·감시는 시작하지 않았다.
-4. 이번 종료 기록은 다른 세션의 `AGENTS.md`·`AI_WORKFLOW.md`·`SESSION_WORKFLOW.md` 미커밋 변경을 보존하고 이 기능 체크포인트만 commit/push한다.
+4. 사용자 후속 요청에서 개인 컨텍스트 pull과 제품 fetch 후 PR MERGED·현재 release의 병합 커밋 포함·기본 checkout clean·3118/3119 미실행을 재확인했다. 현재 release HEAD는 `3e428d847b7410697520fb9026d181c558dddb46`이며 후속 작업이 추가되어도 이 PR의 병합 결과는 위 `c77c3a861` 기준으로 확인한다. 남은 자체 임시 PR 본문·Clinic/Lab/Admin 린트 로그 4개를 정리했고 검증 이미지는 보존했다. 별도 worktree·제품 브랜치·캐시·다른 세션 자료는 보존한다. 이 체크포인트와 PROJECTS.md의 해당 기능 색인만 commit/push한다.

@@ -67,6 +67,12 @@ For detailed current state, read:
 - 이 색인은 세부 상태를 중복 보관하지 않는다. 과거 SHA, PR 상태, QA·배포 이력은
   각 프로젝트의 최신 체크포인트에서 확인하고 재개 시 live Git과 대조한다.
 
+### Dentlink 치과 주문목록 아이콘·텍스트 정렬 — DL-16655
+
+- Web Clinic 주문 행 정렬 수정이며 사용자 직접 병합한 release 대상 PR #4675의 종료 기록이다.
+- 구현·검증·병합 확인·정리 상태와 Git 커밋 목록 차이 질의 및 개선 검토안(미적용)은
+  [개인 체크포인트](projects/dentlink-client-order-list-alignment.md)에 보존한다.
+
 ### Dentlink 기공소 환자목록 디자인·API 대응 — DL-16652
 
 - 웹 Lab·기공소 앱의 최종 Figma·배포된 DEV API 대응이다. 전역 Remake 배지만 Office 앱에도 적용했다.
