@@ -76,9 +76,12 @@ For detailed current state, read:
 ### Dentlink 기공소 환자목록 디자인·API 대응 — DL-16652
 
 - 웹 Lab·기공소 앱의 최종 Figma·배포된 DEV API 대응이다. 전역 Remake 배지만 Office 앱에도 적용했다.
-- 기존 메인 프로젝트 폴더의 별도 기능 세션과 제품별 `feature/DL-16652` worktree를 사용한다.
+- 기존 메인 프로젝트 폴더의 별도 기능 세션과 제품별 worktree를 사용한다. 최신 전달 브랜치는 아래 정본을 따른다.
 - 이번 화면 전용 표이며 기존 공통 테이블이나 공식 디자인시스템의 변경은 아니다.
-- 3제품 commit/push·PR 전달과 신규 번역 시트 등록 완료. 실기QA·STG 및 외부 검사 한계는 정본을 따른다.
+- 웹기능은 release1.88.0에 병합됐고 전체release→새stage PR #4677을 생성했다. 사용자가stage에 병합했고 배포Actions3개는 진행중이다.
+  실제배포완료/QA는 별도다.
+- 앱은 최종release에서 본인작업만 전달하도록 #318유지·Lab #6기능/#5독립문서로 정리했고 옛Lab2/3/4는 닫았다.
+  신규번역시트·검증·실기QA/OTA 및 외부검사 한계는 정본을 따른다.
 - [projects/dentlink-patient-list-design.md](projects/dentlink-patient-list-design.md)
 
 ### Dentlink 타기공소 주문 조회 가드 — DL-16596

@@ -1,5 +1,37 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
+## 최신 웹 전달·세션 정리 — 2026-10-08 스테이징 PR #4677
+
+- **현재:** 사용자jongsunP가 #4677을 14:50:42 KST에 병합했다. 실제stage SHA는
+  `d37956611815ac17f2095c05fa6392b57c55f736`, tree는release cb38bfbfc87865f97dae9bc6c39f9c9d30c7203f와 동일하다.
+  14:50:45에 같은SHA로 시작한 치과웹37734431427·Lab웹37734431389·Admin37734431594 배포Actions는
+  최종조회당시 모두 IN_PROGRESS다. root가 PR병합/배포명령을 실행한 것은 아니며 배포·통합QA 완료는 아직 아니다.
+  아래 OPEN/새stage=master/새run미관측은 생성직후 증거로 보존한다.
+- 사용자가 앞선 앱 PR 구성이 본인 의도와 맞다고 확인했다. 최종release에서 본인작업만 전달한다는
+  정책과 아래 #318유지/#6기능/#5독립문서 구성을 확정한다. 앱source·PR을 이번에는 추가 변경하지 않았다.
+- 이어 사용자 승인으로 **웹 원격 stage 삭제 → 최신 원격 master에서 stage 생성 → release/v1.88.0 PR**을 실행했다.
+  이전 stage248e4028b8f89484bd3be1e627affb5200b3d3b9를 로컬
+  `refs/codex-backup/stage-20261008-248e4028b8f8`에 보존했다. 열린stage PR0·보호/rules0을 확인했고
+  삭제시 oldSHA lease·생성시 nonexistence lease로 다른 작업의 원격 변경을 덮어쓰지 않게 했다.
+- 새stage=현재master **6b79c9756cc56313fe833aad463bddb1f8c385fa**, head release는
+  **eca577a6e67e4f23aa3c4742a12e23f261298233**다.
+  [PR #4677](https://github.com/Innvoaid/dentlink-client/pull/4677) `release/v1.88.0 → stage`,
+  OPEN/non-Draft/MERGEABLE/UNSTABLE·21커밋/985파일(+86260/-9948)·autoMergeRequest=null을 readback하고 artifact에 연결했다.
+  환자목록만의 PR이 아니라 최신 1.88.0 전체 릴리스다. 제품코드/추가커밋/로컬checkout 전환은 없다.
+- #4665 사용자병합3e428d847·#4666 지침dd9f1f544의 릴리스 포함을 확인했다.
+  모의병합은 충돌0이고 결과tree cb38bfbfc87865f97dae9bc6c39f9c9d30c7203f=release tree다.
+  master-only #4657은 release #4658과 같은코드결과로 통합된다. 전체diff 기존EOF빈줄3건은 PR본문에 남기고 수정하지 않았다.
+- 원격 삭제/생성 normal push 훅이 성공했고 lint의 기존경고/coverage변화0은 별도로 구분했다.
+  훅은 기존feature1c829807 checkout에서 실행되어 최신전체릴리스 런타임/타입검증으로 확대하지 않는다.
+  PR 생성 후 DLOS guard·리뷰어자동할당 SUCCESS, CodeRabbit은stage대상비활성화 SKIP,
+  Vercel은 최신release작성자chajju 프로젝트접근권한 FAILURE다. 전체CI통과로 보고하지 않는다.
+  stage최신run조회에서 새master기반ref 배포실행은 관측되지 않았고 옛stage배포만 조회됐다.
+- 담당Jira44342를 웹stage준비/앱최종PR 링크로 갱신/readback했다. 상태진행중·상위카드/fixVersion은 유지한다.
+  tracked clean·원격동일, task개발서버 잔류0을 확인했다. 실제stagePR병합·수동배포·통합QA는 미실행이며
+  원격sourcebranches·앱unmergedworktrees·웹QA자료를 보존했다. 메인세션 메시지는 보내지 않았다.
+- 다음 시작점은 현재stage/릴리스SHA를 확인하고 위 사용자병합SHA의 Clinic/Lab/Admin Stage Actions 결과와
+  최신릴리스 통합QA를 확인하는 것이다. 앱의 구현/문서 PR 전달은 아래 기준이며 병합/CodePush 적용은 별도다.
+
 ## 현재 상태 — 2026-10-08 요청한 변경만 릴리스 PR로 정리 완료
 
 - 사용자 최종 지시: 본인이 올린 클리닉·기공소 앱 PR 전체를 확인하고, **최종 대상 릴리스에서

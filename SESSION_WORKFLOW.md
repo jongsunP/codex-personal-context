@@ -560,6 +560,17 @@ Do not call the current model classic `Git Flow`:
   deleting, recreating, or targeting an environment branch, verify the live
   remote refs and documented deployment convention; do not derive a branch
   name from the environment label alone.
+- For an authorized assembled-release staging reset, record the current
+  `stage`/`master`/release SHAs, open stage PRs, and effective protection first.
+  Preserve the old stage commit in a local recovery ref, delete remote stage
+  with the expected SHA lease, then recreate it from exact latest remote
+  `master` with a nonexistence lease. Create `release/vX.Y.Z -> stage` using the
+  repository PR template and verify the actual base/head/full diff and merge
+  result. This is a whole-release PR, not a new feature-only PR. Stop at PR
+  preparation when that is the requested scope; merging and deployment remain
+  separate. Stage workflows have product path filters, so verify Clinic, Lab,
+  and Admin Actions separately after promotion. A branch recreation push may
+  also trigger CI; do not assume either that it deployed or that no job ran.
 
 ### Assistance Rules For Parallel Releases
 

@@ -4,6 +4,37 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
+## 현재 인계 — 2026-10-08 웹 1.88.0 사용자 stage 병합·앱 범위 정리
+
+- **최신:** 사용자jongsunP가 [PR #4677](https://github.com/Innvoaid/dentlink-client/pull/4677)을
+  14:50:42 KST에 병합했다. 현재stage는 `d37956611815ac17f2095c05fa6392b57c55f736`이며
+  전체tree가release와동일하다. master6b79c975/releaseeca577a6는그대로다. root가 대신 병합한 것은 아니다.
+  이SHA에서 14:50:45 KST에 시작한 치과웹37734431427·Lab웹37734431389·Admin37734431594
+  Stage배포run은 최종조회당시 모두 IN_PROGRESS다. 실제배포완료·통합QA 완료로 표시하지 않는다.
+  아래 OPEN/새master기반stage/새run미관측은 생성직후 이력이며 현재상태로 재사용하지 않는다.
+
+- 사용자 요청으로 웹 원격 `stage`를 삭제하고 최신 원격 `master / 6b79c9756cc56313fe833aad463bddb1f8c385fa`
+  에서 다시 생성했다. 이전 `248e4028b8f89484bd3be1e627affb5200b3d3b9`는
+  `refs/codex-backup/stage-20261008-248e4028b8f8`에 로컬 보존했다. 삭제/생성 각각 정확한 lease를 사용했다.
+- [스테이징 PR #4677](https://github.com/Innvoaid/dentlink-client/pull/4677)은
+  `release/v1.88.0 / eca577a6e67e4f23aa3c4742a12e23f261298233` → 새 `stage`다.
+  전체 릴리스21커밋·985파일(+86260/-9948)이며 OPEN/non-Draft/MERGEABLE/UNSTABLE,
+  autoMergeRequest=null, 실제병합/별도배포명령/통합QA 미실행이다. 실제원격 master=stage를 readback했다.
+- 모의병합 충돌0·결과tree cb38bfbfc87865f97dae9bc6c39f9c9d30c7203f=release tree다.
+  master-only #4657과 release의 #4658 수정은 같은코드결과로 통합된다. #4665·#4666 릴리스 포함을 확인했다.
+  전체diff의 기존EOF빈줄3건은 PR에명시하고 타작업을 수정하지 않았다.
+- 생성 후 Admin DLOS Guard·자동reviewer 할당 SUCCESS, CodeRabbit은 stage 리뷰 비활성화로 SKIP이다.
+  Vercel은 release 작성자chajju 프로젝트접근권한으로 FAILURE이며 전체검사PASS로 보고하지 않는다.
+  14:50 KST stage run조회에는 새6b79c975의 배포실행이 없었고 이전run만 관측됐다.
+  PR생성/branch재생성을 실제최신릴리스배포완료로 확대하지 않는다. 이제 남은 것은 위 최신SHA의 앱별Actions 결과/QA 확인이다.
+- 사용자가 앱의 **최종 릴리스에서 본인작업만 반영**하는 구성이 본인 의도라고 재확인했다.
+  클리닉 #318은 배지3파일뿐이라 유지(APPROVED/CLEAN), Lab 기능은 새 #6 20파일,
+  번역운영지침은 독립 #5 문서3파일로 정리했다. 옛 #2/#3/#4는 CLOSED/미병합이며 foundation 불필요다.
+  아래 이전 선행통합/개발대상 기록보다 [DL-16652 최신 정본](dentlink-patient-list-design.md)을 우선한다.
+- 이 세션의 제품코드·릴리스/마스터·다른 작업 checkout은 변경하지 않았다. 해당 웹 checkout은
+  tracked clean·원격동일이고 작업개발서버가 남아 있지 않다. 앱source/worktree·원격branches와 QA자료는 보존했다.
+  Jira DL-16652 댓글44342에 웹stage준비와 앱정리를 통합갱신했다. 메인세션 메시지는 보내지 않았다.
+
 ## Scope
 
 - Web/Admin repository: `/Users/parkjongsun/Repository/dentlink-client`
@@ -20,7 +51,7 @@ Detailed implementation history remains in the relevant existing project file.
 ## 앱 release·제품별 Jira 정책 — 2026-10-08
 
 - 사용자가 이 방향을 지속적인 업무 운영 기준으로 유지하기로 재확인했다.
-  정책·온보딩 정리는 완료됐으며 신규 요청에서 적용한다. 아래 Lab 선행 통합은 별도 미완료 항목이다.
+  정책·온보딩 정리는 완료됐으며 신규 요청에서 적용한다. 이후 최신 앱PR정리로 broad foundation 선행안은 폐기했다.
 - 사용자 확정: 앱 PR은 각 제품의 기존 최신 유효 release를 기본 대상으로 하며,
   같은 바이너리의 호환 CodePush마다 release를 새로 만들지 않는다. feature 시작 기준·PR 대상과
   Git 태그·OTA 업로드/활성화/설치·스토어 심사/출시는 별도 판단·상태로 관리한다.
@@ -30,8 +61,8 @@ Detailed implementation history remains in the relevant existing project file.
 - 사용자 제공 APP 온보딩·참고 링크 21개와 확인 가능한 하위 문서를 실제 Git·스크립트와 대조했다.
   분리 전 문서·폐기된 정책·미해석 객체와 실제 배포 증거를 구분한다.
   상세 전략과 출처·조회 한계는 [앱 온보딩 정본](dentlink-app-onboarding.md)에 둔다.
-- Lab #2·#3은 현재 `release/v1.0.4` 대상이나 분리 전 release 때문에 전체 diff가 확대됐다.
-  #3은 981파일·7커밋이며 선행 통합 판단이 남았다. 이번 지침 정리에서 제품 코드·PR·Jira·배포는 변경하지 않았다.
+- 최초정책조사에서 Lab #2·#3은 분리 전release 대상으로 전체diff가 확대돼 있었다.
+  이후 #6 기능20파일·#5 문서3파일로 대체해 요청한 작업만 전달하도록 정리했다. 최초조사에서는 제품 변경이 없었다.
 
 ## Session Ownership
 
@@ -88,10 +119,10 @@ Detailed implementation history remains in the relevant existing project file.
   사용자가 11:37 KST에 squash 머지했으며 `dd9f1f544`의 release 반영과 지침 7개 파일 일치를 확인했다.
   전용 worktree·로컬 feature를 정리하고 원격 feature는 보존했다. 실제 배포·master 반영과 구분한다. 상세는
   [웹 i18n 정본](dentlink-client-i18n.md)에 두고 앱 팀 지침 변경과 구분한다.
-- 2026-10-08 사용자 승인으로 Lab 앱의 팀 지침도 직접 반영하고
+- 2026-10-08 최초 사용자 승인으로 Lab 앱의 팀 지침도 직접 반영하고
   [앱 PR #3](https://github.com/Innvoaid/dentlink-lab-app/pull/3)을 최초 `develop` 대상으로 전달했다.
   앱 README·AGENTS·CLAUDE 3개 문서, `5844ba5` push·자동 검사 SUCCESS·미병합이다.
-  현재 대상은 `release/v1.0.4`이며 분리 전 release로 전체 diff가 확대됐다. 위 정책 조사·선행 통합 과제를 따른다.
+  이후 release에서 문서만 옮긴 #5로 대체하고 #3을 닫았다. 최신 대상/범위는 앱 i18n 정본을 따른다.
   실제 번역·시트·실행 코드는 변경하지 않았다. 상세는
   [앱 i18n 전달 기록](dentlink-lab-app-i18n.md)에 두고 웹 release 상태와 분리한다.
 
@@ -105,7 +136,7 @@ Detailed implementation history remains in the relevant existing project file.
   수정·검증과 제품 Git 전달 권한을 구분하며 메인세션으로 진행·완료 메시지를 보내지 않는다.
   구현의 최신 상태는 작업 세션과 그 개인 체크포인트를 따른다. 메인세션은 이번 전달만 기록했다.
 
-## DL-16652 기공소 환자목록 디자인·API 대응 — 2026-10-06~08
+## DL-16652 기공소 환자목록 디자인·API 대응 — 최초 전달·QA 이력
 
 - 10월 8일 재점검: 세 feature HEAD와 Figma/댓글/신규 번역 시트 값은 기존 구현과 동일하다.
   웹 #4665는 사람 승인 APPROVED지만 현재 Draft이며 임의 전환/병합하지 않는다. Vercel 프리뷰 차단은
