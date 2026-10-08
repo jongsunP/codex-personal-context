@@ -83,8 +83,10 @@
   read-only requests or commit/push/PR/deployment authorization.
 - For Dentlink apps, follow **Dentlink App Release And Delivery Policy** in
   `SESSION_WORKFLOW.md` and `projects/dentlink-app-onboarding.md`. App PRs
-  normally target that product's existing latest applicable release branch;
-  compatible CodePush work does not require a new release branch every time.
+  for ordinary new features target `develop`. Release is the QA/delivery
+  branch, and approved release changes return to `develop` through a sync PR.
+  Keep already-completed release work unless the user requests another change.
+  Compatible CodePush work does not require a new release branch every time.
   Verify the actual PR base and diff after automation. Keep feature base,
   release integration, Git tags, OTA activation, and store release distinct.
 - When the user asks to `CodeRabbit 리뷰 확인` or equivalent, treat that

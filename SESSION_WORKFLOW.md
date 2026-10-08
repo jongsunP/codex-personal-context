@@ -382,20 +382,28 @@ recoverable across devices and future AI sessions.
 
 ## Dentlink App Release And Delivery Policy
 
-This is the user's standing app policy, confirmed on 2026-10-08. It applies
+This is the user's standing app policy, corrected on 2026-10-08. It applies
 independently to `dentlink-app` (Office) and `dentlink-lab-app` (Lab); the web
 release-train policy below is unchanged. Details and source coverage belong
 in [App onboarding and delivery](projects/dentlink-app-onboarding.md).
 
-- App feature PRs normally target the product's existing latest applicable
-  `release/vX.Y.Z`. Check live remote releases, actual operating version,
-  recent PR bases, and product history. Old `release/office/*` or
-  `release/lab/*` monorepo refs are not automatically current release targets.
-  Do not create a new release just because a new task or CodePush is planned.
+- Ordinary app feature PRs target `develop`; this supersedes the earlier
+  same-day interpretation that ordinary app features target release. For an
+  authorized new feature, normally prepare its base from latest fetched
+  `origin/develop`. Honor an explicit task base or verified release-QA context.
+- Release is the QA/delivery branch. Choose the existing applicable release
+  for the product's current compatible binary; CodePush does not require a
+  new release every time. Verify live releases, app versions, and task context.
+  Old `release/office/*` or `release/lab/*` monorepo refs are not automatically
+  current delivery targets. Version/release creation remains a separate decision.
+- Keep already-completed release deliveries and current PRs unless the user
+  specifically requests another change. Synchronize approved release changes
+  back to `develop` with a `release -> develop` PR when needed. Creating a sync
+  PR does not authorize merging it or deploying either branch.
 - Keep PR destination and feature starting commit distinct. Inspect the
   actual app's `main`, `develop`, release tree, and task dependencies before
-  selecting a compatible base. Do not apply web `origin/master`, a deprecated
-  monorepo develop rule, or a numerically latest but incompatible release
+  selecting a compatible base. Do not apply web `origin/master`, obsolete
+  monorepo paths, or a numerically latest but incompatible release
   mechanically. Report a real integration conflict before writing or retargeting.
 - Compare both commit ancestry and tree/layout, then review the complete PR
   diff. A pre-split release can make a small post-split task include repository
@@ -404,8 +412,10 @@ in [App onboarding and delivery](projects/dentlink-app-onboarding.md).
   task; a different layout or ancestry alone is not proof of a dependency.
 - Deliver only the user's authorized task and its verified necessary
   dependencies. When unrelated split history or other features enlarge an app
-  PR, prefer a fresh feature branch from the intended final release and port
-  only the task's changes into that release's existing structure. Recheck the
+  PR, compare against its actual intended target. For explicitly authorized
+  release-based QA/delivery, a fresh branch from that release can port only the
+  task's changes into its existing structure. Ordinary new features still use
+  `develop`; do not make direct release work the general rule. Recheck the
   full diff, affected product behavior, API, translations, bundle, and baseline
   diagnostics. Do not prepare a broad foundation PR merely to make the feature
   review smaller. If the existing PR already contains only the intended actual
@@ -414,10 +424,10 @@ in [App onboarding and delivery](projects/dentlink-app-onboarding.md).
   replacement, and preserve source branches for recovery unless deletion is
   requested. This preparation does not authorize a PR merge or deployment.
 - After PR creation or reopening, let relevant automation finish and verify
-  its actual base and diff again. Current app automation can redirect Jira
-  feature PRs to `develop`. The user policy selects the intended release;
-  unexpected redirection is a pending delivery issue, not a reason to silently
-  accept `develop` or modify workflows outside the authorized task.
+  its actual base and diff again. Current app automation's ordinary Jira
+  feature target of `develop` agrees with this corrected policy. Explicit
+  release-QA exceptions and release sync PRs still require actual target
+  verification. Do not modify workflows outside the authorized task.
 - For compatible JS/TS, styles, and bundle assets on the same installed
   binary, keep the existing app version/release and identify source changes
   with tags under the current product's convention. Native code/SDKs,
@@ -511,7 +521,7 @@ deployment, and forward propagation as distinct states. Planned release dates
 and active branch heads are time-sensitive and must be verified from live Git
 and PR state before acting.
 
-Use this normal post-PR delivery loop for Dentlink feature work:
+Use this normal post-PR delivery loop for Dentlink web feature work:
 
 1. If CodeRabbit creates review threads and the user asks Codex to handle the
    review, apply the complete review-cycle authority defined in `AGENTS.md`:

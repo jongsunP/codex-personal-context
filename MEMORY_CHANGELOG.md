@@ -2,6 +2,12 @@
 
 ## 2026-10-08
 
+- 사용자가 앱 일반 feature의 통합 대상을 develop으로 정정했다. 같은 날 앞선 release 기본 해석을 대체하고
+  AGENTS·SESSION_WORKFLOW·온보딩·제품별 정본·색인에 반영했다. release는 QA/배포이며 호환 CodePush는
+  기존 release를 유지한다. 승인된 release 전달 정리 이력과 일반 신규 feature 시작 기준을 구분했다.
+  양 앱 동기화 PR Office321/Lab9는 생성 후 GitHub에서 jongsunP 병합16:08:37/16:07:37 KST를 확인했다.
+  메인 실행은 PR 생성까지다. 이후 진행은 다른 세션에 맡기고 여기서는 지침만 수정하라는 정정을 따르며,
+  이미 수행된 작업은 유지하고 추가 제품 코드·PR·merge·배포 작업은 실행하지 않는다.
 - DL-16652사용자마감요청으로완료상태/다음시작점을정리하고새요청전대기한다.
   메인생성기존Clinic321(04ed4e5b/16:08:37)·Lab9(e6fec379/16:07:37)의release→develop병합을live확인,
   양develop은각release와전체tree동일이다. 중복PR/추가병합·배포는하지않았다.

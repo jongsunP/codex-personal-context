@@ -24,10 +24,15 @@
 
 ### 앱 release·PR
 
-- 앱 PR은 **해당 제품의 이미 존재하는 최신 유효 `release/vX.Y.Z`**를 기본 대상으로 한다.
-  매 업무마다 release를 새로 만들지 않는다. 같은 바이너리와 호환되는 CodePush는 기존 release를 유지할 수 있다.
+- **2026-10-08 후속 사용자 정정: 일반 신규 앱 feature PR은 `develop`을 기본 대상으로 한다.**
+  같은 날 앞서 기록한 ‘일반 앱 feature도 release 대상’ 해석은 이 정정으로 대체한다.
+  승인된 일반 신규 기능은 최신 `origin/develop` 기준으로 준비하며, 명시된 별도 기준·release QA는 구분한다.
+- release는 QA·배포 단계의 기준이다. 같은 바이너리와 호환되는 CodePush는 기존 유효
+  `release/vX.Y.Z`를 유지할 수 있으며 매 업무마다 새 release를 만들지 않는다.
+- 이미 완료한 release 전달은 유지한다. 필요한 경우 **`release → develop` 동기화 PR**로
+  반영한 변경을 개발 기준에 돌려놓는다. 기존 feature PR 재작성·retarget·merge·배포를 자동 실행하지 않는다.
 - PR 대상과 feature 시작 커밋은 구분한다. `main`·`develop`·release의 트리, 선행 변경, 작업 의존성을 확인한다.
-  웹의 `origin/master` 규칙이나 폐기된 모노레포의 develop 규칙을 앱에 자동 적용하지 않는다.
+  웹의 `origin/master` 규칙이나 과거 모노레포 경로·앱 구성을 현재 앱에 자동 적용하지 않는다.
 - 실제 운영 버전과 최근 PR을 확인한다. 과거 `release/office/*`·`release/lab/*`나 태그를 현재 목표로 오인하지 않는다.
 - PR 생성·재오픈 후 자동화가 끝나면 **실제 base와 전체 diff를 재확인**한다.
   관련 없는 분리·기능 커밋이 섞이면 선행 통합을 별도로 판단한다. `MERGEABLE/CLEAN`은 범위 검증이 아니다.
@@ -54,7 +59,7 @@
 3. 네이티브 영향과 실제 설치 바이너리 호환성을 확인해 CodePush 또는 스토어 경로를 판단한다.
 4. 해당 제품의 가까운 코드·생성 API·팀 문서·환경별 설정을 대조한다. 미확정 BE 계약이나 UI를 임의로 추가하지 않는다.
 5. 구현·코드 검증 → 해당 플랫폼 로컬 QA → 적절한 시점의 다른 플랫폼·필요 실기기 QA를 구분한다.
-6. 승인 범위 안에서 commit/push/PR을 처리하고 실제 release 대상·리뷰·diff를 다시 확인한다.
+6. 승인 범위 안에서 commit/push/PR을 처리하고 실제 PR 대상·리뷰·diff를 다시 확인한다.
 7. merge·태그·업로드·활성화·설치·스토어 제출·심사·출시·서버 호환성을 각각 확인하고 개인 체크포인트를 저장한다.
 
 ## CodePush와 스토어·버전 개념
@@ -100,16 +105,17 @@
 - 오류 보고에는 재현 시점·진입 경로·앱/OS/환경·바이너리·적용 라벨·설치/업데이트 경로를 기록한다.
   인증 정보·환자 데이터·env/키 첨부의 실제값은 개인 문서에 복사하지 않는다.
 
-## 최신 앱 PR 정리 — 2026-10-08
+## 승인된 release 전달 정리 이력 — 2026-10-08
 
-- [앱 전달 정책](../SESSION_WORKFLOW.md#dentlink-app-release-and-delivery-policy)에 요청한 변경만
-  최종release에 전달하는 기준을 추가했다. 분리 이력이 섞이면 release에서 새 feature를 만들고
-  실제 필요한 변경만 옮긴다. broad foundation PR을 기본 선행 조건으로 삼지 않는다.
-- Office #318은 이미 release 대비 배지3파일뿐이어서 그대로 유지했다. 최신 APPROVED/CLEAN이다.
+- 당시 명시 승인된 release 전달 작업은 요청한 변경만 최종 release에 반영하도록 정리했다.
+  분리 이력이 섞인 작업을 release 기준의 새 feature로 옮긴 이력이며, 일반 신규 feature의
+  develop 기준을 대체하지 않는다. broad foundation PR을 기본 선행 조건으로 삼지 않는다.
+- Office #318은 당시 release 대비 배지3파일뿐이어서 그대로 유지했다. 당시 APPROVED/CLEAN이었다.
 - Lab 기능은 #6 `feature/lab/DL-16652-release / e3bf335` → 기존release/v1.0.4(20파일),
   번역 운영 문서는 독립 #5 `feature/lab-i18n-workflow-release / 2fb6e8b` → 같은release(3문서)다.
   기존 #2/#3와 불필요한 기반 #4는 CLOSED/미병합이며 source branch는 보존했다.
-  둘 다 올바른base·전체diff·검사완료·MERGEABLE/CLEAN·미해결0을 확인했다. 실제merge/배포는 미실행이다.
+  당시 올바른base·전체diff·검사완료·MERGEABLE/CLEAN·미해결0을 확인했다. 이후 사용자 병합과
+  Lab Staging 배포는 [Lab 최신 체크포인트](dentlink-lab-app.md)를 따른다.
 - 세부 검증·QA 경계는 [DL-16652](dentlink-patient-list-design.md)와 [번역 전달](dentlink-lab-app-i18n.md)을 따른다.
   아래 live 표와 diff확대 기록은 이번 정리 이전의 정책 조사 이력이다.
 
@@ -123,7 +129,8 @@
 다음은 발견된 상태이며, 이번 지침 작업에서 제품 코드·PR·release를 수정하지 않았다.
 
 - 양 앱 `auto-pr-title.yml`은 Jira feature PR 생성·재오픈 시 base를 develop으로 변경한다.
-  사용자 기본 release 정책과 충돌하므로 PR 실제 base read-back을 기본 절차로 둔다. 자동화 변경은 별도 작업이다.
+  이는 후속 정정된 일반 feature의 develop 기본값과 일치한다. 최초 조사 당시 release 기본 해석과의
+  충돌 기록을 현재 정책으로 재사용하지 않는다. PR 실제 base read-back은 유지하며 자동화는 변경하지 않았다.
 - Lab release는 **분리 이전 monorepo 트리**이며 현재 main/develop에는 분리·기존 수정 등 6개 추가 커밋이 있다.
   #3은 현재 981파일·7커밋(+2740/-39781), #2는 991파일·10커밋(+3419/-39975)이다.
   앱별 최신 release라는 이유로 이 선행 통합 차이를 무시하지 않는다. 자세한 #3 상태는 [번역 전달](dentlink-lab-app-i18n.md)이다.

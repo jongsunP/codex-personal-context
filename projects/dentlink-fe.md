@@ -102,10 +102,10 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## 앱 release·제품별 Jira 정책 — 2026-10-08
 
-- 사용자가 이 방향을 지속적인 업무 운영 기준으로 유지하기로 재확인했다.
-  정책·온보딩 정리는 완료됐으며 신규 요청에서 적용한다. 이후 최신 앱PR정리로 broad foundation 선행안은 폐기했다.
-- 사용자 확정: 앱 PR은 각 제품의 기존 최신 유효 release를 기본 대상으로 하며,
-  같은 바이너리의 호환 CodePush마다 release를 새로 만들지 않는다. feature 시작 기준·PR 대상과
+- 사용자가 같은 날 후속 정정했다. **일반 앱 feature PR은 `develop`에 모으며, release는 QA·배포 단계**다.
+  이전 release 기본 대상 해석을 대체한다. 기존 release 전달은 유지하고 필요한 변경을 release→develop PR로 동기화한다.
+  기존 앱 PR 정리에서 broad foundation 선행안도 이미 폐기했다.
+- 같은 바이너리의 호환 CodePush마다 release를 새로 만들지 않는다. feature 시작 기준·PR 대상과
   Git 태그·OTA 업로드/활성화/설치·스토어 심사/출시는 별도 판단·상태로 관리한다.
 - 승인된 업무 접수에서는 웹·치과 앱·기공소 앱의 영향을 구분하고, 해당 제품별 카드를 재사용하거나
   없으면 생성한다. 영향 없는 제품의 빈 카드는 만들지 않는다. 공통 요구를 연결하되 제품별 완료를 구분한다.
@@ -115,6 +115,11 @@ Detailed implementation history remains in the relevant existing project file.
   상세 전략과 출처·조회 한계는 [앱 온보딩 정본](dentlink-app-onboarding.md)에 둔다.
 - 최초정책조사에서 Lab #2·#3은 분리 전release 대상으로 전체diff가 확대돼 있었다.
   이후 #6 기능20파일·#5 문서3파일로 대체해 요청한 작업만 전달하도록 정리했다. 최초조사에서는 제품 변경이 없었다.
+- 사용자 승인으로 Office [#321](https://github.com/Innvoaid/dentlink-app/pull/321)과
+  Lab [#9](https://github.com/Innvoaid/dentlink-lab-app/pull/9)의 release→develop 동기화 PR을 생성했다.
+  이후 GitHub에서 두 PR의 `jongsunP` 병합을 확인했다. 메인은 생성까지만 실행했고 병합·배포는 실행하지 않았다.
+  사용자는 이후 진행을 다른 세션에 맡기고 여기서는 지침만 수정하도록 정정했다. 이미 수행된 작업은 유지한다.
+  상세 이력은 제품별 체크포인트에 두며 추가 제품 작업을 자동 재개하지 않는다.
 
 ## Session Ownership
 
