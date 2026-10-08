@@ -4,7 +4,17 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 인계 — 2026-10-08 클리닉 사용자 병합·Lab 동기화 완료
+## 현재 인계 — 2026-10-08 Lab 사용자 병합·Staging CodePush 완료
+
+- Lab 문서5=768814e1와 기능6=f000ae2c를 사용자께서 병합했다. 최신 release/v1.0.4@f000ae2c/tree31a50be7을
+  확인하고 기존 worktree를 clean detached release로 전환해 승인된 iOS/Android Staging CodePush를 실행했다.
+- Lab iOS **v31/15:25:36 KST**, Android **v31/15:26:36 KST** 각각 성공이다.
+  바이너리1.0.4·활성·mandatory·rollout100%·릴리스description을 서버에서 재조회 검증했다.
+- 실기기 OTA 적용·재실행/기능QA는 미검증이며 Production/Development·native/store·클리닉 추가 배포는 없다.
+  Jira44342/READY FOR QA 유지와 개인기록을 정리했다. 메인세션 메시지는 보내지 않았다.
+  다음 시작점은 [DL-16652 정본](dentlink-patient-list-design.md)의 Staging v31 적용 QA다.
+
+## 이전 인계 — 2026-10-08 클리닉 사용자 병합·Lab 동기화 완료
 
 - 웹 배포 완료는 사용자 보고이며 이번에는 Actions/화면 재검증을 하지 않았다.
   클리닉318은 live MERGED/bf9e897ef72d37190cc52c84cd796ce2ec6a0e3c/15:02:42 KST를 확인했다.

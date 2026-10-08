@@ -2,6 +2,11 @@
 
 ## 2026-10-08
 
+- 사용자 Lab 문서5/기능6 병합768814e1/f000ae2c를 확인하고 명시 승인된 Staging CodePush를 실행했다.
+  최신release1.0.4@f000ae2c/tree31a50be7·clean detached기존worktree에서 플랫폼별 명령을순차실행해
+  iOS v31/15:25:36·Android v31/15:26:36 업로드 성공/CLIexit0·서버history readback을 확인했다.
+  바이너리1.0.4·active/mandatory·rollout100%이며 새native/코드변경/태그/스토어/Production/Development/Slack은없다.
+  Jira44342/READY FOR QA를 유지하고기록했다. 실기기OTA다운로드/적용/재실행·기능QA는별도로남아있다.
 - 클리닉318의 사용자병합 bf9e897e/15:02:42를 live확인했다. 웹배포완료는 사용자보고로구분했다.
   밀링7반영으로 Labrelease가96cc94a0/src로바뀌어5/6충돌을 사용자승인으로 동기화·일반push했다.
   기능6=55bc143·18파일(+579/-150), 문서5=9e04b395·3파일(+72/-3), 현재둘다CLEAN/MERGEABLE이다.

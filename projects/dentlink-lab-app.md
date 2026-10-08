@@ -22,7 +22,19 @@
 - 최신 번역 지침 전달은 문서 전용 #5이며 [전달 기록](dentlink-lab-app-i18n.md)을 따른다.
   공통 정책 정리 당시 제품 변경은 없었으며 아래 최신 사용자 승인 작업과 구분한다.
 
-## DL-16652 현재 확인 — 2026-10-08 최신 릴리스 충돌 해결
+## DL-16652 현재 확인 — 2026-10-08 Staging CodePush 양 플랫폼 배포
+
+- 사용자 병합 #5=768814e1/15:21:32·#6=f000ae2c/15:22:06 KST를 확인했다.
+  최신 release/v1.0.4@f000ae2c의 tree31a50be7은 기존 모의통합과 동일하며 소스 새 변경은 없다.
+- 기존 patient-list worktree를 clean **detached f000ae2c**로 바꿔 사용자 승인 Staging 배포를 실행했다.
+  feature55bc143·문서9e04b395·source/원격branches는 보존했다. 다음 코드작업 전 checkout을 다시 확인한다.
+- **Dentlink-Lab-iOS Staging v31(15:25:36)**, **Dentlink-Lab-Android Staging v31(15:26:36)** 업로드 성공이다.
+  서버 history로 대상1.0.4·활성·mandatory·rollout100%·description f000ae2c를 각각 검증했다.
+  index.js·Hermes release bundle·플랫폼별 Staging 명령을 사용했고 Slack/Production/Development 호출은 없다.
+- Jira44342/READY FOR QA 유지와 개인기록을 정리했다. 실제 Staging 설치본의 v31 OTA 적용/재실행·기능QA는
+  아직 미검증이다. 상세 hash·확인경계·다음 시작점은 [DL-16652](dentlink-patient-list-design.md) 정본을 따른다.
+
+## 이전 확인 — 2026-10-08 최신 릴리스 충돌 해결
 
 - 밀링센터 #7 반영 후 release/v1.0.4@96cc94a0가 src 단독 구조로 바뀌었다. 사용자 승인으로
   기존 #6을 동기화한 HEAD55bc14377104b294a424d30a5fe135c946e2655d를 일반 push했다.

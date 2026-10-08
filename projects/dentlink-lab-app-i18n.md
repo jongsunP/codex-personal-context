@@ -1,6 +1,14 @@
 # Dentlink Lab 앱 번역 지침 전달
 
-## 현재 전달 — 2026-10-08 최신 릴리스 충돌 해결
+## 현재 전달 — 2026-10-08 사용자 병합 완료
+
+- 사용자 병합 #5를 live MERGED로 확인했다. merge768814e1b5a9642df1979998cc89289c4d5f0759,
+  15:21:32 KST, 대상release/v1.0.4다. source9e04b395와 기존 문서worktree/branch는 보존했다.
+- 기능 #6도 사용자 병합 f000ae2c이며 해당 release에서 Lab iOS/Android Staging CodePush v31을
+  각각 배포했다. 문서3파일은 코드 실행 결과나 시트 생성/쓰기 완료 증거가 아니다.
+  상세 배포 상태는 [DL-16652](dentlink-patient-list-design.md)를 따른다.
+
+## 이전 전달 — 2026-10-08 최신 릴리스 충돌 해결
 
 - 최신 release/v1.0.4@96cc94a0의 src 단독 구조에 기존 PR #5를 동기화·일반 push했다.
   HEAD9e04b395275a870bf3bf74b42c155eafb9f41d89, 부모2fb6e8b+96cc94a0,

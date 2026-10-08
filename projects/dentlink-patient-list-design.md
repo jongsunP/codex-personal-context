@@ -1,6 +1,34 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 최신 확인 — 2026-10-08 클리닉 사용자 병합·Lab 릴리스 충돌 해결
+## 최신 확인 — 2026-10-08 Lab 사용자 병합·양 플랫폼 Staging CodePush 완료
+
+- 사용자가 Lab 문서 #5와 기능 #6을 병합했고 직접 Staging CodePush iOS/Android 배포를 승인했다.
+  live MERGED: #5 `768814e1b5a9642df1979998cc89289c4d5f0759`/15:21:32 KST,
+  #6 `f000ae2c2974068f3ceb0bb914b19c2a23a305ac`/15:22:06 KST다. root는 PR을 병합하지 않았다.
+- 배포 소스는 최신 origin/release/v1.0.4의 **f000ae2c**, tree는31a50be7이다.
+  검증한 기능+문서 모의 통합 tree와 실제 병합 tree가 동일하고 55bc143 대비 실행코드/native/deps diff0이다.
+  기존 patient-list worktree를 clean 상태에서 **detached f000ae2c**로 전환해 배포했다.
+  feature/lab/DL-16652-release@55bc143와 문서 feature@9e04b395, 원격/source/백업은 보존했다.
+- 기존 인증의 Revopush CLI0.0.15와 앱의 플랫폼별 Staging 명령을 사용했다.
+  `yarn codepush-force-ios:staging --description 'DL-16652 patient list and remake; release/v1.0.4 f000ae2'`
+  이후 Android 명령을 순차 실행했다. Slack 호출 없는 명령이며 entry index.js·Hermes release bundle,
+  대상 바이너리 **1.0.4**·mandatory·rollout100%·isDisabled=false다. 버전일치/clean/원격SHA를 확인했다.
+
+| 제품/OS | deployment/실제 label | 업로드 KST | packageHash |
+| --- | --- | --- | --- |
+| Dentlink-Lab-iOS | Staging / **v31** | 15:25:36 | 540a59c6d7973a2ebfde5a7b1af2f67d9ab40b6a6e9f9dec8346311ff8f2ec7d |
+| Dentlink-Lab-Android | Staging / **v31** | 15:26:36 | 5c135f9e7f93b6021c133ff3a08f9c40b561630a3bbb63d309a09f90ba97f332 |
+
+- 양 CLI exit0/Successful release 이후 서버 history를 각각 재조회해 label·description·1.0.4·
+  active·mandatory·rollout100%를 검증했다. 직전 Staging은 양쪽 v30이었고 이번에 각각 v31이 됐다.
+  upload/활성화가 완료됐으며 실기기의 OTA 다운로드·적용·재실행/화면 QA는 이번에 확인하지 않았다.
+- Production/Development·태그·native 빌드·스토어·클리닉 앱에는 이번 배포를 실행하지 않았다.
+  STG Swagger와 4시간 재점검 취소·메인 세션 메시지 제외를 유지했다. 소스 변경/추가 제품 커밋은 없다.
+- 담당 Jira44342를 Staging 배포 결과로 갱신하고 READY FOR QA를 유지했다. 다음 시작점은
+  Lab Staging 1.0.4 Release 설치본에서 v31 적용과 환자 목록/검색/최근 주문/Remake를 확인하는 것이다.
+  Git 준비·PR 사용자 병합·양 플랫폼 Staging 업로드와 실기기 적용 QA는 별도 상태다.
+
+## 이전 확인 — 2026-10-08 클리닉 사용자 병합·Lab 릴리스 충돌 해결
 
 - 사용자가 웹 병합·배포 완료와 클리닉 병합을 알렸다. 클리닉 #318의 실제 MERGED도 확인했다.
   merge `bf9e897ef72d37190cc52c84cd796ce2ec6a0e3c`, 15:02:42 KST다. 웹 배포 완료는 사용자 보고이며

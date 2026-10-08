@@ -79,8 +79,8 @@ For detailed current state, read:
 - 기존 메인 프로젝트 폴더의 별도 기능 세션과 제품별 worktree를 사용한다. 최신 전달 브랜치는 아래 정본을 따른다.
 - 이번 화면 전용 표이며 기존 공통 테이블이나 공식 디자인시스템의 변경은 아니다.
 - 웹기능/스테이징4677은 사용자병합, 웹배포완료는 사용자보고다. 클리닉318의 사용자병합도 live확인했다.
-- 최신 Lab release96cc94a0에 기능6=55bc143·18파일/독립문서5=9e04b395·3파일을 동기화해 충돌을 해결했다.
-  둘다 CLEAN/MERGEABLE이며 실제PRmerge/CodePush는 미실행이다. 옛Lab2/3/4는 닫힌 이력이다.
+- Lab 기능6/문서5는 사용자병합, 최신release/v1.0.4@f000ae2c에서 iOS/Android Staging CodePush를 각각 배포했다.
+  양쪽 v31·바이너리1.0.4·활성·mandatory·100%를 서버검증했다. 실기기OTA/기능QA는별도다. 옛Lab2/3/4는닫힌이력이다.
   신규번역시트·검증·실기QA/OTA 및 외부검사 한계는 정본을 따른다.
 - [projects/dentlink-patient-list-design.md](projects/dentlink-patient-list-design.md)
 
