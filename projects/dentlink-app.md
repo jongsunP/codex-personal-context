@@ -23,7 +23,17 @@
   `origin/main` 대비 1커밋 뒤이며 권한관리 worktree도 존재한다. 아래 2026-09-28의
   단일 worktree·로컬 동기화 상태는 당시 기록이며 현재 상태로 재사용하지 않는다.
 
-## DL-16652 현재 확인 — 2026-10-08 검토 중 아이콘 양 앱 비교
+## DL-16652 현재 확인 — 2026-10-08 Clinic 재검토·추가 수정 없음
+
+- 사용자 양앱검증/필요수정 승인 후 최신 origin/release/v2.2.4@a00efb1e를 독립 재검토했다.
+  실제 transformer는 white path를 유지하며 일반 NEW는 purple600 원24px 안 white teeth12px다.
+  Clinic 환자카드는 caseStatus 텍스트로 해당 치아 경로를 쓰지 않는다. #318 Remake 수정과도 무관하다.
+- 소스 기준 같은 대비 결함이 없어 Clinic 추가 변경/커밋/PR/배포는 하지 않았다.
+  실제 Clinic 설치본 화면/OTA bundle 확인은 별도이며 정상 실기기 QA 완료로 확대하지 않는다.
+- Lab 카드만 [PR8](https://github.com/Innvoaid/dentlink-lab-app/pull/8) →release/v1.0.4로 원본14px/#959595 보정을 전달했다.
+  아직 병합/추가배포 전이다. 상세는 [DL-16652 정본](dentlink-patient-list-design.md)을 따른다.
+
+## 이전 확인 — 2026-10-08 검토 중 아이콘 양 앱 비교
 
 - 사용자 Lab 실물 제보에 따라 Office도 읽기 전용으로 확인했다. 최신 release/v2.2.4@a00efb1e와
   기존81584b82의 OrderProgressStatus/SvgTeethFilled/Icon/PatientCard/KO 리소스는 byte 동일하다.

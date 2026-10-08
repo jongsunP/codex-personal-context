@@ -2,6 +2,11 @@
 
 ## 2026-10-08
 
+- 사용자양앱검증/필요수정승인으로Lab NEW카드를최종Figma14px/#959595원본으로보정했다.
+  QA/lab/DL-16652-review-icon@bb2df333·3파일(+11/-1)만push하고PR8→release1.0.4를생성/연결했다.
+  자동화후base/diff·CLEAN/MERGEABLE·미해결0을검증, lint/실제SVG/양플랫폼JS bundle PASS·기존type5동일/신규0이다.
+  Clinic최신2.2.4에는같은결함근거없어추가코드/PR없다. Jira44342/READY FOR QA정리·메인메시지없음.
+  PR8병합/추가CodePush·실기기픽셀확인은아직이며현재Staging v31은아이콘미수정이다.
 - 사용자 Lab iOS 실물 ‘검토 중’ 아이콘 제보를 양 앱 코드와 실제 SVG 변환/native paint 경로로 조사했다.
   Lab환자카드 NEW의 bgwhite/pathwhite가 직접원인이고 동일Android도영향받는다. Office 일반주문은
   보라색 원위white로대비유지·PR318Remake만변경이며 같은결함근거없다. 카드SVG12개도확인했다.

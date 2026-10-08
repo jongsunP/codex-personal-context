@@ -4,7 +4,18 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 인계 — 2026-10-08 Lab 검토 중 아이콘 제보 조사
+## 현재 인계 — 2026-10-08 Lab 검토 중 아이콘 수정 준비
+
+- 사용자 승인으로 Lab 카드 NEW를 Figma 원본14px/#959595로 보정해
+  [PR8](https://github.com/Innvoaid/dentlink-lab-app/pull/8) →release/v1.0.4로 전달했다.
+  QA/lab/DL-16652-review-icon@bb2df333·3파일(+11/-1), OPEN/non-Draft/CLEAN/MERGEABLE·미해결0이다.
+- 실제SVG/양플랫폼 배포용JS bundle/lint 통과·기존type5오류 byte동일/신규0·독립검토 blocker0이다.
+  Clinic 최신2.2.4에는 같은문제근거없어 추가작업없다. 실기기픽셀/설치본은별도미검증이다.
+- Jira44342/READY FOR QA와 개인기록을 정리했다. 병합/추가OTA/native/store는실행하지 않았다.
+  현재양플랫폼Staging v31은수정전이며 PR8 반영 후Staging재배포/NEW표시QA가다음이다.
+  메인세션 메시지는보내지않았고 [DL-16652 정본](dentlink-patient-list-design.md)을 우선한다.
+
+## 이전 인계 — 2026-10-08 Lab 검토 중 아이콘 제보 조사
 
 - Lab Staging 실물 제보의 검토 중 NEW는 환자 카드 흰 배경에 고정 white SVG가 원인이다.
   실제 SVG 변환/native paint 경로까지 확인했고 같은 Android 코드도 영향받는다. Office 일반주문은

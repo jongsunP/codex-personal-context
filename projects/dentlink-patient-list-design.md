@@ -1,6 +1,33 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 최신 확인 — 2026-10-08 Staging 실물 제보: 검토 중 아이콘 누락 원인 확정
+## 최신 확인 — 2026-10-08 검토 중 아이콘 수정 PR 준비 완료
+
+- 사용자가 양 앱 확인과 필요한 수정의 각 릴리스 전달을 승인했다. 실제 병합·추가 CodePush는 실행하지 않았다.
+- Figma 앱 main325:32222가 사용하는 Order Status set267:39862의 Lab NEW267:39992,
+  tooth267:39993을 읽기 전용으로 확인했다. 원본은 **14×14/viewBox14, #959595(mono600)**다.
+  원본 export SHA256은5970d93999c41aab6e70bc550ebda334fc064921f175e3eca4a079b58547bcd0이다.
+- 최신 release/v1.0.4@f000ae2c에서 기존 Lab patient-list worktree를 재사용해
+  **QA/lab/DL-16652-review-icon**을 만들었다. QA/lab 규칙은 현재 PR 자동화의 기존 release 대상을 따른다.
+  카드 전용 SvgPatientTeethFilled 원본·generated export·NEW 매핑/14px만 수정했다.
+  commit **bb2df333e102b96286eb37b01d48cdb529adeef0**, 1커밋·3파일 **+11/-1**이며 push/원격0/0다.
+- [Lab PR #8](https://github.com/Innvoaid/dentlink-lab-app/pull/8) → **release/v1.0.4**, OPEN/non-Draft,
+  MERGEABLE/CLEAN, 미해결 리뷰0·사람승인0·autoMergeRequest=null이다. 자동 title/body SUCCESS,
+  labels SKIPPED 후 실제 base와 전체3파일 diff를 재확인했고 제목은 아이콘 수정으로 구체화했다.
+  자동화 완료는 CodeRabbit 리뷰나 사람 승인 증거가 아니다. PR을 artifact에 연결했다.
+- 검증: SVG 원본 byte/SHA 동일·export 재생성·TSX ESLint/Prettier·diff·앱1.0.4 버전 일치 PASS.
+  실제 transformer의 gray fill/viewBox와 iOS/Android dev=false index.js 번들에 동일 path·색·크기 포함을 확인했다.
+  수정 전후 full typecheck는 기존 오류5개/exit2, 3228bytes 로그 byte 동일·신규0이다.
+  독립 검토 blocker0이며 공용 white teeth/일반 주문목록·API·번역·native·deps·lock·entry 변경0이다.
+  테스트 코드를 새로 작성·수정하지 않았고 새 native 빌드/실기기 픽셀/OTA 적용 검증도 실행하지 않았다.
+- Clinic origin/release/v2.2.4@a00efb1e를 별도 transformer/호출 경로로 재검토했다.
+  일반 NEW는 purple600 원24px 안 white teeth12px, 환자 카드는 caseStatus 텍스트여서 같은 결함 근거가 없다.
+  #318은 Remake만 변경했다. Clinic 추가 수정/빈 PR/배포는 없으며 실제 설치본 표시 확인은 사용자 확인과 별도다.
+- 담당 Jira44342를 PR8/기존 v31/수정 미배포 상태로 갱신·readback하고 READY FOR QA를 유지했다.
+  신규 문구가 없으므로 i18n/시트는 변경하지 않았다. 메인세션 메시지·STG Swagger·4시간 재점검도 없다.
+- 다음 시작점: **PR8 병합 후 최신 release를 확인하고 양 플랫폼 Staging CodePush 적용·실제 NEW 표시를 확인**한다.
+  현재 양 플랫폼 Staging **v31에는 이 수정이 없고**, 기존1.0.4 바이너리의 CodePush 범위다.
+
+## 이전 확인 — 2026-10-08 Staging 실물 제보: 검토 중 아이콘 누락 원인 확정
 
 - 사용자가 iOS Lab 실물에서 새 환자목록 디자인 반영을 확인했고, ‘검토 중’ 아이콘만 없는 듯 보인다고
   제보했다. 양 앱 확인을 요청했고 본인은 실물 확인을 계속한다. 이 실물 결과는 사용자 관찰이며 root의 기기 재현은 아니다.

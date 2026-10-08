@@ -22,7 +22,20 @@
 - 최신 번역 지침 전달은 문서 전용 #5이며 [전달 기록](dentlink-lab-app-i18n.md)을 따른다.
   공통 정책 정리 당시 제품 변경은 없었으며 아래 최신 사용자 승인 작업과 구분한다.
 
-## DL-16652 현재 확인 — 2026-10-08 검토 중 아이콘 결함 조사
+## DL-16652 현재 확인 — 2026-10-08 검토 중 아이콘 수정 PR8
+
+- 사용자 승인으로 Lab 카드 NEW에 최종 Figma 원본14px/#959595 치아를 적용했다.
+  전용 SVG·export·NEW 매핑3파일(+11/-1)이며 공용 white teeth/기존 주문목록·native·deps는 보존했다.
+- 최신 release/v1.0.4@f000ae2c에서 QA/lab/DL-16652-review-icon@bb2df333으로 준비·push했다.
+  [PR8](https://github.com/Innvoaid/dentlink-lab-app/pull/8)은 같은 release 대상 OPEN/non-Draft/CLEAN/MERGEABLE,
+  미해결리뷰0·사람승인0·autoMerge=null이다. PR 자동화 후 실제 base와 전체diff를 재확인했다.
+- lint/format/export/버전·양플랫폼 배포용JS bundle·실제SVG transform과bundle색/치수 PASS,
+  full typecheck는 전후기존오류5개 byte동일/신규0이다. 독립검토 blocker0·실제화면픽셀은미검증이다.
+- Jira44342/READY FOR QA를 정리했다. PR병합·추가CodePush·새native/store·메인메시지는없다.
+  현재 Staging v31은수정전이며 다음은 PR8 반영 후1.0.4 양플랫폼 Staging 재배포/실제NEW표시QA다.
+  자세한 Figma/검증/전달 근거는 [DL-16652 정본](dentlink-patient-list-design.md)을 따른다.
+
+## 이전 확인 — 2026-10-08 검토 중 아이콘 결함 조사
 
 - 사용자 iOS Staging 실물 제보의 ‘검토 중’ NEW 아이콘 누락은 환자 카드의 흰 배경과
   SvgTeethFilled path 고정 white가 원인이다. root color를 SVG 변환/native renderer가 덮어쓰지 않는다.
