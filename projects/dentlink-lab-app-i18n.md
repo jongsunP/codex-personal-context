@@ -1,6 +1,21 @@
 # Dentlink Lab 앱 번역 지침 전달
 
-## 프로젝트 지침 반영 — 2026-10-08
+## 최신 전달 대상·범위 확인 — 2026-10-08
+
+- 사용자 앱 release 정책 확인 중 live [PR #3](https://github.com/Innvoaid/dentlink-lab-app/pull/3)을 재조회했다.
+  현재 base는 `release/v1.0.4`, HEAD `5844ba5348901aa435ef522e47f5f1d91e00de86`, OPEN·non-Draft·MERGEABLE/CLEAN이다.
+  아래 develop 대상 기록은 최초 생성 당시 이력이다. 이번 조사에서 PR base나 제품 코드는 변경하지 않았다.
+- release HEAD `cb585775ca21e27949e67758a5933139cfc567d8`는 분리 이전 monorepo 트리다.
+  현재 main/develop `f33283339d339b3c6d39fe2735a8420f2c1a5ae1`의 분리·기존 수정 6커밋이 release에 없다.
+- 따라서 PR 전체 diff는 **981파일·7커밋·+2740/-39781**이며, 아래 개별 문서 커밋의 3파일과 다르다.
+  저장소 분리·기존 DL-16548/DL-16556 변경이 함께 포함돼 ‘문서 3개만 머지하는 PR’으로 보고하지 않는다.
+  #2도 같은 release 대상으로 991파일·10커밋이다. release 선행 통합과 의도한 전달 범위를 별도 판단해야 한다.
+- 새 [앱 공통 지침](dentlink-app-onboarding.md)에 기존 최신 유효 release·CodePush/바이너리·태그/실제 배포,
+  자동화 후 실제 base/diff 확인을 저장했다. 이번 정책 정리에서 재베이스·통합·머지·배포는 수행하지 않았다.
+- 다음 시작점: 사용자/앱 개발자의 release 분리 반영 계획과 두 PR 전체 diff를 대조하고 선행 통합 방식을 확정한다.
+  리뷰 성공·MERGEABLE만으로 위 범위 문제를 완료 처리하지 않는다. 원격 feature와 현재 checkout은 보존한다.
+
+## 프로젝트 지침 최초 반영 이력 — 2026-10-08
 
 - 사용자가 웹 PR #4666과 같은 기본 작업 지침을 Lab 앱 프로젝트에도 반영하도록 승인했다.
   FE 메인세션이 직접 처리하며 Office 앱·웹 제품 코드는 이번 작업 범위가 아니다.
@@ -11,7 +26,7 @@
 - 커밋 `5844ba5348901aa435ef522e47f5f1d91e00de86`
   (`docs: Lab 번역과 스프레드시트 기본 작업 지침 추가`), 원격 feature와 0/0·clean.
 - [앱 PR #3](https://github.com/Innvoaid/dentlink-lab-app/pull/3):
-  `feature/lab-i18n-workflow` → `develop`, OPEN·non-Draft·MERGEABLE/CLEAN.
+  최초 생성 시 `feature/lab-i18n-workflow` → `develop`, OPEN·non-Draft·MERGEABLE/CLEAN.
   자동 제목·본문·라벨 검사 3개 SUCCESS, 사람 리뷰·merge·배포는 아직 하지 않았다.
   웹 `release/v1.88.0`이나 PR #4666과 앱 전달 브랜치를 혼용하지 않는다.
 - 팀 정본은 앱 `README.md`의 **번역 동기화 (Lab)**이다. `AGENTS.md`·`CLAUDE.md`가
@@ -31,5 +46,6 @@
   문서 작업이므로 번역 쓰기 명령·앱 실행·네이티브 빌드는 수행하지 않았다.
 - 기존 [Lab 앱 정본](dentlink-lab-app.md)은 앱의 제품 경계·기능 상태·번역 절차를 담는다.
   그 파일의 다른 세션 미커밋 변경은 이번 기록에서 수정·스테이징·커밋하지 않았다.
-- 다음 시작점: 앱 PR #3의 최신 HEAD·리뷰·merge 상태를 확인한다. merge 전에는 feature를 보존하며,
-  앱 신규 문구 작업에서는 개인 컨텍스트뿐 아니라 작업 branch의 팀 번역 지침도 읽는다.
+- 최초 인계의 다음 시작점은 PR #3 최신 HEAD·리뷰·merge 확인이었다. 현재는 위 선행 통합 문제가 우선이다.
+  앱 신규 문구 작업에서는 feature를 보존하며,
+  개인 컨텍스트뿐 아니라 작업 branch의 팀 번역 지침도 읽는다.

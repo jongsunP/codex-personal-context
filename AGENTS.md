@@ -48,7 +48,9 @@
   implementation terminology unless it is needed to explain a real limitation.
 - For Jira work updates, follow **Jira Work Updates** in `AI_WORKFLOW.md`:
   use the user's assigned child issue and comment on a parent only when the
-  user explicitly requests it.
+  user explicitly requests it. For authorized Dentlink work intake, reuse or
+  create separate product cards for affected Web, Office app, and Lab app
+  scope; do not create empty cards for unaffected products.
 - For names and terminology, follow **Project-Aligned Naming** in
   `DEVELOPMENT_STYLE.md`: prefer defined project/reference terms or simple
   project vocabulary; ask for review before introducing an ambiguous new name.
@@ -79,6 +81,12 @@
   question merely because a planned release is named or does not exist yet.
   Release-based follow-up/QA is the documented exception. This does not widen
   read-only requests or commit/push/PR/deployment authorization.
+- For Dentlink apps, follow **Dentlink App Release And Delivery Policy** in
+  `SESSION_WORKFLOW.md` and `projects/dentlink-app-onboarding.md`. App PRs
+  normally target that product's existing latest applicable release branch;
+  compatible CodePush work does not require a new release branch every time.
+  Verify the actual PR base and diff after automation. Keep feature base,
+  release integration, Git tags, OTA activation, and store release distinct.
 - When the user asks to `CodeRabbit 리뷰 확인` or equivalent, treat that
   wording as explicit authorization for the complete review cycle on the
   current PR: inspect every unresolved CodeRabbit thread, verify each finding

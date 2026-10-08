@@ -166,6 +166,29 @@ scratch details.
 
 ## Jira Work Updates
 
+- For authorized Dentlink work intake, classify Web/Admin, Office native app,
+  and Lab native app separately. This is the user's standing preference,
+  confirmed on 2026-10-08: reuse an existing suitable product issue, or create
+  a separate card for each affected product when bundled work lacks one.
+  Routine product-card preparation and updates are included in authorized
+  intake; do not repeat the same permission question for each missing card.
+  An explicit read-only, setup-only, or pause request still limits mutations.
+- Do not always create three cards. Record unaffected products with the
+  reason, keep uncertain impact pending, and ask only for missing scope or
+  ownership decisions. Check existing children and linked issues before
+  creating anything so another assignee's work is not duplicated.
+- Keep a shared parent or requirement reference where the actual Jira issue
+  types and hierarchy allow it. Do not invent nested subtasks, reassign
+  someone else's card, or invent fixVersions and due dates. Product labels in
+  titles should follow existing project vocabulary; identify the product
+  clearly when the current title does not.
+- Track each product's requirements, PR, checks, QA, release integration, and
+  deployment separately. A common API/BE requirement can remain one linked
+  source; another product's completion is not proof of this card's completion.
+  Splitting cards does not automatically split sessions, folders, or worktrees.
+- Apply this rule to new intake and resumed work when needed. A request to
+  save the policy is not authorization to bulk rewrite existing Jira issues,
+  rename existing branches/PRs, or mutate a product repository.
 - When a task has parent and child issues, organize work updates on the child
   issue assigned to the user. Do not comment on a parent issue unless the user
   explicitly requests it.

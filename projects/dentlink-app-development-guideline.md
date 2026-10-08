@@ -11,6 +11,11 @@ product code. Use the team's package scripts as reliable environment/build
 primitives, then arrange them with the user's preferred visible Codex terminal,
 device, Metro and Reactotron workflow. The user manages the IDE separately.
 
+Read [App onboarding and delivery](dentlink-app-onboarding.md) for the
+2026-10-08 release/PR policy and product-specific Jira cards. This runtime
+playbook does not choose a feature base or authorize deployment. Its earlier
+monorepo scripts must be checked against the current Office or Lab repository.
+
 Read `projects/dentlink-app-local-development.md` for the detailed runtime
 matrix and per-platform launch checklist.
 

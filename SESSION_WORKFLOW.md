@@ -147,6 +147,10 @@ responsibilities rather than forcing the whole product into one checkout.
   `Innvoaid/dentlink-app`. A web responsive change does not prove native-app
   delivery. Verify each repository's current base, API, runtime, and release
   independently; do not apply the web `origin/master` rule to either app.
+- For app PR targets and CodePush/native delivery decisions, read
+  [App onboarding and delivery](projects/dentlink-app-onboarding.md) and
+  Dentlink App Release And Delivery Policy below. Deprecated monorepo
+  documents and workflow defaults do not override the current user policy.
 
 - Keep one Dentlink FE top-level management session in a personal coordination
   folder, with no dedicated product checkout or worktree. It continuously owns
@@ -194,7 +198,9 @@ main session or asking about checkout separation for every small task.
 1. When the user submits a new work link to the main session, inspect the
    linked requirements, relevant comments, and necessary current code/Git
    state. Classify the product scope, expected continuation, dependencies,
-   and checkout ownership before choosing the working arrangement.
+   and checkout ownership before choosing the working arrangement. For
+   authorized work intake, reuse or prepare separate cards for affected Web,
+   Office app, and Lab app scope under Jira Work Updates in `AI_WORKFLOW.md`.
 2. For a small, bounded task expected to finish in one focused work cycle,
    create a separate feature session in the existing main project folder.
    Use a suitable existing product checkout; a new project folder or worktree
@@ -373,6 +379,58 @@ the user chooses to try one, evaluate the real benefit and operating cost,
 then promote, revise, or remove it based on actual use. Record meaningful
 changes in `MEMORY_CHANGELOG.md` so the evolution of the workflow remains
 recoverable across devices and future AI sessions.
+
+## Dentlink App Release And Delivery Policy
+
+This is the user's standing app policy, confirmed on 2026-10-08. It applies
+independently to `dentlink-app` (Office) and `dentlink-lab-app` (Lab); the web
+release-train policy below is unchanged. Details and source coverage belong
+in [App onboarding and delivery](projects/dentlink-app-onboarding.md).
+
+- App feature PRs normally target the product's existing latest applicable
+  `release/vX.Y.Z`. Check live remote releases, actual operating version,
+  recent PR bases, and product history. Old `release/office/*` or
+  `release/lab/*` monorepo refs are not automatically current release targets.
+  Do not create a new release just because a new task or CodePush is planned.
+- Keep PR destination and feature starting commit distinct. Inspect the
+  actual app's `main`, `develop`, release tree, and task dependencies before
+  selecting a compatible base. Do not apply web `origin/master`, a deprecated
+  monorepo develop rule, or a numerically latest but incompatible release
+  mechanically. Report a real integration conflict before writing or retargeting.
+- Compare both commit ancestry and tree/layout, then review the complete PR
+  diff. A pre-split release can make a small post-split task include repository
+  restructuring and unrelated changes. `MERGEABLE/CLEAN` does not validate
+  scope; establish necessary prior integration separately.
+- After PR creation or reopening, let relevant automation finish and verify
+  its actual base and diff again. Current app automation can redirect Jira
+  feature PRs to `develop`. The user policy selects the intended release;
+  unexpected redirection is a pending delivery issue, not a reason to silently
+  accept `develop` or modify workflows outside the authorized task.
+- For compatible JS/TS, styles, and bundle assets on the same installed
+  binary, keep the existing app version/release and identify source changes
+  with tags under the current product's convention. Native code/SDKs,
+  permissions, native configuration, or JS requiring unavailable native
+  features need a compatible new binary and the appropriate store path.
+  Decide version/release creation with the actual app delivery plan; the
+  policy alone does not authorize creating or deleting a release branch.
+- Record app marketing version, platform build number, Git tag/commit,
+  actual CodePush label, and deployment target separately. A tag suffix is
+  not necessarily a Revopush label or native build number. Never infer the
+  next tag from its largest suffix without checking the current workflow.
+- Keep PR merge, Git tag/GitHub Release, CodePush upload, disabled/enabled,
+  rollout, installed-device uptake, store upload, review submission, approval,
+  and public release distinct. Current tag workflows only create tags and
+  GitHub Releases. Production CodePush commands upload disabled; native
+  Fastlane uploads do not automatically submit or publicly release the app.
+- Validate the affected app/platform/environment and installed binary. Metro
+  or Debug success is not CodePush verification. Keep Office/Lab and
+  iOS/Android delivery evidence separate; verify relevant mobile lifecycle
+  and device paths at a sensible checkpoint rather than rebuilding every
+  product for each edit.
+
+Implementation, product commit/push/PR mutations, environment changes,
+merge, tags, OTA activation, and store submission still require their existing
+authorization. A policy/onboarding-analysis request does not perform them.
 
 ## Dentlink Release-Train Branch Strategy
 

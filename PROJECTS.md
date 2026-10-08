@@ -118,13 +118,16 @@ For detailed current state, read:
 ### Dentlink Office App
 
 - `dentlink-app`은 앱 저장소 분리 이후 Office 전용이다. 기본 checkout은 `main`이며
-  기능 시작 기준/PR 대상과 작업 공간은 매번 live Git으로 확인한다.
+  기능 시작 기준과 작업 공간은 매번 live Git으로 확인한다.
+  PR은 기존 최신 유효 앱 release가 기본 대상이다. [공통 앱 지침](projects/dentlink-app-onboarding.md)을 따른다.
 - [projects/dentlink-app.md](projects/dentlink-app.md)
 
 ### Dentlink Lab App
 
 - 기공소 네이티브 앱은 별도 저장소 `Innvoaid/dentlink-lab-app`을 사용한다.
   기본 checkout은 `/Users/parkjongsun/Repository/dentlink-lab-app`의 `main`이다.
+  PR은 기존 최신 유효 앱 release가 기본 대상이며 CodePush마다 새 release를 만들지 않는다.
+  [공통 앱 지침](projects/dentlink-app-onboarding.md)에서 바이너리·태그·배포와 자료 현행성을 구분한다.
 - [projects/dentlink-lab-app.md](projects/dentlink-lab-app.md)
 
 ### Dentlink 권한관리 — DL-16317
@@ -165,7 +168,8 @@ For detailed current state, read:
 - 기공소 기능의 문구 변경은 번역 리소스·시트 반영·검증까지 기본 범위다.
   웹은 아래 i18n 문서, 별도 Lab 앱은 [앱 정본](projects/dentlink-lab-app.md)의 절차를 따른다.
 - Lab 앱의 팀 에이전트 지침 반영은 [앱 i18n 전달 기록](projects/dentlink-lab-app-i18n.md)을 따른다.
-  앱 PR #3은 `develop` 대상이며 웹 `release/v1.88.0`과 별도다.
+  앱 PR #3은 현재 `release/v1.0.4` 대상이며 분리 전 release 때문에 981파일 diff가 생겼다.
+  선행 통합 판단은 미해결이며 웹 `release/v1.88.0`과 별도다.
 - [projects/dentlink-client-i18n.md](projects/dentlink-client-i18n.md)
 
 ### Dentlink DSO Dashboard — DL-15223

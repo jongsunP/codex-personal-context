@@ -1,5 +1,14 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
+## 앱 전달 대상 재확인 — 2026-10-08 FE 메인 정책 조사
+
+- 제품 코드·PR를 변경하지 않고 현재 base를 재조회했다. Lab #2는 `release/v1.0.4`,
+  Office #318은 `release/v2.2.4` 대상이며 HEAD는 아래 표와 동일하다. 이전 develop 대상 기록은 당시 이력이다.
+- Lab release는 저장소 분리 이전 트리라 #2의 전체 diff가 991파일·10커밋으로 확대돼 있다.
+  이전 ‘해당 기능 diff만 포함’ 확인을 현재 base에 재사용하지 않는다. 선행 분리 통합 여부·전체 PR 범위는 미해결이다.
+  공통 원칙과 근거는 [앱 온보딩·배포 지침](dentlink-app-onboarding.md)에 둔다.
+  아래 기능 QA·API·번역 결과는 그대로 보존하며 실제 merge·배포 근거로 확대하지 않는다.
+
 ## 현재 상태 — 2026-10-08 재점검·iOS 후속 QA
 
 - 사용자 현재 상황 확인 요청으로 개인 Git과 세 feature checkout을 pull하고 PR/API/Figma/시트를 live 확인했다.
@@ -68,8 +77,8 @@
 | 제품 | branch / HEAD | PR / base |
 | --- | --- | --- |
 | 웹 | `feature/DL-16652` / `1c82980797fc0cf8e728f0aed77250e956336f8d` | [#4665](https://github.com/Innvoaid/dentlink-client/pull/4665) → `release/v1.88.0` |
-| Lab 앱 | `feature/DL-16652` / `14949c6afd77530852c166b317a667f4b30dd049` | [#2](https://github.com/Innvoaid/dentlink-lab-app/pull/2) → `develop` |
-| Office 앱 | `feature/DL-16652` / `ffcdc736a327e0fbe0293aa0d4d868ca6561b216` | [#318](https://github.com/Innvoaid/dentlink-app/pull/318) → `develop` |
+| Lab 앱 | `feature/DL-16652` / `14949c6afd77530852c166b317a667f4b30dd049` | [#2](https://github.com/Innvoaid/dentlink-lab-app/pull/2) → `release/v1.0.4` |
+| Office 앱 | `feature/DL-16652` / `ffcdc736a327e0fbe0293aa0d4d868ca6561b216` | [#318](https://github.com/Innvoaid/dentlink-app/pull/318) → `release/v2.2.4` |
 
 - 사용자 재점검 지시에 따라 최신 API·Figma 댓글/속성·시트·PR을 직접 다시 확인했다.
   웹 리뷰의 자체 DOM 클래스 스타일을 styled component로 분리해 동작/수치는 보존했다.

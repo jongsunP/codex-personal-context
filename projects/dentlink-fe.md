@@ -17,6 +17,20 @@ Detailed implementation history remains in the relevant existing project file.
 - Active AI workflow: Codex only. The remote `claude-personal-context`
   repository is retained only as an archive and is not loaded by default.
 
+## 앱 release·제품별 Jira 정책 — 2026-10-08
+
+- 사용자 확정: 앱 PR은 각 제품의 기존 최신 유효 release를 기본 대상으로 하며,
+  같은 바이너리의 호환 CodePush마다 release를 새로 만들지 않는다. feature 시작 기준·PR 대상과
+  Git 태그·OTA 업로드/활성화/설치·스토어 심사/출시는 별도 판단·상태로 관리한다.
+- 승인된 업무 접수에서는 웹·치과 앱·기공소 앱의 영향을 구분하고, 해당 제품별 카드를 재사용하거나
+  없으면 생성한다. 영향 없는 제품의 빈 카드는 만들지 않는다. 공통 요구를 연결하되 제품별 완료를 구분한다.
+  카드 분리는 세션/폴더/worktree 분리를 강제하지 않으며 상위 댓글은 사용자 명시 요청이 필요하다.
+- 사용자 제공 APP 온보딩·참고 링크 21개와 확인 가능한 하위 문서를 실제 Git·스크립트와 대조했다.
+  분리 전 문서·폐기된 정책·미해석 객체와 실제 배포 증거를 구분한다.
+  상세 전략과 출처·조회 한계는 [앱 온보딩 정본](dentlink-app-onboarding.md)에 둔다.
+- Lab #2·#3은 현재 `release/v1.0.4` 대상이나 분리 전 release 때문에 전체 diff가 확대됐다.
+  #3은 981파일·7커밋이며 선행 통합 판단이 남았다. 이번 지침 정리에서 제품 코드·PR·Jira·배포는 변경하지 않았다.
+
 ## Session Ownership
 
 - 메인세션은 항상 Dentlink FE 전체를 감독·조율하는 최상위 세션이다.
@@ -73,8 +87,9 @@ Detailed implementation history remains in the relevant existing project file.
   전용 worktree·로컬 feature를 정리하고 원격 feature는 보존했다. 실제 배포·master 반영과 구분한다. 상세는
   [웹 i18n 정본](dentlink-client-i18n.md)에 두고 앱 팀 지침 변경과 구분한다.
 - 2026-10-08 사용자 승인으로 Lab 앱의 팀 지침도 직접 반영하고
-  [앱 PR #3](https://github.com/Innvoaid/dentlink-lab-app/pull/3)을 `develop` 대상으로 전달했다.
+  [앱 PR #3](https://github.com/Innvoaid/dentlink-lab-app/pull/3)을 최초 `develop` 대상으로 전달했다.
   앱 README·AGENTS·CLAUDE 3개 문서, `5844ba5` push·자동 검사 SUCCESS·미병합이다.
+  현재 대상은 `release/v1.0.4`이며 분리 전 release로 전체 diff가 확대됐다. 위 정책 조사·선행 통합 과제를 따른다.
   실제 번역·시트·실행 코드는 변경하지 않았다. 상세는
   [앱 i18n 전달 기록](dentlink-lab-app-i18n.md)에 두고 웹 release 상태와 분리한다.
 

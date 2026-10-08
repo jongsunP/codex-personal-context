@@ -11,6 +11,16 @@
 - 신규 작업은 정확한 앱을 먼저 구분하고 제품별 branch·worktree·API·runtime·release를 확인한다.
   웹의 `origin/master` 전략이나 Office 설정을 그대로 적용하지 않는다.
 
+## 앱 공통 작업 정책 — 2026-10-08
+
+- [앱 온보딩·작업·배포 정본](dentlink-app-onboarding.md)을 함께 읽는다.
+  앱 PR은 기존 최신 유효 release가 기본 대상이며 CodePush마다 release를 새로 만들지 않는다.
+- live `release/v1.0.4 / cb585775ca21e27949e67758a5933139cfc567d8`가 있고 #2·#3은 이 release 대상이다.
+  이 release는 분리 전 트리여서 현재 PR에 저장소 분리·기존 변경이 함께 포함된다.
+  실제 base·전체 diff·선행 통합을 확인하며 단순 MERGEABLE/CLEAN을 범위 검증으로 쓰지 않는다.
+- #3의 최신 대상과 확대된 diff는 [번역 지침 전달 기록](dentlink-lab-app-i18n.md)에 둔다.
+  이번 공통 정책 정리에서는 제품 코드·PR·release·배포를 변경하지 않았다.
+
 ## DL-16652 현재 확인 — 2026-10-08
 
 - PR #2는 OPEN/non-Draft/MERGEABLE/CLEAN, HEAD `14949c6afd`는 소스·원격 동일하며 새 제품 수정은 없다.

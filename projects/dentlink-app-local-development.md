@@ -12,6 +12,10 @@ controls. The team's package scripts remain the canonical launch commands.
 Use `projects/dentlink-app-development-guideline.md` for the master progression
 from the iOS local loop through Android verification and Development CodePush.
 
+Read [App onboarding and delivery](dentlink-app-onboarding.md) for the current
+app release/PR policy. Confirm Office or Lab's separate repository and live
+scripts before using older monorepo command examples from this playbook.
+
 ## Configuration Model
 
 Treat a local app session as a combination of independent axes rather than one

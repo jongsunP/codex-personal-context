@@ -1,5 +1,14 @@
 # Dentlink Office App setup and current checkpoint
 
+## 앱 공통 작업 정책 — 2026-10-08
+
+- [앱 온보딩·작업·배포 정본](dentlink-app-onboarding.md)을 함께 읽는다.
+  앱 PR은 기존 최신 유효 release가 기본 대상이며, 같은 바이너리의 호환 CodePush는 기존 release를 유지한다.
+- live 최신 정식 release는 `release/v2.2.4 / 14557194c12f8836362d3663b27ab3b621c0478a`다.
+  #314·#316은 병합, #317·#318은 open이며 모두 이 release 대상이다. PR 자동화의 develop 기본값과 구분한다.
+- 제품별 Jira 카드와 merge·태그·OTA 업로드/활성화/설치·스토어 심사/출시 상태를 분리한다.
+  이번 작업은 지침 정리이며 제품 코드·PR·release·배포는 변경하지 않았다.
+
 ## 앱 저장소 분리 및 업무 범위 — 2026-10-06
 
 - 사용자 확정: Office/Lab 앱이 최근 별도 저장소로 분리됐다. 앞으로도 모든 앱 업무에서
