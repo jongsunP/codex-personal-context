@@ -15,13 +15,22 @@
 
 - [앱 온보딩·작업·배포 정본](dentlink-app-onboarding.md)을 함께 읽는다.
   앱 PR은 기존 최신 유효 release가 기본 대상이며 CodePush마다 release를 새로 만들지 않는다.
-- live `release/v1.0.4 / cb585775ca21e27949e67758a5933139cfc567d8`가 있고 #2·#3은 이 release 대상이다.
-  이 release는 분리 전 트리여서 현재 PR에 저장소 분리·기존 변경이 함께 포함된다.
+- 정책 조사 당시 `release/v1.0.4 / cb585775ca21e27949e67758a5933139cfc567d8`에 #2·#3이 향해 있었다.
+  이 release는 분리 전 트리여서 분리 기반의 별도 통합이 필요했다. 아래 DL-16652 준비에서 #2의 비교 base를 정리했다.
   실제 base·전체 diff·선행 통합을 확인하며 단순 MERGEABLE/CLEAN을 범위 검증으로 쓰지 않는다.
 - #3의 최신 대상과 확대된 diff는 [번역 지침 전달 기록](dentlink-lab-app-i18n.md)에 둔다.
   이번 공통 정책 정리에서는 제품 코드·PR·release·배포를 변경하지 않았다.
 
 ## DL-16652 현재 확인 — 2026-10-08
+
+- 최신 사용자 지시는 Lab 앱만 **리뷰 가능한 미병합 상태까지 완료**, 웹·Office 추가 처리와 메인세션 보고 제외다.
+  이번 기능은 기존1.0.4 호환 CodePush 작업이며 새 release/버전/심사를 만들지 않는다.
+- [기반 #4](https://github.com/Innvoaid/dentlink-lab-app/pull/4)는 기존분리 f332833 그대로6커밋·981파일→release/v1.0.4,
+  [기능 #2](https://github.com/Innvoaid/dentlink-lab-app/pull/2)는 그 기반branch를 임시base로4커밋·19파일이다.
+  둘다OPEN/non-Draft/MERGEABLE/CLEAN이며 실제merge·태그·OTA업로드/활성화는 하지 않았다.
+  기반Merge commit→기능base를release로변경→19파일재확인 순서를 각 PR과 [작업 정본](dentlink-patient-list-design.md)에 기록했다.
+- 새 버전 검사/두diff검사/기존 서비스·주문상세9테스트 통과. source14949c6 clean/원격동일·네이티브/의존성변경0이다.
+  실제Release설치본OTA QA는 이후배포단계이며 Debug/Metro결과와 구분한다. Jira44342에 Lab 준비를 기록했다.
 
 - PR #2는 OPEN/non-Draft/MERGEABLE/CLEAN, HEAD `14949c6afd`는 소스·원격 동일하며 새 제품 수정은 없다.
 - DeviceHub 정상 입력이 회복돼 정식 cached Debug 앱 1.0.4(151)+최신 Metro를 own SE3/iOS 26.5에서

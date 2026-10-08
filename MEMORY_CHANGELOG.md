@@ -2,6 +2,12 @@
 
 ## 2026-10-08
 
+- DL-16652 Lab 앱을 사용자 요청대로 머지 전 리뷰 준비까지 마쳤다. 기존1.0.4 CodePush 전제를 확정하고
+  기존 분리6커밋 기반 PR #4→release/v1.0.4와 feature PR #2→임시기반base(4커밋·19파일)를 분리했다.
+  기반 이력을 보존한 Merge commit 후 기능base를release로돌려 재확인하는 순서를 기록했다.
+  버전/diff/기존9테스트 PASS·두PR clean/미해결0, Jira44342 readback. 제품소스/HEAD·release는 그대로이며
+  모든PR merge·태그·CodePush·스토어는 미실행, 웹/Office추가처리와 메인세션 보고도 제외했다.
+  웹은 직전 사용자merge 확인을 정본에 반영하고 이전Draft기록을 현재상태로 재사용하지 않는다.
 - 사용자가 앱 release·제품별 Jira 운영 방향의 지속 적용을 재확인해 FE 정본에 기록했다.
   지침 정리는 완료하고 Lab PR #2/#3의 선행 통합 과제는 미완료로 유지했다. 이번 정리에 새 작업 공간은 없다.
 - 사용자 앱 release 정책과 제품별 Jira 카드 지침을 공통 AGENTS/SESSION_WORKFLOW/AI_WORKFLOW에 저장했다.

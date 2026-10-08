@@ -1,5 +1,52 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
+## 현재 상태 — 2026-10-08 Lab 앱 머지 전 준비 완료
+
+- 사용자 확정: 앱 분리는 완료됐고 DL-16652는 기존 `1.0.4` 대상 CodePush 작업이다.
+  스토어 심사·새 버전·새 release는 이번 범위가 아니다. 이명제님 리뷰 도착을 선행 조건으로 삼지 않고
+  리뷰 가능한 상태까지 준비하되 **모든 PR의 실제 머지는 금지**한다. 태그·OTA 업로드/활성화도 하지 않는다.
+  웹·Office 앱 추가 처리와 메인세션 보고는 제외한다. 기존 4시간 재점검 취소도 유지한다.
+- 이전의 ‘이명제님 확인이 필수’ 판단을 수정했다. 최신 앱 정책과 메인세션의 읽기 전용 의견은
+  기존 `release/v1.0.4` 유지·분리 기반 별도 통합·기능 검토·CodePush 방향으로 일치했다.
+  이 상담은 직전 사용자 요청에 따른 것이며 이번 준비 결과는 메인세션에 추가 전송하지 않았다.
+- 이미 `main`/`develop`에 있는 분리 기준 `f33283339d339b3c6d39fe2735a8420f2c1a5ae1`을 그대로
+  `codex/lab-release-v1.0.4-foundation` 원격 branch로 push해 [기반 PR #4](https://github.com/Innvoaid/dentlink-lab-app/pull/4)를 생성·artifact 연결했다.
+  `release/v1.0.4`의 `cb585775ca21e27949e67758a5933139cfc567d8` 대비 **6커밋·981파일(+2671/-39780)**다.
+  DL-16548·DL-16556 기존 수정, 문서/PR 규칙, DL-16313 분리 PR #1 및 통합 이력까지 포함한다.
+  기반의 기존 네이티브/환경 정리는 이번 기능의 새 native 변경이나 새 바이너리 요구와 구분한다.
+- [기능 PR #2](https://github.com/Innvoaid/dentlink-lab-app/pull/2)의 base를 위 기반 branch로 임시 변경했다.
+  live GitHub diff는 **4커밋·19파일(+705/-152)**이며 로컬 `f332833...14949c6` 파일 집합과 정확히 일치한다.
+  최종 대상은 계속 `release/v1.0.4`다. 기반이 미병합이므로 현재 release를 대상으로 한 19파일 PR이라고 보고하지 않는다.
+- 두 PR 모두 OPEN/non-Draft/MERGEABLE/CLEAN·미해결 리뷰0, 사람 리뷰/승인0이다. #2에는 기존
+  add-labels SUCCESS만 있으며 CodeRabbit 리뷰 완료 근거는 없다. #4의 새 Validate Lab/version 검사와
+  title/body 자동화 SUCCESS·label SKIPPED를 완료 후 확인했다. 두 본문에 의존 관계·검증·한계를 기록했다.
+- 새 검증: `yarn validate:versions` 통과(package·Android·Xcode 모두1.0.4), 기반/기능 각각
+  `git diff --check` 통과. 서비스 격리 기존 테스트6개와 주문 상세 조회·이동·실패 처리3개를
+  canonical jest.config.js로 실행해 **9개 PASS**, 나머지15개는 범위 제외했다. 신규 코드 결함은 확인되지 않았다.
+  이전 renderer10·변경 lint/Prettier·번역·기기 QA는 아래 해당 일자의 결과를 재사용한다.
+  전체 타입 오류4개는 기존과 동일하며 전체 타입검사 통과로 보고하지 않는다.
+- 분리 전 `apps/lab/package.json`도1.0.4이고 기존 Lab CodePush 스크립트는 해당 파일을 읽었다.
+  이전 루트0.0.1은 monorepo 버전이며 실제 Lab 버전 불일치 근거가 아니다. 현재 대상은
+  Dentlink-Lab-iOS/Android·targetBinaryVersion1.0.4·entry index.js다. 이번19파일에는
+  package/lock/native/환경 변경0이며 source HEAD `14949c6afd77530852c166b317a667f4b30dd049`와 원격이 그대로다.
+- 사용자 담당 자식 Jira DL-16652 댓글44342에 Lab 리뷰 준비 결과와 두 PR 링크를 기록하고 readback했다.
+  기존 title/status 진행 중/fixVersion과 부모 카드는 변경하지 않았다. 기존 여러 제품 기록의 일괄 재분류는 하지 않았다.
+- 웹 PR #4665는 직전 live 확인에서 사용자 merge(2026-10-08 12:00:32 KST,
+  merge `3e428d847b7410697520fb9026d181c558dddb46`)가 확인됐다. 이번에는 웹·Office checkout/PR을 추가 처리하지 않았다.
+  Office merge 여부를 웹 merge나 사용자 ‘추가 처리 불필요’ 판단으로 추론하지 않는다.
+
+### 다음 시작점 — 머지/배포 별도 승인 후
+
+1. PR #4를 **Merge commit**으로 기존 release에 반영해 f332833의 조상 관계를 보존한다.
+   저장소에서 merge commit 방식이 허용됨을 확인했다. Squash/rebase로 기반을 복제하면 feature diff가 다시 커질 수 있다.
+2. PR #2 base를 `release/v1.0.4`로 변경하고19파일·HEAD·충돌·검사를 재확인한 뒤 기능을 머지한다.
+   임시 기반 branch로 기능을 바로 머지하지 않는다. 기능 PR을 close/reopen하면 자동화가 base를
+   develop으로 돌리므로 재오픈하지 말고 필요한 base만 변경한다.
+3. 기존 번역 지침 PR #3은 이번 작업 밖이라 미변경이다. 기반 반영 후 해당 담당자가 별도 범위를 확인한다.
+4. 새 API가 준비된 대상 환경에서 실제1.0.4 Release 설치본의 iOS/Android CodePush 적용·재실행을 확인한다.
+   Debug/Metro는 OTA를 건너뛰므로 이전 기기 QA가 OTA 증거가 아니다. Production 업로드는 disabled이며
+   활성화는 별도다. Development/Staging 명령은 disabled가 없어 사전 승인 없이 실행하지 않는다.
+
 ## 앱 전달 대상 재확인 — 2026-10-08 FE 메인 정책 조사
 
 - 제품 코드·PR를 변경하지 않고 현재 base를 재조회했다. Lab #2는 `release/v1.0.4`,
@@ -9,7 +56,7 @@
   공통 원칙과 근거는 [앱 온보딩·배포 지침](dentlink-app-onboarding.md)에 둔다.
   아래 기능 QA·API·번역 결과는 그대로 보존하며 실제 merge·배포 근거로 확대하지 않는다.
 
-## 현재 상태 — 2026-10-08 재점검·iOS 후속 QA
+## 이전 확인 — 2026-10-08 재점검·iOS 후속 QA
 
 - 사용자 현재 상황 확인 요청으로 개인 Git과 세 feature checkout을 pull하고 PR/API/Figma/시트를 live 확인했다.
   세 feature HEAD는 아래 표와 동일하며 소스 clean·원격 일치다. 코드 수정·PR Draft 전환·병합·배포는 하지 않았다.
