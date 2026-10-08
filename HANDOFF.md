@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-08 **비개발자 짧은 요청 기준 하네스 정비·첫 시험 저장 후 대기**. 기본은 준비된 프로젝트의 에이전트에 화면·동작만 자연어로 요청하는 방식이다. 경로·명령·파일·포트 지시 없이 AGENTS/스킬/지침→실제 DLDS→생성/검사/미리보기/FE 인계를 에이전트가 맡는다. 제품 `feature/DL-16471 / 18405b37b`의 문서4개만 커밋·푸시·clean. 개인 기록·이전 대화·완성 화면을 제외한 첫 짧은 요청의 생성/저장·취소·320px, 짧은 문구 후속 수정/동작 보존 및 모의 FE 연결6/6 확인. 50647은 로컬 결과이며 임시 소스·서버는 다른 기기로 자동 이전되지 않는다. 긴 시험 조건/개인 기록을 읽은 이전 시험은 엄격한 첫 사용 근거와 구분했다. 다음은 최신 환경 확인→FE의 새 대화 짧은 요청/자연어 수정→Codex의 동작·FE 재사용 검증이다. 다른 에이전트·비개발자 실사용·제품 API/공유 운용·에디터는 별도이며 PM·디자이너 참여는 실제 서비스 단계 전 요청하지 않는다. 상세는 정본을 따른다.
+  — 2026-10-08 **작업 기준 저장·첫 사용 재시험 완료, 요구 범위 보완 필요로 대기**. 사용자 화면·동작만 입력→에이전트가 실제 DLDS 탐색/생성/검사/미리보기/FE 인계를 처리하는 기준이다. 제품 `feature/DL-16471 / 18405b37b`는 추가 추적 코드 변경 없이 clean. 기록 제외 새 시험에서 생성·실행·짧은 제목 수정은 됐지만 요청하지 않은 빈값 저장 차단·앞뒤 공백 제거가 들어가 전체 기준은 미통과다. 부모가 실제 입력/저장으로 확인했고 몰래 수정하지 않았다. 과거 요약이 노출된 첫 재시험은 엄격한 근거에서 제외했다. 현재5196은 로컬 결과 화면이며 소스/서버는 다른 기기로 자동 이전되지 않는다. 다음은 최신 환경 확인→미지정 검증/값 변환의 하네스 판단·검사 보완→같은 짧은 요청 재시험이다. 추가 수동 QA·다른 사람 참여·제품 API/공유 운용·에디터는 자동 시작하지 않는다. 상세/보존 경로는 정본을 따른다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
