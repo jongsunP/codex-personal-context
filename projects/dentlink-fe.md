@@ -4,7 +4,20 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 인계 — 2026-10-08 웹 1.88.0 사용자 stage 병합·앱 범위 정리
+## 현재 인계 — 2026-10-08 클리닉 사용자 병합·Lab 동기화 완료
+
+- 웹 배포 완료는 사용자 보고이며 이번에는 Actions/화면 재검증을 하지 않았다.
+  클리닉318은 live MERGED/bf9e897ef72d37190cc52c84cd796ce2ec6a0e3c/15:02:42 KST를 확인했다.
+- 최신 Lab release1.0.4가 밀링 #7 포함96cc94a0의 src 구조로 바뀌어 기능6·문서5가 충돌했다.
+  사용자 승인으로 같은 PR들을 동기화·일반 push했다. 기능6=55bc143·18파일(+579/-150),
+  문서5=9e04b395·3파일(+72/-3), 둘다 CLEAN/MERGEABLE·미해결/pending0·사람승인0이다.
+- 생성API/밀링/native/deps는 보존했고 카드 전용SVG를 분리했다. 기존13검증·양플랫폼 배포용JS bundle
+  통과, 최신baseline/feature fulltsc5오류 byte 동일/신규0이다. 두PR 모의통합 충돌0/21파일이다.
+  실제PRmerge/태그/CodePush/메인메시지는없다. Jira44342와 개인Git기록을정리했고 READY FOR QA는유지했다.
+- 이전20파일/monorepo 안내는 당시 이력이다. 다음시작점은 현재base/HEAD 재확인이며
+  [DL-16652 최신 정본](dentlink-patient-list-design.md)을우선한다.
+
+## 이전 인계 — 2026-10-08 웹 1.88.0 사용자 stage 병합·앱 범위 정리
 
 - **최신:** 사용자jongsunP가 [PR #4677](https://github.com/Innvoaid/dentlink-client/pull/4677)을
   14:50:42 KST에 병합했다. 현재stage는 `d37956611815ac17f2095c05fa6392b57c55f736`이며

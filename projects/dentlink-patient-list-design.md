@@ -1,5 +1,43 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
+## 최신 확인 — 2026-10-08 클리닉 사용자 병합·Lab 릴리스 충돌 해결
+
+- 사용자가 웹 병합·배포 완료와 클리닉 병합을 알렸다. 클리닉 #318의 실제 MERGED도 확인했다.
+  merge `bf9e897ef72d37190cc52c84cd796ce2ec6a0e3c`, 15:02:42 KST다. 웹 배포 완료는 사용자 보고이며
+  이번에는 배포 Actions/화면을 재검증하지 않았다. 아래 웹 IN_PROGRESS와 Office OPEN은 이전 조회 이력이다.
+- Lab release가 밀링센터 #7 반영으로 `96cc94a0cf0166eebcd5d7bf1553135df0b1904a`의
+  `src` 단독 구조로 바뀌어 #5/#6 모두 충돌했다. 사용자가 Lab 후속 처리를 승인했고 기존 두 PR을
+  최신 release에 동기화·일반 push했다. 실제 PR 병합·CodePush·태그·스토어·메인 보고는 하지 않았다.
+- [기능 #6](https://github.com/Innvoaid/dentlink-lab-app/pull/6)의 HEAD는
+  `55bc14377104b294a424d30a5fe135c946e2655d`, 부모 e3bf335+96cc94a0다.
+  branch `feature/lab/DL-16652-release`, 기존 patient-list worktree, clean·원격 0/0다.
+  최종 diff는 **18파일 +579/-150**이며 최신 release가 ancestor다. 새 PR/force push는 없다.
+- 승인된 14949c6의 표준 환자 카드·탭·서비스·Common query·번역·SVG를 현대 구조에 연결했다.
+  기존 분리 전 포트의 Office wrapper·별도 Lab 카드/탭/query/model은 제거했다. 최신 생성 API는
+  새 환자 DTO 12필드가 이미 있어 파일 전체를 유지했다. 기존 밀링센터 service/query·계정 전환·
+  fetcher/navigation/native/의존성/lock/환경/버전/빌드 스크립트는 release와 byte 동일하다.
+- 밀링센터의 SvgObjectLabFilled/Small을 보존하고 환자 원본을 **SvgPatientLabFilled**로 추가했다.
+  아이콘 이름 외 카드 내용은 승인본과 byte 동일하며 SVG export를 재생성했다. 12px·상태/detail 조건·
+  recentOrderId·isRemake·주문 수·생일 없음·전역 Remake·번역 6키를 독립 검토했고 새 결함 0이다.
+- 새 검증: immutable install·버전 1.0.4·diff·손작성 TS6파일 ESLint/Prettier PASS.
+  기존 서비스 격리6·주문 상세3·번역3·공용 배지 renderer1 **13개 PASS**다. 테스트 소스는 수정하지 않았다.
+  예전 카드9개는 변경 전 아이콘 mock이어서 재실행 범위에서 제외했다. 이전 카드10/기기 결과는 원본의 이력이다.
+  iOS/Android 각각 **index.js·dev false JS bundle 성공**이며 새 native 빌드/기기/OTA 검증은 아니다.
+  동일 deps의 최신 release와 full typecheck는 각 오류5/exit2·로그3228bytes byte 동일, 신규 오류0이다.
+- [독립 문서 #5](https://github.com/Innvoaid/dentlink-lab-app/pull/5)의 HEAD는
+  `9e04b395275a870bf3bf74b42c155eafb9f41d89`, 부모2fb6e8b+96cc94a0다. 최신 src 경로와
+  i18n:optional을 보존한 문서3개 **+72/-3**이며 생성 리소스·시트·실행코드 변경은 없다.
+- 두 PR 모두 release/v1.0.4@96cc94a0 대상으로 OPEN/non-Draft/MERGEABLE/CLEAN,
+  미해결 리뷰0·사람승인0·autoMergeRequest=null이다. 최신 라벨 자동화는 COMPLETED/SKIPPED이고
+  pending0이다. Lab CodeRabbit 실제 리뷰 완료 근거는 없으며 자동화 종료와 구분한다.
+  둘의 merge-tree 모의 통합은 충돌0/tree `31a50be704fa918455c7661b68184eae5d5b685c`,
+  release 대비21파일(+651/-153)이다. 문서와 기능은 독립이어서 필수 병합 순서는 없다.
+- 담당 Jira 기존44342를 갱신했다. live 카드가 READY FOR QA로 바뀐 사실을 확인해 그대로 유지했다.
+  기존 담당자·fixVersion/상위카드는 변경하지 않았다. 기존 Sheet 승인값을 그대로 유지했고 이번에는 쓰지 않았다.
+  STG Swagger/4시간 재점검 취소도 유지한다. 기존 source/원격 branch와 동기화 전 백업 ref를 보존했다.
+- 다음 시작점은 두 PR의 최신 HEAD/base/diff를 다시 확인하는 것이다. 현재 리뷰 전 Git 준비는 완료이며
+  사용자 실제 병합 후 배포용 앱/CodePush 적용 QA는 별도다. 옛 #2/#3/#4 재오픈·foundation 통합은 필요 없다.
+
 ## 최신 웹 전달·세션 정리 — 2026-10-08 스테이징 PR #4677
 
 - **현재:** 사용자jongsunP가 #4677을 14:50:42 KST에 병합했다. 실제stage SHA는

@@ -22,7 +22,21 @@
 - 최신 번역 지침 전달은 문서 전용 #5이며 [전달 기록](dentlink-lab-app-i18n.md)을 따른다.
   공통 정책 정리 당시 제품 변경은 없었으며 아래 최신 사용자 승인 작업과 구분한다.
 
-## DL-16652 현재 확인 — 2026-10-08 릴리스에서 기능만 전달
+## DL-16652 현재 확인 — 2026-10-08 최신 릴리스 충돌 해결
+
+- 밀링센터 #7 반영 후 release/v1.0.4@96cc94a0가 src 단독 구조로 바뀌었다. 사용자 승인으로
+  기존 #6을 동기화한 HEAD55bc14377104b294a424d30a5fe135c946e2655d를 일반 push했다.
+  최종 diff18파일(+579/-150)·behind0·clean/원격0/0이며 MERGEABLE/CLEAN이다.
+- 승인14949c6의 카드/탭/조회/번역을 연결했고 최신 생성API·밀링·인증·캐시·navigation은 보존했다.
+  밀링 Lab SVG2개를 유지하고 환자 전용 SvgPatientLabFilled를 추가했다. native/설정/deps/버전 변경0이다.
+- 기존13테스트·scope lint/format·버전1.0.4·diff PASS, 양 플랫폼 index.js 배포용JS bundle 성공이다.
+  최신release/feature fulltsc5오류·3228bytes 로그 byte 동일/신규0이며 전체통과가 아니다.
+  이전 카드9개는 변경 전 icon mock이라 이번 재실행 제외다. 새 기기/native/OTA 검증은 하지 않았다.
+- 문서 #5도9e04b395로 동기화해3파일(+72/-3)·CLEAN이다. 함께 모의통합 충돌0/21파일이며 순서독립이다.
+  두PR의 미해결0·검사pending0·사람승인0, 실제merge/태그/CodePush/메인보고는없다.
+  이전20파일/apps-lab 진입점은 당시 이력이며 최신 정본은 [DL-16652](dentlink-patient-list-design.md)다.
+
+## 이전 확인 — 2026-10-08 분리 전 릴리스에서 기능만 전달
 
 - [기능 PR #6](https://github.com/Innvoaid/dentlink-lab-app/pull/6)은 `release/v1.0.4 / cb585775`에서 직접
   시작한 `feature/lab/DL-16652-release / e3bf33567c5fde6e526e38b237d2b21f416b4476`이다.

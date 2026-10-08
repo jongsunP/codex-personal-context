@@ -78,9 +78,9 @@ For detailed current state, read:
 - 웹 Lab·기공소 앱의 최종 Figma·배포된 DEV API 대응이다. 전역 Remake 배지만 Office 앱에도 적용했다.
 - 기존 메인 프로젝트 폴더의 별도 기능 세션과 제품별 worktree를 사용한다. 최신 전달 브랜치는 아래 정본을 따른다.
 - 이번 화면 전용 표이며 기존 공통 테이블이나 공식 디자인시스템의 변경은 아니다.
-- 웹기능은 release1.88.0에 병합됐고 전체release→새stage PR #4677을 생성했다. 사용자가stage에 병합했고 배포Actions3개는 진행중이다.
-  실제배포완료/QA는 별도다.
-- 앱은 최종release에서 본인작업만 전달하도록 #318유지·Lab #6기능/#5독립문서로 정리했고 옛Lab2/3/4는 닫았다.
+- 웹기능/스테이징4677은 사용자병합, 웹배포완료는 사용자보고다. 클리닉318의 사용자병합도 live확인했다.
+- 최신 Lab release96cc94a0에 기능6=55bc143·18파일/독립문서5=9e04b395·3파일을 동기화해 충돌을 해결했다.
+  둘다 CLEAN/MERGEABLE이며 실제PRmerge/CodePush는 미실행이다. 옛Lab2/3/4는 닫힌 이력이다.
   신규번역시트·검증·실기QA/OTA 및 외부검사 한계는 정본을 따른다.
 - [projects/dentlink-patient-list-design.md](projects/dentlink-patient-list-design.md)
 

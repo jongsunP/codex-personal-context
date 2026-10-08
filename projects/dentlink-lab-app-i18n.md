@@ -1,6 +1,20 @@
 # Dentlink Lab 앱 번역 지침 전달
 
-## 현재 전달 — 2026-10-08 릴리스에서 문서만 옮긴 PR #5
+## 현재 전달 — 2026-10-08 최신 릴리스 충돌 해결
+
+- 최신 release/v1.0.4@96cc94a0의 src 단독 구조에 기존 PR #5를 동기화·일반 push했다.
+  HEAD9e04b395275a870bf3bf74b42c155eafb9f41d89, 부모2fb6e8b+96cc94a0,
+  feature/lab-i18n-workflow-release·기존 i18n-release worktree clean·원격0/0다.
+- 실제 전체diff AGENTS·CLAUDE·README 문서3개(+72/-3)이며 최신 src/configs/i18n과
+  src scanner·i18n:optional 경로/실행방식을 반영했다. 밀링/분리 코드·리소스·시트는 변경하지 않았다.
+- README/변경구간 format·명령/경로/CSV/optional 대조·diff PASS. AGENTS/CLAUDE 전체format은
+  release에도 있는 기존 불일치라 전체재포맷하지 않았다. 생성·시트쓰기·앱빌드·OTA·PRmerge는미실행이다.
+- live OPEN/non-Draft/MERGEABLE/CLEAN, release/v1.0.4@96cc94a0 대상이다.
+  미해결0·pending0·사람승인0·autoMergeRequest=null, 라벨 자동화 COMPLETED/SKIPPED다.
+  본문도 최신 범위로 갱신했다. 기능 #6과 모의통합 충돌0이며 독립이므로 필수순서가 없다.
+- 다음 시작점은 현재 #5 HEAD/base 확인이다. 옛 #3/#4는 닫힌 이력이며 다시 반영하지 않는다.
+
+## 이전 전달 — 2026-10-08 분리 전 릴리스에서 문서만 옮긴 PR #5
 
 - 사용자 앱 PR 전체 정리 지시로 기존 #3의 분리·타기능 이력을 제거한 새
   [PR #5](https://github.com/Innvoaid/dentlink-lab-app/pull/5)를 만들고 #3을 CLOSED/미병합 처리했다.
