@@ -1,6 +1,44 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 현재 상태 — 2026-10-07 자율 재점검·iOS 확인
+## 현재 상태 — 2026-10-08 재점검·iOS 후속 QA
+
+- 사용자 현재 상황 확인 요청으로 개인 Git과 세 feature checkout을 pull하고 PR/API/Figma/시트를 live 확인했다.
+  세 feature HEAD는 아래 표와 동일하며 소스 clean·원격 일치다. 코드 수정·PR Draft 전환·병합·배포는 하지 않았다.
+- 웹 #4665는 OPEN/Draft/MERGEABLE/UNSTABLE, reviewDecision APPROVED다. chajju가 10월 7일 09:34:41 KST에
+  승인했고 jongsunP 계정의 ConvertToDraftEvent가 같은 날 10:04:09 KST에 있다. 전환 이유는 확인되지 않았으며
+  현재 Draft를 임의 해제하지 않는다. Vercel FAILURE·CodeRabbit SUCCESS, 세 PR 미해결 리뷰 0개다.
+  release/v1.88.0 보호 규칙은 승인 1개·required contexts/checks[]·effective rules[]여서 Vercel은 필수 머지 검사가 아니다.
+- Lab #2·Office #318은 OPEN/non-Draft/MERGEABLE/CLEAN·자동 검사 SUCCESS·추가 사람 리뷰 0개다.
+  11:16 세 PR HEAD/미해결 리뷰 0개를 다시 확인했다. Jira는 진행 중/v1.88.0이며 댓글 44341에 새 iOS 결과와
+  남은 조건을 기록하고 readback했다. 개인 checkpoint 6792b9e를 pull한 뒤 확인했으며 다른 작업 이력은 보존했다.
+- 10:40:12 KST 실제 API: DEV 770행 새 7필드 모두 존재/정상 타입·null 0/recentOrderId 양수,
+  old orderId 0행이다. STG 694행은 old orderId 694행·새 7필드 각 0행으로 이전 계약을 유지한다.
+  STG Swagger는 조회하지 않았다. STG 신규 계약 선배포 조건은 아직 해소되지 않았다.
+- 10:39~48 최종 Figma의 카드 12px·Remake text/icon primary600 및 관련 댓글 #15~#20은 그대로다.
+  10:48 공식 Sheets connector에서 웹 10키×en/ko 20값·Lab 6키×en/ko 12값이 현재 생성 파일과 정확히 일치했다.
+  PM 이름/상태나 셀은 변경하지 않았고 i18n CLI는 재실행하지 않아 이전 403을 오늘 결과로 재사용하지 않는다.
+- DeviceHub 읽기 연결이 2.264초에 성공해 기존 timeout이 달라졌다. 정식 cached Debug 앱+최신 Metro를
+  own Lab SE3/iOS 26.5에 연결해 정상 tap/setValue·로그인·serviceType LAB, 실제 770명/첫 페이지 10명,
+  이름 검색 1명·선택 환자 recentOrderId와 OrderDetail route/WebView source 일치를 확인했다.
+  상세 WebView mounted·isPreparing=false·loading=false·errorPage=false까지이며 웹 내부 조작 QA는 아니다.
+- 별도 iOS 합성 KO/EN 카드에서 343×248pt·간격 14pt·내부 12pt·두 9자리 수치 보존/경계 내·긴 라벨,
+  생일 없음·Remake primary600·6종 상태를 확인했다. 이번 iOS pressed 및 지정 QA 그룹 ID 대조는
+  미검증으로 구분한다. current employee/employer는 auth/profile과 boolean 일치했으나 독립 승인 group ID는
+  정본에 없다. Lab fixture/언어를 원복하고 own sim·Metro8088을 정리했다. HEAD14949c6 clean·원격 동일,
+  오늘 native 재빌드/제품 수정은 없다. PR #2 본문에 새 결과/한계를 반영하고 readback 및 자동 검사 SUCCESS를
+  확인했다. Lab UI 점유 해제 후 Office iOS를 순차 확인했다.
+- Office iOS 로그인은 loggedIn=true/serviceType OFFICE 및 승인 QA 계정 일치로 성공했다.
+  현재 자동 활성 employee/employer와 clinic QA 지정 ID는 dotenv의 inline 주석을 제외하고 정규화해
+  비교하면 모두 일치한다. 최초 검사 false는 주석을 값에 포함한 helper 오류여서 그룹 blocker가 아니다.
+  Home/Orders 및 초기 대기 필터 8건 중 가시 2행을 확인했으나 실제 Remake는 미발견이다.
+  Reset/Done 두 좌표 tap과 5회 wheel은 수행 확증/행 변화가 없어 필터 초기화·paging 성공으로 계산하지 않는다.
+  계정 전체/8행 전체의 Remake 0건으로 일반화하지 않는다. 별도 iOS local 배지 fixture는 실행하지 않았고
+  기존 renderer 3/3 증거와 실제 서버 사례를 구분한다. PR #318 본문에 반영하고 readback했다.
+  own sim/Metro8090/root.env를 정리했고 원본 env/설정/lock·ffcdc73 clean/원격 동일을 보존했다.
+  두 앱 모두 오늘 새 native build/제품 수정은 없다. 그룹/주문/권한·SDK/서명 변경이나 병합/배포는 하지 않았다.
+  현재 CoreDevice 3개는 모두 simulated이며 연결된 실물기기는 0대다. 기존 22개 sim은 초기 확인 시 모두 Shutdown이다.
+
+## 이전 확인 — 2026-10-07 자율 재점검·iOS 확인
 
 - 사용자 최신 지시: 스스로 처리 가능한 후속 작업은 처리하고, 없으면 대기한다. 불가한 항목은
   이유를 알리고 대기한다. 기존 commit/push·PR·Jira·개인 Git 기록 승인은 유지하며 병합·배포는 제외한다.
@@ -132,7 +170,7 @@
 - 각 HEAD·원격 SHA 일치/clean을 확인했다. 기존 main·권한관리·가드·DLDS checkout은 보존했다.
   앱 feature→develop 규칙 및 각 release 통합 상태를 확인했다. 웹 일정이 앱 base를 바꾸지 않는다.
 
-## 검증·한계
+## 검증 이력·한계 — 2026-10-06~07
 
 - 웹 Lab·Clinic·Admin 타입 및3커밋의 필수 pre-commit 검사 통과. Clinic ignored next-env는
   표준 next typegen으로 준비했고 tracked 설정 변경은 없다. 변경 lint 오류0/기존 any경고1·Prettier·diff 통과.
@@ -200,18 +238,21 @@
 
 - 4시간 예약 재확인은 취소됐다. 사용자가 재개하면 세 PR/head/CI를 live 확인하고 요청된 디자인
   수정에 대응한다. STG/운영 새 계약 선배포 후 실제 통합 연동, Office 실제 Remake 사례,
-  실물/iOS 로그인 이후 UI 및 웹 Vercel 접근 확인이 남는다. 완료된 Android 실행·Lab 검색/이동 QA는 다시
-  미완료로 되돌리지 않는다. 사람 리뷰 후 병합/배포는 별도 승인·전제 확인 단계다.
+  실물 기기/배포 바이너리 및 웹 Vercel 프리뷰 접근 확인이 남는다. 완료된 Android 실행과 Lab iOS
+  목록/검색/최근 주문 이동은 다시 미완료로 되돌리지 않는다. 웹은 사람 승인 완료/현재 Draft이며
+  임의 해제하지 않는다. 앱 사람 검토와 병합/배포는 별도 승인·전제 확인 단계다.
 - 기존 orders 번역 차이와 ADC scope는 별도 기존 문구/인증 문제다. 신규 기능의 시트 등록을
   다시 미완료로 되돌리지 않는다. 다른 작업/PM 원문을 확인해 처리한다.
 - 직접 처리 가능한 리뷰·최신 디자인·이 화면의 실제 실행 결함은 승인 범위에서 수정한다.
   STG/운영 backend 선배포, Vercel 팀 접근/계정 연결, ADC scope 변경은 외부 담당/계정 조치가 필요하다.
   기존 앱 타입 오류·다른 기능 orders 시트 차이는 기술적 불가능이 아니라 이번 작업 범위 밖이다.
   미검증 runtime과 실제 실패한 CLI 검사를 완료라고 표현하지 않는다.
-- 10월7일 자율 재점검에서는 추가 제품 수정이 필요하지 않았다. 정식 iOS native 빌드는 두 앱에서
-  성공했지만 로그인 이후 UI는 DeviceHub 자동 제어 연결 제한으로 미검증이다. 정상 입력 도구 연결
-  또는 실제 기기 연결이 가능해지면 이어간다. STG 새 계약·Vercel·사람 리뷰 조건이 해결될 때까지
-  예약 재점검이나 미승인 병합/배포를 진행하지 않고 대기한다.
+- 10월 8일 DeviceHub 정상 입력 회복 뒤 Lab iOS 실제 흐름과 합성 카드 QA를 추가 확인했다.
+  Office iOS는 정상 로그인·QA 지정 그룹/홈/가시 주문 목록까지 확인했다. 실제 Remake 사례는 미검증이다.
+  Mac Cua에는 누름 유지 중 별도 관찰을 보장하는 공식 API 근거가 없어 iOS held-pressed는 미검증이다.
+  ClickOptions.durationMs의 누름 유지 설명은 Linux에만 명시되며 Mac 전체 불가능으로 단정하지 않는다. 웹 내부 상세 조작·
+  실물 기기는 완료된 확인 범위와 구분한다. 추가 제품 결함이 없으면 새 코드 커밋을 만들지 않는다.
+  외부 API 선배포/프리뷰 접근·사람 검토와 별도 병합/배포 승인 전에는 예약 작업을 만들지 않고 대기한다.
 - 자료는 현재 기기 `/Users/parkjongsun/.codex/visualizations/2026/10/06/01a11038-d621-7fb3-ad4e-58d01fbb9a6a/DL-16652/`
   의 final-review/final-delivery/current-review에 원본 캡처·합성 화면·집계·검사 로그로 보존했다. 실환자 화면/토큰/
   비밀번호를 Git에 저장하지 않는다. local-only 자료이며 Git 정본은 결과·링크·다음 시작점을 전달한다.
@@ -221,3 +262,6 @@
 - 10월7일 두 own iOS sim·Metro8088/8090도 정리했다. 기존 simulator/adb/shared deps/DeviceHub·
   CoreSimulator service는 보존했다. 두 앱 iOS startup 캡처는 인증 전 공개 안내 화면이며 PHI가 없다.
   보존한 iOS build log는 env dictionary를 가리고 민감 env값 잔존0을 내부 확인한 것이다.
+- 10월 8일 두 own iOS sim/Metro8088·8090/root.env도 정리했다. Lab fixture·ko를 원복했고 source clean을
+  확인했다. current-review의 20261008 증거는 공개 Figma·합성 Lab 화면·API/번역/PR 집계·safe report다.
+  실제 환자 화면/AX 원문/토큰/credential/서버 원응답은 보존하지 않는다. 현재 실물 기기 QA는 수행하지 않았다.

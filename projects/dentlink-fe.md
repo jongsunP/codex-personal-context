@@ -88,7 +88,17 @@ Detailed implementation history remains in the relevant existing project file.
   수정·검증과 제품 Git 전달 권한을 구분하며 메인세션으로 진행·완료 메시지를 보내지 않는다.
   구현의 최신 상태는 작업 세션과 그 개인 체크포인트를 따른다. 메인세션은 이번 전달만 기록했다.
 
-## DL-16652 기공소 환자목록 디자인·API 대응 — 2026-10-06
+## DL-16652 기공소 환자목록 디자인·API 대응 — 2026-10-06~08
+
+- 10월 8일 재점검: 세 feature HEAD와 Figma/댓글/신규 번역 시트 값은 기존 구현과 동일하다.
+  웹 #4665는 사람 승인 APPROVED지만 현재 Draft이며 임의 전환/병합하지 않는다. Vercel 프리뷰 차단은
+  required merge check가 아니다. Lab #2·Office #318은 OPEN/non-Draft/MERGEABLE/CLEAN이다.
+- 실제 DEV API는 신규 계약 770명, STG 실제 API는 이전 계약 694명이다. STG Swagger는 조회하지 않았다.
+  STG/운영 API 선배포 확인 후 UI 배포가 필요하며 현재 배포 완료로 보고하지 않는다.
+- DeviceHub 연결 회복 뒤 Lab iOS 실제 목록·검색·최근 주문 이동과 별도 합성 카드 검증을 마쳤다.
+  Office iOS 정상 로그인/지정 QA 그룹/홈/가시 주문 목록까지 확인했으나 실제 Remake는 미검증이다.
+  앱 PR 본문과 Jira 44341에 새 결과/남은 조건을 반영했고 두 own sim/Metro/임시 env를 정리했다.
+  제품 소스 수정은 없고 상세 결과/남은 조건은 아래 기능 정본에 둔다. 병합·배포·Draft 전환은 하지 않는다.
 
 - 사용자 요청으로 기존 메인 프로젝트 폴더 안에 **DL-16652 기공소 환자목록 디자인 변경**
   세션 `01a11038-d621-7fb3-ad4e-58d01fbb9a6a`(local)을 생성하고 확정 요구와 작업 공간을 자동 전달했다.

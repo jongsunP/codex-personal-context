@@ -11,7 +11,22 @@
 - 신규 작업은 정확한 앱을 먼저 구분하고 제품별 branch·worktree·API·runtime·release를 확인한다.
   웹의 `origin/master` 전략이나 Office 설정을 그대로 적용하지 않는다.
 
-## DL-16652 최종 디자인 전달 — 2026-10-06~07
+## DL-16652 현재 확인 — 2026-10-08
+
+- PR #2는 OPEN/non-Draft/MERGEABLE/CLEAN, HEAD `14949c6afd`는 소스·원격 동일하며 새 제품 수정은 없다.
+- DeviceHub 정상 입력이 회복돼 정식 cached Debug 앱 1.0.4(151)+최신 Metro를 own SE3/iOS 26.5에서
+  확인했다. 실제 DEV 로그인·환자 770명/첫 페이지 10명·이름 검색 1명·recentOrderId 기반 상세 이동,
+  WebView mounted/loading=false/errorPage=false까지 정상이다. 웹 상세 내부 조작은 별도다.
+- 별도 iOS 합성 KO/EN에서 카드 343×248pt·목록 간격 14pt·내부 12pt·두 9자리 주문 수 보존,
+  긴 라벨·생일 없음·Remake primary600·6개 상태를 확인했다. iOS pressed·지정 QA 그룹 ID 대조·
+  실물 기기·배포 바이너리·최종 Android APK 재빌드는 미검증이며 이전 Android 증거와 구분한다.
+- 공식 Sheet connector의 신규 6키/en·ko 12값은 현재 생성 파일과 모두 일치했다.
+  CLI 403은 10월 6일 결과이며 오늘 CLI는 재실행하지 않았다. DEV는 새 API, STG는 이전 API다.
+- PR 본문에 새 iOS 결과와 STG 선배포 조건을 반영했다. 전체 정본과 다음 시작점은
+  [DL-16652](dentlink-patient-list-design.md)에 둔다. fixture/언어·own sim/Metro8088을 정리했고 .env 부재·
+  Git clean/원격 동일·본문 readback/자동 검사 SUCCESS를 확인했다. 아래 DeviceHub 실패는 이전 확인 이력이다.
+
+## DL-16652 최종 디자인 전달 — 2026-10-06~07 이력
 
 - [PR #2](https://github.com/Innvoaid/dentlink-lab-app/pull/2), feature/DL-16652→develop,
   OPEN/non-draft/MERGEABLE/CLEAN 및 자동 제목/본문/라벨 검사 성공 확인.

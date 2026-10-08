@@ -14,7 +14,22 @@
   `origin/main` 대비 1커밋 뒤이며 권한관리 worktree도 존재한다. 아래 2026-09-28의
   단일 worktree·로컬 동기화 상태는 당시 기록이며 현재 상태로 재사용하지 않는다.
 
-## DL-16652 Office Remake 전달 — 2026-10-06~07
+## DL-16652 현재 확인 — 2026-10-08
+
+- PR #318은 OPEN/non-Draft/MERGEABLE/CLEAN, HEAD `ffcdc73`는 소스·원격 동일하다. 새 제품 수정은 없다.
+  최종 Figma/댓글의 primary600·reset16·text14/21·gap4는 기존 구현과 일치한다.
+- DeviceHub 입력 연결이 회복돼 own iOS 26.5에서 정식 cached Debug 앱 2.2.4(151)+최신 Metro8090을
+  확인했다. 정상 로그인·serviceType OFFICE 및 승인 QA 계정 일치가 확인됐다. 오늘 새 native build는 없다.
+- 현재 자동 활성 employee/employer는 dotenv의 inline 주석 제거·정수 정규화 후 clinic QA 지정 ID와
+  모두 일치한다. 최초 false는 검사 helper 오류로 정정했다. 그룹 활성화·서버 변경 없이 Home/Orders 및
+  초기 대기 8건 중 가시 2행을 확인했다. 실제 Remake 미발견이며 필터 Reset/Done·wheel 시도는 수행 확증/
+  가시행 변화가 없어 필터 초기화·paging 성공으로 계산하지 않는다. 전체 계정/8행 Remake 0건은 아니다.
+- 실제 Office Remake·별도 iOS local fixture는 미검증으로 남기고 기존 renderer 3/3 증거와 구분한다.
+  own sim·Metro8090·본인 root.env를 정리했으며 원본 env/lock/설정 불변·ffcdc73 clean/원격 동일이다.
+  PR #318 본문 갱신/readback·자동 검사 SUCCESS를 확인했다. 전체 다음 시작점은 [DL-16652 정본](dentlink-patient-list-design.md)에 둔다.
+  아래 DeviceHub timeout·authstore false는 10월 7일 확인 이력이며 현재 입력/로그인 상태가 아니다.
+
+## DL-16652 Office Remake 전달 — 2026-10-06~07 이력
 
 - 사용자가 디자이너 구두 답변으로 웹·앱 모든 Remake 배지 사용처의 변경을 확정했다.
   Office 환자 목록은 바꾸지 않았고 OrderListRemakeBadge→OrderOfficeListItem의 배지만 변경했다.
