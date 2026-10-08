@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-08 **에이전트 공통 경로 정리·생성/후속수정 검증 저장 후 사용자 확인 대기**. 기본은 프로젝트를 읽는 에이전트의 자연어 요청이며 지침·스킬·`ai:screen` 도구는 AI 호출/인증을 하지 않는다. 기존 Codex 웹 입력은 `dev:ai-generation:codex` 선택 경로, `dev:ai-preview`는 AI 없는 고정 예시다. 제품 `feature/DL-16471 / 47edfb37f` 커밋·푸시·clean, 생성/수정 PC·휴대폰 동작까지 확인했다. 이번 실제 생성은 Codex 계열이며 다른 에이전트의 호환성·비개발자 사용성·공유 운용/에디터는 미확인이다. 다음은 최신 Git/서버 확인→FE 화면·코드 확인/자연어 요청→Codex 동작·재사용 검증. PM·디자이너/다른 팀원은 실제 서비스 단계 전에는 요청 대상에서 제외한다.5179는 생성된 결과만 보는 로컬 화면이며 임시 두 TSX는 Git 제외여서 다른 기기로 자동 이전되지 않는다. 정확한 경계·기기 복구·실행법은 기능 체크포인트를 따른다.
+  — 2026-10-08 **비개발자 짧은 요청 기준 하네스 정비·첫 시험 저장 후 대기**. 기본은 준비된 프로젝트의 에이전트에 화면·동작만 자연어로 요청하는 방식이다. 경로·명령·파일·포트 지시 없이 AGENTS/스킬/지침→실제 DLDS→생성/검사/미리보기/FE 인계를 에이전트가 맡는다. 제품 `feature/DL-16471 / 18405b37b`의 문서4개만 커밋·푸시·clean. 개인 기록·이전 대화·완성 화면을 제외한 첫 짧은 요청의 생성/저장·취소·320px, 짧은 문구 후속 수정/동작 보존 및 모의 FE 연결6/6 확인. 50647은 로컬 결과이며 임시 소스·서버는 다른 기기로 자동 이전되지 않는다. 긴 시험 조건/개인 기록을 읽은 이전 시험은 엄격한 첫 사용 근거와 구분했다. 다음은 최신 환경 확인→FE의 새 대화 짧은 요청/자연어 수정→Codex의 동작·FE 재사용 검증이다. 다른 에이전트·비개발자 실사용·제품 API/공유 운용·에디터는 별도이며 PM·디자이너 참여는 실제 서비스 단계 전 요청하지 않는다. 상세는 정본을 따른다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
