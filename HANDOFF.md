@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-06 **진행 순서를 저장하고 사용자 재개 요청까지 대기**한다. 다음은 사용자(FE)+Codex의 환경 실행 → 연락처 새 생성·후속 수정 → 코드 재사용 검토 → 근거에 따른 보완 → 다른 화면 유형 검증/사용 환경 정리다. 이 순서는 아직 실행하지 않았다. 다른 팀원은 지금 제외하며, 작업 완료 후 실제 서비스로 사용할 단계 전에는 PM·디자이너에게 시험/검토를 요청하지 않는다. 제품 `feature/DL-16471`의 `fa46e3438`과 원격이 일치하고 clean이며 현재 로컬5178은 꺼져 있다. 기존 생성·검사·미리보기·코드 전달의 기술 시험은 저장돼 있다. 제품/API·공유 배포·전체 에디터·Figma 추가시험은 별도다. 다음은 개인 컨텍스트/제품 pull과 브랜치 확인 후 `pnpm dev:ai-preview` → `/ai-generation.html`부터 시작한다. 정확한 상태·환경·외부 문서 차이는 기능 체크포인트를 따른다.
+  — 2026-10-08 **에이전트 공통 경로 정리·생성/후속수정 검증 저장 후 사용자 확인 대기**. 기본은 프로젝트를 읽는 에이전트의 자연어 요청이며 지침·스킬·`ai:screen` 도구는 AI 호출/인증을 하지 않는다. 기존 Codex 웹 입력은 `dev:ai-generation:codex` 선택 경로, `dev:ai-preview`는 AI 없는 고정 예시다. 제품 `feature/DL-16471 / 47edfb37f` 커밋·푸시·clean, 생성/수정 PC·휴대폰 동작까지 확인했다. 이번 실제 생성은 Codex 계열이며 다른 에이전트의 호환성·비개발자 사용성·공유 운용/에디터는 미확인이다. 다음은 최신 Git/서버 확인→FE 화면·코드 확인/자연어 요청→Codex 동작·재사용 검증. PM·디자이너/다른 팀원은 실제 서비스 단계 전에는 요청 대상에서 제외한다.5179는 생성된 결과만 보는 로컬 화면이며 임시 두 TSX는 Git 제외여서 다른 기기로 자동 이전되지 않는다. 정확한 경계·기기 복구·실행법은 기능 체크포인트를 따른다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
