@@ -72,6 +72,21 @@ Detailed implementation history remains in the relevant existing project file.
   사용자가 11:37 KST에 squash 머지했으며 `dd9f1f544`의 release 반영과 지침 7개 파일 일치를 확인했다.
   전용 worktree·로컬 feature를 정리하고 원격 feature는 보존했다. 실제 배포·master 반영과 구분한다. 상세는
   [웹 i18n 정본](dentlink-client-i18n.md)에 두고 앱 팀 지침 변경과 구분한다.
+- 2026-10-08 사용자 승인으로 Lab 앱의 팀 지침도 직접 반영하고
+  [앱 PR #3](https://github.com/Innvoaid/dentlink-lab-app/pull/3)을 `develop` 대상으로 전달했다.
+  앱 README·AGENTS·CLAUDE 3개 문서, `5844ba5` push·자동 검사 SUCCESS·미병합이다.
+  실제 번역·시트·실행 코드는 변경하지 않았다. 상세는
+  [앱 i18n 전달 기록](dentlink-lab-app-i18n.md)에 두고 웹 release 상태와 분리한다.
+
+## DL-16655 신규 세션 전달 — 2026-10-08
+
+- 치과 웹 주문목록 Product·Patient 아이콘/글자 정렬 QA 요청이다. Jira 본문·첨부 존재를 확인하고
+  기존 메인 프로젝트 폴더에 **DL-16655 치과 주문목록 아이콘·텍스트 정렬** 세션을 만들었다.
+- 세션 `01a11939-5a8c-7973-a2b4-9e47ce3accc1`, 기본 웹 checkout을 사용하며 새 폴더·worktree는 없다.
+  메인과 같은 `gpt-6.1-sol / ultra`를 명시했고 생성된 세션 메타데이터에서 실제 적용을 확인했다.
+- 요구·첨부·live Git 대조 후 이해되지 않으면 해당 세션 사용자에게 먼저 질문하도록 전달했다.
+  수정·검증과 제품 Git 전달 권한을 구분하며 메인세션으로 진행·완료 메시지를 보내지 않는다.
+  구현의 최신 상태는 작업 세션과 그 개인 체크포인트를 따른다. 메인세션은 이번 전달만 기록했다.
 
 ## DL-16652 기공소 환자목록 디자인·API 대응 — 2026-10-06
 

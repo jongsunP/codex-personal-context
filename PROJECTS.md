@@ -164,6 +164,8 @@ For detailed current state, read:
 - 다국어 구현과 운영 절차. 완료한 전용 worktree·로컬 브랜치는 정리됐다.
 - 기공소 기능의 문구 변경은 번역 리소스·시트 반영·검증까지 기본 범위다.
   웹은 아래 i18n 문서, 별도 Lab 앱은 [앱 정본](projects/dentlink-lab-app.md)의 절차를 따른다.
+- Lab 앱의 팀 에이전트 지침 반영은 [앱 i18n 전달 기록](projects/dentlink-lab-app-i18n.md)을 따른다.
+  앱 PR #3은 `develop` 대상이며 웹 `release/v1.88.0`과 별도다.
 - [projects/dentlink-client-i18n.md](projects/dentlink-client-i18n.md)
 
 ### Dentlink DSO Dashboard — DL-15223
