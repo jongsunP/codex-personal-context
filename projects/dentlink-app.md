@@ -31,7 +31,8 @@
 - 소스 기준 같은 대비 결함이 없어 Clinic 추가 변경/커밋/PR/배포는 하지 않았다.
   실제 Clinic 설치본 화면/OTA bundle 확인은 별도이며 정상 실기기 QA 완료로 확대하지 않는다.
 - Lab 카드만 [PR8](https://github.com/Innvoaid/dentlink-lab-app/pull/8) →release/v1.0.4로 원본14px/#959595 보정을 전달했다.
-  아직 병합/추가배포 전이다. 상세는 [DL-16652 정본](dentlink-patient-list-design.md)을 따른다.
+  이후 사용자 병합59e6a56c와 Lab 양플랫폼 Staging v32 재배포를 완료했다. Clinic 추가 배포는 없다.
+  실제 Lab v32 적용/화면QA는 별도이며 상세는 [DL-16652 정본](dentlink-patient-list-design.md)을 따른다.
 
 ## 이전 확인 — 2026-10-08 검토 중 아이콘 양 앱 비교
 

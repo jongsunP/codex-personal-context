@@ -1,6 +1,33 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 최신 확인 — 2026-10-08 검토 중 아이콘 수정 PR 준비 완료
+## 최신 확인 — 2026-10-08 검토 중 아이콘 수정 Staging v32 재배포 완료
+
+- 사용자가 PR8을 직접 병합하고 CodePush 재배포를 승인했다. live MERGED는
+  **59e6a56cd39981c5c8e69166680794f8bf0f4593 / 15:59:08 KST**, target release/v1.0.4다.
+- 최신 release와 검증한 bb2df333의 전체 tree는 **85c9fafdcfb76d8dfb65e38171bf4204e5362c8e**로 동일하다.
+  직전 f000ae2c 대비 변경은 아이콘3파일(+11/-1)이며 native/deps/버전1.0.4는 보존됐다.
+  기존 patient-list worktree를 clean **detached59e6a56**으로 전환하고 pull/독립검토/버전일치/SVG SHA를 확인했다.
+  QA/lab/DL-16652-review-icon@bb2df333과 기존 source branches는 보존했다.
+- 기존 Revopush CLI0.0.15의 플랫폼별 Staging 명령을 iOS→Android 순차 실행했다.
+  description은 `DL-16652 In Review icon; release/v1.0.4 59e6a56`이며 index.js/Hermes 배포용 bundle,
+  바이너리1.0.4·mandatory·rollout100%·isDisabled=false다. Slack 알림 없는 명령을 사용했다.
+
+| 제품/OS | Staging label | 업로드 KST | packageHash |
+| --- | --- | --- | --- |
+| Dentlink-Lab-iOS | **v32** | 16:01:35 | 76805f2ac7377a13adf24110866ad226a2895698c1d17b1af2636c5232c9038a |
+| Dentlink-Lab-Android | **v32** | 16:02:26 | d71f5f19369d85e628ce377a2c420dba012f1cc7c28bf005744d33d667aea1e4 |
+
+- 양 CLI exit0/Successful release 후 서버 history를 각각 재조회했다. 직전 v31에서 각v32로 바뀌었고
+  packageHash 변경·소스 description·1.0.4·active·mandatory·100%를 검증했다.
+  로컬 sanitized receipt는 /tmp/DL16652-lab-review-icon-staging-codepush-20261008.json이다.
+- 이번 v32에 Figma 원본14px/#959595 NEW 치아 보정이 포함됐다. 실제 기기의 OTA 다운로드·적용·재실행과
+  수정 아이콘 픽셀 QA는 아직 root 미검증이며 사용자의 실제 Staging 최종 확인과 구분한다.
+- Jira44342를 재배포 결과로 갱신하고 READY FOR QA를 유지했다. 개인 기록도 정리했다.
+  Clinic/Production/Development/native/store/tag·번역/시트·STG Swagger·4시간 재점검·메인 메시지는 추가 실행하지 않았다.
+- 다음 시작점: Lab **Staging1.0.4/v32** 적용 후 ‘검토 중’ 회색 치아와 기존 주문목록 흰 치아를 실제 화면에서 확인한다.
+  아래 PR8 OPEN/미배포/v31은 수정 준비 당시의 이전 이력이다.
+
+## 이전 확인 — 2026-10-08 검토 중 아이콘 수정 PR 준비 완료
 
 - 사용자가 양 앱 확인과 필요한 수정의 각 릴리스 전달을 승인했다. 실제 병합·추가 CodePush는 실행하지 않았다.
 - Figma 앱 main325:32222가 사용하는 Order Status set267:39862의 Lab NEW267:39992,

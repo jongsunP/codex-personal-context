@@ -22,7 +22,18 @@
 - 최신 번역 지침 전달은 문서 전용 #5이며 [전달 기록](dentlink-lab-app-i18n.md)을 따른다.
   공통 정책 정리 당시 제품 변경은 없었으며 아래 최신 사용자 승인 작업과 구분한다.
 
-## DL-16652 현재 확인 — 2026-10-08 검토 중 아이콘 수정 PR8
+## DL-16652 현재 확인 — 2026-10-08 아이콘 수정 Staging v32 배포
+
+- PR8은 사용자 병합으로 release/v1.0.4@59e6a56c에 반영됐다(15:59:08 KST).
+  전체tree가 검증한 bb2df333과 동일하고 native/deps/버전1.0.4는 보존됐다.
+- 승인된 양 플랫폼 Staging CodePush 재배포 완료: iOS **v32/16:01:35**, Android **v32/16:02:26** KST.
+  서버 history에서 기존v31→v32·packageHash 변경·59e6a56 description·1.0.4·active·mandatory·100%를 확인했다.
+- 기존 patient-list worktree는 clean detached59e6a56이며 QA branch/원격 source는 보존했다.
+  Jira44342/READY FOR QA와 개인기록을 정리했고 Clinic/Production/native/store/tag·메인메시지는 추가 실행하지 않았다.
+- 실제 Staging 앱의 v32 적용·재실행/NEW 회색14px 치아 표시는 아직 별도 확인이 필요하다.
+  다음 시작점과 packageHash 근거는 [DL-16652 정본](dentlink-patient-list-design.md)을 따른다.
+
+## 이전 확인 — 2026-10-08 검토 중 아이콘 수정 PR8
 
 - 사용자 승인으로 Lab 카드 NEW에 최종 Figma 원본14px/#959595 치아를 적용했다.
   전용 SVG·export·NEW 매핑3파일(+11/-1)이며 공용 white teeth/기존 주문목록·native·deps는 보존했다.

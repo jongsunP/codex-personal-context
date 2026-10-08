@@ -2,6 +2,11 @@
 
 ## 2026-10-08
 
+- 사용자PR8병합59e6a56c/15:59:08확인후승인된Lab양플랫폼Staging CodePush재배포를완료했다.
+  검증bb2df333과전체tree동일·native/deps/1.0.4보존, iOSv32/16:01:35·Androidv32/16:02:26 KST다.
+  CLIexit0+서버history에서v31→v32/packageHash변경·description·active/mandatory/100%를검증했다.
+  Jira44342/READY FOR QA·개인기록정리, 실제OTA적용/NEW회색14px픽셀QA는별도미확인이다.
+  Clinic/Production/native/store/tag·번역시트·메인메시지는추가실행하지않았다.
 - 사용자양앱검증/필요수정승인으로Lab NEW카드를최종Figma14px/#959595원본으로보정했다.
   QA/lab/DL-16652-review-icon@bb2df333·3파일(+11/-1)만push하고PR8→release1.0.4를생성/연결했다.
   자동화후base/diff·CLEAN/MERGEABLE·미해결0을검증, lint/실제SVG/양플랫폼JS bundle PASS·기존type5동일/신규0이다.

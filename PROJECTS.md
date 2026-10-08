@@ -82,7 +82,8 @@ For detailed current state, read:
 - Lab 기능6/문서5는 사용자병합, 최신release/v1.0.4@f000ae2c에서 iOS/Android Staging CodePush를 각각 배포했다.
   양쪽 v31·바이너리1.0.4·활성·mandatory·100%를 서버검증했다. 실기기OTA/기능QA는별도다. 옛Lab2/3/4는닫힌이력이다.
   이후사용자NEW아이콘제보를확인해Lab카드만Figma14px/#959595로보정한PR8을같은release로전달했다.
-  PR8은병합/추가OTA전이고현재v31은미수정이다. Clinic최신release에는같은결함근거없어추가변경없다.
+  PR8사용자병합59e6a56c 후Lab iOS16:01/Android16:02 Staging v32재배포완료·1.0.4/활성/100%서버확인했다.
+  v32실제적용/아이콘QA는별도다. Clinic최신release에는같은결함근거없어추가수정/배포없다.
   신규번역시트·검증·실기QA/OTA 및 외부검사 한계는 정본을 따른다.
 - [projects/dentlink-patient-list-design.md](projects/dentlink-patient-list-design.md)
 

@@ -4,7 +4,16 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 인계 — 2026-10-08 Lab 검토 중 아이콘 수정 준비
+## 현재 인계 — 2026-10-08 Lab 아이콘 수정 Staging v32 배포
+
+- 사용자 PR8 병합59e6a56c/15:59:08 KST를 확인하고 승인된 Lab 양플랫폼 Staging 재배포를 완료했다.
+  최신 release1.0.4의 전체tree는 검증한bb2df333과 동일·아이콘3파일만 변경·native/deps/버전은 보존됐다.
+- iOS **v32/16:01:35**, Android **v32/16:02:26** KST, 서버에서1.0.4·활성·mandatory·100%·소스description을 확인했다.
+  Jira44342/READY FOR QA와 개인기록을 정리했다. Clinic/Production/native/store/tag·메인메시지는 추가 실행하지 않았다.
+- 실제 Staging v32 적용·재실행 후 NEW 회색14px 치아 확인은 남아 있으며
+  다음 시작점은 [DL-16652 정본](dentlink-patient-list-design.md)의 v32 실물QA다.
+
+## 이전 인계 — 2026-10-08 Lab 검토 중 아이콘 수정 준비
 
 - 사용자 승인으로 Lab 카드 NEW를 Figma 원본14px/#959595로 보정해
   [PR8](https://github.com/Innvoaid/dentlink-lab-app/pull/8) →release/v1.0.4로 전달했다.
