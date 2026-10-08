@@ -1,6 +1,31 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 최신 확인 — 2026-10-08 검토 중 아이콘 수정 Staging v32 재배포 완료
+## 세션 마감 — 2026-10-08 완료 상태 정리 후 대기
+
+- 사용자께서 전체 작업 완료로 정리하고 대기하도록 요청했다. **새 요청 전 추가 구현·리뷰·배포·자동 재조회는 실행하지 않는다.**
+  4시간 재점검 취소를 유지하며 새 예약/자동화를 만들지 않았다. 메인세션 메시지도 보내지 않았다.
+- 웹은 사용자 병합·배포 완료 보고를 보존한다. 이번 마감에서 웹 배포 Actions/화면을 다시 검증하지 않았다.
+  Clinic Remake #318과 Lab 지침 #5·환자 기능 #6·NEW 아이콘 #8의 기존 병합/검증 이력을 유지한다.
+- 메인세션이 만든 기존 release→develop PR을 확인해 중복 생성하지 않았다. **양 앱 모두 MERGED**다.
+
+| 제품 | 동기화 PR | 실제 develop 병합 SHA / KST | 코드 동기화 확인 |
+| --- | --- | --- | --- |
+| Clinic | [#321 release/v2.2.4 → develop](https://github.com/Innvoaid/dentlink-app/pull/321) | 04ed4e5b41ea0d4686b40b5d652c0b8d99645e8d / 16:08:37 | release a00efb1e와 전체 tree449ed40b 동일 |
+| Lab | [#9 release/v1.0.4 → develop](https://github.com/Innvoaid/dentlink-lab-app/pull/9) | e6fec379adbac1e1753834caa436dc006866e760 / 16:07:37 | release59e6a56c와 전체 tree85c9fafd 동일 |
+
+- Clinic은 release 전체33파일, Lab은22파일의 동기화이며 충돌0/기존 develop 코드 누락0을 확인했다.
+  사용자 최신 정정은 **일반 앱 feature → develop**, 기존 release 전달은 유지하고 필요한 내용을 develop으로 동기화하는 것이다.
+  앞선 ‘모든 앱 feature의 기본 대상=release’ 해석은 대체됐다. release QA·기존 호환 CodePush 흐름은 별도로 판단한다.
+- Lab Staging은 아이콘 수정 포함 **iOS·Android 모두 v32**, 앱1.0.4·활성·mandatory·rollout100%다.
+  업로드/서버 확인은 아래 기록대로 완료했으며 실제 기기 v32 적용·재실행·NEW 아이콘 픽셀 QA는 root 미검증 이력으로 남긴다.
+  Clinic 소스에는 같은 대비 결함 근거가 없어 추가 수정/CodePush는 하지 않았다. 새 native/store/Production/tag도 없다.
+- 담당 Jira44342는 v32 배포 결과와 실물 확인 경계를 기록했고 READY FOR QA를 유지한다.
+  제품 worktree는 clean이며 Office feature81584b82/Lab detached59e6a56c와 source/원격 브랜치를 보존했다.
+  제품 코드·branch·PR·배포에 이번 마감의 추가 변경은 없다. 메인세션 작성 중인 공통 정책7파일도 수정하지 않았다.
+- 재개 시 이 마감 기록을 읽고 최신 Git/PR/배포 상태와 사용자의 새 요청을 먼저 확인한다.
+  실물 제보가 오면 Lab Staging1.0.4/v32 적용 여부와 검토 중14px/#959595·일반 목록 white 치아를 구분해 확인한다.
+
+## 이전 확인 — 2026-10-08 검토 중 아이콘 수정 Staging v32 재배포 완료
 
 - 사용자가 PR8을 직접 병합하고 CodePush 재배포를 승인했다. live MERGED는
   **59e6a56cd39981c5c8e69166680794f8bf0f4593 / 15:59:08 KST**, target release/v1.0.4다.
