@@ -8,7 +8,19 @@
 - 상위 조율 정본: [Dentlink FE](dentlink-fe.md). 제품 저장소에 개인 인계문을 추가하지 않는다.
 - Jira/Notion 댓글 작성·상태 변경, 제품 branch 생성·commit·push·PR·merge·배포는 별도 명시 승인 범위를 따른다.
 
-## 현재 체크포인트 — 2026-10-06: 검토 완료 및 Jira·로컬 정리
+## 현재 체크포인트 — 2026-10-08: 릴리즈 병합·staging 배포 작업 확인
+
+- 사용자 요청에 따라 개인 정본과 제품 Git을 pull/fetch한 뒤 PR·Jira·Notion·배포 작업을 읽기 대조했다. 이번 확인에서 제품 코드·PR·Jira·Notion을 변경하거나 branch/worktree를 삭제하지 않았다.
+- [PR #4660](https://github.com/Innvoaid/dentlink-client/pull/4660)은 **2026-10-07 10:05:58 KST** `release/v1.88.0`으로 **MERGED**다. inkyookoh의 팀 승인(APPROVED, 10/7 09:17 KST) 후 jongsunP가 병합했고, merge commit은 **`2c1dc7c04b9f53629442de3fd5ae7ff436e6a540`**이다. CodeRabbit SUCCESS·미해결 0개를 현재 조회로 재확인했다. Codex가 이번 확인에서 병합한 것은 아니다.
+- 최신 `origin/release/v1.88.0` **`9baeca42f0ba955ed562f3a7550955cd00c907ed`**에 해당 merge가 포함돼 있다. `origin/master`는 여전히 **`6b79c9756cc56313fe833aad463bddb1f8c385fa`**이며 이번 merge는 아직 포함되지 않았다. 릴리즈 완료 후 forward propagation과 구분한다.
+- [Admin Stage 배포 작업](https://github.com/Innvoaid/dentlink-client/actions/runs/37562418779)은 해당 merge를 포함한 **`248e4028b8f89484bd3be1e627affb5200b3d3b9`**로 10/7 11:31~11:41 KST에 성공했다. Office·Lab Stage 최신 성공 작업에도 포함된다. 배포 workflow 성공과 commit 포함까지만 확인했으며 실제 환경 artifact·브라우저 제출/재조회·릴리즈 QA 완료를 확정하지 않는다.
+- [Admin Production 최신 배포 작업](https://github.com/Innvoaid/dentlink-client/actions/runs/37002023407)은 **v1.87.1 / `30775203…` / 10월 2일**로 이번 merge를 포함하지 않는다. `prd/admin/v1.88` 태그도 없다. 이번 수정의 운영 반영 완료 근거는 없으며 v1.88.0 일정은 10/12다. PR의 DLOS Vercel preview 차단은 이 Admin Stage 작업 성공과 별개다.
+- [Jira DL-16615](https://innovaid.atlassian.net/browse/DL-16615)는 **[FE] 미국 Medit 주문의 TAT·미리보기 날짜를 RX에 맞게 수정**, **Ready for Deploy / v1.88.0 / 2026-10-12 / resolution null**이다. 현재 댓글은 PM 댓글 2개다. 과거 진행 댓글 44296은 10/6 **17:19 KST** 사용자 계정에서 삭제된 changelog를 확인했다. 이를 이전 기록과 대조하되 다시 등록하지 않았다. 상위 카드 댓글·상태도 이번 조회에서 바꾸지 않았다.
+- Notion 토론은 현재 댓글 **3개**다. 사용자가 올린 처리 답변 뒤에 PM이 **10/6 11:59 KST** “다음 정기 배포 12일”로 티켓을 잡겠다는 답변을 남겼다. 신규 수정 요청이나 실제 제출/재조회 QA 완료 답변은 없다.
+- 로컬 기본 checkout은 **clean master**, upstream과 동일하다. 로컬 `feature/DL-16615`와 원격 feature는 **`1b0c7a44d9d8f39c55e741c30c1521e4dad75e0e`**로 보존돼 있다. 이 기능의 임시 worktree는 없다. DLDS·환자목록·권한관리 별도 checkout은 다른 진행 중 작업으로 유지한다.
+- 현재 단계는 **개발·로컬 검증·CodeRabbit·팀 승인·릴리즈 병합 완료, 수정 포함 Admin Stage 배포 작업 성공**이다. 남은 확인은 실제 테스트 주문 제출·재조회와 조립된 릴리즈 QA, 운영 배포 및 완료 릴리즈의 master 반영이다.
+
+## 이전 체크포인트 — 2026-10-06: 검토 완료 및 Jira·로컬 정리
 
 - 사용자가 검토 종료 후 담당 하위 Jira의 현재 상태·처리 내용, 개인 메모리의 진행상황, 임시 worktree 정리를 승인했다. 상위 카드 댓글은 지금 필요 없다고 명시했다.
 - [PR #4660](https://github.com/Innvoaid/dentlink-client/pull/4660)은 **OPEN**, base `release/v1.88.0`, head `feature/DL-16615` / **`1b0c7a44d9d8f39c55e741c30c1521e4dad75e0e`** 그대로다. CodeRabbit **SUCCESS / 미해결 0개**, Admin DLOS guard·Auto Assign·Vercel Preview Comments 성공이다. 팀 승인 `REVIEW_REQUIRED`, merge 미실행, `dentlink-dlos` Vercel preview의 Deployment was blocked 상태는 남아 있다.
@@ -104,8 +116,8 @@
 
 ## 다음 시작점
 
-1. 제품 `feature/DL-16615` / `1b0c7a44d9d8f39c55e741c30c1521e4dad75e0e`와 [PR #4660](https://github.com/Innvoaid/dentlink-client/pull/4660)의 원격 head·target·check·리뷰 상태를 다시 확인한다. 목표 릴리즈는 사용자 확정 **v1.88.0**이다.
+1. [PR #4660](https://github.com/Innvoaid/dentlink-client/pull/4660)은 병합됐다. 최신 v1.88.0 release·staging 배포 대상과 현재 QA/운영 배포 기록을 다시 확인한다. 기본 checkout이 clean master로 돌아온 상태를 존중하고 feature를 불필요하게 다시 checkout하지 않는다.
 2. Admin 실제 앱의 테스트 데이터로 RX·TAT·수동 변경·최소일·재진입·제출·재조회를 QA한다. 운영 주문 수정/제출을 검증용으로 실행하지 않는다. 73건의 격리 검증을 전체 앱 QA로 취급하지 않는다.
-3. CodeRabbit 검토는 현재 head에서 완료·미해결 0개다. 새 지적이 생기면 현재 코드·기존 패턴에 대조하고 필요한 범위만 처리한다. 지금은 팀 리뷰·승인을 기다린다. merge·배포는 별도 승인 범위다.
+3. CodeRabbit 검토·팀 승인·release 병합은 완료다. 릴리즈 QA와 운영 배포 완료 증거가 생기면 담당 하위 Jira와 개인 체크포인트를 현재 단계에 맞춘다. 삭제된 과거 Jira 댓글을 임의로 복구하거나 상위 카드에 댓글을 쓰지 않는다.
 4. Vercel `dentlink-dlos` preview 차단은 로그인이 필요한 상세 확인 사항이다. 현재 상태를 코드 실패로 단정하거나 사용자 승인 없이 배포 설정을 바꾸지 않는다.
-5. 팀이 PR을 v1.88.0에 병합한 뒤 조립된 staging 릴리즈에서 QA한다. 서버 자동수집·Clinic 보정 확대와 iTero 변경은 이번 PR 범위에 포함하지 않는다.
+5. 운영 배포 이후 최종 릴리즈의 master 반영을 확인한다. 코드 변경·환경 branch 변경·배포는 승인 범위를 확인한다. 서버 자동수집·Clinic 보정 확대와 iTero 변경은 이번 PR 범위에 포함하지 않는다.
