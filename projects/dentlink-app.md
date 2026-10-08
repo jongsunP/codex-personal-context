@@ -23,7 +23,18 @@
   `origin/main` 대비 1커밋 뒤이며 권한관리 worktree도 존재한다. 아래 2026-09-28의
   단일 worktree·로컬 동기화 상태는 당시 기록이며 현재 상태로 재사용하지 않는다.
 
-## DL-16652 현재 확인 — 2026-10-08 릴리스 동기화 완료
+## DL-16652 현재 확인 — 2026-10-08 변경 범위 재점검·PR 유지
+
+- 사용자 앱 PR 전체 정리 지시로 #318을 최신release/v2.2.4(14557194c)와 다시 비교했다.
+  HEAD81584b82의 전체 diff는 배지3파일(+16/-14)뿐이고 나머지 tracked 파일은 release와 동일하다.
+  커밋8개에 기존 이력이 있어도 추가 실제변경이 없어 새브랜치/PR 재작성은 불필요하다.
+- 기존 [PR #318](https://github.com/Innvoaid/dentlink-app/pull/318)을 유지하고 본문에 scope audit를 추가했다.
+  최신 live 상태는 OPEN/non-Draft/MERGEABLE/CLEAN·**APPROVED**, CodeRabbit SUCCESS·미해결0·
+  검사pending0·autoMergeRequest=null이다. 실제 merge·배포·제품코드 변경은 하지 않았다.
+- 변경patch 불변으로 아래 버전/lint/renderer3 및 release/fulltsc8진단 동일·신규0 근거를 보존한다.
+  새 기기/실제Remake/OTA 확인은 아니며 최신 공통 정리는 [DL-16652](dentlink-patient-list-design.md)에 둔다.
+
+## 이전 확인 — 2026-10-08 릴리스 동기화 완료
 
 - 사용자 승인 외 준비 실행 지시로 기존 feature에 최신release/v2.2.4(14557194c)를 충돌 없이 동기화했다.
   Merge commit81584b8201edffd00b2261aaa5d7322be493bd1e를 push했고 release ref는 변경하지 않았다.

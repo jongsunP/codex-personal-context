@@ -4,7 +4,8 @@
 
 사용자 작업 지침과 실제 앱 Git·스크립트를 대조해 정리한 개인 운영 정본이다.
 웹·치과 앱·기공소 앱은 독립 저장소이며, 이 문서는 두 네이티브 앱의 공통 판단 기준을 담는다.
-기능 상세·QA 이력은 해당 기능 체크포인트에 남긴다. 이번 정리는 제품 코드·PR·Jira·배포를 변경하지 않았다.
+기능 상세·QA 이력은 해당 기능 체크포인트에 남긴다. 온보딩 최초 조사에서는 제품 코드·PR·Jira·배포를
+변경하지 않았다. 이후 승인된 앱 PR 정리는 아래 최신 체크포인트를 따른다.
 
 | 제품 | 저장소 | 개인 체크포인트 |
 | --- | --- | --- |
@@ -13,8 +14,9 @@
 | 기공소 앱 Lab | `Innvoaid/dentlink-lab-app` | [Lab](dentlink-lab-app.md) |
 
 - 최신 사용자 지침과 확인된 live 사실을 우선한다. Notion의 편집일·검증 표시·코드 예시는 현재 적용 증거가 아니다.
-- 온보딩의 단일 저장소 `apps/office`·`apps/lab`·`shared/` 설명은 분리 전 역사다.
-  현재 앱별 `src/`, 루트 `package.json`, 실제 iOS/Android 프로젝트와 대응시킨다.
+- 온보딩의 단일 저장소 설명은 분리 전 자료지만, 작업 대상 release에는 그 구조가 남을 수 있다.
+  **선택한 브랜치의 실제 구조·진입점·앱별 package 버전을 우선**한다. main/develop의 `src/`와
+  구 릴리스의 `apps/lab`·`shared/`를 구분하고, 레이아웃 변경을 작업에 자동 포함하지 않는다.
 - 로컬 개발은 기존 [개발 지침](dentlink-app-development-guideline.md)과
   [실행 체크리스트](dentlink-app-local-development.md)를 함께 읽되 제품별 최신 명령을 확인한다.
 
@@ -98,7 +100,20 @@
 - 오류 보고에는 재현 시점·진입 경로·앱/OS/환경·바이너리·적용 라벨·설치/업데이트 경로를 기록한다.
   인증 정보·환자 데이터·env/키 첨부의 실제값은 개인 문서에 복사하지 않는다.
 
-## live 확인과 문서 차이 — 2026-10-08
+## 최신 앱 PR 정리 — 2026-10-08
+
+- [앱 전달 정책](../SESSION_WORKFLOW.md#dentlink-app-release-and-delivery-policy)에 요청한 변경만
+  최종release에 전달하는 기준을 추가했다. 분리 이력이 섞이면 release에서 새 feature를 만들고
+  실제 필요한 변경만 옮긴다. broad foundation PR을 기본 선행 조건으로 삼지 않는다.
+- Office #318은 이미 release 대비 배지3파일뿐이어서 그대로 유지했다. 최신 APPROVED/CLEAN이다.
+- Lab 기능은 #6 `feature/lab/DL-16652-release / e3bf335` → 기존release/v1.0.4(20파일),
+  번역 운영 문서는 독립 #5 `feature/lab-i18n-workflow-release / 2fb6e8b` → 같은release(3문서)다.
+  기존 #2/#3와 불필요한 기반 #4는 CLOSED/미병합이며 source branch는 보존했다.
+  둘 다 올바른base·전체diff·검사완료·MERGEABLE/CLEAN·미해결0을 확인했다. 실제merge/배포는 미실행이다.
+- 세부 검증·QA 경계는 [DL-16652](dentlink-patient-list-design.md)와 [번역 전달](dentlink-lab-app-i18n.md)을 따른다.
+  아래 live 표와 diff확대 기록은 이번 정리 이전의 정책 조사 이력이다.
+
+## 이전 live 확인과 문서 차이 — 2026-10-08 정책 조사
 
 | 제품 | 최신 정식 원격 release | 확인된 최근 PR |
 | --- | --- | --- |

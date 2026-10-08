@@ -2,6 +2,13 @@
 
 ## 2026-10-08
 
+- 사용자 앱PR 전체정리 지시로 요청한 작업만 최종release에 전달하도록 정정했다.
+  Lab은 release1.0.4에서 기능1커밋20파일 e3bf335의PR6과 독립문서1커밋3파일2fb6e8b의PR5로 대체했고,
+  기존2/3/4를 CLOSED·미병합/대체링크·원격branch보존으로 정리했다. 광범위 foundation은 불필요했다.
+  Office318은 release 대비 실제배지3파일만 있어 유지했고 최신승인완료/CLEAN·CodeRabbit SUCCESS를 확인했다.
+  새Lab포트 renderer10+연결4·lint/format/버전·양플랫폼releaseJSbundle PASS, 전체type는각baseline6개동일/신규0,
+  독립검토결함0·모의통합충돌0이다. 새포트기기/OTA QA는 별도이며 실제PRmerge/배포/메인보고는없다.
+  담당Jira댓글44342·제품체크포인트·앱release정책을 새구성으로 갱신하고 이전기반안을 이력으로 표시했다.
 - DL-16652 두앱의리뷰전모든준비를최종확인했다. Office318behind0/3파일승인대기,
   Lab4기반/2기능분리·19파일추가코드리뷰결함0·순차merge-tree충돌0/최종tree동일이다.
   실행가능한준비잔여0, 검사pending/미해결0·자동merge설정없음. LabPR검증본문·형식검사범위를명확히했고

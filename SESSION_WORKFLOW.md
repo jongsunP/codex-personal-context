@@ -400,7 +400,19 @@ in [App onboarding and delivery](projects/dentlink-app-onboarding.md).
 - Compare both commit ancestry and tree/layout, then review the complete PR
   diff. A pre-split release can make a small post-split task include repository
   restructuring and unrelated changes. `MERGEABLE/CLEAN` does not validate
-  scope; establish necessary prior integration separately.
+  scope. Verify whether a prior integration is actually necessary for this
+  task; a different layout or ancestry alone is not proof of a dependency.
+- Deliver only the user's authorized task and its verified necessary
+  dependencies. When unrelated split history or other features enlarge an app
+  PR, prefer a fresh feature branch from the intended final release and port
+  only the task's changes into that release's existing structure. Recheck the
+  full diff, affected product behavior, API, translations, bundle, and baseline
+  diagnostics. Do not prepare a broad foundation PR merely to make the feature
+  review smaller. If the existing PR already contains only the intended actual
+  changes, retain it rather than recreating a branch for its commit count alone.
+  Close replaced or unnecessary PRs when cleanup is authorized, link the
+  replacement, and preserve source branches for recovery unless deletion is
+  requested. This preparation does not authorize a PR merge or deployment.
 - After PR creation or reopening, let relevant automation finish and verify
   its actual base and diff again. Current app automation can redirect Jira
   feature PRs to `develop`. The user policy selects the intended release;

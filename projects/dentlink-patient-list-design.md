@@ -1,6 +1,60 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 현재 상태 — 2026-10-08 리뷰 전 준비 최종 완료
+## 현재 상태 — 2026-10-08 요청한 변경만 릴리스 PR로 정리 완료
+
+- 사용자 최종 지시: 본인이 올린 클리닉·기공소 앱 PR 전체를 확인하고, **최종 대상 릴리스에서
+  이번 작업만 반영**하도록 정리한다. 필요하면 새 feature에 작업만 옮기고 불필요한 PR은 닫는다.
+  실제 PR 병합·태그·CodePush·스토어 작업·메인세션 보고는 계속 제외한다. 웹은 사용자 병합 완료다.
+- 이전 기반 #4 → 기능 #2 순차 통합안은 폐기했다. 분리 이력은 이번 기능의 필수 의존성이 아니며
+  해당 릴리스의 기존 구조에 기능만 옮길 수 있었다. 기존 앱 분리·DL-16548·DL-16556을 함께 반영하지 않는다.
+  이전 `codex/` 기반 이름도 개인 feature 규칙에 맞지 않았으며 새 브랜치는 `feature/` 규칙을 따른다.
+
+| 제품·범위 | 현재 PR → 최종 릴리스 | 브랜치·푸시 HEAD | 실제 전체 diff |
+| --- | --- | --- | --- |
+| 클리닉 Remake | [#318](https://github.com/Innvoaid/dentlink-app/pull/318) → `release/v2.2.4` | `feature/DL-16652` / `81584b8201edffd00b2261aaa5d7322be493bd1e` | 3파일, +16/-14 |
+| 기공소 환자 목록·Remake | [#6](https://github.com/Innvoaid/dentlink-lab-app/pull/6) → `release/v1.0.4` | `feature/lab/DL-16652-release` / `e3bf33567c5fde6e526e38b237d2b21f416b4476` | 1커밋·20파일, +1037/-19 |
+| 기공소 번역 운영 지침 | [#5](https://github.com/Innvoaid/dentlink-lab-app/pull/5) → `release/v1.0.4` | `feature/lab-i18n-workflow-release` / `2fb6e8b3a0840255796b29ad5000cbabfc8a71b3` | 1커밋·문서 3파일, +86/-1 |
+
+- 클리닉 #318은 릴리스에 없는 실제 변경이 배지 3파일뿐이고 그 외 tracked 파일이 릴리스와 동일하다.
+  커밋 수가 많다는 이유로 재작성하지 않았다. 최종 live 확인에서 OPEN/non-Draft/MERGEABLE/CLEAN,
+  **APPROVED**, CodeRabbit SUCCESS·미해결 0·검사 pending 0·autoMergeRequest=null이다.
+  이 승인 완료 상태는 앞선 승인 대기 기록보다 최신이며 사용자의 실제 병합 결정은 대신 실행하지 않았다.
+- 기공소 #6은 `origin/release/v1.0.4`의 `cb585775ca21e27949e67758a5933139cfc567d8`에서 직접 분기했다.
+  worktree는 기존 `/Users/parkjongsun/Repository/dentlink-lab-app-patient-list`를 재사용했고 source/origin clean·0/0,
+  릴리스 대비 behind 0/ahead 1이다. 전체 20파일은 카드·Lab 탭·최소 공통 분기·Lab 조회/타입·SVG8개·
+  6개 번역키·Remake 배지다. native/SDK/의존성/lock/버전/env/진입점/워크플로·다른 기능 변경은 없다.
+- 기존 릴리스의 `apps/lab`·`shared`를 유지한다. Lab만 새 탭·typed query와 `/lab/patients/consolidate`
+  4개 조회 인자를 사용하고, Office의 기존 카드·조회·서비스는 그대로 보존했다.
+  최신 DEV Swagger에서 해당 경로·DTO 2개만 생성한 별도 `shared/models/LabPatientApi.ts`를 연결해
+  전체 공통 API 재생성을 피했다. 새 DTO 12필드·페이지 7필드·enum은 실제 spec과 대조했다.
+  확정 디자인 12px·전역 Remake·recentOrderId 이동·상태/주문 수 표시와 기존 번역·SVG를 옮겼다.
+- 새 검증: immutable install·앱 버전·diff PASS, 변경 손작성 TS 7파일 ESLint 0오류/경고,
+  해당 TS와 새 DTO Prettier PASS, 카드 renderer 10개·실제 연결 흐름 4개 **총 14개 PASS**,
+  정식 `apps/lab/index.js`를 사용한 iOS/Android `--dev false` JS bundle 모두 성공했다.
+  Lab/Office 전체 타입검사는 각각 릴리스와 새 포트가 6진단/exit 2·로그 byte 동일해서 신규 오류 0이다.
+  클리닉 별도 저장소의 기존 8진단과 구분하며 전체 타입검사 성공이라고 보고하지 않는다.
+- 20파일 독립 코드 검토에서 새 확정 결함 0건이다. 실제 merge 없이 merge-tree로 릴리스 → #6
+  충돌 0과 tree `115c0e1ca3cc12708296780470357fa994ac8b32`를 확인했다. #6과 #5를 함께 적용하는
+  모의 통합도 충돌 0/tree `09fdb7563738b4d19a0e294ff54f0652ec0051a4`이며 실제 ref는 변경하지 않았다.
+- #5는 기존 릴리스에서 별도 문서만 옮겼다. AGENTS·CLAUDE·README의 번역·운영 시트 지침을
+  해당 릴리스 경로·명령에 맞췄으며 실제 번역·시트·생성 리소스를 새로 수정하지 않았다.
+  #6 기능 반영과 독립이며 별도 순서·기반 PR이 필요하지 않다. 상세는 [번역 지침 전달](dentlink-lab-app-i18n.md)이다.
+- Lab #5·#6은 자동화 완료 후에도 대상 `release/v1.0.4`와 전체 3/20파일 diff를 유지한다.
+  OPEN/non-Draft/MERGEABLE/CLEAN·미해결 0·검사 pending 0·autoMergeRequest=null이다.
+  Lab 저장소에서 CodeRabbit 실제 리뷰 완료 근거는 없으며 일반 PR 자동화 성공과 구분한다.
+- 기존 **#2·#3·#4는 CLOSED/미병합**이며 각각 #6·#5·#6 대체 링크를 남겼다. task artifact의
+  #2·#4 연결도 제거하고 #5·#6을 연결했다. 옛 원격/source branch는 복구용으로 보존했다.
+  최종 14:23 KST 작성자 `jongsunP` 기준 두 저장소 OPEN PR 전체 조회에서 #318·#5·#6만 남았다.
+  담당 Jira DL-16652 기존 댓글44342를 새 PR·범위·검증 결과로 갱신/readback했다.
+  부모 카드·제목·상태(진행 중)·fixVersion은 변경하지 않았다.
+- 이전 실제 기기 QA는 `14949c6` 구현에 대한 증거로 보존한다. 새 `e3bf335`의 확인은
+  위 renderer/흐름/배포용 bundle이며 새 native 빌드·실제 기기·OTA 적용 완료로 확대하지 않는다.
+  STG Swagger 재조회·4시간 재점검은 하지 않으며 취소 상태를 유지한다.
+- 다음 시작점: 위 세 PR의 실제 HEAD/base/diff/검사/리뷰를 다시 확인하고 사용자 요청에 대응한다.
+  #318은 현재 승인 완료, #5·#6은 리뷰 가능한 상태다. 기존 foundation을 병합하거나 옛 PR을 재오픈하지 않는다.
+  실제 PR 병합·배포는 별도 사용자 결정이며 새 포트의 기기/OTA QA와 배포 환경 API는 별도 검증이다.
+
+## 이전 상태 — 2026-10-08 기반 통합안의 리뷰 전 점검 (새 #6으로 대체)
 
 - 사용자 최종 목표는 **지금 가능한 모든 준비를 리뷰 전에 완료**하는 것이다. 앱 두 제품의 코드·브랜치·
   PR 범위·검사·본문을 최종 점검했고 현재 자율 처리할 추가 코드/브랜치 준비 항목은0건이다.
@@ -27,7 +81,7 @@
 - Jira 담당자식DL-16652 기존댓글44342를 양앱의최종리뷰준비결과/3PR링크로통합갱신하고readback했다.
   새댓글중복·부모카드·제목/status/fixVersion변경은없다. Office/Lab HEAD와source/origin clean은그대로다.
 
-## Office 릴리스 동기화 완료 — 2026-10-08
+## 이전 확인 — 2026-10-08 Office 릴리스 동기화
 
 - 최신 사용자 지시로 Office/클리닉 PR #318의 **승인 외 준비를 지금 처리**했다. 앞선 Office 추가 처리 제외는
   이 동기화 범위에 한해 변경됐다. 제품 PR 실제 merge·태그·배포는 계속 금지이며 메인세션에도 보고하지 않는다.
@@ -58,7 +112,7 @@
 - **현재 남은Git반영조건은 사람승인1개**다. 승인되면새branch·재작업·별도기반PR 없이현재#318을그대로merge할수있다.
   실제merge는사용자별도결정이며이번에는승인요청/auto-merge설정도하지않았다(autoMergeRequest=null).
 
-## Lab 앱 머지 전 준비 완료 — 2026-10-08
+## 이전안 — 2026-10-08 Lab 기반·기능 분리 준비 (폐기)
 
 - 사용자 확정: 앱 분리는 완료됐고 DL-16652는 기존 `1.0.4` 대상 CodePush 작업이다.
   스토어 심사·새 버전·새 release는 이번 범위가 아니다. 이명제님 리뷰 도착을 선행 조건으로 삼지 않고
@@ -93,7 +147,7 @@
   merge `3e428d847b7410697520fb9026d181c558dddb46`)가 확인됐다. 이번에는 웹·Office checkout/PR을 추가 처리하지 않았다.
   Office merge 여부를 웹 merge나 사용자 ‘추가 처리 불필요’ 판단으로 추론하지 않는다.
 
-### 다음 시작점 — 머지/배포 별도 승인 후
+### 이전안의 다음 시작점 — 실행하지 않음, 새 #6으로 대체
 
 1. PR #4를 **Merge commit**으로 기존 release에 반영해 f332833의 조상 관계를 보존한다.
    저장소에서 merge commit 방식이 허용됨을 확인했다. Squash/rebase로 기반을 복제하면 feature diff가 다시 커질 수 있다.
@@ -105,7 +159,7 @@
    Debug/Metro는 OTA를 건너뛰므로 이전 기기 QA가 OTA 증거가 아니다. Production 업로드는 disabled이며
    활성화는 별도다. Development/Staging 명령은 disabled가 없어 사전 승인 없이 실행하지 않는다.
 
-## 앱 전달 대상 재확인 — 2026-10-08 FE 메인 정책 조사
+## 이전 확인 — 2026-10-08 FE 메인 전달 대상 조사
 
 - 제품 코드·PR를 변경하지 않고 현재 base를 재조회했다. Lab #2는 `release/v1.0.4`,
   Office #318은 `release/v2.2.4` 대상이며 HEAD는 아래 표와 동일하다. 이전 develop 대상 기록은 당시 이력이다.
@@ -348,7 +402,7 @@
   미해결0개다. Office CodeRabbit SUCCESS는 develop 자동 리뷰 제외에 따른 skip이며 실제 리뷰
   완료로 해석하지 않는다. 앱 자동 라벨은 최신 head 성공이다.
 
-## 다음 시작점·보존
+## 이전 전달의 다음 시작점·보존 — 최신 PR 구성은 문서 맨 위 참조
 
 - 4시간 예약 재확인은 취소됐다. 사용자가 재개하면 세 PR/head/CI를 live 확인하고 요청된 디자인
   수정에 대응한다. STG/운영 새 계약 선배포 후 실제 통합 연동, Office 실제 Remake 사례,

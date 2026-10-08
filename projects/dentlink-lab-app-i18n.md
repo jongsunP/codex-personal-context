@@ -1,6 +1,25 @@
 # Dentlink Lab 앱 번역 지침 전달
 
-## 최신 전달 대상·범위 확인 — 2026-10-08
+## 현재 전달 — 2026-10-08 릴리스에서 문서만 옮긴 PR #5
+
+- 사용자 앱 PR 전체 정리 지시로 기존 #3의 분리·타기능 이력을 제거한 새
+  [PR #5](https://github.com/Innvoaid/dentlink-lab-app/pull/5)를 만들고 #3을 CLOSED/미병합 처리했다.
+  대체 링크를 남겼으며 기존 branch/default checkout은 복구용으로 보존했다.
+- 기준 `origin/release/v1.0.4 / cb585775ca21e27949e67758a5933139cfc567d8`, 새 branch
+  `feature/lab-i18n-workflow-release / 2fb6e8b3a0840255796b29ad5000cbabfc8a71b3`이다.
+  worktree `/Users/parkjongsun/Repository/dentlink-lab-app-i18n-release`, clean·원격0/0, 1커밋이다.
+  커밋 제목은 `docs: Lab 번역과 운영 시트 기본 작업 지침 추가`다.
+- 실제 전체 diff는 **AGENTS.md·CLAUDE.md·README.md 문서3개(+86/-1)**다.
+  기존 릴리스의 `shared/configs/i18n`, scanner `apps/lab/src`·`shared` 및 실제 명령을 사용한다.
+  새 기능PR #6과 독립적으로 적용 가능하며 foundation/저장소분리/다른기능 변경을 포함하지 않는다.
+- 문서 변경구간 format·diff·실제 명령/경로/CSV 대조 및 독립 검토 PASS. 전체문서 format은
+  기준과 최종 모두 같은 기존3파일 실패여서 전체 통과로 보고하지 않는다.
+  번역 문구·실제Sheet·생성리소스·앱실행/native/OTA는 변경하거나 수행하지 않았다.
+- 자동화 완료 후 OPEN/non-Draft/MERGEABLE/CLEAN, base `release/v1.0.4`, 전체3파일·HEAD를 확인했다.
+  title/body SUCCESS·label SKIPPED·검사pending/미해결0·autoMergeRequest=null, PR artifact 연결 완료다.
+  실제 merge/배포는 하지 않았다. 다음 시작점은 #5 현재 리뷰/HEAD/base 확인이며 옛 #3/#4 반영이 아니다.
+
+## 이전 확인 — 2026-10-08 분리 이력으로 diff 확대 (새 #5로 대체)
 
 - 사용자 앱 release 정책 확인 중 live [PR #3](https://github.com/Innvoaid/dentlink-lab-app/pull/3)을 재조회했다.
   현재 base는 `release/v1.0.4`, HEAD `5844ba5348901aa435ef522e47f5f1d91e00de86`, OPEN·non-Draft·MERGEABLE/CLEAN이다.
@@ -46,6 +65,6 @@
   문서 작업이므로 번역 쓰기 명령·앱 실행·네이티브 빌드는 수행하지 않았다.
 - 기존 [Lab 앱 정본](dentlink-lab-app.md)은 앱의 제품 경계·기능 상태·번역 절차를 담는다.
   그 파일의 다른 세션 미커밋 변경은 이번 기록에서 수정·스테이징·커밋하지 않았다.
-- 최초 인계의 다음 시작점은 PR #3 최신 HEAD·리뷰·merge 확인이었다. 현재는 위 선행 통합 문제가 우선이다.
+- 최초 인계의 다음 시작점은 PR #3 최신 HEAD·리뷰·merge 확인이었다. 이 순서는 현재 #5로 대체됐다.
   앱 신규 문구 작업에서는 feature를 보존하며,
   개인 컨텍스트뿐 아니라 작업 branch의 팀 번역 지침도 읽는다.

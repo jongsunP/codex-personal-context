@@ -16,12 +16,32 @@
 - [앱 온보딩·작업·배포 정본](dentlink-app-onboarding.md)을 함께 읽는다.
   앱 PR은 기존 최신 유효 release가 기본 대상이며 CodePush마다 release를 새로 만들지 않는다.
 - 정책 조사 당시 `release/v1.0.4 / cb585775ca21e27949e67758a5933139cfc567d8`에 #2·#3이 향해 있었다.
-  이 release는 분리 전 트리여서 분리 기반의 별도 통합이 필요했다. 아래 DL-16652 준비에서 #2의 비교 base를 정리했다.
-  실제 base·전체 diff·선행 통합을 확인하며 단순 MERGEABLE/CLEAN을 범위 검증으로 쓰지 않는다.
-- #3의 최신 대상과 확대된 diff는 [번역 지침 전달 기록](dentlink-lab-app-i18n.md)에 둔다.
-  이번 공통 정책 정리에서는 제품 코드·PR·release·배포를 변경하지 않았다.
+  이 release는 분리 전 트리라 당시 PR에 다른 작업이 섞여 있었다. 분리 전체를 필수 기반으로 보았던
+  판단은 수정했다. 최신 정책은 최종 릴리스에서 요청한 변경만 옮기고 전체 diff·실제 의존성을 검증한다.
+  단순 MERGEABLE/CLEAN이나 레이아웃 차이를 범위/필수 통합 증거로 쓰지 않는다.
+- 최신 번역 지침 전달은 문서 전용 #5이며 [전달 기록](dentlink-lab-app-i18n.md)을 따른다.
+  공통 정책 정리 당시 제품 변경은 없었으며 아래 최신 사용자 승인 작업과 구분한다.
 
-## DL-16652 현재 확인 — 2026-10-08
+## DL-16652 현재 확인 — 2026-10-08 릴리스에서 기능만 전달
+
+- [기능 PR #6](https://github.com/Innvoaid/dentlink-lab-app/pull/6)은 `release/v1.0.4 / cb585775`에서 직접
+  시작한 `feature/lab/DL-16652-release / e3bf33567c5fde6e526e38b237d2b21f416b4476`이다.
+  기존 환자목록 worktree를 재사용했고 source/origin clean·0/0, behind0/ahead1·20파일(+1037/-19)이다.
+  분리·다른 기능·native·의존성·버전·설정 변경 없이 요청한 카드/API/번역/SVG/Remake만 옮겼다.
+- 이 릴리스의 `apps/lab`·`shared` 구조와 Office 기존 환자 화면을 보존한다. Lab 전용 typed query·
+  새 탭을 분기하고 최신 DEV Swagger에서 필요한 DTO/endpoint만 별도 생성했다.
+  배포용 JS entry는 **`apps/lab/index.js`**이며 modern split `index.js` 증거와 혼용하지 않는다.
+- renderer10·연결 흐름4·버전/immutable install/diff/변경 lint·format PASS, iOS/Android release-mode
+  JS bundle 성공. 전체 Lab/Office 타입검사 각각 baseline/final6진단 동일·신규0이며 full pass가 아니다.
+  독립 코드 리뷰 결함0·release/#5 모의통합 충돌0이다. 새 포트의 실제 기기·native build·OTA는 미실행이다.
+- #6·독립 문서 #5는 OPEN/non-Draft/MERGEABLE/CLEAN, 올바른release·전체diff·자동화 완료·미해결0이다.
+  대체된 #2·#3·#4는 CLOSED/미병합이다. foundation 병합은 불필요하며 옛 source branch는 보존했다.
+  Jira44342와 PR본문을 최신 결과로 갱신했다. 실제 PR merge·태그·CodePush·메인 보고는 하지 않았다.
+- 전체 정본·검증 한계·다음 시작점은 [DL-16652](dentlink-patient-list-design.md), 앱 전달 원칙은
+  [SESSION_WORKFLOW](../SESSION_WORKFLOW.md#dentlink-app-release-and-delivery-policy)다.
+  아래 실제 기기 결과는 이전14949c6에 대한 이력이며 새e3bf335 기기검증으로 계산하지 않는다.
+
+## 이전 확인 — 2026-10-08 기반 통합 준비·기기 QA
 
 - 리뷰전최종점검에서19파일전체코드/호출부추가검토·새확정결함0, 현재실행할준비잔여0을확인했다.
   merge-tree순차통합은충돌0·최종tree14949c6와동일이며실제refs/PR은미병합이다.
@@ -121,10 +141,13 @@
 
 ## 규칙과 다음 시작점
 
-- 작업 checkout의 `AGENTS.md`를 읽고 기존 `src` 구조와 Styled Components 규칙을 따른다.
-- `src/models/Api.ts` 등 생성 모델은 직접 수정하지 않고 확인된 Swagger로 생성한다.
+- 작업 checkout의 `AGENTS.md`를 읽고 선택한 release의 실제 구조와 Styled Components 규칙을 따른다.
+  main/develop의 `src`와 이번 #6 release의 `apps/lab`·`shared`를 혼용하거나 구조 변경을 자동 포함하지 않는다.
+- 작업 branch의 생성 모델은 직접 수정하지 않고 확인된 Swagger로 생성한다.
+  #6의 Lab DTO는 `shared/models/LabPatientApi.ts`이며 기존 공통 모델 재생성으로 범위를 넓히지 않는다.
   백엔드 미완성 상태와 예정 계약·실제 연동 완료를 구분한다.
 - 환경·서명·CodePush·스토어 배포는 별도 사용자 지시를 따른다.
 - 환자목록의 첫 작업은 [DL-16652 정본](dentlink-patient-list-design.md)에서 이어간다.
-  API 경로: `src/services/patient.service.ts`, 화면:
-  `src/features/orderList/tabs/OrderPatientTabScreen.tsx` 및 `OrderPatientListItem`.
+  현재 #6 API 경로는 `shared/services/lab.service.ts`, query는 `shared/queries/useLabQueries.ts`,
+  화면은 `shared/features/orderList/tabs/OrderLabPatientTabScreen.tsx`와
+  `shared/features/orderList/components/OrderLabPatientListItem.tsx`다. 원래 Office 탭은 공통 wrapper가 유지한다.
