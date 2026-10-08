@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-08 **사용자 요청으로 중단·마무리, 다음 재개 요청 대기**. 사용자 화면·동작만 입력→에이전트가 실제 DLDS 탐색/생성/검사/미리보기/FE 인계를 처리하는 기준이다. 제품 `feature/DL-16471 / 18405b37b`는 추가 추적 코드 변경 없이 clean. 기록 제외 새 시험에서 생성·실행·짧은 제목 수정은 됐지만 요청하지 않은 빈값 저장 차단·앞뒤 공백 제거가 들어가 전체 기준은 미통과다. 부모가 실제 입력/저장으로 확인했고 몰래 수정하지 않았다. 과거 요약이 노출된 첫 재시험은 엄격한 근거에서 제외했다. 현재5196은 로컬 결과 화면이며 소스/서버는 다른 기기로 자동 이전되지 않는다. 다음은 최신 환경 확인→미지정 검증/값 변환의 하네스 판단·검사 보완→같은 짧은 요청 재시험이다. 추가 수동 QA·다른 사람 참여·제품 API/공유 운용·에디터는 자동 시작하지 않는다. 기준·판정·다음 시작점은 원격에 저장하며, 명시적 재개 전 추가 구현/시험/팀 문서 수정을 하지 않는다. 상세/보존 경로는 정본을 따른다.
+  — 2026-10-08 **사용자 승인으로 재개한 요구 범위 보완·재시험을 저장하고 대기**. 제품 `feature/DL-16471 / f9e9b00e2`의 하네스 문서4개·선택형 생성기 프롬프트1개를 정상 hook으로 커밋·푸시했다. 요청 없는 입력 제한/값 변환을 막는 기준을 보완한 뒤 새 에이전트3개(전화번호2·표시 이름1)가 추가 질문/생성 소스 보정 없이 생성·후속 수정·FE 모의 연결을 확인했다. 부모 실제 브라우저25그룹 및 선택형 실제 AI 초기/명시적 후속12그룹, 기존 도구43tests 통과. 이 시험 범위는 통과했지만 전체2단계·다른 도구/실제 비개발자/제품 API·화면 품질/업무 절감은 별도다. Jira DL-16471 진행 중·Notion FE 현재 결과만 갱신/검증했고 상위/완료 카드·Draft PR·merge·배포는 변경하지 않았다. 로컬 결과5186/5194/5217·소스·증거는 자동 기기 이전되지 않는다. 다음은 최신 상태 확인→FE의 선택적 새 대화 사용 확인→대표 화면 기준과 코드 인계/보정량 검증. 사용자 수동 QA·PM/디자이너 참여를 필수 관문으로 요구하지 않는다. 상세 보존 경로·재개 순서·한계는 정본을 따른다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
