@@ -23,7 +23,19 @@
   `origin/main` 대비 1커밋 뒤이며 권한관리 worktree도 존재한다. 아래 2026-09-28의
   단일 worktree·로컬 동기화 상태는 당시 기록이며 현재 상태로 재사용하지 않는다.
 
-## DL-16652 현재 확인 — 2026-10-08
+## DL-16652 현재 확인 — 2026-10-08 릴리스 동기화 완료
+
+- 사용자 승인 외 준비 실행 지시로 기존 feature에 최신release/v2.2.4(14557194c)를 충돌 없이 동기화했다.
+  Merge commit81584b8201edffd00b2261aaa5d7322be493bd1e를 push했고 release ref는 변경하지 않았다.
+- PR #318은 OPEN/non-Draft/MERGEABLE/REVIEW_REQUIRED/BLOCKED, release 뒤처짐0·3파일(+16/-14)이다.
+  3파일과3958bytes기능patch는ffcdc736과동일하다. 새branch/코드재작성/별도기반PR없이 사람승인만남았다.
+- 버전2.2.4/diff/scopeESLint/badgePrettier/renderer3 PASS. generatedindex의Prettier는release동일기저형식문제다.
+  최신release와syncHEAD의 fulltsc8개/exit2·5765bytes로그가byte동일해신규오류0이며 전체검사통과는아니다.
+- 새HEAD CodeRabbit SUCCESS·추가actionable0·미해결0, 기존리뷰를동기화결과에승계한완료다.
+  PR본문을갱신했고 실제PRmerge·배포·태그·메인세션보고·Jira변경은하지않았다.
+  기존기기/실제OfficeRemake/OTA미검증경계와 다음시작점은 [DL-16652 정본](dentlink-patient-list-design.md)을따른다.
+
+## DL-16652 iOS 후속 QA — 2026-10-08 이전 확인
 
 - PR #318은 OPEN/non-Draft/MERGEABLE/CLEAN, HEAD `ffcdc73`는 소스·원격 동일하다. 새 제품 수정은 없다.
   최종 Figma/댓글의 primary600·reset16·text14/21·gap4는 기존 구현과 일치한다.

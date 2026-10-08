@@ -1,6 +1,37 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 현재 상태 — 2026-10-08 Lab 앱 머지 전 준비 완료
+## 현재 상태 — 2026-10-08 Office 릴리스 동기화 완료
+
+- 최신 사용자 지시로 Office/클리닉 PR #318의 **승인 외 준비를 지금 처리**했다. 앞선 Office 추가 처리 제외는
+  이 동기화 범위에 한해 변경됐다. 제품 PR 실제 merge·태그·배포는 계속 금지이며 메인세션에도 보고하지 않는다.
+  Lab의 기반 #4/기능 #2는 아래 미병합 준비 상태로 유지하고 웹에는 추가 처리하지 않았다.
+- Office 기존 worktree `dentlink-app-patient-remake / feature/DL-16652`를 pull/fetch한 뒤
+  최신 `origin/release/v2.2.4` `14557194c12f8836362d3663b27ab3b621c0478a`를 동기화했다.
+  이전 feature `ffcdc736`은 release보다2커밋 뒤처졌고 strict 최신화 규칙/승인1개가 적용됐다.
+- 기존 release 커밋 #316 `939ae95`와 #314 `1455719`의20파일(주문화면 수정·Denture 흐름 등)을
+  충돌 없이 포함한 Merge commit **`81584b8201edffd00b2261aaa5d7322be493bd1e`**을 생성·기존 feature에 push했다.
+  부모는 ffcdc736+14557194c다. 새 branch·기반PR·이력재작성·forcepush는 없으며 실제release ref는 그대로다.
+- 현재 [PR #318](https://github.com/Innvoaid/dentlink-app/pull/318)은 `release/v2.2.4` 대상으로 OPEN/non-Draft,
+  MERGEABLE/REVIEW_REQUIRED/BLOCKED다. HEAD는81584b82이며 source/origin 동일·clean이다.
+  release 대비 behind0/ahead8, 최종diff **3파일(+16/-14)**다. 기존Remake patch3958bytes가 동기화 전후
+  완전히 같고3파일blob도 ffcdc736과 동일해 새 배지 코드 변경은 없다.
+- 새검증: 버전2.2.4(package/Android/Xcode)·diff검사·TS2파일ESLint0·badgePrettier·기존renderer3/3 PASS.
+  생성 SVG index의 Prettier 실패는 release 원본에서도 같은 기존generator형식 문제라 파일을 수정하지 않았다.
+- 최신release와동기화HEAD의 package/yarn/tsconfig byte동일·동일deps/TS5.9.3으로 fulltsc를 비교했다.
+  양쪽exit2/진단8개·로그5765bytes byte동일이어서 신규오류0이다. 이전develop기준6개 검사와 구분하며
+  전체타입검사통과로 표현하지 않는다. 이번release동기화로native/SDK/Pod/권한/JS의존성을 새로 변경하지 않았다.
+  base의iOS프로젝트직렬화/Ruby도구lock갱신을 기능PR의새native변경으로 확대하지 않는다.
+- 새HEAD CodeRabbit SUCCESS/Review completed·추가actionable0·미해결thread0을 확인했다.
+  [봇댓글](https://github.com/Innvoaid/dentlink-app/pull/318#issuecomment-6013195506)의 target_branch_merge_carry_forward는
+  이전ffcdc736 리뷰를 동일변경의merge동기화결과에 승계한 것이며 새전체소스리뷰로 주장하지 않는다.
+  SVG는pathfilter제외, TS2파일처리다. add-labelsSKIPPED는release조건에 맞으며 새배포workflow는 없다.
+- PR본문에 동기화·최신타입baseline·검증한계·실제PRmerge미실행을 반영/readback했다.
+  pureGit준비라 이번에는 Jira의기능결과댓글/상태를 추가변경하지 않았다. 실물/실제OfficeRemake·OTA QA는
+  기존미검증경계로 유지하며 새nativebuild/기기QA/환경/서명/서버변경은 하지 않았다.
+- **현재 남은Git반영조건은 사람승인1개**다. 승인되면새branch·재작업·별도기반PR 없이현재#318을그대로merge할수있다.
+  실제merge는사용자별도결정이며이번에는승인요청/auto-merge설정도하지않았다(autoMergeRequest=null).
+
+## Lab 앱 머지 전 준비 완료 — 2026-10-08
 
 - 사용자 확정: 앱 분리는 완료됐고 DL-16652는 기존 `1.0.4` 대상 CodePush 작업이다.
   스토어 심사·새 버전·새 release는 이번 범위가 아니다. 이명제님 리뷰 도착을 선행 조건으로 삼지 않고
