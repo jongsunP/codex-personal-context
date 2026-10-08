@@ -1,6 +1,33 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 현재 상태 — 2026-10-08 Office 릴리스 동기화 완료
+## 현재 상태 — 2026-10-08 리뷰 전 준비 최종 완료
+
+- 사용자 최종 목표는 **지금 가능한 모든 준비를 리뷰 전에 완료**하는 것이다. 앱 두 제품의 코드·브랜치·
+  PR 범위·검사·본문을 최종 점검했고 현재 자율 처리할 추가 코드/브랜치 준비 항목은0건이다.
+  실제PR merge·태그·CodePush·스토어 작업과 메인세션 보고는 계속 제외한다. 웹 추가 처리도 하지 않았다.
+- 클리닉 #318은81584b82→release/v2.2.4(14557194c), behind0·배지3파일(+16/-14),
+  CodeRabbit 완료·추가actionable0/미해결0·사람승인1개대기다. 기존PR 그대로 승인 후 반영 가능하다.
+- Lab 기반 #4는f332833→release/v1.0.4(cb585775),6커밋·981파일·version검사SUCCESS,
+  기능 #2는14949c6→임시foundationbase(f332833),4커밋·19파일(+705/-152)이다.
+  세PR 모두OPEN/non-Draft·미해결0·검사pending0·autoMergeRequest=null을 live 재확인했다.
+- Lab19파일 전체diff·호출부를 추가 검토해 카드상태/주문수/생일누락/recentOrderId/Remake,
+  API12필드/조회/페이지·번역6키/SVG8개 연결에 새 확정 결함을 발견하지 못했다.
+  source가 동일해 기존기능/기기검사를 반복하지 않았다. 형식검사범위를명확히할때 손작성6개TS파일의
+  Prettier를명시해확인했고모두PASS다(기존importOrder옵션경고는있으며source변경없음).
+- 실제merge 없이 `git merge-tree --write-tree`로 현재release→foundation→feature 순차통합을 확인했다.
+  충돌0, 기반tree f4e77ddd=현재f332833 tree, 최종tree24d55034=현재14949c6 tree다.
+  branch/ref/worktree는 변경하지 않았다. #4 Merge commit→#2base를release로변경→19파일재확인
+  순서는 현재 미병합 조건에서 미리 실행할 수 없는 실제반영 단계이며 두PR에명시했다.
+- Lab PR #4/#2에 모의통합·전체코드검토 결과를 추가하고 본문readback했다. Lab 형식검사 문구는
+  손작성변경TS의ESLint/Prettier로 범위를명확히해 생성파일전체포맷통과로 오해하지않게했다.
+- 추가QA는완료로표시하지않는다. iOS누름유지/캡처는 현재Mac공식입력지원근거가없고,
+  Office실제Remake는 가시행에서사례를못찾은검증한계다. 둘은배포전에도가능한플랫폼UI QA지만
+  현재추가코드결함근거는없다. OTA는실제Release설치본에update적용·재실행을확인하는배포QA다.
+  이경계들은각PR본문에보존했고기기/계정/서버/환경을임의변경하지않았다.
+- Jira 담당자식DL-16652 기존댓글44342를 양앱의최종리뷰준비결과/3PR링크로통합갱신하고readback했다.
+  새댓글중복·부모카드·제목/status/fixVersion변경은없다. Office/Lab HEAD와source/origin clean은그대로다.
+
+## Office 릴리스 동기화 완료 — 2026-10-08
 
 - 최신 사용자 지시로 Office/클리닉 PR #318의 **승인 외 준비를 지금 처리**했다. 앞선 Office 추가 처리 제외는
   이 동기화 범위에 한해 변경됐다. 제품 PR 실제 merge·태그·배포는 계속 금지이며 메인세션에도 보고하지 않는다.
