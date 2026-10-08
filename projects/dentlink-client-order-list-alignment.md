@@ -6,13 +6,14 @@
 - 기능 세션: `01a11939-5a8c-7973-a2b4-9e47ce3accc1`, `gpt-6.1-sol / ultra` 실제 생성 설정은 메인세션이 확인했다.
 - 개인 세션 폴더는 기존 `/Users/parkjongsun/Documents/ChatGPT/메인 프로젝트`, 제품은 기존 `/Users/parkjongsun/Repository/dentlink-client` 기본 checkout이다. 새 제품 폴더·worktree는 만들지 않았다.
 - 상위 조율 정본: [Dentlink FE](dentlink-fe.md). 진행·완료 메시지는 메인세션으로 보내지 않는다.
-- 사용자 요청으로 구현·검증 후 제품 commit·push와 `release/v1.88.0` 대상 PR 생성까지 승인·완료했다. CodeRabbit 리뷰 처리·merge·배포, Jira 댓글·상태 변경은 이번 실행에서 하지 않았다.
+- 사용자 요청으로 구현·검증 후 제품 commit·push와 `release/v1.88.0` 대상 PR 생성까지 승인·완료했다. 사용자가 직접 PR을 병합한 뒤 병합 확인과 세션 정리를 요청했다. 본 세션은 CodeRabbit 리뷰 처리·추가 코드 수정·merge·배포, Jira 댓글·상태 변경을 수행하지 않았다.
 
-## 현재 체크포인트 — 2026-10-08: commit·push·릴리스 대상 PR 생성 완료
+## 현재 체크포인트 — 2026-10-08: 사용자 squash merge 확인·세션 종료
 
 - 개인 컨텍스트 pull, 제품 fetch/pull 후 clean `master`와 최신 `origin/master` 동일, 기존 Medit 세션 idle·다른 기능은 별도 worktree인 점을 확인했다. 기준 HEAD는 `6b79c9756cc56313fe833aad463bddb1f8c385fa`다.
 - 지정된 `feature/DL-16655`를 해당 HEAD에서 생성했다. 제품 커밋은 `80207a234332ad43f22b184b39213fb5d1a5d790`(`fix: 치과 주문목록 아이콘과 텍스트 정렬 수정`)이며 동일 HEAD를 `origin/feature/DL-16655`에 푸시·upstream 설정했다. 현재 이 기능 세션이 기본 checkout의 유일한 작성자이며 작업 트리는 clean이다.
-- [PR #4675](https://github.com/Innvoaid/dentlink-client/pull/4675)는 OPEN·일반 PR, `feature/DL-16655` → `release/v1.88.0`이며 GitHub에서 대상·HEAD·1파일(+9/-1)을 확인하고 현재 기능 세션에 첨부했다. 전달 검사 당시 release HEAD는 `9baeca42f0ba955ed562f3a7550955cd00c907ed`다. 기존 master 커밋 #4657은 release에 동일 수정 #4658이 있어 PR 파일 diff에 포함되지 않으며 읽기 전용 merge-tree에서 충돌 없이 정렬 수정 1파일만 합쳐지는 것을 확인했다.
+- [PR #4675](https://github.com/Innvoaid/dentlink-client/pull/4675)는 `feature/DL-16655` → `release/v1.88.0`으로 사용자가 직접 병합했으며 GitHub에서 MERGED·병합 시각 2026-10-08 11:57:41 KST를 확인했다. squash 커밋은 `c77c3a861fb912c1727d2fc1d2114b8daafc3e9b`(부모 1개)이며 제품 fetch 후 `origin/release/v1.88.0` 반영을 확인했다. 병합 직전 부모 `9baeca42f0ba955ed562f3a7550955cd00c907ed` 대비 실제 변경은 정렬 1파일(+9/-1)뿐이고 해당 파일은 기능 커밋 `80207a234`와 동일하다. PR은 현재 기능 세션에 첨부되어 있다.
+- 사용자 지적에 따라 다른 작성자 커밋을 확인했다. PR 커밋 목록의 `6b79c9756`(Tom/고인규, master #4657)은 master에서 분기할 때 포함된 기존 Admin LinkTalk 이력이다. release의 #4658(`cb7423eca`)에 이미 동일 수정(+23/-5)이 반영돼 이번 병합에는 Admin 변경이 추가되지 않았다. GitHub squash 메시지에는 Tom의 `Co-authored-by`가 자동 포함돼 공동 작성자 메타데이터만 남았으며 코드 혼입은 없다. 실제 병합 diff와 원본 정렬 파일이 일치하므로 병합 이력 수정은 필요하지 않다.
 - Jira 본문·첨부31542/31543·댓글을 직접 조회했다. fixVersions 미지정·댓글0·상태 `해야 할 일`이었다. 두 첨부도 Chrome에서 직접 열어 확인했다. 헤더가 아니라 주문 행의 Product·Patient 아이콘과 텍스트의 세로 중심 정렬 요청이다.
 - 수정 파일: `shared/ui/src/OrderListUI/OrderListCardListTable/OrderListCardListTableRow.tsx`. Product와 Patient의 기존 `EllipsisTooltip` 두 호출에 **`flex`와 `align="left"`**만 추가했다(최종 diff 9추가/1삭제).
 - 원래 부모와 아이콘은 이미 flex center였다. 기본 툴팁 trigger의 inline-block baseline 여백 때문에 실제 텍스트 중심보다 아이콘이1.25px 아래였다. 기존 flex 옵션의 block trigger로 여백을 제거했다. 부모 `align="center"` DOM 속성에서 상속되는 `-webkit-center`로 짧은 이름이 가로 중앙으로 움직이지 않도록 기존 align prop을 left로 지정했다.
@@ -28,12 +29,12 @@
 - 원본 행 callback 호출을 합성 클릭 상태/URL hash로 확인했다. 이는 실제 Clinic 상세 라우팅·실API 증거가 아니다.
 - 720px에서도6셀 중심0px·간격6px를 확인했고, 719px에서는 기존 모바일3행으로 전환됐다. 브라우저 viewport override는 reset했다.
 - 별도 읽기 전용 에이전트의 최종 diff 재검토에서 추가 문제는 없었다. 신규 테스트·제품 build·E2E·네이티브 앱 QA는 수행하지 않았다.
-- 실제 Clinic 로컬 페이지는 로그인 화면까지 확인했다. 사용자에게 직접 로그인을 요청했으며 로그인 후 실데이터 주문목록·실제 상세 이동과 사용자 시각 QA는 대기다. 합성 컴포넌트 검증을 실계정 QA 완료로 보고하지 않는다.
-- 검증 이미지: 개인 세션 폴더의 `DL-16655-before.jpg`, `DL-16655-after.jpg`(합성 데이터). 임시 Vite 서버3119·실행 세션·harness는 소유 에이전트가 정리 완료했다. 제품 node_modules는 보존했다. Clinic DEV 서버3118(exec session41439)는 직접 로그인 대기용으로 유지한다.
+- 실제 Clinic 로컬 페이지는 로그인 화면까지 확인했으며 Codex가 실계정 주문 데이터·실제 상세 이동 QA를 완료한 근거는 없다. 이번 요청은 병합 확인과 종료이므로 로그인 QA를 추가 실행하지 않았다. 합성 컴포넌트 검증을 실계정 QA 완료로 보고하지 않는다. staging QA·배포도 미확인이다.
+- 검증 이미지: 개인 세션 폴더의 `DL-16655-before.jpg`, `DL-16655-after.jpg`(합성 데이터)는 보존했다. 임시 Vite 서버3119·실행 세션·harness는 이전에 정리했다. 이번 종료에서 소유 Clinic DEV 서버3118(exec session41439)을 종료했고 listener·PID76474/76504/76516가 없는 것을 확인했다. 로그인 대기 탭도 현재 Chrome 목록에 없다. 제품 node_modules·기존 ignored 캐시·다른 기능 worktree와 브라우저 탭은 보존했다.
 
-## 다음 시작점
+## 종료 상태와 다음 시작점
 
-1. 이 개인 기록과 제품 remote를 갱신하고 `feature/DL-16655`의 HEAD·clean 상태·다른 작성 세션·worktree·3118 서버 소유와 PR #4675의 실제 상태를 재확인한다. 제품 변경은 원격 feature와 릴리스 대상 PR에 보존되어 있다.
-2. 사용자 로그인 완료 시 `http://localhost:3118/orders`에서 실제 Product·Patient 정렬·말줄임·상세 이동을 확인한다. 직접 로그인이 불가능하면 실계정 QA를 계속 대기로 둔다.
-3. 이번 전달 요청은 PR 생성으로 완료했다. CodeRabbit 리뷰 처리·merge·배포는 별도 요청 시 진행하며 자동 리뷰 확인·감시는 시작하지 않는다.
-4. 실제 QA 종료·사용자 중단 시 소유3118 서버를 중지하고 로그인 대기 탭을 정리한다. 개인 기록은 동시 세션 문서를 보존하고 이 파일만 commit/push한다.
+1. DL-16655 구현·전달과 사용자 병합 확인은 완료했다. 기본 checkout은 `feature/DL-16655`/`80207a234`·upstream 동일·clean으로 보존하며 새 worktree나 브랜치 삭제는 수행하지 않았다. 원격 feature·병합 PR·release squash 커밋에 변경이 보존되어 있다.
+2. 재개 요청 시 개인 컨텍스트와 제품 remote를 갱신하고 실제 release·PR·checkout 소유·미커밋 상태를 먼저 확인한다. 추가 QA가 요청될 때만 Clinic 서버와 실계정 검증을 다시 준비한다.
+3. staging QA·배포·Jira 정리 여부는 별도 요청 및 실제 증거로 확인한다. CodeRabbit 자동 리뷰 확인·감시는 시작하지 않았다.
+4. 이번 종료 기록은 다른 세션의 `AGENTS.md`·`AI_WORKFLOW.md`·`SESSION_WORKFLOW.md` 미커밋 변경을 보존하고 이 기능 체크포인트만 commit/push한다.
