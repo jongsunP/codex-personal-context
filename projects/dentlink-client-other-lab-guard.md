@@ -7,7 +7,7 @@
 - 과거의 STG 반영·통합 QA 대기 메모는 당시 확인 범위의 이력입니다. 10월12일 사용자 완료 확인에 따라 이 세션의 후속 작업 목록에서 제외하며, 완료 판단 근거는 사용자 보고입니다.
 - 10월7일 완료한 로컬 `feature/DL-16596` 삭제. 이번 확인에서도 해당 로컬 branch·기능용 임시 worktree가 없습니다. 원격 branch와 병합된 PR은 보존합니다.
 - 10월12일 `/tmp/dl-16596-verify`에 남은 `provider-release-candidate.tsx` 1개와 빈 디렉터리를 삭제했습니다. 임시 QA 서버3116/3117 및 관련 fixture 프로세스가 없음을 확인했습니다. 기존 검증 화면 PNG2개는 보존합니다.
-- 현재 제품 main checkout은 다른 작업의 `feature/DL-16655` `80207a234332ad43f22b184b39213fb5d1a5d790`이며 clean입니다. 이 checkout과 DLDS/환자목록/권한 worktree는 현재 소유 작업을 그대로 유지했습니다.
+- 정리 시작 시 제품 main checkout은 다른 작업의 `feature/DL-16655`였고 최종 확인 시 `master` clean 상태였습니다. 이 세션에서는 제품 checkout을 전환하거나 수정하지 않았으며, DLDS/환자목록/권한 worktree도 그대로 유지했습니다.
 - 개인 Git 기록을 정리해 commit/push한 뒤 현재 세션을 보관합니다. 메인 세션으로 결과를 전달하지 않습니다. 새로운 요청은 당시 최신 Git 상태와 요구사항을 기준으로 시작합니다.
 
 ## 최종 구현
