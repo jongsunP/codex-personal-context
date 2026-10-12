@@ -1,5 +1,106 @@
 # Dentlink 권한관리 — DL-16317
 
+## 현재 상태 — 2026-10-12 확정 디자인 보완·최신 master 참조·원격 보존
+
+- 사용자가 확정 디자인의 누락과 디자이너가 글로 설명한 조건까지 확인·수정하도록
+  재개했다. 아래 10월 6일의 중단 기록은 당시 이력이며 이번 재개 범위에는 적용하지
+  않는다. 기준은 [Figma 주문 상세 475:75511](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=475-75511&m=dev).
+  **기공소 웹·앱은 사용자가 별도 작업 완료·배포 예정이라고 하여 이번 구현에서 제외했다.**
+  백엔드는 아직 배포되지 않았다는 사용자 설명을 기준으로, 임의 서버 계약을 만들지 않았다.
+- 기존 제품 commit/push·개인 Git 메모리·사용자 담당 하위 Jira 정리 승인을 유지해
+  이번 보완을 구현·검증·commit/push했다. PR 생성·merge·배포·CodePush는 하지 않았다.
+  상위 DL-16317에는 댓글을 쓰지 않았다.
+
+### 이번에 보완한 범위
+
+- **치과 주문 상세 실제 페이지:** 준비한 주문 조회·주문 변경·환자/Case 수정·LinkTalk
+  읽기 전용·담당 의사 변경 경고 조건을 실제 페이지에서 전달할 수 있게 연결했다.
+  아직 실제 Member/관계 API에서 조건을 계산하는 연결은 아니다. 기본값은 기존 동작을 유지한다.
+- **조회 불가 화면:** 디자인의 `No order data available.`·`Go to Home`과 실제 SVG
+  일러스트를 적용했다. 조회 불가일 때 주문 내용·사이드패널·관련 모달을 숨기며,
+  PC는 홈 경로, 앱은 기존 네이티브 HomeTab/HomeScreen 메시지로 이동한다.
+  조회 권한이 사라지면 열린 상세 모달을 정리하고 오래된 RN 수신 callback의 재진입도 막는다.
+  기존 404 이동·앱 최초 조회 실패의 toast/back은 서버 거절 계약이 없어 변경하지 않았다.
+- **Case/담당 의사 설명:** 모바일 Case 제목 수정은 제공하지 않는다는 디자인 설명을
+  적용하고 이전 수정 callback도 차단했다. 담당 의사 변경 경고가 표시되는 모달은
+  디자인 높이 729px을 적용하고 일반 모달은 기존 692px을 유지했다.
+- **웹 직접 승인 화면:** 주문 변경과 별도의 승인 조건을 page/hook/UI/capture까지
+  전달했다. 읽기 전용일 때 승인·거절·주석 작성을 숨기고 파일·URL·버전 조회와
+  다운로드는 유지한다. 제한 변경·대상 변경·unmount 후 이전 callback, 파일 처리와
+  지연 capture가 행동을 재개하지 않는지 확인했다. Planning/Design 승인 화면이 대상이며
+  별도의 Case Preference 설문에는 확인되지 않은 제한을 추가하지 않았다.
+- **치과 앱 직접 승인 화면:** 같은 범위의 조회/행동 분리와 이전 callback·비동기
+  파일 처리·지연 주석 차단을 준비했다. 기존 native LinkTalk는 읽기 전용 전달과
+  입력/첨부 제한이 이미 있어 재검토만 했다. 앱 주문 상세는 WebView 공통 화면이다.
+- Figma PC/모바일/앱 화면과 내부 설명을 MCP context·screenshot으로 대조했다.
+  3D 미리보기·채팅 조회·파일 조회는 유지하고 읽기 전용 작성/첨부 조건을 확인했다.
+  기공소 caller 수정·배포 예정 작업의 재적용은 하지 않았다. 기존 branch의 과거 Lab
+  사전 작업은 보존하며 이번 Lab 완료 보고를 우리 배포/런타임 증거로 간주하지 않는다.
+
+### 최신 master 참조와 Git 위치
+
+- 사용자 요청으로 `origin/master`를 다시 fetch하고
+  **`693b8b4c4d247716db05ea415bc7bd1d33dab4cc` / Release/v1.88.0 (#4688)**를 확인했다.
+  기존 기준점에서 대규모 변경과 Lab/shared 충돌이 예상돼 **master 전체를 merge한 상태는 아니다.**
+  이번 치과 구현에 필요한 출시 동작을 선별해 반영했다.
+- 최신 master의 앱 Denture 다음 주문 지원을 보존했다. 모바일 Next Order의 과거
+  사용 불가 팝업을 제거하고 권한 guard는 유지했다. 다음 주문 생성 성공 시 앱의
+  `OrderScreen` 이동을 최신 `useOrderDetail.ts`와 동일하게 반영했다.
+- 향후 통합에서는 master의 밀링 callback/의사 이름 추적·아이콘 패키지와 generated
+  경로·승인 첨부 한도 변경을 보존해야 한다. 현재 Clinic은 밀링 callback을 전달하지
+  않으며 Lab 정책을 임의 확장하지 않았다. 전체 최신 패키지 통합·통합 후 QA는 남았다.
+- 웹 worktree `/Users/parkjongsun/Repository/dentlink-client-permission`,
+  `feature/DL-16317 / origin/feature/DL-16317`.
+  **HEAD/upstream/실제 원격 `a6392cc67862590aea48889f927944d192baa002`**, clean.
+  디자인 보완 `26aaa0747`, 최신 앱 다음 주문 호환 `a6392cc67`를 push했다.
+  기존 master base `9bed1f7bd753e229478302413c0ec9a7e7a11dc2`는 그대로다.
+- 치과 앱 worktree `/Users/parkjongsun/Repository/dentlink-app-permission`,
+  `feature/DL-16317 / origin/feature/DL-16317`.
+  **HEAD/upstream/실제 원격 `445ced6eba5093d2cdc63d050d00bee15396e6c7`**, clean.
+  기존 오래된 main 기준 feature를 보존했다. 현재 앱 정책상 새 일반 기능의 기준과 PR
+  대상은 develop이며, 이번에 브랜치 변경/재기준화/PR 생성은 하지 않았다.
+
+### 검증과 증거 경계
+
+- Clinic 전체 Jest **24 suites / 177 tests 통과**. 이번 승인 11·실제 페이지 5·
+  모바일 Case 1·앱 Next Order 1개를 포함한다. Next Order는 실제 mobile title/button과
+  workflow label helper를 사용해 허용 시 실행/팝업 없음, 제한 후 보관 callback 차단을 검증했다.
+- 웹 Clinic/Lab/Admin 타입 검사 통과. 일반 pre-commit/pre-push를 정상 실행해
+  제품 push가 성공했다. 전체 세 서비스 lint는 각각 기존 경고 223/189/410개·오류 0개이며,
+  shared coverage 비교는 baseline과 같다. 훅을 우회하거나 baseline을 수정하지 않았다.
+- 이번 승인 shared 검사에서는 기존 타입 진단 579개가 그대로이고, scoped shared
+  lint의 기존 오류 1개·경고 2개도 그대로였다. shared 전체 타입/lint 통과라고 보고하지 않는다.
+- 치과 앱 feature Jest **16 suites / 108 tests 통과**, 직접 승인 회귀 8개 포함.
+  실행은 `yarn jest --config jest.config.js --runInBand __tests__/features`를 사용한다.
+  전체 앱 타입 오류는 기존 **18개 동일**, 추가 진단 없음. scoped lint 오류 0개,
+  기존 array-index-key 경고 2개·기존 RN StrictMode 경고는 별도로 남았다.
+- 실제 NoData 컴포넌트를 임시 외부 fixture로 렌더링해 1440×1080/375×812에서
+  200×195px 내용·SVG 원래 크기·홈 버튼 실행을 확인했다. 임시 서버는 종료했고
+  제품 테스트 페이지/preview harness/설정은 추가하지 않았다. 임시 자료와 로그는 /tmp에
+  있어 Git으로 이동하지 않는다. 실제 로그인 페이지 전체/실기기/서버 Member QA 증거는 아니다.
+- 실제 Member·담당/공유/과거 참여 API 연결, 서버 GET 범위/거절 code,
+  담당 변경 후 조회 상실 응답, 계정/상태별 UI·직접 URL·실기기 QA는 여전히 남았다.
+  API 미연결 상태를 실제 신규 권한 시행 완료라고 보고하지 않는다.
+
+### Jira·다음 시작점
+
+- Web **DL-16319** 제목을 `[FE][Web] 담당 환자 제한 및 Member 권한 적용`으로
+  정리하고 진행 댓글 **44414**에 보완·검증·남은 실연동/통합 QA를 기록했다.
+  기존 본문 null은 유지했다.
+- 영향을 받는 제품별 카드 규칙에 따라 치과 앱 **DL-16752**를 상위 DL-16317의
+  별도 하위 카드로 만들었다. 제목은 `[FE][Office App] 담당 환자 제한 및 Member 권한 적용`,
+  담당 Frankie, 진행 중이며 작업 구분과 실제 연동/실기기 잔여는 댓글 **44415**에 기록했다.
+  두 카드의 제목·상태·담당·상위·최신 댓글을 재조회했다. 기공소 카드는 만들지 않았다.
+- 현재 확정 디자인에서 API 없이 가능한 이번 보완은 원격에 보존했다. 다음 시작은
+  실제 응답 설계/예시를 받아 준비한 개별 조건에 매핑하는 작업이며, 그 전에는 기존
+  페이지/승인 화면에 임시 조건을 연결해 수동 확인할 수 있다. 서버 role 값만 바꿔 모든
+  제한이 자동 적용되는 상태는 아니다. 신규 정책/enum/endpoint를 추정해 추가하지 않는다.
+- 반복된 Codex 응답 끊김은 코드 결과와 구분했다. 요청 ID
+  `bb4c7d1b-a0ae-4bd2-96a6-e483c19e9621`의 10월 12일 18:30:39 KST 스트림 오류와
+  자동 retry 기록을 로컬 로그에서 확인했다. 앱 26.1007.30912/build 20156은 업데이트 검사
+  `up_to_date`였다. 원인은 미확정이며 오류 해결·서비스 장애·네트워크 문제를 단정하지 않았다.
+  로그 전송·앱 재시작·설정 변경은 하지 않고 코드/원격 상태를 재확인해 마무리했다.
+
 ## 현재 상태 — 2026-10-06 하위 Jira 정리·메모리 저장 후 대기
 
 - 사용자는 현재 상태를 저장하고 대기하라고 명시했다. 이번에 허용된 작업은
