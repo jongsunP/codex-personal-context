@@ -1,6 +1,46 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
+## 현재 체크포인트 — 2026-10-12 · DLDS·DLOS 패키지·Studio 통합
 
-## 현재 체크포인트 — 2026-10-12 · 시작 준비·대표 서비스 화면·FE 코드 재사용 확인 후 대기
+**사용자 승인·방향:** 기존 DLDS 작업을 백업으로 남기고 최신 master에서 새 브랜치를 만들어, 이미 정리된 DLOS의 폴더·독립 패키지·Studio 갤러리 방식으로 DLDS를 통합합니다. 비개발자는 제품 전체 레포 대신 `dentlink-studio`를 받습니다. 하네스 발전은 통합 이후이며, 이번 브랜치에는 이전 하네스·생성기·에디터를 옮기지 않았습니다. `shared/ui/src/v2`를 DLOS로 간주하지 않습니다.
+
+### 저장소·백업·최신 master
+
+- **백업 보존:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16471`, HEAD/origin `12fb96a4e32c6a5e9abb4f61c235d9c2c1e53a14`. 추적 파일 clean이며 기존 AI 생성 결과·ignored 자료를 보존했습니다. reset·switch·통합·삭제하지 않았습니다.
+- **새 client 작업:** `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `codex/dlds-dlos-integration`. 최초 master base `6b79c9756cc56313fe833aad463bddb1f8c385fa`, 구현 저장 `f2de5110442c0e96e49dd7ab332b4cddccc824f0`을 push했습니다. 이후 사용자 요청으로 최신 master `693b8b4c4d247716db05ea415bc7bd1d33dab4cc`를 같은 새 브랜치에 병합했습니다. 최종 HEAD/origin은 `b366208836300a739bf70c880fbd3173753e9f3c`이며 추적 파일 clean·ahead/behind0입니다.
+- **최신 기준 확인:** 처음 가져온 DLOS 기반은 release/v1.88.0 `66aba1060`이었고 갱신된 master의 DLOS/icons/패키지 도구 원천은 이 기준과 같습니다. 최신 master의 Admin DLOS 전환, DLOS 가드·baseline·workflow, 공용 신규 export와 다른 제품 변경을 보존했습니다. 예전 Admin의 DLDS 구현을 복원하지 않았습니다.
+- **Studio 저장:** `/Users/parkjongsun/Repository/dentlink-studio`, 같은 `codex/dlds-dlos-integration`, main base `503bf044aaa6ac7280dd79193a77aba1d8ebc6f5`, HEAD/origin `5822d97fd457302cfc68618cfbc09f81c3f34a9e`. 추적 파일 clean이며 main은 수정하지 않았습니다.
+
+### 구현한 통합
+
+- `shared/dlds`에 **@innvoaid/dlds**를 분리했습니다. `src/components/hooks/utils/styles/tokens`, 공개 root export, 빌드·타입·테스트를 갖추고 DLOS와 같은 독립 패키지 구조를 사용합니다. 업무 UI·모델·API·제품 config/hook 의존성은 포함하지 않습니다. DLDS·DLOS의 디자인 값과 테마는 각각 유지합니다.
+- 기존 `shared/ui` 컴포넌트 경로와 `@dentlink/ui/dlds`, 범용 hook 경로는 호환 재수출로 남겨 앱 import를 유지합니다. 이전 DLDS의 공개 항목 누락을 점검했습니다. 일부 legacy props는 기존 허용 범위를 유지하는 타입 어댑터로 연결했습니다. 제품 소비를 전부 새 root API로 재작성하지 않았습니다.
+- `@innvoaid/icons`의 공개 registry를 사용하도록 정리했습니다. 최초 base master SVG386개와 release 추가26개(갱신된 master412개)는 내용 변경 없이 보존했고 이전 DLDS 추가121개를 합쳐533개입니다. 기존 source 없는 TSX25개 alias를 포함해 registry558개를 유지합니다. 임의 아이콘 사용처 교체나 추가 Figma 모양/색상 대조는 하지 않았습니다.
+- 세 패키지의 React18/19 peer 범위와 타입 트리를 정리했습니다. 런타임 React 버전은 그대로입니다. styled-components 번들 타입의 필요한 내부 `dist/types` 참조는 `.js` 확장자만 보완해 NodeNext에서 실제 타입 파일을 찾게 했고, 공개 root에 없는 타입으로 치환하지 않았습니다.
+- Studio `/design-system/dlds`에 **28개 DLDS 예시**를 연결했습니다. 코드·props·토큰과 실제 컴포넌트를 제공하며 `packages/dlds-preview`는 공개 패키지 root만 사용합니다. client 소스 링크/복사 의존성이 없습니다. Pretendard·reset·portal을 DLDS 영역에 한정해 DLOS/Studio 스타일을 보존합니다.
+- 기존 패키지 workflow에 DLDS를 포함했습니다. master의 Admin guard는 그대로입니다. `pack:packages`는 CLI가 지원하는 `inspect`에 연결했으며 그 별칭 명령 자체를 검증했습니다. 앞선 지원하지 않는 `pack` 문자열 연결은 검토 중 수정했습니다.
+- 최신 Admin ref callback4곳과 주문 상세 floating button의 styled prop 타입은 실제 기존 값에 맞췄습니다. 드래그 호출·권한 판단·표시 조건·간격 계산은 그대로인 타입 호환 수정입니다. 최신 pristine master에서는 Admin 타입 검사가 통과했고, 통합의 React 타입 통일로 드러난 nullable prop 호환 오류는 이 타입 보완 후 통과했습니다. upstream baseline 오류로 표현하지 않습니다.
+
+### 검증한 범위·한계
+
+- **최신 master 병합 후:** DLDS149 / DLOS381 / icons 생성2 / 패키지 규칙10 테스트, 패키지3종 타입·빌드·pack, 외부 React18/19의 엄격 타입(Bundler·NodeNext)·Vite build·Node ESM SSR 통과. client frozen install도 통과했습니다.
+- **실제 앱:** 최신 병합본의 Clinic/Lab/Admin 타입 검사, Admin DLOS guard(기존 baseline60)·guard tests6, Admin production Next build 통과. 병합 전 Clinic production build도 통과했습니다. 인증된 전체 제품 화면 QA·실제 기기·staging/production 배포를 뜻하지 않습니다.
+- **커버리지:** 최신 master의 pristine 임시 checkout에서 configs21tests / hooks32tests를 측정했습니다. configs49.15%lines·12.25%functions·94.56%branches, hooks48.17%·61.11%·86.5%입니다. 기준 JSON의 파일 경로만 새 worktree로 정규화했고 수치는 보정하지 않았습니다. 통합 코드의 covered 수는 줄지 않았으며 enforcement 통과, hooks lines54.6%입니다. 미테스트 코드 이동에 따른 비율 상승을 테스트 증가로 표현하지 않습니다. 정상 commit/push hook을 우회하지 않습니다.
+- **Studio:** 격리 사본에서 실제 packed 패키지3종을 설치해 verify(lint·type·14tests·workspace2)·Next production build·문서 trace를 통과했습니다. PC/390px에서28개 항목, Modal 열기/편집/Escape/focus 복귀, Popup, Tooltip 폰트/portal, scroll lock 해제, DLDS↔DLOS 전환, Calendar/날짜, 모바일 넘침 없음·실행 오류0을 확인했습니다. client의 최신 master 병합은 이 패키지 구현 소스를 바꾸지 않았습니다.
+- **증거 경계:** 로컬 tarball은 `/tmp/dentlink-integration-artifacts-latest`, 재검사 로그는 `/tmp/dlds-integration-latest-*.log`, 시각 자료는 `/tmp/studio-dlds-*.png`입니다. 기기별 임시 자료이며 Git memory가 이 파일·의존성·서버를 전송하지 않습니다. 다른 기기는 저장된 소스와 팀 문서로 검사를 다시 실행합니다. 검사용 서버는 종료했고 기존 사용자/old backup 서버는 임의 종료하지 않았습니다.
+
+### 실제 공개·설치 선행 조건 및 다음 순서
+
+- **2026-10-12 재조회:** 공개 npm의 `@innvoaid/dlds`, `@innvoaid/dlos`, `@innvoaid/icons`는 모두 HTTP404였습니다. 코드상 public npm 설정과 실제 공개는 다릅니다. 공개 publish0회, protected branch merge·PR 변경·서비스 배포0회입니다.
+- Studio manifest는 공개 npm0.1.0에 맞춰 준비했지만 기존 lockfile은 GitHub Packages prerelease입니다. 실제 registry에 없는 integrity를 만들거나 lockfile을 삭제하지 않았습니다. **그대로 새 복제/frozen install/CI/Vercel 배포가 완료된 상태가 아닙니다.** 검증 사본의 file tarball override는 공유 코드/lockfile에 넣지 않았습니다. `.npmrc.example`·CI는 npm의 scoped registry를 명시해 예전 전역 GitHub scope 설정 영향을 피합니다.
+- **다음1:** 사용자(FE)와 실제 공개 버전·npm 권한/CI secret·배포 승인을 확인합니다. 기존 수동 패키지 workflow/문서의 verify·dry-run→명시적 publish 순서를 사용합니다. 권한을 추측하거나 승인 전에 실제 공개하지 않습니다.
+- **다음2:** 실제 npm에 세 패키지가 조회되면 Studio의 정확한 버전·정상 lockfile을 갱신하고 frozen install→verify/build→갤러리 동작을 확인합니다. 실제 배포는 별도 승인입니다.
+- **다음3:** 통합된 Studio·버전 패키지 경계에서 agent-first 하네스 지침·환경 준비·FE 코드 전달을 발전시킵니다. 사용자는 화면·동작만 요청하고 에이전트가 프로젝트 확인·안전한 최신 동기화·탐색·생성·검사·미리보기를 처리하는 원칙은 유지합니다. 기존 제품 전체 레포용 setup를 Studio에 그대로 이식하지 않습니다. PM/디자이너 참여 요청·에디터는 서비스로 사용할 단계 이후입니다.
+- **재개:** 개인 context와 두 실제 브랜치를 안전하게 갱신하고 dirty/upstream을 먼저 확인합니다. old backup을 현재 통합 branch로 오해하지 않습니다. Node·pnpm8.6.9, 필요시 `NODE_OPTIONS=--max-old-space-size=8192`를 사용합니다. HTTPS workflow scope가 없을 때 기존 확인된 SSH 인증을 한 명령의 pushurl override로 사용하며 전역 인증/remote 설정은 바꾸지 않습니다. 코드·팀 정본은 client `docs/design-systems.md`·`docs/packages.md`·`shared/dlds/README.md`, Studio `README.md`·`docs/design-system-routing.md`에 있습니다.
+
+**마감 기록:** client `b36620883`과 Studio `5822d97`의 원격 일치·clean을 확인했습니다. 정상 commit의3앱 타입, push의3앱 lint·DLOS guard tests·coverage를 통과했습니다. 담당 child Jira **DL-16471**의 현재 방향/진행 내용을 갱신하고 결과 댓글 **44411**을 추가했으며 본문 read-back 일치·진행 중 유지 확인. 상위/완료 카드·기존 PR는 변경하지 않았습니다. 이번 통합 코드 저장은 완료했고 실제 npm 공개·Studio 정상 lock/frozen 설치·후속 하네스는 남았습니다. 개인 context3문서를 commit/push한 후 대기합니다. live Git/Jira가 기록보다 우선합니다.
+
+
+## 이전 체크포인트 — 2026-10-12 · 시작 준비·대표 서비스 화면·FE 코드 재사용 확인 후 대기
 
 - **승인·현재 범위:** 사용자가 추천 순서의 자율 진행, 대표 서비스 화면 대비 생성 결과와 FE 재사용 보정량 확인, 커밋·푸시·메모리·Jira 정리를 승인했다. 이어 비개발자가 “DLDS로…” 요청하면 프로젝트 확인 → 매 시작 최신 Git 동기화 → 실행 준비 → 준비 완료 안내를 내부에서 수행하도록 제안했고 이를 반영했다. 사용자 의견 없이는 할 수 없는 경우만 질문한다. 이번 범위 검증·저장을 마쳤으며 후속 재개 요청을 기다린다. 전체 2단계·비개발자 서비스·에디터 완성을 의미하지 않는다.
 - **현재 제품:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16471`, HEAD/origin **`12fb96a4e32c6a5e9abb4f61c235d9c2c1e53a14`**, 추적 파일 clean. 오늘 정상 commit/push: `c3b784230` 시작 준비 도구·지침 → `9642f75be` 오래된 checkout의 계약 검사를 동기화 후 수행 → `c40255640` 기존 화면 부분 재사용·공통 Modal/표시 기준 → `12fb96a4e` 생성 파일을 보호하는 최신 코드 동기화와 기존 폼 연결 지침. 정상 훅의 Clinic/Lab/Admin 타입·push lint/coverage를 우회하지 않았다. 기존 제품 UI·공통 컴포넌트·테마·API·CI·E2E·의존성/lockfile·비교용 Draft PR·merge·배포는 변경하지 않았다.

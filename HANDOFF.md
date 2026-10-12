@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-12 **시작 준비·대표 서비스 화면·FE 재사용을 검증·저장 후 대기**. 제품 `feature/DL-16471 / 12fb96a4e`에 매 시작 현재 원격 최신 동기화·실행 준비와 기존 ignored 생성 파일 보호를 정상 hook으로 커밋·푸시했다. 새 복제본의 실제 설치·준비 완료·원본/lock 불변 및 도구86tests 통과. 대표 Clinic 연락처 창은 완성 소스 제외한 새 에이전트 생성→자연어2회 보완→생성 UI 수동 재작성 없이 실제 폼·국가 입력·알림에45줄 연결로 확인했다. 주요 좌표/스타일3폭 차이0, 독립 동작 검증 통과지만 실제 API·제품 적용·비개발자/다른 도구·일반 작업 절감은 별도다. DL-16471 요구/결과 댓글·Notion 현재 결과만 갱신하고 상위/완료 카드·Draft PR·배포는 변경하지 않았다. 증거/zip/서버5192·5281은 다른 기기로 자동 이전되지 않는다. 다음은 최신 context/제품·환경 확인→FE 선택 사용 확인 또는 새 대표 화면/첫 사용 시험이며 수동 QA·PM/디자이너 참여를 필수 관문으로 만들지 않는다. 자세한 재개·조건/한계는 정본을 따른다.
+  — 2026-10-12 **DLDS·DLOS 패키지·Studio 통합**. old `feature/DL-16471 / 12fb96a4e`는 백업 보존, 새 `codex/dlds-dlos-integration`에서 최신 master `693b8b4c4`를 반영했습니다. 독립 @innvoaid/dlds·기존 import 호환·Studio28개 예시와 패키지/앱 검증을 완료했습니다. Studio 구현 `5822d97` 저장. npm3종 실제 공개·정상 Studio lock/frozen 설치는 남았으며 하네스 발전은 그 후입니다. client `b36620883`·Studio `5822d97` 원격 저장, DL-16471 결과 댓글44411 확인. 다른 기기 재개 절차는 정본 checkpoint를 확인합니다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
