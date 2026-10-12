@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-08 **사용자 승인으로 재개한 요구 범위 보완·재시험을 저장하고 대기**. 제품 `feature/DL-16471 / f9e9b00e2`의 하네스 문서4개·선택형 생성기 프롬프트1개를 정상 hook으로 커밋·푸시했다. 요청 없는 입력 제한/값 변환을 막는 기준을 보완한 뒤 새 에이전트3개(전화번호2·표시 이름1)가 추가 질문/생성 소스 보정 없이 생성·후속 수정·FE 모의 연결을 확인했다. 부모 실제 브라우저25그룹 및 선택형 실제 AI 초기/명시적 후속12그룹, 기존 도구43tests 통과. 이 시험 범위는 통과했지만 전체2단계·다른 도구/실제 비개발자/제품 API·화면 품질/업무 절감은 별도다. Jira DL-16471 진행 중·Notion FE 현재 결과만 갱신/검증했고 상위/완료 카드·Draft PR·merge·배포는 변경하지 않았다. 로컬 결과5186/5194/5217·소스·증거는 자동 기기 이전되지 않는다. 다음은 최신 상태 확인→FE의 선택적 새 대화 사용 확인→대표 화면 기준과 코드 인계/보정량 검증. 사용자 수동 QA·PM/디자이너 참여를 필수 관문으로 요구하지 않는다. 상세 보존 경로·재개 순서·한계는 정본을 따른다.
+  — 2026-10-12 **시작 준비·대표 서비스 화면·FE 재사용을 검증·저장 후 대기**. 제품 `feature/DL-16471 / 12fb96a4e`에 매 시작 현재 원격 최신 동기화·실행 준비와 기존 ignored 생성 파일 보호를 정상 hook으로 커밋·푸시했다. 새 복제본의 실제 설치·준비 완료·원본/lock 불변 및 도구86tests 통과. 대표 Clinic 연락처 창은 완성 소스 제외한 새 에이전트 생성→자연어2회 보완→생성 UI 수동 재작성 없이 실제 폼·국가 입력·알림에45줄 연결로 확인했다. 주요 좌표/스타일3폭 차이0, 독립 동작 검증 통과지만 실제 API·제품 적용·비개발자/다른 도구·일반 작업 절감은 별도다. DL-16471 요구/결과 댓글·Notion 현재 결과만 갱신하고 상위/완료 카드·Draft PR·배포는 변경하지 않았다. 증거/zip/서버5192·5281은 다른 기기로 자동 이전되지 않는다. 다음은 최신 context/제품·환경 확인→FE 선택 사용 확인 또는 새 대표 화면/첫 사용 시험이며 수동 QA·PM/디자이너 참여를 필수 관문으로 만들지 않는다. 자세한 재개·조건/한계는 정본을 따른다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.

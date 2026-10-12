@@ -1,6 +1,52 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 체크포인트 — 2026-10-08 · 요구 범위 보완·새 에이전트 재시험 저장 후 대기
+## 현재 체크포인트 — 2026-10-12 · 시작 준비·대표 서비스 화면·FE 코드 재사용 확인 후 대기
+
+- **승인·현재 범위:** 사용자가 추천 순서의 자율 진행, 대표 서비스 화면 대비 생성 결과와 FE 재사용 보정량 확인, 커밋·푸시·메모리·Jira 정리를 승인했다. 이어 비개발자가 “DLDS로…” 요청하면 프로젝트 확인 → 매 시작 최신 Git 동기화 → 실행 준비 → 준비 완료 안내를 내부에서 수행하도록 제안했고 이를 반영했다. 사용자 의견 없이는 할 수 없는 경우만 질문한다. 이번 범위 검증·저장을 마쳤으며 후속 재개 요청을 기다린다. 전체 2단계·비개발자 서비스·에디터 완성을 의미하지 않는다.
+- **현재 제품:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16471`, HEAD/origin **`12fb96a4e32c6a5e9abb4f61c235d9c2c1e53a14`**, 추적 파일 clean. 오늘 정상 commit/push: `c3b784230` 시작 준비 도구·지침 → `9642f75be` 오래된 checkout의 계약 검사를 동기화 후 수행 → `c40255640` 기존 화면 부분 재사용·공통 Modal/표시 기준 → `12fb96a4e` 생성 파일을 보호하는 최신 코드 동기화와 기존 폼 연결 지침. 정상 훅의 Clinic/Lab/Admin 타입·push lint/coverage를 우회하지 않았다. 기존 제품 UI·공통 컴포넌트·테마·API·CI·E2E·의존성/lockfile·비교용 Draft PR·merge·배포는 변경하지 않았다.
+
+### 하네스 시작 준비 — 사용자 의견 반영
+
+1. 기본 전제는 FE가 로컬 프로젝트, 사용할 브랜치/upstream과 접근 권한, Node·지정 pnpm을 준비해 놓는 것이다. 비개발자는 화면·동작만 말하며 Git·명령·출력 파일·포트를 지정하지 않는다. 특정 Codex나 웹 입력창은 필수가 아니다. 파일 읽기/쓰기·명령/미리보기 도구가 있는 에이전트여야 한다.
+2. 에이전트가 `pnpm ai:screen setup`을 내부 실행한다. 프로젝트·현재 branch/upstream·dirty/진행 중 Git을 확인하고 **매 시작 현재 원격 브랜치를 명시해 fetch → 확인한 upstream SHA로 `merge --ff-only --no-autostash --no-overwrite-ignore`** 한다. 이는 git pull의 fetch/FF 반영을 보호 옵션 적용을 위해 나눈 것이며 실제 pull 명령을 호출한다고 하지 않는다. 임의 master 전환·merge commit·stash/reset/clean·강제 처리는 하지 않는다.
+3. 동기화 뒤 최신 안내·DLDS 계약·실제 자료·실행 도구를 확인한다. 오래된 checkout에 DLDS export/packageManager/lock이 없더라도 프로젝트 식별 후 먼저 갱신한다. 설치가 필요하면 `pnpm install --frozen-lockfile --ignore-scripts`를 사용한다. 에셋 재생성·Git hook 설치를 자동 실행하지 않고, 필요한 실행 바이너리도 확인한다.
+4. 준비된 때만 짧게 안내한다. 로컬 변경·분기·기존 ignored 생성 파일 충돌·권한/인증·도구 부족 등은 코드 보존 후 안전 중단하고 FE 환경 지원이 필요한 이유만 안내한다. 로그/자격증명/개발 명령을 비개발자에게 그대로 넘기지 않는다. 프로젝트 실행 준비와 AI 로그인·브라우저/다른 도구·생성 화면의 품질은 별개다.
+
+### 대표 서비스 화면 시험·FE 보정량
+
+- **기준:** 실제 Clinic `MyProfileSection`/`UpdateProfile`/`useUpdateProfileForm`/`CountryCodeSelectForm`과 RHF·Yup·React Query·Jotai·테마·폰트를 격리 호스트에서 실행했다. API와 Toast 전달만 시험용으로 대체했다. 로그인한 실제 서비스·실제 서버·전체 페이지 QA가 아니다. 기존 창의 실제 제목/국가/52px 입력·Save/닫기와 PC480×352·모바일 bottom382px를 관찰했다. 이 화면에는 Cancel 버튼이 없다. 지정된 기존 계약의 숫자 추출·빈 Save 차단은 확인한 근거이며 미지정 입력 규칙 금지 원칙을 뒤집지 않는다.
+- **새 에이전트 입력:** “DLDS로 첨부한 연락처 수정 창과 같은 화면을 만들어줘. 번호 옆 연필로 열고, 번호를 저장하거나 창을 닫을 수 있게 해줘.” 이전 대화·개인 기록·다른 생성물·대상 완성 화면 소스·참조 호스트는 제외하고 프로젝트 지침·DLDS·일반 예시와 화면 자료만 허용했다. 추가 질문0. 파일 접근을 기술적으로 차단한 환경은 아니다.
+- **처음 결과는 바로 재사용 불가:** 코드 검사/샘플 동작은 통과했지만 실제 프로필 슬롯에서 정보가 중복되고 국가 표시를 재조립했으며 Save 스타일·모달 기본 초점·입력 속성에 차이가 있었다. 이 결과를 성공으로 덮지 않고 처음 소스·실패/차이도 보존했다.
+- **자연어 후속1:** 기존 프로필 중복 없이 연필/창만 분리, 제공 국가 표시값 유지, 숫자 키보드, 실패 알림은 기존 처리에 맡기도록 요청했다. 기본 재사용·표시는 개선됐으나 기존 국가 Controller의 등록/기본값 의미와 Modal 기본 사용은 더 맞출 필요가 있었다.
+- **자연어 후속2:** 기존 국가 항목 자체를 넣을 수 있게 하고 기존 공통 Modal의 Save·기본 동작, 연필18px·입력 `text/numeric/[0-9]*`를 맞추도록 요청했다. 최종 UI는 `countryField: ReactNode`와 props/callback으로 재사용하고 샘플 상태는 `SampleApp.tsx`에 분리했다. 생성 단계별 범위·타입·lint·빌드 실패로 인한 소스 보정0회와 **자연어 보완2회**는 구분한다. 생성 담당자의 검사문 두 곳은 호스트 텍스트/외부 Tab 순서 기대를 고쳐 실패 기록을 보존했다.
+- **최종 FE 연결:** 독립 담당자가 생성 UI를 수동 수정0으로 실제 기존 슬롯에 연결했다. 기존 폼·Controller/국가 컴포넌트·성공 상태·숨은 numberingSystem·알림을 재사용하는 어댑터 **유효45줄·연결 판단10개**다. import/braces 포함, 빈줄/주석 제외 기준이며 산업 표준 비용 단위가 아니다. 초기45줄·후속1 32줄과 단순 줄 수로 절감률을 계산하지 않는다. 실제 FE 수작업 대조군이나 일반 일정 산정은 없다.
+- **실제 저장 의미 보존:** `onSubmit`은 async여도 내부 `mutate`를 기다리지 않아 반환 Promise를 성공으로 취급할 수 없다. 실제 성공 상태로 닫도록 연결했다. 기존 국가 항목의 등록 시점에 따라 undefined를 열기 전에 넣으면 화면/저장 US, 열린 뒤 넣으면 표시 US/저장 undefined라는 시험 조건을 재현했다. 정적 `if (!value)`만 보고 반드시 숨겨진다고 했던 초기 추론은 정정했다. 최종은 기존 Controller/국가 컴포넌트를 그대로 주입하며 null Controller bridge·직접 기본값 setValue는 진단용 보존본만 남겼다. undefined/빈 문자열은 강제로 넣은 격리 경계 조건이고 실제 API에서 그런 데이터가 내려온다는 증거는 아니다.
+- **검증:** 최종 FE strict 타입/빌드·Chromium22그룹, 부모 독립 실제 폼 동작8그룹 통과. 부모가 모달·국가/전화 입력·제목·Save의 주요 좌표/수집 CSS를1280/390/320px에서 대조해 차이0을 확인했다. 생성 담당자의 최종 자체 브라우저31개/가짜 연결26개는 이 독립 검증과 구분한다. 실행 오류/외부 HTTP0. 별도 load/open/success 콘솔 시험의 styled-props warning6개는 baseline과 문자열까지 같고 콘솔 오류0이다. 전체 픽셀·모든 RHF 내부 error/touched 상태·접근성/실기기 키보드까지 동일하다고 하지 않는다.
+- **보존한 기존 제한:** 대기 중 중복 Save 가능·늦은 성공으로 재열린 창이 닫힐 수 있음·응답 message가 없으면 알림 없음·기본 Modal은 초점을 가두지 않음. 요구되지 않은 UI/오류/Retry나 제품 동작 수정으로 확대하지 않았다.
+
+### 도구·새 설치 확인
+
+- 공통 화면/시작 준비 테스트 **54/54**, 선택형 생성기 **32/32**, preview lint·스킬 형식·diff 검사 통과. Git 제외 파일/상위 파일·폴더/symlink/rename/newline 충돌 보존, sibling 정상 갱신, stale 계약, 제한/제외 refspec, 고정 SHA, 동시 branch/HEAD/dirty/rebase 변경, 출력 제한 초과 중단을 실제 임시 Git fixture로 확인했다. 설치 부분을 모의 처리한 단위 시험과 아래 실제 설치를 구분한다.
+- **실제 새 환경 시험:** 원격 `feature/DL-16471 / 12fb96a4e`를 node_modules 없는 새 single-branch clone으로 받아 전용 임시 store로 실제 설치했다. 이 Mac의 Node24.4.1/pnpm8.6.9에서 설치1회·캐시 재사용0·2,527 패키지, setup약46.4초로 성공했다. 4,432개 추적 파일의 SHA·lockfile·HEAD 불변/clean, esbuild transform·tsc/eslint/vite probe, 준비 완료 안내를 확인했다. 빈 prepare는0바이트2TSX, 빈 check는 범위 오류로 거절하고 완료 receipt를 만들지 않았다. 실제 AI 생성·다른 OS/기기·다른 도구·비개발자 사용성 시험은 아니다. 임시 clone/store는 증거 보존 후 제거했다.
+- 최종 실제 작업 checkout에서도 `pnpm ai:screen setup`을 실행해 준비 완료·HEAD/upstream 일치·clean을 재확인했다. 최초 root `pnpm lint:ai-preview`는 해당 script가 root에 없어서 실행 준비 오류였고, 올바른 `pnpm --filter @dentlink/ui lint:ai-preview`로 통과했다. 생성 UI의 실패/보정으로 세지 않는다.
+
+### 저장·팀 문서·다른 기기 재개
+
+- **제품 정본:** `AGENTS.md` → `.agents/skills/dlds-screen/SKILL.md` → `shared/ui/ai-preview/AI_GUIDE.md`/`README.md`; 새 도구 `project-setup.mjs`와 tests, `agent-screen.mjs`의 준비 gate를 사용한다. 개인 상태 파일을 회사 저장소에 넣지 않았다.
+- **팀 문서:** 사용자 담당 [DL-16471](https://innovaid.atlassian.net/browse/DL-16471)의 시작 요구를 좁게 보완하고 결과 댓글44378을 추가했다. 제목/담당자/진행 중 상태를 유지한다. 상위/완료 카드·PR 상태는 변경하지 않는다. [Notion FE](https://app.notion.com/p/3ecce072e82f81f3bb89fbf5729da06c)의 현재 시작 절차·대표 화면·FE 재사용 결과만 간결히 갱신하고 전체 의도 본문 및 기존 Figma 자식 페이지 보존을 재조회 확인했다. 새 중복 문서는 만들지 않았다.
+- **로컬 증거 정본:** `/Users/parkjongsun/Documents/ChatGPT/디자인시스템정비 프로젝트/artifacts/service-contact-20261012/RESULTS.md`. reference/generated/fe-integration/parent/fresh-setup에 최초·두 후속·최종 소스/화면/검사와 정정 기록을 보존했다. `fe-integration/fe-source-final.zip`은 최종 UI·샘플·45줄 어댑터다. 의존성/빌드 산출물은 증거 복사에서 제외했다.
+- **로컬 실행:** 생성 샘플 `http://127.0.0.1:5281/`, 실제 폼 연결 격리 호스트 `http://127.0.0.1:5192/?placement=existing-slot&revision=final`, 참조 호스트5190. 호스팅/제품 서비스가 아니라 이 기기의 시험 서버다. 현재 켜져 있다고 다른 기기에서도 가정하지 않는다. 다음 접속 시 실제 프로세스를 확인하고 사용자 서버를 임의 종료하지 않는다.
+- **출력/기기 경계:** 생성은 제품 Git 제외 `shared/ui/.ai-sessions/agent/service-contact-fresh-20261012-v4n8`, 실제 폼 연결은 `.ai-sessions/integration/service-contact-20261012`. 개인 Git은 결정·조건·소스 SHA·코드 commit·검증·재개 경로를 보존하며 ignored 소스/이미지/서버/인증/의존성을 자동 전송하지 않는다. 새 기기는 컨텍스트와 제품 branch를 갱신하고 실행 환경을 확인한 뒤 보존 zip/자료를 별도 전달받거나 같은 기준을 다시 렌더·생성한다. 완성 화면 소스를 미리 읽고 새 시험이었다고 하지 않는다.
+- **최종 생성 SHA256:** Screen `dcaf2a1c17d9074f877131b689a35d7d5921911f340d095726c244484f6a5653`, SampleApp `3a019b1a687716e594c0e1d2f03bece8dfc4a67b36f0048e0016aacf5f29081a`. 최초/후속1도 각 증거 폴더에 원문 보존한다.
+
+### 다음 시작 순서 — 정리 후 대기
+
+1. **Codex:** 사용자 재개 요청에서 개인 context와 실제 제품 branch/dirty/upstream·접근/실행 환경을 확인한다. 이번 대표 연락처·새 설치·생성 파일 보존을 현재 미해결로 반복하지 않는다. 새 증거가 있으면 해당 지점만 재현한다.
+2. **사용자(FE), 선택:** 프로젝트를 읽는 새 대화에서 짧은 화면 요청과 자연어 수정으로 직접 사용 흐름을 볼 수 있다. 기존 결과만 보려면5192 최종 폼 연결 화면을 연다. 사용자 수동 QA를 이번 작업 완료의 필수 조건으로 요구하지 않는다.
+3. **다음 자율 진행 후보:** 이번에 보완한 지침으로 새 대표 화면1종 또는 동일 화면의 새 첫 사용을 시험하여 첫 결과부터 재사용 가능한지, 어떤 자연어/FE 보완이 남는지 확인한다. 기존 연락처의 최초 완성도를 이미 완벽했다고 바꾸거나 이번45줄로 일반 작업 절감을 주장하지 않는다.
+4. **별도 승인/운용 범위:** 실제 제품 경로 적용·live API/권한·팀 리뷰/PR·배포, 다른 에이전트/OS의 사용 조건, 비개발자 운용과 에디터는 별도다. 현재는 사용자(FE)와 Codex만 진행하고 PM·디자이너는 서비스로 사용할 단계 전에는 시험/검토를 요청하지 않는다. 저장·대기 요청을 이전 자율 지침으로 덮고 다음 범위를 자동 시작하지 않는다.
+
+## 이전 체크포인트 — 2026-10-08 · 요구 범위 보완·새 에이전트 재시험 저장 후 대기
 
 - **이번 승인·현재 상태:** 사용자가 직전 대기를 해제하고 오늘 정한 지침을 기준으로 혼자 진행 가능한 작업과 정리까지 승인했다. 미지정 입력 규칙 보완 → 새 생성/후속 수정 → 독립 화면·FE 인계 검사 → 커밋·푸시·Jira/Notion·재개 기록 정리를 수행했다. 이번 보완점은 아래 시험 범위에서 통과했으며 **2단계 전체 완료는 아니다.** 마무리 후 다음 재개 요청을 기다린다. 사용자 답변·추가 수동 QA가 현재 작업 완료의 필수 조건은 아니다.
 - **제품 저장:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16471`, HEAD와 원격 `f9e9b00e24a2e66776a187845423315343e38db1`, 추적 파일 clean. `AGENTS.md`, `.agents/skills/dlds-screen/SKILL.md`, `shared/ui/ai-preview/AI_GUIDE.md`, `README.md`, `local-generation/runner.mjs` 5파일(+36/-4)을 정상 hook으로 커밋·푸시했다. 제품 UI·공통 컴포넌트·API·CI·E2E·의존성·비교용 Draft PR·merge·배포는 변경하지 않았다.
