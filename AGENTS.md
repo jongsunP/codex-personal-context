@@ -89,6 +89,10 @@
   Compatible CodePush work does not require a new release branch every time.
   Verify the actual PR base and diff after automation. Keep feature base,
   release integration, Git tags, OTA activation, and store release distinct.
+  Also read the 2026-10-12 app-developer delivery flow in the onboarding
+  document before planning delivery. It is reference material pending
+  alignment, not a silent replacement of the confirmed policy or authorization
+  for PR changes, merges, deployment, or branch synchronization.
 - When the user asks to `CodeRabbit 리뷰 확인` or equivalent, treat that
   wording as explicit authorization for the complete review cycle on the
   current PR: inspect every unresolved CodeRabbit thread, verify each finding

@@ -100,7 +100,15 @@ Detailed implementation history remains in the relevant existing project file.
 - Active AI workflow: Codex only. The remote `claude-personal-context`
   repository is retained only as an archive and is not loaded by default.
 
-## 앱 release·제품별 Jira 정책 — 2026-10-08
+## 앱 개발자 전달 프로세스 — 2026-10-12 참고·합의 대기
+
+- 사용자 제공 앱 개발자의 일반 개발·핫픽스 흐름을 [앱 온보딩 정본](dentlink-app-onboarding.md)에 보존했다.
+  일반 개발은 develop 기준 feature→release→QA→release→main(CodePush)→develop 최신화,
+  핫픽스는 main 기준 hotfix→main(CodePush)→release·develop 최신화다.
+- 원문의 ‘별도 조율 전 참고만’ 조건을 유지한다. 기존 2026-10-08 확정 지침과 다른 PR 대상·최신화 경로는
+  자동 대체하지 않으며 앞으로 앱 업무 계획에서 함께 확인한다. 이번 작업은 개인 지침 저장이며 제품·PR·배포는 변경하지 않았다.
+
+## 앱 release·제품별 Jira 정책 — 2026-10-08 기존 확정 지침
 
 - 사용자가 같은 날 후속 정정했다. **일반 앱 feature PR은 `develop`에 모으며, release는 QA·배포 단계**다.
   이전 release 기본 대상 해석을 대체한다. 기존 release 전달은 유지하고 필요한 변경을 release→develop PR로 동기화한다.

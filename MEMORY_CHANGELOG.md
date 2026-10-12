@@ -2,6 +2,10 @@
 
 ## 2026-10-12
 
+- 앱 개발자 전달 일반 개발(develop 기준 feature→release→QA→release→main/CodePush→develop)과
+  핫픽스(main 기준 hotfix→main/CodePush→release·develop 최신화)를 온보딩 정본에 저장했다.
+  원문의 ‘별도 조율 전 참고만’ 조건과 기존 10/8 확정 지침과의 PR 대상·최신화 차이를 명시했다.
+  AGENTS·SESSION_WORKFLOW·FE 조율 문서에서 앞으로 함께 읽도록 연결했으며 기존 정책·PR·배포는 자동 변경하지 않았다.
 - 사용자Staging기준/웹release1.88직접지시로총주문수표시만삭제하는새브랜치를준비했다.
   웹feature/DL-16652-hide-total-orders@66aba1060·표1파일(+5/-16),
   앱QA/lab/DL-16652-hide-total-orders@1311d473·카드1파일(-21)로우리Lab count/API/i18n을보존했다.

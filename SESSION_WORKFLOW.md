@@ -387,6 +387,14 @@ independently to `dentlink-app` (Office) and `dentlink-lab-app` (Lab); the web
 release-train policy below is unchanged. Details and source coverage belong
 in [App onboarding and delivery](projects/dentlink-app-onboarding.md).
 
+The user's 2026-10-12 app-developer handoff is saved there as **reference
+material pending alignment**. Its ordinary feature integration target and
+post-delivery synchronization path differ from the confirmed policy below;
+the hotfix flow is also reference material. Read both before planning an app
+delivery, verify the actual task target and automation, and align unresolved
+differences before performing the affected Git/delivery action. The handoff
+does not itself retarget existing PRs or authorize merges or deployments.
+
 - Ordinary app feature PRs target `develop`; this supersedes the earlier
   same-day interpretation that ordinary app features target release. For an
   authorized new feature, normally prepare its base from latest fetched
