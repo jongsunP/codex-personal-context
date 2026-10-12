@@ -286,11 +286,11 @@ Detailed implementation history remains in the relevant existing project file.
 ## DL-16615 MEDIT TAT 수정 세션 접수 — 2026-10-06
 
 - 최신 전달 상태: [PR #4660](https://github.com/Innvoaid/dentlink-client/pull/4660)은
-  **10/7 10:05 KST `release/v1.88.0` 병합 완료**이며 팀 승인·CodeRabbit 검토 완료·미해결 0개다.
-  10/8 확인한 수정 포함 Admin Stage 배포 작업도 성공했다. 실제 제출/재조회·릴리즈 QA 완료와
-  운영 반영은 미확인이다. Jira는 Ready for Deploy / v1.88.0(10/12)이며, 과거 진행 댓글은
-  사용자 계정의 10/6 삭제 이력을 확인해 재등록하지 않았다. 기본 checkout은 clean master,
-  feature는 로컬·원격에 보존돼 있고 이 기능의 임시 worktree는 없다.
+  **10/7 `release/v1.88.0` 병합 완료**이며 팀 승인·CodeRabbit 검토 완료·미해결 0개다.
+  **10/12 사용자가 확인까지 모두 완료됐다고 보고했고, Jira 완료 상태도 재확인해 작업을 종료했다.**
+  로컬 `feature/DL-16615`는 원격·squash merge의 동일 결과를 검증한 뒤 삭제했다.
+  기본 checkout은 clean master이며 원격 feature·PR과 다른 진행 중 worktree는 보존한다.
+  이 기능의 임시 worktree·임시 파일은 없다. 사용자 요청에 따라 현재 기능 세션을 보관한다.
   상세 이력·검증·다음 시작점은 [Medit TAT 체크포인트](dentlink-client-medit-tat.md)를 따른다.
 
 - 사용자 요청에 따라 새 폴더 없이 기존 `메인 프로젝트`에
