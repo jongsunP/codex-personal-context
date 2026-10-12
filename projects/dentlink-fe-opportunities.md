@@ -8,7 +8,7 @@
 - **백업 보존:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16471`, HEAD/origin `12fb96a4e32c6a5e9abb4f61c235d9c2c1e53a14`. 추적 파일 clean이며 기존 AI 생성 결과·ignored 자료를 보존했습니다. reset·switch·통합·삭제하지 않았습니다.
 - **새 client 작업:** `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `codex/dlds-dlos-integration`. 최초 master base `6b79c9756cc56313fe833aad463bddb1f8c385fa`, 구현 저장 `f2de5110442c0e96e49dd7ab332b4cddccc824f0`을 push했습니다. 이후 사용자 요청으로 최신 master `693b8b4c4d247716db05ea415bc7bd1d33dab4cc`를 같은 새 브랜치에 병합했습니다. 최종 HEAD/origin은 `b366208836300a739bf70c880fbd3173753e9f3c`이며 추적 파일 clean·ahead/behind0입니다.
 - **최신 기준 확인:** 처음 가져온 DLOS 기반은 release/v1.88.0 `66aba1060`이었고 갱신된 master의 DLOS/icons/패키지 도구 원천은 이 기준과 같습니다. 최신 master의 Admin DLOS 전환, DLOS 가드·baseline·workflow, 공용 신규 export와 다른 제품 변경을 보존했습니다. 예전 Admin의 DLDS 구현을 복원하지 않았습니다.
-- **Studio 저장:** `/Users/parkjongsun/Repository/dentlink-studio`, 같은 `codex/dlds-dlos-integration`, main base `503bf044aaa6ac7280dd79193a77aba1d8ebc6f5`, HEAD/origin `5822d97fd457302cfc68618cfbc09f81c3f34a9e`. 추적 파일 clean이며 main은 수정하지 않았습니다.
+- **Studio 저장:** `/Users/parkjongsun/Repository/dentlink-studio`, 같은 `codex/dlds-dlos-integration`, main base `503bf044aaa6ac7280dd79193a77aba1d8ebc6f5`, 구현 저장 `5822d97fd457302cfc68618cfbc09f81c3f34a9e`, 문서 정정 후 HEAD/origin `25af81a2fd8ae4ebaf89be93abe45b7784ce5cb2`. DLOS README의 과거 React18만 지원 설명을 현재 통합 패키지18/19 지원과 맞췄습니다. 추적 파일 clean이며 main은 수정하지 않았습니다.
 
 ### 구현한 통합
 
@@ -28,9 +28,17 @@
 - **Studio:** 격리 사본에서 실제 packed 패키지3종을 설치해 verify(lint·type·14tests·workspace2)·Next production build·문서 trace를 통과했습니다. PC/390px에서28개 항목, Modal 열기/편집/Escape/focus 복귀, Popup, Tooltip 폰트/portal, scroll lock 해제, DLDS↔DLOS 전환, Calendar/날짜, 모바일 넘침 없음·실행 오류0을 확인했습니다. client의 최신 master 병합은 이 패키지 구현 소스를 바꾸지 않았습니다.
 - **증거 경계:** 로컬 tarball은 `/tmp/dentlink-integration-artifacts-latest`, 재검사 로그는 `/tmp/dlds-integration-latest-*.log`, 시각 자료는 `/tmp/studio-dlds-*.png`입니다. 기기별 임시 자료이며 Git memory가 이 파일·의존성·서버를 전송하지 않습니다. 다른 기기는 저장된 소스와 팀 문서로 검사를 다시 실행합니다. 검사용 서버는 종료했고 기존 사용자/old backup 서버는 임의 종료하지 않았습니다.
 
+### 코드 비교용 PR·사용자 로컬 화면 확인 — 2026-10-12 후속
+
+- 사용자 승인으로 [client Draft PR#4689](https://github.com/Innvoaid/dentlink-client/pull/4689)을 만들었습니다. base는 **master**, head는 **codex/dlds-dlos-integration / b36620883**이며 Draft/OPEN 상태·base/head를 재조회하고 현재 대화 artifact로 연결했습니다. 목적은 master 대비 코드 대조이며 실제 병합을 진행하지 않습니다. Studio PR은 요청받지 않아 만들지 않았습니다.
+- npm 공개 전 화면 확인을 위해 Studio25af81a와 실제 빌드한 세 패키지를 사용하는 **로컬 사본**을 준비했습니다: `/Users/parkjongsun/Documents/ChatGPT/디자인시스템정비 프로젝트/local-preview/dentlink-studio`. 원본 두 Git checkout은 clean이고 manifest/공식 lockfile을 로컬 tarball 구성으로 바꾸지 않았습니다.
+- 사용자 실행: 위 로컬 사본으로 이동하여 **`pnpm dev`**. DLDS는 `http://127.0.0.1:5300/design-system/dlds`, DLOS는 `http://127.0.0.1:5300/design-system/dlos`. 종료는 실행 터미널에서 Ctrl+C. 비밀번호/인증 값을 넣지 않았으며 로컬 dev bypass를 사용합니다. 검사 서버는 확인 후 종료합니다.
+- 실제 설치(pnpm8.6.9)와 두 route의 HTTP200·Button/Code 등 갤러리 렌더·실행 오류0을 확인했습니다. 이 사본은 고정된 현재 소스 화면 확인용이고 원본 Git 코드 수정은 자동 반영되지 않습니다. 실제 npm 공개/배포 완료가 아닙니다.
+- 다른 기기는 이 사본/의존성이 Git으로 전송되지 않습니다. Codex가 현재 client branch에서 `pnpm pack:packages --out <artifact-dir>`로 세 패키지를 만들고 현재 Studio branch를 Git archive한 격리 사본의 root pnpm.overrides에 세 file tarball을 연결한 뒤 설치합니다. 사본의 dev 명령만5300으로 고정합니다. 기존 파일을 덮어쓰기 전에 변경/소유권을 확인합니다. 정상 공유 repo에 file/link override를 커밋하지 않습니다.
+
 ### 실제 공개·설치 선행 조건 및 다음 순서
 
-- **2026-10-12 재조회:** 공개 npm의 `@innvoaid/dlds`, `@innvoaid/dlos`, `@innvoaid/icons`는 모두 HTTP404였습니다. 코드상 public npm 설정과 실제 공개는 다릅니다. 공개 publish0회, protected branch merge·PR 변경·서비스 배포0회입니다.
+- **2026-10-12 재조회:** 공개 npm의 `@innvoaid/dlds`, `@innvoaid/dlos`, `@innvoaid/icons`는 모두 HTTP404였습니다. 코드상 public npm 설정과 실제 공개는 다릅니다. 통합 구현 마감 때 공개 publish·protected merge·PR 변경·서비스 배포는0회였습니다. 이후 아래 사용자 승인으로 코드 비교용 Draft PR만 생성했습니다.
 - Studio manifest는 공개 npm0.1.0에 맞춰 준비했지만 기존 lockfile은 GitHub Packages prerelease입니다. 실제 registry에 없는 integrity를 만들거나 lockfile을 삭제하지 않았습니다. **그대로 새 복제/frozen install/CI/Vercel 배포가 완료된 상태가 아닙니다.** 검증 사본의 file tarball override는 공유 코드/lockfile에 넣지 않았습니다. `.npmrc.example`·CI는 npm의 scoped registry를 명시해 예전 전역 GitHub scope 설정 영향을 피합니다.
 - **다음1:** 사용자(FE)와 실제 공개 버전·npm 권한/CI secret·배포 승인을 확인합니다. 기존 수동 패키지 workflow/문서의 verify·dry-run→명시적 publish 순서를 사용합니다. 권한을 추측하거나 승인 전에 실제 공개하지 않습니다.
 - **다음2:** 실제 npm에 세 패키지가 조회되면 Studio의 정확한 버전·정상 lockfile을 갱신하고 frozen install→verify/build→갤러리 동작을 확인합니다. 실제 배포는 별도 승인입니다.

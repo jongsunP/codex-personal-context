@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-12 **DLDS·DLOS 패키지·Studio 통합**. old `feature/DL-16471 / 12fb96a4e`는 백업 보존, 새 `codex/dlds-dlos-integration`에서 최신 master `693b8b4c4`를 반영했습니다. 독립 @innvoaid/dlds·기존 import 호환·Studio28개 예시와 패키지/앱 검증을 완료했습니다. Studio 구현 `5822d97` 저장. npm3종 실제 공개·정상 Studio lock/frozen 설치는 남았으며 하네스 발전은 그 후입니다. client `b36620883`·Studio `5822d97` 원격 저장, DL-16471 결과 댓글44411 확인. 다른 기기 재개 절차는 정본 checkpoint를 확인합니다.
+  — 2026-10-12 **DLDS·DLOS 패키지·Studio 통합**. old `feature/DL-16471 / 12fb96a4e`는 백업 보존, 새 `codex/dlds-dlos-integration`에서 최신 master `693b8b4c4`를 반영했습니다. 독립 @innvoaid/dlds·기존 import 호환·Studio28개 예시와 패키지/앱 검증을 완료했습니다. Studio 구현 `5822d97` 저장. npm3종 실제 공개·정상 Studio lock/frozen 설치는 남았으며 하네스 발전은 그 후입니다. client `b36620883`·Studio `25af81a` 원격 저장, DL-16471 결과 댓글44411 확인. 사용자 승인으로 master 대상 비교용 Draft PR#4689를 만들었고5300 로컬 확인용 Studio 사본·실행법을 준비했습니다. 다른 기기 재개 절차는 정본 checkpoint를 확인합니다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
