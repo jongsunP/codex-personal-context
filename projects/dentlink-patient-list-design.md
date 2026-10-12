@@ -1,6 +1,56 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 최신 작업 — 2026-10-12 총 주문 수 표시만 제거, 새 브랜치 준비
+## 최신 마감 — 2026-10-12 총 주문 수 숨김 전달·앱 Staging v36 완료
+
+- 사용자가 커밋·푸시·양 제품 PR을 승인했고, 웹과 앱 각1파일만 반영했다.
+  웹 feature/DL-16652-hide-total-orders@d2d1abf55d977e4ab00c6fbaa7c6c9cd1f60e197(+5/-16),
+  앱 QA/lab/DL-16652-hide-total-orders@e6c4f89eca1f547455086b263a15f12a4b555cb0(-21)다.
+  우리Lab 주문 수·생일 구분선·상태·Remake·검색/이동·API/i18n은 보존했고 별도 Clinic 수정은 없다.
+- [웹 #4686](https://github.com/Innvoaid/dentlink-client/pull/4686)은 사용자 병합으로
+  release/v1.88.0@951503d422e11620cb207d5f5890fa9a827d531a에 반영됐다(17:50:04 KST).
+  pnpm frozen install로 의존성을 복구해 Clinic/Lab/Admin fulltype PASS,
+  normal commit/push 훅의 전앱 lint 오류0·기존경고, DLOS guard/coverage도 PASS다.
+  CodeRabbit SUCCESS·미해결0이며 Vercel 미리보기는 BLOCKED다. 초기1640 type진단은 의존성복구 전 이력이다.
+- [앱 #13](https://github.com/Innvoaid/dentlink-lab-app/pull/13)은 사용자 병합으로
+  release/v1.0.4@8eeac8981513badd9604f526a5c501603d32714c에 반영됐다(17:53:52 KST).
+  scopedlint/format/diff PASS·독립검토 blocker0·자동화후 base/diff1파일 확인·미해결0이다.
+  사용자가 [release→main #14](https://github.com/Innvoaid/dentlink-lab-app/pull/14)도 병합해
+  main@bb619010b25419b724a5f6acded6f5760bb9af15로 전달됐다(17:54:18 KST).
+- 승인된 웹 Staging reset을 수행했다. old stage f5ca7b8f9a03b58f5f037c3388087c790b9df1dc는
+  refs/codex-backup/stage-20261012-f5ca7b8f9a03에 보존했다. openStagePR0/protectedfalse/rules0과
+  live SHA를 확인해 expectedSHA lease 삭제·nonexistence lease로 master6b79c975에서 새stage를 만들었다.
+  원격 refs/heads/stage=master를 readback했으며 CLI의 과거 rename 경고와 실제 ref가 다름도 구분했다.
+- [Stage #4687](https://github.com/Innvoaid/dentlink-client/pull/4687) release/v1.88.0→stage를 생성·연결했다.
+  **29커밋·1464파일(+80419/-10065)**의 전체 릴리스이며 총수숨김1파일 PR로 설명하지 않았다.
+  merge-tree충돌0/resulttree249f46e63482e6df7e10af89eb3b5f4b820d8530=release를 독립 확인했다.
+  사용자jongsunP가 #4687도 병합해 stage=b98da6ff89229d8e31847e66a0a34800de842e3f(17:58:53 KST),
+  전체 tree가 release와 같은 것을 확인했다. root는 실제 PR을 병합하거나 수동 배포를 호출하지 않았다.
+- 사용자 병합 후 Clinic/Lab/Admin stage Actions38226980939/38226980815/38226980916이 IN_PROGRESS였다.
+  사용자가 배포를 진행했다고 알린 뒤 **최신 보고를 ‘웹은 지금 배포 중’으로 정정**했다.
+  ‘앱만 계속’ 지시에 따라 웹의 추가 배포 조회·화면 QA는 실행하지 않았다. 최종 SUCCESS를 root 확인으로 확대하지 않는다.
+- 사용자가 앱 개발자에게 전달받은 QA→release→main/CodePush main/모든 배포 후main→develop 흐름은
+  최신 AGENTS와 온보딩 기준 **참고 자료·합의 대기**로 구분한다. 기존 확정 정책을 자동 대체하지 않는다.
+  이번 Lab main Staging CodePush는 이 참고 자료가 아닌 **사용자의 명시 요청**으로 수행했다.
+  Production·native/store·tag·main→develop 추가 PR/병합은 실행하지 않았다.
+- main bb619010의 전체tree8bd4226ce43b5dc8108ba0762327e20fa443adbd가 검증한 QA e6c4f89와 같고,
+  native/deps/index.js/config 변경0·버전1.0.4를 확인했다. clean detached main에서 플랫폼별 알림 없는
+  Staging 명령을 iOS→Android 순차 실행했다. QA local/origin branch도 보존했다.
+
+| 플랫폼 | Staging label | 업로드 KST | packageHash |
+| --- | --- | --- | --- |
+| Dentlink-Lab-iOS | **v36** (직전v35) | 18:03:16 | 9a063f0e9565c61865d63039e92064b3aa457a389410688f8545a52e5a6b745e |
+| Dentlink-Lab-Android | **v36** (직전v35) | 18:03:48 | 1b7eaed9f466ce2ae4266962b734fd732050311009f35822bce6219804e8edf1 |
+
+- 양 CLI exit0/성공marker와 afterhistory readback을 확인했다. main SHA description 일치·새hash·
+  바이너리1.0.4/isDisabled=false/isMandatory=true/rollout100%다. 안전한 receipt는
+  /tmp/DL-16652-lab-hide-total-orders-staging-codepush-20261012.json이며 원문token/PHI/blobURL은 없다.
+  사용자는 **앱 배포된 것을 확인했다**고 보고했다. root의 실기기 OTA 적용·재실행·총수제거 화면 QA는 별도 미검증이다.
+- Jira 기존 완료 상태를 유지하고 추가 댓글44407에 전달/배포 경계를 기록했다. 개인 공통 정책은 메인세션의
+  참고·합의 대기 정본을 보존했고 이 기능의 실제 이력만 추가한다. 메인세션 메시지·자동화·예약·추가 배포는 없다.
+- 사용자가 현재 맡은 작업은 끝난 것으로 정리했다. **웹 배포 진행 중 / 앱 Staging v36 완료** 상태로 대기한다.
+  새 요청 전 추가 Actions 조회·리뷰·배포·동기화를 자동 실행하지 않는다. 재개 시 최신 사용자 요청과 live Git/배포 상태를 확인한다.
+
+## 이전 준비 — 2026-10-12 총 주문 수 표시만 제거, 새 브랜치 준비
 
 - 사용자가 웹 환자 표의 ‘전체 주문 수’ 컬럼과 Lab 앱 카드의 ‘총 주문 수 숫자 |’를 빠르게 제거하도록 요청했다.
   그 외 문구·API·번역은 후속 범위다. 웹 base는 **release/v1.88.0**, 환경은 **Staging**으로 직접 확정했다.

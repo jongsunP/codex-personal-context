@@ -4,7 +4,19 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 인계 — 2026-10-08 Lab 아이콘 수정 Staging v32 배포
+## 현재 인계 — 2026-10-12 총 주문 수 숨김·앱 Staging v36 완료
+
+- Web4686=951503d4/앱13=8eeac898은 사용자 병합했다. 각1파일만 총주문수표시를 제거하고 나머지정보/API는 보존했다.
+  웹의 의존성복구 후3앱type·normalhooks PASS, CodeRabbit SUCCESS/미해결0이다. Vercelpreview는 차단됐다.
+- 승인된 웹remoteStage삭제(복구refs/lease보존)→master6b79c975에서stage재생성→release1.88 PR4687준비를 완료했다.
+  사용자병합stageb98da6ff/tree=release249f46e6, 전체릴리스1464파일이다. **최신웹보고는배포진행중**이며 추가조회는중단했다.
+- 사용자가 Labrelease→main14를 병합하고 main소스StagingCodePush를명시승인했다. mainbb619010에서
+  iOSv36/18:03:16·Androidv36/18:03:48 KST완료·1.0.4/active/mandatory/100%서버확인이다. 사용자가앱배포확인도보고했다.
+- 앱개발자흐름은 최신AGENTS/온보딩의참고·합의대기자료다. 기존확정정책을자동대체하거나추가main→develop/배포를하지않는다.
+  Jira44407·개인체크포인트에실제전달결과와root실기기QA미검증을기록했다. 메인메시지·자동후속작업없이새요청전대기한다.
+- 상세SHA/검증/배포hash/다음시작점은 [DL-16652](dentlink-patient-list-design.md)을 따른다.
+
+## 이전 인계 — 2026-10-08 Lab 아이콘 수정 Staging v32 배포
 
 - 사용자 PR8 병합59e6a56c/15:59:08 KST를 확인하고 승인된 Lab 양플랫폼 Staging 재배포를 완료했다.
   최신 release1.0.4의 전체tree는 검증한bb2df333과 동일·아이콘3파일만 변경·native/deps/버전은 보존됐다.

@@ -23,7 +23,19 @@
 - 최신 번역 지침 전달은 문서 전용 #5이며 [전달 기록](dentlink-lab-app-i18n.md)을 따른다.
   온보딩 최초 조사 당시 제품 변경은 없었으며 아래 후속 사용자 승인 작업과 구분한다.
 
-## release → develop 동기화 — 2026-10-08
+## 현재 완료 — 2026-10-12 총 주문 수 숨김·main Staging v36
+
+- 사용자 요청으로 총수label/number/뒤구분선만 제거한1파일-21을 QA branch e6c4f89로 commit/push/PR13 전달했다.
+  사용자병합으로release8eeac898, 이어 main PR14=bb619010으로 반영됐다. 우리Lab count/API/i18n은 보존했다.
+- 사용자의 명시 요청대로 main bb619010의 검증QA동일tree·1.0.4/native/deps/entry보존을 확인하고
+  양플랫폼 Staging CodePush를 실행했다. iOS **v36/18:03:16**, Android **v36/18:03:48** KST,
+  CLIexit0+서버history에서1.0.4·active·mandatory·rollout100%·description/hash변경을 검증했다.
+- 사용자가 앱 배포를 확인했다고 보고했다. root 실기기 OTA 적용/총수제거 화면 QA는 별도 미검증이다.
+  worktree는 clean detachedmain이며 QA/source refs를 보존했다. Production/native/store/tag/main→develop추가작업은 없다.
+- 앱 개발자 전달 흐름은 최신 온보딩의 참고·합의 대기 자료로 구분하며 이번 main배포 명시 권한과 혼용하지 않는다.
+  웹은 최신사용자보고상배포진행중, 요청된 앱업무는 완료하고 새 요청 전 대기한다. [기능 정본](dentlink-patient-list-design.md).
+
+## 이전 release → develop 동기화 — 2026-10-08
 
 - 사용자 승인으로 [PR #9](https://github.com/Innvoaid/dentlink-lab-app/pull/9)을 생성했다.
   `release/v1.0.4 / 59e6a56cd39981c5c8e69166680794f8bf0f4593` → `develop`이며

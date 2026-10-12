@@ -6,6 +6,12 @@
   핫픽스(main 기준 hotfix→main/CodePush→release·develop 최신화)를 온보딩 정본에 저장했다.
   원문의 ‘별도 조율 전 참고만’ 조건과 기존 10/8 확정 지침과의 PR 대상·최신화 차이를 명시했다.
   AGENTS·SESSION_WORKFLOW·FE 조율 문서에서 앞으로 함께 읽도록 연결했으며 기존 정책·PR·배포는 자동 변경하지 않았다.
+- 총주문수숨김웹4686(d2커밋→951503d4)·Lab13(e6커밋→8eeac898) commit/push/PR후사용자병합을확인했다.
+  웹frozen install로3앱type/normalhooks PASS·CodeRabbit완료/미해결0. Stage복구/lease삭제/master6b기준재생성후
+  전체release1.88 PR4687도사용자병합b98da6ff/tree249f=release이고최신웹보고는배포진행중이다.
+  명시요청Labmain14=bb619010소스에서양OSStaging v36(18:03:16/18:03:48)완료·1.0.4/active/mandatory/100%서버확인이다.
+  사용자는앱배포확인보고/root실기기QA는별도미검증. 개발자흐름은37eadee정본의참고·합의대기로구분했고자동정책대체없다.
+  Jira44407/원완료상태유지·개인기록정리후대기, 추가Web조회/main→develop/Production/native/store/tag/메인메시지없다.
 - 사용자Staging기준/웹release1.88직접지시로총주문수표시만삭제하는새브랜치를준비했다.
   웹feature/DL-16652-hide-total-orders@66aba1060·표1파일(+5/-16),
   앱QA/lab/DL-16652-hide-total-orders@1311d473·카드1파일(-21)로우리Lab count/API/i18n을보존했다.
