@@ -4,7 +4,15 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 인계 — 2026-10-12 Lab Production v13·main → develop 완료
+## 현재 종결 — 2026-10-12 DL-16652 사용자 앱 확인 완료
+
+- 사용자가 앱 확인 완료·웹 직접 배포 진행 중으로 보고하고 전체 작업을 완료로 정리·로컬 cleanup·세션 보관을 요청했다.
+- Lab양OS Productionv13/1.0.4 활성100%·main→develop15 사용자병합/tree동일 이력과 웹release상용main 전달을 보존한다.
+  Jira 완료 상태·댓글44407과 [기능 정본](dentlink-patient-list-design.md)을 마감했다.
+- 새로운 구체 요청 전 추가 개발·QA·배포조회·동기화·예약·메인세션 보고를 하지 않는다.
+  다른 기능 작업 복사본과 메인세션의 미커밋 파일은 보존하며 이 기능의 전용 로컬 항목만 정리한다.
+
+## 이전 인계 — 2026-10-12 Lab Production v13·main → develop 완료
 
 - 사용자가 Lab 상용 CodePush와 main→develop 최종 PR을 명시 요청했다. 웹 배포는 사용자 직접 수행 범위다.
 - mainbb619010에서 양OS Production **v13/1.0.4/active/mandatory/100%**를 업로드·활성화·서버확인했다.

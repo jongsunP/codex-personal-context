@@ -1,6 +1,36 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 최신 전달 — 2026-10-12 Lab Production v13 활성화 완료
+## 최종 종결 — 2026-10-12 상용 전달·사용자 앱 확인 완료
+
+- 사용자가 **앱 확인 완료**, **웹 배포는 사용자 진행 중**으로 보고했고 웹·앱 상용 전달 작업이 끝났으므로
+  추가 조치 없이 로컬·메모리 정리 후 이 세션 보관을 요청했다. 이 기능의 사용자 요청 업무는 종결한다.
+- Lab Production은 양OS **v13 / binary1.0.4 / active / mandatory / rollout100%**로 이전 전달에서 서버 검증했다.
+  사용자 앱 확인 완료를 최신 결과로 추가하며, root가 기기별 검증을 새로 실행했다고 바꾸지 않는다.
+  mainbb619010·사용자 병합 develop56cba674·전체tree8bd4226c 동일이라는 최종 동기화 근거를 보존한다.
+- 웹은 Git cleanup용 fetch에서 origin/master **693b8b4c4d247716db05ea415bc7bd1d33dab4cc**의
+  `Release/v1.88.0 (#4688)` 반영과 총수숨김 환자표 파일의 전달본 대비 diff0을 확인했다.
+  사용자 상용 배포 진행 보고를 기록하며 배포 Actions/운영 화면을 새로 조회하거나 최종 SUCCESS로 확대하지 않는다.
+- Jira **DL-16652 / 완료**를 유지하고 기존 추가 댓글44407을 사용자 앱 확인·웹 직접 배포·최종 종결로 갱신했다.
+  공통 표/공식 디자인시스템으로 확장하지 않았고, 카드12px·사용처 전체 Remake 모양의 확정 범위를 유지한다.
+- 세션 전용 **3개 worktree**를 제거했다: `dentlink-client-patient-list`, `dentlink-lab-app-patient-list`,
+  `dentlink-app-patient-remake`. 모두 tracked/untracked clean·관련 runtime0이며 ignored는 재생성 가능한 의존성/빌드 캐시였다.
+  Lab 최종 QA/release/main/develop tree 동일, Office Remake3파일의 feature/release/develop blob 동일,
+  웹 전달본 환자표와 origin/master 동일 및 각 source의 원격 보존을 확인하고 정리했다.
+- 원격과 동일한 중복 로컬 브랜치 **7개**도 제거했다. Web feature/DL-16652·feature/DL-16652-hide-total-orders,
+  Lab feature/DL-16652·feature/lab/DL-16652-release·QA/lab/DL-16652-review-icon·QA/lab/DL-16652-hide-total-orders,
+  Office feature/DL-16652다. 원격 브랜치/PR·release refs·Web stage backup ref는 변경하지 않았다.
+  Lab local-only `backup/lab-dl16652-before-release-sync-20261008 @ e3bf335`는 복구용으로 유지했다.
+- Web ignored `coverage-baseline.json`은 삭제 전에 공용 git dir의
+  `codex-closeout/DL-16652-20261012/web/coverage-baseline.json`에 보존했다.
+  공용 checkout, DLDS/권한/번역 worktree와 메인세션의 미커밋3파일은 그대로 보존했다.
+- 안전한 CodePush receipt3개는 `/Users/parkjongsun/.codex/visualizations/2026/10/06/01a11038-d621-7fb3-ad4e-58d01fbb9a6a/DL-16652/closeout-20261012/`
+  로 이관·byte 일치 확인 후 /tmp 원본과 실행 helper2개를 정리했다. 과거 항목의 /tmp receipt 링크는 이 경로에서 복구한다.
+  기존 합성/Figma 화면·검사 로그의 local-only 증거 폴더는 보존했으며 실제 환자/인증 원문을 Git에 추가하지 않았다.
+- **남은 구현·리뷰·배포·동기화 요청 없음.** 앱 확인과 상용 전달은 사용자 완료 선언을 우선하며,
+  이전 STG/API/실기기 미완료 메모만으로 작업을 자동 재개하지 않는다. 새로운 구체 요청 때만 다시 상태를 확인한다.
+  웹 배포 추가 조회·4시간 재점검·예약·메인세션 보고도 실행하지 않는다.
+
+## 이전 전달 — 2026-10-12 Lab Production v13 활성화 완료
 
 - 사용자가 기공소 앱 상용 CodePush와 최종 `main → develop` PR을 명시 요청했다. 웹 배포는 사용자가 직접 진행한다.
   이번 요청은 Lab 운영 전달·동기화 PR 권한이며, 공통 앱 정책의 참고·합의 대기 조건을 자동 변경하지 않는다.

@@ -23,7 +23,16 @@
 - 최신 번역 지침 전달은 문서 전용 #5이며 [전달 기록](dentlink-lab-app-i18n.md)을 따른다.
   온보딩 최초 조사 당시 제품 변경은 없었으며 아래 후속 사용자 승인 작업과 구분한다.
 
-## 현재 완료 — 2026-10-12 Production v13·main → develop 최종 동기화
+## 최종 종결 — 2026-10-12 사용자 앱 확인 완료·세션 보관
+
+- 사용자가 앱 확인 완료와 전체 작업 종결을 요청했다. Lab 양OS Productionv13/1.0.4/active/mandatory/100%와
+  main→develop15 사용자병합/전체tree동일의 전달 근거를 보존하며 필요한 앱 업무는 모두 끝났다.
+- 웹 배포는 사용자 진행 중이고 root의 추가 배포 조회·실기기 QA·브랜치 동기화는 요청되지 않았다.
+  Jira 완료 상태/댓글44407과 개인 기능 기록을 최종 정리한다.
+- 전용 로컬 작업 복사본을 정리하고 새 요청 전 작업을 재개하지 않는다.
+  상세 정리 결과와 복구 위치는 [DL-16652 최종 정본](dentlink-patient-list-design.md)을 따른다.
+
+## 이전 완료 — 2026-10-12 Production v13·main → develop 최종 동기화
 
 - 사용자 명시 요청으로 main bb619010 소스에서 iOS·Android Production CodePush를 각각 **v13**으로 업로드 후 활성화했다.
   바이너리1.0.4·mandatory·rollout100%·isDisabled=false를 각 서버 history로 확인했고 양 bundle hash는 Staging v36과 같다.
