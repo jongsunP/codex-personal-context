@@ -1,6 +1,27 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 세션 마감 — 2026-10-08 완료 상태 정리 후 대기
+## 최신 작업 — 2026-10-12 총 주문 수 표시만 제거, 새 브랜치 준비
+
+- 사용자가 웹 환자 표의 ‘전체 주문 수’ 컬럼과 Lab 앱 카드의 ‘총 주문 수 숫자 |’를 빠르게 제거하도록 요청했다.
+  그 외 문구·API·번역은 후속 범위다. 웹 base는 **release/v1.88.0**, 환경은 **Staging**으로 직접 확정했다.
+- 웹 기존 patient-list worktree에서 **feature/DL-16652-hide-total-orders**를 만들었다.
+  HEAD/base66aba1060bc1a9933ad9ae418a26a7da0fc6d88a, 변경은
+  lab/src/components/PatientList/PatientListLayerDesktop.tsx **1파일 +5/-16**이다.
+  총수col·header·cell을 제거하고 loading/empty colspan7·환자명 뒤 divider·삭제120px만큼 최소폭을 맞췄다.
+- 앱 기존 patient-list worktree에서 **QA/lab/DL-16652-hide-total-orders**를 만들었다.
+  HEAD/base1311d4737a2c624c77612f684ae392a035162b8b(최신 Staging용release/v1.0.4), 변경은
+  src/features/orderList/components/OrderPatientListItem.tsx **1파일 -21줄**이다.
+  총수label·number·뒤verticalDivider만 삭제했고 우리Lab count·생일divider·상태·Remake·이동은 보존했다.
+- 양 제품 ESLint/Prettier/diff 검사 PASS·독립 검토 blocker0이다. 웹 전체 type는 공통 패키지 참조 등 오류로 실패하지만
+  동일 환경의 수정 전후 compiler API 진단은 각각1640개·신규0이며 해당 환자 컴포넌트 오류도 없다.
+  API/DTO/i18n resource/Sheet/native/버전/테스트 소스는 변경하지 않았다. 새 실제 화면/기기 검증은 실행하지 않았다.
+- 현재 Lab 양OS Staging은 **v35/1.0.4/active/mandatory/100%**(iOS10/12 11:19:33, Android11:20:21 KST)다.
+  description이 비어 있어 배포 exact source SHA는 직접 입증하지 못했다. 최신 release1311의 환자 카드가
+  기존59e6 원본과 byte 동일한 것을 확인하고 그 Staging용 릴리스에서 작업했다. v35에는 이번 제거가 아직 없다.
+- **두 제품 수정은 로컬 신규 브랜치의 unstaged 상태**다. 이번 요청에서 제품 commit/push/PR/merge/배포는 하지 않았다.
+  다음 시작점은 이 두 파일 diff 확인 후 승인된 전달 작업이다. 메인세션 메시지·예약·추가 디자인/문구 변경은 없다.
+
+## 이전 마감 — 2026-10-08 완료 상태 정리 후 대기
 
 - 사용자께서 전체 작업 완료로 정리하고 대기하도록 요청했다. **새 요청 전 추가 구현·리뷰·배포·자동 재조회는 실행하지 않는다.**
   4시간 재점검 취소를 유지하며 새 예약/자동화를 만들지 않았다. 메인세션 메시지도 보내지 않았다.

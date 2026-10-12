@@ -1,5 +1,14 @@
 # Memory Changelog
 
+## 2026-10-12
+
+- 사용자Staging기준/웹release1.88직접지시로총주문수표시만삭제하는새브랜치를준비했다.
+  웹feature/DL-16652-hide-total-orders@66aba1060·표1파일(+5/-16),
+  앱QA/lab/DL-16652-hide-total-orders@1311d473·카드1파일(-21)로우리Lab count/API/i18n을보존했다.
+  lint/format/diff·독립검토PASS, 웹기존type진단1640→1640/신규0·새화면QA미실행이다.
+  제품소스는unstaged/local only·제품commit/push/PR/deploy없음이며현재LabStaging v35에는미반영이다.
+  앱v35는description빈값이라exact배포SHA미입증을구분했고정본에다음전달시작점을기록했다.
+
 ## 2026-10-08
 
 - 사용자가 앱 일반 feature의 통합 대상을 develop으로 정정했다. 같은 날 앞선 release 기본 해석을 대체하고
