@@ -87,14 +87,12 @@ For detailed current state, read:
   신규번역시트·검증·실기QA/OTA 및 외부검사 한계는 정본을 따른다.
 - [projects/dentlink-patient-list-design.md](projects/dentlink-patient-list-design.md)
 
-### Dentlink 타기공소 주문 조회 가드 — DL-16596
+### Dentlink 타기공소 주문 조회 가드 — DL-16596 — 완료
 
-- 웹 Lab 타기공소 추가금·채팅 읽음 요청 차단, 디자인 조회·기존 승인 흐름 유지.
-  [PR #4663](https://github.com/Innvoaid/dentlink-client/pull/4663)은 2026-10-07 사용자 merge로 `release/v1.88.0` `9baeca42f`에 반영됐다.
-- 최종 검증 head e2d33db83과 squash 결과 tree 동일. 타입·필수 검사·관련38테스트·CodeRabbit SUCCESS/미해결0 이력 보존.
-- 제품 checkout은 최신 master `6b79c9756` clean. 완료한 로컬 feature/DL-16596 삭제, 원격 branch 보존, 다른3worktree 미변경. 개인 기록 정리 후 대기한다.
-- 담당 DL-16640에 release 반영을 기록했고 Ready for Deploy 유지. 실제 STG 디자인 자료 권한·배포 후 통합 QA 및 production은 남았다.
-- [projects/dentlink-client-other-lab-guard.md](projects/dentlink-client-other-lab-guard.md)
+- 타기공소 추가금·채팅 읽음 요청 차단과 디자인 조회·기존 승인 흐름 유지. [PR #4663](https://github.com/Innvoaid/dentlink-client/pull/4663)은 release/v1.88.0 `9baeca42f`에 사용자 merge 완료.
+- 2026-10-12 사용자 완료 확인·추가 작업 없음. 과거 배포/QA 대기 항목은 이 세션의 후속 작업에서 제외하고 세션을 보관한다.
+- 로컬 feature/임시 worktree 정리 완료, 남은 임시 후보 파일 제거. 원격 branch·검증 화면 및 다른 작업 checkout/worktree는 보존한다.
+- 구현·리뷰·검증·Jira 이력은 [projects/dentlink-client-other-lab-guard.md](projects/dentlink-client-other-lab-guard.md)에 정리했다.
 
 ### Dentlink DLDS / AI 화면 제작 — DL-16437 / DL-16466 / DL-16471
 
