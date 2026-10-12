@@ -69,7 +69,7 @@ For detailed current state, read:
 
 ### Dentlink 치과 주문목록 아이콘·텍스트 정렬 — DL-16655
 
-- Web Clinic 주문 행 정렬 수정이며 사용자 직접 병합한 release 대상 PR #4675의 종료 기록이다.
+- Web Clinic 주문 행 정렬 수정, 사용자 직접 병합한 release 대상 PR #4675. 2026-10-12 사용자 완료 확정·추가 작업 없음, 로컬 정리 완료·세션 보관 요청.
 - 구현·검증·병합 확인·정리 상태와 Git 커밋 목록 차이 질의 및 개선 검토안(미적용)은
   [개인 체크포인트](projects/dentlink-client-order-list-alignment.md)에 보존한다.
 
