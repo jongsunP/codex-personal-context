@@ -8,7 +8,13 @@
 - 상위 조율 정본: [Dentlink FE](dentlink-fe.md). 제품 저장소에 개인 인계문을 추가하지 않는다.
 - Jira/Notion 댓글 작성·상태 변경, 제품 branch 생성·commit·push·PR·merge·배포는 별도 명시 승인 범위를 따른다.
 
-## 현재 체크포인트 — 2026-10-08: 릴리즈 병합·staging 배포 작업 확인
+## 현재 체크포인트 — 2026-10-12: 사용자 결정으로 대기
+
+- 사용자가 "좋아 그럼 우선 대기가 맞는거 같아"라고 확인해 이 기능의 추가 작업은 대기한다. 대기 결정만 개인 정본에 기록하며 제품 코드·PR·Jira·Notion을 추가 변경하지 않는다.
+- 마지막 외부 확인은 **10/8**이다. 그때 개발·검토·팀 승인·v1.88.0 병합과 수정 포함 Admin Stage 배포 작업 성공을 확인했다. 실제 제출/재조회·릴리즈 QA 완료 및 운영 반영은 당시 미확인이었다. 10/12에는 외부 상태를 재조회하지 않았으므로 현재 배포 여부를 같은 상태로 단정하지 않는다.
+- 사용자 재개 요청 또는 QA·운영 반영 결과 전달 후 최신 상태를 다시 대조한다. 이 개인 대기는 Jira의 ON HOLD 전환을 의미하지 않는다. 기존 진행 이력과 로컬 작업 자료는 보존한다.
+
+## 이전 체크포인트 — 2026-10-08: 릴리즈 병합·staging 배포 작업 확인
 
 - 사용자 요청에 따라 개인 정본과 제품 Git을 pull/fetch한 뒤 PR·Jira·Notion·배포 작업을 읽기 대조했다. 이번 확인에서 제품 코드·PR·Jira·Notion을 변경하거나 branch/worktree를 삭제하지 않았다.
 - [PR #4660](https://github.com/Innvoaid/dentlink-client/pull/4660)은 **2026-10-07 10:05:58 KST** `release/v1.88.0`으로 **MERGED**다. inkyookoh의 팀 승인(APPROVED, 10/7 09:17 KST) 후 jongsunP가 병합했고, merge commit은 **`2c1dc7c04b9f53629442de3fd5ae7ff436e6a540`**이다. CodeRabbit SUCCESS·미해결 0개를 현재 조회로 재확인했다. Codex가 이번 확인에서 병합한 것은 아니다.
