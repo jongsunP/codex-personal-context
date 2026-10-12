@@ -2,6 +2,11 @@
 
 ## 2026-10-12
 
+- Lab 상용 CodePush와 최종 main→develop PR의 명시 요청을 완료했다. mainbb619010의 양OS Productionv13을
+  비활성 업로드 후 Stagingv36과 각bundlehash동일/1.0.4를 확인해 활성화·mandatory·100%서버검증했다.
+  iOS18:20:25/Android18:21:05 KST업로드, PR15→develop을 생성/연결했고 사용자병합56cba674/18:22:23도확인했다.
+  main/develop전체tree8bd4226c동일/diff0. Jira44407/완료 상태 유지·개인기록정리, 웹은사용자직접배포다.
+  root실기기운영OTA/화면/건강상태는미검증이며 기존참고·합의대기정책의자동변경/추가병합은없다.
 - 앱 개발자 전달 일반 개발(develop 기준 feature→release→QA→release→main/CodePush→develop)과
   핫픽스(main 기준 hotfix→main/CodePush→release·develop 최신화)를 온보딩 정본에 저장했다.
   원문의 ‘별도 조율 전 참고만’ 조건과 기존 10/8 확정 지침과의 PR 대상·최신화 차이를 명시했다.

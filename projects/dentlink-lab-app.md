@@ -23,7 +23,19 @@
 - 최신 번역 지침 전달은 문서 전용 #5이며 [전달 기록](dentlink-lab-app-i18n.md)을 따른다.
   온보딩 최초 조사 당시 제품 변경은 없었으며 아래 후속 사용자 승인 작업과 구분한다.
 
-## 현재 완료 — 2026-10-12 총 주문 수 숨김·main Staging v36
+## 현재 완료 — 2026-10-12 Production v13·main → develop 최종 동기화
+
+- 사용자 명시 요청으로 main bb619010 소스에서 iOS·Android Production CodePush를 각각 **v13**으로 업로드 후 활성화했다.
+  바이너리1.0.4·mandatory·rollout100%·isDisabled=false를 각 서버 history로 확인했고 양 bundle hash는 Staging v36과 같다.
+  iOS upload18:20:25/활성확인18:21:31, Android upload18:21:05/활성확인18:22:06 KST다.
+- [PR #15 main → develop](https://github.com/Innvoaid/dentlink-lab-app/pull/15)를 생성·연결하고 자동화 후 base/diff를 확인했다.
+  전체 diff1파일-21·merge-tree충돌0이며, 사용자 jongsunP 병합18:22:23 KST/56cba67454ea9f7c1ff028231c26df1568a87928을 확인했다.
+  live main/develop의 전체 tree8bd4226ce43b5dc8108ba0762327e20fa443adbd가 동일·최종diff0이다. root가 병합하지 않았다.
+- 요청된 운영 전달·동기화는 완료했다. 코드/native/API/번역/새binary 수정은 없고 제품 작업 복사본은 clean detachedbb619010이다.
+  실제 운영 기기의 OTA 적용·재실행·화면/운영 건강은 별도 미검증이며 웹은 사용자 직접 배포다.
+  이번 명시 요청을 공통 전달 정책 변경으로 확대하지 않는다. Jira44407/완료 상태와 [기능 정본](dentlink-patient-list-design.md)을 정리했다.
+
+## 이전 완료 — 2026-10-12 총 주문 수 숨김·main Staging v36
 
 - 사용자 요청으로 총수label/number/뒤구분선만 제거한1파일-21을 QA branch e6c4f89로 commit/push/PR13 전달했다.
   사용자병합으로release8eeac898, 이어 main PR14=bb619010으로 반영됐다. 우리Lab count/API/i18n은 보존했다.

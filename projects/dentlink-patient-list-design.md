@@ -1,6 +1,40 @@
 # 기공소 환자목록 디자인·API 대응 — DL-16652
 
-## 최신 마감 — 2026-10-12 총 주문 수 숨김 전달·앱 Staging v36 완료
+## 최신 전달 — 2026-10-12 Lab Production v13 활성화 완료
+
+- 사용자가 기공소 앱 상용 CodePush와 최종 `main → develop` PR을 명시 요청했다. 웹 배포는 사용자가 직접 진행한다.
+  이번 요청은 Lab 운영 전달·동기화 PR 권한이며, 공통 앱 정책의 참고·합의 대기 조건을 자동 변경하지 않는다.
+- 최신 main **bb619010b25419b724a5f6acded6f5760bb9af15**와 Staging v36 소스가 동일하고,
+  clean detached worktree·전체 tree **8bd4226ce43b5dc8108ba0762327e20fa443adbd**·버전일치 검사를 확인했다.
+  바이너리 타깃은 **1.0.4**다. source Git tag `v1.0.4`와 Revopush label `v13`은 별개다.
+  native/build/deps/entry/API/i18n 수정 및 새 스토어 빌드는 없으며, 실제 설치본 build 번호는 이번에 확인하지 않았다.
+- 기존 Production 최신 label은 양OS v12/1.0.3이며, 1.0.4 대상 기존 활성 이력은 v11이다.
+  기존 Revopush CLI0.0.15와 저장소의 플랫폼별 Production 명령으로 **비활성 업로드 → 해시/타깃 확인 → 활성화**했다.
+  사용자 상용 배포 요청에 따라 각 새 label만 `patch --disabled false`로 활성화했고 Slack 알림은 보내지 않았다.
+
+| 플랫폼 | Production label | 업로드 KST | 활성 read-back KST | packageHash |
+| --- | --- | --- | --- | --- |
+| Dentlink-Lab-iOS | **v13** | 18:20:25 | 18:21:31 | 9a063f0e9565c61865d63039e92064b3aa457a389410688f8545a52e5a6b745e |
+| Dentlink-Lab-Android | **v13** | 18:21:05 | 18:22:06 | 1b7eaed9f466ce2ae4266962b734fd732050311009f35822bce6219804e8edf1 |
+
+- upload/activation CLI 모두 exit0, 각각 서버 history에서 **1.0.4·isDisabled=false·mandatory=true·rollout100%**와
+  main SHA description을 재확인했다. 양 packageHash는 각 OS **Staging v36과 byte 동일**하다.
+  sanitized receipt는 `/tmp/DL-16652-lab-hide-total-orders-production-codepush-20261012.json`이다.
+  root가 실기기 Production OTA 다운로드·재실행·화면 또는 운영 건강 상태까지 검증한 것은 아니다.
+- [최종 동기화 PR #15](https://github.com/Innvoaid/dentlink-lab-app/pull/15)을 `main → develop`으로 생성·연결했다.
+  생성 당시 main 전용2/develop 전용3커밋이나 실제 diff는 환자카드 **1파일 -21줄**이다.
+  merge-tree 충돌0·결과 tree=main·기존 develop 코드 누락0을 독립 확인했다.
+  자동 title/body SUCCESS·labels SKIPPED 후 실제 base/develop·head/main·diff가 그대로인 것을 확인했다.
+  main의 기존 버전검사 SUCCESS와 이 sync PR의 새 검사를 혼동하지 않았다. root는 PR을 병합하지 않았다.
+- 사용자 jongsunP의 #15 **MERGED / 18:22:23 KST / 56cba67454ea9f7c1ff028231c26df1568a87928**을 live 확인했다.
+  fetch 후 origin/develop=56cba674, origin/main=bb619010이고 두 전체 tree가 **8bd4226ce43b5dc8108ba0762327e20fa443adbd**로 같다.
+  main은 develop의 ancestor이며 최종 파일 diff0이다. 추가 제품 코드/병합/배포를 root가 수행하지 않았다.
+- Jira44407을 운영 배포·사용자 동기화 병합 결과로 갱신하고 기존 완료 상태를 유지했다.
+  개인 프로젝트 기록을 별도 작업 복사본에서 정리하며, 메인세션 작업 중 파일은 보존한다.
+  **요청된 Lab 운영 CodePush·동기화 완료 / 웹은 사용자 직접 배포**로 마감한다.
+  새 요청 전 추가 Production/개발배포·웹조회·실기기QA·예약·메인세션 메시지는 실행하지 않는다.
+
+## 이전 마감 — 2026-10-12 총 주문 수 숨김 전달·앱 Staging v36 완료
 
 - 사용자가 커밋·푸시·양 제품 PR을 승인했고, 웹과 앱 각1파일만 반영했다.
   웹 feature/DL-16652-hide-total-orders@d2d1abf55d977e4ab00c6fbaa7c6c9cd1f60e197(+5/-16),

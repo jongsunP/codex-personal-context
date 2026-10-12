@@ -4,7 +4,17 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 인계 — 2026-10-12 총 주문 수 숨김·앱 Staging v36 완료
+## 현재 인계 — 2026-10-12 Lab Production v13·main → develop 완료
+
+- 사용자가 Lab 상용 CodePush와 main→develop 최종 PR을 명시 요청했다. 웹 배포는 사용자 직접 수행 범위다.
+- mainbb619010에서 양OS Production **v13/1.0.4/active/mandatory/100%**를 업로드·활성화·서버확인했다.
+  iOS18:20:25/Android18:21:05 KST업로드이고, 양 hash가 검증된 각 Stagingv36과 같다. 실기기 운영 적용/화면은 별도 미검증이다.
+- [Lab #15](https://github.com/Innvoaid/dentlink-lab-app/pull/15) main→develop을 준비했고 사용자병합18:22:23/56cba674도 확인했다.
+  main/develop전체tree8bd4226c 동일·diff0·sourceclean이며 root가 PR 병합하지 않았다. Jira44407/완료 상태 유지다.
+- 상세SHA/hash/검증경계는 [DL-16652 정본](dentlink-patient-list-design.md)을 따른다. 기존 온보딩 참고·합의 대기 정책은 보존한다.
+  추가웹작업·메인세션메시지·자동배포없이 새 요청 전 대기한다.
+
+## 이전 인계 — 2026-10-12 총 주문 수 숨김·앱 Staging v36 완료
 
 - Web4686=951503d4/앱13=8eeac898은 사용자 병합했다. 각1파일만 총주문수표시를 제거하고 나머지정보/API는 보존했다.
   웹의 의존성복구 후3앱type·normalhooks PASS, CodeRabbit SUCCESS/미해결0이다. Vercelpreview는 차단됐다.
