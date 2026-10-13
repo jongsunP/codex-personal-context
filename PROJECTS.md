@@ -153,7 +153,7 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **2026-10-13 실제 개발서버 계약 연결·원격 보존 후 대기:** 현재 세션
+- **2026-10-13 가능한 범위 마감·BE 최종 명세 후 재개 대기:** 현재 세션
   `01a132e9-6555-7a02-9c72-4dad9c04cc64`에서 실제 Swagger generate로 Member와 담당 ID,
   리뷰 허용 여부를 확인해 치과 웹/앱의 필터·새 Case·주문 행동/직접 접근에 연결했다.
   최신 웹 master `aff278a43`을 통합했고 웹 `1c67612c3`·앱 `72a7914`를
@@ -168,6 +168,8 @@ For detailed current state, read:
   처리한다. Pickup 링크 제한은 요구가 아니며, 관련 Case 편집 확대도 미확정으로 개발 잔여에서 제외한다.
   확정 화면·Member/기존 API 기준 FE 개발·commit/push는 완료다. 최신 Swagger의 채팅 전환
   API는 실제 caller에 아직 적용하지 않았으며, 최종 BE 연동·QA·merge 준비와 분리한다.
+  **최종 사용자 지시:** 완료 구현은 보존하고, 채팅 전환은 BE 최종 명세·전환 범위 확인 후 진행한다.
+  현재 가능한 Swagger/실사용 확인과 정리를 마쳤으며 새 지시 전 자동 조사·추가 개발 없이 대기한다.
   웹은 master 기준 코드 검토가 가능하며 실제 PR은 배포 대상 release를 정해 비교해야 한다.
   앱의 `develop` 대상 diff는 권한관리 60파일만이지만 실제 통합 충돌 6파일이 있어
   PR 진행 시 develop 동작과 권한 조건을 함께 정리해야 한다.
