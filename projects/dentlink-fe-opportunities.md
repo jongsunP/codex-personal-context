@@ -22,6 +22,12 @@
 
 **관련 이력:** client `251fce0f4` Admin DLOS 전환 → `1996ffa9b` GitHub Packages 계약 → `422bf9c25` 공개 npm → `53951a1e1` OIDC → PR#4691 `7a8d44485` 자동 배포/버전 검사. Studio `95585c0` 초기 환경 → `8a31d40` 갤러리 통합 → `1f1fd86` 공통 wireframe/스킬 → `9a11650` 프로젝트 Git 범위 정책 → `1a01ca3` CRM 시안 사례. author inkyoo/inkyookoh와 PR 작성자를 직접 확인했습니다. 같은 조직의 `dentlink-design`도 조회했으나 현재 Git 저장소가 비어 있어 구현 근거가 없습니다. 읽기 결과로 배포/전체 사용자 사용성을 새로 검증했다고 하지 않습니다.
 
+### 문서 구분·디자인시스템 관계
+
+- 동료의 운영·시안 제작 문서는 원래 있었습니다. client의 `docs/packages.md`, Studio의 `docs/design-system-routing.md`·`docs/wireframe-harness.md` 등이 조사 원자료입니다. 동료에게 별도로 의도 확인 인터뷰를 했다는 뜻이 아니라 코드·커밋·문서와 사용자가 전달한 사실을 근거로 구조를 확인했습니다.
+- 필요한 기존 문서를 통합 작업 브랜치에서 보완했고, client의 `docs/design-systems.md`·`shared/dlds/README.md`와 Studio의 `packages/dlds-preview/README.md`를 새로 작성했습니다. 이 개인 Git 문서의 조사·근거와 브랜치 지침도 별도로 정리했습니다. 동료의 master/main 원본문서를 직접 바꾼 것은 아닙니다.
+- 현재는 DLDS/DLOS의 디자인·컴포넌트·테마를 각각 유지하면서 원천 관리·배포 방식·Studio 공간을 함께 사용합니다. 동료 Studio 원문에도 별도 DLDS 패키지·갤러리·서비스 어댑터를 추가하도록 적혀 있습니다. 두 디자인 자체를 장기적으로 하나로 통일하거나 기존 서비스를 DLOS로 전환한다는 결정은 확인되지 않았으며 FE팀의 별도 합의 대상입니다.
+
 ### 이번 client 대응과 검증
 
 - 동료 OIDC(Node22/npm11.5.1+, id-token:write, 기존 workflow filename)·master 자동 배포·수동 publish=true·PR dry-run 계약을 유지하며 DLDS를 배포/검사 목록과 경로에 포함했습니다.
@@ -42,6 +48,7 @@
 
 - **저장 후 대기:** 사용자 요청으로 현재 수행 가능한 코드 정리·조사·검증을 마감합니다. 제품 코드에 추가 변경은 없고 두 통합 브랜치는 원격과 일치합니다. 다음은 npm 공개 준비·Studio 코드 오너 반영 경로부터 확인하며, 재개 요청 전 새 하네스 개발·공개·병합·배포를 자동 시작하지 않습니다.
 - Client5cdae094c 원격 일치·clean, Studio25af81a 원본 clean, old DLDS12fb96a4 백업 보존. 비교용 Draft#4692는 master/새 feature head5cdae094c를 재조회했습니다. #4691 실제 MERGED master가 최종 feature의 조상이며 PR 설명의 선행 OPEN 가정은 제거했습니다.
+- **최종 PR 상태 추가 확인:** head5cdae094c에서 `guard`·`verify`는 SUCCESS, `publish`는 SKIPPED입니다. Vercel은 FAILURE/`Deployment was blocked`이며 구체적인 차단 원인은 조사하지 않았습니다. CodeRabbit 상태가 SUCCESS여도 description은 `Review skipped: draft pull request`이므로 정식 리뷰 통과로 표현하지 않습니다. client PR 코드 비교 범위의 구현·검증 완료와 npm/Studio 공식 적용·배포 완료를 구분합니다.
 - 담당 child DL-16471의 현재 방향/남은 조건을13일 조사 기준으로 갱신하고 결과 댓글 **44417**을 추가했습니다. 이후 #4691 실제 병합·최종 저장 코드를 같은 본문/댓글에 반영하여 중복 댓글을 늘리지 않았습니다. 본문·댓글 read-back 일치·진행 중 상태 유지, 상위/완료 카드·동료 PR는 변경하지 않았습니다.
 - 코드·배포 계약·시안 제작 조사와 검토용 패치 준비는 마쳤습니다. 실제 npm 게시·Studio 공통 원본 반영·DLDS 프로필 확장·제품 FE 자동 인계는 완료하지 않았습니다. 새 기기에서 이어갈 근거/경계/다음 순서를 이 정본에 저장하고 개인 context를 원격으로 마감합니다.
 
@@ -51,6 +58,13 @@
 2. DLDS 최초 공개/Trusted Publisher 준비와 새 버전 실제 공개는 사용자 명시적 승인이 필요합니다. 이미 공개된 버전/secret을 추측하거나 우회하지 않습니다.
 3. Studio 공통 연결 패치는 코드 오너 경로로 반영하고, 실제 공개된 버전으로 lockfile/frozen 설치·verify/build·갤러리를 확인합니다. 새 정책과 작업 공간을 별도 하네스로 복제하지 않습니다.
 4. 이후 사용자(FE)·Codex가 DLDS 프로필·화면틀·템플릿과 FE 코드 인계의 실제 수정량을 구체화합니다. PM/디자이너 참여는 서비스로 쓸 단계 이후라는 기존 원칙을 유지합니다.
+
+### 동료 요청·승인 이후 재개 조건 — 현재는 승인 대기
+
+- 사용자는 동료에게 요청할지 고민 중이며, 공개 실행·Studio 접근 정책 변경을 이번 질문만으로 승인한 것은 아닙니다. 권한·공개 설정을 변경하거나 npm publish·Studio 공식 반영을 시작하지 않고 저장 후 대기합니다.
+- 요청할 내용: **(1)** `@innvoaid/dlds` 최초 등록과 기존 GitHub 자동 배포 연결을 진행하거나 사용자가 진행할 수 있는 npm 권한·방법을 제공. 변경된 DLOS/icons도 같은 배포 버전으로 준비되어 있으므로 실제 공개 버전·경로는 담당자와 확인. **(2)** 최신 Studio main에 DLDS 갤러리를 연결할 검증된 패치를 코드 오너가 반영하거나 사용자가 공통 코드를 수정·PR 작성할 수 있도록 정식 권한·정책/반영 경로를 마련.
+- 동료가 직접 작업할 필요만 있는 것은 아닙니다. 사용자에게 작업을 맡겨도 된다는 합의와 실제 npm 배포/설정 접근, Studio 공통 변경을 허용하는 권한·CI 정책이 갖춰지고 사용자가 진행을 요청하면 Codex가 배포 절차·코드 반영·lockfile·검증을 이어갈 수 있습니다. 구두 허락만으로 현재 실제 권한이 바뀌었다고 보지 않고, 이메일 위장·정책 우회·임의 관리자 등록을 하지 않습니다.
+- 허락 이후 첫 순서: 원격/작업 상태와 실제 권한 확인 → 최초 DLDS 공개·자동 배포 연결 및 공개 버전 확인 → 최신 Studio 공통 변경 경로로 패치 적용 → 실제 npm 버전의 정상 설치·lockfile·frozen/verify/build/화면 검증. 비교용 Draft PR#4692를 자동 병합하거나 정식 배포 PR로 전환하지 않습니다. 준비된 stable0.1.1과 별도 prerelease 시험 공개는 구분하며 현재 어느 공개 경로도 실제 실행하지 않았습니다.
 
 ## 이전 체크포인트 — 2026-10-12 · DLDS·DLOS 패키지·Studio 통합
 
