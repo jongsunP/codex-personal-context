@@ -22,8 +22,9 @@
   `344:49964`, No Data `475:77664`(App `475:77704`), 조회 가능한 타 의사 주문
   `475:77743`/상위 설명 `475:75588`을 재확인했다. 부분 조회는 내용·파일·3D 조회를 유지하면서
   승인/반려·주문 수정/취소·채팅 작성·Case 제목 편집 등 허용되지 않은 기능을 제한하는 상태다.
-- 사용자 확정 범위의 **웹·Office 앱 FE 개발과 제품 commit/push는 완료**로 구분한다.
-  실계정/실기기 QA와 실제 서버 조회 범위·접근 거절 확인은 별도 잔여이며 개발 미완료로 혼용하지 않는다.
+- **확정 화면 정책·현재 연결한 Member/기존 API 기준의 웹·Office 앱 FE 개발과 제품 commit/push는 완료**다.
+  이는 새 채팅 API 전환이나 최종 BE 권한 계약 전체 연동 완료를 뜻하지 않는다.
+  실계정/실기기 QA와 실제 서버 조회 범위·접근 거절 확인도 별도 잔여다. 전체 잔여를 QA만으로 축소하지 않는다.
 - 본인 주문의 현재 Case 이외 관련 Case 전체를 편집 가능하게 확장하는 요구는 확정되지 않았다.
   담당 필드 부재만으로 이를 FE 개발 잔여나 필수 BE 대기로 분류하지 않는다.
   native 최초 조회 실패의 기존 fallback 유지 역시 승인된 범위이며 새 매핑을 개발 잔여로 단정하지 않는다.
@@ -77,6 +78,29 @@
 - 이번 확인은 읽기 전용이며 제품 HEAD/코드는 그대로다. 새 채팅 선언을 제품 generated 파일이나
   실제 caller에 반영하지 않았다. BE 최종 범위가 확정돼 재개하면 Swagger를 갱신하고 새 주문별 채팅
   발송 계약과 기존 deprecated 경로의 지원/전환 정책을 확인한 뒤 필요한 FE 연결을 검토한다.
+
+### 2026-10-13 14:04 KST Swagger·실사용 채팅 재확인
+
+- 같은 DEV `/v3/api-docs`를 재조회하고 요청에 no-cache도 지정했다. 두 응답의 JSON과 SHA256이
+  동일했고 응답 Date는 05:04:48 UTC, Cache-Control은 no-cache/no-store다.
+  `/tmp/dentlink-permission-chat-recheck{,-nocache}-20261013.json`이 해당 원본이다.
+- 현재 문서에는 새 주문 발송 POST `/office/chat-messages/orders/{orderId}`가 있다.
+  기존 `/office/chat-messages` GET/POST는 남아 있고 deprecated다. chatId 기반
+  `/office/chats/{chatId}/messages` GET/POST도 문서에 있으나 이들은 첫 보존본에도 있던 경로다.
+  따라서 '교체 Swagger 전체가 아직 미배포'라는 전달과 현재 조회 문서의 대상/환경/버전을 맞춰야 한다.
+  이 문서 조회로 실제 인증 요청 성공이나 BE 최종 정책 배포까지 확인한 것은 아니다.
+- 빠진 4개 GET(`/office/chats`, `/office/chats/{chatId}/messages/participants`,
+  `/office/chats/latest/participants`, `/office/chat-messages/participants`)은 웹/앱의 실제 화면 caller가 없다.
+  앱에는 일부 미사용 서비스/query와 옛 generated 선언이 남아 있으나 활성 화면 호출은 없다.
+- 반대로 deprecated GET/POST `/office/chat-messages`는 웹 `useLinkTalk`, 앱 `useMessage`에서
+  조회/폴링/페이지/일반 발송에 실제 사용 중이다. 주문 ORDER와 고객지원 DENTLINK가 같은 경로를 쓴다.
+  신규 주문 POST와 chatId 기반 GET/POST로의 실제 caller 전환은 **아직 미적용**이다.
+- 새 주문 POST는 ORDER 일반 전송에 대응하며 기존 GET·고객지원·별도 답글까지 일괄 교체하는
+  계약이 아니다. 필수 전환 대상/시점, 빈 채팅·chatId 확보·주문/고객지원 분기·답글 지원을 BE와 확정한 뒤
+  해당 FE 전환을 별도 작업으로 진행해야 한다. deprecated를 즉시 서버 호출 실패나 삭제로 해석하지 않는다.
+- 우선 완료: 확정 UI/상세 세 상태·Member enum·기존 담당 정보 기반 행동 제어·로컬 검증·제품 원격 보존.
+  미완료/재확인: 채팅 전환 범위와 실제 caller 적용, 최종 BE 조회/접근 정책 및 실계정·실기기 QA,
+  앱 develop 통합 충돌/웹 전달 release 선택과 실제 PR·merge·배포.
 
 ### 실제 계약과 디자인 기준
 
