@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-13 **역할 정정 반영·npm 재시도 마감**. client `77ff34f76`의 기존 운영 문서2곳·PR#4692·Jira child DL-16471/댓글44417에 FE=패키지 공개, 동료=Studio 갤러리 연결·최신화 역할을 반영했습니다. 정상3앱 타입/lint·guard·coverage 후 commit/push 완료. FE의 Studio 공통 작업자 등록은 요구하지 않습니다. 기존 npm 실행38350722659의 실패 job을1회 재시도했으나 attempt2도 icons OIDC E403으로 실패했고 목표0.1.2-pr.a118246 세 패키지 미공개/DLDS404입니다. 지금 필수 외부 조치는 npm 관리자의 공개 설정·권한 확인입니다. PR는 non-Draft·미병합(사용자 보류), Studio 원본25af81a와 검토 사본은 참고/인계물로 보존합니다. 다음은 동료 npm 설정 해결 답변→실제 공개/소비 검증→동료 담당 DLDS 갤러리 연결·갱신 결과 확인입니다. 자동 최신화 완료나 제품 배포로 표현하지 않으며 새 하네스 개발은 별도입니다. 최신 PR CI 확인 결과는 개인 정본에 기록합니다.
+  — 2026-10-13 **브레이크포인트 / FE 패키지 준비 완료·npm 설정 회신 대기**. client `77ff34f76` 저장·푸시·CI 통과, PR#4692 OPEN/non-Draft·미병합(사용자 보류), 추가 PR 불필요. npm run38350722659 attempt2도 icons OIDC E403으로 실패했고 목표0.1.2-pr.a118246 세 패키지 미공개/DLDS404입니다. FE 공통 Studio 권한 요구는 제외합니다. 목표 운영은 **npm 정식 공개→Studio 갤러리 자동 최신화**이며 현재 Studio9f13a61e의 수동 sync는 latest만 읽어 pr시험버전은 선택하지 않습니다. 자동화 완료는 미확인입니다. 다음은 npm 권한 해결→시험 공개/외부 설치 검증→DLDS Trusted Publisher 준비→사용자 기존PR 머지 결정→정식latest 공개·갤러리 자동 최신화 결과 확인입니다. Studio 원본/검토 사본은 보존하고 새 하네스/프로필/FE 인계 개발은 통합 이후입니다. 완료·미완료·역할·검증 범위·재개 근거와 PR/Jira 마감은 개인 정본에 저장했습니다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.

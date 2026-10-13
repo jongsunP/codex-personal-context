@@ -1,5 +1,47 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 체크포인트 — 2026-10-13 · 역할 정정 반영·npm 재시도 마감
+## 현재 브레이크포인트 — 2026-10-13 · FE 패키지 준비 완료·npm 설정 회신 대기
+
+**목적:** 사용자가 지금까지의 필요한 대화를 정리하고 완료/미완료/남은 작업과 PR 여부를 현재 시점으로 저장·브리핑하도록 요청했습니다. 새로운 구현·npm 재시도·master 병합을 진행하는 요청으로 넓히지 않습니다. 아래는 새기기/새세션에서 우선 읽을 현재 상태이며 이전 체크포인트의 Studio 권한 필수 조건은 대체된 기록입니다.
+
+### 운영 개념·완료 구분
+
+- **의도된 운영:** `dentlink-client`에서 범용 UI 패키지를 npm에 공개 → **Studio 갤러리 자동 최신화**. FE가 매번 Studio 공통 코드를 수정하거나 수동 연결을 요청하는 운영으로 정리하지 않습니다. 자동 연결·최신화 환경의 설정은 Studio 관리 영역이며 FE 공통 작업자 등록 요구는 제외합니다.
+- **현재 확인한 구현:** Studio 원격 main **`9f13a61e494babc0298f6ed4f8eca0ceedfc1014`**, 직전6ea3512e 대비 Jira 링크 문서1개만 추가. DLDS route는 준비 중, DLDS 패키지 연결은 없고 repository workflow는 Verify/Project scope뿐입니다. 기존 `dlos:sync`는 DLOS/icons의 registry `/latest`를 읽는 수동 명령입니다. 외부 배포 설정은 조사하지 않았으므로 향후 자동화 완료/부재 전체를 단정하지 않습니다. 동료의 “해놓을거라서”는 의도/계획과 실제 확인을 나눕니다.
+- **시험/정식 구분:** 승인된 시험 공개는 `0.1.2-pr.a118246`/tag `pr`로 `latest`를 바꾸지 않습니다. 현재 Studio 동기화에는 이 시험 버전이 자동 선택되지 않습니다. 시험 성공과 정식 갤러리 자동 최신화 확인은 별도 단계입니다.
+
+| 구분 | 현재 상태 | 남은 책임/조건 |
+| --- | --- | --- |
+| DLDS를 DLOS 원천·패키지·검사 체계에 통합 | 구현·검증·저장 완료 | client 공개 API/기존 제품 import 호환 유지 |
+| 실제 npm 시험 공개·DLDS 최초 등록 | 미완료·2차 실행도 icons OIDC E403 | npm 관리자 설정·권한 해결 후 Codex 실행 |
+| 실제 게시 패키지 외부 설치·exports 확인 | 미완료·공개 성공에 의존 | Codex가 registry 기반 검증 |
+| DLDS Trusted Publisher 자동 배포 연결 | 미완료·신규등록 이후 설정 대상 | npm 관리자 설정·Codex 동작 확인 |
+| 기존 PR#4692 master 머지 | 사용자 의도로 보류 | 시험 공개/설치·자동배포 설정 확인 후 사용자 결정 |
+| 정식0.1.1/latest 공개 | 미완료 | master 자동 배포 성공/실제 registry 확인 |
+| Studio 갤러리 자동 최신화 결과 | 미검증 | 정식 공개 후 결과 확인, 필요시 Studio 측 자동 설정 확인 |
+| Studio용 DLDS 프로필·화면틀·템플릿/FE 인계·하네스 | 통합 이후 별도 | 이번 패키지 준비 전체 완료와 구분 |
+
+### 현재 저장·검증·문서
+
+- **Client 정본:** `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16471-dlds-dlos-integration`, HEAD/origin **`77ff34f76b2a9a1c994b0eaa3ff177799751ad12`**, clean. 이전 전체 하네스 백업은 `/Users/parkjongsun/Repository/dentlink-client-dlds`/feature/DL-16471/12fb96a4e를 보존합니다.
+- **PR#4692:** OPEN/non-Draft·base master·head 위77ff34f76, mergedAt null. 기존 PR 한 개로 이어갑니다. **추가 PR은 필요 없으며 이 브레이크포인트에서 머지하지 않습니다.** 최신 패키지 CI38357212495·DLOS guard SUCCESS, PR publish SKIPPED. CodeRabbit은 파일 한도로 실행되지 않아 사용자 지시로 skip. Vercel preview `Deployment was blocked`는 별도 관리자 확인 사항이며 npm 공개 필수 선행으로 두지 않습니다.
+- **npm live read-back:** icons/DLOS latest0.1.0·pr 없음·목표 버전 없음, DLDS HTTP404. 공개 run38350722659 attempt2 FAILURE/a11824692는 여전히 최종 결과입니다. 신규로 재실행하거나 부분 공개했다고 표현하지 않습니다. 정확한 Trusted Publisher 설정 화면은 확인하지 못했습니다.
+- 기존 docs/design-systems.md·docs/packages.md에 운영 역할을 반영한77ff34f76 정상 commit/push hook(3앱 타입/lint/guard/coverage)과 CI는 이전 마감에서 통과했습니다. 이번 체크포인트는 추가 코드 변경·소스 테스트 재실행 없이 실제 상태/registry/PR/Studio 코드만 읽기 확인했습니다.
+- Studio 원본 `/Users/parkjongsun/Repository/dentlink-studio`/같은feature/25af81a clean·preserve. 이전main6cd59a0 기준 private 결합 사본/38파일patch·61테스트/빌드/갤러리·CRM14화면 표시는 참고·인계물이며 정상 npm/공식 자동 갤러리 증거가 아닙니다. 원격 Git 참조와 복원 근거를 아래에 남겼고 private 사본은 기기별 자료입니다.
+- PR#4692 설명과 child DL-16471 본문·기존 댓글44417을 브레이크포인트 기준으로 정리합니다. “동료담당”은 자동 연결을 마련하는 영역을 뜻하며 매번 수동반영 요청으로 오해되지 않게 표기합니다. parent/완료 카드와 Studio 정책은 변경하지 않습니다.
+
+### 다음 시작점
+
+1. **사용자/동료:** npm 관리자가 icons/DLOS의 현재 workflow 공개 OIDC E403 설정·권한을 해결했다는 답변을 받습니다. DLDS 최초 공개 후 해당 패키지의 Trusted Publisher 설정도 연결합니다. 추가 Studio 계정 권한은 요청하지 않습니다.
+2. **Codex:** 개인 context·제품 feature를 안전하게 pull하고 실제 PR 머지/HEAD/registry/권한 변경을 확인합니다. 사용자가 먼저 머지했거나 일부 패키지가 이미 공개됐다면 그 실제 상태로 재개 경로를 고르며 옛 bootstrap을 무조건 실행하지 않습니다.
+3. **Codex:** 아직 미등록이면 승인된 수동 시험 공개를 재개해 registry 버전·exports·외부 설치를 확인합니다. 반복 E403은 설정 해결 전 다시 시도하지 않고 별도 승인 없는 credential/권한 우회도 하지 않습니다.
+4. **npm 관리자/Codex:** DLDS 신규 등록 후 Trusted Publisher·직접 공개 허용 설정과 자동 배포 준비를 확인합니다.
+5. **사용자:** 기존 PR#4692의 master 머지를 결정합니다. **추천은 시험 공개·설치 검증/자동배포 준비 후 머지**입니다. 사용자가 명시적으로 승인해야 실제 머지합니다.
+6. **Codex:** master 자동 배포의 정식0.1.1/latest 공개 성공·실제 패키지/설치와 Studio 갤러리 자동 최신화 결과를 확인합니다. 자동화가 준비되지 않았다면 Studio 측 자동 설정 확인으로 남기며 FE 공통권한 등록을 필수로 되살리지 않습니다.
+7. 이 통합을 확인한 후 Studio 기반 DLDS 하네스·대표 화면/FE 코드 인계를 별도 논의합니다. 과거 전체 제품 레포용 하네스를 이 통합 브랜치에 무작정 복원하지 않습니다.
+
+**브레이크포인트 마감:** 개인 정본/HANDOFF·PR/Jira 설명을 현재 기준으로 저장하고 개인 Git을 commit/push한 뒤 대기합니다. 이번 승인된 정리는 npm 공개·PR 병합·Studio 자동화 완료를 의미하지 않습니다.
+
+## 이전 체크포인트 — 2026-10-13 · 역할 정정 반영·npm 재시도 마감
 
 - **사용자 승인:** Codex가 할 수 있는 작업은 모두 처리하고, 실제 불가한 것만 남겨 사용자·동료 답변으로 계속 핑퐁합니다. PR/Jira·운영 문서 역할 정정, 가능한 공개 확인과 커밋/푸시/메모리 정리를 진행했습니다. master 병합은 가능하나 사용자가 일부러 보류한 별도 결정이며 승인 없이 실행하지 않습니다.
 - **역할은 확정된 경계로 유지:** FE/Codex는 client 디자인시스템 원천·npm 공개·실제 버전/exports/외부 설치 확인, 동료는 Studio 초기 갤러리 연결·자동 최신화 운영을 담당합니다. FE의 Studio 공통 작업자 등록 요구는 제외합니다. Studio 자동화가 이미 완료된 것으로 표현하지 않습니다.
