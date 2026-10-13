@@ -56,6 +56,28 @@
 - Web 하위 Jira 댓글 **44418**의 잘못된 Pickup/관련 Case 개발 잔여 문구도 사용자 확정 기준으로
   수정했다. 개발 완료와 실계정 QA 잔여를 분리하며 진행 중 상태를 유지한다. 상위 댓글은 쓰지 않았다.
 
+### 2026-10-13 백엔드 부분 배포 보고·계약 재확인
+
+- 사용자는 백엔드가 아직 전부 배포된 것은 아니며 어제 변경도 API 교체보다 Member 추가로
+  보인다고 전했다. BE 전체 배포 완료로 취급하지 않는다.
+- `d374b77e7^ → d374b77e7`의 이전/이후 생성본 비교에서 권한관리 관련 계약 변화는
+  MEMBER enum 추가가 중심이다. `OrderDto` 전체는 동일하고 dentist/dentistId/patientCaseId/
+  isReviewable, 환자/Case/주문/Draft의 기존 계약도 유지됐다. 앱 isReviewable 타입 추가는
+  오래된 앱 생성본 보완이며 신규 Member용 BE 필드가 아니다(웹에서는 9월 11일 이미 존재).
+- 이번 확인의 최신 DEV 원본은 `/tmp/dentlink-permission-member-contract-check-20261013.json`이다.
+  오늘 첫 generate 때 보존한 `/tmp/dentlink-permission-dev-swagger-20261013.json`과 비교하면
+  **POST `/office/chat-messages/orders/{orderId}`가 추가**되고 기존 `/office/chat-messages`
+  GET/POST에 deprecated 표시가 추가됐다. 새 본문 `OrderChatMessageCreateDto`는 message/fileIds,
+  orderId는 path다. 기존 endpoint의 본문/응답 구조는 유지된다. 결제 관련 변경도 별도로 있다.
+  따라서 현재 Swagger 전체가 Member enum만 바뀐 상태라고 단정하지 않는다.
+- 어제 배포 직전/직후의 Swagger 원본은 현재 임시 경로에 없어 어제 배포 전체 diff를 확정하지
+  않는다. 위 새 채팅 선언은 오늘 보존본과 현재 조회 사이의 차이이며 어제 배포로 날짜를 붙이지 않는다.
+- 새 담당/공유/과거 참여/행동 권한 필드나 전용 거절 code 명세는 확인되지 않았다. 서버 내부의
+  조회 범위/권한 검사는 기존 API 구조 그대로도 바뀔 수 있으므로 Swagger만으로 시행 완료를 증명하지 못한다.
+- 이번 확인은 읽기 전용이며 제품 HEAD/코드는 그대로다. 새 채팅 선언을 제품 generated 파일이나
+  실제 caller에 반영하지 않았다. BE 최종 범위가 확정돼 재개하면 Swagger를 갱신하고 새 주문별 채팅
+  발송 계약과 기존 deprecated 경로의 지원/전환 정책을 확인한 뒤 필요한 FE 연결을 검토한다.
+
 ### 실제 계약과 디자인 기준
 
 - 웹 `pnpm generate:api-type`, 앱 `yarn swagger-typescript-api-dev`를 실제 실행해
