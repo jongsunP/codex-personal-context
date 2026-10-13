@@ -1,5 +1,14 @@
 # Memory Changelog
 
+## 2026-10-13
+
+- DL-16317 breakpoint 이후 중단된 Jira44423/API 반영 검토와 권한 구현 전수 감사를 마쳤다.
+  BE의 ORDER 채팅 GET·POST 교체 요청을 확인하여 전체 채팅 명세 대기 판단을 정정했다.
+  원본 hook/helper 임시 검사로 캡처 busy 회수·직원 scoped cache 갱신 누락을 재현하고,
+  숨긴 URL 필터·Pickup 미사용 제한·역할 변경 chat cache 경계와 기존/신규 한계를 구분했다.
+  웹167파일 범위·앱60파일의 source/caller 검토와 BE/FE 담당별 다음 범위를 정본에 기록했다.
+  제품 HEAD·코드·Jira·PR·배포는 그대로이며 개인 진행 기록만 저장한다.
+
 ## 2026-10-12
 
 - DL-16652 사용자가 앱 확인 완료·웹 직접 상용 배포 진행 중과 전체 작업 종결을 선언했다.

@@ -1,6 +1,130 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-13 기능별 BE 준비 후 이어갈 breakpoint
+## 현재 상태 — 2026-10-13 breakpoint 이후 API·권한 구현 전수 재검토
+
+- **범위:** 사용자 요청에 따라 중단된 댓글 44423 확인과 `with…`·페이지·컴포넌트 제한의 적정성을
+  다시 검토했다. 이번 작업은 조사·검증이며 **제품 코드 수정, API 전환, 제품 커밋/푸시·PR·배포는 하지 않았다.**
+  웹·Office 앱 checkout은 기존 원격 HEAD와 같고 clean이다. 개인 진행 기록만 갱신한다.
+- **이전 판단 정정:** 아래 17:17 breakpoint의 '즉시 고칠 FE 단독 오류 없음/계약 준비 통보 대기'는
+  이번 결과로 대체한다. **주문 채팅 GET·POST는 BE의 명시적 교체 요청이 있어 지금 FE 전환 대상**이며,
+  독립 FE 보완과 미사용 코드 정리도 확인했다. '주문 상세 검증만 남음' 또는 '전부 BE 대기'로 보고하지 않는다.
+- **사용자 의도 유지:** FE는 역할별 메뉴·필터·가능한 행동과 주문별 기본/부분/차단 화면을 담당한다.
+  GET의 조회 범위·total/filter-hint 정제는 BE가 담당하며, 응답을 FE에서 임의로 잘라 권한을 구현하지 않는다.
+  Pickup은 모든 주문 링크로 진입한 뒤 상세에서 판단한다. 준비된 API만 순차 연결하며 전체 BE 완성을 기다리지 않는다.
+
+### 최신 근거와 감사 기준
+
+- [DL-16317 댓글 44423](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44423):
+  Leo(태경), **2026-10-13 17:07:03 KST**. GET·POST `/office/chat-messages`를
+  `/office/chat-messages/orders/{orderId}`로 교체해 달라는 명시적 요청이다. 댓글 생성 시각은
+  이전 breakpoint보다 앞서며, 이번에 사용자가 지정한 댓글을 읽어 반영 필요성을 확인했다.
+- **Swagger 재조회 17:41 KST:** `https://dev-api.dentlink.io/v3/api-docs`, 935 paths,
+  SHA256 `95beaf4e7797538f1f95a06ed18773c320de0422bc10bf04d81a329e9e718057`.
+  `/tmp/dentlink-permission-full-audit-swagger-20261013.json`; 17:17 저장본과 동일하다.
+  별도의 상세 접근 검증 endpoint는 현재 공개 명세에서 식별되지 않았다. 같은 GET의 BE 내부 정제 여부는 별도다.
+- **웹:** `feature/DL-16317 / 1c67612c3506090706704c558ac07852d739a518`, 원격 동일.
+  PR #4693의 실제 기준 `aff278a43...HEAD` 변경 167파일을 범위로 source·연결 경로를 점검했다.
+  현재 fetch된 master는 `8772d68825cac6e23792d86a715153a67dc71078`로 이동했으며, 이를 feature에 합치지 않았다.
+  develop은 기존 사용자 병합 `e6cfea705e4dadd3ec6c3c81d2b8432245f5b35c`다.
+- **제품·디자인:** 부모 Jira의 원본 Notion 5-4 권한 범위를 재조회했으나 전체 응답은 truncated였다.
+  완전한 PRD를 모두 검증했다고 확대하지 않는다. 이후 사용자 확정인 공유 주문 부분 조회와 Pickup 전링크 정책이
+  이전 제안보다 우선한다. Figma `2OR0Gj7NUFEEeYBjQg5Y6v / 475:77743` 부분 상세 화면을 다시 받아
+  이전 실계정 스크린샷과 대조했다. 새 브라우저 QA·실제 권한 변경·데이터 변경은 실행하지 않았다.
+
+### 바로 반영할 수 있는 범위
+
+| 항목 | 확인한 근거·상태 | 최소 후속 범위 |
+| --- | --- | --- |
+| 주문 채팅 GET·POST | 댓글 44423과 공개 명세가 일치하나 Web/App 실제 adapter는 구 경로 유지 | ORDER만 새 주문 경로로 분기. GET page/size/sort 유지, POST body는 message/fileIds. DENTLINK 고객지원·답글·page·read·latest·unread·번역은 현행 경로 유지 |
+| 승인 파일 전환 시 캡처 로딩 | **원본 hook으로 재현한 회귀.** PNG A 캡처 대기 중 PNG B로 전환하면 version이 바뀌어 finally의 busy 해제가 생략됨 | 무효화된 캡처의 busy 상태 회수. 새 작업의 상태를 오래된 완료가 덮지 않도록 검증. 권한 상실 차단은 유지 |
+| 직원 캐시 갱신 불일치 | **원본 helper/QueryClient로 재현.** reader는 `[EMPLOYEE_OWN_SHOW, employeeId]`, 결제·스캐너·요금표 writer는 옛 단일 key | 현재 직원의 scoped cache에 갱신. atom은 갱신되므로 즉시 화면 오류로 단정하지 않지만 query 데이터는 옛값임. 기존 온보딩 reader도 함께 정렬 |
+| Member에게 숨긴 필터의 URL·요청 잔존 | **실행 경로를 소스로 확인.** Admin→Member 또는 직접 URL의 myOrderOnly/dentistIds/myPatientOnly가 요청에 남고 해당 chip/reset UI 없음 | Clinic의 역할별 유효 요청 조건과 URL 정규화. Board dentistName도 숨긴 채 요청에 남지만 공통 Reset은 가능. BE가 실제 행을 줄이는지는 별도 미확인 |
+| Pickup 미사용 링크 제한 | 실제 Clinic/Lab caller가 canOpenOrder를 전달하지 않아 런타임은 전링크 유지. shared source 13개·story 1개·test 1개에 옛 차단 분기가 남음 | 확정 정책에 필요 없는 optional prop 전달·차단 분기·제한 Story/test 제거. 모든 링크 유지 검증은 보존 |
+
+- Web 전환 중심: `shared/models/src/chat/chat.apis.clinic.ts:16,34`의 두 adapter.
+  `clinic/src/lib/LinkTalk/useLinkTalk.tsx` 초기/페이지 조회·폴링·원문 이동의 반복 조회·전송이 여기에 모인다.
+  응답 DTO가 같고 메시지에 chatId가 있으므로 별도 chatId 선행 조회나 채팅 전체 구조 교체는 필요하지 않다.
+  새 경로에 유효한 orderId만 전달하는 검증과 실제 URL/query/body·고객지원·답글 회귀 확인이 필요하다.
+- 캡처 근거: `shared/ui/src/OrderApprovalUI/useOrderApprovalCapture.ts:533,538,574`.
+  `OrderApprovalUI.tsx`는 캡처 중 파일 전환을 허용하고 RejectForm은 isCapturing으로 버튼을 비활성화한다.
+  임시 실제 hook 검사 **2개 중 1 실패/1 통과**: 파일 URL 변경은 busy=true 잔존, 권한 OFF는 false 복구.
+  `/tmp/dentlink-permission-capture-leaf-repro-20261013.pvtmfxvh/`에 test/run.log/results.json 보존.
+- 캐시 근거: `clinic/src/services/employee/employee.query.ts:15`,
+  `lib/Billing/syncEmployerHasPaymentProfile.ts:19`, `lib/Scanner/syncEmployerOralScannersPreference.ts:32`,
+  `services/employer/employer.query.ts:493`, `pages/office/onboard/landing.tsx:32`.
+  임시 원본 helper 검사 **3개 중 2 실패/1 통과**: 현재 직원 key에 기대한 payment/scanner 값은 갱신되지 않고
+  옛 단일 key와 atom만 갱신됨. `/tmp/dentlink-permission-cache-audit-20261013/`에 test/run.log/results.json 보존.
+  즉시 UI는 atom 병합으로 보완되므로 실제 결제/온보딩 화면 장애가 실계정에서 재현됐다고 표현하지 않는다.
+- 숨긴 필터 근거: `lib/OrderList/order-list.helpers.ts:96,148`, `useOrderListDesktop.tsx:53,93`,
+  `lib/PatientList/patient-list.helpers.ts:37`, `lib/Order/useOrderKanbanBoard.tsx:54`,
+  shared `OrderListLayerMobileFilter.tsx:131,155,190`. NEW 환자 선택은 이미 hidden myPatientOnly=false로 정규화한다.
+  서버 목록의 FE 재필터링과 위 입력 상태 정규화는 다른 작업이다.
+
+### with·페이지·컴포넌트 처리 판정
+
+| 처리 | 판정과 이유 |
+| --- | --- |
+| 기존 withAuthorization | **역할별 직접 URL 접근 처리는 필요.** 이번에 새로 만든 HOC가 아니다. 로그인·현재 소속·역할 검증과 이전 소속 응답 무효화는 유지할 이유가 있다 |
+| 메뉴/버튼 숨김과 page/action guard | 서로 다른 진입 경계를 담당한다. UI 숨김만으로 열린 모달·직접 URL·이미 시작한 비동기 동작까지 처리되지 않으므로 일괄 중복으로 제거하지 않는다 |
+| Orders/Patients/Case 등 employee+authority query key | BE가 새 응답을 정제해도 이전 역할 캐시는 남을 수 있으므로 필요한 FE 처리다. 다만 reader/writer와 관련 chat 경계를 함께 맞춰야 한다 |
+| 공통 직원 정보 조회 | `_app`의 query와 withAuthorization의 직접 GET이 cold/mismatched 상태에서 겹칠 수 있다. **기존 구조의 통합 후보**, 이번 Member 기능이 전부 불필요하다는 근거는 아니다 |
+| withRemakeOrderAuthorization | Member일 때 전체 order GET으로 담당자를 확인하는 새 선행 조회가 있다. 현재 Remake DTO에 담당자/행동 권한이 없어 바로 삭제할 근거는 부족하다. 관련 API가 동등한 판정을 제공하면 통합·축소할 후보 |
+| 승인 페이지 order GET | useOrderApprovalPage가 전체 역할에 추가 조회한다. 현재 approval DTO만으로 Member 담당자를 알 수 없어 관계 확인이 필요하지만, 향후 반환 권한/동등한 검증 계약에 맞춰 조회를 합치거나 범위를 줄일 수 있다 |
+| 직접 주문 수정 step | 기존 order GET의 결과로 gate하며 별도 검증 endpoint를 새로 만들지 않는다. Member 본인/미지정 Draft와 타 의사 주문을 구별한다 |
+| 부분 상세 | 조회·파일·환자 수정 등과 주문 변경/승인/채팅 전송은 별도 허용 범위다. 전체 readonly 하나로 합치면 현재 확정 동작을 바꿀 수 있다 |
+| 관련 Case 제목 편집 | 현재 Member 본인 주문의 현재 Case만 허용한다. 다른 관련 Case 편집 범위는 확정 근거 부족으로 과도 제한/필수 누락을 단정하지 않는다 |
+| 403·2131·기타 실패 | 2131 소속 전환을 별도 처리하고 나머지 403을 조회불가로 본다. 최종 BE 오류 계약과 대조 필요. 기존 withAuthorization의 일반 요청 실패→403은 이전부터 있던 한계다 |
+
+### 채팅 캐시·Office 앱 별도 확인
+
+- **웹 채팅 역할 전환은 정적 위험:** `clinic/src/lib/LinkTalk/useLinkTalk.tsx:84`의 CHAT_LIST key는
+  params만 포함하고 employee/role이 없다. 주문 상세 page의 LinkTalk와 AppProviders에 역할별 cache 제거도 없어,
+  동일 직원 EDITOR→MEMBER 전환 후 서버가 범위를 줄이면 새 GET 전 이전 대화를 재사용할 수 있는 경로가 남는다.
+  기존 구조이며 실제 대화 노출을 실계정으로 재현한 것은 아니다. ORDER API 전환 때 함께 범위를 검증할 항목이다.
+- **앱 기준:** `feature/DL-16317 / 72a79146aaba1054827ab3dbd4540f274373a4ef`, 원격 동일 clean.
+  현행 origin/develop `2bc7d04dd92136b7a63a3d8c4d4e288afa867102`, merge-base `19f68100`.
+  3-dot 변경60파일(source42·test18)과 연결된 navigator/provider/직원 활성화 경로를 대조했다.
+  이번 앱 감사에서는 테스트·번들·기기 실행이나 코드 변경을 하지 않았다.
+- **이번 앱 변경에서 놓친 cache writer:** `src/queries/useUserQueries.ts:34`는 EMPLOYEE_OWN 4요소 key를
+  읽지만 `src/features/common/components/EmployeeProfile.tsx:101`의 활성화 응답은 3요소 key에 써
+  확인된 응답을 새 reader가 재사용하지 못한다. 소스에서 확인한 누락이며 실기기 장애 재현은 아니다.
+- **앱 채팅 역할 cache:** `src/queries/useLinkTalkQueries.ts:130,179` 메시지 key는 직원/역할이 없고
+  `useCommonServiceQueries.ts:107` 최신 목록은 소속만 포함한다. 동일 직원 역할 변경 시
+  `src/libs/useEmployeeProfile.ts:65` reset은 주문 상세/ORDER_INFO에 한정된다. 명시적 소속 전환에는
+  latest/unread reset이 있으므로 모든 전환이 초기화되지 않는다고 확대하지 않는다. 정적 위험/기기 QA 잔여다.
+- **앱 주문 채팅:** `src/services/linktalk.service.ts:38,102` 두 adapter는 구 경로다. ORDER만 교체하고
+  고객지원·답글·페이지 번호·읽음·번역을 유지하면 초기/폴링/페이지/push/종료 fallback 연결을 함께 바꿀 수 있다.
+  native 소스 수정·통합·배포는 웹 DEV 전달과 별도 범위로 유지한다.
+- **기존 native 진입 예외:** `src/features/orderList/screens/OrderDetailScreen.tsx:119,258`은 최초 order GET
+  성공 전 WebView를 비우며 실패는 toast/back으로 처리한다. 웹 NoData와 다르고 이번에 도입한 회귀는 아니다.
+  상세3상태를 native 진입에도 맞출 때 해당 오류 계약과 함께 검토한다. 일반403을 일괄 치환하지 않는다.
+- **기존 앱 비동기 경계:** OrderAdditionalInfoSection.tsx:482 및 useUploadOrderFile.ts:49는 upload 대기 후
+  captured orderId에 attach를 시작하며 현재 actor/화면 종료를 재확인하지 않는다. 실행 가능한 후속 요청 경로의
+  정적 위험으로 기록한다. 이번 diff는 cache key만 변경했고 서버 변경 성공/실기기 오류 재현은 없다.
+- **앱 단순화 후보:** Member에게 숨긴 Dentist UI에서도 OrderNewCaseSection.tsx:49와
+  OrderFilterBottomSheet.tsx:137의 직원 조회가 실행된다. 신규 리뷰 eligibility GET+저장 직전 재조회도 통합 후보다.
+  Draft DTO에 담당자가 없어 이어하기/삭제 직전 상세를 확인하는 처리는 현재 계산 근거가 있으므로 일괄 제거하지 않는다.
+
+### 검토·검증 범위와 다음 시작점
+
+- 웹 source 검토: Clinic 변경 source 37개+조회불가 SVG 3개, shared UI 변경 source **72개 전체**,
+  Lab 동반 변경 6개, 별도 HOC/atom/조회 query·route export와 generated model/enum diff를 확인했다.
+  실제 연결을 확인하기 위해 변경되지 않은 메뉴·목록 parser·chat adapter·고객지원·승인 버튼 등도 읽었다.
+  이 범위는 정적 감사이며 모든 화면/권한 조합의 실제 사용 QA 완료와 다르다.
+- 이번 새 실행 검증은 위 임시 재현 **총 5개: 예상 동작 assertion 실패 3개, 대조군 통과 2개**다.
+  Jest runner 실패가 아닌 두 회귀의 재현이다. 제품 파일에는 임시 테스트를 추가하지 않았다.
+  기존 257개 웹 검사·3서비스 타입/빌드·157개 앱 검사 통과는 이전 동일 HEAD 기록이며 이번에 재실행하지 않았다.
+- 기존 DEV 자동 E2E 97통과/2실패/5제외/5미실행과 ISV 버튼 timeout 원인 미확정은 유지한다.
+  이번 정적 감사나 재현 검사로 DEV 자동 E2E/실계정 최종 QA가 통과했다고 갱신하지 않는다.
+- **다음 FE 순서:** ORDER adapter 전환 → 독립 FE 회귀와 숨긴 필터 보완 → Pickup 미사용 제한 정리 →
+  해당 범위 로컬 검사·리뷰 → 승인된 제품 커밋/푸시와 DEV PR → 사용자 merge/DEV 반영 후 실제 두 계정 QA.
+  이번 요청은 검토이므로 위 제품 변경은 아직 실행하지 않았다.
+- **BE·사용자 준비:** 목록/total/filter-hint 정제 완료 범위, 상세 기본/부분/거절 및 관련 Case·파일·채팅 허용 기준,
+  실제 사용 endpoint/응답/오류 코드와 구별 가능한 주문을 제공한다. 새 상세 검증 API가 반드시 필요하다고 가정하지 않는다.
+  Admin은 성공하고 Member만 거절되는 주문, 본인/타 의사/미지정 Draft, 3D, 담당 변경 후 접근 상실과 실제 저장 QA는 남아 있다.
+- 앱과 상용 release는 별도 전달 범위다. 새 사용자 지시 없이 추가 구현·배포·자동 조회/모니터링은 시작하지 않는다.
+
+## 이력 — 2026-10-13 17:17 기능별 BE 준비 후 이어갈 breakpoint
 
 - **최신 사용자 지시:** BE 권한 작업은 아직 전부 배포되지 않았다. 주문 목록에서 역할별 차이가
   없거나 주문 상세의 검증 계약이 보이지 않는 상태를 전체 연동 완료로 계산하지 않는다.

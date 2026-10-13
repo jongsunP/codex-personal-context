@@ -153,37 +153,30 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-13 breakpoint:** BE는 아직 전부 배포되지 않았다. 완료 코드는 보존하고
-  전체 BE 완료를 기다리지 않으며 준비 통보된 기능부터 계약·실제 응답 대조 → 필요한 FE 연결 →
-  해당 범위 QA → 커밋/푸시·DEV 전달 순서로 따라간다. 새 통보 전 자동 조사·추측 구현은 하지 않는다.
-- **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
-  로컬·원격 `1c67612c3`, clean. [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693)은
-  사용자 merge, 현행 원격 develop `e6cfea705`, master `aff278a43`. DEV 빌드/배포·실제 반영 확인.
-  Member 메뉴/필터·NEW 본인 담당·주문 행동/직접 접근·Draft/승인 제어 구현과 치과 테스트 257개,
-  3서비스 타입/빌드 통과는 보존했다. 이번 마감은 제품 변경/빈 커밋 없이 기존 원격 보존을 확인했다.
-- **실제 UI QA:** Chrome 기본 `jongsun.test2=Member`, 시크릿 `jongsun.test1=Admin`, 같은 병원
-  역할 확인. 메뉴/필터·NEW·본인 기본·타 의사 부분 상세/승인·공유 Case/파일·Pickup 링크 유지 확인.
-  Pickup `9000004066`은 Admin도 조회 불가여서 Member 전용 차단 증거가 아니다.
-- **잔여:** 목록/건수/filter-hint 정제와 상세 기본/부분/차단 기준·검증 계약, 일부 Case `-`/대화 없음,
-  Admin은 성공하고 Member만 거절되는 주문, Draft/3D/실제 저장·전송·담당 변경 후 접근 등은 미완료/미확인이다.
-  현재 확정된 새 FE 단독 디자인 오류는 없으며 FE 임의 목록 정제/guard 일괄 삭제를 시작하지 않는다.
-- **17:17 현행 Swagger:** 새 주문별 GET·기존 POST `/office/chat-messages/orders/{orderId}` 확인,
-  `/office/chats/{chatId}/messages` 제거. 현재 caller는 deprecated `/office/chat-messages` 유지다.
-  ORDER/고객지원/답글의 해당 계약·사용 시점 확인 후 준비된 범위부터 전환한다. 별도 상세 접근
-  검증 API는 공개 명세에서 식별되지 않았다. 같은 GET의 BE 내부 정제만 달라질 수도 있다.
-- **자동 E2E:** [DEV workflow 38354572860](https://github.com/Innvoaid/dentlink-client/actions/runs/38354572860)
-  배포 성공과 구분하여 후속 E2E failure 종료 확인. development 97통과/2실패/5허용 제외/5미실행,
-  수집109. 이전 진행 중 기록은 대체하며 전체 자동 QA 통과로 보고하지 않는다.
-  실패2건은 ISV `Insta Smile Vision` 상품 버튼 대기 timeout, 후속5건은 serial 미실행이다.
-  현재 원인은 미확정이며 권한 작업과 별도의 ISV/E2E 조사 잔여로 보존했다.
-- **Office 앱 별도:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 동일 feature,
-  로컬·원격 `72a7914`, clean. 관련 테스트157·iOS/Android JS bundle 통과, 전체 타입 기존18오류.
-  develop 통합·PR·실기기·배포/CodePush 미완료. 알려진 미래 통합 충돌 후보는 후속 범위에서 재확인한다.
+- **최신 2026-10-13 breakpoint 이후 전수 재검토:** 댓글
+  [44423](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44423)은 BE의 주문 채팅 GET·POST
+  교체 요청이다. 현행 Swagger와 일치하므로 **ORDER 전환은 지금 할 FE 작업**이다. DENTLINK/답글/읽음 등은 유지한다.
+  이전 '즉시 할 FE 작업 없음/전체 채팅 계약 대기' 판단은 대체한다. 이번은 감사이며 제품 변경은 하지 않았다.
+- **새 확인:** 실제 원본 hook/helper로 캡처 파일 전환 후 로딩 잔존과 employee scoped cache 갱신 누락을 재현했다.
+  Member에게 숨긴 Orders/Patients/Board URL 필터가 요청에 남는 경로도 확인했다. Pickup canOpenOrder는 실제 caller가
+  사용하지 않는 옛 링크 제한 prop·분기·Story/test로 정리 가능하다. 모든 주문 링크 유지 정책은 그대로다.
+- **과도 구현 판단:** 역할별 메뉴/필터·직접 URL/action guard·이전 역할 cache 분리는 필요하다.
+  withAuthorization을 일괄 삭제하지 않는다. 직원 GET 통합 및 Remake/승인 선행 order GET 축소는 해당 BE 계약과 대조한다.
+  목록 데이터/total/filter-hint 정제, 상세 세 상태·관련 조회·오류 계약, 실제 차단 주문/Draft/3D/저장 QA는 별도 잔여다.
+- **웹 보존:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
+  로컬·원격 `1c67612c3`, clean. 사용자 merge [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693),
+  develop `e6cfea705`·DEV 배포 확인은 기존 근거다. 최신 fetch master는 `8772d6882`로 갱신됐고 feature에 합치지 않았다.
+  감사는 PR 실제 기준 `aff278a43...HEAD` 변경167파일을 범위로 source/caller를 점검했다.
+- **검증 경계:** 이번 임시 회귀 재현5개는 3실패/2대조군통과. 기존 웹257개/3서비스 타입·빌드 통과는 이전 기록이다.
+  DEV E2E 97통과/2실패/5제외/5미실행(ISV 버튼 timeout)은 미해결로 유지한다. 새 브라우저/쓰기 QA는 하지 않았다.
+- **Office 앱 별도:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 동일 feature `72a7914`, 원격 동일 clean.
+  ORDER API 전환과 권한별 cache 연결 검토 잔여가 있다. 기존157검사/양OS JS bundle 통과·전체type기존18오류이며
+  develop 통합·PR·실기기·CodePush는 미완료다. 웹 DEV 후속 작업에 자동 포함하지 않는다.
 - Web [DL-16319](https://innovaid.atlassian.net/browse/DL-16319), Office App
-  [DL-16752](https://innovaid.atlassian.net/browse/DL-16752)는 진행 중이다. 상위 댓글은 쓰지 않는다.
+  [DL-16752](https://innovaid.atlassian.net/browse/DL-16752). 이번 감사에서는 Jira/PR를 변경하지 않았다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
   앱 표시 이름은 `권한관리 프로젝트 폴더`, 기존 `권한관리세션` 유지.
-- 주문별 실제 증거·원격 상태·BE/사용자/FE 담당 순서와 재개점은
+- 상세 findings·원본 근거·검증 한계·실계정 UI 이력·후속 담당 순서는
   [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)에 보존한다.
 
 ### Dentlink 통합알림센터 — 사전 검토
