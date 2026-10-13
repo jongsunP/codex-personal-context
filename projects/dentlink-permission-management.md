@@ -27,7 +27,8 @@
 - 본인 주문의 현재 Case 이외 관련 Case 전체를 편집 가능하게 확장하는 요구는 확정되지 않았다.
   담당 필드 부재만으로 이를 FE 개발 잔여나 필수 BE 대기로 분류하지 않는다.
   native 최초 조회 실패의 기존 fallback 유지 역시 승인된 범위이며 새 매핑을 개발 잔여로 단정하지 않는다.
-- PR 생성 전 웹 `master`, Office 앱 `develop`에 대한 전체 diff를 확인한다.
+- 웹의 개발 기준인 `master`와 Office 앱 PR 대상 `develop`에 대한 전체 diff를 확인한다.
+  웹의 실제 전달 PR 대상은 의도한 배포 버전의 `release/vX.Y.Z`이며 master 기준과 구분한다.
   리뷰를 위한 PR 준비 단계와 실계정 QA·최종 merge/배포 준비는 구분한다. PR은 아직 생성하지 않았다.
 
 ### 2026-10-13 PR 검토 준비 확인
@@ -38,7 +39,10 @@
   실제 diff **167파일(+10,307/-1,310)**이고 미해결 충돌은 없다. 권한관리와 전체 DEV Swagger
   생성에 따른 DTO/메서드 변경, 이전 Lab optional 조건·번역 보존분을 PR 설명에서 구분한다.
   `.github`/scripts/package/lockfile/Admin 제품 소스/DLOS/icons에는 target 대비 차이가 없다.
-  웹은 `master` 대상으로 리뷰 PR을 준비할 수 있다.
+  master 기준 코드 검토는 가능하다. 웹 전달 PR은 배포 대상 release를 정한 뒤 그 target의
+  실제 diff를 다시 확인해야 한다. 현재 DL-16317/DL-16319 fixVersions는 빈 값이며,
+  확인한 원격의 최신 버전 release는 이미 완료된 `release/v1.88.0`이다.
+  현재 master나 완료된 release를 임의 전달 대상으로 선택하거나 새 release를 만들지 않는다.
 - Office 앱 target **`origin/develop=2bc7d04dd92136b7a63a3d8c4d4e288afa867102`**,
   merge-base `19f68100`이며 develop만 17커밋/feature만 7커밋이다.
   feature의 7개 커밋은 모두 권한관리이고 실제 PR diff **60파일(+5,574/-403)**은
