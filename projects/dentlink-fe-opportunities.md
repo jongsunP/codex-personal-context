@@ -1,5 +1,58 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 체크포인트 — 2026-10-13 · 동료 DLOS 운영 구조 파악·DLDS 후속 반영
+## 현재 체크포인트 — 2026-10-13 · npm 공개 승인 실행·Studio 준비 마감
+
+**현재 상태:** 승인된 코드 준비·검증·저장은 완료했습니다. npm 실제 공개는 OIDC 권한 거부로 실패했고 Studio 최신 main의 공식 반영은 공통 작업자 등록 전이라 보류했습니다. 사용자는 현재 계정으로 안 되는 것은 넘기고 가능한 작업을 마친 뒤, 처리/미처리·이유·동료 요청을 브리핑하도록 지시했습니다. 권한 준비 전 새 하네스·에디터 작업이나 자동 재시도를 시작하지 않고 대기합니다.
+
+### 승인과 진행 경계
+
+- 사용자 승인: PR#4692 Draft 해제 → CodeRabbit 검토 → npm 공개(시험 prerelease부터) → Studio 반영·검증 → 커밋/푸시/메모리/Jira 정리. **master 병합은 별도 결정이며 실행하지 않았습니다.**
+- CodeRabbit은 233개 파일이 기본 한도를 넘고 추가 실행에 최대 $58.25가 표시됐습니다. 사용자 답변 “리뷰 막혔으면 그냥 건너뛰고 다음 단계 진행해줘”에 따라 유료 리뷰를 실행하지 않았습니다. GitHub 상태 SUCCESS는 리뷰 통과가 아니라 한도 skip이며 실제 리뷰/스레드는 없습니다.
+- Studio 공통 변경 경로는 사용자가 **동료가 jongsunP를 정식 공통 작업자로 등록**하는 방식으로 선택했습니다. 선택만으로 권한이 생긴 것은 아닙니다. 현재 정책에는 아직 inkyookoh만 있습니다. 이메일 위장·정책/후크 우회·임의 등록·권한 변경은 하지 않았습니다.
+
+### 저장 코드·PR·CI
+
+- **Client:** `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16471-dlds-dlos-integration`, HEAD/origin **`a118246927021579f643cba205ebcc7056dec5b0`**, clean/ahead-behind0. 정상 commit의3앱 타입·push의3앱 lint/DLOS guard/shared coverage 통과. workflow push는 명령 한 번의 SSH pushurl을 사용했으며 후크와 영구 remote 설정을 바꾸지 않았습니다.
+- **PR#4692:** OPEN, **non-Draft**, base master/head 위 feature·a118246. 제목의 코드 비교 목적은 유지하고 설명을 실제 결과로 갱신했습니다. guard·verify SUCCESS, PR publish는 SKIPPED. Vercel preview는 FAILURE/`Deployment was blocked`로 남고 관리자 화면 로그인이 없어 차단 원인은 확인하지 못했습니다. 제품 서비스 배포를 뜻하지 않습니다.
+- 이전 master 동기화 `5cdae094c`와 실제 병합 #4691의 master `aff278a43`는 그대로 조상입니다. **이번 신규 코드4파일:** `packages_publish.yml`, `scripts/package-bootstrap.js`, `scripts/package-bootstrap.test.js`, `docs/packages.md`. UI 패키지 번들 원천은 이전 검증본과 같습니다.
+- 신규 DLDS 최초 등록만 수동 prerelease/publish=true/bootstrap_dlds=true로 제한했습니다. 기존 secret NPM_TOKEN은 최초 등록 자격 확인과 DLDS 공개 단계에만 주입하고, 기존 icons/DLOS·정상 배포는 OIDC를 유지합니다. 토큰을 읽거나 출력하지 않았습니다. registry404만 미등록으로 인정하고 기타 오류는 중단합니다. 기본값 false·자격 범위·순서/YAML 확인, bootstrap14/14·패키지 규칙22/22 통과.
+- **Studio 원본:** `/Users/parkjongsun/Repository/dentlink-studio`, 같은 feature, HEAD/origin **`25af81a2fd8ae4ebaf89be93abe45b7784ce5cb2`**, clean. 원본/정책을 그대로 두었으며 최신 main **`6cd59a0ae3e638d869973b8245717a71db6bff09`** 결합 패치는 개인 사본에만 준비했습니다. Studio PR는 만들지 않았습니다.
+- **Old DLDS 백업:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16471`, **`12fb96a4e32c6a5e9abb4f61c235d9c2c1e53a14`** 및 기존 ignored 결과를 보존합니다.
+
+### 실제 npm 실행·미공개 확인
+
+- 승인된 workflow_dispatch **[38350722659](https://github.com/Innvoaid/dentlink-client/actions/runs/38350722659)**, ref 위 feature, channel=prerelease/publish=true/bootstrap_dlds=true. 목표 버전 **`0.1.2-pr.a118246`**, tag pr. 소스의 stable0.1.1 선언은 유지합니다.
+- verify SUCCESS: bootstrap14·artifact22, DLDS149/DLOS381, 타입/build/pack 및 외부 React18/19 소비 검사 통과. publish 준비의 DLDS404 guard·기존 자격 npm whoami 확인도 통과했습니다. **whoami 통과만으로 신규 패키지 쓰기 권한까지 증명하지 않습니다.**
+- **publish FAILURE:** `Publish bootstrap prerequisites with Trusted Publishing`의 icons PUT에서 E403 `OIDC permission denied for this action`. DLDS 최초 token 공개 단계는 실행되지 않았습니다. 기존 패키지를 token fallback이나 stage-publish로 우회하지 않았습니다.
+- 실패 후 실제 registry 조회: icons/DLOS latest0.1.0, 목표0.1.2-pr.a118246 둘 다 없음, DLDS HTTP404. **목표 세 패키지는 모두 미공개이며 부분 공개도 확인되지 않았습니다.** master 병합/dist-tag 변경/제품 배포는 하지 않았습니다.
+- npm 브라우저는 Sign in 상태이며 현재 로컬 npm도 미인증입니다. GitHub NPM_TOKEN 존재/CI 인증은 확인했으나 npm 관리자 설정 접근은 확보하지 못했습니다. 사용자가 계정으로 안 되는 것은 넘기라고 하여 추가 로그인 질문·권한 변경은 하지 않습니다.
+
+### 최신 Studio 사본 검증·자료 위치
+
+- 개인 자료: `/Users/parkjongsun/Documents/ChatGPT/디자인시스템정비 프로젝트/artifacts/studio-dlds-followup-latest-20261013/`의 base/source/verify, patch, source-validation.json, runtime-validation.json, browser-readonly.json, README·로그. 이전 f7fb9eb 기준 자료 `studio-dlds-followup-20261013/`도 보존했습니다.
+- 최신 main6cd59a0의 PM 공유·문서·wireframe 동적 실행 등 변경을 보존했습니다. 공식 source에는 file/link/tarball override가 없고 세 외부 선언0.1.1·기존main npm0.1.0 lock을 보존합니다. **공식 frozen 설치가 가능한 상태는 아직 아닙니다.**
+- 최신 main 기준 **38파일 patch SHA256 `d1330164b2aca89efab579c477f600b90b8afe5da35d01615af4929aef5e00b1`**. 부모 Git에 간섭하지 않도록 명시적 private GIT_DIR/GIT_WORK_TREE/index로 실제 적용·재적용을 확인했습니다. 초기 archive apply 확인은 부모 Git 영향으로 재시도했으며 최종 실제 파일 존재/hash를 대조했습니다.
+- **격리된 verify 사본만** 실제0.1.1 세 tarball override로 설치·verify62건(61통과/1skip/0실패)·Next production build·4경로 trace 통과. skip은 opt-in Codex native 권한 프로필 실환경 검사입니다.
+- 부모도 Chrome에서 DLDS28예시·DLOS 갤러리·기존CRM14화면 표시와 오류0을 읽기 전용 확인했습니다. 기존 styled-components prop warning은 별도이며 수정하지 않았습니다. **전체 상호작용 QA, 공개 registry 설치, 서비스 적용/배포 증거는 아닙니다.**
+- 임시5302 검증 서버를 종료하고 listener 없음 확인. 본 작업 확인용 로컬/npm/Vercel 탭은 닫았습니다. 사용자의5300 등 다른 서버/탭은 건드리지 않았습니다.
+- 위 사본·tarball은 로컬 자료라 다른 기기에 자동 전달되지 않습니다. 재개 시 원격 Studio base6cd59a0와 저장된 DLDS gallery 변경503bf044..25af81a, 실제 게시 버전 pins를 바탕으로 최신 main 보존 여부를 확인해 패치를 복원합니다. 회사 코드를 개인 메모리 저장소에 통째로 복제하지 않습니다.
+
+### 권한 때문에 남은 부분·동료에게 요청할 것
+
+1. **npm 관리자:** `@innvoaid/icons`·`@innvoaid/dlos`의 Trusted Publisher(organization Innvoaid/repository dentlink-client/workflow packages_publish.yml, environment 없음)에서 **직접 npm publish 허용(Allowed actions)**을 확인·허용합니다. E403은 확인했으나 실제 설정 화면을 보지 못했으므로 해당 체크가 원인이라고 확정하지 않습니다. npm package write/설정 권한과2FA가 필요한 작업이며 저장소 push 권한이나 토큰 인증만으로 대신할 수 없습니다.
+2. **Studio 코드 오너:** `.github/project-access.json`에 `jongsunP`/`jongsun@dentlink.app`를 공통 작업자로 정식 등록하고 CODEOWNERS·PR 범위 정책과 함께 확인합니다. GitHub 계정은 push 가능하지만 공통 작업 정책은 아직 허용하지 않습니다. 현재 원문: 공통 변경은 코드 오너가 별도 PR로 작성합니다. 선택한 사용자 등록 경로가 실제 마련되기 전 원본 공통 코드를 수정·PR 제출하지 않습니다.
+3. **Vercel은 필요 시 별도:** PR preview가 필요하면 프로젝트 관리자가 deployment blocked 이유를 확인합니다. 로컬 검증과 npm 권한 해소에 필수인 것은 아닙니다.
+
+### 재개 순서·마감
+
+1. 개인 context를 pull하고 위 feature2개/PR/registry/실제 권한을 안전하게 확인합니다. 사용자 답변 없이 동일 OIDC 실패 재시도를 반복하지 않습니다.
+2. npm 권한이 해결되면 **같은 head 실행38350722659를 재시도**하여0.1.2-pr.a118246을 공개하고3종 실제 버전·exports·tag를 read-back합니다. DLDS 첫 공개 자체의 scope/write 권한 오류가 나타나면 그 결과로 별도 안내합니다.
+3. DLDS 공개 후 해당 패키지의 Trusted Publisher 직접 publish 허용도 등록·확인합니다. 새 패키지의 향후 OIDC 동작까지 기존2종으로 추정하지 않습니다.
+4. Studio 실제 공통 변경 허용이 확인되면 최신 main 기반 패치를 공식 feature/PR에 반영합니다. 실제 공개된3종 버전으로 고정하고 정상 registry lockfile/frozen 설치·verify/build·gallery/기존CRM 화면을 검증합니다. tarball override를 공식 저장소에 넣지 않습니다.
+5. 사용자에게 결과를 보고하고 **master 병합은 별도 승인**을 받습니다. DLDS 프로필·화면 틀·FE 인계/하네스 확장은 통합 이후 별도 논의입니다.
+- 담당 child **DL-16471**의 현재 설명·기존 댓글44417을 실제 결과로 갱신하고 진행 중을 유지했습니다. 상위/완료 카드·동료 PR는 변경하지 않습니다. PR4692 설명도 새 결과로 맞추며 CodeRabbit skip과 실제 npm 미공개를 숨기지 않습니다.
+- 이 마감은 가능한 작업의 저장 완료이며 npm 공개·Studio 공식 반영 완료를 뜻하지 않습니다. 개인 Git checkpoint와 HANDOFF를 commit/push한 뒤 대기합니다.
+
+## 이전 체크포인트 — 2026-10-13 · 동료 DLOS 운영 구조 파악·DLDS 후속 반영
 
 **사용자 목적 재확인:** DLDS를 DLOS 외형에 맞추는 수준이 아니라, 동료가 `dentlink-client`·`dentlink-studio`·npm에 구현한 원천 관리/배포/시안 제작 구조를 파악하고 그 체계에 DLDS를 맞춥니다. PR/master만 보지 않고 관련 커밋·문서·실제 npm artifact·Studio 프로젝트 코드를 확인했습니다. 기존 DLDS 전체 제품 레포용 하네스 추가 개발은 보류하고 통합 구조를 먼저 맞춥니다.
 

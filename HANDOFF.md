@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-13 **동료 DLOS 운영 구조 파악·DLDS 후속 반영**. 두 통합 브랜치는 `feature/DL-16471-dlds-dlos-integration`으로 정정, client `5cdae094c` 저장·Draft PR#4692(master 대조) 연결. 실제 MERGED #4691의 master aff278a43 반영까지 끝냈고 3패키지0.1.1·OIDC/버전 검증을 완료했습니다. Studio25af81a는 보존하며, 최신 main f7fb9eb의 공통 wireframe/접근 정책과 DLDS 결합용 패치를 개인 자료에 준비·검증했습니다. DLDS 첫 npm 공개·Studio 코드 오너 경로의 공통 반영/정상 lock·DLDS 프로필과 FE 실제 인계는 남았습니다. 현재는 동료 요청·승인/실제 권한 준비를 기다립니다. 맡겨 진행하는 합의와 npm/Studio 공식 접근이 갖춰지면 Codex가 이어갈 수 있으며 구두 허락을 권한 확보로 간주하지 않습니다. Vercel 배포 차단·CodeRabbit Draft 리뷰 skip과 문서 작성자 구분도 정본 checkpoint에 기록했습니다.
+  — 2026-10-13 **승인 실행 후 권한 대기**. client `feature/DL-16471-dlds-dlos-integration`/`a11824692` 저장·푸시, PR#4692 Draft 해제(master는 미병합), 신규 DLDS 최초 등록용 수동 경로와 CI 검증 완료. CodeRabbit은 한도로 실행되지 않아 사용자 지시로 건너뜀. npm 실행38350722659는 verify 통과 후 icons OIDC E403으로 공개 실패: 목표0.1.2-pr.a118246 세 패키지 미공개/DLDS404. Studio25af81a 원본은 보존하고 최신main6cd59a0+DLDS 사본은 설치·61테스트·빌드·갤러리/CRM14화면 표시를 확인했습니다. npm 관리자의 icons·DLOS 직접 publish 허용 확인과 Studio 코드 오너의 jongsunP 정식 등록이 필요합니다. 이후 같은 실행 재시도→실제 npm 버전/정상 lock 설치→Studio 공식 반영 순서입니다. 사용자는 현재 계정으로 막힌 것은 넘기고 가능한 작업을 마감·브리핑하도록 지시했습니다. Jira·PR 설명과 실패 근거·재개 조건·문서 작성자 구분은 정본에 저장했습니다. 새 하네스/에디터 개발은 별도입니다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
