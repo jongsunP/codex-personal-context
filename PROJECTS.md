@@ -153,12 +153,18 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-13 개발서버용 웹 merge:** 사용자 요청으로 develop을 원격 master
+- **최신 2026-10-13 Member 화면 QA 준비·대기:** 사용자는 DEV 배포와 BE 동료의 부분 화면 노출을
+  확인했지만 Member 역할이 없어 전체 정확성은 미확인이다. 사용자가 BE에 역할 변경·테스트 계정을
+  준비하도록 요청하고, 준비되면 다시 알린다. 그때 실제 Member 화면의 권한별 UI·필터 제공,
+  주문번호별 기본/부분/차단 상세와 확정 디자인 일치 등 FE가 직접 확인 가능한 웹 UI만 먼저 점검한다.
+  화면 QA와 BE 내부 데이터 정제/전체 권한 검증을 구분한다. BE 최종 명세 후 with/선행 GET 정리 여부와
+  채팅 전환을 판단하는 원칙도 유지한다. 지금은 구현·계정 변경·외부 상태 재조회 없이 준비와 기록 후 대기한다.
+- **2026-10-13 개발서버용 웹 merge 이력:** 사용자 요청으로 develop을 원격 master
   `aff278a43`에서 재생성하고 [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693)을 만들었다.
   사용자가 15:02:51 KST에 직접 merge했고 현재 원격 develop은 **`e6cfea705`**다.
   이전 develop `e9d3f3509`는 로컬 참조/bundle로 보존했다. feature는 `1c67612c3` 그대로다.
   Office DEV build/deploy job과 Lab DEV workflow 성공이다. 15:14:46 KST Clinic DEV의 실제 BUILD_ID
-  `hbVeD1fi0LvvqQFsJJUPG`가 이번 빌드와 일치했고, 자동 반영 확인도 성공했다. 후속 자동 E2E는 진행 중이며
+  `hbVeD1fi0LvvqQFsJJUPG`가 이번 빌드와 일치했고, 자동 반영 확인도 성공했다. 후속 자동 E2E는 15:17 당시 진행 중이었으며
   실계정 QA와 BE 전체 배포는 확인되지 않았다. CodeRabbit 자동 리뷰는 skip, Vercel DLOS는 blocked였다.
   이번 목적은 기존 화면을 BE 개발자가 DEV에서 사용할 수 있게 하는 것이며 상용 release/Office 앱 전달과 별개다.
 - **최신 사용자 FE/BE 원칙:** GET 조회 범위·데이터 정제는 BE 내부에서 처리할 수 있다.
