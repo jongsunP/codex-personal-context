@@ -1,6 +1,116 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-13 새 세션 인수인계·개발서버 기준 재개
+## 현재 상태 — 2026-10-13 개발서버 계약 연결·최신 master 통합·원격 보존 후 대기
+
+- 사용자가 승인한 개발서버 Swagger 확인/generate, 확정 디자인과 실제 계약 연결,
+  최신 웹 master 통합, 로컬 검증, 제품 commit/push, 개인 체크포인트·하위 Jira 정리를 마쳤다.
+  **스테이징은 확인하지 않았다. PR 생성·protected branch merge·배포·CodePush는 하지 않았다.**
+  기공소 웹/앱의 신규 정책 구현은 제외하고 최신 master의 기존 Lab 변경은 보존했다.
+- 현재 세션은 `01a132e9-6555-7a02-9c72-4dad9c04cc64`다. 아래 새 세션 인수인계와
+  10월 12일 이하 기록은 당시 상태를 보존한 이력이며 현재 API 미연결/merge 진행 상태가 아니다.
+- 사용자는 **별도로 준비된 테스트 계정이 없다**고 답했다. 개발서버 포털은 로그인 화면까지
+  확인했으며, 인증된 Member 실계정·실기기 QA는 수행하지 못했다. 임시 브라우저 탭은 닫았다.
+  자동 테스트·빌드·Swagger 응답은 실제 사용자의 주문/환자 범위나 배포·릴리즈 완료 증거가 아니다.
+
+### 실제 계약과 디자인 기준
+
+- 웹 `pnpm generate:api-type`, 앱 `yarn swagger-typescript-api-dev`를 실제 실행해
+  `https://dev-api.dentlink.io/v3/api-docs`의 계약을 생성했다. 공개
+  `/codes/authority-type?serviceType=OFFICE` 응답에서도 OWNER=Admin,
+  PAYMENT_MANAGER=Billing Manager, EDITOR=Manager, **MEMBER=Member**와 code `0000`을 확인했다.
+- 생성 계약에 MEMBER와 기존 employee/dentist ID, `OrderDto.isReviewable`이 있다.
+  담당 의사 선택 값과 활성 직원의 본인 ID는 employee ID 기준이다. 담당·공유·과거 참여의
+  새로운 관계 플래그, `canAction` 같은 필드, 새로운 접근 거절 업무 code는 확인되지 않았다.
+  목록 GET의 서버 응답 범위를 사용하며 FE에서 담당 이름 비교나 임의 목록 잘라내기를 하지 않는다.
+- [확정 Figma 475:75511](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=475-75511&m=dev)은
+  **조회 가능한 타 의사 주문을 보는 Member** 화면이다. 주문 변경/취소·Case 제목 수정·승인/거절·
+  채팅 작성/첨부는 제한하고 파일·URL·3D·대화 조회를 유지한다. **환자 정보 Edit은 유지한다.**
+  Member 전체를 읽기 전용으로 만들지 않으며 기존 EDITOR 허용 경로는 Member도 허용한다.
+  비용/청구 경로의 OWNER/PAYMENT_MANAGER 조건은 그대로다.
+- NEW Case는 본인 담당으로 고정하고 FOLLOW_UP은 기존 담당을 유지한다. 일반 환자 목록은
+  서버 범위를 사용하며 주문 1단계는 치과 전체 환자/Case 선택을 유지한다. 담당 미지정 또는
+  본인 담당 Draft는 이어하기/삭제를 허용한다. 미확정 역할/직원/담당 상태의 행동은 허용하지 않는다.
+- 리뷰 대상은 서버의 `isReviewable`로 확인하고 본인이 작성한 기존 리뷰 수정은 유지한다.
+  to-review는 담당된 작성 대상, own은 로그인한 사용자가 여러 소속에서 작성한 리뷰라는
+  기존 정책을 보존했다. 단순 Member 역할만으로 리뷰를 일괄 금지하지 않는다.
+
+### 웹 구현·Git 위치
+
+- `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`.
+  **HEAD/upstream/실제 원격 `1c67612c3506090706704c558ac07852d739a518`**, clean.
+  마지막 원격 확인의 master **`aff278a433b2d4bc6f8e606a7fb12b6a5b18a407`**가 HEAD의 조상이다.
+- 기존 진행 중이던 693b8b4 통합을 보존해 `1718b2cd5`로 마쳤고, 이후 원격 전진
+  b229a944/aff278a43을 각각 `b90dd3234`/`d3bda388e`로 통합했다. reset/stash/rebase하지 않았다.
+  실제 계약 연결 `d374b77e7`, 종료된 화면의 리뷰 저장 차단 `c015a9bc9`, 테스트 lint 정리
+  `31a9e2920`, 소속 전환 뒤 이전 요청의 화면 이동 차단 `1c67612c3`을 정상 commit/push했다.
+- generated Admin/Lab/Office/data-contracts 4개를 최신 DEV 생성물로 갱신했다. Member의
+  주문/환자/보드 필터, 역할 표시, 초대 분석 라벨, 새 Case UI/RHF/최종 전송값에 실제 역할을 연결했다.
+  현재 역할·직원 ID를 목록/건수/보드/타임라인/Draft/주문 1단계 쿼리 키에 반영하고 소속/역할
+  변경 시 이전 누적 보드·응답을 재사용하지 않는다. 서버 결과 범위나 prefix invalidation은 유지했다.
+- 주문 상세·직접 편집/승인·Remake에 현재 직원/주문/역할/담당 조건을 연결했다. 실제 주문 GET
+  HTTP 403은 기존 NoData/홈 이동으로 처리하되 기존 소속 전환 code `2131`은 유지한다.
+  401/네트워크 오류는 권한 거절로 바꾸지 않는다. 확인된 담당 변경은 현재 직원의 주문 캐시에
+  새 담당 정보를 먼저 반영해 후속 조회 실패가 이전 본인 담당 상태를 되살리지 않게 했다.
+- 환자 Edit은 조회 가능한 주문에서 유지하고, Case 편집은 본인 주문의 현재 Case ID만 확정한다.
+  다른 관련 Case의 담당은 `CaseListDto`에 없고 Pickup도 dentistName만 있어 이름으로 추정하지 않는다.
+  Pickup의 확정 디자인상 주문번호 링크 제한·공유 Case 예외는 담당 ID/공유 관계가 없어
+  실제 계약 연결이 남았다. 본인 주문의 현재 Case 이외 관련 Case까지 권한을 확인한 상태는 아니다.
+  비동기 검증·화면 종료·직원/주문 변경 후 보관된 작성/삭제/다음 주문/승인 callback은 차단한다.
+  이미 전송한 HTTP 자체를 취소하거나 서버 변경을 되돌리는 기능은 추가하지 않았다.
+
+### 치과 앱 구현·Git 위치
+
+- `/Users/parkjongsun/Repository/dentlink-app-permission`, `feature/DL-16317`.
+  **HEAD/upstream/실제 원격 `72a79146aaba1054827ab3dbd4540f274373a4ef`**, clean.
+  기존 오래된 feature base를 보존했다. 이번에 앱 main/develop merge·재기준화·PR 생성은 하지 않았다.
+- 앱 전체 generator 결과는 unrelated Product/Option/OptionGroup 계약 변화로 기존 타입 진단
+  18개에서 321개로 늘어났다. 전체 생성물은 임시 경로에 보존하고, **실제 generator 출력의
+  authority 필드 14곳과 `OrderDto.isReviewable` 블록만 자동 추출해 반영**했다.
+  임의 역할/DTO를 작성하지 않았고 관계 없는 전체 상품 계약 마이그레이션은 제외했다.
+- Member 필터/NEW Case 본인 지정, 최신 주문 정보 확인 후 직접 편집/승인/채팅 작성,
+  Draft 이어하기·삭제, 리뷰 작성 허용 여부를 연결했다. 기존 본인 리뷰 수정은 유지한다.
+  새 리뷰·첨부/업로드와 직접 주문 제출의 역할/직원/대상 변경·unmount·지연 처리도 차단했다.
+- native 주문 상세/직원 조회 키를 직원 기준으로 통일하고 역할 변경 시 해당 소속 상세를 다시 읽는다.
+  주문/건수/Draft·환자 일반/1단계/Case·홈 요약 조회에는 확인된 직원+권한을 추가했다.
+  미확정/mismatch 상태의 자동/수동 조회는 실제 API 전에 차단한다.
+- 웹 일반 resource HTTP 403 처리는 적용했지만 **native는 알려진 code `2005` 및 기존 세션 처리,
+  최초 조회 실패 toast/back을 유지**한다. Swagger에 새 거절 규칙이 없어 모든 native 403을
+  신규 NoData로 바꾸지 않았다. 실제 거절 응답을 받은 뒤 필요한 매핑을 확인해야 한다.
+
+### 검증·증거 경계
+
+- 최종 Clinic Jest **32 suites / 257 tests 통과**, Clinic/Lab/Admin 타입 검사와 production build 통과.
+  icons/DLOS 타입·build, DLOS **45 files / 381 tests**, 최신 package artifact 테스트 **17개** 통과.
+- 정상 pre-push 통과: Clinic/Lab/Admin lint **오류 0개**, 경고 각각 **223/186/393개**.
+  Admin DLOS guard **60/baseline 60**, guard 테스트 **6개**, shared configs **21개**,
+  shared hooks **32개** 및 coverage 비교 통과. 첫 push의 신규 테스트 fixture lint 오류 2개는
+  수정·회귀 검증 후 정상 재실행했다. 훅 우회/coverage baseline 변경은 하지 않았다.
+  서비스 검사 통과를 shared 전체 타입/lint 통과라고 확대하지 않는다.
+- 앱 관련 Jest **23 suites / 157 tests 통과**, scoped lint 오류 0개/기존 경고 8개,
+  prettier/diff 통과. 앱 전체 타입 로그는 기존 **18개 진단과 동일**하며 전체 타입 통과는 아니다.
+- iOS **70 assets**, Android **74 assets** JS bundle 생성 성공. 실제 symlinked node_modules를
+  드러내는 임시 Metro 설정을 `/tmp`에서 사용했으며 제품 Metro 설정/lockfile은 바꾸지 않았다.
+  실행 중인 iOS simulator/ADB device가 없어 실제 앱 실행·실기기 QA 증거는 아니다.
+- Swagger snapshot·전체 앱 생성물·검증 로그·임시 설정은 `/tmp/dentlink-permission-*`에 있다.
+  원격에 보존된 코드는 다음 기기에서 재검증할 수 있으나 임시 산출물 자체는 휴대되지 않는다.
+
+### Jira·대기·다음 시작점
+
+- 사용자 담당 Web [DL-16319](https://innovaid.atlassian.net/browse/DL-16319)에 댓글 **44418**,
+  Office App [DL-16752](https://innovaid.atlassian.net/browse/DL-16752)에 댓글 **44419**로
+  실제 계약 연결·코드 보존·검증·실계정/실기기 잔여를 기록하고 재조회했다.
+  두 카드 모두 **진행 중**을 유지했다. 상위 DL-16317에는 댓글을 쓰지 않았다.
+- 승인된 이번 FE/검증/원격 정리를 마쳤으며 **추가 지시 전 대기**한다. 자동 외부 상태 확인,
+  새 테스트 계정 설정, PR/merge, staging/배포/CodePush를 이어가지 않는다.
+- 재개 시 개인 context와 해당 feature를 안전하게 refresh하고 아래를 확인한다.
+  1. Member 실계정 및 본인/타 의사/공유/과거 참여 주문, 담당 미지정 Draft·전체 환자 선택 데이터.
+     FOLLOW_UP 생성·Draft 복원 뒤 담당 지정 결과도 서버 업무 정책과 대조한다.
+  2. 실제 서버 GET 범위·담당 변경 후 조회 상실·직접 주소 접근과 native 거절 code/응답.
+  3. 다른 관련 Case/Pickup의 담당 구분이 요구된다면 필요한 실제 계약과 확정 디자인.
+  4. 인증된 개발서버 화면과 앱 실기기 QA. 앱 일반 PR 정책은 develop이며 기존 feature base와
+     현재 delivery reference 차이를 확인한 뒤, PR/릴리즈 작업은 새 승인 범위에서 진행한다.
+
+## 이력 — 2026-10-13 새 세션 인수인계·개발서버 기준 재개
 
 - 같은 등록 권한관리 프로젝트에 후속 세션
   **`01a132e9-6555-7a02-9c72-4dad9c04cc64`**를 생성했다. 실제 적용 설정
