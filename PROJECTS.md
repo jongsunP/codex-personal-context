@@ -164,7 +164,8 @@ For detailed current state, read:
   Member Orders5·숨긴 필터 유지. 실제 전송/업로드/주문/담당/권한/승인 변경은 하지 않았다.
 - **검증 구분:** 채팅48건/전체Clinic302건·3서비스타입·독립리뷰·normal push검사 통과 이력 유지.
   새 자동 E2E 최종 **97통과/2실패/5허용제외/5미실행**(109수집). 이전 실패였던 승인/Feedback2는 최초 시도 PASS,
-  해당 파일12/12·10/10 통과로 회복됐다. 남은 ISV2는 이전과 같은 버튼 대기 timeout이며 DEV 카테고리 전제 확인이 필요하다.
+  해당 파일12/12·10/10 통과로 회복됐다. **사용자 최신 지시로 E2E/ISV는 현재 범위에서 제외**하며 참고 이력만 보존한다.
+  이번 FE의 잔여·대기/재개 조건으로 삼지 않고 추가 조사·수정·재실행하지 않는다. CI/테스트 설정은 유지한다.
 - **다음:** BE 기능별 최종 계약·Member 부분 승인/Draft/3D/접근 상실·쓰기 사례가 준비되면 순차 진행한다.
   동등 BE 계약 확인 전 필요한 guard/cache는 유지한다. 전체 BE 완료나 쓰기 QA 완료로 확대하지 않는다.
 - **Office 앱 별도:** `/Users/parkjongsun/Repository/dentlink-app-permission`, feature `72a7914`의 ORDER API·cache/통합·실기기·배포 잔여 유지.
