@@ -2,6 +2,11 @@
 
 ## 2026-10-13
 
+- DL-16317 웹 DEV 후속을 사용자 승인으로 구현하고 feature/DL-16317의812aff0d4를 normal hook으로 커밋·푸시했다.
+  ORDER 채팅 API·역할 cache/입력 초기화·캡처 busy·직원 cache·숨긴 필터를 보완하고 Pickup 미사용 제한을 제거했다.
+  Clinic281건/3서비스 타입·빌드/normal push 검사가 통과했다. 기존 DEV 두 계정 읽기 비교와 신규 코드 QA를 구분했다.
+  새 PR/DEV 병합·배포, BE 기능별 계약·테스트 주문, 실제 쓰기 QA, native 별도 잔여를 정본의 다음 담당 순서로 저장했다.
+
 - DL-16317 breakpoint 이후 중단된 Jira44423/API 반영 검토와 권한 구현 전수 감사를 마쳤다.
   BE의 ORDER 채팅 GET·POST 교체 요청을 확인하여 전체 채팅 명세 대기 판단을 정정했다.
   원본 hook/helper 임시 검사로 캡처 busy 회수·직원 scoped cache 갱신 누락을 재현하고,

@@ -153,30 +153,25 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-13 breakpoint 이후 전수 재검토:** 댓글
-  [44423](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44423)은 BE의 주문 채팅 GET·POST
-  교체 요청이다. 현행 Swagger와 일치하므로 **ORDER 전환은 지금 할 FE 작업**이다. DENTLINK/답글/읽음 등은 유지한다.
-  이전 '즉시 할 FE 작업 없음/전체 채팅 계약 대기' 판단은 대체한다. 이번은 감사이며 제품 변경은 하지 않았다.
-- **새 확인:** 실제 원본 hook/helper로 캡처 파일 전환 후 로딩 잔존과 employee scoped cache 갱신 누락을 재현했다.
-  Member에게 숨긴 Orders/Patients/Board URL 필터가 요청에 남는 경로도 확인했다. Pickup canOpenOrder는 실제 caller가
-  사용하지 않는 옛 링크 제한 prop·분기·Story/test로 정리 가능하다. 모든 주문 링크 유지 정책은 그대로다.
-- **과도 구현 판단:** 역할별 메뉴/필터·직접 URL/action guard·이전 역할 cache 분리는 필요하다.
-  withAuthorization을 일괄 삭제하지 않는다. 직원 GET 통합 및 Remake/승인 선행 order GET 축소는 해당 BE 계약과 대조한다.
-  목록 데이터/total/filter-hint 정제, 상세 세 상태·관련 조회·오류 계약, 실제 차단 주문/Draft/3D/저장 QA는 별도 잔여다.
-- **웹 보존:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
-  로컬·원격 `1c67612c3`, clean. 사용자 merge [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693),
-  develop `e6cfea705`·DEV 배포 확인은 기존 근거다. 최신 fetch master는 `8772d6882`로 갱신됐고 feature에 합치지 않았다.
-  감사는 PR 실제 기준 `aff278a43...HEAD` 변경167파일을 범위로 source/caller를 점검했다.
-- **검증 경계:** 이번 임시 회귀 재현5개는 3실패/2대조군통과. 기존 웹257개/3서비스 타입·빌드 통과는 이전 기록이다.
-  DEV E2E 97통과/2실패/5제외/5미실행(ISV 버튼 timeout)은 미해결로 유지한다. 새 브라우저/쓰기 QA는 하지 않았다.
-- **Office 앱 별도:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 동일 feature `72a7914`, 원격 동일 clean.
-  ORDER API 전환과 권한별 cache 연결 검토 잔여가 있다. 기존157검사/양OS JS bundle 통과·전체type기존18오류이며
-  develop 통합·PR·실기기·CodePush는 미완료다. 웹 DEV 후속 작업에 자동 포함하지 않는다.
+- **최신 2026-10-13 18:23 웹 후속 구현 완료:** 사용자 승인으로 Jira44423의 ORDER 채팅 GET·POST
+  새 주문 경로를 연결하고 채팅 scope/로컬 상태, 캡처 busy, 직원 cache, Member 숨긴 URL·요청 필터를 보완했다.
+  Pickup 미사용 링크 제한 코드를 제거했고 모든 주문 링크 진입은 유지한다. 필요 with/직접 접근 guard는 유지한다.
+- **웹 원격:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
+  `812aff0d4d49d7e82c1e3d54708d236a77e07bee`, 원격 일치 clean. normal commit/push 성공.
+  기존 DEV PR4693 병합/배포와 별개로 **이번 후속 커밋의 새 PR·merge·배포는 하지 않았다.**
+- **검증:** Clinic37 suite/281건, 3서비스 타입·빌드, normal push lint(오류0)·DLOSguard·shared coverage 통과.
+  기존 DEV의 Member/Admin 같은 주문3943 화면 차이를 읽기로 재확인했으며 신규 코드 배포/쓰기 QA는 남아 있다.
+  기존 DEV E2E97통과/2실패/5제외/5미실행(ISV 버튼timeout)은 별도 미해결이다.
+- **다음:** DEV 후속 전달 후 두 계정 채팅/화면 확인, BE의 목록·total·filter-hint·상세 기본/부분/거절 계약과
+  테스트 주문 준비 범위부터 순차 연동한다. 같은 GET 내부 정제도 가능하며 새 검증 API를 선행 가정하지 않는다.
+  실제 Draft/3D/접근 상실/저장 QA와 선행 GET 통합은 해당 근거가 준비되면 진행한다.
+- **Office 앱 별도:** `/Users/parkjongsun/Repository/dentlink-app-permission`, feature `72a7914`, 원격 동일 clean.
+  이번에는 수정하지 않았고 ORDER API·cache 후속/통합·실기기·배포는 남아 있다.
 - Web [DL-16319](https://innovaid.atlassian.net/browse/DL-16319), Office App
-  [DL-16752](https://innovaid.atlassian.net/browse/DL-16752). 이번 감사에서는 Jira/PR를 변경하지 않았다.
+  [DL-16752](https://innovaid.atlassian.net/browse/DL-16752). Jira/PR 변경·추가 배포·자동 모니터링은 하지 않았다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
   앱 표시 이름은 `권한관리 프로젝트 폴더`, 기존 `권한관리세션` 유지.
-- 상세 findings·원본 근거·검증 한계·실계정 UI 이력·후속 담당 순서는
+- 상세 구현·감사 근거·검증 한계·다음 담당 순서는
   [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)에 보존한다.
 
 ### Dentlink 통합알림센터 — 사전 검토

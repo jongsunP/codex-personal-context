@@ -1,6 +1,77 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-13 breakpoint 이후 API·권한 구현 전수 재검토
+## 현재 상태 — 2026-10-13 18:23 KST 웹 후속 구현·커밋·푸시 완료
+
+- **사용자 승인:** 준비된 Member/Admin 브라우저를 필요시 활용해 하던 작업을 이어가고, 완료 후
+  커밋·푸시·메모리와 브리핑까지 하라는 직접 지시를 받았다. 아래 전수 감사에서 확인한 **웹 DEV 후속 범위**를 구현했다.
+  Office native 소스·PR·배포/CodePush는 이번 전달에 포함하지 않았다.
+- **웹 원격 보존:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
+  **`812aff0d4d49d7e82c1e3d54708d236a77e07bee`** (`fix: 주문 채팅 전환과 멤버 권한 후속 처리 보완`).
+  normal commit/push hook 성공, 원격 ls-remote 일치, working tree clean을 확인했다.
+  기존 `1c67612c3` 뒤 1커밋이며, 현재 `origin/develop...HEAD` 후속 diff는 43파일이다.
+- **DEV 배포와 구분:** 이번 커밋의 새 PR·병합·배포는 실행하지 않았다. 기존 PR4693 사용자 병합과
+  develop `e6cfea705` 배포는 이전 버전의 근거다. 이번 수정은 feature 원격에 준비된 상태다.
+
+### 이번 완료 범위
+
+| 항목 | 반영 결과 |
+| --- | --- |
+| 주문 채팅 API | 댓글44423과 현행 Swagger에 맞춰 ORDER GET·POST를 `/office/chat-messages/orders/{orderId}`로 전환. GET page/size/repeated sort, POST message/fileIds만 전달. 유효하지 않은 주문 ID는 요청하지 않음 |
+| 기존 채팅 흐름 | 동일 adapter를 쓰는 초기·페이지·폴링·원문 이동·전송에 적용. 같은 응답/chatId를 유지하며 DENTLINK 고객지원·답글·읽음·페이지 위치·latest/unread·번역 경로는 유지 |
+| 채팅 역할 전환 | query key에 직원·권한을 포함하고 현재 직원 profile 확인 전 ORDER 조회를 대기. wrapper remount로 이전 대화·pending 메시지·입력 draft·이미지 carousel을 비움. 이전 역할의 늦은 응답은 현재 화면에 반영되지 않음 |
+| 캡처 로딩 | 승인 파일 URL·variant·캡처 권한 변경 시 무효화된 캡처/저장 busy를 회수. 이전 작업 완료가 새 캡처/저장 상태를 덮지 않도록 기존 version guard 유지 |
+| 직원 캐시 | 결제·스캐너·요금표 writer와 온보딩 reader를 `[EMPLOYEE_OWN_SHOW, employeeId]`로 일치시킴. 소속 전환 중 ID가 다른 profile로 새 직원 cache를 쓰지 않음 |
+| Member 숨긴 필터 | Orders dentistIds/myOrderOnly, Patients myPatientOnly, Board dentistName을 URL·표시·요청에서 제거. 역할 미확정/Admin의 조건과 나머지 검색·날짜·상태·페이지는 유지. 서버 rows/total을 FE에서 재필터링하지 않음 |
+| Board 전환 검증 | reset의 invalidate도 현재 직원·권한·유효 조건으로 좁혀 이전 Admin 필터 재요청을 방지. 리뷰에서 발견한 역할 전환 시 정렬 초기화는 제거해 기존 정렬 유지 |
+| Pickup 정리 | 사용되지 않는 canOpenOrder prop·전달·차단 분기와 제한 Story/test 제거. 모든 주문번호는 기존처럼 상세로 이동하며 제한은 상세에서 판단 |
+
+- **with/guard 판단:** 기존 withAuthorization, 메뉴·필터 표시, 직접 URL/action guard, 직원·권한별 cache는
+  각각 필요한 경계를 담당하므로 유지했다. Remake/승인 선행 order GET은 현재 DTO로 담당/행동 권한을
+  대체할 수 없어 유지했다. BE가 동등한 판정/응답을 제공하면 그 근거로 통합·축소한다.
+  새 검증 endpoint·UI·문구나 전체 readonly 정책을 추측해서 추가하지 않았다.
+- **명세:** 이번 재조회 `/tmp/dentlink-permission-implementation-swagger-20261013.json` SHA256
+  `95beaf4e7797538f1f95a06ed18773c320de0422bc10bf04d81a329e9e718057`로 감사 당시와 같다.
+  별도 상세 검증 endpoint는 현재 공개 명세에서 식별되지 않았다. 동일 GET의 BE 내부 정제는 별도로 확인한다.
+
+### 검증과 실제 브라우저 경계
+
+- 최종 Clinic Jest **37 suite / 281건 전부 통과**. API 계약·실제 useLinkTalk 호출 흐름·역할/직원 scope 16건,
+  직원 cache5건, 숨긴 필터6건(기존 목록 cache2건과 함께8건), 캡처17건, Pickup 전링크3건을 포함한다.
+  새 테스트 fixture의 Router/type 문제는 수정했고 최종 전체 실행 및 normal 타입 검사에서 통과했다.
+- **Clinic/Lab/Admin 타입 및 production build 모두 통과.** Board 최종 소스 변경 뒤 Clinic build도 재확인했다.
+  normal push: 3서비스 lint 오류0(기존 warning은 남음), Admin DLOS guard6건, shared coverage check 통과.
+  root와 별도 agent가 API/cache·필터·chat scope를 독립 리뷰했고 유효 지적을 반영한 뒤 재확인했다.
+- 검증 로그: `/tmp/dentlink-permission-clinic-tests-20261013.log`,
+  `/tmp/dentlink-permission-{clinic,lab,admin}-build-20261013.log`,
+  `/tmp/dentlink-permission-commit-20261013.log`, `/tmp/dentlink-permission-push-20261013.log`.
+  임시 로그는 로컬 보조 증거이며 원격 코드·테스트·이 기록으로 다른 기기에서 이어간다.
+- **기존 DEV 화면 읽기 비교:** 준비된 Chrome 일반 Member `jongsun.test2`와 시크릿 Admin `jongsun.test1`,
+  같은 병원의 주문 `9000003943`을 다시 비교했다. 두 화면 모두 Case/Orders4/4·트리·파일을 제공했고,
+  Member는 Billing/Dashboard 메뉴·주문 Cancel/Edit·채팅 입력이 없으며 Admin에는 표시된다.
+  Patient Info Edit은 Member에도 남는 현재 부분 조회 정책과 일치한다. 양쪽 대화는 No Messages였다.
+- 위 브라우저는 **기존 DEV 버전**이며 새 커밋의 배포 QA가 아니다. 실제 채팅 전송·파일 업로드·주문 변경·
+  권한 변경·저장은 실행하지 않았다. 새 POST는 mock transport로 body/URL/응답 연결을 검증했다.
+- 이전 DEV E2E **97통과/2실패/5제외/5미실행**(ISV 버튼 timeout)은 여전히 별도 미해결이다.
+  이번 로컬 검사로 DEV 자동 E2E나 전체 실계정 QA가 통과했다고 처리하지 않는다.
+
+### 남은 일과 다음 담당 순서
+
+1. **FE/사용자 DEV 전달:** 이번 feature 후속분으로 develop PR을 만들고 검토·사용자 병합·DEV 배포 후
+   실제 Member/Admin 두 계정에서 새 주문 채팅 GET과 허용 역할 전송/답글/읽음/페이지를 확인한다.
+   현재는 커밋·푸시까지 완료이며 새 PR/merge/deploy는 별도 단계다.
+2. **BE:** 기능별 준비 범위를 알려준다. 같은 GET이어도 목록/total/filter-hint 정제,
+   주문 기본·부분·거절 판단과 관련 Case/파일/채팅 범위·오류 계약을 실제 endpoint/응답과 함께 확인한다.
+   별도 검증 API를 반드시 신설해야 한다고 가정하지 않고 준비된 기능부터 연결한다.
+3. **BE/사용자 테스트 준비 → FE 확인:** Admin만 성공하고 Member는 거절되는 주문,
+   본인/타 의사/미지정 Draft, 실제3D, 담당 변경 후 접근 상실, 실제 저장·승인·취소·전송 대상이 필요하다.
+   이미 준비된 두 계정은 계속 활용한다. `9000009248`/`9000009123`의 부분 Case/대화는 정책·응답 대조 잔여다.
+4. **Office native 별도:** checkout `dentlink-app-permission`, feature `72a79146aaba1054827ab3dbd4540f274373a4ef`,
+   원격 동일 clean을 재확인했다. 앱 ORDER API 전환·직원 cache writer/채팅 scope·기기 QA·통합/배포는 남아 있다.
+   이전 157개 검사/양OS bundle·기존 type18오류는 과거 기록이며 이번에 재실행하지 않았다.
+5. **대기 경계:** 이번에 확인된 웹 FE 단독 후속 수정은 마쳤다. 배포/BE 계약/테스트 준비의 새 근거가 오면
+   위 순서로 이어간다. 새 요청 없이 추가 기능·PR·병합·배포·자동 모니터링을 시작하지 않는다.
+
+## 이력 — 2026-10-13 breakpoint 이후 API·권한 구현 전수 재검토 (후속 구현 전)
 
 - **범위:** 사용자 요청에 따라 중단된 댓글 44423 확인과 `with…`·페이지·컴포넌트 제한의 적정성을
   다시 검토했다. 이번 작업은 조사·검증이며 **제품 코드 수정, API 전환, 제품 커밋/푸시·PR·배포는 하지 않았다.**
