@@ -1,5 +1,41 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-13 · FE 패키지 준비 완료·npm 설정 회신 대기
+## 현재 브레이크포인트 — 2026-10-13 · DLDS 최초 등록 성공·icons 반영 및 자동 배포 설정 확인 대기
+
+**사용자 요청과 범위:** 동료의 npm 권한 해결 답변과 최신 master를 확인해 미처리 작업을 이어가라는 요청을 수행했습니다. 모델 전환 후에도 이전 승인·실행 기록과 실제 Git/CI를 다시 대조했습니다. 이전 회신 대기·PR 동결 지시는 재개 요청으로 해제됐습니다. **PR#4692의 master 병합은 여전히 사용자의 별도 결정**이며 실행하지 않았습니다.
+
+### 완료·저장
+
+- **최신 master:** `8772d68825cac6e23792d86a715153a67dc71078`/PR#4694. 변경은 icons·DLOS의 0.1.0→0.1.1 두 버전뿐이며 컴포넌트·workflow 변경은 없습니다. Actions38368414677 verify/publish 성공과 registry의 두 패키지 0.1.1 GitHub Actions/OIDC publisher를 확인했습니다. 기존 OIDC E403 대기 사유는 해소됐습니다.
+- **Client 정본:** `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16471-dlds-dlos-integration`, HEAD/origin **`94b6324be13e63d10dd75b0f37ab31893817e196`**, clean. master 병합 커밋330844c54와 버전 조정94b6324be를 정상 hook으로 저장·푸시했습니다. 직전77ff34f76 대비 실제 파일 차이는 `shared/dlds/package.json`, `shared/dlos/package.json`, `shared/icons/package.json`의 **0.1.1→0.1.2 세 줄**입니다. UI·기능·workflow를 새로 수정하지 않았습니다.
+- **검증:** 실제 npm 기준 release-check, 패키지 규칙22+bootstrap14 테스트, 정상 Git hook의 3앱 타입/lint·Admin DLOS guard·shared coverage 통과. 기존 lint 경고는 남아 있으나 hook 실패는 없습니다. PR CI38372212102에서 DLDS149·DLOS381 테스트, 세 패키지 타입·빌드·pack·dry-run, tarball 기반 외부 React18/19 Bundler/NodeNext 타입·Vite 빌드·Node ESM SSR 통과. DLOS guard38372212270도 성공입니다.
+- **PR:** [#4692](https://github.com/Innvoaid/dentlink-client/pull/4692), 제목 `[DL-16471] DLDS·DLOS 패키지 통합`, OPEN/non-Draft·base master·미병합. 기존 PR 한 개를 이어갑니다. 실제 반영 목적과 최신 master/버전·공개 결과를 본문에 반영했습니다. CodeRabbit은235파일/150파일 한도 skip(실제 리뷰 미실행, 사용자 지시로 유료 실행 제외), Vercel은 기존 `Deployment was blocked` 상태입니다.
+- **Jira:** child DL-16471의 현재 설명과 기존 댓글44417을 갱신했습니다. 기준 문서 이하 요구사항·이력과 다른 댓글은 보존했고 진행 중을 유지했습니다. 상위/완료 카드·Studio 정책은 변경하지 않았습니다.
+
+### 실제 npm 공개 결과
+
+- [수동 공개 Actions38372263872](https://github.com/Innvoaid/dentlink-client/actions/runs/38372263872)는 **verify/publish 모두 SUCCESS**입니다. head94b6324be, channel=prerelease, publish=true, bootstrap_dlds=true. 기존 계산식에 따라 시험 버전은 세 패키지 모두 **`0.1.3-pr.94b6324`**입니다. 정식 준비 버전0.1.2와 구분합니다.
+- icons/DLOS는 기존 OIDC, 신규 DLDS 최초 등록은 기존 NPM_TOKEN 자격으로 실행됐습니다. CI 로그에는 세 업로드 성공과 npm 처리 대기 안내가 있습니다. DLDS 최초 생성 권한은 실제 성공했으므로 더 이상 최초 등록 token 권한을 요청할 필요가 없습니다.
+- **18:19:51 KST registry 확인:** DLOS와 신규 DLDS의 시험 버전은 실제 등록됐습니다. **icons 시험 버전은 아직 조회되지 않습니다.** CLI 업로드 접수는17:59:54 KST이며 약20분 뒤에도 시험 버전이 없었습니다.
+- **태그:** DLOS/icons의 기존 latest는0.1.1입니다. 신규 DLDS는 첫 등록 후 npm이 latest와pr를 모두0.1.3-pr.94b6324로 표시했습니다. 이것은 정식0.1.2 공개 완료를 뜻하지 않습니다. 시험 검증은 세 패키지의 정확한 버전을 지정해 수행합니다.
+- **설치 검증 미완료:** 두 디자인시스템은 icons의 같은 시험 버전을 요구합니다. 해당 버전이 아직 공개 조회되지 않아 실제 registry 기반 세 패키지 설치·frozen 재설치·외부 소비 검증은 시작하지 않았습니다. tarball 소비 검사 성공과 구분합니다. 중복 publish, 다른 icons 버전으로 대체, token fallback, stage 공개 전환은 하지 않았습니다.
+- npm 공식 안내는 게시 전 검사가 보통 약5분, 경우에 따라15분 이상 걸릴 수 있다고 설명합니다. 현재 아이콘의 상세 처리/수동 검토 여부는 공개 정보만으로 알 수 없습니다. [공식 안내](https://github.blog/changelog/2026-07-28-npm-publish-time-malware-scanning-and-dual-use-metadata/). 공개 CLI 성공만으로 설치 가능 상태라고 보고하지 않습니다.
+
+### 남은 순서·담당
+
+1. **Codex가 먼저 재조회:** 재개 시 개인 context와 feature를 안전하게 pull하고 PR/HEAD와 세 패키지의 실제 registry를 확인합니다. icons 시험 버전이 보이면 추가 publish 없이 준비된 외부 설치 검증을 실행합니다. 계속 없으면 npm 관리자에게 `@innvoaid/icons@0.1.3-pr.94b6324`의 처리 상태·알림 확인을 요청합니다. 원인이 다시 OIDC E403이라고 단정하지 않습니다.
+2. **npm 관리자:** 신규 `@innvoaid/dlds`의 Trusted Publisher를 `Innvoaid / dentlink-client / packages_publish.yml`(environment 없음)로 확인·등록하고 **직접 npm publish 허용**을 설정합니다. 이후 정상 OIDC 배포로 검증합니다. 기존 icons/DLOS 설정을 다시 필수 요청으로 되돌리지 않습니다. 로컬 `npm whoami`는 인증 오류로 실패했고 npm 관리 UI 설정은 확인하지 못했습니다. CI secret 추출·권한 우회는 하지 않습니다.
+3. **사용자:** 시험 설치 검증·DLDS 자동 배포 준비 후 기존 PR#4692의 master 병합을 결정합니다. 승인 없이 병합하지 않습니다. 병합 후 기존 master workflow의 정식0.1.2/latest 공개와 실제 설치를 확인합니다.
+4. **Codex/Studio 운영:** 정식 공개 이후 Studio 갤러리 자동 최신화 결과를 확인합니다. 읽기 확인한 Studio main1f9e9acb는 DLOS/icons0.1.0 고정, DLDS 준비 중, 수동dlos:sync이며 자동화 완료 증거는 없습니다. 외부 배포 설정은 미확인입니다. FE의 Studio 공통 작업자 등록이나 매번 수동 PR을 필수로 요청하지 않습니다. 자동 연결이 준비되지 않았다면 그 설정을 확인합니다.
+5. 그다음 Studio 기반 DLDS 하네스·대표 화면·FE 코드 인계를 논의합니다. 새 하네스/에디터는 이번 공개 후속에 섞지 않습니다.
+
+### 재개 자료·보존
+
+- 외부 설치 준비: `/tmp/dlds-registry-consumer-94b6324/verify.cjs --run`. 실행 명령은 `node /tmp/dlds-registry-consumer-94b6324/verify.cjs --run`이며 **아직 실행하지 않았습니다**. 기존 `scripts/package-artifact.js`의 `CONSUMER_FILES`를 그대로 사용하고 세 dependency만 정확한 registry 버전으로 지정, tarball override를 제거했습니다. 인증 없는 빈 npm 설정에서 일반 설치→node_modules 재생성 후 frozen 설치(잠금파일 hash 동일)→React18/19 타입(Bundler/NodeNext)·Vite 빌드·Node ESM SSR을 검사합니다. 다른 기기에 임시파일이 없으면 위 커밋의 동일 fixture에서 재구성합니다.
+- 로컬 로그: `/tmp/dlds-012-commit.log`, `/tmp/dlds-012-push.log`, `/tmp/dlds-012-pr-ci.log`, `/tmp/dlds-012-bootstrap-ci.log`, `/tmp/dlds-012-registry-result.json`. GitHub run ID/커밋이 원격 복구 근거이며 로컬 임시파일만을 유일한 근거로 두지 않습니다.
+- 기존 DLDS 백업 `/Users/parkjongsun/Repository/dentlink-client-dlds`/feature/DL-16471/12fb96a4e와 Studio 원본25af81a, 이전 private 검증 자료는 보존했습니다. 이전 Studio tarball 검증을 최신 registry/공식 갤러리 검증으로 표현하지 않습니다.
+- 이 정본과 HANDOFF를 개인 Git에 commit/push한 뒤 대기합니다. 자동 감시·추가 공개·master 병합은 시작하지 않습니다. 다음 사용자 재개/설정 답변이 오면 위1번부터 현재 사실을 확인합니다.
+
+## 이전 체크포인트 — 2026-10-13 · FE 패키지 준비 완료·npm 설정 회신 대기
 
 **목적:** 사용자가 지금까지의 필요한 대화를 정리하고 완료/미완료/남은 작업과 PR 여부를 현재 시점으로 저장·브리핑하도록 요청했습니다. 새로운 구현·npm 재시도·master 병합을 진행하는 요청으로 넓히지 않습니다. 아래는 새기기/새세션에서 우선 읽을 현재 상태이며 이전 체크포인트의 Studio 권한 필수 조건은 대체된 기록입니다.
 
