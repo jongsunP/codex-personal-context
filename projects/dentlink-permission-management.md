@@ -1,6 +1,48 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-13 개발서버용 develop 재생성·웹 PR #4693 생성
+## 현재 상태 — 2026-10-13 사용자 웹 PR merge·DEV 배포 확인·최종 BE 명세 대기
+
+- **사용자가 직접 merge:** 웹 [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693)은
+  2026-10-13 **15:02:51 KST**에 MERGED다. 원격 develop은 실제 재조회에서
+  **`e6cfea705e4dadd3ec6c3c81d2b8432245f5b35c`**, master는 `aff278a43`,
+  feature/DL-16317은 `1c67612c3`다. 이번 목적은 완료한 화면을 개발서버에 올려 BE 개발자가
+  사용할 수 있게 하는 것이다. 상용 전달이나 Office 앱 통합/배포까지 완료한 의미가 아니다.
+- **15:13 KST DEV 확인:** 같은 merge SHA의
+  [Office DEV workflow 38354572860](https://github.com/Innvoaid/dentlink-client/actions/runs/38354572860)은
+  `office-dev-build-and-deploy` job 성공(15:13:30 KST), Docker build/push·S3 정적 파일·ECS 배포
+  step 성공이다. 후속 `e2e-and-notify`는 진행 중이며 전체 workflow/E2E 성공은 아직 확인하지 않았다.
+  ECS step은 서비스 안정화까지 기다리지 않는 설정이므로 배포 step 성공과 새 빌드 서빙 증거를 구분한다.
+  [Lab DEV workflow 38354572871](https://github.com/Innvoaid/dentlink-client/actions/runs/38354572871)은
+  같은 SHA로 전체 성공(15:11:58 KST)이다. 이는 보존된 Lab diff로 자동 실행된 결과이며 신규 Lab 정책 구현이 아니다.
+- **새 Clinic 빌드 서빙 확인:** 15:14:46 KST 비로그인 `https://dev-portal.dentlink.io`는 HTTP 200,
+  Next BUILD_ID **`hbVeD1fi0LvvqQFsJJUPG`**를 제공했다. 동일 workflow의 S3 manifest 업로드 ID와
+  일치하며, 후속 job의 `Wait for new version to be live`도 성공했다. 실제 DEV 새 빌드 반영은 확인됐다.
+  자동 E2E는 실행 중이고 인증된 Member 권한/주문 범위/실기기 QA나 BE 전체 배포 완료 증거는 아니다.
+- **사용자 확정 FE/BE 책임:** GET의 조회 범위·데이터 정제는 BE 내부에서 처리할 수 있고
+  API 형태는 유지될 수 있다. FE는 접속한 사용자 권한에 따른 UI/페이지/행동과 필터 제공,
+  실제 바뀐 API의 caller 연결, 주문번호별 상세 **기본 / 부분 조회 / 조회 불가** 표현을 담당한다.
+  기존 `with...`나 선행 GET이 모두 최종 설계로 확정된 것은 아니다. 최종 BE 응답에 맞춰
+  필요한 FE 처리만 남기고 중복된 관계 예측/추가 조회를 줄일 수 있다. 지금 임의 삭제하지 않는다.
+- **현재 코드 읽기 전용 검토 결과:** 로그인·소속·역할 진입 제어와 소속 변경 후 이전 승인 폐기,
+  기본 폼 데이터 GET·거절 화면·직원별 cache/callback 보호는 필요한 FE 책임이다.
+  `withAuthorization`의 직원 GET은 기존 `_app` 직원 cache 재사용 후보다.
+  `withRemakeOrderAuthorization`의 Member 전용 선행 주문 GET과 `useOrderApprovalPage`의
+  담당 확인용 주문 GET은 최종 Remake/승인 응답 계약이 충분하면 축소/통합할 후보다.
+  직접 주문 폼·`canPerformOfficeOrderActions`의 담당 관계 판정과 Case 제목 허용 연결도
+  최종 부분 조회/행동 계약에 맞춰 재검토한다. 동일 query key의 hook 둘을 중복 네트워크 GET으로 단정하지 않는다.
+- **지금 할 일/대기할 일:** DEV 새 빌드 반영 증거와 자동 E2E 결과를 현재 확인 가능한 범위에서
+  확인·기록한다. 최종 BE 명세 전 추가 guard 삭제·채팅 API 전환·FE 목록 데이터 정제를 시작하지 않는다.
+  다음 재개 시 BE 최종 문서와 실제 요청/응답으로 위 후보 및 채팅 전환 범위를 검증하고,
+  실제 Member 주문/환자 범위·상세 세 상태를 QA한다. 별도 테스트 계정은 아직 없다.
+- 제품 소스·feature commit은 이번 사후 확인에서 변경하지 않았다. CodeRabbit develop 자동 리뷰는
+  skip이었고 Vercel DLOS check는 blocked였다. 이들은 실제 코드 리뷰 완료/전체 PR checks 성공 증거가 아니다.
+  사용자의 merge 이후 DEV Office/Lab workflow 결과와 분리해 기록하며 리뷰/설정을 임의 변경하지 않는다.
+- Web DL-16319의 기존 댓글 `44418`에 15:17 KST 사용자 merge·새 DEV 빌드 반영·자동 E2E 진행과
+  BE 최종 명세 후 잔여를 갱신하고 재조회했다. 카드 진행 중을 유지하며 상위/Office 앱 댓글은 이번에 변경하지 않았다.
+  이번 사용자 질문으로 필요한 사후 확인과 메모리 정리를 한 것이며, 새 지시 없이 자동 조사/채팅 전환/
+  guard 제거/배포/모니터링을 이어가지 않는다.
+
+## 이력 — 2026-10-13 개발서버용 develop 재생성·웹 PR #4693 생성
 
 - **최신 사용자 명시 지시:** 이번 작업은 웹 개발서버용이다. 원격 develop을 삭제하고 현재 원격
   master에서 새 develop을 만든 뒤 현재 작업 브랜치의 develop PR을 생성하도록 요청해 실행했다.

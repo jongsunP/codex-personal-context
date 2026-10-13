@@ -153,13 +153,19 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-13 개발서버용 웹 PR:** 사용자 명시 요청으로 원격 develop을 삭제하고
-  원격 master **`aff278a43`**에서 재생성했다. 이전 develop `e9d3f3509`는 로컬 참조/bundle로 보존했다.
-  웹 [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693),
-  **`feature/DL-16317 / 1c67612c3 → develop / aff278a43`**, 일반 Open PR 생성·attach·base/diff 재확인 완료.
-  제품 코드는 그대로이고 미머지다. Vercel blocked check와 CodeRabbit develop 자동 리뷰 skip으로
-  checks/review 완료 상태는 아니다. 이 요청에서는 Office 앱을 변경하지 않았으며,
-  채팅 전환은 BE 최종 명세 후 진행한다. 개발서버용 PR 예외와 상용 release 전달을 구분한다.
+- **최신 2026-10-13 개발서버용 웹 merge:** 사용자 요청으로 develop을 원격 master
+  `aff278a43`에서 재생성하고 [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693)을 만들었다.
+  사용자가 15:02:51 KST에 직접 merge했고 현재 원격 develop은 **`e6cfea705`**다.
+  이전 develop `e9d3f3509`는 로컬 참조/bundle로 보존했다. feature는 `1c67612c3` 그대로다.
+  Office DEV build/deploy job과 Lab DEV workflow 성공이다. 15:14:46 KST Clinic DEV의 실제 BUILD_ID
+  `hbVeD1fi0LvvqQFsJJUPG`가 이번 빌드와 일치했고, 자동 반영 확인도 성공했다. 후속 자동 E2E는 진행 중이며
+  실계정 QA와 BE 전체 배포는 확인되지 않았다. CodeRabbit 자동 리뷰는 skip, Vercel DLOS는 blocked였다.
+  이번 목적은 기존 화면을 BE 개발자가 DEV에서 사용할 수 있게 하는 것이며 상용 release/Office 앱 전달과 별개다.
+- **최신 사용자 FE/BE 원칙:** GET 조회 범위·데이터 정제는 BE 내부에서 처리할 수 있다.
+  FE는 사용자 권한별 UI·필터 제공, 실제 바뀐 API 연결, 주문번호별 기본/부분/조회 불가 상세를 담당한다.
+  기존 with/선행 GET은 최종 BE 계약에 맞춰 필요한 것만 유지한다. Remake·승인 관계 확인용
+  추가 주문 GET과 담당 사전판정은 재검토 후보이며 지금 임의 삭제하지 않는다.
+  채팅 전환도 BE 최종 명세 확인 후 진행한다. 이번 확인에서는 제품 코드/Office 앱을 변경하지 않았다.
 - **2026-10-13 가능한 범위 마감·BE 최종 명세 후 재개 대기:** 현재 세션
   `01a132e9-6555-7a02-9c72-4dad9c04cc64`에서 실제 Swagger generate로 Member와 담당 ID,
   리뷰 허용 여부를 확인해 치과 웹/앱의 필터·새 Case·주문 행동/직접 접근에 연결했다.
