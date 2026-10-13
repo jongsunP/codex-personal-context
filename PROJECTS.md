@@ -153,22 +153,25 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-13 18:23 웹 후속 구현 완료:** 사용자 승인으로 Jira44423의 ORDER 채팅 GET·POST
+- **최신 2026-10-13 18:45 웹 DEV 후속 PR 준비 완료:** 사용자 승인으로 Jira44423의 ORDER 채팅 GET·POST
   새 주문 경로를 연결하고 채팅 scope/로컬 상태, 캡처 busy, 직원 cache, Member 숨긴 URL·요청 필터를 보완했다.
   Pickup 미사용 링크 제한 코드를 제거했고 모든 주문 링크 진입은 유지한다. 필요 with/직접 접근 guard는 유지한다.
 - **웹 원격:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
   `812aff0d4d49d7e82c1e3d54708d236a77e07bee`, 원격 일치 clean. normal commit/push 성공.
-  기존 DEV PR4693 병합/배포와 별개로 **이번 후속 커밋의 새 PR·merge·배포는 하지 않았다.**
+  [PR4695](https://github.com/Innvoaid/dentlink-client/pull/4695) `feature/DL-16317 → develop` 생성/연결 완료,
+  OPEN/MERGEABLE. 실제 Clinic26+shared17파일 차이로 develop의 clinic/** 자동배포 조건을 충족한다.
+  원본 브랜치를 유지했고 새 코드/빈 커밋은 없다. **이번 PR 병합·배포는 아직 실행하지 않았다.**
+  CodeRabbit은 develop 리뷰 skipped, 별도 DLOS Vercel preview Blocked로 mergeState UNSTABLE이다.
 - **검증:** Clinic37 suite/281건, 3서비스 타입·빌드, normal push lint(오류0)·DLOSguard·shared coverage 통과.
   기존 DEV의 Member/Admin 같은 주문3943 화면 차이를 읽기로 재확인했으며 신규 코드 배포/쓰기 QA는 남아 있다.
   기존 DEV E2E97통과/2실패/5제외/5미실행(ISV 버튼timeout)은 별도 미해결이다.
-- **다음:** DEV 후속 전달 후 두 계정 채팅/화면 확인, BE의 목록·total·filter-hint·상세 기본/부분/거절 계약과
+- **다음:** 사용자 PR4695 병합 → DEV 자동배포 완료 확인 → 두 계정 채팅/화면 확인, BE의 목록·total·filter-hint·상세 기본/부분/거절 계약과
   테스트 주문 준비 범위부터 순차 연동한다. 같은 GET 내부 정제도 가능하며 새 검증 API를 선행 가정하지 않는다.
   실제 Draft/3D/접근 상실/저장 QA와 선행 GET 통합은 해당 근거가 준비되면 진행한다.
 - **Office 앱 별도:** `/Users/parkjongsun/Repository/dentlink-app-permission`, feature `72a7914`, 원격 동일 clean.
   이번에는 수정하지 않았고 ORDER API·cache 후속/통합·실기기·배포는 남아 있다.
 - Web [DL-16319](https://innovaid.atlassian.net/browse/DL-16319), Office App
-  [DL-16752](https://innovaid.atlassian.net/browse/DL-16752). Jira/PR 변경·추가 배포·자동 모니터링은 하지 않았다.
+  [DL-16752](https://innovaid.atlassian.net/browse/DL-16752). 이번은 웹 PR 준비만 했고 Jira 변경·추가 배포·자동 모니터링은 하지 않았다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
   앱 표시 이름은 `권한관리 프로젝트 폴더`, 기존 `권한관리세션` 유지.
 - 상세 구현·감사 근거·검증 한계·다음 담당 순서는

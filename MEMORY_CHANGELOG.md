@@ -2,6 +2,11 @@
 
 ## 2026-10-13
 
+- DL-16317 현재 feature 보존과 Clinic 변경 포함 DEV 전달 요청으로 후속 PR4695(feature/DL-16317→develop)를 만들었다.
+  head812aff0d4/후속1커밋/43파일(Clinic26+shared17), clinic/** 배포조건충족·MERGEABLE을 확인했다.
+  추가 소스/빈커밋 없이 원본 브랜치를 유지했다. Auto Assign성공·CodeRabbit develop리뷰skip·DLOS Vercel preview Blocked를 구분했다.
+  사용자 병합→DEV자동배포→두계정QA, BE기능별 준비 대기 순서를 기록했으며 병합/배포/자동모니터링은 실행하지 않았다.
+
 - DL-16317 웹 DEV 후속을 사용자 승인으로 구현하고 feature/DL-16317의812aff0d4를 normal hook으로 커밋·푸시했다.
   ORDER 채팅 API·역할 cache/입력 초기화·캡처 busy·직원 cache·숨긴 필터를 보완하고 Pickup 미사용 제한을 제거했다.
   Clinic281건/3서비스 타입·빌드/normal push 검사가 통과했다. 기존 DEV 두 계정 읽기 비교와 신규 코드 QA를 구분했다.

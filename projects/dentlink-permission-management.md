@@ -1,16 +1,30 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-13 18:23 KST 웹 후속 구현·커밋·푸시 완료
+## 현재 상태 — 2026-10-13 18:45 KST 웹 DEV 후속 PR 준비 완료
 
 - **사용자 승인:** 준비된 Member/Admin 브라우저를 필요시 활용해 하던 작업을 이어가고, 완료 후
   커밋·푸시·메모리와 브리핑까지 하라는 직접 지시를 받았다. 아래 전수 감사에서 확인한 **웹 DEV 후속 범위**를 구현했다.
   Office native 소스·PR·배포/CodePush는 이번 전달에 포함하지 않았다.
+  이후 사용자는 현재 feature를 유지한 채 clinic 변경을 포함해 개발서버에 추가 배포할 수 있도록 준비하고
+  완료/잔여를 정리하도록 요청했다. 이 지시에 따라 develop 후속 PR을 생성했다.
 - **웹 원격 보존:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
   **`812aff0d4d49d7e82c1e3d54708d236a77e07bee`** (`fix: 주문 채팅 전환과 멤버 권한 후속 처리 보완`).
   normal commit/push hook 성공, 원격 ls-remote 일치, working tree clean을 확인했다.
   기존 `1c67612c3` 뒤 1커밋이며, 현재 `origin/develop...HEAD` 후속 diff는 43파일이다.
-- **DEV 배포와 구분:** 이번 커밋의 새 PR·병합·배포는 실행하지 않았다. 기존 PR4693 사용자 병합과
-  develop `e6cfea705` 배포는 이전 버전의 근거다. 이번 수정은 feature 원격에 준비된 상태다.
+- **DEV 후속 PR:** [#4695](https://github.com/Innvoaid/dentlink-client/pull/4695),
+  `[DL-16319] 개발서버용 주문 채팅 API와 Member 권한 후속 보완`, OPEN/ready,
+  **`feature/DL-16317 → develop`**, head `812aff0d4`, base `e6cfea705`를 생성 후 재확인하고 현재 chat에 연결했다.
+  커밋1개/43파일(**Clinic26 + shared17**)이며 source branch·HEAD는 유지했다. 새 제품 수정/빈 커밋은 없다.
+- **배포 조건:** 현행 `clinic_dev_build_and_deploy.yml`은 develop push + `clinic/**` 변경으로 실행되며
+  base/head에서 동일하다. 실제 Clinic26파일 변경으로 조건을 충족하므로 배포용 dummy 변경이 필요 없다.
+  병합하면 Docker/ECR·정적파일S3·DEV ECS 배포, BUILD_ID 확인 및 후속 DEV E2E가 자동 실행된다.
+  E2E는 배포 뒤 실행되므로 배포 성공과 E2E 성공을 별도로 확인한다.
+- **PR 검사:** GitHub `MERGEABLE`, `mergeStateStatus=UNSTABLE`. Auto Assign SUCCESS,
+  CodeRabbit SUCCESS 표시는 **develop 자동 리뷰 제외로 skipped**이며 실제 리뷰 통과가 아니다.
+  별도 `dentlink-dlos` Vercel 미리보기는 **Deployment was blocked / FAILURE**다.
+  현재 상태에서 차단 사유를 작성자 권한 등으로 추측하지 않았고 Clinic DEV workflow와 구분한다.
+- **병합·배포 미실행:** 현재 단계는 사용자 병합 전 PR 준비다. 기존 PR4693 사용자 병합과
+  develop `e6cfea705` 배포는 이전 버전의 근거이며 새 후속 코드가 DEV에 반영됐다고 보고하지 않는다.
 
 ### 이번 완료 범위
 
@@ -56,9 +70,9 @@
 
 ### 남은 일과 다음 담당 순서
 
-1. **FE/사용자 DEV 전달:** 이번 feature 후속분으로 develop PR을 만들고 검토·사용자 병합·DEV 배포 후
-   실제 Member/Admin 두 계정에서 새 주문 채팅 GET과 허용 역할 전송/답글/읽음/페이지를 확인한다.
-   현재는 커밋·푸시까지 완료이며 새 PR/merge/deploy는 별도 단계다.
+1. **사용자 병합 → DEV 자동배포 → FE 확인:** 준비된 PR4695를 검토·병합하면 Clinic 변경으로 배포가 시작된다.
+   실제 배포 완료/BUILD_ID 확인 뒤 Member/Admin 두 계정으로 새 주문 채팅 GET과 허용 역할 전송/답글/읽음/페이지를 확인한다.
+   현재는 코드 커밋·푸시와 PR 생성까지 완료이며 병합/새 배포/실계정 QA는 남아 있다.
 2. **BE:** 기능별 준비 범위를 알려준다. 같은 GET이어도 목록/total/filter-hint 정제,
    주문 기본·부분·거절 판단과 관련 Case/파일/채팅 범위·오류 계약을 실제 endpoint/응답과 함께 확인한다.
    별도 검증 API를 반드시 신설해야 한다고 가정하지 않고 준비된 기능부터 연결한다.
@@ -68,8 +82,9 @@
 4. **Office native 별도:** checkout `dentlink-app-permission`, feature `72a79146aaba1054827ab3dbd4540f274373a4ef`,
    원격 동일 clean을 재확인했다. 앱 ORDER API 전환·직원 cache writer/채팅 scope·기기 QA·통합/배포는 남아 있다.
    이전 157개 검사/양OS bundle·기존 type18오류는 과거 기록이며 이번에 재실행하지 않았다.
-5. **대기 경계:** 이번에 확인된 웹 FE 단독 후속 수정은 마쳤다. 배포/BE 계약/테스트 준비의 새 근거가 오면
-   위 순서로 이어간다. 새 요청 없이 추가 기능·PR·병합·배포·자동 모니터링을 시작하지 않는다.
+5. **대기 경계:** 이번에 확인된 웹 FE 단독 후속 수정과 DEV PR 준비를 마쳤다. 사용자는 BE 추가 완료를 기다리는 중이다.
+   이번 PR 병합/배포 또는 BE 계약/테스트 준비의 새 근거가 오면 위 순서로 이어간다.
+   별도 병합·배포 실행·자동 모니터링은 설정하지 않았다. 이번 PR 준비에서는 동일 HEAD의 테스트를 불필요하게 재실행하지 않았다.
 
 ## 이력 — 2026-10-13 breakpoint 이후 API·권한 구현 전수 재검토 (후속 구현 전)
 
