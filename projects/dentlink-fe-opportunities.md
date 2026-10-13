@@ -1,5 +1,20 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 체크포인트 — 2026-10-13 · 동료 답변에 따른 FE·Studio 역할 정정
+## 현재 체크포인트 — 2026-10-13 · 역할 정정 반영·npm 재시도 마감
+
+- **사용자 승인:** Codex가 할 수 있는 작업은 모두 처리하고, 실제 불가한 것만 남겨 사용자·동료 답변으로 계속 핑퐁합니다. PR/Jira·운영 문서 역할 정정, 가능한 공개 확인과 커밋/푸시/메모리 정리를 진행했습니다. master 병합은 가능하나 사용자가 일부러 보류한 별도 결정이며 승인 없이 실행하지 않습니다.
+- **역할은 확정된 경계로 유지:** FE/Codex는 client 디자인시스템 원천·npm 공개·실제 버전/exports/외부 설치 확인, 동료는 Studio 초기 갤러리 연결·자동 최신화 운영을 담당합니다. FE의 Studio 공통 작업자 등록 요구는 제외합니다. Studio 자동화가 이미 완료된 것으로 표현하지 않습니다.
+- **제품 저장:** client `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16471-dlds-dlos-integration`, HEAD/origin **`77ff34f76b2a9a1c994b0eaa3ff177799751ad12`**. 이번 커밋은 **docs/design-systems.md·docs/packages.md 두 문서만4줄 추가/1줄 교체**이며 UI·패키지 원천·API·워크플로우·권한 설정은 변경하지 않았습니다. 정상 pre-commit의3앱 타입, pre-push의3앱 lint/DLOS guard/shared coverage 통과. SSH pushurl은 명령 단위로만 사용했습니다.
+- **문서 검증:** diff-check/design-systems Prettier 통과. packages.md 전체 Prettier 경고는 변경 전부터 있던 표/빈줄 형식이며 이번 변경 문장은 formatter와 같아 불필요 전체 재정렬을 하지 않았습니다. 변경 없는 소스의 모든 테스트를 새 로컬 실행한 것으로 표현하지 않습니다.
+- **PR/Jira 정정 완료:** PR#4692 설명과 child DL-16471의 본문·기존 댓글44417에서 Studio 공통 등록을 필수로 둔 내용을 제거하고 역할/인계/공개 실패를 반영했습니다. Jira read-back 본문·댓글 일치, 진행 중 유지. 상위/완료 카드와 Studio 원본/정책은 변경하지 않았습니다. 비교용 PR는 OPEN/non-Draft/master 미병합입니다.
+- **실제 공개 한 번 재시도:** 승인된 기존 run **38350722659 attempt2**, 기존 실패 publish job만 재실행했습니다. head는 기존 공개 준비 코드 **a11824692**, 목표는 **0.1.2-pr.a118246**입니다. 문서 커밋은 패키지 artifact 내용에 영향을 주지 않습니다. publish job **115161628025**는 icons PUT의 동일한 E403 `OIDC permission denied for this action`으로 다시 실패했습니다(15:30 KST). DLDS 최초 등록 step은 실행되지 않았습니다. verify는 기존 성공 결과이며 이번에 전체 verify가 재실행됐다고 하지 않습니다.
+- **실패 후 read-back:** icons/DLOS latest0.1.0, pr tag 없음/목표 버전 없음, DLDS HTTP404. 목표3종 공개·부분 공개·dist-tag 변경은 확인되지 않았습니다. 실제 npm registry 설치 검증은 공개 성공 전에는 진행할 수 없습니다. 반복 재시도·token fallback·stage 공개 우회·npm 권한 변경은 하지 않습니다.
+- **인계 자료:** Studio25af81a 원본과 main6cd59a0 기준 private 결합 사본/38파일patch/61테스트·빌드·DLDS/DLOS/CRM14화면 표시 자료는 보존합니다. 최신 원격 main6ea3512e의 수동 DLOS sync와 DLDS 준비 중 상태는 아래 역할 조사에 기록했습니다. private README에도 Studio 담당자용 참고·인계물임을 명시했습니다. 자료가 자동으로 공유되거나 새기기에 이동한 것은 아니며 Git 참조로 복원할 수 있습니다.
+- **동료에게 필요한 필수 요청:** npm 관리자가 기존 icons/DLOS의 Trusted Publisher 직접 공개 설정·권한을 확인·해결하는 것입니다. 실제 설정 화면을 보지 못했으므로 특정 체크박스가 원인이라고 확정하지 않습니다. DLDS 최초 공개 후 해당 패키지의 Trusted Publisher 연결도 관리자 단계로 확인합니다. Studio 공통 권한 등록은 요청하지 않습니다.
+- **다음 핑퐁:** 동료의 npm 설정 해결 답변 → Git/권한/registry/PR 상태 안전하게 재확인 → 같은 코드의 공개 재시도 및 실제 버전·exports·외부 설치 확인 → Studio 담당자에게 패키지 정보/자료 인계 및 갤러리 연결·갱신 결과 확인. PR 머지는 별도 사용자 결정이며 새 하네스·에디터 작업은 통합 이후입니다.
+- 최신 문서 커밋77ff34f76의 PR CI **38357212495**는 **SUCCESS**입니다. release-check·artifact/bootstrap tests·package type/test/build·외부 React18/19 소비·pack/dry-run이 통과했고 PR publish는 의도적으로 SKIPPED입니다. DLOS guard38357212524도 SUCCESS입니다. CodeRabbit은235파일/150한도로 실제 리뷰가 실행되지 않았으며 유료 리뷰를 실행하지 않았습니다. Vercel preview 배포 차단은 필요 시 관리자 확인 사항으로 별도이며 패키지 공개의 필수 선행은 아닙니다.
+- 최종 PR/Jira 설명·HEAD/state와 원격 저장 상태를 read-back 확인했고 이 Git 정본/HANDOFF를 commit/push한 뒤 다음 답변을 기다립니다. 코드·문서·CI 준비가 끝난 것이며 실제 npm 공개/Studio 배포까지 완료됐다는 뜻은 아닙니다.
+
+## 이전 체크포인트 — 2026-10-13 · 동료 답변에 따른 FE·Studio 역할 정정
 
 - **사용자가 공유한 동료 Tom 답변(14:59~15:00):** FE는 Studio 접근 권한이 없어도 되고, dentlink-client에서 패키지를 올릴 수 있으면 됩니다. 컴포넌트 갤러리는 동료가 자동 최신화되도록 준비할 예정입니다. 이 답변은 아래 이전 체크포인트의 “jongsunP 공통 작업자 등록이 필수” 판단을 대체합니다.
 - **FE/Codex 담당:** client의 DLDS 원천·공개 API·빌드/검사·npm 패키지 공개 및 실제 공개 버전/exports/소비 계약 확인. **Studio 담당:** 동료가 갤러리 연결·자동 최신화와 Studio 공통 운영을 맡습니다. 전체 FE팀 공통 권한 확대나 사용자 등록을 이 작업의 필수 조건으로 요구하지 않습니다.
