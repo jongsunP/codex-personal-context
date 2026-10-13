@@ -166,7 +166,8 @@ For detailed current state, read:
   서버의 담당/공유/과거 참여 GET 범위·담당 변경 후 접근 상실/native 거절 규칙을 QA에서 확인한다.
   **사용자 확정:** Pickup 모든 주문번호 링크는 상세로 이동하고 상세에서 기본/조회 불가/부분 조회를
   처리한다. Pickup 링크 제한은 요구가 아니며, 관련 Case 편집 확대도 미확정으로 개발 잔여에서 제외한다.
-  사용자 확정 범위의 웹/Office 앱 FE 개발·commit/push는 완료이며 PR 검토와 QA·merge 준비는 별개다.
+  확정 화면·Member/기존 API 기준 FE 개발·commit/push는 완료다. 최신 Swagger의 채팅 전환
+  API는 실제 caller에 아직 적용하지 않았으며, 최종 BE 연동·QA·merge 준비와 분리한다.
   웹은 master 기준 코드 검토가 가능하며 실제 PR은 배포 대상 release를 정해 비교해야 한다.
   앱의 `develop` 대상 diff는 권한관리 60파일만이지만 실제 통합 충돌 6파일이 있어
   PR 진행 시 develop 동작과 권한 조건을 함께 정리해야 한다.
