@@ -7,7 +7,7 @@
 
 - 사용자 지시로 두 통합 브랜치를 **`feature/DL-16471-dlds-dlos-integration`**으로 이름만 먼저 바꿨습니다. 이 단계에서 client b36620883·Studio25af81a SHA가 변경 전후 일치했습니다. old backup `feature/DL-16471 / 12fb96a4e`는 그대로입니다.
 - GitHub head branch rename으로 기존 비교용 PR#4689가 CLOSED됐습니다. 기록은 남기고 [Draft PR#4692](https://github.com/Innvoaid/dentlink-client/pull/4692)을 master 대상으로 생성·연결했습니다. base/head/Draft를 재조회 확인했습니다. 실제 병합 목적은 아닙니다.
-- **Client 현재:** `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, HEAD/origin **`861f4d552896dec7acddb84037efb20fe6de8f51`**, clean/ahead-behind0. 최신 master `b229a944e`의 OIDC와 **아직 OPEN인 PR#4691 / 7a8d44485**의 배포 계약을 기능 브랜치에 합쳐 병합 이후를 미리 대응했습니다. PR#4691 자체/master를 병합하거나 변경하지 않았습니다. 비교용 PR에는 선행 PR 변경도 포함됨을 명시했습니다.
+- **Client 현재:** `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, HEAD/origin **`5cdae094c9c812f3d93a66ded44f456807a09032`**, clean/ahead-behind0. 사용자가 #4691의 개념과 실제 병합을 확인해 방향을 확정했고, GitHub에서도 MERGED·2026-10-13 11:19 KST·master `aff278a433b2d4bc6f8e606a7fb12b6a5b18a407`을 검증했습니다. 이 master를 기능 브랜치에 충돌 없이 합쳤습니다. 직전 저장 `861f4d552`와 최종 파일 내용은 같고 이력 연결만 추가됐습니다. 동료 PR·보호 master 자체는 변경하지 않았습니다.
 - **Studio 원본:** `/Users/parkjongsun/Repository/dentlink-studio`, 같은 새 feature 이름, HEAD/origin **`25af81a2fd8ae4ebaf89be93abe45b7784ce5cb2`**, clean. 최신 main **`f7fb9ebbd6380343bb6ec250a0fff5c210ad78e5`**은 조사했으나 공통 변경 정책을 임의로 우회해 원본에 반영하지 않았습니다. 실제 통합 검토용 패치는 아래 개인 자료 경로에서 준비합니다.
 - 일반 구현의 `feature/<Jira>` 규칙을 도구의 `codex/` 기본값으로 대체하지 않도록 `SESSION_WORKFLOW.md`와 client `AGENTS.md`에 생성 전 확인을 명시했습니다. 같은 티켓 백업이 있으면 설명 접미사를 붙여 구분합니다. 다른 동료의 chore/feat 브랜치를 임의로 바꾸지 않습니다.
 
@@ -27,7 +27,7 @@
 - 동료 OIDC(Node22/npm11.5.1+, id-token:write, 기존 workflow filename)·master 자동 배포·수동 publish=true·PR dry-run 계약을 유지하며 DLDS를 배포/검사 목록과 경로에 포함했습니다.
 - 현재 npm 실제 조회: **DLOS/icons latest0.1.0 공개, DLDS404**. 공개 icons0.1.0에는 우리 DLDS가 요구하는 `iconComponents`가 없습니다. 새 내용을0.1.0에 덮어쓰거나 기존 실제패키지를 통합본으로 오인하지 않습니다.
 - 세 manifest를 **0.1.1**로 함께 올리고 새 DLDS의 미공개 상태가 기존 DLOS/icons의 source 변경+버전 상승 누락을 가리지 않도록 검사했습니다. 소스변경 PR은3종 동일 새 버전, 변경 없는 부분 배포 재시도는 미공개분만 허용합니다. 선언 보정 build script 변경도 artifact 변경으로 봅니다.
-- 패키지 규칙 **22/22**, DLOS381·DLDS149·icons2 테스트,3패키지 타입/build/pack, React18/19 엄격 타입(Bundler/NodeNext)·Vite·NodeESM SSR, frozen install, actual npm 기반 release-check 통과. commit의3앱 타입와 push의3앱 lint·guard tests·shared coverage도 정상 hook으로 통과했습니다. 실제 공개/publish·protected merge·서비스 배포는0회입니다.
+- 패키지 규칙 **22/22**, DLOS381·DLDS149·icons2 테스트,3패키지 타입/build/pack, React18/19 엄격 타입(Bundler/NodeNext)·Vite·NodeESM SSR, frozen install, actual npm 기반 release-check 통과. 실제 병합 master 동기화는 소스 불변이라 위 전체 검사를 반복하지 않고, 최종 master 대비 release-check와 정상 commit의3앱 타입·push의3앱 lint·guard tests·shared coverage를 확인했습니다. 실제 공개/publish·protected merge·서비스 배포는0회입니다.
 - npm의 최초 DLDS 등록/공개와 해당 패키지 Trusted Publisher 등록은 별도 운영 준비입니다. 기존2패키지 OIDC가 동작한다고 새 DLDS까지 준비완료로 표현하지 않습니다. 토큰/이메일/권한/레지스트리 설정을 임의 변경하지 않았습니다.
 
 ### Studio에서 따라갈 부분·실제 진행 경계
@@ -40,13 +40,13 @@
 
 ### 마감 상태
 
-- Client861f4d552 원격 일치·clean, Studio25af81a 원본 clean, old DLDS12fb96a4 백업 보존. 비교용 Draft#4692는 master/새 feature head861f4d552를 재조회했습니다. 선행#4691은 OPEN/7a8d44485 그대로입니다.
-- 담당 child DL-16471의 현재 방향/남은 조건을13일 조사 기준으로 갱신하고 결과 댓글 **44417**을 추가했습니다. 본문 read-back 일치·진행 중 상태 유지, 상위/완료 카드·동료 PR는 변경하지 않았습니다.
+- Client5cdae094c 원격 일치·clean, Studio25af81a 원본 clean, old DLDS12fb96a4 백업 보존. 비교용 Draft#4692는 master/새 feature head5cdae094c를 재조회했습니다. #4691 실제 MERGED master가 최종 feature의 조상이며 PR 설명의 선행 OPEN 가정은 제거했습니다.
+- 담당 child DL-16471의 현재 방향/남은 조건을13일 조사 기준으로 갱신하고 결과 댓글 **44417**을 추가했습니다. 이후 #4691 실제 병합·최종 저장 코드를 같은 본문/댓글에 반영하여 중복 댓글을 늘리지 않았습니다. 본문·댓글 read-back 일치·진행 중 상태 유지, 상위/완료 카드·동료 PR는 변경하지 않았습니다.
 - 코드·배포 계약·시안 제작 조사와 검토용 패치 준비는 마쳤습니다. 실제 npm 게시·Studio 공통 원본 반영·DLDS 프로필 확장·제품 FE 자동 인계는 완료하지 않았습니다. 새 기기에서 이어갈 근거/경계/다음 순서를 이 정본에 저장하고 개인 context를 원격으로 마감합니다.
 
 ### 다음 시작점
 
-1. 개인 context와 실제 feature2개·PR4692/4691·npm 상태를 안전하게 갱신합니다. #4691이 실제 merge되면 그 master를 기능 브랜치에 다시 반영해 대조 diff를 정리합니다. 코드 비교용 Draft를 실제 merge목적으로 전환하지 않습니다.
+1. 개인 context와 실제 feature2개·PR4692·npm 상태를 안전하게 갱신합니다. #4691의 실제 병합 master 반영은 끝났으므로 같은 가정 작업을 반복하지 않습니다. 코드 비교용 Draft를 실제 merge목적으로 전환하지 않습니다.
 2. DLDS 최초 공개/Trusted Publisher 준비와 새 버전 실제 공개는 사용자 명시적 승인이 필요합니다. 이미 공개된 버전/secret을 추측하거나 우회하지 않습니다.
 3. Studio 공통 연결 패치는 코드 오너 경로로 반영하고, 실제 공개된 버전으로 lockfile/frozen 설치·verify/build·갤러리를 확인합니다. 새 정책과 작업 공간을 별도 하네스로 복제하지 않습니다.
 4. 이후 사용자(FE)·Codex가 DLDS 프로필·화면틀·템플릿과 FE 코드 인계의 실제 수정량을 구체화합니다. PM/디자이너 참여는 서비스로 쓸 단계 이후라는 기존 원칙을 유지합니다.

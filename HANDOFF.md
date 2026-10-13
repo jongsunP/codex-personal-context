@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-13 **동료 DLOS 운영 구조 파악·DLDS 후속 반영**. 두 통합 브랜치는 `feature/DL-16471-dlds-dlos-integration`으로 정정, client `861f4d552` 저장·Draft PR#4692(master 대조) 연결. OPEN #4691의 병합 이후를 기능 브랜치에서 미리 대응했고 3패키지0.1.1·OIDC/버전 검증을 완료했습니다. Studio25af81a는 보존하며, 최신 main f7fb9eb의 공통 wireframe/접근 정책과 DLDS 결합용 패치를 개인 자료에 준비합니다. DLDS 첫 npm 공개·Studio 코드 오너 경로의 공통 반영/정상 lock·DLDS 프로필과 FE 실제 인계는 남았습니다. 조사 근거·현재 경계·재개 순서는 정본 checkpoint를 확인합니다.
+  — 2026-10-13 **동료 DLOS 운영 구조 파악·DLDS 후속 반영**. 두 통합 브랜치는 `feature/DL-16471-dlds-dlos-integration`으로 정정, client `5cdae094c` 저장·Draft PR#4692(master 대조) 연결. 실제 MERGED #4691의 master aff278a43 반영까지 끝냈고 3패키지0.1.1·OIDC/버전 검증을 완료했습니다. Studio25af81a는 보존하며, 최신 main f7fb9eb의 공통 wireframe/접근 정책과 DLDS 결합용 패치를 개인 자료에 준비·검증했습니다. DLDS 첫 npm 공개·Studio 코드 오너 경로의 공통 반영/정상 lock·DLDS 프로필과 FE 실제 인계는 남았습니다. 조사 근거·현재 경계·재개 순서는 정본 checkpoint를 확인합니다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
