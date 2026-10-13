@@ -1,5 +1,49 @@
 # Dentlink 권한관리 — DL-16317
 
+## 현재 상태 — 2026-10-13 새 세션 인수인계·개발서버 기준 재개
+
+- 사용자가 이 대화에서 응답 재연결이 반복돼 **같은 권한관리 프로젝트 폴더에 새 세션을
+  만들고 진행 상태를 인수인계한 뒤 기존 세션을 보관**하도록 요청했다. 기존 진행 내용을
+  그대로 이어가며 아래 신규 지시를 추가한다. 이 세션에서는 이후 제품 구현을 중복 진행하지 않는다.
+- **새 지시:** 스테이징 서버는 확인하지 않는다. 개발서버에 백엔드가 배포된 것으로
+  보인다는 사용자 보고를 기준으로 개발서버 Swagger를 실제 확인·generate한 뒤,
+  생성된 응답/역할/관계 계약과 최신 master·확정 디자인을 대조해 필요한 FE 작업을 진행한다.
+  배포 여부와 계약은 새 세션에서 확인할 사항이며 이번 세션에서 Swagger 생성/실연동은 하지 않았다.
+- **최신 master 통합 진행 상태:** 웹 HEAD/원격은 여전히
+  `a6392cc67862590aea48889f927944d192baa002`. `git merge --no-commit --no-ff origin/master`로
+  `693b8b4c4d247716db05ea415bc7bd1d33dab4cc`를 통합 중이다. **MERGE_HEAD가 남아 있고
+  merge commit/push는 아직 하지 않았다.** 기존 커밋으로 임의 reset/stash/rebase하지 않는다.
+- 3개 충돌(Lab LinkTalk·mobile title buttons·title buttons hook)을 해소했고 unmerged
+  파일은 없다. master의 Lab 주문 소유/읽음/context 보호, 신규 밀링 버튼,
+  의사 이름 추적·앱 Next Order를 유지했다. 새 밀링 버튼도 기존 주문 변경 조건과
+  보관 callback 실행 guard를 적용해 권한 제어 우회를 방지했다. Lab 신규 정책을 추가하지 않았다.
+- 웹 index에는 master 변경 **1,463파일 staged**가 있고, 기존
+  `clinic/src/lib/Order/orderDetailActionPermissions.test.tsx`에 밀링 desktop/mobile
+  회귀 2개가 **unstaged**로 남아 있다. untracked 없음. 새 세션은 실제 index/worktree를
+  재확인해 테스트 파일까지 stage하고 통합 검토/필수 훅 후 merge commit/push를 마무리한다.
+- `pnpm install --frozen-lockfile` 성공, icon workspace 링크/최신 패키지 동기화 완료.
+  통합 후 Clinic/Lab/Admin 타입 검사 모두 통과, Clinic **25 suites/182 tests** 통과,
+  icons/DLOS 패키지 타입 검사 통과, DLOS **45 files/381 tests** 통과,
+  해소 파일·추가 테스트 포맷 및 diff 검사 통과. production build·새 pre-push
+  Admin DLOS guard/coverage·통합 commit/push는 아직 미완료다.
+- 치과 앱은 HEAD/원격 `445ced6eba5093d2cdc63d050d00bee15396e6c7`, clean이다.
+  feature **16 suites/108 tests**를 재실행해 통과했다. 이번 웹 master 통합에서 앱
+  develop/main을 병합하지 않았고 앱 제품 코드도 추가 변경하지 않았다.
+- 10월 13일 인수인계 직전 `git ls-remote`로 웹 master가
+  **`b229a944ebc77cd1ec6fc68a531edfbdfb78a6bb`**로 추가 전진한 것을 확인했다.
+  새 세션은 기존 merge 작업을 보존하면서 다시 fetch하고 이 최신 변경도 통합·검증한다.
+  로컬 `origin/master`/MERGE_HEAD의 693b8b4 기준과 실제 원격 최신 SHA를 혼동하지 않는다.
+- **API 사용 조사:** GET `/office/chats/{chatId}/messages`는 확인한 웹·치과 앱에서
+  실제 호출자가 없다. 웹 generated 선언과 앱 `findChatMessagesByChatId` 서비스 함수만
+  남았고 실제 조회는 GET `/office/chat-messages`를 사용한다. 삭제/백엔드 폐기는 수행하지 않았다.
+- 기존 승인 유지: 필요한 FE 구현/검증, 제품 commit/push, Git 개인 메모리와 사용자
+  담당 하위 Jira 정리까지 진행하고 대기한다. Web DL-16319·Office App DL-16752를
+  제품별로 정리하며 **상위 DL-16317 댓글 금지**, 기공소 웹/앱 신규 구현 제외를 유지한다.
+  PR 생성·merge·배포·CodePush는 별도 승인 범위다. feature 브랜치로 master를 통합하는
+  이번 허용과 protected branch/PR merge는 서로 다르다.
+- 새 세션은 기존 세션 실제 설정 **gpt-6.1-sol/ultra**를 확인해 같은 설정으로 준비한다.
+  개인 체크포인트와 실제 Git 상태를 기준으로 인수인계하고, 오래된 대화 전체를 복제하지 않는다.
+
 ## 현재 상태 — 2026-10-12 확정 디자인 보완·최신 master 참조·원격 보존
 
 - 사용자가 확정 디자인의 누락과 디자이너가 글로 설명한 조건까지 확인·수정하도록
