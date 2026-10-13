@@ -153,6 +153,13 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
+- **최신 2026-10-13 개발서버용 웹 PR:** 사용자 명시 요청으로 원격 develop을 삭제하고
+  원격 master **`aff278a43`**에서 재생성했다. 이전 develop `e9d3f3509`는 로컬 참조/bundle로 보존했다.
+  웹 [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693),
+  **`feature/DL-16317 / 1c67612c3 → develop / aff278a43`**, 일반 Open PR 생성·attach·base/diff 재확인 완료.
+  제품 코드는 그대로이고 미머지다. Vercel blocked check와 CodeRabbit develop 자동 리뷰 skip으로
+  checks/review 완료 상태는 아니다. 이 요청에서는 Office 앱을 변경하지 않았으며,
+  채팅 전환은 BE 최종 명세 후 진행한다. 개발서버용 PR 예외와 상용 release 전달을 구분한다.
 - **2026-10-13 가능한 범위 마감·BE 최종 명세 후 재개 대기:** 현재 세션
   `01a132e9-6555-7a02-9c72-4dad9c04cc64`에서 실제 Swagger generate로 Member와 담당 ID,
   리뷰 허용 여부를 확인해 치과 웹/앱의 필터·새 Case·주문 행동/직접 접근에 연결했다.

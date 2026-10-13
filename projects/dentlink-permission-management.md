@@ -1,6 +1,46 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-13 가능한 범위 마감·BE 최종 명세 후 재개 대기
+## 현재 상태 — 2026-10-13 개발서버용 develop 재생성·웹 PR #4693 생성
+
+- **최신 사용자 명시 지시:** 이번 작업은 웹 개발서버용이다. 원격 develop을 삭제하고 현재 원격
+  master에서 새 develop을 만든 뒤 현재 작업 브랜치의 develop PR을 생성하도록 요청해 실행했다.
+  이는 이번 개발서버용 웹 PR의 대상 예외이며 일반 웹 release 전달 정책을 변경하지 않는다.
+- 삭제 전 `origin/develop`은 **`e9d3f3509bc808bd7a21de8c8b76b083d9966298`**였다.
+  develop을 base/head로 사용하는 열린 PR 및 feature/DL-16317의 기존 열린 PR은 없었다.
+  삭제는 해당 SHA의 lease로, 생성은 develop 부재의 lease로 진행해 중간 외부 변경을 덮지 않았다.
+- 기존 develop을 로컬 Git 참조
+  `refs/codex-backup/develop-before-dl-16317-dev-20261013-e9d3f3509`와 복구 bundle
+  `/Users/parkjongsun/.codex/backups/dentlink-client/develop-before-dl-16317-dev-20261013-e9d3f3509.bundle`
+  에 보존했다. `git bundle verify` 성공. master에 있는 prerequisite를 사용하는 증분 bundle이며
+  이 로컬 산출물은 다른 기기에 자동 전달되지 않는다. 복구가 필요하면 현재 develop 상태와 사용자 지시를 먼저 확인한다.
+- 원격 develop 삭제·신규 생성 성공. **새 develop과 원격 master가 모두
+  `aff278a433b2d4bc6f8e606a7fb12b6a5b18a407`**임을 실제 원격 재조회로 확인했다.
+  삭제/생성 모두 정상 pre-push lint·DLOS guard·coverage를 통과했고 훅을 우회하지 않았다.
+- 웹 [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693)
+  **`feature/DL-16317 → develop`**, 일반 Open PR으로 생성하고 이 채팅에 attach했다.
+  title `[DL-16317] 개발서버용 Member 권한과 주문 상세 제한 적용`.
+  실제 base `develop/aff278a43`, head `feature/DL-16317/1c67612c3`를 생성 후 다시 확인했다.
+  diff **167파일(+10,307/-1,310), 14커밋**, `git diff --check` 통과, GitHub `MERGEABLE`이다.
+  제품 코드는 변경하지 않았고 해당 worktree는 clean이다.
+- **검토 상태:** Auto Assign 성공. CodeRabbit은 develop base 자동 리뷰 설정이 꺼져
+  `Review skipped: reviews are disabled for this base branch`였다. success 표시는 실제 리뷰 완료가 아니다.
+  Vercel `dentlink-dlos` check는 `Deployment was blocked` failure이며 HEAD에 붙은 기존
+  상태(생성 시각 02:37:17 UTC)다. [현재 Vercel 상태](https://vercel.com/innovaid-2c855104/dentlink-dlos/HAGJqQDiZLaZDYqvWzWHQesMTkv1),
+  [CodeRabbit 설명](https://github.com/Innvoaid/dentlink-client/pull/4693#issuecomment-6139211802).
+  PR의 mergeStateStatus는 `UNSTABLE`이며 충돌 없음과 checks/review 완료를 구분한다.
+- PR 생성은 제품 배포 trigger가 아니다. develop push의 경로 필터에 따라 Office/Lab/Admin DEV
+  자동 배포가 가능하지만, 이번 aff278 develop push에 대응하는 새 workflow run은 확인 시점에 없었다.
+  수동 배포·PR merge는 실행하지 않았고 권한관리 feature의 실제 개발서버 배포 완료 증거도 아니다.
+- PR 본문에 확정 Member/UI 범위·257개 테스트·서비스 타입/빌드와 기존 Lab optional 보존분,
+  전체 Swagger 생성 동반 변경, 새 채팅 API 미전환·BE 최종 명세/실계정 QA 잔여를 명시했다.
+  Web DL-16319 댓글 `44418`에도 개발서버용 PR과 미머지·미배포 확인 상태를 반영했다.
+  상위 DL-16317에는 댓글을 쓰지 않았다. Office 앱 저장소/브랜치/PR은 이번 요청에서 조작하지 않았다.
+- **후속:** 이 웹 PR의 리뷰와 현재 checks를 처리하고 실제 develop merge/DEV 반영은 별도 사용자
+  지시 범위에서 진행한다. 채팅 API 전환은 BE 최종 명세 확인 후라는 지시를 유지한다.
+  이전의 '웹 release 대상 미결정으로 PR 미생성' 상태는 이번 DEV PR에 적용하지 않는다.
+  최종 상용 release 전달·Office 앱 develop 통합·실계정/실기기 QA는 별도 후속으로 남는다.
+
+## 이력 — 2026-10-13 가능한 범위 마감·BE 최종 명세 후 재개 대기
 
 - **최종 사용자 지시:** 완료된 작업은 그대로 보존한다. 채팅 API 전환은 **백엔드 최종 명세 확인 후**
   진행한다. 지금 확정된 범위에서 할 수 있는 확인·정리·원격 저장을 마치고 대기한다.
