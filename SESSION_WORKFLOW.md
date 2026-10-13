@@ -495,6 +495,9 @@ Treat the following as the branch strategy for the Dentlink web repository
   This rule does not authorize commits, pushes, PR mutations, merges, or
   release/develop/stage changes beyond the user's existing authorization.
 - `feature/*` branches are the only normal implementation branches.
+- Verify this prefix before creating or renaming a branch. Agent/tool defaults
+  such as `codex/` do not replace the repository rule. When preserving another
+  branch for the same Jira, append a short description to `feature/<Jira>`.
 - `release/vX.Y.Z` branches are deployment-only release trains cut from
   `master`; they are not feature-development branches.
 - A feature PR targets the release branch for its intended deployment version.
