@@ -1,5 +1,43 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-13 · DLDS 최초 등록 성공·icons 반영 및 자동 배포 설정 확인 대기
+## 현재 브레이크포인트 — 2026-10-13 · DLDS 직접 참조 전환·UI 연결 파일 제거
+
+**사용자 승인:** 동료 의견을 확인한 뒤 DLDS를 다시 내보내는 `shared/ui` 파일을 제거하고 사용처를 직접 전환하도록 승인했습니다. 이어 커밋·푸시·기존 PR·나머지 정리까지 명시적으로 요청했습니다. npm 재공개·master 병합은 이번에 실행하지 않습니다.
+
+### 구조 판단과 수정
+
+- 이전 통합은 DLDS 구현을 `shared/dlds`로 옮기면서 import 수정 범위를 줄이려고 `shared/ui` 연결 파일을 의도적으로 남겼습니다. 구현이 두 벌인 것은 아니지만, 동료의 DLOS처럼 제품이 패키지를 직접 사용하는 최종 구조까지는 정리하지 않은 상태였습니다. 출발 구조의 차이가 영구 호환 파일을 반드시 요구한 것은 아닙니다.
+- 이번에는 **DLDS 연결 파일82개 제거**, UI의 중복 root/type export·`@dentlink/ui/dlds` 제거, Clinic·Lab·Admin·업무 UI·예제의 직접 `@innvoaid/dlds` 참조로 전환했습니다. 업무 UI와 제품 전용 조합은 유지했습니다. `shared/ui` 전체 삭제나 새로운 UI/동작 변경이 아닙니다.
+- **기존 Button은 `LegacyButton as Button`**으로 연결합니다. 패키지의 `Button`은 별도 Button.refactor 구현이므로 이름만 보고 바꾸지 않습니다. Typography의 기존 문자열 color 타입은 본체에서 보존하며 알 수 없는 색상 이름을 새 색으로 해석하지 않습니다.
+- 실제 사용 중인 조합 요소·타입의 공개 export, 앱·config 의존성 및 lockfile, 관련 Jest mock/mapper, Admin DLOS guard·baseline, 팀 문서6개를 함께 정리했습니다. `@dentlink/hook`의 기존 호환 경로는 이번 UI 연결 제거 범위에 포함하지 않습니다.
+- Admin 가드는 직접 DLDS import와 LegacyButton 별칭·namespace·생성 문자열을 검사하도록 보완했고 **기존 허용량60은 그대로**입니다. 신규 예외나 UI 추가가 아닙니다.
+
+### 코드 저장·검증
+
+- Client 정본: `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16471-dlds-dlos-integration`.
+- 직접 전환 커밋 **`5d4a4b057824a0fdd216b2ac54ab0d8c6eaebefb`**, 1,037파일(대부분 import 변경), 연결 파일82개 삭제.
+- 후속 버전 정렬 커밋 **`41d9b699c87ac6a627912dd7c0ea7169cc1209a4`**: 세 패키지 **0.1.4**, 최초 등록 태그 조건을 운영 문서에 추가. 버전 수정은4파일만이며 UI 코드를 다시 바꾸지 않았습니다.
+- **검증:** Clinic·Lab·Admin 타입 및 production build 통과. DLDS149개, 관련 Clinic2 suites/3 tests, Admin guard9개·60/60, 패키지 규칙22개·bootstrap14개, 정상 commit/push hook의 타입·lint/guard·shared coverage를 확인했습니다. 기존 TypeScript 권장 버전·Browserslist·lint 경고는 별도이며 실패가 아닙니다.
+- **동일 구현 대조:** import 심벌2,957개를 원본과 대조해 구현 교체·식별자 유실이 없음을 확인했습니다. TypographyProps4곳의 호환 타입 이동과 ToastState1곳의 type-only 전환은 별도 검토했습니다. 이 결과가 실제 전체 화면 QA 완료를 뜻하지는 않습니다.
+- 실제 tarball의 React18/19 외부 소비자에서 Bundler/NodeNext 타입·Vite production build·Node ESM SSR 통과. LegacyButton·InputBase·PaginationUI·StyledFlexBox를 소비 fixture에 추가했습니다. **npm registry 설치 검증과는 구분**합니다.
+- PR [#4692](https://github.com/Innvoaid/dentlink-client/pull/4692)는 기존 실제 반영용 OPEN/non-Draft·base master·미병합을 유지합니다. 새 PR를 만들지 않으며 CodeRabbit 유료 리뷰는 사용자 지시로 계속 제외합니다.
+
+### PR 검사에서 추가 확인한 배포 조건
+
+- 직접 전환 후 Actions38379820924가 Release check에서 실패했습니다. 원인은 새 DLDS 최초 등록이 시험 `0.1.3-pr.94b6324`를 latest로 지정해 준비 버전0.1.2가 낮아진 것입니다. 로컬 소스/타입/빌드 실패가 아닙니다.
+- 기존 검사 `compareVersionCore`는 숫자 부분을 비교하므로0.1.3도 같은 숫자로 차단됩니다. **기존 검사 규칙을 완화하지 않고0.1.4로 함께 올렸고 실제 registry Release check 통과**를 확인했습니다. dist-tag 변경·중복 publish·권한 우회는 하지 않았습니다.
+- 이전5d4a4b의 Admin guard38379821047은 성공입니다. **최종41d9b699c의 packages_publish38380291774 verify SUCCESS / publish SKIPPED, Admin DLOS Guard38380291697 SUCCESS**입니다. 공개가 아닌 PR 검증입니다. DLDS149·DLOS381 테스트, 패키지 타입·빌드·외부소비·pack·dry-run이 최종 head에서 통과했습니다.
+- **마감 확인:** 제품 HEAD/origin 모두41d9b699c, clean. 정상 commit/push hook을 우회하지 않았습니다. PR#4692의 제목·base master·OPEN/non-Draft·미병합을 유지하고 본문·child DL-16471 설명/기존 댓글44417을 갱신·재조회했습니다. CodeRabbit은1,107파일/150파일로 skip(실제 리뷰 없음), Vercel은 기존 Deployment was blocked 상태입니다. 상위/완료 Jira·Studio·npm 태그·master는 변경하지 않았습니다. 개인 정본/HANDOFF를 commit/push하고 대기합니다.
+
+### 남은 일·다음 시작점
+
+1. **npm 관리자:** 이전 `@innvoaid/icons@0.1.3-pr.94b6324`는18:50KST registry 재조회에서도 없음(latest0.1.1). 상세 처리 상태·알림을 확인합니다. DLOS·DLDS의 해당 시험 버전은 있음. 신규 `@innvoaid/dlds`의 Trusted Publisher(`Innvoaid / dentlink-client / packages_publish.yml`, environment 없음, 직접 npm publish 허용) 설정도 확인합니다. 기존 icons/DLOS OIDC E403은 해결된 과거 원인이므로 같은 요청으로 되돌리지 않습니다.
+2. **Codex:** 설정 회신/재개 요청 뒤 개인 context·feature/PR·registry를 갱신하고 최신 소스 기준 공개·정확한 버전 설치 검증을 이어갑니다. 기존94b6324 시험 결과에는 이번 공개 export 보완이 없으므로 최신 코드의 외부 검증과 혼동하지 않습니다. 현재 준비 버전은0.1.4이며 다음 시험 계산은 기존 도구를 그대로 사용합니다.
+3. **사용자:** 기존 PR의 master 병합을 별도로 결정합니다. 병합 후 정식 공개·실제 설치와 Studio 갤러리 자동 최신화 결과를 확인합니다. FE의 Studio 공통 작업자 등록은 필수 조건이 아닙니다.
+4. 통합 확인 뒤 Studio 기반 하네스·대표 화면·FE 인계를 별도 진행합니다. 옛 전체 레포용 하네스를 이 브랜치로 무작정 복원하지 않습니다.
+
+기존 DLDS 백업 `feature/DL-16471`/12fb96a4e와 Studio 원본/자료는 보존했습니다. 새 서버·자동 모니터링은 시작하지 않았으며, 이번 검증 빌드는 각 앱의 ignored `.next/dlds-direct-check`에 남아 있습니다. `/tmp/dlds-direct-*` 로그와 `/tmp/dlds-import-identity-audit.json`은 로컬 보조 자료이며 원격 커밋·CI·이 정본을 복구 기준으로 사용합니다.
+
+## 이전 체크포인트 — 2026-10-13 · DLDS 최초 등록 성공·icons 반영 및 자동 배포 설정 확인 대기
 
 **사용자 요청과 범위:** 동료의 npm 권한 해결 답변과 최신 master를 확인해 미처리 작업을 이어가라는 요청을 수행했습니다. 모델 전환 후에도 이전 승인·실행 기록과 실제 Git/CI를 다시 대조했습니다. 이전 회신 대기·PR 동결 지시는 재개 요청으로 해제됐습니다. **PR#4692의 master 병합은 여전히 사용자의 별도 결정**이며 실행하지 않았습니다.
 

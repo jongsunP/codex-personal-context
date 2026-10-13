@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — **2026-10-13 공개 후속 마감:** 최신 master8772와 세 패키지0.1.2 조정을 client feature/DL-16471-dlds-dlos-integration의94b6324be에 저장·푸시했습니다. 정상 hook·PR CI·수동 공개38372263872 성공. 시험0.1.3-pr.94b6324의 DLOS·신규 DLDS는 실제 registry 확인, icons는 약20분 뒤에도 미조회라 외부 설치 검증은 대기입니다. 다음은 **icons 반영 재조회·정확한 버전 설치 검증 → 신규 DLDS Trusted Publisher/직접 공개 설정 → 사용자 PR머지결정 → 정식 공개·Studio 갤러리 결과 확인**입니다. 기존 icons/DLOS OIDC 권한과 DLDS 최초 생성은 성공했으므로 같은 요청을 반복하지 않습니다. PR#4692는 실제 반영 목적 OPEN/non-Draft·미병합, Studio 공통 권한은 FE 필수 조건이 아닙니다. npm의 상세 처리 상태·DLDS 설정은 관리자 확인 영역입니다. 새 하네스/에디터는 통합 이후이며 자동 감시 없이 재개 지시를 기다립니다. 실행 방법·원격 복구 근거는 프로젝트 정본에 있습니다.
+  — **2026-10-13 직접 참조 정리:** 동료 의견과 사용자 승인으로 shared/ui의 DLDS 연결82개를 제거하고 제품도 @innvoaid/dlds를 직접 사용하도록 전환했습니다. 업무 UI·기존 Button/Typography 동작은 유지합니다. client feature/DL-16471-dlds-dlos-integration에5d4a4b057(전환)·41d9b699c(세 패키지0.1.4 정렬)를 저장·푸시했습니다. 3앱 타입/production 빌드·DLDS149·외부 React18/19 tarball 소비·정상 hooks 통과. 실제 PR#4692는 OPEN/non-Draft·미병합이며 전체 화면 QA·새 npm 공개는 수행하지 않았습니다. 기존 시험0.1.3-pr.94b6324의 icons는18:50에도 미조회, DLDS/DLOS는 등록됨. 다음은 **icons 처리 상태·신규 DLDS Trusted Publisher 확인 → 최신 코드 공개·registry 설치 검증 → 사용자 PR 병합 결정 → 정식 공개·Studio 자동 갤러리 결과 확인**입니다. FE의 Studio 공통 권한은 필수 조건이 아닙니다. 새 하네스는 통합 이후이며 재개 지시 전 자동 감시/공개/병합을 하지 않습니다. 최종 CI와 복구 근거는 프로젝트 정본을 확인합니다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
