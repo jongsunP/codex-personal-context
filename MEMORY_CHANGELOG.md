@@ -2,6 +2,14 @@
 
 ## 2026-10-13
 
+- 사용자 직접 승인으로 PR4696을 develop에 일반 병합했다(19:33:51 KST, 03e62121e).
+  DEV38384223907 배포/probe 성공과 새 BUILD_ID Kd6ikAQrMpzBT5J6qW4k0 실제 서빙 뒤 Member/Admin 읽기·화면 이동 QA를 완료했다.
+  문자열 주문 ID 회귀의 해결을 Admin 채팅/Review 복구·승인 진입, Member 본인/공유 및 Admin 공유 주문 새 GET200으로 확인했다.
+  기본/부분/차단 화면·입력 제한·Member 목록 필터도 유지됐다. feature e106405ad 보존, develop tree동일, 추가 소스 수정 없음.
+  새 E2E 최종97통과/2실패/5허용제외/5미실행, 승인/Feedback2 및 후속10건 회복을 확인했다. 기존 ISV2의 동일 timeout만 남았다.
+  BE 최종 범위/오류 계약·추가 테스트 사례·실제 쓰기 QA·Office native 별도 잔여를 보존하고 현재 가능한 FE 작업 완료로 대기한다.
+  CI 확인 모니터를 종료했고 별도 Jira/Slack 수동 전달·상용 배포·장기 모니터링은 하지 않았다.
+
 - PR4695의 DEV 새 BUILD_ID UowKnn4x6iXWck7cKODV7 실제 서빙 후 두 실계정 화면을 비교했다.
   Member/Admin Orders5/1033·Patients5/612·Board4/559, 본인5214기본·공유3943부분·9123Member차단/Admin허용과 Pickup 전링크 진입을 확인했다.
   새 채팅 adapter가 SSR 문자열 주문번호를 거절해 요청0이 되는 FE 회귀를 발견하고 e106405ad로 수정·normal commit/push했다.

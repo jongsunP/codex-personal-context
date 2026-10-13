@@ -1,6 +1,65 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-13 19:28 KST DEV 실계정 QA·채팅 회귀 수정 후 대기
+## 현재 상태 — 2026-10-13 PR4696 병합·DEV 배포·재검증 정리 후 대기
+
+- **최신 사용자 승인:** Codex가 PR4696을 develop에 직접 병합하고, DEV 자동배포 및 배포 후 실계정 재검증까지 진행한다.
+  기존 feature를 보존하며 FE가 현재 확인할 수 있는 것을 처리한 뒤 커밋·푸시·개인 기록을 정리하고 대기한다.
+- **병합·원격:** [PR4696](https://github.com/Innvoaid/dentlink-client/pull/4696), **19:33:51 KST MERGED**,
+  `feature/DL-16317 → develop`, merge **`03e62121e988418b944de0b7d71dfdb3ea4559cb`**.
+  head `e106405ad92f8d3820a31bf28ee0c3f5de784477`를 match하여 일반 merge했다. 강제/admin override는 사용하지 않았다.
+  `/Users/parkjongsun/Repository/dentlink-client-permission`의 feature는 삭제/이동하지 않았고,
+  feature와 develop 전체 tree 동일·원격 feature 일치·작업 checkout clean을 확인했다. 이번 병합 후 추가 소스 수정은 없다.
+- **실제 배포 완료:** [DEV38384223907](https://github.com/Innvoaid/dentlink-client/actions/runs/38384223907), 위 merge SHA와 일치.
+  ECS 배포 단계 **19:45:16**, build/deploy job **19:45:45 success**. 새 BUILD_ID **`Kd6ikAQrMpzBT5J6qW4k0`**를
+  **19:47:23 공개 DEV HTML HTTP200**에서 확인했고 CI 새 버전 probe도 **19:47:57 success**다.
+  이후 두 실계정 화면을 새로 읽어 아래 항목을 검증했다. 빌드·배포·실제 서빙과 자동 E2E 결과는 구분한다.
+
+### 새 배포의 실계정 재검증
+
+| 항목 | 직접 확인한 결과 |
+| --- | --- |
+| Admin 승인 주문9248 | 채팅 메시지와 Review 버튼 복구. Review 클릭으로 `/orders/9000009248/approvals/1469`에 진입하며 PNG 미리보기·Download·Approve/Reject 표시. 실제 승인/거절은 하지 않음 |
+| Member 본인5214 | 기본 상세·Edit/Cancel·담당 변경·채팅 입력 유지. 새 `GET /office/chat-messages/orders/9000005214?page=0&size=20` **HTTP200**, `data: []`, `totalElements: 0` |
+| Member 공유3943 | Case4/Order4·Patient Info Edit·상세/Files1 유지, 주문 변경·채팅 입력 숨김. 새 채팅 GET **HTTP200**, code0000·빈 data·totalElements0 |
+| Admin 공유3943 | Edit/Cancel·담당 변경·채팅 입력 표시. 같은 새 채팅 GET **HTTP200**, code0000·빈 data·totalElements0. 양쪽 No Messages는 이 주문의 실제 빈 응답과 일치 |
+| 주문9123 비교 | Member는 No order data available / Go to Home, Admin은 Case8/Order10·상세·Edit/Cancel·채팅 메시지와 입력 표시 |
+| 승인9248/1469 비교 | 같은 직접 URL에서 Member는 No order data available, Admin은 승인 파일·Approve/Reject 표시. Member 부분 승인 조회 사례는 여전히 별도 준비 필요 |
+| Member 주문 목록 | Orders5와 Member 메뉴·My Orders Only/Dentist 필터 숨김 유지. 이전 배포의 전체 목록/필터 QA와 구분해 최소 회귀 범위를 재검증함 |
+
+- 문자열 주문번호 때문에 HTTP 요청 전 차단되던 회귀는 실제 새 GET200 및 Admin 메시지/Review 표시로 해결을 확인했다.
+  현재 읽기 QA에서 추가 FE 결함은 발견하지 못했다. 전체 BE 권한 계약 완료나 실제 쓰기 동작 검증을 뜻하지 않는다.
+- 개인 테스트 주문의 채팅 전송·업로드·주문/담당/권한 저장·승인/거절은 실행하지 않았다.
+  기존 자동 E2E는 병합 workflow로 시작된 별도 테스트 계정 흐름이며 수동 실계정 검증과 구분한다.
+- 로컬 스크린샷은 기존 `~/.codex/visualizations/2026/10/13/01a132e9-6555-7a02-9c72-4dad9c04cc64/permission-post-deploy-qa/`의
+  `admin-chat-review-9248-after-fix.png`, `admin-approval-review-recovered.png`, `member-denied-9123-after-fix.jpg`,
+  `member-orders-after-chat-fix.jpg`에 저장했다. 다른 기기에서는 원격 코드·CI·이 기록으로 이어간다.
+
+### 자동 E2E와 다음 순서
+
+- **이전 run38379072202 최종:** 19:33:47 KST failure. 109수집 / 85통과 / 4실패 / 5허용제외 / 15미실행, flaky0·전역오류0.
+  승인 거절·승인 후 피드백 2건은 6개 trace에서 정상 OWNER/승인 상태인데 SSR 문자열 주문 ID로 채팅 HTTP 요청0·Review 부재였다.
+  이번 수정과 직접 일치하는 회귀이며 아래 새 CI에서 회복을 확인했다. Review는 채팅 승인 메시지의 버튼이다.
+  ISV 상품→옵션·Step4 진입 2건은 카테고리 API200의 13개 목록에 Insta Smile Vision이 없어 테스트 전제와 DEV 카탈로그가 달랐다.
+  더 이전 run38354572860에서도 실패한 별도 건이며 채팅 회귀나 권한 FE 결함으로 분류하지 않는다.
+- **새 run38384223907 최종:** **20:05:49 KST E2E 종료 / failure**. **109수집 / 97통과 / 2실패 / 5허용제외 / 5미실행**,
+  flaky0·전역오류0. 실제 Clinic SHA03e62121와 BUILD_ID Kd6ikAQrMpzBT5J6qW4k0를 확인했다.
+  **승인 거절 Review(`05_labStatus.spec.ts:270`)와 승인 후 Completed/Feedback(`08_orderFeedback.spec.ts:189`)는 모두 최초 시도 PASS**,
+  해당 파일 전체도 각각 **12/12, 10/10 PASS**다. 이전 채팅 회귀로 미실행됐던 후속10건도 회복됐다.
+  남은 실패는 이전과 동일한 ISV2건(`instasmile.spec.ts:36`, `step4-ui-state.spec.ts:56`),
+  `Insta Smile Vision` 버튼 대기90초 timeout / `order-step2-product.ts:97`, 각각3시도 실패다.
+  오류/실패 위치는 동일하며 새 원인으로 바뀐 증거는 없다. 이전 trace의 카테고리 누락 진단과 현재 같은 실패 증상을 구분한다.
+  최종 근거는 `/tmp/dentlink-dev-38384223907-artifacts.zip`의 report.json과 원격 CI다. 자동 검증 전체 통과로 표현하지 않는다.
+- **BE/사용자 다음 준비:** 기능별 최종 범위·오류 계약, Member 부분 조회 가능한 승인 주문, 본인/타 의사/미지정 Draft,
+  실제3D, 담당 변경 후 접근 상실과 쓰기 테스트 사례. ISV E2E는 DEV 카탈로그/테스트 전제 확인이 필요하다.
+  같은 GET 내부 정제도 가능하며 별도 상세 검증 API를 선행 가정하지 않는다.
+- **FE 다음:** 준비된 기능·사례부터 새 명세/실응답·디자인에 대조하고 필요한 부분만 구현/QA한다.
+  기존 필요 guard/cache는 유지하고 BE 동등 계약이 확인되면 선행 GET 등을 통합·축소한다.
+- **Office native 별도:** feature72a7914의 앱 ORDER API/cache·실기기 QA·통합/배포 잔여는 그대로이며 이번에 수정하지 않았다.
+- **현재 가능한 FE 수정·배포·읽기 화면 재검증은 완료, 추가 FE 결함 미발견으로 대기한다.**
+  위 ISV 테스트 전제와 BE 잔여가 해소되면 해당 범위부터 재개한다. 이번 CI 확인용 임시 모니터는 종료했다.
+  별도 Jira/Slack 수동 전달·상용 배포·장기 자동 모니터링은 수행하지 않았다.
+
+## 이력 — 2026-10-13 19:28 KST DEV 실계정 QA·채팅 회귀 수정 후 대기
 
 - **최신 사용자 지시:** BE 추가 작업 전 FE가 할 수 있는 것을 최대한 처리한다. 검토 후 커밋·푸시·메모리를
   정리하고 문제를 보고한 뒤 대기한다. 이번 화면 QA는 읽기 범위였으며 실제 전송·업로드·주문/담당/승인 변경은 하지 않았다.
