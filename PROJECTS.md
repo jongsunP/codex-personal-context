@@ -153,60 +153,38 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-13 Member·Admin 실제 PC 웹 UI 비교:** 사용자가 준비한 Chrome 기본
-  `jongsun.test2=Member`와 시크릿 `jongsun.test1=Admin`을 같은 병원에서 실제 확인했다.
-  역할별 상단/Office 메뉴·Patients/Orders/Board 필터, NEW 본인 담당 고정, 동일 타 의사 In Review 주문
-  수정/취소/담당 변경/채팅 작성 숨김, 승인 미리보기 유지·승인/반려 숨김, 공유 환자 Case 트리/파일 조회를 확인했다.
-  Pickup 링크는 새 탭의 상세로 이동한다. `9000004066` 조회 불가는 Admin도 같아 Member 전용 거절 증거는 아니다.
-  일부 다른 주문에서 Member의 Case `-`/대화 없음과 초기 승인대기 안내·목록 범위는 BE 최종 응답/정책과
-  재확인할 항목이다. 제공된 공유 주문 `9000003943`은 Case/Order 4/4가 두 계정에 정상 제공됐다.
-  Draft 0·3D 샘플 미검증, 실제 저장/전송/승인/역할 변경·모바일/native는 이번 판정에 포함하지 않았다.
-  제품 소스/Jira/API 전환 변경 없이 주요 FE UI 검토를 마쳤으며 상세 증거와 후속은 프로젝트 체크포인트에 기록했다.
-- **2026-10-13 Member 화면 QA 준비·대기 이력:** 사용자는 DEV 배포와 BE 동료의 부분 화면 노출을
-  확인했지만 Member 역할이 없어 전체 정확성은 미확인이다. 사용자가 BE에 역할 변경·테스트 계정을
-  준비하도록 요청하고, 준비되면 다시 알린다. 그때 실제 Member 화면의 권한별 UI·필터 제공,
-  주문번호별 기본/부분/차단 상세와 확정 디자인 일치 등 FE가 직접 확인 가능한 웹 UI만 먼저 점검한다.
-  화면 QA와 BE 내부 데이터 정제/전체 권한 검증을 구분한다. BE 최종 명세 후 with/선행 GET 정리 여부와
-  채팅 전환을 판단하는 원칙도 유지한다. 지금은 구현·계정 변경·외부 상태 재조회 없이 준비와 기록 후 대기한다.
-- **2026-10-13 개발서버용 웹 merge 이력:** 사용자 요청으로 develop을 원격 master
-  `aff278a43`에서 재생성하고 [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693)을 만들었다.
-  사용자가 15:02:51 KST에 직접 merge했고 현재 원격 develop은 **`e6cfea705`**다.
-  이전 develop `e9d3f3509`는 로컬 참조/bundle로 보존했다. feature는 `1c67612c3` 그대로다.
-  Office DEV build/deploy job과 Lab DEV workflow 성공이다. 15:14:46 KST Clinic DEV의 실제 BUILD_ID
-  `hbVeD1fi0LvvqQFsJJUPG`가 이번 빌드와 일치했고, 자동 반영 확인도 성공했다. 후속 자동 E2E는 15:17 당시 진행 중이었으며
-  실계정 QA와 BE 전체 배포는 확인되지 않았다. CodeRabbit 자동 리뷰는 skip, Vercel DLOS는 blocked였다.
-  이번 목적은 기존 화면을 BE 개발자가 DEV에서 사용할 수 있게 하는 것이며 상용 release/Office 앱 전달과 별개다.
-- **최신 사용자 FE/BE 원칙:** GET 조회 범위·데이터 정제는 BE 내부에서 처리할 수 있다.
-  FE는 사용자 권한별 UI·필터 제공, 실제 바뀐 API 연결, 주문번호별 기본/부분/조회 불가 상세를 담당한다.
-  기존 with/선행 GET은 최종 BE 계약에 맞춰 필요한 것만 유지한다. Remake·승인 관계 확인용
-  추가 주문 GET과 담당 사전판정은 재검토 후보이며 지금 임의 삭제하지 않는다.
-  채팅 전환도 BE 최종 명세 확인 후 진행한다. 이번 확인에서는 제품 코드/Office 앱을 변경하지 않았다.
-- **2026-10-13 가능한 범위 마감·BE 최종 명세 후 재개 대기:** 현재 세션
-  `01a132e9-6555-7a02-9c72-4dad9c04cc64`에서 실제 Swagger generate로 Member와 담당 ID,
-  리뷰 허용 여부를 확인해 치과 웹/앱의 필터·새 Case·주문 행동/직접 접근에 연결했다.
-  최신 웹 master `aff278a43`을 통합했고 웹 `1c67612c3`·앱 `72a7914`를
-  `feature/DL-16317`에 push했다. 두 checkout은 clean이며 앱 main/develop은 병합하지 않았다.
-- 웹 **257개**, 앱 관련 **157개** 자동 테스트 통과. 웹 3서비스 타입/빌드·정상 푸시 훅,
-  DLOS **381개**·패키지 타입/빌드, 앱 iOS/Android JS bundle을 확인했다.
-  앱 전체 타입은 기존 **18개 오류 동일**이며 전체 타입 통과는 아니다. 기공소 신규 작업,
-  스테이징 확인·PR 생성/merge·배포·CodePush는 하지 않았다.
-- 별도 테스트 계정이 없다는 사용자 답변으로 인증된 Member 실계정·실기기 QA는 남았다.
-  서버의 담당/공유/과거 참여 GET 범위·담당 변경 후 접근 상실/native 거절 규칙을 QA에서 확인한다.
-  **사용자 확정:** Pickup 모든 주문번호 링크는 상세로 이동하고 상세에서 기본/조회 불가/부분 조회를
-  처리한다. Pickup 링크 제한은 요구가 아니며, 관련 Case 편집 확대도 미확정으로 개발 잔여에서 제외한다.
-  확정 화면·Member/기존 API 기준 FE 개발·commit/push는 완료다. 최신 Swagger의 채팅 전환
-  API는 실제 caller에 아직 적용하지 않았으며, 최종 BE 연동·QA·merge 준비와 분리한다.
-  **최종 사용자 지시:** 완료 구현은 보존하고, 채팅 전환은 BE 최종 명세·전환 범위 확인 후 진행한다.
-  현재 가능한 Swagger/실사용 확인과 정리를 마쳤으며 새 지시 전 자동 조사·추가 개발 없이 대기한다.
-  웹은 master 기준 코드 검토가 가능하며 실제 PR은 배포 대상 release를 정해 비교해야 한다.
-  앱의 `develop` 대상 diff는 권한관리 60파일만이지만 실제 통합 충돌 6파일이 있어
-  PR 진행 시 develop 동작과 권한 조건을 함께 정리해야 한다.
-  Web DL-16319 댓글 **44418**과
-  Office App DL-16752 댓글 **44419**에 진행·잔여를 기록했고 두 카드는 진행 중이다.
-  상위 댓글은 쓰지 않았으며 이번 승인 범위를 정리한 뒤 추가 지시 전 대기한다.
+- **최신 2026-10-13 breakpoint:** BE는 아직 전부 배포되지 않았다. 완료 코드는 보존하고
+  전체 BE 완료를 기다리지 않으며 준비 통보된 기능부터 계약·실제 응답 대조 → 필요한 FE 연결 →
+  해당 범위 QA → 커밋/푸시·DEV 전달 순서로 따라간다. 새 통보 전 자동 조사·추측 구현은 하지 않는다.
+- **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
+  로컬·원격 `1c67612c3`, clean. [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693)은
+  사용자 merge, 현행 원격 develop `e6cfea705`, master `aff278a43`. DEV 빌드/배포·실제 반영 확인.
+  Member 메뉴/필터·NEW 본인 담당·주문 행동/직접 접근·Draft/승인 제어 구현과 치과 테스트 257개,
+  3서비스 타입/빌드 통과는 보존했다. 이번 마감은 제품 변경/빈 커밋 없이 기존 원격 보존을 확인했다.
+- **실제 UI QA:** Chrome 기본 `jongsun.test2=Member`, 시크릿 `jongsun.test1=Admin`, 같은 병원
+  역할 확인. 메뉴/필터·NEW·본인 기본·타 의사 부분 상세/승인·공유 Case/파일·Pickup 링크 유지 확인.
+  Pickup `9000004066`은 Admin도 조회 불가여서 Member 전용 차단 증거가 아니다.
+- **잔여:** 목록/건수/filter-hint 정제와 상세 기본/부분/차단 기준·검증 계약, 일부 Case `-`/대화 없음,
+  Admin은 성공하고 Member만 거절되는 주문, Draft/3D/실제 저장·전송·담당 변경 후 접근 등은 미완료/미확인이다.
+  현재 확정된 새 FE 단독 디자인 오류는 없으며 FE 임의 목록 정제/guard 일괄 삭제를 시작하지 않는다.
+- **17:17 현행 Swagger:** 새 주문별 GET·기존 POST `/office/chat-messages/orders/{orderId}` 확인,
+  `/office/chats/{chatId}/messages` 제거. 현재 caller는 deprecated `/office/chat-messages` 유지다.
+  ORDER/고객지원/답글의 해당 계약·사용 시점 확인 후 준비된 범위부터 전환한다. 별도 상세 접근
+  검증 API는 공개 명세에서 식별되지 않았다. 같은 GET의 BE 내부 정제만 달라질 수도 있다.
+- **자동 E2E:** [DEV workflow 38354572860](https://github.com/Innvoaid/dentlink-client/actions/runs/38354572860)
+  배포 성공과 구분하여 후속 E2E failure 종료 확인. development 97통과/2실패/5허용 제외/5미실행,
+  수집109. 이전 진행 중 기록은 대체하며 전체 자동 QA 통과로 보고하지 않는다.
+  실패2건은 ISV `Insta Smile Vision` 상품 버튼 대기 timeout, 후속5건은 serial 미실행이다.
+  현재 원인은 미확정이며 권한 작업과 별도의 ISV/E2E 조사 잔여로 보존했다.
+- **Office 앱 별도:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 동일 feature,
+  로컬·원격 `72a7914`, clean. 관련 테스트157·iOS/Android JS bundle 통과, 전체 타입 기존18오류.
+  develop 통합·PR·실기기·배포/CodePush 미완료. 알려진 미래 통합 충돌 후보는 후속 범위에서 재확인한다.
+- Web [DL-16319](https://innovaid.atlassian.net/browse/DL-16319), Office App
+  [DL-16752](https://innovaid.atlassian.net/browse/DL-16752)는 진행 중이다. 상위 댓글은 쓰지 않는다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
-- 앱 표시 이름은 `권한관리 프로젝트 폴더`. 기존 `권한관리세션`을 유지한다.
-- 체크포인트: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
+  앱 표시 이름은 `권한관리 프로젝트 폴더`, 기존 `권한관리세션` 유지.
+- 주문별 실제 증거·원격 상태·BE/사용자/FE 담당 순서와 재개점은
+  [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)에 보존한다.
 
 ### Dentlink 통합알림센터 — 사전 검토
 
