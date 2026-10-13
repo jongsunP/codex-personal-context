@@ -1,5 +1,40 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-13 · DLDS 직접 참조 전환·UI 연결 파일 제거
+## 현재 브레이크포인트 — 2026-10-13 · 남은 스토리 폴더 제거·npm 실제 설치 검증
+
+**사용자 결정:** Storybook은 향후 종료 방향이지만 지금 전체를 제거하지 않습니다. DLDS 구현이 이동한 뒤 `shared/ui`에 스토리만 남은 폴더는 스토리까지 삭제합니다. 이어 혼자 가능한 필수 작업을 진행하고 커밋·푸시·메모리까지 정리한 뒤, 동료 조치가 꼭 필요한 시점에 정확한 요청을 안내하도록 승인했습니다. PR 병합은 아직 별도 결정입니다.
+
+### 이번 코드 정리
+
+- Client 정본 `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16471-dlds-dlos-integration`.
+- **`c5679107d278315861f171da482bab551c57dff1`** `chore: DLDS 이동 후 남은 스토리 폴더 제거`: 스토리22개·폴더21개 삭제, 1,123줄 삭제만 있으며 제품 구현·UI 동작·패키지 버전은 바꾸지 않았습니다. 이전 직접 참조/버전 커밋5d4a4b057·41d9b699c 위에 저장·푸시했습니다.
+- 삭제 파일의 경로·이름 직접 참조0, 각 구현의 DLDS 공개 export 유지 확인. Storybook은 glob으로 수집하므로 설정 변경이 필요 없습니다. Button·Modal·TextInput·Tooltip 등 실제 조합 코드가 함께 있는 폴더와 Storybook 도구·설정은 유지했습니다.
+- 정상 commit/push hook으로3앱 타입·lint, Admin guard9개·60/60, shared coverage 통과. 기존 lint warning은 있으나 실패는 없습니다. diff check와 삭제 범위 일치도 확인했습니다. 소스 없는 폴더를 그대로 둔 점을 사용자가 지적했고, 구현 이동과 폴더 정리 완료를 혼동하지 않도록 구분합니다.
+- hook 호환 경로4개와 제품 설정/DLDS 토큰 일부 중복은 이번 UI 정리의 필수 누락이나 배포 차단이 아닌 선택 후속 범위입니다. 임의로 리팩터링하지 않았습니다.
+
+### 실제 npm 설치와 배포 확인
+
+- 이전 시험 **`0.1.3-pr.94b6324`는 이제 icons·DLOS·DLDS 모두 registry에 있습니다. 이전 icons 처리 대기는 해소**됐으므로 같은 요청을 동료에게 반복하지 않습니다.
+- 위 정확 버전3개를 새 외부 consumer에 설치했습니다. 소스 링크·tarball override 없이 공개 npm을 사용했고, node_modules 제거 후 frozen lockfile 재설치까지 확인했습니다. React18.2/19.0 각각 Bundler·NodeNext 타입·Vite production build·Node ESM SSR 통과. 실제 tarball integrity/lockfile 일치도 확인했습니다. **이는 이전 공개 버전 검증이며 이번 최신 export의 검증과 구분**합니다.
+- 로컬 보조 근거 `/tmp/dentlink-registry-consumer-XD6kP0/report.json`, 재사용 스크립트 `/tmp/dlds-registry-consumer-check.cjs --version <정확버전>`. 다른 기기에서는 기존 `scripts/package-artifact.js`의 consumer fixture를 참고해 정확한 registry 버전3개를 dependency로 지정하고 overrides/file/link 없이 동일 검사합니다. 임시 파일의 존재가 복구 전제는 아닙니다.
+- 최신 `c5679107d`의 수동 [npm 시험 실행38382879133](https://github.com/Innvoaid/dentlink-client/actions/runs/38382879133)을 `channel=prerelease`, `publish=true`, `bootstrap_dlds=false`로 실행했습니다. 시험 계산은 **0.1.5-pr.c567910**, 정식 준비 버전은0.1.4입니다. **verify SUCCESS, publish FAILURE**이며 실패 항목은 신규DLDS의 npm PUT E404입니다. 기존 DLDS GET200/이전 버전 설치는 성공하므로 패키지 미생성으로 판단하지 않습니다. Trusted Publisher 미등록/불일치 등 관리자 설정 세부는 미확인이고, 관리자에게 확인·수정 요청할 지점입니다. 이전 icons/DLOS OIDC E403과 구분합니다.
+- 같은 실행에서 icons 업로드19:29:21KST, DLOS19:29:25KST는 접수됐고 DLDS19:29:26KST는실패했습니다. **19:31:23KST registry 확인: 새DLOS 있음, 새icons 미조회, 새DLDS 없음.** 신규3종 registry 설치 검증은 미완료입니다. 초기등록 token 대체, 강제 태그 변경, 중복 공개나 권한 우회는 하지 않았습니다. icons는 신규 업로드 직후 처리 대기일 수 있으므로 원인을 단정하거나 즉시 별도 관리자 요청으로 확대하지 않습니다.
+
+### 별도 Vercel 상태
+
+- PR의 `Deployment was blocked`는 Vercel bot이 명시한 jongsunP 팀 멤버/계정 연결 권한 문제이며 패키지 컴파일 오류가 아닙니다. [봇 근거](https://github.com/Innvoaid/dentlink-client/pull/4692#issuecomment-6136211556).
+- 기존 client 연결 `dentlink-dlos` 사이트와 Studio의 별도 `/design-system/dlos` 갤러리는 다른 배포입니다. 기존 client master8772d688의 Production 배포도 실패 표시지만 구체 원인은 접근할 수 없어 미확정입니다. 기존 사이트는HTTP200/갤러리 HTML을 반환하며 최신 코드 적용을 증명하지 않습니다.
+- **이번 npm·소스 통합을 위해 Vercel 팀 가입을 필수 요청으로 추가하지 않습니다.** 기존 별도 사이트의 자동 배포 운영은 필요할 때 확인합니다. CodeRabbit은 파일 수1,107/150 한도로 실제 리뷰 skip이며 사용자 지시대로 유료 리뷰를 하지 않습니다.
+
+### 최종 결과·다음 순서
+
+- 최종head/origin **c5679107d278315861f171da482bab551c57dff1**, clean. [PR 패키지CI38382871445](https://github.com/Innvoaid/dentlink-client/actions/runs/38382871445) verify SUCCESS/publish SKIPPED, [Admin guard38382871519](https://github.com/Innvoaid/dentlink-client/actions/runs/38382871519) SUCCESS. 별도 수동 공개의 권한 실패와 코드검사 성공을 혼동하지 않습니다.
+- 기존PR#4692 본문·child JiraDL-16471 설명/기존댓글44417을 실제결과로 갱신했습니다. 기준 문서 이하 요구사항·이력, 제목·진행중 상태·다른 댓글은 보존했습니다. PR은 OPEN/non-Draft·master 대상·미병합이며 새 하네스·Studio 공통 코드·원래 DLDS 백업은 변경하지 않았습니다.
+- **지금 사용자→npm 관리자 요청:** `@innvoaid/dlds`의 Trusted Publisher를 `Innvoaid / dentlink-client / packages_publish.yml`, environment 비움으로 확인·등록하고 직접 `npm publish` 허용/패키지 배포 권한을 확인합니다. 기존 패키지는 존재하지만 위수동run의 기본OIDC 공개만E404이므로 최초등록 token이나 기존icons/DLOS 권한을 다시 요청하지 않습니다. Vercel팀/Studio공통권한 요청도 이번필수아님.
+- **설정 회신 후 Codex:** personal/client/PR/registry 갱신 → 최신head가 같은지확인 →3종0.1.5-pr.c567910 등록상태확인(icons처리중이면중복publish금지) →같은head의 실패publish job 재실행(`gh run rerun 38382879133 --failed`, 기존등록은skip) →3종정확버전 실제설치·frozen재설치·Bundler/NodeNext 타입·Vitebuild·SSR React18/19. 최근추가공개API LegacyButton/InputBase/PaginationUI/StyledFlexBox도현재smoke fixture대로확인합니다. 코드가추가로바뀌면기존run을최신검증이라하지말고그head용정상workflow사용.
+- **그다음 사용자:** 위검증을보고 PR#4692 master병합결정. 병합후 정식0.1.4/latest 자동배포·registry설치·Studio갤러리 자동최신화 결과확인. 실제Studio초기DLDS연결이미완료라면그때담당자에게구체요청. 통합확인전하네스확장부터시작하지않습니다.
+- 이번필수코드정리·혼자가능한검증은완료했으며 관리자설정회신을기다립니다. 자동감시/재시도/추가공개/병합은예약하지않습니다. 개인정본/HANDOFF를commit/push해다른기기에서도이순서로이어갑니다.
+
+## 이전 브레이크포인트 — 2026-10-13 · DLDS 직접 참조 전환·UI 연결 파일 제거
 
 **사용자 승인:** 동료 의견을 확인한 뒤 DLDS를 다시 내보내는 `shared/ui` 파일을 제거하고 사용처를 직접 전환하도록 승인했습니다. 이어 커밋·푸시·기존 PR·나머지 정리까지 명시적으로 요청했습니다. npm 재공개·master 병합은 이번에 실행하지 않습니다.
 
