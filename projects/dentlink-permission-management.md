@@ -12,6 +12,46 @@
   확인했으며, 인증된 Member 실계정·실기기 QA는 수행하지 못했다. 임시 브라우저 탭은 닫았다.
   자동 테스트·빌드·Swagger 응답은 실제 사용자의 주문/환자 범위나 배포·릴리즈 완료 증거가 아니다.
 
+### 2026-10-13 사용자 확정에 따른 완료 범위 정정
+
+- 사용자가 **Pickup의 모든 주문번호 링크는 주문 상세로 이동하고, 제한은 상세에서 처리**한다고
+  명시했다. 타 의사 주문 링크 제거·공유 Case 링크 예외는 현재 요구가 아니다.
+  오래된 Figma/Pickup 설명을 근거로 이 조건을 개발 잔여로 분류했던 Codex 판단을 철회했다.
+  아래 과거 Pickup 조건 준비 이력은 당시 작업 기록이며 현재 요구를 대체하지 않는다.
+- 주문 상세는 **기본 / 조회 불가 / 부분 조회**의 세 상태로 구분한다. Figma 정상 상세
+  `344:49964`, No Data `475:77664`(App `475:77704`), 조회 가능한 타 의사 주문
+  `475:77743`/상위 설명 `475:75588`을 재확인했다. 부분 조회는 내용·파일·3D 조회를 유지하면서
+  승인/반려·주문 수정/취소·채팅 작성·Case 제목 편집 등 허용되지 않은 기능을 제한하는 상태다.
+- 사용자 확정 범위의 **웹·Office 앱 FE 개발과 제품 commit/push는 완료**로 구분한다.
+  실계정/실기기 QA와 실제 서버 조회 범위·접근 거절 확인은 별도 잔여이며 개발 미완료로 혼용하지 않는다.
+- 본인 주문의 현재 Case 이외 관련 Case 전체를 편집 가능하게 확장하는 요구는 확정되지 않았다.
+  담당 필드 부재만으로 이를 FE 개발 잔여나 필수 BE 대기로 분류하지 않는다.
+  native 최초 조회 실패의 기존 fallback 유지 역시 승인된 범위이며 새 매핑을 개발 잔여로 단정하지 않는다.
+- PR 생성 전 웹 `master`, Office 앱 `develop`에 대한 전체 diff를 확인한다.
+  리뷰를 위한 PR 준비 단계와 실계정 QA·최종 merge/배포 준비는 구분한다. PR은 아직 생성하지 않았다.
+
+### 2026-10-13 PR 검토 준비 확인
+
+- 제품 feature HEAD/원격 일치와 clean을 재확인했다. 사용자 질문은 PR 준비 단계 확인이며
+  이번 확인에서 PR 생성·실제 target 통합·merge·배포는 수행하지 않았다.
+- 웹 target `origin/master=aff278a43`는 feature HEAD의 조상이다. behind 0/ahead 14,
+  실제 diff **167파일(+10,307/-1,310)**이고 미해결 충돌은 없다. 권한관리와 전체 DEV Swagger
+  생성에 따른 DTO/메서드 변경, 이전 Lab optional 조건·번역 보존분을 PR 설명에서 구분한다.
+  `.github`/scripts/package/lockfile/Admin 제품 소스/DLOS/icons에는 target 대비 차이가 없다.
+  웹은 `master` 대상으로 리뷰 PR을 준비할 수 있다.
+- Office 앱 target **`origin/develop=2bc7d04dd92136b7a63a3d8c4d4e288afa867102`**,
+  merge-base `19f68100`이며 develop만 17커밋/feature만 7커밋이다.
+  feature의 7개 커밋은 모두 권한관리이고 실제 PR diff **60파일(+5,574/-403)**은
+  src 42·테스트 18파일이다. legacy monorepo/native/lockfile/workflow의 관계 없는 변경은 없다.
+- 읽기 전용 `merge-tree`에서 앱 충돌 **6파일**을 확인했다: `MessageInput.test.tsx`,
+  `MessageInput.tsx`, `MessageTemplate.tsx`, `DesignConfirmationScreen.tsx`, `OrderScreen.tsx`,
+  `useUploadOrderFile.ts`. Draft PR로 코드 검토는 가능하지만, 정상 통합/merge 준비까지 끝난 것은 아니다.
+  앱 PR 진행 작업에서는 develop의 업로드 잠금·덴처 동작·이전 화면 복귀와 feature 권한 guard를
+  함께 보존해 통합해야 한다. develop의 `OrderDentureWorkflowSection.tsx:437` 상세 캐시 쓰기도
+  직원 기준의 새 상세 키 helper에 맞춰야 한다. 실제 코드 변경/통합 뒤에는 비례 검증이 필요하다.
+- Web 하위 Jira 댓글 **44418**의 잘못된 Pickup/관련 Case 개발 잔여 문구도 사용자 확정 기준으로
+  수정했다. 개발 완료와 실계정 QA 잔여를 분리하며 진행 중 상태를 유지한다. 상위 댓글은 쓰지 않았다.
+
 ### 실제 계약과 디자인 기준
 
 - 웹 `pnpm generate:api-type`, 앱 `yarn swagger-typescript-api-dev`를 실제 실행해
@@ -53,8 +93,8 @@
   새 담당 정보를 먼저 반영해 후속 조회 실패가 이전 본인 담당 상태를 되살리지 않게 했다.
 - 환자 Edit은 조회 가능한 주문에서 유지하고, Case 편집은 본인 주문의 현재 Case ID만 확정한다.
   다른 관련 Case의 담당은 `CaseListDto`에 없고 Pickup도 dentistName만 있어 이름으로 추정하지 않는다.
-  Pickup의 확정 디자인상 주문번호 링크 제한·공유 Case 예외는 담당 ID/공유 관계가 없어
-  실제 계약 연결이 남았다. 본인 주문의 현재 Case 이외 관련 Case까지 권한을 확인한 상태는 아니다.
+  Pickup은 기존 링크 이동을 유지하며 상세의 현재 접근 조건으로 처리한다.
+  현재 Case 이외 관련 Case 편집 확대는 확정 요구가 아니며 개발 잔여로 분류하지 않는다.
   비동기 검증·화면 종료·직원/주문 변경 후 보관된 작성/삭제/다음 주문/승인 callback은 차단한다.
   이미 전송한 HTTP 자체를 취소하거나 서버 변경을 되돌리는 기능은 추가하지 않았다.
 
@@ -76,7 +116,7 @@
   미확정/mismatch 상태의 자동/수동 조회는 실제 API 전에 차단한다.
 - 웹 일반 resource HTTP 403 처리는 적용했지만 **native는 알려진 code `2005` 및 기존 세션 처리,
   최초 조회 실패 toast/back을 유지**한다. Swagger에 새 거절 규칙이 없어 모든 native 403을
-  신규 NoData로 바꾸지 않았다. 실제 거절 응답을 받은 뒤 필요한 매핑을 확인해야 한다.
+  신규 NoData로 바꾸지 않았다. 승인된 기존 fallback이며 실제 거절 응답 확인은 QA 항목이다.
 
 ### 검증·증거 경계
 
@@ -107,7 +147,8 @@
   1. Member 실계정 및 본인/타 의사/공유/과거 참여 주문, 담당 미지정 Draft·전체 환자 선택 데이터.
      FOLLOW_UP 생성·Draft 복원 뒤 담당 지정 결과도 서버 업무 정책과 대조한다.
   2. 실제 서버 GET 범위·담당 변경 후 조회 상실·직접 주소 접근과 native 거절 code/응답.
-  3. 다른 관련 Case/Pickup의 담당 구분이 요구된다면 필요한 실제 계약과 확정 디자인.
+  3. Pickup 링크 이동 후 정상/조회 불가/부분 조회 상태를 확인한다. 관련 Case 편집 확대 등
+     미확정 정책은 새 요구가 제시될 때 검토하며 현재 개발 잔여로 취급하지 않는다.
   4. 인증된 개발서버 화면과 앱 실기기 QA. 앱 일반 PR 정책은 develop이며 기존 feature base와
      현재 delivery reference 차이를 확인한 뒤, PR/릴리즈 작업은 새 승인 범위에서 진행한다.
 
