@@ -2,6 +2,12 @@
 
 ## 2026-10-13
 
+- PR4695의 DEV 새 BUILD_ID UowKnn4x6iXWck7cKODV7 실제 서빙 후 두 실계정 화면을 비교했다.
+  Member/Admin Orders5/1033·Patients5/612·Board4/559, 본인5214기본·공유3943부분·9123Member차단/Admin허용과 Pickup 전링크 진입을 확인했다.
+  새 채팅 adapter가 SSR 문자열 주문번호를 거절해 요청0이 되는 FE 회귀를 발견하고 e106405ad로 수정·normal commit/push했다.
+  채팅48건·전체Clinic302건·3서비스타입·독립리뷰·normal push검사 통과. PR4696 feature/DL-16317→develop 1커밋/3파일 생성·연결했다.
+  수정은 아직 미배포이며 사용자 병합→새배포→채팅 조회 재확인, 자동E2E최종결과·BE추가범위/승인부분조회사례·쓰기QA·native별도잔여를 기록하고 대기한다.
+
 - 사용자 PR4695 병합(18:49:26 KST)과 develop97529d847/feature812aff0d4 tree동일을 확인했다.
   DEV38379072202는 Docker build/push 진행 중이며 새 BUILD_ID·화면 QA는 미확인이다.
   먼저 breakpoint를 저장하고 배포 완료 후 준비된 Member/Admin 화면검증을 계속하라는 최신 지시와 재개순서를 기록했다.

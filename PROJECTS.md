@@ -153,26 +153,25 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-13 18:51 PR4695 사용자 병합·DEV 배포 진행:** 사용자 승인으로 Jira44423의 ORDER 채팅 GET·POST
-  새 주문 경로를 연결하고 채팅 scope/로컬 상태, 캡처 busy, 직원 cache, Member 숨긴 URL·요청 필터를 보완했다.
-  Pickup 미사용 링크 제한 코드를 제거했고 모든 주문 링크 진입은 유지한다. 필요 with/직접 접근 guard는 유지한다.
+- **최신 2026-10-13 19:28 DEV 실계정 QA·회귀 수정 후 대기:** PR4695 DEV 배포/새 BUILD_ID
+  `UowKnn4x6iXWck7cKODV7` 실제 서빙을 확인하고 Member/Admin 화면을 비교했다.
+  Orders5/1033·Patients5/612·Board4/559, 역할별 메뉴/숨긴 필터 URL 정리, 본인5214기본·공유3943부분·9123Member차단/Admin허용,
+  Pickup 타 의사 주문 링크 진입을 확인했다. 승인9248는 이제 Member 차단/Admin허용이므로 부분 승인 사례는 별도로 필요하다.
 - **웹 원격:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
-  `812aff0d4d49d7e82c1e3d54708d236a77e07bee`, 원격 일치 clean. normal commit/push 성공.
-  [PR4695](https://github.com/Innvoaid/dentlink-client/pull/4695) `feature/DL-16317 → develop` 생성/연결 완료,
-  **18:49:26 KST 사용자 MERGED**, develop `97529d847`, feature와 tree동일. 원본브랜치 유지.
-  실제 Clinic26+shared17파일 차이로 [Office DEV38379072202](https://github.com/Innvoaid/dentlink-client/actions/runs/38379072202) 실행 중이다.
-  18:51 Docker build/push 진행, 새 BUILD_ID 서빙·UI QA는 아직 미확인이다.
-  병합 전 CodeRabbit develop 리뷰 skipped·별도 DLOS Vercel preview Blocked는 배포와 구분한다.
-- **검증:** Clinic37 suite/281건, 3서비스 타입·빌드, normal push lint(오류0)·DLOSguard·shared coverage 통과.
-  기존 DEV의 Member/Admin 같은 주문3943 화면 차이를 읽기로 재확인했으며 신규 코드 배포/쓰기 QA는 남아 있다.
-  기존 DEV E2E97통과/2실패/5제외/5미실행(ISV 버튼timeout)은 별도 미해결이다.
-- **현재 지시/다음:** breakpoint 저장 후 계속 진행. DEV 새 BUILD_ID 확인 → 두 계정 화면/필터/상세/채팅 조회 검증, BE의 목록·total·filter-hint·상세 기본/부분/거절 계약과
-  테스트 주문 준비 범위부터 순차 연동한다. 같은 GET 내부 정제도 가능하며 새 검증 API를 선행 가정하지 않는다.
-  실제 Draft/3D/접근 상실/저장 QA와 선행 GET 통합은 해당 근거가 준비되면 진행한다.
+  `e106405ad92f8d3820a31bf28ee0c3f5de784477`, normal commit/push 성공. 원본 브랜치를 유지했다.
+  SSR 문자열 주문번호를 새 채팅 adapter가 거절해 HTTP요청0이 되는 회귀를 수정했다.
+  [PR4696](https://github.com/Innvoaid/dentlink-client/pull/4696) `feature/DL-16317 → develop` OPEN/MERGEABLE,
+  1커밋/3파일(Clinic테스트2+shared1), chat연결 완료. 실제 Clinic 회귀 변경으로 DEV 배포조건 충족. 이 수정은 아직 미배포다.
+- **검증:** 채팅48건/전체Clinic37 suites·302건, 3서비스타입, 독립리뷰, normal push lint·DLOSguard·shared coverage 통과.
+  새 후속의 production build는 재실행하지 않았다. PR의 별도 DLOS Vercel preview Blocked·CodeRabbit develop리뷰skip은 실제 DEV/리뷰 완료와 구분한다.
+  [DEV38379072202](https://github.com/Innvoaid/dentlink-client/actions/runs/38379072202)의 배포/probe는 성공했으며 자동 E2E는 19:27:18 최종 관측에서 실행 중이다.
+- **현재 지시/다음:** FE에서 가능한 수정·검토를 정리한 뒤 대기한다. 사용자 PR4696병합→DEV배포→채팅 새 GET/응답/표시 재확인.
+  BE 기능별 계약과 테스트 사례가 준비되는 대로 순차 진행하며 같은 GET 내부 정제도 가능하다.
+  자동E2E 최종결과, Member 부분 승인·Draft/3D/접근 상실·실제 쓰기 QA, BE 동등 계약 이후 선행 GET 통합 등이 남았다.
 - **Office 앱 별도:** `/Users/parkjongsun/Repository/dentlink-app-permission`, feature `72a7914`, 원격 동일 clean.
   이번에는 수정하지 않았고 ORDER API·cache 후속/통합·실기기·배포는 남아 있다.
 - Web [DL-16319](https://innovaid.atlassian.net/browse/DL-16319), Office App
-  [DL-16752](https://innovaid.atlassian.net/browse/DL-16752). 이번은 웹 PR 준비만 했고 Jira 변경·추가 배포·자동 모니터링은 하지 않았다.
+  [DL-16752](https://innovaid.atlassian.net/browse/DL-16752). Jira 변경·후속 병합/추가 배포·장기 자동 모니터링은 하지 않았다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
   앱 표시 이름은 `권한관리 프로젝트 폴더`, 기존 `권한관리세션` 유지.
 - 상세 구현·감사 근거·검증 한계·다음 담당 순서는

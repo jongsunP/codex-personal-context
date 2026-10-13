@@ -1,6 +1,71 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-13 18:51 KST PR4695 사용자 병합·DEV 배포 진행 breakpoint
+## 현재 상태 — 2026-10-13 19:28 KST DEV 실계정 QA·채팅 회귀 수정 후 대기
+
+- **최신 사용자 지시:** BE 추가 작업 전 FE가 할 수 있는 것을 최대한 처리한다. 검토 후 커밋·푸시·메모리를
+  정리하고 문제를 보고한 뒤 대기한다. 이번 화면 QA는 읽기 범위였으며 실제 전송·업로드·주문/담당/승인 변경은 하지 않았다.
+- **기존 배포 확정:** 사용자 병합 PR4695 / develop `97529d847a73e899d15c9590a80615645b2c176d`의
+  [DEV38379072202](https://github.com/Innvoaid/dentlink-client/actions/runs/38379072202) build/deploy job은
+  **19:03:57 KST success**, 새 BUILD_ID 대기 단계 **19:05:55 success**다.
+  **19:06:47 공개 DEV HTML HTTP200 / `UowKnn4x6iXWck7cKODV7`**를 새 manifest와 대조했다.
+  이후 준비된 두 브라우저를 새로고침하여 아래 화면 QA를 진행했다. 자동 E2E는 **19:27:18 최종 관측에서 실행 중**이며
+  최종 성공/실패·건수는 아직 미확정이다. 이전 실행의 97/2 결과와 혼합하지 않는다.
+- **새 FE 회귀 발견·수정:** Admin 주문9123 화면의 Network에서 주문/직원/Case API는 발생하지만
+  `chat-messages/orders/` 및 `chat` 요청은 0건이고 LinkTalk는 No Messages였다.
+  SSR `orders/[order_id]/index.tsx`가 주문번호를 문자열로 넘기는데 새 adapter의 `Number.isSafeInteger`가 이를 거절해
+  HTTP 호출 전 예외가 났다. 권한/profile enabled 문제라는 초기 가설은 원인이 아니다.
+  Admin 직원 API는 id213, authorityType OWNER, displayAuthorityType Admin을 반환했다.
+- **수정 방법:** ORDER adapter 내부에서 정규 양의 정수 문자열을 number로 변환한 뒤 safe integer를 검증한다.
+  숫자/문자열 정상 ID를 GET·POST에 허용하고 빈값·공백·지수·소수·음수·0·leading zero·unsafe ID 차단과
+  DENTLINK 기존 경로/본문을 유지한다. 전역 DTO·SSR·UI·직원 scope를 불필요하게 확대 변경하지 않았다.
+- **웹 원격:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 **`feature/DL-16317` 유지**,
+  **`e106405ad92f8d3820a31bf28ee0c3f5de784477`** (`fix: 문자열 주문번호의 채팅 요청 차단 수정`), normal commit/push 성공, 원격 일치·clean 확인.
+  shared adapter1 + Clinic 회귀 테스트2 = 3파일/1커밋이다.
+  [후속 PR4696](https://github.com/Innvoaid/dentlink-client/pull/4696), **feature/DL-16317 → develop**, OPEN/MERGEABLE,
+  정확히 위 1커밋/3파일을 확인하고 chat에 연결했다. Clinic의 실제 회귀 테스트 변경이 `clinic/**` 배포 조건을 충족한다.
+  사용자 병합 전이며 이 수정은 아직 DEV에 배포되지 않았다.
+- **검증:** 기존 코드에서 새 회귀 5실패/26통과 → 수정 후 채팅4 suites/48건 통과.
+  전체 Clinic **37 suites / 302건 통과**, Clinic 별도 타입 검사 및 normal commit의 **3서비스 타입 통과**.
+  변경 lint/Prettier/diff-check, 독립 코드 리뷰, normal push의 3서비스 lint(기존 warning 존재)·Admin DLOS guard·shared coverage 통과.
+  이번 최소 후속 수정의 production build는 별도 재실행하지 않았으며 앞선 3서비스 build 성공과 구분한다.
+  PR의 `dentlink-dlos` Vercel preview는 **Blocked / FAILURE**, CodeRabbit은 **develop 자동 리뷰 제외로 skipped**다.
+  각 bot 댓글을 확인했으며 CodeRabbit SUCCESS를 실제 리뷰 완료로 확대하지 않는다. 별도 preview 차단 원인은 미확정이다.
+
+### 새 DEV에서 직접 확인한 화면
+
+| 항목 | Member jongsun.test2 | Admin jongsun.test1 / 판단 |
+| --- | --- | --- |
+| 계정·메뉴 | frankieDevOffice, Members의 Me=Member; Billing/Dashboard 없음, Office는 Members | 같은 병원 Me=Admin; Billing/Dashboard 및 Office Dashboard/Members/Billing Contact 있음 |
+| 전체 목록 | Orders5, Patients5, Board4 | Orders1033, Patients612, Board559. 이전과 달리 Orders/Board도 실제 범위 차이가 관측됨. 전체 BE 계약 완료라는 뜻은 아님 |
+| 숨긴 필터 | Orders My Orders Only/Dentist, Patients My Patients Only, Board Dentist Name 없음 | Admin에는 유지됨. Member 직접 URL의 myOrderOnly/dentistIds/myPatientOnly/dentistName 제거와 기존 검색어 보존 확인 |
+| 본인 주문5214 | 기본 상세, Edit/Cancel/담당 변경/채팅 입력 표시, Case1/Order1 | 담당 변경 모달의 접근 상실 안내만 확인하고 저장 없이 닫음 |
+| 공유 주문3943 | 부분 상세, Case4/Order4 트리/Patient Info Edit/상세/파일1 유지, 주문 변경·채팅 입력 숨김 | 같은 주문 Admin에는 Edit/Cancel/담당 변경/채팅 입력 표시. 파일 선택 시 Member Download(1) 활성화 확인, 실제 다운로드는 하지 않음 |
+| 타 의사 주문9123 | No order data available / Go to Home | Admin은 Case8/Order10·상세·Edit/Cancel/채팅 입력 표시. 이전 부분형 관측과 달리 이번에는 Member 차단을 실제 대조함 |
+| 승인9248/1469 | 주문 조회 불가 화면 | Admin은 PNG 미리보기·Download·Approve/Reject 표시. 이 주문은 이제 Member 부분 승인 조회 사례로 사용할 수 없음 |
+| Pickup | 타 의사 주문4066 링크 클릭 → 새 주문 상세 탭으로 이동 | 링크를 목록에서 막지 않음 확인. 도착 화면은 조회 불가이며 이 번호는 예전에도 두 역할 모두 불가여서 Member 전용 차단 증거로 쓰지 않음 |
+| 채팅 | 기본/부분 화면의 No Messages | 문자열 ID 회귀로 실제 조회가 실행되지 않았으므로 대화 없음/정상 조회 증거가 아님. 수정 후 재배포 QA 필요 |
+
+- Figma 부분 상세475:77743·Member 필터475:85345를 새로 읽고 비교했다.
+  차단 화면의 형태도 확인했지만 이번에는 API HTTP 거절 코드/본문까지 수집하지 않았으므로 BE 오류 계약 확정으로 표현하지 않는다.
+  기본·부분·차단의 실제 화면 분기는 위 준비된 주문에 한해 확인했다.
+- 로컬 시각 증거: `~/.codex/visualizations/2026/10/13/01a132e9-6555-7a02-9c72-4dad9c04cc64/permission-post-deploy-qa/`
+  `member-own-5214.jpg`, `member-partial-3943.jpg`, `member-denied-9123.jpg`, `admin-detail-9123.png`.
+  이 이미지와 `/tmp/dentlink-permission-chat-fix-*20261013.log`, `/tmp/dentlink-order-chat-runtime-string-*`는 로컬 보조자료이며
+  다른 기기에서는 원격 코드·테스트·이 기록으로 이어간다.
+
+### 다음 순서와 대기 경계
+
+1. **사용자:** PR4696 확인·병합 → 기존 DEV 자동배포. Codex가 병합/재배포를 실행하지 않았다.
+2. **FE:** 재배포 후 새 BUILD_ID를 확인하고 Admin/Member 주문 채팅 GET 발생·응답·대화 표시를 재확인한다.
+   현재 DEV의 No Messages를 정상으로 처리하지 않는다. 실제 전송/업로드 검증은 별도 테스트 범위가 준비될 때 진행한다.
+3. **현재 자동 E2E:** run38379072202 최종 결과는 다음 재개 시 확인한다. 배포 성공·실계정 읽기 QA와 별개다.
+4. **BE/사용자:** 기능별 최종 범위·오류 계약과 추가 사례를 준비한다. 같은 GET의 내부 정제도 가능하며 별도 검증 API를 선행 가정하지 않는다.
+   Member 부분 조회 가능한 승인 주문, 본인/타 의사/미지정 Draft, 실제3D, 담당 변경 후 접근 상실과 저장·승인·취소·전송 사례가 남았다.
+   기존 필요 guard/cache는 유지하고 BE 동등 계약이 확인되면 선행 GET 등을 통합·축소한다.
+5. **Office native 별도:** feature72a7914의 상태와 앱 ORDER API/cache·실기기 QA·통합/배포 잔여는 그대로다. 이번에 수정하지 않았다.
+6. 정리 후 **대기**한다. 장기 BE/배포 자동 모니터링은 만들지 않았으며 다음 사용자 전달 또는 재개 지시에서 이어간다.
+
+## 이력 — 2026-10-13 18:51 KST PR4695 사용자 병합·DEV 배포 진행 breakpoint
 
 - **사용자 승인:** 준비된 Member/Admin 브라우저를 필요시 활용해 하던 작업을 이어가고, 완료 후
   커밋·푸시·메모리와 브리핑까지 하라는 직접 지시를 받았다. 아래 전수 감사에서 확인한 **웹 DEV 후속 범위**를 구현했다.
