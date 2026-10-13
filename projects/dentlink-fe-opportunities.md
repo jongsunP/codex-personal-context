@@ -3,6 +3,10 @@
 
 **목적:** 사용자가 지금까지의 필요한 대화를 정리하고 완료/미완료/남은 작업과 PR 여부를 현재 시점으로 저장·브리핑하도록 요청했습니다. 새로운 구현·npm 재시도·master 병합을 진행하는 요청으로 넓히지 않습니다. 아래는 새기기/새세션에서 우선 읽을 현재 상태이며 이전 체크포인트의 Studio 권한 필수 조건은 대체된 기록입니다.
 
+**PR 목적 변경·회신 후 안내:** 사용자가 제목을 **`[DL-16471] DLDS·DLOS 패키지 통합`**으로 직접 변경했고, 이제 PR#4692는 **실제 master 반영을 위한 PR**입니다. 과거 비교용 목적은 당시 이력으로만 남깁니다. 목적 변경은 즉시 머지 승인과 별개입니다. 현재는 npm 설정 해결 답변을 기다리며 추가 실행을 중단합니다. 사용자가 동료의 답변을 공유하면 Codex가 실제 권한·PR/HEAD·registry 상태를 먼저 확인하고 아래 순서로 기존 승인 범위를 이어갑니다. 답변만으로 공개 성공을 추정하지 않으며, 사용자가 직접 설정/승인해야 하는 일이 생기면 구체적인 행동과 이유를 그때 안내합니다.
+
+**최종 대기 지시:** 사용자가 “PR해논건 일단 더 이상 뭐 안하고 현재 상태 그대로 놔둘께”라고 확정했습니다. 현재 PR 제목·본문·상태·리뷰·머지를 추가 변경하지 않고 유지합니다. 이 목적 정정 이후 새 PR 작업·CI 재실행·npm 재시도·Studio 작업을 시작하지 않으며, 회신/재개 요청 전에는 외부 상태를 계속 새로 조회하지 않습니다. 개인 메모리 저장만 마치고 대기합니다.
+
 ### 운영 개념·완료 구분
 
 - **의도된 운영:** `dentlink-client`에서 범용 UI 패키지를 npm에 공개 → **Studio 갤러리 자동 최신화**. FE가 매번 Studio 공통 코드를 수정하거나 수동 연결을 요청하는 운영으로 정리하지 않습니다. 자동 연결·최신화 환경의 설정은 Studio 관리 영역이며 FE 공통 작업자 등록 요구는 제외합니다.
@@ -15,7 +19,7 @@
 | 실제 npm 시험 공개·DLDS 최초 등록 | 미완료·2차 실행도 icons OIDC E403 | npm 관리자 설정·권한 해결 후 Codex 실행 |
 | 실제 게시 패키지 외부 설치·exports 확인 | 미완료·공개 성공에 의존 | Codex가 registry 기반 검증 |
 | DLDS Trusted Publisher 자동 배포 연결 | 미완료·신규등록 이후 설정 대상 | npm 관리자 설정·Codex 동작 확인 |
-| 기존 PR#4692 master 머지 | 사용자 의도로 보류 | 시험 공개/설치·자동배포 설정 확인 후 사용자 결정 |
+| 실제 반영용 PR#4692 master 머지 | 사용자 의도로 보류 | 시험 공개/설치·자동배포 설정 확인 후 사용자 결정 |
 | 정식0.1.1/latest 공개 | 미완료 | master 자동 배포 성공/실제 registry 확인 |
 | Studio 갤러리 자동 최신화 결과 | 미검증 | 정식 공개 후 결과 확인, 필요시 Studio 측 자동 설정 확인 |
 | Studio용 DLDS 프로필·화면틀·템플릿/FE 인계·하네스 | 통합 이후 별도 | 이번 패키지 준비 전체 완료와 구분 |
@@ -23,7 +27,7 @@
 ### 현재 저장·검증·문서
 
 - **Client 정본:** `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16471-dlds-dlos-integration`, HEAD/origin **`77ff34f76b2a9a1c994b0eaa3ff177799751ad12`**, clean. 이전 전체 하네스 백업은 `/Users/parkjongsun/Repository/dentlink-client-dlds`/feature/DL-16471/12fb96a4e를 보존합니다.
-- **PR#4692:** OPEN/non-Draft·base master·head 위77ff34f76, mergedAt null. 기존 PR 한 개로 이어갑니다. **추가 PR은 필요 없으며 이 브레이크포인트에서 머지하지 않습니다.** 최신 패키지 CI38357212495·DLOS guard SUCCESS, PR publish SKIPPED. CodeRabbit은 파일 한도로 실행되지 않아 사용자 지시로 skip. Vercel preview `Deployment was blocked`는 별도 관리자 확인 사항이며 npm 공개 필수 선행으로 두지 않습니다.
+- **PR#4692:** 제목 `[DL-16471] DLDS·DLOS 패키지 통합`, 실제 반영 목적, OPEN/non-Draft·base master·head 위77ff34f76, mergedAt null. 기존 PR 한 개로 이어갑니다. **추가 PR은 필요 없으며 이 브레이크포인트에서 머지하지 않습니다.** 최신 패키지 CI38357212495·DLOS guard SUCCESS, PR publish SKIPPED. CodeRabbit은 파일 한도로 실행되지 않아 사용자 지시로 skip. Vercel preview `Deployment was blocked`는 별도 관리자 확인 사항이며 npm 공개 필수 선행으로 두지 않습니다.
 - **npm live read-back:** icons/DLOS latest0.1.0·pr 없음·목표 버전 없음, DLDS HTTP404. 공개 run38350722659 attempt2 FAILURE/a11824692는 여전히 최종 결과입니다. 신규로 재실행하거나 부분 공개했다고 표현하지 않습니다. 정확한 Trusted Publisher 설정 화면은 확인하지 못했습니다.
 - 기존 docs/design-systems.md·docs/packages.md에 운영 역할을 반영한77ff34f76 정상 commit/push hook(3앱 타입/lint/guard/coverage)과 CI는 이전 마감에서 통과했습니다. 이번 체크포인트는 추가 코드 변경·소스 테스트 재실행 없이 실제 상태/registry/PR/Studio 코드만 읽기 확인했습니다.
 - Studio 원본 `/Users/parkjongsun/Repository/dentlink-studio`/같은feature/25af81a clean·preserve. 이전main6cd59a0 기준 private 결합 사본/38파일patch·61테스트/빌드/갤러리·CRM14화면 표시는 참고·인계물이며 정상 npm/공식 자동 갤러리 증거가 아닙니다. 원격 Git 참조와 복원 근거를 아래에 남겼고 private 사본은 기기별 자료입니다.
