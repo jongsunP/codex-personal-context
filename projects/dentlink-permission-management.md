@@ -1,6 +1,71 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-13 Member 테스트 계정 준비 후 FE 화면 확인 대기
+## 현재 상태 — 2026-10-13 Member·Admin 실계정 웹 UI 비교 완료·BE 연동 확인 잔여
+
+- **사용자 준비와 실제 역할 확인:** Chrome 기본 창 `jongsun.test2`는 Member, 시크릿 창
+  `jongsun.test1`은 같은 `frankieDevOffice`의 Admin이다. 각 Office Members의 `(Me)`와
+  Member/Admin 표시를 실제 화면에서 확인했다. 이전 '테스트 계정 준비 전' 상태는 이 기록으로 대체한다.
+- **이번 범위:** 준비된 실제 DEV PC 웹을 직접 조작해 FE가 확인 가능한 UI·필터·제한 표시와
+  확정 Figma를 비교했다. BE 내부 정제/권한 완성도를 판정하거나 새 채팅 API를 전환하지 않았다.
+  제품 checkout은 pull 후 `feature/DL-16317 / 1c67612c3`, 마감 확인에서도 clean이다.
+  제품 소스·생성본·권한/계정·Jira·PR·배포는 이번 검토에서 변경하지 않았다.
+
+### 실제 UI에서 확인한 항목
+
+| 항목 | Member와 Admin의 실제 비교 | 판정 |
+| --- | --- | --- |
+| 상단·Office 메뉴 | Member Billing·Dashboard 숨김, Office는 Members만. Admin Billing·Dashboard와 Dashboard/Members/Billing Contact 탭 제공 | 의도 확인 |
+| Patients | Member My Patients Only 숨김, Admin 표시. 당시 목록 5 vs 612는 관찰값이며 정제 정확성 전체 판정은 아님 | 필터 UI 확인 |
+| Orders·Board | Member My Orders Only/Dentist 숨김, 상태·날짜 유지. Board는 Order Number/Patient Name만, Admin은 Dentist Name도 제공 | 디자인 방향 확인 |
+| 신규 Case 첫 화면 | 같은 제공된 환자에서 Member는 본인 담당 표시 고정, Find Dentist/Assign Myself 없음. Admin은 두 선택 버튼 제공 | 의도 확인 |
+| 본인 기본 상세 `9000005214` | Member도 수정·취소·담당 변경과 채팅 입력 UI 제공. 담당 변경 modal에 접근 상실 경고 표시 | 기본 상태 확인 |
+| 타 의사 In Review `9000009123` | 같은 상태·ID에서 Admin은 Cancel/Edit·담당 변경·채팅 입력 제공, Member는 모두 숨김. 내용·Patient Edit 유지 | 부분 상태의 행동 제한 확인 |
+| 제공된 공유 환자 상세 `9000003943` | Member는 Case/Order 4/4와 트리 유지, Admin은 수정·취소·담당 변경 제공하고 Member는 숨김. 파일 1개 선택 시 Download(1) 활성화, 실제 다운로드/변경은 안 함 | 조회 유지·행동 제한 확인 |
+| 승인 `9000009248/approvals/1469` | Member도 PNG 미리보기·파일 목록·Download UI 유지, Approve/Reject 없음. Admin에는 두 버튼 제공 | 부분 승인 UI 확인 |
+| Pickup `9000004066` | 타 의사 주문번호도 새 탭의 상세로 이동. 중앙 No order data available./Go to Home 표시 | 링크 유지·조회 불가 모양 확인 |
+| Billing 직접 진입 | Member가 `/billing/statement`에 직접 진입하면 `/403` Forbidden 화면 | FE 페이지 제한 표현 확인 |
+
+- 조회 불가 `9000004066`은 **Admin도 동일**했다. 삭제/소속/데이터/권한 중 원인은 이번에
+  확정하지 않았다. 조회 불가 디자인은 확인했으나 'Admin 가능, Member 권한 때문에 차단' 검증으로 계산하지 않는다.
+- Member 본인 → 타 의사 → 다른 화면 → 상세 직접 재진입을 실제 확인했고, 본인 주문의 행동 UI가
+  타 의사 상세에 남는 현상은 확인하지 않았다. 두 원래 창은 최종 비교용 동일 주문 `9000003943`의
+  상세에 남겼다. Pickup 클릭으로 생긴 QA 임시 탭은 닫았고 파일 선택도 해제했다.
+- Next·저장·주문 생성·승인/반려·취소·담당 변경·메시지 전송·첨부·삭제를 실행하지 않았다.
+  초기 `/orders/create`는 진입/환자·NEW Case 선택까지 조회·로컬 폼 설정만 한다는 코드를 확인했다.
+
+### 확인한 차이와 다음 재확인
+
+1. **일부 부분 상세의 조회 데이터 차이:** `9000009248`/`9000009123`에서 Admin은 Case 8/Order 10과
+   트리·기존 대화를 보지만 Member는 건수 `-`, 트리 없음, `No Messages`다. 이 환자는 Member 목록 5건에
+   없었다. 반면 Member에게 제공된 환자의 `9000003943`은 두 계정 모두 Case/Order 4/4와 트리가 있고,
+   두 계정 모두 대화 없음이다. 모든 Member 부분 상세에서 FE가 트리/대화를 숨기는 현상은 아니다.
+   최종 BE의 주문별 기본/부분/차단 기준·관련 환자/Case/채팅 조회 허용 범위와 실제 응답을 대조한다.
+2. **코드 읽기 전용 진단:** canWrite=false는 메시지 GET을 막지 않고, 기존 `/office/chat-messages`를
+   계속 조회한다. `No Messages`는 빈 list 표현이며 빈 응답·오류를 이 화면만으로 구분할 수 없다.
+   Case GET도 Member에게 enabled이며 행동 제한이 트리를 숨기지 않는다. 상세 page는 `order.patient`
+   와 평면 `order.patientId` 둘 다 있어야 patientId를 설정하므로, 실제 응답에 평면 ID가 없다면
+   nested ID 연결 보완 후보다. 현재 응답은 조사하지 않았으므로 이 후보를 확정 FE 버그로 기록하지 않는다.
+3. **승인대기 안내·범위:** 두 계정에서 초기 승인대기 38, 전체 Orders 1033, Board 559를 관찰했다.
+   Member에도 `Orders waiting for your approval`이 보였다. FE는 `/office/orders/filter-hint`의 PENDING으로
+   초기 필터·안내를 설정하고 조회 건수를 그대로 표시한다. 최종 서버 역할별 필터/허용 응답과 문구를
+   맞춰 확인할 항목이다. Member도 본인 주문 승인이 가능하므로 모든 Member의 안내를 임의 제거하지 않는다.
+4. **미검증:** Admin은 조회 가능하고 Member만 거절되는 실제 주문 사례, Draft 이어하기/삭제 UI
+   (두 Board Draft 0), STL/3D 실제 조회, 실제 저장/전송/승인/담당 변경 이후 상태, 모바일 웹/Office 앱/실기기는
+   이번 검토의 완료 판정에 포함하지 않았다. 최종 BE 조회 기준과 채팅 전환·with/선행 GET 정리 원칙은 유지한다.
+
+- **디자인 근거 재확인:** Orders `475:85345`, Patients `43:44977`, Board `43:44991`, NEW `395:66740`,
+  기본 상세 `344:49964`, 부분 상세 `475:77743`/Sidebar `475:77776`, 승인 `475:76737`,
+  채팅 `475:76744`, 조회 불가 `475:77664`를 공식 Figma에서 재확인했다.
+  [부분 상세](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=475-77743)의 트리/조회 유지와
+  작성 UI 제거를 비교했다. Pickup의 모든 링크 유지라는 사용자 확정을 계속 우선한다.
+- **로컬 증거:** `/Users/parkjongsun/.codex/visualizations/2026/10/13/01a132e9-6555-7a02-9c72-4dad9c04cc64/permission-ui-qa/`
+  에 실제 역할·필터·NEW·기본/부분/조회 불가·승인·파일·Pickup 화면을 저장했다. `member-shared-order-9000003943.png`
+  와 `admin-shared-order-9000003943.png`, `member-partial-order-9000009123.png`와 `admin-order-9000009123.png`가
+  같은 주문 비교 증거다. 로컬 PNG는 다른 기기에 자동 전달되지 않으며 이 Git 기록이 휴대 가능한 결과다.
+- 현재 확인한 주요 권한 UI는 의도대로다. 부분 조회 데이터 차이·승인대기 안내는 BE 응답/정책과 함께
+  재확인할 대상으로 남긴다. 이 UI 검토를 전체 BE 연동·권한 QA 완료나 코드 변경 승인으로 확장하지 않는다.
+
+## 이력 — 2026-10-13 Member 테스트 계정 준비 후 FE 화면 확인 대기
 
 - **사용자 관찰:** 개발서버 배포를 확인했고 BE 동료가 일부 화면에서 작업된 모습을 확인했다.
   사용자는 현재 Member 역할이 없어 전체를 보지 못했으며, 모든 동작이 정확한지는 아직 확인하지 않았다.
