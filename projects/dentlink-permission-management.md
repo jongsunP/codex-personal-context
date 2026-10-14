@@ -1,6 +1,47 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-14 확정 계약 기준 웹 FE 정리
+## 현재 상태 — 2026-10-14 로컬 화면 검수 재개, Member 로그인 대기
+
+- **최신 사용자 설명/요청:** DEV 웹은 원복되어 권한 feature를 확인할 배포 화면이 없다. 기존 코드를 로컬 실행해서라도 확인하도록 요청했다.
+  따라서 아래 코드 작업의 화면 QA 제외 지시는 이번 **로컬 읽기 화면 검수** 범위에서 갱신됐다.
+  DEV 웹 재조사·재배포·E2E는 재개하지 않으며, 주문/권한 저장·승인/거절·채팅 전송·업로드는 실행하지 않는다.
+- **실행 코드:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
+  `f749491593ef1977976bc1c801b24e89bb5f5984`. 양쪽 저장소 pull은 up to date였고 제품 소스 수정 없이 실행했다.
+  실행 명령은 `pnpm --filter dentlink-clinic-web dev --hostname 127.0.0.1 --port 3000`이다.
+  **로컬 URL `http://localhost:3000`**, 기존 `.env.development`의 **DEV API**에 연결한다.
+  프런트만 로컬이며 BE까지 독립 mock 환경인 것은 아니다. DEV 웹의 원복/서빙 상태는 확인하지 않았다.
+- **런타임 인계:** localhost:3000 서버를 Member 비교를 위해 유지한다. 당시 listener PID31719, exec session80669,
+  로그 `/tmp/dentlink-permission-local-20261014.log`. 이 PID/session은 로컬 일시 정보이므로 재개 시 살아 있는지 다시 확인한다.
+
+### 로컬 Admin에서 직접 확인한 범위
+
+- Chrome 기본 창의 localhost 기존 로그인은 **jongsun.test1 / frankieDevOffice**다. 프로필에서 계정을 확인했다.
+  Billing/Dashboard 메뉴, Orders의 Dentist·My Orders Only, Patients의 My Patients Only,
+  Board의 Dentist Name 필터가 표시된다. Patients612·Board559를 관찰했으며 Orders38은 기존 Pending 조건이 적용된 목록이다.
+- 주문9123은 상세/Case 트리·Edit/Cancel·담당 변경 버튼·채팅 메시지와 입력을 표시한다.
+  공유 비교용3943은 Cases4/Orders4·Files1·Edit/Cancel·담당 변경·채팅 입력이 표시된다. 이 화면에서 No Messages를 관찰했다.
+  이번에는 응답 본문을 수집하지 않았으므로 빈 채팅의 서버 원인까지 새로 확정하지 않는다.
+- 승인9248/1469는 PNG 실제 미리보기·Download·Approve/Reject가 표시된다. 승인/거절·다운로드는 실행하지 않았다.
+- Pickup의 예약 항목을 펼쳐 주문4066을 클릭하면 새 localhost 주문 상세 탭으로 이동한다.
+  도착 화면은 No order data available이다. 이 번호는 Admin도 조회 불가이므로 Member 전용 거절 사례로 쓰지 않는다.
+- 위 화면 범위에서 새 권한 FE 결함은 발견하지 못했다. Member 제한·현재 API 2152 응답·전체 디자인 일치를 검증했다는 뜻은 아니다.
+- 로컬 로그의 부가 `GET /api/qa-users` 500은 QA 제보 위젯의 Jira 담당자 조회 경로다.
+  해당 route는 Jira 설정 누락/접근 실패 때 500을 반환하며 권한 주문 GET과 별개다. 비밀값·환경은 읽거나 변경하지 않아
+  정확한 설정 원인은 확정하지 않았고 이번 권한 검수로 확대 수정하지 않는다.
+- 이미지: `~/.codex/visualizations/2026/10/14/permission-local-qa/`의
+  `admin-approval-9248.jpg`, `admin-shared-3943.jpg`, `admin-board.jpg`. 다른 기기에서는 이 기록을 기준으로 화면을 다시 확인한다.
+
+### 지금 필요한 것과 다음 순서
+
+1. 시크릿 창에 `http://localhost:3000` 로그인 페이지를 별도로 열었다. DEV 로그인과 localhost 로그인은 별개이며,
+   이번에 시크릿 localhost는 미로그인 상태였다. 사용자에게 **Member jongsun.test2로 로컬 로그인 후 알려달라**고 요청했다.
+   기본 창 localhost Admin과 시크릿 localhost Member로 비교하며, 예전 DEV 창의 계정 배치와 혼동하지 않는다.
+2. Member 로그인 완료 후 메뉴/필터 숨김, 본인5214·부분3943·차단9123·승인9248/1469를 같은 로컬 코드로 확인한다.
+   기존 Remake draft가 있으면 Additional 화면 재사용도 확인하고, 없으면 새 draft를 만들지 않는다.
+3. 현재 제품은 f74949159 그대로 clean이다. 이번에는 로컬 실행/읽기 검수만 했으므로 제품 신규 커밋·PR·병합·배포는 없다.
+   확정 정책 외 구현 대기와 Office native 별도 범위는 아래 기록을 유지한다.
+
+## 이력 — 2026-10-14 확정 계약 기준 웹 FE 정리
 
 - **최신 사용자 지시:** 현재 개발서버 상태는 판단 기준에서 제외하고, 원래 작업하던 웹 feature 코드에서
   논의로 정해진 FE 작업과 Swagger 재생성을 진행한다. 실제 API/실계정 테스트·화면 검수·E2E·배포는 이번 범위에서 제외한다.

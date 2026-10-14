@@ -154,7 +154,11 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-14:** 현재 개발서버·실계정 QA·화면 검수·E2E를 제외하고 원래 웹 feature에서 확정 계약의 FE 작업을 진행했다.
+- **최신 2026-10-14 로컬 검수 재개:** 사용자가 DEV 웹을 원복했다고 알리고 기존 코드를 로컬 실행해 확인하도록 요청했다.
+  localhost:3000에서 기존 DEV API에 연결해 Admin(jongsun.test1)의 목록 필터·주문9123/3943·승인9248/1469·Pickup 링크를 확인했다.
+  새 권한 화면 결함은 발견하지 못했다. 시크릿 localhost는 미로그인이어서 Member(jongsun.test2) 로그인 후 비교를 요청했다.
+  로컬 서버와 비교 창을 유지한다. 제품 소스 변경·새 PR·병합·배포·E2E는 없다.
+- **확정 계약 구현:** 원래 웹 feature에서 확정 계약의 FE 작업을 완료했다.
   [Leo 댓글44435](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44435)에 따라 기존 주문 GET200과 담당 의사 ID로
   기본/부분 상세를 구분하고 403/2152를 차단한다. 별도 내 환자/주문 판정 API는 기다리지 않는다. 현재 코드가 이미 이 계약을 따른다.
 - **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 `feature/DL-16317` 유지,
@@ -163,9 +167,9 @@ For detailed current state, read:
   Member Remake Additional의 중복 주문 GET을 guard 응답 재사용으로 정리하고 Swagger 생성물4파일을 갱신했다.
   필요한 역할/직접 진입/action guard·캐시 분리는 유지한다. ORDER 채팅 수동 adapter는 이미 최신 명세와 일치한다.
 - **검증:** 관련5 suites/55건·3서비스 타입·포맷/diff 검사·독립 코드 리뷰·normal push 검사 통과.
-  이번 실제 API/화면 QA·새 PR·병합·배포는 없음. 10/13 PR4696 배포와 실계정 읽기 QA는 상세 문서의 과거 이력으로 보존한다.
+  이후 로컬 Admin 화면을 확인했지만 Member 비교·실제 쓰기는 미확인이다. 10/13 PR4696 배포/QA는 과거 이력으로 보존한다.
 - **다음:** 확정된 웹 FE 계약의 코드 반영은 처리했다. 미지정 Draft 등 추가 정책/기능 계약이 확정되면 필요한 차이만 반영한다.
-  부분 승인/Draft/3D/접근 상실/쓰기 QA는 사용자가 테스트를 재개할 때 확인하며, E2E는 계속 현재 범위 밖이다.
+  우선 localhost Member 로그인 후 기본/부분/차단·필터·직접 URL을 비교한다. 부분 승인/Draft/3D/접근 상실/쓰기 검증은 별도이며 E2E는 제외한다.
 - **Office 앱 별도:** `/Users/parkjongsun/Repository/dentlink-app-permission`, feature `72a7914`의 ORDER API·cache/통합·실기기·배포 잔여 유지.
 - Web [DL-16319](https://innovaid.atlassian.net/browse/DL-16319), Office App [DL-16752](https://innovaid.atlassian.net/browse/DL-16752).
   Jira 의견은 사용자가 직접 전달했으며 Codex의 추가 게시·개발서버 조사·배포·장기 모니터링은 없다.
