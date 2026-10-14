@@ -141,6 +141,7 @@ For detailed current state, read:
 
 - 2026-10-12 앱·웹 코드와 Amplitude·Datadog RUM/서버 로그/APM 조사 및 Notion 팀 공유 문서 정리를 완료했다. 웹뷰 일부 API의 status 0과 403 이동을 관측했으나 정확한 원인은 미확정이다.
 - 사용자 팀 공유 완료 보고 후 개인 메모리만 저장·세션 보관 요청. 코드·Jira·PR·배포 변경은 없으며 자동 재개하지 않는다. BE 앞단 로그 또는 사용자 재현 결과와 재개 지시가 다음 시작점이다.
+- 2026-10-14 마감: 웹 `/403` 이동 조건과 메모리 직원 권한/저장된 직원 ID의 구분, 주문 상세의 4개 허용 권한을 체크포인트에 보강했다. 원인 미확정 상태를 유지하며 사용자 재요청으로 메모리 저장 후 세션을 보관한다.
 - [개인 체크포인트](projects/dentlink-app-order-detail-403-investigation.md)
 
 ### Dentlink Lab App
