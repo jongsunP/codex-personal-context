@@ -1,6 +1,63 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-13 PR4696 병합·DEV 배포·재검증 정리 후 대기
+## 현재 상태 — 2026-10-14 확정 계약 기준 웹 FE 정리
+
+- **최신 사용자 지시:** 현재 개발서버 상태는 판단 기준에서 제외하고, 원래 작업하던 웹 feature 코드에서
+  논의로 정해진 FE 작업과 Swagger 재생성을 진행한다. 실제 API/실계정 테스트·화면 검수·E2E·배포는 이번 범위에서 제외한다.
+  기존 커밋·푸시·개인 기록 정리 지시는 유지한다. develop/master 통합이나 새 PR·병합·배포는 진행하지 않는다.
+- **작업 기준:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 `feature/DL-16317` 유지.
+  시작 `e106405ad92f8d3820a31bf28ee0c3f5de784477`, 이번 커밋 **`f749491593ef1977976bc1c801b24e89bb5f5984`**
+  (`fix: 주문 권한 조회 재사용과 API 명세 갱신`). Clinic 3파일 + Swagger 생성물 4파일이다.
+  normal commit/push 완료, 원격 feature SHA 일치·working tree clean을 확인했다.
+
+### 확정 계약과 코드 대조
+
+- 근거는 Leo의 [DL-16317 댓글44435](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44435)와 실제 feature 코드다.
+  별도 내 환자/내 주문 검증 API를 기다리거나 새로 추가하지 않는다.
+  기존 `GET /office/orders/{orderId}` 성공으로 조회 가능 여부를 판단하고, 주문 담당 의사와 현재 직원 ID로 Member 행동 권한을 구분한다.
+- **200 + 본인 담당:** 기본 상세와 허용된 행동. **200 + 타 의사 담당:** 부분 상세·변경 행동 제한.
+  **403 / code 2152:** 해당 환자 접근 불가이므로 상세 차단.
+  활성 직원 응답의 실제 ID 필드는 `id`다. `activeEmployeeId`와 profile의 ID가 일치한 상태에서 판단한다.
+- 기존 `isOfficeOrderAccessDenied`는 병원 전환용 `2131`을 제외한 403을 처리하므로 `2152`도 이미 포함한다.
+  2152만 처리하도록 좁히거나 기존 병원 전환 동작을 바꾸지 않았다.
+  담당 의사 helper의 `order.dentist?.id ?? order.dentistId`는 두 필드 불일치 근거가 없어 그대로 유지했다.
+- 상세·승인·주문 수정·리메이크의 판정은 이미 이 계약과 맞는다. `withAuthorization`은 직원/역할별 페이지 접근,
+  개별 guard는 직접 URL 진입·변경 행동, 직원/역할별 query key는 캐시 분리를 담당하므로 일괄 제거하지 않는다.
+  승인/리메이크 직접 진입에서 사용하는 기존 주문 GET은 여전히 필요하다.
+  Pickup은 모든 주문번호 링크를 열고 도착한 상세에서 제한하는 기존 구현을 유지한다.
+- 사용자는 위 검토 의견을 Jira에 직접 전달했다고 알렸다. 이번 작업에서 Codex가 Jira/Slack에 추가로 게시하지 않았다.
+
+### 이번 반영과 로컬 검증
+
+- `pnpm generate:api-type`으로 현행 `https://dev-api.dentlink.io/v3/api-docs`를 재생성했다.
+  `shared/models/src/{Office,Lab,Admin,data-contracts}.ts` 4파일이 변경됐다.
+  원문 SHA256: `62be4515a489e803b69a2f18b4d78aa4886a6c9b95a64549054281ee50ef5f12`.
+  생성물에는 다른 BE 기능의 스키마 변화도 함께 포함되며, 해당 기능의 수동 FE 구현까지 변경한 것은 아니다.
+- 새 ORDER 채팅 GET/POST와 `OrderChatMessageCreateDto(message, fileIds)`가 생성물에 반영됐다.
+  기존 수동 ORDER adapter는 이미 이 경로·본문을 사용하고 있어 재전환하지 않았다. 고객지원/답글/읽음 등 기존 경로는 유지한다.
+  `OrderDto`, `OrderDentistDto`, `AffiliatedEmployeeProfileDto`, `ApprovalGroupDto`, `ChatMessageDto`는 직전 생성물과 동일하다.
+  **2152 의미는 Jira 댓글 근거**이며 Swagger 주문 GET은 여전히 200만 문서화하므로 Swagger에 오류 계약이 명시됐다고 표현하지 않는다.
+- Member의 Remake Additional은 guard가 받은 주문을 optional prop으로 재사용하고 자체 ADDITIONAL 조회만 비활성화했다.
+  직원/역할 query scope·focus 재조회·직접 URL 제한·권한 상실 시 폼 제거는 유지한다.
+  비 Member는 기존 Additional 조회를 그대로 사용한다. 저장 후 상세 이동·Remake 파일 업로드의 기존 재조회도 바꾸지 않았다.
+- **로컬 검증:** Remake 14건 + 기존 권한 helper/주문 query/채팅 adapter·요청 41건 = 5 suites / 55건 통과.
+  Member 응답 재사용·응답 변경·2152 이후 폼 제거·비 Member 조회 유지 회귀를 포함한다.
+  normal commit의 Clinic/Lab/Admin 타입 검사, 변경 파일 포맷·diff 검사, 독립 코드 리뷰를 통과했다.
+  normal push의 3서비스 lint(오류 0, 기존 경고 존재)·Admin DLOS guard·shared coverage 검사도 통과했다.
+  이는 로컬 코드/모의 응답 검증이며 실제 서버 권한 적용·화면 디자인 검수 증거로 확대하지 않는다.
+
+### 남은 범위와 다음 시작점
+
+1. **현재 확정된 웹 FE 계약의 코드 반영은 처리했다.** 별도 상세 판정 API 부재를 개발 대기 사유로 삼지 않는다.
+2. **BE/기획 확인이 추가로 필요한 범위만 대기:** 미지정 Draft 처리 등 아직 확정되지 않은 정책이나 추가 기능별 계약이 나오면
+   기존 feature 코드와 차이를 확인하고 필요한 부분만 반영한다. 계약 없이 제한·API·화면을 추가하지 않는다.
+3. **QA는 이번 범위 밖:** 부분 승인·본인/타 의사/미지정 Draft·3D·담당 변경 후 접근 상실·실제 저장/승인/채팅 전송은
+   추후 사용자가 테스트를 재개할 때 준비된 사례로 확인한다. E2E는 계속 제외한다.
+4. **Office native는 별도:** 앱 `72a7914`의 ORDER API/cache·통합·실기기·배포 잔여는 이번 웹 변경으로 완료되지 않는다.
+5. 개발서버 상태 조사·브라우저 조작·새 PR·병합·배포·자동 모니터링은 이번에 하지 않는다.
+   이번 정리 후 대기하며 다음 재개 시 이 기록과 원격 feature부터 확인한다. 아래 10/13 배포·QA 근거는 과거 이력이다.
+
+## 이력 — 2026-10-13 PR4696 병합·DEV 배포·재검증 정리 후 대기
 
 - **최신 범위 정정:** 사용자가 E2E 관련은 현재 작업과 무관하므로 우선 넘기라고 명시했다.
   E2E/ISV 잔여는 참고 이력만 보존하고 이번 권한 FE의 잔여 작업·대기/재개 조건에서 제외한다.

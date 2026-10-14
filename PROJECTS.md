@@ -153,24 +153,21 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-13 DEV 재검증 후 대기:** 사용자 직접 승인에 따라 Codex가 [PR4696](https://github.com/Innvoaid/dentlink-client/pull/4696)을
-  `feature/DL-16317 → develop`으로 병합했다(19:33:51, merge `03e62121e988418b944de0b7d71dfdb3ea4559cb`).
-  [DEV38384223907](https://github.com/Innvoaid/dentlink-client/actions/runs/38384223907)의 build/deploy 및 새 버전 probe 성공,
-  새 BUILD_ID `Kd6ikAQrMpzBT5J6qW4k0` 실제 공개 서빙 후 두 실계정 읽기·화면 이동 QA를 완료했다.
-- **웹 원격:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
-  `e106405ad92f8d3820a31bf28ee0c3f5de784477` 보존, develop 전체 tree 동일·원격 일치·clean. 병합 후 추가 코드 수정은 없다.
-- **새 화면 확인:** Admin9248 채팅/Review 복구 및 승인1469 진입. Member5214기본·3943부분·9123차단과 Admin9123허용 유지.
-  Member5214/3943 및 Admin3943 새 채팅 GET200·빈 data·totalElements0로 No Messages가 실제 응답과 일치함을 확인했다.
-  Member Orders5·숨긴 필터 유지. 실제 전송/업로드/주문/담당/권한/승인 변경은 하지 않았다.
-- **검증 구분:** 채팅48건/전체Clinic302건·3서비스타입·독립리뷰·normal push검사 통과 이력 유지.
-  새 자동 E2E 최종 **97통과/2실패/5허용제외/5미실행**(109수집). 이전 실패였던 승인/Feedback2는 최초 시도 PASS,
-  해당 파일12/12·10/10 통과로 회복됐다. **사용자 최신 지시로 E2E/ISV는 현재 범위에서 제외**하며 참고 이력만 보존한다.
-  이번 FE의 잔여·대기/재개 조건으로 삼지 않고 추가 조사·수정·재실행하지 않는다. CI/테스트 설정은 유지한다.
-- **다음:** BE 기능별 최종 계약·Member 부분 승인/Draft/3D/접근 상실·쓰기 사례가 준비되면 순차 진행한다.
-  동등 BE 계약 확인 전 필요한 guard/cache는 유지한다. 전체 BE 완료나 쓰기 QA 완료로 확대하지 않는다.
+- **최신 2026-10-14:** 현재 개발서버·실계정 QA·화면 검수·E2E를 제외하고 원래 웹 feature에서 확정 계약의 FE 작업을 진행했다.
+  [Leo 댓글44435](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44435)에 따라 기존 주문 GET200과 담당 의사 ID로
+  기본/부분 상세를 구분하고 403/2152를 차단한다. 별도 내 환자/주문 판정 API는 기다리지 않는다. 현재 코드가 이미 이 계약을 따른다.
+- **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 `feature/DL-16317` 유지,
+  `f749491593ef1977976bc1c801b24e89bb5f5984` (`fix: 주문 권한 조회 재사용과 API 명세 갱신`).
+  normal commit/push 완료·원격 일치·working tree clean.
+  Member Remake Additional의 중복 주문 GET을 guard 응답 재사용으로 정리하고 Swagger 생성물4파일을 갱신했다.
+  필요한 역할/직접 진입/action guard·캐시 분리는 유지한다. ORDER 채팅 수동 adapter는 이미 최신 명세와 일치한다.
+- **검증:** 관련5 suites/55건·3서비스 타입·포맷/diff 검사·독립 코드 리뷰·normal push 검사 통과.
+  이번 실제 API/화면 QA·새 PR·병합·배포는 없음. 10/13 PR4696 배포와 실계정 읽기 QA는 상세 문서의 과거 이력으로 보존한다.
+- **다음:** 확정된 웹 FE 계약의 코드 반영은 처리했다. 미지정 Draft 등 추가 정책/기능 계약이 확정되면 필요한 차이만 반영한다.
+  부분 승인/Draft/3D/접근 상실/쓰기 QA는 사용자가 테스트를 재개할 때 확인하며, E2E는 계속 현재 범위 밖이다.
 - **Office 앱 별도:** `/Users/parkjongsun/Repository/dentlink-app-permission`, feature `72a7914`의 ORDER API·cache/통합·실기기·배포 잔여 유지.
 - Web [DL-16319](https://innovaid.atlassian.net/browse/DL-16319), Office App [DL-16752](https://innovaid.atlassian.net/browse/DL-16752).
-  현재 가능한 FE 수정·배포·화면 재검증은 완료해 대기한다. CI 확인 모니터 종료, 별도 Jira/Slack 수동 전달·상용 배포·장기 모니터링 없음.
+  Jira 의견은 사용자가 직접 전달했으며 Codex의 추가 게시·개발서버 조사·배포·장기 모니터링은 없다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트` (`권한관리 프로젝트 폴더`, 기존 `권한관리세션` 유지).
 - 상세 구현·검증·담당별 다음 순서는 [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)에 보존한다.
 

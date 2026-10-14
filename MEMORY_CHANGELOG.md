@@ -1,5 +1,14 @@
 # Memory Changelog
 
+## 2026-10-14
+
+- 권한관리 최신 지시를 현재 DEV/QA/화면 검수 제외·기존 웹 feature의 확정 계약 구현으로 갱신했다.
+  Leo 댓글44435의 기존 주문 GET200/담당 의사 비교/403·2152 계약과 현재 코드를 대조했으며 별도 검증 API 대기는 해제했다.
+  필요한 with/직접 진입/action/cache는 유지하고 Member Remake Additional의 중복 GET만 응답 재사용으로 정리했다.
+  Swagger 생성물4파일과 Clinic3파일을 f74949159에 normal commit/push하고 원격 일치·clean을 확인했다.
+  관련55건·3서비스 타입·독립 리뷰·normal push 검사 통과.
+  추가 정책/BE 계약·추후 QA·Office native의 별도 잔여와 새 PR/병합/배포를 하지 않는 경계를 정본에 저장했다.
+
 ## 2026-10-13
 
 - 사용자 최신 지시에 따라 E2E/ISV 관련을 현재 권한관리 작업 범위에서 제외했다.
