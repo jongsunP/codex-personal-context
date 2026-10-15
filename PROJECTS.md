@@ -174,7 +174,11 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-14 로컬 검수 정리 완료:** 사용자가 DEV 웹을 원복했다고 알리고 기존 코드를 로컬 실행해 확인하도록 요청했다.
+- **최신 2026-10-15 Claude 인수·CodeRabbit 3건 처리:** PR4700(→ release/v1.89.0) head `55ad768d5`, 스레드3건 resolved.
+  Place Order 가드 제거·주문 작성 조회 실패 안내(승인 확인 대상)·시스템 메시지 권한 ref 커밋 단계 갱신.
+  정식 웹 worktree `dentlink-client-permission`은 `96ff6836b`로 뒤처져 재개 시 pull 필요.
+  Office 앱 worktree 미커밋 변경34항목은 소유권 미확인. 상세는 정본 상단 참조.
+- **2026-10-14 로컬 검수 정리 완료:** 사용자가 DEV 웹을 원복했다고 알리고 기존 코드를 로컬 실행해 확인하도록 요청했다.
   localhost:3000에서 기존 DEV API에 연결해 Admin(jongsun.test1)의 목록 필터·주문9123/3943·승인9248/1469·Pickup 링크를 확인했다.
   파일1개 선택/해제 시 Download 활성/비활성도 확인했다. 확인 범위에서 새 권한 화면 결함은 발견하지 못했다.
   사용자 지시로 가능한 범위에서 마감했으며 Member 로컬 미로그인 비교는 미검증으로 남겼다. 추가 로그인 요청 없이 대기한다.

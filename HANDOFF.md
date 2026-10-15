@@ -43,7 +43,7 @@ Do not store secrets or private customer data here.
 - Dentlink mobile app: `projects/dentlink-app.md`
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md` — 백엔드 문제로 이번 배포 제외, PR #4623 미병합 종료. 재개 지시까지 작업 브랜치 보존·대기.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
-  — Office API 4개 사용처 조사 완료. 권한관리 본 작업 미착수·지시 대기.
+  — 2026-10-15 Web PR4700(→ release/v1.89.0) `55ad768d5`, CodeRabbit 3건 처리·resolve(Claude 인수). 팀 리뷰·병합·쓰기 QA 대기. Office 앱은 개발 잔여 + 미커밋 변경 소유권 확인 필요.
 - Dentlink 통합알림센터: [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
   — REST 방향·사전 조사 완료. 권한관리 선행, 미정 정책 확인과 재개 지시 대기.
 

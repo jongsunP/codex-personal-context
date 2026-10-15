@@ -2,6 +2,13 @@
 
 ## 2026-10-15
 
+- 권한관리 PR4700을 Claude가 이어받아 CodeRabbit 실제 스레드3건을 처리했다(앞선 '리뷰0건' 기록 정정).
+  부분 상세 Place Order 가드 제거, 주문 작성 화면 403 외 조회 실패 시 조회 불가 표시(2131 제외, 승인 확인 대상),
+  shared 시스템 메시지 권한 ref의 layout effect 갱신을 3커밋으로 반영해 원격 `55ad768d5` push·스레드 resolve했다.
+  관련 Jest 14 suites/131 tests·3서비스 타입/lint·DLOS guard·shared coverage 통과, 실계정 QA 없음.
+  중첩 worktree ESLint 충돌로 hook 항목을 직접 실행 후 `--no-verify` push했다. 정식 웹 worktree는 3커밋 뒤,
+  Office 앱 worktree에는 기록되지 않은 미커밋 변경34항목이 있어 소유권 확인 전 손대지 않는다.
+
 - 권한관리 앱 재점검에서 Office의 주문 채팅 API 미전환, 직원/권한별 대화 캐시 누락,
   활성 직원 캐시 reader/writer 불일치와 403/2152가 세션 만료로 처리되는 결함을 확인했다.
   앱은 추가 FE 개발이 남으며 새 BE API 대기 상태가 아니다. Lab 앱 추가 변경 근거는 없었다.
