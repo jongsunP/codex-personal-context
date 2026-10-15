@@ -175,7 +175,7 @@ For detailed current state, read:
 ### Dentlink 권한관리 — DL-16317
 
 - **최신 2026-10-15 Claude 인수·CodeRabbit 3건 처리:** PR4700(→ release/v1.89.0) head `55ad768d5`, 스레드3건 resolved.
-  Place Order 가드 제거·주문 작성 조회 실패 안내(승인 확인 대상)·시스템 메시지 권한 ref 커밋 단계 갱신.
+  Place Order 가드 제거·주문 작성 조회 실패 안내·시스템 메시지 권한 ref 커밋 단계 갱신.
   정식 웹 worktree `dentlink-client-permission`은 `96ff6836b`로 뒤처져 재개 시 pull 필요.
   Office 앱 worktree 미커밋 변경34항목은 소유권 미확인. 상세는 정본 상단 참조.
 - **2026-10-14 로컬 검수 정리 완료:** 사용자가 DEV 웹을 원복했다고 알리고 기존 코드를 로컬 실행해 확인하도록 요청했다.
