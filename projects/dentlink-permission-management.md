@@ -1,6 +1,42 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-15 release/v1.89.0 대상 PR4700 생성 완료
+## 현재 상태 — 2026-10-15 PR4700 미사용 준비 코드·테스트·Storybook 정리
+
+- **사용자 지침:** 테스트는 실제 필요한 경우에만 유지하고, Storybook은 이제 사용하지 않는 방향이다.
+  이번 PR 전체에서 불필요한 파일과 준비 코드를 다시 점검·정리하도록 요청했다.
+  이 기능의 후속 작업에서 검수 편의만을 이유로 stories/테스트/helper를 추가하지 않는다.
+- **제품:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
+  `b725934a7` (`refactor: 권한 관리의 미사용 준비 코드와 검증 파일 정리`).
+  정상 commit/push 완료. 기존 PR4700의 대상 `release/v1.89.0` 및 master 파생 전달 경로를 유지한다.
+- **Storybook:** 신규 5파일 삭제, 기존 2파일의 이번 예제 추가분 원복. 최종 PR에 stories 변경은 없다.
+  다른 기능이 갖고 있던 기존 Storybook 파일을 일괄 삭제한 것은 아니다.
+- **미사용 제품 코드:** 실제 호출자가 없는 Draft `canContinueDraft`/`canDeleteDraft` 입력·전달과 행별 UI 준비,
+  상세 페이지 외부 권한 입력 6개 및 승인 페이지/hook 외부 권한 입력을 제거했다.
+  테스트도 가상 권한 prop 대신 실제 직원 역할·주문 담당 의사·GET403/2152 응답으로 검증하도록 바꿨다.
+- **범위 밖 Lab 선행 확장:** Clinic에는 Memo 탭이 없고 Lab/Admin에서 실제 제한 조건을 공급하지 않던
+  Memo 권한 확장 6파일을 release 기준으로 복원했다. Lab의 미사용 `isReadOnly` 전달도 제거했다.
+  추가금·배송일 편집·상태 변경은 실제 Lab 전용이고 제한 조건이 공급되지 않아 관련 준비 코드를 원복했다.
+  함께 도입됐던 일반 unmount/지연 callback 방어까지 원복되는 경로는 기존 release 동작 복원으로 구분한다.
+  실제 Lab 시스템 메시지 액션 전달과 기존 `isInputHidden`은 유지한다.
+- **실제 기능 보존:** Member 메뉴·필터, 상세 기본/부분/차단, 직접 작성 URL의 본인·미지정 Draft 검사,
+  `isCurrentDraftContext`의 직원·역할·화면 종료 검사, Clinic 채팅 읽기 전용과 직원/권한별 캐시는 유지한다.
+  이름이 같은 직접 작성 페이지의 지역 변수 `canContinueDraft`는 실제 검사이므로 제거하지 않았다.
+- **테스트 정리:** 미사용 Memo/Draft UI 전용 테스트와 제품 변경이 없는 Pickup 링크 테스트 3파일 삭제.
+  정적인 HOC 옵션을 런타임에 바꾸던 테스트, Lab 전용 미연결 제한 테스트 및 반복 fixture를 정리했다.
+  신규 테스트는 27파일/7,610줄 → 24파일/6,424줄, 전체 PR은 174파일 → 151파일이다.
+  이번 정리 커밋은 41파일 +306/-2,076, 순 1,770줄 감소다.
+- **검증:** 남은 관련 Jest 24 suites/217 tests 전부 통과. 독립 호출 경로/diff 검토에서 실제 Member
+  연결 누락을 발견하지 못했다. 정상 commit의 Clinic/Lab/Admin 타입 검사와 `git diff --check` 통과.
+  정상 push의 Clinic/Lab/Admin lint, Admin DLOS guard, shared coverage 검사도 통과했다.
+  기존 lint/Prettier 설정 경고는 있으나 검사 실패는 아니다. PR 본문도 최종 범위와 검증 결과로 갱신했다.
+  기존 Swagger 생성물·SVG 3개는 실사용/생성 계약을 확인해 유지하며 env/ignore/package/배포 workflow 변경은 없다.
+  로그: `/tmp/dentlink-permission-cleanup-final-tests-20261015.log`,
+  `/tmp/dentlink-permission-cleanup-commit-20261015.log`, `/tmp/dentlink-permission-cleanup-push-20261015.log`.
+- **다음:** PR 팀 리뷰·release 병합/배포 후 아래 실데이터 쓰기 QA와 Draft 사례 QA를 진행한다.
+  이번 정리는 코드 검증이며 새 실계정 화면 QA·네이티브 수정·E2E·배포·Jira 댓글은 하지 않았다.
+  CodeRabbit은 사용자의 한도 초과 시 생략 지시를 유지하며 유료 재실행하지 않는다.
+
+## PR 생성 이력 — 2026-10-15 release/v1.89.0 대상 PR4700
 
 - **최신 리뷰 결정:** 사용자가 PR4700 CodeRabbit 확인·필요 수정·커밋/푸시·메모리화를 요청했으나,
   실제 조회 결과 CodeRabbit은 리뷰 한도 초과로 실행되지 않았다. 체크 상태 SUCCESS를 리뷰 완료로 해석하지 않는다.
@@ -21,7 +57,7 @@
 - **[PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700)**:
   `[DL-16317] Member 권한과 주문 상세 접근 제한 적용`, `feature/DL-16317` → `release/v1.89.0`, OPEN·일반 PR.
   생성 후 실제 base/head와 MERGEABLE, 174파일(+11,701/-1,065)을 확인하고 현재 채팅에 연결했다.
-- **최신 제품 HEAD는 `7bf2b72a752c831e63069d6f37364f37647e2cb1`**.
+- **PR 생성 당시 제품 HEAD는 `7bf2b72a752c831e63069d6f37364f37647e2cb1`**.
   PR 준비 중 release `af636cac8`와 generated `PaymentProfileRequestDto.name` 설명 주석 한 곳의 충돌을 발견해
   feature에 release를 통합하고 릴리즈 설명을 유지했다. normal commit/push 완료·원격 일치·clean 확인.
   독립 대조에서 릴리즈 단독 변경47파일 보존 및 generated 필드/타입 손실 없음을 확인했다.
