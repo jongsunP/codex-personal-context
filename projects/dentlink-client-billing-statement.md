@@ -1,14 +1,14 @@
 # DL-16796 Billing Statement 명칭 변경
 
-## 현재 상태 — 2026-10-15 구현·검증·커밋·푸시·release 대상 PR 완료
+## 현재 상태 — 2026-10-15 PR 전달·CodeRabbit 확인 완료, 팀 리뷰 대기
 
 - 상위 [DL-16795](https://innovaid.atlassian.net/browse/DL-16795), Frankie 담당 하위 [DL-16796](https://innovaid.atlassian.net/browse/DL-16796).
 - 담당 채팅: `01a1395f-5658-7b31-9e82-d285d572f186` / `DL-16796 Billing Statement 명칭 변경`.
 - 개인 폴더 `/Users/parkjongsun/Documents/ChatGPT/메인 프로젝트`, 제품 저장소 `/Users/parkjongsun/Repository/dentlink-client` 기존 기본 checkout을 사용한다. 새 제품 폴더·worktree는 만들지 않는다.
 - 사용자가 최신 master에서 브랜치를 만들어 구현·commit·push하고 `release/v1.89.0` 배포용 PR까지 만드는 것을 승인했다. 기존 checkout에서 `feature/DL-16796`을 준비해 11파일·18문구를 수정했다.
 - 제품 커밋 `3aac1dff0005706e78015cb5f23f255712696911` (`fix: 청구 문서와 다운로드 명칭을 Invoice로 변경`), 원격 branch와 일치·clean.
-- [PR #4699](https://github.com/Innvoaid/dentlink-client/pull/4699): `feature/DL-16796` → `release/v1.89.0`, OPEN/non-draft, 1커밋·11파일, MERGEABLE. 채팅에 PR 연결 완료. 마무리 조회에서 Admin DLOS Guard/Auto Assign SUCCESS, CodeRabbit PENDING이었다. 자동화 실행 후에도 base/head가 유지됨을 확인했다.
-- 실제 병합·배포, Jira 변경, 실계정 화면/PDF·ZIP 다운로드·실기기 QA는 수행하지 않았다. CodeRabbit 리뷰 처리도 이번 요청에 포함되지 않았다.
+- [PR #4699](https://github.com/Innvoaid/dentlink-client/pull/4699): `feature/DL-16796` → `release/v1.89.0`, OPEN/non-draft, 1커밋·11파일, MERGEABLE. 채팅에 PR 연결 완료. 사용자 후속 요청으로 CodeRabbit 완료/SUCCESS와 미해결 스레드0건을 확인했다. Admin DLOS Guard/Auto Assign도 SUCCESS이며 팀 리뷰는 REVIEW_REQUIRED다.
+- 실제 병합·배포, Jira 변경, 실계정 화면/PDF·ZIP 다운로드·실기기 QA는 수행하지 않았다. CodeRabbit 검토 후 추가 수정이 없어 제품 신규 커밋·푸시는 없다.
 - 메인세션은 전달만 마쳤으며, 이후 이 담당 세션에서 사용자 지시를 받아 이어간다. 메인세션에 자동 진행/완료 메시지를 보내지 않는다.
 
 ## 확정 범위와 해석 정정
@@ -65,6 +65,15 @@
 
 1. PR4699가 현재 전달 결과다. 추가 지시 전 자동 병합·배포·Jira 변경·장기 모니터링·메인세션 메시지는 하지 않는다.
 2. 재개 시 개인 컨텍스트 pull → 이 문서 → feature/PR4699의 live head/base/리뷰·CI 상태를 확인한다. 구현을 다시 시작하거나 새 PR을 중복 생성하지 않는다.
-3. CodeRabbit 리뷰 요청이 오면 현재 PR의 전체 리뷰 처리 지침을 따른다. PR 병합과 release/상용 배포는 별도 승인 단계다.
+3. 현재 CodeRabbit 검토는 완료됐으며 팀 리뷰 승인 대기다. 새 리뷰/변경이 생기면 해당 최신 head로 다시 검토한다. PR 병합과 release/상용 배포는 별도 승인 단계다.
 4. 승인된 QA에서 Clinic 결제 내역(데스크톱/모바일), Admin 결제 조회/매출 ZIP, 개별/통합/Receipt 문서명·번호·금액·파일명과 앱 다운로드를 확인한다. Jira 첨부가 다시 열리면 픽셀 대조 미완료를 해소한다.
 5. 향후 Jira 정리는 기존 담당 하위 DL-16796에 한다. 상위 댓글은 사용자 명시 요청 때만 작성한다.
+
+## CodeRabbit 후속 확인 — 2026-10-15
+
+- 사용자 요청: PR4699 CodeRabbit 의견을 확인하고 필요한 수정이 있으면 commit/push까지 처리.
+- 개인 컨텍스트와 feature를 pull한 뒤 원격/로컬/PR head `3aac1dff0` 일치·clean을 확인했다. CodeRabbit run `fb9f98ad-7ec7-43d4-8ad7-c1d961a8d3fd`는 11파일 전체를 처리했으며 02:53:49 UTC에 Review completed/SUCCESS다.
+- [CodeRabbit 결과](https://github.com/Innvoaid/dentlink-client/pull/4699#issuecomment-6183290997)는 actionable comment 없음, GraphQL reviewThreads 전체0건(hasNextPage=false). 일반 review 제출 객체는 없지만 상세 요약과 commit status로 실제 리뷰 완료를 확인했다.
+- 유일한 pre-merge 경고는 Docstring Coverage 50%/권장80%(분석 함수2개). 신규 함수·로직 변경 없는 표시명/파일명 치환이며 기능 결함 지적이 아니므로 주석 비율만 맞추는 추가 수정을 하지 않았다. [처리 근거 댓글](https://github.com/Innvoaid/dentlink-client/pull/4699#issuecomment-6183353072)을 남겼다.
+- 독립 읽기 전용 보조 검토에서도 결제 버튼→Invoice API/PDF, ZIP→같은 개별 PDFUI, Receipt→item.invoiceNo 연결과 Commercial Invoice 보존을 확인했으며 적용할 실제 결함은 없었다.
+- 신규 제품 변경이 없어 기존 통과 검사를 반복하지 않았다. git diff --check 통과·clean, 댓글 후 CodeRabbit SUCCESS/미해결0/동일 head를 다시 확인했다. 기존 3aac1dff0과 PR 대상은 유지되며 팀 리뷰·실계정 다운로드 QA·병합·배포와 구분한다.
