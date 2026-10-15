@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — **2026-10-15 89 릴리스 병합 준비 완료·팀 리뷰 대기:** client feature/DL-16471-dlds-dlos-integration/fcbf17a9a 푸시·clean. PR#4692를 release/v1.89.0 대상으로 변경. npm3종 시험0.1.5-pr.c567910 자동 공개·실제 React18/19 소비 검증 완료(이후는 테스트 한 파일만 수정). release 조합3앱 타입·최신 패키지CI38675949953·Admin38675949943 PASS, 신규 메뉴 테스트 회귀9개 복구(기존 master15개 실패는 별도). **이번 사용자 목표는 이 PR 병합까지이며 하네스는 합친 뒤 후속. 남은 조건은 동료 승인1건(현재0, 기존 리뷰 요청 inkyookoh/chajju), 충돌 없음.** 리뷰 후 최신상태 확인·일반 병합·반영 검증/기록. 관리자 우회나 자동 감시 안 함. 정식npm은 master 반영 시, Studio/하네스는 후속. env는 별도 세션01a13d89-14d1-71f0-b53b-8b6238c384f9. 상세 근거/재개 순서는 정본 참조.
+  — **2026-10-15 89 릴리스 병합 준비 완료·팀 리뷰 대기:** 의도는 **DLOS의 구조·패키지·빌드·배포 설정에 DLDS를 맞추기**이며 디자인/구현 통합이 아님. client feature/DL-16471-dlds-dlos-integration/fcbf17a9a 푸시·clean. PR#4692를 release/v1.89.0 대상으로 변경. npm3종 시험0.1.5-pr.c567910 자동 공개·실제 React18/19 소비 검증 완료(이후는 테스트 한 파일만 수정). release 조합3앱 타입·최신 패키지CI38675949953·Admin38675949943 PASS, 신규 메뉴 테스트 회귀9개 복구(기존 master15개 실패는 별도). **이번 사용자 목표는 이 PR 병합까지이며 하네스는 합친 뒤 후속. 남은 조건은 동료 승인1건(현재0, 기존 리뷰 요청 inkyookoh/chajju), 충돌 없음.** 리뷰 후 최신상태 확인·일반 병합·반영 검증/기록. 관리자 우회나 자동 감시 안 함. Client 내부 사용은 npm 공개를 기다리지 않음. 정식npm은 master 반영 시, Studio/하네스는 후속. 정본 상단에 담당별 단계1~6 저장. env는 별도 세션01a13d89-14d1-71f0-b53b-8b6238c384f9. 상세 근거/재개 순서는 정본 참조.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.

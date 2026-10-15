@@ -3,6 +3,25 @@
 
 **범위:** npm 설정 해결 후 사용자 지시에 따라 다음 단계를 진행했습니다. Slack의 89 릴리스 합의대로 기존 PR 대상을 변경하고, 합쳐질 코드 검증·필수 테스트 경로 보완·PR/Jira/메모리 정리를 수행했습니다. 병합·정식 공개·제품 배포는 하지 않았습니다.
 
+### 사용자가 재확인한 의도와 완료 기준
+
+- **“합친다”의 의미:** 동료가 DLOS에 마련한 폴더 구조·독립 패키지·공개 진입점·빌드·npm 배포 설정을 기준으로 DLDS도 맞춰 따라갑니다. DLDS 디자인을 DLOS로 교체하거나 두 컴포넌트 시스템을 하나의 구현으로 합치는 작업이 아닙니다. 이 구조 정리가 현재 PR에 반영되어 있으며, 이번 목표는 이 PR의 release/v1.89.0 병합까지입니다.
+- **Client와 Studio 구분:** dentlink-client는 저장소 내부 workspace 패키지를 사용하므로 PR이 release에 병합되면 해당 코드로 실행·검증할 수 있습니다. npm 정식 공개를 기다릴 필요는 없습니다. npm 공개는 Studio 등 외부 소비자가 해당 버전을 설치할 수 있게 하는 단계이며, Studio 실제 업데이트·갤러리 반영 완료와는 별개입니다.
+- **이번 저장 요청에서 재확인:** PR#4692 OPEN/non-Draft, base release/v1.89.0, head fcbf17a9a, mergeable, review REQUIRED/승인0건. 최신 패키지 verify·Admin guard SUCCESS, publish SKIPPED. 제품 checkout clean. 이번 요청으로 코드·PR·Jira·배포를 추가 변경하지 않고 이 기준과 단계만 저장합니다.
+
+### 단계별 진행 — 지금은 1번
+
+| 순서 | 담당 | 진행할 일 | 완료 기준 |
+| --- | --- | --- | --- |
+| 1 | 사용자·동료 | 기존 PR#4692 리뷰·승인 | 필요한 동료 승인1건. 리뷰 의견이 있으면 Codex가 검토·필요 수정 후 재검증 |
+| 2 | Codex | 승인 결과를 받은 뒤 최신 head·충돌·checks 확인하고 release/v1.89.0 병합 | 실제 merge SHA와 release 반영 확인, Jira·메모리 갱신. **이번 목표 종료점** |
+| 3 | 사용자·팀, 필요 시 Codex | 릴리스의 서비스 화면 QA와 기존 배포 절차 진행 | 실제 화면/동작 확인. 정적 검사와 구분하며 특히 날짜·Modal 영향 확인 |
+| 4 | Codex·배포 담당 | 릴리스 절차의 master 반영 시 정식 npm 자동 공개 확인 | 공개된 정확 버전의 실제 설치 검증. 현재 소스 준비 버전0.1.4는 실행 시 재확인 |
+| 5 | Codex, 필요 시 Studio 담당 | Studio 패키지 업데이트·갤러리 반영 확인 | npm 등록과 별도로 실제 Studio에서 DLDS 사용 확인 |
+| 6 | 사용자·Codex | 통합된 Studio 구조를 기준으로 하네스 보완 범위 논의·진행 | 별도 후속 작업. 현재 병합 준비에 포함하지 않음 |
+
+1~2가 현재 진행 범위이고 3~6은 병합 이후의 안내입니다. 1.89.0 병합이 서비스 배포·master 반영·npm 정식 공개·Studio 반영을 동시에 의미하지 않습니다. master 반영은 npm 공개의 실행 계기이며, CI 성공·실제 registry 등록은 별도로 확인합니다. QA/제품 배포 완료가 npm workflow의 자동 조건은 아닙니다. Studio는 이미 공개된 prerelease로 먼저 검증할 수도 있으나 현재 권장 순서는 정식 공개 후 확인입니다. 정식 패키지가 먼저 필요해지면 승인된 수동 공개 경로를 별도로 검토합니다.
+
 ### 코드와 PR
 
 - 정본 `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16471-dlds-dlos-integration`. HEAD/origin **`fcbf17a9aedd88f29bee7f0925208dda7b0fc654`**, clean.
