@@ -25,8 +25,8 @@ Check this folder first when finding or continuing local projects.
 ### 사무실 의자 구매·헤드레스트 개선 조사
 
 - 회사 지원금30만원, 배송·필수옵션 포함 총예산40만원. 통짜 쿠션 좌판을 유지하면서 머리 하중에 헤드판이 뒤로 회전하지 않는 의자를 찾는다.
-- 2026-10-15 실제 판매 페이지 비교 완료. G1 프라임 스몰피팅·에르먼 X5/X3 등은 조건부 후보이며 헤드 위치·고정력은 미검증이다. 구매/수리는 미결정, 사용자가 링크를 직접 검토 중이다.
-- 다음 시작점은 사용자 제품 검토 의견 수령. [개인 체크포인트](projects/office-chair-research.md)
+- 2026-10-15 비교 후 아르코 선택·결제 진행 의사로 조사 종료. 구매·수령·실사용 완료는 확인하지 않았다. 조건 적합성과 비용 절약 대안을 구분하고 실제 고정력은 미검증으로 남긴다.
+- 이번 메모리의 중심은 사용자 구매 판단 방식이다. [구매 판단 흐름](DECISION_FRAMEWORK.md#product-purchase-decisions)에 일반 원칙을 저장했으며 추가 조사 없이 대기한다. [사례·조사 이력](projects/office-chair-research.md)
 
 ### Action Sports Journal
 

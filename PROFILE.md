@@ -54,6 +54,13 @@ original choice.
 This pattern appears across development, fitness, vehicle decisions, AI usage,
 and product work.
 
+2026-10-15 제품 구매 상담에서 사용자가 직접 확인한 성향: 주어진 예산·환경·
+제약 안에서 확인 가능한 변수를 최대한 검토하고, 남는 불확실성을 인정한 뒤
+최선의 선택을 하려 한다. 결정 전후의 재확인은 놓친 변수와 판단 과정의 빈틈을
+점검하려는 목적이다. 이를 완벽한 제품에 대한 집착이나 결정하지 못하는 성향으로
+해석하지 않는다. 구체적인 구매 비교·추천 방식은
+[구매 판단 흐름](DECISION_FRAMEWORK.md#product-purchase-decisions)을 따른다.
+
 The user's self-understanding can be summarized with a Zhang He style analogy:
 adaptation, realistic optimization, using the cards available, and choosing the
 best practical path over an idealized one.
