@@ -1,6 +1,24 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-15 Member/Admin 로컬 연동 확인·홈 채팅 캐시 보완 완료
+## 현재 상태 — 2026-10-15 release/v1.89.0 대상 PR4700 생성 완료
+
+- 사용자가 기존 PR 유무를 확인하고 없으면 `release/v1.89.0` 대상으로 생성하도록 명시 요청했다.
+  기존 feature의 PR4693/4695/4696은 모두 develop에 MERGED였고 열린 PR은 없었다.
+- **[PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700)**:
+  `[DL-16317] Member 권한과 주문 상세 접근 제한 적용`, `feature/DL-16317` → `release/v1.89.0`, OPEN·일반 PR.
+  생성 후 실제 base/head와 MERGEABLE, 174파일(+11,701/-1,065)을 확인하고 현재 채팅에 연결했다.
+- **최신 제품 HEAD는 `7bf2b72a752c831e63069d6f37364f37647e2cb1`**.
+  PR 준비 중 release `af636cac8`와 generated `PaymentProfileRequestDto.name` 설명 주석 한 곳의 충돌을 발견해
+  feature에 release를 통합하고 릴리즈 설명을 유지했다. normal commit/push 완료·원격 일치·clean 확인.
+  독립 대조에서 릴리즈 단독 변경47파일 보존 및 generated 필드/타입 손실 없음을 확인했다.
+  최종 PR diff는 권한관리 누적 변경이며 package/lock/env/ignore/배포 workflow 변경은 없다.
+- 통합 HEAD에서 Clinic/Lab/Admin 타입, 3서비스 lint, Admin DLOS guard, shared coverage 정상 hook 통과.
+  아래 실제 계정 QA는 앞선 `e5c8a3e19` 기준이며 통합 HEAD의 화면 QA를 새로 한 것은 아니다.
+  로그: `/tmp/dentlink-permission-release-pr-commit-20261015.log`, `/tmp/dentlink-permission-release-pr-push-20261015.log`.
+- **다음:** PR 팀 리뷰·병합 → 릴리즈 환경 배포 → 아래 남은 실데이터 QA.
+  이번 요청은 PR 생성까지이므로 CodeRabbit 대응/지속 감시·병합·배포·Jira 댓글은 진행하지 않았다.
+
+## 구현·로컬 QA 체크포인트 — 2026-10-15 Member/Admin 확인·홈 채팅 캐시 보완 완료
 
 - **최신 승인:** 사용자가 BE 예정 API가 모두 완료된 기준으로 기존 작업 브랜치에서 로컬 연동 검증·가능한 수정·커밋/푸시·메모리화를 요청했다.
   시크릿 localhost의 Member 로그인을 직접 완료해 주었다. 아래 실계정 결과가 이전의 포괄적인 QA/BE 대기 기록보다 우선한다.
