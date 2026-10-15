@@ -1,5 +1,58 @@
 # Dentlink 권한관리 — DL-16317
 
+## 현재 상태 — 2026-10-15 앱 재점검·웹 주문 이동 보완
+
+- **이번 요청:** Office/Lab 앱의 현재 구현 확인과 제품별 Jira 정리, 웹에 남은 결함이 있으면 보완.
+  개인 컨텍스트와 기존 두 permission worktree를 pull하고 live Jira·PR·DEV Swagger를 대조했다.
+- **웹 추가 수정:** Member의 타 의사 부분 상세에서 사이드패널 다른 주문번호를 눌러도 이동하지 않던
+  `handleChangeOrder`의 편집 권한 검사를 제거했다. 링크는 목적 주문으로 이동하고 목적지 GET에서
+  기본/부분/차단을 판정한다. 수정·Remake·담당 의사 변경 제한은 그대로 유지한다.
+  기존 hook·기존 테스트 2파일만 변경했으며 새 파일/Storybook은 추가하지 않았다.
+  커밋 `96ff6836b` (`fix: 부분 제공 상세의 다른 주문 이동 허용`) 정상 commit/push 완료·원격 일치·clean.
+  PR4700은 release/v1.89.0 대상으로 OPEN/MERGEABLE이며 본문도 수정 동작과 검증으로 갱신했다.
+- **웹 검증:** 수정 전 실제 hook 회귀 1건 실패(이동 0회), 수정 후 관련 3 suites/32 tests 통과.
+  Prettier·diff 및 정상 commit의 Clinic/Lab/Admin 타입 검사 통과.
+  정상 push의 3서비스 lint·Admin DLOS guard·shared coverage도 통과했다(기존 lint 경고 별도).
+  로그 `/tmp/dentlink-permission-web-navigation-{before,after,commit,push}-20261015.log`.
+  기존 24 suites/217 tests는 직전 정리 시점 결과이며 이번에는 관련 3묶음을 실행했다.
+  이번 추가 검증은 코드 수준이며 새 실계정·기기 QA는 하지 않았다.
+- **Office 앱은 개발 잔여:** `/Users/parkjongsun/Repository/dentlink-app-permission`,
+  `feature/DL-16317@72a79146a` 로컬/원격 동일 clean. origin/develop `2bc7d04d` 대비 17/7커밋 분기,
+  3-dot diff 60파일이며 이 feature의 PR은 없다. 이번 앱은 확인 요청 범위로 코드·Git 변경 없이 감사했다.
+  1. 상세 GET의 **403/code2152를 로그인 만료로 처리**한다. fetcher.ts:147과 실제 상세 query/service 경로 확인.
+     실제 모듈을 격리 실행하여 loggedIn=false 및 세션키8개 삭제를 확인했다. 2005/2004는 세션 유지.
+     현재 origin/develop도 같다. 실제 사용자 계정에서 로그아웃을 일으키는 시험은 하지 않았다.
+  2. ORDER 채팅 GET/POST가 아직 `/office/chat-messages`다. 현재 제공된
+     `/office/chat-messages/orders/{orderId}`로 전환해야 한다. 고객지원·답글·읽음·페이지·번역은 기존 계약 유지.
+     구 API도 Swagger에 남아 있으므로 모든 기존 호출이 실패한다고 단정하지 않는다.
+  3. 메시지/신규 메시지/최근 대화/미읽음 query key에 직원·권한 구분이 빠져 있다.
+     같은 병원 내 직원/권한 변경 전후 key 동일함을 격리 실행으로 확인했다. 명시적 병원 전환에는
+     latest/unread reset이 이미 있으나 동일 직원 역할 변경과 메시지 state/cache는 별도 보완이 필요하다.
+  4. EmployeeProfile의 활성화 성공 writer는 EMPLOYEE_OWN 3요소, reader는 employeeId 포함 4요소다.
+     현재 reader가 활성화 응답을 받도록 맞춰야 한다. 후속 조회가 있어 항상 화면 실패인 것은 아니다.
+  5. native 상세는 최초 GET 성공 전 WebView를 막고 실패는 toast/back이다. 2152 세션 보존 후에도
+     웹 조회 불가 화면으로 연결되도록 확정된 접근 거절만 구분해야 한다. 다른 오류를 일괄 바꾸지 않는다.
+  추가 정적 잔여: 파일 업로드 후 attach 전 현재 직원/권한/화면 종료 재확인,
+  숨긴 의사 필터의 불필요한 조회 및 미사용 외부 권한 입력 정리. 무단 저장 성공을 재현한 것은 아니다.
+  Draft DTO에 담당 정보가 없어 상세 재조회하는 실제 검사는 제거 대상이 아니다.
+- **Office 검증:** 이번 기존 변경 관련 Jest 18 suites/128 tests PASS
+  (`--config jest.config.js` 명시, `/tmp/dentlink-office-permission-audit-tests-20261015.log`).
+  위 2152 인터셉터 문제는 이 기존 테스트가 다루지 않아 별도 격리 실행으로 확인했다.
+- **Lab 앱:** origin/develop `56cba674`, origin/main `bb619010`의 tree 동일.
+  환자 카드의 전체 주문/Case 수 제거·우리 Lab 주문 수 및 제목 중앙 정렬은 이미 반영되어 있다.
+  상세 Case/주문 트리는 Lab 웹 WebView를 사용한다. DEV 명세는 기존 `/lab/chat-messages` GET/POST이며
+  Lab 주문별 신규 경로는 없다. 이번 Office 전환을 Lab에 복제하거나 빈 Lab 카드를 만들 필요를 찾지 못했다.
+  현재 별도 i18n checkout은 보존했다. 실기기·배포 확인은 이번 감사에 포함하지 않았다.
+- **API/협의:** 최신 원본 `/tmp/dentlink-permission-app-audit-swagger-20261015.json`(936 paths),
+  부모 최신 합의 댓글44436 유지. 별도 내 주문/환자 판정 API 대기는 불필요하다.
+- **Jira:** Web DL-16319는 본문에 실제 범위/3상태/Pickup 링크/앱 경계를 정리하고,
+  댓글44456에 구현/QA/앱 경계를 보고한 뒤 **Ready for Deploy**로 전환·확인했다.
+  Office DL-16752는 오래된 BE 미배포 대기 문구를 현재 계약으로 정정하고 댓글44455에 개발 잔여를 반영했다.
+  Office는 진행 중 유지. 부모 DL-16317과 다른 담당자 카드는 변경하지 않았다.
+- **다음:** 웹은 PR4700 팀 리뷰·release 병합/배포 및 앞서 정리한 쓰기/Draft QA.
+  앱은 2152 세션·상세 진입 → ORDER 채팅/역할 캐시 → 직원 정보 갱신 및 비동기 경계 보완 →
+  develop 통합/PR 준비 → Member/Admin 실기기 QA 순서다. 새 BE API를 기다릴 작업이 아니다.
+
 ## 현재 상태 — 2026-10-15 PR4700 미사용 준비 코드·테스트·Storybook 정리
 
 - **사용자 지침:** 테스트는 실제 필요한 경우에만 유지하고, Storybook은 이제 사용하지 않는 방향이다.
