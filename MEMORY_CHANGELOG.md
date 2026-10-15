@@ -2,6 +2,12 @@
 
 ## 2026-10-15
 
+- 권한관리 최신 Figma·Jira·Swagger 재검토 뒤 승인된 웹 UI 2건을 기존 `feature/DL-16317`의 `7c724ad0a`로 normal commit/push했다.
+  Lab 상세의 Cases/Orders 건수만 숨기고 Total/트리/Clinic 표시를 유지했으며, Lab 환자 목록 제목의 baseline 정렬을 middle로 수정했다.
+  3서비스 타입·린트·필수 guard/coverage·독립 리뷰 통과, 실제 화면/실계정 QA·배포는 미실행이다.
+  추가 i18n 감사의 기존 OFFICE 전용 logIn 키 검출 실패를 별도로 기록했다. 관련 Jira 30개/연결 기획 재검토로
+  Lab 이후 주문 열람 범위 계약, Member 홈·최근 목록의 서버 정제, Draft/자동 할당·서버 검증 잔여와 재개 순서를 정리했다.
+
 - PR4699의 CodeRabbit이 현재 head3aac1dff0/11파일 검토 완료·SUCCESS, actionable comment/미해결 스레드0건임을 확인했다. Docstring50% 경고는 로직 변경 없는 명칭 치환에서 추가 수정하지 않는 근거를 PR댓글6183353072에 기록했다. 독립 소스 검토도 결함 없음, 제품 추가 변경/커밋/푸시 없이 팀 리뷰 대기로 갱신했다.
 
 - DL-16796을 사용자 승인에 따라 최신 master에서 구현해 `3aac1dff0`으로 normal commit/push하고 release/v1.89.0 대상 PR4699를 생성·연결했다. 11파일의 문서/버튼/번호라벨/파일명만 변경했고 발행·결제 구조는 유지했다. 로컬 의존성 링크 누락을 frozen install로 복구한 뒤 3서비스 타입·린트와 필수 push 검사, 합성 PDF8사례 전후 비교·11페이지 시각 확인을 마쳤다. 사용량 제한으로 중단된 보조 검증은 루트가 이어받았다. 네이티브 수정 불필요 소스 판정, 실제 다운로드/실기기·첨부·리뷰/병합/배포 미완료와 재개 시작점을 보존한다.

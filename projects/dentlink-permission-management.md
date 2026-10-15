@@ -1,6 +1,79 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-14 가능한 로컬 화면 검수·정리 완료 후 대기
+## 현재 상태 — 2026-10-15 웹 UI 2건 반영·검증·커밋푸시 완료 후 대기
+
+- **최신 승인 범위:** 사용자가 기존 `feature/DL-16317`에서 즉시 가능한 UI 2건을 구현·검증하고
+  커밋·푸시·Git 기반 메모리 정리까지 요청했다. 새 PR·develop/master 통합·배포·실계정 QA·E2E는 이번 범위에 포함하지 않는다.
+- **작업 경로/출발점:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
+  출발 `f749491593ef1977976bc1c801b24e89bb5f5984`. 개인/제품 저장소 모두 pull 완료·출발 clean이었다.
+  제품 최종 커밋은 **`7c724ad0afdd9b5c0e6ba30693fa2abefedd33ff`**
+  (`fix: 기공소 주문 건수 노출과 환자 목록 제목 정렬 수정`). 정상 커밋·푸시 완료, 원격 feature SHA 일치·작업 트리 clean 확인.
+
+### 반영한 UI와 근거
+
+1. **Lab 주문상세 사이드패널 Cases·Orders 건수 숨김.**
+   오늘 Figma #24/#25와 [신규 설명 576:32704](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=576-32704),
+   [화면 576:32702](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=576-32702)를 확인했다.
+   `shared/ui/src/OrderDetailUI/extra/OrderDetailSidePannel/OrderDetailSidePannel.tsx`에서
+   `serviceType !== "LAB"` 조건으로 건수 라벨·숫자·구분자 블록만 감쌌다.
+   전체(Total), 환자 정보, 케이스·주문 트리와 주문 이동은 유지한다. Clinic의 OFFICE 표시도 유지한다.
+2. **Lab 환자 목록 ‘우리 기공소 주문현황’ 제목 세로 정렬.**
+   [DL-16751 댓글44409](https://innovaid.atlassian.net/browse/DL-16751?focusedCommentId=44409)의 기존 UI 백로그다.
+   환자명 열 공백은 긴 이름을 위한 설계이므로 유지한다. `lab/src/components/PatientList/PatientListLayerDesktop.tsx`의
+   `StyledLabHeaderCell`에 `vertical-align: middle` 한 줄만 추가해 전역 styled-reset의 baseline을 덮어썼다.
+   다른 헤더와 같은 정렬이며 높이·padding·열 너비·색·문구는 유지한다.
+- 위 두 소스 파일만 변경했다. API·generated DTO·권한 guard·env/ignore·번역 호출/key/리소스는 변경하지 않았다.
+  i18n 가이드를 읽었으며 기존 번역 호출을 유지하므로 번역 시트 동기화 변경도 없다.
+
+### 검증과 한계
+
+- 독립 코드 리뷰에서 수정 필요 결함 없음. Lab 페이지의 LAB 전달, Clinic의 OFFICE 전달,
+  Total/트리 유지와 Lab 전용 제목 CSS의 적용 범위를 확인했다. Admin에는 현재 해당 sidebar 호출부가 없다.
+- 변경 2파일 Prettier·diff 검사, Lab 제목 파일 scoped ESLint 통과.
+  정상 커밋의 Clinic/Lab/Admin 타입 검사 및 정상 푸시의 3서비스 lint·Admin DLOS guard·shared coverage 검사 통과.
+  전체 lint의 기존 경고와 Prettier의 기존 설정 옵션 경고는 실패와 구분한다.
+  푸시 로그: `/tmp/dentlink-permission-ui-push-20261015.log`.
+- 추가 `pnpm audit:i18n`은 기존 `account.auth.actions.logIn` 키 누락 판정으로 실패했다.
+  수정 전 HEAD에도 shared SigninForm의 OFFICE 전용 `actions.logIn` 호출과 Lab en/ko 키 부재가 동일함을 확인했다.
+  실제 Lab 로그인 호출부는 `serviceType="LAB"`이며 `actions.signIn` 분기를 사용한다.
+  따라서 이번 UI 회귀나 실제 Lab 로그인 번역 장애로 단정하지 않는다. 감사기의 서비스 분기 처리 검토는 별도 범위로 남긴다.
+  로그: `/tmp/dentlink-permission-ui-i18n-20261015.log`.
+- 실제 수정 화면 렌더·Member/Admin 실계정·서버 데이터 범위·저장 동작은 이번에 검증하지 않았다.
+  타입/정적 리뷰를 배포·기능 QA 완료 근거로 확대하지 않는다.
+
+### 현재 계약과 추가 확인할 것
+
+- **조사 범위 보완:** 최초 보고에서 일부 연결 Jira가 빠져 있었다. 사용자 재확인 요청 뒤 DL-16317 하위 30개와
+  DL-16747/16799, DL-16652를 직접 읽어 UI 백로그 DL-16751 및 기공소 열람 범위 기획을 추가했다.
+  Figma 댓글 #1~25(목록에 #13 없음), 최신/과거 디자인과 현재 코드를 대조했다.
+- **기존 계약 유지:** 부모 최신 댓글은 여전히 [44436](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44436).
+  기존 주문 GET200·담당 의사 비교·403/2152 방식 및 주문 채팅 API 전환은 이미 반영돼 있다.
+  DL-16782의 별도 검증 API 카드 제목은 그보다 오래된 기록이고 추가 계약이 없어 새 API 대기 사유로 삼지 않는다.
+- **DEV Swagger 변경 없음:** 10/15 재조회 SHA256은 `62be4515a489e803b69a2f18b4d78aa4886a6c9b95a64549054281ee50ef5f12`,
+  936 paths/1,383 schemas로 10/14 생성 기준과 동일하다. 이번에는 재생성하지 않았다.
+  권한 코드 공개 응답도 Admin → Billing Manager → Manager → Member 순서로 확인돼 dropdown 추가 정렬은 불필요하다.
+- **BE/기획 확인 1 — [DL-16747](https://innovaid.atlassian.net/browse/DL-16747):** 기공소가 처리한 주문 이후 주문의 열람 제한.
+  Yoonie 기획 진행 중이며 하위 DL-16799에도 세부 계약은 없다. ‘이후’의 판정 기준,
+  `GET /lab/patients/{patientId}/cases/orders` 목록 정제, `GET /lab/orders/{orderId}` 직접 조회 거절 status/code 확인이 필요하다.
+  DTO에는 마지막 처리 주문 경계/조회 허용 정보가 없어 FE가 날짜·ID로 임의 필터링하지 않는다.
+- **BE 확인 2 — Member 홈/최근 LinkTalk 범위:** `/office/orders/main`, `/office/chats/latest`와 관련 전체·미읽음 건수를
+  본인 담당 주문 범위로 반환하는지 확인한다. 공유 환자의 타 의사 담당 주문까지 최근 목록에 넣는다는 뜻이 아니다.
+  현 DTO로는 담당 의사 ID를 확실히 비교할 수 없어 FE 임의 필터를 추가하지 않는다.
+- **기존 미확정/QA 유지:** 미지정 Draft 복원 정책은 미확정이다. 주문 1단계 본인 자동 할당은 DL-16785에 명시돼 있으며
+  실제 서버 적용·배포·응답이 미검증이다. Member 기본/부분/차단·담당 변경 이후 접근·직접 승인/Remake·쓰기 동작은
+  추후 확정 계약/준비된 사례로 확인한다.
+  DL-16783/16785의 Ready for Deploy는 배포 증거가 아니며, 완료 카드 DL-16653의 타 기공소 주문 진입 QA 체크도 미완료다.
+  DL-16784 AOP 트랜잭션 테스트·DL-16786 Annotation 런타임 검증은 해야 할 일이며, 추가 FE API 계약은 없다.
+- **범위 분리:** DL-16652 모바일 환자 카드는 Lab native 작업으로 확인돼 웹 누락으로 계산하지 않는다.
+  Office native DL-16752의 채팅/API·실기기·통합/배포 잔여도 이번 웹 UI 변경으로 완료되지 않는다.
+
+### 다음 시작점
+
+1. 새 BE/기획 답변이 오면 개인 Git pull → 이 기록 → 기존 feature/원격 상태 확인 후 해당 API/정책 차이만 반영한다.
+2. 화면 QA 재개 요청이면 이 feature를 로컬에서 실행하고 준비된 Member/Admin 사례로 확인한다. DEV 웹에 feature가 올라갔다고 가정하지 않는다.
+3. 이번 커밋은 기존 feature에만 유지한다. 새 사용자 지시 없이 PR·병합·배포·외부 댓글·자동 모니터링을 진행하지 않는다.
+
+## 이력 — 2026-10-14 가능한 로컬 화면 검수·정리 완료 후 대기
 
 - **최신 사용자 설명/요청:** DEV 웹은 원복되어 권한 feature를 확인할 배포 화면이 없다. 기존 코드를 로컬 실행해서라도 확인하도록 요청했다.
   따라서 아래 코드 작업의 화면 QA 제외 지시는 이번 **로컬 읽기 화면 검수** 범위에서 갱신됐다.
