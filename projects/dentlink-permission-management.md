@@ -30,6 +30,23 @@
   (기본/부분/차단 상세, 직원 전환, 채팅·승인/거절, 본인/미지정/타 의사 Draft, 업로드) → 승인된 배포다.
   PR 병합·배포·CodePush는 하지 않았다. 추가 변경·자동 모니터링 없이 사용자 재개 지시를 기다린다.
 
+### 추가 읽기 QA — 2026-10-15 로컬 Admin/Member 초기 Pending 필터 차이
+
+- 사용자 질문으로 현재 실행 중인 웹 서버 PID97531의 cwd가 정식 permission/clinic이고
+  HEAD `55ad768d5`·clean인 것을 확인했다. 일반 Chrome Admin localhost와 시크릿 Member 127.0.0.1을 비교했다.
+- 양쪽 모두 DEV `GET /office/orders/filter-hint`를 실제 호출한다. Admin 응답은
+  `{code:"0000", data:"PENDING"}`, 자동 선택된 `PENDING_ORDER`+`OFFICE_APPROVAL_PENDING` 목록은 38건이었다.
+  Member 응답은 `{code:"0000", data:"ALL"}`이고 기본 상태 필터 없이 전체 5건을 표시했다.
+- Member에도 두 상태를 명시해 조회했다. 정확한 두 query와 size10/page0 요청의 HTTP200 및
+  화면 0 Orders/No Result를 확인했다. 따라서 현재 Member가 조회 가능한 Pending 주문이 없어
+  서버가 ALL을 돌려주고 FE가 이를 반영한 결과이며, 이 흐름의 FE 호출/필터 전달 누락은 발견하지 못했다.
+- 코드상 기본 필터는 역할 공통으로 hint=PENDING·진입 URL query 없음일 때 마운트당 1회만 적용한다.
+  Member 제거 필터는 dentistIds/myOrderOnly뿐이다. 직원·권한별 cache/enabled 조건은 연결돼 있고,
+  현행 DEV Swagger도 별도 Member 필수 인자를 요구하지 않는다. `/pending-summary`는 앱 전용으로 구분한다.
+- 확인 후 Member `/orders`·Status 미선택·전체5건으로 복원했다. 창 전환/주소 입력 중 섞인 잘못된 query의
+  결과는 증거에서 제외하고 정확한 query의 응답만 위 결론에 사용했다. 제품/PR/Jira 수정이나 쓰기 QA는 없다.
+  이는 현재 계정의 반환 데이터 확인이며 BE가 정한 환자/주문 전체 접근 범위의 최종 QA 증거는 아니다.
+
 ## 이전 체크포인트 — 2026-10-15 중단 작업 복구·Office 보완 및 develop 통합 완료
 
 - **사용자 요청/범위:** 토큰 중단 전 Office 구현을 이어서 가능한 보완·검증·커밋/푸시·메모리·Jira 정리까지 완료.
