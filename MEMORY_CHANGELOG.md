@@ -9,7 +9,7 @@
   기존 테스트 안에서 수정 전 실패·수정 후 3 suites/32 tests 통과, Office 기존18 suites/128 tests 통과.
   사용자 담당 Web/Office Jira를 현재 계약과 제품별 완료/잔여 기준으로 정리했다.
 
-- 웹 env 관리안의 최종 Notion 문서와 ASJ/Render 참고 예시를 확정했다. Render 실제 환경변수 화면·서버 코드 위치·process.env 의미, GitHub Variables와의 공통점/차이·선정 이유·공개/비밀값 구분을 정리했다. 사용자 지정 403 조사 문서와 같은 DEV Team / Development Documents 계층으로 이동하고 본문 보존을 확인했다. 제품 구현·설정 변경·배포 없이 개인 메모리 저장 후 대기한다.
+- 웹 env 관리안의 최종 Notion 문서와 ASJ/Render 참고 예시를 확정했다. Render 실제 환경변수 화면·서버 코드 위치·process.env 의미, GitHub Variables와의 공통점/차이·선정 이유·공개/비밀값 구분을 정리했다. 사용자 지정 403 조사 문서와 같은 DEV Team / Development Documents 계층으로 이동했다. 이후 사용자 직접 편집본을 검토하고 승인된 대체안 제목만 'GitHub 기반 환경변수 관리'로 변경해 나머지 본문 보존을 확인했다. 제품 구현·설정 변경·배포 없이 개인 메모리 저장 후 대기한다.
 
 - 권한관리 PR4700을 실제 제품 사용 경로 기준으로 다시 정리했다. Storybook 변경 7건을 제외하고,
   미사용 Draft/페이지 권한 입력과 Lab 메모·상태·배송·추가금 선행 확장을 원복했다.

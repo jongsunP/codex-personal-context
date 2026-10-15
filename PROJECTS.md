@@ -18,7 +18,7 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- DLDS와 분리한 별도 기능 세션. 2026-10-15 [팀 공유용 Notion 문서](https://app.notion.com/p/3face072e82f814b9a6ceaa36e5638af)와 ASJ/Render 참고 예시를 최종 확정하고, 사용자 지정 403 조사 문서와 같은 **DEV Team / Development Documents** 계층으로 이동했다. 본문 보존·부모 위치 read-back 완료. 사용자 요청으로 **구현하지 않고 메모리 저장 후 대기**한다.
+- DLDS와 분리한 별도 기능 세션. 2026-10-15 [팀 공유용 Notion 문서](https://app.notion.com/p/3face072e82f814b9a6ceaa36e5638af)는 사용자 지정 403 조사 문서와 같은 **DEV Team / Development Documents** 계층에 있다. 사용자 직접 편집본을 최종 검토한 뒤 승인된 **대체안: GitHub 기반 환경변수 관리** 제목만 변경하고 나머지 본문 보존을 확인했다. 사용자 요청으로 **구현하지 않고 메모리 저장 후 대기**한다.
 - 공개 설정은 GitHub Variables에서 로컬·CI가 공유하고 서버 Secrets→ECS는 유지하는 제안이다. 로컬 비밀값 보관소·권한·관리 담당은 적용 전에 확정하며 특정 제품 도입을 결정하지 않았다. 제품 변경·Git/PR·배포는 미착수다.
 - [개인 체크포인트](projects/dentlink-client-env-management.md)
 
