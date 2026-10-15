@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — **2026-10-13 스토리 정리·npm 권한 확인 대기:** client `feature/DL-16471-dlds-dlos-integration`의 `c5679107d`까지 저장·푸시했습니다. DLDS 연결82개와 스토리만 남은21폴더/22파일 제거, 업무 UI·실제 조합·Storybook 설정 유지. 정상 hooks·최종 PR 패키지/guard 검사 통과. 이전 시험0.1.3-pr.94b6324의 실제 registry React18/19 설치·재설치·타입·빌드·SSR 확인. 최신 시험0.1.5-pr.c567910은 run38382879133 verify 성공 후 **DLDS 기본 OIDC 공개만 E404**; icons/DLOS 업로드 접수,19:31에는 새 DLOS만 조회. 지금은 npm 관리자가 신규 DLDS Trusted Publisher(`Innvoaid / dentlink-client / packages_publish.yml`, environment 비움, 직접 공개 허용)를 확인할 차례입니다. 회신 후 등록 상태 확인 → 실패 공개 재개 → 최신3종 설치 검증 → 사용자 PR#4692 병합 결정 → 정식0.1.4/latest·Studio 자동 갤러리 확인. Vercel 기존 별도 사이트 권한과 Studio 공통 권한은 이번 필수 요청이 아닙니다. 자동 감시·병합 없이 대기하며 자세한 복구·검증 근거는 정본을 확인합니다.
+  — **2026-10-15 DLDS 자동 배포 설정 회신 대기:** client `feature/DL-16471-dlds-dlos-integration`/`c5679107d`, clean·저장/푸시 완료, PR#4692 미병합 유지. env/ignore 관련 이번변경 재검토는 종료했고 추가수정없음. 최신시험0.1.5-pr.c567910은 이제icons·DLOS등록완료, DLDS만미등록(run38382879133 기본OIDC PUT E404). **지금 사용자→npm관리자: 신규DLDS Trusted Publisher·직접공개권한 확인 요청**(`Innvoaid / dentlink-client / packages_publish.yml`, environment비움). 회신→Codex 실패공개재개·최신3종설치검증→사용자PR병합결정→정식0.1.4/latest·Studio갤러리확인→하네스순서. 최초등록token/기존iconsDLOS권한/Studio공통권한/Vercel팀가입 재요청불필요. 자동감시·공개재시도·병합없이대기. 자세한순서/근거는정본의10월15일체크포인트참조.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
