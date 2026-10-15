@@ -1,6 +1,64 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-15 Claude 인수·PR4700 CodeRabbit 3건 처리
+
+## 현재 상태 — 2026-10-15 중단 작업 복구·Office 보완 및 develop 통합 완료
+
+- **사용자 요청/범위:** 토큰 중단 전 Office 구현을 이어서 가능한 보완·검증·커밋/푸시·메모리·Jira 정리까지 완료.
+  중간에 Claude가 웹 PR4700의 CodeRabbit만 처리한 변경도 인수 검토했다. 미커밋 Office 변경은 앞선 Codex 작업임을
+  작업 기록과 diff로 확인해 이어받았다. 웹의 master → feature → release/v1.89.0 전달 경로는 유지한다.
+- **웹 인수 결과:** 정식 `/Users/parkjongsun/Repository/dentlink-client-permission`을 pull하여
+  `feature/DL-16317@55ad768d54c3ffc9948f22051aad36ba49ba293c` 원격 동일·clean으로 맞췄다.
+  Claude의 Place Order/조회 실패 안내/권한 ref 갱신 3커밋에서 새 회귀를 찾지 못했고 추가 웹 수정은 하지 않았다.
+  현재 코드의 관련 기존 4 suites/38 tests PASS. PR4700은 OPEN/MERGEABLE, base release/v1.89.0이다.
+  CodeRabbit은 최신 head까지 실제 실행했으며 신규 지적 0·전체 3 threads 모두 resolved를 재확인했다.
+  이전 '새 리뷰 미확인/정식 worktree 3커밋 뒤' 상태는 해소됐다. 유료 재실행은 요청하지 않았다.
+- **Office 최종 Git:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317`,
+  `df3c79a5efa51e9c9160c9f0d6d260be93310584` 정상 push 완료·원격 HEAD/ls-remote 일치·clean.
+  1. `323466a` 주문 채팅 API와 직원별 요청 범위 적용
+  2. `5c9e57e` 주문 접근 거절과 승인 권한 처리 보완
+  3. `7a43819` 주문의 미사용 권한 입력과 숨긴 필터 조회 정리
+  4. `df3c79a` 최신 origin/develop `62e5864`를 feature로 통합한 merge commit
+  원격 develop/main/release를 변경하거나 앱 PR·배포·CodePush를 실행한 것은 아니다. 앱 열린 PR 없음 확인.
+- **완료된 Office 기능:**
+  - 403/code2152는 로그인 만료로 처리하지 않는다. 제한 상세는 기존 웹 조회 불가 화면으로 진입하며,
+    다른 오류는 기존 toast/back을 유지한다. 목적 주문 조회가 실패하면 이전 주문 데이터/채팅 버튼을 재사용하지 않는다.
+  - ORDER GET/POST `/office/chat-messages/orders/{orderId}`로 전환. support/reply/read/page/translation 계약 유지.
+    DEV Swagger 생성기를 실제 실행한 결과에서 필요한 DTO/alias/2method 76줄만 반영해 무관한 대량 생성 변경은 제외했다.
+    원본 `/tmp/dentlink-office-permission-implementation-swagger-20261015.json`, SHA256
+    `62be4515a489e803b69a2f18b4d78aa4886a6c9b95a64549054281ee50ef5f12`, 936 paths.
+  - 메시지/신규/최근/미읽음/주문정보/승인목록을 직원·권한별로 구분하고 직접 cache writer도 일치시켰다.
+    직원/권한 변경 시 이전 로컬 메시지·답글·낙관적 읽음 상태 및 지연 응답/작업을 차단한다.
+    EmployeeProfile 활성 직원 writer도 reader의 employeeId 포함 키와 일치시켰다.
+  - 승인 화면은 주문 GET 성공 후 siblings를 조회한다. 주문/승인 조회 실패 시 과거 파일을 가리고,
+    2152는 기존 OrderDetail로 연결, 다른 오류는 기존 toast/back. 공유 Member의 파일/URL/버전 조회는 유지한다.
+    승인·거절/첨부 준비 동안 직원·권한·대상이 바뀌면 이전 작업을 차단한다.
+  - 주문/채팅 업로드는 최신 직원 권한을 요청 전후 재확인한다. multipart 중 권한/주문 전환은 기존
+    abort/delete cleanup 큐를 재사용한다. 이미 첨부 요청이 전송됐을 가능성이 있는 파일은 임의로 삭제하지 않는다.
+  - 미사용 외부 권한 prop은 제거하고 실제 역할·담당자 판정을 유지했다. 숨긴 Member 의사 필터 조회를 중단한다.
+- **develop 통합:** 충돌 11파일을 양쪽 의미를 보존해 해결했다. 덴처 다음 단계 주문 POST와 shouldReturnOnBack,
+  날짜 형식/생년월일 검증, Submission Method, 중복 업로드 방지·첨부/재조회 대기·실패 정리를 유지했다.
+  덴처 다음 주문 API에도 현재 직원/권한 확인을 연결했다. 독립 코드 검토에서 추가 실행 경로 결함을 찾지 못했다.
+  최종 origin/develop 대비 권한 feature diff는 75파일이며 env/ignore/stories/package/lock/native/배포 workflow 변경 없음.
+- **검증:** 통합 전 관련 22 suites/173 tests, 통합 후 권한+업스트림 충돌 영향 26 suites/235 tests PASS.
+  전체 feature 변경 TS/TSX lint 0 errors(기존 warning10), Prettier/diff PASS.
+  전체 타입 검사는 기존 18개 진단이 동일(라인번호 정규화 비교 시 추가/제거 0). 타입 전체 PASS라고 보고하지 않는다.
+  iOS JS bundle+74 assets, Android JS bundle+78 assets 생성 PASS. worktree node_modules symlink 때문에
+  `/tmp/dentlink-office-permission-metro-20261015.cjs`에 watchFolders만 보완했고 저장소 설정은 변경하지 않았다.
+  실기기·실계정 쓰기 QA/네이티브 빌드는 하지 않았다(부팅 시뮬레이터·연결 Android 없음, ios/Pods 없음).
+- **검증 로그:** `/tmp/dentlink-office-final-{tests,lint,format,type,ios-bundle,android-bundle}-20261015.log`,
+  `/tmp/dentlink-web-resume-review-20261015.log`. 신규 테스트 파일은 실제 승인조회·세션·업로드 회귀 검증용이며
+  Storybook/검수용 UI/개인 인수 파일은 제품 저장소에 추가하지 않았다.
+- **Jira:** Web DL-16319 댓글44459로 Claude 리뷰 처리 재확인, Ready for Deploy 유지.
+  Office DL-16752 댓글44460에 개발 완료/검증/실기기·PR·배포 잔여를 반영하고 transition12로 Ready for Deploy 전환 확인.
+  기존 요구사항 본문은 충분하여 유지했다. 부모/다른 담당 카드와 Lab 앱은 변경하지 않았다.
+- **남은 것/재개점:** 현재 계약 기준 즉시 처리할 개발 잔여나 추가 BE API 확인 질문은 발견하지 못했다.
+  다음은 Office 앱 PR·팀 리뷰 → QA 버전 준비(웹 상세는 PR4700 릴리즈와 함께) → 같은 병원 Member/Admin 실제 기기의
+  기본/부분/차단 상세·직원전환·채팅/승인/거절 쓰기·본인/미지정/타 의사 Draft·업로드 QA → 승인된 배포다.
+  앱 PR 기본 대상은 확인된 정책 develop이며, 10/12 앱 개발자 release 전달 설명은 별도 합의 전 참고 자료로 유지한다.
+  이번 작업으로 웹 PR 병합/릴리즈 배포·앱 PR 생성/병합·CodePush를 실행하지 않았다. 재개 지시 전 대기한다.
+
+
+## 이전 체크포인트 — 2026-10-15 Claude 인수·PR4700 CodeRabbit 3건 처리
 
 - **이번 요청:** 사용자가 PR4700 CodeRabbit 지적의 처리·commit/push·resolve를 Claude에 요청했다.
   이전 에이전트(Codex) 작업을 이어받도록 이 저장소와 Codex transcript로 의도를 파악했다.

@@ -174,33 +174,20 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-15 Claude 인수·CodeRabbit 3건 처리:** PR4700(→ release/v1.89.0) head `55ad768d5`, 스레드3건 resolved.
-  Place Order 가드 제거·주문 작성 조회 실패 안내·시스템 메시지 권한 ref 커밋 단계 갱신.
-  정식 웹 worktree `dentlink-client-permission`은 `96ff6836b`로 뒤처져 재개 시 pull 필요.
-  Office 앱 worktree 미커밋 변경34항목은 소유권 미확인. 상세는 정본 상단 참조.
-- **2026-10-14 로컬 검수 정리 완료:** 사용자가 DEV 웹을 원복했다고 알리고 기존 코드를 로컬 실행해 확인하도록 요청했다.
-  localhost:3000에서 기존 DEV API에 연결해 Admin(jongsun.test1)의 목록 필터·주문9123/3943·승인9248/1469·Pickup 링크를 확인했다.
-  파일1개 선택/해제 시 Download 활성/비활성도 확인했다. 확인 범위에서 새 권한 화면 결함은 발견하지 못했다.
-  사용자 지시로 가능한 범위에서 마감했으며 Member 로컬 미로그인 비교는 미검증으로 남겼다. 추가 로그인 요청 없이 대기한다.
-  검수 서버/생성한 localhost 탭은 종료했다. 제품 소스 변경·새 PR·병합·배포·E2E는 없다.
-- **확정 계약 구현:** 원래 웹 feature에서 확정 계약의 FE 작업을 완료했다.
-  [Leo 댓글44435](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44435)에 따라 기존 주문 GET200과 담당 의사 ID로
-  기본/부분 상세를 구분하고 403/2152를 차단한다. 별도 내 환자/주문 판정 API는 기다리지 않는다. 현재 코드가 이미 이 계약을 따른다.
-- **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 `feature/DL-16317` 유지,
-  `f749491593ef1977976bc1c801b24e89bb5f5984` (`fix: 주문 권한 조회 재사용과 API 명세 갱신`).
-  normal commit/push 완료·원격 일치·working tree clean.
-  Member Remake Additional의 중복 주문 GET을 guard 응답 재사용으로 정리하고 Swagger 생성물4파일을 갱신했다.
-  필요한 역할/직접 진입/action guard·캐시 분리는 유지한다. ORDER 채팅 수동 adapter는 이미 최신 명세와 일치한다.
-- **검증:** 관련5 suites/55건·3서비스 타입·포맷/diff 검사·독립 코드 리뷰·normal push 검사 통과.
-  이후 로컬 Admin 화면을 확인했지만 Member 비교·실제 쓰기는 미확인이다. 10/13 PR4696 배포/QA는 과거 이력으로 보존한다.
-- **다음:** 확정된 웹 FE 계약의 코드 반영은 처리했다. 미지정 Draft 등 추가 정책/기능 계약이 확정되면 필요한 차이만 반영한다.
-  지금 추가 작업 없이 대기한다. 명시적 QA 재개 때 로컬 서버·Member 로그인부터 준비하고 기본/부분/차단·필터·직접 URL을 비교한다.
-  부분 승인/Draft/3D/접근 상실/쓰기 검증은 별도이며 E2E는 제외한다.
-- **Office 앱 별도:** `/Users/parkjongsun/Repository/dentlink-app-permission`, feature `72a7914`의 ORDER API·cache/통합·실기기·배포 잔여 유지.
-- Web [DL-16319](https://innovaid.atlassian.net/browse/DL-16319), Office App [DL-16752](https://innovaid.atlassian.net/browse/DL-16752).
-  Jira 의견은 사용자가 직접 전달했으며 Codex의 추가 게시·개발서버 조사·배포·장기 모니터링은 없다.
-- 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트` (`권한관리 프로젝트 폴더`, 기존 `권한관리세션` 유지).
-- 상세 구현·검증·담당별 다음 순서는 [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)에 보존한다.
+- **최신 2026-10-15:** 중단된 Office 구현을 이어서 완료하고 Claude의 웹 CodeRabbit 수정도 인수 검증했다.
+- **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317@55ad768d5`, 원격 동일·clean.
+  PR4700 → release/v1.89.0 OPEN/MERGEABLE. 최신 CodeRabbit 실제 리뷰 신규지적0·미해결0, 관련4 suites/38 tests 재확인.
+  master 파생 → release → master 전달 경로 유지, 웹 develop은 이번 전달과 무관하다.
+- **Office 앱:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 같은 이름의 독립 feature `df3c79a`, 원격 동일·clean.
+  주문별 채팅 API·직원/권한별 캐시·2152 세션 보존/상세 연결·승인 조회/비동기 권한·파일 정리·미사용 조건 정리를 완료했다.
+  최신 앱 develop62e5864를 feature에 통합해 덴처·생년월일·업로드 대기를 보존했다. 원격 develop은 변경하지 않았다.
+  관련26 suites/235 tests·lint오류0·iOS/Android JS bundle PASS, 전체 타입 기존18오류 그대로/추가0.
+- **Jira:** Web DL-16319 댓글44459, Office DL-16752 댓글44460. 둘 다 Ready for Deploy(개발 완료), 실제 QA/배포 완료 아님.
+- **다음:** 웹 PR 팀리뷰/릴리즈 반영, 앱 PR·팀리뷰/QA 버전 준비 → 같은 병원 Member/Admin의 실제 기기·쓰기 QA → 승인 배포.
+  앱 PR은 아직 없고 생성/병합/CodePush·배포 미실행. 현재 계약상 추가 BE API 대기 개발은 발견되지 않았다.
+  App PR 기본 develop 정책과 앱개발자의 참고 release 전달 흐름을 실제 PR 준비 시 구분한다.
+- 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
+- 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 
 ### Dentlink 통합알림센터 — 사전 검토
 

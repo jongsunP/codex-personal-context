@@ -2,6 +2,14 @@
 
 ## 2026-10-15
 
+- 권한관리 토큰 중단 작업을 복구했다. Claude 웹55ad768d5를 정식 worktree에 반영하고 최신 CodeRabbit
+  신규지적0/미해결0 및 기존4 suites/38 tests 통과 확인. Office 앱의 주문별 채팅 API, 직원/권한별 캐시,
+  2152 세션/상세, 승인조회·비동기/업로드 정리, 불필요 조건을 보완하고 최신develop62e5864를 feature에 통합했다.
+  앱df3c79a 정상 push·원격동일·clean, 26 suites/235 tests·lint오류0·iOS/Android JS bundle PASS,
+  전체 타입 기존18진단 유지/추가0. Web 댓글44459·Office 댓글44460 및 Office Ready for Deploy 전환 완료.
+  현재 계약 개발 잔여 없음, 앱PR·팀리뷰/QA준비·실기기/쓰기QA·승인배포가 다음이며 아직 PR/배포/CodePush 미실행.
+
+
 - 권한관리 PR4700을 Claude가 이어받아 CodeRabbit 실제 스레드3건을 처리했다(앞선 '리뷰0건' 기록 정정).
   부분 상세 Place Order 가드 제거, 주문 작성 화면 403 외 조회 실패 시 조회 불가 표시(2131 제외),
   shared 시스템 메시지 권한 ref의 layout effect 갱신을 3커밋으로 반영해 원격 `55ad768d5` push·스레드 resolve했다.
