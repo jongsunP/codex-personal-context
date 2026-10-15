@@ -36,6 +36,31 @@
 - **다음:** 웹은 PR4700 팀 리뷰 → release/v1.89.0 병합·배포 → 쓰기/Draft QA.
   앱은 미커밋 변경 소유권 확인 후 기존 잔여 순서(2152 세션·상세 진입 → ORDER 채팅/역할 캐시 → 직원 정보 갱신)를 따른다.
 
+## API 사용처 재검토 — 2026-10-15 별도 조회 세션 대기
+
+- **범위:** 사용자 요청으로 웹 Office·Lab·Admin과 Office·Lab 앱의 실제 API 호출부를 읽기 전용으로 조사했다.
+  이 조회 세션(`01a1337c-cad1-7e02-bc3b-9a25801be537`)의 결과이며, 위 권한관리 구현·리뷰 상태를 변경하지 않는다.
+- GET `/office/order-chats`, GET `/lab/order-chats`: 웹은 생성 API 정의만 존재한다.
+  각 앱은 `LinkTalkService.findOrderChats`와 `useFindOrderChatsInfiniteQuery`가 남아 있지만
+  해당 훅을 소비하는 화면이 없다. 실제 Office·Lab LinkTalk 목록은 각각 GET
+  `/office/chats/latest`, `/lab/chats/latest`를 사용하며 Admin 웹도 두 `order-chats` 경로를 호출하지 않는다.
+- PATCH `/office/orders/{orderId}/revisions`: 미사용이라는 이전 결론을 재확인했다.
+  웹 `shared/models/src/order/order.apis.clinic.ts:83`의 함수만 남아 있고 호출부는 없다.
+  같은 파일의 `approve()` 주석은 `/revisions`로 잘못 표시되지만 실제 요청은 `/approve`다.
+- 별개 PATCH `/lab/orders/{orderId}/revisions`는 Lab 웹 `useOrderDetailForm.ts:502`에서
+  `PENDING_ORDER → NEW` 변경에 사용한다. `/admin/orders/{orderId}/revisions`는 생성 정의만 존재한다.
+  Office·Lab 네이티브에는 직접 호출부가 없고, Lab 앱 WebView도 상태 변경 버튼을 숨긴다
+  (`OrderDetailBoxTitleDesktop`의 `!isDentlinkApp`, Mobile의 Office 앱 전용 조건).
+  앱에서 상태 변경 모달을 여는 메시지·라우트 플래그도 찾지 못해 간접 호출 진입 없음으로 확인했다.
+- **최신성:** 조회 중 fetch한 웹 `origin/master 8772d6882`, `origin/feature/DL-16317 55ad768d5`,
+  `origin/release/v1.89.0 af636cac8`에서 revisions 결론이 같다. 앱은 Office `origin/main/develop 62e5864`,
+  Lab `origin/main bb61901`·`origin/develop 56cba67` 및 로컬 권한 작업 코드에서 확인했다.
+- **한계:** 정적 호출 경로·화면 연결 확인이며 운영 트래픽, 구버전 앱, 실기기 실행 증거는 아니다.
+  10월 13일 POST 채팅/pending-summary 조사 결과는 당시 기록이며 이번에 현재 경로를 다시 확인한 것으로 취급하지 않는다.
+  제품 코드·PR·Jira·배포 변경이나 실제 변경 API 요청은 하지 않았다.
+- **대기:** 사용자가 `오케이 대기`로 종료했다. 개인 체크포인트 저장 후 이 조회 세션은 추가 외부 조회·개발 없이
+  다음 명시적 요청을 기다린다. 다른 권한관리 구현 세션을 중단하거나 대신 진행하라는 지시는 아니다.
+
 ## 이전 체크포인트 — 2026-10-15 앱 재점검·웹 주문 이동 보완
 
 - **이번 요청:** Office/Lab 앱의 현재 구현 확인과 제품별 Jira 정리, 웹에 남은 결함이 있으면 보완.
