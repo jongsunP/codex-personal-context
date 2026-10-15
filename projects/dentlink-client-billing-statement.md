@@ -1,6 +1,6 @@
 # DL-16796 Billing Statement 명칭 변경
 
-## 현재 상태 — 2026-10-15 PR 전달·CodeRabbit 확인 완료, 팀 리뷰 대기
+## 현재 상태 — 2026-10-15 개발 완료·메모리화 후 사용자 요청 대기
 
 - 상위 [DL-16795](https://innovaid.atlassian.net/browse/DL-16795), Frankie 담당 하위 [DL-16796](https://innovaid.atlassian.net/browse/DL-16796).
 - 담당 채팅: `01a1395f-5658-7b31-9e82-d285d572f186` / `DL-16796 Billing Statement 명칭 변경`.
@@ -8,9 +8,10 @@
 - 사용자가 최신 master에서 브랜치를 만들어 구현·commit·push하고 `release/v1.89.0` 배포용 PR까지 만드는 것을 승인했다. 기존 checkout에서 `feature/DL-16796`을 준비해 11파일·18문구를 수정했다.
 - 제품 커밋 `3aac1dff0005706e78015cb5f23f255712696911` (`fix: 청구 문서와 다운로드 명칭을 Invoice로 변경`), 원격 branch와 일치·clean.
 - [PR #4699](https://github.com/Innvoaid/dentlink-client/pull/4699): `feature/DL-16796` → `release/v1.89.0`, OPEN/non-draft, 1커밋·11파일, MERGEABLE. 채팅에 PR 연결 완료. 사용자 후속 요청으로 CodeRabbit 완료/SUCCESS와 미해결 스레드0건을 확인했다. Admin DLOS Guard/Auto Assign도 SUCCESS이며 팀 리뷰는 REVIEW_REQUIRED다.
-- 실제 병합·배포, Jira 변경, 실계정 화면/PDF·ZIP 다운로드·실기기 QA는 수행하지 않았다. CodeRabbit 검토 후 추가 수정이 없어 제품 신규 커밋·푸시는 없다.
+- Codex가 실제 병합·배포, Jira 상태 변경·댓글 작성, 실계정 화면/PDF·ZIP 다운로드·실기기 QA를 수행하지 않았다. CodeRabbit 검토 후 추가 수정이 없어 제품 신규 커밋·푸시는 없다.
 - 메인세션은 전달만 마쳤으며, 이후 이 담당 세션에서 사용자 지시를 받아 이어간다. 메인세션에 자동 진행/완료 메시지를 보내지 않는다.
 - 사용자 요청으로 Jira 댓글은 작성하지 않고 카드 상태는 사용자가 직접 옮긴다. 10/15 후속 조회에서 상위 DL-16795는 진행 중, 하위 DL-16796은 Ready for Deploy였다. 이 카드 상태는 팀 리뷰 승인·병합·배포 증거와 구분한다.
+- 사용자가 Admin 포함 모든 확정 개발 요청의 완료를 재확인한 뒤 `메모리화 하고 대기해줘`라고 지시했다. 구현·로컬 검증·commit/push·PR·CodeRabbit 확인을 완료 상태로 저장하고, 재개 요청 전 추가 개발/조회/모니터링/메시지/병합/배포 없이 대기한다.
 
 ## 확정 범위와 해석 정정
 
@@ -24,12 +25,12 @@
 
 ## 최신 Jira 근거 — 2026-10-15 직접 조회
 
-- 상위 댓글 13개, 첨부 3개(31649/31650/31651). 하위 카드는 Frankie 담당·해야 할 일, 본문/댓글/첨부 없음.
+- 상위 댓글 13개, 첨부 3개(31649/31650/31651). 하위 카드는 Frankie 담당, 본문/댓글/첨부 없음. 마지막 조회 상태는 상위 진행 중, 하위 Ready for Deploy다.
 - [댓글44431](https://innovaid.atlassian.net/browse/DL-16795?focusedCommentId=44431): 위 세 문서 명칭 변경/유지 구분. 과거 Commercial Invoice와의 혼동 방지 이력과 FA팀 확인 제안은 배경이며, FA 확인 완료 증거를 임의로 만들지 않는다.
 - [댓글44439](https://innovaid.atlassian.net/browse/DL-16795?focusedCommentId=44439): 핫픽스가 아닌 정기배포 포함. 상위 fixVersion `v1.89.0`, Jira 계획일 2026-10-26, unreleased. 하위 fixVersion은 비어 있다. 일정은 구현 기준 브랜치나 실제 배포 완료 증거가 아니다.
 - [댓글44441](https://innovaid.atlassian.net/browse/DL-16795?focusedCommentId=44441), 10/14 17:21 KST: Jeanna가 각 케이스별 Invoice가 맞다고 답변했다. 여러 케이스를 함께 결제하더라도 각 건의 Invoice를 원한다는 설명으로, 44440의 추가 확인에는 답변이 도착했다.
 - [댓글44442](https://innovaid.atlassian.net/browse/DL-16795?focusedCommentId=44442), 10/15 08:21 KST: Jun이 관리자 결제 목록 버튼명도 챙겨 달라고 요청하며 첨부31651을 추가했다.
-- [댓글44443](https://innovaid.atlassian.net/browse/DL-16795?focusedCommentId=44443), 10/15 10:59 KST: Mina가 Jun 첨부 이미지의 `statement 다운로드` 버튼을 `invoice 다운로드`로 변경하도록 Frankie에게 명시했다. 해당 버튼명 변경은 확정 요구사항이다. 이번 재조회에서도 발행 방식 변경 지시는 없으며 상위/하위 모두 해야 할 일 상태다.
+- [댓글44443](https://innovaid.atlassian.net/browse/DL-16795?focusedCommentId=44443), 10/15 10:59 KST: Mina가 Jun 첨부 이미지의 `statement 다운로드` 버튼을 `invoice 다운로드`로 변경하도록 Frankie에게 명시했다. 해당 버튼명 변경은 확정 요구사항이며 후속 재조회에서도 발행 방식 변경 지시는 없었다.
 - 본문·댓글 전체는 직접 읽었다. 이미지 픽셀은 아직 검증하지 못했다. 10/14~15 IAB 미리보기 실패에 이어 10/15 pageAssets로 관찰된 첨부 3개를 읽었지만 이미지 응답이 없어 실패했다. 임시 Jira 탭은 종료했다. 첨부 확인 완료로 보고하지 않으며 본문·댓글·실제 연결 코드 기준으로 구현했다. 이미지 미확인은 현재 문구 변경 전체의 PM 승인 선행조건이 아니다.
 - 10/15 사용자 Admin 포함 여부 재확인 요청으로 상위 댓글13개/하위0개 전체를 다시 읽었다. 마지막 댓글은 여전히44443이며 새 코드 요구는 없었다. 원격 PR4699 head3aac1dff0의 Admin5파일(결제 조회 버튼, 개별PDF, Receipt, ZIPUI/hook)을 다시 대조해 `Statement 다운로드 → Invoice 다운로드`와 제목/번호라벨/ZIP·PDF 파일명 반영을 확인했다. 모든 확정된 개발 요청은 PR에 포함돼 있고 신규 제품 수정/Jira 댓글은 하지 않았다. FA 확인 제안이나 첨부·실환경 QA 완료를 주장하지 않는다.
 
@@ -48,7 +49,7 @@
 
 ## Git와 소유권 — 2026-10-15 최종 확인
 
-- 개인 컨텍스트는 clean `main`에서 `git pull --ff-only` 완료. 마무리 기록 전 HEAD `1421028`. 다른 세션의 DLDS 기록 등을 보존하고 이 업무 문서·색인·변경 이력만 수정한다.
+- 개인 컨텍스트는 clean `main`에서 `git pull --ff-only` 완료. 이번 대기 기록 전 HEAD `249f7bd`. 다른 세션의 권한관리/DLDS 기록을 보존하고 이 업무 문서·색인·변경 이력만 수정한다.
 - 제품 기본 checkout의 master를 `git pull --ff-only`로 `693b8b4c4` → `8772d68825`로 갱신한 뒤 `git switch -c feature/DL-16796 origin/master`로 시작했다. 새 checkout/worktree를 만들지 않았다.
 - `origin/release/v1.89.0@af636cac8d6f1939dda7c628b1d4873cf86c89c0`은 시작 master보다 1커밋 앞이었다(DL-16787 #4697). 해당 변경을 feature에 섞지 않았고 PR diff는 이번 11파일만이다.
 - 제품 최종 `feature/DL-16796@3aac1dff0`, upstream `origin/feature/DL-16796`, ahead0/behind0·dirty/untracked 없음. 일반 hook을 거쳐 commit/push했다.
@@ -65,7 +66,7 @@
 
 ## 남은 작업과 다음 시작점
 
-1. PR4699가 현재 전달 결과다. 추가 지시 전 자동 병합·배포·Jira 변경·장기 모니터링·메인세션 메시지는 하지 않는다.
+1. 사용자 요청으로 메모리화 후 대기한다. PR4699가 현재 전달 결과이며 추가 지시 전 개발·조회·자동 병합·배포·Jira 변경·모니터링·메인세션 메시지를 시작하지 않는다.
 2. 재개 시 개인 컨텍스트 pull → 이 문서 → feature/PR4699의 live head/base/리뷰·CI 상태를 확인한다. 구현을 다시 시작하거나 새 PR을 중복 생성하지 않는다.
 3. 현재 CodeRabbit 검토는 완료됐으며 팀 리뷰 승인 대기다. 새 리뷰/변경이 생기면 해당 최신 head로 다시 검토한다. PR 병합과 release/상용 배포는 별도 승인 단계다.
 4. 승인된 QA에서 Clinic 결제 내역(데스크톱/모바일), Admin 결제 조회/매출 ZIP, 개별/통합/Receipt 문서명·번호·금액·파일명과 앱 다운로드를 확인한다. Jira 첨부가 다시 열리면 픽셀 대조 미완료를 해소한다.
