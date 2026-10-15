@@ -16,6 +16,12 @@ Check this folder first when finding or continuing local projects.
 
 ## Projects
 
+### Dentlink 웹 env Git 제외·환경변수 관리
+
+- DLDS와 분리한 별도 기능 세션. 2026-10-15 최신 master 기준 env9개·로컬/CI/Docker/E2E 공급 경로 조사 완료, 구현안 검토 대기다.
+- 기존 서버 Secrets→ECS 계약은 유지하고 빌드 설정·E2E 공급을 정리한 후 추적을 해제하는 안이다. 제품 변경·Git/PR·배포는 미착수다.
+- [개인 체크포인트](projects/dentlink-client-env-management.md)
+
 ### 사무실 의자 구매·헤드레스트 개선 조사
 
 - 회사 지원금30만원, 배송·필수옵션 포함 총예산40만원. 통짜 쿠션 좌판을 유지하면서 머리 하중에 헤드판이 뒤로 회전하지 않는 의자를 찾는다.
