@@ -2,6 +2,12 @@
 
 ## 2026-10-15
 
+- 권한관리 후속 점검에서 원기획/TC·댓글을 대조해 Member의 미지정/본인 Draft 표시와 신규 본인 할당은 확정 요구임을 정정했다.
+  기존 Draft/form 테스트 3 suites/38 tests와 실제 수정 컴포넌트의 격리 로컬 렌더를 확인했고 추가 제품 결함은 발견하지 못했다.
+  기존 i18n 실패는 서비스 분기를 구분하지 못하는 감사 도구 오탐으로 분리했다. 제품 `7c724ad0a`는 원격 일치·clean 유지다.
+  Lab 이후 주문 열람 기준의 기획 질문, BE 목록/GET/건수/Draft 적용 확인, 이후 로컬 실계정 QA 순서를 구체화했다.
+  기획 문서의 포함 Drive 자료 1개 미열람 및 실계정·서버·쓰기 QA 미완료 한계를 보존한다.
+
 - 권한관리 최신 Figma·Jira·Swagger 재검토 뒤 승인된 웹 UI 2건을 기존 `feature/DL-16317`의 `7c724ad0a`로 normal commit/push했다.
   Lab 상세의 Cases/Orders 건수만 숨기고 Total/트리/Clinic 표시를 유지했으며, Lab 환자 목록 제목의 baseline 정렬을 middle로 수정했다.
   3서비스 타입·린트·필수 guard/coverage·독립 리뷰 통과, 실제 화면/실계정 QA·배포는 미실행이다.
