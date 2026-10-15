@@ -2,6 +2,10 @@
 
 ## 2026-10-15
 
+- 사용자가 권한관리 전달 경로를 master 파생 → feature/DL-16317 → release/v1.89.0 → master로 재확정했다.
+  develop은 이번 기반/릴리즈/완료 판정과 무관하며 이전 임시 개발서버 이력을 현재 전달 경로에 연결하지 않도록 정정했다.
+  기존 PR4700의 release 대상은 이 기준에 부합해 제품·PR 변경 없이 유지했다.
+
 - 권한관리 사용자 요청으로 기존 develop PR3건 MERGED/열린PR없음을 확인하고 release/v1.89.0 대상 PR4700을 생성했다.
   generated 설명 주석1곳 충돌을 릴리즈 문구로 해소해 feature HEAD7bf2b72a7을 normal commit/push했다.
   3서비스 타입/린트·필수 guard/coverage 통과, 릴리즈 변경 보존·174파일 최종범위·실제 base/head/MERGEABLE 확인 완료.
