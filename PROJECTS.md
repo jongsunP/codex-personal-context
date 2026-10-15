@@ -16,6 +16,12 @@ Check this folder first when finding or continuing local projects.
 
 ## Projects
 
+### 사무실 의자 구매·헤드레스트 개선 조사
+
+- 회사 지원금30만원, 배송·필수옵션 포함 총예산40만원. 통짜 쿠션 좌판을 유지하면서 머리 하중에 헤드판이 뒤로 회전하지 않는 의자를 찾는다.
+- 2026-10-15 실제 판매 페이지 비교 완료. G1 프라임 스몰피팅·에르먼 X5/X3 등은 조건부 후보이며 헤드 위치·고정력은 미검증이다. 구매/수리는 미결정, 사용자가 링크를 직접 검토 중이다.
+- 다음 시작점은 사용자 제품 검토 의견 수령. [개인 체크포인트](projects/office-chair-research.md)
+
 ### Action Sports Journal
 
 - Repository: `https://github.com/jongsunP/action-sports-journal-app`
