@@ -2,9 +2,20 @@
 
 ## 현재 상태 — 2026-10-15 release/v1.89.0 대상 PR4700 생성 완료
 
+- **최신 리뷰 결정:** 사용자가 PR4700 CodeRabbit 확인·필요 수정·커밋/푸시·메모리화를 요청했으나,
+  실제 조회 결과 CodeRabbit은 리뷰 한도 초과로 실행되지 않았다. 체크 상태 SUCCESS를 리뷰 완료로 해석하지 않는다.
+  [봇 댓글6184540498](https://github.com/Innvoaid/dentlink-client/pull/4700#issuecomment-6184540498)은
+  현재 HEAD7bf2b72a7·대상171파일·유료 재실행 최대 US$42.75를 안내한다. reviews0/전체 reviewThreads0을 확인했다.
+  비용 확인 질문에 사용자가 **“한도 넘었으면 넘겨 그냥”**이라고 답해 CodeRabbit 리뷰를 생략하기로 확정했다.
+  유료 재실행·자동 수정·대체 전수 리뷰는 하지 않는다. CodeRabbit 미검토 상태를 보존하며 팀 리뷰/QA 단계로 진행한다.
+  이번에는 리뷰 지적으로 인한 제품 수정·추가 제품 커밋/푸시가 없고 HEAD7bf2b72a7을 유지한다.
+
 - **사용자 확정 전달 경로:** `master`에서 파생 → `feature/DL-16317` → `release/v1.89.0` → `master`.
   `develop`은 이번 작업의 기반·릴리즈 경로·완료 판정과 무관하다. 이전 develop PR은 임시 개발서버 확인 이력일 뿐이며
   이번 작업의 통합·배포 단계나 다음 할 일에 연결하지 않는다.
+  2026-10-15 재확인: 최초 feature 커밋 `5ffe7e054`의 부모 `9bed1f7bd`는 master 이력이며,
+  이후 통합은 master 및 release 이력이다. develop 코드를 유입한 이력은 없고 현재 원격 SHA와 로컬이 일치한다.
+  PR4700은 `feature/DL-16317@7bf2b72a7` → `release/v1.89.0@af636cac8`, OPEN/MERGEABLE이다.
 - 사용자가 기존 PR 유무를 확인하고 없으면 `release/v1.89.0` 대상으로 생성하도록 명시 요청했다.
   생성 전 열린 PR은 없었다.
 - **[PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700)**:
