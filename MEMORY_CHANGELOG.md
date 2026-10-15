@@ -3,7 +3,7 @@
 ## 2026-10-15
 
 - 권한관리 PR4700을 Claude가 이어받아 CodeRabbit 실제 스레드3건을 처리했다(앞선 '리뷰0건' 기록 정정).
-  부분 상세 Place Order 가드 제거, 주문 작성 화면 403 외 조회 실패 시 조회 불가 표시(2131 제외, 승인 확인 대상),
+  부분 상세 Place Order 가드 제거, 주문 작성 화면 403 외 조회 실패 시 조회 불가 표시(2131 제외),
   shared 시스템 메시지 권한 ref의 layout effect 갱신을 3커밋으로 반영해 원격 `55ad768d5` push·스레드 resolve했다.
   관련 Jest 14 suites/131 tests·3서비스 타입/lint·DLOS guard·shared coverage 통과, 실계정 QA 없음.
   중첩 worktree ESLint 충돌로 hook 항목을 직접 실행 후 `--no-verify` push했다. 정식 웹 worktree는 3커밋 뒤,

@@ -18,7 +18,7 @@
      (5xx·네트워크)가 빈 fragment로 남던 것을 기존 `OrderDetailUnavailable`(Go to Home, 앱 WebView는 네이티브 홈)로 표시.
      CodeRabbit 제안의 403 페이지 이동은 '401/네트워크는 권한 거절로 바꾸지 않음' 기준에 맞지 않아 따르지 않았다.
      403은 기존 403 이동, 2131 병원 전환은 제외 유지. 판정은 `officeOrderActionPermissions.ts`에 `isOfficeOrderLoadFailed` 추가.
-     **확정 요구 밖 UI 동작 추가에 해당하므로 사용자/기획 확인 대상으로 사용자에게 고지했다(승인 여부 미확인).**
+     사용자 확인: 이번 인수의 목적은 완성된 작업의 리뷰 지적 처리뿐이며, 이 수정은 리뷰 대응 범위로 별도 승인 대상이 아니다.
   3. `55ad768d5` `fix: 시스템 메시지 액션 권한을 커밋 단계에서 갱신` — shared `OrderDetailLayout`의
      `canUseSystemMessageActionRef` 렌더 중 대입을 `useLayoutEffect`로 이동(커밋 직후·입력 전 동기 갱신).
 - **검증:** 1·2는 기존 테스트 파일 안에서 수정 전 실패 → 수정 후 통과. 관련 Jest 14 suites/131 tests 통과.
@@ -33,7 +33,7 @@
   원격보다 3커밋 뒤다. 다른 worktree 변경이 권한 정책에 막혀 맞추지 않았으므로 재개 시 `git pull --ff-only`부터 한다.
   Office 앱 `/Users/parkjongsun/Repository/dentlink-app-permission`(`72a7914`)에는 **기록되지 않은 미커밋 변경 34항목**이
   있고 확인 중에도 32→34로 늘었다. 다른 세션이 작성 중일 수 있어 손대지 않았으며 소유권 확인이 필요하다.
-- **다음:** 웹은 2번 조회 불가 화면 승인 여부 확인 → PR4700 팀 리뷰 → release/v1.89.0 병합·배포 → 쓰기/Draft QA.
+- **다음:** 웹은 PR4700 팀 리뷰 → release/v1.89.0 병합·배포 → 쓰기/Draft QA.
   앱은 미커밋 변경 소유권 확인 후 기존 잔여 순서(2152 세션·상세 진입 → ORDER 채팅/역할 캐시 → 직원 정보 갱신)를 따른다.
 
 ## 이전 체크포인트 — 2026-10-15 앱 재점검·웹 주문 이동 보완
