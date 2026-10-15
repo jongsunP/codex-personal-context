@@ -1,5 +1,42 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-15 · DLDS 자동 배포·최신 npm 설치 검증 완료
+## 현재 브레이크포인트 — 2026-10-15 · 89 릴리스 PR 검증·리뷰 대기
+
+**범위:** npm 설정 해결 후 사용자 지시에 따라 다음 단계를 진행했습니다. Slack의 89 릴리스 합의대로 기존 PR 대상을 변경하고, 합쳐질 코드 검증·필수 테스트 경로 보완·PR/Jira/메모리 정리를 수행했습니다. 병합·정식 공개·제품 배포는 하지 않았습니다.
+
+### 코드와 PR
+
+- 정본 `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16471-dlds-dlos-integration`. HEAD/origin **`fcbf17a9aedd88f29bee7f0925208dda7b0fc654`**, clean.
+- 추가 커밋은 `test: DLDS 이동에 맞춰 기공소 메뉴 테스트 경로 수정`. `lab/scripts/tests/navigation.test.cjs` 한 파일만16줄 추가/9줄 삭제했습니다. 제품 UI·패키지 소스·버전·lockfile·배포 코드는 c5679107d와 동일합니다. 정상 commit/push hook의3앱 타입·lint·Admin guard·shared coverage 통과(기존 lint 경고 있음). hook 생략 없이 기존 SSH 인증을 명령 단위 pushurl로 사용했습니다.
+- [PR#4692](https://github.com/Innvoaid/dentlink-client/pull/4692)는 OPEN/non-Draft, **base `release/v1.89.0`**, 미병합입니다. 제목 `[DL-16471] DLDS·DLOS 패키지 통합` 유지. 팀 리뷰 `REVIEW_REQUIRED`입니다. 보호규칙은 승인1건, 코드오너 리뷰 옵션도 켜져 있으나 base에 CODEOWNERS 파일이 없습니다. 기존 요청 리뷰어는 inkyookoh·chajju이며 승인0건입니다. 저장소 auto merge도 비활성입니다. 보호규칙을 우회하지 않습니다.
+- release base는 `af636cac8d6f1939dda7c628b1d4873cf86c89c0`, master는 `8772d68825cac6e23792d86a715153a67dc71078`. release에 추가된 밀링센터49경로/47TS·TSX는 삭제된 UI import를 쓰지 않습니다. 공통 변경 SharedLabAside의 supplier 메뉴와 DLDS Icon import는 모두 유지됩니다. base 변경 전후 PR 내용은 동일하며 신규 delivery branch/cherry-pick 불필요.
+
+### 검증과 한계
+
+- GitHub 실제 merge commit `16d09cd07b7382153da50f91a0acad7f031cdca6`를 임시 archive로 풀어 frozen install 후 검증했습니다. 후속 최종 merge `572c2e0b5fe3297dc7be0188deda37050cfb043f`는 테스트 한 파일만 다릅니다. **release89 병합 예정 코드에서 frozen install·Clinic/Lab/Admin 타입 검사·Admin guard9개 및60/60·정식 버전 검사 통과.**
+- 최초 임시 타입 검사는 Node 기본 heap 한도에 중단됐습니다. 8GB heap으로 재실행하자 Git archive에 없는 `next-env.d.ts` 때문에 PNG 타입을 못 읽었습니다. 각 앱의 정식 `next typegen`으로 필요한 선언을 생성하고 순차 재검사했습니다. 제품 수정이나 임의 타입 허용으로 숨긴 오류가 아닙니다. TypeScript5.0.4 권장 버전 경고는 별도입니다.
+- 메뉴 테스트 baseline: master11통과/15실패 → DLDS 이동 후2통과/24실패 → 이번 mock 경로 보완 후11통과/15실패. 실제 feature와 release 조합 모두 master의 통과/실패 목록과 일치합니다. 신규 회귀9개를 복구했으며 기존15개를 전체 성공으로 처리하지 않았습니다. 기존 실패는 삭제된 Outsourcing파일/경로·오래된 기대값·VM process/MC stub 등이며 별도 정비 범위입니다. 실제 Icon/Tooltip과 SVG assertion은 유지했습니다.
+- **최종 head의 패키지 CI38675949953 SUCCESS(검증·타입·테스트·빌드·외부 소비·dry-run), publish SKIPPED. Admin guard38675949943 SUCCESS. PR synchronize로 release89 조합에 새 검사가 실행됐습니다.**
+- CodeRabbit은 SUCCESS 표시지만 실제로는1,108파일/150파일 한도 skip입니다. 사용자 결정대로 유료 리뷰를 요청하지 않습니다. 이전 커밋의 Vercel Preview는 팀 접근 권한으로 차단됐습니다. 이번 head의 Vercel 배포 완료는 확인하지 않았으며 npm·Studio 갤러리와 구분합니다.
+- 로컬 보조 로그 `/tmp/dlds-release89-type-results.json`, `/tmp/dlds-release89-*-type-final.log`, `/tmp/dlds-navigation-{baseline,applied,candidate-merged}.log`, commit/push 로그. /tmp 파일은 다른 기기 복구 전제가 아닙니다. 필요 시 PR의 merge ref를 별도 임시 checkout하고 frozen install → next typegen → 3앱 type 순으로 재현합니다. 전체 서비스 화면 QA·배포·Studio 운영 반영 증거는 아닙니다.
+
+### npm·문서 정리
+
+- 이전 체크포인트의 기본 OIDC 공개 성공과 실제 npm consumer 검증은 유효합니다:3종 `0.1.5-pr.c567910`, React18.2/19.0, frozen 재설치·Bundler/NodeNext 타입·Vite build·Node ESM SSR·integrity 모두 통과. 이후 변경은 테스트 한 파일뿐이라 재공개하지 않았습니다. 최신 head 이름의 시험 버전을 공개한 것으로 표현하지 않습니다.
+- PR 본문과 사용자 하위 Jira **DL-16471**의 현재 상태·기존 최신 댓글44417을 갱신했습니다. npm E404 대기 문구를 해소하고 release89 검증/리뷰/후속 절차를 명시했습니다. Jira의 기존 요구사항·기준 문서·부모/완료 카드·상태는 유지했습니다.
+- env Git 제외 작업은 별도 **env 파일 Git 제외와 환경변수 관리 정리** thread `01a13d89-14d1-71f0-b53b-8b6238c384f9`에서 진행하며 여기 제품 변경에 섞지 않습니다.
+
+### 사용자 최신 범위와 다음 시작점
+
+- 사용자는 이번 진행 목표를 **하네스 개발이 아니라 이 브랜치의 병합까지**라고 재확인했습니다. 원래 큰 계획도 기존 작업 보존 → 최신 master 새 브랜치에서 DLOS 방식 DLDS 정리 → npm 검증 → 병합 → 후속 Studio/하네스였습니다. 현재는 89 릴리스 합의에 따라 release/v1.89.0에 병합하는 단계입니다. 하네스는 합친 뒤 별도로 가다듬습니다.
+- **완료 지점:** 코드·시험 공개·실제 설치·릴리스 조합 타입·GitHub CI·커밋/푸시·PR/Jira 정리까지 완료. 병합 충돌 없음. 패키지 권한 문제는 더 이상 blocker가 아닙니다.
+- **현재 필수 조건:** 동료 리뷰 승인1건. inkyookoh와 chajju에게 이미 GitHub 리뷰 요청이 되어 있으며 승인0건입니다. 코드오너 옵션이 켜져 있다는 사실과 실제 CODEOWNERS 미존재를 구분하고, 사용자에게는 동료 리뷰 승인1건으로 안내합니다. 임의로 리뷰 요청 메시지를 추가 전송하거나 관리자 우회로 합치지 않습니다.
+- **사용자:** 동료에게 기존 PR 리뷰를 받고 승인됐다고 알려주시면 됩니다. npm 설정을 다시 요청할 필요는 없습니다.
+- **Codex 재개:** context/feature/PR/release 최신화 → 실제 승인·head·충돌·CI 확인 → 사용자에게서 확인된 이번 병합 목표 범위에서 일반 병합 진행 → 병합SHA·대상·실제 반영을 검증하고 메모리/Jira 정리. 새 변경이나 충돌이 생기면 먼저 해결/보고합니다. 정상 승인 없이 병합하지 않습니다. 사용자에게 같은 병합 의도를 다시 묻는 것을 자동 선행조건으로 만들지 않습니다.
+- **병합 이후 별도:** release 서비스 QA/배포 및 master 반영 → 정식 npm0.1.4 공개·실제 설치 → Studio 자동 갤러리 반영 확인 → 하네스 보완. release89 병합 자체는 master push 전용 stable/latest 공개를 실행하지 않습니다. Studio에 먼저 stable이 필요하면 수동 공개 시점을 따로 정합니다. 이 순서는 후속 가이드이며 이번에 하네스 개발을 시작할 지시가 아닙니다.
+
+**대기:** 현재 병합은 팀 리뷰 승인 때문에 남았습니다. 자동 모니터링·추가 리팩터링·재공개·하네스 작업 없이 리뷰 결과를 기다립니다.
+
+## 이전 브레이크포인트 — 2026-10-15 · DLDS 자동 배포·최신 npm 설치 검증 완료
 
 **사용자 요청:** 동료가 npm 설정을 변경했다는 회신을 전달하고 재확인·다음 순서 안내를 요청했습니다. 이어 env 정리는 메인 프로젝트 폴더 하위의 별도 세션에 인계하고 이 세션에서는 DLDS 검증을 계속하도록 지시했습니다.
 
