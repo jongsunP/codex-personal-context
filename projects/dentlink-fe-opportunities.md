@@ -1,5 +1,32 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-15 · env 검토 종료·DLDS 자동 배포 설정 회신 대기
+## 현재 브레이크포인트 — 2026-10-15 · DLDS 자동 배포·최신 npm 설치 검증 완료
+
+**사용자 요청:** 동료가 npm 설정을 변경했다는 회신을 전달하고 재확인·다음 순서 안내를 요청했습니다. 이어 env 정리는 메인 프로젝트 폴더 하위의 별도 세션에 인계하고 이 세션에서는 DLDS 검증을 계속하도록 지시했습니다.
+
+### 완료·검증
+
+- Client 정본은 `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16471-dlds-dlos-integration`, HEAD/origin `c5679107d278315861f171da482bab551c57dff1` 그대로입니다. 이번에는 제품 코드·버전·PR 대상·병합을 변경하지 않았습니다.
+- [Actions 38382879133](https://github.com/Innvoaid/dentlink-client/actions/runs/38382879133)의 실패 job만 재실행했습니다. **attempt 2 SUCCESS**, 같은 head의 verify는 이전 성공을 재사용하고 publish가 새로 성공했습니다. `bootstrap_dlds=false`인 기본 Trusted Publishing 경로이며 기존 토큰 대체·태그 강제 변경은 하지 않았습니다. 등록된 icons/DLOS는 재공개하지 않았습니다.
+- **12:05:36 KST** npm이 DLDS 업로드를 접수했고 처리 대기 후 실제 registry에서도 `@innvoaid/dlds@0.1.5-pr.c567910`이 조회됐습니다(등록 시각12:07:43 KST). 이전 PUT E404는 이번 실행에서 재발하지 않았습니다. 관리자 설정 화면 자체의 세부 변경을 직접 본 것은 아니지만 해당 자동 배포 경로는 실제 성공했습니다.
+- **12:09:46 KST 최신 3종 실제 설치 검증 PASS:** icons·DLOS·DLDS 모두 `0.1.5-pr.c567910`을 공개 npm에서 설치했습니다. React 18.2.0/19.0.0 각각 최초 설치 → node_modules 삭제 → pnpm8.6.9 frozen 재설치(락 해시 불변) → Bundler/NodeNext 타입 → Vite production build → Node ESM SSR 통과. registry tarball 해시·lockfile integrity·전이 icons 버전·dist exports도 일치하며 file/link/workspace/override 없이 검증했습니다. LegacyButton/InputBase/PaginationUI/StyledFlexBox 등 최근 공개 API도 포함했습니다. 전체 서비스 화면 QA나 Studio 실제 배포 검증을 뜻하지는 않습니다.
+- 로컬 보조 근거: `/tmp/dlds-registry-consumer-20261015.QAC8qC/summary.json`, `react18/registry-dependency-proof.json`, `react19/registry-dependency-proof.json`, 단계별 로그. 임시 `check.cjs`는 현행 `scripts/package-artifact.js`의 CONSUMER_FILES에서 추출해 registry 정확 버전·override 제거로 조정했습니다. 다른 기기에서는 해당 정본 fixture로 같은 검사를 재구성합니다. 검사 스크립트의 `file:` 문자열 검색이 `excludeLinksFromLockfile` 키를 잡은 오탐은 임시 검사만 수정했고 제품 결함이 아니었습니다.
+- 태그 구분: 세 패키지의 `pr`은 `0.1.5-pr.c567910`. `latest`는 icons/DLOS `0.1.1`, DLDS `0.1.3-pr.94b6324`입니다. **이번 것은 시험 버전 공개이며 정식 stable 공개는 아직 아닙니다.** 준비된 소스 manifest는 세 패키지0.1.4입니다.
+
+### 89 릴리스 합의와 다음 순서
+
+- [Slack 원문](https://innovaidhq.slack.com/archives/C09613TBE5A/p1792024421500669)에서 Tom과 사용자는 DLDS import 변경을 **89 릴리스에 포함**하기로 합의했습니다. 아래 과거 기록의 “검증 후 곧바로 master 병합”보다 이 합의와 현행 릴리스 전략을 우선합니다.
+- 현재 PR#4692는 OPEN/non-Draft·base master·미병합 그대로입니다. 실제 `origin/release/v1.89.0=af636cac8d6f1939dda7c628b1d4873cf86c89c0`, `origin/master=8772d68825cac6e23792d86a715153a67dc71078`. release89는 master에 #4697 밀링센터 변경 1건을 더한 상태입니다. feature와 release89 merge-base가 master와 같고 PR diff도 동일합니다. 임시 object directory의 merge-tree에서 충돌 없음(공통 수정 SharedLabAside 자동 병합). 합쳐진 제품의 타입·QA 검증은 별도로 남습니다.
+- **바로 다음 PR 단계:** 사용자 승인 범위에서 기존 #4692의 base를 `release/v1.89.0`으로 변경 → 해당 대상 checks/리뷰 재확인 → 팀 승인 및 명시적 병합 → 조립된 release QA. 새 delivery branch/cherry-pick은 현재 필요하지 않습니다. 이번에는 base 변경이나 병합을 하지 않았습니다.
+- **npm 정식 공개:** 현재 workflow push trigger는 master만이므로 release89 병합 자체는 stable/latest 자동 공개를 실행하지 않습니다. 릴리스 완료 후 master 반영 시 기존 자동 공개를 사용하거나, 그 전에 Studio에 stable이 필요하면 수동 stable 공개 시점을 별도로 정합니다. 제품 웹 앱은 workspace 의존성이므로 release 빌드 자체가 npm stable 공개를 기다리는 것은 아닙니다. 자동 공개 완료와 Studio 실제 설치·갤러리 반영은 각각 확인해야 합니다.
+- 동료에게 DLDS 자동 배포 권한을 다시 요청할 필요는 현재 없습니다. 통합 확인 후 Studio 기준 AI 프롬프트·하네스/FE 코드 전달을 발전시킵니다. 새 기능·정식 공개·PR 변경을 임의로 이어가지 않습니다.
+
+### env 별도 세션 인계
+
+- Slack의 `.env` Git 제외·공급 방법 정리는 npm Trusted Publisher의 선택 입력칸 `GitHub Environment`와 다릅니다. 이번 DLDS PR에서 `.env`9개와 서비스 env ignore 규칙은 변경하지 않았으며 새 env 작업을 섞지 않습니다.
+- 사용자 명시 요청으로 메인 프로젝트 폴더(projectId `4a13e754-960d-4ca3-b716-8f7a19311b64`)에 **env 파일 Git 제외와 환경변수 관리 정리** 세션을 생성했습니다. threadId `01a13d89-14d1-71f0-b53b-8b6238c384f9`, host local. 부모와 동일한 `gpt-6-astra`/`ultra`를 명시했고 실제 turn_context 적용도 확인했습니다.
+- Slack 배경·현재 변경 범위·Docker/E2E 파일 의존·비밀값 출력 금지·기존 worktree 보존을 전달했습니다. 그 세션은 우선 읽기 전용 조사와 구현안 보고부터 시작합니다. 실제 구현 시 최신 origin/master 기준 별도 feature 브랜치/격리 체크아웃이며, 코드/커밋/푸시/PR/배포는 해당 세션 사용자 승인에 따릅니다. 이 세션에서는 env 코드를 수정하지 않습니다.
+
+## 이전 브레이크포인트 — 2026-10-15 · env 검토 종료·DLDS 자동 배포 설정 회신 대기
 
 **현재 요청:** 상황과 재개 순서를 메모리에 저장하고, 1번부터 사용자/동료/Codex가 할 일을 자세히 안내합니다. 이번에는 제품 코드·PR·배포를 변경하거나 재시도하지 않습니다.
 

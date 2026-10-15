@@ -35,7 +35,7 @@ Do not store secrets or private customer data here.
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471: [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — **2026-10-15 DLDS 자동 배포 설정 회신 대기:** client `feature/DL-16471-dlds-dlos-integration`/`c5679107d`, clean·저장/푸시 완료, PR#4692 미병합 유지. env/ignore 관련 이번변경 재검토는 종료했고 추가수정없음. 최신시험0.1.5-pr.c567910은 이제icons·DLOS등록완료, DLDS만미등록(run38382879133 기본OIDC PUT E404). **지금 사용자→npm관리자: 신규DLDS Trusted Publisher·직접공개권한 확인 요청**(`Innvoaid / dentlink-client / packages_publish.yml`, environment비움). 회신→Codex 실패공개재개·최신3종설치검증→사용자PR병합결정→정식0.1.4/latest·Studio갤러리확인→하네스순서. 최초등록token/기존iconsDLOS권한/Studio공통권한/Vercel팀가입 재요청불필요. 자동감시·공개재시도·병합없이대기. 자세한순서/근거는정본의10월15일체크포인트참조.
+  — **2026-10-15 DLDS 자동 배포·최신 npm 설치 검증 완료:** client feature/DL-16471-dlds-dlos-integration/c5679107d 그대로. Actions38382879133 attempt2 기본 OIDC 공개 성공, 최신3종0.1.5-pr.c567910 실제 registry 설치·frozen 재설치·타입·빌드·SSR React18/19 PASS. PR#4692는 master 대상·미병합 유지. **다음: 89 릴리스 합의에 맞춰 기존 PR base를 release/v1.89.0으로 변경할 단계**(현재 diff 동일·충돌 없음, 아직 변경 안 함) → checks/리뷰 → 승인·병합 → release QA. release 병합 자체는 stable npm 자동 공개를 실행하지 않으며 master 반영 또는 별도 수동 stable 시점 확인 후 Studio 검증. npm 권한 재요청 불필요. env Git 제외는 메인 프로젝트의 별도 세션 01a13d89-14d1-71f0-b53b-8b6238c384f9에 인계했고 여기와 분리. 상세 근거/재개 순서는 정본 최신 체크포인트 참조.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — master 기준 조사·보고 전용. 사용자 승인 전 제품 수정 금지.
