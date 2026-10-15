@@ -67,6 +67,13 @@ For detailed current state, read:
 - 이 색인은 세부 상태를 중복 보관하지 않는다. 과거 SHA, PR 상태, QA·배포 이력은
   각 프로젝트의 최신 체크포인트에서 확인하고 재개 시 live Git과 대조한다.
 
+### Dentlink Billing Statement 명칭 변경 — DL-16796
+
+- 상위 DL-16795의 기존 개별/통합 문서 명칭 변경. Commercial Invoice와 발행·결제 구조는 유지한다.
+- 2026-10-15 최신 댓글에서 케이스별 Invoice 확인과 관리자 버튼 변경 요청을 확인했다. FE PDF 생성 경로 조사 완료, 첨부 시각 확인·앱 영향 최종 확인·제품 구현/QA는 미완료다.
+- 기존 메인 프로젝트 폴더의 담당 세션에서 사용자 구현 지시 대기. 제품 코드·브랜치·PR·Jira 변경 없음.
+- [개인 체크포인트](projects/dentlink-client-billing-statement.md)
+
 ### Dentlink 치과 주문목록 아이콘·텍스트 정렬 — DL-16655
 
 - Web Clinic 주문 행 정렬 수정, 사용자 직접 병합한 release 대상 PR #4675. 2026-10-12 사용자 완료 확정·추가 작업 없음, 로컬 정리 완료·세션 보관 요청.
