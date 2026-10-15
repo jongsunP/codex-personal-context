@@ -76,8 +76,8 @@ For detailed current state, read:
 ### Dentlink Billing Statement 명칭 변경 — DL-16796
 
 - 상위 DL-16795의 기존 개별/통합 문서 명칭 변경. Commercial Invoice와 발행·결제 구조는 유지한다.
-- 2026-10-15 최신 댓글에서 케이스별 Invoice 확인과 관리자 버튼 변경 요청을 확인했다. FE PDF 생성 경로 조사 완료, 첨부 시각 확인·앱 영향 최종 확인·제품 구현/QA는 미완료다.
-- 기존 메인 프로젝트 폴더의 담당 세션에서 사용자 구현 지시 대기. 제품 코드·브랜치·PR·Jira 변경 없음.
+- 2026-10-15 최신 master 기준 `feature/DL-16796`에서 11파일 명칭 변경, normal commit/push와 합성 PDF8사례 검증 완료. 앱 최신 소스상 네이티브 수정은 불필요하다.
+- [PR #4699](https://github.com/Innvoaid/dentlink-client/pull/4699)을 `release/v1.89.0` 대상으로 전달했다. 병합·배포·실계정/앱 다운로드 QA와 첨부 시각 대조는 미완료다.
 - [개인 체크포인트](projects/dentlink-client-billing-statement.md)
 
 ### Dentlink 치과 주문목록 아이콘·텍스트 정렬 — DL-16655
