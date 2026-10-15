@@ -1,7 +1,36 @@
 # Dentlink 권한관리 — DL-16317
 
 
-## 현재 상태 — 2026-10-15 중단 작업 복구·Office 보완 및 develop 통합 완료
+## 현재 상태 — 2026-10-15 Office PR329 생성·웹 리뷰 확인 후 대기
+
+- **사용자 요청:** Office 앱 PR을 생성하고 CodeRabbit 유효 지적을 처리하되, 리뷰가 실행되지 않거나
+  한도에 걸리면 건너뛴다. 웹도 남은 확인을 마치고 커밋/푸시·메모리 정리 후 대기한다.
+- **Office PR:** [PR329](https://github.com/Innvoaid/dentlink-app/pull/329),
+  `feature/DL-16317 → develop`, head `df3c79a5efa51e9c9160c9f0d6d260be93310584`.
+  OPEN/MERGEABLE, develop `62e5864`가 이미 포함되어 최종 diff 75파일/11커밋(+7581/-791)이다.
+  자동 제목·본문·라벨 workflow 성공 후에도 실제 base develop과 의도한 본문을 재확인했다.
+  앱은 확인된 develop 대상 정책을 적용하며 웹의 release/v1.89.0 전달 경로와 구분한다.
+- **Office CodeRabbit:** [댓글6187728788](https://github.com/Innvoaid/dentlink-app/pull/329#issuecomment-6187728788)에
+  Review skipped가 명시되어 있다. 자동 리뷰 대상 패턴이 `release/*`여서 develop 대상은 실행하지 않았다.
+  체크 SUCCESS는 실제 리뷰 완료가 아니다. reviews0/reviewThreads0이며, 사용자 지시에 따라 별도 재실행·과금·
+  설정/대상 브랜치 변경은 하지 않았다. 새 수정 지적이 없어 제품 코드/커밋은 추가하지 않았다.
+- **웹:** [PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700),
+  `feature/DL-16317@55ad768d54c3ffc9948f22051aad36ba49ba293c → release/v1.89.0` 유지.
+  OPEN/MERGEABLE/REVIEW_REQUIRED. 최신 HEAD에 대한 CodeRabbit 실제 리뷰를 확인했고
+  전체 3개 스레드 모두 resolved·추가 페이지 없음·신규 유효 지적 없음이다.
+  docstring coverage 안내 경고만으로 불필요한 주석/파일을 추가하지 않았다.
+- **Git/검증:** 두 제품은 기존 커밋이 원격과 동일하고 clean이다. 앞선 Office 26 suites/235 tests,
+  lint오류0·iOS/Android JS bundle PASS 및 기존 타입 오류18개/추가0, 웹 관련4 suites/38 tests 결과를 유지한다.
+  이번 단계는 PR/리뷰 확인이며 코드 변경이 없어 테스트를 반복하지 않았고 실기기/쓰기 QA를 새로 수행하지 않았다.
+- **Jira:** Office DL-16752 댓글44462에 PR329·자동 리뷰 생략·다음 QA를 반영했다.
+  Web DL-16319 댓글44459의 앱 PR 미생성 문구도 PR329 링크로 갱신했다. 두 카드 Ready for Deploy 유지.
+  부모 카드·Lab 앱은 변경하지 않았다.
+- **완료/재개점:** 현재 확정 계약에서 즉시 필요한 추가 FE 개발이나 BE 확인 질문은 발견하지 못했다.
+  다음은 두 PR의 팀 리뷰 → 웹 릴리즈/앱 QA 버전 준비 → 같은 병원 Member/Admin 실제 기기와 쓰기 QA
+  (기본/부분/차단 상세, 직원 전환, 채팅·승인/거절, 본인/미지정/타 의사 Draft, 업로드) → 승인된 배포다.
+  PR 병합·배포·CodePush는 하지 않았다. 추가 변경·자동 모니터링 없이 사용자 재개 지시를 기다린다.
+
+## 이전 체크포인트 — 2026-10-15 중단 작업 복구·Office 보완 및 develop 통합 완료
 
 - **사용자 요청/범위:** 토큰 중단 전 Office 구현을 이어서 가능한 보완·검증·커밋/푸시·메모리·Jira 정리까지 완료.
   중간에 Claude가 웹 PR4700의 CodeRabbit만 처리한 변경도 인수 검토했다. 미커밋 Office 변경은 앞선 Codex 작업임을
