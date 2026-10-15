@@ -18,8 +18,8 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- DLDS와 분리한 별도 기능 세션. 2026-10-15 Tom 원문·최신 master env9개·공급 경로·공식 문서를 대조해 근거 기반 관리안 제안 완료, 구현 지시 대기다.
-- 공개 설정은 GitHub Variables에서 로컬·CI가 공유하고 서버 Secrets→ECS는 유지하는 안이다. 로컬 비밀값 공유처는 별도 필요하며 신규 후보로 AWS Secrets Manager를 제안했다. 제품 변경·Git/PR·배포는 미착수다.
+- DLDS와 분리한 별도 기능 세션. 2026-10-15 Tom 원문·최신 master env9개·공급 경로·공식 문서를 대조했고, 사용자가 확정한 현황·개선안을 [팀 공유용 Notion 문서](https://app.notion.com/p/3face072e82f814b9a6ceaa36e5638af)로 작성했다. 공유 위치 미지정으로 현재 개인 비공개 초안이며 본문 저장을 확인했다.
+- 공개 설정은 GitHub Variables에서 로컬·CI가 공유하고 서버 Secrets→ECS는 유지하는 제안이다. 로컬 비밀값 보관소·권한·관리 담당은 적용 전에 확정하며 특정 제품 도입을 결정하지 않았다. 제품 변경·Git/PR·배포는 미착수다.
 - [개인 체크포인트](projects/dentlink-client-env-management.md)
 
 ### 사무실 의자 구매·헤드레스트 개선 조사
