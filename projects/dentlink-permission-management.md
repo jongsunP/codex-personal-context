@@ -1,6 +1,82 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-15 확정 FE 반영 완료·필수 API 존재 확인·실계정 연동 검증 잔여
+## 현재 상태 — 2026-10-15 Member/Admin 로컬 연동 확인·홈 채팅 캐시 보완 완료
+
+- **최신 승인:** 사용자가 BE 예정 API가 모두 완료된 기준으로 기존 작업 브랜치에서 로컬 연동 검증·가능한 수정·커밋/푸시·메모리화를 요청했다.
+  시크릿 localhost의 Member 로그인을 직접 완료해 주었다. 아래 실계정 결과가 이전의 포괄적인 QA/BE 대기 기록보다 우선한다.
+- **제품:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`.
+  `e5c8a3e19ae0153b6be71ed2a12850e08bbd88ea` (`fix: 직원과 권한 변경 시 홈 채팅 캐시 분리`) normal commit/push 완료.
+  원격 feature SHA 일치·작업 트리 clean 확인. 기존 Lab UI 2건 `7c724ad0a`도 그대로 포함한다.
+  이번에 PR 생성/병합/배포·Jira 댓글·네이티브/E2E 변경은 하지 않았다. env/ignore도 수정하지 않았다.
+- **추가 API 대기는 해제된 상태 유지.** 현재 DEV API로 아래 기능이 실제 동작한다.
+  기존 주문 GET200 + 담당 의사 비교 + GET403/2152 계약을 사용하며, FE 임의 목록 필터나 별도 판정 API를 추가하지 않는다.
+  API가 없다는 포괄적인 문의는 불필요하다. 재현되는 응답/권한 불일치가 생겼을 때만 좁혀 문의한다.
+
+### 이번에 수정한 결함과 검증
+
+- 홈 최근 LinkTalk가 같은 직원의 권한 변경 뒤 이전 목록·전체 건수를 재사용하고, 미읽음 건수는 소속/직원 변경 뒤 이전 캐시를 재사용할 수 있었다.
+  수정 전 회귀 테스트 2건 실패로 확인했다. 직원·권한별 query key를 분리하고 현재 직원/권한이 확인된 뒤 조회하도록 했다.
+  전환 첫 렌더부터 이전 목록·건수·필터를 제거하며, 수동 refetch도 유효한 직원 맥락에서만 수행한다.
+  서버 API 경로/파라미터/목록 정제 정책은 바꾸지 않았다.
+- 변경 4파일: `clinic/src/components/Dashboard/Dashboard.tsx` 호출 1줄,
+  `clinic/src/lib/Dashboard/useDashboardLinkTalk.ts`, `clinic/src/services/chat/chat.query.ts`,
+  신규 `clinic/src/lib/Dashboard/useDashboardLinkTalk.test.tsx`.
+- 독립 검토, 신규 회귀 4건 포함 관련 7 suites/54 tests 및 별도 기존 권한 9 suites/90 tests 통과.
+  Clinic 타입·변경 hook/query/test ESLint·Prettier·diff 검사 통과.
+  정상 commit의 Clinic/Lab/Admin 타입과 정상 push의 3서비스 lint·Admin DLOS guard·shared coverage 검사도 통과했다.
+  기존 lint/Prettier 설정 경고는 실패와 구분한다.
+  로그: `/tmp/dentlink-permission-chat-commit-20261015.log`, `/tmp/dentlink-permission-chat-push-20261015.log`.
+
+### 실제 계정으로 확인한 범위
+
+- 로컬 Clinic `http://localhost:3000` + 기존 DEV API. Admin `jongsun.test1`(직원213, OWNER),
+  Member `jongsun.test2`(직원386, MEMBER), 같은 frankieDevOffice. 사용자 비밀번호/토큰을 추출하거나 저장하지 않았다.
+- **메뉴/필터:** Member는 Billing/Dashboard 메뉴 없음, 주문 Dentist/My Orders Only·환자 My Patients Only 필터 없음.
+  Admin은 해당 메뉴/필터 유지. Member 주문 목록5건·환자 목록5건, 보드 In Review4건/Draft0건 및 의사 필터 없음을 확인했다.
+  보드는 표시 상태 범위가 목록과 달라 총건수 차이만으로 결함으로 판단하지 않는다.
+- **홈:** Admin Active624/Pending38, LinkTalk All203/Unread4.
+  Member Active5/Pending0, 최근 주문5214/4393/3988/3437/2912 모두 본인 담당, LinkTalk All1/Unread0(2912).
+  캐시 수정 후 새로고침/새 탭에서도 각각의 범위를 확인했다. 실제 계정의 권한을 변경한 것은 아니며 전환 경계는 회귀 테스트로 확인했다.
+- **기본 상세:** Member 본인 `9000005214`는 Cancel/Edit·담당의사 변경·채팅 입력/파일 업로드가 표시된다.
+  `/orders/9000005214/additional`의 본인 수정 폼과 본인 Assigned Dentist/Save Changes 표시까지 확인했다. 저장은 누르지 않았다.
+- **부분 상세:** 공유 환자 목록에서 타 의사 주문 `9000003943`으로 이동 가능.
+  환자/Case/주문 트리와 Details/Files/Timeline 유지, 주문 Cancel/Edit·담당의사 변경·채팅 입력/업로드 숨김.
+  기존 파일1건 선택 시 Download(1) 활성화 확인 후 선택 해제했다. Admin의 같은 주문은 전체 기능이 표시된다.
+  `/orders/9000003943/additional` 직접 진입은 `/403`으로 이동해 차단됐다.
+- **차단 상세:** Member `9000009123`은 No order data available/Go to Home.
+  Query Devtools의 해당 `order_show` 오류 응답에서 HTTP403, code2152, FORBIDDEN 및 Member own orders/patients 제한 메시지를 직접 확인했다.
+  Admin의 같은 주문은 상세/수정/채팅 입력이 열린다. 이를 단순한 공통 데이터 없음과 구분한다.
+- **승인/Remake:** Admin `/orders/9000009248/approvals/1469`는 파일 미리보기와 Approve/Reject,
+  Member는 No order data available로 내용/버튼 미노출. Member의 공유 주문 `/remakes/9000003943/info`는 Remake 선택 목록으로 되돌아갔고 목록은 No Result였다.
+  이 Remake 사례는 해당 주문의 자격/상태 조건도 관여하므로 역할별 단독 증거로 확대하지 않는다.
+- **Pickup 링크:** Member가 기존 Pickup의 타 의사 주문 `9000004066` 링크를 누르면 새 탭의 해당 주문 상세로 이동한다.
+  링크 단계 차단 없음 확인. 도착 화면은 No order data available이며 이 사례는 과거 Admin에서도 데이터 없음이었으므로
+  4066을 역할별 상세 차단 증거로 쓰지 않는다. 역할별 거절 증거는 위9123이다.
+- **신규 주문:** Member Place Order 시작 화면, 본인 환자 검색과 기존 Case 선택까지 확인했다.
+  서버에 Draft를 만드는 Next/저장/주문 제출은 하지 않았다. 기존 Draft 이어하기용 실제 사례가 없어 미지정/본인/타 의사 Draft3종은 실데이터로 검증하지 못했다.
+- **Lab UI2건:** 기존 로컬 Lab 로그인([LAB-DEV] E2E Lab), `http://localhost:3005`에서 환자 목록 제목의 실제 `vertical-align: middle`을 확인했다.
+  환자→`9000009704` 상세에서 패널을 펼쳐 전체·Case/주문 트리 유지 및 Cases/Orders 건수 숨김을 확인했다.
+  단일 주문 환자 사례이며 DL-16747의 타 기공소 이후 주문 경계 전체 검증은 아니다.
+- 증거: `/Users/parkjongsun/.codex/visualizations/2026/10/15/permission-local-qa/`의 Member home/partial3943/blocked9123,
+  Admin3943/9123, Lab patients/detail-panel 캡처.
+- 로컬 QA 위젯 `/api/qa-users`의 Jira 설정500·ChannelIO 미로딩 등 기존 개발환경 경고는 별도다.
+  HMR 직후 React queue 오류는 전체 새로고침으로 해소됐으며, 한 시크릿 탭 정지는 동일 계정/URL 새 탭에서 재현되지 않았다.
+  Lab 상단 Order는 인쇄 버튼이었다. 인쇄 임시 탭은 닫았고 실제 패널 화살표로 검수했다. 인쇄/파일 저장은 실행하지 않았다.
+- 검수 종료 후 직접 실행한 Clinic/Lab 서버를 정상 종료하고 임시 Admin/Lab·중복 시크릿 탭을 닫았다.
+  사용자가 로그인한 Member 세션을 잃지 않도록 시크릿 홈 탭1개는 남겼다. 서버 재시작 후 기존 로그인 유효성을 확인한다.
+
+### 남은 것과 다음 시작점
+
+1. **현재 확인된 FE 구현 결함은 조치 완료.** 위 범위를 근거로 FE 전체 QA/출시까지 완료했다고 확대하지 않는다.
+2. 다음에는 준비된 테스트 데이터로 실제 주문 저장·승인/거절·채팅/파일 전송과 Draft 미지정/본인/타 의사3종을 검증한다.
+   담당자 변경 전후·공유/과거 담당 경계·Lab DL-16747의 여러 기공소 전후 주문 사례도 필요하다.
+   정상 운영 데이터의 권한 변경/임의 fixture 생성은 하지 않는다. 이번에는 저장·승인/거절·전송·업로드 등의 제출 버튼을 실행하지 않았다.
+3. BE에 지금 반드시 새로 질문할 API 누락/재현 오류는 없다. Lab 경계 등 준비된 사례가 기대 결과와 다를 때
+   주문번호·현재 직원/기공소·응답status/code와 기대 기준을 모아 좁혀 확인한다.
+4. 재개 시 개인 Git pull → 위 feature/원격/clean 확인 → 로컬 Clinic(3000)·필요시 Lab(3005) 실행 → 기존 브라우저 로그인 유효성 확인 순서.
+   PR/통합/배포는 별도 요청으로 진행한다.
+
+## 이전 체크포인트 — 2026-10-15 확정 UI 반영·필수 API 존재 확인
 
 ### 최신 정정 — API 추가 출시 대기 아님
 
