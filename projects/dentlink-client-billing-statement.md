@@ -20,11 +20,12 @@
 
 ## 최신 Jira 근거 — 2026-10-15 직접 조회
 
-- 상위 댓글 12개, 첨부 3개(31649/31650/31651). 하위 카드는 Frankie 담당·해야 할 일, 본문/댓글/첨부 없음.
+- 상위 댓글 13개, 첨부 3개(31649/31650/31651). 하위 카드는 Frankie 담당·해야 할 일, 본문/댓글/첨부 없음.
 - [댓글44431](https://innovaid.atlassian.net/browse/DL-16795?focusedCommentId=44431): 위 세 문서 명칭 변경/유지 구분. 과거 Commercial Invoice와의 혼동 방지 이력과 FA팀 확인 제안은 배경이며, FA 확인 완료 증거를 임의로 만들지 않는다.
 - [댓글44439](https://innovaid.atlassian.net/browse/DL-16795?focusedCommentId=44439): 핫픽스가 아닌 정기배포 포함. 상위 fixVersion `v1.89.0`, Jira 계획일 2026-10-26, unreleased. 하위 fixVersion은 비어 있다. 일정은 구현 기준 브랜치나 실제 배포 완료 증거가 아니다.
 - [댓글44441](https://innovaid.atlassian.net/browse/DL-16795?focusedCommentId=44441), 10/14 17:21 KST: Jeanna가 각 케이스별 Invoice가 맞다고 답변했다. 여러 케이스를 함께 결제하더라도 각 건의 Invoice를 원한다는 설명으로, 44440의 추가 확인에는 답변이 도착했다.
 - [댓글44442](https://innovaid.atlassian.net/browse/DL-16795?focusedCommentId=44442), 10/15 08:21 KST: Jun이 관리자 결제 목록 버튼명도 챙겨 달라고 요청하며 첨부31651을 추가했다.
+- [댓글44443](https://innovaid.atlassian.net/browse/DL-16795?focusedCommentId=44443), 10/15 10:59 KST: Mina가 Jun 첨부 이미지의 `statement 다운로드` 버튼을 `invoice 다운로드`로 변경하도록 Frankie에게 명시했다. 해당 버튼명 변경은 확정 요구사항이다. 이번 재조회에서도 발행 방식 변경 지시는 없으며 상위/하위 모두 해야 할 일 상태다.
 - 본문·댓글 전체는 직접 읽었다. 이미지 픽셀은 아직 검증하지 못했다. 10/14 IAB에서 첫 첨부 미리보기 실패 후 다운로드 대기 중 턴이 중단됐고, 10/15 새 첨부도 미리보기 로딩 상태였다. 첨부 확인 완료로 보고하지 않는다. 이미지 미확인은 현재 문구 변경 전체의 PM 승인 선행조건이 아니다.
 
 ## 코드 조사 근거와 영향 범위
