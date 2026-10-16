@@ -1,10 +1,76 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-> 2026-10-01: 피드백 조사 브랜치 정리 후 기본 `dentlink-client` checkout은
-> `master`로 복귀했다. LBX `feature/DL-16387`의 로컬·원격 브랜치는 보존하며
-> 백엔드 문제로 보류 상태다. 재개 시 현재 checkout·브랜치·dirty를 다시 확인한다.
+## 현재 체크포인트 — 2026-10-16, 날짜별 전달 브랜치로 develop 병합 완료
 
-## 현재 체크포인트 — 2026-09-29, 백엔드 문제로 보류 유지 / 다른 기기 인수인계
+### 최신 요청과 결과
+
+- 사용자가 오래된 개발서버 전달 브랜치를 삭제하고 원본은 보존한 채, 날짜가 있는
+  별도 브랜치로 현재 `develop` 대상 PR을 생성하도록 요청했다. 이후 사용자가
+  [PR #4705](https://github.com/Innvoaid/dentlink-client/pull/4705)를 직접 병합했다.
+- GitHub에서 2026-10-16 13:18:44 KST `MERGED`, base `develop`, merge commit
+  **`dd6388ff976928e72f0de2d8521688977db2013b`**를 확인했다. 현재 원격 develop과
+  동일하며 병합 결과 전체 tree가 검증한 전달 HEAD와 정확히 같다.
+- 원본 **`feature/DL-16387 / 347909945b091324e7134673525203de14e122fd`**는
+  로컬·원격에 그대로 보존했다. 원본을 develop 또는 release에 직접 병합하지 않았다.
+- 새 전달 브랜치는 **`feature/DL-16387-develop-20261016`**, HEAD는
+  **`73082ae5ade30e1c33deb281abbe83039545ab7d`**다. 원본에서 분기하여 당시 최신
+  develop `7c29721f939ccd766da88785ccc103279adee25a`를 병합했다. 커밋 제목은
+  `chore: LBX 개발서버 전달 브랜치에 최신 개발 변경 반영`이며 정상 hooks로 push했다.
+  현재 날짜별 전달 브랜치도 로컬·원격에 보존돼 있다.
+- 이전 전달용 원격 **`feature/DL-16387-develop`은 사용자 지시로 삭제**했다.
+  삭제 전 head `b95a27a36`가 기존 PR #4624의 squash `792bb396f`와 전체 tree가
+  같음을 재확인했다. 이 옛 이름을 재사용하지 않는다. PR #4624의 병합 이력은 남아 있다.
+
+### 현재 develop 호환 수정과 검증
+
+- 충돌 파일은 기공소 검색, 배송 목록, API 생성 타입 3개였다. 최신 develop의
+  Autocomplete/기공소 필터와 최신 Mother 문서 enum(`STATEMENT_OF_REASON` 포함)을
+  보존했다. 문서 타입 enum 확장은 최신 develop에서 이미 제공하던 계약이며
+  기존 합의에서 제외한 사유서 신규 기능을 이번에 추가한 것이 아니다.
+- develop의 Admin DLOS 전환에 맞춰 LBX 폼의 Select/복수 선택·Typography·Button과
+  Modal을 맞췄다. 원래 기능·문구·선행 조건·빈 목록 안내·초기화·조회/제출 차단을
+  유지하고 메뉴가 비활성화될 때 닫히도록 제어했다. 기공소 검색의 라벨 숨김·Escape
+  처리와 문서 링크의 현재 DLOS Button API를 맞췄다. DLOS baseline을 늘리지 않았다.
+- 변경은 **전달 브랜치와 develop에만** 있다. 원본 `347909945`에 이 호환 수정을
+  역반영하지 않았다. 이후 운영 릴리스 준비 시 원본만 그대로 전달하거나 develop
+  전달 브랜치 전체를 다른 release에 병합하지 말고, 그때의 기준과 필요한 변경을 검토한다.
+- Clinic·Lab·Admin 타입 검사와 정상 commit/push hooks 통과. 앱 lint는 기존 경고
+  222/186/393개, 오류 0. Admin DLOS guard 60/60, guard 테스트, shared configs
+  21개·hooks 40개 테스트 및 기존 coverage baseline 비교 통과.
+- 로컬 jsdom 컴포넌트 통합 검증 **7/7 통과**: Baby 초기 선행 조건 및 Mother 빈 목록,
+  Lab→Office→복수 주문→선택 초기화, Mother 선택 후 제출 활성화/메뉴 Escape,
+  Pickup 초기 제출 차단/연락처 조기 오류 없음, 메뉴 비활성화/재활성화, 기공소 검색
+  라벨·Escape를 확인했다. 실제 DLOS와 폼을 사용하되 조회 응답·DataForm 외곽은 대역이다.
+  브라우저 전체 UI QA나 실제 백엔드 성공 증거가 아니며 실제 서버 업무 요청은 보내지 않았다.
+- PR의 Admin DLOS Guard·Auto Assign 성공. **CodeRabbit은 develop 대상 자동 리뷰가
+  비활성화돼 `Review skipped: reviews are disabled for this base branch`**로 success였다.
+  실제 새 CodeRabbit 검토를 완료한 것으로 해석하지 않는다. 조회 당시 리뷰 스레드는 0개다.
+- 초기 타입 검사는 새 checkout의 자동 생성 `next-env.d.ts` 부재로 실패했다.
+  각 앱의 공식 `next typegen` 후 정상 hooks를 통과했으며 제품 소스 우회나 hook 생략은 없다.
+  임시 테스트 초기 로더/대역 key 문제도 수정 후 최종 7개를 실행했다. 기존 Icon의
+  Vite 동적 import 경고는 남았으며 최종 React 중복 key 경고는 없었다.
+
+### 배포 경계·정리·다음 시작점
+
+- 병합 후 자동 실행된 [Admin 개발서버 배포 run](https://github.com/Innvoaid/dentlink-client/actions/runs/38849971928)은
+  종료 확인 시 **`in_progress`**다. 직접 배포를 실행하거나 성공 완료·실제 화면을 확인한 것은 아니다.
+- 이번 승인으로 개발서버 전달을 진행했지만, 과거 백엔드 문제의 해결 여부·새 API
+  계약·실제 생성/배송사 접수 성공과 운영 release 배포는 별도 확인이 필요하다.
+  기존 #4623은 미병합 종료 상태를 유지한다. 테스트를 위한 실제 생성·수정 요청 금지도 유지한다.
+- 기본 checkout이 다른 작업 `feature/DL-16796 / 3aac1dff0`이라 그대로 두고,
+  임시 `/tmp/dentlink-lbx-develop-20261016` worktree에서만 작업했다. 앱 worktree
+  도구가 `Not a git repository`를 반환해 수동 Git worktree를 사용했다. push·병합
+  보존 확인 후 필요한 테스트 자료를 밖으로 복사하고 임시 worktree/의존성을 제거했다.
+  원래 checkout은 branch·HEAD 그대로 clean이며 다른 작업 worktree는 변경하지 않았다.
+- 기기 한정 자료: `/tmp/lbx-develop-20261016-tests/`의 최종 결과·테스트 대역,
+  `/tmp/lbx-develop-20261016-{commit,push,lint}.log` 등. 이 원본들은 Git으로 이동하지
+  않으며 영구 복구를 보장하지 않는다. 재개 시 아래의 기기 준비 조건을 적용하고
+  이 체크포인트의 검증 요약·커밋·PR을 근거로 삼는다.
+- 다음 시작점: 사용자 요청에 따라 위 배포 run의 완료와 실제 개발서버 조회/화면을
+  확인한다. PR 병합과 배포·QA 성공을 구분한다. 추가 구현/운영 릴리스/실제 생성 검증은
+  별도 지시를 따른다. 현재 추가 자동 감시는 예약하지 않고 대기한다.
+
+## 이전 체크포인트 — 2026-09-29, 백엔드 문제로 보류 유지 / 다른 기기 인수인계
 
 ### 현재 목적·상태·승인 경계
 
