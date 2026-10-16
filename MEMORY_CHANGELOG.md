@@ -2,6 +2,8 @@
 
 ## 2026-10-16
 
+- 웹 env 사용자가 회의에서 Notion 정리 문서를 공유한 뒤 후속 진행하기로 확정했다. 회의 전 문서·Jira·분류·코드·GitHub 새 설정 준비 완료, Draft PR4713 미병합 상태를 재확인했다. 기존 운영은 새 설정을 사용하지 않으며, 회의 후 재개 전까지 추가 변경 없이 대기한다.
+
 - 웹 env 작업을 FE 기존 값·이름·동작 보존으로 재확정해 후속 구현을 마감했다. Eximbay 서버 변경 필수/미사용 Medit 제외 판단을 철회하고 private build로 모두 보존했다.
   89b051664/8d29f043e 정상 commit/push, Draft PR4713 본문 갱신. 9환경 값 일치·env74/E2E도구220·타입/lint 및 Clinic 포함3서비스 native빌드/HTTP200 확인.
   GitHub 새 build/E2E Secrets5개 추가(기존 설정 유지), 9개 기존 배포 Docker/workflow의 입력 연결·수동E2E 과거ref 호환·암호화 pack/unpack 구현.

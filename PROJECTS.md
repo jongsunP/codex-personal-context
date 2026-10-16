@@ -23,7 +23,7 @@ Check this folder first when finding or continuing local projects.
 - 9개 GitHub 환경·공개238항목과 신규Secrets5개 준비. Eximbay·Medit 기존 값도 private build 공급으로 유지한다. 기존 배포 workflow/Docker 설정 연결은 작업 브랜치에 반영했으며 실제 배포하지 않았다. env9개는 계속 Git 추적 중이다.
 - 공개 수신/갱신·개인값 보호·private 암호화 pack/unpack·E2E 분리·비배포 검증 경로 마련. 환경설정74·E2E도구220·타입/lint 통과, 3서비스 외부 네트워크 차단 native 빌드/standalone HTTP200·9환경 값 보존 확인. 실제 Docker/실계정/팀원 전달·전환은 미검증.
 - [DL-16818](https://innovaid.atlassian.net/browse/DL-16818)이 문서·작업 목차. [DL-16819](https://innovaid.atlassian.net/browse/DL-16819) 완료, [DL-16821](https://innovaid.atlassian.net/browse/DL-16821) 진행 중·최종댓글44467. Notion 개요/운영/[따라하기](https://app.notion.com/p/3fbce072e82f81578c76d458c0a01c22)에 실제 명령·전달/갱신 방법 반영.
-- 사용자 재개 후 Docker/실사용·설정 전달·복구 확인 → 팀 적용·env 추적 해제·전환. Docker 설치·Vercel Dashboard 검증은 하지 않았다. Eximbay 서버화·키 회전·과거 Git 이력 정리는 별도 개선이다. [개인 체크포인트](projects/dentlink-client-env-management.md) 기준으로 대기한다.
+- 사용자는 회의에서 Notion 문서를 먼저 공유한 뒤 재개하기로 확정했다. 회의 전 준비는 완료이며 그때까지 추가 변경 없이 대기한다. 이후 Docker/실사용·설정 전달·복구 확인 → 팀 적용·env 추적 해제·전환. Docker 설치·Vercel Dashboard 검증은 하지 않았다. Eximbay 서버화·키 회전·과거 Git 이력 정리는 별도 개선이다. [개인 체크포인트](projects/dentlink-client-env-management.md) 기준으로 재개한다.
 
 ### 사무실 의자 구매·헤드레스트 개선 조사
 

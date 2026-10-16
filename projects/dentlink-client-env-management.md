@@ -51,6 +51,7 @@
 
 ### Jira·Notion과 다음 시작점
 
+- 사용자는 2026-10-16 마감 후 **회의에서 정리된 Notion 문서를 먼저 공유하고, 그 이후 후속 작업을 진행**한다고 확정했다. 현재 회의 전 준비 범위는 완료이며 회의 결과·사용자 재개 지시 전까지 코드/GitHub 추가 변경·검증 확장·배포를 진행하지 않는다. 기존 Draft PR·worktree와 등록된 새 설정은 보존한다.
 - 전체 목차: [DL-16818](https://innovaid.atlassian.net/browse/DL-16818), 진행 중. 조사·회의 [DL-16819](https://innovaid.atlassian.net/browse/DL-16819) 완료 유지. 구현 [DL-16821](https://innovaid.atlassian.net/browse/DL-16821) Frankie·진행 중, 최종 댓글44467로 결과·Eximbay 선행 조건 정정·다음 단계 기록. 상위 카드 중복 댓글 없음.
 - Notion3개 모두 `DEV Team / Development Documents`, data source `26366594-1ec5-423c-b7c3-35abe1e047f2` 같은 계층이며 상단DL16818 링크 유지:
   1. [현재 상황과 개선안](https://app.notion.com/p/3face072e82f814b9a6ceaa36e5638af)
