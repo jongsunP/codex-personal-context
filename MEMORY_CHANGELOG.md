@@ -2,6 +2,12 @@
 
 ## 2026-10-16
 
+- 웹 환경변수 후속 검증을 추가 설치 없이 마쳤다. STAGE 비밀파일을 DEV에 가져오는 결함을 환경·종류 표시 검증으로 수정했고, Medit 키는 현재 웹 미사용으로 분류했다.
+  최신 c1f424d06 정상 커밋·푸시, master 비교용 Draft PR4713 생성·첨부·base/head/draft 확인. 기존 env9파일·배포·원래 checkout은 보존했다.
+  env46/E2E도구220·타입·lint 통과, 외부 네트워크 차단 Admin/Lab 실제 native 빌드와 standalone HTTP200, DEV/STAGE109개씩 테스트 목록 수집 확인.
+  Docker 설치는 사용자 보류이며 이미지·실계정 시나리오·실제 팀원 전달·Clinic Eximbay 서버 처리·전환/복구는 남았다. BE 서명 API가 이미 있다는 근거는 없고 현재 callback은 발급 API가 아니다.
+  Vercel 전용 키는 확인 범위에서 없었고 Vercel 사이트/미리보기 성공을 완료조건으로 삼지 않는다. Notion 따라하기·Jira44466·개인 체크포인트를 갱신하고 검증 서버 및 임시 native 복사본을 정리했다.
+
 - 권한관리 웹·Office의 FE 예외 처리에 대한 과잉 차단/입력 유실 감사를 완료했다. 웹 신규 확정 수정 없음,
   앱 채팅 refresh·피드백 Retry/저장/첨부·승인 화면 복귀의 일시 오류 복구를 기존6파일에 반영했다.
   949e0f6/dafcad7/6437dbb 커밋·푸시, 기존 PR329 OPEN→develop 본문 및 head 확인 완료. 새 디자인·문구·정책·파일 없음.
