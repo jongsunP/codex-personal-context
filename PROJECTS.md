@@ -177,12 +177,14 @@ For detailed current state, read:
 ### Dentlink 권한관리 — DL-16317
 
 - **최신 2026-10-16:** 웹 최종 검토 지적2건과 숨긴 필터 조회를 보완한 PR4700을 사용자가 release에 병합했다.
+  이후 개발서버 배포를 알렸으며 검토 후 발견 사항을 다시 전달할 예정이므로 대기한다.
   최초 주문 확인 전 승인자료 차단, 확인된 주문의 일시적 재조회 실패 시 리메이크/승인 입력 보존을 구분한다.
 - **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317@f4bfaf1bf`, 원격 동일·clean.
   PR4700 → release/v1.89.0 MERGED, 실제 원격 merge `047fcc585` 확인(13:03:46 KST).
   Clinic 전체35 suites/303 tests·3서비스 타입·정상push린트/커버리지 PASS. frozen설치+정식Clinic production build
   정적195페이지/standalone까지 PASS. 이전 의존성 오류는 pnpm실행경로를 생략한 검증방식 문제로 해소했다.
-  병합된 실제 release tree가 검증한 가상 통합 tree와 일치하며 통합 Clinic 타입 PASS. 배포는 미확인이다.
+  병합된 실제 release tree가 검증한 가상 통합 tree와 일치하며 통합 Clinic 타입 PASS.
+  개발서버 배포 완료는 사용자 보고이며 Codex의 추가 배포/화면 검증 및 운영 배포 확인은 없다.
   master 파생 → release → master 전달 경로 유지, 웹 develop은 이번 전달과 무관하다.
 - **Office 앱:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 같은 이름의 독립 feature `df3c79a`, 원격 동일·clean.
   주문별 채팅 API·직원/권한별 캐시·2152 세션 보존/상세 연결·승인 조회/비동기 권한·파일 정리·미사용 조건 정리를 완료했다.
@@ -191,7 +193,7 @@ For detailed current state, read:
   [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → develop OPEN/MERGEABLE.
   CodeRabbit은 자동 대상 release/* 설정으로 skipped(실제 리뷰0). 사용자 지시로 별도 실행 없이 종료했다.
 - **Jira:** Web DL-16319 댓글44459, Office DL-16752 댓글44462에 PR 링크/잔여 반영. 둘 다 Ready for Deploy(개발 완료).
-- **다음:** 웹 release 통합 완료. 릴리즈/앱 QA 버전 준비 → 같은 병원 Member/Admin 실제 기기·쓰기 QA → 승인 배포.
+- **다음:** 웹 개발서버 사용자 검토 결과 대기. 이후 전달받은 QA 이슈를 기준으로 재개한다.
   Office 앱 PR 상태는 이번에 재확인하지 않았으며 CodePush·배포는 수행하지 않았다.
   새 제품 변경 없이 커밋/원격 동일 상태를 유지하며 사용자 재개 지시 전 대기한다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
