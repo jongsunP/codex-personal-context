@@ -2,6 +2,10 @@
 
 ## 2026-10-16
 
+- 권한관리 사용자가 현재 가능한 웹·앱 조치를 마감하고 QA는 나중에 진행하겠다고 명시했다.
+  앱6437dbb/PR329 OPEN→develop·웹e28b9c7e8 clean을 재확인하고 대기 상태를 기록했다.
+  QA·병합·배포·감시를 시작하지 않으며 브랜치/worktree 보존, 사용자 QA 재개 지시 후 실제 배포 버전부터 확인한다.
+
 - 웹 환경변수 후속 검증을 추가 설치 없이 마쳤다. STAGE 비밀파일을 DEV에 가져오는 결함을 환경·종류 표시 검증으로 수정했고, Medit 키는 현재 웹 미사용으로 분류했다.
   최신 c1f424d06 정상 커밋·푸시, master 비교용 Draft PR4713 생성·첨부·base/head/draft 확인. 기존 env9파일·배포·원래 checkout은 보존했다.
   env46/E2E도구220·타입·lint 통과, 외부 네트워크 차단 Admin/Lab 실제 native 빌드와 standalone HTTP200, DEV/STAGE109개씩 테스트 목록 수집 확인.

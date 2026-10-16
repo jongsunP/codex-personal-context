@@ -46,6 +46,7 @@ Do not store secrets or private customer data here.
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
   — 2026-10-16 PR #4705의 develop 병합 완료. 운영 릴리스는 별도이며 원본과 날짜별 전달 브랜치를 보존한다.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
+  — 사용자 최종 종료: 현재 가능한 웹·앱 조치 완료, QA는 나중에 진행. 새 요청 전 QA·병합·배포·감시 없이 대기하며 브랜치/worktree를 보존한다.
   — 최신 예외 감사에서 웹 추가 수정 없음. 앱 채팅·피드백·승인의 일시 오류 복구3건과 입력/첨부/완료 응답 경계를 보완했다.
   949e0f6/dafcad7/6437dbb 정상 커밋·푸시·PR329 본문 갱신, 기존6파일만 변경. 관련69 tests·lint PASS, 타입18진단 기존동일.
   새 UI/문구/정책/파일 없이 기존 refresh/Retry/앱·화면 복귀를 사용한다. Vercel은 사용자 지시로 제외했다.
