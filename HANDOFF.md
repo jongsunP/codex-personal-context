@@ -46,10 +46,11 @@ Do not store secrets or private customer data here.
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
   — 2026-10-16 PR #4705의 develop 병합 완료. 운영 릴리스는 별도이며 원본과 날짜별 전달 브랜치를 보존한다.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
-  — 2026-10-16 웹 PR4706은 release/v1.89.0에 merge10c30e3cb로 병합, 사용자 개발서버 배포 완료 보고.
+  — 2026-10-16 웹 PR4706은 release/v1.89.0에 merge10c30e3cb로 병합. 최신 사용자 기준 배포 전·브랜치/워크트리 보존.
   원래 웹 feature/DL-16317은 상용 미반영을 이유로 사용자 지시에 따라 f4bfaf1bf로 로컬/리모트 복구·보존.
   후속 codex 브랜치는 삭제 상태, 기존 워크트리는 삭제하지 않고 release detached HEAD·clean 유지.
-  앱 PR329는 OPEN이므로 feature/DL-16317@7cb4487 보존. 필수 BE 요청 없음. 실제 QA 결과 후 웹은 새 QA 브랜치로 재개.
+  앱 PR329는 OPEN이므로 feature/DL-16317@7cb4487 보존. Member 운영 적용은 앱329 포함 버전과 함께 관리한다.
+  필수 BE 요청 없음. 다른 에이전트 우려 검토만 완료, 제품 변경 없음. 실제 QA 결과 후 웹은 새 QA 브랜치로 재개.
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — PR #4699의 release/v1.89.0 병합 완료. QA·운영 출시 별도이며 브랜치는 보존한다.
 - Dentlink 통합알림센터: [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)

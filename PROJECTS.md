@@ -179,7 +179,7 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-16:** 사용자 개발서버 배포 완료 보고 후 웹 작업 브랜치 정리·메모리 저장·종료 요청.
+- **최신 2026-10-16:** 다른 에이전트 인계 재확인. 사용자 최신 기준은 release 반영 완료·배포 전이며 브랜치/워크트리 보존.
 - **웹:** [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706) → release/v1.89.0 MERGED,
   merge10c30e3cb(15:13:18 KST). 실제 런타임/QA/운영 배포는 추가 확인하지 않았다.
   최종d5f896740와 release tree 동일, PR4700의 squash 통합 tree도 일치 확인.
@@ -187,12 +187,13 @@ For detailed current state, read:
   삭제 전 f4bfaf1bf로 로컬·리모트 복구 완료. 상용 반영 전 브랜치/워크트리 보존 지시가 우선한다.
   `/Users/parkjongsun/Repository/dentlink-client-permission`은 release10c30e3cb detached HEAD·clean으로 보존한다.
 - **기존 검증:** Clinic353/Lab399 tests·3서비스 타입/정상push검사 PASS. 976097e85 production build195페이지 PASS.
-  CodeRabbit 승인 ID 보존 지적 수정·resolve 완료. 후속 자동 리뷰는 사용자 요청으로 대기 중단, 이번 재조회 없음.
+  CodeRabbit 승인 ID 보존 지적 resolved·추가 unresolved0 확인. 체크 PENDING이며 완료로 단정/대기하지 않는다.
 - **Office 앱:** [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → develop OPEN,
   `feature/DL-16317@7cb4487`은 미병합이므로 보존. 앱 코드/브랜치/배포 변경 없음.
   기존394 tests·양 플랫폼 JS bundle PASS, 타입 진단18건은 기존과 동일. 실기기 QA와 구분한다.
-- **다음:** 개발서버 실제 Member/Admin QA 결과 대기. 웹 QA 수정은 최신 release에서 새 브랜치로 재개한다.
-  필수 BE 후속 없음. 앱은 별도 PR 병합/QA 버전 전달이 남으며 웹 배포와 혼동하지 않는다.
+- **다음:** 웹/앱 전달 및 Member 활성화 순서에 맞춰 실제 QA. PR329 미포함 앱은 승인 UI 제한이 없어 호환버전 적용을 함께 관리한다.
+  같은 환자 타 주문403 우려는 정책상 정상 허용 경로이므로 필수 BE 질문을 재개하지 않는다. 실제403은 QA근거로 조사한다.
+  이번 제품 변경/전체 테스트 재실행 없음. 후속 QA 수정은 최신 release에서 새 브랜치로 재개한다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
 - 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 

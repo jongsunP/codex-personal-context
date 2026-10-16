@@ -2,6 +2,12 @@
 
 ## 2026-10-16
 
+- 권한관리 다른 에이전트 인계를 재확인했다. 웹 featuref4bfaf1bf 로컬/리모트 복구와 release10c30e3cb detached clean 보존 완료 상태이며 추가 복구 불필요.
+  최신 사용자 기준을 release 반영·배포 전으로 정정했다. PR4700 통합 tree와 PR4706 최종 tree도 대조했다.
+  현재 PRD5-2/5-3의 환자 전체 읽기 정책상 담당 변경 보조GET403을 필수 BE 질문으로 재분류하지 않는다.
+  반면 PR329 미포함 앱의 승인 UI 노출 가능성은 조건부 배포 호환성으로 인정하고 Member 활성화/앱버전을 함께 관리하도록 기록했다.
+  CodeRabbit thread resolved/추가0·체크PENDING, 제품수정·중복전체검증·배포·리뷰대기 없이 메모리만 갱신한다.
+
 - 권한관리 #4700·#4706의 release/v1.89.0 반영과 squash 동일성을 확인하고 release 기준 Clinic/Lab Jest·3서비스 tsc 통과를 확인했다.
   정적 리뷰에서 확정 버그는 없고 배포 전 확인 2건(담당 변경 경고의 타 주문 403 처리, 웹 선배포 시 구버전 앱 승인 화면 노출)을 기록했다.
   feature/DL-16317은 보존, permission 워크트리는 release 10c30e3cb detached로 원복했다(Claude).

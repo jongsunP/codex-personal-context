@@ -1,21 +1,39 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-16 release 반영 확인·병합 내용 검토(Claude)
+## 현재 상태 — 2026-10-16 다른 에이전트 작업 인계 재확인·배포 전 보존
 
-- **사용자 목적:** release/v1.89.0에 병합만 됐고 실제 배포 전이므로 `feature/DL-16317`은 보존한다.
-- **브랜치/워크트리:** `feature/DL-16317` 로컬·리모트 `f4bfaf1bf` 유지. Claude가 한때 워크트리를 이 브랜치로 switch했다가
-  사용자 승인 후 기록 의도대로 `dentlink-client-permission`을 release `10c30e3cb` detached HEAD·clean으로 되돌렸다.
-  (feature 브랜치에는 #4706이 없으므로 후속 QA는 release 내용에서 시작)
-- **반영 확인:** #4700 merge `047fcc585`, #4706 merge `10c30e3cb` 모두 release 조상. squash 결과 tree가 각 feature 최종과 동일.
-- **검증(release 10c30e3cb):** Clinic Jest 35 suites/353, Lab 38 suites/399 PASS, Clinic/Lab/Admin tsc 0 error.
-- **정적 리뷰(f4bfaf1bf·#4706):** 되돌릴 확정 버그 없음. 배포 전 확인 2건(코드 동작은 확인, 영향은 정책/배포 순서 의존):
-  1. 담당 변경 경고 조회에서 같은 환자의 다른 주문 GET이 403이면 catch → "Cannot Change a Dentist"로 모달이 열리지 않고 재시도도 동일
-     (`useOrderDetail.ts` dentist change check). 서버가 Member에게 같은 환자 타 주문을 403으로 거절할 수 있는지 확인 필요.
-  2. `OrderDetailBoxPendingApproval`이 읽기 전용에서도 승인 열기를 허용 → Office 앱 WebView는 네이티브 승인 화면으로 이동.
-     앱 측 Member guard는 미병합 Office PR329에만 있어 웹이 먼저 배포되면 구버전 앱에서 승인/거절 UI 노출 가능(서버 거절 시 오류 UX).
-  Low: 승인 페이지가 Admin도 주문 GET 성공에 묶임, PLANNING SKIP 클릭도 차단, 명시 approvalId 미존재 시 type DESIGN 고정 등.
-- **CodeRabbit #4706:** 지적1건 resolved, 이후 커밋 새 지적 없음, 체크 표시는 PENDING.
-- **다음:** 위 2건 정책/배포 순서 확인 → 배포 → 실계정 QA. 수정이 필요하면 최신 release에서 새 `feature/` 브랜치로 진행.
+- **최신 사용자 기준:** release 반영은 완료됐지만 배포 완료로 취급하지 않는다. 원래 웹 feature 브랜치를 복구하고
+  워크트리를 보존하려는 목적이다. 다른 에이전트의 정적 리뷰는 검토만 요청했으므로 제품 코드는 수정하지 않는다.
+  과거 개발서버 배포 보고만으로 이번 최종본의 배포/상용 출시/QA 완료를 단정하지 않는다.
+- **실제 Git 재확인:** 웹 `feature/DL-16317` 로컬·리모트는 삭제 전 `f4bfaf1bf102a555ec6350aee97ea0a1ab2c7d05`,
+  upstream 정상. `/Users/parkjongsun/Repository/dentlink-client-permission`은 `10c30e3cb` detached HEAD·clean이다.
+  인용된 '현재 #4706 이전 소스'는 이미 지난 상태다. 다른 에이전트의 기록과 실제 Git 모두 최신 release로 복구됨을 확인했다.
+  브랜치·워크트리 추가 복구/삭제/전환은 하지 않았다. 원래 feature에는 #4706이 없으므로 QA는 보존한 release 소스 기준이다.
+  `codex/dl-16317-permission-followup`은 삭제 상태를 유지한다.
+- **병합:** PR4700→047fcc585, PR4706→10c30e3cb 모두 release에 반영돼 있다.
+  10c30e3cb tree는 최종d5f896740 tree와 동일하다. PR4700은 원래feature f4bfaf1bf 전체 tree 자체와 같지는 않다.
+  당시 release a065b39e4와 f4bfaf1bf를 merge-tree한 결과0a14f88dc가 실제047fcc585 tree와 같아 권한 작업 누락이 없음을 확인했다.
+- **검증:** 기존 Clinic353/Lab399 tests 로그와 3서비스 타입 통과 기록을 확인했다. 현재 release는 그 최종 검증 소스와 동일하다.
+  이번 인계 검토에서는 전체 테스트/빌드를 중복 실행하지 않았다. 실계정 저장·실기기·실배포 QA 증거로 확대하지 않는다.
+- **다른 에이전트 우려 1(담당 변경 보조 GET403):** 오류이면 모달을 열지 않는 코드는 맞고 기존 회귀 테스트도 있다.
+  다만 현행 [권한 PRD](https://www.notion.so/3eace072e82f81aa955dc21cba5cf127) 5-2/5-3을 직접 재조회해,
+  본인 담당 주문1건이 있는 환자의 모든 케이스·타 의사 주문 읽기가 허용됨을 확인했다. 변경 진입은 본인 주문에서만 가능하다.
+  따라서 '같은 환자의 다른 주문은 정상적으로403일 수 있다'를 전제로 새 BE 확인/FE 우회를 필수 잔여로 만들지 않는다.
+  실제 QA에서403이 나오면 담당 변경 경합·목록/상세 응답 불일치 등을 요청/응답 근거로 조사한다. 정상 API계약대로면 추가조치 없음.
+- **우려 2(구버전 앱 승인 UI): 조건부 타당한 배포 호환성 항목.** 웹 PendingApproval:125는 native
+  DesignConfirmationScreen으로 이동한다. native bridge가 이를 전달하며, 앱 PR329에는 본인 담당 여부에 따른 승인·거절 UI/제출 제한이 있다.
+  비교한 origin/develop62e5864에는 이 guard가 없어, PR329 미포함 앱에서 주문·승인 GET이 성공하면 버튼 노출 가능성이 있다.
+  실제 설치/배포 앱 버전 및 서버 mutation 거절은 미확인이다. '서버가 막으니 무해'나 현재 발생 중인 사고로 단정하지 않는다.
+  PRD5-1도 권한 체계 선배포와 MEMBER 실제 지정(신규 가입 기본값 포함, 알림센터 릴리즈 이후)을 분리한다.
+  Member 운영 활성화 전에 PR329 포함 앱 버전 적용/검증을 함께 관리한다. 새 BE API가 필요한 코드 누락으로 분류하지 않는다.
+- **기타 Low:** Admin 승인 페이지는 현재 주문 확인 이후 자료/액션을 제공하며, 이미 확인한 주문의 일시 오류는 보존한다.
+  PLANNING SKIP도 비활성인 현 코드 동작은 확인했으나 이를 확정 정책 위반으로 볼 추가 근거는 없다. 즉시 되돌릴 확정 회귀는 발견하지 못했다.
+- **Office:** `/Users/parkjongsun/Repository/dentlink-app-permission` feature/DL-16317@7cb4487 로컬·원격동일·clean,
+  PR329 OPEN → develop. 앱/웹 배포 순서와 Member 활성화를 함께 확인할 상태이며 이번 앱 변경 없음.
+- **CodeRabbit 현재:** PR4706 기존 thread1개 resolved, 추가 unresolved thread0/페이지없음. d5f896740의 봇 빈 리뷰가 있고
+  체크는 여전히 PENDING이다. 표시된 새 지적은 없지만 재검토 성공으로 단정하지 않으며 대기/재실행하지 않는다.
+- **다음:** 브랜치·워크트리 보존, 팀의 웹/앱 전달 및 Member 활성화 순서에 맞춰 실제 QA. 필수 BE 추가 요청 없음.
+  실제 문제나 추가 지시 전 제품 수정·새 PR·병합·배포·자동 감시는 하지 않는다.
 
 ## 이전 체크포인트 — 2026-10-16 사용자 지시로 원래 웹 feature 브랜치 복구·워크트리 보존
 
