@@ -1,7 +1,52 @@
 # Dentlink 권한관리 — DL-16317
 
 
-## 현재 상태 — 2026-10-15 Office PR329 생성·웹 리뷰 확인 후 대기
+## 현재 상태 — 2026-10-16 웹 PR4700 최종 머지 전 검토
+
+- **요청/범위:** 디자인 재검수보다 배포 위험·부작용·성능·불필요한 코드/개발 방식을 전수 검토한다.
+  이번 요청은 검토이며 제품 수정·커밋/푸시·PR/Jira 댓글·병합·배포는 하지 않았다. Office 앱은 별도 범위다.
+- **현재 Git:** 정식 웹 worktree `feature/DL-16317@55ad768d54c3ffc9948f22051aad36ba49ba293c`, 원격 동일·clean.
+  PR4700은 OPEN/MERGEABLE, REVIEW_REQUIRED/BLOCKED. 최신 CodeRabbit SUCCESS, 3 threads 모두 resolved·추가 페이지 없음.
+  실제 원격 release/v1.89.0은 `a065b39e48afbeff4ef6b2e052ed2d82d6966f25`로 feature에 없는 2커밋
+  (#4681 입고검사·#4699 Invoice)이 있다. GitHub PR API의 base SHA는 이전 `af636cac8`이므로 현재 원격 ref와 구분한다.
+  `git merge-tree --write-tree`는 충돌 없이 `5a6671a891f328f6de1ef423af48f1e0ccb6a9fa`를 만들었다. 실제 merge/ref 변경은 없다.
+- **머지 전 보완 권장 2건(P2):**
+  1. `clinic/src/common/hocs/withRemakeOrderAuthorization.tsx:36-52`: Member의 본인 주문 확인 후에도
+     창 복귀 등 background 원주문 재조회가 네트워크/500으로 실패하면 `isError`만으로 폼을 unmount하고
+     `/remakes`로 이동한다. 기존 데이터/권한이 유효해도 미저장 입력을 잃는다. 권한 거절/담당 변경과
+     일반 조회 실패를 분리하고, 일반 실패에서는 입력 보존·재시도/저장 제한 방향으로 보완해야 한다.
+  2. `clinic/src/lib/Order/useOrderApprovalPage.ts:115-122,187-189`: 주문 GET의 403만 없으면 열람 허용으로
+     계산하고 siblings는 병렬 조회한다. Member의 주문 GET 대기 또는500 + siblings200에서 승인 파일·다운로드·URL이
+     검증 완료 전 노출된다. 현재 주문 조회 성공과 승인 데이터 조회/표시 순서를 연결하고 로딩·일반 오류·거절을
+     구분해야 한다. FE 순서 문제는 재현했지만 siblings 서버의 독립 권한 검증까지 우회됐다고 확인한 것은 아니다.
+- **재현:** 저장소 밖 `/tmp/dl16317-final-review-repro-20261016/order-access`에 기존 fixture를 복사한 임시 테스트
+  2 suites/3 cases로 위 현동작을 재현했다. PASS는 문제 동작의 assertion이 통과했다는 뜻이다.
+  실제 서버 장애/쓰기 요청은 유발하지 않았으며 제품 테스트 파일은 추가하지 않았다.
+- **비차단 정리 후보:** Member 주문목록에서 숨긴 Dentist 필터용 직원 GET이 Desktop/Mobile 훅에 남아 있다
+  (`useOrderListDesktop.tsx:22`, `useOrderListMobile.tsx:36`). 기존 조회 재사용으로 요청 폭증이나 실제 오류는 없지만
+  Member에서 enabled를 끌 수 있다. 이를 보안 결함/머지 차단 사유로 보지는 않는다.
+- **불필요 코드/영향 검토:** withAuthorization/리메이크 가드·역할별 캐시·비동기 쓰기 가드에는 실제 사용 경로가 있다.
+  ORDER 채팅 GET/POST/폴링/원문 찾기 전환, Support 유지, 직원 캐시 writer3곳, Lab/Admin 공용 UI 기본 동작을 확인했다.
+  새로운 반복 조회/무한 렌더링이나 대규모로 제거할 미사용 추상화는 발견하지 못했다. 기존 목록 PC/모바일 이중
+  마운트 및 상세 파일/요약 별도 GET은 PR 이전 구조다. diff151파일(+9828/-863) 중24개는 테스트(+6464)다.
+- **HEAD 검증:** Clinic 전체35 suites/283 tests, Lab 전체36 suites/382 tests PASS(합71 suites/665 tests).
+  Clinic/Lab/Admin 타입3개 PASS. lint3개 오류0(경고222/186/393), Admin DLOS guard PASS, diff check PASS.
+- **릴리즈 통합 검증:** 충돌 없이 합쳐질 tree `5a6671a891`를 별도 snapshot에 반영한 뒤
+  Clinic/Lab/Admin `tsc --noEmit --incremental false` 모두 통과했다. Lab generated `next-env.d.ts`는
+  archive 제외 파일이므로 임시 snapshot에만 복원했다. 원본 checkout/branch/로컬 실행 서버는 그대로다.
+- **Production build 한계:** HEAD를 git archive한 별도 /tmp snapshot에서 Clinic build를 시도했다.
+  TypeScript 통과 후 webpack이 `@toast-ui/editor` CSS·`date-fns`를 해석하지 못해 실패, static generation 미실행.
+  관련4개 source와 package/lock은 PR에서 변경되지 않았고 원본에서도 같은 module resolution 실패를 확인했다.
+  의존성 설치/제품 설정 변경으로 범위를 넓히지 않았다. 빌드/배포 성공을 주장하지 않는다.
+- **증거:** `/tmp/dl16317-final-{clinic,lab}-{tests,type,lint}-20261016.log`,
+  `/tmp/dl16317-final-admin-{type,lint}-20261016.log`, 임시 재현 `order-access/results.log`,
+  `/tmp/dentlink-pr4700-production-build-20261016.log`,
+  `/tmp/dentlink-pr4700-merged-{clinic,lab,admin}-type-20261016.log`.
+- **다음:** 사용자에게 위2건 보완 후 머지를 권고한다. 수정 요청 시 기존 feature에서 실제 결함을 고치고
+  재현을 회귀 테스트로 바꿔 검증·승인된 커밋/푸시를 진행한다. 이후 팀 리뷰 승인·정상 build 환경 검증·QA/배포다.
+  과거의 “즉시 할 FE 잔여 없음” 판단은 이번 새 결함 발견 전의 체크포인트로만 읽는다.
+
+## 이전 체크포인트 — 2026-10-15 Office PR329 생성·웹 리뷰 확인 후 대기
 
 - **사용자 요청:** Office 앱 PR을 생성하고 CodeRabbit 유효 지적을 처리하되, 리뷰가 실행되지 않거나
   한도에 걸리면 건너뛴다. 웹도 남은 확인을 마치고 커밋/푸시·메모리 정리 후 대기한다.
