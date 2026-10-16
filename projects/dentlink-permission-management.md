@@ -1,7 +1,45 @@
 # Dentlink 권한관리 — DL-16317
 
 
-## 현재 상태 — 2026-10-16 웹 PR4700 최종 머지 전 검토
+## 현재 상태 — 2026-10-16 최종 검토 지적 수정·기존 PR4700 반영 완료
+
+- **사용자 승인/범위:** 최종 검토의 조치 사항을 수정·검증·커밋/푸시하고 살아 있는 PR4700에 반영한다.
+  PR 병합은 사용자가 진행할 예정이며 이번 단계에서 merge/배포/Jira 댓글/앱 수정은 하지 않았다.
+- **제품 Git:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 `feature/DL-16317`,
+  `f4bfaf1bf102a555ec6350aee97ea0a1ab2c7d05` (`fix: 주문 재조회 입력 보존과 승인 접근 확인 보완`).
+  정상 commit/push hook 통과·원격 ls-remote/PR head 일치·clean. 기존 10파일만 수정했고 신규 파일은 없다.
+- **완료:**
+  - Member 리메이크는 현재 주문/담당이 확인된 기존 데이터가 있을 때 network/408/429/5xx 재조회 실패로
+    작성 폼을 제거하지 않는다. 최초 실패는 기존 조회 불가 화면, 실제 403/담당·직원 변경/2131 처리는 유지한다.
+  - 승인 페이지의 siblings/recently 조회 및 파일/URL 표시는 현재 주문 확인 후 시작한다. 최초 pending과 실패를
+    분리하고, 403/404에서 캐시 자료와 잔여 콜백을 차단한다. 이미 확인된 주문의 일시적 재조회 실패에서는
+    Reject 입력·첨부 상태를 유지한다. 비동기 다운로드도 기존 ref/version으로 대상·열람 상태를 다시 확인한다.
+  - 두 화면은 기존 officeOrderActionPermissions 파일의 같은 일시 오류 판정을 사용한다.
+  - Member에게 숨긴 주문목록 Dentist 필터용 직원 조회를 PC/모바일에서 중단한다. 공용 훅의 기존 호출은 기본값 true로 유지한다.
+- **검증:** Clinic 전체35 suites/303 tests PASS(기존 테스트 확장, 신규 파일 없음).
+  commit hook Clinic/Lab/Admin 타입 PASS. push hook 3서비스 lint오류0(경고222/186/393),
+  Admin DLOS guard 및 shared coverage PASS. 읽기 전용 교차리뷰에서 추가 병합 차단 회귀를 발견하지 못했다.
+- **빌드 미완료 해소/이전 설명 정정:** 별도 snapshot에 pnpm8.6.9 frozen-lockfile 설치 후 정식
+  `pnpm build:clinic`를 실행해 TypeScript·webpack·정적195페이지·trace·standalone 서버까지 exit0으로 완료했다.
+  snapshot10파일 hash가 최종 커밋과 일치한다. 이전 date-fns/@toast-ui/editor 해석 실패는 수동 node실행으로
+  pnpm wrapper의 의존성 경로를 생략한 검증방식 한계였으며 정상 명령에서는 재현되지 않았다.
+  제품 manifest/lock/env/config 변경이나 임의 dependency/alias 추가는 없다. macOS/Node24 로컬 production build이며
+  Docker Node20/Alpine 이미지 빌드·실제 배포·쓰기 QA를 수행한 결과와 구분한다. 임시 snapshot은 삭제했다.
+- **릴리즈 호환:** 실제 release/v1.89.0 `a065b39e4`와 충돌 없이 합쳐지는 tree
+  `0a14f88dcb87f509cf3f1cd119809abbdf338012` 확인, 해당 통합소스 Clinic 타입 PASS.
+  앞선 통합 전 3서비스 타입 결과 및 기존 전체 Lab 테스트36 suites/382 PASS 기록은 아래에 보존한다.
+- **PR:** 기존 [PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700) → release/v1.89.0 유지,
+  본문에 최종 동작·검증·QA 경계를 갱신했다. 확인 시 OPEN/MERGEABLE, REVIEW_REQUIRED/BLOCKED이며
+  새 커밋의 CodeRabbit은 PENDING이다. 기존 head의 리뷰 성공을 새 head 리뷰 완료로 간주하지 않는다.
+  자동 리뷰를 강제 재실행하거나 유료 한도를 사용하지 않았다.
+- **증거:** `/tmp/dl16317-fix-{clinic-tests,commit,push}-20261016.log`,
+  `/tmp/dentlink-pr4700-final-production-build-20261016.log`,
+  `/tmp/dentlink-pr4700-final-merged-clinic-type-20261016.log`,
+  `/tmp/dentlink-pr4700-final-build-snapshot-20261016.json`.
+- **다음:** 이번에 확인한 코드 조치 잔여는 없다. GitHub 최신 자동 리뷰/필수 승인 상태를 확인한 뒤 사용자가
+  PR을 병합할 수 있는 상태로 판단한다. 이후 실제 릴리즈 쓰기/권한 QA와 배포는 별도다. 추가 작업/자동 모니터링 없이 대기한다.
+
+## 이전 체크포인트 — 2026-10-16 웹 PR4700 최종 머지 전 검토
 
 - **요청/범위:** 디자인 재검수보다 배포 위험·부작용·성능·불필요한 코드/개발 방식을 전수 검토한다.
   이번 요청은 검토이며 제품 수정·커밋/푸시·PR/Jira 댓글·병합·배포는 하지 않았다. Office 앱은 별도 범위다.
