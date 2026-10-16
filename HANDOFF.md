@@ -52,10 +52,13 @@ Do not store secrets or private customer data here.
   후속 codex 브랜치는 삭제 상태, 기존 워크트리는 권한 최종 병합10c30e3cb detached HEAD·clean 유지.
   원격 release24d3ff18a의 추가분은 비밀번호 변경 PR4701이며 권한 코드 변경 없음.
   앱 PR329 OPEN·미배포는 사용자 의도이므로 feature/DL-16317@7cb4487 보존. 앱 검증/Member 운영 적용은 PR329 포함 버전으로 진행한다.
-  최종 코드 교차 검토에서 신규 확정 차단 사유 없음. 다주문 환자의 담당 변경1+N 조회 지연은 QA 실측 대상이다.
-  필수 BE 요청 없음, 제품 변경 없음. 실제 QA 결과 후 웹은 최신 release에서 새 QA 브랜치로 재개.
-  후속으로 Codex DEV 읽기 검수를 시작했다. Member 확인 완료 일부, Admin 시크릿 로그인 요청 대기.
-  담당 변경 경고5214 미노출은 데이터 조건 확인 전 판정 보류이며 상세 체크포인트의 재개 순서를 따른다.
+  Admin 로그인 완료·사용자 테스트 데이터 생성 승인 후 Codex DEV 역할별 QA를 수행했다.
+  메뉴/필터/주문1단계 저장/상세3종/링크/직접 URL 제한 정상, Draft9738·9739·9740 생성(제출/결제 없음).
+  합성9739 담당 변경→Member 차단→원래 Member 담당 복원→접근 복구까지 확인했다.
+  **신규 QA2건:** FE5214 담당 변경 경고 누락은 SSR 문자열 ID 비교 오류로 확정.
+  기존 환자217에 Member Draft9740 저장 후 Patients 최신 응답 누락은 Draft 포함 정책과 불일치(BE 내부 원인 미확인).
+  제품 코드 변경 없음. 다음은 최신 release에서 FE 최소 수정/PR 승인 후 진행, BE에는 실제 응답 조건 조사자료 전달,
+  DEV 재검증→스테이징 QA. 앱 실기기/승인 대기 쓰기/다주문 지연 등 미실시 범위는 상세 체크포인트를 따른다.
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — PR #4699의 release/v1.89.0 병합 완료. QA·운영 출시 별도이며 브랜치는 보존한다.
 - Dentlink 통합알림센터: [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)

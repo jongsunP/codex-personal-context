@@ -182,12 +182,14 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-16:** 웹·Office FE 구현 완료. 웹 release 병합 및 개발서버 사전 테스트용 배포는 사용자 확인.
-  BE·FE 개발서버 사전 확인 후 스테이징 정식 QA 예정이며 상용 출시는 별도다. 브랜치/워크트리 보존.
-  Codex 권한별 읽기 검수 착수: DEV Member 역할·메뉴/필터·본인 상세 확인. Admin 시크릿 로그인 요청 후 대기.
-  담당 변경 경고 미노출5214는 보조GET 데이터/브라우저 build 확인 전 판정 보류. 공개 배포본에는 경고 구현이 있다.
+- **최신 2026-10-16:** Admin 로그인·테스트 데이터 생성 승인을 받아 DEV 역할별 실제 QA 진행.
+  메뉴/필터/주문1단계 NEW·FOLLOW_UP 저장/상세 기본·부분·차단/Pickup·공유 Case 링크/직접 URL 제한 확인.
+  Draft3건(9738·9739·9740) 생성,9739 담당 변경 후 Member 차단·원복 후 복구 확인. 제출/결제 없음.
+  **추가 조치2건:** FE5214 담당 변경 경고 누락(SSR 문자열 ID/숫자 비교 오류) 확정,
+  Member 기존 환자217의 Draft9740 저장 후에도 Patients 응답에서 누락(정책은 Draft 포함). BE 내부 원인은 미확인.
+  코드 수정은 아직 하지 않았다. FE 최소 수정/PR 및 BE 실제 반환 조건 확인 후 DEV 재검증이 다음이다.
 - **웹:** [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706) → release/v1.89.0 MERGED,
-  merge10c30e3cb(15:13:18 KST). 실제 런타임/QA/운영 배포는 추가 확인하지 않았다.
+  merge10c30e3cb(15:13:18 KST). DEV 런타임 핵심 QA는 위 결과, 스테이징 정식 QA/운영 출시는 별도다.
   최종d5f896740와 release tree 동일, PR4700의 squash 통합 tree도 일치 확인.
   `codex/dl-16317-permission-followup` 로컬·리모트 삭제. 웹 `feature/DL-16317`은 사용자 후속 지시로
   삭제 전 f4bfaf1bf로 로컬·리모트 복구 완료. 상용 반영 전 브랜치/워크트리 보존 지시가 우선한다.
@@ -199,10 +201,10 @@ For detailed current state, read:
   `feature/DL-16317@7cb4487`은 미병합이므로 보존. 앱 코드/브랜치/배포 변경 없음.
   기존394 tests·양 플랫폼 JS bundle PASS, 타입 진단18건은 기존과 동일. 실기기 QA와 구분한다.
   미병합·미배포는 사용자 의도다. native 권한 검증은 PR329 포함 버전으로 진행한다.
-- **최종 검토/다음:** 개발서버 사전 테스트를 막는 신규 확정 회귀·누락 없음. Member 담당 변경의 클릭 시1+N 순차 GET은
+- **검토/다음:** 종전 정적 검토 이후 위 실제 QA에서 신규2건이 나왔다. Member 담당 변경의 클릭 시1+N 순차 GET은
   다주문 환자에서 실제 지연 측정 필요. 성능·실사용 QA 전체 완료를 의미하지 않는다. DEV 사전 확인 → 스테이징 정식 QA.
   웹/앱 전달 및 Member 활성화 순서를 함께 관리한다. PR329 미포함 앱은 승인 UI 제한이 없어 호환버전 적용을 함께 관리한다.
-  같은 환자 타 주문403 우려는 정책상 정상 허용 경로이므로 필수 BE 질문을 재개하지 않는다. 실제403은 QA근거로 조사한다.
+  같은 환자 타 주문403 추측을 선행 질문으로 재개하지 않는다. Draft 환자 누락은 실제 QA 응답 근거로 별도 조사한다.
   이번 제품 변경/전체 테스트 재실행 없음. 후속 QA 수정은 최신 release에서 새 브랜치로 재개한다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
 - 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).

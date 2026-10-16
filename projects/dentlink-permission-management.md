@@ -1,22 +1,71 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-16 개발서버 권한별 읽기 검수 착수·Admin 로그인 대기
+## 현재 상태 — 2026-10-16 DEV Admin·Member 쓰기 포함 사전 QA: FE 결함1·서버 반환 불일치1
 
-- **최신 요청/다음 흐름:** 정식 QA를 기다리기 전에 Codex가 Admin/Member로 요구사항대로 화면이 보이는지 사전 검수한다.
-  현재는 읽기 검수만 진행하며 주문 저장/Next(Draft 생성)·담당 변경 Done·승인/거절·메시지/파일 전송·실제 권한 변경은 실행하지 않는다.
-- **이번 실제 DEV 확인:** Chrome 일반 창 `https://dev-portal.dentlink.io`의 jongsun.test2,
-  Office Members `(Me)`/Member 및 동일 테스트 병원을 확인했다. Member Office 관리 메뉴 제한, 주문 Dentist/My Orders 필터 없음,
-  Status/날짜 필터 유지·현재 본인 주문5건, 본인5214 상세의 Edit/Cancel·담당 변경·채팅 입력/파일 선택 UI를 확인했다.
-- **판정 보류 1건:** 본인5214의 담당 변경 모달에서 접근 상실 경고가 안 보였다. 타의사 라디오를 선택해도 동일하며,
-  Done은 누르지 않고 닫았다. 화면은 Cases1/Orders1이지만 보조 cases/orders의 DRAFT/CANCELED 포함범위가 같다고 단정하지 않는다.
-  경고는 현행 코드상 라디오와 무관하고 다른 본인 주문 유무로 결정된다. 실제 보조GET 응답·로드된 build를 확인한 뒤 정상/오류를 판정한다.
-  공개 DEV buildId `T-HN6Soh-Ok2Djun68obD`의 상세 chunk `[order_id]-d4c98e1b6c27c9fc.js`에서 경고 조회/문구/props 전달까지 확인했다.
-  따라서 PR4706 전체 미배포나 FE 버그로 확정하지 않는다. 정확한 배포 SHA는 미확인이다.
-- **로그인 준비:** 기존 Admin 시크릿 창이 없어 새 시크릿 DEV 로그인 화면을 열었다. 사용자에게 jongsun.test1 로그인 요청을 보냈고 답변 대기 중이다.
-  Member 일반창은5214 상세·모달 닫힌 상태로 보존했다. 로그인 입력을 방해하지 않도록 추가 브라우저 조작을 멈춘다.
-- **재개:** Admin 로그인 완료 확인 → 같은 화면의 역할 차이 비교 → Member 주문1단계 NEW/FOLLOW_UP·부분3943·차단9123·직접 URL 제한 확인
-  → 담당 변경 경고 보조응답 확인. 실제 저장·다주문 지연·Draft3종·native PR329 포함 앱 QA는 별도 조건이 필요하다.
-  정식 스테이징 QA를 대체하지 않는다. 제품 코드/브랜치/PR/배포 변경 없음.
+- **사용자 승인/범위:** Admin 로그인 완료 후 “필요하면 주문을 만들던 환경을 만들어서라도 최대한” 비교 요청.
+  DEV 화면 비교와 테스트 Draft 생성·합성 테스트 Draft 담당 변경/원복까지 진행했다. 종전 읽기 전용 제한은 이 요청으로 확장됐다.
+  코드 수정·새 PR·배포·계정 역할 변경은 이번에 하지 않았다. 실제 주문 제출/결제·승인/거절·메시지/파일 전송도 하지 않았다.
+- **계정:** `https://dev-portal.dentlink.io`, 같은 frankieDevOffice(office86).
+  일반 Chrome test2=Member(employee386), 시크릿 test1=Admin/OWNER(employee213), Office Members의 본인 표시로 대조.
+- **정상 확인:** Admin Billing/Dashboard/Office 관리 메뉴와 Dentist/My Orders/My Patients 필터가 제공되고 Member에는 숨겨진다.
+  Member Status/날짜 필터는 유지되고 Billing·Dashboard 직접 URL도 Forbidden이다.
+  Admin 주문 목록은 PENDING_ORDER/OFFICE_APPROVAL_PENDING 자동 필터38건, Member는 기존 본인 주문5건으로 시작했다.
+  주문1단계 NEW에서 Admin은 Assigned Dentist/Assign Myself 제공·선택값 저장, Member는 영역 없음·본인 자동 배정 저장을 확인했다.
+  Member 기존 타 의사 Case FOLLOW_UP도 본인386으로 저장하며 원래 Case 담당 의사(박 병원)는 유지된다.
+- **상세/링크 정상:** Member 본인5214는 일반 상세·수정/취소/담당 변경/채팅 입력 제공,
+  타 의사3943은 부분 상세(이력/파일 읽기 유지, 주문 수정/취소/담당 변경/채팅 입력/업로드 없음),9123은 No order data.
+  같은3943·9123은 Admin에서 정상 전체 상세·입력 기능 제공. Member의3943 추가정보 수정 URL은403.
+  Pickup의 타 의사4066 주문번호 클릭은 새 상세 탭으로 이동한 뒤 No order data로 제한된다(링크 자체 차단 없음).
+  공유 환자3437에서 다른 Case3200 주문 링크 이동·부분 조회, Approved Planning 자료2개 미리보기 확인.
+  이 완료된 승인 이력의 액션 부재를 승인 대기 주문의 승인/거절 차단 검증으로 확대하지 않는다.
+- **실제 담당 변경 검증:** 아래 합성 Draft9739를 Admin 화면에서 Member→Admin으로 변경 저장하니 Member product URL이403.
+  Admin에서 Member로 원복 저장 후 Member product 화면 정상 접근·담당 test2 확인. 기존 임상 주문은 변경하지 않았다.
+
+### 발견1 — FE 확정 결함: 마지막 본인 주문의 담당 변경 경고 누락
+
+- Member5214 담당 변경 모달에서 타 의사 선택 전후 모두 접근 상실 경고가 없다. 변경 Done은 실행하지 않았다.
+- 실제 `GET /office/patients/1345/cases/orders`200은 case2790/order5214 **한 건만** 반환한다.
+  `orderId:9000005214`는 숫자이고 traceId=`20261016084327788pzs0773`.
+- `clinic/src/pages/orders/[order_id]/index.tsx:69-80`은 SSR orderId를 문자열로 전달하나 Props는 number로 선언한다.
+  `clinic/src/lib/Order/useOrderDetail.ts:151-171`의 `item.orderId !== orderId` 비교에서 현재 주문이 제외되지 않아,
+  자기 주문을 보조 조회한 뒤 “다른 본인 주문 있음”으로 잘못 판정하고 경고를 숨긴다.
+  공개 SSR의 문자열 ID와 배포 chunk의 동일 로직/경고 문구·props까지 대조했다. 라디오·CSS·모달 props 문제가 아니다.
+- **최소 수정안:** 비교 시 `Number(orderId)`로 현재 ID 정규화. 기존 테스트에 SSR 문자열 ID/목록 숫자 ID/현재 주문1건 조건을 추가해
+  경고 표시와 불필요한 현재 주문 상세 GET0회를 검증한다. 전체 SSR/cache 키 형식 변경으로 범위를 넓히지 않는다.
+  제품 코드는 아직 수정하지 않았다. 기존 number-only 테스트가 실제 route 경계 문제를 포착하지 못했다.
+
+### 발견2 — 실제 서버 반환이 Draft 포함 환자 접근 정책과 불일치
+
+- Member가 기존 환자217·Case219에 FOLLOW_UP Draft9740 생성. 새 `GET /office/orders/9000009740`200에서
+  patientId217/patientCaseId219/dentistId386/creatorId386/purpose FOLLOW_UP/status DRAFT/detailStatus OFFICE_DRAFT/step PROFILE 확인.
+  임시 로컬 입력만 남은 상태가 아니며 paymentStatus NOT_CREATED, 결제/최종 주문 제출 없음.
+- 이후 새 `GET /office/patients/consolidate?size=10&page=0`200과 전체 화면 재조회 모두 기존5명만 반환한다.
+  환자217(테스트 이름 `asdsadasdsad`)이 누락된다. totalElements5, traceId=`20261016084838372MNY1146`.
+- 현행 [권한 PRD](https://www.notion.so/3eace072e82f81aa955dc21cba5cf127) §5-2는 본인 담당 주문1건 이상인 환자의 접근을 허용하며
+  **Draft·취소 포함** 및 Patients 목록 반영을 명시한다. 원문 최종 편집2026-10-15 16:06:54 KST를 재확인했다.
+- FE는 최초 Draft 저장부터 patientId/CaseId/dentistId를 전달하고 Patients 응답을 표시한다.
+  근거 `clinic/src/lib/OrderForm/OrderProfileForm/order-profile-form-helper.ts:160-181`,
+  `clinic/src/services/patient/usePatientConsolidateListQuery.ts`.
+  **서버 내부 원인은 미확인**이며 “새 API 미개발”로 단정하지 않는다. 이 실제 QA 사례와 trace/정책을 BE에 전달해 반환 조건을 조사할 필요가 있다.
+  이전 “필수 BE 질문 없음” 판단은 추측성 선행 질문에 관한 것이었고, 이번에 재현된 정책/응답 불일치는 신규 QA 결과다.
+
+### 생성 데이터·보존·다음
+
+- DEV Draft3건 보존(제출/결제 없음):
+  - `9000009738`: Admin 신규 환자 `QA DL16317 1016 Admin`, Case `QA Permission Shared Case`, 담당213. Member 상세 차단 확인.
+  - `9000009739`: Member 신규 환자 `QA DL16317 1016 Member`, Case `QA Member Assigned`, 담당386.
+    담당386→213→386 변경 검증 후 **원복 완료**. Member Draft 보드 노출, Admin9738 제외 확인.
+  - `9000009740`: 기존 환자217/Case219 FOLLOW_UP, 담당386. 위 서버 반환 불일치 재현 데이터.
+- 화면 증거는 로컬 `/Users/parkjongsun/.codex/visualizations/2026/10/16/permission-dev-qa/`에 저장했다:
+  member-warning-missing.jpg, member-partial-3943.jpg, member-blocked-9123.jpg, member-followup-9740.jpg,
+  admin-draft-9738.png, admin-full-3943.png, member-draft-reassigned-denied.jpg, member-draft-restored-9739.jpg.
+  사진은 Git에 넣지 않고 재현 조건/ID/결론을 이 문서에 보존한다.
+- **Git 유지:** 웹 worktree10c30e3cb detached clean·원본 featuref4bfaf1bf 보존, 앱feature7cb4487 clean·PR329 보존.
+  DEV buildId T-HN6Soh-Ok2Djun68obD의 권한 코드 일치는 확인했으나 정확한 전체 배포 SHA는 미확인.
+- **다음 순서:** FE 경고1건 수정 지시 시 최신 release/v1.89.0에서 새 QA 브랜치 → 최소 수정/회귀검증/PR.
+  BE에는 발견2의 실제 데이터·응답 조건 확인을 요청 → 수정본 DEV 재배포 후 두 건 재검증 → 스테이징 정식 QA.
+  앱 PR329 포함 버전의 실기기 검증은 별도이며, 승인 대기 실제 쓰기/파일·메시지 전송/ISV 저장/직원 전환/다주문 지연 측정은 이번에 완료하지 않았다.
+  권한 차이 핵심 흐름은 실제 검증했지만 “추가 조치 없이 QA 대기만 하면 됨”으로 종결하지 않는다.
 
 ## 이전 체크포인트 — 2026-10-16 최종 코드 재검토·개발서버 사전 검증 단계
 
