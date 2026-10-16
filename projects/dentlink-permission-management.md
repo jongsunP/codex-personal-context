@@ -1,7 +1,43 @@
 # Dentlink 권한관리 — DL-16317
 
+## 현재 상태 — 2026-10-16 담당 변경 경고 완료, 사용자 배포/QA 대기
 
-## 현재 상태 — 2026-10-16 정책 재대조 후 웹·Office 앱 후속 보완
+- **최신 요청/판단:** BE는 완료됐다는 사용자 기준으로 FE가 가능한 보완을 마치고 웹·앱 PR까지만 전달한다.
+  배포는 사용자가 진행한다. 아래 이전 체크포인트의 '담당 변경 경고 BE 확인 필요'는 해제한다.
+- **BE로 분류했던 이유와 정정:** 환자 Case 주문 목록에는 담당 ID가 없고 주문 목록에는 환자 필터가 없어
+  단일 응답으로 경고를 판정할 수 없었다. 이를 필수 BE 보완으로 분류한 것은 과했다.
+  기존 환자 Case 주문 API와 주문 상세 GET을 조합하면 정확히 확인 가능하며 새 API/필드가 필수는 아니다.
+- **웹:** 기존 `codex/dl-16317-permission-followup`에 `976097e85f8b1c6561924379ee2f716384d8ec1f`
+  (`fix: 담당 변경 전 환자 주문에 따른 접근 경고 보완`)을 추가했다.
+  정상 commit/push 후 원격 head 일치·clean을 확인했다.
+  [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706) → `release/v1.89.0` OPEN/MERGEABLE과 본문 갱신을 확인했다.
+  - Member가 담당 변경을 열 때 현재 환자의 Case 주문을 1회 조회한 뒤 현재/중복/삭제 주문을 제외한다.
+    나머지 주문 상세에서 본인 담당을 찾으면 경고를 생략하고 즉시 조회를 끝낸다. DRAFT/CANCELED는 포함한다.
+  - 다른 본인 주문이 없을 때 기존 접근 해제 경고를 표시한다. 페이지 진입과 Admin에는 보조 조회가 없다.
+    최악의 경우 같은 환자 주문 수 N에 대해 1+N GET이며 병원 전체 목록 조회는 하지 않는다.
+  - 조회 실패/누락 응답에서는 존재 여부를 추측하지 않고 기존 오류 알림 후 모달을 열지 않는다. 다시 클릭해 재시도한다.
+    중복 클릭, 직원/권한/환자/주문 변경, unmount 후 이전 결과/콜백을 차단한다.
+    보조 상세 GET에는 employee-id와 skipOfficeSwitchRequired를 전달한다.
+  - PC/mobile 제목 컴포넌트와 기존 페이지에 연결했다. 이번 추가는 기존8파일만 변경, 신규파일/스토리/env/패키지 없음.
+- **Office 앱:** 기존 `feature/DL-16317@7cb4487023001714ee3247ca454b97fdc9d1fca7` 및
+  [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → `develop`을 유지한다.
+  담당 변경은 OrderDetailScreen → DentlinkWebView → 웹 orders 상세/mobile 제목 → 공용 모달 경로다.
+  이번 경고 보완은 웹 배포로 함께 적용되므로 네이티브 중복 구현/빈 커밋은 만들지 않았다. PR 본문에 배포 의존성을 반영했다.
+- **검증:** Clinic 전체35 suites/349 tests, Lab 전체38 suites/399 tests PASS.
+  최종 타입 보완 후 hook24 tests 재검증 PASS. 정상 commit hook Clinic/Lab/Admin 타입 PASS.
+  정상 push hook 세 서비스 lint(기존 warning 있음)·Admin DLOS guard·shared coverage PASS.
+  최종976097e85와 소스 차이0인 격리 snapshot의 frozen 설치/정식 Clinic production build exit0:
+  TypeScript·webpack·195/195페이지·standalone 생성 확인, 임시 snapshot 삭제. 실제 배포/실계정 쓰기 QA와 구분한다.
+  증거: `/tmp/dl16317-warning-{clinic-tests,lab-tests,commit,push,clinic-build,clinic-snapshot}-20261016.*`.
+  독립 검토에서 추가 제품 결함을 발견하지 못했다. 기존 PRD의 환자 전체 읽기 허용으로 보조 상세 GET 경로도 대조했다.
+  앱 코드는 이번에 바뀌지 않았으며 직전394 tests/양 플랫폼 JS bundle 증거는 아래와 같다.
+- **다음:** 웹 PR4706·앱 PR329 팀 리뷰/병합 및 사용자 QA 배포 → Member/Admin 실계정·실기기 QA.
+  담당 변경 경고 유/무, 변경 후 부분 조회/접근 차단, 신규/기존 Case·ISV 담당 배정, 읽기/쓰기 제한을 확인한다.
+  현재 확정 범위의 필수 BE 요청이나 추가 FE 구현 대기는 없다. 서버 실제 데이터·쓰기·실기기 결과는 QA 증거로 남긴다.
+  merge/배포/CodePush/E2E/자동 리뷰 대기·유료 재실행은 수행하지 않는다. Jira connector403은 직전 제한이며 이번 재시도 없음.
+
+
+## 이전 체크포인트 — 2026-10-16 정책 재대조 후 웹·Office 앱 후속 보완
 
 - **사용자 승인:** 주문 1단계 조건 누락을 포함해 가능한 권한 작업 전반을 재검토하고 수정·검증·커밋/푸시·PR까지 진행한다.
   웹은 이미 release에 병합되어 `origin/release/v1.89.0`에서 새 브랜치로 진행한다. Office 앱은 아직 미병합이므로

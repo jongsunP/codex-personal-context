@@ -2,6 +2,13 @@
 
 ## 2026-10-16
 
+- 권한관리 잔여 담당 변경 경고를 기존 환자 Case 주문·주문 상세 API 조합으로 구현했다.
+  BE 필수 후속으로 분류했던 판단을 정정하고 웹976097e85/PR4706에 반영했다. Office PR329는7cb4487 유지하며
+  동일 WebView 경로라 중복 앱 커밋 없이 웹 배포 의존성을 정리했다. 정상 commit/push·원격동일·clean, 두 PR본문 갱신.
+  Clinic349/Lab399 tests·3서비스 타입·정상push검사·최종커밋 production build195페이지/standalone PASS.
+  페이지 상시/병원 전체 조회 없이 Member 변경 클릭에만 조회하며 본인 주문 발견 시 중단, 오류·권한 전환 가드를 검증했다.
+  사용자 배포/실제 QA 대기이며 merge·배포·CodePush·E2E·자동 리뷰 루프는 하지 않는다.
+
 - 권한관리 Figma·실제 권한 PRD/TC·DEV Swagger 전반을 재대조해 Member 기존 Case 주문도 본인 배정임을 정정했다.
   웹 release047fcc585에서 새 codex/dl-16317-permission-followup을 만들어 f173d49f7 normal commit/push 및 PR4706을 생성했다.
   담당 UI 숨김/불필요 조회 중단과 읽기 전용 번역·승인·완료C.P. 조회를 보완했다. Clinic324/Lab399 tests·3서비스 타입·

@@ -182,9 +182,9 @@ For detailed current state, read:
 - **최신 2026-10-16:** 사용자 요청으로 Figma·실제 권한 PRD/TC·DEV Swagger와 코드 전반을 재대조했다.
   Member 기존 Case 후속 주문 본인 배정, 담당 UI 숨김, 읽기 전용 번역/승인 자료 조회와 앱 일시 오류 입력 보존을 보완했다.
 - **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`,
-  `codex/dl-16317-permission-followup@f173d49f7`, 원격 동일·clean.
+  `codex/dl-16317-permission-followup@976097e85`, 원격 동일·clean.
   이미 병합된 PR4700의 release047fcc585에서 분기했고 [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706)
-  → release/v1.89.0 OPEN/MERGEABLE. Clinic35 suites/324 tests·Lab38 suites/399 tests·3서비스 타입/정상push검사 PASS.
+  → release/v1.89.0 OPEN/MERGEABLE. Clinic35 suites/349 tests·Lab38 suites/399 tests·3서비스 타입/정상push검사 PASS.
   격리 frozen설치+Clinic production build195페이지/standalone PASS. 기존 feature f4bfaf1bf 보존, 웹 develop 무관.
 - **Office 앱:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317@7cb4487`, 원격 동일·clean.
   기존 [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → develop OPEN/MERGEABLE에 후속3커밋 반영.
@@ -192,8 +192,8 @@ For detailed current state, read:
   자동 CodeRabbit은 기존 대상 패턴으로 skipped이며 실제 리뷰 PASS가 아니다.
 - **Jira:** 이번 connector403으로 최신 댓글/상태 재조회·변경은 못했다. 과거 카드 업데이트는 기능 체크포인트에서 구분한다.
 - **다음:** 팀 리뷰/병합·QA 버전 준비 → 실제 Member/Admin 저장·조회/쓰기 제한·직원 전환·오류 회복 QA.
-  BE에는 같은 환자 내 다른 본인 담당 주문 여부에 따른 담당 변경 경고 판정 정보 제공을 확인한다.
-  새 별도 접근 API나 불필요한 전체 조회는 추가하지 않았다. 후속 merge·배포·CodePush는 수행하지 않았다.
+  담당 변경 경고 조건도 기존 환자 주문/상세 API로 완료해 필수 BE 요청은 없다. Office WebView에도 함께 적용된다.
+  변경 클릭 시 환자 범위만 조회하며 본인 주문 발견 시 중단한다. 새 별도 접근 API나 병원 전체 조회는 추가하지 않았다. 후속 merge·배포·CodePush는 수행하지 않았다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
 - 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 
