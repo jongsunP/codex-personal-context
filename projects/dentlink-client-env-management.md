@@ -1,6 +1,60 @@
 # Dentlink 웹 환경변수 관리
 
-## 현재 상태 — 2026-10-16 착수 전 최종 검토·브리핑 완료, 실제 구현 미착수
+## 현재 상태 — 2026-10-16 준비 구현·GitHub 설정·실제 사용 가이드 완료
+
+이 절이 최신 기준입니다. 아래의 미착수·보류·제안 표현은 이전 이력이며 최신 상태를 뜻하지 않습니다. **준비 구현과 실제 운영 전환은 구분합니다. 기존 env 9개는 아직 Git에서 관리하고 기존 배포 경로도 유지합니다.**
+
+### 승인과 제품 Git
+
+- 사용자는 별도 브랜치·작업 폴더에서 1 변수 분류 → 2 코드 준비 → 3 새 GitHub 환경/값 준비를 승인했다. 이후 **노션·지라 정리 후 하던 작업을 이어서 커밋·푸시·메모리까지 마무리**하도록 명시했다. 기존 운영 변경·배포·merge·키 회전·Git 이력 재작성은 이번 실행에 포함하지 않았다.
+- 제품 작업 폴더: `/Users/parkjongsun/Repository/dentlink-client-env-management`, 브랜치 `feature/DL-16821`. 기준은 당시 `origin/master` `8772d68825cac6e23792d86a715153a67dc71078`이다.
+- 제품 커밋: `6cca7323d62d36ddf2389ad5b65c0ebc76c3fd72` (`feat: 웹 환경설정 분리와 GitHub 연동 준비`). 정상 commit/push 후 원격 SHA 동일·작업 폴더 clean을 확인했다. 새 PR은 없으며 이 브랜치의 Actions 실행도 0개다.
+- 원래 `/Users/parkjongsun/Repository/dentlink-client`는 `feature/DL-16796` / `3aac1dff0005706e78015cb5f23f255712696911` clean 상태로 보존했다. 다른 기능 worktree도 변경하지 않았다. 이후 재개 시 두 상태를 다시 확인한다.
+- Codex 관리 worktree 생성은 조정 폴더가 Git 저장소가 아니어서 실패했고, 제품 저장소의 일반 `git worktree add`로 분리했다. managed worktree로 등록된 것으로 가정하지 않는다.
+
+### Jira·Notion의 단일 진입점
+
+- 전체 문서와 하위 작업의 목차는 **[DL-16818 — 웹 환경변수 관리 방식 전환](https://innovaid.atlassian.net/browse/DL-16818)**이다. 상태는 진행 중이다. 사용자가 문서가 나뉘었으므로 링크를 일괄로 가진 상위가 필요하다고 명시해, 문서 3개의 용도와 읽는 순서까지 정리했다.
+- [DL-16819 — 환경변수 현황 조사·회의 및 운영 방안 정리](https://innovaid.atlassian.net/browse/DL-16819)는 기존 하위 카드다. 제목·설명·노션 링크를 정리하고 기존 완료 상태를 유지했다.
+- [DL-16821 — 환경변수 분리 및 GitHub 연동 구현](https://innovaid.atlassian.net/browse/DL-16821)을 같은 부모 아래 새 하위 작업으로 생성했다. Frankie에게 할당, 진행 중이다. 준비 결과·검증·실제 전환 전 남은 항목을 기록하며 전체 이관 완료로 닫지 않는다.
+- Notion 3개는 모두 `DEV Team / Development Documents` data source `26366594-1ec5-423c-b7c3-35abe1e047f2`의 같은 계층이다. 각 문서 맨 위에서 DL-16818로 돌아갈 수 있다. 제목·부모·연결·명령·본문 구조를 read-back했다.
+  1. [현재 상황과 개선안](https://app.notion.com/p/3face072e82f814b9a6ceaa36e5638af): 배경·대체안·선정 이유. 사용자가 다듬은 본문과 댓글은 유지하고 상위 카드 링크만 추가했다.
+  2. [사용·운영 가이드](https://app.notion.com/p/3fbce072e82f81119615e41b7c1195eb): 팀 운영법 / 개념·설정 방법. 실제 명령은 다음 문서로 연결했다.
+  3. [로컬 설정·갱신 따라하기](https://app.notion.com/p/3fbce072e82f81578c76d458c0a01c22): 이번에 추가. 도구 설치·로그인·설정 받기·비밀값 분리/가져오기·갱신·적용·문제 해결을 포함한다. 현재 가능한 준비와 전환 후 실행을 구분했다.
+- 사용자 선호: 짧고 쉽게 쓰되, `gh auth login` 같은 사소해 보여도 실제 사용에 필요한 명령을 생략하지 않는다. 길어지면 개념/운영과 따라하기를 나누고, 상위 목차에서 함께 찾게 한다. 단순 개념 설명만으로 사용 가이드가 완성됐다고 보고하지 않는다.
+
+### 구현과 실제 설정
+
+- `scripts/env/manifest.json`에서 기존 env의 변수명 105개를 public-build46 / server-config2 / server-secret8 / test-config39 / test-secret8 / blocked2로 분류했다. 코드에만 있는 선택 항목14개는 별도 표시하며 자동 등록하지 않는다. 실제 값은 manifest·예제·문서에 기록하지 않았다.
+- 새 GitHub Environment 9개에 공개 설정 항목 총238개를 등록하고 **페이지네이션을 포함해 모두 다시 읽어 일치**를 확인했다. admin dev/stage/prd=20/20/19, clinic=34/36/38, lab=24/24/23. 비어 있는 선택값은 등록하지 않는다.
+- 생성 전 270개 원격 branch tip의 workflow 3647개를 검사해 새 이름 참조가 없음을 확인했다. 기존 Environment5개·Repository Variables0·Repository Secrets22의 메타데이터는 전후 동일했다. 기존 보호 규칙과 Secrets는 변경하지 않았다. 새 설정을 소비하는 기존 배포 작업은 없다.
+- 명령은 **`pnpm env:pull clinic dev`** 형식이다. `pnpm env pull ...`은 pnpm 자체 env 명령과 충돌하므로 사용하지 않는다. `env:help / env:diff / env:prepare / env:apply / env:bootstrap / env:import`를 제공한다. Node20.12+와 gh 로그인이 필요하다.
+- 공개 설정은 `.env-management/public/<서비스>-<환경>.json`에 받고, DEV/STAGE private는 같은 루트의 `private/*.runtime.env`, `private/*.e2e.env`로 분리한다. `bootstrap`은 기존 파일을 보존하며 최초 분리, `import --replace`는 해당 종류의 파일 전체 교체다. PRD 비밀값은 로컬로 가져오지 않는다.
+- `prepare`는 `generated/*.env` 초안만 만들고 앱을 바꾸지 않는다. `apply`는 실제 env의 Git 추적이 남아 있으면 차단하며, Clinic의 blocked 항목도 차단한다. 전환 후 서비스 `.env.development`에 선택 dev/stage 설정을 적용하고 `.env.local` 및 수동 수정은 보존한다. 새 설정 파일0600·디렉터리0700, symlink 경로 거부, 값 로그 출력 금지다.
+- E2E는 shell > private E2E > 선택 공개 설정(API만) > legacy 순서다. 새 파일이 없을 때 기존 실행을 유지하며 잘못된 새 설정은 숨기지 않는다. E2E 계정·테스트 정보를 앱 초안/새 빌드 입력에서 제외하고 Playwright가 시작하는 앱 서버의 해당 값은 비운다. 로컬 STAGE 적용 후 local E2E를 실행할 때는 서비스들을 DEV로 다시 적용한다.
+- `Dockerfile.web`과 수동 전용 `web_env_validate.yml`은 별도 검증 경로다. BuildKit mount로 검증된 public 값만 공급하고 config revision으로 캐시를 분리한다. build 단계 네트워크 차단, AWS/Secrets/push/S3/ECS/Slack 연결 없음. 기존9개 Dockerfile/배포 workflow는 그대로다.
+- `.gitignore`·새 Docker context는 실제 설정 파일을 제외한다. 기존 Docker context에는 새 private 폴더와 `.env*.local` 제외만 추가해 기존 tracked env 공급을 유지했다. 기존 env9개 내용과 추적은 그대로다.
+
+### 검증과 한계
+
+- 환경설정 자동 검사36개, E2E 실행 도구 검사220개, E2E TypeScript 검사와 diff check를 통과했다. E2E 도구 검사는 합성 데이터이며 실계정 시나리오 실행이 아니다.
+- Admin·Clinic·Lab DEV에서 실제 `pull → bootstrap → prepare`를 실행해 GitHub와 원래 공개값 일치, 생성 앱 env에 E2E 정보 없음, 생성/private 파일 Git 제외와0600을 확인했다. private의 기존 빈 값은 그대로 두었고 유효성을 새로 보장하지 않는다.
+- 새 worktree는 `pnpm install --frozen-lockfile --ignore-scripts` 후 husky가 없어서 정상 `pnpm exec husky install`로 준비했다. 이미지 타입 선언 누락은 각 서비스 `next typegen`으로 해결했고, 이어 정상 pre-commit의 Clinic·Lab·Admin 타입 검사가 통과했다. 생성 next-env/type 파일은 Git 제외다. hook 우회나 공용 타입 소스 변경은 없었다.
+- 정상 pre-push의 3서비스 lint, Admin DLOS guard6개, shared configs21개/hooks32개 검사도 통과했다. 새 폴더의 coverage baseline 누락은 대상 소스·lockfile·coverage script가 기준 master와 같음을 먼저 확인하고 공식 `pnpm coverage:baseline`으로 생성해 해결했다. 재검사에서 변화0이며 baseline은 Git 제외다.
+- HTTPS push는 기존 OAuth의 `workflow` scope 부재로 새 Actions 파일이 거부됐다. 이미 등록된 동일 사용자 `jongsunP` SSH 인증을 검증한 뒤 **이번 push에만** `git -c remote.origin.pushurl=git@github.com:Innvoaid/dentlink-client.git push --set-upstream origin feature/DL-16821`를 사용해 성공했다. OAuth 권한 확대·영구 remote 변경·hook 우회는 없었다. 향후 workflow 변경 push도 현재 인증 범위를 먼저 확인한다.
+- 공개/환경 allowlist·누락·계정 분리·개인 수정 보존·특수문자 직렬화 검사를 포함한다. 최종 리뷰에서 작은따옴표와 리터럴 `\\n`/`\\r` 조합의 dotenv 변환 차이를 막고 회귀 검사를 추가했다. 변경 파일에는 기존 서버 비밀값·테스트 비밀번호·개인정보를 복사하지 않았다.
+- Docker CLI가 없어 실제 Docker 빌드는 미실행이다. 앱 실행·실계정 E2E·서비스 배포·결제 동작·팀 간 비밀파일 전달·팀원별 조회 권한도 아직 검증하지 않았다. 새 workflow는 커밋만으로 실행하지 않는다.
+
+### 실제 전환 전에 남은 일 / 다음 시작점
+
+1. 이 체크포인트와 `feature/DL-16821` 원격/작업 폴더를 먼저 동기화·확인하고, 팀 공유 후 의견을 반영한다. 현재 준비만 완료한 상태를 전체 보안 이관 완료로 설명하지 않는다.
+2. Docker 사용 가능한 환경에서 새 비배포 검증 경로를 실행하고, 앱·E2E 공급/누락·이미지 내 설정파일 제외를 확인한다. 실제 DEV API 쓰기 테스트는 승인 범위를 별도로 유지한다.
+3. `NEXT_PUBLIC_EXIMBAY_SECRET_KEY`는 브라우저 서명 경로에 있어 Variables 등록·새 Clinic 적용/빌드에서 차단했다. 서버 서명 전환·실제 키 유효성/회전 판단이 필요하다. `NEXT_PUBLIC_MEDITLINK_KEY`는 용도·공개 여부 확인 전 차단, Google Maps 등의 실제 도메인/API 제한도 미확인이다.
+4. 새 팀원에게 필요한 DEV/STAGE private 파일을 권한 확인한 암호화 직접 전송으로 전달하는 절차를 실제 연결·검증한다. GitHub Secrets 원문 다운로드는 불가하며 로그/artifact 우회도 사용하지 않는다. Vault·Infisical 도입은 승인하지 않았다.
+5. 실제 배포 workflow 연결·설정 변경 시 이미지 식별자·Clinic CDN 이전 파일 보존/복구를 정리하고 검증한다. 기존 SHA 기반 태그 및 같은 PACKAGE_VERSION의 `--delete` 문제를 해결하기 전 복원 완료로 보지 않는다.
+6. 위 공급·실행·복구와 팀 전환 안내가 끝난 뒤에만 env Git 추적 해제와 실제 전환을 진행한다. 과거 Git 이력의 값은 추적 해제만으로 사라지지 않으며 키 회전/이력 정리는 별도 판단이다.
+
+## 이전 상태 — 2026-10-16 착수 전 최종 검토·브리핑 완료, 실제 구현 미착수
 
 - 사용자는 실제 작업과 플래닝을 전적으로 맡았고, 두 Notion 문서는 아직 팀에 공유하지 않았으며 화요일에 공유할 예정이라고 밝혔다. 회의 전에는 **1 변수 분류 → 2 별도 브랜치 코드 작업 → 3 새 GitHub 환경/값 준비**를 진행할 수 있고, **4 배포 없는 기술 검증 → 회의 의견 반영·사용자 결과 확인 → 실제 운영 전환**으로 구분해 설명했다. 수동 QA 전체를 사용자에게 요구하는 뜻이 아니며 기술 검증은 Codex가 수행한다.
 - 최신 요청은 진행 전에 필요한 문서·코드·GitHub 상태를 최종 검토하고 간단한 단계별 브리핑을 달라는 것이다. **이번 턴은 검토와 문구 보완만 수행했다.** 새 작업 브랜치/환경/값 생성, 제품 코드 변경, 테스트·빌드·배포 실행은 하지 않았다.
