@@ -762,6 +762,27 @@ records:
   development-session prompts, terminal commands, exact values, or text the
   user needs to paste elsewhere.
 
+### Concise Status Briefings
+
+When the user asks for a briefing or an easy explanation, give one compact
+answer covering completed work, current impact, and remaining steps. This
+preference was clarified on 2026-10-16.
+
+- Say what is complete and where it exists: separate branch, master, external
+  settings, or the deployed service. Do not collapse these into "done."
+- State whether current operation is affected and the concrete reason. For
+  example, newly registered GitHub settings are not used by the current
+  deployment code. Avoid an unqualified claim that everything is safe.
+- Give the remaining steps in order and make a meeting or user-resume gate
+  clear. Do not make the user ask several follow-ups to assemble the status.
+- Keep this user-facing briefing to a few plain sentences or short bullets.
+  Test counts, file lists, implementation history, and detailed handoff
+  evidence belong in the checkpoint unless needed to explain an actual issue.
+
+Example: code is complete on a separate branch; GitHub settings are registered
+but current deployment code does not consume them; after sharing the Notion
+guide at the meeting, validate actual use and recovery, then cut over.
+
 ## Database And Sensitive Work
 
 Default database work should be read-only.
