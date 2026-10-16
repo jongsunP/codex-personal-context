@@ -4,7 +4,24 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 후속 정리 완료 — 2026-10-16 frankieTemp 백업 검토
+## 현재 재확인 — 2026-10-16 진행 중 릴리스 보존 기준
+
+- 사용자가 ‘릴리즈 완료 작업 정리’는 **과거 운영 배포가 끝난 작업**을 뜻한다고 명확히 했다.
+  현재 작업·QA·배포 대기인 `v1.89.0` 관련 브랜치는 release에 병합됐더라도 보존한다.
+  이 기준을 `SESSION_WORKFLOW.md`의 정리 절에 반영했다.
+- 메인세션의 실제 삭제 목록과 현재 웹 v1.89 대상 PR 9개 및 열린 PR 5개의 head/base를
+  대조한 교집합은 0개다. 웹147개는 과거 PRD v1.88.0 반영을 다시 확인했고 앱7개도
+  이전 운영 전달 작업이다. 별도 폐기 승인 frankieTemp4개는 출시 증명과 구분한다.
+  삭제한 로컬 release/v1.88.0과 Lab 문서 공간도 현재 미출시 작업에 해당하지 않는다.
+- **별도 확인 항목:** PR #4706의 `codex/dl-16317-permission-followup`은 원격에 없다.
+  현재 v1.89에만 반영돼 있어 위 기준상 보존 대상이지만, 메인세션 삭제 목록에는 없었다.
+  권한관리 정본에는 별도 정리 후 원래 `feature/DL-16317`만 복구한 이력이 있다.
+  원래 feature의 로컬·원격 복구와 기존 worktree 보존은 확인했으며, 이번 조회에서
+  후속 브랜치 복원이나 추가 제품 변경은 하지 않았다. 이 항목을 사용자에게 알린다.
+- 이 재검증 결과를 타 세션의 모든 삭제가 적절했다는 보증으로 확대하지 않는다.
+  담당 세션의 최신 복구·보존 상태는 [권한관리 정본](dentlink-permission-management.md)을 따른다.
+
+## 이전 후속 정리 완료 — 2026-10-16 frankieTemp 백업 검토
 
 - 사용자 요청으로 남아 있던 `frankieTemp/` 5개를 코드·과거 PR·현재 운영 소스와 비교했다.
   이번 삭제는 아래 사용자 확인에 따른 **대체 완료·불필요 실험의 폐기**이며,

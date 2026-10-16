@@ -324,6 +324,19 @@ unless their move or cleanup is authorized.
    checkout when its commits are preserved remotely. Keep remote branches and
    PRs unless their change is separately authorized.
 
+For cleanup requested on the basis of completed releases, the user's
+2026-10-16 clarification is controlling: remove only completed work from a
+past release that already reached production. Preserve feature, QA and
+delivery branches and their needed worktrees for the current unfinished
+release train, even when their PRs have merged into that release. At the time
+of clarification, web `release/v1.89.0` is current work/release waiting, not a
+cleanup target. Compare deletion candidates against all PRs for the current
+release, including merged PRs, and current work ownership. A separate explicit
+approval to discard an obsolete experiment is not proof of production release.
+For apps that reuse a release branch for CodePush, verify the specific work's
+delivery and active use; the release name alone does not establish completion.
+The disposable-local-checkout exception above does not override this scope.
+
 The Dentlink FE top-level session remains responsible for cross-feature
 coordination. Each feature session owns edits, checks, commits, pushes, and PR
 work only inside its explicitly assigned repository/worktrees and within the
