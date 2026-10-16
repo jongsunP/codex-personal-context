@@ -2,6 +2,13 @@
 
 ## 2026-10-16
 
+- 웹 env 작업을 FE 기존 값·이름·동작 보존으로 재확정해 후속 구현을 마감했다. Eximbay 서버 변경 필수/미사용 Medit 제외 판단을 철회하고 private build로 모두 보존했다.
+  89b051664/8d29f043e 정상 commit/push, Draft PR4713 본문 갱신. 9환경 값 일치·env74/E2E도구220·타입/lint 및 Clinic 포함3서비스 native빌드/HTTP200 확인.
+  GitHub 새 build/E2E Secrets5개 추가(기존 설정 유지), 9개 기존 배포 Docker/workflow의 입력 연결·수동E2E 과거ref 호환·암호화 pack/unpack 구현.
+  실제 TTY에서 발견한 전달 CLI 미종료를 수정하고 양쪽 exit0·내용일치·비출력 검증 후 fixture를 정리했다.
+  Notion 운영/따라하기·Jira44467과 체크포인트를 최신화했다. 기존env9 추적 유지, 실제배포/merge/전환·Docker설치·실계정쓰기는 하지 않았다.
+  추가 팀정책/BE계약을 받아올 필요 없이 다음 사용자 재개에서 Docker·팀원수신/실사용·복구 확인 후 전환한다. 아래 앞선 기록의 Eximbay 차단·Medit 제외는 대체된 이력이다.
+
 - 권한관리 사용자가 현재 가능한 웹·앱 조치를 마감하고 QA는 나중에 진행하겠다고 명시했다.
   앱6437dbb/PR329 OPEN→develop·웹e28b9c7e8 clean을 재확인하고 대기 상태를 기록했다.
   QA·병합·배포·감시를 시작하지 않으며 브랜치/worktree 보존, 사용자 QA 재개 지시 후 실제 배포 버전부터 확인한다.

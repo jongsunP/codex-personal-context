@@ -18,13 +18,12 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- **2026-10-16 전환 준비 구현과 새 GitHub 설정을 완료**했다. 전체 작업·문서 목차는 [DL-16818](https://innovaid.atlassian.net/browse/DL-16818), 조사·회의 [DL-16819](https://innovaid.atlassian.net/browse/DL-16819)는 완료, 구현 [DL-16821](https://innovaid.atlassian.net/browse/DL-16821)은 진행 중이다.
-- 별도 worktree `/Users/parkjongsun/Repository/dentlink-client-env-management`, `feature/DL-16821`, 최신 커밋 `c1f424d06`까지 정상 푸시했다. [master 비교용 Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713)을 생성했다. 공개 설정 받기·갱신·private 분리·환경 혼동 방지·적용 보호·E2E 설정 분리와 수동 전용 비배포 빌드 경로를 준비했다. 기존 제품 checkout은 보존했다.
-- GitHub 서비스×환경 9개를 추가하고 공개 설정238개를 등록·read-back했다. 기존5환경·Repository Variables/Secrets 설정은 유지했다. 원래 env9개도 아직 추적 중이며 기존 배포 workflow는 바꾸지 않았다.
-- Notion은 **현재 상황과 개선안 / 사용·운영 가이드 / [로컬 설정·갱신 따라하기](https://app.notion.com/p/3fbce072e82f81578c76d458c0a01c22)**로 분리했다. 설치·`gh auth login`·`pnpm env:pull clinic dev` 같은 실제 명령까지 안내하고, 3개 모두 상위 Jira에 연결했다. 간결함 때문에 필수 사용 절차를 빼지 않는다.
-- 환경설정46개·E2E 실행 도구220개·E2E 타입·3서비스 타입/lint 검사 통과. 외부 네트워크를 차단한 Admin·Lab DEV 로컬 빌드와 standalone 로그인 페이지·JS HTTP200, DEV/STAGE 테스트 목록 각각109개 수집까지 확인했다. 실제 Docker 빌드·실계정 E2E·배포·팀 간 private 전달은 미검증이다. 사용자가 Docker 설치를 보류했으며 Vercel 사이트/미리보기 성공은 이번 완료 조건이 아니다.
-- Clinic 전환 전 Eximbay 서버 서명 계약·실제 키 상태 확인이 필요하다. 현재 웹에서 안 읽는 Medit 키는 unused로 제외했다. 공급/복구 검증과 팀 전환 안내 후 env 추적 해제·실제 전환한다. Vault/Infisical 도입은 없다.
-- [개인 체크포인트](projects/dentlink-client-env-management.md)의 최신 상태·승인·검증·다음 시작점을 따른다. 팀의 기존 정책을 사용자에게 다시 받아오라고 요구하지 않는다.
+- **2026-10-16 FE 기존 env 외부 공급 준비·설치 없는 검증·푸시 완료, 실제 전환 대기.** 사용자는 기존 값·변수명·동작 보존을 확정했다. BE/결제 로직·배포 체계 개편을 추가하지 않으며 새로 팀에 받아올 필수 정책·BE 계약은 없다.
+- 별도 `/Users/parkjongsun/Repository/dentlink-client-env-management`, `feature/DL-16821`, 최신 `8d29f043e` 정상 push. [master 비교용 Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713) 유지. 원래 제품 checkout 보존.
+- 9개 GitHub 환경·공개238항목과 신규Secrets5개 준비. Eximbay·Medit 기존 값도 private build 공급으로 유지한다. 기존 배포 workflow/Docker 설정 연결은 작업 브랜치에 반영했으며 실제 배포하지 않았다. env9개는 계속 Git 추적 중이다.
+- 공개 수신/갱신·개인값 보호·private 암호화 pack/unpack·E2E 분리·비배포 검증 경로 마련. 환경설정74·E2E도구220·타입/lint 통과, 3서비스 외부 네트워크 차단 native 빌드/standalone HTTP200·9환경 값 보존 확인. 실제 Docker/실계정/팀원 전달·전환은 미검증.
+- [DL-16818](https://innovaid.atlassian.net/browse/DL-16818)이 문서·작업 목차. [DL-16819](https://innovaid.atlassian.net/browse/DL-16819) 완료, [DL-16821](https://innovaid.atlassian.net/browse/DL-16821) 진행 중·최종댓글44467. Notion 개요/운영/[따라하기](https://app.notion.com/p/3fbce072e82f81578c76d458c0a01c22)에 실제 명령·전달/갱신 방법 반영.
+- 사용자 재개 후 Docker/실사용·설정 전달·복구 확인 → 팀 적용·env 추적 해제·전환. Docker 설치·Vercel Dashboard 검증은 하지 않았다. Eximbay 서버화·키 회전·과거 Git 이력 정리는 별도 개선이다. [개인 체크포인트](projects/dentlink-client-env-management.md) 기준으로 대기한다.
 
 ### 사무실 의자 구매·헤드레스트 개선 조사
 
