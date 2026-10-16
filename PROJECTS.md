@@ -20,9 +20,9 @@ Check this folder first when finding or continuing local projects.
 
 - DLDS와 분리한 별도 기능 세션. **2026-10-16 회의에서 GitHub 기반 적용 방향과 팀 공동 관리를 확정**했다. 현재는 로컬 동기화·dev/stage/prd와 서비스 분리·Variables/Secrets 분류·공개 키 검토·설정 변경 후 배포/복원 등 운영 상세를 조사·설계하는 단계이며 **구현은 보류**다. 회의 의도는 이해 완료다.
 - master `8772d688`의 env9개/변수명105개, 배포9개와 GitHub 설정을 읽기 전용으로 재확인했다. 서비스×환경9개 구획과 로컬 단방향 갱신을 제안했으며 구체안은 아직 팀 확정 전이다. 로컬 비밀값 공유 경로와 외부 키의 실제 상태는 추가 확인 대상이며 Vault/Infisical은 참고 후보일 뿐 도입 결정이 아니다.
-- [팀 공유용 Notion](https://app.notion.com/p/3face072e82f814b9a6ceaa36e5638af)은 **DEV Team / Development Documents**에 있고 기존 방향 설명 본문·댓글3개를 유지한다. 이번 회의 내용으로 Notion을 수정하거나 제품 코드·설정·Git/PR·배포를 변경하지 않았다.
+- [기존 방향 설명 문서](https://app.notion.com/p/3face072e82f814b9a6ceaa36e5638af)의 본문·댓글을 유지하고, 같은 **DEV Team / Development Documents**에 별도 [사용·운영 가이드](https://app.notion.com/p/3fbce072e82f81119615e41b7c1195eb)를 작성·read-back했다. 보관·환경 분리·로컬 갱신·공통 변경·배포·팀 규칙을 쉽게 설명하며, Infisical은 로컬 비밀값용 추천안으로 제시했다. 실제 제품 코드·설정·Git/PR·배포 변경은 없다.
 - [개인 체크포인트](projects/dentlink-client-env-management.md)
-- 착수 전 질문별 제안 가능 범위와 필수 사실/정책 확인을 구분해 저장한 뒤 사용자 요청으로 대기 중이다. 기존 비밀값 공유 수단 유무는 미답변이며, 재개 요청 전 추가 조사·문서·구현·설정 변경은 하지 않는다.
+- 사용자가 기존 로컬/운영 정책은 없으며 이번에 함께 정해 팀에 공유하는 것이 목적이라고 명확히 했다. 기존 정책을 다시 물어오도록 요구하지 않는다. 현재는 신규 가이드 검토 단계이며 실제 도입 권한·비용·외부 키 상태는 구체안에 맞춰 필요한 시점에 확인한다.
 
 ### 사무실 의자 구매·헤드레스트 개선 조사
 
