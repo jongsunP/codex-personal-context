@@ -54,6 +54,8 @@ Do not store secrets or private customer data here.
   앱 PR329 OPEN·미배포는 사용자 의도이므로 feature/DL-16317@7cb4487 보존. 앱 검증/Member 운영 적용은 PR329 포함 버전으로 진행한다.
   최종 코드 교차 검토에서 신규 확정 차단 사유 없음. 다주문 환자의 담당 변경1+N 조회 지연은 QA 실측 대상이다.
   필수 BE 요청 없음, 제품 변경 없음. 실제 QA 결과 후 웹은 최신 release에서 새 QA 브랜치로 재개.
+  후속으로 Codex DEV 읽기 검수를 시작했다. Member 확인 완료 일부, Admin 시크릿 로그인 요청 대기.
+  담당 변경 경고5214 미노출은 데이터 조건 확인 전 판정 보류이며 상세 체크포인트의 재개 순서를 따른다.
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — PR #4699의 release/v1.89.0 병합 완료. QA·운영 출시 별도이며 브랜치는 보존한다.
 - Dentlink 통합알림센터: [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)

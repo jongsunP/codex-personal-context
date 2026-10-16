@@ -182,6 +182,8 @@ For detailed current state, read:
 
 - **최신 2026-10-16:** 웹·Office FE 구현 완료. 웹 release 병합 및 개발서버 사전 테스트용 배포는 사용자 확인.
   BE·FE 개발서버 사전 확인 후 스테이징 정식 QA 예정이며 상용 출시는 별도다. 브랜치/워크트리 보존.
+  Codex 권한별 읽기 검수 착수: DEV Member 역할·메뉴/필터·본인 상세 확인. Admin 시크릿 로그인 요청 후 대기.
+  담당 변경 경고 미노출5214는 보조GET 데이터/브라우저 build 확인 전 판정 보류. 공개 배포본에는 경고 구현이 있다.
 - **웹:** [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706) → release/v1.89.0 MERGED,
   merge10c30e3cb(15:13:18 KST). 실제 런타임/QA/운영 배포는 추가 확인하지 않았다.
   최종d5f896740와 release tree 동일, PR4700의 squash 통합 tree도 일치 확인.
