@@ -183,7 +183,8 @@ For detailed current state, read:
 - **웹:** [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706) → release/v1.89.0 MERGED,
   merge10c30e3cb(15:13:18 KST). 실제 런타임/QA/운영 배포는 추가 확인하지 않았다.
   최종d5f896740와 release tree 동일, PR4700의 squash 통합 tree도 일치 확인.
-  `codex/dl-16317-permission-followup`과 웹 `feature/DL-16317` 로컬·리모트 삭제 완료.
+  `codex/dl-16317-permission-followup` 로컬·리모트 삭제. 웹 `feature/DL-16317`은 사용자 후속 지시로
+  삭제 전 f4bfaf1bf로 로컬·리모트 복구 완료. 상용 반영 전 브랜치/워크트리 보존 지시가 우선한다.
   `/Users/parkjongsun/Repository/dentlink-client-permission`은 release10c30e3cb detached HEAD·clean으로 보존한다.
 - **기존 검증:** Clinic353/Lab399 tests·3서비스 타입/정상push검사 PASS. 976097e85 production build195페이지 PASS.
   CodeRabbit 승인 ID 보존 지적 수정·resolve 완료. 후속 자동 리뷰는 사용자 요청으로 대기 중단, 이번 재조회 없음.
