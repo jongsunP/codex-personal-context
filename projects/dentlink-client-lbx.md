@@ -1,6 +1,6 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-10-16, 원본 브랜치에 픽업 조회 API 후속 수정
+## 현재 체크포인트 — 2026-10-16, 원본 픽업 API 수정 저장 / develop 전달 PR #4709
 
 ### 원본·전달 브랜치 운영 기준 — 사용자 정정 우선
 
@@ -42,20 +42,39 @@
 
 ### 현재 저장 상태·다음 시작점
 
-- 제품 수정은 **원본 `feature/DL-16387`의 로컬 미커밋 6파일**이다. 원본 로컬 HEAD와
-  origin은 아직 `347909945b091324e7134673525203de14e122fd`로 같다.
-  제품 커밋·push·후속 PR·병합·추가 배포는 실행하지 않았다.
-- 원본의 작업 공간은 `/tmp/dentlink-lbx-pickup-api-20261016`이다. 기본 checkout은
-  다른 작업 `feature/DL-16796 / 3aac1dff0005706e78015cb5f23f255712696911`, clean 상태로
-  유지한다. 테스트/patch 증거는 `/tmp/lbx-pickup-api-20261016-evidence/`와
-  `/tmp/lbx-pickup-api-20261016-original-*.log`에 있다. 로컬 미커밋 코드와 /tmp 증거는
-  다른 기기로 이동하지 않으므로 원격 보존 전에 작업 공간을 제거하지 않는다.
-- 커밋·push/develop PR 확인 질문에 사용자는 브랜치 운영 의도를 정정했다.
-  다음 지시에 따라 **원본에 먼저 커밋·push**하고, 개발서버 반영을 요청하면 그 원본
-  수정만 현재 develop에 전달하는 별도 브랜치/PR을 준비한다. 배포용에서만 기능 수정을
-  누적하여 원본이 뒤처지게 만들지 않는다. 병합/배포는 별도 지시를 따른다.
+- 사용자가 **원본 커밋·push 후 그 원본에서 별도 개발서버 전달 브랜치를 만들어 develop
+  PR을 생성**하도록 명시 승인했다. 원본 `feature/DL-16387`의 커밋은
+  **`b69dd84b6d2590449c2f6887330b4e8285b2ab63`**,
+  `fix: LBX 픽업 대상 배송 조회 API 변경`이며 로컬·원격이 일치한다.
+- 원본의 이 커밋에서 **`feature/DL-16387-develop-pickup-20261016`**을 만들고
+  당시 최신 develop `8d725079dacf4472fd272b3a2e08725bc6255af9`를 충돌 없이 병합했다.
+  전달 HEAD **`9f0479318b58e1f2947765a39209ce000745ca41`**의 첫 부모는 원본
+  `b69dd84b6`, 두 번째 부모는 develop `8d725079d`다. 원본에는 develop을 역병합하지 않았다.
+- [PR #4709](https://github.com/Innvoaid/dentlink-client/pull/4709)는 위 전달 브랜치에서
+  **develop** 대상으로 OPEN이며 생성 직후 `MERGEABLE`을 확인했다. develop 대비
+  **6파일 +149/-9**로 이번 API 변경만 포함한다. 기존 #4705의 DLOS/개발서버 변경은 유지된다.
+  예상 merge-tree와 실제 전달 tree `72d1d5dc2d797d93155d01fc552b3ac719ee7ede`가 같다.
+- 두 브랜치 모두 정상 commit/push hooks를 통과했다. 원본 전체 lint는 기존 경고
+  Clinic 223/Lab 189/Admin 410, 오류 0; configs 21개·hooks 32개 및 coverage 비교 통과.
+  전달본은 타입 3앱, 기존 lint 경고 222/186/393·오류 0, DLOS guard 60/60와 guard 테스트,
+  configs 21개·hooks 40개 및 같은 2026-04-23 coverage baseline 비교를 통과했다.
+- 병합된 전달본에서도 실제 DLOS 픽업 폼/query/wrapper를 사용한 로컬 통합 검증
+  **8/8 통과**했다. 앞선 원본 8/8과 구분하며 실제 업무 서버 요청 성공이나 브라우저 QA는 아니다.
+- PR의 Auto Assign은 성공했고 CodeRabbit은 develop 설정 때문에
+  **`Review skipped: reviews are disabled for this base branch`**로 success다.
+  새 CodeRabbit 리뷰 통과로 보고하지 않는다. GitHub Admin DLOS Guard도 성공했고,
+  최종 PR은 `OPEN / MERGEABLE / CLEAN`을 확인했다.
+- 두 브랜치의 원격 저장과 tracked clean 확인 후 임시
+  `/tmp/dentlink-lbx-pickup-api-20261016` worktree를 제거했다. 테스트는
+  `/tmp/lbx-pickup-api-20261016-evidence/delivery-final/`로 복사했고 원본/전달 로그는
+  `/tmp/lbx-pickup-api-20261016-{original,delivery}-*.log`에 있다. 이 자료는 기기 한정이다.
+  기본 checkout은 계속 `feature/DL-16796 / 3aac1dff0005706e78015cb5f23f255712696911`,
+  clean 상태이며 다른 작업의 브랜치/worktree는 변경하지 않았다.
+- 다음 단계는 #4709의 팀 리뷰 후 사용자/팀이 develop에 병합하는 것이다.
+  이번 작업에서 PR 병합이나 배포는 실행하지 않았다. 운영 릴리스 전달도 별도다.
+  이후 기능 수정은 원본에서 계속하고, 필요할 때 원본을 기준으로 전달 브랜치를 만든다.
 - 기존 [개발서버 배포 run 38849971928](https://github.com/Innvoaid/dentlink-client/actions/runs/38849971928)은
-  이번 조회에서 **completed/success**, source `dd6388ff976928e72f0de2d8521688977db2013b`였다.
+  앞선 조회에서 **completed/success**, source `dd6388ff976928e72f0de2d8521688977db2013b`였다.
   이는 이전 #4705의 배포 성공이며 이번 신규 API 교체의 배포 성공은 아니다.
 
 ## 이전 체크포인트 — 2026-10-16, 날짜별 전달 브랜치로 develop 병합 완료

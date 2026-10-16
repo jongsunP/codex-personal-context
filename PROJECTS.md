@@ -149,9 +149,10 @@ For detailed current state, read:
 ### Dentlink Admin LBX — DL-16279 / DL-16387
 
 - 기존 배송 목록·상세 확장, LBX Baby/Mother 생성 및 픽업 생성.
-- 2026-10-16 날짜별 전달 PR #4705를 사용자가 develop에 병합했다. 운영 릴리스는 별도다.
-  원본 `feature/DL-16387`과 `feature/DL-16387-develop-20261016`을 보존하며
-  후속 릴리스는 정본의 호환 수정·전달 범위를 다시 확인한다. 테스트 중 실제 생성·수정 요청 금지.
+- 2026-10-16 원본 `feature/DL-16387`에 픽업 API 교체 `b69dd84b6`를 저장하고,
+  원본에서 별도 전달 브랜치를 만들어 develop PR #4709를 생성했다. 이전 #4705는 병합·개발 배포 완료.
+  기능 수정은 원본에 누적하고 별도 브랜치는 배포용으로만 사용한다. 운영 릴리스는 별도이며,
+  전달 시 대상 호환 변경을 확인한다. 테스트 중 실제 생성·수정 요청 금지.
 - [projects/dentlink-client-lbx.md](projects/dentlink-client-lbx.md)
 
 ### Dentlink Office App
