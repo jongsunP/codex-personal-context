@@ -1,7 +1,89 @@
 # Dentlink 권한관리 — DL-16317
 
 
-## 현재 상태 — 2026-10-16 웹 개발서버 배포 후 사용자 검토 결과 대기
+## 현재 상태 — 2026-10-16 정책 재대조 후 웹·Office 앱 후속 보완
+
+- **사용자 승인:** 주문 1단계 조건 누락을 포함해 가능한 권한 작업 전반을 재검토하고 수정·검증·커밋/푸시·PR까지 진행한다.
+  웹은 이미 release에 병합되어 `origin/release/v1.89.0`에서 새 브랜치로 진행한다. Office 앱은 아직 미병합이므로
+  기존 `feature/DL-16317`과 PR329에 이어서 반영하라는 답을 받았다. merge/배포/CodePush는 수행하지 않는다.
+- **웹 전달:** `/Users/parkjongsun/Repository/dentlink-client-permission`,
+  `codex/dl-16317-permission-followup@f173d49f734312cb748e321d31a6984235c920a1`.
+  시작점은 PR4700 실제 merge인 `047fcc585`다. 기존 feature/DL-16317은 f4bfaf1bf로 보존했다.
+  정상 commit/push 후 원격 동일·clean, [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706)
+  → release/v1.89.0 OPEN/MERGEABLE을 확인했다. 웹 develop은 관련 없다.
+- **정책 원문 재확인:** 기존 링크의 알림센터 문서와 별개로 실제 권한 PRD
+  [담당 환자 제한](https://www.notion.so/3eace072e82f81aa955dc21cba5cf127)을 확인했다.
+  최종 편집 2026-10-15, 관련 본문·Resolved 결정·TC 및 댓글 5 discussions/10 comments를 읽었다.
+  문서의 AI 초안 표기 자체를 승인으로 취급하지 않고 PM/BE 댓글, 결정표, Figma와 대조했다.
+  Figma `2OR0Gj7NUFEEeYBjQg5Y6v`의 주문 1단계 23:22253/22675/23851/24863,
+  Draft 조건107:23961, 주문 상세475:75511 및 앱 주문47:21715를 직접 다시 확인했다.
+- **웹 보완:**
+  - Member NEW의 담당 의사 영역 전체를 숨기고 후보 의사 GET을 중단한다. Admin/Manager·Lab/Admin 기본 선택은 유지한다.
+  - Member는 NEW뿐 아니라 기존 Case 추가 주문(FOLLOW_UP)도 본인 담당이다. 폼 복원과 제출 직전 모두 보장한다.
+    기존 patientCaseId는 유지하며 Case 자체의 담당자를 수정하는 별도 요청은 없다.
+    과거의 'NEW만 본인 고정, FOLLOW_UP는 Case 담당 유지' 해석은 이 원문 확인으로 정정한다.
+  - 부분 상세에서도 정책상 예외인 번역 재시도, DESIGN/PLANNING 승인 자료 조회, 완료된 C.P. 조회를 허용한다.
+    메시지 쓰기·승인/거절·Workflow·C.P. 요청/대리 제한은 유지하며 저장된 이전 콜백도 쓰기 모달을 열지 않는다.
+  - 기존 15파일만 수정했다. 신규 파일·스토리·환경/ignore·패키지/lock·API 생성물 변경은 없다.
+- **웹 검증:** Clinic 전체35 suites/324 tests, Lab 전체38 suites/399 tests PASS.
+  commit hook Clinic/Lab/Admin 타입, push hook 세 서비스 lint·Admin DLOS guard·shared coverage PASS.
+  주문 1단계와 상세/채팅을 별도로 교차 검토했다. f173d49f7 스냅샷에서 pnpm8.6.9 frozen 설치 후
+  `pnpm build:clinic` exit0: TypeScript·webpack·195/195페이지·standalone 확인. 설치/빌드 후 추적 소스 차이0,
+  snapshot만 삭제했고 원본 .next/로컬 서버는 유지했다. macOS Node24 검증이며 Docker/실제 런타임 QA와 구분한다.
+  `/tmp/dl16317-followup-clinic-{build.log,snapshot.json,source-manifest.json}`에 증거를 보존했다.
+- **Office 앱 전달:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317`에
+  `0c6bc84`(후속/ISV 주문 담당), `de9be1f`(읽기 전용 채팅),
+  `7cb4487023001714ee3247ca454b97fdc9d1fca7`(승인 입력 보존)을 정상 commit/push했다.
+  [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → develop의 head 일치·OPEN/MERGEABLE·clean 확인.
+  웹과 달리 새 앱 PR을 만들거나 release로 대상을 변경하지 않았다. 기존 PR 본문은 최종 동작/검증으로 갱신했다.
+- **리뷰 경계:** 앱 CodeRabbit 댓글6187728788은 2026-10-16에도 Review skipped로 갱신됐으며 실제 리뷰 통과가 아니다.
+  웹 새 PR의 자동 리뷰는 생성 직후 진행 중이었고 별도 재실행·유료 실행·스레드 처리 완료를 주장하지 않는다.
+  이번 요청은 코드 재검토와 수정/PR까지이며 별도 자동 리뷰 대기 루프를 시작하지 않는다.
+- **Office 앱 보완:**
+  - Member 기존 Case 후속 주문과 별도 ISV 경로에 본인 담당 고정, ISV 담당 선택/My Patients Only 숨김 및 직원 후보 조회 중단.
+  - 읽기 전용 번역 재시도, DESIGN/PLANNING 승인 메시지6종 조회 허용. 실제 승인/반려 및 메시지 쓰기는 제한한다.
+  - 번역 재시도에 기존 ScopedRequestConfig를 연결해 직원/메시지 변경·unmount 후 오래된 작업을 차단한다.
+  - 확인한 주문/승인 자료의 network/408/429/5xx 재조회 실패에서 반려 입력·첨부를 보존하고 제출을 막는다.
+    403/404·직원/대상 변경은 자료와 입력을 제거한다.
+  - 주문/채팅403/404에서는 캐시 대화도 숨긴다. 서버 재조회 시작과 이전 응답 반영 조건을 분리하여
+    재접근이 허용되면 같은 캐시도 다시 표시한다. 새 반복 API나 권한 endpoint를 추가하지 않았다.
+  - 독립 검토에서 발견한 보완 중 회귀(ISV 비Member 선택 덮어씀,403 후 재조회까지 차단)를 수정하고 재현2개 PASS.
+  - 기존21파일(제품13/테스트8)만 수정했다. 새 파일·스토리·env·패키지/lock 변경은 없다.
+- **Office 앱 검증:** 관련 Jest41 suites/394 tests PASS, 변경 파일 lint오류0/기존경고2, diff검사 PASS.
+  변경 전 HEAD df3c79a를 별도 추출해 같은 의존성으로 TypeScript 진단18건을 대조했으며 줄번호 외 전체 내용 동일.
+  전체 실행의 App 네이티브 mock/Datadog 환경 실패2suite도 HEAD에서 동일 재현했다. 이 결과를 전체 타입/테스트 PASS로
+  확대하지 않는다. E2E는 제외한다. 증거는 `/tmp/dl16317-app-{final-unit-tests,final-lint,head-baseline-type,final-type,head-baseline-test}-20261016.log`.
+- **Office bundle:** 최종7cb4487 기준 iOS/Android production JS bundle 모두 exit0, source map에 변경 제품13파일 포함.
+  기존 외부 node_modules symlink 때문에 첫 Metro 해석은 실패했으며 /tmp 설정의 watchFolders로 실제 경로만 추가한 뒤 통과했다.
+  제품 Metro/env/의존성/서버를 변경하지 않았다. 빌드 전후 소스 hash동일·clean.
+  `/tmp/dl16317-followup-office-{ios-bundle.log,android-bundle.log,bundle.json}`에 증거가 있다.
+  이는 JS bundle이며 실제 native binary/실기기/CodePush 검증이 아니다.
+- **API 재대조:** DEV Swagger955paths/1432schemas, SHA256
+  `4b5dc8a18960451465f2fe35d340d6e4fa6bec26780a539775f82f155a795be0`.
+  현재 Office 생성 클라이언트와 method/path 증감0, 관련 DTO14개 필드 변화0이다.
+  관계없는 비Office 삭제 API9개를 반영하기 위한 대량 재생성은 하지 않았다. 새 별도 주문 접근 API를 기다리지 않는다.
+- **확정 잔여 1건:** 담당 변경 경고는 Resolved #11에 따라 같은 환자 내 다른 본인 담당 주문이 없을 때만 표시해야 한다.
+  현재 `/office/orders`는 patientId/제외 주문 필터가 없고 목록에는 환자·담당 ID가 없으며,
+  환자 Case 주문 응답에도 dentistId가 없다. 정확한 존재 여부/건수 등을 기존 응답에 제공할지 BE 확인이 필요하다.
+  `size=2` 추정, 이름 비교, 전체 목록/개별 상세 반복 요청은 하지 않는다. 기존 경고는 유지한다.
+- **그 외 판단:**
+  - 디자인의 '주문 이력 없음/있음' 예시는 현재 코드의 환자 존재(total===0) 분기와 구분한다.
+    등록 환자는 있지만 주문0인 경우의 초기 노출을 바꾸라는 확정 근거는 없어 기존 전체 환자 선택을 유지한다.
+  - Draft 본문 '본인만'과 구체 TC/Figma '미지정+본인'은 표현 차이가 있다. 구체 TC/Figma와 기존 구현을 유지한다.
+    Scanner는 현재 항상 담당자가 배정된다는 PM 댓글이 있으며 실제 서버 정제는 QA로 확인한다.
+  - Pickup 모든 주문번호는 상세로 이동, 상세 기본/부분/차단과 기존 페이지·필터 권한 경계는 유지한다.
+    권한 HOC·직원별 캐시·비동기 가드는 사용 근거가 있어 불필요 코드로 제거하지 않는다.
+  - Lab 신규 정책/기간 cutoff와 별도 알림센터 개편은 확장하지 않는다. 과거 E2E/ISV 테스트 실패 제외는 유지하며,
+    이번 앱의 ISV 주문 권한 누락 보완과 그 과거 카탈로그/E2E 이슈를 혼동하지 않는다.
+- **증거/한계:** Figma·Notion·DEV Swagger·현행 코드 및 테스트를 확인했다. Jira connector는403
+  ('The app is not installed on this instance')으로 최신 댓글 재조회/카드 수정은 하지 못했다.
+  실계정 저장/승인·실기기·이번 후속 배포 결과는 확인하지 않았다. 이전 'FE 잔여 없음'은 이번 새 발견 전 체크포인트다.
+- **다음 순서:** 팀 리뷰 후 웹 PR4706 → release/v1.89.0, 앱 PR329 → develop 전달/QA 버전 준비.
+  Member/Admin으로 신규/기존 Case·ISV 저장, 기본/부분/차단 상세, 번역/승인 조회와 쓰기 제한,
+  직원 전환 및 일시 오류/접근 회복을 실제 환경에서 QA한다. BE에는 위 담당 변경 경고 판정 정보만 구체적으로 확인한다.
+  문서 표현 차이는 근거 없이 새 FE 동작으로 확장하지 않는다. 자동 배포/CodePush/리뷰 모니터링은 시작하지 않는다.
+
+## 이전 체크포인트 — 2026-10-16 웹 개발서버 배포 후 사용자 검토 결과 대기
 
 - **최신 사용자 소식:** 개발서버에 배포했으며 검토 후 발견 사항이 있으면 다시 알려주겠다고 했다.
   개발서버 배포 완료는 사용자 보고이며, Codex가 배포 커밋·실제 화면·QA 결과를 추가 확인한 것은 아니다.

@@ -2,6 +2,14 @@
 
 ## 2026-10-16
 
+- 권한관리 Figma·실제 권한 PRD/TC·DEV Swagger 전반을 재대조해 Member 기존 Case 주문도 본인 배정임을 정정했다.
+  웹 release047fcc585에서 새 codex/dl-16317-permission-followup을 만들어 f173d49f7 normal commit/push 및 PR4706을 생성했다.
+  담당 UI 숨김/불필요 조회 중단과 읽기 전용 번역·승인·완료C.P. 조회를 보완했다. Clinic324/Lab399 tests·3서비스 타입·
+  정상push검사·정식production build195페이지 PASS. 앱은 사용자 확인에 따라 기존 feature/PR329(develop)에
+  0c6bc84/de9be1f/7cb4487을 푸시했다. 후속/ISV 담당 배정, 읽기 채팅·접근 복구, 승인 입력 보존을 기존21파일에 반영했다.
+  앱394 tests·lint오류0·iOS/Android JS bundle PASS, 타입18건은 변경전과 동일. 실제 QA와 담당 변경 경고 BE 판정 정보는 잔여다.
+  신규파일/스토리/env/패키지 생성이나 후속merge/배포/CodePush는 없다. Jira403과 앱CodeRabbit skip을 실제 통과와 구분했다.
+
 - 사용자 요청으로 frankieTemp 백업 5개를 추가 검토했다. version·threeJsTemp는 다른 담당자의
   대체 완료, DL-10132는 최근 적용 완료 및 과거 약관 초안 폐기, DL-4978은 실험 폐기 승인을 받아
   원격 4개를 삭제했다. invoiceTemplete는 유사 HTML 견본만 있고 실제 배송 문서는 서버 URL로
