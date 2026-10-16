@@ -1,6 +1,11 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-16 담당 변경 경고 보완 PR4710·Draft 환자 목록 문의 정상 종결
+## 현재 상태 — 2026-10-16 담당 변경 경고 PR4710 release 병합·사용자 DEV 배포 진행 중
+
+- **최신 전달 상태:** 사용자 PR4710 병합 및 해당 release 기반 DEV 배포 진행 중 보고.
+  GitHub에서 PR4710 MERGED → release/v1.89.0, merge `8daac356176169e6407f92c91a8bcf2753a1e09b`,
+  2026-10-16 18:28:16 KST 병합을 확인했다. DEV 배포 완료·새 배포본 경고 재검증은 아직 확인하지 않았다.
+  기존 브랜치·worktree는 보존하며 추가 배포·병합·삭제는 하지 않는다.
 
 - **사용자 지시/최신 정책:** BE 문의와 별개로 승인된 FE 수정·검증·커밋·푸시·PR 흐름을 계속 진행했다.
   사용자가 백엔드 답변을 전달했다: **"정책상 지금이 맞다. draft 주문의 환자는 아직 내환자로 판단 안한다."**
@@ -15,8 +20,8 @@
   신규 파일·추상화·API·환경 파일·페이지 상시 조회는 추가하지 않았다. Admin 보조 조회도 기존대로 없다.
 - **Git/PR:** 최신 fetched release/v1.89.0 `24d3ff18a`에서 `feature/DL-16317-dentist-warning`을 분기했다.
   `748c8f6bb`(SSR ID 수정), `e28b9c7e8ad37841baadde958ef088b6668a2343`(Draft 정책 반영) 정상 커밋·푸시 완료.
-  [PR4710](https://github.com/Innvoaid/dentlink-client/pull/4710) OPEN → `release/v1.89.0`, head e28b9c7e8,
-  GitHub의 base/head/변경 파일2개와 로컬·원격 SHA 일치 확인. 이 채팅에 PR 첨부 완료. 병합·배포는 하지 않았다.
+  [PR4710](https://github.com/Innvoaid/dentlink-client/pull/4710)은 사용자 병합으로 MERGED → `release/v1.89.0`, head e28b9c7e8.
+  GitHub의 base/head/변경 파일2개와 로컬·원격 SHA 일치 확인. 이 채팅에 PR 첨부 완료. Codex가 병합·배포를 실행한 것은 아니다.
 - **검증:** 수정 전 문자열 ID 조건의 경고 누락1건, 추가 Draft 조건2건을 각각 실패 테스트로 재현했다.
   수정 후 주문 상세 hook28개+화면9개=2 suites/37 tests PASS, Clinic·Lab·Admin tsc PASS,
   정상 pre-commit/pre-push 검사 완료. push 중 기존 lint warning은 있으나 hook 실패 없음.
@@ -28,7 +33,7 @@
   Office worktree는 `feature/DL-16317@7cb4487`·clean, [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) OPEN → develop.
   앱의 의도적 미병합·미배포를 유지했다. 앱 주문 상세도 이 웹 화면을 사용하므로 이번 수정의 별도 native 코드 변경은 없다.
 - **QA/다음:** 아래 DEV Admin·Member 핵심 권한 차이 및 합성 Draft 담당 변경/복구 검증은 완료된 기록이다.
-  사용자 PR4710 병합·DEV 배포 → Member 마지막 본인 주문 및 다른 본인 Draft만 남은 조건의 경고 재확인 → 스테이징 정식 QA.
+  사용자 DEV 배포 완료 확인 → Member 마지막 본인 주문 및 다른 본인 Draft만 남은 조건의 경고 재확인 → 스테이징 정식 QA.
   앱 native QA는 PR329 포함 버전으로 진행한다. BillingManager/Manager 계정·직원 전환·승인 대기 실제 쓰기·ISV 저장·
   파일/메시지 전송·실기기·다주문 환자의 1+N 조회 지연은 이번 실계정 QA 완료 범위가 아니다.
   일반 Draft 진입은 작성 폼을 사용한다. 직접 Draft 상세에서 담당 변경 시 cases GET403 가능성은 미재현·기존 로직이라

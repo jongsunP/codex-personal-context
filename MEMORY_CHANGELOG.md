@@ -2,6 +2,10 @@
 
 ## 2026-10-16
 
+- 권한관리 사용자가 PR4710을 release에 병합하고 해당 release 기반 DEV 배포를 진행 중이라고 보고했다.
+  GitHub MERGED/release/v1.89.0/merge8daac3561/18:28:16 KST 확인. 배포 완료나 새 배포본 QA 통과로 확대하지 않는다.
+  브랜치·worktree를 보존하고 다음 단계는 배포 완료 후 담당 변경 경고 및 권한 동작 재확인으로 갱신했다.
+
 - 권한관리 DEV QA 후 승인된 FE 후속을 완료했다. release24d3ff18a에서 feature/DL-16317-dentist-warning 분기,
   748c8f6bb/e28b9c7e8 정상 커밋·푸시, PR4710 OPEN → release/v1.89.0 생성·base/head/2파일 확인.
   SSR 문자열 ID로 마지막 본인 주문의 경고가 누락되는 결함을 수정했다. 사용자 전달 BE 최종 답변은
