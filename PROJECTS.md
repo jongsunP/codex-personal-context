@@ -23,6 +23,7 @@ Check this folder first when finding or continuing local projects.
 - [기존 방향 설명 문서](https://app.notion.com/p/3face072e82f814b9a6ceaa36e5638af)의 본문·댓글을 유지하고, 같은 **DEV Team / Development Documents**의 별도 [사용·운영 가이드](https://app.notion.com/p/3fbce072e82f81119615e41b7c1195eb)를 **운영법 / 개념·설정 방법** 두 부분으로 간단히 정리·read-back했다. Vault/Infisical은 참고로만 전달했다는 사용자 정정에 따라 추천·도입 내용을 제거했다. GitHub 환경 공간과 Docker 연결을 쉽게 설명하며 실제 명령·로컬 비밀값 전달 경로는 구현 시 완성한다. 실제 제품 코드·설정·Git/PR·배포 변경은 없다.
 - [개인 체크포인트](projects/dentlink-client-env-management.md)
 - 사용자가 기존 로컬/운영 정책은 없으며 이번에 함께 정해 팀에 공유하는 것이 목적이라고 명확히 했다. 기존 정책을 다시 물어오도록 요구하지 않는다. 현재는 신규 가이드 검토 단계이며 실제 도입 권한·비용·외부 키 상태는 구체안에 맞춰 필요한 시점에 확인한다.
+- 사용자 작업·플래닝 담당 확정, 문서는 화요일 팀 공유 예정이다. 착수 전 최종 검토에서 노션2개·master/develop/stage의 설정 참조·GitHub admin 권한과 기존 환경5개/Variables0을 재확인했다. 다음은 변수 분류·별도 브랜치 코드·새 환경 추가 준비이며, 기존 설정/배포를 유지한다. 기술 검증은 배포·실데이터 변경 없이 수행하고 팀 공유 후 운영 전환한다. 이번에는 가이드 순서만 보완했으며 실제 구현·GitHub 변경·검증 실행은 없다.
 
 ### 사무실 의자 구매·헤드레스트 개선 조사
 
