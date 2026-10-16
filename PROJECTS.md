@@ -18,8 +18,9 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- DLDS와 분리한 별도 기능 세션. 2026-10-15 [팀 공유용 Notion 문서](https://app.notion.com/p/3face072e82f814b9a6ceaa36e5638af)는 사용자 지정 403 조사 문서와 같은 **DEV Team / Development Documents** 계층에 있다. **대체안: GitHub 기반 환경변수 관리** 본문과 구두 설명용 댓글 3개까지 최종 확인했다. 설명은 댓글에만 유지하며 본문·댓글 추가 수정은 불필요하다. 사용자 요청으로 **구현하지 않고, 팀 의견 수령 후 재개 요청까지 대기**한다.
-- 공개 설정은 GitHub Variables에서 로컬·CI가 공유하고 서버 Secrets→ECS는 유지하는 제안이다. 로컬 비밀값 보관소·권한·관리 담당은 적용 전에 확정하며 특정 제품 도입을 결정하지 않았다. 제품 변경·Git/PR·배포는 미착수다.
+- DLDS와 분리한 별도 기능 세션. **2026-10-16 회의에서 GitHub 기반 적용 방향과 팀 공동 관리를 확정**했다. 현재는 로컬 동기화·dev/stage/prd와 서비스 분리·Variables/Secrets 분류·공개 키 검토·설정 변경 후 배포/복원 등 운영 상세를 조사·설계하는 단계이며 **구현은 보류**다. 회의 의도는 이해 완료다.
+- master `8772d688`의 env9개/변수명105개, 배포9개와 GitHub 설정을 읽기 전용으로 재확인했다. 서비스×환경9개 구획과 로컬 단방향 갱신을 제안했으며 구체안은 아직 팀 확정 전이다. 로컬 비밀값 공유 경로와 외부 키의 실제 상태는 추가 확인 대상이며 Vault/Infisical은 참고 후보일 뿐 도입 결정이 아니다.
+- [팀 공유용 Notion](https://app.notion.com/p/3face072e82f814b9a6ceaa36e5638af)은 **DEV Team / Development Documents**에 있고 기존 방향 설명 본문·댓글3개를 유지한다. 이번 회의 내용으로 Notion을 수정하거나 제품 코드·설정·Git/PR·배포를 변경하지 않았다.
 - [개인 체크포인트](projects/dentlink-client-env-management.md)
 
 ### 사무실 의자 구매·헤드레스트 개선 조사

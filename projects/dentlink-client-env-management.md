@@ -1,6 +1,62 @@
 # Dentlink 웹 환경변수 관리
 
-## 현재 상태 — 2026-10-15 본문·댓글 최종 확정, 팀 의견 수령 후 재개 대기
+## 현재 상태 — 2026-10-16 회의 후 GitHub 기반 적용 방향 확정, 운영 상세 설계
+
+- **팀은 GitHub 기반 환경변수 관리로 전환하기로 했다.** 사용자의 “깃에서 관리”는 이전 제안의 GitHub Variables/Secrets를 활용한다는 문맥이며, 실제 env 파일을 계속 Git에 커밋한다는 뜻으로 해석하지 않는다.
+- 관리 주체는 별도 개인 담당자가 아닌 **팀 공동 관리**다. 회의 후 작업하면서 전환 시점을 맞춘다. 담당자 지정이나 적용 여부를 다시 질문하지 않는다.
+- 현재 요청은 정리되지 않은 회의 메모의 의도를 이해하고, 그에 맞는 실제 운영 상세를 조사·설계·브리핑하는 것이다. **제품 코드·env 파일·GitHub Variables/Secrets·권한·배포 변경은 아직 하지 않는다.** 적용 방향에 동의한 것과 지금 구현을 실행하라는 지시는 구분한다.
+- 기존 [팀 공유용 Notion](https://app.notion.com/p/3face072e82f814b9a6ceaa36e5638af)은 방향 설명 문서로 완료됐고 이번 회의 후 내용으로 수정하지 않았다. 다음 산출물은 회의 질문에 답하는 운영 상세안이며, Notion 본문·댓글 추가 수정은 별도 요청 시 한다.
+- “조사가 끝났는지”라는 사용자의 질문은 회의 메모의 내용·의도를 충분히 이해했는지에 관한 것이었다. 회의 의도는 이해 완료이고 추가 해석 질문은 없다. 이를 제품 검증·구현 완료 질문으로 바꾸지 않는다. 앞서 “로컬 최초 세팅만 남았다”고 좁혀 설명했던 것은 부정확했다. 환경 분리·동기화·설정 변경 반영까지 운영 상세로 구체화해야 하며, 기술 선택 전체를 사용자가 다시 회의에서 정해 와야 하는 선행 조건으로 제시하지 않는다.
+
+### 회의 메모의 의미
+
+1. GitHub 기반 적용은 결정됐으므로 실제로 어떻게 운영할지 정한다.
+2. 팀원이 클라우드 설정을 로컬로 가져오기·갱신하기, 로컬 변경을 공통값에 반영하기, 개인 설정 보존과 동기화 기준을 정한다.
+3. 기존 변수명을 유지하면서 dev/stage/prd 및 Admin/Clinic/Lab에 올바른 값을 전달하는 방법을 설명한다.
+4. `clinic_prd_build_and_deploy.yml`의 기존 `secrets.*` 사용을 기준으로 Variables/Secrets 역할과 등록 위치를 정한다.
+5. 현재 env 항목의 실제 용도·공개 가능성을 검토한다. `NEXT_PUBLIC_`만 보고 안전하다고 분류하지 않으며 Variables 저장 여부와 접두사 정책을 구분한다.
+6. Vault·Infisical은 팀원이 과거 인턴 경험에서 소개한 참고 후보다. 회사의 현재 사용 도구나 신규 도입 확정으로 해석하지 않는다.
+
+### 2026-10-16 읽기 전용 조사 결과
+
+- 개인 컨텍스트는 pull 후 읽었다. 제품 checkout은 다른 기능 `feature/DL-16796` / `3aac1dff0005706e78015cb5f23f255712696911`로 clean이어서 변경하지 않고 fetch한 고정 `origin/master` **`8772d68825cac6e23792d86a715153a67dc71078`**의 Git 객체를 조사했다.
+- Git 추적 env는 9개, 중복을 제외한 변수명은 **105개**이며 그중 95개에 `NEXT_PUBLIC_`가 붙어 있다. 값 원문은 출력·기록하지 않았다. 소스 정적 분류이며 실제 키 유효성·운영 번들·서비스 콘솔 제한 설정을 검증한 것은 아니다.
+- 공개 설정 관리 후보는 API/CDN/서비스 URL·제목·기능 설정이다. Stripe 값은 publishable prefix임을 값 비노출로 확인했고 브라우저 `loadStripe` 경로와 대조했다. Google Maps·Amplitude·Datadog RUM의 브라우저용 키/토큰은 서버 인증키와 구분한다. 실제 도메인·API 제한은 아직 확인하지 않았다.
+- Clinic DEV/STG에는 각각 nonempty E2E password 항목 7개가 있다. 접두사는 `NEXT_PUBLIC_`지만 테스트 비밀값이므로 제품 빌드 입력과 분리해야 한다. 직접 사용처는 E2E/Node 측에서 확인했으며 이것만으로 실제 브라우저 유출을 단정하지 않는다.
+- `NEXT_PUBLIC_EXIMBAY_SECRET_KEY`는 `clinic/src/lib/Card/eximbayCardRegistrationParams.ts:90`에서 fgkey를 만들며 웹 팝업과 WebView redirect 코드에서 호출한다. 공식 v2.3 가이드는 해당 secretkey의 비밀 유지를 요구한다. Variables로 이동할 대상이 아니고, Secrets에 보관해도 현재 브라우저 소비 경로를 유지하면 비밀이 되지 않는다. 서버 서명 전환·실제 키 유효성/노출·회전 판단은 별도 검토 대상으로 둔다. 결제 코드나 키를 임의로 변경하지 않는다.
+- `NEXT_PUBLIC_MEDITLINK_KEY`의 직접 사용처는 찾지 못했고 관련 Medit 페이지의 ID 참조도 주석 코드다. 미사용 후보이지 삭제·공개 가능성이 확정된 것은 아니다. 코드에 있으나 현재 env에 없는 선택 설정도 있어, env 이름 목록만으로 필수항목을 확정하지 않는다.
+- 현재 DEV는 `develop` push, STG는 `stage` push 또는 `stg/{제품}/**` tag, PRD는 `prd/{제품}/**` tag를 중심으로 실행되며 9개 workflow 모두 수동 실행이 있다. 제품 경로 필터가 있다. DEV/STG Docker는 대상 env를 `.env.production`으로 옮겨 build한다. Clinic STG/PRD는 한 빌드 결과를 서울·오하이오에 배포한다.
+- 제품 배포 workflow 9개에 `job.environment` 선언은 없다. `clinic_prd_build_and_deploy.yml:205-206`의 `JIRA_API_TOKEN` 등 GitHub Secrets→ECS 공급을 확인했다. AWS/Slack 인증 Secret과 앱 서버 Secret의 역할을 구분하며 기존 공급을 임의로 대체하지 않는다.
+- 당시 GitHub 조회: Repository Variables 0개. 기존 Environments 5개(`develop`, `Preview`, `Preview – dentlink-client-ui`, `Production`, `Production – dentlink-dlos`)는 Variables/Secrets 0개였다. 제품용 환경으로 간주해 덮어쓰지 않는다. 현재 `gh` 인증의 저장소 Admin 권한은 확인했지만 팀원 전원의 권한까지 확인한 것은 아니다.
+- workflow가 참조하는 `S3_AWS_ACCESS_KEY_ID`, `S3_AWS_SECRET_ACCESS_KEY`, `OPENAI_IMAGE_MODEL`은 repository Secret 목록에 없었다. 조직 scope 조회가 불가해 전체 부재·배포 고장으로 단정하지 않는다.
+- GitHub Variables는 환경별 CLI/API 조회가 가능하지만 Secrets API는 값 재조회가 불가능하다. Secrets를 Actions 로그/artifact로 내보내 로컬에 전달하는 우회는 사용하지 않는다.
+- 설정값만 바꾸고 재빌드할 때 현재 `{env}-${github.sha}` 이미지 태그가 재사용된다. Clinic CDN 업로드는 `${PACKAGE_VERSION}/_next/static --delete`여서 같은 버전의 이전 정적 파일이 제거될 수 있다. 설정 revision·빌드 식별자·이전 정적 파일 보존까지 복원 설계에 포함해야 한다. 현재 동작을 변경하거나 배포 복원을 검증하지 않았다.
+
+### 조사에 따른 운영안 — 제안이며 아직 구현·팀 확정 전
+
+- **서비스×환경 9개 GitHub Environment**로 현재 9개 env와 대응시키는 안을 우선 제안한다. 예시 `clinic-dev`, `clinic-stage`, `clinic-prd` 등. 기존 `NEXT_PUBLIC_API` 같은 이름을 그대로 각각 저장하며 앱 코드에 DEV_/STAGE_를 붙이지 않는다. 각 workflow가 해당 환경을 명시적으로 선택하고 빌드·배포 단계에 값을 연결한다. Region별 설정은 현재 동일하므로 지역까지 추가 분리할 근거는 없다.
+- GitHub Variables/Secrets는 보관 방식, `NEXT_PUBLIC_`는 Next의 브라우저 노출 규칙으로 서로 다른 기준이다. Variables에 넣기 위해 PUBLIC을 추가하지 않는다. 서버 일반 설정에는 PUBLIC이 필요하지 않고 실제 서버 인증키는 Secrets를 사용한다.
+- 공개 설정은 **GitHub를 원본으로 하는 로컬 단방향 사본**을 기본으로 한다. 로그인→서비스/환경 선택→필수항목 검사→ignored env 생성, 변경 키 확인→명시적 갱신, 개인 override 보존을 지원한다. 공통값 변경은 대상·키를 명시해 GitHub에서 변경하고 팀에 알린다. 완성된 개인 env 전체의 자동 업로드/자동 삭제는 제안하지 않는다.
+- 기존 `.env.development/staging/production` 이름을 생성 파일로 유지하는 안이 소비부 변경을 줄인다. Next 개인 override와 별도로 E2E는 선택한 환경만 명시적으로 로딩하도록 맞춘다. `.env.staging` 다운로드는 Next 실행 환경이 저절로 바뀌는 뜻이 아니며, `NODE_ENV=staging`으로 처리하지 않는다. DEV 기본·STG QA 선택·PRD 명시 선택은 제안 운영 규칙이다.
+- 로컬 개발·테스트 비밀값의 실제 공유 경로는 아직 확인되지 않았다. 기존 승인된 수단이 있으면 재사용하고, 새 도구가 필요하면 Infisical의 환경별 조회/로컬 공급 기능을 우선 비교할 수 있다. Vault는 기존 운영 기반이 없다면 관리 부담이 크다는 판단이다. 특정 도구·플랜·비용·신규 권한은 확정하지 않았다. 같은 값을 로컬/CI에서 쓰면 원본과 전달 방향을 하나로 정한다.
+- Variables 저장만으로 서버가 갱신되지 않는다. 로컬 갱신/재시작, 공개 빌드값 변경 후 재빌드·배포, 현재 runtime Secret 변경 후 배포를 구분한다. 설정만 바뀐 빌드의 캐시·image 식별·정적 파일 보존·복원을 설계한다.
+
+### 다음 조치와 남은 확인
+
+1. 회의 메모→조사 근거→추천 운영 규칙으로 운영 상세안을 정리한다. 적용 여부·관리 주체를 다시 묻지 않는다.
+2. 변수별 서비스/환경·사용처·공개 가능성·필수/선택·빌드/서버/테스트 소비부·보관 위치 표를 완성한다. 공개 키와 테스트 자격, Eximbay 등 보안 검토 항목을 구분한다.
+3. 최초 로컬 세팅·차이 확인·갱신·개인 override·공통값 수정·설정 변경 후 배포/복원을 구체화한다. 파일명·명령·환경 연결의 기술적 선택은 Codex가 제안한다.
+4. 사실 확인 질문은 현재 팀의 개발/테스트 비밀값 공유 수단이 있는지다. 아직 답을 받지 않았다. 전달된 Vault/Infisical 링크를 현재 사용 중이라는 답으로 대신하지 않는다. 외부 키 유효성·Google Maps 제한·Eximbay 실운영 상태 등은 코드만으로 확정할 수 없어 필요한 범위의 콘솔/담당자 확인이 남는다.
+5. **실제 구현 요청을 받기 전에는 코드·GitHub 설정·권한·배포를 변경하지 않는다.** 구현 시 최신 Git/권한/외부 설정을 재확인하고, 새 공급 경로와 로컬·빌드·E2E 검증 뒤 Git 추적을 해제한다. PR/merge/배포/키 회전/이력 재작성은 해당 승인 범위를 따른다.
+
+### 추가 근거
+
+- [GitHub 환경별 Variables](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-variables#creating-configuration-variables-for-an-environment), [CLI 조회](https://cli.github.com/manual/gh_variable_list), [Secrets 값 조회 불가](https://docs.github.com/en/rest/actions/secrets#get-a-repository-secret)
+- [Next 환경변수·브라우저 노출](https://nextjs.org/docs/pages/guides/environment-variables), [Stripe 키 종류](https://docs.stripe.com/keys), [Google Maps 제한](https://developers.google.com/maps/api-security-best-practices)
+- [Eximbay 공식 v2.3 가이드](https://developer.eximbay.com/eng/eximbay/pdf/Eximbay_Global_Payment_Integration_guide_kr.pdf)
+- [Infisical 프로젝트·환경·로컬 사용](https://infisical.com/docs/documentation/platform/secrets-mgmt/project), [Vault](https://developer.hashicorp.com/vault)
+
+## 이전 상태 — 2026-10-15 본문·댓글 최종 확정, 회의 전 대기 이력
 
 - 사용자 최종 지시: **최종 댓글 내용까지 메모리하고 대기하며, 사용자가 팀 의견을 받은 뒤 다시 진행한다.** 본문과 댓글 3개를 다시 읽어 추가 수정·병합이 필요하지 않음을 확인했다. Notion은 현재 상태를 유지하며 제품 구현·Git 추적 해제·Variables/Secrets 설정·배포는 시작하지 않는다. 자동 후속 작업이나 팀 의견 모니터링도 설정하지 않는다.
 - 최종 문서는 **현재 상황 3항목 → 대체안: GitHub 기반 환경변수 관리 4항목 → 선정 사유 3항목 → 개인 사이드프로젝트 참고 예시**로 구성한다. 사용자가 최상단의 '관리안 제안 단계' 안내문, 참고 예시의 프로젝트 이름 소개와 말미 중복 공식 링크 등을 직접 정리한 최신 본문을 유지했다. 안내문 삭제는 구현 승인이나 적용 완료를 뜻하지 않는다.
@@ -184,9 +240,8 @@
 
 ## 다음 시작점
 
-- **지금은 팀 의견 수령 후 사용자 재개 요청까지 대기다.** 현재 Notion 본문·댓글은 추가 수정하지 않는다. 사용자가 의견을 전달하면 기존 제안과 대조해 결정·미정사항을 정리하고, 구현을 명시적으로 요청할 때 최신 Git 상태와 미정인 보관소·권한부터 확인한다. 댓글 확인이나 팀 의견 대기는 구현 승인으로 해석하지 않는다.
-- 팀 공유용 Notion 문서와 참고 예시 정리, 기존 403 조사 문서와 같은 Development Documents 계층으로 이동 및 read-back까지 완료했다. 사용자가 내용을 공유하며, Tom에게 보낼 Slack 문안 작성은 후속 작업이 아니다.
-- 구현 지시를 받으면 최신 master에서 격리 환경을 준비하고 공개/비밀 설정을 분류한다. Variables 읽기 권한과 로컬 비밀값의 실제 보관소·접근 경로를 확정하고 새 공급 경로를 검증한다. Tom에게 기술안 전체를 결정해 달라고 돌려주지 않는다.
-- Eximbay 공개 허용/서버 서명은 별도 범위로 검토한다.
-- 제품 구현·커밋/푸시/PR·배포·Git 이력 재작성·키 회전·CI 자격 변경은 별도 승인 없이 진행하지 않는다. Slack/Jira 메시지도 게시하지 않았다.
-- 이번 검증은 live Git/Slack/Secret 이름과 소스의 정적 조사다. 테스트·빌드·실계정·배포·운영 증거는 없다.
+- 상단 **2026-10-16 현재 상태**부터 읽는다. 팀은 GitHub 기반 적용 방향을 결정했으며 현재는 회의에서 나온 운영 상세를 정리하는 단계다. 회의 전 “팀 의견 대기” 기록으로 되돌아가지 않는다.
+- 회의 내용은 이해 완료다. 서비스/환경 분리·로컬 동기화·변수 분류·변경 반영/복원에 대한 구체적인 안을 제시하고, 실제로 알 수 없는 사실만 좁혀 확인한다. 팀 공동 관리와 회의 후 진행 원칙을 재질문하지 않는다.
+- 제품 구현은 여전히 보류다. 명시적 구현 요청 시 최신 master·작업 위치·권한·설정 상태를 재확인한다. 기존 Notion은 요청 없이 변경하지 않는다.
+- Eximbay의 서버 서명·키 유효성/노출/회전은 구분해 검토하고, 모든 공개 설정 분리를 중단하는 포괄적 선행 조건으로 확대하지 않는다. 공개 가능성이 확인되지 않은 키를 Variables로 옮기지 않는다.
+- 제품 구현·커밋/푸시/PR·배포·Git 이력 재작성·키 회전·CI 자격 변경은 해당 승인 없이 진행하지 않는다. Slack/Jira 게시도 하지 않았다. 현재 증거는 코드·GitHub 메타데이터·공식 문서 조사이며 실제 빌드·테스트·실계정·운영 검증은 없다.
