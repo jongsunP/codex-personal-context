@@ -1,10 +1,12 @@
 # Dentlink 권한관리 — DL-16317
 
 
-## 현재 상태 — 2026-10-16 최종 검토 지적 수정·기존 PR4700 반영 완료
+## 현재 상태 — 2026-10-16 웹 PR4700 release 머지 완료
 
 - **사용자 승인/범위:** 최종 검토의 조치 사항을 수정·검증·커밋/푸시하고 살아 있는 PR4700에 반영한다.
-  PR 병합은 사용자가 진행할 예정이며 이번 단계에서 merge/배포/Jira 댓글/앱 수정은 하지 않았다.
+  사용자가 PR4700을 release/v1.89.0에 병합했다고 알려 실제 GitHub/Git을 확인했다.
+  merge 시각은 2026-10-16 13:03:46 KST, 커밋 `047fcc585cf0b514087e0b89dd88045e9bd89b5d`다.
+  Codex가 별도 merge/배포/Jira 댓글/앱 수정을 수행한 것은 아니다.
 - **제품 Git:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 `feature/DL-16317`,
   `f4bfaf1bf102a555ec6350aee97ea0a1ab2c7d05` (`fix: 주문 재조회 입력 보존과 승인 접근 확인 보완`).
   정상 commit/push hook 통과·원격 ls-remote/PR head 일치·clean. 기존 10파일만 수정했고 신규 파일은 없다.
@@ -27,17 +29,17 @@
   Docker Node20/Alpine 이미지 빌드·실제 배포·쓰기 QA를 수행한 결과와 구분한다. 임시 snapshot은 삭제했다.
 - **릴리즈 호환:** 실제 release/v1.89.0 `a065b39e4`와 충돌 없이 합쳐지는 tree
   `0a14f88dcb87f509cf3f1cd119809abbdf338012` 확인, 해당 통합소스 Clinic 타입 PASS.
+  사용자 병합 후 원격 release `047fcc585`의 실제 tree도 이 검증 tree와 일치한다.
   앞선 통합 전 3서비스 타입 결과 및 기존 전체 Lab 테스트36 suites/382 PASS 기록은 아래에 보존한다.
-- **PR:** 기존 [PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700) → release/v1.89.0 유지,
-  본문에 최종 동작·검증·QA 경계를 갱신했다. 확인 시 OPEN/MERGEABLE, REVIEW_REQUIRED/BLOCKED이며
-  새 커밋의 CodeRabbit은 PENDING이다. 기존 head의 리뷰 성공을 새 head 리뷰 완료로 간주하지 않는다.
-  자동 리뷰를 강제 재실행하거나 유료 한도를 사용하지 않았다.
+- **PR:** [PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700) → release/v1.89.0,
+  MERGED·head f4bfaf1bf·merge 047fcc585를 실제 확인했다. 최종 동작·검증·QA 경계 본문은 유지한다.
+  자동 리뷰를 강제 재실행하거나 유료 한도를 사용하지 않았다. 이번 상태 확인은 배포나 실제 QA 증거가 아니다.
 - **증거:** `/tmp/dl16317-fix-{clinic-tests,commit,push}-20261016.log`,
   `/tmp/dentlink-pr4700-final-production-build-20261016.log`,
   `/tmp/dentlink-pr4700-final-merged-clinic-type-20261016.log`,
   `/tmp/dentlink-pr4700-final-build-snapshot-20261016.json`.
-- **다음:** 이번에 확인한 코드 조치 잔여는 없다. GitHub 최신 자동 리뷰/필수 승인 상태를 확인한 뒤 사용자가
-  PR을 병합할 수 있는 상태로 판단한다. 이후 실제 릴리즈 쓰기/권한 QA와 배포는 별도다. 추가 작업/자동 모니터링 없이 대기한다.
+- **다음:** 웹 release 통합은 완료했다. 실제 배포 준비/완료와 릴리즈 쓰기·권한 QA는 별도이며 확인하지 않았다.
+  배포/QA 결과 또는 사용자 재개 지시를 기다린다. feature 브랜치·worktree는 유지하며 추가 작업/자동 모니터링은 없다.
 
 ## 이전 체크포인트 — 2026-10-16 웹 PR4700 최종 머지 전 검토
 
