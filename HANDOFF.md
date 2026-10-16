@@ -36,8 +36,8 @@ Do not store secrets or private customer data here.
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471:
   [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — PR #4692의 release/v1.89.0 팀 리뷰·병합 대기. 시험 npm 배포와 정식 출시를 구분한다.
-  사용자 재개 요청 전 추가 작업·자동 확인 없이 대기하며 상세 검증·다음 단계는 정본을 따른다.
+  — 2026-10-16 PR #4692의 release/v1.89.0 충돌 확인. 다른 브랜치 정리 후 사용자가 일괄 충돌 해결을 지시할 때까지 코드·PR 변경/병합·자동 확인 없이 대기한다.
+  재개 시 다른 브랜치의 기능·의도와 DLDS의 DLOS 구조·패키지 통합 목적을 함께 보존한다. 과거 충돌 없음·검증 성공과 현재 상태를 구분하며 상세 근거·순서는 정본을 따른다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — 승인된 UI 정리 PR #4642가 반영된 완료 이력. 미착수 조사로 되돌리지 않는다.
