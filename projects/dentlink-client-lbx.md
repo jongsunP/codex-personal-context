@@ -1,6 +1,64 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-10-16, 날짜별 전달 브랜치로 develop 병합 완료
+## 현재 체크포인트 — 2026-10-16, 원본 브랜치에 픽업 조회 API 후속 수정
+
+### 원본·전달 브랜치 운영 기준 — 사용자 정정 우선
+
+- 사용자의 뜻은 **기능 구현·수정을 원본 `feature/DL-16387`에서 계속 누적하고,
+  개발서버 배포가 필요할 때 원본을 기반으로 별도의 전달 브랜치를 만들어 배포용으로만
+  사용한다**는 것이다. 원본을 유지한다는 말을 코드 수정 금지나 브랜치 동결로 해석하지 않는다.
+- 최신 develop의 DLOS 등 환경별 호환 수정은 전달 브랜치에서 처리한다. 운영 릴리스도
+  그때의 기준과 필요한 호환 변경을 검토해 전달하며 develop 전체를 원본/release에 섞지 않는다.
+- 이번에는 처음 develop 기준 로컬 후속 브랜치에 구현했으나 사용자가 이 기준을 정정했다.
+  커밋·push·PR 생성 전이었으므로 같은 임시 작업 공간을 원본으로 전환하여 API 변경만
+  적용했고, 불필요해진 로컬 `feature/DL-16387-pickup-api-20261016`은 고유 커밋 0개와
+  `origin/develop` 동일 HEAD를 확인 후 제거했다. 원본에 DLOS 변경은 가져오지 않았다.
+
+### 요청·구현·검증
+
+- 요청은 [DL-16279 댓글 44464](https://innovaid.atlassian.net/browse/DL-16279?focusedCommentId=44464)의
+  LBX 픽업 생성 대상 배송 조회 API 교체다. 운영 배포 보류 후 개발서버에만 별도로
+  전달한 상황도 재확인했다. Office/Lab 앱은 이번 수정 범위가 아니다.
+- DEV OpenAPI의 `GET /admin/shipments/collectible`은 필수 `labId`, 선택
+  `id/officeName/isConsolidated/page/size/sort`, 페이지 응답
+  `ApiPageResponseListCollectibleShipmentAdminDto`를 사용한다. API가 운송장 발급·
+  픽업 미요청·출고 전인 DHL 배송을 조회하며, LBX 모달은 `labId`, `isConsolidated=true`,
+  `page/size`로 요청한다. 치과명은 기존 `receiverName` 대신 `officeName`이다.
+- 원본 수정 6파일: 생성 `Admin.ts/data-contracts.ts`에 해당 신규 계약만 같은 generator로
+  생성해 반영하고, shipment 도메인 타입/wrapper, consolidation query, 픽업 폼의
+  치과명 표시를 연결했다. 기존 원본 `ComboboxDropdown`과 페이지 추가 조회, 선택/초기화,
+  빈 목록/오류 UX, 픽업 POST, 일반 배송 목록은 유지했다. queryKey를 구분하고
+  AbortSignal을 wrapper까지 연결했다.
+- **원본 기준 Clinic·Lab·Admin 타입 검사, 변경 파일 ESLint·Prettier·diff 검사 통과.**
+  원본의 실제 ComboboxDropdown/폼/query/wrapper를 사용하고 HTTP adapter 및 폼 외곽,
+  기공소·날짜 입력을 대체한 로컬 통합 검증 **8/8 통과**: 필수 기공소, GET 계약,
+  페이지 추가 조회, 기공소 변경 시 이전 요청 취소/응답 제외, officeName·복수 선택,
+  빈 목록/실패, 재조회 후 부적격 선택 제출 차단. 독립 코드/계약 검토 추가 지적 없음.
+- 최초 develop 기반 검증도 8개와 타입/린트/DLOS guard 60/60을 통과했지만 이는
+  별도 이력이다. 최종 원본에는 DLOS 의존성이나 guard를 추가하지 않았다.
+  임시 검증 초기의 모듈 경로·비동기 대기를 수정했고 기존 Icon Vite 경고는 남아 있다.
+- 실제 업무 GET 결과와 개발서버 화면 QA는 이번 범위에서 확인하지 않았으며,
+  테스트 중 실제 백엔드 생성·수정 요청은 0건이다. 코드에서 업무 API를 막지는 않는다.
+
+### 현재 저장 상태·다음 시작점
+
+- 제품 수정은 **원본 `feature/DL-16387`의 로컬 미커밋 6파일**이다. 원본 로컬 HEAD와
+  origin은 아직 `347909945b091324e7134673525203de14e122fd`로 같다.
+  제품 커밋·push·후속 PR·병합·추가 배포는 실행하지 않았다.
+- 원본의 작업 공간은 `/tmp/dentlink-lbx-pickup-api-20261016`이다. 기본 checkout은
+  다른 작업 `feature/DL-16796 / 3aac1dff0005706e78015cb5f23f255712696911`, clean 상태로
+  유지한다. 테스트/patch 증거는 `/tmp/lbx-pickup-api-20261016-evidence/`와
+  `/tmp/lbx-pickup-api-20261016-original-*.log`에 있다. 로컬 미커밋 코드와 /tmp 증거는
+  다른 기기로 이동하지 않으므로 원격 보존 전에 작업 공간을 제거하지 않는다.
+- 커밋·push/develop PR 확인 질문에 사용자는 브랜치 운영 의도를 정정했다.
+  다음 지시에 따라 **원본에 먼저 커밋·push**하고, 개발서버 반영을 요청하면 그 원본
+  수정만 현재 develop에 전달하는 별도 브랜치/PR을 준비한다. 배포용에서만 기능 수정을
+  누적하여 원본이 뒤처지게 만들지 않는다. 병합/배포는 별도 지시를 따른다.
+- 기존 [개발서버 배포 run 38849971928](https://github.com/Innvoaid/dentlink-client/actions/runs/38849971928)은
+  이번 조회에서 **completed/success**, source `dd6388ff976928e72f0de2d8521688977db2013b`였다.
+  이는 이전 #4705의 배포 성공이며 이번 신규 API 교체의 배포 성공은 아니다.
+
+## 이전 체크포인트 — 2026-10-16, 날짜별 전달 브랜치로 develop 병합 완료
 
 ### 최신 요청과 결과
 
