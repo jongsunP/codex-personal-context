@@ -182,6 +182,10 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
+- **최신 예외 감사:** 웹은 새 확정 과잉 차단/입력 유실 없이 유지했다. 앱 채팅·피드백·승인의 일시 오류 후 복구 누락을 보완했고,
+  입력·첨부 보존과 403/404·직원 전환 차단을 함께 검증했다. 새 UI/문구/정책/파일은 추가하지 않았다.
+  앱949e0f6/dafcad7/6437dbb 커밋·푸시 및 기존 PR329 본문 갱신 완료. 최종 관련5 suites/69 tests·6파일 lint PASS,
+  타입은 기존18진단과 동일. Vercel은 사용자 지시로 제외. 상세 검토/재현/기존 이슈 구분은 프로젝트 기록에 보존했다.
 - **최신 2026-10-16:** DEV Admin/Member 실제 QA의 담당 변경 경고 누락을 수정하고
   [PR4710](https://github.com/Innvoaid/dentlink-client/pull/4710)은 사용자 병합으로 MERGED → release/v1.89.0(8daac3561)이다.
   사용자 보고: 해당 release 기반 DEV 배포 진행 중. 배포 완료·새 배포본 재검증은 아직이다.
@@ -198,8 +202,8 @@ For detailed current state, read:
   DEV 핵심 메뉴/필터/NEW·FOLLOW_UP 저장/상세3종/링크/직접 URL 제한과 합성 Draft 담당 변경·복구 QA 완료.
   Draft9738·9739·9740 보존, 제출/결제 없음. 이번 수정의 새 배포본 QA와는 구분한다.
 - **Office 앱:** [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → develop OPEN,
-  `feature/DL-16317@7cb4487`은 미병합이므로 보존. 앱 코드/브랜치/배포 변경 없음.
-  기존394 tests·양 플랫폼 JS bundle PASS, 타입 진단18건은 기존과 동일. 실기기 QA와 구분한다.
+  `feature/DL-16317@6437dbb` 로컬·원격 일치·clean. 기존 브랜치에서 예외 복구3건을 보완했고 PR에 반영했다.
+  최종 관련69 tests PASS·타입18진단 기존동일. 기존394 tests·양 플랫폼 JS bundle은 이전7cb4487 검증 기록이다.
   미병합·미배포는 사용자 의도다. native 권한 검증은 PR329 포함 버전으로 진행한다.
 - **다음:** 사용자 DEV 배포 완료 후 경고 재확인 → 스테이징 정식 QA.
   앱 상세 웹 경고에는 이번 수정이 반영되며 native 권한 QA/운영 활성화는 PR329 포함 버전으로 진행한다.

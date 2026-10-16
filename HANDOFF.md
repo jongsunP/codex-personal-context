@@ -46,6 +46,9 @@ Do not store secrets or private customer data here.
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
   — 2026-10-16 PR #4705의 develop 병합 완료. 운영 릴리스는 별도이며 원본과 날짜별 전달 브랜치를 보존한다.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
+  — 최신 예외 감사에서 웹 추가 수정 없음. 앱 채팅·피드백·승인의 일시 오류 복구3건과 입력/첨부/완료 응답 경계를 보완했다.
+  949e0f6/dafcad7/6437dbb 정상 커밋·푸시·PR329 본문 갱신, 기존6파일만 변경. 관련69 tests·lint PASS, 타입18진단 기존동일.
+  새 UI/문구/정책/파일 없이 기존 refresh/Retry/앱·화면 복귀를 사용한다. Vercel은 사용자 지시로 제외했다.
   — 2026-10-16 DEV QA 후 담당 변경 경고를 보완해 커밋·푸시했고, PR4710은 사용자 병합으로 release/v1.89.0 MERGED.
   merge8daac3561/18:28:16 KST를 GitHub 확인. 사용자가 해당 release 기반 DEV 배포 진행 중이며 완료/새 배포본 QA는 아직이다.
   현재 permission worktree는 release24d3ff18a에서 분기한 feature/DL-16317-dentist-warning@e28b9c7e8·clean이다.
@@ -55,7 +58,7 @@ Do not store secrets or private customer data here.
   DEV Admin/Member 메뉴·필터·NEW/FOLLOW_UP 저장·상세3종·링크·직접 URL·합성 담당 변경/복구 QA 기록을 보존한다.
   Draft9738·9739·9740 보존(제출/결제 없음). 새 수정의 배포본 QA는 아직이다.
   원본 웹 featuref4bfaf1bf와 worktree 보존, PR4700/4706 release 병합·DEV 사전 테스트 배포 기록 유지.
-  앱 PR329 OPEN·feature7cb4487·미배포는 사용자 의도다. 이번 웹 상세 수정의 별도 native 코드 변경은 없다.
+  앱 PR329 OPEN→develop·feature6437dbb·clean이며 미병합/미배포는 사용자 의도다. 위 앱 복구 보완 포함 버전으로 QA한다.
   다음은 사용자 DEV 배포 완료→경고 재확인→스테이징 QA, 앱은 PR329 포함 버전으로 실기기 QA.
   다른 역할·승인 대기 쓰기·다주문 지연 등 미실시 범위와 배포/Member 활성화 순서는 상세 체크포인트를 따른다.
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
