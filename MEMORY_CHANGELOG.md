@@ -2,6 +2,11 @@
 
 ## 2026-10-16
 
+- 권한관리 사용자의 개발서버 배포 완료 보고 후 실제 웹 PR4706 MERGED/release10c30e3cb를 확인했다.
+  squash 통합 tree를 검증하고 웹 feature/DL-16317·codex/dl-16317-permission-followup의 로컬/리모트 브랜치를 삭제했다.
+  원본 폴더는 release10c30e3cb detached HEAD·clean으로 보존했다. 미병합 Office PR329/앱 feature 브랜치는 유지한다.
+  배포 보고와 실제 QA·앱 배포를 구분해 기록했으며 추가 리뷰/배포/감시는 하지 않고 QA 결과 대기로 종료한다.
+
 - 권한관리 웹 PR4706 CodeRabbit의 승인 ID 대상 대체 오류를 재현·수정하고 d5f896740 정상 commit/push했다.
   기존2파일만 변경, Clinic353/Lab399 tests·3서비스 타입·정상push검사 PASS. thread 답변/resolve 완료.
   최신d5f896740 CodeRabbit은 마지막 PENDING이며 사용자 요청으로 추가 대기/조회 없이 종료한다.

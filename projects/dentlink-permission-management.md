@@ -1,6 +1,33 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-16 웹 PR4706 CodeRabbit 후속 검토
+## 현재 상태 — 2026-10-16 웹 배포 보고 및 병합 브랜치 정리 완료
+
+- **사용자 보고/요청:** 배포 완료 후 메모리·정리, 작업 로컬/리모트 브랜치 삭제 및 종료를 요청했다.
+  앞선 문맥상 개발서버 배포 완료로 기록하며, 실제 배포 SHA·런타임·운영 배포·QA 통과를 별도 확인한 것은 아니다.
+- **실제 웹 병합 확인:** [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706)은
+  `release/v1.89.0`에 MERGED, 2026-10-16 15:13:18 KST,
+  merge `10c30e3cbf5a31ecd7f051abe5b3d29c8bbd03d5`, 마지막 feature head `d5f896740808864780420c6d8ee24e2f5ce33106`.
+  PR4700도 MERGED(merge047fcc585), 두 PR은 squash 병합이므로 단순 commit ancestry와 구분한다.
+  PR4706의 최종 feature/release tree 및 patch-id가 같으며, PR4700은 당시 release a065b39e4와 feature f4bfaf1bf의
+  merge-tree `0a14f88dcb87f509cf3f1cd119809abbdf338012`가 실제 merge047fcc585 tree와 같음을 확인했다.
+- **삭제 완료 — 웹 저장소 한정:**
+  - `codex/dl-16317-permission-followup` 로컬·리모트(삭제 전 d5f896740)
+  - `feature/DL-16317` 로컬·리모트(삭제 전 f4bfaf1bf)
+  원격 예상 SHA lease로 변경 경합을 방어한 삭제 push가 정상 hook을 통과했다. 이후 로컬/원격/tracking ref 없음 확인.
+  squash 병합의 동등성을 확인한 뒤 로컬 branch -D를 사용했다. 추가 백업 브랜치는 만들지 않았다.
+- **로컬 위치 보존:** `/Users/parkjongsun/Repository/dentlink-client-permission`은
+  실제 release merge `10c30e3cb`의 detached HEAD·clean으로 남겼다. 최종 feature와 tree가 같아 소스 내용 변화 없음.
+  폴더·ignored 환경 파일·의존성·서버 및 다른 작업용 worktree는 삭제/수정하지 않았다.
+- **Office 앱 보존:** 실제 [PR329](https://github.com/Innvoaid/dentlink-app/pull/329)는 여전히 OPEN → develop,
+  head `7cb4487023001714ee3247ca454b97fdc9d1fca7`. 미병합 앱의 `feature/DL-16317`은 로컬/리모트 모두 삭제하지 않았다.
+  웹 배포 소식을 앱 병합·배포 완료로 확대하지 않는다.
+- **검증/리뷰 경계:** 기존 FE 검증과 CodeRabbit 승인 ID 수정은 아래에 보존한다. 새 커밋 리뷰 대기는 사용자 요청으로
+  앞서 중단했으며 이번 정리에서 자동 리뷰를 다시 조회/실행하지 않았다. 실제 계정·기기 QA는 별도다.
+- **다음 시작점:** 개발서버 QA 결과가 오면 현재 release/v1.89.0을 fetch하고 해당 QA 후속용 새 작업 브랜치를 만들어 수정한다.
+  삭제한 브랜치를 현재 활성 브랜치로 가정하지 않는다. 앱 작업 재개는 보존한 feature/PR329 상태부터 확인한다.
+  필수 BE 추가 요청 없음. 지금은 추가 구현·배포·모니터링 없이 종료한다.
+
+## 이전 체크포인트 — 2026-10-16 웹 PR4706 CodeRabbit 후속 검토
 
 - **승인/범위:** 사용자 요청은 PR4706 CodeRabbit 리뷰 확인이다. 개인 AGENTS의 기존 합의에 따라 유효 지적 수정,
   검증·커밋/푸시·답변·resolve 및 최신 리뷰 재확인까지 처리한다. 다른 기능 재조사나 앱 PR 변경·배포는 하지 않는다.

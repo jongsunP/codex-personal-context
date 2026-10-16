@@ -179,23 +179,19 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-16:** 사용자 요청으로 Figma·실제 권한 PRD/TC·DEV Swagger와 코드 전반을 재대조했다.
-  Member 기존 Case 후속 주문 본인 배정, 담당 UI 숨김, 읽기 전용 번역/승인 자료 조회와 앱 일시 오류 입력 보존을 보완했다.
-- **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`,
-  `codex/dl-16317-permission-followup@d5f896740`, 원격 동일·clean.
-  이미 병합된 PR4700의 release047fcc585에서 분기했고 [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706)
-  → release/v1.89.0 OPEN/MERGEABLE. Clinic35 suites/353 tests·Lab38 suites/399 tests·3서비스 타입/정상push검사 PASS.
-  직전976097e85의 격리 frozen설치+Clinic production build195페이지/standalone PASS.
-  CodeRabbit 승인 ID 보존 지적을 수정·회귀검증하고 해당 thread를 resolved 처리했다.
-  새 커밋 리뷰는 마지막 확인 PENDING이며 사용자 요청으로 대기를 중단했다. 기존 feature f4bfaf1bf 보존, 웹 develop 무관.
-- **Office 앱:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317@7cb4487`, 원격 동일·clean.
-  기존 [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → develop OPEN/MERGEABLE에 후속3커밋 반영.
-  Jest41 suites/394 tests·lint오류0·iOS/Android production JS bundle PASS. Type 진단은 기존18건과 동일/추가0.
-  자동 CodeRabbit은 기존 대상 패턴으로 skipped이며 실제 리뷰 PASS가 아니다.
-- **Jira:** 이번 connector403으로 최신 댓글/상태 재조회·변경은 못했다. 과거 카드 업데이트는 기능 체크포인트에서 구분한다.
-- **다음:** 팀 리뷰/병합·QA 버전 준비 → 실제 Member/Admin 저장·조회/쓰기 제한·직원 전환·오류 회복 QA.
-  담당 변경 경고 조건도 기존 환자 주문/상세 API로 완료해 필수 BE 요청은 없다. Office WebView에도 함께 적용된다.
-  변경 클릭 시 환자 범위만 조회하며 본인 주문 발견 시 중단한다. 새 별도 접근 API나 병원 전체 조회는 추가하지 않았다. 후속 merge·배포·CodePush는 수행하지 않았다.
+- **최신 2026-10-16:** 사용자 개발서버 배포 완료 보고 후 웹 작업 브랜치 정리·메모리 저장·종료 요청.
+- **웹:** [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706) → release/v1.89.0 MERGED,
+  merge10c30e3cb(15:13:18 KST). 실제 런타임/QA/운영 배포는 추가 확인하지 않았다.
+  최종d5f896740와 release tree 동일, PR4700의 squash 통합 tree도 일치 확인.
+  `codex/dl-16317-permission-followup`과 웹 `feature/DL-16317` 로컬·리모트 삭제 완료.
+  `/Users/parkjongsun/Repository/dentlink-client-permission`은 release10c30e3cb detached HEAD·clean으로 보존한다.
+- **기존 검증:** Clinic353/Lab399 tests·3서비스 타입/정상push검사 PASS. 976097e85 production build195페이지 PASS.
+  CodeRabbit 승인 ID 보존 지적 수정·resolve 완료. 후속 자동 리뷰는 사용자 요청으로 대기 중단, 이번 재조회 없음.
+- **Office 앱:** [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → develop OPEN,
+  `feature/DL-16317@7cb4487`은 미병합이므로 보존. 앱 코드/브랜치/배포 변경 없음.
+  기존394 tests·양 플랫폼 JS bundle PASS, 타입 진단18건은 기존과 동일. 실기기 QA와 구분한다.
+- **다음:** 개발서버 실제 Member/Admin QA 결과 대기. 웹 QA 수정은 최신 release에서 새 브랜치로 재개한다.
+  필수 BE 후속 없음. 앱은 별도 PR 병합/QA 버전 전달이 남으며 웹 배포와 혼동하지 않는다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
 - 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 
