@@ -1,6 +1,6 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-10-16, 원본 픽업 API 수정 저장 / develop 전달 PR #4709
+## 현재 체크포인트 — 2026-10-16, develop 전달 병합 / 원본 유지·후속 지시 대기
 
 ### 원본·전달 브랜치 운영 기준 — 사용자 정정 우선
 
@@ -51,7 +51,9 @@
   전달 HEAD **`9f0479318b58e1f2947765a39209ce000745ca41`**의 첫 부모는 원본
   `b69dd84b6`, 두 번째 부모는 develop `8d725079d`다. 원본에는 develop을 역병합하지 않았다.
 - [PR #4709](https://github.com/Innvoaid/dentlink-client/pull/4709)는 위 전달 브랜치에서
-  **develop** 대상으로 OPEN이며 생성 직후 `MERGEABLE`을 확인했다. develop 대비
+  **develop** 대상으로 생성했고 **2026-10-16 17:19:40 KST 병합 완료**를 확인했다.
+  merge commit은 `9f87150f9095f7e59ee81427a230606e56f7a84e`이며 현재 origin/develop과 같다.
+  병합 결과 전체 tree는 검증한 전달본과 정확히 같고, PR의 develop 대비
   **6파일 +149/-9**로 이번 API 변경만 포함한다. 기존 #4705의 DLOS/개발서버 변경은 유지된다.
   예상 merge-tree와 실제 전달 tree `72d1d5dc2d797d93155d01fc552b3ac719ee7ede`가 같다.
 - 두 브랜치 모두 정상 commit/push hooks를 통과했다. 원본 전체 lint는 기존 경고
@@ -63,16 +65,29 @@
 - PR의 Auto Assign은 성공했고 CodeRabbit은 develop 설정 때문에
   **`Review skipped: reviews are disabled for this base branch`**로 success다.
   새 CodeRabbit 리뷰 통과로 보고하지 않는다. GitHub Admin DLOS Guard도 성공했고,
-  최종 PR은 `OPEN / MERGEABLE / CLEAN`을 확인했다.
+  PR 생성 검증 시 `OPEN / MERGEABLE / CLEAN`이었고 이후 사용자/팀이 병합했다.
 - 두 브랜치의 원격 저장과 tracked clean 확인 후 임시
   `/tmp/dentlink-lbx-pickup-api-20261016` worktree를 제거했다. 테스트는
   `/tmp/lbx-pickup-api-20261016-evidence/delivery-final/`로 복사했고 원본/전달 로그는
   `/tmp/lbx-pickup-api-20261016-{original,delivery}-*.log`에 있다. 이 자료는 기기 한정이다.
   기본 checkout은 계속 `feature/DL-16796 / 3aac1dff0005706e78015cb5f23f255712696911`,
   clean 상태이며 다른 작업의 브랜치/worktree는 변경하지 않았다.
-- 다음 단계는 #4709의 팀 리뷰 후 사용자/팀이 develop에 병합하는 것이다.
-  이번 작업에서 PR 병합이나 배포는 실행하지 않았다. 운영 릴리스 전달도 별도다.
-  이후 기능 수정은 원본에서 계속하고, 필요할 때 원본을 기준으로 전달 브랜치를 만든다.
+- 사용자가 개발서버 배포를 알리고 **정리·메모리 저장 후 대기**를 지시했다.
+  원본 `feature/DL-16387`을 계속 유지하며, 필요한 후속 구현을 원본에 누적하고
+  개발서버 반영이 필요할 때 별도 전달 브랜치로 배포하는 기준을 다시 확인했다.
+- [이번 개발서버 배포 run 38872943654](https://github.com/Innvoaid/dentlink-client/actions/runs/38872943654)의
+  source는 위 merge `9f87150f9`이며 마지막 직접 조회는 **in_progress**였다.
+  사용자 배포 전달과 GitHub workflow 최종 성공 판정은 구분한다. 이번 종료 요청으로
+  추가 QA·생성/수정 요청·배포 재실행·자동 모니터링을 시작하지 않는다.
+- 병합·원격 보존 확인 후 사용 완료된 **로컬** 전달 브랜치
+  `feature/DL-16387-develop-20261016`과 `feature/DL-16387-develop-pickup-20261016`을
+  제거했다. 원격의 `73082ae5a`·`9f0479318` 및 PR #4705/#4709 이력은 유지한다.
+  #4709는 squash 병합이라 전달 commit 자체는 develop 조상이 아니지만 전체 tree가
+  동일하고 remote에도 저장되어 있어 로컬 삭제 후 복구 가능함을 확인했다.
+- 독립 읽기 전용 감사에서도 원본 local/remote `b69dd84b6`, clean 기본 checkout,
+  LBX 임시 worktree/디렉터리 없음, 다른 작업 보존을 확인했다. 현재 추가 LBX 로컬 정리 대상 없음.
+- **현재 대기 상태.** 다음 사용자 요청 시 정본과 원격을 갱신하고 원본에서 이어간다.
+  원본 유지라는 말을 코드 동결로 해석하지 않는다. 운영 릴리스 전달은 별도 지시를 따른다.
 - 기존 [개발서버 배포 run 38849971928](https://github.com/Innvoaid/dentlink-client/actions/runs/38849971928)은
   앞선 조회에서 **completed/success**, source `dd6388ff976928e72f0de2d8521688977db2013b`였다.
   이는 이전 #4705의 배포 성공이며 이번 신규 API 교체의 배포 성공은 아니다.
