@@ -1,6 +1,23 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-16 사용자 지시로 원래 웹 feature 브랜치 복구·워크트리 보존
+## 현재 상태 — 2026-10-16 release 반영 확인·병합 내용 검토(Claude)
+
+- **사용자 목적:** release/v1.89.0에 병합만 됐고 실제 배포 전이므로 `feature/DL-16317`은 보존한다.
+- **브랜치/워크트리:** `feature/DL-16317` 로컬·리모트 `f4bfaf1bf` 유지. Claude가 한때 워크트리를 이 브랜치로 switch했다가
+  사용자 승인 후 기록 의도대로 `dentlink-client-permission`을 release `10c30e3cb` detached HEAD·clean으로 되돌렸다.
+  (feature 브랜치에는 #4706이 없으므로 후속 QA는 release 내용에서 시작)
+- **반영 확인:** #4700 merge `047fcc585`, #4706 merge `10c30e3cb` 모두 release 조상. squash 결과 tree가 각 feature 최종과 동일.
+- **검증(release 10c30e3cb):** Clinic Jest 35 suites/353, Lab 38 suites/399 PASS, Clinic/Lab/Admin tsc 0 error.
+- **정적 리뷰(f4bfaf1bf·#4706):** 되돌릴 확정 버그 없음. 배포 전 확인 2건(코드 동작은 확인, 영향은 정책/배포 순서 의존):
+  1. 담당 변경 경고 조회에서 같은 환자의 다른 주문 GET이 403이면 catch → "Cannot Change a Dentist"로 모달이 열리지 않고 재시도도 동일
+     (`useOrderDetail.ts` dentist change check). 서버가 Member에게 같은 환자 타 주문을 403으로 거절할 수 있는지 확인 필요.
+  2. `OrderDetailBoxPendingApproval`이 읽기 전용에서도 승인 열기를 허용 → Office 앱 WebView는 네이티브 승인 화면으로 이동.
+     앱 측 Member guard는 미병합 Office PR329에만 있어 웹이 먼저 배포되면 구버전 앱에서 승인/거절 UI 노출 가능(서버 거절 시 오류 UX).
+  Low: 승인 페이지가 Admin도 주문 GET 성공에 묶임, PLANNING SKIP 클릭도 차단, 명시 approvalId 미존재 시 type DESIGN 고정 등.
+- **CodeRabbit #4706:** 지적1건 resolved, 이후 커밋 새 지적 없음, 체크 표시는 PENDING.
+- **다음:** 위 2건 정책/배포 순서 확인 → 배포 → 실계정 QA. 수정이 필요하면 최신 release에서 새 `feature/` 브랜치로 진행.
+
+## 이전 체크포인트 — 2026-10-16 사용자 지시로 원래 웹 feature 브랜치 복구·워크트리 보존
 
 - **최신 사용자 지시:** release가 아직 상용에 완전히 반영되지 않았으므로 `feature/DL-16317`을 다시 살리고,
   워크트리도 아직 삭제하지 않는다. 직전 정리 요청의 이 브랜치 삭제 부분을 대체한다.

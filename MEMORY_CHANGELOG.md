@@ -2,6 +2,10 @@
 
 ## 2026-10-16
 
+- 권한관리 #4700·#4706의 release/v1.89.0 반영과 squash 동일성을 확인하고 release 기준 Clinic/Lab Jest·3서비스 tsc 통과를 확인했다.
+  정적 리뷰에서 확정 버그는 없고 배포 전 확인 2건(담당 변경 경고의 타 주문 403 처리, 웹 선배포 시 구버전 앱 승인 화면 노출)을 기록했다.
+  feature/DL-16317은 보존, permission 워크트리는 release 10c30e3cb detached로 원복했다(Claude).
+
 - 권한관리 사용자가 아직 상용 반영 전이라 웹 feature/DL-16317 복구와 워크트리 보존을 요청했다.
   삭제 전 f4bfaf1bf로 원래 feature를 로컬/리모트 복구하고 원격 동일을 확인했으며, 워크트리는 최신 release10c30e3cb detached HEAD로 유지한다.
   후속 codex 브랜치는 삭제 상태이고 앱 브랜치는 기존대로 보존한다. 사용자 후속 지시 전 재삭제하지 않는다.
