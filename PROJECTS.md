@@ -182,10 +182,12 @@ For detailed current state, read:
 - **최신 2026-10-16:** 사용자 요청으로 Figma·실제 권한 PRD/TC·DEV Swagger와 코드 전반을 재대조했다.
   Member 기존 Case 후속 주문 본인 배정, 담당 UI 숨김, 읽기 전용 번역/승인 자료 조회와 앱 일시 오류 입력 보존을 보완했다.
 - **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`,
-  `codex/dl-16317-permission-followup@976097e85`, 원격 동일·clean.
+  `codex/dl-16317-permission-followup@d5f896740`, 원격 동일·clean.
   이미 병합된 PR4700의 release047fcc585에서 분기했고 [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706)
-  → release/v1.89.0 OPEN/MERGEABLE. Clinic35 suites/349 tests·Lab38 suites/399 tests·3서비스 타입/정상push검사 PASS.
-  격리 frozen설치+Clinic production build195페이지/standalone PASS. 기존 feature f4bfaf1bf 보존, 웹 develop 무관.
+  → release/v1.89.0 OPEN/MERGEABLE. Clinic35 suites/353 tests·Lab38 suites/399 tests·3서비스 타입/정상push검사 PASS.
+  직전976097e85의 격리 frozen설치+Clinic production build195페이지/standalone PASS.
+  CodeRabbit 승인 ID 보존 지적을 수정·회귀검증하고 해당 thread를 resolved 처리했다.
+  새 커밋 리뷰는 마지막 확인 PENDING이며 사용자 요청으로 대기를 중단했다. 기존 feature f4bfaf1bf 보존, 웹 develop 무관.
 - **Office 앱:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317@7cb4487`, 원격 동일·clean.
   기존 [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → develop OPEN/MERGEABLE에 후속3커밋 반영.
   Jest41 suites/394 tests·lint오류0·iOS/Android production JS bundle PASS. Type 진단은 기존18건과 동일/추가0.

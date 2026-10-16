@@ -1,6 +1,32 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-16 담당 변경 경고 완료, 사용자 배포/QA 대기
+## 현재 상태 — 2026-10-16 웹 PR4706 CodeRabbit 후속 검토
+
+- **승인/범위:** 사용자 요청은 PR4706 CodeRabbit 리뷰 확인이다. 개인 AGENTS의 기존 합의에 따라 유효 지적 수정,
+  검증·커밋/푸시·답변·resolve 및 최신 리뷰 재확인까지 처리한다. 다른 기능 재조사나 앱 PR 변경·배포는 하지 않는다.
+- **웹:** `codex/dl-16317-permission-followup@d5f896740808864780420c6d8ee24e2f5ce33106`,
+  `fix: 승인 링크에 지정된 대상 정보 유지`. 정상 commit/push 후 원격 head 일치.
+  기존 [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706) → `release/v1.89.0` 유지.
+- **유효 지적 수정:** 읽기 전용 승인 링크에 명시된 approvalId가 현재 approvals에 없으면 첫 DESIGN 승인으로 바뀌던 문제를
+  실제 테스트2개로 재현했다. 명시 ID를 유지하고 다른 현재 AUTO 미리보기로 대체하지 않도록 수정했다.
+  ID 생략 때 기존 DESIGN/AUTO fallback은 유지한다. 제품/기존 테스트2파일만 수정, 새 파일 없음.
+- **검증:** Clinic35 suites/353 tests, Lab38 suites/399 tests PASS. 정상 commit의 Clinic/Lab/Admin 타입과
+  정상 push의 3서비스 lint·Admin DLOS guard·shared coverage PASS(기존 warning 있음), diff/테스트포맷 PASS.
+  최신2파일 독립 검토에서 추가 결함 없음. 이번 단순 대상 선택 수정에서 production build는 반복하지 않았으며,
+  직전976097e85 빌드195페이지/standalone PASS 증거는 아래에 구분해 보존한다.
+- **리뷰 답변:** [승인 ID thread](https://github.com/Innvoaid/dentlink-client/pull/4706#discussion_r4291452818)에
+  재현/수정 내용을 답변하고 resolved 처리했다.
+  [순차 조회/Docstring 판단](https://github.com/Innvoaid/dentlink-client/pull/4706#issuecomment-6209294669)을 기록했다.
+  순차 조회 지연은 유효한 성능 개선 제안이지만 기능 오류는 아니다. 병렬 묶음의 추가 요청 및 묶음 완료 대기와
+  클릭할 때만 조회하고 본인 주문 발견 시 즉시 중단하는 현 구조를 비교해 이번에는 순차 조회를 유지한다.
+  많은 주문 사례의 실측 지연은 QA에서 확인한다. Docstring 수치 경고만을 위한 주석 증가는 하지 않았다.
+- **최신 자동 리뷰/중단:** d5f896740에 대한 CodeRabbit 상태는 마지막 확인에서 PENDING이었다.
+  사용자가 "처리했으면 더 안기다리고 마무리"라고 지시하여 대기/추가 상태 조회를 중단한다. 기존 지적 thread는 resolved이나
+  새 커밋 리뷰 완료·추가 지적 없음까지 확인한 결과는 아니다. 이후 사용자 요청 시 해당 결과부터 확인한다.
+- **그 외/다음:** 필수 BE 후속 없음, Office native7cb4487/PR329 유지. 팀 리뷰/병합 → 사용자 QA 배포 → 실제 계정·기기 QA.
+  merge/배포/CodePush/E2E/유료 CodeRabbit 실행은 하지 않는다.
+
+## 이전 체크포인트 — 2026-10-16 담당 변경 경고 완료, 사용자 배포/QA 대기
 
 - **최신 요청/판단:** BE는 완료됐다는 사용자 기준으로 FE가 가능한 보완을 마치고 웹·앱 PR까지만 전달한다.
   배포는 사용자가 진행한다. 아래 이전 체크포인트의 '담당 변경 경고 BE 확인 필요'는 해제한다.

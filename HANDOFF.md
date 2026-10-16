@@ -48,7 +48,8 @@ Do not store secrets or private customer data here.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
   — 2026-10-16 정책 재대조 후 웹 후속 PR #4706(release/v1.89.0)·Office 기존 PR #329(develop)에 보완 푸시.
   Member 후속 주문/ISV 담당 배정·읽기 조회·앱 승인 입력 보존 및 기존 API를 사용한 담당 변경 경고 조건 완료.
-  웹976097e85·앱7cb4487, 필수 BE 요청 없음. 사용자 배포 후 실제 QA가 다음 단계다.
+  웹d5f896740(승인 ID 보존 리뷰 수정)·앱7cb4487, 필수 BE 요청 없음. 사용자 배포 후 실제 QA가 다음 단계다.
+  새 커밋 CodeRabbit은 마지막 PENDING이며 사용자가 추가 대기 없이 마무리하도록 요청했다.
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — PR #4699의 release/v1.89.0 병합 완료. QA·운영 출시 별도이며 브랜치는 보존한다.
 - Dentlink 통합알림센터: [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
