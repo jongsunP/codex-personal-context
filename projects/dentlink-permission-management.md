@@ -10,6 +10,10 @@
   인용된 '현재 #4706 이전 소스'는 이미 지난 상태다. 다른 에이전트의 기록과 실제 Git 모두 최신 release로 복구됨을 확인했다.
   브랜치·워크트리 추가 복구/삭제/전환은 하지 않았다. 원래 feature에는 #4706이 없으므로 QA는 보존한 release 소스 기준이다.
   `codex/dl-16317-permission-followup`은 삭제 상태를 유지한다.
+- **메인세션 사용자 추가 설명:** 살려두려는 대상은 원본 작업 브랜치이며 release 통합 이후
+  부분 수정·QA용 파생 브랜치는 아니다. PR4706 후속은 이 파생 범주이고 변경은 release에 보존돼 있다.
+  메인세션에서 이 후속까지 필수 복구로 안내한 판단은 정정했다. 현재 원본 feature·최신 release
+  worktree 보존 상태를 유지하며 추가 복구는 필요 없다.
 - **병합:** PR4700→047fcc585, PR4706→10c30e3cb 모두 release에 반영돼 있다.
   10c30e3cb tree는 최종d5f896740 tree와 동일하다. PR4700은 원래feature f4bfaf1bf 전체 tree 자체와 같지는 않다.
   당시 release a065b39e4와 f4bfaf1bf를 merge-tree한 결과0a14f88dc가 실제047fcc585 tree와 같아 권한 작업 누락이 없음을 확인했다.
