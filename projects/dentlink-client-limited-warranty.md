@@ -4,11 +4,21 @@
 개인 체크포인트다. 다음 세션에서는 이 기록보다 live Git, Jira, PR과 배포 상태를
 우선하며 구현·리뷰·merge·스테이징 QA·배포를 구분한다.
 
+## 현재 정리 완료 — 2026-10-16 과거 원본 백업 폐기
+
+- Warranty 기능의 DL-16258 재구현·출시를 Git으로 확인했고, 사용자가 최근 실제 대체 적용도
+  완료했다고 재확인했다. 과거 `frankieTemp/DL-10132`의 약관 추가 초안까지 폐기하도록 승인했다.
+- 원격 `frankieTemp/DL-10132 / d9fa6cea63ea5f940eb5642656326c35927bf0fe`를 삭제했다.
+  아래 9/3의 원격 보존·재개 안내는 당시 이력이다. 과거 약관과 현재 정책의 차이를 미완료 작업으로
+  다시 등록하거나 과거 초안을 현행 약관에 자동 반영하지 않는다.
+- 복구용 증분 bundle은 웹 공용 Git 디렉터리의 `codex-closeout/frankie-backup-cleanup-20261016/`
+  에 있다. 삭제 당시 제품 코드·약관·Jira·PR·배포는 변경하지 않았다. [FE 정리 기록](dentlink-fe.md).
+
 ## 범위와 근거
 
 - Jira: [DL-16258](https://innovaid.atlassian.net/browse/DL-16258)
 - 관련 과거 Jira: [DL-9895](https://innovaid.atlassian.net/browse/DL-9895)
-- 과거 구현 원본: 원격 `frankieTemp/DL-10132`, commit `9f65edae9`
+- 과거 구현 원본: 당시 원격 `frankieTemp/DL-10132`, commit `9f65edae9` (10/16 승인 후 브랜치 삭제)
 - DL-16258은 배포 시점 미확정으로 반영되지 않았던 과거 Warranty 작업을 현재
   기준으로 다시 반영하는 작업이다.
 - 최초 복원 때 Jira에 연결된 과거 Notion 문서는 삭제 또는 이동된 상태여서 과거
@@ -33,7 +43,7 @@
 - CodeRabbit이 확인한 정책 본문의 명백한 문법·철자 오류 5곳은 법적 의미를 바꾸지
   않는 범위에서 교정했다.
 
-## 현재 체크포인트 — 2026-09-03
+## 이전 체크포인트 — 2026-09-03
 
 ### 최신 전달: master 병합·push 및 스테이징 배포 완료
 

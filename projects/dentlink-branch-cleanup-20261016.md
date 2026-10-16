@@ -1,13 +1,37 @@
-# Dentlink released branch cleanup - 2026-10-16
+# Dentlink branch cleanup - 2026-10-16
 
 Recovery and deletion ledger. See [FE checkpoint](dentlink-fe.md) for current scope and status.
 
-- Deleted: 4 local branches, 1 worktree, 154 personal remote branches. Server absence verified.
+- Initial released-work cleanup: 4 local branches, 1 worktree, 154 personal remote branches. Server absence verified.
 - Remote owner: jongsunP, verified by PR ownership and exact source HEAD.
 - Web production: 951503d422e11620cb207d5f5890fa9a827d531a; Admin, Clinic and Lab deployment succeeded.
 - Office: PR318 in main and v2.2.4.82/.83 tags; related files match main. Production v83 activation/install records do not establish the exact OTA source SHA.
 - Lab: main bb619010, Production v13 / binary1.0.4 both OS active100%, user completion on 2026-10-12.
 - Shared branches, tags, stashes, active/unreleased and uncertain work were preserved.
+
+## Follow-up: approved obsolete frankieTemp backups
+
+The user confirmed replacement work for version/threeJsTemp/DL-10132 and explicitly
+approved discarding DL-4978 after being told its experiment was absent from production.
+These are authorized obsolete-work deletions, not proof that each entire source was released.
+
+| Deleted remote branch | Previous SHA | Authorization basis |
+| --- | --- | --- |
+| `frankieTemp/version` | `7aa24794890af938cbba995b09a16594a93c31b8` | User confirmed another developer completed replacement library upgrades |
+| `frankieTemp/threeJsTemp` | `42db3f991b0a8d4d65d3e15b3ed5aeaf9e5f9949` | User confirmed 3D work was handled elsewhere |
+| `frankieTemp/DL-10132` | `d9fa6cea63ea5f940eb5642656326c35927bf0fe` | Warranty replacement applied; user approved discarding old terms draft |
+| `frankieTemp/DL-4978` | `4aebf270312d721f215d73e53192d12539325d22` | User explicitly approved discarding the old mobile focus experiment |
+
+- Preserved: `frankieTemp/invoiceTemplete / 062ba4aeea1e0d33014bd1b126e6aa0f11f871d0`.
+  Similar local HTML exists, but live shipping UI consumes a server-provided document URL;
+  the requested condition of confirmed replacement application was not established.
+- Backup: web common Git directory `codex-closeout/frankie-backup-cleanup-20261016/`,
+  `approved-frankie-backups.bundle` and `manifest.json`. Incremental bundle verified against preserved master history.
+- Remote SHA rechecked immediately before deletion; absence and preserved invoice SHA verified afterward.
+  Other remote refs, local branches/worktrees, tags, stashes and primary checkout stayed unchanged.
+- Follow-up: remote 4 deleted, local/worktree 0. Web remote heads 272 to 268.
+  Daily cumulative remote deletion count: **158 (initial154 + follow-up4)**.
+  The detailed repository tables below describe the initial cleanup snapshot.
 
 ## Recovery
 

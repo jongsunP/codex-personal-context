@@ -77,8 +77,9 @@ For detailed current state, read:
   [SESSION_WORKFLOW.md의 업무 접수 기준](SESSION_WORKFLOW.md#new-work-intake-and-session-routing)을 따른다.
 - 현재 열린 기능 세션과 다른 기기의 첫 대화에서 읽을 체크포인트:
   [projects/dentlink-fe.md](projects/dentlink-fe.md)의 **다른 기기에서 이어가기** 절.
-  2026-10-16 출시 완료 작업의 로컬 브랜치 4개·worktree 1개·원격 브랜치 154개 정리 이력도
-  같은 문서에 보존한다. 진행 중·미출시·소유/반영 불명확 항목은 유지했다.
+  2026-10-16 로컬 브랜치 4개·worktree 1개·원격 브랜치 158개 정리 이력도 같은 문서에 보존한다.
+  원격은 출시 완료154개와 사용자 확인 후 폐기한 frankieTemp 백업4개다.
+  진행 중·공용·타인 항목과 대체 적용을 확인하지 못한 invoiceTemplete는 유지했다.
 - 이 색인은 세부 상태를 중복 보관하지 않는다. 과거 SHA, PR 상태, QA·배포 이력은
   각 프로젝트의 최신 체크포인트에서 확인하고 재개 시 live Git과 대조한다.
 

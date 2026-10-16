@@ -4,7 +4,28 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 정리 완료 — 2026-10-16 출시된 개인 브랜치·worktree
+## 현재 후속 정리 완료 — 2026-10-16 frankieTemp 백업 검토
+
+- 사용자 요청으로 남아 있던 `frankieTemp/` 5개를 코드·과거 PR·현재 운영 소스와 비교했다.
+  이번 삭제는 아래 사용자 확인에 따른 **대체 완료·불필요 실험의 폐기**이며,
+  1차 정리의 운영 반영 검증 154개와 근거를 구분한다.
+- 원격 4개를 추가 삭제했다: `version`(라이브러리 업그레이드는 다른 담당자가 대체 완료),
+  `threeJsTemp`(3D 작업은 다른 곳에서 대체 완료), `DL-10132`(최근 Warranty 작업으로
+  대체 적용 완료 및 과거 약관 초안 폐기 확인), `DL-4978`(모바일 채팅 포커스 실험 폐기 승인).
+  원본 전체 코드가 그대로 출시됐다는 의미는 아니며, 이 과거 초안을 다시 할 일로 복원하지 않는다.
+- **`frankieTemp/invoiceTemplete / 062ba4aeea1e0d33014bd1b126e6aa0f11f871d0`는 보존했다.**
+  유사한 `Invoice-commercial.html` 견본은 있으나 실제 배송 UI는 서버가 준 문서 URL을 연다.
+  사용자의 ‘비슷한 양식이 적용됐다면 삭제’ 조건을 확인할 근거가 부족하다. 최신 요청대로 추가 질문 없이 유지한다.
+- 삭제 전 정확한 SHA·열린 PR head/base·worktree 미사용과 증분 Git bundle을 검증했다.
+  삭제 후 원격 부재·invoice 백업 유지·다른 원격 ref/로컬 branch·worktree·태그·stash·checkout
+  불변을 확인했다. 웹 원격은 272→268개이며 이번 로컬 브랜치/worktree 삭제는 없다.
+- 복구용 bundle과 manifest는 웹 공용 Git 디렉터리의
+  `codex-closeout/frankie-backup-cleanup-20261016/`에 있다. 정확한 SHA와 사유는
+  [삭제 목록](dentlink-branch-cleanup-20261016.md)의 후속 절에 보존한다.
+- **오늘 누계:** 로컬 브랜치 4개, worktree 1개, 원격 브랜치 158개(1차 출시 완료154 + 승인된 폐기4).
+  제품 코드·PR·Jira·배포 변경은 없으며 개인 컨텍스트 정리 후 새 요청 전 대기한다.
+
+## 이전 1차 정리 완료 — 2026-10-16 출시된 개인 브랜치·worktree
 
 - 사용자 명시 요청에 따라 **실제 릴리스까지 완료된 본인 작업**만 정리했다.
   PR 작성자 `jongsunP`, 현재 원격 HEAD, squash/최종 전달본의 변경 보존, 운영 반영,
