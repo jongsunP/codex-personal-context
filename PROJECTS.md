@@ -182,30 +182,28 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-16:** Admin 로그인·테스트 데이터 생성 승인을 받아 DEV 역할별 실제 QA 진행.
-  메뉴/필터/주문1단계 NEW·FOLLOW_UP 저장/상세 기본·부분·차단/Pickup·공유 Case 링크/직접 URL 제한 확인.
-  Draft3건(9738·9739·9740) 생성,9739 담당 변경 후 Member 차단·원복 후 복구 확인. 제출/결제 없음.
-  **추가 조치2건:** FE5214 담당 변경 경고 누락(SSR 문자열 ID/숫자 비교 오류) 확정,
-  Member 기존 환자217의 Draft9740 저장 후에도 Patients 응답에서 누락(정책은 Draft 포함). BE 내부 원인은 미확인.
-  코드 수정은 아직 하지 않았다. FE 최소 수정/PR 및 BE 실제 반환 조건 확인 후 DEV 재검증이 다음이다.
-- **웹:** [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706) → release/v1.89.0 MERGED,
-  merge10c30e3cb(15:13:18 KST). DEV 런타임 핵심 QA는 위 결과, 스테이징 정식 QA/운영 출시는 별도다.
-  최종d5f896740와 release tree 동일, PR4700의 squash 통합 tree도 일치 확인.
-  `codex/dl-16317-permission-followup` 로컬·리모트 삭제. 웹 `feature/DL-16317`은 사용자 후속 지시로
-  삭제 전 f4bfaf1bf로 로컬·리모트 복구 완료. 상용 반영 전 브랜치/워크트리 보존 지시가 우선한다.
-  `/Users/parkjongsun/Repository/dentlink-client-permission`은 release10c30e3cb detached HEAD·clean으로 보존한다.
-  원격 release는 비밀번호 변경 PR4701로24d3ff18a까지 전진했으나 권한 구현 파일 변경은 없다. worktree는 권한 최종 병합 snapshot이다.
-- **기존 검증:** Clinic353/Lab399 tests·3서비스 타입/정상push검사 PASS. 976097e85 production build195페이지 PASS.
-  CodeRabbit 승인 ID 보존 지적 resolved·추가 unresolved0 확인. 체크 PENDING이며 완료로 단정/대기하지 않는다.
+- **최신 2026-10-16:** DEV Admin/Member 실제 QA의 담당 변경 경고 누락을 수정하고
+  [PR4710](https://github.com/Innvoaid/dentlink-client/pull/4710) OPEN → release/v1.89.0 생성했다.
+  SSR 문자열/숫자 ID 비교 오류와 다른 본인 Draft를 접근 유지 근거로 세는 조건을 보완했다.
+  사용자 전달 BE 최종 답변: **Draft 주문만으로는 내 환자로 판단하지 않는다.** 통합 Patients 환자217 미포함은 정상 종결,
+  필수 BE 추가 요청 없음. 취소 주문 인정은 유지한다. 기존 Draft 포함 PRD보다 이 최신 답변이 우선한다.
+- **웹:** PR4700/4706은 release 병합 및 DEV 사전 테스트 배포 완료 기록을 유지한다.
+  현재 `/Users/parkjongsun/Repository/dentlink-client-permission`은 release24d3ff18a에서 분기한
+  `feature/DL-16317-dentist-warning@e28b9c7e8`·clean, 로컬·원격 동일. 커밋748c8f6bb/e28b9c7e8 및 PR4710 확인.
+  원본 `feature/DL-16317@f4bfaf1bf` 로컬·리모트와 worktree 보존. 이전 detached10c30e3cb는 과거 상태다.
+  삭제된 `codex/dl-16317-permission-followup`은 복구하지 않았다. 새 PR 병합·배포는 사용자 진행 단계다.
+- **이번 검증:** 기존 파일2개만 수정, 수정 전 실패 재현 → 관련2 suites/37 tests PASS,
+  Clinic·Lab·Admin 타입·정상push검사 PASS(기존 lint warning 있음), 최종 diff 추가 확정 문제 없음.
+  DEV 핵심 메뉴/필터/NEW·FOLLOW_UP 저장/상세3종/링크/직접 URL 제한과 합성 Draft 담당 변경·복구 QA 완료.
+  Draft9738·9739·9740 보존, 제출/결제 없음. 이번 수정의 새 배포본 QA와는 구분한다.
 - **Office 앱:** [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → develop OPEN,
   `feature/DL-16317@7cb4487`은 미병합이므로 보존. 앱 코드/브랜치/배포 변경 없음.
   기존394 tests·양 플랫폼 JS bundle PASS, 타입 진단18건은 기존과 동일. 실기기 QA와 구분한다.
   미병합·미배포는 사용자 의도다. native 권한 검증은 PR329 포함 버전으로 진행한다.
-- **검토/다음:** 종전 정적 검토 이후 위 실제 QA에서 신규2건이 나왔다. Member 담당 변경의 클릭 시1+N 순차 GET은
-  다주문 환자에서 실제 지연 측정 필요. 성능·실사용 QA 전체 완료를 의미하지 않는다. DEV 사전 확인 → 스테이징 정식 QA.
-  웹/앱 전달 및 Member 활성화 순서를 함께 관리한다. PR329 미포함 앱은 승인 UI 제한이 없어 호환버전 적용을 함께 관리한다.
-  같은 환자 타 주문403 추측을 선행 질문으로 재개하지 않는다. Draft 환자 누락은 실제 QA 응답 근거로 별도 조사한다.
-  이번 제품 변경/전체 테스트 재실행 없음. 후속 QA 수정은 최신 release에서 새 브랜치로 재개한다.
+- **다음:** 사용자 PR4710 병합·DEV 배포 후 경고 재확인 → 스테이징 정식 QA.
+  앱 상세 웹 경고에는 이번 수정이 반영되며 native 권한 QA/운영 활성화는 PR329 포함 버전으로 진행한다.
+  다른 역할 계정·직원 전환·승인 대기 쓰기·실기기·다주문 지연 등의 미실시 범위는 상세 체크포인트를 따른다.
+  새 CodeRabbit 리뷰 완료·새 DEV 배포 QA·전체 성능 검증 완료로 확대하지 않는다.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
 - 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 

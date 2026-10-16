@@ -46,19 +46,17 @@ Do not store secrets or private customer data here.
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
   — 2026-10-16 PR #4705의 develop 병합 완료. 운영 릴리스는 별도이며 원본과 날짜별 전달 브랜치를 보존한다.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
-  — 2026-10-16 웹 PR4706은 release/v1.89.0에 merge10c30e3cb로 병합. 사용자 확인: 개발서버 사전 테스트용 배포 완료,
-  BE·FE 공동 사전 확인 후 스테이징 정식 QA 예정. 상용 출시는 별도이며 브랜치/워크트리 보존.
-  원래 웹 feature/DL-16317은 상용 미반영을 이유로 사용자 지시에 따라 f4bfaf1bf로 로컬/리모트 복구·보존.
-  후속 codex 브랜치는 삭제 상태, 기존 워크트리는 권한 최종 병합10c30e3cb detached HEAD·clean 유지.
-  원격 release24d3ff18a의 추가분은 비밀번호 변경 PR4701이며 권한 코드 변경 없음.
-  앱 PR329 OPEN·미배포는 사용자 의도이므로 feature/DL-16317@7cb4487 보존. 앱 검증/Member 운영 적용은 PR329 포함 버전으로 진행한다.
-  Admin 로그인 완료·사용자 테스트 데이터 생성 승인 후 Codex DEV 역할별 QA를 수행했다.
-  메뉴/필터/주문1단계 저장/상세3종/링크/직접 URL 제한 정상, Draft9738·9739·9740 생성(제출/결제 없음).
-  합성9739 담당 변경→Member 차단→원래 Member 담당 복원→접근 복구까지 확인했다.
-  **신규 QA2건:** FE5214 담당 변경 경고 누락은 SSR 문자열 ID 비교 오류로 확정.
-  기존 환자217에 Member Draft9740 저장 후 Patients 최신 응답 누락은 Draft 포함 정책과 불일치(BE 내부 원인 미확인).
-  제품 코드 변경 없음. 다음은 최신 release에서 FE 최소 수정/PR 승인 후 진행, BE에는 실제 응답 조건 조사자료 전달,
-  DEV 재검증→스테이징 QA. 앱 실기기/승인 대기 쓰기/다주문 지연 등 미실시 범위는 상세 체크포인트를 따른다.
+  — 2026-10-16 DEV QA 후 담당 변경 경고를 보완해 PR4710 OPEN → release/v1.89.0 생성, 커밋·푸시 완료.
+  현재 permission worktree는 release24d3ff18a에서 분기한 feature/DL-16317-dentist-warning@e28b9c7e8·clean이다.
+  SSR 문자열/숫자 ID와 다른 본인 Draft 제외 조건 수정, 기존파일2개·관련37 tests/3서비스 타입/정상push검사 PASS.
+  **BE 최신 답변으로 정상 종결:** Draft 주문의 환자는 아직 내 환자가 아니므로 통합 Patients 환자217 미포함은 정상이다.
+  BE 추가 수정/API 질문으로 남기지 않는다. 기존 Draft 포함 PRD보다 이 사용자 전달 최종 정책을 우선한다.
+  DEV Admin/Member 메뉴·필터·NEW/FOLLOW_UP 저장·상세3종·링크·직접 URL·합성 담당 변경/복구 QA 기록을 보존한다.
+  Draft9738·9739·9740 보존(제출/결제 없음). 새 수정의 배포본 QA는 아직이다.
+  원본 웹 featuref4bfaf1bf와 worktree 보존, PR4700/4706 release 병합·DEV 사전 테스트 배포 기록 유지.
+  앱 PR329 OPEN·feature7cb4487·미배포는 사용자 의도다. 이번 웹 상세 수정의 별도 native 코드 변경은 없다.
+  다음은 사용자 PR4710 병합·DEV 배포→경고 재확인→스테이징 QA, 앱은 PR329 포함 버전으로 실기기 QA.
+  다른 역할·승인 대기 쓰기·다주문 지연 등 미실시 범위와 배포/Member 활성화 순서는 상세 체크포인트를 따른다.
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — PR #4699의 release/v1.89.0 병합 완료. QA·운영 출시 별도이며 브랜치는 보존한다.
 - Dentlink 통합알림센터: [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)

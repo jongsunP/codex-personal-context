@@ -2,6 +2,16 @@
 
 ## 2026-10-16
 
+- 권한관리 DEV QA 후 승인된 FE 후속을 완료했다. release24d3ff18a에서 feature/DL-16317-dentist-warning 분기,
+  748c8f6bb/e28b9c7e8 정상 커밋·푸시, PR4710 OPEN → release/v1.89.0 생성·base/head/2파일 확인.
+  SSR 문자열 ID로 마지막 본인 주문의 경고가 누락되는 결함을 수정했다. 사용자 전달 BE 최종 답변은
+  **Draft는 내 환자 판단에서 제외**이므로 통합 Patients 환자217 미포함은 정상 종결이며 BE 미완료가 아니다.
+  담당 변경 경고에서도 다른 본인 Draft를 접근 유지 근거에서 제외하고 일반·취소 주문은 유지했다.
+  수정 전 실패 재현 후 관련37 tests/Clinic·Lab·Admin 타입/정상push검사 PASS, 기존 lint warning 있음.
+  원본featuref4bfaf1bf·worktree 및 앱feature7cb4487/PR329 의도적 미병합 보존. 앱 native 수정·병합·배포 없음.
+  다음은 사용자 PR4710 병합·DEV 배포 후 경고 재확인, 스테이징 정식 QA/PR329 포함 앱 실기기 검증이다.
+  아래 Draft 포함 정책 불일치 기록은 문의 당시 이력이며 새 답변으로 대체됐다.
+
 - 권한관리 Admin 로그인 완료와 테스트 환경 생성 승인을 받아 DEV Admin/Member 사전 QA를 실제 수행했다.
   메뉴·필터·NEW/FOLLOW_UP 저장·상세3종·Pickup/공유 Case 링크·직접 URL 차단을 확인했다.
   Draft9738/9739/9740 생성, 합성9739 담당 변경 후 차단과 원복 후 접근 복구 확인. 제출/결제/기존 주문 변경 없음.

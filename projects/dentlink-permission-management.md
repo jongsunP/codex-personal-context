@@ -1,6 +1,41 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-16 DEV Admin·Member 쓰기 포함 사전 QA: FE 결함1·서버 반환 불일치1
+## 현재 상태 — 2026-10-16 담당 변경 경고 보완 PR4710·Draft 환자 목록 문의 정상 종결
+
+- **사용자 지시/최신 정책:** BE 문의와 별개로 승인된 FE 수정·검증·커밋·푸시·PR 흐름을 계속 진행했다.
+  사용자가 백엔드 답변을 전달했다: **"정책상 지금이 맞다. draft 주문의 환자는 아직 내환자로 판단 안한다."**
+  질문 대상은 Place Order 전체 환자 선택이 아닌 `GET /office/patients/consolidate?size=10&page=0` 통합 Patients 목록이었다.
+  아래 Draft9740 저장 후 환자217 미포함은 이 최신 정책에 따른 정상 동작으로 종결한다. BE 추가 수정/API 요청으로 남기지 않는다.
+  이전 PRD의 Draft 포함 문구보다 이번 사용자 전달 확정 답변을 우선한다. Notion/Jira 정책 원문을 직접 수정한 것은 아니다.
+- **FE 반영:** 마지막 본인 주문의 담당 변경 경고 누락을 수정했다. SSR의 문자열 `orderId`를 비교 시 `Number(orderId)`로
+  정규화해 현재 주문을 다른 본인 주문으로 세거나 불필요하게 재조회하지 않게 했다.
+  새 정책에 맞춰 다른 본인 DRAFT는 환자 접근 유지 근거에서 제외한다. 목록에서 DRAFT면 조회를 생략하고,
+  목록 상태가 빠진 경우 상세의 DRAFT 상태도 확인한다. 일반·CANCELED 주문의 기존 인정 조건은 유지한다.
+  `clinic/src/lib/Order/useOrderDetail.ts`, 기존 `useOrderDetailPermissions.test.tsx` 2개만 변경했다.
+  신규 파일·추상화·API·환경 파일·페이지 상시 조회는 추가하지 않았다. Admin 보조 조회도 기존대로 없다.
+- **Git/PR:** 최신 fetched release/v1.89.0 `24d3ff18a`에서 `feature/DL-16317-dentist-warning`을 분기했다.
+  `748c8f6bb`(SSR ID 수정), `e28b9c7e8ad37841baadde958ef088b6668a2343`(Draft 정책 반영) 정상 커밋·푸시 완료.
+  [PR4710](https://github.com/Innvoaid/dentlink-client/pull/4710) OPEN → `release/v1.89.0`, head e28b9c7e8,
+  GitHub의 base/head/변경 파일2개와 로컬·원격 SHA 일치 확인. 이 채팅에 PR 첨부 완료. 병합·배포는 하지 않았다.
+- **검증:** 수정 전 문자열 ID 조건의 경고 누락1건, 추가 Draft 조건2건을 각각 실패 테스트로 재현했다.
+  수정 후 주문 상세 hook28개+화면9개=2 suites/37 tests PASS, Clinic·Lab·Admin tsc PASS,
+  정상 pre-commit/pre-push 검사 완료. push 중 기존 lint warning은 있으나 hook 실패 없음.
+  diff check와 기존 테스트 파일 Prettier 검사 PASS. hook 파일의 기존 포맷 차이2곳은 기준 코드와 같아 범위를 넓혀 수정하지 않았다.
+  최종 diff 독립 검토에서 추가 조치할 확정 문제 없음. 이 결과는 새 코드의 DEV 배포/실계정 재검증을 대신하지 않는다.
+- **보존:** `/Users/parkjongsun/Repository/dentlink-client-permission`은 현재 QA 브랜치 e28b9c7e8·clean이다.
+  이전 detached10c30e3cb 기록은 과거 상태이며 이번 QA 수정 때문에 의도적으로 새 브랜치를 체크아웃했다.
+  원본 웹 `feature/DL-16317` 로컬·리모트 f4bfaf1bf와 기존 worktree를 유지한다. 삭제된 codex 후속 브랜치는 복구하지 않았다.
+  Office worktree는 `feature/DL-16317@7cb4487`·clean, [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) OPEN → develop.
+  앱의 의도적 미병합·미배포를 유지했다. 앱 주문 상세도 이 웹 화면을 사용하므로 이번 수정의 별도 native 코드 변경은 없다.
+- **QA/다음:** 아래 DEV Admin·Member 핵심 권한 차이 및 합성 Draft 담당 변경/복구 검증은 완료된 기록이다.
+  사용자 PR4710 병합·DEV 배포 → Member 마지막 본인 주문 및 다른 본인 Draft만 남은 조건의 경고 재확인 → 스테이징 정식 QA.
+  앱 native QA는 PR329 포함 버전으로 진행한다. BillingManager/Manager 계정·직원 전환·승인 대기 실제 쓰기·ISV 저장·
+  파일/메시지 전송·실기기·다주문 환자의 1+N 조회 지연은 이번 실계정 QA 완료 범위가 아니다.
+  일반 Draft 진입은 작성 폼을 사용한다. 직접 Draft 상세에서 담당 변경 시 cases GET403 가능성은 미재현·기존 로직이라
+  추측성 우회나 필수 BE 질문을 추가하지 않았다. 실제 해당 QA 결과가 나오면 조사한다.
+  새 PR의 CodeRabbit 완료나 새 DEV 배포 검증은 이번에 주장하지 않는다. 테스트 Draft3건은 아래 상태로 보존했다.
+
+## 이전 체크포인트 — 2026-10-16 DEV Admin·Member 쓰기 포함 사전 QA 당시 발견
 
 - **사용자 승인/범위:** Admin 로그인 완료 후 “필요하면 주문을 만들던 환경을 만들어서라도 최대한” 비교 요청.
   DEV 화면 비교와 테스트 Draft 생성·합성 테스트 Draft 담당 변경/원복까지 진행했다. 종전 읽기 전용 제한은 이 요청으로 확장됐다.
@@ -34,7 +69,10 @@
   경고 표시와 불필요한 현재 주문 상세 GET0회를 검증한다. 전체 SSR/cache 키 형식 변경으로 범위를 넓히지 않는다.
   제품 코드는 아직 수정하지 않았다. 기존 number-only 테스트가 실제 route 경계 문제를 포착하지 못했다.
 
-### 발견2 — 실제 서버 반환이 Draft 포함 환자 접근 정책과 불일치
+### 발견2 — 당시 PRD와 Draft 환자 목록 차이 관찰(이후 정상 정책으로 종결)
+
+- **최신 정정:** 위 현재 상태의 사용자 전달 BE 답변으로 Draft는 내 환자 판단에서 제외됨을 확인했다.
+  다음은 문의 당시의 관찰/정책 비교 이력이며 현재 BE 장애나 미완료 작업이 아니다.
 
 - Member가 기존 환자217·Case219에 FOLLOW_UP Draft9740 생성. 새 `GET /office/orders/9000009740`200에서
   patientId217/patientCaseId219/dentistId386/creatorId386/purpose FOLLOW_UP/status DRAFT/detailStatus OFFICE_DRAFT/step PROFILE 확인.
