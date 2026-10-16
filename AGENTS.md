@@ -38,9 +38,11 @@
   responses. The user will ask follow-up questions when more detail is needed.
 - Minimize screen footprint for direct answers: avoid unnecessary headings,
   long lists, and verbose explanations so the answer is easy to see at a glance.
-- For briefings and simple explanations, follow **Concise Status Briefings**
-  in `SESSION_WORKFLOW.md`: state what is done and where, the effect on current
-  operation with its reason, and what remains in one compact answer.
+- Across all projects and sessions, when the user asks for work status, a
+  report, or a briefing, follow **Concise Status Briefings** in
+  `SESSION_WORKFLOW.md`: **완료한 것 → 현재 영향 → 남은 일**, in that order,
+  briefly. State where completed work exists, its current effect and reason,
+  and the remaining work or that none remains.
 - For development work, CTO handoffs, implementation notes, decision records,
   and cross-session summaries, include as much detail as the work requires.
 - Explain important engineering decisions clearly when detail is necessary.

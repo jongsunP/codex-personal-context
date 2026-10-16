@@ -764,9 +764,11 @@ records:
 
 ### Concise Status Briefings
 
-When the user asks for a briefing or an easy explanation, give one compact
-answer covering completed work, current impact, and remaining steps. This
-preference was clarified on 2026-10-16.
+Across all projects and sessions, when the user asks for work status, a report,
+a briefing, or an easy explanation of progress, use this default order:
+**완료한 것 → 현재 영향 → 남은 일** (completed work → current impact →
+remaining work). Keep the answer short. The user confirmed this as a common
+working instruction on 2026-10-16, not a rule limited to one feature session.
 
 - Say what is complete and where it exists: separate branch, master, external
   settings, or the deployed service. Do not collapse these into "done."
@@ -775,6 +777,10 @@ preference was clarified on 2026-10-16.
   deployment code. Avoid an unqualified claim that everything is safe.
 - Give the remaining steps in order and make a meeting or user-resume gate
   clear. Do not make the user ask several follow-ups to assemble the status.
+- If nothing remains, say so. If work is paused, state the actual agreed
+  resume condition; a meeting or waiting phrase from an example does not
+  create a gate for unrelated work. Report saving, committing, or pushing as
+  complete only after those actions have succeeded.
 - Keep this user-facing briefing to a few plain sentences or short bullets.
   Test counts, file lists, implementation history, and detailed handoff
   evidence belong in the checkpoint unless needed to explain an actual issue.
