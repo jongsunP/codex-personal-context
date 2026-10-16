@@ -1,6 +1,16 @@
 # DL-16796 Billing Statement 명칭 변경
 
-## 현재 상태 — 2026-10-15 개발 완료·메모리화 후 사용자 요청 대기
+## 현재 확인 — 2026-10-16 Git 정리 중 병합 상태 갱신
+
+- [PR #4699](https://github.com/Innvoaid/dentlink-client/pull/4699)은 GitHub에서
+  **MERGED → release/v1.89.0**, 10:58:21 KST로 확인했다.
+  merge `a065b39e48afbeff4ef6b2e052ed2d82d6966f25`, source `3aac1dff0005706e78015cb5f23f255712696911`이다.
+- 운영 출시 완료 근거는 없어 기본 checkout의 `feature/DL-16796`과 원격 브랜치를 보존했다.
+  이번 작업은 Git 정리용 조회이며 추가 구현·QA·배포·Jira 변경은 하지 않았다.
+- 아래 2026-10-15 팀 리뷰·병합 대기 기록은 당시 이력이다. 병합 완료를 실제 QA·운영 반영 완료로 확대하지 않는다.
+
+
+## 이전 상태 — 2026-10-15 개발 완료·메모리화 후 사용자 요청 대기
 
 - 상위 [DL-16795](https://innovaid.atlassian.net/browse/DL-16795), Frankie 담당 하위 [DL-16796](https://innovaid.atlassian.net/browse/DL-16796).
 - 담당 채팅: `01a1395f-5658-7b31-9e82-d285d572f186` / `DL-16796 Billing Statement 명칭 변경`.

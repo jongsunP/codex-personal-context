@@ -4,118 +4,51 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 종결 — 2026-10-12 DL-16652 사용자 앱 확인 완료
+## 현재 정리 완료 — 2026-10-16 출시된 개인 브랜치·worktree
 
-- 사용자가 앱 확인 완료·웹 직접 배포 진행 중으로 보고하고 전체 작업을 완료로 정리·로컬 cleanup·세션 보관을 요청했다.
-- Lab양OS Productionv13/1.0.4 활성100%·main→develop15 사용자병합/tree동일 이력과 웹release상용main 전달을 보존한다.
-  Jira 완료 상태·댓글44407과 [기능 정본](dentlink-patient-list-design.md)을 마감했다.
-- 새로운 구체 요청 전 추가 개발·QA·배포조회·동기화·예약·메인세션 보고를 하지 않는다.
-  다른 기능 작업 복사본과 메인세션의 미커밋 파일은 보존하며 이 기능의 전용 로컬 항목만 정리한다.
+- 사용자 명시 요청에 따라 **실제 릴리스까지 완료된 본인 작업**만 정리했다.
+  PR 작성자 `jongsunP`, 현재 원격 HEAD, squash/최종 전달본의 변경 보존, 운영 반영,
+  열린 PR의 head/base 및 worktree 사용 여부를 대조하고 삭제 직전 SHA를 재확인했다.
+- **로컬 브랜치 4개·worktree 1개·원격 브랜치 154개 삭제**, 삭제 후 서버·로컬 ref 재조회 완료.
+  정확한 브랜치명·SHA·PR·보존 공간은 [삭제 및 보존 목록](dentlink-branch-cleanup-20261016.md)에 있다.
 
-## 이전 인계 — 2026-10-12 Lab Production v13·main → develop 완료
+| 저장소 | 로컬 브랜치 삭제 | worktree 삭제 | 원격 브랜치 삭제 | 남은 로컬 브랜치 / worktree |
+| --- | ---: | ---: | ---: | ---: |
+| 웹 `dentlink-client` | 1 | 0 | 147 | 9 / 5 |
+| 치과 앱 `dentlink-app` | 0 | 0 | 1 | 2 / 2 |
+| 기공소 앱 `dentlink-lab-app` | 3 | 1 | 6 | 1 / 1 |
 
-- 사용자가 Lab 상용 CodePush와 main→develop 최종 PR을 명시 요청했다. 웹 배포는 사용자 직접 수행 범위다.
-- mainbb619010에서 양OS Production **v13/1.0.4/active/mandatory/100%**를 업로드·활성화·서버확인했다.
-  iOS18:20:25/Android18:21:05 KST업로드이고, 양 hash가 검증된 각 Stagingv36과 같다. 실기기 운영 적용/화면은 별도 미검증이다.
-- [Lab #15](https://github.com/Innvoaid/dentlink-lab-app/pull/15) main→develop을 준비했고 사용자병합18:22:23/56cba674도 확인했다.
-  main/develop전체tree8bd4226c 동일·diff0·sourceclean이며 root가 PR 병합하지 않았다. Jira44407/완료 상태 유지다.
-- 상세SHA/hash/검증경계는 [DL-16652 정본](dentlink-patient-list-design.md)을 따른다. 기존 온보딩 참고·합의 대기 정책은 보존한다.
-  추가웹작업·메인세션메시지·자동배포없이 새 요청 전 대기한다.
+- 웹 로컬은 오래된 `release/v1.88.0`만 삭제했다. 기본 checkout은 Billing의
+  `feature/DL-16796 / 3aac1dff` 그대로다. 웹 PRD v1.88.0 `951503d4`의 Admin·Clinic·Lab
+  Actions 38228924416·38228730049·38228870317 성공과 삭제 후보의 반영을 확인했다.
+  웹 원격 147개에는 출시된 전체 패치와 동등한 develop 파생 3개가 포함된다.
+- 기공소 앱은 두 `feature/lab-i18n-workflow*`와 local-only DL-16652 backup을 삭제했고,
+  문서용 `dentlink-lab-app-i18n-release` worktree를 제거했다. 기본 checkout을
+  최신 `main / bb619010`으로 fast-forward했으며 이제 main 하나만 남았다.
+- 치과 앱은 출시된 `feature/DL-16652` 원격만 삭제했다. local main은 `a32aa691`,
+  origin/main보다 18커밋 뒤인 기존 상태를 유지했고 권한관리 worktree는 보존했다.
+- **보존:** 권한관리·LBX·DLDS·Billing의 미출시 작업과 관련 검토 공간, 타인 브랜치,
+  공용 main/master/develop/stage/release, 최신 변경의 출시 여부가 불명확한 파생 브랜치.
+  release/develop 병합을 운영 출시와 같게 보지 않는다. 태그와 기존 stash도 보존했다.
+- 남은 8개 worktree는 모두 tracked/untracked clean이다. 웹은 삭제 예정 147개 외 원격 ref의
+  삭제·SHA 변경이 없음을 전후 비교했다. 제품 코드·PR·Jira·배포는 변경하지 않았다.
+- 삭제 전 검증한 bundle과 manifest는 각 저장소의 공용 Git 디렉터리
+  `codex-closeout/released-branch-cleanup-20261016/`에 있다. 웹 bundle은 보존된 master 이력에
+  의존하는 증분 백업이고 앱 bundle은 독립 백업이다. bundle은 현재 디바이스에만 있으며
+  개인 컨텍스트의 삭제 목록·PR 이력과 구분한다.
+- 중복된 기능별 전달 이력은 정본 링크로 줄이고 HANDOFF·PROJECTS·아래 기능 색인의
+  오래된 대기 상태를 정정했다. Billing PR #4699는 release/v1.89.0 병합 완료로 갱신했다.
+  재개 요청 전 추가 정리·작업·자동 모니터링은 하지 않는다.
 
-## 이전 인계 — 2026-10-12 총 주문 수 숨김·앱 Staging v36 완료
+## 이전 공통 전달 — 2026-10-08~12 웹·앱 릴리스
 
-- Web4686=951503d4/앱13=8eeac898은 사용자 병합했다. 각1파일만 총주문수표시를 제거하고 나머지정보/API는 보존했다.
-  웹의 의존성복구 후3앱type·normalhooks PASS, CodeRabbit SUCCESS/미해결0이다. Vercelpreview는 차단됐다.
-- 승인된 웹remoteStage삭제(복구refs/lease보존)→master6b79c975에서stage재생성→release1.88 PR4687준비를 완료했다.
-  사용자병합stageb98da6ff/tree=release249f46e6, 전체릴리스1464파일이다. **최신웹보고는배포진행중**이며 추가조회는중단했다.
-- 사용자가 Labrelease→main14를 병합하고 main소스StagingCodePush를명시승인했다. mainbb619010에서
-  iOSv36/18:03:16·Androidv36/18:03:48 KST완료·1.0.4/active/mandatory/100%서버확인이다. 사용자가앱배포확인도보고했다.
-- 앱개발자흐름은 최신AGENTS/온보딩의참고·합의대기자료다. 기존확정정책을자동대체하거나추가main→develop/배포를하지않는다.
-  Jira44407·개인체크포인트에실제전달결과와root실기기QA미검증을기록했다. 메인메시지·자동후속작업없이새요청전대기한다.
-- 상세SHA/검증/배포hash/다음시작점은 [DL-16652](dentlink-patient-list-design.md)을 따른다.
-
-## 이전 인계 — 2026-10-08 Lab 아이콘 수정 Staging v32 배포
-
-- 사용자 PR8 병합59e6a56c/15:59:08 KST를 확인하고 승인된 Lab 양플랫폼 Staging 재배포를 완료했다.
-  최신 release1.0.4의 전체tree는 검증한bb2df333과 동일·아이콘3파일만 변경·native/deps/버전은 보존됐다.
-- iOS **v32/16:01:35**, Android **v32/16:02:26** KST, 서버에서1.0.4·활성·mandatory·100%·소스description을 확인했다.
-  Jira44342/READY FOR QA와 개인기록을 정리했다. Clinic/Production/native/store/tag·메인메시지는 추가 실행하지 않았다.
-- 실제 Staging v32 적용·재실행 후 NEW 회색14px 치아 확인은 남아 있으며
-  다음 시작점은 [DL-16652 정본](dentlink-patient-list-design.md)의 v32 실물QA다.
-
-## 이전 인계 — 2026-10-08 Lab 검토 중 아이콘 수정 준비
-
-- 사용자 승인으로 Lab 카드 NEW를 Figma 원본14px/#959595로 보정해
-  [PR8](https://github.com/Innvoaid/dentlink-lab-app/pull/8) →release/v1.0.4로 전달했다.
-  QA/lab/DL-16652-review-icon@bb2df333·3파일(+11/-1), OPEN/non-Draft/CLEAN/MERGEABLE·미해결0이다.
-- 실제SVG/양플랫폼 배포용JS bundle/lint 통과·기존type5오류 byte동일/신규0·독립검토 blocker0이다.
-  Clinic 최신2.2.4에는 같은문제근거없어 추가작업없다. 실기기픽셀/설치본은별도미검증이다.
-- Jira44342/READY FOR QA와 개인기록을 정리했다. 병합/추가OTA/native/store는실행하지 않았다.
-  현재양플랫폼Staging v31은수정전이며 PR8 반영 후Staging재배포/NEW표시QA가다음이다.
-  메인세션 메시지는보내지않았고 [DL-16652 정본](dentlink-patient-list-design.md)을 우선한다.
-
-## 이전 인계 — 2026-10-08 Lab 검토 중 아이콘 제보 조사
-
-- Lab Staging 실물 제보의 검토 중 NEW는 환자 카드 흰 배경에 고정 white SVG가 원인이다.
-  실제 SVG 변환/native paint 경로까지 확인했고 같은 Android 코드도 영향받는다. Office 일반주문은
-  보라색 원 위 white이고 #318은 Remake만 변경해 동일 대비 결함 근거는 없다.
-- 조사만 완료했고 제품/PR/배포/Jira는 추가 변경하지 않았다. v31 업로드 완료와 결함 미수정을 구분한다.
-  다음은 Lab 카드 범위의 아이콘 보정이며 실제 기기 화면은 사용자 확인 중이다.
-  [DL-16652 정본](dentlink-patient-list-design.md)을 우선한다. 메인세션 메시지는 보내지 않았다.
-
-## 이전 인계 — 2026-10-08 Lab 사용자 병합·Staging CodePush 완료
-
-- Lab 문서5=768814e1와 기능6=f000ae2c를 사용자께서 병합했다. 최신 release/v1.0.4@f000ae2c/tree31a50be7을
-  확인하고 기존 worktree를 clean detached release로 전환해 승인된 iOS/Android Staging CodePush를 실행했다.
-- Lab iOS **v31/15:25:36 KST**, Android **v31/15:26:36 KST** 각각 성공이다.
-  바이너리1.0.4·활성·mandatory·rollout100%·릴리스description을 서버에서 재조회 검증했다.
-- 실기기 OTA 적용·재실행/기능QA는 미검증이며 Production/Development·native/store·클리닉 추가 배포는 없다.
-  Jira44342/READY FOR QA 유지와 개인기록을 정리했다. 메인세션 메시지는 보내지 않았다.
-  다음 시작점은 [DL-16652 정본](dentlink-patient-list-design.md)의 Staging v31 적용 QA다.
-
-## 이전 인계 — 2026-10-08 클리닉 사용자 병합·Lab 동기화 완료
-
-- 웹 배포 완료는 사용자 보고이며 이번에는 Actions/화면 재검증을 하지 않았다.
-  클리닉318은 live MERGED/bf9e897ef72d37190cc52c84cd796ce2ec6a0e3c/15:02:42 KST를 확인했다.
-- 최신 Lab release1.0.4가 밀링 #7 포함96cc94a0의 src 구조로 바뀌어 기능6·문서5가 충돌했다.
-  사용자 승인으로 같은 PR들을 동기화·일반 push했다. 기능6=55bc143·18파일(+579/-150),
-  문서5=9e04b395·3파일(+72/-3), 둘다 CLEAN/MERGEABLE·미해결/pending0·사람승인0이다.
-- 생성API/밀링/native/deps는 보존했고 카드 전용SVG를 분리했다. 기존13검증·양플랫폼 배포용JS bundle
-  통과, 최신baseline/feature fulltsc5오류 byte 동일/신규0이다. 두PR 모의통합 충돌0/21파일이다.
-  실제PRmerge/태그/CodePush/메인메시지는없다. Jira44342와 개인Git기록을정리했고 READY FOR QA는유지했다.
-- 이전20파일/monorepo 안내는 당시 이력이다. 다음시작점은 현재base/HEAD 재확인이며
-  [DL-16652 최신 정본](dentlink-patient-list-design.md)을우선한다.
-
-## 이전 인계 — 2026-10-08 웹 1.88.0 사용자 stage 병합·앱 범위 정리
-
-- **최신:** 사용자jongsunP가 [PR #4677](https://github.com/Innvoaid/dentlink-client/pull/4677)을
-  14:50:42 KST에 병합했다. 현재stage는 `d37956611815ac17f2095c05fa6392b57c55f736`이며
-  전체tree가release와동일하다. master6b79c975/releaseeca577a6는그대로다. root가 대신 병합한 것은 아니다.
-  이SHA에서 14:50:45 KST에 시작한 치과웹37734431427·Lab웹37734431389·Admin37734431594
-  Stage배포run은 최종조회당시 모두 IN_PROGRESS다. 실제배포완료·통합QA 완료로 표시하지 않는다.
-  아래 OPEN/새master기반stage/새run미관측은 생성직후 이력이며 현재상태로 재사용하지 않는다.
-
-- 사용자 요청으로 웹 원격 `stage`를 삭제하고 최신 원격 `master / 6b79c9756cc56313fe833aad463bddb1f8c385fa`
-  에서 다시 생성했다. 이전 `248e4028b8f89484bd3be1e627affb5200b3d3b9`는
-  `refs/codex-backup/stage-20261008-248e4028b8f8`에 로컬 보존했다. 삭제/생성 각각 정확한 lease를 사용했다.
-- [스테이징 PR #4677](https://github.com/Innvoaid/dentlink-client/pull/4677)은
-  `release/v1.88.0 / eca577a6e67e4f23aa3c4742a12e23f261298233` → 새 `stage`다.
-  전체 릴리스21커밋·985파일(+86260/-9948)이며 OPEN/non-Draft/MERGEABLE/UNSTABLE,
-  autoMergeRequest=null, 실제병합/별도배포명령/통합QA 미실행이다. 실제원격 master=stage를 readback했다.
-- 모의병합 충돌0·결과tree cb38bfbfc87865f97dae9bc6c39f9c9d30c7203f=release tree다.
-  master-only #4657과 release의 #4658 수정은 같은코드결과로 통합된다. #4665·#4666 릴리스 포함을 확인했다.
-  전체diff의 기존EOF빈줄3건은 PR에명시하고 타작업을 수정하지 않았다.
-- 생성 후 Admin DLOS Guard·자동reviewer 할당 SUCCESS, CodeRabbit은 stage 리뷰 비활성화로 SKIP이다.
-  Vercel은 release 작성자chajju 프로젝트접근권한으로 FAILURE이며 전체검사PASS로 보고하지 않는다.
-  14:50 KST stage run조회에는 새6b79c975의 배포실행이 없었고 이전run만 관측됐다.
-  PR생성/branch재생성을 실제최신릴리스배포완료로 확대하지 않는다. 이제 남은 것은 위 최신SHA의 앱별Actions 결과/QA 확인이다.
-- 사용자가 앱의 **최종 릴리스에서 본인작업만 반영**하는 구성이 본인 의도라고 재확인했다.
-  클리닉 #318은 배지3파일뿐이라 유지(APPROVED/CLEAN), Lab 기능은 새 #6 20파일,
-  번역운영지침은 독립 #5 문서3파일로 정리했다. 옛 #2/#3/#4는 CLOSED/미병합이며 foundation 불필요다.
-  아래 이전 선행통합/개발대상 기록보다 [DL-16652 최신 정본](dentlink-patient-list-design.md)을 우선한다.
-- 이 세션의 제품코드·릴리스/마스터·다른 작업 checkout은 변경하지 않았다. 해당 웹 checkout은
-  tracked clean·원격동일이고 작업개발서버가 남아 있지 않다. 앱source/worktree·원격branches와 QA자료는 보존했다.
-  Jira DL-16652 댓글44342에 웹stage준비와 앱정리를 통합갱신했다. 메인세션 메시지는 보내지 않았다.
+- 웹 release/v1.88.0의 stage 전달, Lab Production v13/1.0.4와 main→develop 동기화,
+  사용자 앱 확인 및 기능 종료를 완료한 이력이다. PR #4677·#4687과 stage 복구 ref,
+  플랫폼별 배포·검증 경계는 [DL-16652 정본](dentlink-patient-list-design.md)에 보존한다.
+- Lab 번역 지침은 [문서 전달 정본](dentlink-lab-app-i18n.md)을 따른다. 기능별 상세 QA·SHA·
+  중간 PR 대기 기록의 중복은 이 조율 문서에서 걷어냈으며 과거 Git 이력에도 남아 있다.
+- 아래 날짜가 붙은 접수·보존·전달 기록은 당시 이력이다. 현재 branch/worktree와 진행 상태는
+  가장 위의 최신 정리 기록 및 각 기능 정본을 우선한다. 완료된 기능을 자동 재개하지 않는다.
 
 ## Scope
 
@@ -382,21 +315,23 @@ Detailed implementation history remains in the relevant existing project file.
   [DLDS 정본](dentlink-fe-opportunities.md)을 따른다.
 - 아래 기기 복구 표의 QA 대기 상태는 이번 보고 전 저장 시점의 기록이다.
 
-## 다른 기기에서 이어가기 — 2026-09-29
+## 다른 기기에서 이어가기 — 2026-10-16 색인 갱신
 
 - 사용자가 현재 살아 있는 각 기능 세션의 상태를 정리해 신규/다른 기기의 첫 대화가
   현재 업무를 파악하도록 지시했다. 기존 세션·대기/보류 상태를 유지하며 각 담당
   세션이 본인 체크포인트를 정리하고 개인 컨텍스트에 commit/push했다.
   메인세션은 네 문서의 저장과 공통 색인 연결을 확인했다.
 
-| 기존 세션 | 저장 시점의 상태 | 개인 정본 |
+| 기능 | 현재 단계 | 개인 정본 |
 | --- | --- | --- |
-| 권한관리세션 | Office API 4개 사용처 조사 완료. 권한관리 본 요구사항·설계·구현 미착수·지시 대기 | [권한관리](dentlink-permission-management.md) |
-| LBX세션 | 백엔드 문제로 보류. 작업 브랜치 보존, 재개 시 계약·배포 대상 재확인 | [LBX](dentlink-client-lbx.md) |
-| 디자인시스템정비세션 | 코드 정비와 자동/대표 검증 저장. 사용자 실제 Clinic/Lab/Admin 로컬 QA 결과 대기 | [DLDS](dentlink-fe-opportunities.md) |
-| 통합알림센터세션 | REST 방향·사전 조사 완료. 권한관리 선행, 미정 정책과 재개 지시 대기. 구현 미착수 | [통합알림센터](dentlink-unified-notification-center.md) |
+| 권한관리 | 웹 release/v1.89.0 병합·개발 배포 사용자 보고 후 검토 대기. Office PR #329 미병합 | [권한관리](dentlink-permission-management.md) |
+| LBX | PR #4705 develop 병합 완료. 운영 릴리스는 별도이며 원본·전달 브랜치 보존 | [LBX](dentlink-client-lbx.md) |
+| 디자인시스템정비 | PR #4692 팀 리뷰·release 반영 대기. 시험 npm 배포와 정식 출시는 구분 | [DLDS](dentlink-fe-opportunities.md) |
+| Billing Statement | PR #4699 release/v1.89.0 병합 완료. QA·운영 출시는 별도 | [문서 명칭 변경](dentlink-client-billing-statement.md) |
+| 통합알림센터 | REST 방향·사전 조사 완료. 권한관리 선행 및 재개 지시 대기 | [통합알림센터](dentlink-unified-notification-center.md) |
+| 웹 환경변수 관리 | 회의 결정 후 운영 설계·팀 확인 단계, 구현 재개 대기 | [환경변수](dentlink-client-env-management.md) |
 
-- 각 개인 기록의 원격 보존 확인: 권한관리 `f778f98`, LBX `976d93b`, DLDS
+- 2026-09-29 최초 개인 기록의 원격 보존 확인: 권한관리 `f778f98`, LBX `976d93b`, DLDS
   `b2d428c`, 통합알림센터 `a5f2883`. 제품 코드의 commit·push를 이번 기록 작업에서
   실행한 것이 아니다. Git/PR/검증·배포의 상세 근거와 한계는 위 기능별 정본에 둔다.
 - 새 기기에서는 개인 컨텍스트 clone/pull → `BOOTSTRAP.md`의 초기 설정·공통 지침
@@ -519,7 +454,7 @@ Detailed implementation history remains in the relevant existing project file.
   다른 작업의 checkout·로컬 branch는 바꾸지 않았다. PR merge나 별도 배포 실행은
   하지 않았다. 다음 단계는 통합 PR 검토·병합 및 실제 stage 배포/QA 확인이다.
 
-## Context Routing
+## Context Routing — 접수 당시 이력
 
 - 2026-09-28 사용자 요청으로 통합알림센터의 선행 작업인
   [DL-16317 권한관리](https://innovaid.atlassian.net/browse/DL-16317)를 별도 준비한다.
@@ -624,7 +559,7 @@ Detailed implementation history remains in the relevant existing project file.
    depends on them; do not re-fetch every external source without a task-driven
    reason.
 
-## Next Starting Point
+## 이전 Next Starting Point — 2026-09-11 전환 당시
 
 - On 2026-09-11 the user delivered the prepared prompts to both the new
   projectless Dentlink FE top-level session and the existing app session.

@@ -1,5 +1,18 @@
 # Dentlink Office App setup and current checkpoint
 
+## 현재 정리 상태 — 2026-10-16
+
+- 출시된 Remake 작업 `feature/DL-16652` 원격 브랜치를 삭제했다. PR #318의 병합 커밋은
+  main 및 v2.2.4.82/.83 출시 태그에 포함되고 관련 3파일은 현재 main과 같다.
+  Production 양OS v83 활성·설치 기록도 확인했으나 OTA 설명의 정확한 소스 SHA 증명과는 구분한다.
+- 기본 local `main / a32aa691199db8c7c0d866af0293a6b9970d8a8d`은 clean이며
+  origin/main보다 18커밋 뒤인 상태를 유지했다. 정리 목적으로 관련 없는 최신화를 하지 않았다.
+- 권한관리 `feature/DL-16317 / df3c79a`와 `dentlink-app-permission` worktree는
+  PR #329 미병합·미출시이므로 보존했다. 이 저장소의 로컬 브랜치/worktree 삭제는 없다.
+- 삭제 전 Git bundle은 공용 Git 디렉터리의
+  `codex-closeout/released-branch-cleanup-20261016/office-released-branches.bundle`에 있다.
+  현재 전체 인벤토리와 삭제 기준은 [FE 정리 기록](dentlink-fe.md)을 따른다.
+
 ## 앱 공통 작업 정책 — 2026-10-08
 
 - [앱 온보딩·작업·배포 정본](dentlink-app-onboarding.md)을 함께 읽는다.

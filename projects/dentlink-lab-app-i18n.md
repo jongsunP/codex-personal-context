@@ -1,6 +1,19 @@
 # Dentlink Lab 앱 번역 지침 전달
 
-## 현재 전달 — 2026-10-08 사용자 병합 완료
+## 현재 종결 — 2026-10-16 출시 후 잔여 작업 공간 정리
+
+- 문서 PR #5는 main의 운영 전달에 포함됐으며 #3은 #5로 대체된 종료 이력이다.
+  문서 자체를 새로 구현하거나 번역 시트를 다시 처리할 잔여 요청은 없다.
+- 로컬·원격 `feature/lab-i18n-workflow`, `feature/lab-i18n-workflow-release`와
+  `/Users/parkjongsun/Repository/dentlink-lab-app-i18n-release` worktree를 삭제했다.
+  삭제 전 tracked/untracked/ignored 변경과 작업 프로세스가 없고 문서 반영이 보존됐음을 확인했다.
+- 기본 checkout은 최신 `main / bb619010b25419b724a5f6acded6f5760bb9af15`와 동일하고 clean이다.
+  삭제 전 커밋은 공용 Git 디렉터리의 `codex-closeout/released-branch-cleanup-20261016/`
+  안에 검증한 `lab-released-branches.bundle`과 manifest로 보존했다. 이 백업은 현재 디바이스에만 있다.
+- 아래 branch/worktree 보존 및 PR 대기 문구는 당시 이력이다. 새 작업 때 해당 공간을 복원하지 말고
+  [FE의 현재 정리 상태](dentlink-fe.md)와 live Git을 먼저 확인한다.
+
+## 이전 전달 — 2026-10-08 사용자 병합 완료
 
 - 사용자 병합 #5를 live MERGED로 확인했다. merge768814e1b5a9642df1979998cc89289c4d5f0759,
   15:21:32 KST, 대상release/v1.0.4다. source9e04b395와 기존 문서worktree/branch는 보존했다.

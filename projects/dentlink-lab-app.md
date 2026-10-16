@@ -1,5 +1,15 @@
 # Dentlink Lab App
 
+## 현재 로컬 상태 — 2026-10-16 출시 후 정리
+
+- 기본 checkout은 `main / bb619010b25419b724a5f6acded6f5760bb9af15`, origin/main과 동일·clean이다.
+  로컬 브랜치와 등록 worktree는 기본 main checkout 하나씩만 남았다.
+- 이미 운영 전달된 DL-16652·번역 지침의 원격 브랜치 6개, 잔여 로컬 브랜치 3개와
+  문서용 `dentlink-lab-app-i18n-release` worktree를 삭제했다. main·develop·release는 보존했다.
+- 삭제 전 검증한 Git bundle과 manifest는 공용 Git 디렉터리의
+  `codex-closeout/released-branch-cleanup-20261016/`에 있다. 자세한 삭제·보존 기준은
+  [FE 정리 기록](dentlink-fe.md)을 따른다. 아래 날짜별 보존 상태는 당시 이력이다.
+
 ## 역할과 저장소 — 2026-10-06 사용자 확정
 
 - 기공소 네이티브 앱의 정본이다. Office 앱은 별도 `dentlink-app`과

@@ -77,7 +77,8 @@ For detailed current state, read:
   [SESSION_WORKFLOW.md의 업무 접수 기준](SESSION_WORKFLOW.md#new-work-intake-and-session-routing)을 따른다.
 - 현재 열린 기능 세션과 다른 기기의 첫 대화에서 읽을 체크포인트:
   [projects/dentlink-fe.md](projects/dentlink-fe.md)의 **다른 기기에서 이어가기** 절.
-  과거 로컬 브랜치/worktree 정리 이력도 같은 문서에 보존한다.
+  2026-10-16 출시 완료 작업의 로컬 브랜치 4개·worktree 1개·원격 브랜치 154개 정리 이력도
+  같은 문서에 보존한다. 진행 중·미출시·소유/반영 불명확 항목은 유지했다.
 - 이 색인은 세부 상태를 중복 보관하지 않는다. 과거 SHA, PR 상태, QA·배포 이력은
   각 프로젝트의 최신 체크포인트에서 확인하고 재개 시 live Git과 대조한다.
 
@@ -85,7 +86,7 @@ For detailed current state, read:
 
 - 상위 DL-16795의 기존 개별/통합 문서 명칭 변경. Commercial Invoice와 발행·결제 구조는 유지한다.
 - 2026-10-15 최신 master 기준 `feature/DL-16796`에서 11파일 명칭 변경, normal commit/push와 합성 PDF8사례 검증 완료. 앱 최신 소스상 네이티브 수정은 불필요하다.
-- [PR #4699](https://github.com/Innvoaid/dentlink-client/pull/4699)을 `release/v1.89.0` 대상으로 전달했다. CodeRabbit 완료·미해결0건/추가 수정 없음, 팀 리뷰 대기다. 병합·배포·실계정/앱 다운로드 QA와 첨부 시각 대조는 미완료다.
+- [PR #4699](https://github.com/Innvoaid/dentlink-client/pull/4699)은 2026-10-16 `release/v1.89.0`에 병합됐다. QA·운영 배포와 실계정/앱 다운로드 검증 완료 근거는 별도이며 원본 브랜치를 보존한다.
 - 사용자가 개발 완료를 확인하고 메모리화 후 대기를 요청했다. Jira 댓글은 남기지 않고 상태는 사용자가 관리한다. 재개 요청 전 추가 작업·모니터링 없음.
 - [개인 체크포인트](projects/dentlink-client-billing-statement.md)
 
@@ -147,8 +148,9 @@ For detailed current state, read:
 ### Dentlink Admin LBX — DL-16279 / DL-16387
 
 - 기존 배송 목록·상세 확장, LBX Baby/Mother 생성 및 픽업 생성.
-- 백엔드 문제로 이번 배포에서 제외했다. PR #4623은 미병합 종료됐으며
-  `feature/DL-16387`은 재개를 위해 보존한다. 테스트 중 실제 생성·수정 요청 금지.
+- 2026-10-16 날짜별 전달 PR #4705를 사용자가 develop에 병합했다. 운영 릴리스는 별도다.
+  원본 `feature/DL-16387`과 `feature/DL-16387-develop-20261016`을 보존하며
+  후속 릴리스는 정본의 호환 수정·전달 범위를 다시 확인한다. 테스트 중 실제 생성·수정 요청 금지.
 - [projects/dentlink-client-lbx.md](projects/dentlink-client-lbx.md)
 
 ### Dentlink Office App
@@ -225,7 +227,8 @@ For detailed current state, read:
   웹은 아래 i18n 문서, 별도 Lab 앱은 [앱 정본](projects/dentlink-lab-app.md)의 절차를 따른다.
 - Lab 앱의 팀 에이전트 지침 반영은 [앱 i18n 전달 기록](projects/dentlink-lab-app-i18n.md)을 따른다.
   기존 앱 PR #3은 문서 전용 #5로 대체됐고, #5는 사용자 병합으로 `release/v1.0.4`에 반영됐다.
-  이후 release→develop 동기화 #9도 병합됐다. 웹 `release/v1.88.0`과 별도다.
+  이후 release→develop #9와 main 운영 전달도 완료됐다. 2026-10-16 문서용 worktree와
+  잔여 로컬·원격 브랜치를 정리했다. 웹 `release/v1.88.0`과 별도다.
 - [projects/dentlink-client-i18n.md](projects/dentlink-client-i18n.md)
 
 ### Dentlink DSO Dashboard — DL-15223
