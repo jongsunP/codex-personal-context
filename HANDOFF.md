@@ -46,6 +46,7 @@ Do not store secrets or private customer data here.
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
   — 2026-10-16 PR #4705의 develop 병합 완료. 운영 릴리스는 별도이며 원본과 날짜별 전달 브랜치를 보존한다.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
+  **대기:** 2026-10-19 사용자 종료 지시. QA 결과/후속 지시 전까지 자동 조회·수정·배포 없이 기존 브랜치/worktree를 보존한다.
   — 2026-10-19 PR4719 사용자release병합(fef630005) 확인 후 stage를 master8772d6882에서 재생성, PR4720 release→stage 준비 후 사용자병합완료(stage4b28c28a6, release와tree동일).
   웹 최신3제품 배포run은 in_progress이며 최종성공/QA는별도다. 기존stage복구ref/전체변경/Actions경계를 정본에 보존했다. 앱은 사용자재승인으로 feature/DL-16317@f037c80 양OS Stagingv336/2.2.4 mandatory100%enabled 전달·서버/소스맵341파일확인완료.
   PR329 OPEN→develop 유지·본문최신화, 원본worktree/시뮬레이터/Metro 보존·임시buildsource만정리. 후속 리뷰 확인에서 최신f037c80에 myungjael LGTM/APPROVED, 리뷰스레드/인라인댓글0건으로 추가수정 없음. CodeRabbit은 develop대상제외 skipped이며 강제실행하지 않았다. 다음은 웹배포완료 및 앱기기적용/QA·사용자/팀 PR병합 판단이다.

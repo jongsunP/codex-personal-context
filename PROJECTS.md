@@ -184,6 +184,8 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
+- **대기:** 2026-10-19 사용자가 정리·메모리화 후 대기를 지시했다. QA 결과 또는 후속 지시 전까지 추가 조회·코드 변경·배포 없이 기존 브랜치/worktree를 보존한다.
+
 - **최신 2026-10-19:** 사용자 PR4719 release병합(fef630005) 확인. 원격 stage413ed3564를 복구 ref로 보존 후 master8772d6882에서 재생성, [PR4720](https://github.com/Innvoaid/dentlink-client/pull/4720) →stage 준비 후 사용자 병합완료(stage4b28c28a6, release와tree동일).
 - 웹 Clinic/Lab/Admin 최신3개배포run은 in_progress까지 확인했다. 최종성공/QA완료는 별도이며 웹feature@5bdad60e6 clean유지.
 - 사용자 재승인으로 앱 feature/DL-16317@f037c80를 양OS **Staging v336/2.2.4/mandatory100%enabled**로 CodePush 완료. 서버readback·소스맵341파일일치, PR329본문갱신·OPEN→develop유지.

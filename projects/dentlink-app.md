@@ -1,5 +1,11 @@
 # Dentlink Office App setup and current checkpoint
 
+## 현재 대기 — 2026-10-19 사용자 QA 결과 전달 대기
+
+- 사용자 지시로 정리 후 대기한다. 양OS Staging v336/2.2.4 전달 및 PR329 최신 head 승인 확인을 유지하며, 추가 확정 수정은 없다.
+- 앱 PR329 미병합·실제 기기 적용/QA는 별도다. QA 결과 또는 사용자 후속 지시가 오면 재개하며 그전에는 추가 조회·배포·병합하지 않는다.
+- 브랜치/worktree·시뮬레이터/Metro를 보존한다. [권한관리 체크포인트](dentlink-permission-management.md)의 종료 기록을 따른다.
+
 ## 최신 리뷰 확인 — 2026-10-19 PR329 최신 head 승인, 추가 수정 없음
 
 - PR329는 OPEN→develop/headf037c80 유지, 최신 head에 myungjael LGTM/APPROVED(05:59:58Z), reviewDecision APPROVED·MERGEABLE/CLEAN 확인.
