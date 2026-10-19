@@ -1,5 +1,16 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-19 · 최신 release89 충돌 해결·검증·푸시 완료, PR 미병합
+## 현재 브레이크포인트 — 2026-10-19 · 사용자 통합 병합 완료, 스테이징 반영 PR 준비
+
+- 사용자가 PR#4692를 직접 병합했습니다. GitHub MERGED·대상 `release/v1.89.0`·병합 SHA `f9a45fe02cead5a0d033598d60411a1ec67e1034`·병합 시각 18:34:21 KST를 확인했습니다. 아래 미병합·리뷰 대기는 과거 기록입니다.
+- 사용자가 기존 원격 stage 삭제와 배포 준비를 승인했습니다. 열린 stage PR 0건, stage branch protection 없음·적용 rules 0건을 확인한 뒤 이전 stage `4b28c28a649a7a0cb7a32f6df67d7c7c1ed66c57`를 SHA lease로 삭제하고 최신 master `8772d68825cac6e23792d86a715153a67dc71078`에서 nonexistence lease로 재생성했습니다. 원격 readback으로 stage=master를 확인했습니다.
+- [PR#4722 — v1.89.0 웹 스테이징 재배포](https://github.com/Innvoaid/dentlink-client/pull/4722): **OPEN, non-Draft, `release/v1.89.0` → `stage`, MERGEABLE, 미병합**. base8772d6882/headf9a45fe02, 전체1,678파일(+53,470/−9,302)을 확인했습니다. GitHub 병합 시험 tree와 release tree가 `5251c0f49978a0e47ebb5f721266f72c2c5275e6`로 같습니다. 앱에 쓰인 기능을 별도 선별하거나 제품 코드를 추가 수정하지 않았습니다.
+- 이전 stage tree는 직전 release `fef630005`와 같으므로, 이전 스테이징 대비 추가는 #4692의 DLDS 통합1,366파일입니다. 기존 기능은 릴리스에 포함돼 있습니다. 로컬 복구 ref `refs/recovery/stage-before-dlds-20261019-4b28c28a6`도 남겼으며 별도 원격 보존 브랜치는 만들지 않았습니다.
+- 삭제·재생성 push hook 정상 통과(세 앱 lint 오류0·기존 경고226/186/393, Admin guard, shared 테스트·coverage). 이는 기존 feature checkout의 hook 결과이며 최신 release 전체 화면 QA를 새로 완료했다는 뜻은 아닙니다. 개인 제품 checkout `feature/DL-16471-dlds-dlos-integration@f027171bd`는 원격과 같고 clean입니다.
+- PR 생성 직후 Admin guard·packages verify는 진행 중으로 관측했습니다. stage 재생성 직후 배포 목록의 최신 실행은 이전 stage4b28c28a6의 세 앱 SUCCESS이며 새 master SHA의 배포 실행은 관측되지 않았습니다. **PR#4722 병합·신규 스테이징 배포·QA는 아직 완료되지 않았습니다.** 자동 리뷰/CI 완료까지 기다리거나 하네스를 재개하지 않았습니다.
+- **다음 순서:** 사용자가 PR#4722 병합 또는 배포 확인을 요청하면 live PR/head/base/checks를 다시 확인 → 병합한 stage SHA에 대한 Office(Clinic)·Lab·Admin 배포를 각각 확인 → FE가 대표 화면, 날짜 선택·모달 등 기존 동작을 확인합니다. 이미 본 화면을 전수 재검사하는 기획 검수로 확대하지 않습니다. 그 뒤 release/master 정식 반영·npm·Studio·하네스는 별도입니다.
+- 이번에는 Jira를 변경하지 않았습니다. 통합 현황 담당 카드 DL-16830과 하네스 카드 DL-16471을 구분하며, PR 병합으로 하네스를 완료 처리하지 않습니다.
+
+## 이전 브레이크포인트 — 2026-10-19 · 최신 release89 충돌 해결·검증·푸시 완료, PR 미병합
 
 **범위와 결정:** 사용자가 일괄 충돌 해결을 재개하도록 명시적으로 승인했습니다. 추가된 다른 작업의 기능·의도를 유지하며 DLDS/DLOS 구조·import 연결만 정리하고, 검증·커밋·푸시·PR·Jira·메모리까지 마무리했습니다. **PR 병합은 아직 하지 말라는 최신 지시를 유지**합니다. 하네스 확장·정식 npm 재공개·제품 배포는 실행하지 않았습니다. 아래 10월 16일의 충돌 해결 보류는 과거 기록입니다.
 

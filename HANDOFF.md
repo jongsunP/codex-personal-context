@@ -36,9 +36,9 @@ Do not store secrets or private customer data here.
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16830·DL-16471:
   [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-19 승인 후 최신 release89@8d209ada9 충돌을 해결하고 f027171bd 커밋·푸시, PR·Jira 정리를 완료했다. 기능·화면 로직 보존, 관련595테스트·타입/lint·패키지/Admin CI 통과. PR#4692는 충돌 해소·미병합·리뷰 필요 상태다.
-  이번 통합 범위에서 확인된 추가 필수 코드 작업은 없다. 사용자가 리뷰·병합 진행 소식을 주기로 했으며, 그전에는 병합·하네스·배포·자동 조회 없이 대기한다. 새 release 변경은 재개 시 확인한다. Jira는 Chrome에서 저장 완료했고, 후속 사용자 승인으로 신규 Atlassian 플러그인도 innovaid에 재연결해 DL-16471 실제 조회까지 성공했다. 확인한 웹 재연결 경로는 정본에 남겼다. Legacy 연결은 사용하지 않는다.
-  이후 Jira 구조 정리 요청으로 통합 전용 하위 DL-16830을 신설하고, 사용자 후속 요청에 따라 개발·검증 완료 상태인 Ready for Deploy로 옮겼다. 기존 DL-16471은 AI 하네스만 남겨 진행 중을 유지하고 본문에 통합 후 보완 예정으로 구분한다. 상위 제목·진행 순서와 1단계 후속 링크를 맞췄으며 기존 이력과 제품·PR은 유지했다. 이후 통합 진행은 DL-16830에서 관리하고 병합·정식 공개·Studio 확인은 남아 있다.
+  — 2026-10-19 사용자가 PR#4692를 release/v1.89.0에 병합했다(f9a45fe02). 승인된 stage 삭제·master8772d6882 재생성 후 전체 release→stage PR#4722를 준비했다. OPEN/non-Draft·MERGEABLE·미병합이며 병합 시험 tree=release를 확인했다. 제품 checkout f027171bd는 clean으로 보존했다.
+  다음은 PR#4722 병합 및 Clinic·Lab·Admin 스테이징 배포 확인, 영향 화면의 기존 동작 QA다. PR 준비만 완료했으며 배포·QA·정식 npm·Studio·하네스 완료를 뜻하지 않는다. 사용자의 후속 지시 전에는 자동 리뷰·모니터링·하네스 작업 없이 대기한다.
+  Jira 통합은 DL-16830(마지막 확인 Ready for Deploy), 하네스는 DL-16471(마지막 확인 진행 중)에서 구분한다. 이번 stage 준비에서는 Jira를 변경하지 않았다. 신규 Atlassian 플러그인의 innovaid 사이트를 사용하고 Legacy는 사용하지 않는다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — 승인된 UI 정리 PR #4642가 반영된 완료 이력. 미착수 조사로 되돌리지 않는다.

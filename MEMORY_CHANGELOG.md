@@ -2,6 +2,8 @@
 
 ## 2026-10-19
 
+- DLDS PR#4692 사용자 release병합(f9a45fe02)을 확인했다. 승인된 기존 stage 삭제·최신 master8772d6882 재생성 후 전체 release→stage PR#4722를 준비·attach했다. 이전 stage4b28c28a6 복구ref, lease삭제/재생성, 전체diff 및 GitHub 병합시험 tree=release를 확인했다. 제품코드·feature checkout은 변경하지 않았고 정상push hook을 통과했다. stage PR 미병합·신규배포/QA/정식npm/Studio/하네스 미완료이며 다음 단계는 PR병합과 세앱배포 확인이다.
+
 - 권한관리 앱 PR329의 사용자 develop 병합을 확인했다(43f7879, 18:13:16 KST). develop과 v336 feature소스 전체tree동일·차이0파일을 확인했다. 기존 feature기준 Stagingv336은 유지하고, 이후 QA 수정은 작업브랜치→develop 병합→develop 전체 Staging CodePush로 전달한다는 사용자 지침을 저장했다. 지금 추가 제품 수정·배포 없이 QA 대기하며 기존브랜치/worktree를 보존한다.
 
 - DLDS Jira 정리 요청으로 상위 DL-16437의 제목·진행 흐름을 맞추고, 통합 전용 하위 DL-16830을 신설했다. 후속 요청으로 코드·검증 완료에 맞춰 Ready for Deploy로 옮겼으며 병합·정식 npm·Studio 확인은 남겨뒀다.
