@@ -1,6 +1,34 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-16 웹·앱 조치 완료·사용자 QA 재개 지시 대기
+## 현재 상태 — 2026-10-19 Office feature Development CodePush 완료·QA 대기
+
+- **사용자 승인:** 앱 `feature/DL-16317`만 개발 환경에 CodePush할 수 있는지 확인한 뒤 사용자가 "진행해줘"라고 명시했다.
+  기존 QA 대기는 유지하고 이번 요청 범위인 Office iOS·Android Development 배포만 실행했다. PR 병합·웹/Lab·Staging/Production 배포는 하지 않았다.
+- **소스/Git:** `/Users/parkjongsun/Repository/dentlink-app-permission`의 `feature/DL-16317@6437dbb02b028bba51fdc59135a2d7c8599ad759`.
+  pull 후 로컬·원격 일치·clean을 확인했다. [PR329](https://github.com/Innvoaid/dentlink-app/pull/329)는 OPEN → develop이며 미병합을 유지했다.
+  CodePush는 이 브랜치의 전체 앱 번들이며 Git merge나 권한 변경 부분만 덧붙이는 작업이 아니다.
+- **배포 완료/read-back:** `Dentlink-Office-iOS / Development / v138`, `Dentlink-Office-Android / Development / v138`.
+  모두 `appVersion=2.2.4`, `isDisabled=false`, `isMandatory=true`, `rollout=100`을 실제 history로 확인했다.
+  설명은 `DL-16317 permission QA | feature/DL-16317 @ 6437dbb`; 직전 Development는 양쪽 v137이었다.
+  iOS packageHash `84f8a7e81baeb1cfa609191699c20a6c783bcfdf6a1a98d8e8333d726db67e64`,
+  Android packageHash `6c4f48adb6364a69f7de0c7d8b8da9d467cd734e0ea4042b5b4b3ab48e3d5ef5`.
+- **빌드 환경 보완:** 원래 worktree의 node_modules는 메인 앱 checkout symlink이며 선언/lock과 설치된 Amplitude·Datadog·Firebase가 달랐다.
+  이를 그대로 번들하지 않고 HEAD git archive의 별도 임시 폴더에 `yarn install --immutable`을 수행했다. 공용 node_modules·제품 env·lock·설정은 수정하지 않았다.
+  설치 후 모든 추적 소스가 원본 feature와 동일함을 확인했다. package/yarn.lock/ios/android/Podfile.lock은 기존 release/v2.2.4(cdfdb904) 및 main(62e5864)과 동일했다.
+  새 네이티브 기능 요구는 없으며 API·웹 환경은 설치된 Development 바이너리의 react-native-config 값을 사용한다.
+  **후속 로컬 검증/배포에서도 공용 symlink 의존성이 lock과 일치한다고 가정하지 않는다.** 10/16 테스트/타입 수치는 당시 환경의 기록이다.
+- **이번 검증/정리:** 양 OS release JS bundle·Hermes 변환·업로드 exit0 및 서버 read-back 완료.
+  양쪽 source map에 최종 채팅·피드백·승인 보완3파일 포함을 확인했다. 기존 isv.mp4(1.48MiB)의 CLI 경고는 저장소 기본 `--force` 방식으로 처리했다.
+  최초 outputDir 이름 검사는 업로드 전 종료했으며 `ios/CodePush`, `android/CodePush` 경로로 정상 재실행했다.
+  제품 코드 수정·새 커밋/태그·PR 변경·네이티브 바이너리 빌드·실기기 설치/적용 확인·사용자 QA는 하지 않았다.
+  임시 빌드 소스/의존성은 제거하고 로그·번들·source map·metadata만 아래 임시 증거 경로에 남겼다.
+  `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dl16317-dev-codepush-20261019-53o7kjwt/metadata.json`
+- **현재 영향/다음:** Development 채널을 쓰는 Office2.2.4 앱은 v138을 받을 수 있다. 실제 기기 다운로드·재시작·권한 QA 완료 증거는 아니다.
+  웹 WebView는 별도 DEV 웹 배포본을 계속 사용한다. 필수 BE 추가 질문 없음과 Draft 정책 종결을 유지한다.
+  사용자가 QA를 재개하면 양 OS 실제 라벨 v138 적용부터 확인하고 Member/Admin 권한 및 오류 복구를 검수한다.
+  이후 수정·병합·추가 배포는 새 지시/QA 결과에 따른다. 브랜치·worktree·테스트 Draft는 보존하고 대기한다.
+
+## 이전 체크포인트 — 2026-10-16 웹·앱 조치 완료·사용자 QA 재개 지시 대기
 
 - **최종 종료 지시:** 사용자가 현재 가능한 웹·앱 조치를 마무리하고 QA는 나중에 진행하겠다고 명시했다.
   확인된 필수 FE 수정과 커밋·푸시·PR 반영은 완료이며 추가 필수 BE 문의도 없다.

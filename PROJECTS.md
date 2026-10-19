@@ -182,8 +182,9 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **대기 확정:** 현재 확인된 웹·앱 필수 조치 완료. 사용자가 QA는 나중에 하기로 했으므로 새 지시 전 QA·병합·배포·감시를 진행하지 않는다.
-  브랜치/worktree 보존, 다음 재개는 사용자 QA 요청과 실제 배포 버전 확인부터 시작한다.
+- **최신 2026-10-19:** 사용자 승인으로 앱 `feature/DL-16317@6437dbb`를 Office iOS·Android Development에 CodePush했다.
+  양쪽 v138·2.2.4·mandatory·100% 활성 read-back 확인. PR329는 미병합 유지, 웹/Lab·Staging/Production 배포 없음.
+  QA는 사용자 후속 요청까지 대기하며 브랜치/worktree를 보존한다. 재개 시 실제 기기 v138 적용부터 확인한다.
 - **최신 예외 감사:** 웹은 새 확정 과잉 차단/입력 유실 없이 유지했다. 앱 채팅·피드백·승인의 일시 오류 후 복구 누락을 보완했고,
   입력·첨부 보존과 403/404·직원 전환 차단을 함께 검증했다. 새 UI/문구/정책/파일은 추가하지 않았다.
   앱949e0f6/dafcad7/6437dbb 커밋·푸시 및 기존 PR329 본문 갱신 완료. 최종 관련5 suites/69 tests·6파일 lint PASS,
@@ -206,7 +207,7 @@ For detailed current state, read:
 - **Office 앱:** [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → develop OPEN,
   `feature/DL-16317@6437dbb` 로컬·원격 일치·clean. 기존 브랜치에서 예외 복구3건을 보완했고 PR에 반영했다.
   최종 관련69 tests PASS·타입18진단 기존동일. 기존394 tests·양 플랫폼 JS bundle은 이전7cb4487 검증 기록이다.
-  미병합·미배포는 사용자 의도다. native 권한 검증은 PR329 포함 버전으로 진행한다.
+  10/19 해당 feature의 Development v138 배포 완료. PR 미병합은 유지하며 native 권한 QA는 실제 v138 적용 후 진행한다.
 - **다음:** 사용자 DEV 배포 완료 후 경고 재확인 → 스테이징 정식 QA.
   앱 상세 웹 경고에는 이번 수정이 반영되며 native 권한 QA/운영 활성화는 PR329 포함 버전으로 진행한다.
   다른 역할 계정·직원 전환·승인 대기 쓰기·실기기·다주문 지연 등의 미실시 범위는 상세 체크포인트를 따른다.

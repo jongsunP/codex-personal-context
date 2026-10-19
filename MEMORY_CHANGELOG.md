@@ -1,5 +1,12 @@
 # Memory Changelog
 
+## 2026-10-19
+
+- 권한관리 사용자의 명시적 진행 승인으로 Office feature/DL-16317@6437dbb를 iOS·Android Development v138에 배포했다.
+  2.2.4·mandatory·100% 활성·설명/SHA를 read-back 확인. PR329는 미병합이며 웹/Lab·Staging/Production·태그·제품 코드는 변경하지 않았다.
+  공용 node_modules가 lock과 달라 별도 HEAD archive+immutable install에서 번들·Hermes 생성했고 양 OS 업로드 exit0.
+  실제 기기 적용/QA는 미실행이며 사용자 후속 요청까지 대기. 임시 빌드 소스/의존성을 정리하고 증거·재개 기준을 저장했다.
+
 ## 2026-10-16
 
 - 메인세션에서 상태 보고의 기본 순서 **완료한 것 → 현재 영향 → 남은 일**을 모든 프로젝트·세션의

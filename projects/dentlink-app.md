@@ -1,6 +1,16 @@
 # Dentlink Office App setup and current checkpoint
 
-## 현재 정리 상태 — 2026-10-16
+## 현재 전달 상태 — 2026-10-19 권한관리 feature Development CodePush
+
+- 사용자 승인으로 `feature/DL-16317@6437dbb` 전체 번들을 Office iOS·Android **Development v138**로 배포했다.
+  대상2.2.4·mandatory·100% 활성 read-back 완료. PR329는 OPEN→develop·미병합이며 Staging/Production·웹/Lab 전달은 이번 대상이 아니다.
+- `dentlink-app-permission/node_modules`의 외부 symlink에는 lock과 다른 Amplitude·Datadog 및 누락된 Firebase analytics가 있었다.
+  공유 의존성은 건드리지 않고 HEAD archive+`yarn install --immutable` 격리 환경으로 정상 번들·Hermes·업로드했다.
+  package/lock/native는 release와 동일하다. 후속 배포/검증 때 공유 node_modules의 일치를 별도 확인한다.
+- 실제 기기 OTA 적용과 QA는 사용자 요청까지 대기한다. 브랜치/worktree는 보존하며 자세한 라벨·hash·검증·다음 순서는
+  [권한관리 체크포인트](dentlink-permission-management.md)를 따른다.
+
+## 이전 정리 상태 — 2026-10-16
 
 - 출시된 Remake 작업 `feature/DL-16652` 원격 브랜치를 삭제했다. PR #318의 병합 커밋은
   main 및 v2.2.4.82/.83 출시 태그에 포함되고 관련 3파일은 현재 main과 같다.
