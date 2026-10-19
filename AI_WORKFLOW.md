@@ -164,6 +164,48 @@ scratch details.
   verify it against the remote and local project Git state unless the user
   explicitly asks for a narrower source.
 
+## Atlassian Connection Selection And Recovery
+
+This is the user's shared rule for existing and new sessions, confirmed on
+2026-10-19 after a successful connection repair.
+
+- Use the current **Atlassian** plugin (`mcp__codex_apps__atlassian_*`) for
+  Jira/Confluence. Do not select **Atlassian Rovo (Legacy)** or silently fall
+  back to its `atlassian_rovo__legacy` tools. Its connection is separate and
+  remained unauthenticated when the current plugin was repaired.
+- For Dentlink work, use **`https://innovaid.atlassian.net`**, not
+  `dentlink.atlassian.net`. The verified cloud ID is
+  `e167280a-9dbd-4306-a629-456c995be3c9`; confirm the authorized site with the
+  current plugin's accessible-resources tool as required by its tool contract,
+  then pass that site explicitly. Do not substitute a different site's
+  similarly named issue when the intended site is not authorized.
+- Diagnose separately: Legacy reauthentication errors, current-plugin site
+  approval errors, and actual issue permissions/not-found errors. On
+  2026-10-19, Legacy required reauthentication and the current plugin initially
+  had only the wrong `dentlink` site grant. Reconnecting the current plugin to
+  Innovaid restored actual `DL-16471` reads. This was not a product-code issue.
+- A successful Jira browser login, installed/enabled plugin, or connection
+  toast alone does not prove connector access. Verify the authorized site and
+  read the requested issue through the current plugin before declaring repair
+  complete. Authentication may expire or permissions may change later.
+- If recovery is needed, the verified web path is ChatGPT Plugins → Atlassian
+  → Manage → connected account menu → Reconnect → Atlassian connect → select
+  Innovaid → accept the displayed consent. The direct settings page is
+  `https://chatgpt.com/settings/plugins-settings/plugin_asdk_app_6a83901dde988191b3f3cefdcc19acfa`.
+  Read the actual UI before acting; labels and paths may change. Obtain any
+  required action-time consent for site access/terms. Never request tokens in
+  chat, bypass an app-control restriction, or uninstall a plugin merely to
+  repair OAuth. If the site is absent, check the signed-in account/site access
+  and applicable administrator policy rather than repeating blind reconnects.
+- An old session may still expose or choose Legacy. Discover the current
+  plugin's tools first; if unavailable, explain that limitation and refresh the
+  session/plugin availability through supported controls. Do not guarantee
+  that every existing session or another account/device has been repaired.
+- The Dentlink main session carries this rule into relevant existing-session
+  handoffs and new-session prompts. Shared Git context is the durable source;
+  local guidance sync alone is not cross-device delivery. Propagating the rule
+  does not authorize product changes, deployments, or unsolicited Jira edits.
+
 ## Jira Work Updates
 
 - For authorized Dentlink work intake, classify Web/Admin, Office native app,

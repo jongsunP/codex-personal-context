@@ -51,6 +51,9 @@
   confirmed outcome, use a familiar comparable product behavior as evidence
   when useful, and explain what the reporter should now observe. Omit internal
   implementation terminology unless it is needed to explain a real limitation.
+- For Jira/Confluence connections, follow **Atlassian Connection Selection And
+  Recovery** in `AI_WORKFLOW.md`: use the current Atlassian plugin, not Legacy;
+  Dentlink's authorized site is `innovaid.atlassian.net`.
 - For Jira work updates, follow **Jira Work Updates** in `AI_WORKFLOW.md`:
   use the user's assigned child issue and comment on a parent only when the
   user explicitly requests it. For authorized Dentlink work intake, reuse or
