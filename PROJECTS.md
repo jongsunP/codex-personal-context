@@ -123,9 +123,10 @@ For detailed current state, read:
 - 로컬 feature/임시 worktree 정리 완료, 남은 임시 후보 파일 제거. 원격 branch·검증 화면 및 다른 작업 checkout/worktree는 보존한다.
 - 구현·리뷰·검증·Jira 이력은 [projects/dentlink-client-other-lab-guard.md](projects/dentlink-client-other-lab-guard.md)에 정리했다.
 
-### Dentlink DLDS / AI 화면 제작 — DL-16437 / DL-16466 / DL-16471
+### Dentlink DLDS / AI 화면 제작 — DL-16437 / DL-16466 / DL-16830 / DL-16471
 
-- 실제 컴포넌트 정비 → AI 프롬프트·하네스 정비 → 필요시 에디터 순서다.
+- 실제 컴포넌트 정비 → DLOS 방식의 DLDS 패키지 통합 → AI 프롬프트·하네스 정비 → 필요시 에디터 순서다.
+- 2026-10-19 Jira 업무 분리: 통합·PR·npm·Studio 반영은 신규 DL-16830(진행 중), 하네스는 DL-16471(ON HOLD)에서 관리한다. 통합 코드는 저장·푸시 완료이며 사용자 리뷰·병합 소식 대기다. 아래 시험 경과는 과거 기록이고 정확한 현재 상태는 프로젝트 체크포인트를 따른다.
 - DLDS는 사용자 재개 요청에 따라 대표 사용 화면 검증과 범용 UI 경계·모음 페이지
   보완까지 진행했다. 전체 완료 여부·남은 범위는 최신 체크포인트를 따른다.
 - 최신 지시로 아이콘 추가 전수 대조는 제외하며 누락만 대상으로 한다.
