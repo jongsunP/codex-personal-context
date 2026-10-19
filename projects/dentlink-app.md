@@ -1,6 +1,14 @@
 # Dentlink Office App setup and current checkpoint
 
-## 현재 확인 — 2026-10-19 Editor 결제 API 후속, 앱 로직 추가 불필요
+## 현재 전달 상태 — 2026-10-19 권한별 API 설명 주석 PR329 반영 완료
+
+- 사용자 승인에 따라 기존 `feature/DL-16317`에 `f037c80153b328bbb14fcafd5fb756a59fd4cc8e`를 커밋·푸시했다. HomePaymentReplacementBanner.tsx 주석5줄만 변경했으며 ESLint/diff PASS, 원격 일치·clean이다.
+- PR329 OPEN/비Draft→develop 최신 head·본문 반영·현재 작업 attach 확인. 앱 직접 호출이 없는 웹 결제GET3개와 기존 배너의 OWNER/PAYMENT_MANAGER 조건을 구분했다.
+- 앱 런타임 변경이 없어 별도 CodePush는 필요 없다. 실제 양OS Staging v335/2.2.4 소스는 기존 `5c3504d`이며 본문 기록을 보존했다. Developmentv139·Production·Lab·Jira 변경 없음.
+- 웹은 새 feature/DL-16317-api-permissions@5bdad60e6를 PR4719→release/v1.89.0으로 전달했다. 미병합·미배포이며 반영 후 권한별 확인이 남는다.
+- 앱 개발자 PR리뷰·develop 병합·전체QA/운영 출시는 별도다. [권한관리 체크포인트](dentlink-permission-management.md) 최신 절에 정확한 API 표와 검증 근거를 보존했다.
+
+## 이전 확인 — 2026-10-19 Editor 결제 API 후속, 앱 로직 추가 불필요
 
 - 웹 Staging Editor에서 결제 건수 2건과 v2 결제수단 목록 GET 403을 확인해 웹 중앙 query를 보완했다. 앱에는 세 API의 네이티브 실제 호출이 없고 생성 선언만 존재한다.
 - 앱 `feature/DL-16317@5c3504d`의 HomePaymentReplacementBanner.tsx에 기존 US + OWNER/PAYMENT_MANAGER 최초/복귀 조회 조건 설명 주석 5줄만 추가했다. ESLint/diff PASS, 동작 변경 없음, 아직 로컬 미커밋 상태다.

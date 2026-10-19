@@ -184,11 +184,11 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-19:** 사용자의 Editor 403 후속 요청을 웹부터 처리했다. 실제 Staging OWNER/EDITOR 응답과 서버 계약을 대조해 웹 공통 결제 count2개·v2 결제수단 목록 GET를 OWNER/PAYMENT_MANAGER 전용으로 제한했다.
-- 웹 `feature/DL-16317-api-permissions`는 release89@d28e1b114 기반, 로컬 수정4파일(회귀 테스트1개 포함). 28 tests·Clinic type·lints PASS. 역할/직원 캐시 분리, 일반 조회·주문 조건 유지.
-- 앱 `feature/DL-16317@5c3504d`는 해당3 API 실제 호출 없음. 기존 배너 조건 주석1파일만 로컬 수정, lint PASS. 추가 앱 로직/CodePush 불필요.
-- 이번 제품 변경은 아직 커밋·푸시·PR 전이다. 기존 웹 Staging과 앱 Staging v335/2.2.4·PR329 미병합·Jira READY FOR QA는 그대로이며 이번 웹 보완은 미배포다.
-- 다음은 Git 전달 지시 후 웹 feature→release PR/앱 기존 feature 주석 반영, 웹 Staging 반영 후 권한별 재확인이다. 기존 전체 QA·앱 리뷰/운영 출시는 별도다.
+- **최신 2026-10-19:** 사용자 승인으로 웹 권한별 결제GET3개 보완 및 주석/회귀검증을 커밋·푸시, [PR4719](https://github.com/Innvoaid/dentlink-client/pull/4719) OPEN→release/v1.89.0 생성·attach 완료.
+- 웹 feature/DL-16317-api-permissions@5bdad60e6, 관련28tests·세앱type·정상push hook 통과(기존lint warning). 원격일치·clean, 미병합·미배포.
+- 앱 기존 feature/DL-16317@f037c80 주석1파일만 커밋·푸시하고 PR329 OPEN→develop 최신head/본문 반영. 네이티브 추가로직/CodePush 불필요. 양OS Stagingv335/2.2.4 실제소스5c3504d 유지.
+- PM/백엔드 복사용 설명 제공, 별도 Jira/메시지/배포/병합/CodeRabbit 리뷰 처리 없음. 기존 QA·앱 개발자 리뷰는 별도다.
+- 다음은 웹PR 병합·Staging 반영 후 역할별 요청 여부 확인이다. 기존 일반 주문·환자·크레딧 조회와 주문 가능 판단은 유지한다.
 - 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 
 ### Dentlink 통합알림센터 — 사전 검토

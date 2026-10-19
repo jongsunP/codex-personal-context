@@ -1,6 +1,17 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-19 Editor 공통 화면 403 후속 수정·검증 완료, 제품 Git 전달 전
+## 현재 상태 — 2026-10-19 권한별 결제 API 보완 커밋·푸시·PR 전달 완료
+
+- **최신 사용자 승인:** PM/백엔드에게 전달할 복사용 설명, 실제 코드·주석 반영 및 웹 새 feature→release PR, 앱 기존 PR 반영을 요청했다. 배포/병합/CodeRabbit 후속 리뷰는 이번 요청에 포함되지 않는다.
+- **웹 완료:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317-api-permissions@5bdad60e6da17a8a533622498ba334c9ad952eb1`, `fix: 결제 조회 API에 사용자 권한 조건 적용`. 최신 release `d28e1b114`와 같은 base를 재확인하고 기존 로컬 수정4파일을 정상 커밋·푸시했다. [PR4719](https://github.com/Innvoaid/dentlink-client/pull/4719) OPEN/비Draft → `release/v1.89.0`, head SHA·변경4파일·원격 일치·clean·현재 작업 attach 확인.
+- **웹 범위:** count2개 및 v2 결제수단 목록 GET를 OWNER/PAYMENT_MANAGER에서만 조회하고 직원/권한별 캐시를 분리한다. 기존 배너 제한 주석을 포함해 정확한 경로·허용/생략 역할을 코드에 남겼다. 아래 직전 체크포인트의 API 표와 실제 Staging/서버 계약 근거를 그대로 따른다.
+- **검증:** 직전 검증된 최종 소스의 관련28tests·변경 파일 lint/diff 검사를 유지한다. 이번 정상 commit hook에서 Clinic/Lab/Admin 타입 검사가 모두 통과했고 정상 push hook도 통과했다. 전체 lint의 기존 warning은 있었지만 실패한 검사는 없다. 별도 E2E/Vercel 조치나 CodeRabbit 스레드 검토/대기를 하지 않았다.
+- **앱 완료:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317@f037c80153b328bbb14fcafd5fb756a59fd4cc8e`, `docs: 홈 결제 안내 API 권한 조건 주석 보완`. HomePaymentReplacementBanner.tsx 주석5줄만 커밋·푸시, 단일파일 ESLint/diff PASS. 원격 일치·clean 및 [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) OPEN/비Draft → develop, 최신 head 확인·attach·본문 보완 완료.
+- **앱 영향:** 이번 웹 API3개는 네이티브 actual caller가 없으며 기존 배너도 이미 OWNER/PAYMENT_MANAGER 전용이다. 앱 기능/UI/요청 조건 변경 없음. 기존 Staging v335 소스는 `5c3504d`로 PR 본문에 구분해 보존했으며 주석만을 위한 추가 CodePush는 필요 없다.
+- **현재 영향:** 두 제품의 코드 전달은 완료했지만 PR은 미병합이고 이번 웹 수정은 아직 미배포다. 기존 웹 Staging·앱 양OS Staging v335/2.2.4·Developmentv139·Jira READY FOR QA 상태를 변경하지 않았다. 담당자에게 직접 메시지나 Jira 댓글을 전송하지 않고 복사용 내용을 사용자에게 제공한다.
+- **다음:** 사용자/개발자 PR 검토·웹 PR4719 release 병합 및 Staging 배포 후 Editor/Member의 대상3 API 요청 부재와 Admin/결제관리자 정상 조회를 확인한다. 앱 PR329의 개발자 리뷰·develop 병합과 기존 전체QA/운영 전달은 별도다. 추가 확정 BE 수정 요청은 없으며 기존 일반 주문·환자·크레딧 조회/주문 가능 조건은 보존됐다.
+
+## 이전 상태 — 2026-10-19 Editor 공통 화면 403 후속 수정·검증 완료, 제품 Git 전달 전
 
 - **재개 범위:** 사용자가 Member 외 Editor에서도 발생하는 불필요한 403 요청을 홈·주문목록·환자목록까지 조사하고, 웹부터 수정 후 앱 필요 여부 확인을 지시했다. 실제 Chrome Staging Admin/다른 권한 세션 사용도 승인했다. 공유할 권한/API 목록과 코드 주석을 요청했다.
 - **웹 작업 위치:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 새 `feature/DL-16317-api-permissions`, base `origin/release/v1.89.0@d28e1b114`. 원래 `feature/DL-16317-payment-banner@20be3ee65` 및 원본 feature/worktree는 보존했다. 최신 release에는 별도 Lab PR4708이 포함되며 이번 변경은 Clinic만이다.
