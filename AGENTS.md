@@ -55,8 +55,10 @@
   Recovery** in `AI_WORKFLOW.md`: use the current Atlassian plugin, not Legacy;
   Dentlink's authorized site is `innovaid.atlassian.net`.
 - For Jira work updates, follow **Jira Work Updates** in `AI_WORKFLOW.md`:
-  use the user's assigned child issue and comment on a parent only when the
-  user explicitly requests it. For authorized Dentlink work intake, reuse or
+  across all projects, keep the work definition in the description, subsequent
+  progress in the user's child-issue comments when needed, and shared document
+  links on the parent. Comment on a parent only when the user explicitly
+  requests it. For authorized Dentlink work intake, reuse or
   create separate product cards for affected Web, Office app, and Lab app
   scope; do not create empty cards for unaffected products.
 - For names and terminology, follow **Project-Aligned Naming** in

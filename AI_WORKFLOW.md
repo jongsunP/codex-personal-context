@@ -208,6 +208,10 @@ This is the user's shared rule for existing and new sessions, confirmed on
 
 ## Jira Work Updates
 
+The description, comment, and document-link rules below apply to Jira and
+similar work-tracking cards across all projects and future tasks. The
+Dentlink-specific intake rules remain limited to Dentlink.
+
 - For authorized Dentlink work intake, classify Web/Admin, Office native app,
   and Lab native app separately. This is the user's standing preference,
   confirmed on 2026-10-08: reuse an existing suitable product issue, or create
@@ -236,13 +240,23 @@ This is the user's shared rule for existing and new sessions, confirmed on
   explicitly requests it.
 - Give the user's child issue a concrete title that identifies the work;
   a title containing only `FE` or `[FE]` is not sufficient.
-- Use the description for requirements and preparation needed before work
-  when useful. Keep an existing description when its requirements and scope
-  are already sufficient. Do not replace it with a personal progress log merely
-  to tidy the issue.
-- For work in progress, record confirmed progress, verification, remaining
-  work, and any current pause in a concise comment. Keep the issue's status
-  distinct from Codex's personal waiting state.
+- Use the description for the stable definition of the work: purpose, scope,
+  requirements, and initial preparation or agreed approach. Update it when
+  that definition changes, not each time progress changes. Preserve sufficient
+  user-written content and completed meeting decisions; when reviewing a
+  sound card, polish wording rather than expanding or rebuilding it.
+- Record subsequent confirmed progress, verification, remaining work, and any
+  current pause in a concise comment on the user's child issue when useful.
+  Use the same card if there is no parent/child structure. Do not add a comment
+  just to report cosmetic editing or repeat unchanged status. Keep the issue's
+  status distinct from Codex's personal waiting state.
+- Keep shared document links and the document index on the parent card.
+  Child cards do not need repeated document lists, a manual parent link, or
+  a duplicate child list already available through the tracker hierarchy.
+  Without a parent, keep the necessary links on the work card itself. Specific
+  evidence such as a PR or verification result may accompany the progress
+  comment it supports. Preserve historical comments; this rule does not
+  authorize removing their existing links or rewriting other cards in bulk.
 - Apply the nondeveloper-facing QA/comment style above. Change titles,
   descriptions, or comments only within the user's authorized scope.
 
