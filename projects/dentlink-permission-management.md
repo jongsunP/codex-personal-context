@@ -1,6 +1,43 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-19 앱 Member QA 보완·Development v139 완료 / 웹 QA PR4716 생성
+## 현재 상태 — 2026-10-19 웹 스테이징 전달·앱 최종 검토 및 보완 완료
+
+- **사용자 범위:** 웹 원격 stage를 최신 원격 master에서 삭제·재생성하고 release/v1.89.0→stage PR 생성 승인.
+  이후 앱 PR의 배포 전 코드/회귀/권한/성능 위험 검토와 필요한 수정·PR 반영을 승인했다.
+  앱은 기존 feature/DL-16317/PR329에 반영, 웹에 추가 수정이 필요할 때만 별도 feature→release PR.
+  **이후 실제 배포는 사용자가 담당하며 이번 턴은 코드·PR·기록 정리에서 종료한다.**
+- **웹 stage 준비 완료:** 삭제 전 stage `b98da6ff89229d8e31847e66a0a34800de842e3f`, master `8772d68825cac6e23792d86a715153a67dc71078`,
+  release `8d209ada93698208dcf407d61d3d5e5e3fe72b0b`. stage 관련 열린 PR0, protected=false, effective rules=[] 확인.
+  기존 stage는 로컬 `refs/recovery/stage-before-reset-20261019-122412`에 보존했다. 기대 SHA lease로 삭제 후 비존재 lease로 master SHA에서 재생성했다.
+  정상 push hook 모두 성공. snapshot `/tmp/dentlink-stage-reset-20261019.json`; 삭제/재생성 로그는 `/tmp/dentlink-stage-{delete,create}-20261019.log`.
+- **웹 PR/병합:** 결제 배너 [PR4716](https://github.com/Innvoaid/dentlink-client/pull/4716)은 release에 MERGED(`8d209ada9`).
+  [PR4717](https://github.com/Innvoaid/dentlink-client/pull/4717) `release/v1.89.0→stage` 생성·첨부 후 사용자가 병합했다(mergedBy=jongsunP, 03:27:15Z).
+  stage `413ed3564af9d888a49da2b62666851a948eaf6b`; 릴리즈 전체10커밋/385파일이며 최종 stage/release tree는 `04b5f1f6e26750b39919f81911e0e439e8ba8c72`로 동일.
+  Clinic run39194762561 / Lab39194762505 / Admin39194762571가 해당 SHA로 push 배포 실행 중인 것까지 확인했다. 배포 완료·화면 QA로 표현하지 않는다.
+  재생성 master SHA의 신규 배포 run은 관측되지 않았고 확인된 신규 run은 사용자 병합 SHA였다. 수동 dispatch·추가 merge·E2E/Vercel 조치 없음.
+- **앱 최종 리뷰/확정 회귀:** PR329의 전체81파일 최종 범위에서 권한, 작성·승인 경계, 채팅/피드백, 직원전환 캐시, 업로드/비동기복구,
+  네이티브·의존성 변경을 나눠 검토했다. Denture 저장 성공만 구3필드 캐시에 쓰고 조회자는 직원ID포함4필드+staleTime Infinity를 읽는 누락을 확인했다.
+  부모가 refreshedOrder 인수를 사용하지 않고 다음 단계로 이동하므로 신규 틀니는 옵션 단계 무한로딩, 기존 Draft는 이전 옵션 표시 가능성이 있었다.
+  `OrderDentureWorkflowSection.tsx`에서 employeeId와 기존 getOfficeOrderDetailQueryKey를 사용해 수정했다.
+- **앱 추가 타입 보완:** 정확한 lock 의존성 검사에서 이번 PR의 linktalk.service.ts 최근 채팅 GET에만 신규 Axios 설정 제네릭 충돌1건이 있었다.
+  기존 함수 반환계약에 맞춰 `$api.get<T>`로 응답 타입을 명시했다. 요청 경로·파라미터·권한·런타임 동작은 변경하지 않았다.
+- **앱 검증:** 현재 소스/테스트/config/lock667파일이 QA snapshot과 동일한 것을 확인하고, 관련23 suites **235 tests PASS**.
+  기존 OrderScreen.test.tsx에 실제 저장 callback+QueryObserver의 생성/변경 회귀2개를 추가했고 구키일 때2실패→수정후22PASS도 확인했다.
+  변경3파일 ESLint/diff PASS. 동일 exact 의존성의 origin/develop62e5864와 최종 feature tsc 출력은 **기존6진단으로 정확히 동일**하다.
+  앞선 다른 로컬 의존성의18진단 기록과 구분하며 전체타입통과로 주장하지 않는다. 네이티브/lock/package/env/배포workflow 변경0, 새파일·UI·문구·정책 없음.
+  증거 `/tmp/dl16317-app-final-review-jest-after-20261019.{json,log}`, `...-tsc-after-20261019.log`, `...-base-tsc-20261019.log`,
+  `/tmp/dl16317-denture-regression-{before,after}.log`. 실기기 재검수·실제 부하 계측은 이번 최종 리뷰에서 수행하지 않았다.
+- **앱 커밋/PR 반영 완료:** `586381f` 틀니 캐시+기존회귀테스트, `5c3504d85f65e9746cfbffbcf8ba8856ee079a2f` 채팅 타입.
+  기존 `feature/DL-16317`에 정상 커밋·푸시, [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) OPEN→develop·MERGEABLE/CLEAN·최신head 일치.
+  PR 본문을 최종 동작/검증/배포 경계로 갱신했고 로컬/origin 일치·clean. 앱 PR 병합·재배포는 하지 않았다.
+- **웹 좁은 재검토:** #4716 결제 배너 query/render 권한 일치, 앱 OrderDetailScreen→DentlinkWebView→네이티브 승인 연결,
+  타의사 주문 열람 유지와 승인·거절 차단/직원전환 경계를 확인했다. 추가 확정 웹 수정이나 새 BE 문의 없음.
+  이번 작업은 release의 다른 팀 기능 전체를 새로 검증했다는 의미가 아니다.
+- **남은 일/재개:** 사용자가 배포 후 같은 환경의 웹·앱으로 실제 QA한다. 기존 Development v139는 **be332c5**여서 이번 앱586381f/5c3504d는 미포함.
+  Development 앱은 dev-portal을 보므로 웹 stage 배포를 보지 않는다. 스테이징 통합 QA에는 PR329 최신 코드가 포함된 **Staging 앱**이 필요하다.
+  사용자 최신 지시에 따라 이후 배포는 진행하지 않는다. 기존 feature/worktree와 Member 시뮬레이터·Metro를 보존한다.
+
+## 이전 체크포인트 — 2026-10-19 앱 Member QA 보완·Development v139 완료 / 웹 QA PR4716 생성
 
 - **브랜치 규칙 정정:** 기존 `feature/` 규칙을 놓치고 만든 `codex/dl-16317-payment-banner`를 사용자 지적 후 정리했다.
   현재 로컬·원격은 `feature/DL-16317-payment-banner@20be3ee65`, [PR4716](https://github.com/Innvoaid/dentlink-client/pull/4716) OPEN→release/v1.89.0이다.

@@ -184,12 +184,12 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-19:** Member 앱 QA 후 필터50:50 및 기존결제안내API 권한누락을 보완했다.
-  서버코드확정 OWNER/PAYMENT_MANAGER만조회·표시하도록웹/앱을맞췄다. 앱feature/DL-16317@be332c5 커밋·푸시·PR329반영,
-  Office iOS/Android Development **v139**(2.2.4·mandatory100%활성) 배포·read-back완료. 실제기기적용/전체QA별도.
-  웹은최신release162422ab9기반 `feature/DL-16317-payment-banner@20be3ee65`, **PR4716 OPEN→release/v1.89.0**. 동일SHA/diff로접두사오류의PR4715를대체했고병합·웹배포안함.
-  사용자가배포후앱홈오류해소·필터적용을확인했으며사용OS/실제라벨·전체QA와는구분한다.
-  앱시뮬레이터Member/Reactotron·필터3+배너임시10검증,웹14tests·3서비스type·정상push검사PASS. 추가BE질문없음. 모든브랜치/worktree보존.
+- **최신 2026-10-19:** 웹 원격 stage를 master8772d6882로 삭제·재생성 후 release/v1.89.0→stage PR4717 생성.
+  사용자 병합으로 stage413ed3564/release8d209ada9 tree일치, Clinic/Lab/Admin 배포실행까지확인(완료·QA와별도).
+  앱 최종 리뷰의 틀니 캐시 회귀와 채팅 타입을586381f/5c3504d로수정·푸시, PR329 OPEN→develop·clean.
+  관련23 suites235 tests·lint/diffPASS, exactdeps tsc는develop과동일한기존6진단. 웹최근변경/연계재검토는추가수정없음.
+  최신앱수정은Developmentv139(be332c5)에미포함. 이후배포는사용자담당,Staging통합QA는최신코드의Staging앱필요.
+  원본feature/worktree/Member시뮬레이터보존. 상세원인·증거·스테이징복구ref는권한관리체크포인트참조.
 - **최신 예외 감사:** 웹은 새 확정 과잉 차단/입력 유실 없이 유지했다. 앱 채팅·피드백·승인의 일시 오류 후 복구 누락을 보완했고,
   입력·첨부 보존과 403/404·직원 전환 차단을 함께 검증했다. 새 UI/문구/정책/파일은 추가하지 않았다.
   앱949e0f6/dafcad7/6437dbb 커밋·푸시 및 기존 PR329 본문 갱신 완료. 최종 관련5 suites/69 tests·6파일 lint PASS,

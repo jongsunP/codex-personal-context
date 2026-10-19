@@ -1,6 +1,17 @@
 # Dentlink Office App setup and current checkpoint
 
-## 현재 전달 상태 — 2026-10-19 Member QA 보완 및 Development v139
+## 현재 전달 상태 — 2026-10-19 최종 리뷰 보완·PR329 반영 / 이후 배포 사용자 담당
+
+- 앱 기존 `feature/DL-16317@5c3504d`에 틀니 저장 후 직원별 캐시 갱신(586381f)과 최근 채팅 응답 타입 보완을 커밋·푸시했다.
+  기존 PR329 OPEN→develop·MERGEABLE/CLEAN, 로컬/origin 동일·clean. 새파일·UI·문구·정책·네이티브/lock/env 변경 없음.
+- 확정 회귀는 틀니 워크플로 생성/변경 후 옵션 단계 무한 로딩·이전 옵션 표시 가능성이며 기존 테스트에2케이스로 수정 전 실패/수정 후 성공을 확인했다.
+  최종 관련23 suites235 tests·3파일lint/diff PASS. exact 의존성 tsc는 origin/develop과 동일한 기존6진단(신규0), 전체통과는 아니다.
+- 웹 stage 재생성→release/v1.89.0 PR4717 생성 후 사용자 병합 확인. 웹 최근 결제배너/앱 승인 연계 부분 재검토에서 추가 수정은 없었다.
+- 기존 Development v139는 be332c5이므로 최신 두 커밋은 아직 미배포다. 사용자 지시에 따라 코드/PR까지만 정리했고 앱 병합·CodePush는 하지 않았다.
+  Staging 통합 QA에는 최신PR이 포함된 Staging 앱이 필요하며 Development 앱은 dev-portal을 본다. 전체실기기QA·성능계측은별도다.
+- 상세 SHA·증거·웹전달 상태는 [권한관리 체크포인트](dentlink-permission-management.md) 최신 절을 따른다.
+
+## 이전 전달 상태 — 2026-10-19 Member QA 보완 및 Development v139
 
 - `dentlink-app-permission`의 `feature/DL-16317@be332c5`에 필터 두 탭50:50과 홈 결제 안내 API의 전체 역할 조건을 커밋·푸시했다.
   서버 보안 설정상 OWNER/PAYMENT_MANAGER만 허용하므로 EDITOR/VIEWER/MEMBER/권한미확정에서는 조회·배너표시를 막는다.

@@ -46,11 +46,11 @@ Do not store secrets or private customer data here.
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
   — 2026-10-16 PR #4705의 develop 병합 완료. 운영 릴리스는 별도이며 원본과 날짜별 전달 브랜치를 보존한다.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
-  — 2026-10-19 Member 앱 QA의필터50:50과홈기존결제안내403 보완완료. 서버코드상OWNER/PM만허용함을확인해웹/앱전체역할조건정렬.
-  앱featurebe332c5·PR329반영및Office iOS/Android Development **v139**(2.2.4·mandatory100%활성)배포/read-back완료. 실제기기OTA적용/전체QA별도.
-  웹은release162422ab9기반 `feature/DL-16317-payment-banner@20be3ee65`, **PR4716 OPEN→release/v1.89.0** 생성·미병합. 접두사오류의PR4715는동일SHA/diff로대체후닫았다.
-  앱시뮬레이터/Reactotron과필터3+배너임시10검증,웹14tests·3서비스타입·정상push검사PASS. 사용자가배포후앱오류해소·필터적용을확인했다. 웹PR검토·병합·배포후QA가남았다.
-  추가BE질문없고새UI/문구/파일없음. 공유의존성/네이티브/lock미변경,배포용임시source정리. 브랜치/worktree와Member시뮬레이터/Metro보존.
+  — 2026-10-19 웹stage를master8772d6882로재생성하고release→stage PR4717생성,사용자병합으로stage413ed3564 확인.
+  Clinic/Lab/Admin 배포실행까지관측,배포완료·QA미확정. 기존stage복구ref보존.
+  앱 최종리뷰에서틀니캐시회귀+채팅타입2건수정·235 tests/lint/diffPASS. 동일의존성develop과기존타입6진단동일(신규0).
+  feature/DL-16317@5c3504d·PR329 OPEN→develop·clean,웹추가수정/BE추가문의없음. 이후배포는사용자담당.
+  기존Developmentv139는be332c5로신규두커밋미포함,Staging웹과통합QA하려면최신PR코드의Staging앱필요.
   — 최신 예외 감사에서 웹 추가 수정 없음. 앱 채팅·피드백·승인의 일시 오류 복구3건과 입력/첨부/완료 응답 경계를 보완했다.
   949e0f6/dafcad7/6437dbb 정상 커밋·푸시·PR329 본문 갱신, 기존6파일만 변경. 관련69 tests·lint PASS, 타입18진단 기존동일.
   새 UI/문구/정책/파일 없이 기존 refresh/Retry/앱·화면 복귀를 사용한다. Vercel은 사용자 지시로 제외했다.
