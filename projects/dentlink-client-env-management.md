@@ -2,6 +2,7 @@
 
 ## 현재 상태 — 2026-10-19 보안 분류·회의 전 보완 완료, 추가 콘솔 조사 종료
 
+- 최종 확인 후 사용자가 “지금 단계로 다 됐으면 정리하고 대기”를 요청했다. **회의 전 준비는 완료, 실제 전환은 회의 이후**로 확정하고 대기한다. Google 제한 미확인·Eximbay 브라우저 비밀키 문제는 해결 완료가 아니라 기록된 후속 조치다. 다음 명시적 재개 전까지 추가 조사·제품/설정/문서 변경·검증 확장·배포·자동 모니터링을 하지 않는다. 노션/Jira의 동일 상태를 반복 편집하거나 댓글로 추가하지 않고 이번에는 개인 체크포인트만 저장한다.
 - 사용자가 Google/Eximbay 보안 분류를 재검토한 뒤 회의 전 가능한 코드·설정·문서 보완을 승인했다. 후속으로 “너무 오래 걸리니 넘어갈 것은 넘어가고 빠르게 마무리, 모르면 Secrets에 보관”을 요청했다. 불확실한 키는 비공개 보관하되 브라우저 소비 시 노출은 별도라는 설명 후 추가 콘솔 조사를 종료한다. 실제 배포·병합·env 추적 해제·키 회전은 승인/실행하지 않았다.
 - `/Users/parkjongsun/Repository/dentlink-client-env-management`, `feature/DL-16821`, 최신 `849df9256948b931bcf7e61e47b6214efffb108d` 정상 commit/push 완료. [PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713) OPEN Draft/base master, DRAFT label, `[WIP] ` 제목 유지. 원래 checkout과 기존 env 9개 내용·추적 유지.
 - Google 키는 Admin dev/stage/prd 모두 같은 기존 값이며 `public-build` → `build-secret`으로 변경했다. manifest·예제·로컬 갱신 가이드·분류표·테스트 반영. GitHub Admin3환경 `DENTLINK_BUILD_ENV`를 새로 저장한 뒤 `NEXT_PUBLIC_GOOGLE_MAP_API_KEY` Variable 제거. 전체9환경 Variables235개, Secrets8개(Admin build3+Clinic build3/E2E2). Secrets 원문 재조회는 못하며 저장 성공/이름만 확인했다. 공개 원본·업로드 payload는 기존 env와 값 일치를 검증했다.
