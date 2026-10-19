@@ -1,6 +1,14 @@
 # Dentlink Office App setup and current checkpoint
 
-## 현재 전달 상태 — 2026-10-19 권한별 API 설명 주석 PR329 반영 완료
+## 현재 전달 상태 — 2026-10-19 사용자 재승인으로 Office Staging v336 배포 완료
+
+- 사용자가 웹 stage 재전달 준비 후 앱도 기존 작업브랜치로 Staging CodePush를 다시 하도록 명시 승인했다. `feature/DL-16317@f037c80153b328bbb14fcafd5fb756a59fd4cc8e`를 양OS Staging **v336/2.2.4/mandatory/100%/enabled**로 전달했다.
+- 각 명령1회 exit0·서버 history·소스 설명/설정 확인. 격리 git archive967파일/immutable 설치/주요SDK와 native baseline 일치, 소스맵341자체파일 일치 검증. 기존 영상 크기 경고는 이전과 같은 force 경로로 성공.
+- PR329 OPEN→develop·headf037c80 유지, 본문 최신 v336/이전 v335 이력 반영. 원본worktree clean·Member시뮬레이터/Metro보존, Production/Development/Lab 및 태그/스토어/Slack/Jira 변경 없음.
+- 임시격리source/node_modules만 삭제했고 번들/maps/logs/metadata는 보존했다. `/tmp/dl16317-stg-codepush-repeat-current.json` 및 [권한관리 체크포인트](dentlink-permission-management.md) 참조.
+- 웹 PR4719 release병합 확인 후 master기준 stage 재생성 및 PR4720 release→stage 준비 완료. 웹 PR4720 사용자 병합·배포, 앱 실제 기기v336적용/QA·개발자리뷰/병합·운영전달은 별도다.
+
+## 이전 전달 상태 — 2026-10-19 권한별 API 설명 주석 PR329 반영 완료
 
 - 사용자 승인에 따라 기존 `feature/DL-16317`에 `f037c80153b328bbb14fcafd5fb756a59fd4cc8e`를 커밋·푸시했다. HomePaymentReplacementBanner.tsx 주석5줄만 변경했으며 ESLint/diff PASS, 원격 일치·clean이다.
 - PR329 OPEN/비Draft→develop 최신 head·본문 반영·현재 작업 attach 확인. 앱 직접 호출이 없는 웹 결제GET3개와 기존 배너의 OWNER/PAYMENT_MANAGER 조건을 구분했다.

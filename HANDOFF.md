@@ -46,10 +46,9 @@ Do not store secrets or private customer data here.
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
   — 2026-10-16 PR #4705의 develop 병합 완료. 운영 릴리스는 별도이며 원본과 날짜별 전달 브랜치를 보존한다.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
-  — 2026-10-19 웹 결제 GET3개 권한 보완을 feature/DL-16317-api-permissions@5bdad60e6로 커밋·푸시, PR4719 OPEN→release/v1.89.0 생성 완료.
-  관련28tests·세앱type·정상push hook 통과(기존lint warning), 원격일치·clean. 앱 기존 feature/DL-16317@f037c80 주석1파일만 PR329→develop에 반영·본문 보완.
-  양PR 미병합·웹 수정 미배포, 앱 런타임 변경이 없어 추가 CodePush 불필요. Stagingv335/2.2.4 실제소스5c3504d 유지.
-  다음은 웹PR 사용자 병합·배포 후 권한별 확인 및 기존 앱 개발자 리뷰/QA다. 복사용 PM/백엔드 설명은 사용자에게 전달하며 별도 메시지/Jira/배포 조치는 하지 않았다.
+  — 2026-10-19 PR4719 사용자release병합(fef630005) 확인 후 stage를 master8772d6882에서 재생성, PR4720 OPEN release→stage 준비완료(12커밋/390파일).
+  웹은 사용자 PR병합·배포 전이며 기존stage복구ref/전체변경/Actions경계를 정본에 보존했다. 앱은 사용자재승인으로 feature/DL-16317@f037c80 양OS Stagingv336/2.2.4 mandatory100%enabled 전달·서버/소스맵341파일확인완료.
+  PR329 OPEN→develop 유지·본문최신화, 원본worktree/시뮬레이터/Metro 보존·임시buildsource만정리. 다음은 웹사용자병합/배포 및 앱기기적용/QA·개발자리뷰다.
 
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — PR #4699의 release/v1.89.0 병합 완료. QA·운영 출시 별도이며 브랜치는 보존한다.
