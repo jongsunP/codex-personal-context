@@ -6,9 +6,13 @@
 제품 코드·브랜치·PR·Jira·배포·서버 데이터는 변경하지 않았다. 정적 소스/메뉴/화면/요청 연결 대조를 완료했으며
 실계정·실기기 QA 또는 현재 설치된 OTA의 기능을 검증한 결과는 아니다.
 
-- 사용자 요청으로 [모바일 웹 대비 앱 미지원 기능 현황](https://app.notion.com/p/innovaid/3fece072e82f80d5a02fda9a76cd51b7)의 기존 표에 치과 11개·기공소 8개 항목을 반영했다.
+- 사용자 요청으로 [모바일 웹 대비 앱 미지원 기능 현황](https://app.notion.com/p/innovaid/3fece072e82f80d5a02fda9a76cd51b7)의 기존 표를 채웠으며, 재검토 보완 후 치과 12개·기공소 10개 항목이다.
   기능·웹 경로·앱 현황을 채우고 확인자 열은 모두 `Frankie`로 표시했다. 우선순위·사용 빈도는 미산정으로 비워두었다.
   코드 조사/실기기 미확인과 부분지원 예외를 표 안에 명시했으며, 표 밖의 기존 내용과 5열 구성을 보존했음을 재조회로 확인했다.
+- 사용자의 추가 재검토 요청으로 기존 19항목을 담당을 교차해 다시 읽고 웹 master·양 앱 main의 원격 SHA가 조사 기준과 같음을 확인했다.
+  기존 분류는 유지하되, 양쪽의 받은 초대 수락·소속 가입 2항목과 SHARED 전용 목록·조회 1항목을 보완했다.
+  SHARED 정산은 실제 기능이 아닌 준비 중 화면이며 모바일에서 숨긴 등록/재고조정 버튼도 누락 비교에서 제외한다.
+  이는 정적 코드 교차검토이며 설치 앱/OTA·계정별 실제 동작 검증으로 확대하지 않는다.
 
 ### 비교 기준
 
@@ -31,9 +35,9 @@ fetch 후 고정한 소스를 조사용 임시 사본에서 읽었다. 기존 �
 
 | 대상 | 모바일웹 대비 앱에서 빠지거나 제한된 사용자 흐름 |
 | --- | --- |
-| 양쪽 공통 | 알림 이력함의 조회·읽음·삭제, 신규 가입·비밀번호 찾기/변경·회원탈퇴의 앱 내 진입 |
+| 양쪽 공통 | 알림 이력함의 조회·읽음·삭제, 신규 가입·비밀번호 찾기/변경·회원탈퇴, 받은 초대 수락·소속 가입의 앱 내 진입 |
 | 치과 | 청구서·결제 내역·미납 결제 관리; Pickup 전용 목록/예약 관리; 치과·구성원·청구 담당자·가격표·Scanner Setup 페이지; 개인 프로필 편집·Promotional SMS 동의; 크레딧 이력/자동사용 설정·추천 관리; 신규 치과 소속 신청/연결 |
-| 기공소 | 전체 배송목록·배송 라벨 생성; 직원 초대/관리; 주문목록 카테고리·치과명·날짜 조건; 긴급/지연 주문 집계·모아보기; 소속 기공소 직접 선택 진입(구현 일부 있으나 현재 UI 비활성) |
+| 기공소 | 전체 배송목록·배송 라벨 생성; 직원 초대/관리; 주문목록 카테고리·치과명·날짜 조건; 긴급/지연 주문 집계·모아보기; 소속 기공소 직접 선택 진입(구현 일부 있으나 현재 UI 비활성); SHARED 계정의 설비·제품/옵션·자재 목록/조회(조건부 범위) |
 
 이 목록은 모든 항목을 버그 또는 추가 개발 확정 요구사항으로 선언하는 것이 아니다. 주로 **앱의 정상 메뉴·화면 진입 부재**이며,
 앱 내 임의 채팅/CMS 링크를 통한 우회까지 불가능하다는 뜻은 아니다. 권한에 따른 웹 기능은 같은 권한의 사용자를 기준으로 비교한다.
@@ -74,10 +78,10 @@ fetch 후 고정한 소스를 조사용 임시 사본에서 읽었다. 기존 �
 | Pickup 전용 관리(오늘·예정·과거 목록, 별도 예약/재예약·확정) | web `menus.ts:48-55`, `clinic/src/pages/pickup/index.tsx:30-177`, `shared/ui/src/PickupUI/PickupUI.tsx:87-111` | 전용 목록·관리 화면 진입 없음(AllScreens:27-51). **주문 작성 과정의 PVS/픽업 예약은 있음:** `src/libs/useUpdateOrderAdditional.ts:200-208,270-281`, `src/services/office.service.ts:220-242`. 픽업 전체 불가로 표현 금지. |
 | Office 운영관리(구성원 목록·상세, 치과정보 수정, 청구 담당자, Office dashboard·scanner 계약정보) | web `menus.ts:100-128`; `clinic/src/pages/office/managed/index.tsx:123-219` 모바일 탭/목록; `clinic/src/components/OfficeMemberList/OfficeMemberMobileList.tsx:39-75` 상세; `OfficeManaged/OfficeManagedEmployerInfo.tsx:60-63,92-102` OWNER 수정 | 앱 기본 진입 없음. `EmployeeSelectBottomSheet.tsx:54-87` 기존 소속 전환·결제수단만. 앱 치과 전환은 제공. 구성원 초대/권한 수정의 세부 모바일 허용 여부까지 일괄 확정하지 않음. |
 | Fee Schedule / Scanner Setup | web `menus.ts:110-118` 모바일 메뉴에 hide 플래그 없음; `clinic/src/pages/office/pricing/index.tsx:39-63`, `office/scanners/index.tsx:34-69` | 앱 기본 진입 없음(AllScreens/profile/치과선택). 스캐너 draft 주문 수신과 스캐너 연결 설정은 별개. |
-| 개인 프로필 편집·계정 삭제·암호 변경 | web `clinic/src/pages/my/index.tsx:138-158` 사진 편집, `clinic/src/components/My/MyProfileSection.tsx:46-57` 전화번호 수정, `clinic/src/pages/my/SettingButton.tsx:10-17,36-59` Reset Password/Delete Account | 앱 편집 UI 없음. `src/features/profile/sections/ProfileOfficeSection.tsx:26-43` 읽기 표시, :45-66 설정·알림·링크·로그아웃. `src/features/profile/screens/ProfileScreen.tsx:78-94` 이동 콜백에도 없음. |
+| 개인 프로필 편집·계정 삭제·암호 변경 | web `clinic/src/pages/my/index.tsx:138-158` 사진 편집, `clinic/src/components/My/MyProfileSection.tsx:33-44` 전화번호 수정, `clinic/src/pages/my/SettingButton.tsx:10-17,36-59` Reset Password/Delete Account | 앱 편집 UI 없음. `src/features/profile/sections/ProfileOfficeSection.tsx:26-43` 읽기 표시, :45-66 설정·알림·링크·로그아웃. `src/features/profile/screens/ProfileScreen.tsx:78-94` 이동 콜백에도 없음. |
 | Promotional SMS 동의 | web `clinic/src/components/My/UserSetting.tsx:167-192` 모바일 스위치 | 앱 없음. ProfileNotificationSection:77-120의 푸시 설정과 SMS 동의는 별개. |
 | User/Office Credits 이력·User Credit 자동사용 설정 | web `HeaderProfilePopupMenu.tsx:44-87`; `clinic/src/pages/credit/index.tsx:107-118,140-151` 모바일 자동사용·내역; `OfficeManagedEmployerInfo.tsx:115-131` Office Credits 진입 | 관리 페이지 진입 없음/일부 제공. 앱 `src/features/order/steps/step4OrderDetailsAndSubmit/OrderSummarySection.tsx:79-106,210-248,272-302`에 주문별 크레딧 적용과 Office 자동적용 존재. credit 사용 전체 누락 아님. |
-| Referrals 추천 초대·내역 | web `HeaderProfilePopupMenu.tsx:89-117`, `clinic/src/pages/my/referrals/index.tsx:54-81` mobile layout·초대 | 앱 기본 진입 없음. `ProfileQuickLinksSection.tsx:32-44` Pending Reviews/Help Center만. |
+| Referrals 추천 초대·내역 | web `HeaderProfilePopupMenu.tsx:76-93`, `clinic/src/pages/my/referrals/index.tsx:54-81` mobile layout·초대 | 앱 기본 진입 없음. `ProfileQuickLinksSection.tsx:32-44` Pending Reviews/Help Center만. |
 | My Office 신규 소속 찾기·가입 신청·신청 취소/연결 관리 | web `MyQuickLinks.tsx:58-64`, `clinic/src/components/My/MyOffice.tsx:47-65,80-98` office/find·신청취소·추가 | 앱 기본 진입 없음. `EmployeeProfile.tsx:119-129`, `EmployeeSelectBottomSheet.tsx:54-87`은 이미 소속된 치과 전환. 새 치과 가입/연결과 기존 소속 전환을 구분. |
 | 신규 회원가입·로그인 전 비밀번호 찾기 | web `clinic/src/pages/auth/signin.tsx:15-33`, `clinic/src/lib/AuthSigninForm/useSigninForm.tsx:33-60` 가입·암호찾기 이동. signup에는 모바일 flow 있음(root 교차확인) | 앱 로그인에 없음. `src/features/auth/screens/SigninScreen.tsx:31-134` 이메일/암호/Sign In만, signup/forgot/reset 등록화면·외부 이동 버튼 없음. 초대수락·치과등록까지 앱내 온보딩이 있다고 볼 근거 없음. |
 
@@ -192,10 +196,26 @@ fetch 후 고정한 소스를 조사용 임시 사본에서 읽었다. 기존 �
 - 결제 수단: 앱 PaymentMethodScreen는 route만 있고 canManagePaymentMethod=false로 막지만, 일반 Lab 모바일웹에서 대응하는 정상 메뉴 진입을 확인하지 못했으므로 누락 목록에서 제외합니다.
 - 인쇄/Excel/고정 폭 표처럼 데스크톱 전용 컨트롤을 모바일웹 기능으로 포함하지 않습니다.
 
-## 밀링/공유기공소 계정 및 진행중 release 차이 — 별도 범위
+## 받은 초대 수락·소속 가입 — 양쪽 앱의 추가 누락
+
+- 신규 회원가입, 기존 소속 직접 전환, 직원 초대 발신/관리는 수신자의 초대 수락과 구분한다. 기존 계정도 해당 흐름을 사용할 수 있다.
+- 치과 웹 `clinic/src/components/OfficeInvitation/OfficeInvitationPage.tsx:121-129,172-179`에 Join Office와 모바일 레이아웃이 있고,
+  `clinic/src/lib/OfficeInvitation/useOfficeInvitation.tsx:122-132,402-432`에서 로그인 후 복귀·실제 수락을 처리한다.
+- 기공소 웹 `lab/src/pages/invitations/index.tsx:88-100,135-140`과 `lab/src/lib/LabInvitation/useLabInvitation.ts:111-146`에
+  모바일 수락 화면·로그인 후 복귀·수락 API·소속 활성화가 연결돼 있다.
+- 양쪽 앱 비생성 소스에는 초대 수락 화면·API 호출·전용 딥링크가 없다. `src/configs/utils/dentlinkWebURL.ts:48-58,258-268`의
+  지원 경로에 `/invitations`가 없어 원본 웹 URL을 유지하며 채팅 링크는 OS의 링크 열기로 전달한다.
+  따라서 앱 내 수락은 미지원이고 모바일웹으로 처리한다. 초대 링크 자체가 열리지 않거나 가입이 절대 불가능하다는 뜻은 아니다.
+
+## 밀링/공유기공소 계정 및 진행중 release 차이 — 조건부 범위
 
 - 웹 SHARED 계정은 `/mc` 공유기공소 관리 메뉴를 모바일 햄버거에서도 렌더합니다: `lab/src/components/Layout/SharedLabAside.tsx:44-104,194-219`.
-- 설비, 제품·옵션, 자재목록/입고/출고/재고, 정산(권한조건)이 존재합니다. 외부기공소는 `/milling` 흐름이며 일반Lab과 다른 계정 범위입니다.
+- 설비, 제품·옵션, 자재목록/입출고 내역/재고의 본문 목록·조회가 존재합니다. 외부기공소는 `/milling` 흐름이며 일반Lab과 다른 계정 범위입니다.
+- **재검토 정정:** 정산은 메뉴만 있고 `lab/src/pages/mc/settlements/index.tsx:3-4`가 빈 Layout을 반환해
+  `MillingCenterLayout.tsx:87-93`의 준비 중 화면을 표시합니다. 실제 정산 기능 차이에 넣지 않습니다.
+  같은 Layout `118-134`의 상단 headerAction은 모바일에서 숨겨지므로 등록·재고조정·이동까지 모바일 지원으로 확대하지 않습니다.
+- SHARED의 설비·제품/옵션·자재 목록/조회는 앱 main에 정상 진입이 없어 Notion에는 별도 조건부 항목으로 추가했습니다.
+  실제 목록·query 연결은 EquipmentList/ProductList/OptionList/MaterialList/InboundList/OutboundList/StockManagement에서 확인했습니다.
 - 앱 main에는 MillingOrderList/Detail 화면 자체가 있으나 RootNavigator의 등록과 Home 진입이 10/26 주석으로 꺼져 있습니다. 미구현이라고 단정하면 안 됩니다.
 - 앱 `release/v1.0.5`에는 MillingMaterialForm/Entry/Stock/Detail/QrScan 5개 화면 및 query/service가 추가됐습니다. RootNavigator에 위 5개는 등록돼 있지만 기존 밀링 주문 진입 블록은 여전히 주석입니다. 구현 존재·정상 진입·배포를 분리해야 합니다.
 - 웹 `release/v1.89.0`에는 INTERNAL 계정의 모바일 햄버거 `SiteResourceMenus`가 추가되어 설비·자재 메뉴 진입이 확대됩니다(`Header.tsx` diff 신규 3줄, 신규 SiteResourceMenus.tsx의 labType INTERNAL 조건).
