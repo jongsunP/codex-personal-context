@@ -27,21 +27,21 @@
 - 최종 HEAD의 [패키지 CI 39197666979](https://github.com/Innvoaid/dentlink-client/actions/runs/39197666979) verify SUCCESS / publish SKIPPED, [Admin CI 39197667069](https://github.com/Innvoaid/dentlink-client/actions/runs/39197667069) SUCCESS를 확인했습니다. CodeRabbit SUCCESS 표시는 실제 전체 리뷰 완료로 간주하지 않으며, 기존 파일 수 제한·유료 리뷰 제외 결정을 유지합니다.
 - 실제 계정의 전체 화면 QA·서비스 E2E·제품 배포를 이번에 다시 수행한 것은 아닙니다. 날짜·Modal 등 기존 UI 영향에 대한 릴리스 QA는 별도입니다. npm 시험 `0.1.5-pr.c567910` 성공은 이전 공개 근거이며 이번 HEAD의 신규 공개를 뜻하지 않습니다.
 
-### Jira 정리와 연결 도구 문제
+### Jira 정리와 연결 복구 완료
 
 - 연결 도구는 막혔지만 **로그인된 Chrome의 innovaid Jira에서 직접 수정·저장·새로고침 검증까지 완료**했습니다. Jira 미처리로 넘기지 않았습니다.
 - DL-16471: 현재 상태를 10월 19일 충돌 해결·검증·푸시 완료 / PR 미병합 / 하네스 후속으로 갱신했고, 기존 최신 진행 댓글을 수정했습니다. 새 댓글을 늘리지 않았습니다. 요구사항·기준 문서 링크·과거 검증 기록은 보존하고 편집 내용과 링크 보존도 대조했습니다.
 - DL-16437: 현재 통합 항목만 같은 상태로 갱신했습니다. 상위 댓글은 추가하지 않았습니다. DL-16466: 상단 후속 연결 안내만 갱신했습니다. 세 카드의 제목·담당자·상태는 그대로이며, DL-16437/16471 진행 중, DL-16466 Ready for Deploy입니다.
-- **별도 남은 연결 문제:** 신규 `Atlassian` 플러그인은 `dentlink.atlassian.net`(cloudId `1c3df8a7-3487-4b34-835c-5d9716424972`)만 승인되어 있습니다. 실제 카드의 `innovaid.atlassian.net`(cloudId `e167280a-9dbd-4306-a629-456c995be3c9`) 조회는 미승인 오류이고, 기존 `Atlassian Rovo`는 재인증 필요 오류입니다. 브라우저 로그인 성공은 플러그인 OAuth 복구를 의미하지 않습니다.
-- 사용자가 추후 연결을 복구하려면 플러그인 연결 설정에서 사용할 Atlassian 연결을 재연결하고 **innovaid.atlassian.net을 선택·승인**해야 합니다. 승인 목록에 해당 사이트가 없으면 innovaid에 접근 가능한 계정인지 확인한 뒤 연결 관리자에게 대상 사이트 승인 가능 여부를 요청합니다. 토큰을 채팅에 전달할 필요는 없습니다. 재연결 뒤 Codex가 accessible resources와 실제 DL-16471 읽기로 확인합니다. 그전에도 로그인된 브라우저로 이번처럼 처리할 수 있습니다.
-- Codex 앱 설정 자체의 컴퓨터 제어는 도구에서 허용하지 않아 직접 재연결 창을 열지는 못했습니다. 인증을 우회하거나 다른 사이트의 동명 카드를 수정하지 않았습니다.
+- **연결 복구 완료(같은 날 후속):** 신규 `Atlassian` 플러그인의 잘못된 `dentlink` 사이트 승인을 `innovaid.atlassian.net`으로 다시 연결했습니다. 사용자가 모바일에서 최종 승인 대행을 명시적으로 허락해 Codex가 수락했습니다. 브라우저의 연결 완료 표시뿐 아니라 플러그인 `getAccessibleAtlassianResources`에서 innovaid(read-write), 실제 `DL-16471` 조회 성공까지 확인했습니다. cloudId는 `e167280a-9dbd-4306-a629-456c995be3c9`입니다.
+- **확인한 재연결 경로:** Chrome에서 [Atlassian 플러그인 설정](https://chatgpt.com/settings/plugins-settings/plugin_asdk_app_6a83901dde988191b3f3cefdcc19acfa) → 연결된 계정 `jongsun@dentlink.app` 옆 메뉴 → 다시 연결 → Atlassian 연결 → Site에서 Innovaid 선택 → 승인. Codex 앱 자체는 컴퓨터 제어가 허용되지 않아 웹의 정식 관리 화면을 사용했습니다. 플러그인 제거·권한 우회·토큰 전달 없이 복구했습니다.
+- 앞으로 신규 `Atlassian` 플러그인을 사용합니다. 이전 `Atlassian Rovo (Legacy)`의 재인증 문제까지 해결하거나 플러그인을 제거한 것은 아닙니다. 이번에는 연결과 읽기만 검증했고 Jira 내용을 다시 변경하지 않았습니다.
 
 ### 다음 시작점
 
 1. 지금은 **PR 리뷰·병합 결정 대기**입니다. 사용자 지시 없이 병합·추가 개발·재배포·자동 모니터링하지 않습니다.
 2. 재개 시 personal context를 pull하고 실제 feature/release/PR HEAD·리뷰·checks를 갱신합니다. release가 `8d209ada9` 이후 바뀌었으면 이번 검증을 새 base 검증으로 오인하지 말고 추가 변경을 확인합니다.
 3. 리뷰 의견 또는 병합 지시가 오면 해당 범위를 처리합니다. 병합 이후 릴리스 QA → 릴리스 절차의 master 반영 → 정식 npm 공개·설치 확인 → Studio 반영 확인 → 하네스 보완 순서입니다. release 병합만으로 정식 npm·서비스 배포·Studio 적용이 모두 완료되는 것은 아닙니다.
-4. 연결 도구 복구는 제품 PR의 코드 차단 조건이 아닙니다. 현재 Jira 업데이트는 완료됐고, 향후 OAuth 복구가 필요한 경우에만 위 안내를 이어갑니다.
+4. Jira 업데이트와 신규 Atlassian 연결 복구 모두 완료됐습니다. 재개 시 신규 플러그인의 innovaid 사이트를 사용하며, 위 재연결 안내는 인증이 다시 만료될 경우에만 참고합니다.
 
 로컬 상세 근거는 `/tmp/dlds-release89-*-20261019.*`, `/tmp/dlds-pr4692-after-20261019.json`, `/tmp/dlds-jira-status-20261019.png`입니다. 다른 기기 복구는 임시 파일이 아니라 위 커밋·PR·CI·Jira·Git 메모리를 기준으로 합니다.
 

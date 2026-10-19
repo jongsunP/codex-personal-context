@@ -37,7 +37,7 @@ Do not store secrets or private customer data here.
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16471:
   [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
   — 2026-10-19 승인 후 최신 release89@8d209ada9 충돌을 해결하고 f027171bd 커밋·푸시, PR·Jira 정리를 완료했다. 기능·화면 로직 보존, 관련595테스트·타입/lint·패키지/Admin CI 통과. PR#4692는 충돌 해소·미병합·리뷰 필요 상태다.
-  사용자 요청대로 병합·하네스·배포 없이 대기한다. 새 release 변경은 재개 시 확인한다. Jira는 Chrome에서 저장 완료했으며, 별도의 Atlassian 플러그인 innovaid 사이트 OAuth 승인 문제와 복구 순서는 정본에 남겼다.
+  사용자 요청대로 병합·하네스·배포 없이 대기한다. 새 release 변경은 재개 시 확인한다. Jira는 Chrome에서 저장 완료했고, 후속 사용자 승인으로 신규 Atlassian 플러그인도 innovaid에 재연결해 DL-16471 실제 조회까지 성공했다. 확인한 웹 재연결 경로는 정본에 남겼다. Legacy 연결은 사용하지 않는다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — 승인된 UI 정리 PR #4642가 반영된 완료 이력. 미착수 조사로 되돌리지 않는다.
