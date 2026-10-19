@@ -1,5 +1,17 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-19 · 수정본 stage 반영·배포 시작, 사용자 결과 확인 대기
+## 현재 브레이크포인트 — 2026-10-19 · 10분 뒤 배포 결과 1회 확인 예약
+
+**최신 지시:** 사용자는 반복 조회가 불필요하므로 중단하고 **10분 뒤 딱 한 번만 확인**하도록 정정했습니다. 현재 스레드에 1회 후속 확인 예약(`automationId=automation`)을 만들었습니다. 그 전에는 GitHub/HTTP 상태를 더 조회하지 않습니다. 예약 실행 때 성공하면 배포·E2E를 구분해 보고하고, 실패하면 해당 로그만 조사합니다. 여전히 진행 중이면 그 사실만 보고하고 추가 반복/예약 없이 대기합니다. 실행 후 예약을 일시중지합니다. 코드 수정·추가 PR·병합·재배포는 하지 않으며, 앞으로 PR까지만 진행한다는 공통 기준은 유지합니다.
+
+- 대상 stage: `f4ebf42c5c4c2fdfa86344cb468a8838c052d1f7`, PR#4724로 반영된 빌드 복구본입니다.
+- Lab [39239823104](https://github.com/Innvoaid/dentlink-client/actions/runs/39239823104), Admin [39239823090](https://github.com/Innvoaid/dentlink-client/actions/runs/39239823090) 전체 workflow SUCCESS. 두 로그의 배포 이미지가 `stg-f4ebf42c5c4c2fdfa86344cb468a8838c052d1f7`임을 확인했습니다.
+- 19:59:39 KST, public HTTP200 및 BUILD_ID 변경 확인: Lab `bkOapaLOPnL_mOlP1Hk8H` → `H9BnnzHclgCkyCqYnIsi4`, Admin `K6qMkEIOBAYncKBrMYicJ` → `g5jhqntjRjtuUpiAKKicb`. 두 workflow는 ECS 안정화를 기다리지 않으므로 배포 요청 성공 및 새 화면 응답 확인으로 기록합니다. 생성 BUILD_ID가 로그에 없어서 배포 SHA와 서빙 BUILD_ID를 직접 대조한 것은 아닙니다.
+- Office [39239823093](https://github.com/Innvoaid/dentlink-client/actions/runs/39239823093)는 Docker 빌드·ECR push·정적 파일 업로드 SUCCESS, Seoul/Ohio 배포 안정화는 진행 중입니다. 완결 결과는 아래 작업 재개 시 실제 run에서 확인해야 합니다.
+- Office public HTTP200과 BUILD_ID `v4ANwhhFq5weLGovJdwXw` → `xG0W1d_UCknOIDfU24igM` 변경도 확인했습니다. 다만 마지막 관측에서 Seoul/Ohio 안정화는 진행 중으로, 전체 배포 완료 판정은 후속 확인 대상입니다.
+- 실제 CI Office 로그: TypeScript84초 완료, webpack82초 컴파일 성공. 세 웹 모두 이전 OOM 빌드 실패 단계를 통과했습니다. 서버 자원·힙 한도 변경 없이 FE 의존성 수정으로 통과한 근거입니다.
+- 사용자 FE의 기존 화면·날짜 선택·모달 QA, 정식 master/npm/Studio·하네스는 별도이며 이번 결과 확인에 포함되지 않습니다.
+
+## 이전 브레이크포인트 — 2026-10-19 · 수정본 stage 반영·배포 시작, 사용자 결과 확인 대기
 
 **최신 지시:** 사용자가 배포 결과는 직접 확인해 알려주겠다고 했습니다. Codex는 현재 상태를 정리·저장한 뒤 대기합니다. **배포 결과 추가 조회·HTTP 확인·자동 모니터링·재실행·병합·코드 수정·하네스 작업을 하지 않습니다.** 사용자의 결과 또는 후속 요청이 오면 해당 범위만 재개합니다.
 
