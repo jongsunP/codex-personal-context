@@ -35,6 +35,7 @@
 - **연결 복구 완료(같은 날 후속):** 신규 `Atlassian` 플러그인의 잘못된 `dentlink` 사이트 승인을 `innovaid.atlassian.net`으로 다시 연결했습니다. 사용자가 모바일에서 최종 승인 대행을 명시적으로 허락해 Codex가 수락했습니다. 브라우저의 연결 완료 표시뿐 아니라 플러그인 `getAccessibleAtlassianResources`에서 innovaid(read-write), 실제 `DL-16471` 조회 성공까지 확인했습니다. cloudId는 `e167280a-9dbd-4306-a629-456c995be3c9`입니다.
 - **확인한 재연결 경로:** Chrome에서 [Atlassian 플러그인 설정](https://chatgpt.com/settings/plugins-settings/plugin_asdk_app_6a83901dde988191b3f3cefdcc19acfa) → 연결된 계정 `jongsun@dentlink.app` 옆 메뉴 → 다시 연결 → Atlassian 연결 → Site에서 Innovaid 선택 → 승인. Codex 앱 자체는 컴퓨터 제어가 허용되지 않아 웹의 정식 관리 화면을 사용했습니다. 플러그인 제거·권한 우회·토큰 전달 없이 복구했습니다.
 - 앞으로 신규 `Atlassian` 플러그인을 사용합니다. 이전 `Atlassian Rovo (Legacy)`의 재인증 문제까지 해결하거나 플러그인을 제거한 것은 아닙니다. 이번에는 연결과 읽기만 검증했고 Jira 내용을 다시 변경하지 않았습니다.
+- **공통 전파 인계:** 사용자 요청으로 개인 context `761e34a`의 `AI_WORKFLOW.md`(Atlassian Connection Selection And Recovery)와 `AGENTS.md`에 신규 플러그인 선택·사이트 확인·오류 진단·복구 검증 기준을 저장·푸시했습니다. 메인세션 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`에 원본 사용자 지시와 함께 전달했고, 로컬 지침 동기화·관련 기존 세션 전파·신규 세션 안내 반영을 인계했습니다. 메인의 실제 전파 완료는 해당 세션에서 확인하며, 이 세션의 제품 작업 대기는 유지합니다.
 
 ### 다음 시작점
 
