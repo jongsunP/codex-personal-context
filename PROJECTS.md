@@ -184,11 +184,11 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-19:** 사용자 PR4719 release병합(fef630005) 확인. 원격 stage413ed3564를 복구 ref로 보존 후 master8772d6882에서 재생성, [PR4720](https://github.com/Innvoaid/dentlink-client/pull/4720) OPEN→stage 준비 완료(전체release12커밋/390파일).
-- 웹 PR4720은 사용자 병합·배포 전이다. 재생성 후 새 배포run 미관측, 이전stage의3제품run성공과 이번배포를 구분한다. 웹feature@5bdad60e6 clean유지.
+- **최신 2026-10-19:** 사용자 PR4719 release병합(fef630005) 확인. 원격 stage413ed3564를 복구 ref로 보존 후 master8772d6882에서 재생성, [PR4720](https://github.com/Innvoaid/dentlink-client/pull/4720) →stage 준비 후 사용자 병합완료(stage4b28c28a6, release와tree동일).
+- 웹 Clinic/Lab/Admin 최신3개배포run은 in_progress까지 확인했다. 최종성공/QA완료는 별도이며 웹feature@5bdad60e6 clean유지.
 - 사용자 재승인으로 앱 feature/DL-16317@f037c80를 양OS **Staging v336/2.2.4/mandatory100%enabled**로 CodePush 완료. 서버readback·소스맵341파일일치, PR329본문갱신·OPEN→develop유지.
 - 원본worktree·시뮬레이터/Metro 보존, 임시buildsource만정리. Production/Development/Lab·태그/스토어·Jira/Slack변경없음.
-- 다음은 웹PR 사용자병합·배포 및 권한별 확인, 앱기기v336적용/QA·개발자PR리뷰다. 전체QA/운영출시는별도.
+- 다음은 웹배포완료 및 권한별 확인, 앱기기v336적용/QA·개발자PR리뷰다. 전체QA/운영출시는별도.
 - 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 
 ### Dentlink 통합알림센터 — 사전 검토

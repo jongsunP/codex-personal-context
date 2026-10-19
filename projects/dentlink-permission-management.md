@@ -1,18 +1,18 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-19 웹 Staging 재전달 PR4720·앱 Staging v336 완료
+## 현재 상태 — 2026-10-19 웹 PR4720 사용자 병합·배포 진행 / 앱 Staging v336 완료
 
 - **최신 사용자 승인:** 사용자가 웹 PR4719 release 병합을 완료했다고 알리고, 설명한 기존 stage 재생성→release-to-stage PR 절차 진행을 요청했다. 웹 전달 준비 후 앱도 다시 기존 feature/DL-16317에서 Staging CodePush하도록 명시 승인했다. 이번도 일반 앱 PR/develop 통합 정책을 바꾸는 승인이 아니다.
 - **웹 release 확인:** PR4719 MERGED, merge SHA `fef63000543c32780c82abf202e15e9cef3c3d9c`, 2026-10-19 05:49:54Z. 원격 release/v1.89.0과 일치한다. 별도 PR4708(Lab 입고 검사서 보완)도 최신 release에 포함돼 있다.
 - **웹 stage 재준비 완료:** 기존 stage `413ed3564af9d888a49da2b62666851a948eaf6b`, master `8772d68825cac6e23792d86a715153a67dc71078`, 열린 stage PR0, protected=false/effective rules=[] 확인. `refs/recovery/stage-before-reset-20261019-api-permissions`에 기존 SHA를 보존했다. expected-SHA lease 삭제 후 비존재 lease로 최신 master에서 원격 stage를 재생성했다. 정상 push hook 두 번 모두 성공, 기존 lint warning 유지.
-- **웹 PR:** [PR4720](https://github.com/Innvoaid/dentlink-client/pull/4720), OPEN/비Draft, `release/v1.89.0@fef630005 → stage@8772d6882`, 12커밋/390파일의 전체 release PR. 직전 Staging 대비21파일 차이이며 권한 수정4파일만을 배포하는 PR은 아니다. 실제 base/head/full diff와 현재 작업 attach를 확인했다. 웹 task worktree는 feature/DL-16317-api-permissions@5bdad60e6 clean을 유지한다.
-- **웹 배포 경계:** 이번 PR은 아직 사용자 병합 전이다. branch 재생성 후 단일 Actions 조회에서는 이전 stage413ed3564의 Office/Lab/Admin run 성공만 보였으며 새 재생성 SHA 배포 run은 관측되지 않았다. 이번 수정의 웹 배포 완료로 보고하지 않는다. PR 병합과 이후 웹 배포는 사용자 담당이며 자동 polling/수동 dispatch/추가 merge/E2E/Vercel 처리를 하지 않았다.
+- **웹 PR 준비:** [PR4720](https://github.com/Innvoaid/dentlink-client/pull/4720), OPEN/비Draft, `release/v1.89.0@fef630005 → stage@8772d6882`, 12커밋/390파일의 전체 release PR. 직전 Staging 대비21파일 차이이며 권한 수정4파일만을 배포하는 PR은 아니다. 실제 base/head/full diff와 현재 작업 attach를 확인했다. 웹 task worktree는 feature/DL-16317-api-permissions@5bdad60e6 clean을 유지한다.
+- **웹 사용자 병합/배포:** 정리 중 사용자가 PR4720을 병합했다(mergedBy=jongsunP, 2026-10-19 06:03:47Z). stage `4b28c28a649a7a0cb7a32f6df67d7c7c1ed66c57`와 release `fef630005`의 tree가 동일함을 확인했다. 최신 SHA의 Office run39207769223 / Lab39207769115 / Admin39207769111 모두 **in_progress**인 것까지 확인했다. 웹 배포 최종 성공·화면QA 완료로 보고하지 않는다. 직접 PR 병합·workflow dispatch·E2E/Vercel 처리는 하지 않았으며 이후 자동 polling은 하지 않는다.
 - **웹 증거:** `/tmp/dl16317-stage-reset-api-permissions-20261019.json`, `/tmp/dl16317-stage-delete-api-permissions.log`, `/tmp/dl16317-stage-create-api-permissions.log`. 기존 feature/worktree/복구 ref는 보존했다.
 - **앱 배포 완료:** `/Users/parkjongsun/Repository/dentlink-app-permission`, `feature/DL-16317@f037c80153b328bbb14fcafd5fb756a59fd4cc8e`. iOS/Android 모두 **Staging v336**, target2.2.4, mandatory=true, rollout100, enabled. 기존 v335→v336으로 각 명령 한 번씩 실행 성공, 서버 history readback으로 소스 설명 f037c80·활성 설정을 확인했다. 주석 변경만이어도 실제 bundle hash가 달라 서버가 정상 신규 릴리스로 수락했으며 인위적으로 파일을 바꾸지 않았다.
 - **앱 검증:** git archive 격리 source967개 추적 파일이 HEAD와 동일하고 immutable install/lock/주요 SDK 버전이 이전 v335와 일치한다. v335 및 origin/main/develop 대비 네이티브·package·lock·env 차이0. 양OS 소스맵 자체 JS/TS341개(src339+App.tsx/index.js)가 최종 feature와 모두 일치한다. 기존 isv.mp4 1.48MiB 경고는 기존 --force 경로로 성공했으며 실패·중복 재시도 없음.
 - **앱 패키지 hash:** iOS `bbd7e3bdfe404cec947609162559fe52837142312c3391e8ee6f867491caa937`, Android `aa708c31cf9841f80fba1066af1d4d9c3edb1e778ae9f65aea9a15e8aef5342b`.
 - **앱 기록/정리:** `/tmp/dl16317-stg-codepush-repeat-current.json`; 산출물 `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dl16317-stg-repeat-20261019-5ab76uf4`. 번들/maps/logs/metadata는 보존하고 배포용 임시 source/node_modules만 삭제했다. 원본 worktree clean/원격 일치, Member 시뮬레이터·Metro 유지. Production/Development/Lab·태그·스토어 배포는 변경하지 않았다.
-- **PR/다음:** 앱 PR329 OPEN→develop/headf037c80 유지, 본문에 최신 Stagingv336과 기존v335 이력 구분. 실제 기기 다운로드·재시작·v336 적용 및 권한별 전체QA는 별도다. 웹은 사용자 PR4720 병합·배포 후 권한별 API 호출 여부를 확인한다. 앱 개발자 PR리뷰·병합/운영 전달은 별도이고, 추가 제품 코드 변경·Jira/Slack 등 메시지 전송은 하지 않았다.
+- **PR/다음:** 앱 PR329 OPEN→develop/headf037c80 유지, 본문에 최신 Stagingv336과 기존v335 이력 구분. 실제 기기 다운로드·재시작·v336 적용 및 권한별 전체QA는 별도다. 웹은 현재 배포 완료 후 권한별 API 호출 여부를 확인한다. 앱 개발자 PR리뷰·병합/운영 전달은 별도이고, 추가 제품 코드 변경·Jira/Slack 등 메시지 전송은 하지 않았다.
 
 ## 이전 상태 — 2026-10-19 권한별 결제 API 보완 커밋·푸시·PR 전달 완료
 

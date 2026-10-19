@@ -6,7 +6,7 @@
 - 각 명령1회 exit0·서버 history·소스 설명/설정 확인. 격리 git archive967파일/immutable 설치/주요SDK와 native baseline 일치, 소스맵341자체파일 일치 검증. 기존 영상 크기 경고는 이전과 같은 force 경로로 성공.
 - PR329 OPEN→develop·headf037c80 유지, 본문 최신 v336/이전 v335 이력 반영. 원본worktree clean·Member시뮬레이터/Metro보존, Production/Development/Lab 및 태그/스토어/Slack/Jira 변경 없음.
 - 임시격리source/node_modules만 삭제했고 번들/maps/logs/metadata는 보존했다. `/tmp/dl16317-stg-codepush-repeat-current.json` 및 [권한관리 체크포인트](dentlink-permission-management.md) 참조.
-- 웹 PR4719 release병합 확인 후 master기준 stage 재생성 및 PR4720 release→stage 준비 완료. 웹 PR4720 사용자 병합·배포, 앱 실제 기기v336적용/QA·개발자리뷰/병합·운영전달은 별도다.
+- 웹 PR4719 release병합 확인 후 master기준 stage 재생성 및 PR4720 release→stage 준비 완료. 웹 PR4720은 정리 중 사용자 병합(stage4b28c28a6)됐고 3제품 배포가 진행 중이다. 배포 최종 성공·앱 실제 기기v336적용/QA·개발자리뷰/병합·운영전달은 별도다.
 
 ## 이전 전달 상태 — 2026-10-19 권한별 API 설명 주석 PR329 반영 완료
 

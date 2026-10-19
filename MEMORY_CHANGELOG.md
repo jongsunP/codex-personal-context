@@ -2,6 +2,8 @@
 
 ## 2026-10-19
 
+- 권한관리 종료 확인 중 사용자가 웹 PR4720을 병합했다. stage4b28c28a6와 releasefef630005 tree일치, 최신Office/Lab/Admin배포3건 in_progress까지 확인했다. 앱v336 완료와 웹배포진행을 분리해 정본/색인을 갱신했으며 최종웹성공·QA로 확대하지 않는다.
+
 - 권한관리 사용자 PR4719 release병합(fef630005) 후 웹 Staging 재전달을 승인했다. 기존stage413ed3564를 복구ref로 보존하고 master8772d6882에서 lease삭제/재생성, 전체release PR4720→stage를 준비했다. 사용자병합/웹배포는아직이다.
   이어 명시재승인으로 Office feature/DL-16317@f037c80 양OS Stagingv336/2.2.4 mandatory100%enabled CodePush 완료, 서버readback·소스맵341개일치확인. PR329본문최신화·미병합유지.
   임시격리source만삭제하고산출물보존, 원본worktree/Member시뮬레이터/Metro유지. Production/Development/Lab·태그/스토어·Jira/Slack변경없고기기적용/QA는별도다.
