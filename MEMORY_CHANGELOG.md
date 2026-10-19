@@ -2,6 +2,12 @@
 
 ## 2026-10-19
 
+- DLDS PR#4692에 최신 release89@8d209ada9를 반영해 충돌12개·신규 import/mock 경로를 정리하고 f027171bd로 정상 커밋·푸시했다.
+  릴리스 유입385경로 누락없음·제품308개 본문동일/import만 변경 확인, 관련595테스트·세앱 타입/lint·패키지/Admin CI 통과.
+  기존 navigation15실패는 최신release원본과 동일하며 PR은 MERGEABLE·리뷰필요·미병합으로 유지한다.
+  Atlassian 플러그인 대상사이트 승인 문제가 남아 Chrome에서 Jira3본문·기존 진행댓글을 직접 정리·재조회했다.
+  제품 병합·하네스·재배포 없이 대기하고, 향후OAuth복구 방법과 재개기준을 프로젝트 정본/HANDOFF에 남겼다.
+
 - 권한관리 웹·앱 QA 요청을 사용자가 완료했으며 결과가 나오면 재개하기로 했다. 추가 개발·배포·조회·모니터링 없이 대기하며 기존 브랜치/worktree·앱 PR329 미병합 상태를 보존한다.
 
 - 권한관리 사용자 추가승인으로 Office feature/DL-16317@5c3504d를 양OS Stagingv335(target2.2.4,mandatory100%enabled)로 직접CodePush했다.

@@ -1,5 +1,53 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-16 · 다른 브랜치 반영 후 일괄 충돌 해결 지시 대기
+## 현재 브레이크포인트 — 2026-10-19 · 최신 release89 충돌 해결·검증·푸시 완료, PR 미병합
+
+**범위와 결정:** 사용자가 일괄 충돌 해결을 재개하도록 명시적으로 승인했습니다. 추가된 다른 작업의 기능·의도를 유지하며 DLDS/DLOS 구조·import 연결만 정리하고, 검증·커밋·푸시·PR·Jira·메모리까지 마무리했습니다. **PR 병합은 아직 하지 말라는 최신 지시를 유지**합니다. 하네스 확장·정식 npm 재공개·제품 배포는 실행하지 않았습니다. 아래 10월 16일의 충돌 해결 보류는 과거 기록입니다.
+
+### 코드·PR 저장 상태
+
+- 정본: `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16471-dlds-dlos-integration`.
+- HEAD/origin: **`f027171bd969efaeb142920f539976a5b7d0a28c`**, 정상 커밋·푸시 완료, 작업트리 clean. 커밋: `chore: 릴리스 변경을 보존하며 DLDS 통합 충돌 해결`.
+- 병합 부모는 기존 DLDS `fcbf17a9aedd88f29bee7f0925208dda7b0fc654`와 최신 release `8d209ada93698208dcf407d61d3d5e5e3fe72b0b`입니다. feature 안에서 release를 합쳐 충돌을 해결한 것이며, GitHub PR을 release에 병합한 것은 아닙니다.
+- [PR#4692](https://github.com/Innvoaid/dentlink-client/pull/4692): OPEN, non-Draft, 대상 `release/v1.89.0`, **MERGEABLE**, 팀 리뷰 `REVIEW_REQUIRED`. 본문을 실제 변경·검증·제한과 다음 순서로 갱신하고 재조회했습니다. 이전의 `CONFLICTING / DIRTY`는 해소됐습니다. 리뷰 조건으로 BLOCKED가 표시되는 것과 코드 충돌을 구분합니다.
+- release에는 기존 기준 이후 #4697·#4681·#4699·#4700·#4706·#4701·#4710·#4703·#4714·#4716의 변경이 포함돼 있습니다. 권한·주문·밀링센터·QR·결제 배너·Invoice 등 기능을 보존했습니다.
+
+### 정리한 내용과 보존 확인
+
+- 충돌 12개 파일을 해결했습니다. Clinic 회원 권한/주문상세/온보딩, 공통 주문폼·주문상세·목록·크레딧과 잠금파일에 양쪽 변경을 함께 반영했습니다.
+- 충돌 없이 추가된 Clinic·Lab 코드도 확인해 없어진 UI 경로를 `@innvoaid/dlds`로 연결했습니다. Clinic 테스트 9개와 Lab 소속 전환 테스트의 mock 경로도 맞췄습니다. 기존 서비스 Button은 **`LegacyButton as Button`**, 기존 Button.refactor는 공개 `Button`으로 구분합니다.
+- release에서 유입된 변경 경로 385개와 이번 병합 커밋의 변경 경로가 정확히 같습니다. 유입 누락·범위 밖 경로 0. 제품 코드 308개는 242개 동일, 66개 import만 다르며 **import를 제외한 로직·JSX·스타일 AST 차이 0**입니다. 변경된 import 125종의 컴포넌트/타입 대응과 바인딩 누락 없음도 독립 확인했습니다.
+- 릴리스의 `jsqr@1.4.0`과 lock 추가 7줄을 유지했습니다. 기존 DLDS 패키지 의존성·React 타입 버전도 보존했습니다. 이번 병합에서 `shared/dlds`, `shared/dlos`, `shared/icons` 구현·버전, 배포 workflow, env·gitignore를 추가 변경하지 않았습니다.
+
+### 검증 결과와 한계
+
+- frozen 설치, Clinic/Lab/Admin 전체 타입 검사, 패키지 3종 타입, Admin DLOS guard(허용량 60 유지)·관련 테스트, package artifact/bootstrap 규칙 검사 통과.
+- 최신 release의 추가·수정 테스트: **Clinic 25 suites / 307 tests, Lab 36 suites / 288 tests, 합계 595개 통과**. Lab 소속 전환 node 테스트 8개도 통과했습니다. assertions·fixture·업무 기대값은 변경하지 않았습니다.
+- 정상 commit/push hook의 세 앱 타입·lint, Admin guard·shared coverage도 통과했습니다. hook 우회 없음. 기존 lint 경고는 유지됩니다.
+- 기존 Lab navigation은 11통과/15실패입니다. 최신 release `8d209ada9`의 별도 원본 사본에서도 직접 실행해 **동일한 15개 실패명·원인·actual/expected**를 확인했습니다. 이번 통합의 신규 회귀는 아니며, 전체 테스트 성공으로 표시하지 않습니다. 삭제된 Outsourcing 경로·오래된 기대값/VM mock 등의 별도 정비 범위입니다.
+- 최종 HEAD의 [패키지 CI 39197666979](https://github.com/Innvoaid/dentlink-client/actions/runs/39197666979) verify SUCCESS / publish SKIPPED, [Admin CI 39197667069](https://github.com/Innvoaid/dentlink-client/actions/runs/39197667069) SUCCESS를 확인했습니다. CodeRabbit SUCCESS 표시는 실제 전체 리뷰 완료로 간주하지 않으며, 기존 파일 수 제한·유료 리뷰 제외 결정을 유지합니다.
+- 실제 계정의 전체 화면 QA·서비스 E2E·제품 배포를 이번에 다시 수행한 것은 아닙니다. 날짜·Modal 등 기존 UI 영향에 대한 릴리스 QA는 별도입니다. npm 시험 `0.1.5-pr.c567910` 성공은 이전 공개 근거이며 이번 HEAD의 신규 공개를 뜻하지 않습니다.
+
+### Jira 정리와 연결 도구 문제
+
+- 연결 도구는 막혔지만 **로그인된 Chrome의 innovaid Jira에서 직접 수정·저장·새로고침 검증까지 완료**했습니다. Jira 미처리로 넘기지 않았습니다.
+- DL-16471: 현재 상태를 10월 19일 충돌 해결·검증·푸시 완료 / PR 미병합 / 하네스 후속으로 갱신했고, 기존 최신 진행 댓글을 수정했습니다. 새 댓글을 늘리지 않았습니다. 요구사항·기준 문서 링크·과거 검증 기록은 보존하고 편집 내용과 링크 보존도 대조했습니다.
+- DL-16437: 현재 통합 항목만 같은 상태로 갱신했습니다. 상위 댓글은 추가하지 않았습니다. DL-16466: 상단 후속 연결 안내만 갱신했습니다. 세 카드의 제목·담당자·상태는 그대로이며, DL-16437/16471 진행 중, DL-16466 Ready for Deploy입니다.
+- **별도 남은 연결 문제:** 신규 `Atlassian` 플러그인은 `dentlink.atlassian.net`(cloudId `1c3df8a7-3487-4b34-835c-5d9716424972`)만 승인되어 있습니다. 실제 카드의 `innovaid.atlassian.net`(cloudId `e167280a-9dbd-4306-a629-456c995be3c9`) 조회는 미승인 오류이고, 기존 `Atlassian Rovo`는 재인증 필요 오류입니다. 브라우저 로그인 성공은 플러그인 OAuth 복구를 의미하지 않습니다.
+- 사용자가 추후 연결을 복구하려면 플러그인 연결 설정에서 사용할 Atlassian 연결을 재연결하고 **innovaid.atlassian.net을 선택·승인**해야 합니다. 승인 목록에 해당 사이트가 없으면 innovaid에 접근 가능한 계정인지 확인한 뒤 연결 관리자에게 대상 사이트 승인 가능 여부를 요청합니다. 토큰을 채팅에 전달할 필요는 없습니다. 재연결 뒤 Codex가 accessible resources와 실제 DL-16471 읽기로 확인합니다. 그전에도 로그인된 브라우저로 이번처럼 처리할 수 있습니다.
+- Codex 앱 설정 자체의 컴퓨터 제어는 도구에서 허용하지 않아 직접 재연결 창을 열지는 못했습니다. 인증을 우회하거나 다른 사이트의 동명 카드를 수정하지 않았습니다.
+
+### 다음 시작점
+
+1. 지금은 **PR 리뷰·병합 결정 대기**입니다. 사용자 지시 없이 병합·추가 개발·재배포·자동 모니터링하지 않습니다.
+2. 재개 시 personal context를 pull하고 실제 feature/release/PR HEAD·리뷰·checks를 갱신합니다. release가 `8d209ada9` 이후 바뀌었으면 이번 검증을 새 base 검증으로 오인하지 말고 추가 변경을 확인합니다.
+3. 리뷰 의견 또는 병합 지시가 오면 해당 범위를 처리합니다. 병합 이후 릴리스 QA → 릴리스 절차의 master 반영 → 정식 npm 공개·설치 확인 → Studio 반영 확인 → 하네스 보완 순서입니다. release 병합만으로 정식 npm·서비스 배포·Studio 적용이 모두 완료되는 것은 아닙니다.
+4. 연결 도구 복구는 제품 PR의 코드 차단 조건이 아닙니다. 현재 Jira 업데이트는 완료됐고, 향후 OAuth 복구가 필요한 경우에만 위 안내를 이어갑니다.
+
+로컬 상세 근거는 `/tmp/dlds-release89-*-20261019.*`, `/tmp/dlds-pr4692-after-20261019.json`, `/tmp/dlds-jira-status-20261019.png`입니다. 다른 기기 복구는 임시 파일이 아니라 위 커밋·PR·CI·Jira·Git 메모리를 기준으로 합니다.
+
+## 이전 브레이크포인트 — 2026-10-16 · 다른 브랜치 반영 후 일괄 충돌 해결 지시 대기
+
+> 아래 보류 지시는 당시 기록이며, 위 2026-10-19의 사용자 재개 승인·완료 상태로 대체되었습니다.
 
 - **현재 결정:** `release/v1.89.0`에 다른 작업들이 계속 반영되고 있으므로, 사용자가 다른 브랜치 정리가 끝나고 **일괄 충돌 해결을 진행해도 된다고 알려줄 때까지** 현재 DLDS 브랜치를 그대로 둡니다. 지금은 충돌 해결·제품 코드 수정·PR 변경/병합·재배포·하네스 작업·자동 모니터링을 하지 않습니다. 리뷰나 릴리스 상태가 바뀌었다는 사실만으로 작업을 자동 재개하지 않습니다.
 - **마지막 확인(2026-10-16, 읽기 전용):** [PR #4692](https://github.com/Innvoaid/dentlink-client/pull/4692)는 OPEN, 대상 `release/v1.89.0`, GitHub `CONFLICTING / DIRTY`입니다. 이전 검증 기준 `af636cac8d6f1939dda7c628b1d4873cf86c89c0` 이후 release에 5개 커밋(#4681·#4699·#4700·#4706·#4701)이 추가됐습니다. 어떤 변경이 구체적으로 충돌을 일으켰는지는 아직 조사하지 않았습니다. 추가 반영마다 반드시 충돌한다는 의미는 아닙니다.
