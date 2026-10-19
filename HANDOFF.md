@@ -46,9 +46,11 @@ Do not store secrets or private customer data here.
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
   — 2026-10-16 PR #4705의 develop 병합 완료. 운영 릴리스는 별도이며 원본과 날짜별 전달 브랜치를 보존한다.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
-  — 2026-10-19 사용자 승인으로 앱feature6437dbb를 Office iOS/Android Development v138(2.2.4·mandatory·100% 활성)에 배포하고 read-back 완료.
-  공용 symlink 의존성 불일치를 피하려 HEAD archive+immutable install로 번들했다. 제품/공용 의존성 변경 없이 임시 빌드 소스를 정리했다.
-  실제 기기 적용/QA는 아직이며 사용자 요청까지 대기한다. PR 병합·웹/Lab·Staging/Production 배포는 하지 않았고 브랜치/worktree를 보존한다.
+  — 2026-10-19 Member 앱 QA의필터50:50과홈기존결제안내403 보완완료. 서버코드상OWNER/PM만허용함을확인해웹/앱전체역할조건정렬.
+  앱featurebe332c5·PR329반영및Office iOS/Android Development **v139**(2.2.4·mandatory100%활성)배포/read-back완료. 실제기기OTA적용/전체QA별도.
+  웹은release162422ab9기반 `codex/dl-16317-payment-banner@20be3ee65`, **PR4715 OPEN→release/v1.89.0** 생성·미병합.
+  앱시뮬레이터/Reactotron과필터3+배너임시10검증,웹14tests·3서비스타입·정상push검사PASS. 순서는앱v139실기기확인/웹PR검토·병합·배포후QA.
+  추가BE질문없고새UI/문구/파일없음. 공유의존성/네이티브/lock미변경,배포용임시source정리. 브랜치/worktree와Member시뮬레이터/Metro보존.
   — 최신 예외 감사에서 웹 추가 수정 없음. 앱 채팅·피드백·승인의 일시 오류 복구3건과 입력/첨부/완료 응답 경계를 보완했다.
   949e0f6/dafcad7/6437dbb 정상 커밋·푸시·PR329 본문 갱신, 기존6파일만 변경. 관련69 tests·lint PASS, 타입18진단 기존동일.
   새 UI/문구/정책/파일 없이 기존 refresh/Retry/앱·화면 복귀를 사용한다. Vercel은 사용자 지시로 제외했다.
@@ -61,7 +63,7 @@ Do not store secrets or private customer data here.
   DEV Admin/Member 메뉴·필터·NEW/FOLLOW_UP 저장·상세3종·링크·직접 URL·합성 담당 변경/복구 QA 기록을 보존한다.
   Draft9738·9739·9740 보존(제출/결제 없음). 새 수정의 배포본 QA는 아직이다.
   원본 웹 featuref4bfaf1bf와 worktree 보존, PR4700/4706 release 병합·DEV 사전 테스트 배포 기록 유지.
-  앱 PR329 OPEN→develop·feature6437dbb·clean, 미병합 유지. 이제 Development v138에 앱 보완이 포함됐으며 실제 기기 적용 후 QA한다.
+  앱 PR329 OPEN→develop·featurebe332c5·clean, 미병합 유지. Development v139에최종앱보완포함,실제기기적용후QA한다.
   다음은 사용자 DEV 배포 완료→경고 재확인→스테이징 QA, 앱은 PR329 포함 버전으로 실기기 QA.
   다른 역할·승인 대기 쓰기·다주문 지연 등 미실시 범위와 배포/Member 활성화 순서는 상세 체크포인트를 따른다.
 - Dentlink Billing Statement 명칭 변경 / DL-16796:

@@ -1,6 +1,16 @@
 # Dentlink Office App setup and current checkpoint
 
-## 현재 전달 상태 — 2026-10-19 권한관리 feature Development CodePush
+## 현재 전달 상태 — 2026-10-19 Member QA 보완 및 Development v139
+
+- `dentlink-app-permission`의 `feature/DL-16317@be332c5`에 필터 두 탭50:50과 홈 결제 안내 API의 전체 역할 조건을 커밋·푸시했다.
+  서버 보안 설정상 OWNER/PAYMENT_MANAGER만 허용하므로 EDITOR/VIEWER/MEMBER/권한미확정에서는 조회·배너표시를 막는다.
+  앱에서확인한Member403은기존결제배너권한누락이며주문요약0/0/0으로카드가없는현상과별개다.
+- iOS시뮬레이터 실제Member·Reactotron으로원인/수정/필터를확인했고,기존필터3개+최종배너임시10개검증통과(임시파일삭제).
+- 사용자승인으로최종be332c5를Office iOS/Android **Development v139**에배포했다. 양OS2.2.4·mandatory·100%활성·exit0·서버read-back·source map일치확인.
+  PR329 OPEN→develop·미병합. 실기기v139적용/전체QA·Staging/Production은별도다. fresharchive immutable설치로공유node_modules미변경.
+- 웹도같은서버기준으로QA PR4715→release/v1.89.0 생성,미병합·미배포. 상세원인/근거/hash/다음순서는[권한관리체크포인트](dentlink-permission-management.md)를따른다.
+
+## 이전 전달 상태 — 2026-10-19 권한관리 feature Development v138 CodePush
 
 - 사용자 승인으로 `feature/DL-16317@6437dbb` 전체 번들을 Office iOS·Android **Development v138**로 배포했다.
   대상2.2.4·mandatory·100% 활성 read-back 완료. PR329는 OPEN→develop·미병합이며 Staging/Production·웹/Lab 전달은 이번 대상이 아니다.

@@ -2,6 +2,13 @@
 
 ## 2026-10-19
 
+- 권한관리 Member 앱 QA를시뮬레이터·Reactotron으로재현했다. 홈결제배너GET403(code2005)과정상주문요약0/0/0을구분했다.
+  기존결제API는이번에추가한것이아니며backend보안코드3868da78에서OWNER/PM허용목록을확인했다. 사용자지시로기존전체권한까지웹/앱동일조건적용.
+  앱필터50:50·배너권한보완13b28d6/87cc46b/최종be332c5커밋·푸시·PR329본문갱신,양OSDevelopmentv139배포·서버read-back완료.
+  앱실제MemberQA·필터3+최종배너임시10검증(삭제)통과. 웹QA브랜치codex/dl-16317-payment-banner@20be3ee65/PR4715→release/v1.89.0생성,
+  기존3파일·14tests·3서비스type·정상push검사PASS. jsqr누락설치후재검증했고package/lock/env변경없음.
+  웹미병합·미배포,앱실기기OTA적용/전체QA별도. 임시진단복원/receiver종료·배포source정리,Member시뮬레이터/Metro·모든브랜치/worktree보존.
+
 - 사용자 요청에 따라 모바일웹 대비 앱 기능 차이 조사를 Notion 기존 치과 11행·기공소 8행 표에 반영했다.
   확인자 `Frankie`, 미지원/부분지원 및 코드 조사 한계를 표시하고 우선순위·빈도는 비워두었다. 표 밖 내용과 기존 양식 보존을 재조회 검증했다.
 
