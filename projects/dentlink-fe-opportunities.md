@@ -1,5 +1,18 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-19 · 사용자 통합 병합 완료, 스테이징 반영 PR 준비
+## 현재 브레이크포인트 — 2026-10-19 · stage 병합 완료, 세 웹 빌드 실패 확인·사용자 후속 지시 대기
+
+**최신 지시:** 사용자가 웹 재배포 후 메모리·Jira 정리와 대기를 요청했고, QA는 직접 진행한 뒤 결과를 주기로 했습니다. 정리 도중 실제 배포 실패가 확인되어 이를 즉시 알리고 아래처럼 기록했습니다. **배포 완료·이번 통합본 QA 가능 상태로 오인하지 않습니다. 코드 수정·재배포·추가 QA·하네스 개발·자동 모니터링은 하지 않고 대기합니다.**
+
+- PR#4692는 release/v1.89.0에 병합 완료(`f9a45fe02`). 사용자가 [PR#4722](https://github.com/Innvoaid/dentlink-client/pull/4722)도 18:45 KST에 병합했습니다. 원격 `stage=f38ad84936afd31fa1b4b7e4310d2f8b4bd4b06e`, 실제 stage tree는 release tree와 같은 `5251c0f49978a0e47ebb5f721266f72c2c5275e6`입니다.
+- **배포 실패:** 같은 stage SHA로 18:45 KST에 실행된 [Office/Clinic 39232399325](https://github.com/Innvoaid/dentlink-client/actions/runs/39232399325), [Lab 39232399322](https://github.com/Innvoaid/dentlink-client/actions/runs/39232399322), [Admin 39232399261](https://github.com/Innvoaid/dentlink-client/actions/runs/39232399261)이 모두 FAILURE로 종료됐습니다. 처음에는 in_progress로 관측했으나 18:49 KST 최종 확인에서 실패로 바뀌었습니다.
+- 세 앱 모두 Docker의 Next.js 빌드 중 `FATAL ERROR: ... JavaScript heap out of memory` → worker `SIGABRT` → build 명령 종료1이 직접 실패 원인입니다. 새 이미지의 서비스 배포까지 도달하지 않았으므로, 스테이징에 보이는 화면을 이번 통합본이라고 단정하면 안 됩니다. 기존 타입·595개 테스트·hook 통과가 이 Docker 빌드 성공을 입증하지는 않습니다.
+- **재개 조사 단서:** Office는 `Running TypeScript ...` 이후 약2,045MB 힙에서 실패, `dockerfiles/Dockerfile.clinic.stg:47`의 `pnpm build:clinic`입니다. Node20 Alpine builder에 명시적 힙 확대 설정이 없습니다. deps→builder 복사 목록의 `shared/dlds/node_modules` 부재도 관측됐지만 OOM과의 인과관계나 필요한 해결책은 아직 확인하지 않았습니다. Lab의 optional canvas/Python 경고 이후 설치는 계속됐고 최종 빌드 실패는 OOM입니다. 원인 배경을 단정하거나 설정·검사를 우회하지 않습니다.
+- **Jira:** 신규 Atlassian으로 [DL-16830](https://innovaid.atlassian.net/browse/DL-16830)의 본문을 PR 병합 완료·세 웹 배포 실패·사용자 QA 대기로 갱신하고 실제 재조회 일치를 확인했습니다. 목표·범위·기존 검증·npm/Studio 후속은 보존했고 `Ready for Deploy` 유지, 완료 처리는 하지 않았습니다. DL-16471은 실제 `진행 중`·통합 후 하네스 대기 그대로임을 확인했으며 변경하지 않았습니다. 상위 댓글·새 댓글은 추가하지 않았습니다.
+- **앱 범위:** 이번 DLDS/DLOS는 웹 변경입니다. Office/Lab의 WebView는 원격 웹 URL을 불러오며 앱 manifest에 DLDS/DLOS 패키지 직접 의존이 없어 이 변경만으로 CodePush·스토어 배포는 필요하지 않습니다. 스테이징 웹 배포 성공 후 해당 환경 앱의 웹 화면을 새로 열어 확인합니다. 앱 자체 기능·타 작업의 앱 배포까지 완료됐다는 뜻은 아닙니다.
+- **다음 시작점:** 사용자가 후속 진행을 요청하면 Git/실패 run/현재 배포를 다시 확인 → Docker 메모리 사용·빌드 경로 원인 조사 및 필요한 최소 수정 → 세 웹 재배포 성공·실제 반영 확인 → 사용자가 기존 화면과 날짜 선택·모달 등을 QA하고 결과 공유. 사용자가 먼저 QA 소식을 주면 어느 빌드에서 확인했는지와 배포 성공 여부부터 확인합니다. QA 결과 전에는 자동으로 하네스나 추가 기능으로 넘어가지 않습니다.
+- 개인 제품 checkout은 `feature/DL-16471-dlds-dlos-integration@f027171bd` clean으로 보존됩니다. 이번에는 제품 코드/PR/브랜치/배포를 추가 수정하지 않고 Git fetch·조회와 Jira·개인 메모리만 정리했습니다. 정식 master/npm/Studio 확인은 여전히 후속입니다.
+
+## 이전 브레이크포인트 — 2026-10-19 · 사용자 통합 병합 완료, 스테이징 반영 PR 준비
 
 - 사용자가 PR#4692를 직접 병합했습니다. GitHub MERGED·대상 `release/v1.89.0`·병합 SHA `f9a45fe02cead5a0d033598d60411a1ec67e1034`·병합 시각 18:34:21 KST를 확인했습니다. 아래 미병합·리뷰 대기는 과거 기록입니다.
 - 사용자가 기존 원격 stage 삭제와 배포 준비를 승인했습니다. 열린 stage PR 0건, stage branch protection 없음·적용 rules 0건을 확인한 뒤 이전 stage `4b28c28a649a7a0cb7a32f6df67d7c7c1ed66c57`를 SHA lease로 삭제하고 최신 master `8772d68825cac6e23792d86a715153a67dc71078`에서 nonexistence lease로 재생성했습니다. 원격 readback으로 stage=master를 확인했습니다.

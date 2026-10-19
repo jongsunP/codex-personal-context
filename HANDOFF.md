@@ -36,9 +36,9 @@ Do not store secrets or private customer data here.
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16830·DL-16471:
   [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-19 사용자가 PR#4692를 release/v1.89.0에 병합했다(f9a45fe02). 승인된 stage 삭제·master8772d6882 재생성 후 전체 release→stage PR#4722를 준비했다. OPEN/non-Draft·MERGEABLE·미병합이며 병합 시험 tree=release를 확인했다. 제품 checkout f027171bd는 clean으로 보존했다.
-  다음은 PR#4722 병합 및 Clinic·Lab·Admin 스테이징 배포 확인, 영향 화면의 기존 동작 QA다. PR 준비만 완료했으며 배포·QA·정식 npm·Studio·하네스 완료를 뜻하지 않는다. 사용자의 후속 지시 전에는 자동 리뷰·모니터링·하네스 작업 없이 대기한다.
-  Jira 통합은 DL-16830(마지막 확인 Ready for Deploy), 하네스는 DL-16471(마지막 확인 진행 중)에서 구분한다. 이번 stage 준비에서는 Jira를 변경하지 않았다. 신규 Atlassian 플러그인의 innovaid 사이트를 사용하고 Legacy는 사용하지 않는다.
+  — 2026-10-19 사용자 PR#4692 release병합(f9a45fe02), PR#4722 stage병합(f38ad84936) 완료·실제 stage tree=release 확인. 하지만 세 웹 stage 배포 모두 Docker/Next.js 빌드 중 heap out of memory로 FAILURE다. 배포 완료나 이번 통합본 QA 가능 상태로 기록하지 않는다. 제품 checkout f027171bd는 clean이다.
+  사용자는 QA를 직접 하고 결과를 주기로 했으며 정리 후 대기를 지시했다. 실패 사실을 알리고 코드수정·재배포·추가QA·모니터링·하네스 없이 대기한다. 후속 요청 시 실패run/현재배포확인→빌드원인해결→세웹배포성공확인→사용자QA 순서다. 이번 웹 변경으로 앱 CodePush/스토어 배포는 불필요하다.
+  Jira DL-16830은 본문을 병합완료·배포실패·사용자QA대기로 갱신·재조회했고 Ready for Deploy를 유지했다. 하네스 DL-16471은 진행 중·후속 대기이며 변경하지 않았다. 신규 Atlassian의 innovaid 사이트를 사용한다. 정식 npm·Studio·하네스는 별도다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — 승인된 UI 정리 PR #4642가 반영된 완료 이력. 미착수 조사로 되돌리지 않는다.
