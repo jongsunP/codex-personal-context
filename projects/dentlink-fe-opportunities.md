@@ -1,5 +1,46 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-19 · stage 병합 완료, 세 웹 빌드 실패 확인·사용자 후속 지시 대기
+## 현재 브레이크포인트 — 2026-10-19 · FE 빌드 복구 PR#4723 준비 완료, 병합·재배포 대기
+
+**최신 지시:** 사용자는 서버·백엔드·인프라 증설로 우회하지 않고 기존에 배포되던 조건에서 FE가 할 최선의 수정을 요청했습니다. 아이콘이 원인이면 제거·대체도 검토하되 기존 UI와 기능은 유지합니다. 이 요청으로 아래의 대기 상태를 해제하고 빌드 복구만 진행했습니다. 하네스·새 기능·병합·재배포는 진행하지 않았습니다.
+
+### 확인한 원인과 선택
+
+- 기존 stage와 실패 stage의 Node20 Alpine digest·Next16.2.7·TypeScript5.0.4는 같았습니다. 세 CI 실패는 TypeScript 검사 중 약2GB V8 힙 초과입니다.
+- 통합의 React 타입18.3 통일이 styled-components6.4.3의 비용이 큰 타입 추론을 드러냈습니다. 아이콘 registry의 타입만 단순화해도 OOM이 계속됐습니다. 반면 모든 아이콘·DLDS 코드를 유지한 채 styled-components 타입 버전을 바꾸면 완료되므로 아이콘을 삭제할 근거는 없었습니다.
+- React 타입18.2 원복은 styled props를 any로 약화해 메모리가 감소하는 문제가 있어 채택하지 않았습니다. 6.5.3은 현 TS5.0에서 내장 NoInfer 미해결로 검사가 약화되고, TS5.4+ 동반 변경은 다른 기능의 타입 오류까지 드러내 이번 최소 복구에서 제외했습니다. 중간 실험의 compiler 변경·callback 타입 수정·icon registry 수정은 최종 코드에 없습니다.
+- **선택: styled-components6.4.2 고정.** 공식6.5.0 릴리즈도6.4.2 이후 타입 검사 성능 회귀와 OOM 수정을 명시합니다. 6.4.2/6.4.3 웹 JS6종은 버전 문자열 외 byte 동일이고 dependencies도 동일합니다. CSS class hash/data-styled-version은 버전값 때문에 달라질 수 있어 모든 소비 앱·패키지를 같은 버전으로 맞췄습니다.
+- 작은 타입 probe에서 정상 JSX/as/attrs/ref 추론과 잘못된 prop6건 거절을 확인했습니다. 기존 React18.3/TS5.0/strict/skipLibCheck 설정은 그대로입니다. 타입 검사 비활성화·any shim·힙 확대는 하지 않았습니다.
+
+### 실제 변경
+
+- checkout `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, 새 후속 브랜치 `feature/DL-16830-build-memory`; 병합된 release `f9a45fe02cead5a0d033598d60411a1ec67e1034`에서 생성했습니다. 기존 통합 feature 브랜치는 보존했습니다.
+- 6개 manifest의 styled-components6.4.2 고정, DLDS/DLOS peer 범위 정렬, pnpm이 생성한 lockfile, 외부 소비자 부정 타입 검사5건 및 최소버전 smoke, 팀 문서의 버전 고정 사유를 정리했습니다.
+- 세 앱의 dev/stg/prd Dockerfile9개에 누락된 shared/dlds/node_modules 복사1줄씩 추가했습니다. 이는 FE 패키지 빌드 구성 보완이며 서버 자원·환경 파일·CI 배포 설정은 변경하지 않았습니다.
+- 깨끗한 로컬 webpack 빌드에서 별도로 확인한 미선언 직접 의존성을 기존 lock 버전으로 명시했습니다: 세 앱 date-fns2.30.0/@toast-ui/editor3.2.2, Admin date-fns-tz2.0.0, shared/ui react-device-detect2.2.3. 과거 성공이 캐시 덕분이었다는 인과관계는 확정하지 않았습니다.
+
+### 검증
+
+- Node20.20.2, 프로세스별 `--max-old-space-size=2048`: 세 앱 전체 타입 검사 통과(compiler reported memory Clinic1716046K/Lab1865407K/Admin1954073K). 같은 한도에서 기존6.4.3은 OOM을 재현했습니다.
+- **Clinic·Lab·Admin 로컬 Next.js 전체 빌드 모두 exit0**. 스테이징 env를 프로세스에 읽고 별도 `.next-build-check` 출력으로 검사했으며 env 파일은 바꾸지 않았습니다. BUILD_ID·페이지 manifest·standalone server.js를 확인했습니다. TypeScript5.1 권장 경고는 기존 상태로 남습니다.
+- package typecheck3종, DLOS381+DLDS149=530 tests, JS/DTS build3종, artifact script22tests, frozen lockfile 설치, diff check 통과.
+- 실제 tarball React18.2/19.0 소비자에서 설치·Bundler/NodeNext 타입 검사(잘못된 props5건 거절)·Vite build·Node ESM SSR 통과. 외부 consumer는 styled6.4.2/TS5.4.2, 제품은 기존TS5.0.4로 구분합니다.
+- 로컬 Docker runtime이 없어 Linux Docker 이미지를 실제로 빌드한 것은 아닙니다. 기존 CI는 build+push+배포가 묶여 있어 독단 재실행하지 않았습니다. 스테이징에는 아직 기존 실패 상태가 남아 있으며 실제 배포 성공·사용자 QA 완료로 말하지 않습니다.
+
+### 저장·현재 상태
+
+- 제품 커밋 `7585d178952b5c74cb1b1f431683685c84126e3c`, 원격 `origin/feature/DL-16830-build-memory` 동일 SHA 푸시 확인. pre-commit 세 앱 타입 검사와 pre-push lint·Admin guard·shared coverage 확인을 통과했습니다. 임시 빌드 출력은 제거했고 제품 worktree는 clean입니다.
+- [PR#4723](https://github.com/Innvoaid/dentlink-client/pull/4723) `feature/DL-16830-build-memory` → `release/v1.89.0`: OPEN, non-Draft, MERGEABLE, 미병합. 생성 직후 guard/verify CI는 진행 중으로 확인했으므로 완료로 간주하지 않습니다. PR#4692/#4722는 이미 병합된 원래 통합/스테이징 전달 PR이며 새 복구 PR과 구분합니다.
+- 현재 Atlassian `innovaid.atlassian.net`의 사용자 담당 DL-16830에 진행 댓글44486을 작성했고, 응답 body를 확인했습니다. 본문 업무 정의·상위 카드·하네스 카드는 변경하지 않았습니다. 상태는 Ready for Deploy 유지, 스테이징 배포 성공으로 처리하지 않았습니다.
+- 재현은 Node20에서 `NODE_OPTIONS=--max-old-space-size=2048 pnpm --filter <앱패키지명> exec tsc --noEmit --incremental false` 및 해당 앱 `next build --webpack`를 사용합니다. 이번 로컬 Next 검증은 스테이징 env를 자식 프로세스에 읽었고 임시 출력 경로는 정리했습니다. 다른 기기에서 임시 /tmp 파일이 있다고 가정하지 않습니다.
+
+### 다음 시작점
+
+1. PR#4723의 최신 head/base·CI·리뷰를 확인합니다. 병합은 사용자 지시 후 진행합니다.
+2. release/v1.89.0에 후속 수정 반영 → stage 전달·세 웹 재배포 → 해당 SHA의 Docker/배포 성공 확인.
+3. 사용자 FE가 날짜 입력·모달 등 기존 동작을 확인합니다. 웹 변경만으로 앱 CodePush·스토어 배포가 필요하다는 뜻은 아닙니다.
+4. 정식 master/npm/Studio·하네스 후속은 이후 별도 단계입니다.
+
+## 이전 브레이크포인트 — 2026-10-19 · stage 병합 완료, 세 웹 빌드 실패 확인·사용자 후속 지시 대기
 
 **최신 지시:** 사용자가 웹 재배포 후 메모리·Jira 정리와 대기를 요청했고, QA는 직접 진행한 뒤 결과를 주기로 했습니다. 정리 도중 실제 배포 실패가 확인되어 이를 즉시 알리고 아래처럼 기록했습니다. **배포 완료·이번 통합본 QA 가능 상태로 오인하지 않습니다. 코드 수정·재배포·추가 QA·하네스 개발·자동 모니터링은 하지 않고 대기합니다.**
 
