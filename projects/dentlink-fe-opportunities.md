@@ -1,5 +1,36 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-19 · FE 빌드 복구 PR#4723 준비 완료, 병합·재배포 대기
+## 현재 브레이크포인트 — 2026-10-19 · 수정본 stage 반영·배포 시작, 사용자 결과 확인 대기
+
+**최신 지시:** 사용자가 배포 결과는 직접 확인해 알려주겠다고 했습니다. Codex는 현재 상태를 정리·저장한 뒤 대기합니다. **배포 결과 추가 조회·HTTP 확인·자동 모니터링·재실행·병합·코드 수정·하네스 작업을 하지 않습니다.** 사용자의 결과 또는 후속 요청이 오면 해당 범위만 재개합니다.
+
+### 확인·실행한 것
+
+- 사용자가 복구 [PR #4723](https://github.com/Innvoaid/dentlink-client/pull/4723)을 병합했다고 알렸고, 실제 MERGED 상태와 `release/v1.89.0=62d4b2f7df6048b89cf6855f63252cbad36e1bb5`를 확인했습니다.
+- 기존 stage 대비 변경은 복구 수정 18개 파일(+97/-49)뿐이었습니다. 기존 stage는 삭제·재생성하지 않았습니다.
+- Codex가 [PR #4724](https://github.com/Innvoaid/dentlink-client/pull/4724) `release/v1.89.0 -> stage`를 생성하고 **2026-10-19 19:46 KST에 merge commit으로 병합했습니다.** 당시 '배포 프로세스 돌려줘'를 stage 반영·배포 실행까지로 해석했으나, 사용자가 직후 앞으로는 PR까지만 진행하도록 명확히 정정했습니다. 이후에는 아래 기준을 적용합니다.
+- stage SHA는 `f4ebf42c5c4c2fdfa86344cb468a8838c052d1f7`; release와 파일 tree가 같은 것을 확인했습니다. 부모는 이전 stage `f38ad84936afd31fa1b4b7e4310d2f8b4bd4b06e`와 release `62d4b2f7d`입니다.
+- 같은 stage SHA에서 세 배포가 자동 시작됐습니다. 별도 workflow_dispatch·이전 실패 run 재실행은 하지 않았습니다.
+  - [Office 39239823093](https://github.com/Innvoaid/dentlink-client/actions/runs/39239823093)
+  - [Lab 39239823104](https://github.com/Innvoaid/dentlink-client/actions/runs/39239823104)
+  - [Admin 39239823090](https://github.com/Innvoaid/dentlink-client/actions/runs/39239823090)
+- **마지막 확인은 세 workflow IN_PROGRESS**이며, Office는 Docker build-and-push 단계였습니다. 성공·실패·실제 서비스 반영·QA 결과는 아직 확인하지 않았습니다. 사용자가 결과 확인을 맡아 추가 조회를 중단했습니다.
+- 로컬 제품 checkout `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`은 `feature/DL-16830-build-memory`, HEAD/원격 `7585d178952b5c74cb1b1f431683685c84126e3c`이며 clean입니다. 이번 배포 준비에서 제품 코드를 추가 변경하지 않았습니다.
+- Jira DL-16830에 진행 댓글44487을 저장하고 응답 본문을 확인했습니다. 배포 시작·결과 사용자 확인 대기를 기록했으며, 본문 업무 정의와 Ready for Deploy 상태는 변경하지 않았습니다.
+
+### 앞으로의 병합·배포 기준
+
+- **기본 종료점은 PR 생성까지입니다.** '배포 준비', '배포 프로세스 진행'도 PR 병합 또는 자동 배포 실행 허가로 확대하지 않습니다.
+- 병합·배포는 사용자가 별도로 명시했을 때만 진행합니다. `release -> stage` PR도 동일합니다.
+- 공통 `AGENTS.md`와 `SESSION_WORKFLOW.md`에 이 기준을 기록했습니다. 이번에 이미 시작된 배포는 취소·재실행하지 않습니다.
+
+### 다음 시작점
+
+1. **사용자의 배포 결과 보고를 기다립니다.** 그 전에는 상태 재조회나 다른 작업을 하지 않습니다.
+2. 결과를 받으면 실제 대상 SHA·Office/Lab/Admin 결과와 남은 조치만 구분합니다. Office workflow는 빌드·Seoul/Ohio 배포·E2E를 구분하고, Lab/Admin은 `wait-for-service-stability:false`이므로 workflow 성공만으로 서비스 안정화까지 증명됐다고 하지 않습니다.
+3. 배포 성공 후 사용자 FE가 기존 화면·날짜 선택·모달 등을 QA합니다. 사용자가 오류를 알려주면 해당 문제만 처리합니다.
+4. master 반영·정식 npm·Studio·하네스는 별도 후속이며 이번 배포와 함께 자동 진행하지 않습니다.
+
+## 이전 브레이크포인트 — 2026-10-19 · FE 빌드 복구 PR#4723 준비 완료, 병합·재배포 대기
 
 **최신 지시:** 사용자는 서버·백엔드·인프라 증설로 우회하지 않고 기존에 배포되던 조건에서 FE가 할 최선의 수정을 요청했습니다. 아이콘이 원인이면 제거·대체도 검토하되 기존 UI와 기능은 유지합니다. 이 요청으로 아래의 대기 상태를 해제하고 빌드 복구만 진행했습니다. 하네스·새 기능·병합·재배포는 진행하지 않았습니다.
 

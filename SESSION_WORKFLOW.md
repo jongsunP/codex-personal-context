@@ -563,6 +563,12 @@ and PR state before acting.
 
 Use this normal post-PR delivery loop for Dentlink web feature work:
 
+**2026-10-19 clarification:** Delivery preparation stops at the PR, including
+`release -> stage`. Do not infer merge or automatic-deployment permission from
+"배포할 수 있게" or "배포 프로세스 돌려줘". After preparing the PR, wait for
+the user's separate explicit merge/deploy instruction. A merge that triggers
+deployment still requires this separate instruction.
+
 1. If CodeRabbit creates review threads and the user asks Codex to handle the
    review, apply the complete review-cycle authority defined in `AGENTS.md`:
    verify each finding, fix valid findings, keep the code unchanged with a

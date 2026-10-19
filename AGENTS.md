@@ -85,6 +85,10 @@
   `codex-personal-context` is different: at meaningful session closeout, commit
   and push its curated history automatically so the next session or device can
   recover it.
+- For delivery preparation, stop after creating the PR. A request to prepare
+  deployment or run the deployment process does not authorize merging that
+  PR or starting deployment automatically. Wait for a separate explicit
+  merge/deploy instruction; this also applies to release-to-stage PRs.
 - For every branch creation or rename, follow **Branch Naming And Draft PR
   Metadata** in `DEVELOPMENT_STYLE.md`. Use only the user's exact name or the
   repository's documented naming patterns. Agent prefixes such as `codex/`
