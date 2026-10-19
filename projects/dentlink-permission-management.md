@@ -1,5 +1,14 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 대기 — 2026-10-19 앱 develop 병합 완료, 이후 QA 전달 기준 확정
+
+- 사용자가 앱 작업브랜치를 develop에 병합했다고 알렸다. GitHub 실조회로 [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) **MERGED→develop**, mergedBy=jongsunP, 2026-10-19 18:13:16 KST, merge SHA `43f787909d29f4899a04fad04d3f452d98b53cad`를 확인했다. 조회 시 원격 develop도 같은 SHA다.
+- 기존 Staging 양OS v336/2.2.4는 `feature/DL-16317@f037c80153b328bbb14fcafd5fb756a59fd4cc8e`에서 전달한 빌드다. 사용자는 이를 유지하기로 했으며 병합만을 이유로 새 CodePush하지 않는다. 원격 feature와 로컬 worktree는 그대로 보존한다.
+- **소스 동등성 확인:** fetch한 develop43f7879와 v336 source featuref037c80의 전체 tree가 `355364f3d6b8c6971030170cad74dbe78e9a4be9`로 동일하다. 변경 파일0개, 네이티브/의존성 차이0개이며 worktree clean이다. 현재 병합만을 이유로 재배포할 필요가 없음을 코드로 확인했다.
+- **이후 이 Office 권한관리 QA의 전달 순서:** QA 내용을 작업브랜치에서 수정·검증 → develop에 PR/병합 → develop 전체 소스로 Staging CodePush. 이전의 feature 직접 Staging 전달 예외를 이후 QA에도 반복하지 않는다.
+- 다음 실제 전달 때는 develop에 함께 포함된 변경 및 설치 바이너리 호환성을 확인한다. 이 기록은 전달 계획이며 지금 새로운 코드 변경·병합·배포를 실행하라는 요청은 아니다. 다른 제품이나 운영/스토어 전달 정책까지 변경한 것으로 확대하지 않는다.
+- 앱 PR 병합은 완료됐으므로 남은 일로 유지하지 않는다. 현재는 QA 결과를 기다리며, 새로운 QA 또는 사용자 후속 지시가 있을 때만 재개한다. 웹 배포/전체QA의 이전 증거 경계는 그대로이고 이번에는 재조회하지 않았다.
+
 ## 대기 체크포인트 — 2026-10-19 사용자 정리·메모리화·대기 지시
 
 - 사용자가 추가 수정 없음과 앱 양OS Staging v336 전달 완료를 확인하고 정리·메모리화 후 대기를 요청했다. 지금 확인된 필수 FE 추가 조치는 없다.

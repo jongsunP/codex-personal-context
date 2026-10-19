@@ -1,5 +1,13 @@
 # Dentlink Office App setup and current checkpoint
 
+## 최신 대기 — 2026-10-19 권한관리 PR329 develop 병합 완료
+
+- 사용자 병합을 실조회로 확인했다. PR329 MERGED→develop, 18:13:16 KST, merge/current remote develop `43f787909d29f4899a04fad04d3f452d98b53cad`.
+- 현재 양OS Staging v336/2.2.4는 featuref037c80에서 전달된 빌드로 유지한다. 이번 메시지로 별도 CodePush하지 않는다. 기존 feature/worktree도 보존한다.
+- develop43f7879와 featuref037c80의 전체 소스 tree가 동일(355364f3d6b8c6971030170cad74dbe78e9a4be9), 변경0파일·네이티브/의존성차이0이다. 병합만을 이유로 재배포할 필요가 없다.
+- 이후 이 권한관리 QA는 **작업브랜치 수정·검증 → develop PR/병합 → develop 전체 Staging CodePush** 순서다. 이전 feature 직접 전달 예외는 반복하지 않으며 전달 시 통합 변경·바이너리 호환성을 확인한다.
+- QA 결과/추가 지시를 기다린다. 앱 PR 병합은 더 이상 잔여 작업이 아니며 실제 기기 적용/QA는 별도다. 자세한 근거는 [권한관리 체크포인트](dentlink-permission-management.md)를 따른다.
+
 ## 현재 대기 — 2026-10-19 사용자 QA 결과 전달 대기
 
 - 사용자 지시로 정리 후 대기한다. 양OS Staging v336/2.2.4 전달 및 PR329 최신 head 승인 확인을 유지하며, 추가 확정 수정은 없다.

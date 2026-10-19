@@ -50,7 +50,7 @@ Do not store secrets or private customer data here.
   **대기:** 2026-10-19 사용자 종료 지시. QA 결과/후속 지시 전까지 자동 조회·수정·배포 없이 기존 브랜치/worktree를 보존한다.
   — 2026-10-19 PR4719 사용자release병합(fef630005) 확인 후 stage를 master8772d6882에서 재생성, PR4720 release→stage 준비 후 사용자병합완료(stage4b28c28a6, release와tree동일).
   웹 최신3제품 배포run은 in_progress이며 최종성공/QA는별도다. 기존stage복구ref/전체변경/Actions경계를 정본에 보존했다. 앱은 사용자재승인으로 feature/DL-16317@f037c80 양OS Stagingv336/2.2.4 mandatory100%enabled 전달·서버/소스맵341파일확인완료.
-  PR329 OPEN→develop 유지·본문최신화, 원본worktree/시뮬레이터/Metro 보존·임시buildsource만정리. 후속 리뷰 확인에서 최신f037c80에 myungjael LGTM/APPROVED, 리뷰스레드/인라인댓글0건으로 추가수정 없음. CodeRabbit은 develop대상제외 skipped이며 강제실행하지 않았다. 다음은 웹배포완료 및 앱기기적용/QA·사용자/팀 PR병합 판단이다.
+  PR329는 사용자 develop 병합완료(43f7879), 기존Stagingv336·원본worktree/시뮬레이터/Metro를 보존한다. 후속 리뷰 확인에서 최신f037c80에 myungjael LGTM/APPROVED, 리뷰스레드/인라인댓글0건으로 추가수정 없음. CodeRabbit은 develop대상제외 skipped이며 강제실행하지 않았다. 이후 앱QA는 작업브랜치 수정→develop 병합→develop 전체 Staging CodePush로 전달한다. 지금 추가배포하지 않고 QA 결과를 기다린다.
 
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — PR #4699의 release/v1.89.0 병합 완료. QA·운영 출시 별도이며 브랜치는 보존한다.
