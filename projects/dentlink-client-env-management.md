@@ -1,6 +1,19 @@
 # Dentlink 웹 환경변수 관리
 
-## 현재 상태 — 2026-10-19 Jira 정의·진행 기록 기준 확정, 문서 정리 완료·회의 후 전환 대기
+## 현재 상태 — 2026-10-19 보안 분류·회의 전 보완 완료, 추가 콘솔 조사 종료
+
+- 사용자가 Google/Eximbay 보안 분류를 재검토한 뒤 회의 전 가능한 코드·설정·문서 보완을 승인했다. 후속으로 “너무 오래 걸리니 넘어갈 것은 넘어가고 빠르게 마무리, 모르면 Secrets에 보관”을 요청했다. 불확실한 키는 비공개 보관하되 브라우저 소비 시 노출은 별도라는 설명 후 추가 콘솔 조사를 종료한다. 실제 배포·병합·env 추적 해제·키 회전은 승인/실행하지 않았다.
+- `/Users/parkjongsun/Repository/dentlink-client-env-management`, `feature/DL-16821`, 최신 `849df9256948b931bcf7e61e47b6214efffb108d` 정상 commit/push 완료. [PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713) OPEN Draft/base master, DRAFT label, `[WIP] ` 제목 유지. 원래 checkout과 기존 env 9개 내용·추적 유지.
+- Google 키는 Admin dev/stage/prd 모두 같은 기존 값이며 `public-build` → `build-secret`으로 변경했다. manifest·예제·로컬 갱신 가이드·분류표·테스트 반영. GitHub Admin3환경 `DENTLINK_BUILD_ENV`를 새로 저장한 뒤 `NEXT_PUBLIC_GOOGLE_MAP_API_KEY` Variable 제거. 전체9환경 Variables235개, Secrets8개(Admin build3+Clinic build3/E2E2). Secrets 원문 재조회는 못하며 저장 성공/이름만 확인했다. 공개 원본·업로드 payload는 기존 env와 값 일치를 검증했다.
+- 원격 master/develop/stage/release workflow에서 새 environment/vars/DENTLINK_BUILD_ENV 참조가 없음을 확인했다. 이번 등록 위치 변경을 기존 운영이 읽지 않으며 배포는 실행하지 않았다. 원래 Repository Secrets와 기존5환경은 보존했다.
+- Admin GoogleMap의 직접 Places REST 호출을 Maps JavaScript `Place.searchNearby`로 교체했다. dentist·뷰포트 반경·최대20·POPULARITY·영어 선호·마커 데이터 유지, SDK 좌표 변환/실패 처리 검증. 브라우저용 키는 SDK에서도 보이며 Secrets 저장 자체가 브라우저 비노출을 보장하지 않는다.
+- Eximbay 실제 웹 팝업·앱 WebView는 현재도 브라우저에서 SHA256 서명한다. DEV Swagger에는 Eximbay 서명 API가 없고 기존 요청조회 응답만으로 요청 소유권·권한·미완료 Eximbay 요청 검증을 보증할 수 없다. BE checkout도 없었다. 무인증/임의 파라미터 signer를 만들지 않고, 서버 검증·서버 고정 파라미터·서버 전용 Secret·웹/앱 연결·키 교체 조건을 분류표에 명시했다. FE env 위치 이동과 이 별도 보안 개선을 구분한다.
+- Google Cloud 사용자 본인 인증은 완료됐지만 실제 Admin 키의 발급 프로젝트는 미식별이다. i18n/기존 몇 프로젝트를 읽고 후보 하나를 값 비출력 지문으로 대조했으나 불일치였다. 후보의 제한 상태를 Admin 키 상태로 오인하지 않는다. 사용자도 프로젝트 이름을 모르며 추가 조사를 중단하도록 했다. 실제 Google 제한 변경·키 폐기·과금 호출 없음. 재개 시 사용자 요청이 있을 때만 프로젝트/관리자 확인부터 한다.
+- 검증: env75/75, SDK4/4, Admin 타입, 정상 pre-commit 3서비스 타입·pre-push lint/공용검사 통과(기존 경고). 새 source의 실제 private 값 일치0. 9환경 전체 키·값 재구성 일치, E2E 앱 제외. SDK 실 Google 호출·Docker·실계정/실사용은 미검증. 이전3서비스 native빌드/220E2E도구 확인은 과거 검증으로 구분한다. Docker/Colima 설치 금지 유지.
+- 노션 회의 자료와 팀 사용 가이드만 기존 위치에서 보완/read-back. 저장/실행 노출 구분, Google/Eximbay/Medit 처리, Admin 새 build 파일 갱신 안내. 이전 회의 기록·모음 구조/문서3개 유지. Jira DL-16821 본문에 안정적인 보안 범위만 추가하고 진행은 댓글44488에 기록했다. 상위 DL-16818의 공통문서 모음 링크 유지, 완료 DL-16819 변경 없음.
+- 다음: 회의 공유 후 사용자 요청으로 Docker·실제 팀원 전달/실행·복구 검증 및 env 추적 해제/전환을 재개한다. Google 실제 제한 확인과 Eximbay 서버 서명/키 교체는 해결되지 않은 별도 후속 조치다. 현재 추가 조사·구현·배포 없이 마무리한다.
+
+## 이전 상태 — 2026-10-19 Jira 정의·진행 기록 기준 확정, 문서 정리 완료·회의 후 전환 대기
 
 - 사용자가 최종 완료를 확인하고 메모리 저장 후 대기를 요청했다. 문서·Jira 정리는 종료한다. 다음 요청 전까지 추가 조회·편집·검증·코드/GitHub 변경·배포·전환을 진행하지 않는다. 회의 후 재개 요청을 받으면 실제 Git/PR/설정 상태부터 확인하고 남은 검증과 전환을 함께 진행한다.
 - 사용자가 Jira 본문에서 진행 현황과 중복 링크를 직접 제거했다. 이후 최종 검토·다듬기와 모든 향후 작업의 공통 원칙 저장을 요청했다. **본문은 목적·범위·요구사항·초기 준비/합의, 이후 진행·검증·남은 일은 필요할 때 담당 하위 카드 댓글, 공통 문서 링크는 상위 카드만**으로 확정했다. 정본은 `AI_WORKFLOW.md`의 `Jira Work Updates`이며 `AGENTS.md`에서도 안내한다.

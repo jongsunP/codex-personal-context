@@ -18,12 +18,12 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- **2026-10-16 FE 기존 env 외부 공급 준비·설치 없는 검증·푸시 완료, 실제 전환 대기.** 사용자는 기존 값·변수명·동작 보존을 확정했다. BE/결제 로직·배포 체계 개편을 추가하지 않으며 새로 팀에 받아올 필수 정책·BE 계약은 없다.
-- 별도 `/Users/parkjongsun/Repository/dentlink-client-env-management`, `feature/DL-16821`, 최신 `8d29f043e` 정상 push. [master 비교용 Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713) 유지. 원래 제품 checkout 보존.
-- 9개 GitHub 환경·공개238항목과 신규Secrets5개 준비. Eximbay·Medit 기존 값도 private build 공급으로 유지한다. 기존 배포 workflow/Docker 설정 연결은 작업 브랜치에 반영했으며 실제 배포하지 않았다. env9개는 계속 Git 추적 중이다.
-- 공개 수신/갱신·개인값 보호·private 암호화 pack/unpack·E2E 분리·비배포 검증 경로 마련. 환경설정74·E2E도구220·타입/lint 통과, 3서비스 외부 네트워크 차단 native 빌드/standalone HTTP200·9환경 값 보존 확인. 실제 Docker/실계정/팀원 전달·전환은 미검증.
-- [DL-16818](https://innovaid.atlassian.net/browse/DL-16818)에만 [Notion 문서 모음](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c)을 연결한다. 하위 문서는 이전 회의 기록·설정 화면/연결 흐름·팀 사용 가이드 3개다. 2026-10-19 최종 정리: [DL-16819](https://innovaid.atlassian.net/browse/DL-16819) 완료, [DL-16821](https://innovaid.atlassian.net/browse/DL-16821) 진행 중·진행 댓글 4개(최신44485). 본문은 작업 정의, 이후 진행은 필요할 때 하위 댓글로 기록한다.
-- 사용자는 회의에서 Notion 문서를 먼저 공유한 뒤 재개하기로 확정했다. 회의 전 준비는 완료이며 그때까지 추가 변경 없이 대기한다. 이후 Docker/실사용·설정 전달·복구 확인 → 팀 적용·env 추적 해제·전환. Docker 설치·Vercel Dashboard 검증은 하지 않았다. Eximbay 서버화·키 회전·과거 Git 이력 정리는 별도 개선이다. [개인 체크포인트](projects/dentlink-client-env-management.md) 기준으로 재개한다.
+- **2026-10-19 FE env 분리의 보안 분류·회의 전 보완 완료.** `feature/DL-16821` / `849df9256`, [Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713), base master. 병합·배포·env9개 추적 해제는 하지 않았다.
+- Google 키를 Admin3환경 Secrets/build private로 옮기고 검색을 공식 브라우저 SDK로 연결했다. 9환경 Variables235개·Secrets묶음8개, 원본 키·값 재구성 일치. env75·SDK4·타입/lint/정상hooks 통과. 운영 브랜치가 새 설정을 읽지 않아 현재 서비스 전환 영향 없음.
+- [DL-16818](https://innovaid.atlassian.net/browse/DL-16818)의 [Notion 모음](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c)에 내용문서3개. 회의/팀사용 가이드 보완, 구현 DL-16821 댓글44488, 조사 DL-16819 완료 유지. 본문은 정의·진행은 하위댓글 원칙 유지.
+- 사용자 빠른 마무리 요청으로 Google 콘솔 추가 조사 종료. 실제 키 발급 프로젝트 미식별·제한 미확인, Eximbay 브라우저 서명/키 노출은 별도 서버 연계·키 교체 필요. 보관 위치 이전만으로 전체 보안 해결이라 보고하지 않는다.
+- 회의 후 명시적 재개 요청에서 Docker·팀원 전달/실사용·복구 확인과 추적 해제/전환을 진행한다. Docker 설치 금지·운영 배포 별도 승인 유지. [개인 체크포인트](projects/dentlink-client-env-management.md).
+
 
 ### 사무실 의자 구매·헤드레스트 개선 조사
 
