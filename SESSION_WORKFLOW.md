@@ -312,7 +312,10 @@ unless their move or cleanup is authorized.
    containing the user's common working style, personal-context read order,
    repository and permission boundaries, validation/reporting rules, exact
    worktree/branch/upstream/HEAD state, and any relevant local-environment
-   warnings.
+   warnings. Include the **Branch Naming And Draft PR Metadata** requirements
+   from `DEVELOPMENT_STYLE.md`: permitted names only for every branch purpose,
+   no agent prefixes, and Draft state + `DRAFT` label + exact `[WIP] ` title
+   prefix (one space after the closing bracket).
 7. Pass the user's original request, source links, verified requirements,
    unresolved questions, and authorization scope to the feature session.
    Deliver the startup prompt directly when the user has requested the
@@ -515,9 +518,13 @@ Treat the following as the branch strategy for the Dentlink web repository
   This rule does not authorize commits, pushes, PR mutations, merges, or
   release/develop/stage changes beyond the user's existing authorization.
 - `feature/*` branches are the only normal implementation branches.
-- Verify this prefix before creating or renaming a branch. Agent/tool defaults
-  such as `codex/` do not replace the repository rule. When preserving another
-  branch for the same Jira, append a short description to `feature/<Jira>`.
+- Apply **Branch Naming And Draft PR Metadata** in `DEVELOPMENT_STYLE.md` to
+  every branch purpose, including QA, release follow-up, temporary/backup,
+  delivery/sync, and worktree-created branches. Verify the full permitted name
+  before and after creation or rename. Agent/tool defaults such as `codex/`
+  never replace the repository rule; changing the base to a release does not
+  change the naming rule. When preserving another branch for the same Jira,
+  append a short description within `feature/<Jira>`.
 - `release/vX.Y.Z` branches are deployment-only release trains cut from
   `master`; they are not feature-development branches.
 - A feature PR targets the release branch for its intended deployment version.

@@ -370,17 +370,57 @@ relative complexity.
 - Report existing warnings separately from failures and state test gaps rather
   than overstating completion.
 
-## User-Directed Scope Discipline
+## Branch Naming And Draft PR Metadata
 
-- New work branches use the repository's normal `feature/` prefix by default.
-  Never invent or use an agent-specific prefix such as `codex/` or `claude/`.
-  `release/`, `hotfix/`, or another exceptional prefix is used only when the
-  user explicitly requests that branch purpose; otherwise do not infer an
-  exception from the tool or agent performing the work.
+- This naming rule applies to **every branch creation and rename**, local or
+  remote, across all projects and sessions: ordinary features, QA, release
+  follow-up, review fixes, temporary experiments, backups, delivery/sync
+  branches, and branches created by worktree or delegated-session tools.
+- Use the user's exact branch name when supplied. Otherwise stay within the
+  repository's documented naming patterns; never invent another prefix or
+  namespace. Dentlink task branches use `feature/<Jira>` by default.
+  Agent-specific prefixes such as `codex/`, `claude/`, or `agent/` are forbidden.
+  An agent/tool default, an old branch with that prefix, isolation needs, or a
+  QA/release-based starting commit does not create an exception.
+- Use `release/`, `hotfix/`, or another repository-approved exceptional pattern
+  only for its explicitly authorized purpose. Being authorized to do QA or
+  follow-up work does not authorize inventing `qa/`, `backup/`, or another
+  prefix. If an existing task branch must be preserved, use a permitted
+  descriptive suffix within `feature/<Jira>` rather than a new namespace.
 - Name a branch for its intended delivery scope. When a branch is meant to
   collect multiple QA fixes for one release, use the release QA purpose rather
   than the first Jira card alone; for example, `feature/v1.79.0-qa` for fixes
   targeting `release/v1.79.0`.
+- Before creation or rename, compare the full intended name with the exact
+  user instruction and the allowed repository pattern. After any tool or
+  automation creates the branch, verify its actual name before editing,
+  pushing, or creating a PR. Resolve a mismatch within the existing authority
+  instead of proceeding with an agent-prefixed branch. This rule does not
+  authorize renaming or deleting unrelated existing branches.
+- If a worktree/session tool would force an agent prefix, do not create that
+  branch and plan to rename it afterward. Choose a permitted creation method
+  or a detached checkout instead; the tool does not override the naming rule.
+- A Draft PR requires **all three**: GitHub's actual Draft state, the `DRAFT`
+  label, and the exact title prefix `[WIP] `, including exactly one ASCII space
+  after `]` before the existing title. For Jira work, preserve the normal
+  ticket/title format after it, for example `[WIP] [DL-16821] 작업 제목`.
+  Avoid duplicate `[WIP]` markers and preserve other applicable labels.
+- After creating or converting an authorized PR to Draft, re-read its actual
+  state, labels, and title. Do not report Draft setup complete if one is missing
+  or could not be applied. A title marker or label alone does not set Draft
+  state, and setting Draft alone does not satisfy this requirement.
+- When an authorized transition makes the PR ready for review, remove only
+  the stale `DRAFT` label and leading `[WIP] ` prefix, preserving the remaining
+  title and labels. This consistency rule does not itself authorize changing
+  an existing PR's readiness or editing reference PRs.
+- User references verified on 2026-10-19: web PR
+  [#4713](https://github.com/Innvoaid/dentlink-client/pull/4713) demonstrates the
+  `DRAFT` label, and [#4712](https://github.com/Innvoaid/dentlink-client/pull/4712)
+  demonstrates the leading `[WIP]` title. Neither example alone establishes
+  that all three fields were already present on both PRs.
+
+## User-Directed Scope Discipline
+
 - For every pull request, read and follow the repository's PR skill before
   committing or creating the PR. A normal request to commit, push, and open a
   PR stops after PR creation; do not wait for, monitor, or respond to

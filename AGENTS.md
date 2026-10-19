@@ -80,12 +80,23 @@
   `codex-personal-context` is different: at meaningful session closeout, commit
   and push its curated history automatically so the next session or device can
   recover it.
+- For every branch creation or rename, follow **Branch Naming And Draft PR
+  Metadata** in `DEVELOPMENT_STYLE.md`. Use only the user's exact name or the
+  repository's documented naming patterns. Agent prefixes such as `codex/`
+  and `claude/` are forbidden for QA, follow-up, temporary, backup, delivery,
+  sync, and worktree branches as well as ordinary features. Check the intended
+  and actual branch name; tool defaults and historical names are not exceptions.
+- When creating a Draft PR or converting an authorized PR to Draft, apply and
+  verify all three: GitHub Draft state, the `DRAFT` label, and the exact title
+  prefix `[WIP] ` (including one space after the closing bracket). Follow
+  **Branch Naming And Draft PR Metadata** for details.
 - For authorized Dentlink web implementation, follow **Dentlink Release-Train
   Branch Strategy** in `SESSION_WORKFLOW.md`: ordinary new work uses the latest
   `origin/master`. Do not repeat a base/local-feature-preparation approval
   question merely because a planned release is named or does not exist yet.
-  Release-based follow-up/QA is the documented exception. This does not widen
-  read-only requests or commit/push/PR/deployment authorization.
+  Release-based follow-up/QA is an exception only to the base revision, never
+  to branch naming. This does not widen read-only requests or
+  commit/push/PR/deployment authorization.
 - For Dentlink apps, follow **Dentlink App Release And Delivery Policy** in
   `SESSION_WORKFLOW.md` and `projects/dentlink-app-onboarding.md`. App PRs
   for ordinary new features target `develop`. Release is the QA/delivery
