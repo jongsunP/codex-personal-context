@@ -2,6 +2,11 @@
 
 ## 2026-10-19
 
+- 모바일웹·앱 차이 Notion을 클리닉 담당자 작성 완료 후 다시 대조했다. 사용자 본래 담당은 Lab이며 Clinic 조사는 사전 확인이었다.
+  동료의 Clinic 새 표·기존 접힌 사전 표·개요는 보존하고 Lab10개 항목을 동일6열·5개 주제 표로 변경했다.
+  우선순위/빈도는 미정, 지원 예외와 Owner/SHARED·배포/실기기 조건을 유지하고 소개 편집 담당자 조건을 보완했다.
+  수정 전후 재조회로 Clinic/개요 불변·Lab 구조/내용 일치를 검증했다. Clinic의 모바일웹 범위·비밀번호찾기/사진편집 표기 불일치는 원문 수정 없이 별도 기록했다.
+
 - DLDS PR#4692 사용자 release병합(f9a45fe02)을 확인했다. 승인된 기존 stage 삭제·최신 master8772d6882 재생성 후 전체 release→stage PR#4722를 준비·attach했다. 이전 stage4b28c28a6 복구ref, lease삭제/재생성, 전체diff 및 GitHub 병합시험 tree=release를 확인했다. 제품코드·feature checkout은 변경하지 않았고 정상push hook을 통과했다. stage PR 미병합·신규배포/QA/정식npm/Studio/하네스 미완료이며 다음 단계는 PR병합과 세앱배포 확인이다.
 
 - 권한관리 앱 PR329의 사용자 develop 병합을 확인했다(43f7879, 18:13:16 KST). develop과 v336 feature소스 전체tree동일·차이0파일을 확인했다. 기존 feature기준 Stagingv336은 유지하고, 이후 QA 수정은 작업브랜치→develop 병합→develop 전체 Staging CodePush로 전달한다는 사용자 지침을 저장했다. 지금 추가 제품 수정·배포 없이 QA 대기하며 기존브랜치/worktree를 보존한다.
