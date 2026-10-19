@@ -2,6 +2,11 @@
 
 ## 2026-10-19
 
+- 메인세션에서 Clinic/Lab 모바일웹 대비 Office/Lab 앱 기능 차이를 읽기 전용으로 조사했다.
+  앱 정상 진입이 없는 관리 기능과 기공소의 검색/집계·소속전환 차이를 기록하고, WebView/네이티브 대체 및
+  모바일웹 자체 제한 기능은 제외했다. 두 앱 main·진행 release/권한관리 차이를 분리해 비교 문서와 색인을 저장했다.
+  제품 수정·Jira·PR·배포·실기기 QA는 수행하지 않았으며 구현은 사용자 후속 결정 대기다.
+
 - 권한관리 사용자의 명시적 진행 승인으로 Office feature/DL-16317@6437dbb를 iOS·Android Development v138에 배포했다.
   2.2.4·mandatory·100% 활성·설명/SHA를 read-back 확인. PR329는 미병합이며 웹/Lab·Staging/Production·태그·제품 코드는 변경하지 않았다.
   공용 node_modules가 lock과 달라 별도 HEAD archive+immutable install에서 번들·Hermes 생성했고 양 OS 업로드 exit0.

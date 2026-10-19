@@ -4,6 +4,13 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
+## 현재 조사 — 2026-10-19 모바일웹 대비 앱 기능 차이
+
+- Clinic/Lab 모바일웹과 별도 Office/Lab 앱의 최신 main 계열 소스를 고정해 메뉴·화면·WebView·브리지·실제 요청 연결을 대조했다.
+- 관리 기능의 앱 정상 진입 부재와 일부 검색/집계 차이를 정리했고, 모바일웹도 제한된 기능 및 네이티브 대체 기능은 제외했다.
+- 코드 조사 완료, 제품 변경·실기기 QA·배포 없음. 세부 차이·근거·release 예외·다음 시작점은
+  [모바일웹·앱 기능 비교](dentlink-mobile-web-app-parity.md)에 보존한다. 구현은 사용자 후속 결정 전 미착수다.
+
 ## 현재 재확인 — 2026-10-16 진행 중 릴리스 보존 기준
 
 - 사용자가 ‘릴리즈 완료 작업 정리’는 **과거 운영 배포가 끝난 작업**을 뜻한다고 명확히 했다.

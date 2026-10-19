@@ -159,6 +159,8 @@ For detailed current state, read:
 
 ### Dentlink Office App
 
+- 치과·기공소 앱의 모바일웹 대비 기능 차이와 WebView/모바일 제한 구분은
+  [모바일웹·앱 기능 비교 조사](projects/dentlink-mobile-web-app-parity.md)를 따른다(2026-10-19 정적 조사, 실기기 QA 별도).
 - `dentlink-app`은 앱 저장소 분리 이후 Office 전용이다. 기본 checkout은 `main`이며
   기능 시작 기준과 작업 공간은 매번 live Git으로 확인한다.
   일반 feature PR은 `develop`이 기본 대상이며 release는 QA·배포 단계다.
