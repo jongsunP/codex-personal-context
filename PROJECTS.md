@@ -188,7 +188,7 @@ For detailed current state, read:
 - 웹 Clinic/Lab/Admin 최신3개배포run은 in_progress까지 확인했다. 최종성공/QA완료는 별도이며 웹feature@5bdad60e6 clean유지.
 - 사용자 재승인으로 앱 feature/DL-16317@f037c80를 양OS **Staging v336/2.2.4/mandatory100%enabled**로 CodePush 완료. 서버readback·소스맵341파일일치, PR329본문갱신·OPEN→develop유지.
 - 원본worktree·시뮬레이터/Metro 보존, 임시buildsource만정리. Production/Development/Lab·태그/스토어·Jira/Slack변경없음.
-- 다음은 웹배포완료 및 권한별 확인, 앱기기v336적용/QA·개발자PR리뷰다. 전체QA/운영출시는별도.
+- 앱 PR329 최신head f037c80에 myungjael LGTM/APPROVED 확인, 리뷰스레드/인라인댓글0건으로 추가수정 없음. CodeRabbit은 develop대상제외로 skipped, 강제재실행 안함. 다음은 웹배포완료 및 권한별 확인, 앱기기v336적용/QA·사용자/팀 PR병합 판단이다. 전체QA/운영출시는별도.
 - 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 
 ### Dentlink 통합알림센터 — 사전 검토

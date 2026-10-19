@@ -1,5 +1,15 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 리뷰 확인 — 2026-10-19 앱 PR329 승인 확인, 추가 조치 없음
+
+- 사용자가 Staging 전달 후 앱 PR 리뷰 확인을 요청했다. 개인 문서와 앱 worktree를 ff-only pull하여 최신 상태를 확인했다.
+- [앱 PR329](https://github.com/Innvoaid/dentlink-app/pull/329)는 OPEN/비Draft→develop, head `f037c80153b328bbb14fcafd5fb756a59fd4cc8e`, 로컬/origin 동일·clean이다. `reviewDecision=APPROVED`, `MERGEABLE/CLEAN`을 확인했다.
+- 앱 개발자 `myungjael`이 같은 최신 head에 **LGTM / APPROVED**를 남겼다(2026-10-19 05:59:58Z). GraphQL reviewThreads 0건(hasNextPage=false), REST 인라인 리뷰 댓글 전체 페이지 0건으로 미해결 지적이 없다.
+- CodeRabbit의 유일한 이슈 댓글은 `develop`이 자동리뷰 대상(release/*) 밖이라 **Review skipped**됐다는 내용이다. 체크 SUCCESS를 실제 코드리뷰 완료로 표현하지 않는다. 기존 사용자 지시대로 미실행 리뷰를 강제 재실행하지 않았다.
+- 추가 제품 수정·테스트 재실행·커밋·PR 병합·CodePush는 하지 않았다. 이번 검토는 등록된 리뷰 확인이며 새 전수 코드 감사나 실기기 QA가 아니다. 앱 Staging 양OS v336 상태는 유지한다.
+- 웹 최신 stage4b28c28a6의 Office39207769223/Lab39207769115/Admin39207769111은 단일 재조회에서도 in_progress였다. 추가 자동 polling 없이 배포 완료와 실제 QA는 별도로 둔다.
+- 다음은 사용자/팀의 앱 PR 병합 판단 및 Staging 실제 기기 업데이트·권한 QA다. 등록된 앱 개발자 리뷰는 이미 승인 완료이므로 미진행으로 남기지 않는다.
+
 ## 현재 상태 — 2026-10-19 웹 PR4720 사용자 병합·배포 진행 / 앱 Staging v336 완료
 
 - **최신 사용자 승인:** 사용자가 웹 PR4719 release 병합을 완료했다고 알리고, 설명한 기존 stage 재생성→release-to-stage PR 절차 진행을 요청했다. 웹 전달 준비 후 앱도 다시 기존 feature/DL-16317에서 Staging CodePush하도록 명시 승인했다. 이번도 일반 앱 PR/develop 통합 정책을 바꾸는 승인이 아니다.

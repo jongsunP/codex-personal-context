@@ -1,5 +1,12 @@
 # Dentlink Office App setup and current checkpoint
 
+## 최신 리뷰 확인 — 2026-10-19 PR329 최신 head 승인, 추가 수정 없음
+
+- PR329는 OPEN→develop/headf037c80 유지, 최신 head에 myungjael LGTM/APPROVED(05:59:58Z), reviewDecision APPROVED·MERGEABLE/CLEAN 확인.
+- 전체 리뷰 스레드/인라인 댓글 각각0건, 미해결 지적 없음. CodeRabbit은 develop 대상 제외로 Review skipped이며 기존 지시대로 강제 실행하지 않았다.
+- 제품 코드·테스트·커밋·병합·CodePush 변경 없음. Staging 양OS v336 유지, 앱 개발자 리뷰는 승인 완료이며 사용자/팀의 병합과 실제 기기 QA는 별도다.
+- 정확한 근거와 웹 배포 진행 경계는 [권한관리 체크포인트](dentlink-permission-management.md) 최신 절을 따른다.
+
 ## 현재 전달 상태 — 2026-10-19 사용자 재승인으로 Office Staging v336 배포 완료
 
 - 사용자가 웹 stage 재전달 준비 후 앱도 기존 작업브랜치로 Staging CodePush를 다시 하도록 명시 승인했다. `feature/DL-16317@f037c80153b328bbb14fcafd5fb756a59fd4cc8e`를 양OS Staging **v336/2.2.4/mandatory/100%/enabled**로 전달했다.

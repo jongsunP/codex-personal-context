@@ -2,6 +2,8 @@
 
 ## 2026-10-19
 
+- 권한관리 앱 PR329 리뷰 요청을 처리했다. 최신f037c80에 앱 개발자 myungjael LGTM/APPROVED, MERGEABLE/CLEAN 및 전체 리뷰스레드/인라인댓글0건 확인. CodeRabbit은 develop 대상 제외로 skipped여서 사용자 지시대로 재실행하지 않았다. 추가 제품 수정·커밋·병합·CodePush 없음, Stagingv336 및 별도 기기QA 경계를 보존했다.
+
 - 권한관리 종료 확인 중 사용자가 웹 PR4720을 병합했다. stage4b28c28a6와 releasefef630005 tree일치, 최신Office/Lab/Admin배포3건 in_progress까지 확인했다. 앱v336 완료와 웹배포진행을 분리해 정본/색인을 갱신했으며 최종웹성공·QA로 확대하지 않는다.
 
 - 권한관리 사용자 PR4719 release병합(fef630005) 후 웹 Staging 재전달을 승인했다. 기존stage413ed3564를 복구ref로 보존하고 master8772d6882에서 lease삭제/재생성, 전체release PR4720→stage를 준비했다. 사용자병합/웹배포는아직이다.
