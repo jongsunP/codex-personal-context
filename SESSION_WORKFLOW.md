@@ -316,6 +316,8 @@ unless their move or cleanup is authorized.
    from `DEVELOPMENT_STYLE.md`: permitted names only for every branch purpose,
    no agent prefixes, and Draft state + `DRAFT` label + exact `[WIP] ` title
    prefix (one space after the closing bracket).
+   For Jira/Confluence work, include the canonical **Atlassian Connection
+   Selection And Recovery** reference in `AI_WORKFLOW.md` in the handoff.
 7. Pass the user's original request, source links, verified requirements,
    unresolved questions, and authorization scope to the feature session.
    Deliver the startup prompt directly when the user has requested the
@@ -670,6 +672,9 @@ summary unless a file is genuinely missing.
 6. Reconcile the personal checkpoint with live Git and code; current explicit
    user instructions and verified live state override an older checkpoint.
 7. Continue from the reconciled state instead of relying only on chat memory.
+
+Before Jira/Confluence access, follow **Atlassian Connection Selection And
+Recovery** in `AI_WORKFLOW.md`; apply it to resumed sessions as well as new ones.
 
 Before any project mutation, verify that the current working directory and
 worktree are the exact project location the user intends. If the named project

@@ -4,6 +4,21 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
+## 공통 지침 전파 — 2026-10-19 Atlassian 연결
+
+- 디자인시스템정비세션의 사용자 원문을 확인해 기존·신규 세션 전파 권한을 확인했다.
+  정본은 [AI_WORKFLOW의 Atlassian Connection Selection And Recovery](../AI_WORKFLOW.md#atlassian-connection-selection-and-recovery)이며,
+  신규 Atlassian 사용·Legacy 자동 fallback 금지·Innovaid 사이트 확인과 복구 기준을 따른다.
+- 메인세션에서도 신규 도구의 authorized resources와 `DL-16471` 실제 조회 성공을 확인했다.
+  이는 현재 메인세션의 접근 확인이며 다른 계정·기기의 영구 정상이나 Legacy 복구를 뜻하지 않는다.
+- `SESSION_WORKFLOW.md`의 신규 세션 전달 및 시작·재개 절차에 정본 참조를 추가했다.
+  `setup-local-codex.sh`로 로컬 지침을 동기화하고 AGENTS·AI_WORKFLOW·SESSION_WORKFLOW의 원본 일치를 확인했다.
+- 현재 작업 중인 **권한관리세션**(`01a132e9-6555-7a02-9c72-4dad9c04cc64`)에 지침만 전달했다.
+  사용자 승인 작업과 대기 지시를 유지하며 다음 Jira 접근부터 적용하도록 안내했고, 회신이나 추가 인증 조회를 요구하지 않았다.
+  원본 디자인시스템정비세션은 이미 해당 지침을 알고 있으므로 중복 회신하지 않았다.
+  나머지 대기 FE 세션은 깨우지 않고 다음 재개 시 공통 지침을 적용한다.
+- 이번 정리에서 제품·PR·배포·Notion·Jira 내용은 변경하지 않았다. 연결 지침 후속 정리는 완료이며 추가 작업 없이 대기한다.
+
 ## 현재 조사 — 2026-10-19 모바일웹 대비 앱 기능 차이
 
 - Clinic/Lab 모바일웹과 별도 Office/Lab 앱의 최신 main 계열 소스를 고정해 메뉴·화면·WebView·브리지·실제 요청 연결을 대조했다.

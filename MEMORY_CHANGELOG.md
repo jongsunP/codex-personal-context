@@ -2,6 +2,10 @@
 
 ## 2026-10-19
 
+- 메인세션에서 Atlassian 공통 지침 후속 정리를 완료했다. 신규 연결의 Innovaid 사이트와 DL-16471 조회를 확인하고,
+  신규 세션 전달·재개 절차에 정본 참조를 추가했으며 setup-local-codex.sh 동기화 후 공통 지침 원본 일치를 확인했다.
+  사용자 전파 요청 원문을 확인해 활성 권한관리세션에 지침만 전달했다. 다른 대기 세션은 재개 시 적용하며 제품·PR·배포·Notion·Jira 내용은 변경하지 않았다.
+
 - 권한관리 Editor 403 후속: Staging OWNER/EDITOR 실제 비교와 배포 backend cbafdde2 계약을 확인해 웹 count2개·v2 결제목록 GET를 OWNER/PAYMENT_MANAGER 전용으로 보완했다.
   직원·역할별 캐시 분리, 기존 배너 제한 주석 및 역할별 API 표를 남겼다. 새 테스트1파일을 포함한 웹4파일, 앱은 직접 호출 없어 주석1파일만 로컬 수정.
   28tests·Clinic type·lint·독립 scoped 리뷰 통과. 제품 커밋/푸시/PR/배포 전이며 기존 Staging·앱v335·PR329·Jira는 변경하지 않았다.
