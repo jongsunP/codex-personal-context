@@ -702,6 +702,28 @@ office session and a home session as separate responsibilities. For remote work
 continuity, treat Git-backed documents as the durable source of truth, not the
 current device's local session state.
 
+## Deployment Result Checks
+
+This is a common rule across projects, confirmed by the user on 2026-10-19.
+
+- Expect server deployment to take at least 15 minutes. Confirm the start and
+  target revision once when initiating an authorized deployment, then do not
+  repeatedly query its result until at least 15 minutes after that start.
+  Measure from the deployment/workflow start, not each individual job or step.
+- If it is still running, leave **at least 3 minutes between subsequent polls**.
+  Three minutes is a minimum, not a requirement to poll indefinitely. Batch
+  related app/job checks at each observation and use a longer wait when useful.
+- Avoid frequent GitHub/API/HTTP polling and unchanged progress messages.
+  Report a meaningful result, failure, or required user action. When the user
+  asks for a one-time check or says they will report the result, obey that limit
+  instead of starting another polling loop or recurring monitor.
+- A user-specified wait or check cadence overrides the default. An explicit
+  request to inspect a known failure or urgent incident can be investigated
+  immediately; this is not routine deployment-result polling.
+- Keep build success, deployment request, actual serving revision, and QA/E2E
+  results distinct. A result-check request does not authorize fixes, retries,
+  merges, resource changes, or additional deployment.
+
 ## External MCP Connection Policy
 
 - Prefer one global direct MCP configuration in `~/.codex/config.toml` for a

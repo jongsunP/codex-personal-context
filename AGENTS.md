@@ -89,6 +89,10 @@
   deployment or run the deployment process does not authorize merging that
   PR or starting deployment automatically. Wait for a separate explicit
   merge/deploy instruction; this also applies to release-to-stage PRs.
+- For server-deployment result checks, follow **Deployment Result Checks** in
+  `SESSION_WORKFLOW.md`: first check no earlier than 15 minutes after the
+  deployment starts, then leave at least 3 minutes between any later polls.
+  Respect a user-specified delay, one-time check, or instruction to wait.
 - For every branch creation or rename, follow **Branch Naming And Draft PR
   Metadata** in `DEVELOPMENT_STYLE.md`. Use only the user's exact name or the
   repository's documented naming patterns. Agent prefixes such as `codex/`
