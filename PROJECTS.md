@@ -189,7 +189,7 @@ For detailed current state, read:
   이번에만 사용자 승인한 feature직접배포이며 PR329 OPEN→develop은 앱개발자리뷰용 미병합 유지. Developmentv139/Production은변경없음.
 - 웹 DL-16319·앱 DL-16752 모두 READY FOR QA·전달댓글완료. 전체실기기/권한QA는별도이며 추가확정FE수정/필수BE문의없음.
 - Draft환자 정책 정상종결, 기존권한/예외복구/결제배너/필터/틀니캐시보완과 검증이력은 상세기록을 따른다. 원본feature/worktree/Member시뮬레이터보존.
-- 다음: Staging 앱업데이트적용·동일병원Admin/Member QA 요청 → QA결과대응, 별도로 앱개발자 PR리뷰·병합. 운영출시는별도.
+- 사용자 QA 요청 완료. 추가 작업·조회·모니터링 없이 결과 전달까지 대기하며, 전달받은 QA 결과가 다음 재개점이다. 앱개발자 PR리뷰·병합 및 운영출시는별도.
 - 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
 - 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 

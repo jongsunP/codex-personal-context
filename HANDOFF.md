@@ -49,7 +49,7 @@ Do not store secrets or private customer data here.
   — 2026-10-19 웹stage413ed3564(release8d209ada9와tree동일), 사용자Staging반영확인·추가배포조회중단지시로정리.
   앱feature/DL-16317@5c3504d를 사용자 이번예외승인으로 양OS Stagingv335/2.2.4 직접배포·서버/소스확인완료.
   PR329 OPEN→develop·미병합유지(앱개발자리뷰용),Developmentv139/Production변경없음. 웹DL-16319·앱DL-16752 모두READY FOR QA·전달댓글완료.
-  추가확정FE개발/BE문의없음. 다음은Staging앱업데이트적용·웹/앱권한QA,별도로앱개발자PR리뷰. 실기기적용·QA통과·운영출시는별도다.
+  추가확정FE개발/BE문의없음. 사용자 QA요청완료·결과전달까지 추가작업/조회/모니터링없이대기한다. 앱개발자PR리뷰·실기기적용·QA통과·운영출시는별도다.
   원본feature/worktree/Member시뮬레이터·Metro보존. 상세검증(235tests,baseline동일6타입진단)·정책·배포아티팩트는정본참조.
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — PR #4699의 release/v1.89.0 병합 완료. QA·운영 출시 별도이며 브랜치는 보존한다.
