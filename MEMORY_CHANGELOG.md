@@ -2,6 +2,11 @@
 
 ## 2026-10-19
 
+- 권한관리 Editor 403 후속: Staging OWNER/EDITOR 실제 비교와 배포 backend cbafdde2 계약을 확인해 웹 count2개·v2 결제목록 GET를 OWNER/PAYMENT_MANAGER 전용으로 보완했다.
+  직원·역할별 캐시 분리, 기존 배너 제한 주석 및 역할별 API 표를 남겼다. 새 테스트1파일을 포함한 웹4파일, 앱은 직접 호출 없어 주석1파일만 로컬 수정.
+  28tests·Clinic type·lint·독립 scoped 리뷰 통과. 제품 커밋/푸시/PR/배포 전이며 기존 Staging·앱v335·PR329·Jira는 변경하지 않았다.
+  Git 전달 및 웹 반영 후 재확인을 다음 시작점으로 정리했다. 일반 주문·환자·크레딧 조회와 기존 주문 가능 판단은 유지한다.
+
 - 사용자 요청으로 신규 Atlassian 사용·Legacy 제외·Innovaid 사이트 확인·재연결 검증 절차를
   AI_WORKFLOW 공통 지침과 AGENTS 진입점에 반영했다. 메인세션으로 경험과 전파 요청을
   전달해 기존·신규 세션에서도 같은 인증 혼선을 진단하도록 한다. 제품 작업 재개와는 별개다.

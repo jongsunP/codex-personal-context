@@ -184,13 +184,11 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **최신 2026-10-19:** 웹 PR4717 사용자 병합으로 stage413ed3564/release8d209ada9 tree일치. 웹 Staging 반영은 사용자 확인, 추가 배포 조회는 명시 지시로 종료.
-- 앱 `feature/DL-16317@5c3504d` 최신 최종리뷰 보완까지 Office iOS·Android **Staging v335/2.2.4** 직접 CodePush 완료·서버/read-back/소스 일치 확인.
-  이번에만 사용자 승인한 feature직접배포이며 PR329 OPEN→develop은 앱개발자리뷰용 미병합 유지. Developmentv139/Production은변경없음.
-- 웹 DL-16319·앱 DL-16752 모두 READY FOR QA·전달댓글완료. 전체실기기/권한QA는별도이며 추가확정FE수정/필수BE문의없음.
-- Draft환자 정책 정상종결, 기존권한/예외복구/결제배너/필터/틀니캐시보완과 검증이력은 상세기록을 따른다. 원본feature/worktree/Member시뮬레이터보존.
-- 사용자 QA 요청 완료. 추가 작업·조회·모니터링 없이 결과 전달까지 대기하며, 전달받은 QA 결과가 다음 재개점이다. 앱개발자 PR리뷰·병합 및 운영출시는별도.
-- 등록 폴더: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
+- **최신 2026-10-19:** 사용자의 Editor 403 후속 요청을 웹부터 처리했다. 실제 Staging OWNER/EDITOR 응답과 서버 계약을 대조해 웹 공통 결제 count2개·v2 결제수단 목록 GET를 OWNER/PAYMENT_MANAGER 전용으로 제한했다.
+- 웹 `feature/DL-16317-api-permissions`는 release89@d28e1b114 기반, 로컬 수정4파일(회귀 테스트1개 포함). 28 tests·Clinic type·lints PASS. 역할/직원 캐시 분리, 일반 조회·주문 조건 유지.
+- 앱 `feature/DL-16317@5c3504d`는 해당3 API 실제 호출 없음. 기존 배너 조건 주석1파일만 로컬 수정, lint PASS. 추가 앱 로직/CodePush 불필요.
+- 이번 제품 변경은 아직 커밋·푸시·PR 전이다. 기존 웹 Staging과 앱 Staging v335/2.2.4·PR329 미병합·Jira READY FOR QA는 그대로이며 이번 웹 보완은 미배포다.
+- 다음은 Git 전달 지시 후 웹 feature→release PR/앱 기존 feature 주석 반영, 웹 Staging 반영 후 권한별 재확인이다. 기존 전체 QA·앱 리뷰/운영 출시는 별도다.
 - 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
 
 ### Dentlink 통합알림센터 — 사전 검토

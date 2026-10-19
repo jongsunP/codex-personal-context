@@ -1,6 +1,29 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-19 웹·Office Staging QA 대기 정리 완료
+## 현재 상태 — 2026-10-19 Editor 공통 화면 403 후속 수정·검증 완료, 제품 Git 전달 전
+
+- **재개 범위:** 사용자가 Member 외 Editor에서도 발생하는 불필요한 403 요청을 홈·주문목록·환자목록까지 조사하고, 웹부터 수정 후 앱 필요 여부 확인을 지시했다. 실제 Chrome Staging Admin/다른 권한 세션 사용도 승인했다. 공유할 권한/API 목록과 코드 주석을 요청했다.
+- **웹 작업 위치:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 새 `feature/DL-16317-api-permissions`, base `origin/release/v1.89.0@d28e1b114`. 원래 `feature/DL-16317-payment-banner@20be3ee65` 및 원본 feature/worktree는 보존했다. 최신 release에는 별도 Lab PR4708이 포함되며 이번 변경은 Clinic만이다.
+- **실제 Staging 확인:** 준비된 두 Chrome 세션의 `/office/employee/own` Preview에서 EDITOR와 OWNER를 각각 확인했다. Editor의 환자목록·주문목록에서 결제 건수 2개 GET가 403, 홈에서는 v2 결제수단 목록도 403이었다. Admin 홈에서는 아래 4개 GET 모두 200이었다. Editor의 주문·환자·직원 필터·크레딧 일반 조회는 200이므로 차단하지 않았다. 계정 역할 변경이나 데이터 생성/수정은 하지 않았다.
+- **서버 계약 확인:** Stage 성공 workflow39195277159의 backend `dl-16786@cbafdde2447d2efd2cc06df772a9cd7b3e2da45a`, `OfficeConstants` payment-manager group와 `SpringSecurityConfig` 실제 역할 검사를 대조했다. 아래 4 API는 OWNER/PAYMENT_MANAGER 전용이며 현재 main도 동일하다. 별도 BE 문의나 정책 추정 없이 확인 가능한 범위다.
+
+| GET API | 웹 상태 | Office 앱 상태 |
+|---|---|---|
+| `/office/payments/v2/status-count` | 공통 메뉴의 OWNER/PAYMENT_MANAGER 조건 추가 | 네이티브 실제 호출 없음, 생성 선언만 존재 |
+| `/office/payments/invoices/outstanding-count` | 공통 메뉴의 OWNER/PAYMENT_MANAGER 조건 추가 | 네이티브 실제 호출 없음, 생성 선언만 존재 |
+| `/office/v2/employers/own/payments` | 중앙 목록 query에 동일 조건 추가, 홈·요금표 보조 조회 및 기존 관리 화면 소비자 확인 | 네이티브 실제 호출 없음, 결제 관리 WebView는 이미 OWNER/PAYMENT_MANAGER 전용 |
+| `/office/employers/own/payments/replacement-required` | 기존 US 홈 + OWNER/PAYMENT_MANAGER 조건 유지, 주석 보완 | 기존 US + OWNER/PAYMENT_MANAGER의 최초 조회·복귀 재조회 조건 유지, 주석 보완 |
+
+- **호출 기준:** OWNER(Admin)/PAYMENT_MANAGER만 허용, EDITOR/VIEWER/MEMBER 및 현재 직원 권한 미확정 상태에서는 대상 조회 생략. 기존 배너도 Member만 제외했던 것이 아니라 이미 전체 역할에 이 allowlist가 적용돼 있었다. 이번에 웹의 남아 있던 3개 조회를 같은 서버 정책에 맞췄다.
+- **과잉 제한 방지:** `/office/credits/own/accounts`, 일반 주문·환자 조회, legacy `/office/employers/own/payments`를 결제 API라는 이유로 일괄 차단하지 않는다. 서버 `EMPLOYEE_SESSION_EDITOR_API_LIST`라는 이름만으로 Editor 이상 제한이라고 추론하지 않는다. 실제 설정은 해당 그룹에 서비스 권한만 검사한다.
+- **기존 Member 차이:** 담당의사 선택/필터가 없는 화면에서 직원 목록 GET를 생략하는 기존 조건은 유지한다. 직원 목록 API 자체를 전역 차단하는 것은 아니며 Editor는 계속 조회한다. 주문 상세 및 조건별 작성/승인 권한 정책은 이번 변경 범위 밖이다.
+- **웹 수정 파일:** `clinic/src/services/payment/payment.query.ts`(count 2건), `clinic/src/services/employer/employer.query.ts`(v2 목록), `clinic/src/components/GlobalBanner/GlobalBanner.tsx`(기존 조건 주석). 새 회귀 파일은 `clinic/src/services/payment/payment.query.test.tsx` 한 개만 추가했다. 직원ID·역할별 query key로 전환 전 결제 캐시 노출을 막고 기존 PAYMENTS prefix 갱신·상세 key와의 호환성을 확인했다. 홈 온보딩의 직원 응답 `hasPaymentProfile` fallback과 주문 `isOrderEnabled` 판단은 그대로다.
+- **앱 작업 위치/변경:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317@5c3504d`. `src/features/home/components/HomePaymentReplacementBanner.tsx`의 기존 제한을 설명하는 주석 5줄만 추가했다. 추가 로직·UI·생성 파일 변경은 필요 없다. 네이티브 호출과 WebView 내부 웹 호출을 구분했다.
+- **검증:** 실제 Staging 확인은 수정 전 증거다. 수정 후에는 queryFn 실제 호출/허용·차단 역할/직원 전환/캐시 격리/기존 결제 갱신을 포함한 신규13 + 기존 배너14 + 상세 갱신1 = 3 suites 28 tests PASS. Clinic TypeScript·변경4파일 ESLint·양 저장소 diff 검사 PASS. 앱은 주석 파일 ESLint PASS. 독립 scoped 코드 검토에서 추가 확정 회귀 없음. Member·Viewer·Payment Manager의 이번 검증은 로컬 테스트이며 실제 계정 QA로 확대하지 않는다.
+- **전달 경계:** 이번 추가 변경은 아직 **제품 커밋·푸시·새 PR 전의 로컬 수정**이다. 웹 3개 tracked 수정 + 새 테스트1, 앱 주석1 변경이 남아 있다. 제품 배포·CodePush·병합·Jira 변경·별도 메시지 전송은 하지 않았다. 기존 Staging 웹과 Office v335의 배포 상태는 그대로이며 이 웹 보완은 아직 배포되지 않았다. 기존 앱 PR329도 미병합 상태 유지다.
+- **다음 시작점:** 사용자가 Git 전달을 지시하면 이 검증된 diff를 웹 새 feature→release/v1.89.0 PR, 앱 기존 feature/PR329 주석 반영으로 정리한다. 이후 웹 Staging에 반영된 빌드에서 Editor/Member의 3개 요청 부재와 Admin/결제관리자 정상 조회를 확인한다. 앱 동작 변경이 없으므로 이 주석만을 위한 CodePush는 필요 없다. 그 외 기존 Staging QA와 앱 개발자 리뷰는 계속 별도다.
+
+## 이전 상태 — 2026-10-19 웹·Office Staging QA 대기 정리 완료
 
 - **최종 대기 지시:** 사용자가 QA 요청을 완료했으며 결과가 나오면 다시 전달하겠다고 확인했다. 추가 개발·배포·조회·모니터링 없이 대기한다.
   다음 재개점은 사용자가 전달하는 QA 결과이며, 기존 브랜치·worktree와 앱 PR329 미병합 상태를 유지한다.

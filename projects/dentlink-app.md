@@ -1,6 +1,14 @@
 # Dentlink Office App setup and current checkpoint
 
-## 현재 전달 상태 — 2026-10-19 권한관리 Staging v335·QA 준비
+## 현재 확인 — 2026-10-19 Editor 결제 API 후속, 앱 로직 추가 불필요
+
+- 웹 Staging Editor에서 결제 건수 2건과 v2 결제수단 목록 GET 403을 확인해 웹 중앙 query를 보완했다. 앱에는 세 API의 네이티브 실제 호출이 없고 생성 선언만 존재한다.
+- 앱 `feature/DL-16317@5c3504d`의 HomePaymentReplacementBanner.tsx에 기존 US + OWNER/PAYMENT_MANAGER 최초/복귀 조회 조건 설명 주석 5줄만 추가했다. ESLint/diff PASS, 동작 변경 없음, 아직 로컬 미커밋 상태다.
+- 기존 PR329 OPEN→develop, 양OS Staging v335/2.2.4, Development v139는 그대로다. 별도 앱 CodePush가 필요한 변경은 없다.
+- 제품 Git 전달 전이며 다음 재개는 웹 새 feature→release PR 및 앱 기존 브랜치 주석 커밋 전달 여부다. 실제 계정 QA·앱 개발자 리뷰·운영 출시는 기존대로 별도다.
+- 경로·역할별 API 표·서버/브라우저/로컬 검증 증거와 다음 시작점은 [권한관리 체크포인트](dentlink-permission-management.md) 최신 절을 따른다.
+
+## 이전 전달 상태 — 2026-10-19 권한관리 Staging v335·QA 준비
 
 - 사용자가 웹·앱 QA 요청 완료를 확인했다. 추가 작업·조회·모니터링 없이 QA 결과 전달까지 대기한다.
 - 사용자 명시 승인으로 이번에만 `feature/DL-16317@5c3504d`에서 Office iOS·Android **Staging v335**를 직접 CodePush했다.
