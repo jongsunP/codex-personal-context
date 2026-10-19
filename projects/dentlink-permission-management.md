@@ -1,6 +1,41 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-19 웹 스테이징 전달·앱 최종 검토 및 보완 완료
+## 현재 상태 — 2026-10-19 웹·Office Staging QA 대기 정리 완료
+
+- **최신 사용자 승인:** 개발 환경 확인은 끝났고 웹·앱을 Staging에서 QA한다. 앱 개발자의 추가 리뷰를 위해 PR329는 develop 대상 미병합을 유지하며,
+  **이번에만 feature/DL-16317에서 Staging으로 직접 CodePush**한다. 일반 앱 전달 정책의 변경이 아니며 이후 자동 반복 승인으로 해석하지 않는다.
+  사용자가 QA를 요청할 수 있도록 담당 Jira 카드 상태·전달 설명과 Git 기반 메모리까지 정리하도록 요청했다.
+- **앱 배포 완료:** `/Users/parkjongsun/Repository/dentlink-app-permission`, `feature/DL-16317@5c3504d85f65e9746cfbffbcf8ba8856ee079a2f`.
+  pull 후 원격 일치·clean 확인. Office iOS 및 Android **Staging v335**, target **2.2.4**, enabled, mandatory=true, rollout100.
+  두 release 명령 exit0와 서버 history 재조회로 확인했다. 최신 틀니 캐시586381f·채팅 타입5c3504d, 앞선 필터50:50·전체 역할 결제배너 보완 포함.
+  이전 Staging 양OS v334에서 갱신했으며 Development v139(be332c5)·Production·Lab 앱은 변경하지 않았다.
+- **배포 검증:** HEAD git archive와 `yarn install --immutable`의 격리 source로 번들/Hermes를 생성했다. 설치 후 모든 tracked 파일이 feature와 동일하고
+  Amplitude/Datadog/Firebase 의존성 버전도 lock과 일치한다. iOS·Android source map에 포함된 제품 TS/JS 각339파일 원문이 최종 source와 동일하다.
+  양OS2.2.4 네이티브 baseline 및 package/lock/env/Metro/Babel 차이 없음. 기존 영상 asset 1.48MiB 경고는 기존 force 배포 방식으로 처리했으며 새 asset은 아니다.
+  첫 iOS 호출은 outputDir가 CodePush로 끝나지 않아 업로드 전 실패했고 올바른 경로로 재실행해 성공했다. 별도 중복 release는 없다.
+  iOS packageHash `7cc1ea8be29ace851107e1df5fee1480702f94cb558a65ebb3276ab186e1e73c`,
+  Android `3575fb5d34f5f28b35210baff92673051250c7879aa7aedcb516ae28864514d6`.
+- **증거:** `/tmp/dl16317-stg-codepush-current.json` 및
+  `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dl16317-stg-codepush-20261019-oeu_6uzt/metadata.json`에 source SHA·정확한 설정·전후 history·검증 기록.
+  같은 디렉터리에 양OS release logs, CodePush 번들·source map 보존. 검증 후 배포용 임시 source/의존성만 삭제했다.
+  앱 원본 공용 node_modules·Member 시뮬레이터·Metro는 변경/종료하지 않았다.
+- **PR 상태:** [앱 PR329](https://github.com/Innvoaid/dentlink-app/pull/329) OPEN→develop, head5c3504d. 본문에 Staging v335 전달 및 이번 예외·기기 QA 경계를 반영했다.
+  제품 소스의 추가 변경·새 커밋·PR 병합·태그·스토어 배포는 하지 않았다. 이전 커밋·push·검증(235 tests, 동일 의존성 baseline과 같은6타입진단)은 아래 기록을 유지한다.
+- **웹 전달:** 사용자가 PR4717 병합 및 Staging 배포를 진행했다. stage413ed3564 / release8d209ada9는 동일 tree다.
+  Lab39194762505·Admin39194762571 성공, Clinic39194762561은 마지막 독립 조회에서 두 지역 ECS 배포 진행 중이었다.
+  이후 사용자가 **"웹 배포는 내가 확인할께. 이미 반영되긴 했어. 그거는 넘어가고 나머지 진행해"**라고 명시했다.
+  따라서 사용자 반영 확인을 기준으로 웹 QA 준비 완료로 정리하고 배포 polling을 즉시 종료했다. Clinic Actions 성공을 독립 검증했다고 쓰지 않는다.
+- **Jira:** Office [DL-16752](https://innovaid.atlassian.net/browse/DL-16752)를 Ready for Deploy→**READY FOR QA**로 변경하고
+  Staging v335·2.2.4·업데이트 적용 안내·권한별 QA 범위·PR 미병합 예외를 댓글로 저장했다. Jira MCP 재인증 오류로 기존 인증된 Chrome에서 작업했다.
+  웹 [DL-16319](https://innovaid.atlassian.net/browse/DL-16319)도 사용자 Staging 반영 확인 기준으로 **READY FOR QA**로 변경하고
+  release 반영·권한별 QA 범위·Office Staging 연계·BE 잔여 없음·QA/운영 별도 경계를 댓글로 저장했다. 양카드 본래 설명/담당자를 유지하고 상위 DL-16317은 변경하지 않았다.
+  Chrome 화면에서 상태/댓글 저장을 재확인했고 `/tmp/dl16317-staging-jira/{office,web}-ready-for-qa.png`에 증거를 남겼다.
+- **현재 영향/다음:** 사용자 추가 개발이나 BE 문의가 필요한 확정 항목은 없다. Staging2.2.4 앱에서 업데이트 적용 후 같은 병원의 Member/Admin으로
+  메뉴·필터·주문1단계 담당 지정·주문 상세3종·채팅·승인·임시저장·업로드 QA를 요청한다. 기존 개발 환경 사용자 확인과 Staging 실기기 전체QA는 구분한다.
+  앱 개발자 PR 리뷰·develop 병합, QA 통과 후 운영 전달은 별도다. 브랜치·worktree는 모두 보존하며 QA 결과가 다음 재개점이다.
+  E2E/Vercel은 사용자 제외 범위로 추가 조치하지 않았고 Slack·QA 담당자에게 별도 메시지는 보내지 않았다.
+
+## 이전 체크포인트 — 2026-10-19 웹 스테이징 전달·앱 최종 검토 및 보완 완료
 
 - **사용자 범위:** 웹 원격 stage를 최신 원격 master에서 삭제·재생성하고 release/v1.89.0→stage PR 생성 승인.
   이후 앱 PR의 배포 전 코드/회귀/권한/성능 위험 검토와 필요한 수정·PR 반영을 승인했다.

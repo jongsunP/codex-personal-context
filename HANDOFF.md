@@ -46,26 +46,11 @@ Do not store secrets or private customer data here.
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
   — 2026-10-16 PR #4705의 develop 병합 완료. 운영 릴리스는 별도이며 원본과 날짜별 전달 브랜치를 보존한다.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
-  — 2026-10-19 웹stage를master8772d6882로재생성하고release→stage PR4717생성,사용자병합으로stage413ed3564 확인.
-  Clinic/Lab/Admin 배포실행까지관측,배포완료·QA미확정. 기존stage복구ref보존.
-  앱 최종리뷰에서틀니캐시회귀+채팅타입2건수정·235 tests/lint/diffPASS. 동일의존성develop과기존타입6진단동일(신규0).
-  feature/DL-16317@5c3504d·PR329 OPEN→develop·clean,웹추가수정/BE추가문의없음. 이후배포는사용자담당.
-  기존Developmentv139는be332c5로신규두커밋미포함,Staging웹과통합QA하려면최신PR코드의Staging앱필요.
-  — 최신 예외 감사에서 웹 추가 수정 없음. 앱 채팅·피드백·승인의 일시 오류 복구3건과 입력/첨부/완료 응답 경계를 보완했다.
-  949e0f6/dafcad7/6437dbb 정상 커밋·푸시·PR329 본문 갱신, 기존6파일만 변경. 관련69 tests·lint PASS, 타입18진단 기존동일.
-  새 UI/문구/정책/파일 없이 기존 refresh/Retry/앱·화면 복귀를 사용한다. Vercel은 사용자 지시로 제외했다.
-  — 2026-10-16 DEV QA 후 담당 변경 경고를 보완해 커밋·푸시했고, PR4710은 사용자 병합으로 release/v1.89.0 MERGED.
-  merge8daac3561/18:28:16 KST를 GitHub 확인. 사용자가 해당 release 기반 DEV 배포 진행 중이며 완료/새 배포본 QA는 아직이다.
-  현재 permission worktree는 release24d3ff18a에서 분기한 feature/DL-16317-dentist-warning@e28b9c7e8·clean이다.
-  SSR 문자열/숫자 ID와 다른 본인 Draft 제외 조건 수정, 기존파일2개·관련37 tests/3서비스 타입/정상push검사 PASS.
-  **BE 최신 답변으로 정상 종결:** Draft 주문의 환자는 아직 내 환자가 아니므로 통합 Patients 환자217 미포함은 정상이다.
-  BE 추가 수정/API 질문으로 남기지 않는다. 기존 Draft 포함 PRD보다 이 사용자 전달 최종 정책을 우선한다.
-  DEV Admin/Member 메뉴·필터·NEW/FOLLOW_UP 저장·상세3종·링크·직접 URL·합성 담당 변경/복구 QA 기록을 보존한다.
-  Draft9738·9739·9740 보존(제출/결제 없음). 새 수정의 배포본 QA는 아직이다.
-  원본 웹 featuref4bfaf1bf와 worktree 보존, PR4700/4706 release 병합·DEV 사전 테스트 배포 기록 유지.
-  앱 PR329 OPEN→develop·featurebe332c5·clean, 미병합 유지. Development v139에최종앱보완포함,실제기기적용후QA한다.
-  다음은 사용자 DEV 배포 완료→경고 재확인→스테이징 QA, 앱은 PR329 포함 버전으로 실기기 QA.
-  다른 역할·승인 대기 쓰기·다주문 지연 등 미실시 범위와 배포/Member 활성화 순서는 상세 체크포인트를 따른다.
+  — 2026-10-19 웹stage413ed3564(release8d209ada9와tree동일), 사용자Staging반영확인·추가배포조회중단지시로정리.
+  앱feature/DL-16317@5c3504d를 사용자 이번예외승인으로 양OS Stagingv335/2.2.4 직접배포·서버/소스확인완료.
+  PR329 OPEN→develop·미병합유지(앱개발자리뷰용),Developmentv139/Production변경없음. 웹DL-16319·앱DL-16752 모두READY FOR QA·전달댓글완료.
+  추가확정FE개발/BE문의없음. 다음은Staging앱업데이트적용·웹/앱권한QA,별도로앱개발자PR리뷰. 실기기적용·QA통과·운영출시는별도다.
+  원본feature/worktree/Member시뮬레이터·Metro보존. 상세검증(235tests,baseline동일6타입진단)·정책·배포아티팩트는정본참조.
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — PR #4699의 release/v1.89.0 병합 완료. QA·운영 출시 별도이며 브랜치는 보존한다.
 - Dentlink 통합알림센터: [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)

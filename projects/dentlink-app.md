@@ -1,6 +1,18 @@
 # Dentlink Office App setup and current checkpoint
 
-## 현재 전달 상태 — 2026-10-19 최종 리뷰 보완·PR329 반영 / 이후 배포 사용자 담당
+## 현재 전달 상태 — 2026-10-19 권한관리 Staging v335·QA 준비
+
+- 사용자 명시 승인으로 이번에만 `feature/DL-16317@5c3504d`에서 Office iOS·Android **Staging v335**를 직접 CodePush했다.
+  target2.2.4·mandatory·100%활성, 양명령 성공·서버 history·source map 제품339파일 일치 확인. 최신 틀니 캐시·채팅 타입 보완 포함.
+- PR329는 앱 개발자 리뷰를 위해 **OPEN→develop·미병합** 유지한다. 본문에 전달 상태를 갱신했으며 일반 배포 정책을 변경한 것은 아니다.
+  Developmentv139(be332c5)·Production·Lab 앱은 그대로다. 원본feature/worktree와 사용자 Member 시뮬레이터·Metro를 보존한다.
+- Office Jira DL-16752를 **READY FOR QA**로 변경하고 업데이트 적용 조건·권한별 QA 범위를 기록했다. 실제 기기 v335 적용/전체QA는 아직이다.
+  웹은 사용자 Staging 반영 확인/추가조회 중단 지시에 따라 DL-16319도 READY FOR QA로 정리했다. 양카드 상태·댓글 저장 확인 완료.
+  Clinic Actions 최종 성공은 추가 조회하지 않았으며 사용자 확인과 독립 검증 경계는 [권한관리 체크포인트](dentlink-permission-management.md)에 남겼다.
+- 다음은 Staging2.2.4 앱에서 업데이트 적용 후 Admin/Member 통합QA 및 앱 개발자의 PR리뷰다. 추가 확정 FE개발·필수BE문의는 없고 QA결과를 기다린다.
+  배포 아티팩트/설정/hash·검증 경계·이번 직접feature 배포 예외는 상세 체크포인트에 보존한다.
+
+## 이전 전달 상태 — 2026-10-19 최종 리뷰 보완·PR329 반영 / 이후 배포 사용자 담당
 
 - 앱 기존 `feature/DL-16317@5c3504d`에 틀니 저장 후 직원별 캐시 갱신(586381f)과 최근 채팅 응답 타입 보완을 커밋·푸시했다.
   기존 PR329 OPEN→develop·MERGEABLE/CLEAN, 로컬/origin 동일·clean. 새파일·UI·문구·정책·네이티브/lock/env 변경 없음.
