@@ -1,7 +1,11 @@
 # Dentlink 권한관리 — DL-16317
 
-## 현재 상태 — 2026-10-19 앱 Member QA 보완·Development v139 완료 / 웹 QA PR4715 생성
+## 현재 상태 — 2026-10-19 앱 Member QA 보완·Development v139 완료 / 웹 QA PR4716 생성
 
+- **브랜치 규칙 정정:** 기존 `feature/` 규칙을 놓치고 만든 `codex/dl-16317-payment-banner`를 사용자 지적 후 정리했다.
+  현재 로컬·원격은 `feature/DL-16317-payment-banner@20be3ee65`, [PR4716](https://github.com/Innvoaid/dentlink-client/pull/4716) OPEN→release/v1.89.0이다.
+  GitHub에서 기존 PR head 교체를 지원하지 않아 동일 SHA/diff로 새 PR을 만들고 #4715에 교체 링크를 남겨 닫았다. 잘못된 codex ref만 삭제했다.
+  제품 코드·release 대상·원본 feature/worktree는 그대로이며 기존 SESSION_WORKFLOW의 브랜치 생성 전 접두사 검증을 적용한다.
 - **사용자 범위 확장:** 앱 Member 홈 오류/Action Required 카드 부재와 주문 필터 2개 탭 비율을 조사·보완하도록 요청했다.
   시뮬레이터·Reactotron 사용과 Member 로그인을 직접 완료했다. 기존 결제 API 오류가 다른 역할에도 있었음을 지적한 뒤,
   **앱부터 전체 권한 기준으로 완료 → 웹도 동일하게 진행**, 앱 Development CodePush 및 웹 release 기반 QA 브랜치→PR까지 명시 승인했다.
@@ -24,13 +28,13 @@
   필터Status/OrderDates 양쪽50:50 및 전환 시각검수, 수정후JS전체새로고침·홈재진입22요청에서결제조회0·오류0 확인.
   기존필터Jest3 PASS, 최종실제배너임시Jest10 PASS(OWNER/PM허용,EDITOR/VIEWER/MEMBER/undefined차단·캐시true/권한전환 포함).
   중간9개테스트의EDITOR/VIEWER허용기대는폐기. 임시test삭제,배너lint/format PASS·필터기존unusedargs경고1. Android실기기·OTA적용완료와는구분한다.
-- **웹 완료:** 현재worktree `dentlink-client-permission`을 최신origin/release/v1.89.0@162422ab9 기반 `codex/dl-16317-payment-banner`로 전환했다.
+- **웹 완료:** 현재worktree `dentlink-client-permission`을 최신origin/release/v1.89.0@162422ab9 기반 `feature/DL-16317-payment-banner`로 전환했다.
   원본feature와기존QA브랜치/worktree보존. GlobalBanner의확인된activeEmployee권한으로queryenabled+render제한,
   기존payment helper/test확장. 기존3파일만 변경,응답은병원단위boolean이므로querykey변경·새helper/디자인/문구추가불필요.
   웹은해당query오류toast설정이없으므로앱처럼토스트발생했다고단정하지않는다. 브라우저실계정QA는이번웹추가수정범위에서미실시.
   관련Jest14/파일lint PASS. 최초커밋hook에서최근release의Lab jsqr설치누락으로실패하여frozen-lockfile설치(+1)후Clinic/Lab/Admin타입hook모두PASS.
   정상pre-push의전체lint·Admin guard·coverage검사도PASS(기존lint경고있음). package/lock/env변경없음.
-  `20be3ee65078f7b8c0be335e2bd421c85104b4d5` 커밋·푸시 후 [PR4715](https://github.com/Innvoaid/dentlink-client/pull/4715) OPEN→release/v1.89.0 생성·채팅첨부.
+  `20be3ee65078f7b8c0be335e2bd421c85104b4d5` 커밋·푸시 후 [PR4716](https://github.com/Innvoaid/dentlink-client/pull/4716) OPEN→release/v1.89.0 생성·채팅첨부.
   GitHub base/head/변경3파일과로컬·원격SHA일치·clean 확인. 병합·웹배포는하지않았다.
 - **앱 Development v139 배포:** 사용자 최신 승인에 따라 최종be332c5를양OS에배포했다. iOS/Android 모두target2.2.4, enabled, mandatory=true,rollout100.
   양release명령exit0·서버history read-back·설명SHA·양source map의배너/필터원문일치까지확인. PR병합·태그·Staging/Production/Lab배포없음.
@@ -39,10 +43,12 @@
   freshgitarchive+immutable설치·버전검증으로원본공용의존성미변경,네이티브/lock은v138과동일.
   `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dl16317-dev-codepush-fix-20261019-sl5v0vhc/metadata.json`과로그/번들/maps보존,
   배포용임시source/의존성만제거. `/tmp/dl16317-dev-codepush-current.json`은최신메타데이터참조. **실기기v139다운로드·재시작·적용완료는별도**다.
-- **다음/남은 일:** 이번보고된FE조치는완료,필수BE추가문의없음. 앱2.2.4 Development 실제기기의v139적용후Member홈오류/필터를사용자재확인.
-  웹은PR4715검토·사용자release병합/배포후권한별홈배너QA. 앱PR329의develop병합및전체권한/다른실기기QA는기존별도단계유지.
+- **사용자 재확인:** 배포 후 사용자가 앱 홈 오류 해소와 필터 디자인 적용을 확인했다. Action Required 세 카드 부재는 정상 응답의0/0/0과 기존 표시 조건에 따른 것이며 Member라서 일괄 숨기는 것은 아니라고 설명했다.
+  사용한 OS/실기기와 실제 적용 라벨은 별도 확인하지 않았으므로 양OS 전체QA나 v139기기라벨 검증으로 확대하지 않는다.
+- **다음/남은 일:** 이번보고된FE조치는완료,필수BE추가문의없음. 보고된 앱 홈 오류·필터는 사용자 재확인까지 완료했다.
+  웹은PR4716검토·사용자release병합/배포후권한별홈배너QA. 앱PR329의develop병합및전체권한/다른실기기QA는기존별도단계유지.
   이번범위를전체QA/성능/출시완료로확대하지않으며다른실패API를일괄숨기거나결제업무를변경하지않았다.
-  원본웹feature/DL-16317와기존QA브랜치,앱feature/worktree모두보존. 향후웹후속은현재PR4715브랜치/최신release상태부터확인한다.
+  원본웹feature/DL-16317와기존QA브랜치,앱feature/worktree모두보존. 향후웹후속은현재PR4716브랜치/최신release상태부터확인한다.
 - **로컬 QA 환경:** `/tmp/dl16317-member-qa-current.json`의격리source/Metro8081/iPhoneUDID 참조. 원본공용node_modules불일치로임시immutable설치와Pods를사용했다.
   임시fetcher/Reactotron 진단변경은복원했고로컬진단receiver종료,제품소스외노출/커밋없음. 사용자Member로그인시뮬레이터와Metro는보존한다.
   배포는별도freshgitarchive를사용하며시뮬레이터진단소스를재사용하지않는다. `/tmp/dl16317-member-qa-api.jsonl`은endpoint/status/code/trace/배열길이만저장했다.

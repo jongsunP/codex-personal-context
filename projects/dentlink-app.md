@@ -8,7 +8,8 @@
 - iOS시뮬레이터 실제Member·Reactotron으로원인/수정/필터를확인했고,기존필터3개+최종배너임시10개검증통과(임시파일삭제).
 - 사용자승인으로최종be332c5를Office iOS/Android **Development v139**에배포했다. 양OS2.2.4·mandatory·100%활성·exit0·서버read-back·source map일치확인.
   PR329 OPEN→develop·미병합. 실기기v139적용/전체QA·Staging/Production은별도다. fresharchive immutable설치로공유node_modules미변경.
-- 웹도같은서버기준으로QA PR4715→release/v1.89.0 생성,미병합·미배포. 상세원인/근거/hash/다음순서는[권한관리체크포인트](dentlink-permission-management.md)를따른다.
+- 배포 후 사용자가 앱 홈 오류 해소와 필터 디자인 적용을 확인했다. 사용 OS/적용 라벨 및 전체 역할 QA는 별도다.
+- 웹도같은서버기준으로QA PR4716→release/v1.89.0 생성,미병합·미배포. 상세원인/근거/hash/다음순서는[권한관리체크포인트](dentlink-permission-management.md)를따른다.
 
 ## 이전 전달 상태 — 2026-10-19 권한관리 feature Development v138 CodePush
 

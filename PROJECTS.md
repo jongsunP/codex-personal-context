@@ -187,7 +187,8 @@ For detailed current state, read:
 - **최신 2026-10-19:** Member 앱 QA 후 필터50:50 및 기존결제안내API 권한누락을 보완했다.
   서버코드확정 OWNER/PAYMENT_MANAGER만조회·표시하도록웹/앱을맞췄다. 앱feature/DL-16317@be332c5 커밋·푸시·PR329반영,
   Office iOS/Android Development **v139**(2.2.4·mandatory100%활성) 배포·read-back완료. 실제기기적용/전체QA별도.
-  웹은최신release162422ab9기반 `codex/dl-16317-payment-banner@20be3ee65`, **PR4715 OPEN→release/v1.89.0**. 병합·웹배포안함.
+  웹은최신release162422ab9기반 `feature/DL-16317-payment-banner@20be3ee65`, **PR4716 OPEN→release/v1.89.0**. 동일SHA/diff로접두사오류의PR4715를대체했고병합·웹배포안함.
+  사용자가배포후앱홈오류해소·필터적용을확인했으며사용OS/실제라벨·전체QA와는구분한다.
   앱시뮬레이터Member/Reactotron·필터3+배너임시10검증,웹14tests·3서비스type·정상push검사PASS. 추가BE질문없음. 모든브랜치/worktree보존.
 - **최신 예외 감사:** 웹은 새 확정 과잉 차단/입력 유실 없이 유지했다. 앱 채팅·피드백·승인의 일시 오류 후 복구 누락을 보완했고,
   입력·첨부 보존과 403/404·직원 전환 차단을 함께 검증했다. 새 UI/문구/정책/파일은 추가하지 않았다.

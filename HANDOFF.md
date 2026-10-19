@@ -48,8 +48,8 @@ Do not store secrets or private customer data here.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
   — 2026-10-19 Member 앱 QA의필터50:50과홈기존결제안내403 보완완료. 서버코드상OWNER/PM만허용함을확인해웹/앱전체역할조건정렬.
   앱featurebe332c5·PR329반영및Office iOS/Android Development **v139**(2.2.4·mandatory100%활성)배포/read-back완료. 실제기기OTA적용/전체QA별도.
-  웹은release162422ab9기반 `codex/dl-16317-payment-banner@20be3ee65`, **PR4715 OPEN→release/v1.89.0** 생성·미병합.
-  앱시뮬레이터/Reactotron과필터3+배너임시10검증,웹14tests·3서비스타입·정상push검사PASS. 순서는앱v139실기기확인/웹PR검토·병합·배포후QA.
+  웹은release162422ab9기반 `feature/DL-16317-payment-banner@20be3ee65`, **PR4716 OPEN→release/v1.89.0** 생성·미병합. 접두사오류의PR4715는동일SHA/diff로대체후닫았다.
+  앱시뮬레이터/Reactotron과필터3+배너임시10검증,웹14tests·3서비스타입·정상push검사PASS. 사용자가배포후앱오류해소·필터적용을확인했다. 웹PR검토·병합·배포후QA가남았다.
   추가BE질문없고새UI/문구/파일없음. 공유의존성/네이티브/lock미변경,배포용임시source정리. 브랜치/worktree와Member시뮬레이터/Metro보존.
   — 최신 예외 감사에서 웹 추가 수정 없음. 앱 채팅·피드백·승인의 일시 오류 복구3건과 입력/첨부/완료 응답 경계를 보완했다.
   949e0f6/dafcad7/6437dbb 정상 커밋·푸시·PR329 본문 갱신, 기존6파일만 변경. 관련69 tests·lint PASS, 타입18진단 기존동일.
