@@ -1,5 +1,14 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 — 2026-10-20 Office 앱 QA 브랜치 준비, DL-16851은 웹 수정으로 공통 대응
+
+- 사용자 요청: 앱도 QA를 시작하며 지금처럼 QA 브랜치를 만들고 필요한 수정은 로컬 커밋으로 모은다. 제품 push는 이후 일괄 진행하므로 보류한다.
+- `/Users/parkjongsun/Repository/dentlink-app-permission`에서 기존 `feature/DL-16317`을 정상 pull한 뒤 `origin/develop`을 fetch했다. 최신 develop `43f787909d29f4899a04fad04d3f452d98b53cad`에서 **`feature/DL-16317-qa`**를 `--no-track`으로 생성·checkout했다. HEAD=origin/develop, diff0, upstream 없음, clean이다. 기존 feature/DL-16317@f037c80와 원격 브랜치/worktree는 보존했다.
+- Jira DL-16851 본문 및 댓글44503 ‘앱에서도 동일현상’을 재확인했다. 앱의 `OrderDetailScreen.tsx`는 `/orders/${orderId}`를 WebView로 열고 Staging은 `stg-portal.dentlink.io`로 연결한다. WebView 캐시는 비활성화이며 별도 네이티브 담당 변경 모달/경고/실제 changeDentist 호출은 없다. 독립 읽기 전용 점검도 같은 결론이다.
+- **조치 판정:** 기존 웹 QA 커밋 `b8233cb9a`가 모바일/앱 WebView 경고까지 수정한다. 따라서 이 카드만을 위한 앱 코드 수정·빈 커밋·CodePush는 필요 없다. 앱 새 커밋은 0개이며 QA 브랜치만 준비했다. 웹 수정도 아직 로컬 미푸시·미배포다.
+- **검증/다음:** 앱 수정이 없어 새로운 테스트/네이티브 빌드/시뮬레이터 QA는 실행하지 않았다. 웹의 앞선 관련51tests 및 타입 검사 결과를 유지한다. 웹 수정 배포 후 앱 주문상세에 재진입해 Member 본인 주문 경고 표시와 Admin 미표시를 실제 화면에서 확인한다. 이후 앱 고유 QA가 나오면 이 QA 브랜치에서 수정·검증·로컬 커밋을 모으고, 사용자 지시 후 push/PR→develop 통합→develop 전체 Staging CodePush 순서를 따른다.
+- 이번에는 제품 push/PR·Jira 댓글/상태·배포·별도 제품 카드 생성은 하지 않았다. 이 건은 웹 구현으로 공통 대응하며 앱에서 중복 구현하지 않는다.
+
 ## 최신 — 2026-10-20 웹 QA 2건 구현·검증·로컬 커밋 완료, 제품 푸시 보류
 
 - 사용자 지시: 현재 `feature/DL-16317-qa`에서 앞선 DL-16751을 먼저 커밋하고 DL-16851을 구현·별도 커밋한다. 제품 푸시는 이후 모아서 진행하므로 이번에는 하지 않는다. 모델 변경 후 두 건을 다시 검토하라는 요청까지 반영했다.

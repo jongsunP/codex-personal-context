@@ -185,6 +185,8 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
+- **2026-10-20 앱 QA 준비:** 앱 permission worktree도 최신 develop43f7879에서 `feature/DL-16317-qa` 생성·checkout 완료(upstream 없음, diff0, clean). DL-16851은 웹 주문상세 WebView 경로여서 기존 웹 수정 b8233cb9a로 공통 대응하며 앱 별도 수정/커밋/CodePush는 없다. 이후 앱 고유 QA 수정은 이 브랜치에 로컬 커밋으로 모으고 제품 push는 보류한다. 실제 앱 화면 확인은 웹 수정 배포 후 진행한다.
+
 - **2026-10-20 QA 2건 로컬 커밋 완료:** 웹 permission checkout의 `feature/DL-16317-qa`(release 기준 `f1dab1b1e`, upstream 없음, clean)에 DL-16751 제목 위치 조정 `1db28a295`, DL-16851 Member 담당 변경 경고 수정 `b8233cb9a`를 각각 커밋했다. 관련 51tests·Clinic/Lab/Admin 타입 검사 통과, 모델 변경 후 두 건 재검토 완료. 앱 동일 증상은 웹 주문상세 WebView이므로 이번 웹 수정으로 대응한다. 제품 push는 사용자가 이후 일괄 진행하기로 하여 보류했고 PR/배포/Jira 변경은 없다. 실제 화면 QA는 별도이며 웹 권한 QA를 이 브랜치에 모아 이어간다.
 
 - **이전 전달 2026-10-19:** 사용자 PR4719 release병합(fef630005) 확인. 원격 stage413ed3564를 복구 ref로 보존 후 master8772d6882에서 재생성, [PR4720](https://github.com/Innvoaid/dentlink-client/pull/4720) →stage 준비 후 사용자 병합완료(stage4b28c28a6, release와tree동일).

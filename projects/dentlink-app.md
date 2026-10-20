@@ -1,5 +1,11 @@
 # Dentlink Office App setup and current checkpoint
 
+## 최신 — 2026-10-20 권한관리 앱 QA 브랜치 준비
+
+- 사용자 요청으로 permission worktree에 `origin/develop@43f787909d29f4899a04fad04d3f452d98b53cad` 기준 `feature/DL-16317-qa`를 생성·checkout했다. upstream 없음·diff0·clean이며 기존 feature/DL-16317은 보존했다. 이후 앱 QA 수정은 이 브랜치에 로컬 커밋으로 모으고 제품 push는 보류한다.
+- DL-16851 앱 증상은 웹 주문상세 WebView의 경고 누락이다. 웹 커밋 `b8233cb9a`로 모바일/앱까지 대응하므로 별도 앱 코드·커밋·CodePush는 불필요하다. 웹도 아직 미푸시/미배포이며 웹 배포 후 실제 앱 화면 QA가 남는다.
+- 제품 push/PR·Jira·배포 변경 없음. 상세 근거와 다음 시작점은 [권한관리 체크포인트](dentlink-permission-management.md)를 따른다.
+
 ## 최신 대기 — 2026-10-19 권한관리 PR329 develop 병합 완료
 
 - 사용자 병합을 실조회로 확인했다. PR329 MERGED→develop, 18:13:16 KST, merge/current remote develop `43f787909d29f4899a04fad04d3f452d98b53cad`.
