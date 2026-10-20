@@ -2,6 +2,10 @@
 
 ## 현재 상태 — 2026-10-20 기공소 표 가독성 정리 완료
 
+- **후속 사실 정정:** 소속 전환은 일반 EXTERNAL 기공소의 웹 기능이 아니다. 현재 웹 `canSwitchLabAtom`은 활성 소속 유형이
+  INTERNAL 또는 SHARED이고 유효 소속이 2개 이상일 때만 허용한다. 기존 표에서 이 조건을 누락했다.
+  공유기공소 DL-16092 작업의 `d7c308f27`(9/6)에서 전환 상태·복구, `caf918b24`(9/7)에서 관련 UI가 추가됐다.
+  사용자의 질문에 읽기 전용으로 확인한 정정이며 **Notion 행에는 아직 미반영**이다. 일반 기공소 누락으로 집계하지 않고 조건부 범위로 구분해야 한다.
 - 사용자 요청으로 기공소 표만 다시 정리했다. 치과와 형식을 맞출 필요는 없으며, 핵심은 앱에서 안 되는 작업과 이미 가능한 범위를 한눈에 구분하는 것이다.
 - **미지원 정리 10개 요약 목록과 5개 분야 제목은 그대로 유지**하고 표만
   **기능 / 앱에서 안 되는 것 / 현재 가능한 범위·조건**의 3열로 바꿨다. 현황·우선 순위·사용 빈도 열은 제거했다.
@@ -221,9 +225,12 @@ fetch 후 고정한 소스를 조사용 임시 사본에서 읽었다. 기존 �
 - 비생성 코드에 urgentCount/delayCount/progressEndAt/delayBaseAt를 이용한 조회/집계가 없습니다.
 - 개별 주문 Delayed 상태 배지 코드는 있습니다(`src/features/orderList/components/OrderStatusBadge.tsx:17-48`). 따라서 지연 표시 자체가 없다는 뜻은 아닙니다.
 
-### 8. 로그인 상태에서 소속 기공소 전환 — 코드 있으나 정상 진입 비활성
+### 8. INTERNAL·SHARED의 복수 소속 전환 — 조건부 웹 기능, 앱 직접 진입 비활성
 
-- 모바일웹 햄버거 메뉴 Profile: `lab/src/components/Layout/Header.tsx:247-255`; Profile 버튼이 전환 패널을 엶: `lab/src/components/Layout/Profile.tsx:40-65`; 다중 소속 여부에 따른 전환 UI.
+- 웹 전환 허용 조건은 `lab/src/atoms/common.ts:34-40`의 **INTERNAL 또는 SHARED + 유효 소속 2개 이상**이다.
+  일반 EXTERNAL은 제외된다. 패널을 열 수 있다는 사실만으로 전환이 제공된다고 판단하면 안 된다.
+- 모바일웹 햄버거 메뉴 Profile: `lab/src/components/Layout/Header.tsx:247-255`; Profile 버튼이 패널을 엶: `lab/src/components/Layout/Profile.tsx:40-65`.
+  `LabSwitchModal.tsx:54,142,235`도 위 조건으로 소속 조회·전환 실행·목록 렌더링을 제한한다.
 - 앱 현재 Home은 EmployeeProfile만 실제 렌더: `src/features/home/screens/HomeScreen.tsx:333-342`.
 - EmployeeProfile에는 전환 BottomSheet/handler가 있지만 실제 프로필 영역은 View이고 BottomSheet.present를 호출하는 버튼이 없습니다: `src/features/common/components/EmployeeProfile.tsx:121-168`.
 - 새 HomeProfileHeader 및 밀링 경로는 `10/26 배포일에 해제` 주석으로 비활성: `HomeScreen.tsx:336-342`, `src/navigations/RootNavigator.tsx:183-203`.
