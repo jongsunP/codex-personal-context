@@ -13,7 +13,7 @@
 - GitHub 9환경 **Variables235개 유지**, 기존 값을 바꾸지 않고 **개별 Secrets98개** 등록: Admin 각1, Clinic dev47/stage46/prd2, Lab0. 새 연결은 명시적으로 허용한 개별 Secret만 공급한다. 사용하지 않는 DENTLINK_BUILD_ENV6·DENTLINK_E2E_ENV2 묶음은 제거했다. master/develop/stage/release의 활성 workflow에서 해당 묶음을 읽지 않음을 확인한 뒤 처리했다. 기존 repository Secrets→ECS와 다른 기존 환경은 유지했다.
 - 최초 이관용 로컬 원본9개와 당시 manifest를 `/Users/parkjongsun/.local/share/dentlink-env-backups/20261020-DL-16821`에 백업했다(디렉터리700/파일600, 원본 바이트 대조). E2E는 기존 Clinic 값에서 허용 키만 가져와 ignored `e2e/.env.development`·`.env.staging` 각48키 파일을 최초 준비했다(600, 덮어쓰기 없음). 실제 값은 코드·문서·개인 기억에 기록하지 않았다. 이후 백업/로컬 실제 값은 사람이 관리하며 추가 요청 없이 에이전트가 다시 열지 않는다.
 - AGENTS/.cursorrules/claude.md 및 E2E skill에 실제 값 접근·수정·터미널/MCP/브라우저/Git 이력 우회 금지를 반영했다. Cursor 파일 제외와 Claude Read/Edit deny를 추가했다. **무제한 터미널·MCP·같은 OS 인증까지 기술적으로 차단한 것은 아니다.** 기술적 완전 차단은 실제 파일·인증을 에이전트 실행 환경에서 분리해야 한다. 설치된 Codex CLI 0.163.0-alpha.10.2는 문서의 custom permission deny profile을 합성 임시 설정에서 인식하지 않아 작동하지 않는 .codex 설정을 추가하지 않았다.
-- 노션 모음+내용3개 구조 유지. 이전 회의 기록은 보존하고, 회의 연결 흐름·팀 가이드·모음 설명을 사람 수동 관리로 갱신하여 read-back했다. Jira DL-16818은 목적/문서, DL-16821은 새 작업 정의로 갱신·재조회했다. 상세 진행은 하위 댓글44519에만 기록했다. PR 제목/본문도 release 대상·사람 관리·현재 검증/미검증 기준으로 갱신했다.
+- 사용자 후속 요청으로 **노션 운영 정본을 1개로 통합**했다. 기존 모음 URL `https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c`를 `웹 환경변수 관리: 최종 운영 가이드`로 변경하고 관리 방식·로컬 수동 설정·키 추가/갱신을 모았다. 기존 하위3문서는 본문을 그대로 보존해 `[이력]` 제목과 최종문서 안내를 붙이고 하단 이력 토글에 배치했다. 새 페이지는 만들지 않았으며 총4페이지(최종1+이력3)다. 부모 구조·하위3본문 불변을 read-back 검증했다. Jira DL-16818은 최종문서 하나로 연결하고 DL-16819는 `초기 조사·회의 기록`(완료), DL-16821은 실행·검증(진행 중)으로 구분했다. 본문 정의/이후 진행은 하위 댓글44519 기준을 유지하며 불필요한 새 카드·댓글은 만들지 않았다. PR 제목/본문도 release 대상·사람 관리·현재 검증/미검증 기준으로 갱신했다.
 
 ### 검증과 영향
 
