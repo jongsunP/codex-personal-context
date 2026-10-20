@@ -1,6 +1,27 @@
 # Dentlink 권한관리 — DL-16317
 
-## 최신 조사 — 2026-10-20 DL-16850 재현용 Draft 생성·비교 주문 응답 확인, Lab 로그인 대기
+## 최신 — 2026-10-20 DL-16850 제외, 웹 QA PR4736 전달·Jira 상태 정리
+
+- 사용자 지시: DL-16850은 우선 제외하고 나머지 완료 QA를 PR로 전달하며 Jira는 현재 작업 상태에 맞춰 **상태만** 변경한다. 이번 작업은 PR 전달까지이며 병합·배포·CodePush·리뷰 대응을 실행하지 않는다.
+- 웹 `/Users/parkjongsun/Repository/dentlink-client-permission`의 `feature/DL-16317-qa@8200ba2ffc42dd091d6a8634486f3f1e0e65279a`를 정상 push하고 [PR4736](https://github.com/Innvoaid/dentlink-client/pull/4736)을 `release/v1.89.0` 대상으로 생성·현재 세션에 연결했다. OPEN/비Draft/MERGEABLE, 실제 7커밋·12파일, 로컬/원격/PR HEAD 동일·clean을 확인했다. 새 제품 수정이나 빈 커밋은 없다.
+- 포함한 웹 QA 8건: **DL-16751, DL-16851, DL-16848, DL-16849, DL-16855, DL-16858, DL-16864, DL-16867**. DL-16850의 `labDirectorProfile`·프로필 노출·LinkTalk 프로필 코드는 변경하지 않았다. 최신 release `d43389f96`의 추가 4커밋과 변경 파일이 겹치지 않고, `git merge-tree --write-tree`로 충돌 없음을 확인했다. 로컬 브랜치에 release를 병합하거나 rebase하지 않았다.
+- Office 앱 [PR331](https://github.com/Innvoaid/dentlink-app/pull/331)은 기존 OPEN/비Draft/CLEAN → `develop` 상태를 유지한다. `feature/DL-16317-qa@1fa59edf58f8d2dc8fc4ac8af17a9016be3a6149`의 DL-16859 1커밋·7파일이 로컬/원격/PR에 동일하며 clean이다. 추가 앱 push/PR은 불필요하다. DL-16851·DL-16864는 웹 상세 WebView로 반영되므로 앱 중복 구현은 없다.
+- 검증: 기존 최종 웹 관련 Jest 3 suites/49 tests·Clinic/Lab/Admin 타입 검사 통과 기록을 유지한다. 이번 전달에서 diff-check, 전달 범위, 병합 가능 여부를 재확인했다. 정상 pre-push hook도 성공했다(Clinic/Lab/Admin lint 오류 0·기존 경고 유지, Admin DLOS guard 9 tests, shared/config 21 tests, shared/hooks 32 tests 및 coverage 검사 통과). 앱 기존 20 tests PASS·전체 타입 진단 18→18/신규0 로그를 재확인했으며 재실행/기기 QA는 하지 않았다.
+- Jira: **DL-16848/16849/16855/16858/16859/16864/16867**을 유효한 워크플로우 `해야 할 일 → 진행 중 → Ready for Deploy`로 변경했다. 기존 **DL-16751/16851**은 이미 Ready for Deploy라 유지했다. 완료 수정 9건이 배포 대기 상태다. 본문·댓글·담당자·부모 카드는 변경하지 않았다. DL-16849의 첫 전환 요청 timeout 후 상태가 여전히 진행 중인 것을 확인하고 한 번 재시도하여 성공했다.
+- **DL-16850 상태 주의:** 처음 조회에서는 해야 할 일이었으나 보류 상태 전환을 시도하기 전후에 외부에서 상태가 바뀌었다. 본 세션의 진행 전환은 400으로 거절됐고 이후 조회에서 **완료**가 확인됐다. 본 세션이 완료 처리한 것이 아니며, 완료 상태를 되돌리거나 FE 수정·BE 원인 확정으로 해석하지 않는다. 사용자 지시대로 이번 PR 범위에서는 제외한다.
+- 다음: 사용자/팀이 웹 PR4736 → release, 앱 PR331 → develop 병합 후 각 환경에 배포하고 실제 화면 QA를 진행한다. 앱은 기존 합의대로 **develop 전체 소스로 Staging CodePush**하며 feature 직접 전달 예외를 반복하지 않는다. 이번에는 배포나 CodeRabbit/CI 후속 모니터링을 실행하지 않았다. 기존 브랜치·worktree와 아래 테스트 Draft는 보존한다.
+
+## 조사 결론 — 2026-10-20 DL-16850 실제 제보 주문 응답·상단 프로필 조건
+
+- 사용자가 마련한 Chrome 시크릿 **Office / Diamond District Dental** 세션으로 제보 주문에 접근했다. Lab 계정 로그인 대기가 현재 시작점이라는 아래 기록은 이 조사로 대체된다. 이번 세션의 권한 종류 자체를 별도 employee 응답으로 확정한 것은 아니다.
+- `GET /office/orders/7000012137`은 200이며 `data.lab.id=2698`, `name="sy test lab"`, `employeeId=3012`, `employeeName=null`, **`labDirectorProfile=null`**이었다. 상단 프로필 링크가 없지만 같은 주문 LinkTalk에는 `Poseb83499 Poseb83499` 프로필과 감독/검토 안내가 표시됐다.
+- 비교 주문 `7000012138`의 동일 API도 200이며 `data.lab.id=295`, `name="sy lab"`, `employeeId=408`, `employeeName=null`, **`labDirectorProfile`에 이름·소개 등 정보가 존재**하고 상단 링크가 표시됐다. 두 주문은 같은 환자/케이스지만 서로 다른 기공소다. 두 주문 모두 기공소는 배정돼 있지만, 현재 개별 기공사 배정 상태까지 독립 확인한 것은 아니다. Office 화면에 Lab용 ‘타 기공소’ 표시가 필요한 상황으로 해석하지 않는다.
+- FE Desktop/Mobile 상단은 `serviceType === "OFFICE"`이고 이름/사진/소개/수상 이력/전문 분야/경력 시작 연도 6필드 중 하나라도 null/undefined가 아닐 때 표시한다. Member/본인 주문 여부로 이 프로필을 별도 숨기지 않는다. 사진·소개 일부가 없어도 이름 등 값이 있으면 링크가 열리며, 객체 전체 null이면 모든 필드가 undefined여서 숨는다.
+- 링크 클릭은 전달받은 프로필을 모달에 표시할 뿐 별도 프로필 API를 호출하지 않는다. LinkTalk `LAB_DIRECTOR_PROFILE`은 별도 메시지의 `template.payload`를 직접 표시한다. 채팅 내용이 현재 주문의 담당자/기공소와 동일한지, 과거 데이터인지까지는 확인하지 않았으므로 임의 fallback이나 배정 확정의 근거로 쓰지 않는다.
+- PM 전달 문안을 제공했다. 결론은 **같은 주문 상세 API의 프로필 응답값 차이로 상단 표시가 달라짐**이다. null의 원인이 실제 프로필/노출 직원 설정인지 서버 응답 누락인지는 미확정이며 BE 확정 버그로 보고하지 않는다. 실제 프로필이 없어도 버튼을 제공해야 한다면 빈 상태 정책을 먼저 정해야 한다. 사용자 요청으로 이 건의 구현은 제외했다.
+- 실제 주문 응답 화면을 `/tmp/dl16850-reported-response.png`, `/tmp/dl16850-comparison-response.png`에 임시 보존했다. 다른 세 번째 주문의 통제 비교나 Lab 프로필 설정 변경은 수행하지 않았다. 이 조사에서 제품 코드/주문 데이터는 변경하지 않았다.
+
+## 이전 조사 — 2026-10-20 DL-16850 재현용 Draft 생성·비교 주문 응답 확인, Lab 로그인 대기
 
 - 사용자 요청: 제보 주문에 접근할 수 없으므로 본인 계정으로 테스트 주문을 만들어 조사한다. Chrome의 Staging `frankieStgOffice`/`jongsun.test1` 세션을 사용했다. 제보 주문 `7000012137`의 실제 `GET /office/orders/7000012137` 응답은 403/code2005/Access denied다. 이는 현재 계정의 접근 제한이며 제보 당시 프로필 누락 원인으로 동일시하지 않는다.
 - 사용자 승인 범위에서 테스트 환자 `QA DL16850 20261020`(합성 DOB 01/01/1990), 케이스 `QA DL16850 profile`, 담당 의사 본인 `frankie stgOffice1`로 **Draft 주문 `7000012185`**를 생성했다. 제품 선택 단계 `/orders/7000012185/product`에 보존했으며 제품 확정·최종 제출·결제·배송·타 주문 수정은 하지 않았다. 화면 증거 `/tmp/dl16850-test-draft.png`(임시 파일). 테스트 생성 사실을 나중에 누락하지 말고 정리 시 이 ID를 기준으로 판단한다.
