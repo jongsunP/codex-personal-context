@@ -1,6 +1,28 @@
 # Dentlink 권한관리 — DL-16317
 
-## 최신 조사 — 2026-10-20 Frankie TO DO 하위 QA 8건 분류, 구현 미착수
+## 최신 — 2026-10-20 QA 7건 구현·검증·로컬 커밋 완료, DL-16850 보류
+
+- 사용자 승인: 분류한 8건 중 DL-16850만 제외하고 처리하되 **제품 로컬 커밋까지만** 진행한다. 제품 push/PR·Jira 댓글/상태·병합·배포·CodePush는 하지 않는다. DL-16850은 이후 별도 논의한다.
+- 웹: `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 `feature/DL-16317-qa`, HEAD `8200ba2ff`, upstream 없음·clean. 생성 기준 release/v1.89.0 `f1dab1b1ef086558cf81bdb42b1681b1dc8360ce`와 기존 QA 커밋 `1db28a295`/`b8233cb9a`를 보존했다. 이번 웹 6건은 5개 커밋이며, 브랜치 전체에는 이전 2개를 합쳐 로컬 QA 커밋 7개가 있다.
+- Office 앱: `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317-qa`, base develop `43f787909d29f4899a04fad04d3f452d98b53cad`, HEAD `1fa59edf58f8d2dc8fc4ac8af17a9016be3a6149`, upstream 없음·clean. 기존 feature/DL-16317과 worktree는 보존했다.
+
+| 카드 | 제품·로컬 커밋 | 완료 내용 |
+| --- | --- | --- |
+| DL-16848 | Web `520b57190` | Member 데스크탑 주문 목록의 검색·Status·Order Dates·Place Order를 한 행으로 배치. 좁은 폭에서는 두 행이며 다른 권한의 기존 배치·필터 동작은 유지 |
+| DL-16849 | Web `2c444d3c8` | 오더보드 검색/필터 입력 300px 통일. 해당 화면 안에서만 적용하며 Member 2개·다른 권한 3개 및 좁은 폭 줄바꿈 유지 |
+| DL-16855 | Web `45cd6f371` | 목록·상세 공용 권한 도움말에 밑줄과 아이콘 간격 2px 적용. 도움말 링크 동작 유지 |
+| DL-16858 | Web `de1ed1d05` | Lab 모바일 주문상세에서 Total Cases/Total Orders 숨김. OFFICE/ADMIN의 합계와 케이스 목록은 유지 |
+| DL-16864 | Web `de1ed1d05` | 기존 담당 의사 변경 권한이 없으면 모바일 연필 아이콘도 숨김. 기존 클릭 제한은 이미 있었으며 새 수정 권한 차단을 추가한 것은 아님. 앱 WebView에도 웹 배포로 적용 |
+| DL-16867 | Web `8200ba2ff` | Member의 본인/다른 케이스 이름 수정 모두 제한. 기존 공용 UI·모달·저장 시 권한 검사 경로를 사용하고 다른 역할 및 환자 수정 조건은 유지 |
+| DL-16859 | Office 앱 `1fa59ed` | Member LinkTalk의 My Orders Only 스위치를 숨기고 실제 목록·미읽음·탭 배지·읽음 캐시를 본인 주문 조건으로 통일. 저장된 개인/푸시 설정 자체는 변경하지 않음 |
+
+- 웹 변경은 기존 7파일, 앱은 기존 소스 5파일+테스트 2파일이다. 새 파일·스토리·env/package/lock 변경은 없다. 신규 사용자 문구·별도 권한 정책을 임의로 추가하지 않았다.
+- **검증:** 웹 관련 Jest 3 suites/49 tests PASS, 변경 파일 lint 오류 0, prettier/diff-check PASS. 정상 커밋 훅에서 Clinic/Lab/Admin `tsc --noEmit` 모두 PASS(훅 우회 없음). 앱 관련 Jest 4 suites/20 tests PASS, 변경 lint 오류 0/기존 경고 1, diff-check PASS. 앱 전체 타입 검사는 로컬 설치 환경에서 기존 18진단이 남으며, 수정 전 HEAD와 현재 소스를 같은 CompilerHost 환경에서 비교해 18→18, 신규 0을 확인했다. 앱 전체 타입 검사가 통과했다고 보고하지 않는다.
+- Jira 첨부와 DL-16858 Figma `2OR0Gj7NUFEEeYBjQg5Y6v`/`632:34309`를 대조했다. 실제 로그인 브라우저/시뮬레이터 QA·네이티브 빌드·배포는 이번에 실행하지 않았다. 기존 테스트를 보완했으며 제품 코드의 새 확정 문제는 발견하지 못했다.
+- 검증 로그: `/tmp/permission-order-detail-qa-tests.log`, `/tmp/permission-qa-16855-commit.log`, `/tmp/permission-qa-16849-commit.log`, `/tmp/permission-qa-16848-commit.log`, `/tmp/permission-qa-16858-16864-commit.log`, `/tmp/permission-qa-16867-commit.log`, `/tmp/dl16859-app-tests.log`, `/tmp/dl16859-app-typecheck-comparison.json`. 임시 로그는 장기 보존을 보장하지 않으며 현재 결과는 위 기록으로 남긴다.
+- **다음 시작점:** DL-16850의 헤더 프로필 누락을 별도 논의한다. 해당 영역은 이번에 수정하지 않았다. 제보 주문의 `order.lab.labDirectorProfile` 실제 응답 확인 전에는 FE/BE 원인을 확정하지 않는다. 7건 제품 코드는 로컬에만 있으며, 사용자 일괄 push/PR 지시 후 웹 release/v1.89.0·앱 develop 전달을 진행한다. 배포 후 실제 화면 QA는 별도다.
+
+## 이전 조사 — 2026-10-20 Frankie TO DO 하위 QA 8건 분류, 구현 미착수
 
 - 사용자 요청은 DL-16317 하위에서 본인(Frankie/박종선, accountId 642a7f9580f8c2b1220fba09)에게 배정된 TO DO 카드의 내용·권한 QA 해당 여부·처리 가능·난이도·확인사항을 표로 정리하는 것이다. Jira 직접 하위 카드 전체에서 `해야 할 일`인 8건을 조회했고 전부 본인 배정임을 확인했다. DL-16751/16851 등 Ready for Deploy는 대상에서 제외했다.
 - Jira 본문·댓글·첨부 이미지와 두 제품 QA 브랜치의 실제 코드를 읽었다. DL-16858 댓글44506의 Figma `2OR0Gj7NUFEEeYBjQg5Y6v` node `632:34309`도 screenshot으로 확인했다. 실제 로그인 화면/해당 주문 API 응답 검증은 하지 않았으며, 이번에는 제품 코드/Git/Jira/배포를 변경하지 않았다. 웹 HEAD b8233cb9a, 앱 HEAD43f7879, 양쪽 feature/DL-16317-qa/clean을 확인했다.

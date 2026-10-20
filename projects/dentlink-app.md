@@ -1,6 +1,14 @@
 # Dentlink Office App setup and current checkpoint
 
-## 최신 — 2026-10-20 권한관리 앱 QA 브랜치 준비
+## 최신 — 2026-10-20 DL-16859 앱 QA 로컬 커밋 완료, 제품 푸시 보류
+
+- 사용자 승인에 따라 `/Users/parkjongsun/Repository/dentlink-app-permission`의 기존 `feature/DL-16317-qa`에서 DL-16859를 수정·검증·로컬 커밋했다. HEAD `1fa59edf58f8d2dc8fc4ac8af17a9016be3a6149`, base develop `43f7879`, upstream 없음·clean이며 기존 원본 feature/worktree는 보존했다.
+- Member의 LinkTalk My Orders Only 스위치를 숨기고 목록·미읽음·하단 탭 배지·읽음 캐시의 실제 조회 조건을 본인 주문으로 통일했다. 공용 hook에서 LinkTalk 전용 실효 값을 계산하며 기존 저장 preference와 푸시 알림 설정은 바꾸지 않는다. 확정된 직원 권한으로만 조회하고 역할 전환 시 조건·캐시도 일치시킨다.
+- 기존 소스 5파일과 테스트 2파일 수정, 신규 파일 없음. 관련 4 suites/20 tests PASS, 변경 lint 오류 0/기존 경고 1, diff-check PASS. 전체 타입 검사는 현재 로컬 의존성 환경에서 기존 18진단이 있으며 동일 환경의 수정 전후 비교에서 신규 진단 0이다. 전체 타입 통과·시뮬레이터 QA·네이티브 빌드 완료를 의미하지 않는다.
+- 제품 push/PR·Jira·CodePush·배포는 하지 않았다. 이번 웹 6건과 앱 1건을 로컬 커밋으로 보관하고 DL-16850은 별도 논의한다. 웹 DL-16864/16858 및 앞선 DL-16851의 앱 WebView 반영은 웹 배포 이후이며 앱에 중복 구현하지 않았다.
+- 이후 사용자 일괄 push 지시 → develop PR/병합 → develop 전체 Staging CodePush 정책을 유지한다. 기존 Staging v336은 변경하지 않았다. 상세 커밋·범위·검증·다음 시작점은 [권한관리 체크포인트](dentlink-permission-management.md)를 따른다.
+
+## 이전 — 2026-10-20 권한관리 앱 QA 브랜치 준비
 
 - 사용자 요청으로 permission worktree에 `origin/develop@43f787909d29f4899a04fad04d3f452d98b53cad` 기준 `feature/DL-16317-qa`를 생성·checkout했다. upstream 없음·diff0·clean이며 기존 feature/DL-16317은 보존했다. 이후 앱 QA 수정은 이 브랜치에 로컬 커밋으로 모으고 제품 push는 보류한다.
 - DL-16851 앱 증상은 웹 주문상세 WebView의 경고 누락이다. 웹 커밋 `b8233cb9a`로 모바일/앱까지 대응하므로 별도 앱 코드·커밋·CodePush는 불필요하다. 웹도 아직 미푸시/미배포이며 웹 배포 후 실제 앱 화면 QA가 남는다.
