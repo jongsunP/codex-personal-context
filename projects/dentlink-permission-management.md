@@ -1,6 +1,16 @@
 # Dentlink 권한관리 — DL-16317
 
-## 최신 인수 대기 — 2026-10-20 DL-16751 웹 QA 이관
+## 최신 — 2026-10-20 웹 QA 2건 구현·검증·로컬 커밋 완료, 제품 푸시 보류
+
+- 사용자 지시: 현재 `feature/DL-16317-qa`에서 앞선 DL-16751을 먼저 커밋하고 DL-16851을 구현·별도 커밋한다. 제품 푸시는 이후 모아서 진행하므로 이번에는 하지 않는다. 모델 변경 후 두 건을 다시 검토하라는 요청까지 반영했다.
+- 웹 위치: `/Users/parkjongsun/Repository/dentlink-client-permission`, branch `feature/DL-16317-qa`, base `f1dab1b1ef086558cf81bdb42b1681b1dc8360ce`(생성 당시 release/v1.89.0). HEAD `b8233cb9aa8655540f15d6abde2c82bd80e0b50d`, upstream 없음, worktree clean. 기존 권한 브랜치/worktree는 보존한다.
+- **DL-16751**: `1db28a295b53b2bf4d7b5ecf2386595bb10dcbe5`, `ui: 환자 목록 기공소 주문 현황 제목 위치 조정`. Lab 환자 목록의 ‘우리 기공소 주문 현황’ 제목·아이콘을 약 2px 아래로 조정했다. `PatientListLayerDesktop.tsx`의 padding 한 줄만 변경했고 높이·전체 상하 padding·문구·다른 열은 그대로다.
+- **DL-16851**: `b8233cb9aa8655540f15d6abde2c82bd80e0b50d`, `fix: 멤버 담당 의사 변경 경고를 주문 기준으로 표시`. Jira 본문과 첨부 디자인의 요구는 Member가 자기 주문의 담당 의사를 바꿀 때 기존 접근 권한 경고를 표시하는 것이다. 같은 환자의 다른 본인 주문이 있으면 경고를 숨기던 조건을 제거했다. Member+본인 주문의 기존 변경 권한 조건으로 경고를 표시하며, 이를 위해 환자 이력·타 주문을 추가 GET하지 않는다. 불필요해진 조회 상태/로딩 UI와 해당 테스트만 정리했다. 기존 실제 변경 권한 검사와 직원·주문·권한 변경/unmount 이후 오래된 callback 차단은 유지한다. 새 UI·문구·파일 추가는 없다.
+- **Office 앱 영향**: Jira 댓글44503의 앱 동일 증상도 확인했다. `dentlink-app-permission/src/features/orderList/screens/OrderDetailScreen.tsx`가 `/orders/${orderId}` 웹 상세를 WebView로 연다. 이번 웹 수정은 Desktop/Mobile 공통으로 반영되므로 웹 배포 후 앱 WebView에도 적용되며, 이 건을 위한 네이티브 코드/CodePush 변경은 없다. 앱 checkout은 clean으로 보존했다. 실제 앱 화면 확인은 아직이다.
+- **검증**: 관련 Jest 3 suites/51 tests PASS. 두 정상 commit hook에서 Clinic/Lab/Admin `tsc --noEmit` 모두 PASS. 수정 Clinic 4파일 ESLint는 오류0/기존 경고6, diff-check PASS. 처음 commit hook의 로컬 DLDS workspace module 누락은 `pnpm install --frozen-lockfile`로 해결했고 package/lock/env 추적 파일은 바뀌지 않았다. 모델 변경 후 실제 Git·diff·검증 로그 및 독립 읽기 전용 리뷰로 두 커밋을 재검토했고 추가 확정 문제는 발견하지 못했다.
+- **현재 영향/다음**: 두 제품 커밋은 로컬에만 있다. 제품 push·PR·Jira 댓글/상태·배포는 하지 않았다. 실제 화면의 최종 육안 QA는 남아 있다. 사용자 후속 지시에 따라 같은 QA 브랜치에 작업을 모은 뒤 일괄 push 및 release/v1.89.0 PR을 진행한다. 별도 확정 백엔드 수정 요청은 없다.
+
+## 이전 인수 대기 — 2026-10-20 DL-16751 웹 QA 이관
 
 - 디자인시스템 세션에서 사용자 요청에 따라 이관했다는 메시지를 받았다. 이관 메시지의 사용자 지침은 **권한관리 웹 QA를 카드별 브랜치 대신 `feature/DL-16317-qa`에 모아 처리**하는 것이며, 지금은 인수 상태만 확인하고 다음 지시까지 추가 구현·제품 커밋/푸시/PR 없이 대기한다.
 - 직접 확인: `/Users/parkjongsun/Repository/dentlink-client-permission`의 현재 브랜치 `feature/DL-16317-qa`, HEAD와 로컬 `origin/release/v1.89.0` 모두 `f1dab1b1ef086558cf81bdb42b1681b1dc8360ce`. upstream 없음. `feature/DL-16317-api-permissions`를 포함한 기존 권한 브랜치는 보존돼 있다. 새로 원격을 fetch하거나 제품 브랜치를 pull/변경하지 않았다.

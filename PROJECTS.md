@@ -185,9 +185,9 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **2026-10-20 QA 인수 대기:** 웹 permission checkout의 `feature/DL-16317-qa`(release 기준 `f1dab1b1e`, upstream 없음)에 DL-16751 제목 위치 padding 한 줄 미커밋 수정을 인수했다. 상태·diff만 직접 확인했고 추가 구현·제품 커밋/푸시/PR 없이 다음 지시를 기다린다. 이후 웹 권한 QA는 카드별 브랜치 대신 이 QA 브랜치에 모은다는 이관 지침을 기록했다. 기존 브랜치/worktree는 보존한다.
+- **2026-10-20 QA 2건 로컬 커밋 완료:** 웹 permission checkout의 `feature/DL-16317-qa`(release 기준 `f1dab1b1e`, upstream 없음, clean)에 DL-16751 제목 위치 조정 `1db28a295`, DL-16851 Member 담당 변경 경고 수정 `b8233cb9a`를 각각 커밋했다. 관련 51tests·Clinic/Lab/Admin 타입 검사 통과, 모델 변경 후 두 건 재검토 완료. 앱 동일 증상은 웹 주문상세 WebView이므로 이번 웹 수정으로 대응한다. 제품 push는 사용자가 이후 일괄 진행하기로 하여 보류했고 PR/배포/Jira 변경은 없다. 실제 화면 QA는 별도이며 웹 권한 QA를 이 브랜치에 모아 이어간다.
 
-- **최신 2026-10-19:** 사용자 PR4719 release병합(fef630005) 확인. 원격 stage413ed3564를 복구 ref로 보존 후 master8772d6882에서 재생성, [PR4720](https://github.com/Innvoaid/dentlink-client/pull/4720) →stage 준비 후 사용자 병합완료(stage4b28c28a6, release와tree동일).
+- **이전 전달 2026-10-19:** 사용자 PR4719 release병합(fef630005) 확인. 원격 stage413ed3564를 복구 ref로 보존 후 master8772d6882에서 재생성, [PR4720](https://github.com/Innvoaid/dentlink-client/pull/4720) →stage 준비 후 사용자 병합완료(stage4b28c28a6, release와tree동일).
 - 웹 Clinic/Lab/Admin 최신3개배포run은 in_progress까지 확인했다. 최종성공/QA완료는 별도이며 웹feature@5bdad60e6 clean유지.
 - 사용자 재승인으로 앱 feature/DL-16317@f037c80를 양OS **Staging v336/2.2.4/mandatory100%enabled**로 CodePush 완료. 서버readback·소스맵341파일일치. 이후 사용자 PR329→develop 병합완료(43f7879)를 확인했으며 기존v336빌드는 유지한다.
 - 원본worktree·시뮬레이터/Metro 보존, 임시buildsource만정리. Production/Development/Lab·태그/스토어·Jira/Slack변경없음.
