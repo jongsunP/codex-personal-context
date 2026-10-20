@@ -2,6 +2,8 @@
 
 ## 2026-10-20
 
+- FE env 회의 결과를 반영해 실제 값을 사람이 직접 관리하도록 전환 코드를 마무리했다. feature/DL-16821@9647f12a4 commit/push, env9개 Git 추적 해제·로컬/백업 보존, agent env 스킬·자동 전달 도구·manifest·공유 분류표 제거, CI 공급/E2E 수동 파일 연결 유지. GitHub235 Variables 값 불변/개별 Secrets98 등록·미사용 묶음8 제거를 확인했다. 최초 push workflow scope 차단은 사용자 인증 승인 후 해소했다. 합성12/E2E233/정상hook·3서비스 합성native빌드/standalone env0·release시험병합을 확인했다. 노션 기존3문서 구조와 Jira 정의를 수동 운영으로 정리했고, 실제 접근 차단의 도구별 한계·Docker/실사용 미검증·병합/배포 별도 승인 경계를 기록했다. 분류 이력은 값 없이 개인 기억에만 보존한다.
+
 - 권한관리 앱 QA 요청으로 permission worktree에 최신 origin/develop43f7879 기준 `feature/DL-16317-qa`를 생성했다(upstream 없음·diff0·clean). DL-16851의 앱 동일 증상은 원격 웹 주문상세 WebView이고 별도 native 구현이 없으므로 웹 커밋 b8233cb9a로 공통 대응한다. 앱 추가 코드/빈 커밋/CodePush 없이 준비만 완료했으며 제품 push는 일괄 진행 요청 전까지 보류한다. 웹 배포 후 실제 앱 경고 QA 및 이후 앱 고유 QA를 같은 브랜치에서 이어간다.
 
 - DLDS 세션의 당일 QA3건(PR4730/4731/4732)을 모델 변경 후 실제 diff로 재검토했다. 레드닷만 DLDS 회귀, 리메이크는 master에서도 재현한 기존 잘림, CP는 기존 DONE-only 표시 조건 문제라는 결론을 유지했다. CP 모달 높이·내부 스크롤 잘림 수정이 아님을 사용자에게 설명하되 제보 주문의 실제 상태 미확인 한계를 보존했다. 제품 추가 수정·테스트 재실행·Jira/PR 변경 없이 기록만 정리하고 대기하며, 남은 QA는 권한관리 세션에서 진행한다. 인계 색인의 과거 OOM 실패 상태도 현재 checkpoint 안내로 갱신했다.

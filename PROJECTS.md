@@ -18,11 +18,10 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- **2026-10-20 release/v1.89.0에 함께 반영하기로 결정, 회의 결과 대기.** `feature/DL-16821` / `47308a557`, [Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713)의 실제 base는 사용자가 변경한 `release/v1.89.0`이다. OPEN Draft·DRAFT·`[WIP] `·clean 재확인. 코드와 지침은 별도 브랜치이며 병합·배포·env9개 추적 해제는 아직이다. 기존 env77/E2E도구222/타입·lint 검증 이력 유지.
-- GitHub 9환경 Variables235개는 10/20 전체 페이지 재조회에서 기준 검사 통과·기존 공개 값 차이0, Secrets묶음8개는 등록 확인했다(원문 read-back 불가). 병합 뒤 별도 설정 수정/수동 스위치는 예정돼 있지 않으며, 실제 빌드 소비는 최종 검증 대상이다. Google Admin3키의 Secrets 보관·SDK 연결 유지.
-- [DL-16818](https://innovaid.atlassian.net/browse/DL-16818)의 [Notion 모음](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c)에 내용문서3개. 회의 자료의 코드/로컬 파일 개념과 팀 가이드의 최초 로컬 갱신 안내를 보완했다. 진행은 DL-16821 댓글44500, 조사 DL-16819 완료 유지. 본문은 정의·진행은 하위댓글 원칙 유지.
-- 사용자 빠른 마무리 요청으로 Google 콘솔 추가 조사 종료. 실제 키 발급 프로젝트 미식별·제한 미확인, Eximbay 브라우저 서명/키 노출은 별도 서버 연계·키 교체 필요. 보관 위치 이전만으로 전체 보안 해결이라 보고하지 않는다.
-- 회의 결과 후 사전 백업/복원·전환 코드 마무리(env 추적 해제 포함)·release 빌드 검증 → 별도 승인된 병합 → 환경별 배포/동작 확인 순서다. 완성된 코드·설정이 준비되면 배포 순간 사용자 본인의 전환 조작은 필요 없다. `bootstrap`·독립 `prepare`·미사용 `diff` 정리 후보와 `apply` 내부 로직 보존 조건 유지. 동료 옛 파일 강제 삭제·Docker 설치는 보류하며 현재 추가 작업 없이 대기한다. [개인 체크포인트](projects/dentlink-client-env-management.md).
+- **2026-10-20 회의 후 사람 수동 관리로 변경, 구현/설정 반영 완료.** `feature/DL-16821@9647f12a4`, [Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713) → `release/v1.89.0`. env9개 Git 추적 해제·로컬 원본 보존, 에이전트 env 스킬/자동 전달 도구/manifest/공유 분류 이력 제거. CI 공급과 빈 example·E2E 수동 파일만 유지한다.
+- GitHub Variables235 유지, 개별 Secrets98 등록·미사용 묶음8 제거. 값·소비 계약 대조 일치. 이후 실제 값은 사람이 관리하며 에이전트는 키 이름·빈 예제·코드만 다룬다. 프로젝트 지침·도구 제외 규칙은 적용했으나 무제한 터미널/MCP까지 완전 차단하려면 실행 환경 격리가 필요하다.
+- [DL-16818](https://innovaid.atlassian.net/browse/DL-16818) / [Notion 문서 모음](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c)의 기존 기록+회의 흐름+팀 사용법3개 유지. 현재 문서·Jira 정의를 수동 관리로 갱신했다.
+- 새 계약12·E2E 도구233·타입/lint/공용 검사와 합성 DEV 값 3서비스 native 빌드 통과, standalone 실제 env0, 최신 release 시험 병합 충돌0. Docker/실계정 E2E/팀원 사용·복구는 미검증이며 병합·배포는 미실행. 팀원은 pull 전 env 백업과 수동 보완이 필요하다. Google 키 제한·Eximbay 서버 서명/키 교체·과거 Git 이력은 별도 후속이다. [개인 체크포인트](projects/dentlink-client-env-management.md).
 
 
 ### 사무실 의자 구매·헤드레스트 개선 조사

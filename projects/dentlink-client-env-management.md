@@ -1,6 +1,36 @@
 # Dentlink 웹 환경변수 관리
 
-## 현재 상태 — 2026-10-20 release/v1.89.0에 함께 반영, GitHub 설정 재확인 후 회의 결과 대기
+## 현재 상태 — 2026-10-20 회의 결과 반영, 사람 수동 관리로 전환 코드 완료
+
+**아래 과거 기록의 에이전트 env 관리·암호화 전달·manifest 운영은 폐기된 방식입니다. 현재 기준은 이 항목과 최신 팀 가이드입니다.**
+
+### 확정 방향과 완료한 것
+
+- 회의에서 **이번 최초 이전은 에이전트가 처리하되, 이후 실제 env/GitHub 값은 사람이 직접 관리**하기로 확정했다. 새 키 작성자가 빈 example과 필요한 GitHub 환경을 맞추고, 팀원은 pull 후 로컬 파일을 직접 보완한다. 기존 키의 값만 바뀌어도 변경자가 로컬 갱신을 알려야 한다. 추가 회의 질문으로 돌리지 말고 이 기준으로 운영한다.
+- 작업 위치 `/Users/parkjongsun/Repository/dentlink-client-env-management`, 브랜치 `feature/DL-16821`, 커밋 `9647f12a42f7bf77e5b1b0dcc06a511d00fbedb3` commit/push 완료. 최초 push는 GitHub CLI workflow scope 부재로 거절됐으나 사용자가 device 인증으로 승인한 뒤 정상 hook을 거쳐 push했다. PR #4713의 target `release/v1.89.0`, OPEN/Draft/DRAFT label/`[WIP] `는 유지한다. 병합·배포는 실행하지 않았다.
+- 로컬 관리 스크립트 env.js/env-transfer, scripts/env 디렉터리의 manifest·관련 테스트, 환경변수 에이전트 스킬, 공유 분류 이력표를 제거했다. **scripts/build-env.js는 CI/Docker 공급·검사만**, scripts/e2e-env.js는 사람이 준비한 E2E 파일 또는 CI 입력만 처리한다. 공통 예제에 빈 키와 빌드 입력 구역을 모았으며 별도 분류 manifest는 없다.
+- 실제 env9개를 Git 추적에서 제거하고 ignored 로컬 원본은 그대로 보존했다. Git에 남는 env 파일은 서비스3개·E2E의 빈 `.env.example`4개뿐이다. 이전 분류 조사 이력은 값 없이 [개인 분류 이력](dentlink-client-env-classification-history.md)에 보존했으며 현재 운영 정본으로 쓰지 않는다.
+- GitHub 9환경 **Variables235개 유지**, 기존 값을 바꾸지 않고 **개별 Secrets98개** 등록: Admin 각1, Clinic dev47/stage46/prd2, Lab0. 새 연결은 명시적으로 허용한 개별 Secret만 공급한다. 사용하지 않는 DENTLINK_BUILD_ENV6·DENTLINK_E2E_ENV2 묶음은 제거했다. master/develop/stage/release의 활성 workflow에서 해당 묶음을 읽지 않음을 확인한 뒤 처리했다. 기존 repository Secrets→ECS와 다른 기존 환경은 유지했다.
+- 최초 이관용 로컬 원본9개와 당시 manifest를 `/Users/parkjongsun/.local/share/dentlink-env-backups/20261020-DL-16821`에 백업했다(디렉터리700/파일600, 원본 바이트 대조). E2E는 기존 Clinic 값에서 허용 키만 가져와 ignored `e2e/.env.development`·`.env.staging` 각48키 파일을 최초 준비했다(600, 덮어쓰기 없음). 실제 값은 코드·문서·개인 기억에 기록하지 않았다. 이후 백업/로컬 실제 값은 사람이 관리하며 추가 요청 없이 에이전트가 다시 열지 않는다.
+- AGENTS/.cursorrules/claude.md 및 E2E skill에 실제 값 접근·수정·터미널/MCP/브라우저/Git 이력 우회 금지를 반영했다. Cursor 파일 제외와 Claude Read/Edit deny를 추가했다. **무제한 터미널·MCP·같은 OS 인증까지 기술적으로 차단한 것은 아니다.** 기술적 완전 차단은 실제 파일·인증을 에이전트 실행 환경에서 분리해야 한다. 설치된 Codex CLI 0.163.0-alpha.10.2는 문서의 custom permission deny profile을 합성 임시 설정에서 인식하지 않아 작동하지 않는 .codex 설정을 추가하지 않았다.
+- 노션 모음+내용3개 구조 유지. 이전 회의 기록은 보존하고, 회의 연결 흐름·팀 가이드·모음 설명을 사람 수동 관리로 갱신하여 read-back했다. Jira DL-16818은 목적/문서, DL-16821은 새 작업 정의로 갱신·재조회했다. 상세 진행은 하위 댓글44519에만 기록했다. PR 제목/본문도 release 대상·사람 관리·현재 검증/미검증 기준으로 갱신했다.
+
+### 검증과 영향
+
+- 이전 값 없는 manifest 대비 9환경 빌드 키·필수/선택·Secret 분류 차이0. GitHub Variables235개를 페이지네이션하여 기존 원본과 새 prepare 결과를 값 비출력으로 대조했고 9환경 모두 일치했다. Secrets98개는 업로드 성공과 이름 등록을 확인했으며 GitHub에서 원문 read-back/실제 Actions 소비를 확인한 것은 아니다.
+- 새 CI 합성 검사12/12, E2E 도구233/233 및 E2E TypeScript, 정상 pre-commit의 Clinic/Lab/Admin 타입 검사와 pre-push의 3서비스 lint/Admin guard/공용 테스트·coverage 통과(기존 경고 있음). 독립 리뷰에서 수정이 필요한 공급 회귀나 누출 결함을 발견하지 않았다.
+- 최신 release `660b14f9b989be4bab36dd80ce500a5de52e7083`과 시험 병합 충돌0, 합성 병합 tree `23233248274e6e9522cee18d997befd9d893ffbb`에 실제 env0·새 공급 코드 유지. 해당 tree를 별도 임시 소스로 풀어 빌드 계약12검사도 통과했다. 실제 release branch 병합 또는 조합된 전체 앱 빌드는 아니다.
+- 합성 DEV 값 native production 빌드: Admin·Clinic·Lab 모두 exit0, 타입·컴파일·정적 생성·standalone 완료. 각 standalone의 실제 env/envbundle 파일0개를 확인했다. macOS Node24.4.1/pnpm8.6.9에서 실제 env 없는 임시 소스와 복제 의존성으로 새 prepare/build 경로를 검사했으며 Docker Node20/Linux Alpine 검증은 아니다. 최초 symlink 의존성 방식은 standalone 복사 경로 오류로 실패해 APFS 복제 방식으로 교정했다. 증거 `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dentlink-env-native-review-p5_8koo7`.
+- 제품 코드는 별도 브랜치에만 있으므로 운영 배포 동작은 아직 바뀌지 않았다. GitHub 값 등록과 기존 묶음 제거는 완료됐지만 실제 배포 브랜치가 새 경로를 사용하려면 코드 전달/배포가 필요하다.
+
+### 남은 일과 다음 시작점
+
+1. Docker/Colima 설치 보류는 유지한다. Docker 이미지 빌드·BuildKit mount·최종 이미지 격리 실검증은 미완료다. 새 수동 web_env_validate workflow는 default branch에 아직 등록되지 않아 현재 feature ref만으로 즉시 dispatch할 수 없으며, 이를 위해 PR마다 운영 Secrets를 사용하는 자동 빌드를 새로 추가하지 않았다. Docker가 있는 승인된 환경 또는 workflow 등록 이후 사람이/승인된 CI에서 검증한다.
+2. 팀원은 env 삭제 커밋을 pull하기 전에 기존 값을 별도로 보관하고, 이후 최신 example과 자신의 로컬 파일을 비교해 보완한다. 실제 팀원의 사용/복구와 실계정 E2E는 아직 검증하지 않았다. 에이전트는 원문을 다시 조회하지 말고 값 없는 코드/합성 테스트만 다룬다.
+3. Docker/실사용 확인 후 별도 명시 승인을 받아 release 병합·환경별 배포를 진행한다. 준비/PR 완료 요청은 병합·배포 승인이 아니다. 설정 등록만으로 돌아가는 서버가 즉시 바뀌지 않으며 완성된 workflow가 전달되면 별도 전환 스위치는 없다.
+4. Google 브라우저 키의 발급 프로젝트/허용 사이트·API 제한과 Eximbay 서버 서명·키 교체는 별도 보안 후속이다. Git 추적 해제는 과거 Git 이력을 지우지 않으며 이력 재작성/키 회전은 실행하지 않았다. 보관 위치 이전만으로 모든 보안 문제가 해결됐다고 말하지 않는다.
+
+## 이전 상태 — 2026-10-20 회의 전 release/v1.89.0 반영 계획
 
 - 사용자가 PR #4713의 대상을 `release/v1.89.0`으로 바꿨고, 환경설정 변경도 **1.89 코드와 함께 반영·배포**하기로 했다. master에 별도로 먼저 반영할 필요는 없다. 사용자가 제시한 일정은 회의 후 DEV/STAGE, 다음 주 운영 배포이며, 실행 완료 사실이나 현재 배포 승인이 아니다.
 - 마감 재조회: `/Users/parkjongsun/Repository/dentlink-client-env-management`, `feature/DL-16821`, `47308a55798fdae3cdb98ffa7f4fbe174846c6e0`, 원격 추적 상태 clean. [PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713)은 base `release/v1.89.0`, 같은 head, OPEN/Draft/DRAFT label/`[WIP] ` 제목이다. 아래 과거 기록의 base master는 당시 상태다.
