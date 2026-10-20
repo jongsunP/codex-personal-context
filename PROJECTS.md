@@ -18,7 +18,7 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- **2026-10-20 회의 후 사람 수동 관리로 변경, 구현/설정 반영 완료.** `feature/DL-16821@9647f12a4`, [Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713) → `release/v1.89.0`. env9개 Git 추적 해제·로컬 원본 보존, 에이전트 env 스킬/자동 전달 도구/manifest/공유 분류 이력 제거. CI 공급과 빈 example·E2E 수동 파일만 유지한다.
+- **2026-10-20 회의 후 사람 수동 관리로 변경, 구현/설정 반영 완료.** `feature/DL-16821@9647f12a4`, [Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713) → `release/v1.89.0`. env9개 Git 추적 해제, 에이전트 env 스킬/자동 전달 도구/manifest/공유 분류 이력 제거. 후속으로 로컬 자동화 캐시76파일과 서비스 staging/production6파일도 프로젝트 밖 비공개 백업으로 옮겼다. 로컬 development3개·E2E2개·빈 example과 CI 공급은 유지한다.
 - GitHub Variables235 유지, 개별 Secrets98 등록·미사용 묶음8 제거. 값·소비 계약 대조 일치. 이후 실제 값은 사람이 관리하며 에이전트는 키 이름·빈 예제·코드만 다룬다. 프로젝트 지침·도구 제외 규칙은 적용했으나 무제한 터미널/MCP까지 완전 차단하려면 실행 환경 격리가 필요하다.
 - [DL-16818](https://innovaid.atlassian.net/browse/DL-16818)에서 [최종 운영 가이드](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c) 하나로 연결한다. 기존 모음을 최종 가이드로 전환하고 하위3문서는 `[이력]` 표시·본문 보존·하단 토글로 정리했다(새 페이지 없음). DL-16819는 완료된 초기 회의 이력, DL-16821은 실행/검증 카드다.
 - 새 계약12·E2E 도구233·타입/lint/공용 검사와 합성 DEV 값 3서비스 native 빌드 통과, standalone 실제 env0, 최신 release 시험 병합 충돌0. Docker/실계정 E2E/팀원 사용·복구는 미검증이며 병합·배포는 미실행. 팀원은 pull 전 env 백업과 수동 보완이 필요하다. Google 키 제한·Eximbay 서버 서명/키 교체·과거 Git 이력은 별도 후속이다. [개인 체크포인트](projects/dentlink-client-env-management.md).
