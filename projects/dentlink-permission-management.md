@@ -1,5 +1,12 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 — 2026-10-20 앱 QA PR331 전달 완료, 웹은 DL-16850 이후 일괄 PR
+
+- 사용자 지시: 앱 완료분은 기존 작업브랜치/열린 PR에 반영하거나 없으면 PR까지 진행한다. 웹은 DL-16850을 마친 뒤 기존 QA와 한 번에 PR로 전달한다. DL-16850은 웹 주문상세 프로필 표시 건이며 원인 확정·처리는 아직 남았다.
+- 기존 Office PR329는 이미 develop에 병합됐고 현재 QA 브랜치에는 열린 PR이 없음을 확인했다. `/Users/parkjongsun/Repository/dentlink-app-permission`의 `feature/DL-16317-qa@1fa59edf58f8d2dc8fc4ac8af17a9016be3a6149`를 정상 push하고 [PR331](https://github.com/Innvoaid/dentlink-app/pull/331)을 `develop` 대상으로 생성·현재 세션에 연결했다. OPEN/비Draft, base `43f7879`, 정확히 1커밋·7파일, 원격 동일·worktree clean을 확인했다. 자동 제목은 저장소 규칙에 따라 `[DL-16317] [공통] 담당 환자 제한 (Member 권한 추가)`이다.
+- 이번 전달에서 새 코드 변경은 없다. 직전 검증 결과와 독립 읽기 전용 diff/로그 검토(앱 20 tests PASS, lint 오류 0, 기존 타입 진단 18→18/추가 0)를 PR에 기록했다. 전체 타입 통과·실제 기기 QA를 의미하지 않는다. 리뷰 완료·병합·CodePush·배포·Jira 변경은 하지 않았다.
+- 웹 `feature/DL-16317-qa@8200ba2ff`는 clean/미푸시를 유지한다. 다음은 DL-16850 별도 논의·실제 주문 응답에 따른 원인 확인/필요 수정 후 웹 기존 QA 커밋을 함께 release/v1.89.0 PR로 전달하는 것이다. 앱은 PR331 리뷰/병합 이후 사용자 지시에 따라 develop 전체 Staging CodePush하며 기존 v336을 이번에 변경하지 않았다.
+
 ## 최신 — 2026-10-20 QA 7건 구현·검증·로컬 커밋 완료, DL-16850 보류
 
 - 사용자 승인: 분류한 8건 중 DL-16850만 제외하고 처리하되 **제품 로컬 커밋까지만** 진행한다. 제품 push/PR·Jira 댓글/상태·병합·배포·CodePush는 하지 않는다. DL-16850은 이후 별도 논의한다.

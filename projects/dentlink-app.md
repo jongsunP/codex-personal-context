@@ -1,5 +1,11 @@
 # Dentlink Office App setup and current checkpoint
 
+## 최신 — 2026-10-20 DL-16859 앱 QA PR331 생성 완료
+
+- 사용자 후속 승인으로 `dentlink-app-permission`의 기존 `feature/DL-16317-qa@1fa59ed`를 push하고 [PR331](https://github.com/Innvoaid/dentlink-app/pull/331) OPEN/비Draft → `develop@43f7879`로 생성했다. 기존 PR329는 병합 완료 상태이며 새 PR에는 DL-16859의 1커밋·7파일만 있다. 로컬/원격 일치·clean을 확인했다.
+- 추가 코드 변경 없이 기존 20 tests PASS·lint 오류 0·타입 기존 18진단/추가 0 및 기기 QA 미수행을 PR에 명시했다. 병합·CodePush·Jira 변경은 하지 않았다. 기존 Staging v336은 유지하며 리뷰/병합 후 develop 전체 CodePush는 별도 사용자 지시에 따른다.
+- 웹은 DL-16850 논의·처리 후 기존 웹 QA를 한 PR로 묶을 예정이며 현재 로컬 미푸시다. 자세한 상태는 [권한관리 체크포인트](dentlink-permission-management.md)를 따른다.
+
 ## 최신 — 2026-10-20 DL-16859 앱 QA 로컬 커밋 완료, 제품 푸시 보류
 
 - 사용자 승인에 따라 `/Users/parkjongsun/Repository/dentlink-app-permission`의 기존 `feature/DL-16317-qa`에서 DL-16859를 수정·검증·로컬 커밋했다. HEAD `1fa59edf58f8d2dc8fc4ac8af17a9016be3a6149`, base develop `43f7879`, upstream 없음·clean이며 기존 원본 feature/worktree는 보존했다.
