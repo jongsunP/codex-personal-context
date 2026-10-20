@@ -1,5 +1,13 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 — 2026-10-20 웹·앱 QA 병합 완료, Staging 재배포 판단
+
+- 사용자 앱 병합 통보 후 [PR331](https://github.com/Innvoaid/dentlink-app/pull/331) MERGED → develop을 실제 확인했다. merge SHA `472ecd97f233bc5b6314a83e5cd6be84a90bf6e1`가 최신 원격 develop과 같다. 이전 develop `43f7879` 이후 이번 squash 1커밋·소스5파일/테스트2파일만 있으며, 검토한 feature HEAD `1fa59ed`와 develop의 tree는 동일하다. ios/android/package/lock/앱 설정 차이0이다.
+- PR331의 Member LinkTalk 조회·미읽음·하단 배지·읽음 캐시 및 권한 전환을 다시 읽기 검토했고 병합을 막을 확정 문제는 발견하지 못했다. 실제 저장된 푸시 설정을 변경하지 않으며, 테스트20개 통과·신규 타입진단0의 기존 근거를 재확인했다. 전체 앱 타입검사 통과나 기기 QA 완료를 의미하지 않는다.
+- 웹 PR4736은 계속 MERGED → release/v1.89.0 `7a7e2fbf8`이다. 원격 stage는 `f4ebf42c5`(PR4724)로 아직 QA 추가분이 없다. release-to-stage 열린 PR은 0개다. 현재 stage와 release 전체 비교는 **7개 추가 squash 커밋·100파일**로, 권한 QA 외 QR/밀링센터/CP/디자인시스템 QA도 포함한다. 이 세션에서 검토한 권한 QA8건만 배포되는 것으로 설명하지 않는다. workflow/Docker/env 차이는 없으며 package 변경은 shared DLDS/DLOS/icons의 0.1.4→0.1.6 버전 값이다. 타 작업100파일 전수를 이 세션이 재검증한 것으로 주장하지 않는다.
+- 판단: **이번 권한관리 수정 기준 웹·앱 모두 Staging 재배포 후 QA 단계로 진행 가능**하다. 웹은 최신 release를 stage에 전달하는 별도 배포 준비/병합 절차, 앱은 최신 develop 전체로 Staging CodePush한다. DL-16850 코드 변경 제외 결정을 유지한다.
+- 사용자 요청은 재배포 가능 여부 판단이며 실제 배포 실행 지시는 아직 없다. 이번에 제품 변경·새 PR·병합·stage 재생성·CodePush·Jira 변경·배포 모니터링을 수행하지 않았다. 두 QA 작업 브랜치와 worktree는 clean 상태로 보존하고, 다음은 사용자 전달 지시에 따른 Staging 준비/배포 또는 QA 결과 대응이다.
+
 ## 최신 대기 — 2026-10-20 웹 QA release 병합 완료, 앱 PR331 추후 병합
 
 - 사용자가 웹 PR4736 병합과 Jira 카드 상태 확인을 완료했다고 알렸다. 실제 GitHub 조회에서 [PR4736](https://github.com/Innvoaid/dentlink-client/pull/4736) **MERGED → release/v1.89.0**, 병합 시각 2026-10-20 18:35:09 KST, merge SHA `7a7e2fbf8087b1be1d2a39f83a074476f01f483d`를 확인했다. fetch한 원격 release도 같은 SHA다. 웹 QA 8건은 release에 반영됐으며, 이번 확인에서 새 배포 성공이나 실제 화면 QA를 확인한 것은 아니다.
