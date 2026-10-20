@@ -1,5 +1,14 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 대기 — 2026-10-20 웹 QA release 병합 완료, 앱 PR331 추후 병합
+
+- 사용자가 웹 PR4736 병합과 Jira 카드 상태 확인을 완료했다고 알렸다. 실제 GitHub 조회에서 [PR4736](https://github.com/Innvoaid/dentlink-client/pull/4736) **MERGED → release/v1.89.0**, 병합 시각 2026-10-20 18:35:09 KST, merge SHA `7a7e2fbf8087b1be1d2a39f83a074476f01f483d`를 확인했다. fetch한 원격 release도 같은 SHA다. 웹 QA 8건은 release에 반영됐으며, 이번 확인에서 새 배포 성공이나 실제 화면 QA를 확인한 것은 아니다.
+- 웹 작업 위치는 `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317-qa@8200ba2ff`를 그대로 유지한다. 로컬/원격 작업 브랜치 동일·clean이며, 병합 이후라는 이유로 브랜치나 worktree를 삭제·교체하지 않았다.
+- 앱은 사용자가 **나중에 병합할 예정**이다. [PR331](https://github.com/Innvoaid/dentlink-app/pull/331)을 다시 조회해 OPEN/비Draft → develop, HEAD `1fa59ed`, CLEAN을 확인했다. 앱 QA 브랜치도 clean이며 추가 수정·푸시·CodePush는 하지 않았다.
+- Jira 완료 수정 9건은 앞서 Ready for Deploy로 정리했고 사용자도 확인했다. 병합만으로 배포/QA 완료 상태로 바꾸지 않았으며 이번에는 Jira를 추가 수정하지 않았다. DL-16850은 이번 코드 전달에서 제외한 결정을 유지한다. 카드의 완료 상태는 앞서 외부에서 관측된 것이며 FE 수정 완료를 뜻하지 않는다.
+- 다음 순서: 웹 release 수정분의 Staging 배포 후 QA 재확인. 앱은 사용자/팀이 PR331을 develop에 병합한 뒤 별도 전달 지시에 따라 develop 전체 Staging CodePush 및 QA를 진행한다. 웹 배포 시 DL-16851·DL-16864 등 앱 WebView 주문상세도 함께 반영되고, DL-16859 네이티브 LinkTalk 수정은 앱 전달이 필요하다.
+- 현재 승인 범위에서 추가 제품 구현은 없다. 기존 검증 결과를 보존하고 제품 테스트/리뷰/배포 자동 모니터링을 재개하지 않는다. 다음 사용자 지시 또는 QA 결과가 오면 해당 제품·배포 버전부터 확인한다. 재현용 Draft `7000012185`는 별도 삭제 지시 없이 보존돼 있다.
+
 ## 최신 — 2026-10-20 DL-16850 제외, 웹 QA PR4736 전달·Jira 상태 정리
 
 - 사용자 지시: DL-16850은 우선 제외하고 나머지 완료 QA를 PR로 전달하며 Jira는 현재 작업 상태에 맞춰 **상태만** 변경한다. 이번 작업은 PR 전달까지이며 병합·배포·CodePush·리뷰 대응을 실행하지 않는다.
