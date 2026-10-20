@@ -164,6 +164,40 @@ scratch details.
   verify it against the remote and local project Git state unless the user
   explicitly asks for a narrower source.
 
+## Local Docker Verification And Tool Reuse
+
+For authorized local Docker checks, reuse installed tools and a suitable
+existing profile after checking its saved configuration and other sessions'
+usage. Do not reinstall tools or create a default profile for each task.
+
+- The current Mac has user-approved Colima/Docker tooling. The recorded
+  profile is `dentlink-env-check`, with Docker context
+  `colima-dentlink-env-check`. Start only the explicitly selected profile,
+  using `--activate=false` so the default Docker context is not changed.
+- Preserve its isolated mount at `/private/tmp/dentlink-env-check`; do not
+  add home, repository, SSH-agent, or authentication-file mounts. Read the
+  [device setup and verification history](projects/dentlink-client-env-management.md#local-docker-tool-reuse)
+  before reuse. Versions and resource allocations there are dated snapshots.
+- Run Docker with its isolated config and explicit context:
+
+  ```sh
+  env -u DOCKER_HOST -u DOCKER_CONTEXT DOCKER_CONFIG=/Users/parkjongsun/.local/share/dentlink-docker-check/docker-config docker --context colima-dentlink-env-check <command>
+  ```
+
+- For synthetic checks, use an isolated `git archive` of tracked source and
+  synthetic configuration. Exclude actual env/auth files from archive and
+  build inputs even if tracked. Do not automatically read or copy these files;
+  actual environment values remain human-managed.
+- Installed tooling does not extend authorization to actual credentials,
+  deployment, external image pushes, or authenticated E2E. Synthetic local
+  results do not prove real-configuration, server-deployment, or user QA success.
+- At completion, stop only the dedicated profile used for that task after
+  confirming no other session is using it. Preserve images and caches; do not
+  stop or delete another session's profiles or containers.
+- This installation is device-local. On another device, check installation
+  and any needed approval separately. A memory update does not start tools,
+  run checks, or resume paused work.
+
 ## Atlassian Connection Selection And Recovery
 
 This is the user's shared rule for existing and new sessions, confirmed on

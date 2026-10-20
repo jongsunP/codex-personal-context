@@ -4,6 +4,14 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
+## 공통 지침 정리 — 2026-10-20 로컬 Docker 도구 재사용
+
+- 사용자 요청을 받은 환경변수 세션의 인계를 바탕으로 설치된 Colima/Docker 재사용 지침을
+  [AI_WORKFLOW](../AI_WORKFLOW.md#local-docker-verification-and-tool-reuse)에 정리했다.
+- 기존 전용 프로필·명시 context/config·격리 마운트를 재사용하고, 실제 env는 사람이 관리하며 다른 세션 자원은 보존한다.
+  버전·자원 사양·완료한 검증은 [환경변수 작업 기록](dentlink-client-env-management.md#local-docker-tool-reuse)에 둔다.
+- 이번 메인 작업은 문서·메모리 정리뿐이다. 도구 시작·추가 검증·제품 변경·배포·대기 업무 재개는 하지 않는다.
+
 ## 공통 지침 전파 — 2026-10-19 Atlassian 연결
 
 - 디자인시스템정비세션의 사용자 원문을 확인해 기존·신규 세션 전파 권한을 확인했다.

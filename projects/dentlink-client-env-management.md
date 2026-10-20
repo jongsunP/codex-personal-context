@@ -19,6 +19,20 @@
 - 증거: `/private/tmp/dentlink-env-check/staging-20261020`, `/private/tmp/dentlink-env-check/signup-locator`, `/tmp/dentlink-setup-node-cache-check-qdce1rez/summary.json`. 최종 안전 요약은 `staging-20261020/e2e-verdict-12261436321-safe.json`. 11:32Z 공개 3서비스 HTML 응답200·동일 BUILD_ID, Admin/Lab 정적 파일 각각3개 HEAD200을 재확인했다. 원문 HTML/설정값은 출력·저장하지 않았다. E2E artifact는 압축을 메모리에서만 처리하고 verdict 및 report의 건수·파일/행·오류 종류 boolean만 추출했다. trace/auth/원본 로그는 추출·열람하지 않았다.
 - Jira DL-16821 댓글44531에 완료 결과·두 수정 PR·최종 전체 E2E 결과를 기록하고 응답 본문을 확인했다. 본문/상태/상위 댓글과 Notion 최종 운영 가이드는 변경하지 않았다. 제품 worktree `/Users/parkjongsun/Repository/dentlink-client-env-management`는 `feature/DL-16821-stage-e2e@460a9c0d5` clean·원격 일치이며 원래 feature/DL-16821과 stage-fix는 보존했다. release685eab699/stage602071d40/master8772d688 원격을 최종 확인했다. 다음 실제 배포는 별도 사용자 지시를 기다린다.
 
+### Local Docker Tool Reuse
+
+- 2026-10-20 사용자 요청으로 환경변수 세션이 메인에 전달한 재사용 기록이다. 공통 운영 정본은
+  [AI_WORKFLOW의 Local Docker Verification And Tool Reuse](../AI_WORKFLOW.md#local-docker-verification-and-tool-reuse)이며,
+  메인은 문서만 정리했고 도구 시작·설치·추가 테스트는 하지 않았다.
+- 전달 세션의 직전 조회: Colima **0.10.3**, Docker CLI **29.8.2**, docker-buildx **0.37.2**, Lima **2.2.0**.
+  현재 Mac에 사용자 승인으로 설치한 이력이며 다른 기기의 설치를 의미하지 않는다.
+- 프로필 `dentlink-env-check`는 전달 당시 **Stopped**, aarch64·VZ/Rosetta·6CPU·8GiB·60GiB·Docker 런타임이다.
+  context는 `colima-dentlink-env-check`, 격리 설정은 `/Users/parkjongsun/.local/share/dentlink-docker-check/docker-config`이다.
+  `/private/tmp/dentlink-env-check`만 마운트하고 홈·저장소·SSH agent·인증 파일은 마운트하지 않았다. 이미지·캐시는 보존했다.
+- 위 현재 상태의 합성 linux/amd64 검증은 `dockerfiles/Dockerfile.web` 기준이다. 모든 서비스별 Dockerfile의 동일성이나
+  실제 설정·배포·사용자 QA 성공을 뜻하지 않는다. 증거는 `/private/tmp/dentlink-env-check/results-2fb2fdc50d6b/summary.json`에 있다.
+- 아래 과거의 Docker/Colima 설치 보류·미검증 기록은 당시 이력이다. 재사용 여부는 최신 상단 완료 기록과 실제 저장 설정·사용 상태를 기준으로 판단한다.
+
 ## 이전 상태 — 2026-10-20 회의 결과 반영, 사람 수동 관리로 전환 코드 완료
 
 **아래 과거 기록의 에이전트 env 관리·암호화 전달·manifest 운영은 폐기된 방식입니다. 현재 기준은 이 항목과 최신 팀 가이드입니다.**
