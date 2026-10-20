@@ -1,5 +1,14 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-20 · 사용자 스테이징 확인 큰 이상 없음, 남은 순서 정리
+## 현재 브레이크포인트 — 2026-10-20 · DLDS QA와 기존 문제 분리
+
+- 사용자 지시: QA를 원인별 별도 브랜치/PR로 분리합니다. 모두 최신 `origin/release/v1.89.0`에서 생성하고 PR도 같은 release를 향합니다. Jira 정리는 사용자가 담당하며 Codex는 변경하지 않습니다. 병합·배포는 금지, PR 생성에서 멈춥니다.
+- checkout: `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`.
+- **DL-16854 레드닷:** DLDS 빈 값 판단 변경으로 라벨과 내부 빨간 점이 중복된 회귀. `feature/DL-16437-qa`, commit `916c7e785`, PR [#4730](https://github.com/Innvoaid/dentlink-client/pull/4730), base `release/v1.89.0`. DropdownBase 조건 한 줄과 관련 테스트만 포함. DLDS 151 tests/typecheck, Clinic/Lab/Admin typecheck와 push hooks 통과(기존 lint 경고 있음). 커밋·푸시·PR 완료, 병합하지 않음.
+- **DL-16857 리메이크 글자 잘림:** 사용자가 master 로컬에서 재현했고 Codex도 Chrome `localhost:3005/shipping` 라벨 생성 모달의 잘림을 직접 확인. DLDS 신규 회귀가 아닌 기존 문제로 분류. `feature/DL-16857`을 release `f1dab1b1e`에서 생성, ShippingOrderListItem 한 파일만 복원. 리메이크 chip flex-shrink 방지 및 날짜 영역 남은 너비 사용. 앞선 실제 컴포넌트 샘플 시각검증 5조건(320/400px, 일반/리메이크/추가금/긴날짜) 통과. commit `3221c713b`, PR [#4731](https://github.com/Innvoaid/dentlink-client/pull/4731), base `release/v1.89.0`. Clinic/Lab/Admin typecheck 및 push hooks 통과(기존 lint 경고 있음). 커밋·푸시·PR 완료, 원격 동일·작업 폴더 clean. 병합하지 않음.
+- **DL-16852 CP 미노출:** master에도 동일한 DONE 상태 표시 조건 존재. DLDS와 별개 기존 문제로 판단. 생산 코드 수정은 아직 없음. 본인/타 담당 조회·부분 입력·빈 데이터·완료 상태용 Clinic/Lab 테스트 초안만 stash에 보존. 이 건은 다음 사용자 지시 후 별도 release 기반 브랜치로 진행합니다.
+- 보존 stash: `DL-16437 QA fixes before master comparison`(현재 stash@{1}, 번호는 바뀔 수 있음)은 레드닷/리메이크 수정 및 CP 테스트 초안 포함, `DL-16437 generated DLDS build artifacts before master comparison`(현재 stash@{0})은 dist 산출물 보관. 전체 pop하면 다른 업무가 섞이므로 필요한 파일만 선택 복원합니다. stash는 로컬 전용이라 다른 기기에서는 기존 PR/기록을 바탕으로 재구성합니다.
+
+## 이전 브레이크포인트 — 2026-10-20 · 사용자 스테이징 확인 큰 이상 없음, 남은 순서 정리
 
 **사용자 확인:** 스테이징을 직접 사용해 봤으며 큰 이상을 발견하지 않았다고 보고했습니다. 이는 전반적인 수동 확인 결과이며 모든 화면·조건·기능의 무결함 보증이나 전체 자동 검증 통과를 뜻하지 않습니다. 이번 요청은 이 결과 기록과 남은 작업·순서 정리이며, 제품 코드 수정·테스트 재실행·병합·배포·하네스 재개는 하지 않았습니다.
 
