@@ -1,6 +1,24 @@
 # Dentlink 웹 환경변수 관리
 
-## 현재 상태 — 2026-10-20 명령 설명 보완, 전환 후 정리 후보 확정
+## 현재 상태 — 2026-10-20 release/v1.89.0에 함께 반영, GitHub 설정 재확인 후 회의 결과 대기
+
+- 사용자가 PR #4713의 대상을 `release/v1.89.0`으로 바꿨고, 환경설정 변경도 **1.89 코드와 함께 반영·배포**하기로 했다. master에 별도로 먼저 반영할 필요는 없다. 사용자가 제시한 일정은 회의 후 DEV/STAGE, 다음 주 운영 배포이며, 실행 완료 사실이나 현재 배포 승인이 아니다.
+- 마감 재조회: `/Users/parkjongsun/Repository/dentlink-client-env-management`, `feature/DL-16821`, `47308a55798fdae3cdb98ffa7f4fbe174846c6e0`, 원격 추적 상태 clean. [PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713)은 base `release/v1.89.0`, 같은 head, OPEN/Draft/DRAFT label/`[WIP] ` 제목이다. 아래 과거 기록의 base master는 당시 상태다.
+- 이 대화에서 확인한 release `f1dab1b1ef086558cf81bdb42b1681b1dc8360ce`와 feature의 시험 병합은 충돌이 없었고, 9개 기존 env의 키·값 차이도 없었다. 이는 해당 리비전의 읽기 검토이며 조합된 릴리즈의 실제 빌드 성공을 뜻하지 않는다. 재개할 때 최신 release와 다시 대조한다. PR 본문의 예전 master 비교용 설명도 실제 준비 작업을 재개할 때 release 대상에 맞춰 정리한다.
+- **GitHub 설정은 등록 완료:** 9개 Environment의 Variables 합계235개를 전체 페이지 조회해 기준 코드의 공개 설정 검사를 통과했고, 기존 env의 공개 값과 차이가 없음을 값 비출력으로 확인했다. Admin build3·Clinic build3/E2E2의 Secrets 묶음8개 이름도 모두 존재한다. Secrets 원문은 API로 다시 읽을 수 없으므로 이번 확인은 등록 여부이며 실제 빌드 소비 검증과 구분한다. 9환경의 protection rule은 없고 deployment branch policy는 null이었다. 첫 페이지 결과만으로 Clinic 키 누락을 판단하지 않도록 목록은 페이지네이션한다.
+- **병합 뒤 GitHub 설정을 수정하거나 배포 순간 수동 스위치를 켜는 단계는 예정돼 있지 않다.** 완성된 workflow가 배포 소스에 포함되면 Actions가 해당 Environment를 선택하고 값을 Docker/Next 빌드에 공급한다. 설정 등록과 정상 소비는 별개이므로 병합 전 최종 검증에서 문제가 발견되면 먼저 보완한다. release 병합 자체는 9서비스 배포 트리거가 아니며, develop·stage/stg 서비스 브랜치·prd 서비스 태그 또는 수동 실행의 실제 배포 소스에 코드가 포함돼야 한다.
+- 사용자는 완성된 코드와 GitHub 설정이 준비됐으면 이후 배포 때 본인이 현장에 없어도 되는 것으로 이해했다. 별도 환경변수 전환 조작 때문에 사용자가 참석할 필요는 없지만, 일반적인 빌드·배포 성공과 서비스 정상 동작 확인은 남는다. '검증'은 수동 QA뿐 아니라 설정 공급·자동 빌드·필수값 검사도 포함한다. **현재 남은 일을 단순히 병합·QA만이라고 줄이지 않는다. 기존 env9개 Git 추적 해제도 아직 미실행이다.**
+
+### 다음 시작점과 남은 순서
+
+1. 사용자 회의 결과/명시적 재개 요청을 받은 뒤 개인 컨텍스트·feature·release·PR·설정의 실제 최신 상태를 확인한다. FE-only·기존 이름/값/동작 유지·팀 공동관리·공통 에이전트 절차는 확정 사항으로 유지한다.
+2. 팀원에게 추적 해제 커밋이 전달되기 전에 기존 private 값의 분리·백업/암호화 전달과 복원을 확인한다. 기존 파일 강제 삭제는 하지 않으며, 동료는 전환 뒤 최초 `.env.development`를 공통 스크립트로 갱신한다. E2E 새 설정과 복구 경로도 확인한다.
+3. 아래 명령 정리 후보와 기존 env9개 Git 추적 해제를 포함해 전환 코드를 완성하고, release 조합의 설정 공급·빌드 검증을 마친다. Docker/Colima 설치 보류를 유지하며 가능한 검증 환경을 재개 시 확인한다. 이미 통과한 합성 테스트를 Docker·실계정 E2E·실제 팀원 사용 성공으로 바꾸어 기록하지 않는다.
+4. 별도 승인된 범위에서 release 병합과 환경별 배포를 진행하고 결과/핵심 동작을 확인한다. 필요한 설정은 첫 배포 전에 준비하며 배포 당일 추가 수동 전환은 없다. 준비/PR 요청만으로 Codex가 merge/deploy하지 않는다. 서버 배포 결과 확인은 공통 15분/3분 간격 지침을 따른다.
+
+이번에는 읽기 확인과 개인 컨텍스트 저장만 했다. 제품 코드·GitHub 설정·PR·Notion/Jira·실제 로컬 env·Git 추적·배포를 변경하지 않았다. Google 키 제한 확인과 Eximbay 서버 서명/키 교체는 별도 후속으로 유지하고 추가 조사를 재개하지 않는다. 회의 결과가 올 때까지 추가 작업·조회·자동 모니터링 없이 대기한다.
+
+## 직전 상태 — 2026-10-20 명령 설명 보완, 전환 후 정리 후보 확정
 
 - 사용자가 환경설정 명령 9개와 `test:env`의 필요성을 검토한 뒤, 소스 주석·기존 문서 보완을 승인했다. **전환 후 불필요한 명령은 메모에 남겨 오늘 회의 이후 실제 전환 작업에서 정리한다**는 지침이다. 지금은 사용 중인 기능을 제거하지 않는다.
 - `/Users/parkjongsun/Repository/dentlink-client-env-management`, `feature/DL-16821`, 커밋 `47308a55798fdae3cdb98ffa7f4fbe174846c6e0` (`docs: 환경설정 명령의 역할과 전환 시점 설명 보완`) commit/push 완료·원격 일치·clean 확인. PR #4713의 같은 head와 OPEN Draft/master/DRAFT label/`[WIP] ` 제목을 재확인했다. `scripts/env.js`, `scripts/env-transfer.js`, `docs/environment-variables.md`에 역할·유지 이유·전환용/상시 용도·기존 파일 보호를 설명했다. 에이전트 요청문은 특정 키워드가 필요한 명령이 아니라 자연어 예시임을 명시했다.

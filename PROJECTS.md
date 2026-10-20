@@ -18,11 +18,11 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- **2026-10-20 회의 전 준비·명령 설명 보완 완료.** `feature/DL-16821` / `47308a557`, [Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713), base master. 기존 E2E 보완 뒤 주석·운영 가이드에 명령별 역할을 보완했고 env77·실행 코드 불변을 확인했다. 이전 E2E도구222·타입/lint 검증 이력 유지. 병합·배포·env9개 추적 해제는 하지 않았다.
-- Google 키의 Admin3환경 Secrets/build private 보관·공식 SDK 연결 유지. 10/19 확인한 9환경 Variables235개·Secrets묶음8개와 키·값 재구성/SDK4검사 이력은 보존한다. 이번에는 GitHub 설정 변경·실계정 실행 없이 별도 브랜치와 문서만 보완했다.
+- **2026-10-20 release/v1.89.0에 함께 반영하기로 결정, 회의 결과 대기.** `feature/DL-16821` / `47308a557`, [Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713)의 실제 base는 사용자가 변경한 `release/v1.89.0`이다. OPEN Draft·DRAFT·`[WIP] `·clean 재확인. 코드와 지침은 별도 브랜치이며 병합·배포·env9개 추적 해제는 아직이다. 기존 env77/E2E도구222/타입·lint 검증 이력 유지.
+- GitHub 9환경 Variables235개는 10/20 전체 페이지 재조회에서 기준 검사 통과·기존 공개 값 차이0, Secrets묶음8개는 등록 확인했다(원문 read-back 불가). 병합 뒤 별도 설정 수정/수동 스위치는 예정돼 있지 않으며, 실제 빌드 소비는 최종 검증 대상이다. Google Admin3키의 Secrets 보관·SDK 연결 유지.
 - [DL-16818](https://innovaid.atlassian.net/browse/DL-16818)의 [Notion 모음](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c)에 내용문서3개. 회의 자료의 코드/로컬 파일 개념과 팀 가이드의 최초 로컬 갱신 안내를 보완했다. 진행은 DL-16821 댓글44500, 조사 DL-16819 완료 유지. 본문은 정의·진행은 하위댓글 원칙 유지.
 - 사용자 빠른 마무리 요청으로 Google 콘솔 추가 조사 종료. 실제 키 발급 프로젝트 미식별·제한 미확인, Eximbay 브라우저 서명/키 노출은 별도 서버 연계·키 교체 필요. 보관 위치 이전만으로 전체 보안 해결이라 보고하지 않는다.
-- 회의 결과 후 Docker·팀원 전달/실사용·복구 확인과 추적 해제/전환을 재개한다. 전환 완료 후 `bootstrap`·독립 `prepare`·불필요한 경우 `diff` 정리를 함께 검토하며 `apply` 내부 생성 로직은 보존한다. 동료의 옛 파일 강제 삭제·Docker 설치는 보류, 운영 배포 별도 승인 유지. [개인 체크포인트](projects/dentlink-client-env-management.md).
+- 회의 결과 후 사전 백업/복원·전환 코드 마무리(env 추적 해제 포함)·release 빌드 검증 → 별도 승인된 병합 → 환경별 배포/동작 확인 순서다. 완성된 코드·설정이 준비되면 배포 순간 사용자 본인의 전환 조작은 필요 없다. `bootstrap`·독립 `prepare`·미사용 `diff` 정리 후보와 `apply` 내부 로직 보존 조건 유지. 동료 옛 파일 강제 삭제·Docker 설치는 보류하며 현재 추가 작업 없이 대기한다. [개인 체크포인트](projects/dentlink-client-env-management.md).
 
 
 ### 사무실 의자 구매·헤드레스트 개선 조사
