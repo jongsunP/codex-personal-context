@@ -18,11 +18,11 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- **2026-10-19 FE env 분리의 보안 분류·회의 전 보완 완료.** `feature/DL-16821` / `849df9256`, [Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713), base master. 병합·배포·env9개 추적 해제는 하지 않았다.
-- Google 키를 Admin3환경 Secrets/build private로 옮기고 검색을 공식 브라우저 SDK로 연결했다. 9환경 Variables235개·Secrets묶음8개, 원본 키·값 재구성 일치. env75·SDK4·타입/lint/정상hooks 통과. 운영 브랜치가 새 설정을 읽지 않아 현재 서비스 전환 영향 없음.
-- [DL-16818](https://innovaid.atlassian.net/browse/DL-16818)의 [Notion 모음](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c)에 내용문서3개. 회의/팀사용 가이드 보완, 구현 DL-16821 댓글44488, 조사 DL-16819 완료 유지. 본문은 정의·진행은 하위댓글 원칙 유지.
+- **2026-10-20 회의 전 E2E 보완 준비 완료.** `feature/DL-16821` / `1e3e66441`, [Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713), base master. 옛 env 자동 보충 제거·필수값 조기 안내를 준비했으며, env77·E2E도구222·타입/lint/정상hooks 통과. 병합·배포·env9개 추적 해제는 하지 않았다.
+- Google 키의 Admin3환경 Secrets/build private 보관·공식 SDK 연결 유지. 10/19 확인한 9환경 Variables235개·Secrets묶음8개와 키·값 재구성/SDK4검사 이력은 보존한다. 이번에는 GitHub 설정 변경·실계정 실행 없이 별도 브랜치와 문서만 보완했다.
+- [DL-16818](https://innovaid.atlassian.net/browse/DL-16818)의 [Notion 모음](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c)에 내용문서3개. 회의 자료의 코드/로컬 파일 개념과 팀 가이드의 최초 로컬 갱신 안내를 보완했다. 진행은 DL-16821 댓글44500, 조사 DL-16819 완료 유지. 본문은 정의·진행은 하위댓글 원칙 유지.
 - 사용자 빠른 마무리 요청으로 Google 콘솔 추가 조사 종료. 실제 키 발급 프로젝트 미식별·제한 미확인, Eximbay 브라우저 서명/키 노출은 별도 서버 연계·키 교체 필요. 보관 위치 이전만으로 전체 보안 해결이라 보고하지 않는다.
-- 회의 후 명시적 재개 요청에서 Docker·팀원 전달/실사용·복구 확인과 추적 해제/전환을 진행한다. Docker 설치 금지·운영 배포 별도 승인 유지. [개인 체크포인트](projects/dentlink-client-env-management.md).
+- 회의 결과 후 Docker·팀원 전달/실사용·복구 확인과 추적 해제/전환을 재개한다. 동료의 옛 파일 강제 삭제는 하지 않고 최초 로컬 갱신을 안내한다. Docker 설치 보류·운영 배포 별도 승인 유지. [개인 체크포인트](projects/dentlink-client-env-management.md).
 
 
 ### 사무실 의자 구매·헤드레스트 개선 조사

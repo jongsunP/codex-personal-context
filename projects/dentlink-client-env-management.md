@@ -1,6 +1,26 @@
 # Dentlink 웹 환경변수 관리
 
-## 현재 상태 — 2026-10-20 코드 흐름 이해 완료, 최종 전환 시 E2E 잔존 파일 참조 제거 예정
+## 현재 상태 — 2026-10-20 회의 전 E2E 보완 준비 완료, 회의 결과 후 실제 전환
+
+- 사용자는 오늘 기존 Notion·Jira와 설명한 개념을 바탕으로 회의하고, 결과를 전달한 뒤 실제 전환을 진행하기로 했다. 회의 전에 할 수 있는 추가 준비를 요청해 **옛 env의 E2E 자동 보충 제거를 격리된 Draft 브랜치에서 미리 구현·검증**했다. 바로 앞 기록의 ‘전환 시 구현 예정’은 이 준비로 대체하며, 실제 운영 반영은 여전히 회의 이후다.
+- 작업 폴더 `/Users/parkjongsun/Repository/dentlink-client-env-management`, 브랜치 `feature/DL-16821`, 최신 `1e3e66441aedf404d6fb7ea67ec67070102c4ec8` (`fix: E2E 설정의 기존 env 자동 보충 제거`) 정상 commit/push 완료. 원격과 일치·clean이다. PR #4713은 base master / OPEN / Draft / DRAFT label / `[WIP] ` 제목을 유지하고 본문을 갱신했다. 기존 849df9256까지 준비한 보안·환경설정 변경을 유지했다.
+- `scripts/env/e2e.js`는 공개 API 설정과 해당 환경 E2E private 파일, 명시적 shell/CI 값만 합친다. 기존 `clinic/.env.development`·`.env.staging`은 읽거나 지우지 않는다. 공통 필수 4개(기본 계정 ID·비밀번호, EMPLOYEE_ID, EMPLOYER_NAME)가 없으면 `assertE2EReady`가 값 없이 준비 방법을 안내한다. 공식 batch/UI runner와 직접 Playwright config 모두 실행 전에 검사한다. 대상/API 검증, shell/CI 최우선·optional 빈 값, 시나리오별 준비와 허용 제외는 유지한다. manifest E2E 전부를 일괄 필수로 만들지 않았다.
+- DEV/STAGE 분리, 옛 값 미보충·파일 보존, 필수 누락 시 브라우저/버전조회 전 중단, 선택값/CI override 회귀를 기존 합성 테스트에 추가했다. 수동 STAGE workflow가 관리 도구 없는 과거 ref를 선택할 때의 legacy 분기는 별도 호환이므로 그대로다. workflow/Docker/실제 env 내용·Git 추적은 이번에 변경하지 않았다.
+- 검증: `pnpm test:env` 77/77, `pnpm e2e:check` 222/222, Clinic workspace의 TypeScript 실행기를 통한 `e2e/tsconfig.json --noEmit`, diff-check 통과. 정상 pre-commit의 3서비스 타입, pre-push의 3서비스 lint·Admin guard·공용 테스트/coverage 검사 통과(기존 경고 있음). 실계정/API/브라우저 E2E·Docker·배포를 실행한 결과가 아니다.
+- 제품 문서 `docs/environment-variables.md`, `e2e/README.md`, 기존 E2E 시나리오 백로그와 one-off 준비 도구의 출력 경로를 새 관리 경로에 맞췄다. 새 개인 인계 파일이나 테스트 파일은 만들지 않았다.
+- Notion 문서 모음과 자식 3개 구조를 확인했다. 이전 회의 기록은 그대로 두고, 회의 자료에 `process.env` 사용 유지·env.js 전달 흐름과 `.env.example`/`.env.development`/선택적 `.env.local` 역할을 짧게 추가했다. 팀 가이드에는 기존 팀원도 전환 후 최초 로컬 갱신, 기존 파일 보존, E2E 별도 설정 준비 요청을 추가했다. 수정 두 문서 read-back 완료. Jira 상위 DL-16818의 문서 모음 링크와 하위 DL-16821 정의 본문은 유지하고, 진행 댓글44500에 준비·검증·미전환을 기록했다.
+- **현재 영향:** 별도 브랜치 코드·문서만 갱신했다. GitHub Variables/Secrets 추가 변경, 원래 작업 폴더 변경, 병합·배포·실제 env 적용·9개 env의 Git 추적 해제는 하지 않았다. GitHub 등록 개수235 Variables/8 Secrets는 10/19 확인 이력이며 이번에는 값을 다시 읽거나 바꾸지 않았다.
+
+### 회의 후 재개 순서
+
+1. 사용자가 전달한 회의 결과를 반영하고 개인 컨텍스트·정확한 작업 브랜치·PR·GitHub 설정의 최신 상태부터 대조한다. 이미 합의한 FE-only·기존 변수 이름/값/동작 유지·팀 공동관리·에이전트 공통 절차를 다시 미정으로 돌리지 않는다.
+2. 팀원은 **env 추적 해제 커밋을 받기 전에** 기존 값의 분리·백업/암호화 전달과 복원을 확인한다. 최초 로컬 `.env.development` 갱신은 기존 `pull → 필요시 unpack → apply` 절차로 처리하고, `apply`가 기존 파일을 보존하며 멈추면 가이드의 겹치지 않는 백업·개인 override 절차를 따른다. `.env.staging` 등 강제 삭제 기능은 추가하지 않는다.
+3. 남은 Docker 이미지·실제 팀원 전달/실행·복구 확인과 새 경로 E2E 검증을 범위에 맞게 진행한다. 이번 합성검사 통과를 실사용 통과로 대신하지 않는다. Docker/Colima 설치 보류는 유지하며 필요한 실행 환경은 재개 시 확인한다. 실계정 쓰기 E2E는 별도 허용 범위와 동시 실행 규칙을 지킨다. 과거 ref workflow 호환과 새 코드 경로를 구분한다.
+4. 확인이 끝나면 기존 env 9개의 Git 추적 해제·전환 커밋을 준비한다. 사용자가 승인한 병합/배포 범위에 따라 환경별 연결·배포 결과를 확인하고, 팀원 로컬 갱신 및 되돌릴 코드/설정/이미지까지 확인한다. 준비나 PR 요청만으로 merge/deploy를 자동 실행하지 않는다. 추적 해제는 과거 Git 이력의 비밀값 삭제가 아니다.
+
+- Google 실제 키 발급 프로젝트·제한 확인과 Eximbay 브라우저 비밀키의 서버 서명/교체는 기존 별도 후속으로 남는다. Secrets 이동만으로 해결됐다고 말하지 않으며 추가 콘솔 조사는 요청 전 재개하지 않는다. 지금은 준비 완료 상태로 회의 결과를 기다리고 추가 작업·배포·자동 모니터링은 하지 않는다.
+
+## 이전 설명 — 2026-10-20 코드 흐름 이해 완료, E2E 후속 필요성 확인
 
 - 사용자가 Cursor에서 AS-IS/TO-BE 코드 흐름과 로컬 파일 동작을 확인했다. 기존 작업 폴더 `/Users/parkjongsun/Repository/dentlink-client-env-management`의 `feature/DL-16821`을 pull해 `849df9256`·원격 일치·clean을 확인했고, 해당 폴더를 별도 Cursor 창에 열었다. 이번에는 읽기·설명만 했으며 제품 코드·GitHub 설정·PR·Notion·Jira·실제 env 적용/삭제·배포는 변경하지 않았다.
 - 이해한 기준: `.env.example`은 실제 값 없는 공유 양식으로 Git에 유지한다. `manifest.json`은 분류·근거·서비스/환경·필수 여부를 기록하는 도구용 기준이며, `env.js`는 가져오기·검사·로컬 생성·빌드 공급을 공통 처리한다. Next.js의 `process.env` 사용은 동일하다. 로컬 dev/stage 적용은 `.env.development`, prd 적용은 `.env.production`; `.env.local`은 선택적 개인 override이며 자동 생성 대상이 아니다. 배포는 GitHub 설정을 빌드/배포 때 공급하고 실행 중 계속 조회하지 않는다.
