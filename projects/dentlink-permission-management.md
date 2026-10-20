@@ -1,5 +1,18 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 — 2026-10-20 Staging 전달 및 READY FOR QA 정리 완료
+
+- **사용자 승인/현재 단계:** 웹은 기존 방식으로 원격 stage를 최신 master에서 재생성하고 release/v1.89.0 → stage PR을 준비하며, Office 앱은 병합된 develop 전체를 Staging CodePush하도록 승인했다. 이후 사용자가 웹 배포를 시작했다고 알리고 **웹은 배포된 것으로 보고 앱 CodePush 후 카드 상태를 변경**하라고 지시했다. 이에 웹 Actions/서버 배포 결과를 따로 확인하지 않고 사용자 지시 기준으로 QA 준비 완료 처리했다. 독립적으로 웹 배포 성공이나 실제 화면 QA를 검증했다는 뜻은 아니다.
+- **웹 전달:** 기존 stage `f4ebf42c5c4c2fdfa86344cb468a8838c052d1f7`를 `refs/recovery/stage-before-reset-20261020-permission-qa`에 보존하고, 열린 stage PR0·보호/유효 규칙 없음 확인 후 expected-SHA lease로 삭제했다. 비존재 lease로 최신 master `8772d68825cac6e23792d86a715153a67dc71078`에서 stage를 재생성했고 실제 원격/API SHA를 확인했다. 정상 pre-push hook 두 번 모두 통과했다.
+- **웹 PR4737:** [release-to-stage PR4737](https://github.com/Innvoaid/dentlink-client/pull/4737)을 비Draft로 생성·연결했고 사용자가 병합했다(2026-10-20 18:46:19 KST). 현재 stage `b4813779c9cfbc9455a9bd1e567e68a486e75042`와 release `7a7e2fbf8087b1be1d2a39f83a074476f01f483d`의 tree는 `15278b32843e5bb1ce1c12c88403a4ea5f22e194`로 같다. 전체 release PR은 21커밋·1729파일이며 직전 stage 대비 7 squash 커밋·100파일이다. 권한 QA 외 다른 release 변경도 포함되므로 권한 수정만 배포한 것으로 설명하지 않는다.
+- **앱 전달 완료:** PR331이 병합된 최신 develop `472ecd97f233bc5b6314a83e5cd6be84a90bf6e1`의 격리 archive에서 Office **iOS·Android 모두 Staging v336 → v337 / target 2.2.4** CodePush를 완료했다. mandatory=true, rollout100, enabled이며 양OS 업로드 exit0과 서버 history readback을 확인했다. 설명은 `DL-16859 Staging QA | develop @ 472ecd97f233bc5b6314a83e5cd6be84a90bf6e1`이다.
+- **앱 전달 검증/한계:** immutable install 성공, 추적 source967개가 전달 전후 develop과 동일하고 각OS 소스맵의 자체 JS/TS341개가 정확히 일치한다. v336 대비 native/package/lock/env 차이0이다. iOS 첫 실행은 출력 상위 디렉터리 누락으로 bundle/upload 전에 실패했고 서버 v336 유지 확인 후 디렉터리를 준비해 성공했다. OS별 성공 업로드는 1회씩이다. 기존 isv.mp4 크기 경고는 기존 --force 경로로 처리했다. 기기 다운로드·재시작·v337 적용 및 실제 권한 QA는 아직 확인하지 않았다.
+- **앱 패키지 hash:** iOS `7ea8edf04ad12a2a53dd4586490a435a37e409bdde544b2279428f162179b9a7`, Android `eafd177e497cca8d8819bd92711c33384633964c935eb566c60581f23a7b784d`. 임시 source/node_modules만 제거하고 bundle/maps/logs/metadata는 보존했다. Slack 메시지·Production/Development/Lab·스토어·태그·제품 코드는 변경하지 않았다.
+- **Jira 상태만 변경:** 완료 웹 QA8건 **DL-16751, DL-16848, DL-16849, DL-16851, DL-16855, DL-16858, DL-16864, DL-16867**, 추가 공통 QA **DL-16852, DL-16857**, Office 앱 **DL-16859**까지 총 **11건**을 유효한 `Staging 배포` 전환으로 `READY FOR QA`로 변경했고 각 응답의 최종 상태를 확인했다. 사용자가 이미 옮긴 **DL-16854**는 READY FOR QA 그대로 유지했다. 본문·댓글·담당자·부모 관계는 변경하지 않았다. **DL-16850**은 코드 변경 제외를 유지하고 외부에서 변경된 완료 상태를 건드리지 않았다.
+- **보존 상태:** 웹 `/Users/parkjongsun/Repository/dentlink-client-permission`의 `feature/DL-16317-qa@8200ba2ff`, 앱 `/Users/parkjongsun/Repository/dentlink-app-permission`의 `feature/DL-16317-qa@1fa59ed`는 로컬/원격 동일·clean이며 브랜치와 worktree를 보존한다. 이번 전달을 위한 추가 제품 수정/커밋은 없다. 기존 웹49tests·3제품 타입 PASS, 앱20tests·전체 타입진단18→18/신규0의 검증 경계를 유지한다.
+- **증거:** 웹 `/tmp/dl16317-stage-delete-20261020-qa.log`, `/tmp/dl16317-stage-create-20261020-qa.log`, `/tmp/dl16317-release-stage-qa-20261020.md`; 앱 `/tmp/dl16859-stg-codepush-current.json` 및 `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dl16859-stg-codepush-20261020-g_in5qh_`.
+- **다음 시작점:** Staging 웹 및 Office 앱 v337 적용 후 실제 QA 결과를 받아 대응한다. DL-16851·DL-16864 등 앱 주문상세 WebView 수정은 웹 배포에서, DL-16859는 이번 네이티브 CodePush에서 전달된다. 현재 추가 구현·배포·자동 모니터링 없이 대기하며, 신규 QA 때 실제 적용 버전/권한/재현 조건부터 확인한다. 재현용 Draft `7000012185`는 별도 삭제 지시 없이 보존한다.
+
 ## 최신 — 2026-10-20 웹·앱 QA 병합 완료, Staging 재배포 판단
 
 - 사용자 앱 병합 통보 후 [PR331](https://github.com/Innvoaid/dentlink-app/pull/331) MERGED → develop을 실제 확인했다. merge SHA `472ecd97f233bc5b6314a83e5cd6be84a90bf6e1`가 최신 원격 develop과 같다. 이전 develop `43f7879` 이후 이번 squash 1커밋·소스5파일/테스트2파일만 있으며, 검토한 feature HEAD `1fa59ed`와 develop의 tree는 동일하다. ios/android/package/lock/앱 설정 차이0이다.
