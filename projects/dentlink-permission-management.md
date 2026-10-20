@@ -1,5 +1,13 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 대기 — 2026-10-20 사용자 담당 READY FOR QA 전체 12건 전달 대조 완료
+
+- 사용자가 권한 외 카드까지 본인 담당 READY FOR QA 전체가 이번 Staging 반영분에 포함되는지 확인하고, 2차 QA 요청을 위해 정리·메모리화·대기하도록 요청했다. 현재 Atlassian의 `assignee = currentUser() AND status = "READY FOR QA" ORDER BY key ASC`를 전체 조회했다. 인증 계정/담당자는 **Frankie(박종선), accountId 642a7f9580f8c2b1220fba09**이며 다음 페이지 없이 총 **12건**이다. 이전 세션의 11건은 그때 상태를 직접 전환한 수이고, 사용자가 미리 전환한 DL-16854를 포함한 현재 전체 수는 12건이다.
+- **웹 11건 포함:** PR4736의 DL-16751/16848/16849/16851/16855/16858/16864/16867 8건과, 별도 공통 QA **DL-16852(CP 부분 입력 내용, PR4732/merge d43389f96), DL-16854(레드닷, PR4730/8545aa57f), DL-16857(배송 모달 리메이크 글자, PR4731/149bfd207)** 3건이다. 실제 PR MERGED·수정 범위·현재 stage 포함을 확인했다. 공통3건은 각 PR head/병합본/현재 stage의 수정 파일이 동일하여 후속 덮어쓰기나 되돌림도 없다.
+- **웹 현재 revision:** 원격 fetch 후 stage `b4813779c9cfbc9455a9bd1e567e68a486e75042` 및 release `7a7e2fbf8087b1be1d2a39f83a074476f01f483d`를 재확인했다. 두 tree가 `15278b32843e5bb1ce1c12c88403a4ea5f22e194`로 같으며 위4개 수정 PR의 merge가 모두 stage에 포함된다. 웹 서비스 배포는 사용자의 기존 완료 간주 지시를 유지했고 Actions/서버/화면을 다시 확인하지 않았다.
+- **앱 1건 포함:** DL-16859는 PR331 MERGED → develop `472ecd97f233bc5b6314a83e5cd6be84a90bf6e1`이며, 최신 원격 develop과 방금 전달한 Office 양OS **Staging v337 / 2.2.4**의 sourceSHA가 같다. 양OS 성공 업로드/서버 readback과 source-map 일치 증거는 `/tmp/dl16859-stg-codepush-current.json`에 있다. 기기 적용·실제 QA는 별도이며, 앱 WebView 상세 수정은 위 웹 배포에서 전달된다.
+- **결론/다음:** 조회한 12건에서 배포 대상 코드 누락·미병합 항목은 발견하지 못했다. 추가 제품 수정·PR·배포·Jira 변경은 필요 없어 수행하지 않았다. 사용자/QA 담당자가 웹 Staging과 앱 v337 적용 후 **2차 QA**를 진행하고 결과가 오면 재개한다. DL-16850은 현재 READY FOR QA 목록에 없으며 기존 수정 제외 결정을 유지한다. 제품 브랜치/worktree는 clean 상태로 보존하고 대기 중 자동 모니터링은 하지 않는다.
+
 ## 최신 — 2026-10-20 Staging 전달 및 READY FOR QA 정리 완료
 
 - **사용자 승인/현재 단계:** 웹은 기존 방식으로 원격 stage를 최신 master에서 재생성하고 release/v1.89.0 → stage PR을 준비하며, Office 앱은 병합된 develop 전체를 Staging CodePush하도록 승인했다. 이후 사용자가 웹 배포를 시작했다고 알리고 **웹은 배포된 것으로 보고 앱 CodePush 후 카드 상태를 변경**하라고 지시했다. 이에 웹 Actions/서버 배포 결과를 따로 확인하지 않고 사용자 지시 기준으로 QA 준비 완료 처리했다. 독립적으로 웹 배포 성공이나 실제 화면 QA를 검증했다는 뜻은 아니다.
