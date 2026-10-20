@@ -1,11 +1,14 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
-## 현재 브레이크포인트 — 2026-10-20 · DLDS만 유지, 권한관리 QA 이관 후 대기
+## 현재 브레이크포인트 — 2026-10-20 · QA 3건 재검토 완료, 권한관리와 분리하여 대기
 
-- 사용자 최종 지시: 이 세션은 DLDS 현황만 정리하고 대기합니다. 권한관리 QA는 `권한관리세션`에서 이어갑니다. 제품 코드 수정·추가 테스트·Jira 변경·병합·배포를 자동 진행하지 않습니다.
+- 사용자 최종 지시: 모델 변경 후 오늘 이 세션에서 만든 QA 3건의 실제 diff와 기존 원인 판단을 다시 확인했습니다. 재검토 결론을 설명한 뒤 사용자가 이해했고, 나머지 QA는 `권한관리세션`에서 진행하기로 했습니다. 이 세션은 기록 후 대기하며 제품 코드 수정·추가 테스트·Jira 변경·병합·배포·E2E·npm/Studio/하네스를 자동 진행하지 않습니다.
+- **재검토 범위와 결론:** 이 세션에서 별도 브랜치·PR까지 만든 것은 DL-16854/PR#4730, DL-16857/PR#4731, DL-16852/PR#4732 총3건입니다. 모두 release/v1.89.0 대상, 마지막 GitHub 조회에서 OPEN/non-Draft/미병합. 실제 diff·주변 코드의 읽기 전용 재검토에서 기존 원인 판단을 뒤집는 근거나 명백한 수정 오류를 찾지 못했습니다. 테스트·실화면 QA는 이번 재검토에서 다시 실행하지 않았습니다. DLDS 회귀로 확인된 것은 레드닷1건뿐이며, 나머지2건을 DLDS QA로 묶지 않습니다.
 - DLDS QA 확정 건은 **DL-16854 레드닷 겹침**입니다. `feature/DL-16437-qa@916c7e785`, [PR#4730](https://github.com/Innvoaid/dentlink-client/pull/4730), base `release/v1.89.0`, 현재 OPEN/미병합을 조회 확인했습니다. 수정·테스트·커밋·푸시 완료, 관련 검증은 아래 이력 참조. 사용자 리뷰/병합/추가 QA 결과를 기다립니다.
+- **리메이크 재확인:** `feature/DL-16857@3221c713b`, PR#4731. DLDS 반영 전 master에서도 사용자가 재현하고 Codex가 확인한 기존 문제입니다. 배송 주문 목록에서 칩이 줄어 글자가 잘리는 것을 막고 날짜 영역이 남은 너비를 쓰게 했으며, 전체 StatusChip이나 다른 화면의 스타일을 바꾸지 않았습니다.
 - DLDS checkout `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`은 현재 `feature/DL-16852@549a1d402`, clean/원격 동일입니다. 사용자 요청 없이 QA 브랜치로 재전환하거나 기존 PR을 변경하지 않습니다. 기존 문제로 분리한 리메이크 PR#4731·CP PR#4732는 유지됩니다.
-- CP 후속 확인: Jira 본문은 입력된 임플란트 내용 미노출이며 첨부 화면에는 임플란트 탭이 없습니다. 실제 제보 주문 상태값은 미확인이라 조건문 원인 확정은 보류합니다. CP 모달 자체 높이·내부 스크롤·목록 배치 CSS는 master 대비 DLDS 작업에서 변경되지 않았습니다. 공통 Modal의 배경 스크롤 잠금·닫기·포커스 변경과는 구분합니다. 신규 Clinic/Lab 테스트2개는 기존 Jest/renderHook 관례 및 ticket-work 지침(커스텀훅 테스트)에 맞아 사용자와 유지하기로 확인했습니다. 최초 추가 동기는 에이전트 판단이었고 지침은 사후 확인했다고 명확히 설명했습니다.
-- **DL-16751 이관 완료:** 이 세션에서 잘못 착수했던 환자 목록 제목 위치 조정 한 건을 권한관리 checkout `/Users/parkjongsun/Repository/dentlink-client-permission`으로 이동했습니다. release `f1dab1b1e` 기반 `feature/DL-16317-qa`를 그쪽에서 체크아웃, 기존 api-permissions 브랜치는 보존. PatientListLayerDesktop.tsx의 StyledLabHeaderCell padding `5px 5px 5px 16px` → `7px 5px 3px 16px` 한 줄(제목/아이콘2px아래)만 미커밋 상태, Lab typecheck 통과. 이쪽 checkout에서는 수정 제거, 댓글/커밋/푸시/PR 없음. 권한관리세션 id `01a132e9-6555-7a02-9c72-4dad9c04cc64`에 사용자 승인으로 메시지 전달 완료. 권한관리 QA는 앞으로 카드별이 아닌 `feature/DL-16317-qa`에 모으고 커밋 전 대기합니다. 이 세션은 해당 작업을 더 진행하지 않습니다.
+- **CP 재확인:** `feature/DL-16852@549a1d402`, PR#4732. master에도 있던 DONE-only 조회 조건을, 완료 상태이거나 실제 표시할 입력값이 있으면 버튼·탭을 보여주도록 보완했습니다. 모달 아래쪽 잘림·스크롤을 수정한 것이 아니며, CP 모달 자체 높이·내부 스크롤·목록 배치 CSS는 DLDS 작업에서 변경되지 않았습니다. 공통 Modal의 배경 스크롤 잠금·닫기·포커스 변경과 구분합니다. 코드상 DLDS 때문에 CP 내용이 가려졌다는 근거는 없고 기존 조회 조건 문제라는 판단을 사용자에게 설명했습니다. 다만 제보 주문의 실제 상태값은 미확인이라 그 주문의 확정 원인·해결까지 단정하지 않습니다. 임플란트 값만 있는 경우에도 초기 Universal 탭은 기존대로이며 Implant Restoration을 선택해 확인합니다. 신규 Clinic/Lab 테스트2개는 기존 Jest/renderHook 관례 및 ticket-work 지침(커스텀훅 테스트)에 맞아 사용자와 유지하기로 확인했습니다. 최초 추가 동기는 에이전트 판단이었고 지침은 사후 확인했다고 설명했습니다.
+- **DL-16751 이관 완료:** 이 세션에서 착수했던 환자 목록 제목 위치 조정 한 건은 권한관리 checkout `/Users/parkjongsun/Repository/dentlink-client-permission`으로 이동했으므로 위 완료 PR3건에 포함하지 않습니다. release `f1dab1b1e` 기반 `feature/DL-16317-qa`, PatientListLayerDesktop.tsx의 StyledLabHeaderCell padding `5px 5px 5px 16px` → `7px 5px 3px 16px` 한 줄(제목/아이콘2px아래), Lab typecheck 통과 상태로 인계했습니다. 이쪽 checkout에서는 수정 제거, 이 세션의 댓글/커밋/푸시/PR 없음. 권한관리세션 id `01a132e9-6555-7a02-9c72-4dad9c04cc64`에 사용자 승인으로 메시지를 전달했고 인계 당시에는 미커밋이었습니다. 이후 상태·추가 QA·Git 작업은 해당 세션과 `projects/dentlink-permission-management.md`가 관리합니다. 과거의 미커밋 상태를 현재 상태로 재사용하지 않습니다.
+- **재개점:** 사용자가 DLDS 관련 QA 결과나 PR 후속을 요청하면 개인 context를 pull하고 해당 PR의 최신 head/base/병합 상태와 실제 checkout을 다시 확인해 그 범위만 진행합니다. 남은 권한관리 QA는 여기서 착수하지 않습니다. 사용자 승인 전에는 세 PR의 병합·배포나 별도 잔여 작업을 진행하지 않습니다.
 
 ## 이전 브레이크포인트 — 2026-10-20 · DLDS QA와 기존 문제 분리
 

@@ -36,9 +36,9 @@ Do not store secrets or private customer data here.
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16830·DL-16471:
   [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-19 사용자 PR#4692 release병합(f9a45fe02), PR#4722 stage병합(f38ad84936) 완료·실제 stage tree=release 확인. 하지만 세 웹 stage 배포 모두 Docker/Next.js 빌드 중 heap out of memory로 FAILURE다. 배포 완료나 이번 통합본 QA 가능 상태로 기록하지 않는다. 제품 checkout f027171bd는 clean이다.
-  사용자는 QA를 직접 하고 결과를 주기로 했으며 정리 후 대기를 지시했다. 실패 사실을 알리고 코드수정·재배포·추가QA·모니터링·하네스 없이 대기한다. 후속 요청 시 실패run/현재배포확인→빌드원인해결→세웹배포성공확인→사용자QA 순서다. 이번 웹 변경으로 앱 CodePush/스토어 배포는 불필요하다.
-  Jira DL-16830은 본문을 병합완료·배포실패·사용자QA대기로 갱신·재조회했고 Ready for Deploy를 유지했다. 하네스 DL-16471은 진행 중·후속 대기이며 변경하지 않았다. 신규 Atlassian의 innovaid 사이트를 사용한다. 정식 npm·Studio·하네스는 별도다.
+  — 2026-10-20 QA3건 재검토 후 대기. 통합·빌드 복구 후 스테이징 배포 성공 및 사용자 전반 확인 이력이 있으며, 과거 OOM 실패를 현재 배포 상태로 재사용하지 않는다. 자동 E2E 잔여는 별도다.
+  레드닷 DL-16854/PR#4730만 DLDS 회귀이며, 리메이크 DL-16857/PR#4731과 CP DL-16852/PR#4732는 기존 문제로 분리했다. 세 PR은 마지막 조회에서 release/v1.89.0 대상 OPEN/미병합, 코드·커밋·푸시 완료다. CP는 기존 표시 조건 보완이며 DLDS 모달 아래 잘림 수정이 아니다. 제보 주문의 실제 상태값·반영 후 QA는 별도 확인이 필요하다.
+  권한관리 DL-16751은 해당 세션으로 이관했고 남은 권한관리 QA도 그쪽에서 진행한다. 이 세션 checkout은 feature/DL-16852@549a1d402 clean이며 사용자 재개 전 제품 변경·테스트·Jira·병합·배포·E2E·정식npm/Studio/하네스를 진행하지 않는다. 최신 근거·정확한 재개점은 위 개인 checkpoint를 따른다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — 승인된 UI 정리 PR #4642가 반영된 완료 이력. 미착수 조사로 되돌리지 않는다.
