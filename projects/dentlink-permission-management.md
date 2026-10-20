@@ -1,5 +1,14 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 조사 — 2026-10-20 DL-16850 재현용 Draft 생성·비교 주문 응답 확인, Lab 로그인 대기
+
+- 사용자 요청: 제보 주문에 접근할 수 없으므로 본인 계정으로 테스트 주문을 만들어 조사한다. Chrome의 Staging `frankieStgOffice`/`jongsun.test1` 세션을 사용했다. 제보 주문 `7000012137`의 실제 `GET /office/orders/7000012137` 응답은 403/code2005/Access denied다. 이는 현재 계정의 접근 제한이며 제보 당시 프로필 누락 원인으로 동일시하지 않는다.
+- 사용자 승인 범위에서 테스트 환자 `QA DL16850 20261020`(합성 DOB 01/01/1990), 케이스 `QA DL16850 profile`, 담당 의사 본인 `frankie stgOffice1`로 **Draft 주문 `7000012185`**를 생성했다. 제품 선택 단계 `/orders/7000012185/product`에 보존했으며 제품 확정·최종 제출·결제·배송·타 주문 수정은 하지 않았다. 화면 증거 `/tmp/dl16850-test-draft.png`(임시 파일). 테스트 생성 사실을 나중에 누락하지 말고 정리 시 이 ID를 기준으로 판단한다.
+- 현재 계정의 기존 본인 담당 주문 `7000006148`을 읽기만 비교했다. `GET /office/orders/7000006148`은 200이고 `data.lab={id:92,name:"frankieStgLab",employeeId:96,employeeEmail:"jongsun.test5@dentlink.app",employeeName:null,labDirectorProfile:null}`이다. 헤더에도 기공사 프로필이 없다. 이 주문은 화면이 전달받은 프로필을 숨긴 경우가 아니라 응답에 프로필 데이터가 없는 경우라는 점까지만 확인했다. 프로필 미등록/노출 직원 미지정/서버 매핑 문제 중 어느 원인인지는 아직 미확정이며 제보 주문에 일반화하지 않는다.
+- FE 재확인: 헤더는 OFFICE이고 프로필 6필드 중 하나라도 non-null이면 표시한다. Member/본인 주문/주문 상태로 숨기는 별도 조건은 없다. LinkTalk는 별도 메시지 payload라 헤더 응답과 구분한다. Draft 1단계는 환자·케이스·담당 의사만 생성하며 Clinic 2~4단계에 기공소 직접 선택 코드가 없으므로 신규 주문 최종 제출만으로 프로필 재현을 보장할 수 없다.
+- Lab 확인 경로: 계정 메뉴 → My Profile(`/my`). `GET /lab/employee/own`의 `id`, `employer.id`, `employer.labProfileEmployeeId`, 최상위 `labDirectorProfile`을 확인한다. Introduction 행은 직원 ID와 `labProfileEmployeeId`가 같은 경우만 노출된다. Admin CRM의 ‘프로필 노출 유저’가 이 지정값을 관리한다. 사용자 사진/이름과 소개 정보는 별도이므로 사진 존재만으로 프로필 완성을 판단하지 않는다. 설정/프로필 PATCH는 이번에 호출하지 않았다.
+- 사용자가 Chrome 시크릿에서 Staging Lab 로그인 화면을 열었으나 로그인 완료는 아직 확인하지 못했다. `frankieStgLab` 계정(jongsun.test5) 로그인 가능 여부를 비동기 질문으로 요청했고 비밀번호는 요청하지 않았다. **다음 시작점은 Lab 로그인 완료 후 프로필 등록·노출 직원 지정 상태를 읽기 확인하고 위 주문 응답과 대조**하는 것이다. 별도 설정 변경은 승인 없이 하지 않는다. 이번 조사에서 제품 코드/Git/Jira/배포 변경은 없으며 웹 HEAD8200ba2ff clean·미푸시, 앱 PR331 전달 상태를 유지한다.
+
 ## 최신 — 2026-10-20 앱 QA PR331 전달 완료, 웹은 DL-16850 이후 일괄 PR
 
 - 사용자 지시: 앱 완료분은 기존 작업브랜치/열린 PR에 반영하거나 없으면 PR까지 진행한다. 웹은 DL-16850을 마친 뒤 기존 QA와 한 번에 PR로 전달한다. DL-16850은 웹 주문상세 프로필 표시 건이며 원인 확정·처리는 아직 남았다.
