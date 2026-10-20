@@ -88,8 +88,8 @@ For detailed current state, read:
 
 - 상위 DL-16795의 기존 개별/통합 문서 명칭 변경. Commercial Invoice와 발행·결제 구조는 유지한다.
 - 2026-10-15 최신 master 기준 `feature/DL-16796`에서 11파일 명칭 변경, normal commit/push와 합성 PDF8사례 검증 완료. 앱 최신 소스상 네이티브 수정은 불필요하다.
-- [PR #4699](https://github.com/Innvoaid/dentlink-client/pull/4699)은 2026-10-16 `release/v1.89.0`에 병합됐다. QA·운영 배포와 실계정/앱 다운로드 검증 완료 근거는 별도이며 원본 브랜치를 보존한다.
-- 2026-10-19 사용자가 스테이징 배포 완료를 알렸다. QA 이슈가 전달되면 대응하고 없으면 현 구현으로 마무리할 예정이며, 현재는 대기한다. Jira 댓글은 남기지 않고 상태는 사용자가 관리하며 추가 작업·모니터링 없음.
+- [PR #4699](https://github.com/Innvoaid/dentlink-client/pull/4699)은 2026-10-16 `release/v1.89.0`에 병합됐으며 10/20 재확인했다. 스테이징 배포는 10/19 사용자 보고 기준이고 실제 QA 통과·운영 배포 확인과 구분한다.
+- 2026-10-20 사용자가 작업 완료 처리·정리·세션 보관을 요청했다. Admin을 포함한 구현·검증 이력을 저장하고 종료하며 예정된 추가 작업은 없다. Jira 댓글은 남기지 않고 상태는 사용자가 관리한다. 후속 요청이 있을 때만 재개하며 브랜치 정리는 하지 않는다.
 - [개인 체크포인트](projects/dentlink-client-billing-statement.md)
 
 ### Dentlink 치과 주문목록 아이콘·텍스트 정렬 — DL-16655
