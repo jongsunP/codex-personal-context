@@ -185,7 +185,7 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **대기:** 2026-10-19 사용자가 정리·메모리화 후 대기를 지시했다. QA 결과 또는 후속 지시 전까지 추가 조회·코드 변경·배포 없이 기존 브랜치/worktree를 보존한다.
+- **2026-10-20 QA 인수 대기:** 웹 permission checkout의 `feature/DL-16317-qa`(release 기준 `f1dab1b1e`, upstream 없음)에 DL-16751 제목 위치 padding 한 줄 미커밋 수정을 인수했다. 상태·diff만 직접 확인했고 추가 구현·제품 커밋/푸시/PR 없이 다음 지시를 기다린다. 이후 웹 권한 QA는 카드별 브랜치 대신 이 QA 브랜치에 모은다는 이관 지침을 기록했다. 기존 브랜치/worktree는 보존한다.
 
 - **최신 2026-10-19:** 사용자 PR4719 release병합(fef630005) 확인. 원격 stage413ed3564를 복구 ref로 보존 후 master8772d6882에서 재생성, [PR4720](https://github.com/Innvoaid/dentlink-client/pull/4720) →stage 준비 후 사용자 병합완료(stage4b28c28a6, release와tree동일).
 - 웹 Clinic/Lab/Admin 최신3개배포run은 in_progress까지 확인했다. 최종성공/QA완료는 별도이며 웹feature@5bdad60e6 clean유지.

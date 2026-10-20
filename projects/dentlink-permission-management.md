@@ -1,5 +1,14 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 인수 대기 — 2026-10-20 DL-16751 웹 QA 이관
+
+- 디자인시스템 세션에서 사용자 요청에 따라 이관했다는 메시지를 받았다. 이관 메시지의 사용자 지침은 **권한관리 웹 QA를 카드별 브랜치 대신 `feature/DL-16317-qa`에 모아 처리**하는 것이며, 지금은 인수 상태만 확인하고 다음 지시까지 추가 구현·제품 커밋/푸시/PR 없이 대기한다.
+- 직접 확인: `/Users/parkjongsun/Repository/dentlink-client-permission`의 현재 브랜치 `feature/DL-16317-qa`, HEAD와 로컬 `origin/release/v1.89.0` 모두 `f1dab1b1ef086558cf81bdb42b1681b1dc8360ce`. upstream 없음. `feature/DL-16317-api-permissions`를 포함한 기존 권한 브랜치는 보존돼 있다. 새로 원격을 fetch하거나 제품 브랜치를 pull/변경하지 않았다.
+- 미커밋 수정은 `lab/src/components/PatientList/PatientListLayerDesktop.tsx` 한 파일 한 줄뿐이다. DL-16751의 환자 목록 ‘우리 기공소 주문 현황’ 제목·아이콘을 아래로 보이게 해달라는 요청에 따라 `StyledLabHeaderCell` padding이 `5px 5px 5px 16px` → `7px 5px 3px 16px`로 변경돼 있다. 전체 상하 padding 합과 높이는 유지한다. 직접 diff·변경 파일 목록·diff-check로 이 상태를 확인했다.
+- Lab 타입 검사는 이관 세션에서 통과했다고 보고받았으며 이 인수 단계에서 재실행하지 않았다. 실제 화면의 최종 육안 확인은 아직이다. 번역·문구·다른 열·공용 UI 수정은 없다. Jira 댓글/상태 변경, 제품 커밋·푸시·PR·배포도 실행하지 않았다.
+- 디자인시스템 checkout은 원래 `feature/DL-16852` clean으로 복귀했고 별도 PR4730/4731/4732는 이번 범위가 아니라는 인계 내용이다. 이번 인수에서는 해당 checkout/PR을 재검증하거나 변경하지 않았다.
+- 다음 시작점: 사용자 후속 지시를 받은 뒤 이 미커밋 수정과 브랜치 상태부터 다시 대조하고, 필요한 화면 확인·다른 권한 QA를 같은 웹 QA 브랜치에서 이어간다. 기존 Office 앱의 develop 통합·CodePush 정책과 과거 전달 이력은 아래 기록대로 유지한다. 지금은 제품 작업을 더 진행하지 않는다.
+
 ## 최신 대기 — 2026-10-19 앱 develop 병합 완료, 이후 QA 전달 기준 확정
 
 - 사용자가 앱 작업브랜치를 develop에 병합했다고 알렸다. GitHub 실조회로 [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) **MERGED→develop**, mergedBy=jongsunP, 2026-10-19 18:13:16 KST, merge SHA `43f787909d29f4899a04fad04d3f452d98b53cad`를 확인했다. 조회 시 원격 develop도 같은 SHA다.
