@@ -19,7 +19,7 @@ Check this folder first when finding or continuing local projects.
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
 - **2026-10-20 STAGE 배포·로컬 Docker·전체 E2E 확인 완료.** PR4713 사용자 병합 후 첫 배포 준비 단계의 pnpm 자동 캐시 오류를 PR4740/4741로 수정해 3서비스 배포를 완료했다. 후속 가입 E2E locator 오류는 PR4743/4744로 수정했다. 최종 release685eab699/stage602071d40, 현재 worktree는 `feature/DL-16821-stage-e2e@460a9c0d5` clean. 전체 E2E run39414265695는 104통과/0실패/0flaky/0미실행/기존 허용제외5, `staging_full_verified:true`다.
-- 사용자 최신 위임은 실패 수정→로컬 확인→PR 검토/병합→STAGE 재배포를 독립적으로 반복해 스테이징 반영을 마치는 것이다. DEV/운영은 제외. 실제 env/GH 값은 계속 사람이 관리하며 에이전트는 값 없는 코드·합성 검증·허용된 CI 메타데이터만 다룬다. 관리 스크립트/스킬/manifest/공유 분류 이력은 제거했고 Git에는 빈 example4개만 남긴다. GitHub 이전 설정 Variables235/개별Secrets98, 이후 재조회·변경 없음.
+- 사용자 위임 범위의 실패 수정→로컬 확인→PR 병합→STAGE 반영·전체 E2E는 완료했고, 최종 절차 대조 후 메모리·대기 요청을 받았다. 추가 env 코드 작업은 없으며 재개 전 새 실행/배포를 하지 않는다. DEV/운영은 추후 해당 코드 배포 시 확인, 로컬은 팀원 수동 준비/보완이다. 실제 env/GH 값은 계속 사람이 관리하며 에이전트는 값 없는 코드·합성 검증·허용된 CI 메타데이터만 다룬다. 관리 자동화/스킬/manifest/공유 분류 이력은 제거했고 Git에는 빈 example4개만 남는다. GitHub 이전 설정 Variables235/개별Secrets98, 이후 재조회·변경 없음.
 - [DL-16818](https://innovaid.atlassian.net/browse/DL-16818) → [웹 환경변수 관리 모음](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c) 아래 최종 운영 가이드1/이력3(총5페이지). DL-16819·DL-16871은 완료 이력, DL-16821은 구현/검증/전환 진행 카드이며 댓글44531에 이번 완료 결과를 기록했다. 본문/상태/상위 댓글은 유지. 이번 배포 수정은 운영 방식이 같아 문서를 다시 바꾸지 않았다.
 - 자동 캐시 오류/수정은 공식 액션으로 합성 재현했고 actionlint10·계약12·정상hook, 가입 locator 합성 브라우저2·E2E 회귀233을 통과했다. 사용자 승인 Colima/Docker로 3서비스 합성 amd64 빌드/실행·정적응답200·실제env파일 부재를 모두 확인했고 전용 VM은 종료했다. 이후 DEV/운영 배포·팀원 수동 설정/사용·복구와 Google 제한·Eximbay 서버서명/키 교체·과거 Git 이력은 별도 경계다. [개인 체크포인트](projects/dentlink-client-env-management.md).
 
