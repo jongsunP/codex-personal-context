@@ -18,10 +18,10 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- **2026-10-20 회의 후 사람 수동 관리로 변경, 구현/설정 반영 완료.** `feature/DL-16821@d44384e91`, [Draft PR #4713](https://github.com/Innvoaid/dentlink-client/pull/4713) → `release/v1.89.0`. env9개 Git 추적 해제, 에이전트 env 스킬/자동 전달 도구/manifest/공유 분류 이력 제거. 후속으로 로컬 자동화 캐시76파일과 서비스 staging/production6파일도 프로젝트 밖 비공개 백업으로 옮겼다. 로컬 development3개·E2E2개·빈 example과 CI 공급은 유지한다. 마지막 코드 보완으로 Claude/Cursor의 env 변형·백업·인증/원본 산출물 제외와 빈 example 예외를 맞췄고 합성135경로·정상hook 검사를 통과했다. 실제 값과 노션/Jira는 다시 변경하지 않았다.
-- GitHub Variables235 유지, 개별 Secrets98 등록·미사용 묶음8 제거. 값·소비 계약 대조 일치. 이후 실제 값은 사람이 관리하며 에이전트는 키 이름·빈 예제·코드만 다룬다. 프로젝트 지침·도구 제외 규칙은 적용했으나 무제한 터미널/MCP까지 완전 차단하려면 실행 환경 격리가 필요하다.
-- [DL-16818](https://innovaid.atlassian.net/browse/DL-16818)에서 [웹 환경변수 관리 모음](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c)으로 연결한다. 모음 아래 [최종 운영 가이드](https://app.notion.com/p/3ffce072e82f811b8613ddace02c1221)1개와 이력3개를 두고 본문을 보존했다(총5페이지). 사용자 요청으로 완료한 작업 단위별 DL-16871 `회의 결과 반영 및 환경변수 전환 준비`를 새로 만들고 완료 처리했다. 기존 DL-16821 본문/진행 중 상태는 유지하며 남은 검증·전환을 담당한다. DL-16819는 완료된 초기 회의 이력이다.
-- 새 계약12·E2E 도구233·타입/lint/공용 검사와 합성 DEV 값 3서비스 native 빌드 통과, standalone 실제 env0, 최신 release 시험 병합 충돌0. Docker/실계정 E2E/팀원 사용·복구는 미검증이며 병합·배포는 미실행. 팀원은 pull 전 env 백업과 수동 보완이 필요하다. Google 키 제한·Eximbay 서버 서명/키 교체·과거 Git 이력은 별도 후속이다. [개인 체크포인트](projects/dentlink-client-env-management.md).
+- **2026-10-20 STAGE 배포·로컬 Docker·전체 E2E 확인 완료.** PR4713 사용자 병합 후 첫 배포 준비 단계의 pnpm 자동 캐시 오류를 PR4740/4741로 수정해 3서비스 배포를 완료했다. 후속 가입 E2E locator 오류는 PR4743/4744로 수정했다. 최종 release685eab699/stage602071d40, 현재 worktree는 `feature/DL-16821-stage-e2e@460a9c0d5` clean. 전체 E2E run39414265695는 104통과/0실패/0flaky/0미실행/기존 허용제외5, `staging_full_verified:true`다.
+- 사용자 최신 위임은 실패 수정→로컬 확인→PR 검토/병합→STAGE 재배포를 독립적으로 반복해 스테이징 반영을 마치는 것이다. DEV/운영은 제외. 실제 env/GH 값은 계속 사람이 관리하며 에이전트는 값 없는 코드·합성 검증·허용된 CI 메타데이터만 다룬다. 관리 스크립트/스킬/manifest/공유 분류 이력은 제거했고 Git에는 빈 example4개만 남긴다. GitHub 이전 설정 Variables235/개별Secrets98, 이후 재조회·변경 없음.
+- [DL-16818](https://innovaid.atlassian.net/browse/DL-16818) → [웹 환경변수 관리 모음](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c) 아래 최종 운영 가이드1/이력3(총5페이지). DL-16819·DL-16871은 완료 이력, DL-16821은 구현/검증/전환 진행 카드이며 댓글44531에 이번 완료 결과를 기록했다. 본문/상태/상위 댓글은 유지. 이번 배포 수정은 운영 방식이 같아 문서를 다시 바꾸지 않았다.
+- 자동 캐시 오류/수정은 공식 액션으로 합성 재현했고 actionlint10·계약12·정상hook, 가입 locator 합성 브라우저2·E2E 회귀233을 통과했다. 사용자 승인 Colima/Docker로 3서비스 합성 amd64 빌드/실행·정적응답200·실제env파일 부재를 모두 확인했고 전용 VM은 종료했다. 이후 DEV/운영 배포·팀원 수동 설정/사용·복구와 Google 제한·Eximbay 서버서명/키 교체·과거 Git 이력은 별도 경계다. [개인 체크포인트](projects/dentlink-client-env-management.md).
 
 
 ### 사무실 의자 구매·헤드레스트 개선 조사

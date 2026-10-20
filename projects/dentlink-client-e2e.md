@@ -1,4 +1,12 @@
-# Dentlink E2E Reliability Checkpoint - 2026-10-01
+# Dentlink E2E Reliability Checkpoint - 2026-10-20
+
+## 환경변수 전환 후 전체 STAGE 확인 — 2026-10-20
+
+- 환경변수 전환 작업의 사용자 위임으로 Admin·Clinic·Lab 스테이징 배포 후 전체 E2E를 확인했다. 첫 실행39408726298은 가입2건이 `signup-step1.ts:67`에서 `getByLabel("Password")`의 부분 일치로 입력칸과 `Show password` 버튼을 함께 선택해 실패했다(89통과/2실패/13미실행/기존 허용제외5).
+- release/v1.89.0 기준 `feature/DL-16821-stage-e2e@460a9c0d5`에서 `exact:true` 한 줄을 적용했다. 합성 브라우저에서 기존2/3요소 선택 오류와 실제 수정 helper 성공2건을 확인했고 runner 회귀233·정상 hook을 통과했다. PR4743→release685eab699, PR4744→stage602071d40에 반영했다. 범위/skip/timeout/assertion과 제품 동작은 바꾸지 않았다.
+- [최종 전체 STAGE 실행39414265695](https://github.com/Innvoaid/dentlink-client/actions/runs/39414265695): `staging_full_verified:true`, `gate_passed:true`, 104통과/0실패/0flaky/0미실행/기존 허용제외5(109수집), source_unchanged:true. 테스트 SHA602071d40, 배포 앱 소스 SHA7d5acd7c6이며 둘의 차이는 위 helper 한 파일뿐이라 재배포 없이 기존 E2E 전용 workflow를 실행했다.
+- 실행 전후 공개 BUILD_ID는 Clinic `9iltTkHG2Ei0RU3jq_Kk2`, Lab `eNylL2BmKH196R9uOI_Fy`, Admin `-IszIxcExdMbC9TH9cbJD`로 동일했다. Clinic은 배포 workflow의 기대 BUILD_ID 확인도 통과했다. 이 기록은 당시 등록된 웹 시나리오/해당 배포의 증거이며 모든 제품 기능·네이티브·DEV/운영 검증을 뜻하지 않는다.
+- 실제 env/GH 값·trace/auth/원본 로그를 열지 않고 결과 JSON의 집계·위치·오류 종류만 제한 추출했다. 세부 배포/검증 경과와 다음 단계는 [환경변수 체크포인트](dentlink-client-env-management.md)를 따른다.
 
 ## 계정·문서 정리 완료와 ISV 후속 확인 — 2026-10-01
 
