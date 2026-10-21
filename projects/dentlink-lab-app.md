@@ -1,6 +1,16 @@
 # Dentlink Lab App
 
-## 대기 확정 — 2026-10-21
+## 최신 전달 완료 — 2026-10-21 PR19 병합·Staging v38
+
+- 사용자가 “기기적 문제 말고 코드적이나 배포적 문제없으면, 실기기 앱 버전은 알아서 맞추겠다”고 명시했다. 앞서 승인한 안전 시 병합·Staging CodePush를 재개했으며, 설치본 확인을 반복 승인 조건으로 두지 않는다. 이 지시는 이번 전달 범위에 한정한다.
+- 새로 pull/fetch한 PR19는 기존 HEAD cd46b7cd/base a32acb02 그대로 OPEN/CLEAN/MERGEABLE, 새 리뷰·코멘트·스레드0이다. 독립 검토에서도 코드·병합을 막을 확정 문제0, 두 파일(+84/-9) 외 동료 코드/의존성/native 설정 변경0을 재확인했다. 기존 테스트를 불필요하게 반복하지 않았고 `yarn validate:versions`는 package/Android/Xcode 모두1.0.4로 통과했다.
+- 2026-10-21 17:18:48 KST PR19를 expected head 확인 후 squash 병합했다. 대상 release/v1.0.5, merge b04be10111e70f20ec3c6151c521907009edd5df. 원격release와 검증된 QA HEAD의 전체tree 동일을 확인했다. main/develop 동기화·버전 변경·태그·스토어 배포는 하지 않았다.
+- 병합 커밋을 detached checkout하여 양OS `revopush release-react`를 순차 실행했다. index.js/mandatory/Staging/targetBinaryVersion1.0.4/force는 기존 프로젝트 명령과 동일하며, Slack 쓰기 금지 때문에 알림 wrapper를 사용하지 않았다. source 전체 SHA/PR19를 description에 기록했다. 양OS Metro/Hermes 번들·업로드가 성공했다.
+- 서버 history 재조회: **Dentlink-Lab-iOS Staging v38**, **Dentlink-Lab-Android Staging v38**, 모두1.0.4/active(isDisabled=false)/mandatory/rollout100%, description의 source b04be101… 일치. 이 결과는 OTA 배포 완료이며 기기 수신·재실행·기능 QA 완료는 아니다. 실제 설치본 버전/네이티브 구성은 사용자가 맞추기로 했다.
+- Jira DL-16881을 Ready for Deploy → READY FOR QA로 상태만 변경했다. 댓글·본문·Slack 쓰기 없음. 전달 후 원래 QA/DL-16881@cd46b7c로 복귀해 clean·원격동일 및 release 전체tree 동일을 확인했고 branch/worktree는 보존했다. 추가 코드 변경은 없어 제품 새 커밋/푸시는 없다.
+- 다음은 사용자의 설치본 준비와 QA 결과다. 웹 재배포·추가 QA·모니터링 없이 대기한다. 웹 번역 Sheet의 기존 별도 보류와 이번 앱 CodePush 완료는 구분한다. 아래 설치본 미확인으로 PR/CodePush 보류한 기록은 이전 상태다.
+
+## 이전 대기 확정 — 2026-10-21
 
 - 사용자가 최종 보고 후 정리·대기를 요청했다. PR19/QA 브랜치는 보존하고 추가 병합·CodePush·QA를 진행하지 않는다. 최신 native 설치본 확인 또는 새 사용자 요청이 오면 아래 호환성 확인 지점에서 재개한다.
 

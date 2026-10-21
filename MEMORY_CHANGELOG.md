@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+- 권한관리 Lab 전달 보류 해소: 사용자가 실기기 앱 버전을 직접 맞추기로 하여 PR19의 기존 두 파일/리뷰·체크를 독립 재확인하고 release/v1.0.5에 squash 병합(b04be101)했다. 최종 merge 소스로 양OS Staging v38/1.0.4/active/mandatory100% CodePush와 source SHA를 read-back 확인했다. Slack 알림은 보내지 않았고 DL-16881은 READY FOR QA로 상태만 변경했다. QA 브랜치/worktree 보존·clean, 웹 재배포/실기기 QA/버전 변경은 없으며 QA 결과 대기로 정리했다.
+
 - 권한관리 사용자 최종 마감 요청에 따라 웹 전달 완료·Lab PR19/native 호환 확인 대기·Sheet 별도 보류를 재개 지점으로 확정했다. 제품 브랜치/worktree를 유지하고 새 요청 전 추가 변경·배포·QA·모니터링 없이 대기한다.
 
 - 권한관리 2차 QA 접수4건을 구현·검증·PR로 전달한 후 사용자 승인으로 웹 PR4747/4750을 CodeRabbit 처리·스쿼시 병합하고, master 기준 stage 재생성/PR4751 병합으로 최종 Staging을 전달했다. PM 국문·Figma 영문을 재확인해 불필요한 리뷰봇 영문 변경을 복원했다. Clinic 양리전 deploy와 Lab/Admin workflow 성공·공개 번들 반영을 확인하고 웹16855/16880/16882는 READY FOR QA, Lab16881은 진행 중으로 상태만 변경했다. Lab PR19 두 파일은 확정 결함이 없지만 기반 Nitro/카메라 native와 실제 설치본 호환이 미확인이라 병합·CodePush는 보류한다. Jira39카드/42댓글·Slack·Figma 알림을 재대조했고 DL16874는 BE 설명을 PM이 수용한 DONE이다. Office 신규 변경 없음, Sheet 전체 동기화는 기존 무관 행 제거/충돌로 별도 보류이며 기능 QA는 사용자 후속으로 남긴다.

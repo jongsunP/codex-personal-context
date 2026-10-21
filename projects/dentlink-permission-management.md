@@ -1,6 +1,14 @@
 # Dentlink 권한관리 — DL-16317
 
-## 대기 확정 — 2026-10-21 사용자 마감 요청
+## 최신 전달 완료 — 2026-10-21 기공소 앱 Staging v38
+
+- 사용자 후속 답변으로 실기기 앱 버전·네이티브 구성은 직접 맞추기로 했으므로, 기존 조건부 승인의 코드·배포 확인 후 Lab PR19 병합·Staging CodePush를 진행했다. 기기 확인을 코드 병합의 blocker로 다시 요구하지 않는다.
+- live PR/독립 코드 점검에서 기존cd46b7c 두 파일 그대로·새 리뷰0·확정 결함0·CLEAN/MERGEABLE을 확인했다. PR19 → release/v1.0.5 squash merge b04be10111e70f20ec3c6151c521907009edd5df, 검증 QA HEAD와 최종release tree 동일이다.
+- 병합 최종 소스로 iOS/Android Metro·Hermes 번들 및 Staging 업로드 성공. 서버 read-back 양OS **v38 / target1.0.4 / active / mandatory /100%**, source SHA 일치. 사용자 Slack 금지에 따라 알림 없는 직접 CLI를 사용했다. main/develop·태그·스토어·제품 버전은 변경하지 않았다.
+- DL-16881은 **READY FOR QA**로 상태만 변경했다. 오늘 FE4건(16855/16880/16882/16881)은 모두 Staging 전달 및 READY FOR QA다. 앱 checkout은 원래 QA/DL-16881@cd46b7c로 복귀하여 clean·원격동일이며 원래 branch/worktree를 보존했다.
+- 남은 것은 사용자 설치본 준비/기능 QA와 웹 Sheet의 별도 보류다. 앱 코드·배포에 추가 blocker가 발견된 것은 없으며 아래의 PR19 미병합/OTA 보류는 이전 이력이다. 웹 재배포·추가 기능 QA·모니터링은 실행하지 않고 다음 사용자 결과를 기다린다. 상세 전달 명령/검증은 [Lab 앱 기록](dentlink-lab-app.md)의 같은 날짜 최상단에 보존했다.
+
+## 이전 대기 확정 — 2026-10-21 사용자 마감 요청
 
 - 사용자가 최종 보고를 확인하고 “정리하고 대기”를 지시했다. 웹 스테이징 전달·Jira 상태 변경·확정 문구 복원 결과는 아래 최종 기록대로 보존한다.
 - 재개 지점은 사용자 QA 결과 또는 Lab 앱 최신 native 설치본 확인이다. Lab PR19는 미병합·CodePush 미실행, 번역 Sheet 전체 동기화도 별도 보류 상태다. 실제 기능 QA 완료로 간주하지 않는다.
