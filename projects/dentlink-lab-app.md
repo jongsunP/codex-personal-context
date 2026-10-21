@@ -1,5 +1,13 @@
 # Dentlink Lab App
 
+## 최종 중단·앱 개발자 인계 — 2026-10-21 실행 불가 제보
+
+- 사용자가 “1.0.5는 실행되지만1.0.4는 설치 후 아예 실행되지 않는다”고 제보했다. 이어 “여기서 종료하고 대기, 다음은 앱 개발자와 진행”을 명시했으므로 진단을 중단한다. 플랫폼/첫 실행 또는 재실행 시점 질문은 미응답이며 후속 답변을 재촉하지 않는다.
+- **현재 배포 상태는 유지:** 기공소 iOS/Android Staging v38, target1.0.4, active/mandatory100%. 앞서 비활성화했던 것은 사용자 요청으로 복구했으며 이번 실행 불가 제보 이후 다시 끄거나 롤백하지 않았다. PR19/release b04be101 및 동료 feature 브랜치·제품 코드·Jira 상태도 변경하지 않았다.
+- 읽기 전용 재확인에서 release b04be101은 VisionCamera5.2.3/Nitro0.37.1/haptic3.0.0을 사용하고 App→RootNavigator→AllScreens→HomeLabScanScreen에서 초기 import된다. 기존main bb619010은 Camera4.7.3이며 Nitro/haptic 의존성이 없다. 따라서 구형 native1.0.4와 v38 JS의 호환 문제가 유력 후보지만 설치본의 실제native/source·기기 로그를 확보하지 않았으므로 **원인 확정 아님**이다. 권한 수정2파일 자체의 확정 결함으로 보고하지 않는다.
+- 마지막 Revopush 조회에서 iOS v38 downloaded1/installed0/active0/failed0, v37 installed3/active2/failed0이었다. Android metrics는 응답에 없었다. 이 수치는 특정 사용자 기기의 crash 증명이나 실패없음 증명이 아니다. 추가 기기 QA·앱 재설치·자동 rollback/비활성화는 실행하지 않았다.
+- 다음은 사용자가 앱 개발자와 설치본 빌드source·native 구성·시작 오류 및 올바른 OTA기준을 확인하는 단계다. 이번 세션은 개인 기록 commit/push 후 대기하고, 새 명시 요청 전 제품 변경·배포·코드푸시·Jira/Slack/Figma 쓰기·추가조사·모니터링을 하지 않는다.
+
 ## 최종 합의·대기 — 2026-10-21 현재 병합/배포 유지
 
 - 사용자는 코드가 릴리즈에 합쳐진 현재 상태를 유지하고, 배포 관련만 앱 개발자와 직접 재확인하기로 했다. 앱 버전을 이유로 추가 코드 이동·병합·재배포를 자율 진행하지 않는다. 앞서 agent가 수동 비활성화했던 v38은 사용자 요청으로 원복됐으며 현재 양OS 활성이다.
