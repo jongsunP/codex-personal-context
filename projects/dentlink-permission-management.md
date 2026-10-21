@@ -1,5 +1,15 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 확정 — 2026-10-21 동료 최신 작업 보존·Lab PR19 유지, CodePush 취소
+
+- 사용자는 처음 Lab 작업브랜치 Staging CodePush를 요청했으나, 이후 **앱 업데이트는 직접 하며 동료의 최신 작업 위에 필요한 수정만 추가하고 PR까지만** 하도록 최종 정정했다. “기공소앱 코드푸쉬도하지말고 pr까지만”을 명시했다. 따라서 **업로드·활성화·네이티브 배포·실제 QA를 실행하지 않았다.** 이전 CodePush 승인을 재사용하지 않는다.
+- Lab live ref는 develop56cba674보다 release/v1.0.5 a32acb02에 동료의 QR/태블릿/Bluetooth 작업(PR16/17/18)이 더 반영된 상태다. 최신 작업 보존 지시에 따라 원래 **QA/DL-16881@cd46b7c → release/v1.0.5 PR19**를 유지한다. PR19 OPEN, 이번 수정 두 파일(+84/-9)만 포함하며 base/전체 diff를 다시 확인했다. 이 결정은 일반 앱 feature 정책 변경이 아니다.
+- 중간에 사용자의 develop 확인 질문을 develop 이전 지시로 해석하여 feature/DL-16881을 develop56cba674에서 만들고 기존 두 커밋만 옮겼다(65a817b/3413f74). 이후 최신 동료 작업을 보존하라는 정정에 따라 원래 QA 브랜치로 복귀했다. 임시 브랜치는 **푸시/PR 생성 없이** 중복 내용 검증 후 로컬에서 제거했다. PR19는 닫거나 base를 바꾸지 않았고 새 PR도 없다. 로컬 의존성은 원래 release lock 기준 immutable 설치로 복원했다. 기존 video 패치가 섞인 설치물은 임시 보존 후 해당 패키지만 깨끗하게 재설치하여 postinstall까지 성공했고 제품 코드·lock diff0을 확인했다.
+- 치과앱은 reflog/live GitHub에서 feature/DL-16317-qa가 origin/develop43f7879에서 생성됐고 PR331의 base도 develop이며 **10/20 이미 MERGED**임을 확인했다(merge472ecd97). 새 치과앱 수정/PR은 이번에 생기지 않았다. checkout HEAD1fa59ed·clean·원격동일이다.
+- **향후 Lab 배포 참고:** release Git 이름은1.0.5지만 package/Android/Xcode는 모두1.0.4다(validate:versions 통과). Revopush Staging 최신은 양OS v37/1.0.4/active/mandatory/100%,10/16 업로드·소스 설명 없음이며 이전v36은 main bb619010였다. 현재 설치본의 native 포함 여부는 확인되지 않았다. Git 이름만으로 설치 버전/CodePush 호환성을 판단하지 않는다.
+- main bb619010 → 기반release a32acb02에는 vision-camera4→5/Nitro/haptic/Bluetooth 등 package/native 변경이 있다. App→RootNavigator→AllScreens→HomeLabScanScreen→VisionCamera5→NitroModules 상위 import로 초기화돼, Nitro 없는 기존 설치본에 release 전체 OTA를 적용하면 시작 단계에서 실패할 수 있음을 독립 코드 검토로 확인했다. 이번 QA2파일의 native 변경0만으로 전체 release 번들의 구형 설치본 호환이 보장되지는 않는다. 사용자가 앱 업데이트를 직접 하므로 임의 우회·강제 CodePush를 진행하지 않는다.
+- **다음:** 웹PR4747·LabPR19는 리뷰/병합 대기, 앱 업데이트/배포/이후 QA는 사용자 진행이다. 동료 작업 롤백이나 develop/release 임의 동기화는 하지 않는다. 원래 제품 브랜치와 PR을 유지하며 개인 기록만 최신 지시로 저장한다.
+
 ## 최신 구현 — 2026-10-21 13:25, 2차 QA 4건 코드·PR 전달 완료
 
 - **사용자 승인:** 확정된 BE 계약을 기준으로 신규 QA 브랜치를 각 release에서 생성하고 FE 4건을 구현·검증·커밋·푸시·PR까지 진행한다. **이후 실제 API/브라우저/기기 QA는 명시 제외**했다. BE 미배포를 구현 중단 사유로 삼지 않는다. DL-16874는 복사 가능한 설명을 먼저 제공하고 조사만 유지한다. Slack/Jira 댓글·상태, 병합·배포·CodePush는 이번 턴에서 변경하지 않았다. 알림센터 및 Office 앱 추가 작업은 범위 밖이다.

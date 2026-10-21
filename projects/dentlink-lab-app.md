@@ -1,5 +1,12 @@
 # Dentlink Lab App
 
+## 현재 확정 — 2026-10-21 최신 동료 작업 보존·PR까지만
+
+- 사용자가 CodePush 요청을 철회하고 **최신 동료 작업을 유지한 채 필요한 코드만 추가하여 PR까지만** 하도록 명시했다. 앱 업데이트/배포는 사용자 진행이다. 업로드·활성화·실제 QA는 하지 않았고 기존 배포 승인을 재사용하지 않는다.
+- 최신 동료 QR/태블릿/Bluetooth 작업은 develop56cba674보다 release/v1.0.5 a32acb02에 더 반영되어 있다. 원래 QA/DL-16881@cd46b7c·PR19→release/v1.0.5를 유지하며 PR은 OPEN/2파일(+84/-9)이다. 중간에 develop 기준으로 만든 임시 feature/DL-16881은 푸시/새PR 없이 정리하고 원래 checkout으로 복귀했다.
+- release 이름은1.0.5지만 package/native 버전은1.0.4이고, 기존 main보다 새로운 Nitro/카메라/Bluetooth native를 포함한다. Staging은 양OS v37/1.0.4이며 설치본 native 포함 여부는 미확인이다. 사용자 배포 시 native 호환을 고려해야 하며 이 세션에서 새 바이너리/CodePush를 자동 진행하지 않는다.
+- 상세 호환성 근거와 치과앱 PR331 develop 병합 확인은 [권한관리 체크포인트](dentlink-permission-management.md)의 최신 확정 기록을 따른다.
+
 ## 현재 QA 작업 — 2026-10-21 cut-off 주문 접근 제한 PR19
 
 - 사용자가 권한관리 2차 QA를 **release에서 새 QA 브랜치 → FE 코드 수정 → 커밋·푸시·PR**까지 승인했으며 실제 서버/화면/기기 QA와 배포는 제외했다.
