@@ -1,5 +1,29 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 검토 — 2026-10-21 2차 QA 멘션 수집 및 FE 후속 카드 생성
+
+- **승인 범위:** 사용자는 어제 2차 Staging 전달 이후 Jira 알림·본인 멘션(다른 담당자 카드 포함), Figma 댓글을 확인하고 QA 내용·처리 가능 여부·난이도·확인사항을 정리하며 필요 시 신규 Jira 카드를 만들도록 요청했다. Slack은 오늘 멘션/관련 스레드의 **읽기만** 명시적으로 허용했다. 이번에는 조사·카드 준비까지만 했으며 제품 구현·커밋·푸시·PR·배포를 시작하지 않았다. Slack 쓰기·댓글·리액션은 하지 않았다.
+- **확인 범위:** Jira 직접 알림의 오늘/어제 항목과 10/20 이후 갱신 DL 83카드의 댓글95개 전체 페이지를 대조했다. Frankie의 정확한 accountId 멘션은 5카드9댓글이며, 배포 후 신규 대응은 DL-16855 댓글44535, DL-16876 댓글44536/44539/44541/44548, DL-16879 댓글44545다. 이전 DL-16751/DL-16850 멘션은 배포 전 또는 종결 답변이다. DL-16871/DL-16821 환경변수 알림은 사용자 본인 보고이며 이번 QA에서 제외했다. 원본 수집은 `/tmp/dl16317-qa2-jira-mentions.json`에 있다(장기 보존 보장 없음).
+- **Figma:** Frankie 알림의 전체 탭에서 오늘·어제 댓글/답글을 확인했다. 권한 파일 `2OR0Gj7NUFEEeYBjQg5Y6v`의 #26 물음표 아이콘, #27 환자명/Office명은 현재 구현에 맞춰 디자인을 갱신하기로 했고 디자이너가 수정 완료했다. #25 모바일 동일 적용 요청은 기존 DL-16864 처리/완료 범위다. 이 댓글들을 새 FE 변경으로 중복 등록하지 않았다.
+- **기존 12건 QA 상태:** DL-16751/16848/16849/16852/16857/16858/16859/16864/16867 **9건 완료**, DL-16851/16854 **READY FOR QA**, DL-16855 **CHECK REQUEST**다. Slack의 '수정 반영건 QA 완료' 발언을 미완료 카드까지 종결됐다는 의미로 확대하지 않는다. DL-16850은 프로필 데이터 정상 확인으로 완료이며 코드 수정 제외를 유지한다.
+
+| 항목 | 현재 판단 / 다음 작업 | 난이도·의존성 |
+| --- | --- | --- |
+| **DL-16855** | Authority 글자만 아니라 글자+물음표 아이콘 그룹 전체 밑줄. `OfficeMemberAuthorityHelp.tsx`의 `text-decoration`을 그룹 밑줄로 최소 변경하면 목록·상세 동시 반영 가능. 기존 카드 재사용 | 낮음, 바로 FE 가능. 권한/API 변경 없음 |
+| **DL-16880 신규 / Web** | 기공소 cut-off 주문 상세의 접근 불가 화면. 본문·환자/케이스 정보·프린트 등 주문 액션을 숨기고, 재조회 실패 시 이전 데이터보다 차단 상태를 우선해야 함 | 중간, FE 준비 가능. 실제 BE 응답으로 연동 확인 필요 |
+| **DL-16881 신규 / Lab App** | Lab 앱 상세 사전 GET 실패가 WebView 진입을 막고, 현재 공통403 처리는 2004/2005 외에 세션을 종료함. 403/1018 수신 시 로그아웃 없이 차단 안내·홈 이동이 되도록 별도 보완 필요 | 중간, 웹만 수정해서 해결되지 않음. 정상 인증 만료와 구분 |
+| **DL-16874 기존 / Leo** | 정산 Summary 미노출 기준 질문. 현재 Lab 완료 화면은 `activeEmployee.authorityType !== EDITOR`면 표시하며 별도 Summary API 없이 주문 GET의 orderDetails/extraFees/lab.currency를 사용. master도 같은 조건 | 기존 정책/관측 계정·응답 대조 대상. 이번 FE 권한 회귀로 확정하지 않음 |
+| **DL-16860** | 강제 DRAFT 전환 시 scanner detail status를 잘못 설정한 QA 데이터 이슈. Leo 설명을 PM이 수용했고 완료 | FE 추가 수정 없음 |
+
+- **신규 카드 검증:** [DL-16880](https://innovaid.atlassian.net/browse/DL-16880) `[FE][Web] 기공소 cut-off 주문 상세 접근 불가 화면 적용`, [DL-16881](https://innovaid.atlassian.net/browse/DL-16881) `[FE][Lab App] cut-off 주문 상세 접근 제한 및 로그인 유지`를 중복 검색 후 DL-16317의 하위 작업으로 생성했다. 둘 다 Frankie 담당·해야 할 일·본문 저장을 다시 읽어 확인했다. 기존 BE DL-16876, 디자인 DL-16879를 재배정/종결하지 않았다. Office 앱은 이 Lab 건의 변경 대상이 아니다.
+- **cut-off 확정 범위:** DL-16876 댓글44541의 PM 지시는 주문 상세만이며 리메이크 신청/디자인컨펌 페이지는 제외한다. 안내는 **'접근 불가능한 주문입니다.' / '홈으로 돌아가기'**. 디자인 DL-16879의 `707:36548` screenshot은 중앙 안내·홈 버튼 및 주문 액션 없는 화면을 확인했지만 여전히 영문이므로 명시된 PM 국문을 따른다. 디자이너가 기존 헤더를 임시로 그렸다고 밝혔으므로 기존 헤더 전체 재디자인을 포함하지 않는다. 서버가 cut-off를 판단하며 FE 독자 시간 계산이나 모든403 차단 화면 전환은 하지 않는다.
+- **BE 현재 증거:** Leo가 댓글44548에서 HTTP403/error code1018을 제안했고, Slack 10/21 12:01에 주문 상세 조회 대응 작업 중이라고 밝혔다. 12:14 BE PR2602 생성 알림은 있으나 실제 배포 완료/응답 확인은 하지 않았다. 기존 권한 API 전반이 미완료라는 뜻이 아니라 이번 신규 QA 응답 연동 건이다. FE 준비를 모두 보류할 이유는 없으며 최종 연동 단계에서 실제 응답을 확인한다.
+- **코드 근거:** Web `lab/src/pages/orders/[order_id]/index.tsx`는 data 유무 중심이라 오류/캐시 우선순위 보완이 필요하고 `AppProviders.tsx`는1018을 일반 toast로 처리한다. `useOrderDetail.ts`의 ORDER_SHOW/ORDER_SHOW_FILE 중복 GET과 차단 후 후속 조회를 함께 점검한다. Lab 앱 `src/configs/utils/fetcher.ts:152–162`, `src/features/orderList/screens/OrderDetailScreen.tsx:58–80,151–161`에서403 세션종료/사전조회 오류복귀 경로를 확인했다. 이는 정적 코드 근거이며 실제 기기에서1018 로그아웃을 재현한 것은 아니다.
+- **권한 QA 외 Figma 멘션:** 알림센터 파일 `QLIzKYWzFFlptCYzN36Iq4` #2 답글([Change Office 토스트 제보](https://www.figma.com/design/QLIzKYWzFFlptCYzN36Iq4?node-id=29-7570#1969249684))에 오류 문구·웹/앱·계정이 없어서 원인/수정 제품은 미확정이다. 사용자에게 환경과 문구를 질문했으며 답변 전 임의로 오류라고 단정하거나 제품별 빈 카드를 만들지 않는다. 코드상 Office 앱에는 정상 성공 토스트 `Office has been successfully changed`와 실패 토스트가 모두 있고, 웹에는 성공 토스트가 없다. 웹 `OfficeSelectListModal.tsx`의 활성화와 병원/직원/크레딧 후속 조회, 앱 `EmployeeProfile.tsx`/`useEmployeeProfile.ts`의 전환 후 조회를 재현 시 대조한다. 아직 이 흐름의 결함을 확정한 것은 아니다. #8은 Oli의 **삭제 기능 제외·개별 읽음 버튼 보류·Read all 유지** 제안에 Yoonie가 동의한 통합알림센터 후속 요구사항이다. 이번 권한 QA 결함/즉시삭제 지시로 확장하지 않고 별도 기능에서 반영할 자료로 전달한다.
+- **Slack 근거:** [16855 재확인](https://innovaidhq.slack.com/archives/C0C651ZAX2A/p1792542599760639), [차단 액션 미노출](https://innovaidhq.slack.com/archives/C0C651ZAX2A/p1792549901272999), [디자인/임시 헤더 설명](https://innovaidhq.slack.com/archives/C0C651ZAX2A/p1792550587347819), [BE 작업 중](https://innovaidhq.slack.com/archives/C0C651ZAX2A/p1792551675843749), [Scanner 데이터 종결](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1792477991639059?thread_ts=1792472682.907309&cid=C04T5SU6A2U).
+- **현재 Git:** 개인 컨텍스트와 기존 권한 worktree를 pull/fetch한 뒤 비교했다. 웹 `dentlink-client-permission`의 `feature/DL-16317-qa@8200ba2ff`, Office `dentlink-app-permission`의 `feature/DL-16317-qa@1fa59ed`는 clean·원격 동일로 보존했다. 최신 Web release/v1.89.0=`3786703e9`, stage=`602071d40`, Office develop=`4e0597b`, Lab develop=`56cba67`를 읽기 비교했으며 브랜치를 전환하지 않았다. 최신 ref 확인을 오늘 배포/기기 QA 완료로 설명하지 않는다.
+- **다음 시작점:** 사용자 구현 지시 후 DL-16855 → DL-16880 웹 → DL-16881 Lab 앱을 제품별 현재 기준 branch에서 처리하고, 정상 주문/차단 주문/재조회/세션 만료를 확인한다. 현재 QA 브랜치는 이전 PR이 이미 병합됐으므로 변경 직전 최신 release/develop과 작업 base·소유권을 확인한다. BE 실제 응답 후 연동 검증, 16874 규칙 확인 및 Change Office 제보의 재현 정보 확인은 각각 분리한다. 지금은 제품 수정·추가 배포·자동 모니터링 없음.
+
 ## 최신 대기 — 2026-10-20 사용자 담당 READY FOR QA 전체 12건 전달 대조 완료
 
 - 사용자가 권한 외 카드까지 본인 담당 READY FOR QA 전체가 이번 Staging 반영분에 포함되는지 확인하고, 2차 QA 요청을 위해 정리·메모리화·대기하도록 요청했다. 현재 Atlassian의 `assignee = currentUser() AND status = "READY FOR QA" ORDER BY key ASC`를 전체 조회했다. 인증 계정/담당자는 **Frankie(박종선), accountId 642a7f9580f8c2b1220fba09**이며 다음 페이지 없이 총 **12건**이다. 이전 세션의 11건은 그때 상태를 직접 전환한 수이고, 사용자가 미리 전환한 DL-16854를 포함한 현재 전체 수는 12건이다.
