@@ -1,6 +1,13 @@
 # Dentlink Lab App
 
-## 현재 확정 — 2026-10-21 최신 동료 작업 보존·PR까지만
+## 최종 정리 — 2026-10-21 PR19 검토 완료·설치본 호환 확인 대기
+
+- 사용자가 이후 요청에서 “앱개발자 검토가 필요하면 PR 유지, 영향이 작아 안전하면 병합 후 최종 버전 Staging CodePush”를 승인했다. 따라서 아래 오전의 PR까지만 경계는 이 조건부 범위에서 대체된다. Jira는 상태만 변경하며 댓글/본문은 쓰지 않는다.
+- PR19 HEAD cd46b7c, base release/v1.0.5 a32acb02, OPEN/MERGEABLE 및 리뷰/스레드0을 재확인했다. 독립 검토에서 두 파일의403/1018 처리·현재 주문 메시지 식별·기존 WebView 공통 핸들러 유지에 확정 결함이 없었고, 이번 diff가 동료 QR/밀링/native 작업을 바꾸지 않음을 확인했다. 기존22tests/계약8건·타입 진단5→5 기록은 같은HEAD에 해당한다.
+- **병합 안전성과 OTA 호환은 별개다.** 기반 release의 VisionCamera5/Nitro/Bluetooth native와 구형 설치본의 호환이 확인되지 않았다. 같은1.0.4 표시만으로 판정할 수 없어 사용자에게 최근 native 포함 설치본인지 질문했다. 확인 전 PR19를 유지하고 CodePush를 실행하지 않는다. 전체release를 구형develop/main으로 임의 변경하거나 동료 코드를 빼서 배포하지 않는다.
+- 웹 대응 PR4747과 영문 Figma 복원 PR4750은 release에 병합했고 최종 stage 전달 PR4751도 병합했다. Lab 웹 배포 run39555735124 SUCCESS 및 공개 번들의 PM 국문/접근 제한 연결을 확인했다. 국문은 PM 지정 그대로, 영문은 Figma 기존 문구다. Jira DL-16881은 진행 중으로만 변경했고 댓글/본문은 쓰지 않았다. 마감 시 PR19 OPEN/MERGEABLE, checkout clean·원격 동일이다. 설치본 확인 질문은 미응답이며 오늘 앱 병합·CodePush·기기 QA는 실행하지 않았다. 웹 배포/접수 감사 전체 결과는 [권한관리 체크포인트](dentlink-permission-management.md)의 최상단 기록을 따른다.
+
+## 이전 확정 — 2026-10-21 최신 동료 작업 보존·PR까지만
 
 - 사용자가 CodePush 요청을 철회하고 **최신 동료 작업을 유지한 채 필요한 코드만 추가하여 PR까지만** 하도록 명시했다. 앱 업데이트/배포는 사용자 진행이다. 업로드·활성화·실제 QA는 하지 않았고 기존 배포 승인을 재사용하지 않는다.
 - 최신 동료 QR/태블릿/Bluetooth 작업은 develop56cba674보다 release/v1.0.5 a32acb02에 더 반영되어 있다. 원래 QA/DL-16881@cd46b7c·PR19→release/v1.0.5를 유지하며 PR은 OPEN/2파일(+84/-9)이다. 중간에 develop 기준으로 만든 임시 feature/DL-16881은 푸시/새PR 없이 정리하고 원래 checkout으로 복귀했다.

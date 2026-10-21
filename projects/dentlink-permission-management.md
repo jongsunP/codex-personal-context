@@ -1,13 +1,30 @@
 # Dentlink 권한관리 — DL-16317
 
-## 당일 최종 브리핑 — 2026-10-21 PR 전달 완료·사용자 배포 대기
+## 최종 정리 — 2026-10-21 웹 스테이징 완료·Lab 앱 호환 확인 대기
+
+- **최신 승인:** 사용자가 웹 CodeRabbit 처리 후 강제 스쿼시 병합과 기존 절차의 Staging 배포를 명시했다. Lab 앱은 앱개발자 검토가 필요하면 PR 유지, 안전하면 병합·최종 Staging CodePush라는 조건부 지시다. Jira는 **상태만 변경**, 댓글·본문 수정 금지이며 Slack은 읽기만 한다. 아래의 오전 PR까지만 지시는 이 범위에서 대체된다.
+- **웹 리뷰:** PR4747의 CodeRabbit 1건은 접근 제한 en/ko 의미 차이였다. 처음 영문을 변경한 c5ff587b9를 검증·push하고 thread PRRT_kwDOJnA7-86un86z를 resolve했으며, 새 HEAD 재검토 SUCCESS/미해결0을 확인했다. 사용자 승인으로 PR4747을 15:15 KST 스쿼시 병합하여 release=f4eb8bf18이 됐다.
+- **문구 정정:** 사용자가 PM·디자이너 명세 우선을 재강조했다. Jira16876 댓글44541의 국문은 `접근 불가능한 주문입니다.` / `홈으로 돌아가기`이며 처음부터 그대로 반영되어 있다. Figma707:38240의 영문은 `No order data available.`다. 리뷰봇에 따라 영문을 바꾼 것은 불필요한 변경으로 판단해 release 기반 새 feature/DL-16880에서 108e98ecc로 복원, PR4750을 생성했다. 원래 한국어 화면/권한 로직은 변경하지 않았다. CodeRabbit의 의미 개선 제안보다 제품 소유자의 명시 문구가 우선한다.
+- **첫 Staging 전달:** stage602071d4/master8772d688/release의 live SHA·열린 stage PR0·보호 없음·stage만의 별도 제품 변경 없음 확인 후 `refs/recovery/stage-before-reset-20261021-permission-qa2`로 보존했다. expected-SHA lease 삭제 및 nonexistence lease로 master 기준 재생성했다. PR4749 release→stage 스쿼시 병합, stage82e1b1808과 releasef4eb8bf18 전체 tree 동일. 15:17:50 KST Clinic39554539803/Lab39554539810/Admin39554539821 실행 시작을 확인했으며 결과 첫 확인은 15:33 이후다. 문구 복원 후 최종 release/stage 반영과 배포 결과는 아래 후속 기록으로 확정한다.
+- **최종 문구 전달:** PR4750의 CodeRabbit은 Sheet 운영 결과 기록1건으로, 실제 명세 대조/보류 근거/검증 결과를 PR에 기록하고 resolve했다. CodeRabbit SUCCESS·미해결0 확인 후 15:27 KST 스쿼시 병합해 release=bda64fd28이다. 후속 stage PR4751은 기존 squash 이력 때문에 충돌하여 병합되지 않았고, 원래 배포 절차대로 stage82e1b1808을 `refs/recovery/stage-before-copy-final-20261021`에 보존·lease 삭제·master8772d688 기준 재생성 후 같은 PR을 재오픈했다. 최종 전체release 비교/base/head를 확인하여 PR4751을15:29:35 스쿼시 병합했다. stage=bd1c0153a, release=bda64fd28 전체tree 동일이다. 이전Lab/Clinic 실행은 중단 요청했고 Admin은 이미 종료되어 취소되지 않았다. 새 Clinic39555735111/Lab39555735124/Admin39555735040은15:29:38 KST 모두 최종stageSHA로 시작했으며 **첫 결과 확인은15:45 이후**다.
+- **최종 배포 결과:** 최종 run은 모두 stage bd1c0153a다. Lab39555735124/Admin39555735040은 SUCCESS, Clinic39555735111은 build-and-push 및 Seoul/Ohio deploy 두 job 모두 SUCCESS(15:50:08/15:50:24 KST)다. 15:52:23 조회에서 자동 e2e-and-notify만 진행 중이며 이를 배포 실패나 실제 QA 완료로 해석하지 않는다. Clinic 공개 응답200의 buildId84UQKmwAPVzM8wDSOP4Hx가 이번 빌드의 S3 업로드 ID와 일치한다. Lab 공개 번들에서 PM 국문·접근 제한 키·ORDER_DETAIL_ACCESS가 확인되고 임의 변경 영문은 없으며 Admin도 공개 응답200이다. Lab/Admin 워크플로는 ECS 안정화 대기가 없으므로 SUCCESS를 모든 태스크 안정화나 실계정 기능 QA로 확대하지 않는다. 사용자가 제외한 후속 기능 QA/E2E 수리를 추가 실행하지 않았다.
+- **Jira 최종 상태:** 실제 배포 단계에 맞춰 DL-16855/16880/16882를 READY FOR QA로 변경했다. DL-16881은 진행 중이며 PR19/설치본 호환 확인 대기다. 이번 후속에는 Jira 댓글·본문을 쓰지 않았고 Slack 직접 쓰기도 없다. DL-16874는 PM/BE가 DONE 처리한 결론을 유지한다.
+- **마감 Git/다음 시작점:** 웹 feature/DL-16880@108e98ecc, Lab QA/DL-16881@cd46b7c는 clean·원격 동일이다. 웹 release bda64fd28과 stage bd1c0153a는 전체 tree ded3daab9 동일이며 제품 branch/worktree는 보존했다. 다음은 사용자의 실제 QA 결과와 Lab 새 native 설치 여부 답변이다. 새 설치본 호환이 확인되어야 조건부 승인 범위의 PR19 병합·Staging CodePush를 재개한다. 지금 추가 FE 결함이나 새 BE 질의를 만들어 두지 않는다. 번역 Sheet의 아래 별도 보류를 배포된 코드 문구 미반영으로 설명하지 않는다.
+- **추가 검증 경계:** 최종 복원 커밋108e98ecc의 세서비스 타입/정상push검증 통과. check:i18n은 기존시트와 gnb/account/orders 양언어6파일 불일치로 실패, audit:i18n은 기존 account.auth.actions.logIn 누락으로 실패를 재확인했다. 전체Sheet동기화/재생성을 완료하거나 오류가 새복원으로 발생했다고 보고하지 않는다. CodeRabbit의 문구재번역/시트일괄쓰기 제안은 확정명세와 운영가이드에 따라 처리했다.
+- **Lab 앱 독립 검토:** PR19 두 파일(+84/-9)에 확정 결함이나 동료 QR/밀링/native 변경은 없고, GET 주문상세403/1018만 인증 만료에서 제외한다. 공통 WebView 메시지와 정상 인증 흐름도 보존한다. 다만 기반 release의 VisionCamera5/Nitro 등은 구 native에 OTA 호환되지 않을 수 있다. package/native/Staging 표시가 모두1.0.4라 새 설치본 포함 여부가 확인되지 않으며, 사용자에게 새 native 설치 여부만 질문했다. 확인 전 PR19/CodePush를 보존한다. 이 조건을 FE 코드 미완료나 새 BE 요구로 설명하지 않는다.
+- **재접수 감사:** 당일 갱신 Jira39카드, 댓글 있는11카드의42댓글 전체 페이지, 정확한 Frankie 당일 멘션10댓글/4카드를 확인했다. Slack 정확 ID 멘션2건·QA그룹9메시지+1답글·FE 배포 논의 후속을 읽었다. root가 Jira 직접 알림함을 다시 열어 최신44558까지 확인하고 Figma 알림/댓글25·26·27을 대조했다. 확인 범위에서 우리 FE4건 외 새 Frankie 요구 누락은 없었다. Figma26/27은 현재 구현에 맞춘 디자인 갱신,25 모바일은 기존16864 범위다. 알림센터는 계속 제외한다.
+- **조사 건 종결:** DL16874는 새 제보 주문7000012246을 BE가 컨설팅 주문(정산/가격 없음)으로 설명했고 PM이 수용하여 DONE(댓글44554~44557)이다. 이전 order7000012208 응답 확인을 현재 미결/추가 BE 문의로 남기지 않는다. BE16876은44549 DEV 완료,44558 14:01 STAGING 배포중 통보이며 실제 연동 QA 완료를 뜻하지 않는다.
+- **동료 범위:** 새 DL16883/16884/16885는 mimi 담당 밀링 QA이며 Frankie 멘션 없음. 임의 수정하지 않는다. Slack의 Stripe stage 합류 제안은 후속에서 Growth DEV 우선 테스트로 정리됐고 현재 stage에만 별도 Stripe 코드가 없음을 Git으로 확인했다.
+- **별도 유지:** Lab 번역2키 Sheet 동기화는 무관한 stale2/충돌3 때문에 운영 가이드상 보류다. locale JSON은 코드에 포함되며 런타임 Sheets 조회는 없다. Office 앱 신규 작업/CodePush는 없고 기존 PR331→develop 병합·Stagingv337 기록을 유지한다. 제품 브랜치/worktree를 삭제하지 않는다.
+
+## 이전 브리핑 — 2026-10-21 PR 전달 완료·사용자 배포 대기
 
 - 오늘 Jira/Figma/Slack 멘션과 v1.89 QA를 조사하고, 필요한 FE 카드3개(16880/16881/16882)를 생성했다. 기존16855를 합쳐 FE4건은 구현·정적/단위 검증·커밋·푸시·PR까지 완료했다. 알림센터는 제외, Slack 쓰기는 없었다. DL-16874는 표시 조건/API 조사와 전달 문구 제공만 했으며 제보 주문 실제 응답은 아직 미확인이다.
 - 마감 시 원격/로컬을 다시 대조했다. 웹 feature/DL-16317-qa2@a64a9cda9와 Lab QA/DL-16881@cd46b7c는 clean·원격동일이다. 웹PR4747→release/v1.89.0, LabPR19→release/v1.0.5 모두 OPEN/미병합이다. 웹 reviewDecision=REVIEW_REQUIRED이며 표시된 Auto Assign/CodeRabbit 상태는 SUCCESS다. 상태 조회만 했으며 CodeRabbit 개별 스레드의 검토·조치 완료를 뜻하지 않는다. OfficePR331→develop은 이전10/20 MERGED로 재확인했다.
 - 오늘 코드 검증은 웹3서비스 타입/필수훅/관련34tests, Lab22tests 및 기존 타입진단5→5(신규0)다. 수정 후 실제 서버·기기 QA, 오늘 변경분의 배포·CodePush·병합은 미실행이다. 조사 단계의 환자 검색 DEV/STG 재현과 수정 후 QA를 혼동하지 않는다.
 - 남은 순서는 PR 리뷰·병합 → 사용자 웹 배포/Lab 앱 업데이트 → 실제 계약 연동 QA다. 별도 미결은 Lab 번역2키 Sheet 동기화(기존 충돌, 코드 문구는 반영 완료)와 DL-16874 제보 주문 orderDetails 응답 확인이다. 사용자 최종 지시에 따라 추가 배포·QA·리뷰 수정을 자동으로 시작하지 않는다. 세부 구현/검증/호환성 근거는 아래 기록에 보존한다.
 
-## 최신 확정 — 2026-10-21 동료 최신 작업 보존·Lab PR19 유지, CodePush 취소
+## 이전 지시 — 2026-10-21 동료 최신 작업 보존·Lab PR19 유지, CodePush 취소
 
 - 사용자는 처음 Lab 작업브랜치 Staging CodePush를 요청했으나, 이후 **앱 업데이트는 직접 하며 동료의 최신 작업 위에 필요한 수정만 추가하고 PR까지만** 하도록 최종 정정했다. “기공소앱 코드푸쉬도하지말고 pr까지만”을 명시했다. 따라서 **업로드·활성화·네이티브 배포·실제 QA를 실행하지 않았다.** 이전 CodePush 승인을 재사용하지 않는다.
 - Lab live ref는 develop56cba674보다 release/v1.0.5 a32acb02에 동료의 QR/태블릿/Bluetooth 작업(PR16/17/18)이 더 반영된 상태다. 최신 작업 보존 지시에 따라 원래 **QA/DL-16881@cd46b7c → release/v1.0.5 PR19**를 유지한다. PR19 OPEN, 이번 수정 두 파일(+84/-9)만 포함하며 base/전체 diff를 다시 확인했다. 이 결정은 일반 앱 feature 정책 변경이 아니다.
