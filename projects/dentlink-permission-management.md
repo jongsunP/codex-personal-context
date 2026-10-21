@@ -1,5 +1,35 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 구현 — 2026-10-21 13:25, 2차 QA 4건 코드·PR 전달 완료
+
+- **사용자 승인:** 확정된 BE 계약을 기준으로 신규 QA 브랜치를 각 release에서 생성하고 FE 4건을 구현·검증·커밋·푸시·PR까지 진행한다. **이후 실제 API/브라우저/기기 QA는 명시 제외**했다. BE 미배포를 구현 중단 사유로 삼지 않는다. DL-16874는 복사 가능한 설명을 먼저 제공하고 조사만 유지한다. Slack/Jira 댓글·상태, 병합·배포·CodePush는 이번 턴에서 변경하지 않았다. 알림센터 및 Office 앱 추가 작업은 범위 밖이다.
+- **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317-qa2`. 생성 기준 `origin/release/v1.89.0@3786703e9d147927bfc3f1d98f90ca012ed9406d`; HEAD/원격 `a64a9cda98f3341f1bf4686d43c6be8eb47591a5`, clean. [PR #4747](https://github.com/Innvoaid/dentlink-client/pull/4747) OPEN/비Draft, 실제 base `release/v1.89.0`를 생성 후 재확인했다. 3커밋·25파일이며 기존 feature/DL-16317·이전 QA 브랜치와 worktree는 보존했다. 최초 PR 조회의 mergeStateStatus는 BLOCKED이며 체크/리뷰 완료나 병합 가능 판정이 아니다.
+- **Lab 앱:** `/Users/parkjongsun/Repository/dentlink-lab-app`, `QA/DL-16881`. 사용자의 release QA 지시에 따라 최신 `release/v1.0.5@a32acb02eea73c7771efa803a99709cf06a5e5a7`에서 생성했다. release에는 develop보다 최신 tablet/QR/milling 변경이 있어 develop으로 역변경하지 않았다. HEAD/원격 `cd46b7cd2a4710d8690251620a40d773009475a0`, clean. [PR #19](https://github.com/Innvoaid/dentlink-lab-app/pull/19) OPEN/비Draft, 자동화 후에도 실제 base `release/v1.0.5`, 2커밋·2파일을 재확인했다. 앱 저장소의 QA/DL-* 규칙을 따랐으며 Office 앱 저장소는 변경하지 않았다. 두 PR을 현재 세션에 연결했다.
+
+| 카드 | 구현·커밋 | 효과 |
+| --- | --- | --- |
+| DL-16855 / Clinic Web | `86a35337e` | Authority 텍스트와 물음표 아이콘 그룹 전체 밑줄. API·권한 동작 변경 없음 |
+| DL-16882 / Lab Web | `d7e4d14d5` | 생성·수정 1단계에서 치과 선택 해제 시 선택 단계/officeId/환자 검색 상태 초기화. 비활성 쿼리 pending 대신 실제 isLoading을 전달하여 무한 스피너 방지 |
+| DL-16880 / Lab Web | `a64a9cda9` | 주문 상세 HTTP403/code1018을 캐시보다 우선하고 접근 불가 화면·홈 이동 표시. 차단 시 주문 본문·후속 쿼리·액션·LinkTalk 숨김 |
+| DL-16881 / Lab App | `ae7c787`, `cd46b7c` | 해당 주문 상세 GET의 403/1018만 인증 만료와 분리하여 세션 유지/WebView 연결. 네이티브·웹 거절 중 하나라도 현재 주문을 거절하면 LinkTalk 숨김 |
+
+### 구현 경계와 검토 결과
+
+- 서버 계약은 기존 `GET /lab/orders/{orderId}`의 HTTP403 + code1018(string/number 허용)이다. FE에서 cut-off 시간을 계산하거나 다른403을 차단 정책에 포함하지 않았다. 일반 인증 만료 흐름은 유지한다. PM 범위대로 주문 상세만 보완하고 리메이크 신청·디자인컨펌의 별도 정책을 추가하지 않았다.
+- 기존 Clinic `OrderDetailUnavailable`를 shared/ui로 이동하고 기본 영문/스타일을 유지했다. Lab은 동일한 기존 SVG 3개를 자신의 public 경로에 복사해 사용하며 Figma707:36548의 기존 안내/홈 버튼과 PM 승인 국문 2개를 적용했다. 임의 안내/별도 디자인을 추가하지 않았다. Clinic 4개 사용처는 import만 바뀐다.
+- Lab 상세는 기본 주문 GET 성공 후에만 기존 본문을 마운트한다. 동일 GET을 별도 ORDER_SHOW_FILE 캐시로 중복 호출하던 상세 훅을 기존 주문 데이터의 files로 통합했다. 독립 리뷰에서 업로드 큐 완료 후 갱신 누락 가능성을 찾아 FloatFileUploadController의 ORDER_SHOW 무효화를 추가했다. 다른 단계 화면이 쓰는 ORDER_SHOW_FILE 무효화·훅은 보존했다.
+- 웹→앱 `ORDER_DETAIL_ACCESS` 메시지는 `{ orderId, accessible }`로 현재 주문만 전달한다. 성공 응답에는 true, 정확한1018에는 false, 로딩·일반 실패에는 메시지를 보내지 않는다. 앱은 현재 주문 일치 여부와 boolean을 검증하며 기존 MODAL 메시지가 차단 상태를 덮지 않는다. 홈 이동은 기존 BottomTabNavigator/HomeTab/HomeScreen 경로를 사용한다.
+- 새 테스트 파일·Story·의존성·네이티브 설정을 추가하지 않았다. 기존 AppProviders 테스트에 전역 오류 토스트 중복 방지 2건만 추가했다. DL-16874·Office 앱·미래 알림센터는 코드 수정하지 않았다.
+
+### 검증 및 남은 범위
+
+- 웹 Clinic/Lab/Admin 타입 검사 통과(커밋 훅도 통과). 관련 Jest 34개(Clinic30+Lab4), 임시 실제 TSX/메시지 직렬화 계약 검증13개, diff/포맷 검사 통과. 임시 검증은 실제 DOM/API/브라우저 QA 증거가 아니다.
+- 웹 정상 push의 필수 훅도 통과: 3개 서비스 lint 오류0(기존 경고 존재), Admin DLOS guard, 공용 패키지 coverage 검사(config21/hook32 tests 포함). 훅을 우회하지 않았다.
+- Lab 앱 기존 Jest22개, 임시 계약 검증8개, 변경 lint/포맷/diff 통과. 전체 타입 진단은 release 기준5개 그대로이고 신규0이다(기존 Icon2/Tooltip/OptionDto/MessageText). 전체 타입 통과라고 보고하지 않는다. 독립 웹·앱 리뷰에서 확인된 갱신 결함 수정 후 남은 확정 버그는 없었다.
+- **번역 Sheet 보류:** 확정 차단 안내 `detail.empty.accessDenied`와 홈 버튼 `detail.empty.goHome`은 en/ko 코드에 반영했다. Sheet export 사전 확인에서 무관한 stale2키·충돌3언어값·대량 미반영 항목이 발견되어 Lab 번역 운영 가이드의 “현재 작업과 무관한 행이 제거되는 상태라면 쓰기를 보류합니다” 지침에 따라 전체 export/generate를 하지 않았다. 이번 2개 키의 Sheet 동기화는 추후 별도 정리가 필요하다. `audit:i18n`은 기존 `account.auth.actions.logIn` 누락으로 실패하며 같은 누락/호출이 release 기준에도 존재한다. 현재 사용자 요청의 코드 구현 실패나 새 번역 누락으로 분류하지 않는다.
+- **DL-16874 전달문:** 0원 때문에 정산 상품 행을 숨기지 않는다. 상품 행은 주문 GET의 orderDetails 기준이며 Lab에는 전체 합계 행이 없어 표시할 상품/추가금액/할인이 없으면 제목만 남을 수 있다. 주문7000012208의 실제 응답 확인이 필요하며 이번 권한 변경 회귀는 확인되지 않았다. 먼저 복사용 문구를 제공했고 코드/카드 변경은 하지 않았다.
+- **다음 시작점:** 사용자 리뷰·병합·대상 서버 반영 후 필요 시 웹 PR4747과 Lab 앱 PR19를 함께 실제 QA한다. 이번에 실제 QA·BE 배포 여부 확인·웹/앱 배포·PR 병합·CodeRabbit 후속 주기는 실행하지 않았다. 현재 제품 작업은 요청한 PR 단계까지 완료이며 자동으로 배포/QA를 시작하지 않는다.
+
 ## 최신 조사 — 2026-10-21 13:01, 환자 검색 재현 및 DL-16874 표시 기준
 
 - **범위/승인:** 사용자는 새 제보도 v1.89에 같은 개념이 있는지, 현재 스테이징 데이터와 무관하게 FE가 바로 처리할 수 있는지를 조사하고 보고하도록 했다. 추가로 [DL-16874 댓글44551](https://innovaid.atlassian.net/browse/DL-16874?focusedCommentId=44551)은 **조사만 해서 이 대화에 답변**하도록 지정했다. 알림센터 등 미래 작업은 계속 제외한다. 이번에는 제품 코드·브랜치·배포를 변경하지 않았고 Slack/Jira 댓글도 작성하지 않았다. 기존의 필요 시 QA 카드 생성 승인을 따라 확인된 환자 검색 결함만 신규 등록했다.

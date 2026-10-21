@@ -1,5 +1,14 @@
 # Dentlink Lab App
 
+## 현재 QA 작업 — 2026-10-21 cut-off 주문 접근 제한 PR19
+
+- 사용자가 권한관리 2차 QA를 **release에서 새 QA 브랜치 → FE 코드 수정 → 커밋·푸시·PR**까지 승인했으며 실제 서버/화면/기기 QA와 배포는 제외했다.
+- 기본 checkout `/Users/parkjongsun/Repository/dentlink-lab-app`은 현재 `QA/DL-16881`이다. 기준 `release/v1.0.5@a32acb02eea73c7771efa803a99709cf06a5e5a7`, HEAD/원격 `cd46b7cd2a4710d8690251620a40d773009475a0`, clean. 아래 main 단일 checkout 기록은 10/16 당시 이력이다.
+- [PR19](https://github.com/Innvoaid/dentlink-lab-app/pull/19)는 OPEN/비Draft, `release/v1.0.5` 대상으로 자동화 후 다시 확인했다. `ae7c787`/`cd46b7c`, 2파일만 수정했다. 일반 feature의 develop 정책을 바꾼 것이 아니라 사용자 명시 release QA 요청이다.
+- `GET /lab/orders/{id}`의 HTTP403/code1018만 인증 만료와 분리하여 세션을 유지하고 차단 WebView에 진입한다. 현재 주문에 대한 네이티브/웹 접근 거절 시 LinkTalk를 숨긴다. 웹 대응은 [dentlink-client PR4747](https://github.com/Innvoaid/dentlink-client/pull/4747)의 ORDER_DETAIL_ACCESS 메시지이며 별도 Office 앱 변경은 없다.
+- 기존 Jest22개·임시 계약 검증8개·변경 lint/포맷/diff는 통과했다. 전체 타입 진단은 release의 기존5개 그대로, 신규0이며 전체 타입 통과나 실제 QA 완료를 뜻하지 않는다. 새 파일/의존성/native 설정은 추가하지 않았다.
+- 병합·CodePush·스토어 전달·실기기 QA·CodeRabbit 후속 검토는 이번에 진행하지 않았다. 다음은 사용자 리뷰/병합 이후 승인된 전달·연동 QA다. 상세 계약·제외 범위와 검증은 [권한관리 체크포인트](dentlink-permission-management.md)의 2026-10-21 구현 기록을 따른다.
+
 ## 현재 로컬 상태 — 2026-10-16 출시 후 정리
 
 - 기본 checkout은 `main / bb619010b25419b724a5f6acded6f5760bb9af15`, origin/main과 동일·clean이다.
