@@ -1,4 +1,13 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
+
+## 권한관리 세션의 후속 DLDS QA — 2026-10-22 PR4759
+
+- 사용자가 권한 QA와DLDS 공통회귀를 release/v1.89.0기준 한웹QA브랜치·건별커밋으로 처리하도록 승인했다. 실제작업위치는 `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/v1.89.0-qa@178a4ab67`이며 이문서의기존DLDS checkout을옮기거나삭제하지않았다.
+- 신규 [DL-16916](https://innovaid.atlassian.net/browse/DL-16916)을부모DL-16437하위에생성하고Frankie/v1.89.0/Ready for Deploy로정리했다. DEV기공소주문에서 Leo Dentistry/Daniel Rudolph 선택후외부클릭초기화재현, 동일DEV API를쓰는master로컬은유지됨. PR4692의포커스복귀가검색결과에선택ID가없는기존blur판정을드러낸DLDS회귀다.
+- 공통Combobox에서현재value의마지막선택항목을검색결과와별개로유지한다. 외부clear/다른ID변경·실제입력변경blur·multiple/모바일계약은보존한다. 병원별예외나focus복귀롤백없음. 커밋 `178a4ab67` 및권한QA `cdce65134`가함께 [PR4759](https://github.com/Innvoaid/dentlink-client/pull/4759) → **release/v1.89.0**에올라갔다.
+- 입력/선택/버튼/탭/날짜/숫자/모달/팝업/툴팁의공통구현과실제사용처를확대검토해추가확정회귀없음. 원본실패3건확인후기존테스트2파일에8건보강,DLDS159tests/typecheck·Clinic/Lab/Admin타입·push훅통과. 실제제품전체QA는아니다.
+- DLDS부모하위7개/최신댓글과최근멘션검색에서추가수신건없음. 기존16854/16830은완료유지. npm게시·Studio반영·병합·배포는이번에실행하지않았다. 다음은사용자PR검토후전달/QA이며 상세근거와관련앱PR21은 [권한관리](dentlink-permission-management.md) 최상단참조.
+
 ## 현재 브레이크포인트 — 2026-10-20 · QA 3건 재검토 완료, 권한관리와 분리하여 대기
 
 - 사용자 최종 지시: 모델 변경 후 오늘 이 세션에서 만든 QA 3건의 실제 diff와 기존 원인 판단을 다시 확인했습니다. 재검토 결론을 설명한 뒤 사용자가 이해했고, 나머지 QA는 `권한관리세션`에서 진행하기로 했습니다. 이 세션은 기록 후 대기하며 제품 코드 수정·추가 테스트·Jira 변경·병합·배포·E2E·npm/Studio/하네스를 자동 진행하지 않습니다.

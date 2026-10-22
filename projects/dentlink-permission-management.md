@@ -1,5 +1,19 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 마감 — 2026-10-22 QA·DLDS 후속 PR 완료, 사용자 병합·배포 대기
+
+- **승인/경계:** 사용자가 기존 QA부터 마무리하고 DLDS 공통 수정·유사 UI 확대 점검·카드 관리를 함께 진행하도록 승인했다. 이어 최신 Jira 댓글·알림까지 재확인하고 웹·앱 모두 PR까지만 진행, 실제 병합·배포는 직접 확인 후 하겠다고 명시했다. 이번에 병합·CodePush·서버 배포·실기기 QA는 하지 않았다. Slack 쓰기와 Jira 부모/기존 카드 댓글 쓰기도 없음.
+- **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 최신 `origin/release/v1.89.0@bdbe43fb1`에서 `feature/v1.89.0-qa` 생성. 기존 feature/DL-16882와 다른 보존 브랜치는 유지했다. `cdce65134`(DL-16882 치과 변경 시 초기 신규 환자 단계 잠금 해제), `178a4ab67`(DL-16916 공통 Combobox 선택 보존·회귀 테스트)을 별도 커밋·푸시. [PR4759](https://github.com/Innvoaid/dentlink-client/pull/4759) → **release/v1.89.0**, 4파일(+243/-14), head `178a4ab6745a81abc1ed56bae8bc7496b402775d`. 작업트리 clean·원격 동일.
+- **DLDS 원인/수정:** 아래 실측대로 검색 응답에서 선택 ID가 빠질 때 포커스 복귀 뒤 blur가 선택을 해제했다. Combobox의 현재 value와 일치하는 마지막 선택만 보존하고 최신 options를 우선한다. 직접 clear·다른 입력 후 blur·부모 value 초기화·다른 ID 변경은 유지한다. 공통 focus 복귀를 되돌리거나 병원별 예외를 추가하지 않았다. 기존 테스트2파일에 8건만 추가, 새 테스트/스토리 파일 없음.
+- **확대 점검:** Dropdown 외 TextInput/InputBase/Password/Checkbox/Radio/Switch/Segment/ButtonGroup/Tabs/Category/Chip/Button, Calendar/DateField/DateRange/Stepper/Slider, Modal/Popup/Portal/Backdrop/Tooltip 및 실제 사용처를 이전 구현과 대조했다. 추가 확정 회귀 없음. 전체 제품 화면·기기 QA 완료를 의미하지 않는다. 패키지 npm 게시/Studio 반영은 이번 작업에 포함하지 않았다.
+- **웹 검증:** 원본에서 선택 유지 회귀 3건 실패 확인 → 수정 후 DLDS **18 files/159 tests** 전체 통과. DLDS 타입, Clinic/Lab/Admin 타입, 기본 커밋·푸시 훅(lint·Admin DLOS guard·shared coverage)과 diff 검사 통과. 기존 lint 경고는 남아 있으며 전체 경고0으로 보고하지 않는다.
+- **Lab 앱:** `/Users/parkjongsun/Repository/dentlink-lab-app`, `QA/DL-16907` → **release/v1.0.5** [PR21](https://github.com/Innvoaid/dentlink-lab-app/pull/21). base `c240548`, 별도 커밋 `04df3b0`(타 기공소/소속 미확인 LinkTalk 입력·읽음·낙관적 읽음 제한), `093cc67`(템플릿 간격 4px). 현재 head `093cc67c4721b637a766387f5cbc6f5dc752c88e`, clean·원격 동일, 2파일(+98/-43). 자동 PR 제목 변경 후에도 base/head/2파일 범위를 재확인했다. Office 앱 추가 변경 없음.
+- **Lab 검증:** 변경파일 ESLint 오류/경고0, 기존 **4 suites/33 tests** 통과, diff 검사·독립 리뷰에서 새 확정 결함 없음. 전체 타입은 기존5진단(Icon2/Tooltip1/order1/MessageText1)으로 실패, 변경파일 진단0. 실기기 로그아웃의 실제 실패 API를 재현한 것은 아니며 전역 fetcher/인증 예외는 추가하지 않았다.
+- **DL-16904 최신 판단:** Mimi 댓글44590(10/22 11:10)은 새 디자인이 아니라 라이브 간격 복원 요청. main@bb619010 및 v1.0.4 계열 태그도 템플릿은10/0px이고 일반 메시지만4px이어서, 4px을 라이브 확정값이라고 설명하지 않았다. 사용자에게 차이를 설명한 뒤 **“4px 보완을 PR에 유지하고 배포 후 QA”** 답변으로 승인받았다. PR21 본문에도 근거/승인/배포 후 QA를 기록했다. 새 BE 질의나 디자인 대기를 blocker로 남기지 않는다.
+- **최신 Jira 확인:** DL-16317 하위52개 전체 목록, 부모 포함42카드 댓글95개와 DLDS부모 DL-16437 하위7개·최신 댓글을 대조했다. 과거 디자인11개는 최신 갱신이 없고 API 일시 제한도 있어 댓글 재조회를 생략했다. Chrome Jira 알림의 직접/관찰 탭에서10/22·10/21 멘션/알림을 실제 확인했다. 16904/16907/16882/16881 및 이미 종결된16880/16876/16874 외 새 FE 요청 없음. 과거 모든 알림의 전수 완료로 확대하지 않는다.
+- **Jira 관리:** DLDS 부모 DL-16437 하위 [DL-16916](https://innovaid.atlassian.net/browse/DL-16916) 생성(Frankie, fixVersion v1.89.0). DL-16882/16916/16904/16907은 **Ready for Deploy**, 기존 DL-16881은 **READY FOR QA** 유지. 새 카드 본문과 상태만 정리했으며 기존 카드 댓글/본문을 덮어쓰지 않았다. 16904의 배포 후 알림 요청은 실제 배포 이후 사용자 지시에서 처리한다.
+- **다음:** 사용자가 웹 PR4759·Lab PR21을 확인해 병합·배포한다. 배포 후 치과 선택 유지/치과 전환 환자 단계, 타 기공소 조회 전용·로그인 유지/내 기공소 읽음·빠른 나가기, 템플릿4px 간격을 QA한다. 기존 Staging v39에는 오늘 PR21의 후속 수정이 포함되지 않는다. 추가 자동 리뷰·병합·배포·모니터링 없이 대기한다.
+
 ## 조사 우선 전환 — 2026-10-22 치과 선택 후 외부 클릭 초기화
 
 - 사용자가 기존 Jira 작업을 잠시 정리/보류하고 Chrome 일반 DEV·시크릿 master의 치과 선택 초기화를 조사해달라고 요청했다. 기존 웹 feature/DL-16882의1파일(+5), Lab QA/DL-16907의2파일(+98/-43) 미커밋 수정을 그대로 보존했고 이 턴에서 제품 코드는 변경하지 않았다. Jira 상태/본문/댓글·Slack·제품커밋/PR/배포 변경 없음.
