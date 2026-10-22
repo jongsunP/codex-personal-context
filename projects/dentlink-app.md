@@ -2,6 +2,7 @@
 
 ## 최신 전달 완료 — 2026-10-22 DL-16929 템플릿 메시지 간격·Staging v340
 
+- **최종 사용자 QA 확인:** 사용자가 치과 앱 스테이징에서 **v340 적용 및 메시지 간격 수정 결과를 직접 확인**했다고 알렸다. Jira DL-16929도 현재 **완료** 상태로 실조회했다. OS는 별도로 명시하지 않았으므로 양OS 각각의 실기기 QA 완료로 확대하지 않는다. 이 건의 개발·전달·사용자 확인은 종결하며 추가 필수 조치 없이 대기한다. 제품/Jira 상태·댓글·배포 추가 변경 없이 개인 기록만 commit/push한다.
 - **승인/원인:** 사용자가 Lab DL-16904와 같은 문제가 Office에도 있는지 코드 확인을 요청했고, 최신 develop에서도 연속 템플릿의 상단 간격이0px인 것을 확인했다. 이어 수정·검증·커밋·푸시·PR병합·CodePush·별도 Jira 카드 생성을 명시 승인했다. 기존 권한관리 전달 흐름대로 develop 통합 후2.2.4 Staging에 전달하며, 이번 건도 권한 정책과 별개인 기존 표시 문제다.
 - **코드:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 최신 `origin/develop@1f89d867861ed77eb6fca48a71e0d99f5999dca4`에서 **feature/DL-16929** 생성. `src/features/chat/components/message/MessageTemplate.tsx:483`의 기본 margin-top만0→4px(1파일+1/-1), 날짜 경계/프로필10px·일반메시지·버튼/API/권한 유지. 별도조기반환 LAB_DIRECTOR_PROFILE은 변경대상 아님. native/package/lock/env/의존성 변경0, 신규 제품/테스트/스토리 파일0.
 - **검증:** 변경파일 ESLint 전후오류0/경고0, 기존 MessageTemplate·MessageActions **2 suites/19 tests PASS**, diff검사 및 package/Android/Xcode2.2.4 버전일치 PASS. 독립 검토에서 Lab확정수정과동일·상위6px/일반4px중복없음·추가결함없음. 이번 스타일1줄변경에 전체타입/전체테스트·네이티브빌드·실기기시각QA는 실행하지 않았다.

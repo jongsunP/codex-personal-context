@@ -2,6 +2,7 @@
 
 ## 치과 앱 추가 전달 완료 — 2026-10-22 DL-16929 / Staging v340
 
+- **사용자 확인·종결:** 이후 사용자가 치과 앱 스테이징 **v340 적용과 수정 결과를 직접 확인**했다고 전달했다. DL-16929는 현재 **완료** 상태인 것을 실조회하여 그대로 유지했다. 실제 사용자 확인 완료로 갱신하되 OS별 전수QA로 확대하지 않는다. 추가 코드·배포·Jira 변경 없이 개인 기록 commit/push 후 새QA/지시 전 대기한다.
 - 사용자가 Lab DL-16904와동일한Office간격문제의코드확인후수정·검증·커밋푸시·PR병합·CodePush·별도Jira생성을명시승인했다. Office최신develop의연속템플릿0px을4px로1줄보완했고날짜/프로필10px과권한/API/버튼은유지했다. 기존권한변경으로생긴문제가아닌공통메시지표시결함이다.
 - **feature/DL-16929@e4fb1ac** → [Office PR333](https://github.com/Innvoaid/dentlink-app/pull/333) → **develop@7e6663be17fb4bd7aed62bc2824e6bd362208dc6** 스쿼시병합완료. 기존19tests·변경lint오류/경고0·버전2.2.4·독립검토통과, native/의존성변경0. 새제품파일/테스트추가없음.
 - 통합소스를 **Android·iOS Staging v340 / 대상2.2.4 / 활성·mandatory100%**로게시하고서버metadata/source·bundle map의src341파일씩일치확인. Lab/웹/DEV/Production·태그·스토어배포는변경하지않았다. 세부근거는 [Office기록](dentlink-app.md) 최상단참조.
