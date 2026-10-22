@@ -1,5 +1,12 @@
 # Dentlink 권한관리 — DL-16317
 
+## DL-16917 Lab 스테이징 전달 완료 — 2026-10-22
+
+- 사용자 승인으로 [Lab PR23](https://github.com/Innvoaid/dentlink-lab-app/pull/23)을 **release/v1.0.5**에 14:41:09 KST 스쿼시 병합했다. 통합SHA **b175d5f3f79ca370e3fb2ee770d6cb8713661c79**, 기존 검증 QA head06e8dfd와 전체tree 동일·버전1.0.5 확인. native/의존성 변경 없음.
+- 통합 릴리즈 소스로 Android·iOS **Staging v42**, 대상 **1.0.5**, 활성·mandatory·rollout100% 게시 및 서버 metadata/source 재조회 완료. Android14:42:24/iOS14:43:02 KST. 기존v41을 수동비활성화하거나 롤백하지 않았다. Slack 알림 없이 직접 CLI를 사용했다.
+- Jira **DL-16917 READY FOR QA** 상태만 변경. 이번 원인은 권한이 아닌 Android 파일명의# URI 해석이며 사용자도 이해/계속 진행을 확인했다. 웹 수정/배포·Office 변경·추가 BE 문의는 없다. iOS 동작은 유지하고 같은 릴리즈 소스만 맞췄다.
+- Lab checkout은 QA/DL-16917@06e8dfd로 복귀, clean·origin 동일·기존브랜치/worktree 보존. 개인 기록 commit/push 후 대기. 남은 일은 실제 Android1.0.5/v42 수신·재시작 후 제보 주문7000012231의 이미지 다운로드 QA다. 자세한 전달/검증은 [Lab 기록](dentlink-lab-app.md) 최상단 참조.
+
 ## 추가 QA DL-16917 처리·Lab PR23 완료 — 2026-10-22
 
 - 사용자가 추가한 Android·주문7000012231/승인2038·이미지 확대 다운로드 실패 정보를 기준으로 재개했다. 실제 승인 페이지의 파일명 `JB+Crown+Insert+#18.jpg`를 확인했고, Android 다운로드 라이브러리가 #를 file URI fragment로 해석한 뒤 원래 경로로 파일 존재를 검사하는 결함을 찾았다. 사용자 권한에 따른 다운로드 차단 문제가 아니며 추가 BE 정책 질의는 필요하지 않다.

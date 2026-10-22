@@ -1,5 +1,13 @@
 # Dentlink Lab App
 
+## DL-16917 전달 완료·QA 대기 — 2026-10-22 Staging v42
+
+- **승인/병합:** 사용자가 PR23 스쿼시 병합·Lab1.0.5 스테이징 CodePush·Jira Ready for QA·기록 정리를 명시 요청했다. PR23의 release/v1.0.5 대상/검증 head06e8dfd/1파일+4/-1, MERGEABLE·CLEAN·미해결 리뷰 없음 확인 후 14:41:09 KST squash 병합했다. 통합 release SHA는 **b175d5f3f79ca370e3fb2ee770d6cb8713661c79**이며, 검증한 QA head와 전체 tree가 동일하다.
+- **배포 전 검증:** package/Android/Xcode 버전1.0.5 일치, 이전 release e4b6277 대비 공통 다운로드 hook1파일만 변경, native/package/yarn.lock/entry 변경0. 기존 테스트37개·독립리뷰 결과를 유지하며 동일 tree에 불필요한 재설치/재검사를 하지 않았다. 전체 타입11진단·해당파일lint1error/29warnings의 기존 한계는 아래 구현 기록과 동일하다.
+- **CodePush 확정:** 통합 release를 detached checkout하여 직접 CLI로 Android→iOS 순차 게시했다(entryFile index.js, mandatory, Staging, targetBinaryVersion1.0.5, rollout100, force). Slack 알림 wrapper는 쓰지 않았다. Android **v42/14:42:24 KST**, iOS **v42/14:43:02 KST** 업로드 성공. 양OS history 재조회에서 appVersion1.0.5/isDisabled=false/isMandatory=true/rollout100, description의 source b175d5f/PR23 일치를 확인했다. 게시 전 양OS 최신은 v41이었으며 기존 라벨 비활성화/롤백은 하지 않았다.
+- **범위:** 사용자가 이번 문제가 권한 기능이 아닌 Android 파일명# 다운로드 문제이며 앱만 배포하는지 확인했고 그렇다고 답했다. iOS 다운로드 로직은 그대로며 양OS 같은 릴리즈 소스를 게시했다. 웹/Office 배포·코드 변경, main/develop 동기화·태그·스토어 배포는 없다.
+- **마감/다음:** Jira **DL-16917 READY FOR QA** 상태만 변경(댓글/본문/Slack 쓰기 없음). `/Users/parkjongsun/Repository/dentlink-lab-app`는 **QA/DL-16917@06e8dfd**로 복귀, clean·origin 동일이며 기존 브랜치/워크트리를 보존했다. 개인 기록 commit/push 후 대기한다. 다음은 실제 Android1.0.5 앱의 v42 수신/재시작 후 주문7000012231→LinkTalk→디자인 컨펌→이미지 확대→다운로드 재QA다. OTA 게시/활성 확인은 기기 적용 또는 기능 QA 통과를 의미하지 않는다. 추가 BE 정책 질문은 없으며 새 요청 전 임의 재배포/모니터링은 하지 않는다.
+
 ## DL-16917 Android 다운로드 수정·PR 완료 — 2026-10-22
 
 - **요청/범위:** 사용자가 조사·확정 원인 수정·검증·커밋·푸시·PR까지 승인했다. Android, 주문7000012231/승인2038, LinkTalk → 디자인 컨펌 요청 → 이미지 확대 → 다운로드 실패 토스트라는 재현 정보를 제공했다. 추가 BE 정책 질의가 필요한 상태는 아니다. 병합·배포·CodePush는 이번 승인 범위 밖이다.
