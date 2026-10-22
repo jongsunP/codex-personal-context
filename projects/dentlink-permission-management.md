@@ -1,5 +1,11 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 전달 완료 — 2026-10-22 Lab 1.0.5 Staging v39
+
+- 사용자 명시승인에 따라 최신 `release/v1.0.5@c240548`(우리PR19+동료PR20)을 설치·검증하고 **기공소 iOS/Android Staging v39, 대상1.0.5**로 게시했다. read-back에서 양OS 활성/mandatory/rollout100 및 소스SHA 일치. 기존v38/1.0.4의활성상태는 유지하고 수동배포설정 변경은 없다.
+- Yarn immutable·Ruby3.2.2/Bundler2.6.9의Pods설치·버전일치 검사·관련4suites/54tests·양OS Metro/Hermes 번들/업로드 성공. 전체타입검사는 기존5진단이남아 통과로표시하지않는다. 새제품코드/커밋/PR없음.
+- 원래Lab `QA/DL-16881@cd46b7c` clean·origin동일로복귀했고 worktree보존. 웹/Office배포·Jira/Slack쓰기없음. 다음은1.0.5설치본의v39수신·재시작 및 권한/cut-off/정상주문/밀링기능QA. 실제기기QA와기존1.0.4실행불가원인은미확인이다. 상세설치/검증/배포근거는 [Lab기록](dentlink-lab-app.md) 최상단참조.
+
 ## 재개 전 확인 — 2026-10-22 Lab 통합 소스 확인 완료
 
 - 사용자 요청으로 내용 확인만 진행했다. 개인·제품 Git pull 후 `origin/release/v1.0.5@c240548`에 우리 PR19와 동료 밀링 PR20이 함께 포함된 것을 확인했다. 동료 PR20 최종 head `56128917` 대비 전체 tree 차이는 우리2파일(+84/-9)뿐이고, 해당 파일은 PR19 당시와 동일하다. 동료 소스 누락 우려는 해소됐다.

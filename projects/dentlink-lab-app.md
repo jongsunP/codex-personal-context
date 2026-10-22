@@ -1,5 +1,17 @@
 # Dentlink Lab App
 
+## 전달 완료 — 2026-10-22 Lab 1.0.5 Staging CodePush v39
+
+- **사용자 승인:** 최신 `release/v1.0.5`에서 필요한 설치·검증 후 기공소 앱1.0.5 대상으로 Staging CodePush하고 메모리·결과 브리핑까지 진행하라고 명시했다. 양OS 전달을 실행했으며 Slack 쓰기 금지는 유지했다.
+- **정확한 소스:** 개인·제품 Git pull 후 원격 release `c2405485045d1454816ae8fd2942b1e533e7d38a`를 detached checkout했다. 원격 SHA를 업로드 직전에 다시 확인했고 clean tree였다. 동료 PR20 최종 소스와 우리 PR19 두파일의 정확한 조합은 아래10/22 확인대로 유지된다. 새 코드/커밋/PR/병합/태그/스토어 배포는 없다.
+- **설치 완료:** `yarn install --immutable` 성공(기존 peer dependency 경고), `yarn pod`는 최초 시스템 Ruby2.6/Bundler2.6.9 미발견으로 실패했다. `.tool-versions`의 기존설치 Ruby3.2.2를 `mise exec ruby@3.2.2 -- yarn pod`로 명시해 성공했다. Bundler2.6.9, CocoaPods1.16.2, Podfile126 dependencies/159 pods. package/yarn.lock/Podfile.lock/Xcode tracked diff0. Pods duplicate UUID·Hermes script 경고는 있었지만 설치 exit0이며 새 native 바이너리를 빌드/설치한 것은 아니다.
+- **검증:** `yarn validate:versions`로 package/Android/Xcode1.0.5 일치. Jest 기본실행은 중복 config 지정 오류여서 파일 수정 없이 `--config jest.config.js`로 실행했다. OrderDetailScreen/appServiceIsolation/errorHandlers/dentlinkWebURL 기존4 suites·54 tests 모두 통과했다. `yarn typecheck`는 기존과 같은5진단(Icon2, Tooltip ref1, order OptionDto.priceType1, MessageText delayLongPress1)으로 실패한다. Tooltip의 다른 동료수정은 있지만 진단의 ref 사용은 기존에도 존재하며 우리2파일의 새진단은 없다. 전체타입검사 통과로 보고하지 않는다. 독립 배포경로 점검에서403/1018 한정 예외·WebView 공통메시지·Lab/native환경 분리 보존 및 새 차단이슈 없음 확인.
+- **CodePush 실행:** Slack 알림 wrapper를 사용하지 않고 OS별 `revopush release-react`를 순차 실행했다. entryFile=index.js, deploymentName=Staging, targetBinaryVersion=1.0.5, mandatory, force. description은 `DL-16881 + DL-16833; release/v1.0.5; source c2405485045d1454816ae8fd2942b1e533e7d38a; PR #19 + #20`. iOS/Android 모두 Metro+Hermes 번들 생성 및 업로드 exit0.
+- **서버 재조회 확정:** Dentlink-Lab-iOS Staging **v39**, 10:53:42 KST; Dentlink-Lab-Android Staging **v39**, 10:54:15 KST. 두 라벨 모두 appVersion1.0.5/isDisabled=false/isMandatory=true/rollout100, source description 일치. 기존v38의1.0.4/활성상태/소스/패키지/업로드시각은 유지했다. 새업로드 후 과거v38의history rollout 필드는100→null로 반환됐으나 수동 patch/disable/rollback은 하지 않았고 isDisabled=false는 그대로다. v38 메타데이터 전체불변이라고 표현하지 않는다.
+- **마감 상태:** `/Users/parkjongsun/Repository/dentlink-lab-app`를 원래 `QA/DL-16881@cd46b7cd2a4710d8690251620a40d773009475a0`로 복귀했다. clean·origin동일이며 branch/worktree 보존. 현재 QA checkout은 배포 source c240548과 다르므로 다음 배포시 최신 release부터 준비한다. 제품 변경이 없어 새제품커밋/푸시 없음. 웹/Office 배포, Jira상태·본문·댓글, Slack 쓰기는 하지 않았다.
+- **남은 일:** 실제1.0.5 기기에서 v39 수신·재시작, cut-off 제한 주문의 로그인유지/차단화면/LinkTalk숨김, 정상주문·채팅 및 동료밀링기능 QA. 사용자1.0.5실행확인은 이전 보고이고 이번OTA수신/기능QA 증거가 아니다. 기존1.0.4실행불가 원인도 별도미확인으로 유지한다. 새요청 없이 추가모니터링/배포/수정하지 않는다.
+- **로컬 검증 기록:** `/tmp/dl16881-20261022-{yarn,pod,tests,typecheck}.log`, `*-ios-codepush.log`, `*-android-codepush.log`, OS별 `*-before.json`/`*-after.json`(선별한 metadata만 저장). 원격복원 근거는 위SHA/라벨/시간이며 임시로그 존재를 장기보존으로 간주하지 않는다.
+
 ## 재개 전 상태 확인 — 2026-10-22
 
 - 사용자 요청은 “작업 재개하려고 하니 내용 확인”이다. 개인 컨텍스트와 현재 제품 checkout을 `git pull --ff-only`로 갱신하고 Slack 본문+댓글7개, GitHub PR19/20, 원격 소스·버전 및 Revopush history를 읽기 전용으로 확인했다. 설치·코드 변경·병합·CodePush·Jira/Slack 쓰기는 실행하지 않았다.
