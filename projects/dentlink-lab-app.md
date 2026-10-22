@@ -1,6 +1,15 @@
 # Dentlink Lab App
 
-## 최신 인계 확인·대기 — 2026-10-21 Slack 본문/댓글 확인
+## 재개 전 상태 확인 — 2026-10-22
+
+- 사용자 요청은 “작업 재개하려고 하니 내용 확인”이다. 개인 컨텍스트와 현재 제품 checkout을 `git pull --ff-only`로 갱신하고 Slack 본문+댓글7개, GitHub PR19/20, 원격 소스·버전 및 Revopush history를 읽기 전용으로 확인했다. 설치·코드 변경·병합·CodePush·Jira/Slack 쓰기는 실행하지 않았다.
+- **통합 확인 완료:** `origin/release/v1.0.5@c2405485045d1454816ae8fd2942b1e533e7d38a`. 우리 PR19(`b04be101`) 다음에 동료 PR20(`feature/DL-16833`)이 10/21 18:33:48 KST 병합됐다. PR20의 실제 최종 head는 `56128917db5e63865705b68b7097e1e7152a101e`이며 원격에 남은 이전 feature ref `41a57ad`만으로 판단하지 않았다. 최종 head 객체를 fetch해 release와 직접 비교한 차이는 우리 2파일(+84/-9)뿐이고, 두 파일은 PR19 병합 당시 blob과 동일하다. 동료 최종 작업 보존 및 우리 권한 수정 포함을 코드로 확인했으므로 이전 소스 누락 우려는 해소됐다.
+- **버전/설치:** 최신 release의 package.json, Android versionName, iOS MARKETING_VERSION은 모두1.0.5다. 이전 배포 소스 대비 package/native 파일 변경은 있고 yarn.lock 변경은 없다. Daniel의 “배포 전 yarn && yarn pod” 안내는 유지한다. `yarn pod` 실제 스크립트는 `cd ios && bundle exec pod install && cd ..`다. 의존성 설치·Pods·통합 검증은 이번에 실행하지 않았고 설치 기기의 native source 일치나 기능 QA 통과를 의미하지 않는다.
+- **OTA 현재 상태:** 조회 시점 양OS Staging 최신은 v38/대상1.0.4/active/mandatory100%, source b04be101 그대로다. 최신 통합 소스 c240548의1.0.5 대상 CodePush는 아직 없다. 사용자가 복구한 v38을 재비활성화하거나 metadata를 바꾸지 않았다. 기존1.0.4 실행불가의 정확한 원인은 별도 미확인이다.
+- **checkout 보존:** `/Users/parkjongsun/Repository/dentlink-lab-app`는 `QA/DL-16881@cd46b7c`, clean·origin 동일이며 브랜치를 바꾸지 않았다. 최신 원격 release와 현재 작업 checkout은 구분한다.
+- **다음 실행 순서:** 사용자의 실행 범위가 주어지면 보존된 QA 브랜치를 그대로 둔 채 최신 통합 release를 작업 기준으로 준비 → yarn/Pods와 필요한 검증 → 설치본 native 호환을 확인한1.0.5 대상 Staging 전달 → 권한/cut-off 기능 QA. 지금 확인 요청만으로 배포를 시작하지 않으며, 추가 cherry-pick/통합 PR은 현재 포함관계상 필요하지 않다.
+
+## 이전 인계 확인·대기 — 2026-10-21 Slack 본문/댓글 확인
 
 - **18:34 새 댓글 확인(기록만):** 사용자 요청으로 같은 Slack 스레드 본문+댓글7개 전체를 다시 읽었다. Daniel은18:34:35 KST(comment1792575275.313299)에 “작업 브랜치 릴리즈1.0.5에 머지해두었고, 만약 바로 스테이징 배포하시면, yarn && yarn pod 진행하고 해주십시오!”라고 알렸다. 이는 동료의 병합 완료 보고이며 이 턴에서 제품 원격fetch/HEAD/PR/포함관계는 재검증하지 않았다. 앞서18:25의 커밋예정 상태는 이 보고로 갱신한다.
 - **다음 재개 첫 순서:** 사용자가 재개하라고 할 때 개인 컨텍스트와 제품 원격을 갱신하고, 최신 release/v1.0.5에 동료 작업과 우리 PR19가 모두 포함됐는지·실제앱버전/native/lock 변경을 확인한다. 이후 동료가 안내한 yarn && yarn pod를 해당 checkout에서 수행하고 당시 사용자 승인 범위의 검증/배포를 진행한다. 이 댓글 자체를 설치/병합/CodePush의 실행 승인으로 사용하지 않는다. 지금은 메모 commit/push만 하며 제품코드·의존성·배포·Jira/Slack 쓰기·모니터링 없음.
