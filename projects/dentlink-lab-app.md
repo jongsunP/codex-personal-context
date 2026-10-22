@@ -1,5 +1,15 @@
 # Dentlink Lab App
 
+## 전달 완료 — 2026-10-22 PR21 스쿼시 병합·1.0.5 Staging v41
+
+- **승인:** 사용자가 메시지 간격4px이 맞다고 확인했고 추가 수정 없이 PR 병합·스테이징 CodePush·Jira 상태 정리·마감을 요청했다. feature 병합 방식은 스쿼시로 명시했다. 4px은 이제 사용자 확인된 값이며 이전의 라이브 코드 수치 미확인과 구분한다. Office 앱 변경/배포와 Slack 쓰기는 없다.
+- **최신 소스 보존:** 병합 전 release가 v39 소스 c240548에서 동료 PR22 생산 목록 보완 `5a47dca739c26b616eb01ee87be57e5101480a83`로 전진한 것을 확인했다. PR22의37파일과 우리 채팅2파일은 겹침이 없고 package/yarn.lock/ios/android 변경0이다. 12:16:38 KST [PR21](https://github.com/Innvoaid/dentlink-lab-app/pull/21)을 `release/v1.0.5`로 squash 병합, 통합 SHA는 `e4b6277018e237d7ef981eba6266a7f01749866a`다. 통합release의 우리2파일은 검증한 PR head093cc67과 동일하며 동료22도 포함된다.
+- **검증:** 통합release를 detached checkout해 버전1.0.5(package/Android/Xcode) 일치, 기존5suites/56tests 통과. v39 이후 의존성/native 변경0이고 당일 Yarn/Pods 설치가 이미 성공했으므로 재설치는 생략했다. 양OS Metro/Hermes 번들·업로드가 성공했다. 실제 기기 수신/기능 QA는 하지 않았다.
+- **타입 검사 경계:** 전체 tsc는 기존5→11진단으로 실패한다. 신규6개는 PR22 생성모델과 기존밀링소비코드 참조 불일치이며 PR21 무관이다. `FindDetails1Data`가 입고→발주 타입으로 바뀌고 입고는 `FindDetails2Data`가 되어 status/locationId/lotNo 관련5진단이 생겼다. 실제 GET은 기존 material-inbounds/details 그대로라 타입별칭 수정 후속이다. `handoverDifference` 모델삭제1진단은 기존선택필터의 계약 의미 정리 대상으로 기록한다. 즉시 부팅/native/OTA차단 확정위험은 발견되지 않았지만 전체 타입통과·밀링QA완료로 설명하지 않는다. 동료코드를 임의 수정하거나 별도카드/댓글을 만들지 않았다.
+- **OTA 확정:** 배포 직전 양OS 최신 Staging은 동료 v40(대상1.0.5, 설명빈값)였다. source SHA를 추정해 단정하지 않았다. Slack wrapper 없이 동일 통합release로 직접 `revopush release-react`를 순차 실행(entryFile index.js, mandatory, Staging, target1.0.5, force). iOS **v41/12:19:01 KST**, Android **v41/12:20:28 KST** 게시. history 재조회에서 대상1.0.5/isDisabled=false/isMandatory=true/rollout100, description의 source e4b6277/PR21+22 일치. 기존v38/v39/v40을 수동 비활성화·rollback하지 않았다.
+- **정리:** Jira DL-16904·16907을 상태만 **READY FOR QA**로 변경했다. 기존16881도 QA대기 유지, 댓글/본문/Slack 쓰기 없음. `/Users/parkjongsun/Repository/dentlink-lab-app`는 원래 `QA/DL-16907@093cc67`으로 복귀해 clean·origin동일, 브랜치/워크트리 보존. 추가 제품코드/커밋/태그/스토어배포/main·develop동기화 없음.
+- **다음:** 실제1.0.5 설치본의 v41 수신·재시작 후4px간격, 타기공소조회전용/로그인유지, 내기공소정상읽음·빠른나가기 QA. 동료밀링타입참조 후속과 기능QA는 별도이며 새지시없이 모니터링/수정/재배포하지 않는다. 이번 웹 배포는 [권한관리 기록](dentlink-permission-management.md) 참조.
+
 ## 최신 마감 — 2026-10-22 QA PR21 완료 (미병합·미배포)
 
 - 사용자가 최신 Jira 요청까지 확인해 처리하되 코드 작업은 PR까지만, 병합·배포는 직접 진행한다고 명시했다. `QA/DL-16907`의 기존2파일을 건별 커밋·푸시했다: `04df3b0`(16907 타 기공소 LinkTalk 입력/읽음 제한), `093cc67`(16904 템플릿 간격4px). [PR21](https://github.com/Innvoaid/dentlink-lab-app/pull/21) base는 **release/v1.0.5**, 기준 `c240548`. 자동화 후 실제base/head/2파일 확인, checkout clean·원격 동일. 기존 QA/DL-16881 보존.

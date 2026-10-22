@@ -1,5 +1,15 @@
 # Dentlink 권한관리 — DL-16317
 
+## 전달 완료·QA 대기 — 2026-10-22 웹 Stage·Lab Staging v41
+
+- **사용자 지시:** 웹PR4759를 직접release에병합한뒤 기존스테이징프로세스로웹배포를명시요청했다. 이어Lab메시지간격4px확인/추가수정불필요, 앱PR스쿼시병합·스테이징CodePush·Jira상태·메모정리까지승인했다. 앞선PR까지만경계는이범위에서대체됐다. Office앱과Production은대상아니다.
+- **웹 병합:** PR4759는12:08:25 KST `release/v1.89.0@909b90566646d483e9f0ab6d0bca7013c121c6c5`에사용자병합됐다. oldstage `bd1c0153af81748e2e96374f1f6ff14209f704a4` tree는이전release bda64fd28와같았고stage고유변경없음. local recovery ref `refs/recovery/stage-before-reset-20261022-permission-qa3`에보존후expectedSHAlease로원격stage삭제→최신master `8772d68825cac6e23792d86a715153a67dc71078`에서재생성했다. 최신release전체에는동료4754/4755도포함된다.
+- **웹 전달:** [PR4760](https://github.com/Innvoaid/dentlink-client/pull/4760) release/v1.89.0→stage 생성·세션연결, guard/verify통과후12:21:33 KST squash병합. 최종stage `1701952af0fe8002398fbdb31bd3fe8120dc9256` 전체tree=release909b90566 확인. 공통DLDS수정이있어3서비스모두실행확인: [Office run39716391008](https://github.com/Innvoaid/dentlink-client/actions/runs/39716391008)(12:21:36), [Lab39716391030](https://github.com/Innvoaid/dentlink-client/actions/runs/39716391030)/[Admin39716391072](https://github.com/Innvoaid/dentlink-client/actions/runs/39716391072)(12:21:37). 시작15분이후첫결과를확인했다. Lab12:32:59/Admin12:34:17배포job성공, Clinic서울12:42:22/오하이오12:48:30배포·안정화·rollback검증성공. Clinic자동E2E는마감시진행중이며이번범위밖으로기다리거나수정하지않았다.
+- **서버 관찰 경계:** 최종3개공개루트모두HTTP200. BUILD_ID는Clinic Chnwe5NJnmgn0tCJphBjR/Lab IgzVRd4RhH8nge9d7MUVo/Admin qyVaKJcnqI_ZhTOhrTjdQ. Clinic의ECS안정화/새taskDefinition확인은workflow가수행했다. Lab/Admin workflow는wait-for-service-stability=false이므로Actions성공+공개응답을확인한범위이며별도AWS태스크실측·BUILD_ID와SHA의직접대응까지확정한것은아니다. 로그인화면/전체기능QA통과로확대하지않는다.
+- **Lab 전달 완료:** 동료PR22 최신생산목록을유지한release에PR21스쿼시병합→통합 `e4b6277018e237d7ef981eba6266a7f01749866a`, 양OS Staging **v41/대상1.0.5/활성/mandatory100%** 게시·source설명재조회완료. 4px는사용자가확인한값이다. 버전검사·기존5suites56tests·양OS번들성공. 전체타입은기존5+동료22생성모델참조6=11진단으로실패(우리2파일무관), 세부원인/후속은 [Lab기록](dentlink-lab-app.md)최상단참조. 동료코드임의수정없음.
+- **현재 Jira:** 웹16882/16916·앱16904/16907 모두 **READY FOR QA**로상태만변경완료. 기존16881 READY FOR QA유지. 댓글/본문/Slack직접쓰기없음. PR4760의배포확인체크만완료로갱신했다.
+- **보존/남은일:** 웹feature/v1.89.0-qa@178a4ab67, Lab QA/DL-16907@093cc67 원래checkout·branch/worktree보존,양쪽clean·origin동일. 새제품수정/추가커밋없음. 사용자가16907자동로그아웃방지까지포함됐는지물어코드·v41배포포함과실제현상해소QA미확인을구분해답했다. 다음은웹치과선택유지/치과전환환자단계, 앱4px간격/타기공소LinkTalk조회전용·로그인유지/정상읽음QA다. 기록commit/push후새지시나QA전까지대기하며실기기검수·추가모니터링·재배포·브랜치정리를자동진행하지않는다.
+
 ## 최신 마감 — 2026-10-22 QA·DLDS 후속 PR 완료, 사용자 병합·배포 대기
 
 - **승인/경계:** 사용자가 기존 QA부터 마무리하고 DLDS 공통 수정·유사 UI 확대 점검·카드 관리를 함께 진행하도록 승인했다. 이어 최신 Jira 댓글·알림까지 재확인하고 웹·앱 모두 PR까지만 진행, 실제 병합·배포는 직접 확인 후 하겠다고 명시했다. 이번에 병합·CodePush·서버 배포·실기기 QA는 하지 않았다. Slack 쓰기와 Jira 부모/기존 카드 댓글 쓰기도 없음.

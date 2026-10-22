@@ -1,5 +1,11 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
+## 후속 전달 완료 — 2026-10-22 DL-16916 스테이징
+
+- 사용자가웹PR4759를release/v1.89.0에병합한뒤웹배포를명시요청했다. 기존stage를복구용local ref로보존후최신master에서원격재생성,전체release→stage [PR4760](https://github.com/Innvoaid/dentlink-client/pull/4760)을스쿼시병합했다. 최종stage1701952af와release909b90566의전체tree동일. 동료릴리즈작업도유지했다.
+- Clinic서울/오하이오·Lab·Admin배포job모두성공,3개공개HTTP200. Clinic배포안정화/rollback검증은workflow성공,Lab/Admin은workflow배포요청성공+공개응답까지이며별도AWS태스크실측은없다. 자동E2E는별도진행중으로범위밖. 실제기능QA완료로표시하지않는다.
+- DL-16916을 **READY FOR QA**로상태만변경했다. 댓글/본문/Slack직접쓰기·npm게시·Studio배포없음. 다음은검색응답에선택ID가없는치과선택유지와다른Combobox사용처QA다. 원래DLDS/worktree/feature브랜치보존,새QA전자동작업없이대기. 관련권한QA16882/Lab앱v41은 [권한관리](dentlink-permission-management.md)최상단참조.
+
 ## 권한관리 세션의 후속 DLDS QA — 2026-10-22 PR4759
 
 - 사용자가 권한 QA와DLDS 공통회귀를 release/v1.89.0기준 한웹QA브랜치·건별커밋으로 처리하도록 승인했다. 실제작업위치는 `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/v1.89.0-qa@178a4ab67`이며 이문서의기존DLDS checkout을옮기거나삭제하지않았다.
