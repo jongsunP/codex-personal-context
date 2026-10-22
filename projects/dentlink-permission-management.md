@@ -2,6 +2,7 @@
 
 ## 전달 완료·QA 대기 — 2026-10-22 웹 Stage·Lab Staging v41
 
+- **마감 확정:** 사용자가 QA 결과가 나오면 직접 알려주겠다고 했으므로 여기서 대기한다. Jira/Slack/배포/E2E를 자동 재조회하거나 추가 수정·배포하지 않는다. 재개 시 개인 컨텍스트와 해당 제품 원격을 갱신하고, 전달된 QA 카드·댓글 및 실제 배포 소스를 확인한 뒤 그 범위만 처리한다. 기존·동료 앱 타입 오류11건은 기록된 별도 후속이며 지금 자동 착수하지 않는다.
 - **사용자 지시:** 웹PR4759를 직접release에병합한뒤 기존스테이징프로세스로웹배포를명시요청했다. 이어Lab메시지간격4px확인/추가수정불필요, 앱PR스쿼시병합·스테이징CodePush·Jira상태·메모정리까지승인했다. 앞선PR까지만경계는이범위에서대체됐다. Office앱과Production은대상아니다.
 - **웹 병합:** PR4759는12:08:25 KST `release/v1.89.0@909b90566646d483e9f0ab6d0bca7013c121c6c5`에사용자병합됐다. oldstage `bd1c0153af81748e2e96374f1f6ff14209f704a4` tree는이전release bda64fd28와같았고stage고유변경없음. local recovery ref `refs/recovery/stage-before-reset-20261022-permission-qa3`에보존후expectedSHAlease로원격stage삭제→최신master `8772d68825cac6e23792d86a715153a67dc71078`에서재생성했다. 최신release전체에는동료4754/4755도포함된다.
 - **웹 전달:** [PR4760](https://github.com/Innvoaid/dentlink-client/pull/4760) release/v1.89.0→stage 생성·세션연결, guard/verify통과후12:21:33 KST squash병합. 최종stage `1701952af0fe8002398fbdb31bd3fe8120dc9256` 전체tree=release909b90566 확인. 공통DLDS수정이있어3서비스모두실행확인: [Office run39716391008](https://github.com/Innvoaid/dentlink-client/actions/runs/39716391008)(12:21:36), [Lab39716391030](https://github.com/Innvoaid/dentlink-client/actions/runs/39716391030)/[Admin39716391072](https://github.com/Innvoaid/dentlink-client/actions/runs/39716391072)(12:21:37). 시작15분이후첫결과를확인했다. Lab12:32:59/Admin12:34:17배포job성공, Clinic서울12:42:22/오하이오12:48:30배포·안정화·rollback검증성공. Clinic자동E2E는마감시진행중이며이번범위밖으로기다리거나수정하지않았다.
