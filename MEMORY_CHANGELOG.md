@@ -2,6 +2,8 @@
 
 ## 2026-10-22
 
+- 기존권한Jira미커밋수정을보존/보류하고특정치과선택초기화조사. DEV Leo/Daniel초기화·Joy유지, 로컬master Leo유지및동일DEV검색응답을실측했다. 검색응답에선택ID가빠져label을잃는기존Combobox판정과PR4692의focus복귀가맞물린FE회귀로판단, 선택ID/label보존방향만정리했다. 이번턴제품수정/외부쓰기없음.
+
 - DL16317 미완료4카드 확인 뒤 QA제외 FE 보완: 웹 feature/DL-16882(최신release1.89)에서 치과변경시 초기빈환자상태해제1파일, Lab QA/DL-16907(최신release1.0.5)에서 타기공소읽음POST/입력제한과 템플릿간격4px 2파일. 웹타입/변경lint·Lab30tests통과, Lab전체타입기존5진단동일·전체lint기존실패. 모두제품미커밋/미배포, 실제제보원인/QA미확정. 16881은기존v39 QA대기이며 다음제품전달/QA순서를보존했다.
 
 - 사용자 승인으로 통합release c240548의 Lab1.0.5 Staging CodePush를 완료했다. Yarn/Pods설치와54tests·버전검사·양OS번들/업로드 성공, 전체타입기존5오류는유지. iOS/Androidv39 활성100%·대상1.0.5·소스SHA read-back확인, v38활성유지. 원래QA브랜치clean복귀·제품수정/외부쓰기없음, 실제기기수신·기능QA는남음.

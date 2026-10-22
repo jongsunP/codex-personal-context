@@ -1,5 +1,14 @@
 # Dentlink 권한관리 — DL-16317
 
+## 조사 우선 전환 — 2026-10-22 치과 선택 후 외부 클릭 초기화
+
+- 사용자가 기존 Jira 작업을 잠시 정리/보류하고 Chrome 일반 DEV·시크릿 master의 치과 선택 초기화를 조사해달라고 요청했다. 기존 웹 feature/DL-16882의1파일(+5), Lab QA/DL-16907의2파일(+98/-43) 미커밋 수정을 그대로 보존했고 이 턴에서 제품 코드는 변경하지 않았다. Jira 상태/본문/댓글·Slack·제품커밋/PR/배포 변경 없음.
+- **실측:** 일반Chrome `https://dev-lab.dentlink.io/orders/create`, Leo Oh 관리자/Leo's lab에서 Leo Dentistry(id186) 선택 직후 환자 목록이 정상 표시되고 바깥 클릭 후 치과선택·환자영역이 초기화된다. Daniel Rudolph, D.D.S.도 같은 선택 해제를 확인했다. Joy's Office는 외부클릭 후 유지된다. 주문 제출/환자 생성은 하지 않았다.
+- **검색 응답:** 선택 직후 GET `/lab/employers/own/clients?officeName=Leo%20Dentistry`는 code0000/data에 id1391 `Leo Dentistry 2`만 있고 id186이 없다. Daniel 전체이름 검색은 code0000/data[]다. DevTools Preview로 직접 확인했으며 왜 BE 검색에서 빠지는지는 아직 조사하지 않았다. 무검색 목록에는 두 치과가 존재한다.
+- **master 대조:** 시크릿 `http://127.0.0.1:3005/orders/create`에서 같은계정 Leo Dentistry선택/외부클릭유지확인. 동일DEV API검색응답도 id1391만으로 같았다. port3005 PID35741 cwd는 dentlink-client/lab이며 해당root는 master8772d688/origin동일·clean이다. 따라서 데이터차이만으로 DEV/master의동작차이를설명할수없다.
+- **확인된 FE 메커니즘:** ComboboxDropdown 선택시 onChange(id)+onSearchChange(label)로 재검색→options교체→선택ID가없으면selectedLabel=''→blur에서keyword와다르므로onChange(undefined). 이 검색/blur판정은master에도있다. PR4692/f9a45fe02 DLDS통합의 DropdownPrimitive.close(110-120행)가 option선택후trigger input으로focus를복귀시키면서 응답후바깥클릭의추가blur에서잠재된선택초기화가드러난다. 실측API/포커스/선택유지대조와코드흐름이일치한다. permission권한차단/이번미배포QA5줄수정의원인은아니다.
+- **영향/다음 방향:** 검색응답에서선택ID가빠지는공통Combobox사용처에같은가능성이있다. 선택한ID/label을현재검색options와독립해유지하고명시적삭제·실제입력수정·외부value변경을구분하는수정이필요하다. 공통focus복귀/accessibility를일괄되돌리거나병원명하드코딩은피한다. 이번요청은조사까지이므로새제품수정은안했으며사용자후속지시에따라기존QA와별개로수정/비례검증한다. BE검색누락은부수확인사항이고 FE보완을전부그답변까지보류할필요는없다.
+
 ## 최신 작업 — 2026-10-22 미완료 QA 코드 보완 (로컬, 미배포)
 
 - **승인 범위:** DL-16317 하위 Frankie 담당 미완료 카드의 처리 가능성을 확인한 뒤 사용자가 “QA나 실기기 확인 등이 아닌 너가 할 수 있는 것 진행”을 요청했다. FE 코드·기존 자동검증까지만 진행했고 제품 커밋/푸시/PR/병합/배포와 Jira/Slack 쓰기는 하지 않았다. 앞선 v39 배포 완료와 이번 새 로컬 수정은 별개다.
