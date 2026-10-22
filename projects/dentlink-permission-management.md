@@ -1,5 +1,16 @@
 # Dentlink 권한관리 — DL-16317
 
+## 최신 작업 — 2026-10-22 미완료 QA 코드 보완 (로컬, 미배포)
+
+- **승인 범위:** DL-16317 하위 Frankie 담당 미완료 카드의 처리 가능성을 확인한 뒤 사용자가 “QA나 실기기 확인 등이 아닌 너가 할 수 있는 것 진행”을 요청했다. FE 코드·기존 자동검증까지만 진행했고 제품 커밋/푸시/PR/병합/배포와 Jira/Slack 쓰기는 하지 않았다. 앞선 v39 배포 완료와 이번 새 로컬 수정은 별개다.
+- **Jira 확인:** 직접 하위52개 중 Frankie 담당19개, Done15개/미완료4개. DL-16881 READY FOR QA, DL-16882 CHECK REQUEST, DL-16904 TO DO, DL-16907 TO DO다. 네 카드 본문·댓글 전체16개(7/7/2/0)와16904 첨부를 확인했다. 기존16881은 cut-off 상세403/1018 대응이고16907의 타 기공소 LinkTalk 조회 경로와 구분한다.
+- **웹 DL-16882:** `/Users/parkjongsun/Repository/dentlink-client-permission`의 최신 `origin/release/v1.89.0@bdbe43fb1`에서 `feature/DL-16882`를 생성했다(upstream 없음). `lab/src/components/Order/OrderProfileForm/OrderProfileCreate.tsx` 한 파일 +5줄로 치과 변경/선택 해제 시 이전 치과의 초기 빈환자 상태를 해제한다. 빈 치과A→환자 있는B→신규환자→기존환자 복귀를 막던 상태 누수이며 최초 빈치과/URL patient 초기진입은 보존한다. Lab 전체 타입검사·파일ESLint·diff검사 통과, 실제 화면 QA 미실시다.
+- **웹 원인 경계:** 기존 무한로딩 수정 대상5파일과 OrderProfileForm 폴더는 release bdbe43fb1 / stage bd1c0153a / develop6f2177f9f 모두 동일하다. 따라서 DEV Git에 수정이 없다고 설명하지 않는다. 제보의 실제 DEV 배포 revision/환자 선택 불가 원인은 미확인이고 이번 상태 누수가 제보 원인이라고 확정하지 않는다.
+- **Lab DL-16907:** 최신 `origin/release/v1.0.5@c240548`에서 `/Users/parkjongsun/Repository/dentlink-lab-app`의 `QA/DL-16907` 생성(upstream 없음), 원래 QA/DL-16881 보존. `ChatDetailScreen.tsx`는 내 기공소 주문 확인 전 입력·읽음 POST·읽음 캐시 변경을 제한한다. 타 기공소 메시지 GET은 유지하며 `POST /lab/chats/read/{chatId}`는 보내지 않는다. 빠른 뒤로가기에서는 기존 주문 쿼리를 공유해 소속 확인 뒤 읽음 처리를 보존하고 비동기 응답 후 소속 변경도 확인한다. 기존 웹 getOrderAccess의 읽음 정책과 일치한다. 공통403 로그아웃 예외를 임의 확대하지 않았다. 실제 로그아웃 제보 API 응답/완전해결은 QA 미실시로 미확정이다.
+- **Lab DL-16904:** `MessageTemplate.tsx` 한 줄로 연속 템플릿 카드 상단0→기존 일반 메시지와 같은4px. 날짜/프로필 경계10px은 유지한다. 확정 Figma 수치를 확인했다는 뜻이 아니며 QA의 간격 추가 요구 범위에서 기존 값을 재사용했다. Office 동일 구현은 확인했지만 이번 Lab 카드 범위 밖이므로 변경하지 않았다.
+- **검증:** Lab 기존4suites/30tests(OrderDetailScreen, messageReply, appServiceIsolation, errorHandlers) 통과, 변경2파일ESLint·diff검사 통과. 전체 타입진단은 배포 전 로그와 byte 동일한 기존5개(Icon2/Tooltip1/order.priceType1/MessageText1), 신규0이다. 전체lint는 기존12844errors/1420warnings로 실패하므로 전체검사 통과로 쓰지 않는다. 독립 코드리뷰에서 이번 읽음 변경의 확정 회귀 없음. 새 테스트/파일/의존성/native/API모델/문구 변경 없음.
+- **현재 영향/다음:** 웹1파일·Lab2파일은 각 신규 로컬 브랜치에서 미커밋이며 release/스테이징/v39에 아직 없다. 다음 사용자 승인 범위에서 diff 재확인→제품 커밋/푸시/PR(웹 release1.89, Lab release1.0.5 QA)→사용자 병합/배포 후 QA 순서다. QA는16881의 v39 cut-off/로그인유지,16882의 실제DEV 및 치과해제/재선택,16907의 타기공소조회+로그인유지/정상채팅읽음,16904의 실제간격을 확인한다. 이번에는 사용자에게 반드시 물어야 할 새 BE 계약 질문은 없다. 원인 미확정인 실제 증상은 QA 결과/로그가 필요하다.
+
 ## 최신 전달 완료 — 2026-10-22 Lab 1.0.5 Staging v39
 
 - 사용자 명시승인에 따라 최신 `release/v1.0.5@c240548`(우리PR19+동료PR20)을 설치·검증하고 **기공소 iOS/Android Staging v39, 대상1.0.5**로 게시했다. read-back에서 양OS 활성/mandatory/rollout100 및 소스SHA 일치. 기존v38/1.0.4의활성상태는 유지하고 수동배포설정 변경은 없다.

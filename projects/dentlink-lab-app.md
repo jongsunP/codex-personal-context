@@ -1,5 +1,13 @@
 # Dentlink Lab App
 
+## 최신 로컬 보완 — 2026-10-22 DL-16907·DL-16904 (미커밋/미배포)
+
+- 사용자 요청으로 QA/실기기 확인을 제외한 코드 보완과 기존검증을 진행했다. 최신 release/v1.0.5 c240548에서 `QA/DL-16907`을 생성했고 원래 QA/DL-16881@cd46b7c는 보존했다. 현재 기본 checkout은 새 QA 브랜치이며 upstream 없음, 아래 v39 전달 후 원래branch복귀는 이전 상태다.
+- DL-16907: `src/features/chat/screens/ChatDetailScreen.tsx`에서 소속 확인 전 입력/읽음처리/낙관적읽음캐시를 막고 타기공소 링크톡 GET은 유지한다. 소속 확인은 현재 orderId와 lab.id/employerId 일치이며 기존 웹정책과 같다. 빠른 뒤로가기는 기존 ORDER_INFO query key의 진행중 조회를 공유하고 소속 확인 뒤 기존 read fallback을 수행한다. 조회 이후 auth소속이 바뀌면 후속 요청/읽음반영 중단. 공통fetcher 변경 없음. 실제 로그아웃 응답이 이POST인지는 미검증이다.
+- DL-16904: `src/features/chat/components/message/MessageTemplate.tsx` 한 줄, 그룹 안에서0px이던 간격을 기존 일반메시지4px로 맞췄다. 날짜/프로필10px 유지. 정확Figma수치/실기기시각QA는미확인, 기존값재사용 판단을 기록한다. Office 앱 변경 없음.
+- 검증: 기존4suites30tests 모두통과, 변경파일ESLint오류/경고0·diff검사통과. 전체tsc는 동일source의 배포전로그와 byte동일한기존5진단이고 신규0. 전체lint는 기존12844errors/1420warnings로실패. 독립리뷰확정회귀없음, 실제기기/서버QA는요청에따라생략. 신규파일/테스트수정/native/의존성/i18n/API모델변경없음.
+- **인계:** 현재2파일미커밋, 제품커밋/푸시/PR/배포·Jira/Slack변경없음. 이수정은 이미게시된Stagingv39에포함되지않는다. 다음승인시에각QA목적별제품커밋/PR을준비하고배포후타기공소조회전용/로그인유지·내기공소읽음/빠른뒤로가기·메시지간격을확인한다. 기존DL16881은v39전달완료·실기기QA대기. 상세4카드상태/웹보완은 [권한관리기록](dentlink-permission-management.md)최상단참조.
+
 ## 전달 완료 — 2026-10-22 Lab 1.0.5 Staging CodePush v39
 
 - **사용자 승인:** 최신 `release/v1.0.5`에서 필요한 설치·검증 후 기공소 앱1.0.5 대상으로 Staging CodePush하고 메모리·결과 브리핑까지 진행하라고 명시했다. 양OS 전달을 실행했으며 Slack 쓰기 금지는 유지했다.
