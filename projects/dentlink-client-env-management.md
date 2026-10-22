@@ -1,6 +1,17 @@
 # Dentlink 웹 환경변수 관리
 
-## 현재 상태 — 2026-10-20 STAGE 배포·로컬 Docker·전체 E2E 확인 완료
+## 현재 상태 — 2026-10-22 DEV env 적용 확인·로컬 수동 설정 안내 후 대기
+
+- 사용자 요청은 **DEV 배포 결과와 필요한 조치의 읽기 전용 조사**였다. 운영서버는 아직 배포하지 않았다는 사용자 설명에 따라 조사 대상에서 제외했다. 이번 세션에서 제품 코드·GitHub 설정·env·배포·Notion·Jira는 변경하지 않았고, 테스트도 새로 실행하지 않았다. 이후 사용자가 아래 결론을 확인하고 메모리 저장·대기를 요청했다.
+- 최신 조회한 `origin/develop` 및 10월 22일 DEV 배포 SHA는 `6f2177f9f8078022bc5d64472bf08650aad6930f`다. Admin·Clinic·Lab 모두 서비스별 DEV Environment → Variables/명시된 Secrets → `scripts/build-env.js` → BuildKit `web_config` → Next 빌드 경로가 적용됐다. 실제 env는 Git 추적에서 빠졌고 빈 `.env.example` 4개만 남는다. 이번 조사에서 추가 env 공급 연결 수정이 필요한 결함은 발견하지 못했다.
+- GitHub Actions의 **설정 준비·Docker 빌드·ECS 배포 단계는 3서비스 모두 성공**했다. [Admin run39697192917](https://github.com/Innvoaid/dentlink-client/actions/runs/39697192917)과 [Lab run39697192923](https://github.com/Innvoaid/dentlink-client/actions/runs/39697192923)은 workflow 전체 성공이다. [Clinic run39697192986](https://github.com/Innvoaid/dentlink-client/actions/runs/39697192986)은 배포 job119557346329와 새 BUILD_ID 일치 확인까지 성공했지만 후속 E2E job119561364744가 실패하여 workflow 전체가 failure다. 배포 실패와 혼동하지 않는다.
+- 조사 시 `dev-portal.dentlink.io`, `dev-admin.dentlink.io`, `dev-lab.dentlink.io`가 모두 HTTP200이었다. BUILD_ID는 순서대로 `O11F95GBC3iFFg0rrBVxg`, `rBm3wvtE2TCpZcGTfyHUX`, `k_qM4qFZfEIf_5b5n-NRf`다. DEV 3개 배포 workflow는 `wait-for-service-stability: false`이며, Admin·Lab의 정확한 실행 버전과 배포 이미지 일치·ECS 안정화는 이번 조사에서 별도로 증명하지 않았다. 접속 성공을 전체 기능 QA 완료로 표현하지 않는다.
+- **DEV E2E는 별도 후속 확인 대상:** artifact12392009414의 값 없는 판정·위치·오류 종류만 제한 추출했다. 전체109개 중 97통과/2실패/0flaky/5미실행/기존 허용제외5, 전역오류0, source_unchanged:true, gate_passed:false다. `instasmile.spec.ts:36`과 `step4-ui-state.spec.ts:56`이 모두 `order-step2-product.ts:97`에서 `Insta Smile Vision` 카테고리 버튼 표시를 기다리다 3시도씩 시간 초과했다. 키 누락/빌드 준비 실패가 관찰된 것은 아니며, DEV 상품 설정·권한·UI와 테스트 기대의 차이는 아직 확정하지 않았다. 실패를 임의 제외하거나 수정·재실행하지 않았다. 10월 20일 STAGE 전체 성공은 당시 별도 환경/버전 증거로 보존한다.
+- **사용자가 확인한 로컬 운영:** 각자 최신 서비스별 `.env.example`의 **키 목록**과 자기 `.env.development`를 비교해 필요한 DEV 값을 사람이 직접 맞춘다. example은 값이 없는 양식이다. 기존 값이 맞으면 재생성·추가 도구 설치·전체 재설정은 필요 없고, 값을 수정하면 로컬 서버를 재시작한다. 개인 `.env.local`이 있으면 우선 적용될 수 있으므로 사람이 함께 확인한다. GitHub Secrets 다운로드·에이전트의 로컬 동기화는 하지 않는다.
+- `/Users/parkjongsun/Repository/dentlink-client-env-management`에는 서비스별 `.env.development` 3개와 E2E development/staging 파일이 존재함만 확인했다. 실제 값·키 내용은 열지 않았으므로 현재 값의 최신성/누락 없음은 보증하지 않는다. 다른 팀원의 PC 설정을 확인한 것도 아니다. 제품 worktree는 `feature/DL-16821-stage-e2e@460a9c0d5` clean으로 유지했다.
+- **다음 시작점:** 사용자 요청 전까지 추가 조사·수정·재배포·자동 모니터링 없이 대기한다. 재개 시 요청한 범위에서 DEV ISV E2E 원인을 별도로 확인하거나 이후 운영 배포 결과를 확인한다. 실제 env 값과 로컬 준비는 계속 사람이 관리한다. 이전 스테이징 자율 실행 위임을 새로운 DEV/운영 작업 권한으로 재사용하지 않는다.
+
+## 이전 상태 — 2026-10-20 STAGE 배포·로컬 Docker·전체 E2E 확인 완료
 
 - **오늘 목표 완료:** Admin·Clinic·Lab 스테이징 배포와 로컬 합성 Docker 빌드·실행을 완료했다. 최종 전체 E2E run39414265695는 `gate_passed:true`, `staging_full_verified:true`, 104통과/0실패/0flaky/0미실행/기존 허용제외5(총109)다. DEV/운영 배포와 master 병합은 하지 않았다. 다음은 사용자 요청 시 이후 환경 배포·사람의 로컬 설정/QA 범위를 이어가며, 현재 남은 스테이징 실패나 대기 중 실행은 없다.
 
