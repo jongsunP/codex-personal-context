@@ -1,5 +1,12 @@
 # Dentlink 권한관리 — DL-16317
 
+## 치과 앱 후속 전달 완료·대기 — 2026-10-22 DL-16927 / Staging v339
+
+- Lab DL-16917과 같은 Android 파일명 URI 문제를 최신 Office develop에서도 확인하여 사용자 요청으로 동일 최소 수정(1파일+4/-1)을 적용했다. 권한·특정 화면에 국한되지 않으며 공통 다운로드 로직을 사용하는 Android 경로에 해당한다. 일반 파일명/확장자/중복 처리와 iOS/API/권한은 유지한다.
+- Office **feature/DL-16927@b2e29d3** 커밋·푸시, [PR332](https://github.com/Innvoaid/dentlink-app/pull/332) 생성 후 사용자 별도 병합 승인에 따라 **develop@1f89d867861ed77eb6fca48a71e0d99f5999dca4**로 15:06:20 KST 스쿼시 병합 완료. 기존 권한 작업과 동료 비밀번호 찾기 PR330 보존. 50 tests·파일명/URI·버전·diff 검사 통과, 기존 타입18진단·파일lint1error/29warnings에서 신규진단0.
+- 통합 소스를 Office **Android·iOS Staging v339 / target2.2.4 / 활성·mandatory100%**로 전달하고 서버 metadata/source를 확인했다. 원본 worktree symlink 의존성으로 첫 번들 실패(업로드 전)는 격리 archive+immutable 설치로 해소, 자체 앱 소스맵343파일씩 원본과 일치한다. 웹/Lab/Production/Development 변경 없음. 세부 원인·복구·로그·해시는 [Office 기록](dentlink-app.md) 최신 절 참조.
+- 별도 치과 Jira **DL-16927 READY FOR QA**, 댓글 없이 상태 정리. 접수 시 기존 Lab DL-16917 및 부모 DL-16317이 이미 완료 상태인 것을 실조회했으며 그 상태를 되돌리지 않았다. Office 원본 checkout은 feature/DL-16927 clean·origin 동일, 기존 branch/worktree 보존. 개인 기록 commit/push 후 사용자 요청대로 대기하며, 다음은 실제 Android2.2.4/v339의 다운로드 QA 결과 접수다. 실제 기기 적용/QA는 아직 미수행이고 추가 BE 확인은 없다.
+
 ## DL-16917 Lab 스테이징 전달 완료 — 2026-10-22
 
 - 사용자 승인으로 [Lab PR23](https://github.com/Innvoaid/dentlink-lab-app/pull/23)을 **release/v1.0.5**에 14:41:09 KST 스쿼시 병합했다. 통합SHA **b175d5f3f79ca370e3fb2ee770d6cb8713661c79**, 기존 검증 QA head06e8dfd와 전체tree 동일·버전1.0.5 확인. native/의존성 변경 없음.

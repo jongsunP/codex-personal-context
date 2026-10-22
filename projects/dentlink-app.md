@@ -1,5 +1,17 @@
 # Dentlink Office App setup and current checkpoint
 
+## 최신 전달 완료 — 2026-10-22 DL-16927 Android 파일명 수정·Staging v339
+
+- **승인/범위:** Lab DL-16917의 `#` 파일명 다운로드 실패를 설명한 뒤 사용자가 치과 앱도 동일한지 확인하고 수정·CodePush를 요청했다. Office 최신 develop에서도 같은 `react-native-blob-util@0.22.0` 및 Android URI 경로 처리를 확인했다. 사용자가 PR 검토 후 병합·CodePush를 승인했고, 이후 정리·마무리·대기를 요청했다. 권한 정책이 아닌 Android 다운로드 구현 결함이다.
+- **코드/PR:** `/Users/parkjongsun/Repository/dentlink-app-permission`에서 최신 `origin/develop@4e0597bb4ed7d69a280321d433d959d5974694b1` 기준 **feature/DL-16927** 생성. `src/hooks/useFileDownload.ts` 1파일 +4/-1로 Android 저장 파일명에서 `#/%`를 `_`로 치환하고 원인 주석을 추가했다. 일반 파일명·확장자·중복 번호·iOS·API·권한·원본 URL은 유지한다. 커밋 **b2e29d324ce95ae27c61dfa9fee3b5abe6bb9134**, 원격 push 및 [PR332](https://github.com/Innvoaid/dentlink-app/pull/332) → develop 생성·자동화 후 base/diff 재확인.
+- **병합:** 15:06:20 KST에 사용자 승인으로 PR332를 스쿼시 병합했다. 통합 SHA **1f89d867861ed77eb6fca48a71e0d99f5999dca4**, 검증 feature head와 전체 tree 동일. 최신 권한 PR329/331과 동료 비밀번호 찾기 PR330을 모두 유지한다. 구 release/v2.2.4에는 이 작업들이 없어 배포 기준으로 사용하지 않았다. release/main 동기화·태그·스토어 배포는 수행하지 않았다.
+- **검증:** 기존 관련 3 suites / **50 tests PASS**, 실제 파일명 함수의 특수문자·일반명·한글·확장자·중복 번호·URI 경로 일치 검사 PASS. package/Android/Xcode **2.2.4** 버전 일치·diff 검사 PASS. 전체 타입 **기존18진단과 byte 동일**, 해당 파일 ESLint **기존1error/29warnings와 동일**, 신규 진단0이다. 독립 코드 검토 추가 문제0. 새 테스트/스토리/제품 파일·의존성·native 변경 없음. 실기기 QA는 미수행이다.
+- **배포 복구/환경:** 최초 원본 worktree 시도는 node_modules가 메인 checkout으로 연결되어 Metro가 `@babel/runtime/helpers/interopRequireDefault`를 찾지 못해 **업로드 전 실패**, 서버 v338 유지 확인. 기존 전달 방식대로 통합 commit의 임시 git archive에서 `yarn install --immutable` 성공(기존 peer 경고), 추적970파일이 원본 blob과 동일함을 검증했다. outputDir가 `CodePush`로 끝나야 하는 CLI 형식도 업로드 전 바로잡았다. 제품 Metro 설정·기존 node_modules 연결은 수정하지 않았다.
+- **CodePush:** 직접 CLI로 Slack 알림 없이 Office **Android·iOS Staging v339**, **대상2.2.4 / 활성 / mandatory / rollout100%** 게시·서버 read-back 완료. Android **15:08:51 KST**, iOS **15:09:41 KST**. description에 통합 SHA·DL-16927·PR332 기록. 양 OS Metro/Hermes 번들·업로드 성공, 소스맵의 자체 앱 JS/TS **343파일씩 원본과 일치**. 기존 `isv.mp4` 1.48MiB 경고는 기존 `--force` 경로로 처리했다. Android hash `c5a8b9976a8963974c74c22b98ea13360141f50b82daa2c8d8cf5e62a7c9cffb`, iOS hash `ff8eac2340d959141d259e5127a1892c504436b7d400994397baac593f043b05`.
+- **기존 OTA와 경계:** 배포 전 양 OS v338/2.2.4는 활성이나 설명이 없어 원본 SHA를 확정하지 않았다. 직전 v337의 develop472ecd9와 최신 통합 소스 사이 native/package/lock/entry 차이0이다. 기존 OTA 수동 비활성화·롤백·Production/Development/Lab/웹 배포는 하지 않았다. iOS 동작은 그대로이고 동일 통합 소스만 맞췄다.
+- **Jira/보존:** 중복 조회 후 별도 치과 카드 [DL-16927](https://innovaid.atlassian.net/browse/DL-16927)을 DL-16317 하위 Frankie 담당으로 생성, 정의만 본문에 작성하고 배포 후 **READY FOR QA** 상태로 전환했다. 부모/기존 카드 댓글·Slack 쓰기는 없다. PR 본문에 전달 상태를 반영했다. 원본 checkout은 feature/DL-16927@b2e29d3로 복귀·clean·origin 동일이며 기존 feature/worktree는 보존한다. 배포용 임시 archive/node_modules만 정리하고 로그·번들·maps·metadata는 `/tmp/dl16927-*`에 보존한다.
+- **남은 일/재개:** Android 2.2.4 설치본에서 v339 수신·재시작 후 특수문자 파일명 및 일반 파일명 다운로드를 QA한다. 업로드/활성 확인은 실제 기기 적용·다운로드 성공 확인과 다르다. 사용자 요청대로 개인 기록 commit/push 후 대기하며, QA 결과/새 지시 전 추가 조회·수정·배포·브랜치 정리는 하지 않는다.
+
 ## 최신 — 2026-10-20 DL-16859 앱 QA PR331 생성 완료
 
 - 사용자 후속 승인으로 `dentlink-app-permission`의 기존 `feature/DL-16317-qa@1fa59ed`를 push하고 [PR331](https://github.com/Innvoaid/dentlink-app/pull/331) OPEN/비Draft → `develop@43f7879`로 생성했다. 기존 PR329는 병합 완료 상태이며 새 PR에는 DL-16859의 1커밋·7파일만 있다. 로컬/원격 일치·clean을 확인했다.
