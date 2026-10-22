@@ -1,11 +1,11 @@
 # Dentlink 권한관리 — DL-16317
 
-## 추가 QA DL-16917 조사·재현 정보 확인 중 — 2026-10-22
+## 추가 QA DL-16917 처리·Lab PR23 완료 — 2026-10-22
 
-- 최신 카드 제목·본문 재조회 후 사용자 승인으로 기공소 앱의 LinkTalk → 디자인 컨펌 상세 → 파일 다운로드 경로를 조사했다. 카드 제목은 기공소 앱이며, 본문은 본인 담당 주문 이력에서는 다운로드 가능/남의 주문 LinkTalk 상세에서는 불가다. 발생 OS·주문번호·버튼 상태/오류 문구는 아직 없어 사용자에게 제보자 확인을 요청했다.
-- Lab 최신 release/v1.0.5 e4b6277에서 `/Users/parkjongsun/Repository/dentlink-lab-app`의 로컬 `QA/DL-16917`을 준비했다. 기존 브랜치/동료 소스 보존, clean·upstream 없음. 다운로드 버튼/공통 hook에는 담당자·Member·타 기공소 다운로드 차단 조건이 없다. 파일 URL/name 누락 시 무반응 종료 경로와 URL/OS 저장 실패 가능성은 있지만 현재 제보의 실제 원인은 미확정이다. 권한 완화나 공통 훅 변경을 임의 수행하지 않았다.
-- 관련 기존 테스트 3 suites/37 tests 통과, 독립 코드 검토 완료. 제품 수정·커밋·푸시·PR은 아직 없으며 병합/배포/CodePush도 하지 않았다. Jira16917만 `진행 중`으로 변경, 댓글·본문/Slack 쓰기 없음. 기존 웹 배포·Lab Staging v41은 유지한다.
-- 답변 후 해당 데이터/경로를 비교해 원인을 확정하고 수정 가능한 부분은 검증·커밋·푸시·PR까지 이어간다. 지금은 추가 BE 정책 문의가 필수라고 판단한 상황이 아니다. 상세 경로·재개 기준은 [Lab 기록](dentlink-lab-app.md) 최상단 참조.
+- 사용자가 추가한 Android·주문7000012231/승인2038·이미지 확대 다운로드 실패 정보를 기준으로 재개했다. 실제 승인 페이지의 파일명 `JB+Crown+Insert+#18.jpg`를 확인했고, Android 다운로드 라이브러리가 #를 file URI fragment로 해석한 뒤 원래 경로로 파일 존재를 검사하는 결함을 찾았다. 사용자 권한에 따른 다운로드 차단 문제가 아니며 추가 BE 정책 질의는 필요하지 않다.
+- Lab `/Users/parkjongsun/Repository/dentlink-lab-app`, **QA/DL-16917@06e8dfde967502a4830e9a93c018ce150702dc7c** → **release/v1.0.5** [PR23](https://github.com/Innvoaid/dentlink-lab-app/pull/23), 커밋·푸시·세션 연결 완료, clean·origin 동일. Android 전용 파일명 생성에 #/% 정규화와 원인 주석만 추가(1파일+4/-1). 일반명·확장자·중복번호·iOS/API/권한·동료 소스는 유지한다.
+- 기존 관련3suites/37tests·diff검사 통과, 독립 리뷰 추가결함0. 전체타입 기존11진단과 동일, 해당파일lint 기존1error/29warnings와 동일로 신규진단없음. 실제 Android 기기 다운로드 성공은 아직 재검증하지 않았으며 코드 수정/URI 경로 비교와 구분한다.
+- Jira16917 **Ready for Deploy** 상태만 변경했다. 댓글/본문·Slack 쓰기, 웹/Office 변경, 제품 병합·CodePush·배포는 하지 않았다. 조사 중 대기했던 OS/증상 질문은 답변 완료로 종결한다. 다음은 사용자 PR검토·병합·배포 후 해당 Android 다운로드 QA다. 자세한 원인/검증은 [Lab 기록](dentlink-lab-app.md) 최상단 참조.
 
 ## 전달 완료·QA 대기 — 2026-10-22 웹 Stage·Lab Staging v41
 
