@@ -1,6 +1,8 @@
 # Dentlink Lab App
 
-## DL-16917 전달 완료·QA 대기 — 2026-10-22 Staging v42
+## DL-16917 전달·사용자 확인 완료 — 2026-10-22 Staging v42
+
+- **사용자 확인/마감:** Staging v42 전달 후 사용자가 “기공소앱은 처리된 것 확인했음”이라고 수정 결과 확인을 직접 전달했다. 이 건의 사용자 확인까지 완료로 정리하며 추가 필수 조치는 없다. 이는 사용자의 확인이며 에이전트가 전체 기기 QA를 수행했다는 뜻은 아니다. 후속 치과 작업 접수 시 Jira DL-16917의 완료 상태도 확인했다. 아래 병합·전달 당시의 QA 대기 기록은 이 확인으로 갱신하며, 추가 요청/문제 제보 전 대기한다.
 
 - **승인/병합:** 사용자가 PR23 스쿼시 병합·Lab1.0.5 스테이징 CodePush·Jira Ready for QA·기록 정리를 명시 요청했다. PR23의 release/v1.0.5 대상/검증 head06e8dfd/1파일+4/-1, MERGEABLE·CLEAN·미해결 리뷰 없음 확인 후 14:41:09 KST squash 병합했다. 통합 release SHA는 **b175d5f3f79ca370e3fb2ee770d6cb8713661c79**이며, 검증한 QA head와 전체 tree가 동일하다.
 - **배포 전 검증:** package/Android/Xcode 버전1.0.5 일치, 이전 release e4b6277 대비 공통 다운로드 hook1파일만 변경, native/package/yarn.lock/entry 변경0. 기존 테스트37개·독립리뷰 결과를 유지하며 동일 tree에 불필요한 재설치/재검사를 하지 않았다. 전체 타입11진단·해당파일lint1error/29warnings의 기존 한계는 아래 구현 기록과 동일하다.

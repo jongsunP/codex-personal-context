@@ -10,7 +10,7 @@
 - **CodePush:** 직접 CLI로 Slack 알림 없이 Office **Android·iOS Staging v339**, **대상2.2.4 / 활성 / mandatory / rollout100%** 게시·서버 read-back 완료. Android **15:08:51 KST**, iOS **15:09:41 KST**. description에 통합 SHA·DL-16927·PR332 기록. 양 OS Metro/Hermes 번들·업로드 성공, 소스맵의 자체 앱 JS/TS **343파일씩 원본과 일치**. 기존 `isv.mp4` 1.48MiB 경고는 기존 `--force` 경로로 처리했다. Android hash `c5a8b9976a8963974c74c22b98ea13360141f50b82daa2c8d8cf5e62a7c9cffb`, iOS hash `ff8eac2340d959141d259e5127a1892c504436b7d400994397baac593f043b05`.
 - **기존 OTA와 경계:** 배포 전 양 OS v338/2.2.4는 활성이나 설명이 없어 원본 SHA를 확정하지 않았다. 직전 v337의 develop472ecd9와 최신 통합 소스 사이 native/package/lock/entry 차이0이다. 기존 OTA 수동 비활성화·롤백·Production/Development/Lab/웹 배포는 하지 않았다. iOS 동작은 그대로이고 동일 통합 소스만 맞췄다.
 - **Jira/보존:** 중복 조회 후 별도 치과 카드 [DL-16927](https://innovaid.atlassian.net/browse/DL-16927)을 DL-16317 하위 Frankie 담당으로 생성, 정의만 본문에 작성하고 배포 후 **READY FOR QA** 상태로 전환했다. 부모/기존 카드 댓글·Slack 쓰기는 없다. PR 본문에 전달 상태를 반영했다. 원본 checkout은 feature/DL-16927@b2e29d3로 복귀·clean·origin 동일이며 기존 feature/worktree는 보존한다. 배포용 임시 archive/node_modules만 정리하고 로그·번들·maps·metadata는 `/tmp/dl16927-*`에 보존한다.
-- **남은 일/재개:** Android 2.2.4 설치본에서 v339 수신·재시작 후 특수문자 파일명 및 일반 파일명 다운로드를 QA한다. 업로드/활성 확인은 실제 기기 적용·다운로드 성공 확인과 다르다. 사용자 요청대로 개인 기록 commit/push 후 대기하며, QA 결과/새 지시 전 추가 조회·수정·배포·브랜치 정리는 하지 않는다.
+- **사용자 마감 확인/재개:** 이후 사용자는 기공소 앱의 수정 결과를 확인했으며, 치과 앱은 별도로 실행 확인하지 않았지만 배포 기준 브랜치 병합과 동일 소스 CodePush가 완료됐다면 작업 완료로 봐도 된다는 판단을 전달했다. 이에 **치과 앱 개발·검증·develop 병합·Staging 전달 범위는 완료**로 마감한다. 치과 실기기 다운로드 QA를 수행한 것으로 기록하지 않으며, 추가 QA를 이번 세션의 필수 잔여 작업으로 강제하지 않는다. 현재 추가 필수 FE 조치는 없다. Jira 상태를 임의 Done으로 바꾸지 않고 개인 기록만 commit/push 후 대기한다. 실제 사용/후속 QA에서 문제가 전달되거나 새 지시가 있을 때만 재개하며, 그전에는 추가 조회·수정·배포·브랜치 정리를 하지 않는다.
 
 ## 최신 — 2026-10-20 DL-16859 앱 QA PR331 생성 완료
 
