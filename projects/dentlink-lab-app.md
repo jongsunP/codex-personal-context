@@ -1,5 +1,16 @@
 # Dentlink Lab App
 
+## DL-16917 조사·재현 정보 확인 중 — 2026-10-22
+
+- **요청:** 사용자가 기공소 앱 LinkTalk → 디자인 컨펌 상세의 파일 다운로드 불가를 조사하고 확정 수정은 검증·커밋·푸시·PR까지 진행하도록 승인했다. 이번 승인은 병합·배포·CodePush를 포함하지 않는다.
+- **카드:** DL-16917 최신 제목은 `[QA 기공소 앱] 링크톡 내 디자인 컨펌 승인 내 있는 파일 다운로드 불가`, 본문은 “내가 지정 의사인 주문의 디자인 컨펌 이력에서는 다운로드 가능하나, 남의 주문의 링크톡 내 디자인 컨펌 상세 화면에서의 다운로드 불가”다. 제목은 Lab이지만 본문의 의사/남의 주문 표현만으로 타 기공소 정책을 단정하지 않는다. OS·주문번호·버튼 상태/오류 정보와 첨부는 없다. 상태만 `진행 중`으로 변경했으며 댓글·본문은 쓰지 않았다.
+- **작업 위치:** `/Users/parkjongsun/Repository/dentlink-lab-app`을 pull/fetch하고 최신 `origin/release/v1.0.5@e4b6277018e237d7ef981eba6266a7f01749866a`에서 문서화된 QA 규칙의 `QA/DL-16917`을 생성했다. 로컬 전용, upstream 없음, clean이며 제품 코드 수정·커밋·푸시·PR은 아직 없다. 기존 QA/DL-16907·QA/DL-16881 및 동료 작업을 보존했다.
+- **확정 코드 경로:** MessageTemplate은 `/lab/orders/{orderId}/approvals/recently?type=DESIGN`으로 approvalId를 얻고 DesignConfirmationScreen에 진입한다. useOrderConfirm은 `/lab/orders/{orderId}/approvals/{approvalId}/siblings`의 그룹 내 최신 승인 files를 표시한다. MediaPreviewModal 다운로드 버튼과 useFileDownload에는 담당 의사·Member·Editor·타 기공소에 따른 다운로드 제한이 없다. 실제 파일 저장은 받은 URL에 직접 GET하며, 별도 권한 검증 API를 호출하지 않는다. 따라서 권한 가드를 제거할 근거는 없다.
+- **이력 경로 대조:** 앱 WebView 경로 확인에 필요한 범위만 웹 origin/release/v1.89.0의 OrderDetailBoxPendingApproval을 읽었다. 일반 DESIGN/PLANNING 이력은 NAVIGATION → DesignConfirmationScreen으로 LinkTalk와 같은 siblings 조회·다운로드를 사용한다. DESIGN+AUTO만 OPEN_MEDIA_PREVIEW로 주문 응답 currentApproval.files/url을 직접 전달한다. 웹 수정·checkout·fetch는 하지 않았다.
+- **미확정 후보:** file URL/name이 없으면 useFileDownload가 해당 파일을 제외하고 조용히 종료한다. URL 요청 실패/만료·OS 저장/공유 실패도 가능하나 실제 해당 응답·증상은 확보하지 않았다. 일반 승인 이력은 동일 네이티브 경로이므로 경로별 권한 제한보다 실패 주문/승인/파일 응답 비교가 필요하다. 기존 uploaderServiceType 필터나 공통 다운로드 훅을 가설만으로 변경하지 않는다.
+- **검증:** 기존 media·appServiceIsolation·OrderDetailScreen 테스트 3 suites/37 tests 통과. 실제 파일 다운로드 재현/실기기 QA 또는 원인 확정 증거가 아니다. 독립 코드 조사에서도 현재 제보와 직접 연결할 확정 FE 결함은 찾지 못했다. 새 테스트/스토리/기타 제품 파일은 만들지 않았다.
+- **재개점:** 사용자에게 제보자의 발생 OS(iOS/Android), 주문번호, 버튼 없음·무반응·오류 문구를 요청했다. 답변 후 동일 주문/승인의 이력 경로와 LinkTalk의 files 및 파일 GET 결과를 비교하고 확정 원인만 수정한다. 현재 BE 정책 문의가 필수라고 결론낸 것은 아니다. 수정 가능한 부분이 확정되면 기존 승인대로 검증·커밋·푸시·release/v1.0.5 PR까지 진행한다. 근거 없는 수정/빈 PR, 임의 병합·재배포는 하지 않는다. 기존 Staging v41 유지.
+
 ## 전달 완료 — 2026-10-22 PR21 스쿼시 병합·1.0.5 Staging v41
 
 - **승인:** 사용자가 메시지 간격4px이 맞다고 확인했고 추가 수정 없이 PR 병합·스테이징 CodePush·Jira 상태 정리·마감을 요청했다. feature 병합 방식은 스쿼시로 명시했다. 4px은 이제 사용자 확인된 값이며 이전의 라이브 코드 수치 미확인과 구분한다. Office 앱 변경/배포와 Slack 쓰기는 없다.
