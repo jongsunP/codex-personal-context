@@ -1,5 +1,15 @@
 # Dentlink Office App setup and current checkpoint
 
+## 최신 전달 완료 — 2026-10-22 DL-16929 템플릿 메시지 간격·Staging v340
+
+- **승인/원인:** 사용자가 Lab DL-16904와 같은 문제가 Office에도 있는지 코드 확인을 요청했고, 최신 develop에서도 연속 템플릿의 상단 간격이0px인 것을 확인했다. 이어 수정·검증·커밋·푸시·PR병합·CodePush·별도 Jira 카드 생성을 명시 승인했다. 기존 권한관리 전달 흐름대로 develop 통합 후2.2.4 Staging에 전달하며, 이번 건도 권한 정책과 별개인 기존 표시 문제다.
+- **코드:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 최신 `origin/develop@1f89d867861ed77eb6fca48a71e0d99f5999dca4`에서 **feature/DL-16929** 생성. `src/features/chat/components/message/MessageTemplate.tsx:483`의 기본 margin-top만0→4px(1파일+1/-1), 날짜 경계/프로필10px·일반메시지·버튼/API/권한 유지. 별도조기반환 LAB_DIRECTOR_PROFILE은 변경대상 아님. native/package/lock/env/의존성 변경0, 신규 제품/테스트/스토리 파일0.
+- **검증:** 변경파일 ESLint 전후오류0/경고0, 기존 MessageTemplate·MessageActions **2 suites/19 tests PASS**, diff검사 및 package/Android/Xcode2.2.4 버전일치 PASS. 독립 검토에서 Lab확정수정과동일·상위6px/일반4px중복없음·추가결함없음. 이번 스타일1줄변경에 전체타입/전체테스트·네이티브빌드·실기기시각QA는 실행하지 않았다.
+- **Git/PR:** 커밋 **e4fb1aca264e14987acac8f1752d52ad9ed54e68** `fix: 치과 앱 연속 템플릿 메시지 간격 보완`, push·[PR333](https://github.com/Innvoaid/dentlink-app/pull/333) 생성·세션연결. 자동화 후 base develop/head/1파일 diff와checks확인; CodeRabbit은 develop대상제외로 skipped, 강제실행없음. 16:28:14 KST **develop@7e6663be17fb4bd7aed62bc2824e6bd362208dc6**로 스쿼시병합. 검증head와통합tree동일, 이전다운로드PR332/권한/동료소스보존.
+- **배포:** 병합SHA git archive의 격리소스에서 `yarn install --immutable` 성공(기존peer경고), 추적970파일원본blob일치·2.2.4재확인. 직접CLI로 Slack알림없이 양OS Metro/Hermes번들·Staging게시1회씩성공. Android **v340/16:29:57 KST**, iOS **v340/16:30:38 KST**, **target2.2.4/활성/mandatory/rollout100%** 및 description의source7e6663b/PR333을서버재조회로확인. 각OS map의 `src/` JS/TS341파일이배포원본과일치. 기존isv.mp4 1.48MiB경고는기존force경로로처리.
+- **증거/경계:** Android packageHash `7b50fabe944b5ce5f62b6363a4df3b13bdeaa7a27de9f7457859825ec68bc589`, iOS `34264d45b0e2e1e1f6e66ee8d403644713f0d7f7139270f99f297da14caea17f`. 직전양OS Stagingv339/2.2.4 source1f89d86확인→1줄JS스타일만추가. Production/Development/Lab/웹·release/main동기화·태그·스토어변경없음. 업로드성공은실제기기수신/화면QA성공과구분한다.
+- **Jira/마감:** 중복확인후 DL-16317 하위 Frankie 담당 **[DL-16929](https://innovaid.atlassian.net/browse/DL-16929)** 생성, 본문에문제/범위/기대결과/원본Lab카드작성. 배포후 **READY FOR QA**로상태변경했고 부모/기존카드댓글·Slack쓰기는없다. feature/DL-16929는원격동일·clean, 이전branch/worktree보존. 배포임시소스/node_modules삭제, `/tmp/dl16929-*` 로그·번들·maps·metadata보존. 요청된개발·통합·전달완료, 다음은필요시실제2.2.4/v340의연속템플릿4px QA결과접수이며 추가지시전대기한다.
+
 ## 최신 전달 완료 — 2026-10-22 DL-16927 Android 파일명 수정·Staging v339
 
 - **승인/범위:** Lab DL-16917의 `#` 파일명 다운로드 실패를 설명한 뒤 사용자가 치과 앱도 동일한지 확인하고 수정·CodePush를 요청했다. Office 최신 develop에서도 같은 `react-native-blob-util@0.22.0` 및 Android URI 경로 처리를 확인했다. 사용자가 PR 검토 후 병합·CodePush를 승인했고, 이후 정리·마무리·대기를 요청했다. 권한 정책이 아닌 Android 다운로드 구현 결함이다.

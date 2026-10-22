@@ -1,5 +1,12 @@
 # Dentlink 권한관리 — DL-16317
 
+## 치과 앱 추가 전달 완료 — 2026-10-22 DL-16929 / Staging v340
+
+- 사용자가 Lab DL-16904와동일한Office간격문제의코드확인후수정·검증·커밋푸시·PR병합·CodePush·별도Jira생성을명시승인했다. Office최신develop의연속템플릿0px을4px로1줄보완했고날짜/프로필10px과권한/API/버튼은유지했다. 기존권한변경으로생긴문제가아닌공통메시지표시결함이다.
+- **feature/DL-16929@e4fb1ac** → [Office PR333](https://github.com/Innvoaid/dentlink-app/pull/333) → **develop@7e6663be17fb4bd7aed62bc2824e6bd362208dc6** 스쿼시병합완료. 기존19tests·변경lint오류/경고0·버전2.2.4·독립검토통과, native/의존성변경0. 새제품파일/테스트추가없음.
+- 통합소스를 **Android·iOS Staging v340 / 대상2.2.4 / 활성·mandatory100%**로게시하고서버metadata/source·bundle map의src341파일씩일치확인. Lab/웹/DEV/Production·태그·스토어배포는변경하지않았다. 세부근거는 [Office기록](dentlink-app.md) 최상단참조.
+- DL-16317 하위별도카드 **[DL-16929](https://innovaid.atlassian.net/browse/DL-16929)** 생성·Frankie담당·배포후 **READY FOR QA**, 원본DL-16904와DL-16916의Done은유지. 부모/기존카드댓글과Slack쓰기는없다. 요청된작업은완료이며실기기시각QA는미수행으로구분한다. 원본checkout/브랜치보존·clean, 개인기록commit/push후추가지시/QA결과전대기한다.
+
 ## 최종 마감·대기 — 2026-10-22 오늘 Jira 알림 확인 및 DL-16916 Done 유지
 
 - **오늘 알림 확인:** Jira 직접 알림의 오늘 카드 7건과 관련 댓글만 확인했다. DL-16927/16917/16904/16882/16907/16881은 조회 당시 **완료**, DL-16916은 **READY FOR QA**였다. 이후 사용자가 DL-16916을 직접 Done으로 변경했다고 알렸으며 **Done 유지**를 명시했다. 오늘 확인한 범위에 새 미처리 개발 요청은 없었다. 모든 프로젝트·과거 알림의 전수 완료로 확대하지 않는다.
