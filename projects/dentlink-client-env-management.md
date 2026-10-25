@@ -1,6 +1,25 @@
 # Dentlink 웹 환경변수 관리
 
-## 현재 상태 — 2026-10-22 DEV env 적용 확인·로컬 수동 설정 안내 후 대기
+## 현재 상태 — 2026-10-25 운영 반영 확인·env 업무 마감 및 브랜치 정리 완료
+
+- **업무 마감:** 메인세션이 전달한 사용자 승인에 따라 1단계 읽기 전용 배포/정리 감사 후 지정된 2단계만 수행했다. env 전환 코드는 DEV·STAGE를 거쳐 v1.89.0 운영까지 반영됐다. 새 제품 수정·PR/병합·재배포·쓰기 QA/E2E·실제 env/GitHub 값 변경은 하지 않았다. 담당 Jira DL-16821은 완료 처리했고, 별도 미해결은 아래에 분리한다. 정리 후 이 세션을 보관하도록 지시받았으며 이후 자동 실행은 하지 않는다.
+- **운영 포함 근거:** `prd/clinic/v1.89.0`, `prd/lab/v1.89.0`, `prd/admin/v1.89.0`과 `origin/release/v1.89.0`은 모두 `a5e465561b953270b2925b2082845ba753f0572f`다. PR4713의 병합 커밋 `2fb2fdc50d6b124b02cd3b3c7224200d8fc549ef`, PR4740의 `14f6d3c8041adb0cf52bc8ce272db50c423355ad`, PR4743의 `460a9c0d5be793c49dbfe44a9adc142c6fb98235`가 운영 이력에 포함된다. 원본 feature/DL-16821의 `aae83bcc3810a47bf1a77e6ce1671950b9e4c11e` 자체는 운영 조상이 아니므로 병합 커밋과 구분한다. env 공급·Docker·빈 example·접근 지침 핵심 파일의 최종 포함을 확인했고, 운영 Git의 env 파일은 빈 example4개뿐이다.
+- **배포 확인:** [Clinic run40180395283](https://github.com/Innvoaid/dentlink-client/actions/runs/40180395283), [Lab run40180309291](https://github.com/Innvoaid/dentlink-client/actions/runs/40180309291), [Admin run40180269225](https://github.com/Innvoaid/dentlink-client/actions/runs/40180269225) 모두 completed/success이며 설정 준비·Docker 빌드·ECS 배포가 통과했다. Clinic은 서울·오하이오 안정화와 PRIMARY task definition 일치에 의한 자동 롤백 부재 검사도 통과했다. 완료 시각은 KST Clinic18:51, Lab18:33, Admin18:33이다. Admin·Lab은 `wait-for-service-stability:false`라 동일 수준의 안정화/정확한 이미지 일치를 증명한 것은 아니다.
+- **공개 읽기 확인 및 한계:** `portal.dentlink.io`, `admin.dentlink.io`, `lab.dentlink.io` 모두 HTTP200. BUILD_ID는 순서대로 `fpkIqbAmqMsWSfMYgj2HN`, `KYTlpHvaAC62Z5IYZ6ChW`, `fMIO_uYVhdY3Pjhu6Vmkt`다. Admin·Lab 정적 파일 각3개 HEAD200도 확인했다. 운영 workflow에는 E2E job이 없으며 새 운영 E2E·로그인 이후 기능 QA를 실행하지 않았다. HTTP 응답과 배포 workflow 성공을 전체 기능 QA나 네이티브 앱 배포 성공으로 확대하지 않는다.
+- **Jira:** DL-16821 `[FE] 환경변수 분리 및 수동 관리 방식 적용`에 댓글 `44628`로 운영 반영·확인 한계·로컬 수동 운영·별도 후속을 기록하고 `완료`(transition5/status10017)로 이동했다. 응답의 저장 본문과 최종 상태를 확인했다. 본문·담당자·상위 댓글은 변경하지 않았다. 기존 완료 DL-16819/DL-16871과 Notion은 유지한다.
+- **정리한 브랜치:** 실행 직전 정확한 로컬/원격 SHA, 열린 PR0, 체크아웃된 worktree 없음과 관련 cwd 사용 프로세스 없음을 재확인했다. `feature/DL-16821@aae83bcc3810a47bf1a77e6ce1671950b9e4c11e` 및 `feature/DL-16821-stage-fix@14f6d3c8041adb0cf52bc8ce272db50c423355ad`만 로컬·원격에서 삭제했다. 원격은 예상 SHA lease와 atomic push로 두 참조만 삭제했고 일치하는 stale remote-tracking 참조도 정리했다. 보호 브랜치·배포 태그·다른 작업의 브랜치는 변경하지 않았다.
+- **원본 복구 자료:** `/Users/parkjongsun/.local/share/codex-closeout/20261025-dentlink-env-DL-16821/`에 `env-branches.bundle`과 `manifest.json`을 보존했다. bundle은 독립 복원 가능한 99,812,353바이트이며 SHA256 `836eb81477cb3096b24394764d4a803fcae48fecdc5fa45b792428113cd46a17`이다. `git bundle verify` → 임시 bare 저장소 복원 → 두 원본 SHA 일치 → `git fsck --full --no-reflogs`를 통과한 뒤 위 브랜치를 삭제했다. manifest에 원본 refs/SHA·검증·삭제 결과·복원 명령을 기록했다. 임시 검증/참조 정리용 bare 저장소는 제거했다. 폴더0700·bundle/manifest0600을 확인했으며, 과거 Git 이력을 포함하므로 개인 제한 권한 경로에서 보존하고 문서 저장소에 업로드하지 않는다.
+- **보존한 로컬:** `/Users/parkjongsun/Repository/dentlink-client-env-management`와 현재 `feature/DL-16821-stage-e2e@460a9c0d5be793c49dbfe44a9adc142c6fb98235`의 로컬·원격을 보존했다. ignored 실제 env5개(Admin/Clinic/Lab development, E2E development/staging)가 있어 clean이라는 이유로 worktree를 삭제하지 않았다. 파일 내용을 읽지 않고 삭제 전후 크기·mtime·inode·권한 메타데이터 불변을 확인했다. Colima `dentlink-env-check`는 Stopped이며 설치·이미지·캐시·기존 검증 자료와 사람의 env 백업을 보존했다.
+
+### 별도 후속과 다음 시작점
+
+- **DEV ISV E2E 실패2건/후속 미실행5건:** 10월22일 관찰된 카테고리 대기 실패는 이번 운영 성공으로 해소 처리하지 않는다. 새 실행/수정 없이 보존하며 별도 요청 시 DEV 상품 설정·권한·UI와 테스트 기대를 대조한다.
+- **별도 보안 과제:** Google 브라우저 키의 실제 발급 프로젝트/공급자 제한 확인, Eximbay 서버 서명·키 교체, 필요한 과거 Git 이력의 값 처리 등은 env 보관 위치 이전과 구분한다. 이번 Jira 완료나 운영 성공은 이 항목들의 해결을 뜻하지 않는다.
+- **사람의 로컬 운영:** 팀원은 `.env.example` 키 목록과 자신의 `.env.development`를 비교해 필요한 DEV 값만 직접 보완한다. `.env.local` 우선값을 확인하고 값을 바꾸면 로컬 서버를 재시작한다. 각 팀원의 준비 완료나 실제 값의 최신성을 에이전트가 확인한 것은 아니다.
+- **release → master 동기화 미실행:** 조사 시 `origin/master`는 `8772d68825cac6e23792d86a715153a67dc71078`로 운영 release/태그와 다르다. 본 세션은 보호 브랜치·태그를 변경하지 않았고 동기화는 메인에서 별도 관리한다.
+- 사용자 재개 전 추가 조사·수정·배포·자동 모니터링을 하지 않는다. 재개 시 담당 체크포인트와 실제 Git/Jira 상태를 갱신하고 필요한 후속만 다룬다. 개인컨텍스트 공용 PROJECTS/MEMORY_CHANGELOG/dentlink-fe와 메인세션 메시지는 이번 정리에서 변경·전송하지 않았다.
+
+## 이전 상태 — 2026-10-22 DEV env 적용 확인·로컬 수동 설정 안내 후 대기
 
 - 사용자 요청은 **DEV 배포 결과와 필요한 조치의 읽기 전용 조사**였다. 운영서버는 아직 배포하지 않았다는 사용자 설명에 따라 조사 대상에서 제외했다. 이번 세션에서 제품 코드·GitHub 설정·env·배포·Notion·Jira는 변경하지 않았고, 테스트도 새로 실행하지 않았다. 이후 사용자가 아래 결론을 확인하고 메모리 저장·대기를 요청했다.
 - 최신 조회한 `origin/develop` 및 10월 22일 DEV 배포 SHA는 `6f2177f9f8078022bc5d64472bf08650aad6930f`다. Admin·Clinic·Lab 모두 서비스별 DEV Environment → Variables/명시된 Secrets → `scripts/build-env.js` → BuildKit `web_config` → Next 빌드 경로가 적용됐다. 실제 env는 Git 추적에서 빠졌고 빈 `.env.example` 4개만 남는다. 이번 조사에서 추가 env 공급 연결 수정이 필요한 결함은 발견하지 못했다.
