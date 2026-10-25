@@ -1,6 +1,26 @@
 # DL-16796 Billing Statement 명칭 변경
 
-## 현재 상태 — 2026-10-20 개발 작업 완료·세션 종료
+## 현재 상태 — 2026-10-25 운영 배포 포함 확인·본인 브랜치 정리 완료
+
+- 메인 세션을 통해 전달된 사용자 승인으로 배포 후 정리를 한시 재개했다. 1단계는 읽기 전용 확인, 2단계는 지정 순번에서 본인 브랜치·담당 체크포인트만 정리했다. 추가 제품 구현·병합·배포·쓰기 QA/E2E는 하지 않았다. 개인 기록 commit/push 후 이 세션을 다시 보관한다.
+- 원격 운영 태그 `prd/clinic/v1.89.0`, `prd/lab/v1.89.0`, `prd/admin/v1.89.0`이 모두 `a5e465561b953270b2925b2082845ba753f0572f`를 가리킴을 직접 확인했다. 메인 세션에서 확인한 당일 성공 Actions는 Clinic `40180395283`, Lab `40180309291`, Admin `40180269225`이며 마지막 완료는 18:51 KST다. 이 세션은 해당 배포 SHA에 본인 변경이 포함됐는지를 별도로 검증했다.
+- [PR #4699](https://github.com/Innvoaid/dentlink-client/pull/4699)은 `MERGED → release/v1.89.0`, source `3aac1dff0005706e78015cb5f23f255712696911`, squash merge `a065b39e48afbeff4ef6b2e052ed2d82d6966f25`다. merge SHA가 운영 SHA의 조상임을 확인했다. source/merge의 stable patch-id는 `c767dec4f3deb8e1af6e6520608b62b303f600e7`로 동일하고, PR의 11파일·18개 추가 문구가 운영 커밋에 모두 유지된다. Admin 5파일은 source와 blob도 같고 Clinic 6파일은 후속 변경에도 해당 문구를 유지한다.
+- Jira 현재 상태: 담당 [DL-16796](https://innovaid.atlassian.net/browse/DL-16796), 상위 [DL-16795](https://innovaid.atlassian.net/browse/DL-16795), Mina 담당 QA [DL-16836](https://innovaid.atlassian.net/browse/DL-16836) 모두 완료다. 담당/QA 하위 댓글은 각각 0개, 상위 댓글은 22개 전체를 확인했다. 상위 44483에서 치과·Admin 프론트 완료 확인, 44492/44497/44498에서 이메일은 Consolidated Statement이고 View PDF는 FE 화면을 열므로 별도 백엔드 수정 불필요로 종결됐다. 이미 완료여서 Jira 댓글·본문·상태를 변경하지 않았다.
+- 상위 카드의 fixVersion `v1.89.0`은 조회 당시 `released=false`, releaseDate `2026-10-25`였다. 이 공통 Jira 버전 메타데이터는 본인 카드/브랜치 정리 범위에서 변경하지 않았으며 실제 운영 태그·배포 결과와 구분한다.
+- 삭제 전 본인 local/remote `feature/DL-16796`이 모두 source SHA와 정확히 일치하고, checkout한 worktree와 해당 branch를 head/base로 쓰는 열린 PR이 없음을 재확인했다. 아래 복구 bundle/manifest를 보존한 뒤 원격은 exact-SHA lease를 사용한 normal push로 삭제하고 로컬 브랜치도 삭제했다. 원격·로컬·remote-tracking ref의 부재를 확인했다.
+- 공유 checkout `/Users/parkjongsun/Repository/dentlink-client`는 clean `master@8772d68825cac6e23792d86a715153a67dc71078`로 보존했다. 다른 로컬/remote-tracking refs와 6개 checkout의 worktree 목록·HEAD는 전후 동일하다. 다른 5개 worktree·기존 백업·실제 env/인증 파일은 정리하지 않았다. 과거 `/tmp/dl-16796-pdf-validation`은 이미 없어 추가 로컬 삭제 대상이 없었다.
+- 원격 브랜치 삭제 때 저장소의 normal pre-push hook이 실행돼 3서비스 lint(기존 경고 있음), Admin DLOS guard 60/60·테스트 6건, shared coverage 검사를 통과했다. 이는 공유 master checkout의 삭제 push 검사이며 운영 SHA의 새 기능 QA로 해석하지 않는다. 제품 소스 변경·신규 제품 커밋은 없다.
+- 이 작업의 추가 개발·정리 항목은 없다. Jira QA 카드의 완료 상태와 실제 운영 실계정/앱 다운로드 검증, 앱 배포는 별개다. 이번에는 운영 화면을 통한 기능 QA나 앱 배포를 수행하지 않았다.
+
+### 복구 자료 — 이 기기의 Git 공용 디렉터리에 보존
+
+- 폴더: `/Users/parkjongsun/Repository/dentlink-client/.git/codex-closeout/DL-16796-20261025/`
+- `feature-DL-16796.bundle`와 `manifest.json`을 보존했다. manifest에는 삭제 전/후 SHA·refs·worktree·검증 결과와 복구 조건이 있다.
+- bundle은 10,001 bytes, SHA-256 `b472a91a91570e19a81c6b4692f52dbff3119633e1e8266d7025d63f7d30114f`다. `git bundle verify`와 `list-heads`로 원본 source/ref 보존을 확인했다.
+- 증분 bundle이므로 보존된 base commit `8772d68825cac6e23792d86a715153a67dc71078`이 필요하다. 복구 요청 시 해당 base 보유 여부와 bundle을 검증한 뒤 bundle의 `refs/heads/feature/DL-16796`을 같은 이름의 로컬 브랜치로 fetch한다. 원격 복원은 별도 요청 때만 수행한다.
+- 백업 파일 자체는 이 기기에 있고, 경로·hash·복구 조건은 이 Git-backed 개인 체크포인트에 기록한다. 공통 `PROJECTS.md`/`MEMORY_CHANGELOG.md`/`dentlink-fe.md` 종합은 메인 세션 담당이다.
+
+## 이전 상태 — 2026-10-20 개발 작업 완료·세션 종료
 
 - 사용자가 현재 작업을 완료 처리하기로 하고 내용 정리 후 세션 보관을 요청했다. 10/19의 QA 대기 상태를 종료하며, 이 세션에서 예정된 추가 작업은 없다. 개인 Git 기록을 commit/push한 뒤 세션을 보관한다.
 - 완료 결과: 개별 `Billing Statement → Invoice`, 통합 `Consolidated Billing Statement → Consolidated Statement`와 Clinic/Admin 버튼·PDF/ZIP 파일명·번호 라벨·안내 문구를 총 11파일에 반영했다. Jira 댓글의 Admin `Invoice 다운로드` 요청도 포함했다. `Commercial Invoice`와 발행·결제 구조, 금액·문서번호 값은 유지했다. 앱 네이티브 추가 수정은 소스 확인상 필요하지 않았다.
@@ -92,8 +112,8 @@
 
 ## 종료 후 재개 조건
 
-1. 2026-10-20 사용자 완료 결정으로 이 세션의 예정된 추가 작업은 없다. 추가 개발·조회·QA 실행·모니터링·배포·Jira 변경·메인세션 메시지를 자동으로 시작하지 않는다.
-2. 향후 QA 이슈나 변경 요청이 전달되면 개인 컨텍스트 pull → 이 문서 → 해당 제품 저장소와 실제 배포 기준·재현 조건을 확인하고 요청 범위에서 재개한다. 이미 병합한 구현이나 PR을 중복 생성하지 않는다.
+1. 2026-10-25 운영 포함 검증과 승인된 본인 브랜치 정리까지 완료했다. 이 세션의 예정된 추가 작업은 없으며 추가 개발·조회·QA 실행·모니터링·배포·Jira 변경·메인세션 메시지를 자동으로 시작하지 않는다.
+2. 향후 QA 이슈나 변경 요청이 전달되면 개인 컨텍스트 pull → 이 문서 → 해당 제품 저장소와 실제 배포 기준·재현 조건을 확인하고 요청 범위에서 재개한다. 원본 feature는 정리됐으므로 자동 복원하거나 기존 구현/PR을 중복 생성하지 않는다. 원본 복구가 필요하면 위 bundle 조건을 따른다.
 3. 관련 Clinic/Admin 화면, 개별/통합/Receipt 문서 및 다운로드 검증은 새 요청에 필요한 범위로 수행한다. 과거 합성 PDF 검증을 실계정·앱 QA 통과 근거로 확대하지 않는다.
 4. Jira 댓글은 남기지 않고 카드 상태는 사용자가 관리한다. 향후 명시적으로 요청된 Jira 업데이트는 담당 하위 DL-16796에 하며, 상위 댓글은 별도 명시 요청 때만 작성한다.
 
