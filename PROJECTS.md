@@ -18,11 +18,10 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- **2026-10-20 STAGE 배포·로컬 Docker·전체 E2E 확인 완료.** PR4713 사용자 병합 후 첫 배포 준비 단계의 pnpm 자동 캐시 오류를 PR4740/4741로 수정해 3서비스 배포를 완료했다. 후속 가입 E2E locator 오류는 PR4743/4744로 수정했다. 최종 release685eab699/stage602071d40, 현재 worktree는 `feature/DL-16821-stage-e2e@460a9c0d5` clean. 전체 E2E run39414265695는 104통과/0실패/0flaky/0미실행/기존 허용제외5, `staging_full_verified:true`다.
-- 사용자 위임 범위의 실패 수정→로컬 확인→PR 병합→STAGE 반영·전체 E2E는 완료했고, 최종 절차 대조 후 메모리·대기 요청을 받았다. 추가 env 코드 작업은 없으며 재개 전 새 실행/배포를 하지 않는다. DEV/운영은 추후 해당 코드 배포 시 확인, 로컬은 팀원 수동 준비/보완이다. 실제 env/GH 값은 계속 사람이 관리하며 에이전트는 값 없는 코드·합성 검증·허용된 CI 메타데이터만 다룬다. 관리 자동화/스킬/manifest/공유 분류 이력은 제거했고 Git에는 빈 example4개만 남는다. GitHub 이전 설정 Variables235/개별Secrets98, 이후 재조회·변경 없음.
-- [DL-16818](https://innovaid.atlassian.net/browse/DL-16818) → [웹 환경변수 관리 모음](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c) 아래 최종 운영 가이드1/이력3(총5페이지). DL-16819·DL-16871은 완료 이력, DL-16821은 구현/검증/전환 진행 카드이며 댓글44531에 이번 완료 결과를 기록했다. 본문/상태/상위 댓글은 유지. 이번 배포 수정은 운영 방식이 같아 문서를 다시 바꾸지 않았다.
-- 자동 캐시 오류/수정은 공식 액션으로 합성 재현했고 actionlint10·계약12·정상hook, 가입 locator 합성 브라우저2·E2E 회귀233을 통과했다. 사용자 승인 Colima/Docker로 3서비스 합성 amd64 빌드/실행·정적응답200·실제env파일 부재를 모두 확인했고 전용 VM은 종료했다. 이후 DEV/운영 배포·팀원 수동 설정/사용·복구와 Google 제한·Eximbay 서버서명/키 교체·과거 Git 이력은 별도 경계다. [개인 체크포인트](projects/dentlink-client-env-management.md).
-
+- **2026-10-25 운영 반영·업무 정리 완료, 세션 보관.** PR4713/4740/4743이 웹 v1.89.0에 포함됐고 3서비스 배포 성공·공개 접속을 확인했다. DL16821은 완료 처리했다.
+- 로컬·원격 완료 브랜치2개씩을 복구 검증 후 삭제했다. 실제 env5개가 있는 worktree와 `feature/DL-16821-stage-e2e`, Colima/캐시는 보존했다. 실제 값은 계속 사람이 관리한다.
+- 10/20 STAGE 전체 E2E 성공과 10/22 DEV ISV 실패2건, 이번 운영 배포 성공은 구분한다. 운영 기능 QA·팀원 로컬 준비·별도 키 보안 과제는 완료로 확대하지 않는다. 추가 실행은 새 지시 후 진행한다.
+- [개인 체크포인트](projects/dentlink-client-env-management.md) · [팀 운영 문서](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c)
 
 ### 사무실 의자 구매·헤드레스트 개선 조사
 
@@ -75,8 +74,9 @@ For detailed current state, read:
   안에서 작업하며 별도 통합 제품 저장소는 없다.
 - 신규 작업의 세션·폴더·worktree 선택은
   [SESSION_WORKFLOW.md의 업무 접수 기준](SESSION_WORKFLOW.md#new-work-intake-and-session-routing)을 따른다.
-- 현재 열린 기능 세션과 다른 기기의 첫 대화에서 읽을 체크포인트:
+- 기능별 보관/대기 상태와 다른 기기의 첫 대화에서 읽을 체크포인트:
   [projects/dentlink-fe.md](projects/dentlink-fe.md)의 **다른 기기에서 이어가기** 절.
+  2026-10-25 배포 후 4세션 마감·보관과 로컬15개/원격14개 정리, 공통 후속을 최상단에 기록했다.
   2026-10-16 로컬 브랜치 4개·worktree 1개·원격 브랜치 158개 정리 이력도 같은 문서에 보존한다.
   원격은 출시 완료154개와 사용자 확인 후 폐기한 frankieTemp 백업4개다.
   진행 중·공용·타인 항목과 대체 적용을 확인하지 못한 invoiceTemplete는 유지했다.
@@ -85,11 +85,9 @@ For detailed current state, read:
 
 ### Dentlink Billing Statement 명칭 변경 — DL-16796
 
-- 상위 DL-16795의 기존 개별/통합 문서 명칭 변경. Commercial Invoice와 발행·결제 구조는 유지한다.
-- 2026-10-15 최신 master 기준 `feature/DL-16796`에서 11파일 명칭 변경, normal commit/push와 합성 PDF8사례 검증 완료. 앱 최신 소스상 네이티브 수정은 불필요하다.
-- [PR #4699](https://github.com/Innvoaid/dentlink-client/pull/4699)은 2026-10-16 `release/v1.89.0`에 병합됐으며 10/20 재확인했다. 스테이징 배포는 10/19 사용자 보고 기준이고 실제 QA 통과·운영 배포 확인과 구분한다.
-- 2026-10-20 사용자가 작업 완료 처리·정리·세션 보관을 요청했다. Admin을 포함한 구현·검증 이력을 저장하고 종료하며 예정된 추가 작업은 없다. Jira 댓글은 남기지 않고 상태는 사용자가 관리한다. 후속 요청이 있을 때만 재개하며 브랜치 정리는 하지 않는다.
-- [개인 체크포인트](projects/dentlink-client-billing-statement.md)
+- 개별/통합 문서 명칭 변경이며 Commercial Invoice와 발행·결제 구조는 유지한다.
+- **2026-10-25 PR4699의 v1.89.0 운영 포함·11파일 변경 보존 확인.** 담당/상위/QA Jira는 이미 완료다. 복구 검증 후 `feature/DL-16796`의 로컬·원격을 삭제하고 세션을 보관했다.
+- 추가 예정 작업은 없다. 오늘 실계정 다운로드 기능 QA를 새로 수행한 것은 아니다. [개인 체크포인트](projects/dentlink-client-billing-statement.md)
 
 ### Dentlink 치과 주문목록 아이콘·텍스트 정렬 — DL-16655
 
@@ -124,22 +122,10 @@ For detailed current state, read:
 
 ### Dentlink DLDS / AI 화면 제작 — DL-16437 / DL-16466 / DL-16830 / DL-16471
 
-- 실제 컴포넌트 정비 → DLOS 방식의 DLDS 패키지 통합 → AI 프롬프트·하네스 정비 → 필요시 에디터 순서다.
-- 2026-10-19 사용자 PR#4692 release병합(f9a45fe02)·PR#4722 stage병합(f38ad84936) 확인. **세 웹 스테이징 배포는 Docker 빌드 OOM으로 모두 실패**했다. DL-16830 본문을 병합완료·배포실패·사용자QA대기로 갱신했고 Ready for Deploy 유지. 사용자 후속 지시까지 코드수정·재배포·QA·하네스 없이 대기한다. 재개는 빌드실패해결/세웹배포확인부터이며 QA는 사용자가 직접 한다. DL-16471 하네스는 별도다. 아래 시험 경과는 과거 기록이고 정확한 현재 상태는 프로젝트 체크포인트를 따른다.
-- DLDS는 사용자 재개 요청에 따라 대표 사용 화면 검증과 범용 UI 경계·모음 페이지
-  보완까지 진행했다. 전체 완료 여부·남은 범위는 최신 체크포인트를 따른다.
-- 최신 지시로 아이콘 추가 전수 대조는 제외하며 누락만 대상으로 한다.
-  누락 확인·명칭 정리에 이어 보조 UI 의존성·사용 예제 정비와 검증을 마쳤다.
-  **사용자 수동 QA는 전체적으로 괜찮아 보인다는 결과이며 전수 무결함 판정은 아니다.**
-  재개 승인에 따라 Password E2E 선택자 수정·16건 재검증과 조사 자료5개 정리를
-  마쳤다. **2단계 사용 기준·실험 초안에 이어 첫 DLDS 연락처 수정 화면의 생성·수정·로컬 미리보기 검증**을
-  마쳤다. 기존 worktree의 `feature/DL-16471`, `pnpm dev:ai-preview`5178에서 확인한다.
-  Figma Code layers에서 원본 master 빈 화면의 독립 생성·프롬프트/요소 선택 수정·ZIP→별도 로컬 실행/타입/빌드까지 시험했다. 기존 Notion에 실제 결과·1GB/초기 FE 설정/adapter 제약·외부 참고·DLDS 방향을 반영했다. 제품 코드는 이번 시험에서 변경하지 않았다. 대표 DLDS 화면 비교와 하네스·에디터의 계속/축소/보류는 사용자/FE팀 논의 대기다. 비개발자용 AI 입력 서비스·완성된 하네스는 아직 없다.
-  피드백 Retry/요구사항 외 UI 정리는 PR #4642 병합으로 완료됐다.
-  기존 `dentlink-client-dlds` worktree를 보존하며 정확한 저장 상태와 다음 시작점은 체크포인트를 따른다.
-- [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-- 2단계 검토 초안: [projects/dentlink-ai-dlds-draft.md](projects/dentlink-ai-dlds-draft.md)
-- 회의 바로가기: [projects/dentlink-fe-meeting.md](projects/dentlink-fe-meeting.md)
+- **2026-10-25 DLDS·DLOS 통합·빌드 복구·QA 관련 5개 PR의 웹 운영 포함 확인.** 미사용 완료 브랜치4개씩을 로컬·원격에서 정리했고 DL16830의 과거 미병합/배포실패 설명을 정정한 뒤 세션을 보관했다.
+- 실제 env가 있는 통합 worktree와 현재 `feature/DL-16852`, 미완료 `dentlink-client-dlds`/`feature/DL-16471` 하네스·stash는 보존한다. 과거 OPEN/배포 실패 기록은 현재 상태가 아니다.
+- 제품 workspace 패키지의 운영 사용과 정식 npm0.1.7 공개·Studio 반영·하네스 완성은 별개다. master 통합 이후의 공개/소비 확인과 하네스 범위는 새 지시에 따라 진행한다. PAUSED 자동화는 유지한다.
+- [현재 체크포인트와 상세 이력](projects/dentlink-fe-opportunities.md) · [2단계 초안](projects/dentlink-ai-dlds-draft.md) · [회의 자료](projects/dentlink-fe-meeting.md)
 
 ### Dentlink 피드백 요구사항 외 UI 정리 — 완료
 
@@ -184,16 +170,10 @@ For detailed current state, read:
 
 ### Dentlink 권한관리 — DL-16317
 
-- **2026-10-20 앱 QA 준비:** 앱 permission worktree도 최신 develop43f7879에서 `feature/DL-16317-qa` 생성·checkout 완료(upstream 없음, diff0, clean). DL-16851은 웹 주문상세 WebView 경로여서 기존 웹 수정 b8233cb9a로 공통 대응하며 앱 별도 수정/커밋/CodePush는 없다. 이후 앱 고유 QA 수정은 이 브랜치에 로컬 커밋으로 모으고 제품 push는 보류한다. 실제 앱 화면 확인은 웹 수정 배포 후 진행한다.
-
-- **2026-10-20 QA 2건 로컬 커밋 완료:** 웹 permission checkout의 `feature/DL-16317-qa`(release 기준 `f1dab1b1e`, upstream 없음, clean)에 DL-16751 제목 위치 조정 `1db28a295`, DL-16851 Member 담당 변경 경고 수정 `b8233cb9a`를 각각 커밋했다. 관련 51tests·Clinic/Lab/Admin 타입 검사 통과, 모델 변경 후 두 건 재검토 완료. 앱 동일 증상은 웹 주문상세 WebView이므로 이번 웹 수정으로 대응한다. 제품 push는 사용자가 이후 일괄 진행하기로 하여 보류했고 PR/배포/Jira 변경은 없다. 실제 화면 QA는 별도이며 웹 권한 QA를 이 브랜치에 모아 이어간다.
-
-- **이전 전달 2026-10-19:** 사용자 PR4719 release병합(fef630005) 확인. 원격 stage413ed3564를 복구 ref로 보존 후 master8772d6882에서 재생성, [PR4720](https://github.com/Innvoaid/dentlink-client/pull/4720) →stage 준비 후 사용자 병합완료(stage4b28c28a6, release와tree동일).
-- 웹 Clinic/Lab/Admin 최신3개배포run은 in_progress까지 확인했다. 최종성공/QA완료는 별도이며 웹feature@5bdad60e6 clean유지.
-- 사용자 재승인으로 앱 feature/DL-16317@f037c80를 양OS **Staging v336/2.2.4/mandatory100%enabled**로 CodePush 완료. 서버readback·소스맵341파일일치. 이후 사용자 PR329→develop 병합완료(43f7879)를 확인했으며 기존v336빌드는 유지한다.
-- 원본worktree·시뮬레이터/Metro 보존, 임시buildsource만정리. Production/Development/Lab·태그/스토어·Jira/Slack변경없음.
-- 앱 PR329 최신head f037c80에 myungjael LGTM/APPROVED 확인, 리뷰스레드/인라인댓글0건으로 추가수정 없음. CodeRabbit은 develop대상제외로 skipped, 강제재실행 안함. PR329 병합은 완료됐다. 다음은 QA 결과 대응이며 앱 후속QA는 작업브랜치→develop 병합→develop 전체 Staging CodePush 순서다. 실제기기QA/운영출시는별도.
-- 상세/과거 QA/다음 시작점: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md).
+- **2026-10-25 웹 권한·후속9PR의 운영 포함과 앱 관련 변경의 운영 Git 포함 확인.** Office 양OS Productionv84/2.2.4, Lab 양OSv17/1.0.5 활성은 확인했으며 OTA exact Git SHA·전 기기 QA와는 구분한다.
+- 웹 완료 refs 로컬8개·원격7개를 복구 검증 후 정리했다. 현재 `feature/v1.89.0-qa`와 실제 env가 있는 웹 worktree, Office4개·Lab3개 앱 refs와 작업 공간은 보존했다. 담당24카드는 이미 Done이며 중복 Jira 변경 없이 세션을 보관했다.
+- Lab웹 번역2키 Sheet 보류, 앱 기존 타입 진단의 현행성, release→master 공통 통합은 별도다. 새 QA 요청 전 추가 작업은 하지 않는다.
+- [현재 체크포인트와 재개점](projects/dentlink-permission-management.md) · [Office](projects/dentlink-app.md) · [Lab](projects/dentlink-lab-app.md)
 
 ### Dentlink 통합알림센터 — 사전 검토
 

@@ -4,6 +4,26 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
+## 배포 후 종합 마감 — 2026-10-25
+
+- 사용자가 오늘 배포된 작업의 담당 세션만 찾아 배포 상태·로컬/브랜치·Jira·개인 기록을 정리하고 보관하도록 승인했다. 메인은 대상 선정·전달·결과 검증·공통 색인을 맡고, 실제 정리는 아래 담당 세션에서 진행했다. 개인 컨텍스트 commit/push는 순차 실행했다.
+- **웹 운영:** Clinic·Lab·Admin `prd/*/v1.89.0` 태그와 release가 모두 `a5e465561b953270b2925b2082845ba753f0572f`다. [Clinic 40180395283](https://github.com/Innvoaid/dentlink-client/actions/runs/40180395283), [Lab 40180309291](https://github.com/Innvoaid/dentlink-client/actions/runs/40180309291), [Admin 40180269225](https://github.com/Innvoaid/dentlink-client/actions/runs/40180269225) 모두 성공이다. 담당자가 각 작업의 병합 커밋·최종 변경 잔존을 대조했다.
+- Clinic은 서울/오하이오 안정화·rollback 검사까지 성공했다. Lab/Admin은 workflow에서 ECS 안정화를 기다리지 않으며, 공개 접속·정적 파일 HTTP200을 별도로 확인했다. **운영 E2E·로그인 이후 기능 QA를 새로 수행한 것은 아니다.** 확인한 범위에서 오늘 배포의 실패 징후는 발견하지 못했다.
+- **앱 관찰:** 권한관리 담당자가 Office 양OS Production **v84/2.2.4**, Lab 양OS **v17/1.0.5** 활성·mandatory100%와 각 최신 Staging 패키지 일치를 확인했다. 해당 수정의 운영 Git 포함과 OTA 활성은 확인했지만, OTA 설명에 source SHA가 없어 패키지→정확한 Git SHA 직접 대응·전 기기 적용/QA는 확인하지 못했다. 앱 원본 refs·작업 공간은 보존했다.
+
+| 담당 세션 | 운영 반영·정리 결과 | 개인 기록·보관 |
+| --- | --- | --- |
+| DL-16796 Billing Statement 명칭 변경 | PR4699 포함. 로컬1·원격1 삭제. Jira 담당/QA 카드 이미 완료 | `02e8520`, [정본](dentlink-client-billing-statement.md), 보관 확인 |
+| env 파일 Git 제외와 환경변수 관리 정리 | PR4713/4740/4743 포함. 로컬2·원격2 삭제. DL16821 완료 처리 | `9b39b9e`, [정본](dentlink-client-env-management.md), 보관 확인 |
+| 디자인시스템정비세션 | PR4692/4723/4730/4731/4732 포함. 로컬4·원격4 삭제. DL16830 과거 배포실패 본문 정정 | `843fe09`, [정본](dentlink-fe-opportunities.md), 보관 확인 |
+| 권한관리세션 | 웹 권한·후속9PR 및 앱 관련 수정의 운영 Git 포함. 로컬8·원격7 삭제. 담당24카드 이미 Done | `936dde2`, [정본](dentlink-permission-management.md), 보관 확인 |
+
+- **총 정리:** 웹 로컬 브랜치15개·원격14개. 제품 코드/신규 제품 커밋/PR/병합/배포는 변경하지 않았다. exact SHA·본인 PR·운영 포함·열린 PR의 head/base·worktree 사용 여부와 복구 자료를 확인한 뒤 삭제했다. 전체 삭제 목록·복구 bundle/manifest의 경로·해시는 담당 정본에 있다. 백업 파일은 이 Mac에 있고 개인 문서 push로 다른 기기에 복사되지는 않는다.
+- **보존:** 실제 env가 있는 env/DLDS통합/권한관리 worktree와 현재 브랜치, 미완료 DLDS 하네스, Office4개 feature·Lab3개 QA refs, 기존 stash/복구 자료·타 세션/타인 자원·보호 브랜치/태그. 이번 worktree 삭제는 없다. LBX의 운영 보류·통합알림센터 미착수 등 오늘 배포와 무관한 세션은 재개하지 않았다.
+- **공통 후속:** 최종 재확인에서 웹 `origin/master=8772d68825cac6e23792d86a715153a67dc71078`이며 `release/v1.89.0 → master` 열린 PR도 없다. 이 통합은 미실행이다. Billing 담당자의 Jira 조회에서 v1.89.0은 `released=false`였다. 보호 브랜치 병합과 공용 버전 전환을 이번 정리로 자동 실행하지 않았다.
+- **별도 보존 과제:** DLDS 정식 npm0.1.7 공개·Studio·하네스, Lab웹 번역2키의 Sheet 반영, 과거 DEV ISV E2E 실패2건, env와 별개인 키 제한/Eximbay 서명·키 교체, Lab앱 기존 타입 진단의 현행성 확인은 별도다. 오늘 운영 실패 또는 새 필수 QA로 임의 재분류하지 않으며 새 요청 없이 재개하지 않는다.
+- 메인은 위 4세션의 실제 보관을 목록에서 확인했다. 공통 인계/색인을 이 결과에 맞게 저장·푸시한 뒤 추가 변경 없이 대기한다. 상세 이력은 담당 정본, 공통 결정과 조율은 이 문서로 구분한다.
+
 ## 공통 지침 정리 — 2026-10-20 로컬 Docker 도구 재사용
 
 - 사용자 요청을 받은 환경변수 세션의 인계를 바탕으로 설치된 Colima/Docker 재사용 지침을
@@ -392,21 +412,20 @@ Detailed implementation history remains in the relevant existing project file.
   [DLDS 정본](dentlink-fe-opportunities.md)을 따른다.
 - 아래 기기 복구 표의 QA 대기 상태는 이번 보고 전 저장 시점의 기록이다.
 
-## 다른 기기에서 이어가기 — 2026-10-16 색인 갱신
+## 다른 기기에서 이어가기 — 2026-10-25 색인 갱신
 
-- 사용자가 현재 살아 있는 각 기능 세션의 상태를 정리해 신규/다른 기기의 첫 대화가
-  현재 업무를 파악하도록 지시했다. 기존 세션·대기/보류 상태를 유지하며 각 담당
-  세션이 본인 체크포인트를 정리하고 개인 컨텍스트에 commit/push했다.
-  메인세션은 네 문서의 저장과 공통 색인 연결을 확인했다.
+- 신규/다른 기기의 첫 대화는 아래 개인 정본에서 현재 업무를 복구한다.
+  2026-10-25 배포 후 정리한 4세션은 기록을 commit/push하고 보관됐으며,
+  그 외 대기/보류 세션은 기존 상태를 유지한다. 상세 근거와 후속의 승인 경계는 각 정본을 따른다.
 
 | 기능 | 현재 단계 | 개인 정본 |
 | --- | --- | --- |
-| 권한관리 | 웹 release/v1.89.0 병합·개발 배포 사용자 보고 후 검토 대기. Office PR #329 미병합 | [권한관리](dentlink-permission-management.md) |
-| LBX | PR #4705 develop 병합 완료. 운영 릴리스는 별도이며 원본·전달 브랜치 보존 | [LBX](dentlink-client-lbx.md) |
-| 디자인시스템정비 | PR #4692 팀 리뷰·release 반영 대기. 시험 npm 배포와 정식 출시는 구분 | [DLDS](dentlink-fe-opportunities.md) |
-| Billing Statement | PR #4699 release/v1.89.0 병합 완료. QA·운영 출시는 별도 | [문서 명칭 변경](dentlink-client-billing-statement.md) |
-| 통합알림센터 | REST 방향·사전 조사 완료. 권한관리 선행 및 재개 지시 대기 | [통합알림센터](dentlink-unified-notification-center.md) |
-| 웹 환경변수 관리 | 회의 결정 후 운영 설계·팀 확인 단계, 구현 재개 대기 | [환경변수](dentlink-client-env-management.md) |
+| 권한관리 | 웹 운영 포함·앱 Production 활성 확인, 완료 refs 정리·세션 보관. 앱 원본/검증 한계 보존 | [권한관리](dentlink-permission-management.md) |
+| LBX | 운영 보류 유지. 오늘 배포 후 정리 대상 아님, 재개는 별도 지시 | [LBX](dentlink-client-lbx.md) |
+| 디자인시스템정비 | 웹 통합·QA 운영 포함·완료 refs 정리·세션 보관. 정식 npm/Studio/하네스는 별도 | [DLDS](dentlink-fe-opportunities.md) |
+| Billing Statement | PR4699 운영 포함·원본 refs 정리·세션 보관, 추가 작업 없음 | [문서 명칭 변경](dentlink-client-billing-statement.md) |
+| 통합알림센터 | 사전 조사 후 미착수, 오늘 정리 대상 아님. 재개 지시 대기 | [통합알림센터](dentlink-unified-notification-center.md) |
+| 웹 환경변수 관리 | 운영 반영·DL16821 완료·refs 정리·세션 보관. 실제 env와 별도 보안/DEV 과제 보존 | [환경변수](dentlink-client-env-management.md) |
 
 - 2026-09-29 최초 개인 기록의 원격 보존 확인: 권한관리 `f778f98`, LBX `976d93b`, DLDS
   `b2d428c`, 통합알림센터 `a5f2883`. 제품 코드의 commit·push를 이번 기록 작업에서
