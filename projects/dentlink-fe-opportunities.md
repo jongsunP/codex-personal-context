@@ -1,5 +1,35 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
+## 현재 브레이크포인트 — 2026-10-25 · 운영 반영 확인, 완료 브랜치 정리 및 세션 보관
+
+- 메인 세션에서 사용자가 오늘 배포된 작업의 상태 확인·담당 자원/Jira/메모리 정리·세션 보관을 승인했습니다. 이 세션은 읽기 전용 점검 후 메인이 지정한 정리 순번에 실행했습니다. 제품 코드 수정·새 테스트·병합·추가 배포·npm 공개·Studio/하네스 개발은 하지 않았습니다. 권한관리 QA의 최신 상태는 해당 세션 정본을 따릅니다. 메인은 오늘 해당 담당 카드들의 Done 확인을 전달했으므로, 과거 QA 대기 기록을 새 미완료 일감으로 만들지 않습니다.
+- **운영 포함:** `prd/clinic/v1.89.0`, `prd/lab/v1.89.0`, `prd/admin/v1.89.0` 태그와 `origin/release/v1.89.0`은 `a5e465561b953270b2925b2082845ba753f0572f`입니다. 아래 5개 PR은 모두 `release/v1.89.0`에 병합됐고, 각 병합 커밋의 운영 포함과 최종 코드 잔존을 확인했습니다. 아래 10/20 기록의 OPEN/미병합은 당시 이력입니다.
+- **배포 확인:** [Clinic 40180395283](https://github.com/Innvoaid/dentlink-client/actions/runs/40180395283)·[Lab 40180309291](https://github.com/Innvoaid/dentlink-client/actions/runs/40180309291)·[Admin 40180269225](https://github.com/Innvoaid/dentlink-client/actions/runs/40180269225) 모두 SUCCESS입니다. Clinic은 서울/오하이오 안정화와 rollback 검사까지 통과했습니다. Lab/Admin workflow는 안정화를 기다리지 않으므로 별도 ECS 상태 실측이나 전체 기능 QA까지 증명하지는 않습니다. 이번 정리에서 실제 화면 QA·E2E를 새로 실행하지 않았습니다.
+- **원인 구분 유지:** PR #4730의 중복 레드닷은 DLDS 회귀, #4731의 Remake 잘림과 #4732의 CP 조회 조건은 기존 문제입니다. CP 수정은 DONE 상태 또는 표시할 입력값이 있을 때 조회를 허용하는 변경이며 모달 하단/스크롤 잘림 수정이 아닙니다. 제보 주문의 실제 데이터로 해결을 확인한 것으로 확대하지 않습니다. 권한관리 세션의 별도 DL-16916/PR #4759 이력은 아래에 보존하고 이 세션에서 재작업하지 않았습니다.
+
+### 완료 브랜치 정리 결과
+
+| PR / 작업 | 원본 브랜치 | 원본 HEAD 전체 SHA | 정리 결과 |
+| --- | --- | --- | --- |
+| [#4692](https://github.com/Innvoaid/dentlink-client/pull/4692) DLDS·DLOS 통합 | `feature/DL-16471-dlds-dlos-integration` | `f027171bd969efaeb142920f539976a5b7d0a28c` | 로컬·원격 삭제 |
+| [#4723](https://github.com/Innvoaid/dentlink-client/pull/4723) 빌드 복구 | `feature/DL-16830-build-memory` | `7585d178952b5c74cb1b1f431683685c84126e3c` | 로컬·원격 삭제 |
+| [#4730](https://github.com/Innvoaid/dentlink-client/pull/4730) 레드닷 | `feature/DL-16437-qa` | `916c7e7855b6ea86c8e081e8ca7cc6ad55621d96` | 로컬·원격 삭제 |
+| [#4731](https://github.com/Innvoaid/dentlink-client/pull/4731) Remake | `feature/DL-16857` | `3221c713b39a07ee4cb7d7becce42798f46921e8` | 로컬·원격 삭제 |
+| [#4732](https://github.com/Innvoaid/dentlink-client/pull/4732) CP | `feature/DL-16852` | `549a1d4023ebb8892b1f0dd08298212ee1af75b9` | 현재 checkout이므로 로컬·원격 유지 |
+
+- 삭제 직전 본인 계정 `jongsunP`의 PR·정확한 local/remote SHA·열린 PR의 head/base·worktree 미사용을 확인했습니다. 스쿼시 병합이므로 원본 HEAD ancestry만으로 판단하지 않았습니다. 원격은 정확한 예상 SHA를 지정한 atomic 삭제로 보호했고, 삭제 후 4개 local/remote ref 부재 및 보존 대상 불변을 검증했습니다.
+- **복구 백업:** `/Users/parkjongsun/.codex/backups/2026-10-25-dlds-release-cleanup/completed-branches.bundle`에 삭제한 4개 브랜치의 전체 이력이 있습니다. `git bundle verify` 및 별도 임시 bare 저장소에서 원본 commit 복원 검증을 통과했습니다. 옆의 `manifest.json`에는 전체 SHA·PR/병합 근거·정리 결과·복구 명령이 있고, `bundle-verify.txt`·`remote-delete.txt`에 검증/삭제 결과가 있습니다. bundle SHA256: `1eb128cda8c944001e9ffcefc5b537cd33f0bc50c1cc93531e0df31abc160c7b`.
+- 로컬 복구 명령: `git fetch /Users/parkjongsun/.codex/backups/2026-10-25-dlds-release-cleanup/completed-branches.bundle refs/heads/<branch>:refs/heads/<branch>`. 원격 복원은 별도 승인 후 진행합니다. 이 bundle은 해당 Mac의 로컬 파일이며 개인 context push로 업로드되지 않습니다. 다른 기기에서는 GitHub `refs/pull/<PR>/head`로 원본을 가져와 위 full SHA와 대조하거나, 백업 bundle을 전달받아 복구합니다.
+
+### 보존·Jira·남은 일
+
+- **현재 제품 위치:** `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`, `feature/DL-16852@549a1d4023ebb8892b1f0dd08298212ee1af75b9`, clean/원격 동일. 이 HEAD는 CP 원본 작업이고 최신 운영 SHA가 아닙니다. 실제 env 9개가 있는 worktree와 `.next`·의존성·기타 생성물을 그대로 보존했습니다. env 값을 읽거나 옮기지 않았습니다.
+- **미완료 하네스:** `/Users/parkjongsun/Repository/dentlink-client-dlds`, `feature/DL-16471@12fb96a4e32c6a5e9abb4f61c235d9c2c1e53a14`, clean/로컬·원격 유지. 생성 결과·인증/검증 자료도 보존했습니다. 관련 stash `1848c793e7504c42d85f33a8f4ce2be81cb4cb06`·`a6cd19aa76e7d1fa335a370cfafa4a795f17270d`를 포함한 전체 stash/worktree 목록은 정리 전후 동일합니다. 타 세션 자원·보호 브랜치/태그·공용 watchman·PAUSED 배포 확인 자동화는 변경하지 않았습니다.
+- **Jira:** [DL-16830](https://innovaid.atlassian.net/browse/DL-16830)의 과거 미병합/배포 실패 설명을 운영 반영·빌드 복구 완료로 정정하고 재조회했습니다. 기존 `완료` 상태·제목·담당자를 유지했으며 새 댓글/상위 카드/타 QA 카드 변경은 없습니다. [DL-16471](https://innovaid.atlassian.net/browse/DL-16471) 하네스와 상위 DL-16437은 진행 중인 후속으로 남습니다.
+- **정식 npm·Studio는 별도:** 점검 당시 `origin/master=8772d68825cac6e23792d86a715153a67dc71078`로 릴리스 동기화 전입니다. 운영 소스 icons/DLOS/DLDS는 `0.1.7`이지만 npm에 해당 버전은 없습니다. DLDS latest=`0.1.3-pr.94b6324`, DLOS/icons latest=`0.1.1`, 세 패키지 pr=`0.1.5-pr.c567910`을 확인했습니다. 최신 관련 패키지 실행 `40173954516`은 검증 성공·공개 SKIPPED이므로 정식 공개 성공 근거가 아닙니다. Studio의 최신 패키지/갤러리 반영도 이번에 확인하지 않았습니다.
+- **다음 시작점:** 사용자 후속 지시가 오면 개인 context를 pull하고 정확한 checkout/원격 상태부터 재확인합니다. 릴리스의 master 반영 → 정식 npm 공개/실제 설치 → Studio 반영 확인 → 승인된 하네스 구체화 순서이며 자동 실행하지 않습니다. 새 QA는 지정된 권한관리 세션에서 진행하고, DLDS의 추가 요청은 해당 범위만 다시 맡습니다. 완료 브랜치 정리는 코드/기능 삭제가 아니며 이번 운영 반영과 미완료 후속을 혼동하지 않습니다.
+- 개인 context는 이 파일만 커밋·푸시하고 이 세션을 보관합니다. 공용 HANDOFF/PROJECTS/MEMORY_CHANGELOG/FE 종합 문서는 메인 세션이 집계합니다.
+
 ## 후속 전달 완료 — 2026-10-22 DL-16916 스테이징
 
 - 사용자가웹PR4759를release/v1.89.0에병합한뒤웹배포를명시요청했다. 기존stage를복구용local ref로보존후최신master에서원격재생성,전체release→stage [PR4760](https://github.com/Innvoaid/dentlink-client/pull/4760)을스쿼시병합했다. 최종stage1701952af와release909b90566의전체tree동일. 동료릴리즈작업도유지했다.
@@ -14,7 +44,7 @@
 - 입력/선택/버튼/탭/날짜/숫자/모달/팝업/툴팁의공통구현과실제사용처를확대검토해추가확정회귀없음. 원본실패3건확인후기존테스트2파일에8건보강,DLDS159tests/typecheck·Clinic/Lab/Admin타입·push훅통과. 실제제품전체QA는아니다.
 - DLDS부모하위7개/최신댓글과최근멘션검색에서추가수신건없음. 기존16854/16830은완료유지. npm게시·Studio반영·병합·배포는이번에실행하지않았다. 다음은사용자PR검토후전달/QA이며 상세근거와관련앱PR21은 [권한관리](dentlink-permission-management.md) 최상단참조.
 
-## 현재 브레이크포인트 — 2026-10-20 · QA 3건 재검토 완료, 권한관리와 분리하여 대기
+## 이전 브레이크포인트 — 2026-10-20 · QA 3건 재검토 완료, 권한관리와 분리하여 대기
 
 - 사용자 최종 지시: 모델 변경 후 오늘 이 세션에서 만든 QA 3건의 실제 diff와 기존 원인 판단을 다시 확인했습니다. 재검토 결론을 설명한 뒤 사용자가 이해했고, 나머지 QA는 `권한관리세션`에서 진행하기로 했습니다. 이 세션은 기록 후 대기하며 제품 코드 수정·추가 테스트·Jira 변경·병합·배포·E2E·npm/Studio/하네스를 자동 진행하지 않습니다.
 - **재검토 범위와 결론:** 이 세션에서 별도 브랜치·PR까지 만든 것은 DL-16854/PR#4730, DL-16857/PR#4731, DL-16852/PR#4732 총3건입니다. 모두 release/v1.89.0 대상, 마지막 GitHub 조회에서 OPEN/non-Draft/미병합. 실제 diff·주변 코드의 읽기 전용 재검토에서 기존 원인 판단을 뒤집는 근거나 명백한 수정 오류를 찾지 못했습니다. 테스트·실화면 QA는 이번 재검토에서 다시 실행하지 않았습니다. DLDS 회귀로 확인된 것은 레드닷1건뿐이며, 나머지2건을 DLDS QA로 묶지 않습니다.
