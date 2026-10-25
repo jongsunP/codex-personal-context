@@ -1,5 +1,29 @@
 # Dentlink 권한관리 — DL-16317
 
+## 운영 배포 확인·완료 브랜치 정리 — 2026-10-25
+
+- **범위:** 메인 세션에서 사용자가 승인한 배포 후 정리의 담당 세션으로 재개했다. 1단계 읽기 확인·복구 준비 후, 순번이 열린 2단계에서 검증된 웹 완료 refs만 삭제했다. 새 제품 구현/PR/병합/배포/쓰기 QA·번역 Sheet 작업은 하지 않았다.
+- **웹 운영 포함:** `prd/clinic/v1.89.0`, `prd/lab/v1.89.0`, `prd/admin/v1.89.0` 및 원격 `release/v1.89.0`은 **a5e465561b953270b2925b2082845ba753f0572f**. 권한관리·후속 PR **4700/4706/4710/4716/4719/4736/4747/4750/4759**의 병합 커밋이 모두 운영 이력에 포함됐다. 마지막 QA 이후 겹친 제품 파일의 변경은 Lab 태블릿/WebView 레이아웃 보완이며 권한 차단을 되돌리지 않았다. 생성 계약의 권한 관련 변경도 발견되지 않았다. 담당 열린 PR은 없다.
+- **배포 근거:** Clinic run40180395283은 18:51:26 KST, Lab40180309291은18:33:03, Admin40180269225는18:33:40에 completed/success. 모두 위 SHA이며 Clinic 서울·오하이오 배포와 circuit-breaker rollback 검증 성공. Lab/Admin의 별도 ECS 태스크 실측과 이번 운영 실계정 기능 QA는 하지 않았다. Actions 성공을 모든 기능/기기 QA 완료로 확대하지 않는다.
+- **앱 운영 관찰:** Office PR329/331/332/333은 운영 Git에 반영, main `49031ad64983715f87f92b4998284da1dbae7c23`과 release/v2.2.4의 tree가 같다. 양OS **Production v84/2.2.4** 활성·mandatory100%이며 각OS 패키지는 Stagingv341과 같다. Lab PR19/21/23도 반영, 원격 main/develop/release/v1.0.5가 **51441039751b63a08c82a1be9695c805c8af1539**, 양OS **Production v17/1.0.5** 활성·mandatory100%이고 각OS 패키지가 Stagingv47과 같다. OTA 설명이 비어 있어 **패키지와 정확한 Git SHA 직접 대응은 미확인**이며 모든 실기기 QA/스토어 배포까지 확인한 것은 아니다. 세부 기록은 각 앱 정본을 따른다.
+- **Jira:** DL-16317 하위 사용자 담당22건(16319/16751/16752/16848/16849/16850/16851/16852/16855/16857/16858/16859/16864/16867/16880/16881/16882/16904/16907/16917/16927/16929)과 별도 **DL-16916/16854** 모두 이미 **Done**임을 실조회했다. 상태·댓글·본문을 중복 변경하지 않았다. DL-16850의 조사 후 구현 제외와 DL-16916 동일 데이터 실화면 QA 미수행 경계는 유지한다.
+- **삭제 완료:** 정확한 SHA·PR 작성자 jongsunP/병합 상태·운영 포함·열린 PR head/base 부재·worktree 미사용을 재확인했다. 원격7개는 expected-SHA lease와 atomic push로 삭제하고 부재를 확인했다. 로컬8개는 expected-SHA transaction으로 삭제했다. 정상 pre-push 검증은 우회하지 않았다. 삭제 목록은 다음과 같다.
+
+| 브랜치 | 삭제 전 SHA | 정리 범위 |
+| --- | --- | --- |
+| `feature/DL-16317` | `f4bfaf1bf102a555ec6350aee97ea0a1ab2c7d05` | 로컬·원격 |
+| `feature/DL-16317-api-permissions` | `5bdad60e6da17a8a533622498ba334c9ad952eb1` | 로컬·원격 |
+| `feature/DL-16317-dentist-warning` | `e28b9c7e8ad37841baadde958ef088b6668a2343` | 로컬·원격 |
+| `feature/DL-16317-payment-banner` | `20be3ee65078f7b8c0be335e2bd421c85104b4d5` | 로컬·원격 |
+| `feature/DL-16317-qa` | `8200ba2ffc42dd091d6a8634486f3f1e0e65279a` | 로컬·원격 |
+| `feature/DL-16317-qa2` | `c5ff587b9150a1111bde5ffa8d868668a1acf62d` | 로컬·원격 |
+| `feature/DL-16880` | `108e98eccfaca989c2966acb1a7a0c3180224478` | 로컬·원격 |
+| `feature/DL-16882` | `bdbe43fb14bb63dfcbad8e2ff91c8ab5623f77a1` | 로컬만 |
+
+- **복구:** `/Users/parkjongsun/Repository/dentlink-client/.git/codex-closeout/permission-web-production-20261025/`의 `permission-web-branches.bundle`과 `manifest.json`에 원본8개 refs·소유/PR·SHA·정리 결과를 보존했다. bundle verify·8head 일치·SHA256 **19288c12035498a259f26abd4f2b6521ac594d43581cfd75ebf843c41012b551** 검증. 운영 태그 이력을 prerequisite로 하는 **로컬 증분 백업**이며 독립 clone용은 아니다. local-only16882는 운영 이력의 조상으로 manifest SHA에서 복구 가능하다. 새 env/인증 백업이나 파일 이동은 없었다.
+- **보존:** 현재 웹 `feature/v1.89.0-qa@178a4ab6745a81abc1ed56bae8bc7496b402775d`는 로컬·원격과 `dentlink-client-permission` worktree를 함께 보존했고 clean이다. `.next/standalone` 내 실제 env가 있어 해당 빌드 폴더를 포함한 worktree 전체 삭제는 하지 않았다(파일명 존재만 확인, 값 미조회). Office4개 feature refs/worktree, Lab3개 QA refs/기본checkout은 OTA exactSHA 미확인 경계에 따라 보존. 보호 브랜치/태그·기존 recovery refs·타 세션/리뷰 공간도 유지했다.
+- **별도 후속·재개:** 원격 웹 master는 여전히 `8772d68825cac6e23792d86a715153a67dc71078`로 release→master 통합이 남아 있으며 이 세션은 병합하지 않았다. Lab **웹** 번역 `detail.empty.accessDenied`/`detail.empty.goHome` Sheet 동기화 보류와 Lab **앱** 과거 전체타입11진단의 해결 여부는 미확인으로 보존한다. 배포 실패나 새 권한 QA 미완료로 재분류하지 않는다. 지난 Clinic/Admin 조사에서 FE의 토큰무효 응답 기반 로그아웃은 공통이며 BE 권한변경 시 세션폐기 정책은 미확인이라는 결론도 유지한다. 새 QA/명시 지시가 오면 정본·해당 원격을 갱신해 재개하며, 이번 개인 기록 commit/push 후 담당 세션을 보관한다.
+
 ## 치과 앱 추가 전달 완료 — 2026-10-22 DL-16929 / Staging v340
 
 - **사용자 확인·종결:** 이후 사용자가 치과 앱 스테이징 **v340 적용과 수정 결과를 직접 확인**했다고 전달했다. DL-16929는 현재 **완료** 상태인 것을 실조회하여 그대로 유지했다. 실제 사용자 확인 완료로 갱신하되 OS별 전수QA로 확대하지 않는다. 추가 코드·배포·Jira 변경 없이 개인 기록 commit/push 후 새QA/지시 전 대기한다.

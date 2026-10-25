@@ -1,5 +1,12 @@
 # Dentlink Lab App
 
+## 운영 반영 확인·원본 작업 보존 — 2026-10-25
+
+- 권한관리 담당 세션의 배포 후 정리에서 **읽기 전용으로** 확인했다. PR19/21/23은 release/v1.0.5에 병합 완료, PR27로 release→main이 반영됐다. 원격 **main/develop/release/v1.0.5 모두51441039751b63a08c82a1be9695c805c8af1539**이며 우리 수정5파일은 이전통합b175d5f3와 blob이 같아 누락/되돌림이 없다. 현재 열린 PR은 없다. 기본checkout의 로컬/remote-tracking refs가 오래됐어도 실제원격은 ls-remote/GitHub API로 확인했으며 이번에는 pull/fetch/checkout하지 않았다.
+- 양OS **Production v17 / target1.0.5 / 활성 / mandatory / rollout100%** 확인. iOS10/25 19:30:36, Android19:31:22 KST 게시이고 각OS packageHash는 **Stagingv47**과 동일하다. iOS `afa2c06b5e233e621e7e5dd9b829c3dcdd853713c6272d83dabf130987e085a5`, Android `1bebd0ef211ea588ff32a1fc7f2b72e7060ea15d7e005b02af9465f098fea2d4`. description/originalLabel/originalDeployment가 없어 **OTA 패키지→정확한 Git SHA 직접 대응은 미확인**이다. 기기 전체 적용·기능 QA·스토어 배포 증거로 확대하지 않으며 이번 세션은 OTA 변경을 하지 않았다.
+- 실제 작업 위치는 `/Users/parkjongsun/Repository/dentlink-lab-app`이라는 **기본checkout**이다. `QA/DL-16917@06e8dfde967502a4830e9a93c018ce150702dc7c` clean·원격동일, 기존 `QA/DL-16881@cd46b7cd2a4710d8690251620a40d773009475a0`와 `QA/DL-16907@093cc67c4721b637a766387f5cbc6f5dc752c88e`를 포함한 세 QA브랜치의 로컬·원격 및 모든 기본/protected refs를 보존했다. env/인증값을 읽지 않았고 기본checkout·Watchman watch도 정리하지 않았다.
+- Jira16881/16904/16907/16917은 모두 이미 Done이므로 상태/댓글을 변경하지 않았다. 기존 사용자 수정 확인은 유지한다. **과거 전체타입11진단은 이후 해결 기록을 확인하지 못한 검증 한계**이며 현재도 그대로 발생한다고 단정하거나 권한 QA를 미완료로 되돌리지 않는다. Lab웹 번역2키 Sheet보류는 앱 미완료로 분류하지 않는다. 새 QA/명시 지시 전 추가 수정·배포 없이 보존하며 웹 정리는 [권한관리 정본](dentlink-permission-management.md)을 따른다.
+
 ## DL-16917 전달·사용자 확인 완료 — 2026-10-22 Staging v42
 
 - **사용자 확인/마감:** Staging v42 전달 후 사용자가 “기공소앱은 처리된 것 확인했음”이라고 수정 결과 확인을 직접 전달했다. 이 건의 사용자 확인까지 완료로 정리하며 추가 필수 조치는 없다. 이는 사용자의 확인이며 에이전트가 전체 기기 QA를 수행했다는 뜻은 아니다. 후속 치과 작업 접수 시 Jira DL-16917의 완료 상태도 확인했다. 아래 병합·전달 당시의 QA 대기 기록은 이 확인으로 갱신하며, 추가 요청/문제 제보 전 대기한다.

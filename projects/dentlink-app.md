@@ -1,5 +1,12 @@
 # Dentlink Office App setup and current checkpoint
 
+## 운영 반영 확인·원본 작업 보존 — 2026-10-25
+
+- 권한관리 담당 세션의 배포 후 정리에서 **읽기 전용으로** 확인했다. Office PR329/331/332/333은 develop 병합 완료이고, 오늘 PR335 release/v2.2.4→main도 병합됐다. `main@49031ad64983715f87f92b4998284da1dbae7c23`과 원격release 전체tree가 같다. 기존 통합7e6663b 대비 차이는 동료 DL-16957 ISV3파일뿐이며 나머지967파일은 같아 우리 권한·다운로드·간격 수정의 누락/되돌림은 발견되지 않았다. 현재 열린 PR은 없다.
+- 양OS **Production v84 / target2.2.4 / 활성 / mandatory / rollout100%** 확인. iOS10/25 17:07:25, Android17:08:25 KST 게시이며 각OS 패키지 hash는 최신 **Stagingv341**과 동일하다. `v2.2.4.84` Git태그는 위 main을 가리킨다. OTA description이 비어 있어 **OTA 패키지→정확한 Git SHA 직접 대응은 미확인**이며, 기기 전체 적용·기능 QA·스토어 배포 성공으로 확대하지 않는다. 이번 세션은 OTA를 새로 게시/변경하지 않았다.
+- `/Users/parkjongsun/Repository/dentlink-app-permission`은 `feature/DL-16929@e4fb1aca264e14987acac8f1752d52ad9ed54e68` clean·원격동일. 기존 `feature/DL-16317@f037c80153b328bbb14fcafd5fb756a59fd4cc8e`, `feature/DL-16317-qa@1fa59edf58f8d2dc8fc4ac8af17a9016be3a6149`, `feature/DL-16927@b2e29d324ce95ae27c61dfa9fee3b5abe6bb9134` 및 현재브랜치의 로컬·원격을 모두 보존했다. 제품 refs/파일/worktree·기본checkout을 가리키는 node_modules 링크·env/인증은 변경하지 않았다.
+- 관련 Jira16752/16859/16927/16929는 이미 Done이며 상태/댓글 변경 없음. 기존 사용자v340 간격 확인을 유지하되 운영v84의 OS별 QA로 확장하지 않는다. 운영 exactSHA 증거가 필요해지면 담당 배포 근거를 받아 대조하고, 지금은 새 QA/사용자 지시 전 추가 조치 없이 보존한다. 웹 정리 결과는 [권한관리 정본](dentlink-permission-management.md)을 따른다.
+
 ## 최신 전달 완료 — 2026-10-22 DL-16929 템플릿 메시지 간격·Staging v340
 
 - **최종 사용자 QA 확인:** 사용자가 치과 앱 스테이징에서 **v340 적용 및 메시지 간격 수정 결과를 직접 확인**했다고 알렸다. Jira DL-16929도 현재 **완료** 상태로 실조회했다. OS는 별도로 명시하지 않았으므로 양OS 각각의 실기기 QA 완료로 확대하지 않는다. 이 건의 개발·전달·사용자 확인은 종결하며 추가 필수 조치 없이 대기한다. 제품/Jira 상태·댓글·배포 추가 변경 없이 개인 기록만 commit/push한다.
