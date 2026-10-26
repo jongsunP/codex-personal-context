@@ -4,7 +4,23 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 현재 작업 공간 — 2026-10-26 메인 정리 완료
+## 현재 업무 배정 — 2026-10-26 정리 후 신규 접수
+
+- 사용자가 디자인시스템 작업 준비와 신규 업무 2개의 별도 세션 진행을 요청했다. 메인은 전달·시작 확인·공통 색인만 관리한다.
+- 디자인시스템의 `/Users/parkjongsun/Repository/dentlink-client-dlds`는 최신 `origin/master`와 같은 `c597f1fb3e7f5c03a76237926c3effad5bb84983`의 **detached HEAD**로 준비됐다. 브랜치·구현·의존성 설치 없이 대기한다. 기본 checkout과 LBX는 유지하며, 웹 등록 worktree는 현재 2개다.
+- 신규 2개 세션은 기존 **메인 프로젝트 폴더**에 생성했다. 별도 프로젝트 폴더·worktree는 없고, 실제 적용 모델/추론 수준 `gpt-6-astra / ultra`와 두 세션의 조사 시작을 확인했다. 제품 코드의 동시 작성 권한을 배정한 것은 아니다.
+
+| 업무 | 담당 세션·ID | 현재 승인 범위 | 상세 정본 |
+| --- | --- | --- | --- |
+| 디자인시스템 준비 | 디자인시스템정비세션 · `01a0a2eb-da08-7131-aaaf-6c14f0cfc204` | detached worktree 준비 완료, branch/구현 없이 대기 | [DLDS](dentlink-fe-opportunities.md) |
+| DL-17012 기공소 우선순위 산정 | DL-17012 기공소 앱 미지원 기능 우선순위 · `01a17657-caad-70f1-9a40-dbde874a3d42` | DL-16825 댓글44617과 기존 모바일웹/앱 비교에 따른 기공소 우선순위안 조사·초안. 치과 영역 보존 | [모바일웹·앱 비교](dentlink-mobile-web-app-parity.md) |
+| DL-17011 관리자 그룹 회원 권한 수정 | DL-17011 관리자 그룹 회원 권한 수정 이력 조사 · `01a17658-54e4-7b42-bd92-d0f790d7f2bd` | 권한관리 이력·요구사항 조사 후 사용자에게 보고. 구현은 아직 시작하지 않음 | [권한관리](dentlink-permission-management.md) |
+
+- DL-17012는 제품 코드 구현 요청이 아니라 기공소 앱 미지원 기능의 우선순위 산정이다. 사용빈도·사업 우선순위를 추정값으로 확정하지 않고 추천안과 미확인 사항을 분리한다.
+- DL-17011의 상위 DL-17010은 **STG Admin OFFICE 그룹 회원 수정 화면**에서 신규 권한이 보이지 않는다는 제보다. 사용자의 최근 배포 QA 설명과 실제 제보 환경을 구분하고, 최초 미구현·병합/배포 누락·후속 회귀 등의 원인을 commit/PR/환경별 근거로 조사한다. 현재 원인을 확정한 것은 아니다.
+- 두 신규 세션이 사용자에게 직접 보고한다. 이전 권한관리 세션의 완료·보관은 유지하며 이번 후속 조사는 새 세션에서 진행한다. 각 세션은 상세 정본, 메인은 공통 색인을 맡는다.
+
+## 이전 작업 공간 정리 완료 — 2026-10-26 신규 접수 전
 
 - **사용자 최종 방향:** `dentlink-client` 기본 저장소를 정리해 사용하고, 별도 작업 코드는 LBX만 보존한다. 기능 세션은 LBX·디자인시스템정비를 유지하며, 이번 정리와 무관한 통합알림센터도 그대로 유지한다. 이후 작업은 그때의 최신 master에서 필요한 브랜치/worktree를 준비하고 필요한 변경만 가져온다. LBX는 후속 명시 요청에 따라 아래처럼 로컬 준비까지 완료했다.
 - 웹 worktree는 `/Users/parkjongsun/Repository/dentlink-client` **1개**, 로컬 브랜치는 **`master`와 `feature/DL-16387` 2개**다. 기본 checkout master는 `c597f1fb3e7f5c03a76237926c3effad5bb84983`로 origin/master와 동일·clean이다. 로컬 LBX는 이 master 위에 필요한19파일만 추가한 `f389c13cfbe497e0b864aa9399efafd9ecae305d`로 재구성했다. 원격 LBX는 기존 `b69dd84b6`을 보존했으며 새 로컬 브랜치의 과거 upstream 연결은 해제했다. [LBX 정본](dentlink-client-lbx.md)에 검증·복구·원격 경계를 기록했다.
@@ -435,15 +451,17 @@ Detailed implementation history remains in the relevant existing project file.
 ## 다른 기기에서 이어가기 — 2026-10-26 색인 갱신
 
 - 신규/다른 기기의 첫 대화는 아래 개인 정본에서 현재 업무를 복구한다.
-  권한관리·Billing·env는 완료/보관 상태다. 메인·LBX·디자인시스템정비·통합알림센터 세션을 유지한다.
-  통합알림센터는 미착수·대기 상태다. 웹은 기본 master worktree만 사용하며 재개 시 필요한 환경을 새로 준비한다.
+  기존 권한관리·Billing·env 세션은 완료/보관 상태다. 메인·LBX·디자인시스템정비·통합알림센터 세션을 유지하고 DL-17012·DL-17011을 별도 새 세션에서 조사한다.
+  통합알림센터는 미착수·대기 상태다. 웹은 기본 master와 새 DLDS detached worktree가 있으며, 신규 조사 2건에는 별도 worktree를 만들지 않았다.
   상세 근거와 후속의 승인 경계는 각 정본을 따른다.
 
 | 기능 | 현재 단계 | 개인 정본 |
 | --- | --- | --- |
 | 권한관리 | 업무 완료·세션 보관, 웹/Office/리뷰 worktree 제거. 앱 원본 refs/검증 한계 보존 | [권한관리](dentlink-permission-management.md) |
 | LBX | 최신 master 기반 로컬 f389c13cf 준비·검증 완료, 세션 유지. 원격은 옛 원본·운영 홀드 | [LBX](dentlink-client-lbx.md) |
-| 디자인시스템정비 | 세션 유지, 옛 worktree 정리·복구 자료 보존. 다음 요청에서 master 기반 2단계 준비 | [DLDS](dentlink-fe-opportunities.md) |
+| 디자인시스템정비 | 최신 master 기반 새 detached worktree 준비 완료. branch/구현 없이 대기 | [DLDS](dentlink-fe-opportunities.md) |
+| DL-17012 기공소 앱 우선순위 | 기존 메인 프로젝트의 신규 세션에서 조사·추천안 작성 시작. 제품 구현 아님 | [모바일웹·앱 비교](dentlink-mobile-web-app-parity.md) |
+| DL-17011 관리자 회원 권한 QA | 신규 세션에서 과거 구현/병합/배포 이력과 현재 요구사항 조사. 구현 전 사용자 보고 | [권한관리](dentlink-permission-management.md) |
 | Billing Statement | PR4699 운영 포함·원본 refs 정리·세션 보관, 추가 작업 없음 | [문서 명칭 변경](dentlink-client-billing-statement.md) |
 | 통합알림센터 | 이번 정리 대상에서 제외·세션 유지. 사전 조사 후 미착수·재개 지시 대기 | [통합알림센터](dentlink-unified-notification-center.md) |
 | 웹 환경변수 관리 | 운영 반영·기본 저장소 로컬 준비 완료. 전용 worktree 제거·세션 보관 | [환경변수](dentlink-client-env-management.md) |

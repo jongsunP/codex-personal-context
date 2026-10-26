@@ -76,7 +76,7 @@ For detailed current state, read:
   [SESSION_WORKFLOW.md의 업무 접수 기준](SESSION_WORKFLOW.md#new-work-intake-and-session-routing)을 따른다.
 - 기능별 보관/대기 상태와 다른 기기의 첫 대화에서 읽을 체크포인트:
   [projects/dentlink-fe.md](projects/dentlink-fe.md)의 **다른 기기에서 이어가기** 절.
-  2026-10-26 웹은 최신 master 기본 worktree1개, 로컬 master/LBX만 남겼다. 메인·LBX·디자인시스템·통합알림센터 세션을 유지하고 env는 보관했다. 로컬 준비와 복구 자료는 최상단 정본에 기록했다.
+  2026-10-26 메인 정리 후 디자인시스템용 detached worktree를 새로 준비했다(브랜치 없음). 로컬 브랜치는 master/LBX를 유지한다. 같은 메인 프로젝트에 DL-17012 기공소 앱 우선순위 산정과 DL-17011 관리자 권한 수정 이력 조사의 새 세션을 만들었고, 두 작업의 추가 worktree는 없다. 기존 완료 세션의 보관과 LBX·통합알림센터 상태는 유지한다. 세션 ID·승인 범위는 최상단 정본에 기록했다.
   10/25 배포 후 4세션 마감과 로컬15개/원격14개 정리 이력도 같은 문서에 보존한다.
   2026-10-16 로컬 브랜치 4개·worktree 1개·원격 브랜치 158개 정리 이력도 같은 문서에 보존한다.
   원격은 출시 완료154개와 사용자 확인 후 폐기한 frankieTemp 백업4개다.

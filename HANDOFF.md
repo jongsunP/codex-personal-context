@@ -34,10 +34,10 @@ Do not store secrets or private customer data here.
 
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
-  — 2026-10-26 웹 기본 master worktree1개·로컬 master/LBX만 남겼다. 기본 env/의존성과 3서비스 로그인 페이지 응답 확인 완료. 메인·LBX·디자인시스템·통합알림센터 세션 유지, env 보관. 이후 최신 master에서 필요한 작업만 준비한다.
+  — 2026-10-26 메인 정리 후 DLDS detached worktree만 추가 준비했다. DL-17012 기공소 앱 우선순위 산정과 DL-17011 관리자 권한 수정 이력 조사를 같은 메인 프로젝트의 새 세션에 배정했다. 두 조사의 별도 worktree/제품 변경은 없다. 세션 ID·승인 범위는 공통 정본 최상단을 따른다.
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16830·DL-16471:
   [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-26 세션 유지. 기존 worktree2개와 제품 브랜치3개를 복구 백업 후 정리했고 Studio 로컬 브랜치도 정리했다. Studio 원격1개는 쓰기 권한403으로 남았다. 미완료 하네스·env/auth·생성 결과는 보호된 로컬 백업에 보존했다. 재개 대상은 Jira DL-16471 ‘2단계 · AI 프롬프트·하네스 정비’(진행 중)이며, 다음 요청에서 최신 master 기준 새 브랜치/필요한 worktree 준비부터 시작한다. 지금은 구현 없이 대기한다.
+  — 2026-10-26 세션 유지. 옛 작업 공간 정리 후 사용자 요청으로 최신 master c597f1fb3 기준 `/Users/parkjongsun/Repository/dentlink-client-dlds`를 detached HEAD로 새로 준비했다. 브랜치 생성·구현·설치 없이 대기한다. 재개 대상은 Jira DL-16471 ‘2단계 · AI 프롬프트·하네스 정비’이며 기존 복구 자료·Studio 원격 권한403 등 별도 후속은 상세 정본을 따른다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — 승인된 UI 정리 PR #4642가 반영된 완료 이력. 미착수 조사로 되돌리지 않는다.
@@ -48,6 +48,10 @@ Do not store secrets or private customer data here.
   — 10/26 최신 master 기반 로컬 feature/DL-16387@f389c13cf 준비·검증 완료. 기본 checkout은 master clean, 원격 LBX는 옛 원본 b69dd84b6 유지·로컬 upstream 해제. 세션/운영 홀드 유지, 새 제품 push/PR/배포 없음.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
   — 웹 운영 포함·앱 Production 활성 확인 후 업무 완료/세션 보관. 10/26 웹/Office/리뷰 worktree3개는 제거하고 설정을 별도 로컬 보관했다. 원본 refs와 OTA exactSHA/전 기기 QA 한계를 유지하며 과거 QA 대기를 새 미완료 업무로 만들지 않는다.
+  — 별도 후속 DL-17011은 새 세션에서 Admin OFFICE 회원 권한 미노출의 이력·요구사항부터 조사한다. 제보 환경은 STG이며 배포 누락 여부는 미확정, 구현은 아직 시작하지 않는다.
+- Dentlink 기공소 앱 미지원 기능 우선순위 / DL-17012:
+  [projects/dentlink-mobile-web-app-parity.md](projects/dentlink-mobile-web-app-parity.md)
+  — DL-16825 댓글44617의 후속 우선순위 산정. 새 세션에서 기존 기공소 비교표와 현재 근거를 대조해 추천안을 작성한다. 치과 영역은 보존하고 제품 구현은 하지 않는다.
 - Dentlink 웹 환경변수 관리: [projects/dentlink-client-env-management.md](projects/dentlink-client-env-management.md)
   — 2026-10-26 기본 master 로컬 준비·전용 worktree 제거·세션 보관 완료. 후속 사용자 요청으로 이번 임시 env 백업11개 삭제, 실제 로컬 env6개 유지. 새 기능 QA/E2E는 미실행이며 별도 DEV/보안 후속은 새 지시 전 보류한다.
 
