@@ -123,8 +123,8 @@ For detailed current state, read:
 
 ### Dentlink DLDS / AI 화면 제작 — DL-16437 / DL-16466 / DL-16830 / DL-16471
 
-- **2026-10-25 DLDS·DLOS 통합·빌드 복구·QA 관련 5개 PR의 웹 운영 포함 확인.** 미사용 완료 브랜치4개씩을 로컬·원격에서 정리했고 DL16830의 과거 미병합/배포실패 설명을 정정했다. 10/26 사용자 지시로 세션·작업 공간은 유지한다.
-- 실제 env가 있는 통합 worktree와 현재 `feature/DL-16852`, 미완료 `dentlink-client-dlds`/`feature/DL-16471` 하네스·stash는 보존한다. 과거 OPEN/배포 실패 기록은 현재 상태가 아니다.
+- **2026-10-25 DLDS·DLOS 통합·빌드 복구·QA 관련 5개 PR의 웹 운영 포함 확인.** 10/26에는 사용자 요청으로 세션을 유지하되 기존 worktree2개·제품 브랜치3개·Studio 로컬 브랜치를 복구 백업 후 정리했다. Studio 원격 브랜치1개는 쓰기 권한403으로 남았다.
+- 미완료 하네스와 env/auth·생성/검증 자료는 `/Users/parkjongsun/.codex/backups/2026-10-26-dlds-fresh-start/`에 보존한다. 원본 제품/Studio clone·stash·다른 작업은 유지한다. 다음 요청에서 최신 master 기반 새 환경을 준비하며, 기존 worktree 경로는 더 이상 사용하지 않는다. 과거 OPEN/배포 실패 기록은 현재 상태가 아니다.
 - 제품 workspace 패키지의 운영 사용과 정식 npm0.1.7 공개·Studio 반영·하네스 완성은 별개다. master 통합 이후의 공개/소비 확인과 하네스 범위는 새 지시에 따라 진행한다. PAUSED 자동화는 유지한다.
 - [현재 체크포인트와 상세 이력](projects/dentlink-fe-opportunities.md) · [2단계 초안](projects/dentlink-ai-dlds-draft.md) · [회의 자료](projects/dentlink-fe-meeting.md)
 

@@ -1,6 +1,30 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 브레이크포인트 — 2026-10-25 · 운영 반영 확인, 완료 브랜치 정리 및 세션 보관
+## 현재 브레이크포인트 — 2026-10-26 · 기존 작업 환경 정리, 세션 유지·새 master 준비 대기
+
+- **최신 사용자 결정:** 1단계 DLDS 정비와 DLOS 방식의 통합·웹 운영 반영은 완료됐지만 2단계 AI 프롬프트/하네스는 미완료입니다. 사용자가 이 세션을 복구한 후, 이 작업 관련 워크트리·브랜치만 정리하고 미반영 작업은 복구 가능하게 남기도록 명시 승인했습니다. **세션은 유지**하며, 최신 master에서 새 환경을 만드는 것은 다음 요청 때 진행합니다. 이전의 하네스 worktree 유지/세션 보관 지시는 이번 결정으로 대체합니다.
+- **워크트리 2개 정리 완료:** `/Users/parkjongsun/Repository/dentlink-client-dlds`와 `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`은 Repository 경로와 Git worktree 등록에서 제거했습니다. 추적/미추적 코드 변경이 없는 상태와 관련 프로세스 부재를 확인했고, 실제 env/auth 및 ignored 결과를 잃지 않도록 **작업 폴더 전체를 같은 볼륨의 제한 권한 백업 위치로 rename**했습니다. root inode 일치를 검증하고 `.git` 연결 파일은 메타데이터로 분리했습니다. 백업 사본은 활성 worktree가 아니며 용량 확보용 삭제는 하지 않았습니다.
+- **제품 브랜치 3개 로컬·원격 삭제:** `feature/DL-16466@56bc1be5ce975c6726637be51347911d730410ba`, `feature/DL-16471@12fb96a4e32c6a5e9abb4f61c235d9c2c1e53a14`, `feature/DL-16852@549a1d4023ebb8892b1f0dd08298212ee1af75b9`. DL-16466은 CLOSED·미병합 PR #4643의 원본, DL-16471은 미완료 하네스이므로 운영 반영을 이유로 지운 것이 아니라 사용자가 승인한 새 출발을 위해 복구 자료를 남긴 것입니다. 본인 소유·전체 SHA·열린 PR head/base 의존 부재를 확인한 뒤 예상 SHA를 보호한 atomic 원격 삭제를 사용했습니다. 원격 push는 브랜치 삭제만 수행했으며 제품 코드 커밋·PR·배포는 없습니다.
+- **Studio 로컬 정리:** `/Users/parkjongsun/Repository/dentlink-studio` 원본 clone은 보존하고 기존 local `main@503bf044aaa6ac7280dd79193a77aba1d8ebc6f5`로만 전환했습니다. 이 세션의 `feature/DL-16471-dlds-dlos-integration@25af81a2fd8ae4ebaf89be93abe45b7784ce5cb2`와 실제 원격에는 없던 과거 `origin/codex/dlds-dlos-integration` 추적 ref를 로컬에서 제거했습니다. 해당 Studio 작업은 미반영 가능 원본으로 별도 bundle에 보존했습니다.
+- **미처리 1개:** Studio의 위 원격 feature 브랜치는 HTTP403 `Write access to repository not granted`로 삭제되지 않았습니다. 실제 GitHub 계정 `jongsunP`의 저장소 권한은 pull=true/push=false입니다. 임의 권한 우회·반복 재시도는 하지 않았습니다. 권한 있는 담당자가 해당 원격 브랜치를 삭제하면 정리가 완결되며, 남아 있어도 새 master 기반 작업 준비를 막지는 않습니다.
+
+### 복구 위치와 보존 범위
+
+- 백업 루트: `/Users/parkjongsun/.codex/backups/2026-10-26-dlds-fresh-start/` (0700). `RESTORE.md`에 복구 방법·주의사항, `manifest.json`에 원본 SHA·정리 전후 refs/worktree·검증·권한 오류를 기록했습니다.
+- `client-branches.bundle`: 위 제품 3개 브랜치의 전체 이력. SHA256 `8c55b0403db3c55ed1ed09acac943cc29878a543d70c6ac7f9348741ad05b228`.
+- `studio-branch.bundle`: Studio 원본 전체 이력. SHA256 `088d32d596e71219f13c489926c3a49b65894f65bee87f69b277c956bb013539`. 두 branch bundle 모두 `git bundle verify`와 독립 bare 저장소의 commit 복원 검증을 통과했습니다.
+- `related-stashes.bundle`: QA/build stash 2개(`1848c793e7504c42d85f33a8f4ce2be81cb4cb06`, `a6cd19aa76e7d1fa335a370cfafa4a795f17270d`)도 별도 bundle로 보존·검증했습니다. SHA256 `3b55a94591e956ff241547db428cdea33be784a92b1284b37e8c33369e0973b6`. 원래 저장소의 전체 stash 목록도 변경하지 않았습니다.
+- `working-copies/` 아래에 두 작업 폴더 전체가 있습니다. env/auth 값은 읽거나 출력하지 않았으며, 미추적 생성 화면·AI 세션 결과·검증 자료·의존성·빌드 캐시까지 함께 보존했습니다. 실제 인증/환경 자료가 포함되므로 Git·공유 문서로 업로드하지 않습니다. 이 백업은 해당 Mac에만 있고 개인 메모리 push가 파일을 다른 기기로 복제하지 않으므로, 다른 기기에서 필요하면 사용자가 안전하게 전달해야 합니다.
+- 기존 10/25 복구 bundle, 모든 stash, 원본 `dentlink-client`와 `dentlink-studio`, env worktree, 타 세션/동료 브랜치, 보호 refs/태그, 이 세션의 Documents 자료는 보존했습니다. 공용 watchman은 유지하고 없어진 integration 경로의 watch만 해제했습니다. 대상 외 local branch/tag 불변과 두 worktree 등록 제거를 검증했습니다. Jira·제품 코드·PR·배포·PAUSED 자동화는 변경하지 않았습니다.
+
+### 다음 시작점
+
+1. **지금은 정리 결과를 공유하고 대기합니다.** 이 세션을 다시 보관하거나 기존 환경을 자동 복원하지 않습니다. 하네스 전체 완료로 처리하지 않습니다.
+2. 사용자가 새 준비를 요청하면 개인 context와 원격 최신 상태를 확인하고 **그 시점의 최신 master에서 새 브랜치·작업 환경을 준비**합니다. 이번 정리에서는 제품 master/main을 pull하거나 새 브랜치/환경을 만들지 않았습니다. 기존 `pnpm dev:*` 안내의 삭제된 worktree 경로는 그대로 실행할 수 없습니다.
+3. 기존 하네스 지침·생성/검증 도구·시험 결과는 위 백업에서 필요한 부분만 검토해 현재 DLDS/DLOS·Studio 구조에 맞춥니다. 과거 제품 전체 레포 기반 하네스를 그대로 이식하거나 특정 AI/별도 입력창을 필수로 되돌리지 않습니다. 목표는 비개발자의 짧은 자연어 요청으로 실제 디자인시스템을 사용하는 화면을 만들고 FE가 결과 코드를 이어받는 것입니다.
+4. npm/Studio의 최신 공개·소비 상태는 재개 시 별도로 확인합니다. 10/25 미공개 및 master 미반영 관측은 당시 이력입니다. 10/26 메인 정본에는 이후 원격 release→master PR #4776 통합 완료가 기록돼 있으므로 옛 'master 반영 대기'를 현재 차단으로 다시 만들지 않습니다. 이번에는 새 배포/게시/QA를 실행하지 않았습니다.
+
+## 이전 브레이크포인트 — 2026-10-25 · 운영 반영 확인, 완료 브랜치 정리 및 세션 보관
 
 - 메인 세션에서 사용자가 오늘 배포된 작업의 상태 확인·담당 자원/Jira/메모리 정리·세션 보관을 승인했습니다. 이 세션은 읽기 전용 점검 후 메인이 지정한 정리 순번에 실행했습니다. 제품 코드 수정·새 테스트·병합·추가 배포·npm 공개·Studio/하네스 개발은 하지 않았습니다. 권한관리 QA의 최신 상태는 해당 세션 정본을 따릅니다. 메인은 오늘 해당 담당 카드들의 Done 확인을 전달했으므로, 과거 QA 대기 기록을 새 미완료 일감으로 만들지 않습니다.
 - **운영 포함:** `prd/clinic/v1.89.0`, `prd/lab/v1.89.0`, `prd/admin/v1.89.0` 태그와 `origin/release/v1.89.0`은 `a5e465561b953270b2925b2082845ba753f0572f`입니다. 아래 5개 PR은 모두 `release/v1.89.0`에 병합됐고, 각 병합 커밋의 운영 포함과 최종 코드 잔존을 확인했습니다. 아래 10/20 기록의 OPEN/미병합은 당시 이력입니다.

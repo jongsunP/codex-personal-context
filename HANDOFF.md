@@ -34,10 +34,10 @@ Do not store secrets or private customer data here.
 
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
-  — 2026-10-26 권한관리 작업 공간3개 제거·설정 보존, 디자인시스템/env 유지. 원격 release→master PR4776 통합은 완료됐으며 Jira 버전 표시는 재조회하지 않았다.
+  — 2026-10-26 권한관리 작업 공간3개 제거·설정 보존, env 유지. DLDS는 이후 별도 사용자 요청으로 아래 정본의 새 출발 정리를 적용한다. 원격 release→master PR4776 통합은 완료됐으며 Jira 버전 표시는 재조회하지 않았다.
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16830·DL-16471:
   [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 웹 운영 포함·완료 refs 정리 후 2026-10-26 사용자 지시로 세션을 유지한다. 통합 worktree/env와 하네스도 보존한다. 정식 npm/Studio/하네스는 별도 후속이며 자동 재개하지 않는다.
+  — 2026-10-26 세션 유지. 기존 worktree2개와 제품 브랜치3개를 복구 백업 후 정리했고 Studio 로컬 브랜치도 정리했다. Studio 원격1개는 쓰기 권한403으로 남았다. 미완료 하네스·env/auth·생성 결과는 보호된 로컬 백업에 보존했다. 다음 요청에서 최신 master 기준 새 환경을 준비하며 자동 재개하지 않는다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — 승인된 UI 정리 PR #4642가 반영된 완료 이력. 미착수 조사로 되돌리지 않는다.
