@@ -1,6 +1,19 @@
 # Dentlink 웹 환경변수 관리
 
-## 현재 상태 — 2026-10-25 운영 반영 확인·env 업무 마감 및 브랜치 정리 완료
+## 현재 상태 — 2026-10-26 기본 저장소 로컬 준비·전용 작업 공간 정리 완료
+
+- 사용자가 실제 로컬 env의 점검·정리·준비를 명시 요청했고, 이후 기본 `dentlink-client`와 LBX 코드만 남기는 방향으로 worktree/세션 정리까지 승인했다. 처음의 env 작업 공간 유지·삭제 전 별도 승인 대기는 이 최신 지시로 대체됐다. 이번 명시 요청은 실제 env 접근의 한정된 예외이며, 팀의 사람 수동 관리 원칙을 바꾸지 않는다. 값은 출력하거나 Git 문서에 저장하지 않았다.
+- 기본 저장소 `master`를 `c597f1fb3e7f5c03a76237926c3effad5bb84983`로 fast-forward했다. origin/master와 동일·clean이며 PR4776으로 운영 release가 포함돼 있다. 아래 10/25의 master 동기화 미실행은 과거 상태다.
+- 활성 설정은 `admin/clinic/lab/.env.development` 3개, 번역 Sheet 지정용 `lab/.env.local`, `e2e/.env.development`, `e2e/.env.staging`이다. 서비스 staging/production 6개는 기본 저장소에서 빼서 제한 권한 로컬 백업에 보존했다. 빈 `.env.example` 4개는 계속 Git 추적한다.
+- DEV 필수 키는 Admin19/Clinic36/Lab24개 모두 채워졌고 유효 API/환경이 DEV임을 확인했다. Clinic의 구형 E2E 중복 키47개는 전용 E2E 설정과 값 일치를 확인한 후 제거했다. E2E 로컬 주소는 실행기의 기존 분리 포트3100/3105/3102에 맞췄다. 선택적 외부 연동의 모든 값·실사용까지 검증한 것은 아니다.
+- `pnpm install --frozen-lockfile`, `pnpm build:packages` 성공. Clinic3000/Lab3005/Admin3002에서 `.env.development` 로드와 `/auth/signin` HTTP200/HTML을 각각 확인했다. 기동 전·후, 요청 후, 종료 후 env3개 존재를 확인했고 사용한 서버는 종료했다. 기존 사용자 Playwright test-server와 IDE는 유지했다. 새 로그인·API 변경·전체 E2E는 실행하지 않았다.
+- 최초 기동 확인 뒤 DEV 파일3개 부재가 관찰돼 동일 원본이 있던 env worktree에서 복구하고 별도 사본을 남겼다. 원인은 확정하지 않았다. 이후 의존성 설치·패키지 빌드·3서비스 기동/요청/종료 재확인에서는 재현되지 않았으며 최종 파일이 존재한다. 최초 확인이 아니라 이 재확인을 로컬 준비 근거로 사용한다.
+- **전용 worktree 제거:** `/Users/parkjongsun/Repository/dentlink-client-env-management`. 실제 env5개는 기본 저장소로 옮겼고 고유 추적/미추적 코드·활성 프로세스가 없음을 확인했다. ignored coverage baseline은 별도 보존하고 생성 캐시와 작업 공간을 정리했다.
+- **완료 로컬 브랜치2개 제거:** `feature/DL-16821-stage-e2e@460a9c0d5be793c49dbfe44a9adc142c6fb98235`, `feature/v1.89.0-qa@178a4ab6745a81abc1ed56bae8bc7496b402775d`. 원격 동일 SHA를 확인했으며 원격 refs는 변경하지 않았다. 웹에는 기본 worktree1개와 `master`, LBX `feature/DL-16387`만 남았다. env 세션 `01a13d89-14d1-71f0-b53b-8b6238c384f9`는 보관했다.
+- 백업/검증 근거는 `/Users/parkjongsun/.local/share/codex-closeout/20261026-web-local-env/`의 `manifest.json`, `local-startup-recheck.json`, `files/`다. 기존 STG/PRD, Clinic/E2E 변경 전 원본과 DEV 복구 사본을 포함한다. 이 Mac에만 있으며 개인컨텍스트 push가 실제 설정을 다른 기기에 복제하지 않는다.
+- **다음 시작점:** 새 요청 때 기본 저장소의 최신 master와 필요한 작업만 준비한다. 삭제할 파생 worktree는 재설정하지 않는다. 이번 로컬 정리는 제품 코드·PR·Jira·배포 변경이 아니다. 아래 DEV ISV/보안 후속을 새로 완료 처리하거나 자동 재개하지 않는다.
+
+## 이전 상태 — 2026-10-25 운영 반영 확인·env 업무 마감 및 브랜치 정리 완료
 
 - **업무 마감:** 메인세션이 전달한 사용자 승인에 따라 1단계 읽기 전용 배포/정리 감사 후 지정된 2단계만 수행했다. env 전환 코드는 DEV·STAGE를 거쳐 v1.89.0 운영까지 반영됐다. 새 제품 수정·PR/병합·재배포·쓰기 QA/E2E·실제 env/GitHub 값 변경은 하지 않았다. 담당 Jira DL-16821은 완료 처리했고, 별도 미해결은 아래에 분리한다. 정리 후 이 세션을 보관하도록 지시받았으며 이후 자동 실행은 하지 않는다.
 - **운영 포함 근거:** `prd/clinic/v1.89.0`, `prd/lab/v1.89.0`, `prd/admin/v1.89.0`과 `origin/release/v1.89.0`은 모두 `a5e465561b953270b2925b2082845ba753f0572f`다. PR4713의 병합 커밋 `2fb2fdc50d6b124b02cd3b3c7224200d8fc549ef`, PR4740의 `14f6d3c8041adb0cf52bc8ce272db50c423355ad`, PR4743의 `460a9c0d5be793c49dbfe44a9adc142c6fb98235`가 운영 이력에 포함된다. 원본 feature/DL-16821의 `aae83bcc3810a47bf1a77e6ce1671950b9e4c11e` 자체는 운영 조상이 아니므로 병합 커밋과 구분한다. env 공급·Docker·빈 example·접근 지침 핵심 파일의 최종 포함을 확인했고, 운영 Git의 env 파일은 빈 example4개뿐이다.

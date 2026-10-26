@@ -18,8 +18,8 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
-- **2026-10-25 운영 반영·업무 정리 완료. 10/26 사용자 지시로 세션·작업 공간 유지.** PR4713/4740/4743이 웹 v1.89.0에 포함됐고 3서비스 배포 성공·공개 접속을 확인했다. DL16821은 완료 처리했다.
-- 로컬·원격 완료 브랜치2개씩을 복구 검증 후 삭제했다. 실제 env5개가 있는 worktree와 `feature/DL-16821-stage-e2e`, Colima/캐시는 보존했다. 실제 값은 계속 사람이 관리한다.
+- **2026-10-26 기본 master 로컬 준비·전용 worktree 제거·세션 보관 완료.** PR4713/4740/4743은 웹 v1.89.0 운영에 포함됐고 DL16821도 완료다. 기존 작업 공간 유지 지시는 최신 메인 정리 지시로 대체됐다.
+- 사용자의 명시 요청으로 DEV/E2E 설정을 기본 저장소에 정리하고 의존성·패키지 빌드·3서비스 로그인 페이지 HTTP200을 확인했다. 서비스 STG/PRD 원본은 제한 권한 로컬 백업에 보존했다. 남은 완료 로컬 브랜치2개도 제거했고 원격은 그대로다. 일반적인 실제 값 수동 관리 원칙은 유지한다.
 - 10/20 STAGE 전체 E2E 성공과 10/22 DEV ISV 실패2건, 이번 운영 배포 성공은 구분한다. 운영 기능 QA·팀원 로컬 준비·별도 키 보안 과제는 완료로 확대하지 않는다. 추가 실행은 새 지시 후 진행한다.
 - [개인 체크포인트](projects/dentlink-client-env-management.md) · [팀 운영 문서](https://app.notion.com/p/3fece072e82f81bf9edfe7a5b959a03c)
 
@@ -76,7 +76,7 @@ For detailed current state, read:
   [SESSION_WORKFLOW.md의 업무 접수 기준](SESSION_WORKFLOW.md#new-work-intake-and-session-routing)을 따른다.
 - 기능별 보관/대기 상태와 다른 기기의 첫 대화에서 읽을 체크포인트:
   [projects/dentlink-fe.md](projects/dentlink-fe.md)의 **다른 기기에서 이어가기** 절.
-  2026-10-26 권한관리 작업 공간3개 정리·설정 보존과 디자인시스템/env 유지, 원격 master 통합 완료를 최상단에 기록했다.
+  2026-10-26 웹은 최신 master 기본 worktree1개, 로컬 master/LBX만 남겼다. 메인·LBX·디자인시스템 세션을 유지하고 env·통합알림센터는 보관했다. 로컬 준비와 복구 자료는 최상단 정본에 기록했다.
   10/25 배포 후 4세션 마감과 로컬15개/원격14개 정리 이력도 같은 문서에 보존한다.
   2026-10-16 로컬 브랜치 4개·worktree 1개·원격 브랜치 158개 정리 이력도 같은 문서에 보존한다.
   원격은 출시 완료154개와 사용자 확인 후 폐기한 frankieTemp 백업4개다.
@@ -139,8 +139,8 @@ For detailed current state, read:
 - 기존 배송 목록·상세 확장, LBX Baby/Mother 생성 및 픽업 생성.
 - 원본 `feature/DL-16387 / b69dd84b6`에서 합의된 기획·백엔드 요구사항 구현은 완료했고,
   운영 배포는 홀드 상태다. 2026-10-16 원본 기반 별도 배포용 브랜치로 개발서버에만 반영했다.
-  develop 전달 PR #4709 병합 및 배포 workflow 성공 확인. 원본은 계속 유지하며 추가 작업을 누적하고,
-  필요할 때 별도 브랜치로 배포한다. 사용 완료된 로컬 전달 브랜치·임시 worktree는 정리했고 현재 대기 중이다.
+  develop 전달 PR #4709 병합 및 배포 workflow 성공 확인. 10/26 원본 코드와 세션은 보존하되,
+  재개 시 최신 master에서 필요한 환경과 LBX 변경만 준비하기로 했다. 현재 새 환경 준비 없이 대기한다.
   실제 업무 API·화면 QA와 운영 릴리스는 별도이며, 테스트 중 실제 생성·수정 요청 금지는 유지한다.
 - [projects/dentlink-client-lbx.md](projects/dentlink-client-lbx.md)
 
@@ -180,6 +180,7 @@ For detailed current state, read:
 
 - 웹·앱의 REST 조회/읽음/삭제와 딥링크 연결을 다룬다. 별도 알림 SSE·silent FCM
   기반 실시간 동기화는 제외됐다. 공통 구현은 미착수이며 전용 worktree가 없다.
+- 2026-10-26 메인 작업 공간 정리에 따라 세션을 보관했다. 사전 검토는 유지하며 새 요청 때만 재개한다.
 - [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
 
 ### Dentlink E2E Stabilization

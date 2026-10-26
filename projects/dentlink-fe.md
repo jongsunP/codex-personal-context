@@ -4,7 +4,16 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
-## 완료 업무 폴더 정리 — 2026-10-26
+## 현재 작업 공간 — 2026-10-26 메인 정리 완료
+
+- **사용자 최종 방향:** `dentlink-client` 기본 저장소를 정리해 사용하고, 별도 작업 코드는 LBX만 보존한다. 기능 세션은 LBX·디자인시스템정비를 유지한다. 이후 작업은 그때의 최신 master에서 필요한 브랜치/worktree를 준비하고 필요한 변경만 가져온다. 지금 새 환경이나 구현을 시작하지 않는다.
+- 웹 worktree는 `/Users/parkjongsun/Repository/dentlink-client` **1개**, 로컬 브랜치는 **`master`와 `feature/DL-16387` 2개**다. master는 `c597f1fb3e7f5c03a76237926c3effad5bb84983`로 fast-forward했고 origin/master와 동일·clean이다. LBX `b69dd84b6d2590449c2f6887330b4e8285b2ab63`는 로컬·원격을 그대로 보존했다.
+- 남아 있던 env worktree와 완료된 로컬 `feature/DL-16821-stage-e2e`, `feature/v1.89.0-qa`를 제거했다. 두 원격 브랜치는 동일 SHA로 유지한다. DLDS 작업 공간 정리는 담당 세션에서 별도로 완료했으며 미완료 하네스의 복구 자료와 Studio 원격 삭제 권한 문제는 [담당 정본](dentlink-fe-opportunities.md)에 있다.
+- 기본 저장소의 DEV env·E2E 설정과 의존성·공용 패키지를 준비했다. Clinic3000/Lab3005/Admin3002 로그인 페이지 HTTP200 및 env 로드를 확인한 뒤 임시 서버를 종료했다. 로그인 이후 기능 QA/E2E를 실행한 것은 아니다. 설정 정리와 복구 근거는 [env 정본](dentlink-client-env-management.md)을 따른다.
+- **메인·LBX·디자인시스템정비 세션 유지, env·통합알림센터 세션 보관 완료.** 통합알림센터는 미착수 상태와 사전 검토를 보존하며 완료로 처리하지 않는다. 앱 저장소, 제품 코드, 원격 refs, Jira, PR, 배포는 이번 정리에서 변경하지 않았다.
+- 다음은 사용자 신규 요청 때 최신 master에서 필요한 작업만 준비한다. 폐기할 worktree의 env/의존성을 다시 맞추지 않는다. LBX 원본을 삭제하거나 자동 rebase하지 않는다.
+
+## 이전 완료 업무 폴더 정리 — 2026-10-26
 
 - 사용자 최신 범위는 **디자인시스템·env 유지, 권한관리·Billing 완료 업무의 Repository 폴더 정리**다. 현재 앱 목록에서도 디자인시스템정비세션·env 파일 Git 제외와 환경변수 관리 정리는 보관 밖 idle임을 확인했다. 이 두 세션과 관련 작업 공간은 변경하지 않았다. 10/25의 4세션 보관 표는 당시 이력이다.
 - 권한관리 웹 `dentlink-client-permission`, Office `dentlink-app-permission`, 웹 내부 PR4700 리뷰의 **3개 등록 worktree를 제거**했다. 미커밋/미추적 코드·활성 작업 없음과 운영 코드 보존을 확인했다. Billing은 별도 폴더가 없어 기본 웹 저장소를 유지했다. Repository 바로 아래 폴더는10개→8개, 웹 checkout은6개→4개, Office는2개→1개다.
@@ -424,17 +433,18 @@ Detailed implementation history remains in the relevant existing project file.
 ## 다른 기기에서 이어가기 — 2026-10-26 색인 갱신
 
 - 신규/다른 기기의 첫 대화는 아래 개인 정본에서 현재 업무를 복구한다.
-  권한관리·Billing은 완료/보관 상태이며, 10/26 사용자 지시로 디자인시스템·env 세션은 유지한다.
-  그 외 대기/보류 세션은 기존 상태를 유지한다. 상세 근거와 후속의 승인 경계는 각 정본을 따른다.
+  권한관리·Billing·env는 완료/보관 상태다. 메인·LBX·디자인시스템정비 세션을 유지하며,
+  통합알림센터는 미착수 상태로 보관했다. 웹은 기본 master worktree만 사용하며 재개 시 필요한 환경을 새로 준비한다.
+  상세 근거와 후속의 승인 경계는 각 정본을 따른다.
 
 | 기능 | 현재 단계 | 개인 정본 |
 | --- | --- | --- |
 | 권한관리 | 업무 완료·세션 보관, 웹/Office/리뷰 worktree 제거. 앱 원본 refs/검증 한계 보존 | [권한관리](dentlink-permission-management.md) |
-| LBX | 운영 보류 유지. 오늘 배포 후 정리 대상 아님, 재개는 별도 지시 | [LBX](dentlink-client-lbx.md) |
-| 디자인시스템정비 | 웹 통합·QA 운영 포함. 사용자 지시로 세션·공간 유지, npm/Studio/하네스 별도 | [DLDS](dentlink-fe-opportunities.md) |
+| LBX | 운영 보류·원본 코드/세션 유지. 재개 시 최신 master에서 필요한 변경만 준비 | [LBX](dentlink-client-lbx.md) |
+| 디자인시스템정비 | 세션 유지, 옛 worktree 정리·복구 자료 보존. 다음 요청에서 master 기반 2단계 준비 | [DLDS](dentlink-fe-opportunities.md) |
 | Billing Statement | PR4699 운영 포함·원본 refs 정리·세션 보관, 추가 작업 없음 | [문서 명칭 변경](dentlink-client-billing-statement.md) |
-| 통합알림센터 | 사전 조사 후 미착수, 오늘 정리 대상 아님. 재개 지시 대기 | [통합알림센터](dentlink-unified-notification-center.md) |
-| 웹 환경변수 관리 | 운영 반영·DL16821 완료. 사용자 지시로 세션·공간과 별도 보안/DEV 과제 유지 | [환경변수](dentlink-client-env-management.md) |
+| 통합알림센터 | 사전 조사 후 미착수·세션 보관. 재개 지시 대기 | [통합알림센터](dentlink-unified-notification-center.md) |
+| 웹 환경변수 관리 | 운영 반영·기본 저장소 로컬 준비 완료. 전용 worktree 제거·세션 보관 | [환경변수](dentlink-client-env-management.md) |
 
 - 2026-09-29 최초 개인 기록의 원격 보존 확인: 권한관리 `f778f98`, LBX `976d93b`, DLDS
   `b2d428c`, 통합알림센터 `a5f2883`. 제품 코드의 commit·push를 이번 기록 작업에서

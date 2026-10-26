@@ -34,7 +34,7 @@ Do not store secrets or private customer data here.
 
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
-  — 2026-10-26 권한관리 작업 공간3개 제거·설정 보존, env 유지. DLDS는 이후 별도 사용자 요청으로 아래 정본의 새 출발 정리를 적용한다. 원격 release→master PR4776 통합은 완료됐으며 Jira 버전 표시는 재조회하지 않았다.
+  — 2026-10-26 웹 기본 master worktree1개·로컬 master/LBX만 남겼다. 기본 env/의존성과 3서비스 로그인 페이지 응답 확인 완료. 메인·LBX·디자인시스템 세션 유지, env·통합알림센터 보관. 이후 최신 master에서 필요한 작업만 준비한다.
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16830·DL-16471:
   [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
   — 2026-10-26 세션 유지. 기존 worktree2개와 제품 브랜치3개를 복구 백업 후 정리했고 Studio 로컬 브랜치도 정리했다. Studio 원격1개는 쓰기 권한403으로 남았다. 미완료 하네스·env/auth·생성 결과는 보호된 로컬 백업에 보존했다. 재개 대상은 Jira DL-16471 ‘2단계 · AI 프롬프트·하네스 정비’(진행 중)이며, 다음 요청에서 최신 master 기준 새 브랜치/필요한 worktree 준비부터 시작한다. 지금은 구현 없이 대기한다.
@@ -45,16 +45,16 @@ Do not store secrets or private customer data here.
 - Dentlink Office app: `projects/dentlink-app.md`
 - Dentlink Lab app: `projects/dentlink-lab-app.md`
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
-  — 2026-10-16 PR #4705의 develop 병합 완료. 운영 릴리스는 별도이며 원본과 날짜별 전달 브랜치를 보존한다.
+  — 운영 홀드·개발서버 반영 상태. 10/26 원본 feature/DL-16387과 세션을 보존했고, 재개 시 최신 master에서 필요한 LBX 변경만 준비한다.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
   — 웹 운영 포함·앱 Production 활성 확인 후 업무 완료/세션 보관. 10/26 웹/Office/리뷰 worktree3개는 제거하고 설정을 별도 로컬 보관했다. 원본 refs와 OTA exactSHA/전 기기 QA 한계를 유지하며 과거 QA 대기를 새 미완료 업무로 만들지 않는다.
 - Dentlink 웹 환경변수 관리: [projects/dentlink-client-env-management.md](projects/dentlink-client-env-management.md)
-  — 운영 반영·DL16821 완료·미사용 refs 정리 후 2026-10-26 사용자 지시로 세션·작업 공간을 유지한다. 실제 env는 사람이 관리하며 별도 DEV/보안 후속은 새 지시 전 보류한다.
+  — 2026-10-26 기본 master 로컬 준비·전용 worktree 제거·세션 보관 완료. 원본 설정은 로컬 제한 권한 백업에 보존. 새 기능 QA/E2E는 미실행이며 별도 DEV/보안 후속은 새 지시 전 보류한다.
 
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — 2026-10-25 PR4699 운영 포함 확인·로컬/원격 완료 브랜치 정리·세션 보관. 추가 예정 작업 없음.
 - Dentlink 통합알림센터: [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
-  — REST 방향·사전 조사 완료. 권한관리 선행, 미정 정책 확인과 재개 지시 대기.
+  — REST 방향·사전 조사 보존, 구현 미착수. 2026-10-26 세션 보관, 재개 지시 대기.
 
 Use `PROJECTS.md` for repository paths and the broader project index.
 
