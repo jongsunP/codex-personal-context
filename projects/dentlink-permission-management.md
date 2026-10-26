@@ -1,5 +1,53 @@
 # Dentlink 권한관리 — DL-16317
 
+## 후속 QA 조사 완료·구현 대기 — 2026-10-26 DL-17011 Admin 그룹 회원 권한
+
+- **현재 요청/세션:** [DL-17011](https://innovaid.atlassian.net/browse/DL-17011), 상위 [DL-17010](https://innovaid.atlassian.net/browse/DL-17010). 새 세션 `01a17658-54e4-7b42-bd92-d0f790d7f2bd`에서 히스토리·작업내용 조사만 수행했다. 기존 메인 프로젝트 폴더를 사용하고 새 제품 worktree/프로젝트 폴더를 만들지 않았다. 제품 코드·branch·PR·Jira·배포 변경은 없으며 구현은 다음 사용자 지시를 기다린다.
+- **결론:** 확정 요구에 있던 **Admin 사이트의 OFFICE 그룹 멤버 권한 선택/표시 반영 누락**이다. Clinic 권한 UI와 공통 API 타입은 갱신했지만 Admin 수정 화면은 기존 고정 목록을 계속 사용했다. 보존 원본 feature부터 운영·master·stage까지 같은 코드여서, 확인한 이력에서는 구현 후 merge/cherry-pick 누락이나 후속 삭제/회귀 근거가 없다. 과거의 권한관리 전체 완료·배포 기록을 이 화면의 완료 증거로 사용하지 않는다.
+
+### 요구사항·QA 기록과 실제 관찰
+
+- DL-17011 본문/댓글은 비어 있다. 실제 요구는 DL-17010의 “OFFICE 그룹 회원 수정 화면에서 신규 권한 미노출, QA 때 완료한 것으로 확인했는데 관리자 수정 사항의 배포 누락인지 확인”이다. 댓글44629는 자동 확인요청 멘션이며 추가 요구가 아니다. 상위 fixVersion은 `v1.90.0`이지만 이 값만으로 구현 base를 정하지 않는다.
+- 원래 [권한관리 기획 정본](https://app.notion.com/p/3eace072e82f81aa955dc21cba5cf127), 최종 편집 **2026-10-22 15:59:44 KST**의 5번 “여정 밖 변경”에 **`[관리자] 그룹 멤버 수정 / 권한 드롭다운 Manager 추가, 포털 Members와 동기화 / 필수`**가 명시돼 있다. 8번 TC에도 **관리자 로그인 → 권한 드롭다운에서 Manager 저장 → 포털 Members에 동일 반영**, Desktop **✅**가 있다. 따라서 Admin을 처음부터 요구 범위 밖으로 제외했다고 설명할 수 없다. 다만 TC 체크의 테스트 시각·빌드·계정·실제 저장 증거는 없어, 무엇을 기준으로 통과했는지는 미확인이다.
+- DL-16317과 DL-16544가 연결한 [기존 알림센터 문서 8-1](https://app.notion.com/p/3c7ce072e82f811184a8e647444f01fd#e984570de2224ebdba3fd667a893cd51)에도 Admin 그룹 수정 TC가 있다. 이 문서는 현재 권한 정본으로 연결된다. 두 Notion 응답의 `truncated=true`는 각각 지원하지 않는 외부 객체/Drive 블록 1개를 포함하며 위 요구·TC 텍스트는 직접 읽었다. Figma direct tool은 이번 세션에 없어서 디자인 픽셀/원본 frame은 새로 검증하지 않았다.
+- DL-16319의 현재 설명과 이력 댓글은 Clinic/기공소 웹의 권한 제한을 중심으로 한다. 댓글의 Member/Admin 비교는 같은 치과 안의 **역할** 비교이며 Admin **사이트** 회원 수정 QA의 증거가 아니다.
+- 제보 환경은 **STG Admin** `https://stg-admin.dentlink.io/employers/2709/employee/3030/edit`, 제보 **2026-10-26 10:16:48.755 KST**다. 운영과 구분한다. 첨부31797은 권한 `Owner`가 선택된 닫힌 드롭다운이며 열린 옵션 목록은 찍혀 있지 않다. 첨부31798 콘솔에서 10:12~10:15의 직원 상세 GET 200, Next BUILD_ID `v37HJVRBldfUQgDFICLjb`를 확인했다. 직원 PUT/PATCH/DELETE와 `/codes/authority-type` 호출은 0건이며 `No stroke found!` 경고 1건 외 오류 로그는 없다. 첨부만으로 저장 실패나 신규 권한 저장 성공을 판정할 수 없다. 원문 로그의 개인정보는 체크포인트에 복제하지 않았다.
+
+### 코드·API 추적
+
+- 고정 소스: 웹 `/Users/parkjongsun/Repository/dentlink-client`, clean `master@c597f1fb3e7f5c03a76237926c3effad5bb84983`, upstream `origin/master`. 기본 checkout을 전환하거나 pull/fetch하지 않았다. 별도 DLDS detached worktree는 유지했고 로컬 LBX `feature/DL-16387@f389c13cfbe497e0b864aa9399efafd9ecae305d`도 변경하지 않았다. 앱 저장소는 이번 Admin 원인 조사에 불필요해 열지 않았다.
+- `admin/src/pages/employers/[employer_id]/employee/[employee_id]/edit.tsx`: 24~30행 기본값은 `authorityType=EDITOR`, 61~69행에서 서버 권한값을 그대로 폼에 넣고, **123행**은 `EnumMaps.EmployeeAuthorityTypeMap`을 options로 사용한다. 별도 resolver/권한 validation은 없다. 57~59행에서 `EmployeeApisAdmin.updateEmployee(values)`로 제출한다.
+- `shared/models/src/common/enum.maps.ts:43~48`은 **`OWNER→Owner / PAYMENT_MANAGER→Billing Manager / EDITOR→Member / VIEWER→Viewer`** 4개뿐이다. 신규 `MEMBER`가 없고 기존 `EDITOR`의 화면 이름도 Manager로 갱신되지 않았다. 신규 옵션만 추가하면 Member 표시가 두 개가 되므로 표시명 정합성도 필요하다.
+- `shared/models/src/employee/employee.apis.admin.ts:60~71`은 ID를 URL로 분리하고 `{status, authorityType, onboardingStep}`를 **PUT `/admin/employers/{employerId}/employee/{employeeId}`**에 전달한다. handwritten `employee.types.ts:70` 및 응답 DTO, generated `data-contracts.ts:6241`은 이미 `MEMBER`를 허용한다. 타입에 신규 권한이 있다는 사실과 UI에 선택지가 있다는 사실은 다르다.
+- 기존 MEMBER 회원은 폼 state에 MEMBER가 남지만 options에 항목이 없어 선택 표시가 비는 경로가 있다(`shared/dlos/src/components/Select.tsx:169~187,407`). 선택을 바꾸지 않은 제출은 state의 MEMBER를 그대로 보낸다. 이는 코드상 판단이며 실제 사용자 저장은 실행하지 않았다.
+- Clinic은 `useAuthorityTypeQuery`로 서비스별 코드 API를 사용하고 `office-member-authority.ts`에서 `OWNER→Admin`, `EDITOR→Manager`, `MEMBER→Member`로 표시한다. Clinic 저장은 별도 PATCH `/office/employers/own/employee/{employeeId}/authority`이므로 Admin PUT 검증을 대신하지 않는다.
+- **2026-10-26 12:57 KST 공개 API 읽기:** STG와 DEV `/codes/authority-type?serviceType=OFFICE`가 모두 200/`0000`, `OWNER=Admin / PAYMENT_MANAGER=Billing Manager / EDITOR=Manager / MEMBER=Member`를 반환한다. STG LAB 응답에는 MEMBER가 없다. DEV `/v3/api-docs`의 Admin PUT `UpdateEmployeeByAdminDto.authorityType`에도 MEMBER가 있다. STG `/v3/api-docs`는 404이므로 STG 쓰기 계약/실제 저장 수용 여부는 아직 미검증이다. 실제 env/auth 값 조회나 로그인·쓰기 API 호출은 하지 않았다.
+
+### 시간순 Git·배포 근거
+
+| 시점·근거 | 확인 사실 |
+| --- | --- |
+| 2025-11-10 `ec301cda9bb224381baa07c5400afa6e8093622f` / PR3359 | 공통 권한 map의 `EDITOR→Member` 설정. 현재 Admin이 그대로 사용한다. |
+| 2026-10-02 `f5a068e5000e266d6dde5af9c126038fd4158ea2` | Clinic 전용 helper/query에서 `EDITOR→Manager` 표시 변경. Admin 수정 없음. |
+| 2026-10-13 `d374b77e7286b218fb10e97033ee79c14a073161` | 공통 enum type에 MEMBER, Clinic helper에 MEMBER 표시 연결. Admin UI와 공통 map 수정 없음. |
+| 2026-10-16 [PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700), merge `047fcc585` | 원본 feature 최종 `f4bfaf1bf102a555ec6350aee97ea0a1ab2c7d05` 병합. 변경151파일에 `admin/`와 `enum.maps.ts` 없음. |
+| 후속 PR4706/4710/4716/4719/4736/4747/4750/4759 | Admin UI/map 변경 없음. 위9개 PR의 병합 커밋은 모두 운영 SHA 및 master의 조상이다. |
+| 운영 release/tag `a5e465561b953270b2925b2082845ba753f0572f` | 원격 `release/v1.89.0` 및 `prd/{clinic,lab,admin}/v1.89.0`와 일치. Admin [run40180269225](https://github.com/Innvoaid/dentlink-client/actions/runs/40180269225) completed/success, 10/25 18:20:56 시작, 배포job18:33:39 완료 KST. 실행 성공과 기능 QA는 구분한다. |
+| master `c597f1fb3e7f5c03a76237926c3effad5bb84983` | 운영 release를 포함하지만 Admin 해당 화면은 여전히 옛 map 사용. |
+| 제보 전 stage `a5ec733f6d591c4ca459b5afce83279e974f29a9` / 현재 stage `0749fc754` | 해당 폼·권한 map 동일. 현재 stage는 제보 후 10/26 11:48 KST PR4783으로 바뀌었다. 제보 전 SHA의 Actions 조회는 Lab Stage1건만이며 Admin run 없음. stage ref 자체를 제보 당시 Admin serving SHA로 취급하지 않는다. |
+
+- `git log --all -S MEMBER`로 공통 map에 MEMBER가 추가된 이력은 없었다. Admin edit 경로의 `-S/-G`, blame과 보존 원본 commit도 대조했다. 삭제한 브랜치를 복구하지 않았다.
+- Admin edit 파일의 blob은 `d374b77e / f4bfaf1bf / 047fcc585 / QA heads8200ba2·c5ff587·178a4ab / a5e465561 / c597f1fb / a5ec733f6 / 0749fc754` 모두 **`f2b168a2f8b3992f41515e1742bc81bfdc6b1552`**로 같다. 공유 map의 권한 항목도 이 revision들에서 같다. 이 증거가 최초 UI 반영 누락 판단의 근거다. 제보 BUILD_ID와 serving SHA 직접 대응은 미확인이다.
+
+### 최소 수정 제안·검증·다음 시작점
+
+- **확정 수정 목표:** Admin에서 OFFICE 회원을 수정할 때 기존 EDITOR는 Manager, 신규 MEMBER는 Member로 구분해 선택·표시·저장하고, 기존 MEMBER의 초기 선택 표시를 보장한다. 같은 흐름의 목록/상세(`admin/src/lib/Employee/useEmployeeField.tsx:101~116,187~201`)도 옛 map을 사용하므로 권한 표시를 함께 맞추는 것이 필요하다.
+- 기존 Admin `admin/src/services/code/hooks/useAuthorityTypeQuery.ts`와 상세의 `data.employer.serviceType`을 활용하는 방향을 우선 검토한다. 실제 OFFICE 코드 응답은 확인했다. 공유 map을 무조건 바꾸면 LAB/ADMIN 그룹까지 MEMBER 옵션이 생기므로 서비스 범위를 지켜야 한다. 코드 API에 없는 기존 VIEWER 값의 초기 표시/미변경 저장도 보존하고, 제거·마이그레이션은 별도 확정 없이 진행하지 않는다.
+- 인접 등록 화면 `admin/src/pages/employers/[employer_id]/employee/form.tsx:71~85`도 같은 옛 map을 사용한다. 이번 확정 TC는 수정 화면이므로 등록까지 포함할지는 구현 전 범위를 확인할 후보이며, 임의로 넓히지 않는다. 이번 작업으로 Clinic/Lab/native의 권한 정책을 다시 구현할 필요는 발견되지 않았다.
+- 구현 후 필요한 검증: OFFICE의 EDITOR/MEMBER 선택과 기존값 초기 표시, PUT payload·상태/온보딩 값 보존, 저장·재조회와 포털 Members 일치, 기존 VIEWER 보존, LAB/ADMIN 옵션 회귀 없음. 타입/정적 검증과 실제 STG 쓰기 QA를 분리한다. 이번에는 코드 수정이 없어 테스트/빌드/실계정 QA를 실행하지 않았다.
+- **미확인:** TC 통과 당시 환경·빌드·계정, 제보 당시 STG serving SHA, Admin PUT의 STG MEMBER 실제 저장. QA 통과 표시는 있으나 이를 재현/서버 반영 성공으로 승격하지 않는다.
+- **재개:** 사용자에게 조사 결과와 위 범위를 보고하고 구현 지시를 기다린다. 승인 후에도 기본 checkout의 active writer·dirty·branch·현재 release 통합을 다시 확인한다. 메인세션은 idle, DLDS/DL-17012는 active로 관찰되어 개인 기록은 이 문서만 수정하며 PROJECTS/HANDOFF/dentlink-fe와 다른 세션 변경을 섞지 않는다. 개인 컨텍스트만 별도 commit/push하고 제품 commit/push/PR/merge/deploy는 별도 승인 전 수행하지 않는다.
+
 ## 완료 업무 로컬 작업 공간 정리 — 2026-10-26
 
 - 사용자 승인으로 권한관리·Billing 완료 업무의 불필요한 Repository 폴더만 정리했다. 디자인시스템·env 세션과 작업 공간은 유지했다. 신규 구현·QA·Jira·배포는 없다.
