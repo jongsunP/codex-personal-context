@@ -1,14 +1,24 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-10-26 develop 병합 / 테스트용 배포 진행·운영 홀드·대기
+## 현재 체크포인트 — 2026-10-26 문서 표시명 원본 반영 / develop PR #4787 생성
+
+### 최신 수정·전달 상태
+
+- [DL-16279 댓글 44647](https://innovaid.atlassian.net/browse/DL-16279?focusedCommentId=44647)의 문서 표시명 요청을 확인하고 사용자가 진행을 승인했다. 배송 상세 **LBX Mother 문서**의 `COURIER_INVOICE`를 `Mother invoice`, `COURIER_LABEL`을 `Mother Label`, `PACKING_LIST`를 `packing list`로 수정했다. 내부 `invoice`·`declaration`, URL·파일명·권한·다운로드 동작·fallback은 유지한다. 일반 배송 문서 영역은 변경하지 않았다.
+- **원본 반영 완료:** `feature/DL-16387 / 8a860f080fea9574c5da5db5907d513529bba7ee`, `fix: LBX Mother 문서 표시명 구분`. 기존 `f389c13cf` 위에 1파일·3줄만 수정해 정상 커밋·push했고 로컬/원격 일치를 확인했다. 원본은 계속 master `c597f1fb3`를 기반으로 LBX 변경을 유지하며 develop을 역병합하지 않았다.
+- **개발 전달 PR 생성까지만 완료:** 원본 새 커밋에서 `feature/DL-16387-develop-documents-20261026`을 만들고 develop `2b79d9198`을 병합했다. 이전 표시명 3줄 충돌은 새 표기를 유지해 해결했다. 전달 HEAD `703e422d26f44bf88be57ff1b66723066eae83c7`의 부모는 원본 `8a860f080`과 develop `2b79d9198`이다. [PR #4787](https://github.com/Innvoaid/dentlink-client/pull/4787), 제목 `[DL-16387] LBX Mother 문서 표시명 수정`, base `develop`, 생성 확인 당시 `OPEN / MERGEABLE`이며 diff는 **1파일 +3/-3**, 원본 수정 patch와 완전히 같다.
+- **검증:** 원본·전달본 모두 정상 pre-commit의 Clinic/Lab/Admin 타입 검사, 정상 pre-push의 lint(오류0·기존 경고226/184/393), DLOS guard60/60·가드 테스트9개, shared configs21개·hooks32개와 기존 2026-04-23 coverage baseline 비교를 통과했다. 변경 파일 ESLint·Prettier·diff 검사도 통과했다. 별도 테스트 코드는 추가하지 않았다.
+- **E2E 영향 가드:** 독립 정적 검토 `NO_IMPACT`. 기존 배송 E2E는 Lab shipping/pickup 흐름이며 Admin Mother 문서 표시명에 의존하지 않고, 결제 E2E의 Admin 접점도 결제 API다. 최종 전달 patch를 대조한 후 가드 기록과 PR 생성 직전 검사까지 통과했다. 원본/전달 ref에 가드 스크립트가 없어서 기본 checkout의 현재 가드 스크립트를 절대 경로로 실행했으며, 가드 파일을 제품 변경에 추가하지 않았다. 실제 E2E·업무 API 요청·브라우저 QA는 수행하지 않았다.
+- **종료 경계:** 요청대로 PR 생성에서 멈췄다. 병합·배포·CodeRabbit 리뷰 처리·CI/배포 모니터링은 시작하지 않았다. PR 생성 직후 검사 상태는 아직 최종 완료를 확인하지 않았으므로 로컬 검사 통과와 구분한다. 운영 릴리스 홀드는 유지한다.
+- **정리/다음 시작점:** 임시 작업 worktree와 의존성은 제거하고 원본·전달 브랜치의 로컬/원격은 유지했다. 기본 checkout의 다른 작업 `feature/DL-17011 / 9dcb644d5`와 기존 detached worktree는 보존했다. 기기 한정 증거는 `/Users/parkjongsun/.local/share/codex-closeout/20261026-lbx-document-labels/`의 `state.json`, `final.patch`, `e2e-guard-result.json`, commit/push 로그와 PR 본문이다. 다음 지시 시 원본 `8a860f080`과 PR #4787의 실제 상태를 갱신하고 이어간다.
 
 ### 계속 유지할 기준
 
 - **원본 `feature/DL-16387`은 최신 master의 코드를 따라가되 LBX 작업 코드를 살려 유지한다.** 특정 시점의 master에 동결하거나 master로 덮어써 LBX 변경을 지우는 것이 목적이 아니다. 재개 시 최신 원격 master와 원본을 비교해 master의 공통 변경을 보존하고, 실제 LBX 변경만 남는지 확인하며 필요한 호환 조정을 한다. 이 기준은 무단 force-push나 자동 동기화·배포 승인이 아니다.
 - LBX 코드는 필요하므로 원본을 계속 보존하지만 **운영 배포는 홀드이며 release에 넣지 않는다.** 테스트가 필요할 때만 `develop` 또는 `stage`에 별도로 반영한다. 테스트 환경 반영·테스트 완료와 운영 릴리스 승인을 구분한다.
-- 환경별 충돌·호환 수정이 필요하면 원본에서 별도 전달 브랜치를 만들어 처리하고, develop/stage의 다른 기능을 원본에 역병합하지 않는다. 이번 #4786은 충돌 없이 **원본 → develop 직접 PR**로 전달했으며, 원본을 변경·삭제한 것이 아니다. 저장소 자동 브랜치 삭제 설정도 꺼져 있음을 확인했다.
+- 환경별 충돌·호환 수정이 필요하면 원본에서 별도 전달 브랜치를 만들어 처리하고, develop/stage의 다른 기능을 원본에 역병합하지 않는다. 앞선 #4786은 충돌 없이 **원본 → develop 직접 PR**로 전달했고, 후속 #4787은 별도 전달 브랜치를 사용했다. 원본을 변경·삭제하는 전달 방식이 아니다. 저장소 자동 브랜치 삭제 설정도 꺼져 있음을 확인했다.
 
-### 이번 develop 전달과 확인 범위
+### 앞선 develop 전달 #4786과 확인 범위
 
 - 사용자가 만든 [PR #4786](https://github.com/Innvoaid/dentlink-client/pull/4786)을 검토했다. head `feature/DL-16387 / f389c13cf`, base `develop / d19d3e217`이며 실제 patch는 master 대비 LBX **19파일(+1518/-28)**과 동일했다. 커밋 목록의 master 병합 커밋은 공통 조상과 파일 내용이 같아 별도 릴리스 코드를 추가하지 않는다. develop 고유 변경 60파일과 LBX 변경 파일은 겹치지 않아 기존 develop 기능을 보존한다.
 - **2026-10-26 15:04:34 KST 사용자/팀 병합 완료**를 GitHub에서 확인했다. merge commit은 **`2b79d9198fa9569c0936df7c3b55d3468cf4f5a6`**이며 이번 종료 확인 시 원격 develop과 같다. 원격 원본은 `f389c13cf`, master는 `c597f1fb3` 그대로다. 에이전트가 PR을 생성·병합하거나 배포를 실행한 것은 아니다.
@@ -19,7 +29,7 @@
 ### 같은 날 완료한 최신 master 기반 원본 재구성
 
 - 사용자가 로컬 `feature/DL-16387`을 **지금 최신 원격 master에서 다시 만들고 필요한 LBX 변경만 준비**하도록 명시했다. 앞선 '원본 보존 후 재개 시 준비' 단계를 이번 요청으로 완료했다. 기본 저장소에서 master pull/fetch 후 `c597f1fb3e7f5c03a76237926c3effad5bb84983`를 기준으로 같은 로컬 브랜치를 재구성했다.
-- **로컬·원격 HEAD:** `f389c13cfbe497e0b864aa9399efafd9ecae305d`, `chore: 최신 마스터 기준으로 LBX 작업 재구성`. 부모는 위 master이며 master 대비 1커밋·19파일(+1518/-28)이다. 원격 재조회에서 master `c597f1fb3`, LBX `f389c13cf`, 로컬/원격 차이 0/0을 확인했다. 사용자의 목적은 **최신 master 위에 실제 LBX 작업 변경만 남기는 것**이며 이 상태로 원격까지 반영했다.
+- **재구성 당시 로컬·원격 HEAD:** `f389c13cfbe497e0b864aa9399efafd9ecae305d`, `chore: 최신 마스터 기준으로 LBX 작업 재구성`. 부모는 위 master이며 master 대비 1커밋·19파일(+1518/-28)이다. 원격 재조회에서 master `c597f1fb3`, LBX `f389c13cf`, 로컬/원격 차이 0/0을 확인했다. 사용자의 목적은 **최신 master 위에 실제 LBX 작업 변경만 남기는 것**이며 이 상태로 원격까지 반영했다. 이후 표시명 수정으로 원본 HEAD는 위 `8a860f080`으로 진행했다.
 - **선별 범위:** 기존 개발서버 전달본 `9f0479318`의 DLOS 대응 Baby/Mother/Pickup 폼, 조회/제출 연결, 배송 목록·상세·필터, order/shipment wrapper·도메인 타입과 필요한 선택적 공통 props만 가져왔다. 최신 `COURIER_LABEL` 계약을 기존 label 표시와 연결했다. master에 이미 있는 generated Admin/API 계약, DLDS/DLOS 패키지, 구형 공통 Dropdown/hook, package/lock/env는 덮어쓰지 않았다. 기존 Lab 번역 key·문구·사용 경로는 그대로여서 번역/시트 쓰기는 없었다.
 - **검증:** Clinic·Lab·Admin typecheck와 정상 pre-commit hook, DLOS guard60/60, 변경19파일 ESLint 오류0/경고7, Prettier·diff 검사 통과. ESLint CLI의 기존 Storybook/react-hooks 중복 plugin 경로 충돌은 같은 설치 plugin을 preload하는 검사 실행으로 해결했으며 저장소 설정·룰은 바꾸지 않았다. 변경된 DatePicker의 기존 불필요한 string 타입 주석3개는 제거했다.
 - **합성 통합9/9:** 현재 query/form과 DLOS Select를 사용해 주문 전체 페이지·중복제거·오류, 픽업 조회 선행 조건·페이지 추가·기공소 전환 시 취소/늦은 응답 제외, Mother 선택/제출, Baby/Pickup 초기 제출 차단을 확인했다. API·DataForm 외곽·기공소 선택·공용 픽업 입력은 대역이므로 실제 API·전체 입력·브라우저 QA 증거가 아니다. 실제 업무 요청·새 배포는 없다.
