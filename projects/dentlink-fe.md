@@ -4,6 +4,15 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
+## 완료 업무 폴더 정리 — 2026-10-26
+
+- 사용자 최신 범위는 **디자인시스템·env 유지, 권한관리·Billing 완료 업무의 Repository 폴더 정리**다. 현재 앱 목록에서도 디자인시스템정비세션·env 파일 Git 제외와 환경변수 관리 정리는 보관 밖 idle임을 확인했다. 이 두 세션과 관련 작업 공간은 변경하지 않았다. 10/25의 4세션 보관 표는 당시 이력이다.
+- 권한관리 웹 `dentlink-client-permission`, Office `dentlink-app-permission`, 웹 내부 PR4700 리뷰의 **3개 등록 worktree를 제거**했다. 미커밋/미추적 코드·활성 작업 없음과 운영 코드 보존을 확인했다. Billing은 별도 폴더가 없어 기본 웹 저장소를 유지했다. Repository 바로 아래 폴더는10개→8개, 웹 checkout은6개→4개, Office는2개→1개다.
+- env21개·debug keystore1·로컬 설정1·coverage baseline2의 **25개 파일**을 내용 조회/복사 없이 rename으로 `/Users/parkjongsun/.local/share/codex-closeout/20261026-permission-folders/`에 제한 권한 보관했다. 메타데이터 일치와 로컬 manifest를 확인했으며 Git 문서에 실제 파일을 업로드하지 않는다.
+- **이번 브랜치 삭제는 없다.** 모든 로컬/원격 refs·기존 복구 bundle·기본 제품 저장소·Lab 앱은 유지했다. Office 기본 의존성과 다른 감시도 보존하고 두 permission 경로의 watch만 해제했다. 복구/재개는 [권한관리](dentlink-permission-management.md), [Office](dentlink-app.md), [Billing](dentlink-client-billing-statement.md)을 따른다.
+- 원격 웹 master는 `c597f1fb3e7f5c03a76237926c3effad5bb84983`(PR4776)으로 release a5e465561을 포함한다. **어제 미실행이던 원격 release→master 통합은 이후 완료됐다.** 로컬 master8772d6882는 clean/40behind이며 fetch만 했다. Jira 버전 표시는 이번에 재조회/변경하지 않았다.
+- 제품 코드·새 커밋/PR·배포·Jira 변경 없이 개인 정본/색인을 저장·푸시하고 대기한다. DLDS·env의 별도 과제와 기존 검증 한계는 자동 재개하지 않는다.
+
 ## 배포 후 종합 마감 — 2026-10-25
 
 - 사용자가 오늘 배포된 작업의 담당 세션만 찾아 배포 상태·로컬/브랜치·Jira·개인 기록을 정리하고 보관하도록 승인했다. 메인은 대상 선정·전달·결과 검증·공통 색인을 맡고, 실제 정리는 아래 담당 세션에서 진행했다. 개인 컨텍스트 commit/push는 순차 실행했다.
@@ -412,20 +421,20 @@ Detailed implementation history remains in the relevant existing project file.
   [DLDS 정본](dentlink-fe-opportunities.md)을 따른다.
 - 아래 기기 복구 표의 QA 대기 상태는 이번 보고 전 저장 시점의 기록이다.
 
-## 다른 기기에서 이어가기 — 2026-10-25 색인 갱신
+## 다른 기기에서 이어가기 — 2026-10-26 색인 갱신
 
 - 신규/다른 기기의 첫 대화는 아래 개인 정본에서 현재 업무를 복구한다.
-  2026-10-25 배포 후 정리한 4세션은 기록을 commit/push하고 보관됐으며,
+  권한관리·Billing은 완료/보관 상태이며, 10/26 사용자 지시로 디자인시스템·env 세션은 유지한다.
   그 외 대기/보류 세션은 기존 상태를 유지한다. 상세 근거와 후속의 승인 경계는 각 정본을 따른다.
 
 | 기능 | 현재 단계 | 개인 정본 |
 | --- | --- | --- |
-| 권한관리 | 웹 운영 포함·앱 Production 활성 확인, 완료 refs 정리·세션 보관. 앱 원본/검증 한계 보존 | [권한관리](dentlink-permission-management.md) |
+| 권한관리 | 업무 완료·세션 보관, 웹/Office/리뷰 worktree 제거. 앱 원본 refs/검증 한계 보존 | [권한관리](dentlink-permission-management.md) |
 | LBX | 운영 보류 유지. 오늘 배포 후 정리 대상 아님, 재개는 별도 지시 | [LBX](dentlink-client-lbx.md) |
-| 디자인시스템정비 | 웹 통합·QA 운영 포함·완료 refs 정리·세션 보관. 정식 npm/Studio/하네스는 별도 | [DLDS](dentlink-fe-opportunities.md) |
+| 디자인시스템정비 | 웹 통합·QA 운영 포함. 사용자 지시로 세션·공간 유지, npm/Studio/하네스 별도 | [DLDS](dentlink-fe-opportunities.md) |
 | Billing Statement | PR4699 운영 포함·원본 refs 정리·세션 보관, 추가 작업 없음 | [문서 명칭 변경](dentlink-client-billing-statement.md) |
 | 통합알림센터 | 사전 조사 후 미착수, 오늘 정리 대상 아님. 재개 지시 대기 | [통합알림센터](dentlink-unified-notification-center.md) |
-| 웹 환경변수 관리 | 운영 반영·DL16821 완료·refs 정리·세션 보관. 실제 env와 별도 보안/DEV 과제 보존 | [환경변수](dentlink-client-env-management.md) |
+| 웹 환경변수 관리 | 운영 반영·DL16821 완료. 사용자 지시로 세션·공간과 별도 보안/DEV 과제 유지 | [환경변수](dentlink-client-env-management.md) |
 
 - 2026-09-29 최초 개인 기록의 원격 보존 확인: 권한관리 `f778f98`, LBX `976d93b`, DLDS
   `b2d428c`, 통합알림센터 `a5f2883`. 제품 코드의 commit·push를 이번 기록 작업에서

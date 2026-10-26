@@ -1,5 +1,11 @@
 # Memory Changelog
 
+## 2026-10-26
+
+- 사용자 승인으로 디자인시스템/env 세션·폴더는 유지하고 완료된 권한관리의 웹/Office 전용 및 과거 PR4700 리뷰 worktree3개를 제거했다. Billing 전용 폴더는 없어 기본 제품 저장소를 유지했다. 미커밋/미추적·활성 작업 없음과 운영 코드 보존을 확인했으며 이번 branch/ref 삭제는 없다.
+- env21·debug keystore1·로컬 설정1·coverage baseline2를 내용 조회/복사 없이 제한 권한 로컬 closeout 폴더에 rename 보존하고 inode/크기/mtime를 검증했다. 두 permission watch만 해제했으며 기본 앱 의존성·다른 감시/워크트리·원본 refs/복구 bundle은 유지했다. 복구 위치와 재개점은 담당 정본에 저장했다.
+- 웹 원격 master c597f1fb3의 PR4776 및 release a5e465561 포함을 확인해 어제 남아 있던 원격 통합을 완료로 정정했다. 로컬 master는 clean/40behind로 유지했으며 제품 코드·PR·Jira·배포 변경은 없다. 개인 기록·색인을 저장·푸시 후 대기한다.
+
 ## 2026-10-25
 
 - 메인 세션이 오늘 배포된 Billing/env/DLDS/권한관리 4세션에 점검·정리·보관을 위임했다. 각 담당자가 웹 v1.89.0 운영SHA a5e465561의 변경 보존, 3서비스 Actions 성공과 공개 응답을 확인하고 복구 자료 검증 후 웹 로컬15개·원격14개 refs를 정리했다. 실제 env가 있는 worktree·현재 refs와 앱 원본·미완료 하네스는 보존했으며 worktree 삭제·제품 코드 수정·추가 배포는 없다.

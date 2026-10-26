@@ -1,5 +1,12 @@
 # Dentlink Office App setup and current checkpoint
 
+## 권한관리 전용 worktree 정리 — 2026-10-26
+
+- 사용자 완료 업무 폴더 정리 승인으로 `dentlink-app-permission`을 제거했다. HEAD e4fb1aca는 원격 동일·clean/미추적0이며 PR329/331/332/333의 변경은 운영 main49031ad에 보존된다. 최종 통합7e6663b와 main은 동료 ISV3파일 외967파일이 같고 release와 main의 전체 tree가 같다. squash 이력을 단순 commit ancestry로 대체하지 않는다.
+- 로컬·원격 feature4개와 기본 `/Users/parkjongsun/Repository/dentlink-app`은 유지했다. 전용 worktree의 node_modules는 기본 저장소를 가리키는 symlink였으며 링크만 제거하고 대상의 inode/존재를 확인했다. Yarn install-state와 해당 worktree watch만 정리했고 공용 Watchman은 유지했다.
+- env9개와 debug keystore1개는 내용 조회/복사 없이 `/Users/parkjongsun/.local/share/codex-closeout/20261026-permission-folders/files/office-permission/`으로 rename 보존했다. 제한 권한과 메타데이터 일치를 검증했다. 원래 경로는 상위 manifest에 기록했고 실제 값은 사람이 관리한다.
+- 제품 코드·브랜치·PR·OTA·Jira 변경은 없다. Productionv84의 exact source SHA/전 기기 QA 경계는 10/25 기록대로 유지한다. 다음 요청은 기본 저장소 확인 후 필요한 worktree를 다시 준비해 이어간다.
+
 ## 운영 반영 확인·원본 작업 보존 — 2026-10-25
 
 - 권한관리 담당 세션의 배포 후 정리에서 **읽기 전용으로** 확인했다. Office PR329/331/332/333은 develop 병합 완료이고, 오늘 PR335 release/v2.2.4→main도 병합됐다. `main@49031ad64983715f87f92b4998284da1dbae7c23`과 원격release 전체tree가 같다. 기존 통합7e6663b 대비 차이는 동료 DL-16957 ISV3파일뿐이며 나머지967파일은 같아 우리 권한·다운로드·간격 수정의 누락/되돌림은 발견되지 않았다. 현재 열린 PR은 없다.

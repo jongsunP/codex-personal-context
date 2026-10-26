@@ -1,5 +1,15 @@
 # Dentlink 권한관리 — DL-16317
 
+## 완료 업무 로컬 작업 공간 정리 — 2026-10-26
+
+- 사용자 승인으로 권한관리·Billing 완료 업무의 불필요한 Repository 폴더만 정리했다. 디자인시스템·env 세션과 작업 공간은 유지했다. 신규 구현·QA·Jira·배포는 없다.
+- **제거한 worktree 3개:** `dentlink-client-permission`(178a4ab67), `dentlink-app-permission`(e4fb1aca), 웹 내부 `.claude/worktrees/pr-4700-review-f03f94`(detached10c30e3c). 미커밋/미추적 코드·사용 프로세스 없음과 관련 변경의 운영 Git 보존을 확인했다. 리뷰 source55ad768d도 최종f4bfaf1bf의 조상이며 관련 수정3가지가 운영 코드에 남아 있다.
+- **파일 보존:** `/Users/parkjongsun/.local/share/codex-closeout/20261026-permission-folders/files/`에 env21개(웹 빌드3·과거 리뷰9·Office9), Office debug keystore1개, 리뷰 로컬 설정1개, coverage baseline2개를 보존했다. 내용 조회/복사 없이 같은 파일시스템 rename으로 옮긴 뒤 inode·크기·mtime 일치를 확인했다. 폴더0700/파일0600이며 상위 `manifest.json`에 원래 경로와 정리 결과를 기록했다. 이 파일들은 개인 문서 push에 포함되지 않으며 필요시 사람이 설정을 확인해 복원한다.
+- 두 permission 경로의 watchman 감시만 해제했다. 공용 Watchman·기본 앱 node_modules·다른 감시는 유지했다. 재생성 가능한 빌드/의존성 캐시를 제거했고 기본 웹·치과 앱·기공소 앱 저장소는 보존했다.
+- **이번 브랜치 삭제는 없다.** 웹 `feature/v1.89.0-qa`, 과거 로컬 리뷰 branch, Office4개 feature·Lab3개 QA refs 및 기존 복구 bundle을 유지했다. 앱 OTA exactSHA/전 기기 QA의 미확인 경계도 유지한다.
+- 원격 웹 master는 `c597f1fb3e7f5c03a76237926c3effad5bb84983`(PR4776)으로 release a5e465561을 포함한다. 어제 남아 있던 원격 통합은 이후 완료됐다. 기본 로컬 master8772d6882는 clean/40behind이며 이번에는 fetch만 했다.
+- 새 요청 시 기본 저장소의 live Git부터 확인하고 필요한 worktree를 다시 준비한다. 기존 Sheet/타입·기기 검증 한계는 아래 이력에 보존하며 이번 정리로 새 필수 후속을 만들지 않는다. 개인 기록을 저장·푸시한 뒤 대기한다.
+
 ## 운영 배포 확인·완료 브랜치 정리 — 2026-10-25
 
 - **범위:** 메인 세션에서 사용자가 승인한 배포 후 정리의 담당 세션으로 재개했다. 1단계 읽기 확인·복구 준비 후, 순번이 열린 2단계에서 검증된 웹 완료 refs만 삭제했다. 새 제품 구현/PR/병합/배포/쓰기 QA·번역 Sheet 작업은 하지 않았다.
