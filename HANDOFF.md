@@ -34,7 +34,7 @@ Do not store secrets or private customer data here.
 
 - Action Sports Journal: `projects/action-sports-journal-app.md`
 - Dentlink frontend coordination: `projects/dentlink-fe.md`
-  — 2026-10-26 웹 기본 master worktree1개·로컬 master/LBX만 남겼다. 기본 env/의존성과 3서비스 로그인 페이지 응답 확인 완료. 메인·LBX·디자인시스템 세션 유지, env·통합알림센터 보관. 이후 최신 master에서 필요한 작업만 준비한다.
+  — 2026-10-26 웹 기본 master worktree1개·로컬 master/LBX만 남겼다. 기본 env/의존성과 3서비스 로그인 페이지 응답 확인 완료. 메인·LBX·디자인시스템·통합알림센터 세션 유지, env 보관. 이후 최신 master에서 필요한 작업만 준비한다.
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16830·DL-16471:
   [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
   — 2026-10-26 세션 유지. 기존 worktree2개와 제품 브랜치3개를 복구 백업 후 정리했고 Studio 로컬 브랜치도 정리했다. Studio 원격1개는 쓰기 권한403으로 남았다. 미완료 하네스·env/auth·생성 결과는 보호된 로컬 백업에 보존했다. 재개 대상은 Jira DL-16471 ‘2단계 · AI 프롬프트·하네스 정비’(진행 중)이며, 다음 요청에서 최신 master 기준 새 브랜치/필요한 worktree 준비부터 시작한다. 지금은 구현 없이 대기한다.
@@ -54,7 +54,7 @@ Do not store secrets or private customer data here.
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — 2026-10-25 PR4699 운영 포함 확인·로컬/원격 완료 브랜치 정리·세션 보관. 추가 예정 작업 없음.
 - Dentlink 통합알림센터: [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
-  — REST 방향·사전 조사 보존, 구현 미착수. 2026-10-26 세션 보관, 재개 지시 대기.
+  — REST 방향·사전 조사 보존, 구현 미착수. 2026-10-26 이번 정리 대상에서 제외해 세션 유지·재개 지시 대기.
 
 Use `PROJECTS.md` for repository paths and the broader project index.
 

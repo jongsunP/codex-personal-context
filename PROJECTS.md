@@ -76,7 +76,7 @@ For detailed current state, read:
   [SESSION_WORKFLOW.md의 업무 접수 기준](SESSION_WORKFLOW.md#new-work-intake-and-session-routing)을 따른다.
 - 기능별 보관/대기 상태와 다른 기기의 첫 대화에서 읽을 체크포인트:
   [projects/dentlink-fe.md](projects/dentlink-fe.md)의 **다른 기기에서 이어가기** 절.
-  2026-10-26 웹은 최신 master 기본 worktree1개, 로컬 master/LBX만 남겼다. 메인·LBX·디자인시스템 세션을 유지하고 env·통합알림센터는 보관했다. 로컬 준비와 복구 자료는 최상단 정본에 기록했다.
+  2026-10-26 웹은 최신 master 기본 worktree1개, 로컬 master/LBX만 남겼다. 메인·LBX·디자인시스템·통합알림센터 세션을 유지하고 env는 보관했다. 로컬 준비와 복구 자료는 최상단 정본에 기록했다.
   10/25 배포 후 4세션 마감과 로컬15개/원격14개 정리 이력도 같은 문서에 보존한다.
   2026-10-16 로컬 브랜치 4개·worktree 1개·원격 브랜치 158개 정리 이력도 같은 문서에 보존한다.
   원격은 출시 완료154개와 사용자 확인 후 폐기한 frankieTemp 백업4개다.
@@ -180,7 +180,7 @@ For detailed current state, read:
 
 - 웹·앱의 REST 조회/읽음/삭제와 딥링크 연결을 다룬다. 별도 알림 SSE·silent FCM
   기반 실시간 동기화는 제외됐다. 공통 구현은 미착수이며 전용 worktree가 없다.
-- 2026-10-26 메인 작업 공간 정리에 따라 세션을 보관했다. 사전 검토는 유지하며 새 요청 때만 재개한다.
+- 2026-10-26 이번 메인 정리 대상이 아니라는 사용자 정정에 따라 세션을 보관 해제해 유지한다. 사전 검토를 보존하며 새 요청 때만 재개한다.
 - [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
 
 ### Dentlink E2E Stabilization
