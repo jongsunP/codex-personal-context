@@ -1,5 +1,17 @@
 # Dentlink 권한관리 — DL-16317
 
+## 후속 QA 구현·PR 완료 — 2026-10-26 DL-17011
+
+- **승인·완료:** 사용자가 앞선 요구/범위 설명 후 Admin 수정 구현·커밋·푸시·`release/v1.90.0` PR 생성을 명시 승인했다. OFFICE 회원 **수정과 목록·상세 표시**를 반영했다. 회원 등록은 추가 범위로 구분한 상태를 유지했으며 이번에는 수정하지 않았다. 아래 조사 단계의 구현 대기는 이 기록으로 대체한다.
+- **제품 위치:** 기존 `/Users/parkjongsun/Repository/dentlink-client` checkout에서 clean/active writer와 두 worktree 상태를 확인하고 원격을 갱신했다. 후속 QA base `origin/release/v1.90.0@f18b664c4367be419d70911eef1e4f0c3caa378d`에서 **`feature/DL-17011`**을 생성했다. 별도 worktree/프로젝트 폴더 없이 진행했으며 LBX `feature/DL-16387@f389c13cfbe497e0b864aa9399efafd9ecae305d`와 DLDS worktree는 유지했다.
+- **커밋·PR:** **`61b692a892cbe7e36307e2b586ed0d8845af68fd`** (`fix: 어드민 치과 회원 권한 선택과 표시 수정`)을 정상 훅으로 커밋·푸시했다. [PR #4784](https://github.com/Innvoaid/dentlink-client/pull/4784), 제목 `[DL-17011] 어드민 치과 회원 권한 선택과 표시 수정`, head `feature/DL-17011`, base `release/v1.90.0`를 재조회했다. Open/비Draft/미병합, commit1개·Admin3파일(+24/-4), head SHA와 원격 일치·checkout clean. 비변경 merge-tree 검사와 GitHub `mergeable=true` 확인은 충돌 부재 근거이며 CI/QA 완료 증거가 아니다.
+- **변경 파일:** `admin/src/common/utils.ts`에 서비스별 `getEmployeeAuthorityOptions`를 추가하고, `admin/src/lib/Employee/useEmployeeField.tsx`의 목록·상세 표시와 `admin/src/pages/employers/[employer_id]/employee/[employee_id]/edit.tsx`의 선택지에 함께 적용했다. OFFICE는 `OWNER=Admin / PAYMENT_MANAGER=Billing Manager / EDITOR=Manager / MEMBER=Member / VIEWER=Viewer`다. 다른 서비스·서비스 정보 없음은 기존 enum map을 그대로 반환한다. 공통 회원 필드를 재사용하는 그룹 상세·CRM 멤버 표에도 같은 OFFICE 표시가 적용된다.
+- **구현 판단:** 기존 Admin 구조가 고정 권한 목록이므로 API query 추가 대신 확정된 OFFICE 전용 목록을 기존 Admin map 유틸 파일에 두었다. 이로써 신규 파일·추가 네트워크/로딩/오류 동작 없이 기존 VIEWER 선택을 보존했다. shared 모델·Clinic/Lab/native·등록 화면·저장 API·초기값·상태/온보딩 payload는 변경하지 않았다. `employer.serviceType`은 기존 응답 필드를 이용하며, 미제공 시 임의로 OFFICE라고 추정하지 않는다.
+- **검증:** Admin 타입, 변경파일 ESLint 오류0/기존경고8, Prettier 및 diff check 통과. 외부 요청 없이 실제 소스 함수를 평가해 OFFICE5종·중복 없는 Member·VIEWER·LAB/ADMIN/SYSTEM/undefined의 기존 map 보존을 확인했고, 기존 Admin PUT을 모킹해 EDITOR/MEMBER/VIEWER의 권한·상태·온보딩 payload와 URL 보존을 확인했다. 새 영구 테스트/보조 파일은 추가하지 않았다.
+- **필수 훅:** pre-commit의 Clinic/Lab/Admin 타입 모두 통과. pre-push의 3서비스 lint 오류0(기존경고226/184/393), Admin DLOS guard60/baseline60, guard tests 및 shared config21·hooks32 tests와 coverage check 통과. 경고를 실패로 분류하거나 훅을 우회하지 않았다. 기존 소스의 env/auth 파일은 읽거나 변경하지 않았다.
+- **독립 리뷰·E2E 가드:** 코드 리뷰에서 추가 버그/회귀/불필요 구현을 발견하지 못했다. 현재 release의 `.codex/skills/e2e-guard/SKILL.md`를 적용하고 별도 읽기 전용 agent가 `origin/release/v1.90.0...HEAD + worktree`를 조사했다. **NO_IMPACT**: 기존 Billing/가입 E2E의 Admin 접점은 직접 API 준비·정리 또는 서버 준비 확인이며 회원 수정 UI를 소비하지 않는다. root가 해당 코드 근거를 확인한 뒤 `.git/e2e-guard/`에 판정과 변경 해시 `7992f2e1723f281acb1f035aa48e07af2967f912`를 기록했고 PR 생성 전 check 통과. E2E 수정0, 브라우저/실계정 E2E 미실행이다.
+- **남은 단계/재개점:** 요청된 구현·커밋·푸시·PR 생성은 완료했다. 실제 계정에서 OFFICE EDITOR↔MEMBER 저장·재조회·포털 Members 반영, VIEWER 및 LAB/ADMIN 회귀 QA는 미실행이다. PR CodeRabbit 대응·병합·서버 배포·Jira 상태/댓글 변경은 이번 실행에 포함하지 않았다. 다음 사용자 지시부터 진행하며, 제품 checkout writer/dirty/branch와 원격 PR을 다시 확인한다. 등록 화면 보완은 별도 범위로 남긴다. 개인 기록은 이 문서만 커밋·푸시하고 다른 세션 문서는 섞지 않는다.
+
 ## 후속 QA 조사 완료·구현 대기 — 2026-10-26 DL-17011 Admin 그룹 회원 권한
 
 - **현재 요청/세션:** [DL-17011](https://innovaid.atlassian.net/browse/DL-17011), 상위 [DL-17010](https://innovaid.atlassian.net/browse/DL-17010). 새 세션 `01a17658-54e4-7b42-bd92-d0f790d7f2bd`에서 히스토리·작업내용 조사만 수행했다. 기존 메인 프로젝트 폴더를 사용하고 새 제품 worktree/프로젝트 폴더를 만들지 않았다. 제품 코드·branch·PR·Jira·배포 변경은 없으며 구현은 다음 사용자 지시를 기다린다.
