@@ -12,6 +12,8 @@ Detailed implementation history remains in the relevant existing project file.
 - 기본 저장소의 DEV env·E2E 설정과 의존성·공용 패키지를 준비했다. Clinic3000/Lab3005/Admin3002 로그인 페이지 HTTP200 및 env 로드를 확인한 뒤 임시 서버를 종료했다. 후속 사용자 요청으로 이번에 안내한 env 백업11개는 삭제했고 활성 로컬 env6개는 유지했다. 로그인 이후 기능 QA/E2E를 실행한 것은 아니다. 설정 정리와 검증 근거는 [env 정본](dentlink-client-env-management.md)을 따른다.
 - **메인·LBX·디자인시스템정비·통합알림센터 세션 유지, env 세션 보관 완료.** 통합알림센터까지 보관한 것은 메인이 정리 범위를 넓게 해석한 것이며, 사용자 정정에 따라 즉시 보관 해제했다. 미착수 상태와 사전 검토는 그대로다. LBX의 승인된 로컬 재구성 외에 앱 저장소, 원격 refs, Jira, PR, 배포는 변경하지 않았다.
 - 다음은 준비된 로컬 LBX 또는 새 사용자 요청에 필요한 작업만 이어간다. 폐기할 worktree의 env/의존성을 다시 맞추지 않는다. LBX 옛 원본은 원격·bundle로 보존하며 재구성된 로컬 결과를 원격에 올리는 작업은 별도다.
+- **이번 정리 최종 마감:** 사용자 확인 후 기본 저장소5개(`codex-personal-context`, 웹, Office 앱, Lab 앱, Studio), 웹 worktree1개·master/LBX 브랜치2개·master clean, 유지할 Dentlink 세션4개를 다시 확인했다. 활성 로컬 env6개는 존재·Git 제외 상태이고 example4개는 Git 추적 대상이며, 이번에 삭제한 env 백업의 잔여는0개다. 추가 제품/IDE 설정 변경이나 테스트 재실행 없이 정리를 종료한다.
+- **새 업무 시작 기준:** 신규 요청의 제품 범위를 먼저 나누고 담당 세션에서 진행한다. 일반 웹 신규 업무는 그 시점 최신 origin/master에서 새 작업 브랜치를 준비하며, 기존 LBX 브랜치를 다른 업무에 재사용하지 않는다. 이번 정리의 추가 필수 작업은 없다. LBX 원격 반영·운영 홀드, DLDS 2단계/Studio 권한, 통합알림센터 미착수는 각 담당 정본의 별도 후속으로 유지하며 새 요청 없이 실행하지 않는다.
 
 ## 이전 완료 업무 폴더 정리 — 2026-10-26
 

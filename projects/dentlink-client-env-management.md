@@ -12,6 +12,7 @@
 - **완료 로컬 브랜치2개 제거:** `feature/DL-16821-stage-e2e@460a9c0d5be793c49dbfe44a9adc142c6fb98235`, `feature/v1.89.0-qa@178a4ab6745a81abc1ed56bae8bc7496b402775d`. 원격 동일 SHA를 확인했으며 원격 refs는 변경하지 않았다. 웹에는 기본 worktree1개와 `master`, LBX `feature/DL-16387`만 남았다. env 세션 `01a13d89-14d1-71f0-b53b-8b6238c384f9`는 보관했다.
 - **임시 env 백업 삭제 완료:** 사용자가 실제 배포 값은 GitHub에서 관리하므로 직전에 안내한 `/Users/parkjongsun/.local/share/codex-closeout/20261026-web-local-env/files/`의 env 백업 삭제를 요청했다. 서비스 STG/PRD6개·Clinic/E2E 변경 전 원본2개·DEV 복구 사본3개의 **11개 파일을 내용 조회 없이 삭제**했다. 해당 위치의 env 잔여0과 기본 저장소 활성 env6개의 inode/크기/mtime 불변을 확인했다. 이 위치의 이전 env 사본은 더 이상 복구 지점이 아니다.
 - 위 closeout 폴더에는 값 없는 `manifest.json`, `local-startup-recheck.json`, `local-startup-summary.json`과 coverage baseline만 남았다. 이번 삭제는 직전에 안내한 env 백업에 한정하며 다른 코드 bundle·과거 정리 백업을 일괄 삭제한 것이 아니다. 실제 로컬 실행은 기본 저장소에 유지한 서비스 DEV 파일을 사용하고, 이번에 GitHub 값이나 로컬 값을 조회·동기화하지 않았다.
+- **최종 사용자 확인·마감:** 실제 로컬 env6개가 존재하며 `git check-ignore` 대상이고, 값 없는 example4개는 `git ls-files`에 포함됨을 재확인했다. 파일 위치는 저장소 루트가 아닌 서비스별 폴더다. 별도 숨김 처리나 IDE 표시/검색 설정 변경은 하지 않았다. 실제 값의 새 조회·추가 설정·테스트 재실행 없이 현재 구성을 유지한다.
 - **다음 시작점:** 새 요청 때 기본 저장소의 최신 master와 필요한 작업만 준비한다. 삭제할 파생 worktree는 재설정하지 않는다. 이번 로컬 정리는 제품 코드·PR·Jira·배포 변경이 아니다. 아래 DEV ISV/보안 후속을 새로 완료 처리하거나 자동 재개하지 않는다.
 
 ## 이전 상태 — 2026-10-25 운영 반영 확인·env 업무 마감 및 브랜치 정리 완료
