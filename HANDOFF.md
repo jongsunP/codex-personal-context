@@ -37,7 +37,7 @@ Do not store secrets or private customer data here.
   — 2026-10-26 권한관리 작업 공간3개 제거·설정 보존, env 유지. DLDS는 이후 별도 사용자 요청으로 아래 정본의 새 출발 정리를 적용한다. 원격 release→master PR4776 통합은 완료됐으며 Jira 버전 표시는 재조회하지 않았다.
 - Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16830·DL-16471:
   [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-26 세션 유지. 기존 worktree2개와 제품 브랜치3개를 복구 백업 후 정리했고 Studio 로컬 브랜치도 정리했다. Studio 원격1개는 쓰기 권한403으로 남았다. 미완료 하네스·env/auth·생성 결과는 보호된 로컬 백업에 보존했다. 다음 요청에서 최신 master 기준 새 환경을 준비하며 자동 재개하지 않는다.
+  — 2026-10-26 세션 유지. 기존 worktree2개와 제품 브랜치3개를 복구 백업 후 정리했고 Studio 로컬 브랜치도 정리했다. Studio 원격1개는 쓰기 권한403으로 남았다. 미완료 하네스·env/auth·생성 결과는 보호된 로컬 백업에 보존했다. 재개 대상은 Jira DL-16471 ‘2단계 · AI 프롬프트·하네스 정비’(진행 중)이며, 다음 요청에서 최신 master 기준 새 브랜치/필요한 worktree 준비부터 시작한다. 지금은 구현 없이 대기한다.
 - Dentlink 요구사항 외 UI 변경 조사:
   [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
   — 승인된 UI 정리 PR #4642가 반영된 완료 이력. 미착수 조사로 되돌리지 않는다.
