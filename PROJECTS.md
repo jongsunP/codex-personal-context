@@ -137,8 +137,9 @@ For detailed current state, read:
 ### Dentlink Admin LBX — DL-16279 / DL-16387
 
 - 기존 배송 목록·상세 확장, LBX Baby/Mother 생성 및 픽업 생성.
-- **2026-10-26 원격 반영 완료:** 최신 master `c597f1fb3` 위에 LBX 1커밋·19파일만 담은 `feature/DL-16387 / f389c13cf`를 로컬·원격 모두 확인했다. 사용자 승인으로 옛 원격을 백업 확인 후 삭제·같은 이름으로 재생성했고 upstream을 연결했다. 3서비스 타입·DLOS 가드·변경 lint/format·합성 통합9개 및 정상 push hook 검증을 통과했다.
-- 원본 bundle과 교체 기록은 담당 정본 경로에 있다. 임시 검증 worktree는 정리했고 기본 checkout의 다른 작업 `feature/DL-17011`은 보존했다. 새 PR·배포는 없으며 LBX 세션·운영 홀드를 유지한다. 10/16 PR4709 develop 배포 성공과 이번 원격 브랜치 재생성을 구분한다.
+- **2026-10-26 develop 전달 완료:** 최신 master `c597f1fb3` 위 LBX 1커밋·19파일인 원본 `feature/DL-16387 / f389c13cf`를 유지한다. 사용자가 원본 → develop PR #4786을 만들고 병합했으며 merge `2b79d9198`을 확인했다. 사용자는 개발 배포가 진행되도록 했음을 알렸고, 배포 최종 성공·실제 QA는 이번 종료에서 확인하지 않았다.
+- **유지 목적:** 원본은 최신 master 코드를 따라가면서 LBX 작업 코드를 살린다. 운영 홀드로 release에서는 제외하고, 필요할 때만 develop/stage에 테스트용으로 전달한다. 환경별 충돌 조정은 별도 전달 브랜치에서 처리하며 원본에 다른 환경 기능을 역병합하지 않는다.
+- 원본 백업·검증·원격 재생성 기록은 정본에 보존했다. 임시 검증 worktree를 정리했고 다른 작업 `feature/DL-17011`은 보존했다. 현재 메모리 저장 후 대기하며 추가 배포 감시·테스트는 시작하지 않는다.
 - 실제 업무 API·화면 QA와 운영 릴리스는 별도이며, 테스트 중 실제 생성·수정 요청 금지는 유지한다.
 - [projects/dentlink-client-lbx.md](projects/dentlink-client-lbx.md)
 

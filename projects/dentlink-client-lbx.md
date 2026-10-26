@@ -1,6 +1,22 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-10-26 최신 master 기반 LBX 원격 재생성 완료
+## 현재 체크포인트 — 2026-10-26 develop 병합 / 테스트용 배포 진행·운영 홀드·대기
+
+### 계속 유지할 기준
+
+- **원본 `feature/DL-16387`은 최신 master의 코드를 따라가되 LBX 작업 코드를 살려 유지한다.** 특정 시점의 master에 동결하거나 master로 덮어써 LBX 변경을 지우는 것이 목적이 아니다. 재개 시 최신 원격 master와 원본을 비교해 master의 공통 변경을 보존하고, 실제 LBX 변경만 남는지 확인하며 필요한 호환 조정을 한다. 이 기준은 무단 force-push나 자동 동기화·배포 승인이 아니다.
+- LBX 코드는 필요하므로 원본을 계속 보존하지만 **운영 배포는 홀드이며 release에 넣지 않는다.** 테스트가 필요할 때만 `develop` 또는 `stage`에 별도로 반영한다. 테스트 환경 반영·테스트 완료와 운영 릴리스 승인을 구분한다.
+- 환경별 충돌·호환 수정이 필요하면 원본에서 별도 전달 브랜치를 만들어 처리하고, develop/stage의 다른 기능을 원본에 역병합하지 않는다. 이번 #4786은 충돌 없이 **원본 → develop 직접 PR**로 전달했으며, 원본을 변경·삭제한 것이 아니다. 저장소 자동 브랜치 삭제 설정도 꺼져 있음을 확인했다.
+
+### 이번 develop 전달과 확인 범위
+
+- 사용자가 만든 [PR #4786](https://github.com/Innvoaid/dentlink-client/pull/4786)을 검토했다. head `feature/DL-16387 / f389c13cf`, base `develop / d19d3e217`이며 실제 patch는 master 대비 LBX **19파일(+1518/-28)**과 동일했다. 커밋 목록의 master 병합 커밋은 공통 조상과 파일 내용이 같아 별도 릴리스 코드를 추가하지 않는다. develop 고유 변경 60파일과 LBX 변경 파일은 겹치지 않아 기존 develop 기능을 보존한다.
+- **2026-10-26 15:04:34 KST 사용자/팀 병합 완료**를 GitHub에서 확인했다. merge commit은 **`2b79d9198fa9569c0936df7c3b55d3468cf4f5a6`**이며 이번 종료 확인 시 원격 develop과 같다. 원격 원본은 `f389c13cf`, master는 `c597f1fb3` 그대로다. 에이전트가 PR을 생성·병합하거나 배포를 실행한 것은 아니다.
+- 병합 전 Admin DLOS Guard와 Auto Assign은 성공했고 충돌이 없었다. CodeRabbit의 success는 **develop 자동 리뷰 비활성화에 따른 Review skipped**이므로 실제 CodeRabbit 검토 완료로 해석하지 않는다.
+- 사용자는 **머지 및 배포되도록 했음**을 알리고 메모리 정리 후 대기를 지시했다. develop의 Admin 변경 push는 개발 배포 workflow 대상이다. 이번 종료에서는 배포 run을 조회하지 않았으며 **배포 최종 성공·실제 개발서버 화면/API QA는 미확인**으로 남긴다. 배포 감시·추가 테스트·생성/수정 요청을 시작하지 않는다.
+- **현재 대기.** 다음 사용자 요청 때 이 정본과 실제 Git/API 상태를 갱신하고 원본에서 이어간다. 테스트 환경 배포가 필요하면 해당 환경과 최종 diff를 확인하며, 운영 전달은 별도 재개 지시를 따른다. 개발서버 배포 후 검증 요청이 오면 workflow 완료와 실제 화면·조회 QA를 구분해서 확인한다.
+
+### 같은 날 완료한 최신 master 기반 원본 재구성
 
 - 사용자가 로컬 `feature/DL-16387`을 **지금 최신 원격 master에서 다시 만들고 필요한 LBX 변경만 준비**하도록 명시했다. 앞선 '원본 보존 후 재개 시 준비' 단계를 이번 요청으로 완료했다. 기본 저장소에서 master pull/fetch 후 `c597f1fb3e7f5c03a76237926c3effad5bb84983`를 기준으로 같은 로컬 브랜치를 재구성했다.
 - **로컬·원격 HEAD:** `f389c13cfbe497e0b864aa9399efafd9ecae305d`, `chore: 최신 마스터 기준으로 LBX 작업 재구성`. 부모는 위 master이며 master 대비 1커밋·19파일(+1518/-28)이다. 원격 재조회에서 master `c597f1fb3`, LBX `f389c13cf`, 로컬/원격 차이 0/0을 확인했다. 사용자의 목적은 **최신 master 위에 실제 LBX 작업 변경만 남기는 것**이며 이 상태로 원격까지 반영했다.
@@ -10,8 +26,8 @@
 - **원격 교체:** 처음에는 로컬만 준비되어 원격이 옛 `b69dd84b6d2590449c2f6887330b4e8285b2ab63`에 남아 있었다. 사용자가 이를 확인한 뒤 **원격을 삭제하고 같은 이름으로 다시 올리도록 명시 승인**했다. 기존 full bundle·열린 PR 없음·배포 workflow 트리거 제외를 확인하고, 옛 SHA를 지정한 lease로 원격을 삭제한 다음 원격 부재를 조건으로 새 `f389c13cf`를 같은 `feature/DL-16387`에 push했다. 로컬 upstream도 새 `origin/feature/DL-16387`로 연결했다. 다른 기기의 옛 로컬 브랜치를 새 원격에 일반 pull해 다시 섞지 말고, 로컬 고유 작업 유무 확인 후 새 원격 기준으로 복구한다.
 - **push 검증:** 정확한 LBX 커밋의 임시 detached worktree에서 정상 pre-push 검사를 통과했다. Clinic/Lab/Admin lint 오류0·기존 경고226/184/393, DLOS guard60/60·가드 테스트9개, shared configs21개·hooks32개 및 커버리지 비교 통과. 최초 삭제 시도는 임시 폴더의 baseline 누락으로 hook이 중단되어 원격은 그대로였다. 기존 `2026-04-23T01:36:07.538Z` baseline을 내용 변경 없이 복사한 뒤 삭제·재생성 모두 정상 hook으로 완료했다. 검사 우회나 새 기준 생성은 없었다.
 - **복구/증거:** `/Users/parkjongsun/.local/share/codex-closeout/20261026-lbx-master-rebuild/`에 검증한 `original-lbx.bundle`, 초기 로컬 재구성 `manifest.json`, lint 결과와 `integration-audit/` 합성 검증9개, 원격 교체 최종 기록 `remote-replacement.json`과 `remote-*.log`를 보존했다. 옛 원본은 이 full bundle과 기존 개발 전달 원격 이력에서 복구할 수 있다. `manifest.json`의 local-only 값은 초기 준비 당시 이력이며 현재 상태는 `remote-replacement.json`을 따른다.
-- **정리:** push용 임시 worktree와 설치 의존성은 제거했다. 기본 checkout은 다른 작업 `feature/DL-17011 / 9dcb644d5`의 clean 상태를 그대로 유지했고, 기존 detached `dentlink-client-dlds`도 변경하지 않았다. 이번 요청으로 새 PR·merge·배포·실제 업무 API 요청은 수행하지 않았다.
-- LBX 세션과 운영 홀드는 유지한다. 다음은 원격까지 반영된 이 브랜치에서 사용자 요청 범위만 이어가고, 실제 API/화면 QA·PR·운영 전달은 각각 구분한다. 아래 10/16의 원본 SHA·개발서버 전달·원본 누적 기준은 당시 이력이며 이번 최신 기준을 우선한다.
+- **정리:** push용 임시 worktree와 설치 의존성은 제거했다. 이번 종료 시에도 기본 checkout은 다른 작업 `feature/DL-17011 / 9dcb644d5`의 clean 상태이며, 기존 detached `dentlink-client-dlds`도 보존했다. 원본 재구성·원격 재생성 당시에는 새 PR·merge·배포·실제 업무 API 요청을 수행하지 않았고, 이후 사용자가 위 #4786을 생성·병합했다.
+- 아래 10/16의 원본 SHA·개발서버 전달·원본 누적 기준은 당시 이력이다. 현재는 위 10/26의 master 추종·LBX 코드 유지와 develop 테스트 전달 기준을 우선한다.
 
 ## 이전 구현 체크포인트 — 2026-10-16, 구현 완료 / 운영 배포 홀드 / 개발서버만 반영·대기
 
