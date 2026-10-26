@@ -1,8 +1,153 @@
 # Dentlink 통합알림센터 — 사전 검토 체크포인트
 
-최종 갱신: 2026-10-26 — Office/Lab OS 알림 권한·서버 수신 설정 연결 조사 완료, 제품 구현 미착수.
+최종 갱신: 2026-10-26 — 기획·디자인·알림 현황표·Jira·Slack·선행 권한 작업·웹/Office/Lab 코드·DEV Swagger 사전 대조 완료. 자료 간 충돌과 API 확인 사항 정리, 제품 구현 미착수.
 
-## 현재 상태 — 2026-10-26
+## 최신 사전 준비 체크포인트 — 2026-10-26
+
+### 요청·목적·완료 경계
+
+- 사용자는 기획·디자인·BE가 아직 완성되지 않았으므로 **실제 구현 전에 얻을 수 있는 정보와 부족한 정보를 지금 최대한 확인**하도록 요청했다. 앞서 ‘실제 착수 전에 문의’라고 남긴 다음 단계는 이번 사전 조사로 당겨 수행했다. 구현 승인으로 확대하지 않는다.
+- 목적은 **사용자가 자기 소속·권한에 맞는 알림을 웹·앱에서 다시 확인하고, 알림 종류와 전달 채널별 수신을 조절하며, 클릭 시 올바른 소속·업무 화면으로 이동하도록 만드는 것**이다. 알림 목록, 수신 설정, OS 권한 안내, 읽음·미읽음 표시, 공통 딥링크, 권한별 수신 범위를 함께 준비한다.
+- 사용자 제공 5개 링크와 연결된 권한 PRD·Google Sheet·BE 첨부를 읽고, 메인세션 답변·보관된 권한 세션·기존 개인 정본·현재 FE 코드·DEV Swagger를 대조했다. 제품 코드/branch/worktree/PR/배포 변경, 서버 실행, 테스트·실기기 QA는 하지 않았다. 외부 Figma/FigJam/Notion/Jira/Slack/Sheet에는 작성·수정·삭제·댓글을 하지 않았다.
+- 기록은 이 개인 체크포인트만 변경한다. 제품 저장소나 FE 공통 정본에 상세 이력을 중복 작성하지 않는다. 사용자 명시적 지시 없이 별도 제품 폴더·worktree를 만들지 않는다.
+- **REST 기반, 기기 간 실시간 동기화 제외, notificationId 직접 전달을 필수로 확정하지 않음**은 기존 사용자 결정으로 유지한다. 알림 전용 SSE, 읽음 동기화 data FCM, 대체 주기적 polling을 추가하지 않는다. 서버가 요청 시 미읽음 수를 계산하는 것과 FE가 상시 동기화하는 것은 다른 요구다.
+- 아래 9월 기록과 당일 초기 OS 조사는 당시 이력이다. 최신 자료가 보완한 클릭 읽음·삭제 UI 제외·Jira 연결·모바일 웹 지원 방향은 이 절을 우선한다. 출처끼리 충돌하거나 최종 승인이 없는 내용은 확정 정책으로 승격하지 않는다.
+
+### 출처와 실제 열람 범위
+
+| 출처 | 직접 확인한 범위·시점·주의점 |
+| --- | --- |
+| [Figma 디자인](https://www.figma.com/design/QLIzKYWzFFlptCYzN36Iq4?node-id=2-6) | 페이지 구조·주석과 Office 앱 목록/설정/OS 차단/빈 목록/다른 치과, Office 웹 목록, Lab 앱·웹 설정의 실제 화면을 읽었다. 모바일 웹 미지원·OS 값 종속 등 이전 주석이 남아 있어 최신 Slack/PRD와 구분한다. 현재 댓글 전체를 직접 읽은 것은 아니다 |
+| [FigJam](https://www.figma.com/board/U9Qpm6ACzjGFKyrCoaAuvA?node-id=68-463) | 제공 노드는 MEMBER 권한 영역이다. 전체 보드 구조, 알림센터 `33:3702`, 레퍼런스 `33:3614`, KakaoBank OS 안내 예시 `642:8892`도 확인했다. 설명 widget `33:3714/33:3512`는 스크린샷으로 읽었으며 9/1 Yoonie 표기다. 예시 화면·과거 메모를 새 구현 요구로 자동 승격하지 않는다 |
+| [알림센터 PRD](https://app.notion.com/p/innovaid/3c7ce072e82f811184a8e647444f01fd) | 제목 `[공통] 알림센터 개편`, 작성 중/초안(검토필요). 최종 편집 10/26 18:52:41 KST, 본문·표와 댓글 11스레드 확인. 외부 Drive 객체 1개는 본문에서 펼쳐지지 않아 전체 첨부까지 읽었다고 하지 않는다 |
+| [DL-16140](https://innovaid.atlassian.net/browse/DL-16140) | 부모 및 직접 자식 12건, 관련 댓글·설계/조사 첨부를 읽었다. 부모 진행 중. 기획·현황 조사 Done과 디자인/BE 준비 중을 구분한다. 직접 자식 목록에는 제품별 FE 구현 카드가 없었으며 전체 Jira에 없다고 단정하지 않는다 |
+| [10/26 Slack 원문](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793001606386079) | 원문+답글 6개, 마지막 19:11:08 KST까지 읽었다. 모바일 웹 지원, OS와 저장값 분리, OS OFF에서 PUSH 조작만 비활성, 카테고리 검토 중이 최신 보완 |
+| [알림 현황 정리 26.09](https://docs.google.com/spreadsheets/d/1w1xwwEWRE0KgiJsOvldxIFbtNgWguohurf5kemIrW_g/edit) | 파일 수정 10/26 17:31:14 KST. 전체 알림 A1:O199, 시스템 링크톡 A1:I35, 개선안 Office A1:O160, 개선안 Lab A1:O160(이후 A161:AC886 공란 확인), 푸시 현황 A1:J70, 메일 A1:Y12/A13:N70, 이벤트별 그룹 A1:AA12/A13:G220을 읽었다. 알림 인벤토리는 초기12행, Copy of Jun은 메타만 확인. 전체 알림 채널 행169개. ‘최종 알림 정리’라는 실제 탭은 없고 표끼리 분류·수신자도 다름 |
+| [DL-17029 BE 조사](https://innovaid.atlassian.net/browse/DL-17029) | 10/26 17:05 첨부 XLSX·댓글44646. BE develop의 TemplateType 92+ChatMessageTemplateType 12와 표 169행을 대조한 담당자 정적 보고. 이 세션이 BE 코드·운영 DB를 직접 검증한 것은 아님. 이후 Sheet에서 MFG 코드명/운영 상태와 덴처 채널 상태가 보정된 것을 확인 |
+| Notion 연결 알림 인벤토리 | data source `d762274b-e0c0-40ce-8a93-900ada29449c`, 저장된 전체 view `3cece072-e82f-808f-b9fe-000cd2d936c0`로 138행 확인. NOTIFICATION55/MAIL50/PUSH27/SMS3/CHAT3, 운영상태 공란135·검토필요19. SQL 조회 한도 제한 후 공식 view 조회로 읽었다. 현재 확정 카탈로그나 실제 발송 건수로 사용하지 않는다 |
+| [연결된 링크톡 조사](https://app.notion.com/p/3d1ce072e82f80cbbe61f505afe96d0c) | 9/17 문서의 시스템 링크톡 19트리거/12타입과 하드코딩 예외를 읽었다. 과거 조사이며 현재 DB 템플릿·수신자를 입증하지 않음 |
+| [권한 PRD](https://app.notion.com/p/3eace072e82f81aa955dc21cba5cf127) | 10/26 17:58:07 KST 편집본의 본문과 댓글5스레드/10개. MEMBER 실제 지정·신규 가입 기본값은 알림센터 릴리즈 이후라는 5-1 조건이 남아 있다. 이를 해제한 별도 결정은 확인되지 않음 |
+| 메인·보관 세션 | 메인 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`에 사용자 허용 범위로 선행 정보만 질문하고 답변을 받았다. 보관 권한 세션 `01a132e9-6555-7a02-9c72-4dad9c04cc64`은 읽기만 했다. 메인 답변은 기존 기록 기반이며 외부 재검증이나 새로운 정책 승인 아님 |
+
+### 현재 자료로 파악한 화면·기능 범위
+
+| 영역 | 준비 기준과 남은 경계 |
+| --- | --- |
+| 제품 | Clinic/Lab PC 웹·모바일 웹, Office/Lab native. 웹·앱 전체 조율은 메인, 이 세션은 알림센터 기능 준비. 기존 완료 기능을 재시작하지 않음 |
+| Inbox | 최신순, All/Unread 두 탭, 카테고리 필터 없음, LinkTalk는 Inbox에서 제외하는 PRD 방향. 미읽음이 있으면 Unread, 없으면 All 진입이라는 디자인 주석. 전체 병원 통합 목록은 요구하지 않음 |
+| 읽음 UI | PRD와 디자인 `141:22284/22286`은 클릭·탭 또는 Read all을 읽음 계기로 명시. 기존 노출·스크롤 자동 읽음을 그대로 재사용하지 않음. 삭제 UI 제외·개별 읽음 버튼 보류·Read all 유지는 10/21 PM 동의 기록과 현재 화면이 부합하지만 최신 댓글 변경 여부까지 직접 확인한 것은 아님 |
+| 수신 설정 진입 | Inbox 안 설정 진입으로 모으고 Profile 기존 진입 제거. 도메인·카테고리·지원 채널별 설정. Employee(소속) 기준으로 웹·앱에서 같은 수신 설정을 사용하려는 PRD 방향 |
+| 플랫폼별 채널 | PUSH 조작은 native만 노출. 웹은 해당 제품이 지원하는 웹알림/메일 범위. Lab은 메일·SMS 미지원이므로 Office 구성을 복사하지 않음. Office/Lab 화면의 도메인 명칭·카테고리는 아직 정리 중 |
+| OS 권한 | OS 권한과 서버 저장 선택을 분리. OS OFF에서도 저장값은 보존·표시하고 PUSH 조작만 비활성, OS 설정 이동 안내. 다른 지원 채널까지 함께 막지 않음. OS ON 복귀 시 사용자가 개별 OFF한 항목을 켜지 않음 |
+| 초기값·이관 | 신규 가입/새 소속은 OS와 무관하게 PUSH ON, 기존 설정은 보존하는 최신 방향. 초대 생성/수락 시점, 구버전 값→신규 분류 매핑·멱등 초기화는 BE 계약 필요. 이전 메시지 신규 구조 마이그레이션 없음과 기존 PUSH 선택 보존은 서로 다른 요구 |
+| 다중 소속 | 현재 또는 다른 소속에 미읽음이 있으면 bell dot, 다른 치과 안내에서 대상 소속으로 전환 후 해당 Inbox Unread 진입. 현재/다른 소속/OS badge의 같은 집계 기준을 원하지만 상세 포함 범위·조회 시점은 미정 |
+| 역할·수신 범위 | Office MEMBER는 담당 주문 수신으로 제한하고 설정 선택을 막는 방향. 같은 환자의 타 의사 주문을 조회할 권한과 그 주문의 알림을 받을 권한은 다름. Editor/Manager 등의 My Orders 선택과 결제 역할별 설정은 최종 역할/API 매핑 필요 |
+| 자동 LinkTalk | 자동 시스템 메시지 자체는 수신 설정으로 끄지 않는 PRD 방향. 같은 업무 이벤트의 별도 PUSH/MAIL/NOTIFICATION과 구분. LinkTalk 채팅·Support PUSH 설정과 Inbox 제외를 혼동하지 않음 |
+| 제외·후속 | 미읽음 이메일 재알림은 다음 릴리즈, 관리자 템플릿/정책 관리 UI는 이번 제외, 기존 메시지 이관 없음. 지표 `notification_opened/sent/settings_viewed`는 제안이며 기존 이벤트와 합칠 계약·기준 측정은 미정 |
+
+OS 관련 최신 근거는 [19:04 정책](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793009068187999), [19:11 PUSH만 비활성 확인](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793009468673069)이다. OS ON과 서버 PUSH ON이 수신 가능한 조건이라는 의미이며, 미수신 과거 알림 재발송·지연 없는 수신을 보장하는 것은 아니다. 1회 홈 권한 안내는 제안 상태이고 노출/닫기/재노출 기준과 문구는 디자인 확인 대상이다.
+
+### 디자인에서 다시 사용할 정확한 위치
+
+- Figma 파일 `QLIzKYWzFFlptCYzN36Iq4`: Office 앱 목록 `25:6486`, 설정 `36:8562`, OS 차단 `62:19720`, 빈 목록 `29:11711`, 치과 전환 `29:7570`; Office 웹 목록 `39:13907`; Lab 앱 설정 `167:25825`, Lab 웹 설정 `123:24602`.
+- bell 위치·Profile 진입 제거 `36:11364/11366/11368`; 다른 소속 dot `173:28442`; 다른 소속 Unread 이동 `29:7884`; 기본 탭 `29:14828`, `89:13621/13634`; 행 필드 domain/category/time/title/subtitle `89:18502`; 상대시간·국가별 날짜 `89:18603`; Read all 비활성·하이라이트 해제 `89:15897/18497/15901`.
+- **대체된 설명:** `39:18425`의 모바일 웹 미지원은 [최신 모바일 웹 지원 답변](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793002051169799)·현 PRD로 대체. `173:27687`의 OS 값으로 ON/OFF 결정, `173:28429`의 OS OFF에서 ON 터치 팝업은 최신 저장값 보존·PUSH 비활성 방향과 재정렬 필요.
+- OS 차단 시 체크 표시/회색 처리, 빈 목록의 Read all 비활성 표현은 일부 화면·주석이 완전히 일치하지 않는다. 문구·색·닫기 동작을 추측하여 새 UI를 만들지 않는다.
+- `158:22708`의 도메인 OFF→ON 시 하위 채널을 모두 ON으로 재설정한다는 메모는 **OS OFF→ON 보존 정책과 별개**다. 이 복구 규칙의 최종 효력과 도메인 OFF 의미를 확인해야 한다.
+- 10/21 Figma #8의 삭제/개별 읽음 보류 기록은 [권한 정본](dentlink-permission-management.md)·보관 세션 turn `01a15c77-10cb-76c2-a7eb-c0999869d35b`·메인 답변과 대조했다. Change Office 토스트 문의는 정확한 플랫폼/계정/문구가 없어 결함 미확정이며, 권한 QA 범위에서 제외된 것을 수정 완료로 기록하지 않는다.
+- FigJam 9/1 설명 `33:3714`도 클릭 읽음·Employee별 읽음·다른 병원 Inbox 이동·최신순 무한스크롤·다른 병원 포함 red dot을 설명한다. 웹 개인화 설정 `33:3512`는 Employee/Office별 저장과 도메인 OFF 시 웹알림 미발송을 명시한다. 최신 PRD의 읽음 계정+employer 범위와 실제 Employee/재가입 처리, Sheet의 항상 노출 문구는 BE/PM 계약으로 정렬해야 한다. 이 두 과거 카드에는 OS 분리·웹앱 저장 공유·삭제/Read all 정책은 없다.
+
+### 원문 간 충돌·미정 사항 — 구현 전 결정할 질문
+
+| 우선 확인 주체 | 질문과 이유·근거 |
+| --- | --- |
+| PM·BE | **수신 OFF 시 Inbox 기록/노출도 끄는가?** PRD·디자인은 도메인 OFF가 웹알림까지 막는 방향인데 [Sheet 전체 알림 B2:B7](https://docs.google.com/spreadsheets/d/1w1xwwEWRE0KgiJsOvldxIFbtNgWguohurf5kemIrW_g/edit#gid=614410508&range=B2:B7)은 인앱 로그 항상 기록·항상 노출·opt-out 불가라고 명시. 파일 수정 시각만으로 우선순위를 정하지 않는다. 저장된 기존 기록 숨김/신규 생성 중단 여부도 분리 필요 |
+| PM·디자인·BE | **최종 도메인/카테고리/채널/수신자 표는 어느 탭·문서인가?** Sheet 전체/개선안/푸시 현황과 Figma 분류가 다름. Office All Employees와 생성자+담당의도 표끼리 다름. 10/26 Slack에서도 Leo 검토 후 디자인 반영 예정. API enum·화면 라벨을 지금 확정하지 않음 |
+| PM·권한 담당 | **MEMBER 실제 적용·신규 가입 기본값 시행 시점과 구버전 앱 대응은?** 권한 코드 운영 전달은 기록으로 확인되지만 PRD5-1의 알림센터 이후 적용 조건을 해제한 근거 없음. 관리 화면에 선택 항목이 있다는 사실과 실제 시행 정책을 구분 |
+| PM·FE·BE | **알림 My Orders Only와 홈/주문/LinkTalk 필터는 어떤 값만 공유하는가?** PRD는 알림 설정 웹·앱 공유, 홈 필터는 웹·앱 독립을 설명. 현재 Office는 서버 preference+로컬 store 연결, Lab은 로컬 store, Clinic은 URL 필터. 동일 이름만으로 합치지 않음. MEMBER 수신은 담당의 기준, 일반 My Orders는 생성자+담당자라는 차이도 있음 |
+| PM·BE | **클릭 읽음의 정확한 성공 기준·대상·전체 범위는?** 클릭 즉시인지 상세 성공 뒤인지, 랜딩 없는 공지/삭제 대상/권한 상실/조회 실패/이미 읽음 재요청, 클릭 알림 하나와 같은 업무의 과거 알림 관계, Read all의 LinkTalk·serviceType·소속 범위 확인. notificationId 또는 정보 조합의 선택·전달 위치·FE/BE 책임은 미정 |
+| BE·FE | **새 목록/필터/페이지·집계·설정 API 계약은?** 현재 DEV 공개 스펙에는 아래 차이가 남음. 읽음 필터를 FE에서 현재 페이지만 걸러 빈 목록·수량 오류를 만들지 않도록 서버 pagination과 합의 필요. count에 채팅 포함 여부, 현재/전체 소속·기기 기준, REST 재조회 계기·실패 시 처리도 필요 |
+| PM·디자인·BE | **기존값 보존과 초기값 생성은 언제 어떻게 하는가?** 신규 가입·초대 수락·기존 사용자 새 소속·신규 카테고리 추가를 분리. OS 변화는 저장값을 바꾸지 않음. 도메인 OFF→ON 하위 선택 복원/전체 ON, 과거 알림 미이관 시 화면, 누락/삭제 템플릿 전환 시점은 확인 대상 |
+| PM·디자인 | **남은 화면 상태는?** 모바일 웹 최종 배치, native 권한 가이드 1회 기준/닫기/다시 안내, 로딩·실패·빈 목록·탭 변경·전체 읽음 실패·소속 전환 실패, 국가별 날짜·문구. 기존 패턴만으로 사용자 동작을 새로 추가하지 않음 |
+
+### 연결된 알림 현황표에서 확보한 FE 매핑 재료
+
+- Sheet `전체 알림` gid `614410508`의 열은 Domain/Category/이벤트·템플릿/발송 조건/Template ID/Order Notification Scope/채널/운영 상태/수신 대상/영·국문 제목·부제/랜딩이다. 매핑 축은 확보했으나 확정 enum·운영 정본으로 간주하지 않는다. 169행 상태 표기는 운영중137/신규15/추가예정3/삭제필요5/미사용6/중단3이며 실제 발송 검증 결과가 아니다.
+- 후보 분류: ORDERS(Design Confirmation/Order Updates/Shipping/Payments/Feedback), CREDITS, USERS(Case preference/Group members), LINKTALK, Manufacturing(Order Updates/Payments). 개선안 탭은 ORDER/PAYMENT/USER PREFERENCE 등 별도 이름을 사용한다. 지원하지 않는 채널이나 비어 있는 값을 추측해 추가하지 않는다.
+- 10/26 BE 첨부 후 Sheet186~194행의 MFG5종은 `MFG_ORDER_SUBMITTED/CANCEL/CONFIRM/IN_PROGRESS/SHIPPING`, 운영중으로 고쳐져 있다. 106~109행 덴처 다음 단계는 CHAT 운영중, NOTIFICATION/PUSH 신규로 구분. 이미 보정된 항목을 현재 결함으로 되풀이하지 않는다.
+- 남은 표 차이: Office13~19행 All Employees와 개선안6~11행 생성자+담당의, 삭제필요96/172/173/179/182행, MFG Template ID 공란, Support184행 Template ID `en`. 월 인보이스195~196행은 추가예정·랜딩 공란. BE 첨부의 미구현/수신자 의견은 FE가 서버 코드로 재검증한 사실과 구분한다.
+- 기존 PushType은 화면 카테고리와 1:1이 아니다. `ORDER_APPROVAL/ORDER_NEW`는 제품·이벤트별 의미가 다르고 푸시 현황표에는 일부 카테고리/수신제품/스캐너/신규유형 매핑이 비어 있다. Template ID·PushType·업무 데이터 ID·알림 개별 레코드 ID는 다른 식별자다.
+- 시스템 링크톡 tab gid `1129039729`는 번호19개+추가 문구1행, SYSTEM/LAB/OFFICE 발신·타입·본문/DB 템플릿·조건·수정 대상이 혼재. 자동승인 `# hours`와 `24 hours`, 국문 공란, 타입 없는 하드코딩도 확인. 시스템 메시지와 동일 이벤트의 사용자 노출 PUSH를 하나의 수신 설정으로 묶지 않는다.
+- 메일 탭은 Auth & Onboarding 수신설정 제외(B10), 샘플 만족도 랜딩 변경/삭제 질문(B28), Case preference 발송 조건 ‘주문 생성 시’(D39)와 ‘매월1일09시’(I39)가 혼재한다. 중단의심 표기를 실제 폐기 확정으로 사용하지 않는다. 이벤트별 그룹의 USER/BENEFIT·Order Status/Account 명칭도 최종 분류 정렬 대상이다.
+
+| 랜딩 종류·원문 예 | 사전 확인할 내용 |
+| --- | --- |
+| `dentlink://confirm/{officeId 또는 employerId}/{orderId}/{approvalId}` | 병원 식별자 명칭 혼용. 현재 앱은 employer→사용자 소속 employee를 찾으므로 계약을 명확히 해야 함 |
+| `dentlink://order/{orderId}` / `dentlink://order/{employerId}/{orderId}` | 병원 없는 기존형과 일반형 공존. 잘못된 현재 소속으로 요청하지 않는 방법 필요 |
+| 주문 URL의 `scanner-draft-received`, `isCasePreferenceModalOpen`, shipment tracking, chat·casePreference 경로 | 단순 screen 이동 외 action·상태 분기 보존. 이미 검증된 기존 기능의 상세 이력을 재작업하지 않음 |
+| 크레딧 PUSH의 ‘알림센터 오픈’, MFG의 `milling/orders/{orderId}` | 실제 URL/payload 없음 또는 웹 상대 경로. native Inbox/상세 목적지와 실패 fallback 계약 필요 |
+| 랜딩 없는 공지, 월 인보이스 랜딩 공란 | 이동할 화면을 임의로 만들지 않음. 클릭·읽음 동작과 표시 구분을 기획에 확인 |
+
+모든 기존·신규 링크에 대해 로그인 준비 → 목표 소속 확인/활성화 → 화면 또는 action → 정책에 따른 읽음을 검토한다. 읽음 정보를 URL/FCM/Airbridge/deferred 경로에서 잃지 않아야 한다. 같은 화면의 서로 다른 알림과 같은 알림의 중복 콜백을 구분하고, 경로 중복 이동 제어를 읽음 중복 제거로 그대로 사용하지 않는다.
+
+### 코드·DEV Swagger 대비 재사용 지점과 변경 예상
+
+10/26 19:16 KST [DEV Swagger JSON](https://dev-api.dentlink.io/v3/api-docs) 읽기 확인. 인증된 계정 조회·mutation·DB 확인은 하지 않았다.
+
+| 영역 | 현재 확인한 계약/실제 호출 | 준비할 차이 |
+| --- | --- | --- |
+| 목록 | 웹 service→query→Notifications→공통 NotificationUI 실제 호출. `GET /messages/notifications` query `id/serviceType/size`; 웹20건 cursor. Native는 생성 Api.ts 선언 외 실제 호출 미확인 | 공개 스펙에 읽음 필터·LinkTalk 제외 parameter 없음. `NotificationDto`는 id/notificationType/serviceType/title/content/landingUrl/isRead/sentAt/options 등 기존 구조. 새 domain/category/event/delivery 표현·native service/query/screen 필요 여부 확인 |
+| 읽음 | 기존 웹 부분/전체 PATCH 호출. partial body `unreadNotificationIds`; all 선택 query `serviceType` 있으나 웹 wrapper는 미전달 | 현재 웹은 노출/스크롤로 부분 읽음, All 하단 도달 시 전체 읽음. 클릭 기준으로 트리거 변경 필요. 신규 읽음 API가 반드시 필요하다고 가정하지 않음 |
+| 삭제 | 기존 DELETE 계약·웹 호출 있음 | 새 화면에서 삭제를 제외하는 방향과 API 자체 제거는 별개. 기존 API 삭제 승인 아님 |
+| 미읽음 집계 | `/unread` boolean, `/employers` string 배열. Native는 로그인/foreground에 서버 디바이스 badge와 Notifee badge를0으로 초기화 | 숫자·소속별 dot·OS 배지를 같은 미읽음 기준으로 묶을 계약과 기존 초기화 정책 확인. 현재 응답만으로 소속ID/count map을 제공한다고 단정하지 않음 |
+| 수신 설정 | 앱 실제 GET/POST `push-preferences`, PATCH preferenceId/settingsId. 응답 `pushEnable/enablePersonalOrders/settings[].id/type/enable`; preference PATCH는 pushEnable와 enablePersonalOrders 필요 | Employee×domain×category×channel 신규 공개 계약은 검색 범위에서 미확인. BE 개발이 전혀 없다는 뜻은 아님. 기존 PUSH 타입과 다채널 새 구조 매핑 필요 |
+| OS 분리 | OS granted 변화 때 POST 초기화, 서버 pushEnable false/필수 타입 누락 때도 초기화, OS 미허용 시 화면 값 false 처리 | 저장값 그대로 표시·보존 + PUSH 비활성 유지. OS ON으로 기존 OFF를 켜는 초기화 연결과 신규 타입 생성 분리. 현재 서버 설정이 아예 없던 구조는 아님 |
+| My Orders | Office 서버 preference+로컬 store, 변경 시 `pushEnable:true`도 PATCH. Lab 로컬 store, Clinic URL필터 | 전체 수신 OFF와 조회 필터를 의도치 않게 켜거나 공유하지 않도록 계약 분리 |
+| 소속/권한 | auth store로 Employee/Employer 헤더. Lab 일반 전환은 서버 활성화·ID검증·query취소/제거 후 새소속 공개. 일반 딥링크 sideEffect는 직접store변경 경로 존재 | 모든 진입이 같은 완료 절차를 거친다고 가정하지 않음. 이전 계정/소속의 늦은 응답 폐기·새 요청 헤더 일치·실패 복구 보존 |
+| 분석 | 웹 notification_click/item_click/filter_click, 앱 push_click 기존 사용 | 새 PRD opened/sent/settings_viewed와 중복/책임/파라미터 합의. 분석 pushType을 읽음 ID나 새 설정 enum으로 간주하지 않음 |
+
+코드 근거(아래 조사 revision 기준):
+
+- 웹: `shared/models/src/messages/messages.apis.clinic.ts:19,38,72,89,109`, 동명 lab파일 `:19,56,73,93`; `clinic/src/components/Notifications/useNotificationsPagination.tsx:34,110,133,149`, Lab 동명 `:25,100,121`; `shared/ui/src/NotificationUI/NotificationUI.tsx:114,176,200,241,278,295`; 각 `services/messages/messages.query.ts`; Clinic `Layout/Header.tsx:104`, Lab `Layout/HeaderActions.tsx:47,108`와 `NavigationMobile.tsx:155`.
+- Office: `src/queries/useAppQueries.ts:29`, `src/libs/usePersonalOrdersPreference.ts:31,65,100`, `src/configs/utils/fetcher.ts:92`, `src/libs/useEmployeeProfile.ts:38,103`, `src/navigations/RootNavigator.tsx:107,313,343,451`, `src/services/app.service.ts:138`; `src/libs/useNavigationConfig.ts:81,88,163,198,203,340,625,682,946`, `src/configs/utils/fcmHandler.ts:108,119`, `src/configs/constants/deepLink.ts:20`.
+- Lab main: `src/libs/useEmployeeProfile.ts:38`, `src/libs/useNavigationConfig.ts:79`, `src/hooks/useProfileNotification.ts:46`, `src/libs/usePersonalOrdersPreference.ts:1`. Native 생성 `src/models/Api.ts` 메서드 존재는 실제 연동 증거가 아님.
+- 앞선 OS 조사에 있는 PermissionProvider/ProfileNotificationSection/usePermissionStore/useAppState/HomeScreen도 재사용 검토 지점이다. 정확한 줄은 추후 변경될 수 있으므로 revision과 실제 호출을 다시 확인한다.
+
+### 선행 권한 작업에서 인계받아 보존할 내용
+
+- 10/25 운영 Git/Actions·Office/Lab Production OTA 활성은 권한 기능 전달 기록이다. 모든 설치 앱의 적용·실기기 QA 완료나 MEMBER 적용 조건 해제, 알림센터 완성을 뜻하지 않는다. 이번에는 기존 배포 검증을 반복하지 않았다.
+- MEMBER는 담당 주문이1건 이상인 환자의 전체 케이스·주문을 읽을 수 있지만, 타 담당자 주문 행동은 읽기 전용이고 본인 담당 주문 행동은 허용한다. 같은 환자라는 이유로 모든 알림을 수신시키지 않는다. BE 발송 대상 제한과 Inbox/집계 필터를 함께 확인해야 한다.
+- Employee별 역할, activeEmployeeId와 profile.id 일치 후 판단, 소속/역할별 캐시 분리·이전 응답 폐기를 보존한다. Office 소속 전환 code2131과 접근 거절2152, Lab 접근 거절1018의 기존 처리를 구분한다. 모든403이 로그아웃되지 않는다는 뜻은 아니다. 조사한 Office `fetcher.ts:147~160`은2005/2152를 별도 처리하고2004 외 나머지403에 토큰 만료 처리를 하므로, 새 알림의 오류도 HTTP 상태만으로 임의 분류하지 않고 실제 서버 code/호출 경로를 확인한다.
+- 10/20 DL-16859 Member LinkTalk 목록·미읽음·배지의 본인 주문 한정은 저장 preference/PUSH 변경 없이 적용한 기존 보호다. 이를 홈 필터 공유 정책이나 알림센터 수신 구현 완료로 사용하지 않는다.
+
+### 이번 코드 조사 위치 — 구현 위치로 배정하지 않음
+
+| 저장소 | 실제 checkout·상태 | 읽은 기준과 한계 |
+| --- | --- | --- |
+| `/Users/parkjongsun/Repository/dentlink-client` | `feature/DL-17011@9dcb644d566cee06fa0019c16b7f47cdf10e8d36`, upstream0/0·clean | `origin/master@c597f1fb3e7f5c03a76237926c3effad5bb84983`, 실제 원격 동일. 조사 알림 파일은 checkout과 차이 없음 |
+| `/Users/parkjongsun/Repository/dentlink-app` | `main@49031ad64983715f87f92b4998284da1dbae7c23`, upstream0/0·clean | 실제 원격 main 동일, 조사 파일은 develop `fc127bd6…`와 차이 없음 |
+| `/Users/parkjongsun/Repository/dentlink-lab-app` | `QA/DL-16917@06e8dfde967502a4830e9a93c018ce150702dc7c`, upstream0/0·clean | main `51441039751b63a08c82a1be9695c805c8af1539`를 git show로 읽고 원격 main 일치 확인. 조사 도중 원격 develop `58a551e717af1a4d1642e03963d34be0c0293591` 변경을 관찰했으나 후속 코드 미검증 |
+
+웹 등록 worktree는 기본 checkout과 `dentlink-client-dlds` detached `c597f1fb…`; 두 앱은 기본 checkout 하나다. 이번 확대 조사에서는 제품 fetch/pull/checkout을 하지 않았다. 당일 앞선 OS 조사에서의 동기화는 별도 이력이다. 현재 branch는 다른 작업용이므로 구현 전 활성 작성자·변경 범위·최신 Git을 다시 확인한다.
+
+### 준비된 작업 묶음·검증 후보·다음 시작점
+
+아래는 구현 계획의 분해이며 착수/기한/담당자 배정/제품 Git 권한을 뜻하지 않는다.
+
+1. **정책·계약 정렬:** 위 충돌 질문을 PM/디자인/BE에 확인하고 최종 카탈로그·role/Employee·읽음/집계·설정·랜딩 계약을 연결한다. 이번에는 외부 댓글/질문을 게시하지 않았다.
+2. **웹 목록·설정:** 기존 서비스/query·반응형 진입을 살피며 All/Unread pagination, 클릭 읽음/Read all, 설정 진입·지원 채널, 다른 소속 안내를 새 계약에 맞춰 계획한다.
+3. **Office/Lab native:** Inbox route/screen/service/query, 설정 이동, OS 안내·저장값 보존, 배지 기준을 제품별로 준비한다. OS 재허용으로 서버 선택을 자동 변경하지 않는 초기화 계약이 선행된다.
+4. **공통 딥링크:** 기존/신규 URL과 동작을 매핑하고 로그인/deferred/FCM/Airbridge/병원 전환·읽음 연결의 순서와 실패 정책을 정한다. 특수 동작·권한 가드·전환 중 응답 폐기를 유지한다.
+5. **검증·전달 준비:** 계약 확정 후 제품별 FE Jira·작업 checkout·base/PR 대상·release를 메인과 조율하고, 승인된 범위에서 구현·검증한다. 구현/코드 검증/사용자 QA/review/merge/release 포함/배포/운영 확인은 별도 단계로 기록한다.
+
+검증 시나리오는 아직 실행하지 않았다: OS OFF에서 저장값 유지·PUSH만 비활성, OS 재허용 뒤 기존 OFF 보존; 신규/기존/초대/다중 소속의 초기값; 첫 노출·스크롤은 읽음 변경 없음; 클릭·Read all 범위/실패; 같은 화면 다른 알림과 동일 알림 중복 콜백; 로그아웃·로그인 전 링크·소속 전환 중 지연 응답·탈퇴·권한 상실·삭제 대상; MEMBER 담당 범위의 목록/배지/PUSH/메일; 필터·페이지 경계와 count; 웹·앱의 다음 REST 조회 일치; 지원하지 않는 채널 비노출·지역 문구.
+
+- Jira 현 상태: DL-16141/16142/16278/16303 기획·조사 Done; DL-16781/16788/16790 디자인 진행 중, DL-16789/16791 목록·Lab 확인 할 일; DL-16905 정책 분석·DL-17029 운영 템플릿 분석 진행 중; DL-16906 BE 설계 할 일. 티켓 상태는 구현·배포 증거가 아니다.
+- **다음 시작점:** 이 절의 출처별 변경 사항·미정 질문을 기준으로 추가 자료/답변만 반영한다. 이미 얻은 권한·기존 API 조사부터 처음 다시 시작하지 않는다. 실제 착수 요청이 오면 최신 Git/Swagger/디자인과 해결된 계약을 재확인하며, 현재는 사전 준비 완료·제품 구현 미착수다.
+
+## 당일 초기 기록 — 2026-10-26
+
+아래는 링크 종합 조사 전의 상태다. 현재 사전 준비 결과·보완된 정책·메인 답변은 문서 맨 위 최신 절을 따른다.
 
 - **이번 메인 작업 공간 정리와 무관한 세션이므로 유지한다.** 메인이 정리 범위를 넓게 해석해 통합알림센터 세션 `01a065e6-afb2-75a0-b465-61c3e488a894`를 보관했으나, 사용자가 정정해 즉시 보관 해제했다. 제품 코드 변경·구현 재개·완료 처리는 아니다. 아래 사전 검토·REST 방향·미정 요구사항은 그대로 보존한다.
 - 다시 요청받으면 이 문서와 최신 메인 조율 정본을 읽고 현재 master 및 API/요구사항을 대조해 필요한 환경만 준비한다. 아래 권한관리 미착수 등 9/29 상태는 당시 이력이며 현재 상태는 담당 정본을 따른다. 이번에는 구현을 재개하지 않았다.
@@ -13,7 +158,7 @@
 - 이전 선행 작업은 [DL-16317 역할·담당자 권한관리](dentlink-permission-management.md)다. 최신 정본에는 해당 작업의 운영 반영·완료/보관이 기록돼 있으므로 아래 9/29 미착수 이력을 현재 상태로 사용하지 않는다. 이번에는 해당 배포·제품 코드를 다시 검증하지 않았다.
 - 권한관리 정본은 알림센터 Inbox·수신 설정·치과 전환 배지·발송 DB 개편을 별도 기능으로 분리한다. 역할/담당자 권한 작업 완료를 OS 권한과 서버 수신 설정 분리 완료로 취급하지 않는다.
 - 과거 PRD에는 권한 체계 선배포와 MEMBER 실제 지정·신규 가입 기본값 적용 시점을 알림센터 릴리즈와 구분한 기록이 있다. 이후 권한 후속 작업도 있으므로 실제 알림 수신 범위·권한 정책·적용 시점은 착수 전 최신 근거로 확인한다. 과거 기록만으로 현재 정책을 확정하지 않는다.
-- 사용자는 필요한 선행 정보가 있으면 보관된 권한관리 세션이나 메인세션에 문의하도록 허용했다. 이번에는 정본에서 선행 관계와 경계가 확인돼 별도 세션을 깨우거나 메시지를 보내지 않았다. 실제 착수 전 기록만으로 해결되지 않는 연결·정책만 해당 세션에 문의한다. 준비 기록을 보존한 뒤 추가 구현 없이 대기한다.
+- 사용자는 필요한 선행 정보가 있으면 보관된 권한관리 세션이나 메인세션에 문의하도록 허용했다. 이 초기 조사에서는 정본만 확인했으나, 이후 ‘부족한 정보를 지금 확인’ 지시에 따라 보관 세션을 읽고 메인 답변까지 받았다. 결과는 문서 맨 위 최신 절에 기록했다. 구현은 시작하지 않는다.
 
 ### OS 알림 권한과 서버 수신 설정 조사 — 2026-10-26
 
@@ -31,11 +176,11 @@
 - 개발 [Swagger JSON](https://dev-api.dentlink.io/v3/api-docs)을 당일 읽기 조회했다. `POST /app/users/own/push-preferences` 설명은 **타입 수가 다르면 신규 타입만 true, 같으면 모든 타입을 true**다. 따라서 OS를 다시 허용할 때 기존 개별 OFF 선택까지 켜질 가능성이 코드와 계약상 있다. 실제 계정 변경 요청이나 서버 DB 직접 확인으로 재현한 결과는 아니다.
 - 서버 설정 연동은 이미 존재한다. 실제 service/query/hook이 `GET/POST /app/users/own/push-preferences`, `PATCH /app/users/own/push-preferences/{preferenceId}`, `PATCH /app/users/own/push-settings/{pushSettingId}`를 사용한다. 응답은 전체 `pushEnable`, `enablePersonalOrders`, 개별 `settings[].id/type/enable`을 구분한다. Employee-Id/Employer-Id 헤더 계약도 있으나 실제 DB의 계정·소속·앱별 저장 단위는 이번 조사로 확정하지 않았다.
 - **권한 감지는 로그인·앱 상태 변경 시 재조회다.** `PermissionProvider`가 `checkNotifications()`를 비동기로 호출하고 Zustand/AsyncStorage에 마지막 상태를 보관한다. OS 설정에서 앱으로 복귀할 때 재확인하는 구조이며, 종료·백그라운드 중 실시간 감지나 지연 없는 반영을 보장하지 않는다. 공통 판정은 `status === granted`이며 iOS 표시 세부 설정·Android 채널 차단을 모두 반영하는 판정은 아니다. 홈에는 OS 미허용 안내 배너가 이미 있다.
-- 사용자 방향으로 분리할 때 검토할 곳: 서버 값을 그대로 표시·수정하도록 OS 조건과 분리하고, OS 허용에 따른 자동 POST를 누락 항목 생성/기존 선택 보존과 구분한다. Office의 `usePersonalOrdersPreference`는 수신 범위 변경 PATCH에 `pushEnable: true`도 넣으므로 향후 전체 수신 OFF 정책과 함께 확인해야 한다. 새 API나 DB가 반드시 필요하다고 가정하지 않는다.
+- 사용자 방향으로 분리할 때 검토할 곳: 서버 저장값을 OS 표시값과 분리하고, OS 허용에 따른 자동 POST를 누락 항목 생성/기존 선택 보존과 구분한다. 후속 10/26 Slack/PRD는 **OS OFF에서도 저장값 보존·표시, PUSH 조작은 비활성**이라고 명시했으므로 OS에 따른 수정 제한까지 없애는 구현은 하지 않는다. Office의 `usePersonalOrdersPreference`는 수신 범위 변경 PATCH에 `pushEnable: true`도 넣으므로 전체 수신 OFF 정책과 함께 확인해야 한다. 새 API나 DB가 반드시 필요하다고 가정하지 않는다.
 - 근거 파일(두 앱 공통): `src/features/common/components/PermissionProvider.tsx`, `src/features/profile/sections/ProfileNotificationSection.tsx`, `src/hooks/useProfileNotification.ts`, `src/hooks/useAppState.ts`, `src/store/usePermissionStore.ts`, `src/services/app.service.ts`, `src/queries/useAppQueries.ts`, `src/features/home/screens/HomeScreen.tsx`. Lab은 로컬 QA 파일과 다르므로 위 main SHA를 기준으로 읽는다.
-- **완료/다음 시작점:** 최신 코드·개발 Swagger 조사만 완료. 제품 수정·실행 테스트·실기기 QA·배포 확인은 하지 않았다. 후속 요청 시 OS 안내와 서버 설정의 분리 범위, 전체/개별 기본값, 서버 저장 단위·초기화 계약을 정하고 승인된 범위만 구현한다. 기존 알림 목록 읽음 기준·읽음 대상 식별 방식은 여전히 미정이다.
+- **초기 조사 완료 경계:** 코드·개발 Swagger 조사만 완료했고 제품 수정·실행 테스트·실기기 QA·배포 확인은 하지 않았다. 이후 자료 종합으로 OS 분리·기본값·클릭 읽음 방향은 보완됐다. 읽음 대상 식별과 실패 정책, 실제 설정 저장/초기화 계약 등 남은 사항은 맨 위 최신 절을 따른다.
 
-## 현재 체크포인트 — 2026-09-29
+## 이전 체크포인트 — 2026-09-29
 
 ### 목적·범위와 선행 작업
 
@@ -192,6 +337,7 @@
 
 2026-09-03 후속 지침이 앞서 확정했던 실시간 동기화 요약을 대체한다. 구현 명세가
 아닌 FE 작업 방향 요약이며, 상세 구현 목록·QA·인프라 항목을 불필요하게 늘리지 않는다.
+아래의 당시 삭제 기능·읽음 정책 미정 설명은 10/26 최신 사전 준비 절의 삭제 UI 제외·클릭 읽음 방향으로 보완됐다. REST와 실시간 동기화 제외라는 사용자 결정은 유지한다.
 
 ### 웹 — Clinic / Lab
 
