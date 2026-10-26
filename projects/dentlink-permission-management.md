@@ -1,6 +1,18 @@
 # Dentlink 권한관리 — DL-16317
 
-## 후속 QA 구현·PR 완료 — 2026-10-26 DL-17011
+## 후속 QA Viewer 선택지 정정·PR 갱신 — 2026-10-26 DL-17011
+
+- **정정 사유:** 사용자가 PM 의도는 병원과 동일한 드롭다운이며 Viewer가 남아 있는 것이 맞는지 지적했다. 최초 구현에서 기존 VIEWER 값 보존을 신규 선택 허용으로 확대한 판단은 잘못이었다. 기존 권한을 표시·미변경 저장하는 것과 새로 선택 가능하게 하는 것은 분리해야 한다. 아래 최초 구현의 5종 옵션·검증 결과는 요구사항 충족 근거로 사용하지 않는다.
+- **현행 근거 재확인:** Notion 기획은 Admin / Billing Manager / Manager / Member 4단계이며 Admin 그룹 멤버 수정과 포털 Members 동기화를 요구한다. DEV·STG `GET /codes/authority-type?serviceType=OFFICE` 공개 응답 모두 `OWNER / PAYMENT_MANAGER / EDITOR / MEMBER` 네 가지다. Clinic은 이 응답만 선택지로 사용한다. Clinic의 Viewer label helper나 API DTO의 VIEWER 타입 존재는 신규 Viewer 선택의 근거가 아니다. 기획의 기존 VIEWER 처리 방침은 여전히 Open이다.
+- **최종 구현:** Admin OFFICE 메뉴를 위 네 가지로 수정했다. `getEmployeeAuthorityLabel`은 목록·상세의 기존 Viewer 표시를 유지하며, 수정 Select의 `selectedOption`은 **OFFICE이고 현재 VIEWER인 경우에만** 현재값을 표시한다. DLOS는 메뉴를 options로만 렌더하므로 Viewer는 선택지에 없다. 기존 Viewer의 상태만 수정하면 VIEWER payload를 유지하고, 임의 권한 변환은 하지 않는다. LAB·ADMIN·서비스 정보 없음의 기존 메뉴/폼 동작, 회원 등록 제외, Admin 3파일 한정은 유지한다.
+- **커밋·원격:** 기존 `feature/DL-17011`에 **`d49b1d139088556c68d38bd1a55f16bddbd567d8`** (`fix: 어드민 치과 권한 선택지를 병원과 일치`)을 추가 커밋·푸시했다. [PR #4784](https://github.com/Innvoaid/dentlink-client/pull/4784)는 `release/v1.90.0` 대상 Open/비Draft/미병합이다. PR head·origin·local SHA 일치와 checkout clean을 확인했다. PR 전체는 commit2개·Admin3파일(+56/-14), 본문도 네 가지 선택과 Viewer 현재값 표시의 구분으로 수정했다.
+- **검증:** 실제 소스 평가로 OFFICE4종을 DEV·STG 코드 응답과 대조하고, Viewer 표시 전용 fallback·다른 서비스의 선택지/폼 보존·모킹한 기존 PUT의 EDITOR/MEMBER/VIEWER payload 보존을 확인했다. Admin 타입·변경파일 ESLint 오류0/기존경고8·Prettier·diff check·기존 DLOS Select 테스트4건 통과. 새 영구 테스트·보조 파일은 추가하지 않았다.
+- **필수 훅·리뷰:** 정상 pre-commit에서 Clinic/Lab/Admin 타입 통과. 정상 pre-push에서 3서비스 lint 오류0(기존경고226/184/393), Admin DLOS guard60/baseline60, guard9·shared config21·hooks32 tests와 coverage check 통과. 독립 리뷰 제안대로 현재값 fallback을 OFFICE/VIEWER로 제한하여 다른 서비스의 옵션 밖 값 동작을 보존했다.
+- **E2E·경계:** 최종 worktree 포함 독립 영향 검토는 NO_IMPACT. 기존 Billing/가입/온보딩 E2E의 Admin 접점은 직접 API 준비·정리 또는 서버 준비 확인이며 회원 수정 메뉴를 소비하지 않는다. 가드 해시 `0a6241196a7fa8abc7debb7073a2ed17c621b516` 기록과 push 전 check 통과. 실제 계정의 저장·재조회·포털 반영 QA 및 브라우저 E2E는 미실행이다. CodeRabbit 대응·병합·배포·Jira 변경은 하지 않았다. 다음 지시 전까지 PR 상태에서 대기하며 이 문서만 개인 컨텍스트에 커밋·푸시한다.
+
+## 최초 후속 QA 구현·PR 기록 — 2026-10-26 DL-17011 (Viewer 선택 보존 판단은 위 기록으로 정정)
+
+아래는 최초 구현 당시의 기록이며, Viewer 선택을 유지한 판단과 5종 옵션은 위 정정으로 대체한다.
 
 - **승인·완료:** 사용자가 앞선 요구/범위 설명 후 Admin 수정 구현·커밋·푸시·`release/v1.90.0` PR 생성을 명시 승인했다. OFFICE 회원 **수정과 목록·상세 표시**를 반영했다. 회원 등록은 추가 범위로 구분한 상태를 유지했으며 이번에는 수정하지 않았다. 아래 조사 단계의 구현 대기는 이 기록으로 대체한다.
 - **제품 위치:** 기존 `/Users/parkjongsun/Repository/dentlink-client` checkout에서 clean/active writer와 두 worktree 상태를 확인하고 원격을 갱신했다. 후속 QA base `origin/release/v1.90.0@f18b664c4367be419d70911eef1e4f0c3caa378d`에서 **`feature/DL-17011`**을 생성했다. 별도 worktree/프로젝트 폴더 없이 진행했으며 LBX `feature/DL-16387@f389c13cfbe497e0b864aa9399efafd9ecae305d`와 DLDS worktree는 유지했다.
