@@ -1,11 +1,31 @@
 # Dentlink 통합알림센터 — 사전 검토 체크포인트
 
-최종 갱신: 2026-10-26 — 제품 구현 미착수, 기존 사전 검토·세션 유지.
+최종 갱신: 2026-10-26 — Office/Lab OS 알림 권한·서버 수신 설정 연결 조사 완료, 제품 구현 미착수.
 
 ## 현재 상태 — 2026-10-26
 
 - **이번 메인 작업 공간 정리와 무관한 세션이므로 유지한다.** 메인이 정리 범위를 넓게 해석해 통합알림센터 세션 `01a065e6-afb2-75a0-b465-61c3e488a894`를 보관했으나, 사용자가 정정해 즉시 보관 해제했다. 제품 코드 변경·구현 재개·완료 처리는 아니다. 아래 사전 검토·REST 방향·미정 요구사항은 그대로 보존한다.
 - 다시 요청받으면 이 문서와 최신 메인 조율 정본을 읽고 현재 master 및 API/요구사항을 대조해 필요한 환경만 준비한다. 아래 권한관리 미착수 등 9/29 상태는 당시 이력이며 현재 상태는 담당 정본을 따른다. 이번에는 구현을 재개하지 않았다.
+
+### OS 알림 권한과 서버 수신 설정 조사 — 2026-10-26
+
+- 사용자 요청은 **현재 앱 구조 조사만**이다. OS 권한은 별도로 확인·설정 이동을 안내하고, 앱 수신 설정은 서버에 별도 보관하려는 방향을 제시했다. 구체적인 화면·문구·기본값·저장 범위나 구현 착수를 승인한 것은 아니다. 기존 REST 알림센터·읽음 정책의 확정/미정 경계는 유지한다.
+- 현재 Office와 Lab은 별도 저장소다. 개인 컨텍스트를 `git pull --ff-only`한 뒤 아래 앱 저장소도 동기화했다. branch 전환·생성, 제품 코드 수정·commit·push·PR·배포는 하지 않았다.
+
+| 조사 대상 | 실제 checkout 및 조사 기준 |
+| --- | --- |
+| Office `/Users/parkjongsun/Repository/dentlink-app` | `main@49031ad64983715f87f92b4998284da1dbae7c23`, `origin/main` 대비 0/0·clean. 기존 main을 fast-forward pull한 코드 기준 |
+| Lab `/Users/parkjongsun/Repository/dentlink-lab-app` | 기존 `QA/DL-16917@06e8dfde967502a4830e9a93c018ce150702dc7c` 유지, upstream 대비 0/0·clean. 조사에는 `git show`로 최신 `origin/main@51441039751b63a08c82a1be9695c805c8af1539` 사용 |
+
+- 위 두 앱의 조사 대상 알림 권한·설정 파일은 각 `origin/develop`과 차이가 없었다. 이는 현재 설치된 앱 버전이나 배포·실기기 동작까지 확인했다는 의미는 아니다. 웹은 이번 조사 범위에 포함하지 않았다.
+- **완전한 양방향 동기화가 아니다.** `ProfileNotificationSection.getSettingEnabled`는 OS 미허용이면 서버 개별 `enable` 값과 무관하게 모든 스위치를 OFF로 표시한다. 변경/전체 켜기 시도도 OS 설정 안내 후 중단한다. OS OFF 시 서버 설정 전체를 false로 저장하는 호출은 조사 범위에서 확인되지 않았다.
+- **OS 허용이 서버 설정을 바꾸는 연결은 있다.** `PermissionProvider`는 저장된 이전 OS 상태와 달라져 `granted`가 되면 설정 초기화 POST를 호출한다. OS 허용 상태에서 서버 전체 `pushEnable`이 false이거나 필수 항목이 누락돼도 같은 초기화를 시도한다. 초기화에는 중복 시도 제어가 있다.
+- 개발 [Swagger JSON](https://dev-api.dentlink.io/v3/api-docs)을 당일 읽기 조회했다. `POST /app/users/own/push-preferences` 설명은 **타입 수가 다르면 신규 타입만 true, 같으면 모든 타입을 true**다. 따라서 OS를 다시 허용할 때 기존 개별 OFF 선택까지 켜질 가능성이 코드와 계약상 있다. 실제 계정 변경 요청이나 서버 DB 직접 확인으로 재현한 결과는 아니다.
+- 서버 설정 연동은 이미 존재한다. 실제 service/query/hook이 `GET/POST /app/users/own/push-preferences`, `PATCH /app/users/own/push-preferences/{preferenceId}`, `PATCH /app/users/own/push-settings/{pushSettingId}`를 사용한다. 응답은 전체 `pushEnable`, `enablePersonalOrders`, 개별 `settings[].id/type/enable`을 구분한다. Employee-Id/Employer-Id 헤더 계약도 있으나 실제 DB의 계정·소속·앱별 저장 단위는 이번 조사로 확정하지 않았다.
+- **권한 감지는 로그인·앱 상태 변경 시 재조회다.** `PermissionProvider`가 `checkNotifications()`를 비동기로 호출하고 Zustand/AsyncStorage에 마지막 상태를 보관한다. OS 설정에서 앱으로 복귀할 때 재확인하는 구조이며, 종료·백그라운드 중 실시간 감지나 지연 없는 반영을 보장하지 않는다. 공통 판정은 `status === granted`이며 iOS 표시 세부 설정·Android 채널 차단을 모두 반영하는 판정은 아니다. 홈에는 OS 미허용 안내 배너가 이미 있다.
+- 사용자 방향으로 분리할 때 검토할 곳: 서버 값을 그대로 표시·수정하도록 OS 조건과 분리하고, OS 허용에 따른 자동 POST를 누락 항목 생성/기존 선택 보존과 구분한다. Office의 `usePersonalOrdersPreference`는 수신 범위 변경 PATCH에 `pushEnable: true`도 넣으므로 향후 전체 수신 OFF 정책과 함께 확인해야 한다. 새 API나 DB가 반드시 필요하다고 가정하지 않는다.
+- 근거 파일(두 앱 공통): `src/features/common/components/PermissionProvider.tsx`, `src/features/profile/sections/ProfileNotificationSection.tsx`, `src/hooks/useProfileNotification.ts`, `src/hooks/useAppState.ts`, `src/store/usePermissionStore.ts`, `src/services/app.service.ts`, `src/queries/useAppQueries.ts`, `src/features/home/screens/HomeScreen.tsx`. Lab은 로컬 QA 파일과 다르므로 위 main SHA를 기준으로 읽는다.
+- **완료/다음 시작점:** 최신 코드·개발 Swagger 조사만 완료. 제품 수정·실행 테스트·실기기 QA·배포 확인은 하지 않았다. 후속 요청 시 OS 안내와 서버 설정의 분리 범위, 전체/개별 기본값, 서버 저장 단위·초기화 계약을 정하고 승인된 범위만 구현한다. 기존 알림 목록 읽음 기준·읽음 대상 식별 방식은 여전히 미정이다.
 
 ## 현재 체크포인트 — 2026-09-29
 
