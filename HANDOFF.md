@@ -45,7 +45,7 @@ Do not store secrets or private customer data here.
 - Dentlink Office app: `projects/dentlink-app.md`
 - Dentlink Lab app: `projects/dentlink-lab-app.md`
 - Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
-  — 운영 홀드·개발서버 반영 상태. 10/26 원본 feature/DL-16387과 세션을 보존했고, 재개 시 최신 master에서 필요한 LBX 변경만 준비한다.
+  — 10/26 최신 master 기반 로컬 feature/DL-16387@f389c13cf 준비·검증 완료. 기본 checkout은 master clean, 원격 LBX는 옛 원본 b69dd84b6 유지·로컬 upstream 해제. 세션/운영 홀드 유지, 새 제품 push/PR/배포 없음.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
   — 웹 운영 포함·앱 Production 활성 확인 후 업무 완료/세션 보관. 10/26 웹/Office/리뷰 worktree3개는 제거하고 설정을 별도 로컬 보관했다. 원본 refs와 OTA exactSHA/전 기기 QA 한계를 유지하며 과거 QA 대기를 새 미완료 업무로 만들지 않는다.
 - Dentlink 웹 환경변수 관리: [projects/dentlink-client-env-management.md](projects/dentlink-client-env-management.md)

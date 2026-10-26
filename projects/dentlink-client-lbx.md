@@ -1,9 +1,15 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 재개 기준 — 2026-10-26 메인 작업 공간 정리
+## 현재 체크포인트 — 2026-10-26 최신 master 기반 로컬 LBX 재구성 완료
 
-- 사용자 최신 결정은 웹 기본 저장소를 최신 master로 정리하고 **별도 작업 코드로 LBX만 보존**하는 것이다. 원본 `feature/DL-16387@b69dd84b6d2590449c2f6887330b4e8285b2ab63`는 로컬·원격 동일 상태로 유지했다. 전용 LBX worktree는 없고 LBX 세션은 유지한다.
-- 재개 시 그때의 최신 master에서 필요한 브랜치/worktree를 준비하고 LBX에 필요한 변경만 가져온다. 아래 과거의 원본 누적 방식보다 이번 최신 준비 방향을 우선한다. 이번 정리에서 원본 삭제·rebase·병합·새 환경 준비·구현은 하지 않았다. 운영 홀드와 기존 검증 한계도 그대로다.
+- 사용자가 로컬 `feature/DL-16387`을 **지금 최신 원격 master에서 다시 만들고 필요한 LBX 변경만 준비**하도록 명시했다. 앞선 '원본 보존 후 재개 시 준비' 단계를 이번 요청으로 완료했다. 기본 저장소에서 master pull/fetch 후 `c597f1fb3e7f5c03a76237926c3effad5bb84983`를 기준으로 같은 로컬 브랜치를 재구성했다.
+- **준비된 로컬 HEAD:** `f389c13cfbe497e0b864aa9399efafd9ecae305d`, `chore: 최신 마스터 기준으로 LBX 작업 재구성`. 부모는 위 master이며 master 대비 1커밋·19파일(+1518/-28)이다. 기본 checkout은 다시 master로 돌렸고 clean, worktree1개·로컬 브랜치 master/LBX만 유지한다. LBX 작업은 이 로컬 브랜치로 전환해 이어갈 수 있다.
+- **선별 범위:** 기존 개발서버 전달본 `9f0479318`의 DLOS 대응 Baby/Mother/Pickup 폼, 조회/제출 연결, 배송 목록·상세·필터, order/shipment wrapper·도메인 타입과 필요한 선택적 공통 props만 가져왔다. 최신 `COURIER_LABEL` 계약을 기존 label 표시와 연결했다. master에 이미 있는 generated Admin/API 계약, DLDS/DLOS 패키지, 구형 공통 Dropdown/hook, package/lock/env는 덮어쓰지 않았다. 기존 Lab 번역 key·문구·사용 경로는 그대로여서 번역/시트 쓰기는 없었다.
+- **검증:** Clinic·Lab·Admin typecheck와 정상 pre-commit hook, DLOS guard60/60, 변경19파일 ESLint 오류0/경고7, Prettier·diff 검사 통과. ESLint CLI의 기존 Storybook/react-hooks 중복 plugin 경로 충돌은 같은 설치 plugin을 preload하는 검사 실행으로 해결했으며 저장소 설정·룰은 바꾸지 않았다. 변경된 DatePicker의 기존 불필요한 string 타입 주석3개는 제거했다.
+- **합성 통합9/9:** 현재 query/form과 DLOS Select를 사용해 주문 전체 페이지·중복제거·오류, 픽업 조회 선행 조건·페이지 추가·기공소 전환 시 취소/늦은 응답 제외, Mother 선택/제출, Baby/Pickup 초기 제출 차단을 확인했다. API·DataForm 외곽·기공소 선택·공용 픽업 입력은 대역이므로 실제 API·전체 입력·브라우저 QA 증거가 아니다. 실제 업무 요청·새 배포는 없다.
+- **원격은 변경하지 않았다.** `origin/feature/DL-16387`은 기존 `b69dd84b6d2590449c2f6887330b4e8285b2ab63` 그대로다. 재구성된 로컬 브랜치의 과거 upstream 연결을 해제했으므로 옛 원격을 일반 pull해 다시 합치지 않는다. 원격 이력 교체·push·PR·release 전달은 별도 지시에 따른다. 개인 문서 push만으로 새 제품 커밋이 다른 기기에 복제되지는 않는다.
+- **복구/증거:** `/Users/parkjongsun/.local/share/codex-closeout/20261026-lbx-master-rebuild/`에 검증한 `original-lbx.bundle`, 기준/원본/새 SHA·선별 파일을 담은 `manifest.json`, lint 결과와 `integration-audit/` 합성 검증9개를 보존했다. 기존 원본은 원격과 이 로컬 bundle에서 복구 가능하다.
+- LBX 세션과 운영 홀드는 유지한다. 다음은 이 준비된 로컬 브랜치에서 사용자 요청 범위만 이어가고, 실제 API/화면 QA·원격 반영·운영 전달은 각각 구분한다. 아래 10/16의 원본 SHA·개발서버 전달·원본 누적 기준은 당시 이력이며 이번 최신 기준을 우선한다.
 
 ## 이전 구현 체크포인트 — 2026-10-16, 구현 완료 / 운영 배포 홀드 / 개발서버만 반영·대기
 

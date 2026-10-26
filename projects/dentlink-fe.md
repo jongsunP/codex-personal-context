@@ -6,12 +6,12 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## 현재 작업 공간 — 2026-10-26 메인 정리 완료
 
-- **사용자 최종 방향:** `dentlink-client` 기본 저장소를 정리해 사용하고, 별도 작업 코드는 LBX만 보존한다. 기능 세션은 LBX·디자인시스템정비를 유지하며, 이번 정리와 무관한 통합알림센터도 그대로 유지한다. 이후 작업은 그때의 최신 master에서 필요한 브랜치/worktree를 준비하고 필요한 변경만 가져온다. 지금 새 환경이나 구현을 시작하지 않는다.
-- 웹 worktree는 `/Users/parkjongsun/Repository/dentlink-client` **1개**, 로컬 브랜치는 **`master`와 `feature/DL-16387` 2개**다. master는 `c597f1fb3e7f5c03a76237926c3effad5bb84983`로 fast-forward했고 origin/master와 동일·clean이다. LBX `b69dd84b6d2590449c2f6887330b4e8285b2ab63`는 로컬·원격을 그대로 보존했다.
+- **사용자 최종 방향:** `dentlink-client` 기본 저장소를 정리해 사용하고, 별도 작업 코드는 LBX만 보존한다. 기능 세션은 LBX·디자인시스템정비를 유지하며, 이번 정리와 무관한 통합알림센터도 그대로 유지한다. 이후 작업은 그때의 최신 master에서 필요한 브랜치/worktree를 준비하고 필요한 변경만 가져온다. LBX는 후속 명시 요청에 따라 아래처럼 로컬 준비까지 완료했다.
+- 웹 worktree는 `/Users/parkjongsun/Repository/dentlink-client` **1개**, 로컬 브랜치는 **`master`와 `feature/DL-16387` 2개**다. 기본 checkout master는 `c597f1fb3e7f5c03a76237926c3effad5bb84983`로 origin/master와 동일·clean이다. 로컬 LBX는 이 master 위에 필요한19파일만 추가한 `f389c13cfbe497e0b864aa9399efafd9ecae305d`로 재구성했다. 원격 LBX는 기존 `b69dd84b6`을 보존했으며 새 로컬 브랜치의 과거 upstream 연결은 해제했다. [LBX 정본](dentlink-client-lbx.md)에 검증·복구·원격 경계를 기록했다.
 - 남아 있던 env worktree와 완료된 로컬 `feature/DL-16821-stage-e2e`, `feature/v1.89.0-qa`를 제거했다. 두 원격 브랜치는 동일 SHA로 유지한다. DLDS 작업 공간 정리는 담당 세션에서 별도로 완료했으며 미완료 하네스의 복구 자료와 Studio 원격 삭제 권한 문제는 [담당 정본](dentlink-fe-opportunities.md)에 있다.
 - 기본 저장소의 DEV env·E2E 설정과 의존성·공용 패키지를 준비했다. Clinic3000/Lab3005/Admin3002 로그인 페이지 HTTP200 및 env 로드를 확인한 뒤 임시 서버를 종료했다. 로그인 이후 기능 QA/E2E를 실행한 것은 아니다. 설정 정리와 복구 근거는 [env 정본](dentlink-client-env-management.md)을 따른다.
-- **메인·LBX·디자인시스템정비·통합알림센터 세션 유지, env 세션 보관 완료.** 통합알림센터까지 보관한 것은 메인이 정리 범위를 넓게 해석한 것이며, 사용자 정정에 따라 즉시 보관 해제했다. 미착수 상태와 사전 검토는 그대로이고 구현을 재개하거나 완료로 처리하지 않는다. 앱 저장소, 제품 코드, 원격 refs, Jira, PR, 배포는 이번 정리에서 변경하지 않았다.
-- 다음은 사용자 신규 요청 때 최신 master에서 필요한 작업만 준비한다. 폐기할 worktree의 env/의존성을 다시 맞추지 않는다. LBX 원본을 삭제하거나 자동 rebase하지 않는다.
+- **메인·LBX·디자인시스템정비·통합알림센터 세션 유지, env 세션 보관 완료.** 통합알림센터까지 보관한 것은 메인이 정리 범위를 넓게 해석한 것이며, 사용자 정정에 따라 즉시 보관 해제했다. 미착수 상태와 사전 검토는 그대로다. LBX의 승인된 로컬 재구성 외에 앱 저장소, 원격 refs, Jira, PR, 배포는 변경하지 않았다.
+- 다음은 준비된 로컬 LBX 또는 새 사용자 요청에 필요한 작업만 이어간다. 폐기할 worktree의 env/의존성을 다시 맞추지 않는다. LBX 옛 원본은 원격·bundle로 보존하며 재구성된 로컬 결과를 원격에 올리는 작업은 별도다.
 
 ## 이전 완료 업무 폴더 정리 — 2026-10-26
 
@@ -440,7 +440,7 @@ Detailed implementation history remains in the relevant existing project file.
 | 기능 | 현재 단계 | 개인 정본 |
 | --- | --- | --- |
 | 권한관리 | 업무 완료·세션 보관, 웹/Office/리뷰 worktree 제거. 앱 원본 refs/검증 한계 보존 | [권한관리](dentlink-permission-management.md) |
-| LBX | 운영 보류·원본 코드/세션 유지. 재개 시 최신 master에서 필요한 변경만 준비 | [LBX](dentlink-client-lbx.md) |
+| LBX | 최신 master 기반 로컬 f389c13cf 준비·검증 완료, 세션 유지. 원격은 옛 원본·운영 홀드 | [LBX](dentlink-client-lbx.md) |
 | 디자인시스템정비 | 세션 유지, 옛 worktree 정리·복구 자료 보존. 다음 요청에서 master 기반 2단계 준비 | [DLDS](dentlink-fe-opportunities.md) |
 | Billing Statement | PR4699 운영 포함·원본 refs 정리·세션 보관, 추가 작업 없음 | [문서 명칭 변경](dentlink-client-billing-statement.md) |
 | 통합알림센터 | 이번 정리 대상에서 제외·세션 유지. 사전 조사 후 미착수·재개 지시 대기 | [통합알림센터](dentlink-unified-notification-center.md) |
