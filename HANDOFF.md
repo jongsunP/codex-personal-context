@@ -49,7 +49,7 @@ Do not store secrets or private customer data here.
 - Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
   — 웹 운영 포함·앱 Production 활성 확인 후 업무 완료/세션 보관. 10/26 웹/Office/리뷰 worktree3개는 제거하고 설정을 별도 로컬 보관했다. 원본 refs와 OTA exactSHA/전 기기 QA 한계를 유지하며 과거 QA 대기를 새 미완료 업무로 만들지 않는다.
 - Dentlink 웹 환경변수 관리: [projects/dentlink-client-env-management.md](projects/dentlink-client-env-management.md)
-  — 2026-10-26 기본 master 로컬 준비·전용 worktree 제거·세션 보관 완료. 원본 설정은 로컬 제한 권한 백업에 보존. 새 기능 QA/E2E는 미실행이며 별도 DEV/보안 후속은 새 지시 전 보류한다.
+  — 2026-10-26 기본 master 로컬 준비·전용 worktree 제거·세션 보관 완료. 후속 사용자 요청으로 이번 임시 env 백업11개 삭제, 실제 로컬 env6개 유지. 새 기능 QA/E2E는 미실행이며 별도 DEV/보안 후속은 새 지시 전 보류한다.
 
 - Dentlink Billing Statement 명칭 변경 / DL-16796:
   `projects/dentlink-client-billing-statement.md` — 2026-10-25 PR4699 운영 포함 확인·로컬/원격 완료 브랜치 정리·세션 보관. 추가 예정 작업 없음.

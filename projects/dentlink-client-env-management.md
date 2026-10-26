@@ -4,13 +4,14 @@
 
 - 사용자가 실제 로컬 env의 점검·정리·준비를 명시 요청했고, 이후 기본 `dentlink-client`와 LBX 코드만 남기는 방향으로 worktree/세션 정리까지 승인했다. 처음의 env 작업 공간 유지·삭제 전 별도 승인 대기는 이 최신 지시로 대체됐다. 이번 명시 요청은 실제 env 접근의 한정된 예외이며, 팀의 사람 수동 관리 원칙을 바꾸지 않는다. 값은 출력하거나 Git 문서에 저장하지 않았다.
 - 기본 저장소 `master`를 `c597f1fb3e7f5c03a76237926c3effad5bb84983`로 fast-forward했다. origin/master와 동일·clean이며 PR4776으로 운영 release가 포함돼 있다. 아래 10/25의 master 동기화 미실행은 과거 상태다.
-- 활성 설정은 `admin/clinic/lab/.env.development` 3개, 번역 Sheet 지정용 `lab/.env.local`, `e2e/.env.development`, `e2e/.env.staging`이다. 서비스 staging/production 6개는 기본 저장소에서 빼서 제한 권한 로컬 백업에 보존했다. 빈 `.env.example` 4개는 계속 Git 추적한다.
+- 활성 설정은 `admin/clinic/lab/.env.development` 3개, 번역 Sheet 지정용 `lab/.env.local`, `e2e/.env.development`, `e2e/.env.staging`이다. 서비스 staging/production 6개는 기본 저장소에서 뺐고, 이후 아래 사용자 요청에 따라 임시 env 백업까지 삭제했다. 빈 `.env.example` 4개는 계속 Git 추적한다.
 - DEV 필수 키는 Admin19/Clinic36/Lab24개 모두 채워졌고 유효 API/환경이 DEV임을 확인했다. Clinic의 구형 E2E 중복 키47개는 전용 E2E 설정과 값 일치를 확인한 후 제거했다. E2E 로컬 주소는 실행기의 기존 분리 포트3100/3105/3102에 맞췄다. 선택적 외부 연동의 모든 값·실사용까지 검증한 것은 아니다.
 - `pnpm install --frozen-lockfile`, `pnpm build:packages` 성공. Clinic3000/Lab3005/Admin3002에서 `.env.development` 로드와 `/auth/signin` HTTP200/HTML을 각각 확인했다. 기동 전·후, 요청 후, 종료 후 env3개 존재를 확인했고 사용한 서버는 종료했다. 기존 사용자 Playwright test-server와 IDE는 유지했다. 새 로그인·API 변경·전체 E2E는 실행하지 않았다.
 - 최초 기동 확인 뒤 DEV 파일3개 부재가 관찰돼 동일 원본이 있던 env worktree에서 복구하고 별도 사본을 남겼다. 원인은 확정하지 않았다. 이후 의존성 설치·패키지 빌드·3서비스 기동/요청/종료 재확인에서는 재현되지 않았으며 최종 파일이 존재한다. 최초 확인이 아니라 이 재확인을 로컬 준비 근거로 사용한다.
 - **전용 worktree 제거:** `/Users/parkjongsun/Repository/dentlink-client-env-management`. 실제 env5개는 기본 저장소로 옮겼고 고유 추적/미추적 코드·활성 프로세스가 없음을 확인했다. ignored coverage baseline은 별도 보존하고 생성 캐시와 작업 공간을 정리했다.
 - **완료 로컬 브랜치2개 제거:** `feature/DL-16821-stage-e2e@460a9c0d5be793c49dbfe44a9adc142c6fb98235`, `feature/v1.89.0-qa@178a4ab6745a81abc1ed56bae8bc7496b402775d`. 원격 동일 SHA를 확인했으며 원격 refs는 변경하지 않았다. 웹에는 기본 worktree1개와 `master`, LBX `feature/DL-16387`만 남았다. env 세션 `01a13d89-14d1-71f0-b53b-8b6238c384f9`는 보관했다.
-- 백업/검증 근거는 `/Users/parkjongsun/.local/share/codex-closeout/20261026-web-local-env/`의 `manifest.json`, `local-startup-recheck.json`, `files/`다. 기존 STG/PRD, Clinic/E2E 변경 전 원본과 DEV 복구 사본을 포함한다. 이 Mac에만 있으며 개인컨텍스트 push가 실제 설정을 다른 기기에 복제하지 않는다.
+- **임시 env 백업 삭제 완료:** 사용자가 실제 배포 값은 GitHub에서 관리하므로 직전에 안내한 `/Users/parkjongsun/.local/share/codex-closeout/20261026-web-local-env/files/`의 env 백업 삭제를 요청했다. 서비스 STG/PRD6개·Clinic/E2E 변경 전 원본2개·DEV 복구 사본3개의 **11개 파일을 내용 조회 없이 삭제**했다. 해당 위치의 env 잔여0과 기본 저장소 활성 env6개의 inode/크기/mtime 불변을 확인했다. 이 위치의 이전 env 사본은 더 이상 복구 지점이 아니다.
+- 위 closeout 폴더에는 값 없는 `manifest.json`, `local-startup-recheck.json`, `local-startup-summary.json`과 coverage baseline만 남았다. 이번 삭제는 직전에 안내한 env 백업에 한정하며 다른 코드 bundle·과거 정리 백업을 일괄 삭제한 것이 아니다. 실제 로컬 실행은 기본 저장소에 유지한 서비스 DEV 파일을 사용하고, 이번에 GitHub 값이나 로컬 값을 조회·동기화하지 않았다.
 - **다음 시작점:** 새 요청 때 기본 저장소의 최신 master와 필요한 작업만 준비한다. 삭제할 파생 worktree는 재설정하지 않는다. 이번 로컬 정리는 제품 코드·PR·Jira·배포 변경이 아니다. 아래 DEV ISV/보안 후속을 새로 완료 처리하거나 자동 재개하지 않는다.
 
 ## 이전 상태 — 2026-10-25 운영 반영 확인·env 업무 마감 및 브랜치 정리 완료

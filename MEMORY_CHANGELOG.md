@@ -2,6 +2,7 @@
 
 ## 2026-10-26
 
+- 실제 배포 값은 GitHub에서 관리한다는 사용자 지시에 따라 직전에 안내한 `20261026-web-local-env/files/`의 env 백업11개를 삭제했다. 값 없는 검증 기록·coverage baseline은 남겼고 기본 웹 저장소의 활성 DEV/E2E/Lab local env6개는 메타데이터 불변으로 보존 확인했다. 제품 코드·GitHub 설정·세션 변경은 없으며, 이전 env 백업 보존 안내를 삭제 완료로 갱신했다.
 - 사용자 후속 명시 요청으로 최신 원격 master c597f1fb3를 pull한 뒤 로컬 feature/DL-16387을 같은 이름으로 재구성했다. DLOS 대응 전달본에서 필요한19파일만 선별해 f389c13cf로 로컬 저장했고 generated 계약·공통 디자인시스템·env는 유지했다. 타입3서비스/정상 commit hook·DLOS60/60·lint 오류0/경고7·format·합성 통합9/9 통과 후 master clean으로 복귀했다. 옛 원본 b69dd84b6은 원격/bundle로 보존하며 새 로컬 upstream은 해제, 제품 push/PR/배포는 하지 않았다. 앞선 재개 시 준비 예정 상태를 완료로 갱신했다.
 - 메인 정리 최종 지시에 따라 웹 기본 master를 c597f1fb3로 fast-forward하고 DEV/E2E env와 의존성을 준비했다. 3서비스 로그인 페이지 HTTP200/env 로드 후 임시 서버 종료를 확인했다. 전용 env worktree와 완료 로컬 브랜치2개를 제거해 기본 worktree1개·master/LBX만 남겼다. 원격 refs·제품 코드·PR·배포 변경은 없다.
 - LBX 코드와 LBX/디자인시스템 세션은 유지하고, 이후 최신 master에서 필요한 변경만 준비한다. env 세션은 보관했다. 메인이 정리 범위를 넓게 해석해 보관했던 통합알림센터는 이번 작업과 무관하다는 사용자 정정에 따라 보관 해제해 미착수·대기로 유지한다. 설정 백업·한 차례 DEV 파일 부재와 복구/재검증·로그인 이후 QA/E2E 미실행 경계를 env 정본에 기록했다. 아래 같은 날 초반의 env 유지·master40behind 상태를 대체한다.
