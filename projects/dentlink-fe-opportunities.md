@@ -1,6 +1,15 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 브레이크포인트 — 2026-10-26 · 기존 작업 환경 정리, 세션 유지·새 master 준비 대기
+## 현재 브레이크포인트 — 2026-10-26 · 최신 master 기반 detached 워크트리 준비 완료
+
+- **이번 범위:** 메인 세션이 전달한 승인에 따라 새 작업 공간만 준비했습니다. 브랜치 생성·2단계 구현은 시작하지 않았으며 세션을 유지하고 대기합니다. 아래의 '새 master 환경 준비 대기'는 이전 기록입니다.
+- **준비 위치:** `/Users/parkjongsun/Repository/dentlink-client-dlds`. 원격 조회와 master 한정 fetch로 확인한 최신 `origin/master@c597f1fb3e7f5c03a76237926c3effad5bb84983`(PR #4776)에서 **detached HEAD**로 만들었습니다. 새 브랜치 0개, 작업 파일 변경 0개입니다. 기존에 정리한 경로를 재사용했지만 옛 작업 사본을 복원한 것이 아닙니다.
+- **보존 확인:** 기본 `/Users/parkjongsun/Repository/dentlink-client`의 `master@c597f1fb3`와 clean 상태, LBX `feature/DL-16387@f389c13cfbe497e0b864aa9399efafd9ecae305d`, 전체 local branch refs가 준비 전후 동일합니다. Studio 원본과 기존 복구 자료도 변경하지 않았습니다. DL-17011·DL-17012의 작업 공간 배정은 메인에서 관리하며 이 준비와 연결해 추정하지 않습니다.
+- **미실행 범위:** 제품 코드·커밋·push·PR·Jira·배포·npm·의존성 설치·빌드·실행·QA를 수행하지 않았습니다. env/auth·GitHub 값·기존 생성 결과를 읽거나 복사·복원하지 않았습니다. 생성 명령에만 checkout hook을 비활성화하여 자동 환경 준비가 실행되지 않게 했으며 저장소 hook 설정은 변경하지 않았습니다. 현재는 소스 checkout만 준비된 상태로, 실행 가능한 개발 환경을 검증한 상태가 아닙니다.
+- **다음 시작점:** 사용자가 2단계 재개를 요청하면 개인 context와 [DL-16471 · 2단계 · AI 프롬프트·하네스 정비](https://innovaid.atlassian.net/browse/DL-16471)의 최신 요구사항을 확인합니다. 이 워크트리의 상태·새로운 원격 master 변화를 확인한 뒤 저장소 규칙에 맞는 작업 브랜치를 준비하고, 현재 패키지·Studio 구조와 필요한 기존 하네스 자료만 검토하여 이어갑니다. 1단계 정비·통합 완료와 2단계 하네스 미완료는 그대로이며 옛 코드를 일괄 복원하지 않습니다.
+- **남은 정리 예외:** Studio 원격 `feature/DL-16471-dlds-dlos-integration`의 삭제 권한403은 아래 기록대로 남아 있습니다. 이번에 재시도하지 않았으며 이 워크트리 준비를 막지 않습니다. 공통 색인은 메인 세션이 정리하고 이번에는 이 담당 프로젝트 기록만 갱신합니다.
+
+## 이전 브레이크포인트 — 2026-10-26 · 기존 작업 환경 정리, 세션 유지·새 master 준비 대기
 
 - **최신 사용자 결정:** 1단계 DLDS 정비와 DLOS 방식의 통합·웹 운영 반영은 완료됐지만 2단계 AI 프롬프트/하네스는 미완료입니다. 사용자가 이 세션을 복구한 후, 이 작업 관련 워크트리·브랜치만 정리하고 미반영 작업은 복구 가능하게 남기도록 명시 승인했습니다. **세션은 유지**하며, 최신 master에서 새 환경을 만드는 것은 다음 요청 때 진행합니다. 이전의 하네스 worktree 유지/세션 보관 지시는 이번 결정으로 대체합니다.
 - **워크트리 2개 정리 완료:** `/Users/parkjongsun/Repository/dentlink-client-dlds`와 `/Users/parkjongsun/Repository/dentlink-client-dlds-integration`은 Repository 경로와 Git worktree 등록에서 제거했습니다. 추적/미추적 코드 변경이 없는 상태와 관련 프로세스 부재를 확인했고, 실제 env/auth 및 ignored 결과를 잃지 않도록 **작업 폴더 전체를 같은 볼륨의 제한 권한 백업 위치로 rename**했습니다. root inode 일치를 검증하고 `.git` 연결 파일은 메타데이터로 분리했습니다. 백업 사본은 활성 worktree가 아니며 용량 확보용 삭제는 하지 않았습니다.
