@@ -1,5 +1,17 @@
 # Dentlink 권한관리 — DL-16317
 
+## 권한 순서 통일·Viewer 제외 정책 반영 — 2026-10-26 DL-17011
+
+- **최신 사용자 결정:** 드롭다운은 가능한 범위에서 높은 권한부터 배열하고, **Viewer는 백엔드가 아직 반환하더라도 프론트에서 존재하지 않는 권한으로 취급**한다. 아래의 기존 Viewer 표시 호환/현재값 보존 결정은 이 명시 지시로 대체한다. 사용자 요청은 같은 PR의 구현·리뷰·커밋·푸시까지 이어가며 병합·배포는 포함하지 않는다.
+- **선택지 규칙:** 기존 shared/models `enum.maps.ts`에 공통 `getEmployeeAuthorityOptions`를 두어 실제 전달된 옵션 중 `OWNER → PAYMENT_MANAGER → EDITOR → MEMBER`만 반환한다. Viewer·미지원 값·중복을 제외하고 원본 배열을 변경하지 않는다. Clinic/Lab/Admin 코드 API hook, Admin 정적 옵션, 공통 MembersUI가 이 기준을 사용한다. API에 없는 권한을 추가하지 않는다. OFFICE는 Admin/Billing Manager/Manager/Member, LAB은 현재 3종과 기존 Owner/Billing Manager/Member 명칭을 유지한다. 신규 일반 가입의 직업 roleType과 별도다.
+- **Viewer 표시·쓰기:** 회원 목록·상세·그룹 상세·CRM·초대·Clinic Pending·결제 담당자 및 Admin 결제 직원표에서 Viewer와 `(VIEWER)` raw suffix를 노출하지 않고 `-`로 표시한다. API가 Viewer를 반환하더라도 새 선택이 불가하다. Admin 등록/수정·초대/재발송, Clinic 권한변경/초대 draft/승인/재발송, Lab 초대/권한변경/재발송은 실제 정제 옵션에 포함된 값인지 검사한다. 기존 Viewer를 자동 변환하지 않으며 사용자가 유효 권한을 선택하면 정상 처리가 가능하다. 거절·취소·삭제는 유지한다.
+- **호환 경계:** 서버에 기존 값이 남아 있으므로 API DTO의 VIEWER 타입과 기존 로그인·HOC 접근 제어·조회 guard를 삭제하지 않았다. 이번 지시는 회원 권한 선택·표시·새 권한 부여 정책이며, 기존 계정의 접근 권한을 임의로 철회하거나 서버 데이터를 마이그레이션한 작업이 아니다. 사용하지 않는 모델/번역 문자열의 VIEWER 검색 결과를 실제 선택지로 혼동하지 않는다.
+- **제품 커밋·PR:** 기존 checkout `/Users/parkjongsun/Repository/dentlink-client`, `feature/DL-17011`에 **`9dcb644d566cee06fa0019c16b7f47cdf10e8d36`** (`fix: 회원 권한 순서 통일 및 뷰어 선택 표시 제외`)을 정상 훅으로 커밋·푸시했다. [PR #4784](https://github.com/Innvoaid/dentlink-client/pull/4784)의 제목은 `[DL-17011] 회원 권한 선택지 정렬 및 Viewer 제외`, base `release/v1.90.0`다. 이번 추가 변경은 24파일(+189/-93), PR 전체는 4commits·26files(+283/-81)다. 개인 상태 문서는 제품 저장소에 추가하지 않았다.
+- **검증:** 실제 공통 helper의 24개 순열, Viewer/unknown/중복 혼합·역순 API 응답, 세 앱의 실제 query hook, 입력 배열 불변·LAB 없는 MEMBER 미추가를 메모리에서 검증했다. 실제 Admin 폼 source를 평가해 모든 서비스의 기존 VIEWER 재저장·신규 생성 차단과 유효 권한 명시 선택 후 저장을 확인했다. Clinic 9검증 묶음(표시·초대 draft·승인·재발송·옵션 누락/실패·유효값 전환), Lab schema13·mutation19케이스 및 shared 표시 검증을 통과했다. 새 테스트/보조 파일·실서버 쓰기는 없다.
+- **필수 검사·기존 실패:** 직접 검사 및 정상 pre-commit의 Clinic/Lab/Admin 타입 모두 통과. 각 앱 변경파일 lint 오류0, 정상 pre-push의 서비스 lint 오류0(기존경고226/184/393), Admin DLOS guard60/baseline60, guard9·shared config21·hooks32 tests/coverage check 통과. shared UI 단독 lint는 원본에도 있는 조건부 useOutsideHandler 오류1건으로 실패한다. Lab i18n audit의 기존 logIn 키 누락과 check의 기존 locale6개 stale은 이번 변경과 분리한다. 새 번역 키·문구·locale/시트 변경은 없다.
+- **독립 리뷰·E2E:** 분담 코드에 대해 독립 검토하고 드롭다운 구현까지 추적했으며 추가 차단사항을 찾지 못했다. 전체 PR26파일의 E2E 영향은 NO_IMPACT: 기존 회원 관리 화면의 권한 선택을 소비하지 않고, 기존 팀 전환/주문 승인/가입/결제 및 API 준비·정리 흐름은 유지한다. 가드 해시 `fe3a6244c2c0557a6021ef799088db2eb48fb49f` 기록과 push 전 check 통과. 실제 계정 QA·브라우저 E2E는 미실행이다.
+- **리뷰 완료·재개점:** 최신 HEAD `9dcb644d5`의 CodeRabbit 검사는 SUCCESS다. 최근 리뷰 본문에서 `1d92a3c0c → 9dcb644d5`의 24파일을 실제 처리했고 `No actionable comments`임을 확인했다(리뷰 생략/한도 초과가 아님). 기존 지적1건은 resolved, 신규·미해결 스레드0건이다. 제품 local/origin/PR HEAD 일치·checkout clean, PR Open/비Draft/미병합·base `release/v1.90.0`를 재확인했다. 이 개인 문서만 커밋·푸시하고 다음 지시부터 이어간다. 팀 승인·실계정 QA·병합·배포는 별도 사용자 지시를 기다린다.
+
 ## 권한 누락 전수 보완·리뷰 완료 — 2026-10-26 DL-17011
 
 - **최신 승인·범위:** 사용자가 회원 등록을 포함한 Admin의 필요한 곳 전체 재점검·수정과 CodeRabbit 전체 리뷰·커밋·푸시를 승인했다. 이어 Clinic/Lab 가입·초대·기타 경로 검토를 요청했고, 발견된 문제도 함께 수정하도록 추가 승인했다. 아래 과거 기록의 등록 제외·Clinic/Lab 검토만 경계는 이 요청으로 대체한다. 병합·배포·Jira 변경은 승인 범위 밖이다.
