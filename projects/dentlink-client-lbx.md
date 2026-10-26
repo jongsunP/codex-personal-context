@@ -1,22 +1,23 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-10-26 문서 표시명 원본 반영 / develop PR #4787 생성
+## 현재 체크포인트 — 2026-10-26 문서 표시명 develop 병합·사용자 배포 완료 / 원본 보존·대기
 
 ### 최신 수정·전달 상태
 
 - [DL-16279 댓글 44647](https://innovaid.atlassian.net/browse/DL-16279?focusedCommentId=44647)의 문서 표시명 요청을 확인하고 사용자가 진행을 승인했다. 배송 상세 **LBX Mother 문서**의 `COURIER_INVOICE`를 `Mother invoice`, `COURIER_LABEL`을 `Mother Label`, `PACKING_LIST`를 `packing list`로 수정했다. 내부 `invoice`·`declaration`, URL·파일명·권한·다운로드 동작·fallback은 유지한다. 일반 배송 문서 영역은 변경하지 않았다.
 - **원본 반영 완료:** `feature/DL-16387 / 8a860f080fea9574c5da5db5907d513529bba7ee`, `fix: LBX Mother 문서 표시명 구분`. 기존 `f389c13cf` 위에 1파일·3줄만 수정해 정상 커밋·push했고 로컬/원격 일치를 확인했다. 원본은 계속 master `c597f1fb3`를 기반으로 LBX 변경을 유지하며 develop을 역병합하지 않았다.
-- **개발 전달 PR 생성까지만 완료:** 원본 새 커밋에서 `feature/DL-16387-develop-documents-20261026`을 만들고 develop `2b79d9198`을 병합했다. 이전 표시명 3줄 충돌은 새 표기를 유지해 해결했다. 전달 HEAD `703e422d26f44bf88be57ff1b66723066eae83c7`의 부모는 원본 `8a860f080`과 develop `2b79d9198`이다. [PR #4787](https://github.com/Innvoaid/dentlink-client/pull/4787), 제목 `[DL-16387] LBX Mother 문서 표시명 수정`, base `develop`, 생성 확인 당시 `OPEN / MERGEABLE`이며 diff는 **1파일 +3/-3**, 원본 수정 patch와 완전히 같다.
+- **개발 전달:** 원본 새 커밋에서 `feature/DL-16387-develop-documents-20261026`을 만들고 develop `2b79d9198`을 병합했다. 이전 표시명 3줄 충돌은 새 표기를 유지해 해결했다. 전달 HEAD `703e422d26f44bf88be57ff1b66723066eae83c7`의 부모는 원본 `8a860f080`과 develop `2b79d9198`이다. [PR #4787](https://github.com/Innvoaid/dentlink-client/pull/4787), 제목 `[DL-16387] LBX Mother 문서 표시명 수정`, base `develop`, diff는 **1파일 +3/-3**, 원본 수정 patch와 완전히 같다. 에이전트는 당시 요청대로 PR 생성에서 멈췄다.
+- **사용자 병합·배포 후 종료:** 사용자가 원본 수정과 별도 전달 방식이 의도에 맞음을 확인하고 **머지 및 개발서버 배포 완료**를 전달했다. GitHub에서 **2026-10-26 18:15:37 KST MERGED**, merge `8e40e9cb6487e0b983065c0bd4a250a6d1293bd5`를 확인했고 종료 조회 시 원격 develop과 같았다. 병합 전체 tree `2856ac21b97971e59a12309cde3cc0b0f5fba9e5`는 검증한 전달본과 동일하다. 원격 원본 `8a860f080`과 master `c597f1fb3`는 유지됐다. 배포 완료는 사용자 전달 기준이며 에이전트가 workflow·실제 화면/API QA를 별도로 확인한 것은 아니다.
 - **검증:** 원본·전달본 모두 정상 pre-commit의 Clinic/Lab/Admin 타입 검사, 정상 pre-push의 lint(오류0·기존 경고226/184/393), DLOS guard60/60·가드 테스트9개, shared configs21개·hooks32개와 기존 2026-04-23 coverage baseline 비교를 통과했다. 변경 파일 ESLint·Prettier·diff 검사도 통과했다. 별도 테스트 코드는 추가하지 않았다.
 - **E2E 영향 가드:** 독립 정적 검토 `NO_IMPACT`. 기존 배송 E2E는 Lab shipping/pickup 흐름이며 Admin Mother 문서 표시명에 의존하지 않고, 결제 E2E의 Admin 접점도 결제 API다. 최종 전달 patch를 대조한 후 가드 기록과 PR 생성 직전 검사까지 통과했다. 원본/전달 ref에 가드 스크립트가 없어서 기본 checkout의 현재 가드 스크립트를 절대 경로로 실행했으며, 가드 파일을 제품 변경에 추가하지 않았다. 실제 E2E·업무 API 요청·브라우저 QA는 수행하지 않았다.
-- **종료 경계:** 요청대로 PR 생성에서 멈췄다. 병합·배포·CodeRabbit 리뷰 처리·CI/배포 모니터링은 시작하지 않았다. PR 생성 직후 검사 상태는 아직 최종 완료를 확인하지 않았으므로 로컬 검사 통과와 구분한다. 운영 릴리스 홀드는 유지한다.
-- **정리/다음 시작점:** 임시 작업 worktree와 의존성은 제거하고 원본·전달 브랜치의 로컬/원격은 유지했다. 기본 checkout의 다른 작업 `feature/DL-17011 / 9dcb644d5`와 기존 detached worktree는 보존했다. 기기 한정 증거는 `/Users/parkjongsun/.local/share/codex-closeout/20261026-lbx-document-labels/`의 `state.json`, `final.patch`, `e2e-guard-result.json`, commit/push 로그와 PR 본문이다. 다음 지시 시 원본 `8a860f080`과 PR #4787의 실제 상태를 갱신하고 이어간다.
+- **종료 경계:** 사용자 요청에 따라 정리·메모리 저장 후 대기한다. 에이전트는 추가 구현·CodeRabbit 처리·CI/배포 모니터링·실제 업무 요청을 시작하지 않는다. 운영 릴리스 홀드는 유지하며 개발서버 반영을 운영 릴리스 승인으로 해석하지 않는다.
+- **정리/다음 시작점:** 임시 worktree와 의존성은 이미 제거했다. 병합 전체 tree 일치·열린 PR 없음·worktree 미점유·원격 보존을 확인하고 `delivery-703e422d2.bundle` 전체 백업을 생성·검증한 뒤, 사용 완료된 **로컬** 전달 브랜치만 삭제했다. 원본 `feature/DL-16387 / 8a860f080`은 로컬·원격 모두 유지하고 원격 전달 브랜치·PR 이력도 보존했다. 기본 checkout의 다른 작업 `feature/DL-17011 / 9dcb644d5`와 기존 detached worktree는 그대로다. 기기 한정 증거는 `/Users/parkjongsun/.local/share/codex-closeout/20261026-lbx-document-labels/`의 `state.json`, bundle, `final.patch`, `e2e-guard-result.json`, commit/push 로그와 PR 본문이다. 다음 사용자 요청 때 최신 master와 원본을 확인하고 원본에서 수정한 뒤 필요한 테스트 환경에 별도 전달한다.
 
 ### 계속 유지할 기준
 
 - **원본 `feature/DL-16387`은 최신 master의 코드를 따라가되 LBX 작업 코드를 살려 유지한다.** 특정 시점의 master에 동결하거나 master로 덮어써 LBX 변경을 지우는 것이 목적이 아니다. 재개 시 최신 원격 master와 원본을 비교해 master의 공통 변경을 보존하고, 실제 LBX 변경만 남는지 확인하며 필요한 호환 조정을 한다. 이 기준은 무단 force-push나 자동 동기화·배포 승인이 아니다.
 - LBX 코드는 필요하므로 원본을 계속 보존하지만 **운영 배포는 홀드이며 release에 넣지 않는다.** 테스트가 필요할 때만 `develop` 또는 `stage`에 별도로 반영한다. 테스트 환경 반영·테스트 완료와 운영 릴리스 승인을 구분한다.
-- 환경별 충돌·호환 수정이 필요하면 원본에서 별도 전달 브랜치를 만들어 처리하고, develop/stage의 다른 기능을 원본에 역병합하지 않는다. 앞선 #4786은 충돌 없이 **원본 → develop 직접 PR**로 전달했고, 후속 #4787은 별도 전달 브랜치를 사용했다. 원본을 변경·삭제하는 전달 방식이 아니다. 저장소 자동 브랜치 삭제 설정도 꺼져 있음을 확인했다.
+- **사용자가 재확인한 순서:** 기능 수정은 먼저 원본에 반영·검증·커밋·push하고, 그 원본에서 별도 개발/스테이징 전달 브랜치를 만들어 해당 환경의 충돌·호환 조정과 PR을 처리한다. develop/stage의 다른 기능을 원본에 역병합하지 않는다. 앞선 #4786의 원본 → develop 직접 PR은 당시 이력이고, #4787에서 사용한 **원본 수정 → 별도 전달 브랜치 → 테스트 환경 반영**이 사용자가 확인한 의도다. 원본은 계속 보존한다. 저장소 자동 브랜치 삭제 설정도 꺼져 있음을 확인했다.
 
 ### 앞선 develop 전달 #4786과 확인 범위
 

@@ -137,10 +137,10 @@ For detailed current state, read:
 ### Dentlink Admin LBX — DL-16279 / DL-16387
 
 - 기존 배송 목록·상세 확장, LBX Baby/Mother 생성 및 픽업 생성.
-- **2026-10-26 문서 표시명 수정:** 댓글44647에 따라 원본 `feature/DL-16387 / 8a860f080`에 문서명 3개를 수정·push했다. 별도 `feature/DL-16387-develop-documents-20261026 / 703e422d2`에서 develop 대상 [PR #4787](https://github.com/Innvoaid/dentlink-client/pull/4787)을 생성했고 1파일 +3/-3만 포함한다. 타입·정상 commit/push 검사·E2E 영향 가드 `NO_IMPACT` 통과. 요청대로 PR 생성에서 멈추며 병합·배포·리뷰 감시는 하지 않았다.
+- **2026-10-26 문서 표시명 수정 전달 완료:** 원본 `feature/DL-16387 / 8a860f080`에 문서명 3개를 수정·push한 뒤 별도 전달 브랜치로 [PR #4787](https://github.com/Innvoaid/dentlink-client/pull/4787)을 만들었다. 사용자가 develop 병합·개발서버 배포 완료를 전달했고, 병합 `8e40e9cb6`와 전달본 전체 tree 일치를 확인했다. 배포 완료는 사용자 전달 기준이며 실제 화면/API QA는 별도다. 타입·정상 commit/push 검사·E2E 영향 가드 `NO_IMPACT` 통과 기록을 유지한다.
 - 앞선 PR #4786은 develop에 병합됐고 사용자가 개발 배포를 진행했다. 배포 최종 성공·실제 QA는 확인하지 않았으며 후속 PR #4787 상태와 구분한다.
-- **유지 목적:** 원본은 최신 master 코드를 따라가면서 LBX 작업 코드를 살린다. 운영 홀드로 release에서는 제외하고, 필요할 때만 develop/stage에 테스트용으로 전달한다. 환경별 충돌 조정은 별도 전달 브랜치에서 처리하며 원본에 다른 환경 기능을 역병합하지 않는다.
-- 원본 백업·검증·원격 재생성 기록은 정본에 보존했다. 임시 검증 worktree를 정리했고 다른 작업 `feature/DL-17011`은 보존했다. 현재 메모리 저장 후 대기하며 추가 배포 감시·테스트는 시작하지 않는다.
+- **유지 목적:** 원본은 최신 master 코드를 따라가면서 LBX 작업 코드를 살린다. 기능 수정은 먼저 원본에 반영·push하고, 원본 기반 별도 전달 브랜치로 develop/stage에 테스트용 반영한다. 운영 홀드로 release에서는 제외하며 원본에 다른 환경 기능을 역병합하지 않는다.
+- 원본 백업·검증·원격 재생성 기록은 정본에 보존했다. 임시 worktree와 사용 완료된 로컬 전달 브랜치를 정리했고 원본 로컬/원격·원격 전달 이력·다른 작업 `feature/DL-17011`은 보존했다. 현재 메모리 저장 후 대기하며 추가 배포 감시·테스트는 시작하지 않는다.
 - 실제 업무 API·화면 QA와 운영 릴리스는 별도이며, 테스트 중 실제 생성·수정 요청 금지는 유지한다.
 - [projects/dentlink-client-lbx.md](projects/dentlink-client-lbx.md)
 
