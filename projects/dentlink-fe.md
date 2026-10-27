@@ -4,6 +4,21 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 아래 단계는 **2026-10-27 개인 문서 대조 결과**이며 제품·외부 서비스의 새 실조회 결과가 아닙니다.
 
+## 웹 v1.90.0 배포 기준 확인 — 2026-10-27
+
+- 사용자 요청으로 원격 refs와 실행 대상을 한 번 확인했다. `release/v1.90.0`과 `prd/clinic/v1.90.0`, `prd/clinic-ohio/v1.90.0`, `prd/lab/v1.90.0`, `prd/admin/v1.90.0`은 모두 **`4168fba5aad347e6958412057b4bf35d856f4473`**를 가리킨다. 릴리스 커밋에서 태그를 만들어 배포한다는 목적과 일치한다.
+- 아래 Actions는 해당 태그 push로 시작했고 실행 `head_sha`도 모두 위 커밋이다. **18:06 KST 메타데이터 조회 당시 진행 중**이었으며 완료 결과는 재조회하지 않았다.
+
+| 서비스 | 시작 시각 KST | 실행 |
+| --- | --- | --- |
+| Clinic | 18:02:09 | [40477752750](https://github.com/Innvoaid/dentlink-client/actions/runs/40477752750) |
+| Lab | 18:03:13 | [40477879968](https://github.com/Innvoaid/dentlink-client/actions/runs/40477879968) |
+| Admin | 18:03:48 | [40477951931](https://github.com/Innvoaid/dentlink-client/actions/runs/40477951931) |
+
+- 같은 exact SHA의 PRD workflow·Dockerfile을 대조했다. 태그 커밋 checkout → 해당 소스 build context → `prd-${github.sha}` 이미지로 전달하며 다른 브랜치 재checkout은 없다. Clinic workflow 하나가 서울·Ohio 양쪽을 처리한다.
+- 이번 확인은 **배포 기준/실행 대상 일치**다. 최종 성공·serving revision·서비스 안정화·사용자 QA의 증거는 아니다. 특히 Lab/Admin은 workflow에서 안정화를 기다리지 않으므로 성공 상태만으로 확대하지 않는다. 자동 후속 감시는 시작하지 않으며 결과 확인은 사용자 요청과 공통 배포 확인 주기를 따른다.
+- 제품 코드·branch·tag·배포 설정은 변경하지 않았다. 기본 checkout은 `feature/DL-17011@9dcb644d5`·clean·upstream0/0 그대로이며 로컬 checkout과 원격 태그 배포 기준을 혼동하지 않는다.
+
 ## 현재 업무 색인 — 2026-10-27
 
 | 업무 | 담당 정본에 기록된 단계·재개 경계 | 상세 정본 |
