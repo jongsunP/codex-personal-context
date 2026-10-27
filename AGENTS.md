@@ -111,12 +111,13 @@
   to branch naming. This does not widen read-only requests or
   commit/push/PR/deployment authorization.
 - For all app work, follow **App Screen Runtime Verification Before Merge**
-  in `DEVELOPMENT_STYLE.md`: actually test every affected screen and, for
-  permission changes, each affected role/permission state before declaring the
-  work ready to merge. This is mandatory; missing runtime evidence blocks
-  merge readiness even when automated checks pass. List affected screens and
-  role-specific checks, perform agent runtime checks first, then give the user
-  that checklist for final device QA with verified and pending results separated.
+  in `DEVELOPMENT_STYLE.md`: the agent must test the **final code** in the
+  simulator/emulator on every affected screen and role/permission state before
+  handing it to the user for final QA or declaring merge readiness. List screens,
+  entry paths, actions, and expected results; provide the completed agent results
+  with the human QA guide. Later code changes require affected-case rechecks.
+  Automated checks or user testing cannot replace this agent verification;
+  missing evidence blocks final-QA handoff and merge readiness.
 - For Dentlink apps, follow **Dentlink App Release And Delivery Policy** in
   `SESSION_WORKFLOW.md` and `projects/dentlink-app-onboarding.md`. App PRs
   for ordinary new features target `develop`. Release is the QA/delivery

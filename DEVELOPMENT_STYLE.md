@@ -334,8 +334,9 @@ This is a mandatory rule for all app work, confirmed by the user on
 2026-10-27. It applies independently to Office and Lab apps and is not
 conditional on whether the current crash investigation reproduces a failure.
 
-- Before declaring an app change ready to merge, identify and actually test
-  **every affected screen** in the running app. Include indirect consumers of
+- Before handing an app change to the user for final QA, and before declaring
+  it ready to merge, the agent must actually test **the final code on every
+  affected screen in the simulator/emulator**. Include indirect consumers of
   changed shared components, hooks, stores, navigation, and permission rules;
   do not limit coverage to edited screen files or the reported example.
 - At implementation planning, name the expected affected screens and entry
@@ -343,11 +344,18 @@ conditional on whether the current crash investigation reproduces a failure.
   consumers. Do not leave the user to infer the test scope from file names.
   Use a compact table: screen / entry path / role and data condition / action
   and expected result / agent result / remaining human check.
-- The agent must perform the available actual-screen checks first, then hand
-  the same checklist to the user for final device QA. Separate agent-verified,
-  blocked/unverified, and user-confirmed results. If agent execution is blocked,
-  state the exact gap rather than presenting a checklist as completed testing;
-  the merge gate remains unmet. Final human QA stays pending until confirmed.
+- Complete the required simulator/emulator screen and role checks as the agent
+  first; only then hand the same checklist and results to the user for final
+  device QA. Testing an intermediate version, only a subset of affected screens,
+  or only the home screen does not satisfy this gate. If agent execution is
+  blocked, report the precise blocker and unfinished checks instead of handing
+  off unfinished agent verification as final human QA. Keep agent verification,
+  final human QA, and merge readiness distinct.
+- Confirm that the running app/Metro uses the intended final checkout/revision
+  and a compatible native binary, including the final implementation and review
+  fixes. Do not use a mock/demo, an older branch, or a stale bundle as proof of
+  the final code. After any later code change, reassess the affected screens and
+  recheck those cases on the resulting final code before QA handoff or merge.
 - For permission work, cover each affected role/permission state with valid
   accounts and server data: allowed access/actions, restricted access/actions,
   and relevant navigation. A mocked or hardcoded role is supplementary evidence,
@@ -357,21 +365,25 @@ conditional on whether the current crash investigation reproduces a failure.
   actions. Check for crashes, render loops, and broken interactions. Inspect
   relevant runtime logs; merely launching the app or viewing its home screen
   does not validate another screen.
-- Check each affected platform before merge. Shared iOS/Android changes need
-  evidence for both; platform-specific work can stay on the affected platform.
-  A compatible simulator/emulator is valid for ordinary screen testing. Use a
-  physical device when the affected behavior cannot be verified there. This
+- Check each affected platform before final QA handoff and merge. Shared
+  iOS/Android changes need evidence for both; platform-specific work can stay
+  on the affected platform.
+  Simulator/emulator screen testing is required. Add physical-device verification
+  for hardware or behavior the simulator cannot reproduce, and identify those
+  device-only checks explicitly rather than claiming simulator proof. This
   does not require a fresh native build or retesting after every small edit.
 - Record the tested revision, app, platform, environment, device/binary, screen,
   role/state, action, and result in a compact checklist. Evidence must cover the
-  proposed merge revision; recheck affected cases after subsequent changes.
-  User-performed testing counts when these conditions and results are known;
-  do not repeat adequate unchanged evidence merely to reach a pass count.
+  final QA/merge revision. User-performed testing is additional final QA and
+  does not replace the agent's required final-code simulator verification.
+  Reuse adequate unchanged agent evidence; do not repeat tests merely to reach
+  a pass count.
 - Type/lint/build checks, unit tests, screenshots, and a green review cannot
   replace this runtime verification. If accounts, data, devices, or execution
   access are missing, report the specific unverified cases and keep the work
-  **not ready to merge**. Preparing a Draft PR is still possible within the
-  user's authorization, using the required Draft label/title metadata.
+  **not ready for final human QA handoff or merge**. Preparing a Draft PR is
+  still possible within the user's authorization, using the required Draft
+  label/title metadata.
 - For a regression caused by a hook/store/effect interaction, verify the real
   interaction and loading-to-data transition. Mocking both the producer and
   stateful consumer can hide a render loop; isolated green tests are not

@@ -412,11 +412,14 @@ independently to `dentlink-app` (Office) and `dentlink-lab-app` (Lab); the web
 release-train policy below is unchanged. Details and source coverage belong
 in [App onboarding and delivery](projects/dentlink-app-onboarding.md).
 
-Before merge readiness, apply the mandatory
+Before final human QA handoff and merge readiness, apply the mandatory
 [App Screen Runtime Verification Before Merge](DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge)
-gate: run every affected screen and relevant role/permission state on each
-affected platform. Missing runtime evidence remains a merge blocker; this
-applies to features, QA fixes, and shared app changes alike.
+gate: the agent runs the final code on every affected screen and relevant
+role/permission state in each affected platform's simulator/emulator, then
+provides results and the user's final QA checklist. Missing evidence blocks
+both that handoff and merge readiness; later changes require affected-case
+rechecks on the resulting final code. This applies to features, QA fixes, and
+shared app changes alike.
 
 The user's 2026-10-12 app-developer handoff is saved there as **reference
 material pending alignment**. Its ordinary feature integration target and

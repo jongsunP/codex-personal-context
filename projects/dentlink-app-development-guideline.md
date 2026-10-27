@@ -19,15 +19,18 @@ monorepo scripts must be checked against the current Office or Lab repository.
 Read `projects/dentlink-app-local-development.md` for the detailed runtime
 matrix and per-platform launch checklist.
 
-Mandatory before merge: follow
+Mandatory before final human QA handoff and merge: follow
 [App Screen Runtime Verification Before Merge](../DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge).
 Actually test all affected screens, including indirect shared-code consumers
 and each affected role/permission state. The staged iOS/Android loop below
 does not defer required runtime evidence until after merge. Unverified cases
 must stay explicit and block a merge-ready report.
-Name the affected screens and entry paths before implementation, verify them
-as the agent first, and provide the user with a screen/role/action/expected-result
-checklist for final device QA. Keep agent and human results separate.
+Name the affected screens and entry paths before implementation. The agent must
+test the final code in the simulator/emulator across all those screens and
+role states before handing over a screen/role/action/expected-result checklist
+for final device QA. An intermediate build or partial agent checks do not qualify;
+later code changes require rechecking their affected cases on the final code.
+Keep agent and human results separate; human testing does not replace agent testing.
 
 ## Default Combination
 
