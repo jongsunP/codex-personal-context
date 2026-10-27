@@ -1,5 +1,11 @@
 # Dentlink Office App setup and current checkpoint
 
+## 운영 iOS LinkTalk SIGSEGV 조사 — 2026-10-27
+
+- [Slack 알림](https://innovaidhq.slack.com/archives/C0CC6EDL78T/p1793086505051709)의 실제 이벤트는 Office iOS Production 2.2.4(1)·CodePush v86·iOS27.0.1에서 15:26:12 KST 발생한 LinkTalk 화면 전환 크래시다. 조사 시점까지 동일 issue는 사용자1명·세션1개·1건이다. 메시지 전송/조회는200이며 main thread의 화면 그리기 경로에서 SIGSEGV가 발생했다.
+- **정확 원인 미확정:** Datadog UI가 운영 앱 dSYM UUID `04104800-AA3D-383D-837F-765EA917D131` 누락을 명시하며, 최상위 앱12프레임을 해석할 수 없다. 오전 디자인컨펌 JS Render Error 및 별도 v84 Hermes native crash와 동일 원인이라고 판단하지 않는다. Git main의 PR338 수정 포함과 v86 기기 적용은 확인했으나 OTA bundle→exact SHA 매핑은 미확인이다.
+- 사용자는 dSYM 위치를 모른다고 답하고 확보 가능한 범위까지만 조사를 요청했다. 제품 수정·커밋/푸시·PR·댓글·배포·시뮬레이터 재실행 없이 마감한다. 후속 확정은 일치하는 archive/dSYM 또는 새 재현 증거와 별도 재개 요청이 있을 때다. 상세 근거·비교·다음 시작점은 [전용 조사 기록](dentlink-app-linktalk-sigsegv-investigation.md)을 따른다.
+
 ## 크래시 검증 마감·실행 환경 종료 — 2026-10-27
 
 - 사용자 요청으로 아래 재현 원인·수정본 검증·검증 공백·머지 전 화면별 QA 절차를 개인 정본에 보존하고 마감했다. 수정 전 오류 재현, 권한관리 원본5c9e57e/PR329 유입, PR338 수정 포함 main의 관련36테스트 및 iOS/DEV/Member 컨펌 진입·첨부 표시 확인이 완료 범위다. 승인·반려 전송·다른 역할/Android/실기기·운영 적용은 검증 완료로 확대하지 않는다.
