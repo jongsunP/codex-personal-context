@@ -1,6 +1,46 @@
 # Dentlink 통합알림센터 — 사전 검토 체크포인트
 
-최종 갱신: 2026-10-26 22시 — 예약된 최종 변경 확인·기록 정리. Slack 후속 답글과 Figma 주석 상태 보완, Notion/Jira/현황표 수정 없음. Figma 사용자 태그 댓글은 접근 제한으로 미확인. 제품 구현 미착수, 이후 사용자 재요청 대기.
+최종 갱신: 2026-10-27 — 사용자 요청으로 Slack 2·3번과 당일 Figma 본인 멘션을 읽기 전용 기술 검토. 아래는 사용자 의견을 받기 전 제안이며 최종 정책·구현 완료가 아니다.
+
+## UX 기술 검토 — 2026-10-27, 사용자 의견 대기
+
+### 요청과 확인 범위
+
+- [오늘 Slack 스레드](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793063024060739)의 부모·답글 13건을 읽었다. [Oli 11:40:56 KST](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793068856006439)가 Frankie에게 **2번 App Push 작동 UX, 3번 다른 병원 알림 확인·이동** 기술 검토를 요청했다. 사용자 요청 순서는 Codex 제안 → 사용자 의견 → 최종 정리이며, 구현 착수가 아니다.
+- 연결 Slack 프로필과 Figma 알림메일 수신자로 사용자 **Frankie(박종선), Slack U051EKTLWQK, jongsun@dentlink.app**를 확인했다. 디자이너 Oli(신민영), PM Yoonie(이세윤)의 요청이다. Slack에서 설정 로직과 최종 알림 카탈로그를 구분했으며, 카탈로그는 Leo와 검토 중이고 목요일 오후 논의 예정이다.
+- Figma 공식 도구에는 여전히 댓글 조회 기능이 없다. 이번에는 **Gmail 읽기 도구가 정상 동작해 10/27 수신된 본인 멘션 3건의 실제 본문·앞선 댓글·지목 화면을 확인**했다. 관련 새 댓글 3개 요약메일 1건도 있지만 본문이 없어 별도 추가 댓글 3건으로 중복 집계하지 않는다. Figma의 전체 최신 댓글을 직접 조회한 것은 아니다. 메일·외부 알림 읽음 상태는 변경하지 않았다.
+- 직접 Figma metadata와 화면을 확인했다: Push 설명 `211:22646`, 다른 병원 앱 흐름 `29:7569`/`29:7884`, 웹 전환 토스트 `123:24242`. 기존 Slack 지원 범위 스레드는 10/26 19:57:29 답글 이후 추가 정책 답글 없음. 오늘 Notion/Jira/Sheet 전체를 다시 조사하지 않았다.
+
+### 오늘 본인 멘션 내용 — 시각은 메일 수신 KST
+
+| 시각 | PM 질문·디자이너 의도 | 해석 |
+| --- | --- | --- |
+| 10:19:36 | 홈 배너를 기기 알림 OFF 후 최초 시점에 한 번만 보여줄 수 있는가 | 1번 배너 노출 정책에 대한 추가 기술 질문 |
+| 10:21:28 | OS OFF에서도 푸시 영역 터치는 받되 안내 팝업 후 설정으로 이동. OS를 켜고 돌아오면 **켜려던 항목만 ON** 가능한가 | 2번의 핵심. OS ON만으로 전체 설정을 켜는 요구가 아님 |
+| 10:21:55 | Oli의 설명에 PM이 Frankie 검토 요청 | 메일의 지목 화면은 같은 Push 설명 `211:22646`. 별도의 3번 병원 전환 멘션으로 잘못 분류하지 않음 |
+
+### 2번 — App Push 설정
+
+- **가능 판단:** 사용자가 특정 항목의 PUSH를 켜려 함 → 해당 항목과 당시 사용자·소속을 보관 → 권한 안내/OS 설정 → 사용자가 앱으로 복귀 → OS 허용과 동일 사용자·소속 확인 → 그 항목만 서버 저장. 배너로 설정에 들어간 경우는 항목 선택 의도가 없으므로 기존 저장값만 유지하는 방향을 제안한다.
+- 양 앱에 OS 권한 확인, 안내 팝업, `Linking.openSettings()`, AppState 복귀 후 `checkNotifications()`가 이미 있다. 현재 개별 setting PATCH도 실제 연결돼 있다. **선택한 항목 보관·복귀 후 해당 항목만 켜기는 아직 없다.** 새 도메인과 기존 pushType/setting 묶음의 매핑은 BE 계약 확인 대상이다.
+- 현재 OS OFF 시 UI 값을 false로 덮고, OS granted 전환 시 preference POST 초기화를 호출한다. 새 요구에는 저장값 표시·보존과 OS 권한을 분리하고, 일괄 초기화가 선택하지 않은 항목을 변경하지 않게 해야 한다. 서버 설정 저장이 지금 전혀 없는 구조는 아니다.
+- OS 권한은 사용자가 허용한다. 앱으로 돌아오면 처리하는 UX는 가능하지만 OS에서 켜는 순간 앱으로 자동 복귀하는 의미는 아니다. 앱 프로세스가 유지되는 일반 복귀에서는 설정 화면 유지 가능. 종료·재시작까지 항목과 화면을 복원할지는 별도 결정이며, 계정/소속 변경·취소·저장 실패 시 오적용하지 않아야 한다.
+- 코드: Office/Lab `src/hooks/useProfileNotification.ts:91,104,117`, Office `src/features/profile/sections/ProfileNotificationSection.tsx:64,136`, `src/features/common/components/PermissionProvider.tsx:62,67,97`, `src/services/app.service.ts:118`. Lab origin/main 동일 대응 위치 `:65,135` 및 PermissionProvider `:69,74,104`. 참고 [React Native AppState](https://reactnative.dev/docs/appstate), [Apple 권한 조회](https://developer.apple.com/documentation/usernotifications/unnotificationsettings), [Android 알림 권한](https://developer.android.com/develop/ui/compose/notifications/notification-permission).
+
+### 3번 — 다른 병원 알림 확인·전환
+
+- 실제 앱 디자인은 **다른 병원 미읽음 배너 → 병원명/주소·숫자 배지 목록 → 병원 선택 → 선택 병원의 알림센터 Unread 탭 → 전환 성공 토스트**다. 다른 병원 알림만 임시 조회하는 방식이 아니라 실제 소속 전환을 포함한다.
+- **가능 판단·제안:** 대상 소속·권한 확인 → 서버 활성화 완료 → 이전 소속 요청/캐시/화면 정리 → 새 소속의 Unread 목록 진입. 홈을 반드시 거쳐야 하는 OS 제약은 없다. 전환 성공과 전환 후 목록 조회 실패는 구분한다. 뒤로 가기로 이전 병원 화면을 되살리지 않으며 정확한 복귀 목적지는 합의 대상이다.
+- Office는 기존 병원 전환·로딩·토스트가 있으나 소속 store를 먼저 바꾸고 서버 활성화를 호출하는 흐름이다. Lab 일반 전환은 서버 활성화·응답 소속 검증·query 취소/제거 후 store를 바꾸며, `RootNavigator`의 소속별 navigationKey로 화면 그룹을 새로 만든다. 새 알림 목적지와 Unread 선택값을 보존해 새 화면 준비 후 여는 연결이 필요하다. 공통 딥링크의 직접 store 변경 경로가 같은 완료 절차를 보장한다고 가정하지 않는다.
+- 웹 Clinic은 code2131에 소속 활성화 후 원 요청을 재시도하는 기반이 있다. Lab 웹은 소속 변경 후 QR 예외 외에 홈으로 이동하는 처리가 있어 알림 목적지 연결을 조정해야 한다. 기존 Clinic 다른 병원 알림은 병원명 안내이고 선택·전환 UI 연결은 없다.
+- **BE 확인 대상:** 병원별 안정 식별자와 미읽음 개수, Unread 조회·페이지 처리, 접근 가능한 소속/역할. 현재 FE의 `/unread`는 boolean, `/employers`는 string 배열이고 생성 목록 query는 `id/serviceType/size`다. 새 숫자 배지·Unread 계약이 확보됐다는 근거가 아니며 최신 서버 구현 부재를 단정하지도 않는다. 이번에는 Swagger를 재조회하지 않았다.
+- 코드: Office `src/libs/useEmployeeProfile.ts:103`, `src/libs/useNavigationConfig.ts:81`; Lab origin/main `src/libs/useMillingAccountSwitch.ts:29`, `src/navigations/RootNavigator.tsx:205`, `src/libs/useNavigationConfig.ts:79`. 웹 `clinic/src/lib/OfficeSwitchRequired/officeSwitchRequired.ts:124,223`, `lab/src/components/LabSwitch/LabEmployeeSwitchBoundary.tsx:39`, `shared/models/src/messages/messages.apis.clinic.ts:38,109`.
+
+### 추가 배너 질문과 다음 시작점
+
+- 홈 배너 1회 노출은 구현 가능하다. 현재 양 앱의 닫힘은 HomeScreen의 임시 useState이며 영구 노출 이력은 없다. **OS OFF를 확인한 회차당 최초 홈 노출 1회, ON 확인 후 다시 OFF가 되면 새 회차**를 제안하되, 설치당 평생 1회/닫기 전 유지 등과 구분해 사용자·PM 확인을 받는다. 기기/계정별 저장 범위, 재설치와 초기 권한 미확정 상태도 정해야 한다.
+- Git 조사 위치: 웹 `feature/DL-17011@9dcb644d566cee06fa0019c16b7f47cdf10e8d36`, Office `main@7f586790e0bbd7b288458e29f00654d38ba68da2`, Lab checkout `QA/DL-16917@06e8dfde967502a4830e9a93c018ce150702dc7c`. 모두 clean·upstream0/0으로 확인. Lab은 checkout을 바꾸지 않고 `origin/main@51441039751b63a08c82a1be9695c805c8af1539`를 읽었고 실제 원격 main 일치도 확인했다. Lab 로컬 main `bb61901`은 원격보다 23커밋 뒤라 조사 기준으로 쓰지 않았다. 조사 위치는 구현 배정이 아니다.
+- **다음 시작점:** 사용자님이 생각한 2·3번 방향을 받은 뒤 의견 차이·정책 경계·BE 계약 질문을 최종 정리한다. 이번 제안을 확정 요구사항으로 승격하지 않는다. REST 기반·기기 간 실시간 동기화 제외·notificationId 직접 전달 비필수는 유지한다. 제품 코드/Git/PR/배포·서버 실행·테스트·기기 QA·외부 댓글 작성은 하지 않았다. 예약 재개나 반복 감시도 하지 않는다.
 
 ## 최신 사전 준비 체크포인트 — 2026-10-26
 
