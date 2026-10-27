@@ -9,10 +9,10 @@ Detailed implementation history remains in the relevant existing project file.
 - 사용자 지시에 따라 모든 앱 작업의 머지 필수 조건을 [App Screen Runtime Verification Before Merge](../DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge)에 정리했다. 영향 화면 전체·공통 코드의 간접 영향·권한별 실제 동작을 확인하며 자동 검사 통과만으로 머지 가능으로 보고하지 않는다. AGENTS·세션 절차·앱 개발/온보딩 문서에서 정본을 참조한다.
 - 현재 Office 크래시 재현 결과와 무관하게 적용하는 상시 지침이다. 후속으로 **영향 화면·진입 경로·권한·기대 동작 명시 → 에이전트 실제 검증 → 같은 목록과 확인/미확인 결과를 사용자에게 최종 실기기 QA 안내**하는 순서도 추가했다. 개인 지침이며 다른 사람의 모든 에이전트나 GitHub 병합을 기술적으로 강제하는 장치를 설치한 것은 아니다.
 
-## 치과 앱 사용자 재현 준비 — 2026-10-27
+## 치과 앱 크래시 검증·마감 — 2026-10-27
 
 - 사용자 요청으로 준비한 `feature/DL-17038-crash-repro@6b0c6e3`에서 사용자가 디자인 컨펌 Render Error를 재현했다. 권한관리 원본5c9e57e/PR329의 빈 객체 참조 변경으로 유입됐으며 기존 mock 테스트가 실제 hook/store 갱신 순환을 놓쳤다. 이후 최신main 검증 요청에 따라 기본 Office checkout을 **main7f58679**로 전환했고 PR338 수정이 포함된 iOS/DEV/Member 컨펌 진입·첨부 표시 정상과 관련36테스트 통과를 확인했다. 원래 사용자 주문ID·전체 권한/양OS/실기기·승인/반려 전송·운영 적용 QA까지 확장하지 않는다.
-- 수정 전 임시 브랜치와 현재 main 실행 환경은 유지한다. 제품 소스 수정·새 커밋/푸시·PR·배포 없음. 검증 근거·남은 범위와 권한관리 영향 화면 목록은 [Office 정본](dentlink-app.md)에 기록했다. 다른 담당 세션은 재개하지 않았다.
+- 사용자 최종 정리 요청으로 main 조상인 임시 로컬 `feature/DL-17038-crash-repro`만 삭제했다. Office 기본 checkout은 main7f58679·원격동일·clean으로 유지하며 시뮬레이터 Shutdown, Device Hub·Metro·Reactotron 종료와8081/9090 listener없음을 확인했다. 제품 소스 수정·새 제품 커밋/푸시·PR·배포 없음. 검증 근거·범위·화면별 QA 절차·다음 시작점은 [Office 정본](dentlink-app.md)에 보존했고, 추가 필수 정리 없이 대기한다. 다른 담당 세션은 재개하지 않았다.
 
 ## 현재 업무 배정 — 2026-10-26 정리 후 신규 접수
 

@@ -1,5 +1,13 @@
 # Dentlink Office App setup and current checkpoint
 
+## 크래시 검증 마감·실행 환경 종료 — 2026-10-27
+
+- 사용자 요청으로 아래 재현 원인·수정본 검증·검증 공백·머지 전 화면별 QA 절차를 개인 정본에 보존하고 마감했다. 수정 전 오류 재현, 권한관리 원본5c9e57e/PR329 유입, PR338 수정 포함 main의 관련36테스트 및 iOS/DEV/Member 컨펌 진입·첨부 표시 확인이 완료 범위다. 승인·반려 전송·다른 역할/Android/실기기·운영 적용은 검증 완료로 확대하지 않는다.
+- 테스트용 **`feature/DL-17038-crash-repro`만 로컬에서 삭제**했다. 정확한 SHA `6b0c6e337871b2daf96d5afc88cee6a1e952db89`와 main의 조상임을 확인한 뒤 `git branch -d`로 삭제해 고유 커밋 손실이 없다. 원격에 만든 브랜치가 아니므로 원격 삭제는 없다. 기본 checkout은 **main `7f586790e0bbd7b288458e29f00654d38ba68da2`**, origin/main과0/0·clean이며 기존 다른 feature4개와 worktree1개는 유지한다.
+- **종료 확인:** iPhone17 Pro `5C0E7639-2345-4B3F-9979-56AFDDA1C708`는 Shutdown, Device Hub GUI·Office Metro·Reactotron은 종료됐고8081/9090 listener가 없다. 설치 앱과 시뮬레이터 데이터·의존성·env는 유지하며 공용 CoreSimulator/Watchman 서비스나 다른 작업 프로세스는 종료하지 않았다.
+- 이번 임시 inspector 도우미와 테스트 설정 파일은 정리하고, 전후 화면 캡처·테스트 로그는 기존 `/tmp` 경로에 둔다. 이 파일들은 임시 로컬 증거이며 다른 기기에서 복원되는 자료가 아니다. 핵심 사실·정확한 SHA·검증 명령·범위는 이 Git 문서에 보존한다.
+- **다음 시작점:** 새 요청이 있을 때 개인 컨텍스트 pull → 해당 앱 live Git/작업 범위 확인 → 필요한 화면·권한별 실행 환경 준비부터 시작한다. 이번 검증 건의 추가 필수 정리는 없으며 새 요청 전 재실행·추가 QA·제품 수정·병합·배포 없이 대기한다. 아래 실행 유지/재현 대기 문구는 각 단계 당시 이력이다.
+
 ## DL-17038 재현·유입 이력·수정본 확인 — 2026-10-27
 
 - 사용자가 수정 전 임시 브랜치에서 직접 실행한 화면을 캡처해 `DesignConfirmationScreen`의 **Maximum update depth exceeded** Render Error를 확인했다. 네이티브 프로세스 강제 종료를 확인한 것은 아니다. 재현 화면: `/tmp/dentlink-office-screen-check-20261027.png`.
