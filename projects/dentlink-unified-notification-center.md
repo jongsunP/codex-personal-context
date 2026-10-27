@@ -4,6 +4,29 @@
 
 ## 최신 정리 — 2026-10-27, 배너·Push·다른 병원 이동
 
+### 후속 점검 — 앱·웹 알림 이동과 전환 안내 문구
+
+- 사용자가 공유용 3번을 강화하도록 요청했다. **앱의 screen 이동과 웹의 알림 popup을 구분하고, 이전/대상 병원명·알림 유입 출처를 토스트에 표시할 수 있는지, URL hash로 강제 재오픈할 때 예외가 무엇인지** 코드로 재검토했다. 13:50 KST 전후 정적 조사이며 구현·브라우저/기기 QA는 하지 않았다.
+- 개인 정본은 `main@25387a8` clean에서 pull ff-only(변경 없음). 다른 활성 작성 세션은 목록에서 확인되지 않았고 메인 idle. 제품 기준은 웹 `feature/DL-17011@9dcb644`, Office `main@7f58679`, Lab checkout `QA/DL-16917@06e8dfde`/조사 ref `origin/main@5144103`; clean을 확인하고 branch/worktree를 바꾸지 않았다.
+
+| 구분 | 확인한 사실과 판정 |
+| --- | --- |
+| 앱의 목적지 | 전용 알림 screen으로 연결 가능하나 서버 소속 활성화와 새 navigation 준비 완료 후 열어야 한다. screen이라는 이유만으로 이미 구현됐거나 모든 예외에 문제가 없다고 단정하지 않음 |
+| 앱의 병원명·출처 | 양 앱에 소속 ID·employer.id/name이 있어 클릭 직전 A병원, 대상 B병원, 알림에서 시작했다는 출처를 임시로 보관할 수 있다. 영구 이동 이력·OS Back 기록 복원은 필요하지 않음 |
+| 앱의 현재 토스트 | Office 일반 전환에는 일반 성공 토스트가 있다. Lab 실제 HomeProfileHeader→useMillingAccountSwitch 경로는 성공 시 sheet만 닫고 토스트가 없다. 공통 EmployeeProfile의 토스트와 혼동하지 않음. 양 앱 CustomToast는 RootNavigator 밖에 있어 표시 기반은 존재 |
+| 웹 알림 | 공유 NotificationUI의 `useModal` 로컬 상태이며 현재 외부 open/Unread 목적지 입력이 없다. **현재 팝업을 계속 살리는 방식보다 닫기→소속 전환→새 병원에서 팝업 한 번 열기**가 적합. 추가 구현으로 가능하며 아직 확정된 UX/구현 완료는 아님 |
+| Clinic 웹 | 확인한 수동 전환은 full reload가 아니다. 관리 화면 경로는 조회 갱신, 조직 화면은 활성화 성공 후 SPA Home 이동이다. OfficeSelectListModal의 완료 콜백은 성공 전 실행되므로 이를 그대로 팝업·성공 토스트 계기로 쓰지 않음 |
+| Lab 웹 | 소속 변경 boundary가 자식 unmount, query 취소/제거, 소속 상태와 toastAtom 초기화, QR 예외 외 Home replace를 실행한다. 이전 팝업/전환 전 토스트는 그대로 보존되지 않는다. 해당 경계 밖의 짧은 임시 요청을 새 소속 준비 후 한 번 소비하는 연결 필요 |
+| 웹 자동 재오픈 | 정상 전환에서는 **병원 활성화 성공→소속 일치·이전 데이터 차단→Home/헤더 준비→대상 병원 팝업 1회 열기**로 구현 가능. 단순히 목적 URL에 hash를 붙이는 일만으로 끝나지 않음. 재시작·사용자 새로고침·새 탭·다른 소속/계정 전환·취소로 임시 의도가 유효하지 않으면 복구하지 않고 사용자가 현재 병원에서 직접 열도록 하는 안 |
+| URL hash/query | 방식 자체는 가능하며 Clinic DentlinkSupport에 실제 hash 패널 연동 선례가 있다. URL은 열기 의도일 뿐 병원 활성화 성공·현재 권한의 증거가 아니다. 새로고침/Back/복사한 URL/다른 탭에서 과거 의도 재실행, 현재 병원 불일치, URL 정리까지 필요. 이번 정상 이동만 지원하려면 URL에 지속시키지 않는 메모리 기반의 일회 요청을 우선 검토 |
+
+- **토스트 문구의 가능한 범위:** ‘병원이 전환되었습니다’, ‘B병원으로 전환되었습니다’, ‘A병원에서 B병원으로 전환되었습니다’, ‘다른 병원 알림에서 B병원으로 전환했습니다’ 모두 이번 요청의 정보를 보관하면 가능하다. 이름/출처를 현재 데이터로 확인한 정상 전환에만 사용하며, 정보가 없으면 추측하지 않는다. 현재 소속만 안다고 이번에 전환됐다고 알릴 수는 없으므로, 성공 근거가 없다면 전환 토스트도 띄우지 않는다.
+- **추천 문구는 목적 병원이 명확한 ‘B병원으로 전환되었습니다’.** A→B/알림 출처를 강조하는 문구도 후보이나 길이·줄바꿈·다국어는 디자인에서 선택한다. 알림 조회가 실패했다면 병원 전환 성공과 알림 표시 성공을 구분한다. ‘B병원 알림을 열었습니다’는 실제 팝업/목록 준비까지 확인한 경우에만 사용한다.
+- **웹 권장안은 제안:** 현 디자인의 Home 랜딩은 유지할 수 있고, 편의 기능을 추가하기로 하면 그 정상 전환에서만 팝업을 한 번 자동으로 연다. 중단된 흐름이나 새로고침 이후까지 과거 팝업·토스트를 복원하지 않는다. 브라우저 Back이 서버 활성 병원을 되돌리는 의미도 아니다. 다른 탭의 소속 동기화를 알림에서 클릭한 요청으로 오인하지 않는다.
+- **필수 구현 확인:** 다른 소속 알림 응답은 현재 병원명 문자열이고 목록 캐시에 소속 키가 없어, 안정적인 소속 식별·이전 데이터 차단을 연결해야 한다. 기존 팝업 열기/노출/스크롤 읽음을 새 클릭·Read all 정책과 분리하여 자동 재오픈 자체가 임의 읽음을 만들지 않도록 한다. 새 API/Unread 구현이 완료됐다고 주장하지 않는다.
+- 근거: 웹 `shared/ui/src/NotificationUI/NotificationUI.tsx:61,114,194,241`, `shared/dlds/src/hooks/useModal.ts:4`; Clinic `components/Office/OfficeSelectListModal.tsx:31,41`, `components/Organization/OrganizationOffices.tsx:45,55`, `components/DentlinkSupport/useDentlinkSupport.ts:39,50`, `pages/_app.tsx:247`; Lab `components/LabSwitch/LabEmployeeSwitchBoundary.tsx:39`, `lib/LabSwitch/resetLabContext.ts:42`, `components/LabSwitch/LabSwitchModal.tsx:39,271`, `lib/LabSwitch/switchLab.ts:23`, `atoms/common.ts:86`. 앱 Office `src/features/common/components/EmployeeProfile.tsx:58`, `App.tsx:109`; Lab 원격main `src/libs/useMillingAccountSwitch.ts:38`, `src/features/home/components/HomeProfileHeader.tsx:89`, `src/navigations/RootNavigator.tsx:206`, `App.tsx:132`.
+- [Figma 웹 선택 모달 `48:12796`](https://www.figma.com/design/QLIzKYWzFFlptCYzN36Iq4?node-id=48-12796)을 재확인했다. OS 안내 등 무관한 외부 댓글을 전부 재조사하지 않았다. [MDN hashchange](https://developer.mozilla.org/en-US/docs/Web/API/Window/hashchange_event), [History replaceState](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState), [Next.js router](https://nextjs.org/docs/pages/api-reference/functions/use-router)로 URL 상태/이동 기록의 동작도 대조했다. 최종 공유 문안은 앱·웹별 가능 범위, 추가 연결, 중단 시 처리와 토스트 선택지로 제공한다. 외부 게시 없음.
+
 ### 사용자와 정렬한 판단 기준
 
 - **정상 흐름을 이어갈 수 있으면 친절하게 완료하고, 이어갈 수 없으면 임시 선택을 버린다.** 중단된 편의 동작을 장기간 보관하거나 재시작 후 복구하는 보장은 요구하지 않는다. 다만 다른 계정·병원에 잘못 저장하거나, 저장 실패를 성공으로 보이거나, 이전 소속 데이터를 새 소속 화면에 섞는 것은 허용하는 예외가 아니다.
