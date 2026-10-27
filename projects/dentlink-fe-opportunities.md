@@ -1,6 +1,15 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 브레이크포인트 — 2026-10-26 · Jira 현행화·2단계 계획 저장, 실제 구현 전 대기
+## 현재 브레이크포인트 — 2026-10-27 · Studio 로컬 동기화·갤러리 실행 준비
+
+- 사용자 요청은 기존 DLDS 갤러리를 직접 보기 위한 Studio 로컬 동기화와 실행 안내입니다. 2단계 하네스 구현 재개는 아닙니다.
+- `/Users/parkjongsun/Repository/dentlink-studio`의 clean `main`을 `503bf044`에서 최신 `origin/main@0b304d510dd65869541b336e0df3b9c4f474af26`으로 fast-forward했습니다. 로컬 변경·들어올 파일과 ignored 파일 충돌이 없음을 확인했고, 동기화 후에도 Git clean입니다.
+- Node `24.4.1` / pnpm `8.6.9`에서 `pnpm install --frozen-lockfile` 성공. 고정된 DLDS·DLOS·icons `0.1.7` 설치 완료이며 manifest·lockfile·env/auth·권한 정책은 수정하지 않았습니다. 패키지 latest 조회·갱신·npm 공개는 하지 않았습니다.
+- 갤러리는 Studio의 `packages/dlds-preview/src/App.tsx`와 `/design-system/dlds`에 있습니다. 실제 DLDS 컴포넌트 원천은 Client의 `shared/dlds`에 남고 Studio는 `@innvoaid/dlds`를 사용합니다. 예전 Client의 `shared/ui/dlds-gallery`와 구분합니다.
+- 사용자가 터미널에서 `cd /Users/parkjongsun/Repository/dentlink-studio` 후 `pnpm dev` 실행 → `http://127.0.0.1:4100/design-system/dlds` 접속. 서버는 대신 시작하지 않았고 실제 화면·실행 성공은 아직 검증하지 않았습니다. 확인 당시 4100 포트는 비어 있었습니다.
+- 다음: 사용자가 갤러리를 확인합니다. 하네스는 아래 10/26 계획에 따라 별도 시작 요청 후 진행합니다. Client 작업 공간·제품 코드·Jira·PR·배포는 변경하지 않았습니다.
+
+## 이전 브레이크포인트 — 2026-10-26 · Jira 현행화·2단계 계획 저장, 실제 구현 전 대기
 
 - **최신 사용자 요청:** 지금은 실제 작업을 시작하는 것이 아니라, 시작 전에 Jira·메모리의 내용과 계획을 정리하는 단계입니다. 아래 계획을 기준으로 나중에 재개하며, 이번 문서 정리를 구현·설치·생성 시험·배포 승인으로 해석하지 않습니다.
 - **완료:** 1단계 DLDS 정비(DL-16466)와 DLOS 방식의 패키지 통합(DL-16830), v1.89.0 웹 운영·master 반영은 완료했습니다. 2단계 AI 프롬프트·하네스(DL-16471)는 미완료입니다. 기존 생성·자연어 수정·FE 연결 시험은 통합 이전의 가능성 검증이며 현재 Studio 사용성이나 일반적인 FE 작업 절감까지 입증한 결과는 아닙니다.
