@@ -344,6 +344,16 @@ relative complexity.
   runtime verification constrain overlap; do not simply sum all product days
   or divide them by the number of agents. Label assumed overlap and any
   unmeasured productivity gain, and recalibrate against actual progress.
+- Include FE analysis, UX feasibility review, and design in planning/development
+  estimates. Separate already-completed planning from remaining work so it is
+  counted once, and label a planning allocation separately from measured worklogs.
+- When the user asks for a development-only estimate, exclude the separate QA
+  phase, QA-driven follow-up fixes, deployment, and external waiting. State
+  whether basic implementation checks are included. This scheduling boundary
+  does not waive the app runtime evidence required before final QA or merge.
+- Record each Jira product card's own effort; put the parallel elapsed schedule
+  and its assumptions in the shared planning explanation. Do not make a sum of
+  product estimates appear to be the promised delivery duration.
 
 ## App Screen Runtime Verification Before Merge
 
