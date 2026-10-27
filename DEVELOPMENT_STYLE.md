@@ -328,6 +328,43 @@ relative complexity.
   another material dependency is unresolved, and state what could change the
   estimate so the user can make the final adjustment.
 
+## App Screen Runtime Verification Before Merge
+
+This is a mandatory rule for all app work, confirmed by the user on
+2026-10-27. It applies independently to Office and Lab apps and is not
+conditional on whether the current crash investigation reproduces a failure.
+
+- Before declaring an app change ready to merge, identify and actually test
+  **every affected screen** in the running app. Include indirect consumers of
+  changed shared components, hooks, stores, navigation, and permission rules;
+  do not limit coverage to edited screen files or the reported example.
+- For permission work, cover each affected role/permission state with valid
+  accounts and server data: allowed access/actions, restricted access/actions,
+  and relevant navigation. A mocked or hardcoded role is supplementary evidence,
+  not a substitute for checking the actual permission-dependent screen.
+- Open each affected screen and exercise the affected behavior, including
+  initial loading/data arrival and relevant transitions, back navigation, and
+  actions. Check for crashes, render loops, and broken interactions. Inspect
+  relevant runtime logs; merely launching the app or viewing its home screen
+  does not validate another screen.
+- Check each affected platform before merge. Shared iOS/Android changes need
+  evidence for both; platform-specific work can stay on the affected platform.
+  A compatible simulator/emulator is valid for ordinary screen testing. Use a
+  physical device when the affected behavior cannot be verified there. This
+  does not require a fresh native build or retesting after every small edit.
+- Record the tested revision, app, platform, environment, device/binary, screen,
+  role/state, action, and result in a compact checklist. Evidence must cover the
+  proposed merge revision; recheck affected cases after subsequent changes.
+  User-performed testing counts when these conditions and results are known;
+  do not repeat adequate unchanged evidence merely to reach a pass count.
+- Type/lint/build checks, unit tests, screenshots, and a green review cannot
+  replace this runtime verification. If accounts, data, devices, or execution
+  access are missing, report the specific unverified cases and keep the work
+  **not ready to merge**. Preparing a Draft PR is still possible within the
+  user's authorization, using the required Draft label/title metadata.
+- Passing this gate does not authorize merge or deployment and does not prove
+  OTA receipt, store release, or production QA. Preserve those separate stages.
+
 ## Figma And QA
 
 - Inspect the provided node and sibling variants for desktop, mobile, long
@@ -337,6 +374,7 @@ relative complexity.
   status actions, closing, back navigation, portal stacking, and scrolling.
 - Compare Figma with the real browser when visual QA is in scope. For states
   unavailable in live data, compare Figma with the exact conditional code.
+  This design comparison does not replace the mandatory app runtime gate above.
 - Respect explicit unsupported surfaces; do not mark them missing or invent a
   responsive feature without a requirement.
 - Separate implemented code, user visual QA, and merge readiness. Passing in
@@ -359,7 +397,8 @@ relative complexity.
   answer is a rollback or a smaller project-aligned correction.
 - After feedback, review in three scopes: today's edits, the affected app or
   feature, then the full branch/shared blast radius.
-- Before deployment, review the completed feature as a whole, including UI/UX,
+- Before deployment (and before merge for affected app screens under the rule
+  above), review the completed feature as a whole, including UI/UX,
   instead of relying only on field-by-field fixes and type/lint checks. Compare
   related screens and modals for layout, prerequisite guidance, loading/error/
   empty states, selection resets, disabled controls, submit eligibility, and

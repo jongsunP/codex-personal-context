@@ -412,6 +412,12 @@ independently to `dentlink-app` (Office) and `dentlink-lab-app` (Lab); the web
 release-train policy below is unchanged. Details and source coverage belong
 in [App onboarding and delivery](projects/dentlink-app-onboarding.md).
 
+Before merge readiness, apply the mandatory
+[App Screen Runtime Verification Before Merge](DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge)
+gate: run every affected screen and relevant role/permission state on each
+affected platform. Missing runtime evidence remains a merge blocker; this
+applies to features, QA fixes, and shared app changes alike.
+
 The user's 2026-10-12 app-developer handoff is saved there as **reference
 material pending alignment**. Its ordinary feature integration target and
 post-delivery synchronization path differ from the confirmed policy below;
@@ -481,7 +487,9 @@ does not itself retarget existing PRs or authorize merges or deployments.
   or Debug success is not CodePush verification. Keep Office/Lab and
   iOS/Android delivery evidence separate; verify relevant mobile lifecycle
   and device paths at a sensible checkpoint rather than rebuilding every
-  product for each edit.
+  product for each edit. The mandatory affected-screen runtime gate above
+  must still pass before merge readiness; a delivery-stage QA plan cannot
+  replace it.
 
 Implementation, product commit/push/PR mutations, environment changes,
 merge, tags, OTA activation, and store submission still require their existing

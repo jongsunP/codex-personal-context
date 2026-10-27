@@ -4,6 +4,11 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
+## 앱 머지 전 화면 실검증 의무화 — 2026-10-27
+
+- 사용자 지시에 따라 모든 앱 작업의 머지 필수 조건을 [App Screen Runtime Verification Before Merge](../DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge)에 정리했다. 영향 화면 전체·공통 코드의 간접 영향·권한별 실제 동작을 확인하며 자동 검사 통과만으로 머지 가능으로 보고하지 않는다. AGENTS·세션 절차·앱 개발/온보딩 문서에서 정본을 참조한다.
+- 현재 Office 크래시 재현 결과와 무관하게 적용하는 상시 지침이다. 사용자가 직접 테스트 중이며 재현 여부는 아직 미확정이다. 이번 지침 저장 중 제품 코드·브랜치·시뮬레이터·Metro·Reactotron은 변경하지 않는다.
+
 ## 치과 앱 사용자 재현 준비 — 2026-10-27
 
 - 사용자 요청으로 메인에서 Office 기본 checkout에 `feature/DL-17038-crash-repro`를 준비하고 iOS 시뮬레이터·Metro·Reactotron을 실행했다. 최신 main의 PR338만 제외한 parent6b0c6e3이며 권한관리 변경은 유지한다. 제품 파일 변경·커밋·푸시·배포 없이 사용자 직접 재현 대기 중이다. 현재 branch/실행 환경/원복 조건은 [Office 정본](dentlink-app.md)을 따른다. 다른 세션의 작업은 재개하거나 변경하지 않았다.

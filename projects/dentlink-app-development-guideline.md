@@ -19,6 +19,13 @@ monorepo scripts must be checked against the current Office or Lab repository.
 Read `projects/dentlink-app-local-development.md` for the detailed runtime
 matrix and per-platform launch checklist.
 
+Mandatory before merge: follow
+[App Screen Runtime Verification Before Merge](../DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge).
+Actually test all affected screens, including indirect shared-code consumers
+and each affected role/permission state. The staged iOS/Android loop below
+does not defer required runtime evidence until after merge. Unverified cases
+must stay explicit and block a merge-ready report.
+
 ## Default Combination
 
 When the user asks to work on the app without specifying every axis, expand it
@@ -209,7 +216,7 @@ After each stage, report only observable state:
 - Git: branch / HEAD / upstream / dirty state
 - Combination: app / platform / environment / device / build / code source
 - Runtime: device screen / Metro / Reactotron and network
-- Checks: executed / passed / baseline or new failures
+- Checks: affected screen and role checklist / tested revision and platforms / results and gaps
 - Deployment: not performed, or exact Development CodePush result
 - Remaining: only unresolved work or evidence gaps
 ```
