@@ -334,6 +334,16 @@ relative complexity.
   integration, developer testing, review/QA corrections, user QA, and delivery.
   Separate product effort and dependency waiting; an estimate is not a
   promised calendar date or authority to write Jira story-point fields.
+- For schedule sharing, account for work that can overlap across independent
+  repositories. The user confirmed on 2026-10-27 that their current operating
+  model is one human working with Codex in the same feature session, with
+  independent product tasks running in parallel when practical. Do not assume
+  one human per product or require the user to coordinate extra sessions.
+- Show product-level effort separately from the elapsed working-day plan.
+  Shared decisions, prerequisite patterns, review, integration, and final
+  runtime verification constrain overlap; do not simply sum all product days
+  or divide them by the number of agents. Label assumed overlap and any
+  unmeasured productivity gain, and recalibrate against actual progress.
 
 ## App Screen Runtime Verification Before Merge
 

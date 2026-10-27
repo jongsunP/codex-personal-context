@@ -302,6 +302,10 @@ development notes to review, not noise to exclude from mention searches.
 - For comment-based requirement review, read the comment, its replies and
   corrections, and the exact pinned design region together. Distinguish a
   question or provisional personal interpretation from an agreed requirement.
+- When the user asks about their review notes collectively, verify every
+  identified note and its pinned region; a supplied link is an example, not
+  permission to narrow the review to that one comment. Compare edited live
+  comments with email snapshots before carrying forward an unresolved item.
 - The Figma connector supplies design content but may not expose comments.
   Notification email can locate comments, including the user's self-mentions,
   but is not proof of the complete current thread or its exact pin location.
@@ -311,6 +315,13 @@ development notes to review, not noise to exclude from mention searches.
   and inspect it with `view_image`. Use this direct window check consistently
   when reviewing comments that the connector cannot read; do not stop at an
   email snippet when the live comment and its screen can be checked.
+- Chrome's accessibility tree can expose current comment text and replies.
+  Pair that text with a target-window screenshot to verify the pin and design.
+  On this device, focusing the exact comment-row accessibility button and
+  sending Space to the Chrome process opened the selected thread; AXPress
+  alone did not. Prefer targeted UI operations over global mouse/keyboard
+  events, and verify the resulting thread before continuing. Never target
+  reply inputs, send, resolve, reaction, or notification-state controls.
 - Resolve the window ID each time; Chrome AppleScript tab/window IDs are not
   CoreGraphics capture IDs. `CGWindowListCopyWindowInfo` can be queried with
   Swift to select the exact owner/title/bounds. A window-specific capture also
