@@ -275,6 +275,12 @@ Dentlink-specific intake rules remain limited to Dentlink.
   deployment separately. A common API/BE requirement can remain one linked
   source; another product's completion is not proof of this card's completion.
   Splitting cards does not automatically split sessions, folders, or worktrees.
+- Size implementation cards around a feature flow with a clear development
+  completion criterion. A large product-wide estimate may need several cards;
+  do not default to one card per product when that hides progress. Keep UI,
+  API integration, and ordinary failure handling together for that flow rather
+  than creating a card per file or API. Reuse existing cards, preserve total
+  estimated effort, and distinguish task splitting from starting implementation.
 - Apply this rule to new intake and resumed work when needed. A request to
   save the policy is not authorization to bulk rewrite existing Jira issues,
   rename existing branches/PRs, or mutate a product repository.
