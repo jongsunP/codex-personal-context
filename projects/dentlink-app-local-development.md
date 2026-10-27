@@ -57,8 +57,8 @@ The ordinary Office Debug commands are:
 
 | Platform | Development | Staging | Production |
 | --- | --- | --- | --- |
-| iOS | `yarn ios-office:dev` | `yarn ios-office:staging` | `yarn ios-office:production` |
-| Android | `yarn android-office:dev` | `yarn android-office:staging` | `yarn android-office:production` |
+| iOS | `yarn ios:dev` | `yarn ios:staging` | `yarn ios:production` |
+| Android | `yarn android:dev` | `yarn android:staging` | `yarn android:production` |
 
 The corresponding `*-release` commands are exceptional paths. Production
 environment and any deployment remain explicit high-risk choices even though a
@@ -92,6 +92,13 @@ Metro, Reactotron/network evidence and unresolved errors separately.
 
 ## iOS Office
 
+### 2026-10-27 확인된 로컬 준비 사항
+
+- 현재 Office 팀 스크립트는 `yarn ios:dev` / `yarn android:dev`다. 이 문서의 명령도 분리된 Office 저장소 기준으로 갱신했다. 실행 전 대상 저장소의 package scripts를 우선한다.
+- 기존 node_modules가 있더라도 lock과 일치한다고 가정하지 않는다. 이번에는 Datadog만2.14.8로 남아 현재 지정3.7.0의 `addAttributes` 호출에서 시작 오류가 발생했다. `yarn install --immutable`로 정렬 후 코드 변경 없이 홈 진입을 확인했다.
+- 이 Mac의 Xcode27.1은 GUI 경로가 `/Applications/Xcode.app/Contents/Applications/DeviceHub.app`다. Simulator.app이 없으면 앱 설치 손상으로 단정하지 말고 실제 설치된 도구를 확인한다. boot된 기기는 `open 'devices://device/open?id=<UDID>'`로 열 수 있으며 실제 기기창을 확인했다. 관리창은 `devices://manage/open?new_window=true`로 별도 열 수 있으나 중복 창이 필요하지 않으면 호출하지 않는다. 이 경로를 구버전 Xcode에 무조건 적용하지 않는다.
+- 10/27 재사용 기기는 iPhone17 Pro/iOS26.5, `5C0E7639-2345-4B3F-9979-56AFDDA1C708`다. 설치 Development 앱+로컬 Metro로 실행했으며 깨끗한 네이티브 재빌드의 증거는 아니다.
+
 1. Boot or select the intended iOS Simulator.
 2. In a visible Codex terminal, start Metro logs when Metro is not
    already running:
@@ -112,7 +119,7 @@ Metro, Reactotron/network evidence and unresolved errors separately.
    is not installed or a native rebuild is actually required:
 
    ```bash
-   yarn ios-office:dev
+   yarn ios:dev
    ```
 
    On this Apple Silicon Mac, do not assume this is currently a reliable clean
@@ -153,7 +160,7 @@ Metro, Reactotron/network evidence and unresolved errors separately.
 4. In another visible Codex terminal, run:
 
    ```bash
-   yarn android-office:dev
+   yarn android:dev
    ```
 
 5. Confirm the Development app launches and Reactotron shows an Android
@@ -190,7 +197,7 @@ For example, before “iOS 시뮬레이터에서 작업하자”, state:
 코드: 현재 체크아웃 브랜치 via Metro
 도구: 필요할 때만 여는 Codex 터미널 + Simulator + Reactotron
 명령: yarn metro-log, 설치된 Development 앱 실행/Reload
-네이티브 재빌드 필요 시에만: yarn ios-office:dev
+네이티브 재빌드 필요 시에만: yarn ios:dev
 ```
 
 The expected result is the Development Office app rendering the current local

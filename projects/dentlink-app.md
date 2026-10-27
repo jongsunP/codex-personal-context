@@ -1,5 +1,15 @@
 # Dentlink Office App setup and current checkpoint
 
+## 크래시 수정 전 사용자 재현 환경 — 2026-10-27
+
+- **요청:** 최신 치과 앱에서 동료가 방금 병합한 수정만 제외한 임시 로컬 브랜치와 iOS 시뮬레이터를 준비한다. 권한관리 변경은 유지하며 크래시 재현은 사용자가 직접 한다.
+- **정확한 기준:** [PR338](https://github.com/Innvoaid/dentlink-app/pull/338), `[DL-17038] 디자인 컨펌 화면 크러쉬 이슈`, myungjael, main 대상, 10/27 08:45:59 KST 병합. merge `40b879ef3e5acb551ac96a9103b3a3c6ebd2f105`의 직전 parent는 `6b0c6e337871b2daf96d5afc88cee6a1e952db89`다. 이 parent의 tree는 기존 운영 main49031ad와 동일하며 권한관리 통합43f7879를 포함한다.
+- **로컬:** `/Users/parkjongsun/Repository/dentlink-app`의 main을 ff-only로 최신40b879e에 맞추고, parent6b0c6e3에서 `feature/DL-17038-crash-repro`를 생성·checkout했다. upstream 없음·clean. 최신 main과의 차이는 `src/libs/useOrderConfirm.ts`와 해당 디자인 컨펌 테스트 2파일뿐이다. 새 제품 커밋/푸시·PR·원격 변경·배포는 없다. 별도 worktree도 만들지 않았다.
+- **환경 준비:** 기존 node_modules의 Datadog2.14.8이 lock 지정3.7.0과 달라 `DdSdkReactNative.addAttributes` 시작 오류가 발생했다. 제품 코드를 우회 수정하지 않고 `yarn install --immutable`로 지정 의존성을 정렬한 뒤 재실행하여 홈 진입을 확인했다. 기존 peer warnings는 있고 제품 추적 파일은 변경되지 않았다.
+- **실행:** iPhone17 Pro/iOS26.5, UDID `5C0E7639-2345-4B3F-9979-56AFDDA1C708`, 기존 Office Development `com.innovaid.dentlink.development` 2.2.4(151) 설치 앱 + 현재 임시 브랜치의 Metro8081. Reactotron9090 연결 확인. 시뮬레이터 네이티브 바이너리를 새로 빌드한 것은 아니며 설치 바이너리의 exact source SHA는 미확인이다. 제외한 PR 자체에는 native/package/lock/entry 변경이 없다.
+- **GUI:** 이 Mac의 Xcode27.1에서는 기존 Simulator.app 대신 `/Applications/Xcode.app/Contents/Applications/DeviceHub.app`를 사용했다. `devices://device/open?id=<UDID>`로 기기창을 열고 실제 화면 캡처·onscreen 창을 확인했다. 앱 홈 위 DEV 공지 팝업이 표시돼 있으며 사용자가 Close 후 진행할 수 있다.
+- **현재/다음:** Metro·Reactotron·기기 창을 켜두고 사용자 재현을 기다린다. 디자인 컨펌 진입·승인/거절·크래시 재현은 실행하지 않았다. 원복 요청 시 현재 dirty/서버 소유권을 확인하고 main40b879e(또는 그때의 최신 승인 기준)으로 전환한다. 임시 브랜치 삭제·새 수정·배포는 자동 실행하지 않는다.
+
 ## 권한관리 전용 worktree 정리 — 2026-10-26
 
 - 사용자 완료 업무 폴더 정리 승인으로 `dentlink-app-permission`을 제거했다. HEAD e4fb1aca는 원격 동일·clean/미추적0이며 PR329/331/332/333의 변경은 운영 main49031ad에 보존된다. 최종 통합7e6663b와 main은 동료 ISV3파일 외967파일이 같고 release와 main의 전체 tree가 같다. squash 이력을 단순 commit ancestry로 대체하지 않는다.

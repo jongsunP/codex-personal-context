@@ -4,6 +4,10 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
+## 치과 앱 사용자 재현 준비 — 2026-10-27
+
+- 사용자 요청으로 메인에서 Office 기본 checkout에 `feature/DL-17038-crash-repro`를 준비하고 iOS 시뮬레이터·Metro·Reactotron을 실행했다. 최신 main의 PR338만 제외한 parent6b0c6e3이며 권한관리 변경은 유지한다. 제품 파일 변경·커밋·푸시·배포 없이 사용자 직접 재현 대기 중이다. 현재 branch/실행 환경/원복 조건은 [Office 정본](dentlink-app.md)을 따른다. 다른 세션의 작업은 재개하거나 변경하지 않았다.
+
 ## 현재 업무 배정 — 2026-10-26 정리 후 신규 접수
 
 - 사용자가 디자인시스템 작업 준비와 신규 업무 2개의 별도 세션 진행을 요청했다. 메인은 전달·시작 확인·공통 색인만 관리한다.
