@@ -1,6 +1,6 @@
 # Dentlink 통합알림센터 — 사전 검토 체크포인트
 
-최종 갱신: 2026-10-27 — Slack 15:15:11 후속 답변과 사용자 단계 확인까지 정리. **현재 1단계: 개발 전 사전 기획·검토 및 자료 누적. 제품 구현 미착수이며 실제 구현은 사용자가 별도로 요청할 때 시작**.
+최종 갱신: 2026-10-27 — 현재 웹·Office/Lab 앱 코드와 DEV Swagger 15:57 KST를 대조해 재사용·변경·계약 확인·검증 범위를 정리. **현재 1단계: 개발 전 사전 기획·검토 및 자료 누적. 제품 구현 미착수이며 실제 구현은 사용자가 별도로 요청할 때 시작**.
 
 ## 최신 체크포인트 — 2026-10-27 사전 기획·검토 유지
 
@@ -8,9 +8,9 @@
 
 - 사용자는 지금까지의 검토·확정 방향·남은 확인사항을 개인 컨텍스트에 정리해 commit/push하고 대기하도록 명시했다. 구현을 시작하라는 지시는 없다.
 - 사용자는 후속으로 **계속 1단계인 개발 전 사전 기획 정리 단계에서 자료만 누적**하라고 재확인했다. 기술적으로 가능하다는 사전 판단이나 공유 완료는 전체 기획 확정·구현 착수 승인으로 취급하지 않는다. 새로 전달되거나 확인 요청받은 자료의 변경분·확정 방향·미정 사항을 누적하고, 임의 반복 감시는 하지 않는다.
-- 이번 개인 기록 갱신은 `main@69f8236` clean·upstream 0/0에서 `git pull --ff-only`했고 변경 없었다. 최근 task 목록상 이 세션 외 활성 작업은 확인되지 않았다. 이 파일만 정리하며 제품 저장소·FE 공통 체크포인트에 이력을 중복 작성하지 않는다.
-- [지정 Slack 스레드](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793063024060739)의 부모와 답글25개를 확인한 뒤, 사용자의 Slack만 재확인 요청으로 **답글28개·최신 15:15:11 KST**까지 읽었다. pagination은 종료 상태이며 신규 답글은 3개다. 댓글·문서·알림 읽음 상태는 바꾸지 않았다. 이번 기록 갱신에서는 외부 자료를 다시 조회하지 않았다.
-- 제품 코드는 당일 정적 검토 결과를 정리했고 앞선 마무리에서 Git 상태를 확인했다. 이후 Slack 재확인·단계 기록에서는 제품 코드/Git, Figma·Notion·Jira·Sheet·Swagger를 다시 읽거나 런타임 검증을 실행하지 않았다. 디자인이 후속 합의대로 수정됐다는 확인은 아직 없다.
+- 이번 추가 사전 검토는 개인 정본 `main@1b399f8` clean·upstream 0/0에서 `git pull --ff-only`했고 변경 없었다. 최근 task 목록상 메인·디자인시스템 세션은 idle이었다. 내부 검토 에이전트는 제품별 읽기만 담당하고 이 파일은 root만 수정한다. 제품 저장소·FE 공통 체크포인트에 이력을 중복 작성하지 않는다.
+- [지정 Slack 스레드](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793063024060739)의 부모와 답글25개를 확인한 뒤, 사용자의 Slack만 재확인 요청으로 **답글28개·최신 15:15:11 KST**까지 읽었다. pagination은 종료 상태이며 신규 답글은 3개다. 댓글·문서·알림 읽음 상태는 바꾸지 않았다. 이후 이번 코드 검토에서는 Slack을 다시 조회하지 않았다.
+- 사용자가 현재 코드 기준 사전 검토를 별도로 요청해 Clinic/Lab 웹·Office/Lab native의 실제 호출 흐름과 Git을 다시 확인했다. 제품 checkout은 유지하고 원격 ref를 `git ls-remote`로 대조했다. DEV 공개 Swagger는 읽기 GET만 수행했고 인증된 업무 API 호출·mutation은 하지 않았다. Figma·Notion·Jira·Slack·Sheet를 이번에 다시 조회하지 않았으므로 요구사항 최신 기준은 위 Slack 15:15:11 및 기존 원문 조사 기록이다. 디자인 반영 완료나 서버 실제 처리 검증으로 확대하지 않는다.
 - 제품 코드/branch/worktree/PR/배포 변경, 서버 실행, 테스트·브라우저/실기기 QA는 하지 않았다. 별도 프로젝트 폴더나 worktree를 만들지 않는다.
 
 ### Slack 최종 공유와 후속 답변
@@ -56,6 +56,67 @@
 - 웹 공통 알림 UI의 기존 노출/스크롤 읽음과 소속 구분 없는 목록 캐시는 새 클릭/Read all 정책 및 병원 전환에 맞춰 조정해야 한다. 새 popup 열기가 임의 읽음이나 이전 병원 데이터 노출을 만들면 안 된다.
 - **편의 UX만을 위해 별도 백엔드 API·이력 서비스를 강제로 추가할 필요는 현재 보이지 않는다.** 배너 이력·임시 선택·토스트 출처·화면 열기는 FE에서 처리 가능하다. 단, 알림센터 본체의 설정 조회/수정·소속 활성화·미읽음 목록/개수·안정적인 대상 ID는 필요하다. BE 명세 미완성 상태이므로 기존/예정 API의 필드 보완조차 전혀 없다고 확정하지 않는다.
 
+### 현재 코드 기준 사전 작업 분해 — 2026-10-27 추가 검토
+
+기존 검토를 재사용하고 실제 코드에서 호출·재사용 지점을 확인했다. 아래는 구현 계획의 재료이며 구현 착수·일정·브랜치 배정이 아니다. 관리자 템플릿/정책 UI는 이번 범위 밖이다.
+
+| 제품·영역 | 재사용 가능한 기반 | 변경·추가가 필요한 부분 | 기획·BE 확인 의존성 |
+| --- | --- | --- | --- |
+| Clinic 웹 Inbox | 공통 NotificationUI, 실제 REST 목록·부분/전체 읽음, 20건 cursor pagination, Bell·반응형 팝업·날짜 표시 | 카테고리 탭→All/Unread, 클릭/Read all 읽음, 삭제 UI 제외, 설정 진입·새 행 정보, 목록 상태 전달 | Unread 조회/페이지 처리, LinkTalk 제외, domain/category/랜딩 필드, 읽음 범위 |
+| Lab 웹 Inbox | 같은 공통 UI와 Lab REST wrapper, 다국어·PC/모바일 Bell | 위 공통 변경 + 소속별 미읽음 캐시와 자동 열기 소비 위치 정리 | Lab 도메인·채널·일반/밀링/외부 기공소 지원 범위 |
+| 웹 수신 설정 | DLDS 기본 UI·인증/소속 헤더·query/mutation·권한 정보 | 도메인×카테고리×채널 설정 화면과 조회/저장 연결은 신규. 생성 push-preferences API 선언은 있으나 Clinic/Lab 웹 실제 호출 없음 | 웹·앱 공유 소속 범위, 최종 카탈로그, 상위 OFF·초기값·기존값 보존 |
+| 웹 다른 소속 이동 | 기존 소속 목록/이름·활성화·전환 가드. Clinic 조직 방문/2131 처리, Lab 화면·캐시 초기화 기반 | 다른 소속 선택 UI/집계 연결, 성공·새 화면 준비 후 해당 popup 및 toast 1회 표시. 일반/QR 진입은 유지 | 안정적인 소속 ID·count, 접근 권한, Back·실패 화면 |
+| Office 앱 Inbox | Navigation·리스트/탭·fetcher/React Query·디자인 시스템 | Inbox screen/route/service/query·Bell·All/Unread·읽음·집계·다른 소속 목록 신규 연결. Profile 설정 진입을 Inbox로 정리 | 목록/읽음/집계 계약, 초기 탭·실패/빈 화면·권한 |
+| Office 앱 설정/OS | 실제 Push 설정 GET/POST/PATCH, 현재 계정/소속 검사·중복 초기화 제어·저장 후 재조회, AppState·권한 조회·팝업·AsyncStorage | OS 값과 서버 선택 표시 분리, 자동 초기화 조건 조정, 선택 Push 임시 보관→유효 복귀 후 저장, 별도 안내 노출 이력 | PushType→새 항목 매핑, 초기화 POST 의미, 안내 형태/위치·선택 유효기간 |
+| Lab 앱 Inbox/설정 | 기본 UI·실제 Push 설정 서비스/query와 계정/소속 가드·OS 확인·로컬 저장 유틸 | Office와 마찬가지로 Inbox 본체와 신규 설정 구성은 추가. Lab 지원 채널·밀링 항목 조건을 보존하며 OS 결합 해제 | Lab 역할·도메인·채널·INTERNAL/밀링 적용 범위. Office 수신 권한을 복사하지 않음 |
+| 양 앱 소속 전환 | Office 기존 활성화·실패 처리, Lab 서버 활성화/응답 ID 검증·query 정리·전환 중복 방지, 기존 Toast | 새 소속 화면 준비 후 Unread 진입. A/B명·출처 전달 및 성공 시 표시. Office의 100ms 타이머는 준비 완료 증거가 아님 | 대상 소속/미읽음 계약, 실제 문구·복귀 화면 |
+| 양 앱 공통 딥링크 | FCM/Notifee/Linking/Airbridge, 로그인 전 URL 보관·후속 처리, 기존 action/화면별 랜딩 | 알림 식별 정보 보존·소속 준비 완료·REST 읽음 연결. 이동 중복과 알림 처리 중복을 분리 | 직접 ID 또는 정보 조합, 전달 위치, 읽음 시점·실패/삭제·재요청 정책 |
+
+#### 기존 결론에 추가된 구체적인 변경·주의 지점
+
+1. **웹 미읽음·목록 상태:** 양 웹 목록 queryKey에 소속/필터가 없고, 부분 읽음 mutation에는 성공 후 목록/dot 갱신 연결이 없다. Lab `services/messages/messages.query.ts:5~15`의 모듈 변수 `cachedHasUnread`는 query 제거만으로 지워지지 않는다. 기존 동작을 그대로 연결하면 이전 소속 표시나 Unread 잔류 가능성이 있어 새 조회 범위와 함께 정리한다. 이는 코드상 위험이며 실행 재현된 결함으로 보고하지 않는다.
+2. **웹 팝업 소비자:** Lab은 화면의 layout 조건에 따라 모바일 Navigation과 HeaderActions가 함께 mount될 수 있고 CSS로 숨겨진다. 자동 열기 의도를 여러 Bell이 소비하지 않도록 실제 팝업을 여는 곳을 정해야 한다. 새 전역 관리자 도입을 기본 해법으로 정하지 않는다. 기존 NotificationUI props에는 loading/error 구분도 없어 최종 실패/빈 화면을 구현할 때 query 상태 전달이 필요하다.
+3. **Office My Orders 결합:** `usePersonalOrdersPreference.ts:65~70`은 `enablePersonalOrders` 변경 때 `pushEnable:true`도 PATCH한다. Profile, OrderSearchForm, LinkTalk/ListSection, ChatDetail, BottomTab이 이 훅을 사용한다. 알림 수신 범위와 화면 조회 필터를 구분하는 계약에 따라 이 결합을 조정해야 한다. MEMBER 강제 값은 현재 LinkTalk 조회 보호이며 신규 Inbox 수신 구현 완료가 아니다. Lab My Orders는 로컬/AsyncStorage 기반이므로 Office와 같은 서버 공유 설정으로 가정하지 않는다.
+4. **OS 분리는 재작성보다 기존 결합 조정:** 양 앱에 권한 조회·복귀 감지·현재 계정/소속 검사·설정 PATCH가 이미 있다. 다만 OS granted 및 `pushEnable:false`/필수 항목 누락 시 초기화 POST를 호출하고 OS OFF에서는 표시를 false로 만든다. POST의 실제 기존값 처리까지 검증한 것은 아니며 보존 계약과 함께 조정한다. 신규 안내 이력은 `PERMISSION_NOTIFICATION`/`FIRST_LAUNCH`와 별도 목적의 값이 필요하다.
+5. **딥링크는 일반 전환과 완료 절차가 다름:** 양 앱 일반 딥링크는 employer→employee를 찾아 auth store를 직접 바꾸는 경로가 있다. 일반 전환 완료를 자동 보장하지 않으며 소속을 찾지 못한 경우에도 기존 employeeId가 남을 수 있다. 읽음 전 대상 소속 검증이 필요하다. 기존 fetcher의 `isScopeCurrent` 패턴을 재사용 검토하고 요청·토큰 재시도까지 소속이 달라지지 않게 연결한다.
+6. **화면 이동 중복≠읽음 중복:** Office FCM은 URL 4초, 양 앱 navigation은 query를 뺀 path 기준 1.5초 중복 억제가 있다. 같은 화면의 다른 알림을 읽음에서 생략하면 안 된다. FCM 별도 data 필드·Airbridge 허용 query·로그인 전 보관에서 합의한 정보가 유실되지 않게 한다. ChannelTalk action, 주문 상태별 분기, 기존 채팅 유지·QR·밀링 등 특수 랜딩을 보존한다.
+7. **배지와 읽음은 별개:** 양 앱 로그인/foreground의 서버 디바이스 badge 및 Notifee 0 처리는 Inbox 읽음이 아니다. 새 미읽음 수와 OS badge를 일치시키려면 집계 범위·갱신 계기를 맞춰야 한다. 이를 이유로 SSE·silent FCM·주기적 polling을 추가하지 않는다.
+
+#### DEV Swagger 계약 대조 — 2026-10-27 15:57 KST
+
+[DEV 공개 스펙](https://dev-api.dentlink.io/v3/api-docs)을 직접 GET하여 기존 FE 호출과 대조했다. 웹 검색 도구의 열기는 실패했으나 같은 공개 JSON을 읽는 요청은 성공했다. 인증 사용자 데이터·BE 코드/DB·실제 응답 의미를 검증한 것은 아니다.
+
+| 현재 공개 계약·실제 연결 | FE가 구현 전에 맞출 부분 |
+| --- | --- |
+| `GET /messages/notifications`: `id/serviceType/size`, 기존 NotificationDto. 웹 실제 연결, 양 앱 generated 선언만 존재 | Unread 필터·cursor 일관성, LinkTalk 제외, 새 행 domain/category와 native/web 랜딩. 현재 받은 한 페이지만 FE에서 필터링해 Unread 전체 조회를 대신하지 않음 |
+| `GET /messages/notifications/unread`: boolean, `/employers`: string 배열 | 대상 소속을 구분할 안정 ID와 소속별 미읽음 개수, 접근 가능한 소속·현재/다른 소속 dot 기준. 이름 문자열로 소속을 추측하지 않음 |
+| `PATCH /messages/notifications/read/partial`: `unreadNotificationIds`; `/read/all`: optional `serviceType`. 웹 partial/all 호출, wrapper는 all의 serviceType 미전달 | 클릭 시점·범위, LinkTalk 제외 후 Read all 의미, 실패/이미 읽음 재요청. 현 partial API에는 최종적으로 레코드 ID가 필요하지만 **딥링크에서 ID를 직접 받는 것만 정답은 아님**. 조합 정보로 해석할 책임/계약 확인 |
+| `/app/users/own/push-preferences` GET/POST, `/{preferenceId}` PATCH는 `pushEnable`와 `enablePersonalOrders` required | Employee·domain·category·channel 공유 설정, 기존 선택/신규 기본값·상위 OFF 보존, My Orders 결합. 조회 후 저장만으로 모든 동시 변경 충돌이 해결된다고 보지 않음 |
+| `PATCH /app/users/own/push-settings/{pushSettingId}`: `pushType/pushEnable`, 기존 PushType enum | 새 카탈로그와 기존 타입의 매핑, 항목이 여러 타입이면 저장 범위·부분 실패 처리. 이미 있는 서비스/query와 보호 로직 재사용 우선 |
+
+확인한 공개 스펙에서 새 다채널 설정·Unread/소속별 count 계약은 확인되지 않았다. BE가 전혀 개발하지 않았다는 결론은 아니다. 편의 UX 때문에 새 API를 먼저 요구하지 않고, 기존/예정 API가 위 기능 정보를 제공하는지 확인한다. 기존 DELETE API는 존재하며 신규 삭제 UI 제외와 API 제거는 별개다.
+
+#### 구현 요청 이후 작업·검증 순서를 위한 준비
+
+1. **기획/BE 계약 정렬:** 최종 카탈로그·역할/수신 범위·OFF와 Inbox 관계·초기값/이관·Unread/count/읽음 식별 계약을 맞춘다. OS 안내 UI·Back·실패/빈 화면·토스트 문구를 디자인과 연결한다. 이번에 외부 질문을 게시하지 않았다.
+2. **데이터 경계:** 인증/Employee 범위, query key·미읽음 캐시, 설정 저장과 My Orders 분리, 읽음/집계 갱신을 제품별로 계획한다. 기존 보호 로직 재사용을 우선한다.
+3. **화면과 동작:** 웹 기존 팝업 확장·신규 설정 연결, 앱 Inbox/설정 진입 추가, OS 임시 선택과 1회 안내, 병원 전환 후 1회 Unread/popup 연결을 나눈다. 모든 예외를 복구하는 전역 시스템은 도입하지 않는다.
+4. **푸시·딥링크:** 동일한 소속 준비·읽음 계약을 기존 진입에 연결하며 각 특수 랜딩을 보존한다.
+5. **최종 코드 실행 검증:** 웹 PC/모바일, Office/Lab iOS·Android의 영향 화면/역할을 에이전트가 검증한 뒤 사용자 최종 QA로 넘긴다. 이후 코드 수정 시 영향 사례를 재검증한다. 지금은 아래 항목 전부 미실행이며 merge/QA 준비 완료가 아니다.
+
+| 영향 화면·진입 | 구현 후 확인할 행동·예상 결과 |
+| --- | --- |
+| 웹 PC/모바일 Bell, 앱 Home→Inbox | All/Unread·페이지 추가·로딩/실패/빈 목록, 노출만으로 읽음되지 않음, 읽음 후 목록/dot/개수 일치 |
+| Inbox→수신 설정·기존 Profile | 진입 이동·지원 채널·서버값 보존, 실제 역할별 표시/저장 권한, 확정된 공유·분리 범위에 맞게 동작하고 의도하지 않은 조회 필터 변경 없음 |
+| OS 안내/항목 선택→권한 요청/설정→복귀 | 허용/거부·선택 없는 복귀·앱 종료·오랜 이탈·계정/소속 변경, 유효한 선택만 저장. 응답 유실은 서버 재조회로 확인 |
+| 알림→다른 소속, 일반 소속 선택·조직 방문·2131·QR·밀링 | 전환 성공 뒤 올바른 대상 UI/토스트 1회, 일반 경로 목적지 유지, 이전 소속 데이터·다중 popup 없음 |
+| Push/Linking/Airbridge·로그인 전/종료/실행 중 | 같은 콜백 중복과 같은 화면의 다른 알림 구분, 올바른 소속 헤더, 특수 랜딩·Back 보존 |
+| 주문/LinkTalk/Chat/하단 badge, 다른 탭·웹 새로고침 | 기존 조회/채팅 읽음 회귀 없음, 끊긴 알림 동작 재생 없음, 새 소속 cache/dot 분리 |
+
+Office는 실제 OWNER/PAYMENT_MANAGER/EDITOR/MEMBER, 본인/타 담당 주문·회수된 소속·삭제 대상을 구분한다. Lab은 자체 실제 역할 및 일반/INTERNAL·밀링 지원 범위를 확정해 검사하며 Office MEMBER 규칙이나 표시명이 같은 역할을 그대로 복사하지 않는다. 시뮬레이터로 확인할 수 없는 실제 푸시/OS 조건은 별도 실기기 증거로 구분한다.
+
+### 임시 정보와 서버값의 보관 범위
+
 | 정보 | 최소 수명·보관 방향 |
 | --- | --- |
 | OS 안내 노출 이력 | 앱 로컬 저장, 실제 최초 노출 시 기록 추천. UI 최종안에 맞춰 결정하며 재설치까지 보장하지 않음 |
@@ -74,7 +135,7 @@
 
 ### 조사 위치·Git 상태와 재사용 근거
 
-앞선 당일 마무리에서 다음 checkout은 모두 **dirty·미추적 없음, 로컬 upstream 기준 ahead/behind 0/0**이었다. 이번 Slack 재확인·단계 기록에서는 제품 Git을 다시 조회하지 않았다. 제품 fetch/pull·branch 변경은 하지 않았으므로 원격을 새로 동기화했다는 뜻은 아니다. 아래 위치는 조사 대상이지 이 기능의 구현 브랜치 배정이 아니다.
+이번 추가 검토에서 다음 checkout은 모두 **dirty·미추적 없음, 로컬 upstream 기준 ahead/behind 0/0**이었다. 현재 checkout과 조사 기준 원격 ref는 `git ls-remote`로 일치를 확인했으며 제품 fetch/pull·branch 변경은 하지 않았다. 아래 위치는 조사 대상이지 이 기능의 구현 브랜치 배정이 아니다.
 
 | 저장소 | 현재 checkout·HEAD |
 | --- | --- |
@@ -82,11 +143,14 @@
 | `/Users/parkjongsun/Repository/dentlink-app` | `main@7f586790e0bbd7b288458e29f00654d38ba68da2` |
 | `/Users/parkjongsun/Repository/dentlink-lab-app` | `QA/DL-16917@06e8dfde967502a4830e9a93c018ce150702dc7c`. 당일 앱 코드 조사 기준은 checkout 변경 없이 읽은 `origin/main@51441039751b63a08c82a1be9695c805c8af1539` |
 
+- 웹 조사 관련 경로는 원격 `master@c597f1fb3e7f5c03a76237926c3effad5bb84983`와 동일. Office 알림 관련 핵심 경로는 원격 `develop@fc127bd6d665be42532c1aaeccd7d58a0d83ffba`와 동일하다. Lab QA checkout과 main은 전체 tree 기준 159파일 차이가 있어 QA 소스를 최신 main으로 취급하지 않았다. 이번 Lab 원격 조회에서 `refs/heads/develop`은 반환되지 않았고 로컬 `origin/develop@58a551e…`를 현행 원격/개발 base로 사용하지 않았다. 실제 구현 위치는 구현 요청 때 확인한다.
 - 웹의 별도 기존 `dentlink-client-dlds` detached worktree도 목록에 있지만 이 세션에서 생성·변경하지 않았다. Office/Lab 앱은 해당 checkout 하나씩이다.
 - 웹 popup 상태/읽음: `shared/ui/src/NotificationUI/NotificationUI.tsx:61,114,194,241`, `shared/dlds/src/hooks/useModal.ts:4`; Clinic 목록 캐시 `clinic/src/components/Notifications/useNotificationsPagination.tsx:34`.
 - 웹 전환: Clinic `components/Office/OfficeSelectListModal.tsx:31,41`, `components/Organization/OrganizationOffices.tsx:45,55`; Lab `components/LabSwitch/LabEmployeeSwitchBoundary.tsx:39`, `lib/LabSwitch/resetLabContext.ts:42`, `components/LabSwitch/LabSwitchModal.tsx:39,155,271`, `lib/LabSwitch/switchLab.ts:23`. Clinic `components/DentlinkSupport/useDentlinkSupport.ts:39,50`는 hash 패널 선례이며 새 알림에 필수 도입하는 근거가 아님.
 - Office 권한/저장/로컬 이력: `src/features/common/components/PermissionProvider.tsx:62,67,97`, `src/hooks/useProfileNotification.ts:91,104,117`, `src/features/profile/sections/ProfileNotificationSection.tsx:64`, `src/configs/utils/asyncStorage.ts:50`.
 - 앱 전환/토스트: Office `src/libs/useEmployeeProfile.ts:103`, `src/features/common/components/EmployeeProfile.tsx:58,67`, `App.tsx:109`; Lab 조사 ref의 `src/libs/useMillingAccountSwitch.ts:38`, `src/features/home/components/HomeProfileHeader.tsx:89`, `src/navigations/RootNavigator.tsx:206`, `App.tsx:132`.
+- 추가 웹 근거: `lab/src/services/messages/messages.query.ts:5,15`, `lab/src/components/Layout/Layout.tsx:100`의 모바일/데스크톱 mount 구조와 HeaderActions/NavigationMobile의 Notifications 소비, 공통 `NotificationUIType.ts:13`의 상태 props; Clinic 부분읽음 `useNotificationsPagination.tsx:134`, Lab `:122`.
+- 추가 앱 근거: Office `src/libs/usePersonalOrdersPreference.ts:65,103`, `src/configs/utils/fetcher.ts:14,94,101,124,219`, `src/libs/useNavigationConfig.ts:88,198,946`, `src/configs/utils/fcmHandler.ts:43,119`, `src/navigations/RootNavigator.tsx:313`. Lab은 위 main ref의 `src/libs/usePersonalOrdersPreference.ts:3`, `src/store/useOrderStore.ts:107`, `src/libs/useNavigationConfig.ts:86,194,898`, `src/features/auth/screens/NotificationSettingScreen.tsx:23`(최초 권한 안내), `src/hooks/useProfileNotification.ts:46,136,179`. 생성 `Api.ts`의 알림 선언과 실제 서비스/query 호출을 구분했다.
 - Figma 본문·화면과 본인 멘션 메일은 당일 이전 조사에서 확인했으나 댓글 전체를 직접 조회하는 도구는 없었다. 이번 Slack 최종 답변을 Figma 반영 완료나 모든 최신 댓글 확인으로 바꾸지 않는다.
 
 ### 공유 문안 작성에서 확정한 방식
@@ -97,7 +161,7 @@
 
 ### 다음 시작점과 대기 조건
 
-- **현재는 1단계인 개발 전 사전 기획·검토 및 자료 누적**이다. 현재까지의 검토·Slack 공유는 정리됐지만 디자인/BE 상세와 미정 사항은 남아 있다. 개인 기록만 commit/push하고 원격 반영을 확인한 뒤 다음 자료나 요청을 기다린다.
+- **현재는 1단계인 개발 전 사전 기획·검토 및 자료 누적**이다. 현재 코드 기준 제품별 재사용/변경/계약 확인 표와 실행 검증 후보까지 준비됐다. 디자인/BE 상세와 미정 사항은 남아 있으며 전체 개발 공수·완성 동작을 확정한 것은 아니다. 개인 기록만 commit/push하고 원격 반영을 확인한 뒤 다음 자료나 요청을 기다린다.
 - 사용자가 자료를 주거나 다시 확인 요청하면 Slack 최신 기준 `1793081711.531789` 이후 답변과 OS 안내 디자인 제안, 최종 카탈로그/API 변경분부터 요청 범위에 맞춰 확인한다. 앞선 조사를 처음부터 재시작하지 않는다.
 - 구현 요청이 생기면 최신 Git/checkout·활성 작성자·디자인·Swagger를 재확인하고 승인 범위를 확정한다. 이 조사용 checkout에서 임의로 구현을 시작하거나 새 branch/worktree/PR/배포를 만들지 않는다.
 - 기존 일회성 22시 확인 예약은 10/26에 종료됐다. 새 반복 감시·예약·세션 간 메시지를 생성하지 않고 사용자 재요청까지 대기한다.
