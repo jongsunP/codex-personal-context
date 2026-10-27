@@ -114,7 +114,9 @@
   in `DEVELOPMENT_STYLE.md`: actually test every affected screen and, for
   permission changes, each affected role/permission state before declaring the
   work ready to merge. This is mandatory; missing runtime evidence blocks
-  merge readiness even when automated checks pass.
+  merge readiness even when automated checks pass. List affected screens and
+  role-specific checks, perform agent runtime checks first, then give the user
+  that checklist for final device QA with verified and pending results separated.
 - For Dentlink apps, follow **Dentlink App Release And Delivery Policy** in
   `SESSION_WORKFLOW.md` and `projects/dentlink-app-onboarding.md`. App PRs
   for ordinary new features target `develop`. Release is the QA/delivery

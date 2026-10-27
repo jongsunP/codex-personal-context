@@ -1,5 +1,30 @@
 # Dentlink Office App setup and current checkpoint
 
+## DL-17038 재현·유입 이력·수정본 확인 — 2026-10-27
+
+- 사용자가 수정 전 임시 브랜치에서 직접 실행한 화면을 캡처해 `DesignConfirmationScreen`의 **Maximum update depth exceeded** Render Error를 확인했다. 네이티브 프로세스 강제 종료를 확인한 것은 아니다. 재현 화면: `/tmp/dentlink-office-screen-check-20261027.png`.
+- **유입 확정:** 권한관리 원본 `5c9e57e1dbaa1d81490291676a40edb723d38106`(10/15), PR329 squash `43f787909d29f4899a04fad04d3f452d98b53cad`(10/19). `useOrderConfirm`의 빈 승인값이 안정된 useState 참조에서 매 렌더 `?? {}`로 바뀌었다. 화면의 tracking memo → Zustand 동기화 effect → 재렌더가 연결되어 데이터 로딩 중 반복 갱신이 발생한다. 기존 화면 effect 자체는 이전 코드이며, 이번 권한관리 변경의 회귀다.
+- **검증 공백:** 기존 화면 테스트는 hook을 안정된 완료 데이터로 대체하고 store setter도 mock 처리했다. hook 단독 테스트는 실제 화면 effect가 없어 둘의 상호작용을 놓쳤다. 개인 기록의 실제 Member 검증은 홈·결제 배너·주문 필터 중심이며 디자인 컨펌 실진입 완료 근거는 찾지 못했다. 테스트 통과를 실제 화면 검증으로 보완하지 못한 공백을 인정하며, 모든 사람이 전혀 테스트하지 않았다고 추정하지 않는다.
+- **동료 수정:** PR338 `40b879e`는 빈 객체를 `useRef`로 유지하고 실제 hook/store의 로딩→데이터 도착→이탈 회귀 테스트를 추가했다. 최신 fetch의 main은 후속 ISV PR339까지 포함한 **`7f58679`**다. 기본 checkout을 이 main으로 ff-only 전환했으며 원격동일·clean, 수정 전 임시 `feature/DL-17038-crash-repro@6b0c6e3`는 보존한다. 두 버전 간 native/package/lock 변경은 없다.
+- **수정본 검증:** `yarn test --config jest.config.js --runInBand --watch=false`로 DesignConfirmationScreen/useOrderConfirm **2 suites /36 tests PASS**. package.json의 오래된 별도 Jest 설정은 사용하지 않았다. iPhone17 Pro/iOS26.5·Office Development2.2.4(151)·현재 main의 Metro에서 Member 계정으로 현재 홈의 승인 대기 주문9000009855/approval1721에 딥링크 진입해 **Planning Approval(동일 DesignConfirmationScreen), 첨부 미리보기, Approve/Reject 버튼 표시와 조회 성공**을 확인했다. `/tmp/dentlink-office-main-confirm-loaded.png`, `/tmp/dentlink-office-confirm-regression.log`가 로컬 증거다. 이전 사용자 재현의 정확한 주문/approval ID는 따로 확인되지 않았다.
+- **경계:** 이번 직접 확인은 위 iOS/DEV/Member의 진입·로딩·표시에 한정된다. 승인·반려 전송, 전 역할/양OS·실기기·운영 OTA 적용 QA는 수행하지 않았다. 제품 소스 수정·새 제품 커밋/푸시·PR·배포 없음. 현재 main 화면과 Metro/Reactotron은 유지하여 사용자 최종 확인을 이어갈 수 있다.
+- **상시 개선:** [머지 전 실검증 정본](../DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge)에 영향 화면 목록 작성 → 에이전트 실제 검증 → 화면/진입 경로/권한/기대 동작/결과를 담은 사용자 최종 QA 안내 순서를 추가했다. 오류 0%를 보장하지 않으며, 미검증을 완료로 처리하지 않는 것이 기준이다.
+
+이번 권한관리의 **검증 대상 목록**은 아래와 같다. 이번에 이 목록 전체를 실행 완료했다는 의미는 아니다. 각 작업에서는 실제 최종 diff와 진입 경로에 맞게 구체화한다.
+
+| 영향 화면 | 권한·조건별 주요 확인 |
+| --- | --- |
+| 홈 | Action Required 진입, Admin/Billing Manager 결제 영역 허용과 다른 역할 제한 |
+| 주문·환자 목록, 검색/필터 | Member 본인 담당 범위·의사 선택 제한, 다른 역할 기존 기능 |
+| 주문 상세·WebView | 본인/타의사 주문 열람·수정, 접근 거절, 네이티브 화면 이동 |
+| 신규 주문·Case·Draft 재개 | 담당자 고정, 본인/타의사/미지정 Draft, 첨부와 다음 단계 |
+| ISV 주문 작성 | 담당자·환자 선택과 저장, Member/비Member 차이 |
+| 디자인·플래닝 컨펌 | 최초 로딩·진입·첨부·복귀, 본인/타의사 승인·반려 허용/제한 |
+| LinkTalk 목록·대화·지원 대화 | 조회 범위, 읽기/쓰기·첨부·템플릿 이동, 권한 변경 |
+| 피드백 상세 | 열람·저장·첨부 권한, 담당/직원 전환 및 저장 중 권한 변경 |
+
+역할은 Admin(OWNER) / Billing Manager(PAYMENT_MANAGER) / Manager(EDITOR) / Member(MEMBER)로 나누며 Member 본인/타의사 담당과 작업에 해당하는 전환·로딩·거절 상태를 구분한다.
+
 ## 크래시 수정 전 사용자 재현 환경 — 2026-10-27
 
 - **요청:** 최신 치과 앱에서 동료가 방금 병합한 수정만 제외한 임시 로컬 브랜치와 iOS 시뮬레이터를 준비한다. 권한관리 변경은 유지하며 크래시 재현은 사용자가 직접 한다.

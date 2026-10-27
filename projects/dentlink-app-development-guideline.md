@@ -25,6 +25,9 @@ Actually test all affected screens, including indirect shared-code consumers
 and each affected role/permission state. The staged iOS/Android loop below
 does not defer required runtime evidence until after merge. Unverified cases
 must stay explicit and block a merge-ready report.
+Name the affected screens and entry paths before implementation, verify them
+as the agent first, and provide the user with a screen/role/action/expected-result
+checklist for final device QA. Keep agent and human results separate.
 
 ## Default Combination
 
