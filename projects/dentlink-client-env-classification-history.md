@@ -2,6 +2,9 @@
 
 2026-10-20 회의 후 사람 수동 관리로 전환하면서 프로젝트에서 제거한 이전 조사 기록입니다. 실제 값은 포함하지 않습니다. 아래 상세 분류와 옛 도구·manifest 링크는 **과거 판단 근거**이며 현재 팀 운영 절차가 아닙니다. 현재 상태는 [프로젝트 체크포인트](dentlink-client-env-management.md)를 따릅니다.
 
+아래 코드·문서 경로는 당시 `dentlink-client` 저장소 기준입니다. 개인 컨텍스트의
+상대 링크가 아니며 현재 파일 존재나 이전 도구의 사용 가능성을 보장하지 않습니다.
+
 ---
 
 # 환경변수 분류표
@@ -27,7 +30,7 @@
 
 - `NEXT_PUBLIC_EXIMBAY_SECRET_KEY`와 `NEXT_PUBLIC_MEDITLINK_KEY`는 `build-secret`으로 기존 값을 보존합니다. Variables에는 넣지 않습니다. Eximbay 브라우저 서명과 Medit의 현재 소비 여부를 근거로 값을 임의로 삭제하거나 기능을 바꾸지 않습니다.
 - Admin·Clinic DEV/STAGE/PRD는 `DENTLINK_BUILD_ENV`, Clinic DEV/STAGE는 `DENTLINK_E2E_ENV`를 사용합니다. 묶음에는 서비스·환경·종류 헤더를 포함합니다.
-- 새 PC에는 `env:pack`으로 암호화한 파일을 기존 팀 DM으로 보내고 비밀번호를 별도 통화·대면으로 공유합니다. 수신자는 `env:unpack`합니다. [사용법](environment-variables.md)을 따릅니다.
+- 새 PC에는 `env:pack`으로 암호화한 파일을 기존 팀 DM으로 보내고 비밀번호를 별도 통화·대면으로 공유합니다. 수신자는 `env:unpack`합니다. 당시 사용법은 제품 저장소의 `docs/environment-variables.md`에 있었습니다.
 - 기존 env 9개의 Git 추적은 아직 유지합니다. 설정값 보존과 로컬·빌드·E2E 공급 검증을 마친 뒤 전환합니다. PRD 값의 준비·복원은 권한 있는 기존 값으로만 진행하며 자동 배포하지 않습니다.
 
 ## 범위와 manifest 읽는 법
@@ -184,13 +187,13 @@
 
 ## SDK 키 분류 근거
 
-- Stripe publishable key는 클라이언트용입니다. [`loadStripe` 소비처](../clinic/src/components/PaymentMethod/PaymentMethodStripeCardModal/PaymentMethodStripeCardModal.tsx)와 [Stripe API keys 문서](https://docs.stripe.com/keys)를 확인했습니다.
-- Amplitude API key는 수집 대상 프로젝트를 지정하며, 조회·관리용 secret key와 다릅니다. [브라우저 초기화](../clinic/src/common/hooks/useAmplitudeInit.ts), [공식 키 설명](https://www.amplitude.com/docs/admin/account-management/manage-your-api-keys-and-secret-keys).
-- Datadog RUM client token은 브라우저에서 보이는 수집용 토큰입니다. [RUM 초기화](../clinic/src/common/hooks/useDatadogRUMInit.ts), [공식 보안 설명](https://docs.datadoghq.com/data_security/real_user_monitoring/).
-- Google Maps JavaScript 키는 브라우저 사용과 도메인/API 제한을 함께 고려해야 합니다. [GoogleMap 소비처](../admin/src/components/GoogleMap/GoogleMap.tsx), [공식 보안 지침](https://developers.google.com/maps/api-security-best-practices).
+- Stripe publishable key는 클라이언트용입니다. `loadStripe` 소비처 `clinic/src/components/PaymentMethod/PaymentMethodStripeCardModal/PaymentMethodStripeCardModal.tsx`와 [Stripe API keys 문서](https://docs.stripe.com/keys)를 확인했습니다.
+- Amplitude API key는 수집 대상 프로젝트를 지정하며, 조회·관리용 secret key와 다릅니다. 브라우저 초기화 `clinic/src/common/hooks/useAmplitudeInit.ts`, [공식 키 설명](https://www.amplitude.com/docs/admin/account-management/manage-your-api-keys-and-secret-keys).
+- Datadog RUM client token은 브라우저에서 보이는 수집용 토큰입니다. RUM 초기화 `clinic/src/common/hooks/useDatadogRUMInit.ts`, [공식 보안 설명](https://docs.datadoghq.com/data_security/real_user_monitoring/).
+- Google Maps JavaScript 키는 브라우저 사용과 도메인/API 제한을 함께 고려해야 합니다. GoogleMap 소비처 `admin/src/components/GoogleMap/GoogleMap.tsx`, [공식 보안 지침](https://developers.google.com/maps/api-security-best-practices).
 - ChannelTalk pluginKey는 JavaScript SDK 초기화 입력이며 memberHash와 다릅니다. [공식 Quickstart](https://developers.channel.io/en/articles/Quickstart-d27c51d1).
 - Medit은 client ID와 client secret을 구분합니다. 현 키가 어느 역할인지는 이름만으로 확정하지 않습니다. [Medit OAuth 문서](https://api-doc.meditlink.com/OpenAPI/stage/guide.html).
-- Eximbay 서명키는 비밀값으로 취급해야 합니다. [현재 브라우저 서명 코드](../clinic/src/lib/Card/eximbayCardRegistrationParams.ts), [Eximbay 결제 연동 문서](https://developer.eximbay.com/eng/eximbay/pdf/Eximbay_Global_Payment_Integration_guide_kr.pdf).
+- Eximbay 서명키는 비밀값으로 취급해야 합니다. 당시 브라우저 서명 코드 `clinic/src/lib/Card/eximbayCardRegistrationParams.ts`, [Eximbay 결제 연동 문서](https://developer.eximbay.com/eng/eximbay/pdf/Eximbay_Global_Payment_Integration_guide_kr.pdf).
 
 ## 브라우저에서 사용하는 키의 보안 조치
 

@@ -48,10 +48,12 @@ This keeps the Git-backed personal guidance in
 auth, caches, logs, sessions, and other machine-local state.
 
 Start with `BOOTSTRAP.md` when a new Codex session needs to understand the user.
-Then read `SESSION_WORKFLOW.md` and the relevant `projects/<project>.md` for
-personal continuation context. Pull the target project repository, verify the
-checkpoint against live Git, and read stable team-owned project documentation
-when relevant.
+Follow its canonical [Read Order](BOOTSTRAP.md#read-order): core guidance and
+the active project's current checkpoint first, then task-relevant topics and
+historical evidence. Do not read unrelated personal topics or the entire change
+log at every start. For product work, refresh the assigned project repository,
+verify the checkpoint against live Git, and read relevant stable team-owned
+documentation under `SESSION_WORKFLOW.md`.
 
 ## Core Files
 

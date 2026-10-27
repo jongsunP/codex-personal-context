@@ -52,10 +52,39 @@ At start or resume:
 
 At meaningful closeout:
 
-1. Curate the current checkpoint and append meaningful history.
+1. Update one current checkpoint; record history only for meaningful decisions,
+   evidence, or changes of state, not every repeated status report.
 2. Remove or label stale duplicate status so only one section is current.
 3. Commit and push `codex-personal-context`.
 4. Commit, push, or mutate the shared project only with explicit user
    authorization.
 
 Do not store secrets, credentials, private customer data, or raw chat logs.
+
+## Current Checkpoint And History Maintenance
+
+- Put the current scope, completed work, present effect, remaining work or
+  waiting condition, verification limits, and next starting point near the top.
+  Branch/SHA and device details are dated observations, not permanent setup.
+- Keep the detailed changing state in one project file. `PROJECTS.md` and
+  `HANDOFF.md` route readers there; the FE main checkpoint keeps cross-project
+  decisions and a short coordination index. Avoid copying changing SHA, PR,
+  deployment, or local-folder inventories into all three.
+- When historical checkpoints obscure the current state, move them to a dated
+  file under `projects/archive/` and link it from the existing project path.
+  Preserve decision rationale, exact revisions, evidence limits, recovery
+  pointers, and meaningful unresolved facts. A full snapshot is acceptable
+  when selective deletion would risk losing context.
+- Keep stable rules and relevant unresolved work in the current file. Label
+  archived instructions and old `current`/`next` headings as historical; they
+  do not reopen finished work, lift a hold, or authorize an old action again.
+  Correct stale summaries only from newer documented evidence, and distinguish
+  this reconciliation from fresh Git, deployment, or device verification.
+- Before publishing a refactor, verify preserved history, relative links and
+  anchors, important policy boundaries, and other sessions' concurrent edits.
+  Commit/push curated personal context and synchronize local guidance as needed.
+- The main coordination session owns this maintenance when requested or when
+  a concrete inconsistency needs correction. Do not reorganize merely to hit a
+  size target, invent a recurring cleanup job, or rewrite active project facts
+  without evidence. Large reference inventories can remain intact and be read
+  only for relevant work.

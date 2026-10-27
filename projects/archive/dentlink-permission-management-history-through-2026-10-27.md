@@ -1,0 +1,3584 @@
+> 과거 이력 보관본입니다. 현재 상태·승인·재개 지시는 [현재 문서](../dentlink-permission-management.md)를 따릅니다.
+> 2026-10-27 정리 전 원문 전체를 보존했으며 상대 Markdown 링크만 위치에 맞게 조정했습니다.
+> 원본 commit: `a3ddbe53af45bfbde4d63658404e0020e7d0c7ef` · SHA256: `a3719f30ba44d68f7e09f80b7deb8721227c63a9b5f5d2bed055efef9bf05c48`.
+
+# Dentlink 권한관리 — DL-16317
+
+## DL-17011 최종 완료·세션 보관 — 2026-10-27
+
+- **사용자 최종 확인:** 배포까지 마무리됐고 추가 QA도 없으므로 이번 작업을 최종 종료한다. 아래 10/26의 대기·재개 상태를 대체하며, 이 작업에 남은 개발·QA·배포 과제는 없다. 배포 완료와 추가 QA 없음은 사용자의 명시 확인에 근거하며 이번 정리에서 새 배포 점검이나 QA를 수행한 의미는 아니다.
+- **완료 결과:** Clinic/Lab/Admin의 회원 권한 선택·표시와 관련 등록/수정·초대 경로 누락을 보완했고, 가능한 높은 권한 순서로 정렬하며 백엔드 응답과 무관하게 Viewer를 제외했다. [PR #4784](https://github.com/Innvoaid/dentlink-client/pull/4784) 병합·구현·검증·CodeRabbit 완료 근거와 최종 정책은 아래 10/26 기록에 보존한다.
+- **종료 처리:** Jira 상태는 사용자가 처리하며 Codex는 변경하지 않는다. 개인 컨텍스트는 이 문서만 커밋·푸시하고, 원격 저장 확인 후 이 세션을 보관한다. 제품 코드·브랜치·PR·배포 변경이나 추가 모니터링은 하지 않는다. 향후 별도 요청이 생기면 당시의 실제 Git·요구사항을 확인해 새 후속 범위로 진행한다.
+
+## DL-17011 마감·스테이징 배포 완료 보고 — 2026-10-26
+
+- **작업 종료:** 사용자가 PR 머지와 스테이징 서버 배포를 완료했다고 알렸으며, 이번 작업을 마감하고 개인 컨텍스트 정리·메모리화 후 대기하도록 요청했다. 아래 구현 당시의 미병합·배포 대기 상태는 이 기록으로 대체한다. 요청된 구현·리뷰·커밋·푸시 작업에 남은 항목은 없다.
+- **직접 확인한 Git 상태:** [PR #4784](https://github.com/Innvoaid/dentlink-client/pull/4784)는 `release/v1.90.0`에 **2026-10-26 14:43:22 KST** 병합됐다. 원 작업 HEAD는 `9dcb644d566cee06fa0019c16b7f47cdf10e8d36`, 최종 merge SHA는 **`f7d65d6eb9831cade4ac8092a594fca4298c0683`**이다. GitHub 비교에서 원격 release는 merge SHA와 동일하고, stage는 merge SHA보다 5커밋 ahead/0 behind·변경파일0으로 병합 결과 포함과 코드 동일성을 확인했다. 원 feature SHA의 직접 ancestry와 최종 merge SHA의 포함 여부를 혼동하지 않는다.
+- **배포·QA 근거 구분:** 스테이징 서버 배포 완료는 사용자 확인에 근거한다. 이번 마감에서 배포 workflow·실제 serving revision·실계정 QA를 새로 확인하거나 실행하지 않았고, Git 반영 사실을 그 검증 대신 사용하지 않는다. 운영 배포 완료를 주장하지 않는다.
+- **최종 정책·범위:** Clinic/Lab/Admin 회원 권한 선택·표시·등록/수정·초대/승인/재발송 경로에 공통 높은 권한 우선 순서 `OWNER → PAYMENT_MANAGER → EDITOR → MEMBER`를 적용한다. 각 서비스가 실제 제공하는 항목만 사용하며, **백엔드가 반환해도 Viewer는 없는 권한으로 취급**한다. 기존 값은 `-`로 표시하고 새 권한 부여를 막으며 자동 변환하지 않는다. API DTO와 기존 로그인·접근제어의 서버 호환 범위는 유지한다. 상세 변경·검증·기존 실패 구분과 최신 CodeRabbit 실제 리뷰 완료/미해결0 근거는 바로 아래 기록을 따른다.
+- **Jira·보존·재개점:** Jira 카드 상태는 사용자가 직접 변경한다. Codex는 Jira 상태·댓글을 수정하지 않는다. 개인 기록은 이 문서만 커밋·푸시하며, 제품 코드·브랜치·PR·배포를 추가로 변경하거나 원 작업 브랜치를 정리하지 않는다. 현재 제품 checkout은 `feature/DL-17011@9dcb644d5`·clean이다. 추가 QA 이슈나 명시적인 재개 요청이 오기 전까지 **대기**한다. 재개 시 개인 컨텍스트와 정확한 제품 checkout·PR·배포 대상을 다시 확인한다.
+
+## 권한 순서 통일·Viewer 제외 정책 반영 — 2026-10-26 DL-17011
+
+- **최신 사용자 결정:** 드롭다운은 가능한 범위에서 높은 권한부터 배열하고, **Viewer는 백엔드가 아직 반환하더라도 프론트에서 존재하지 않는 권한으로 취급**한다. 아래의 기존 Viewer 표시 호환/현재값 보존 결정은 이 명시 지시로 대체한다. 사용자 요청은 같은 PR의 구현·리뷰·커밋·푸시까지 이어가며 병합·배포는 포함하지 않는다.
+- **선택지 규칙:** 기존 shared/models `enum.maps.ts`에 공통 `getEmployeeAuthorityOptions`를 두어 실제 전달된 옵션 중 `OWNER → PAYMENT_MANAGER → EDITOR → MEMBER`만 반환한다. Viewer·미지원 값·중복을 제외하고 원본 배열을 변경하지 않는다. Clinic/Lab/Admin 코드 API hook, Admin 정적 옵션, 공통 MembersUI가 이 기준을 사용한다. API에 없는 권한을 추가하지 않는다. OFFICE는 Admin/Billing Manager/Manager/Member, LAB은 현재 3종과 기존 Owner/Billing Manager/Member 명칭을 유지한다. 신규 일반 가입의 직업 roleType과 별도다.
+- **Viewer 표시·쓰기:** 회원 목록·상세·그룹 상세·CRM·초대·Clinic Pending·결제 담당자 및 Admin 결제 직원표에서 Viewer와 `(VIEWER)` raw suffix를 노출하지 않고 `-`로 표시한다. API가 Viewer를 반환하더라도 새 선택이 불가하다. Admin 등록/수정·초대/재발송, Clinic 권한변경/초대 draft/승인/재발송, Lab 초대/권한변경/재발송은 실제 정제 옵션에 포함된 값인지 검사한다. 기존 Viewer를 자동 변환하지 않으며 사용자가 유효 권한을 선택하면 정상 처리가 가능하다. 거절·취소·삭제는 유지한다.
+- **호환 경계:** 서버에 기존 값이 남아 있으므로 API DTO의 VIEWER 타입과 기존 로그인·HOC 접근 제어·조회 guard를 삭제하지 않았다. 이번 지시는 회원 권한 선택·표시·새 권한 부여 정책이며, 기존 계정의 접근 권한을 임의로 철회하거나 서버 데이터를 마이그레이션한 작업이 아니다. 사용하지 않는 모델/번역 문자열의 VIEWER 검색 결과를 실제 선택지로 혼동하지 않는다.
+- **제품 커밋·PR:** 기존 checkout `/Users/parkjongsun/Repository/dentlink-client`, `feature/DL-17011`에 **`9dcb644d566cee06fa0019c16b7f47cdf10e8d36`** (`fix: 회원 권한 순서 통일 및 뷰어 선택 표시 제외`)을 정상 훅으로 커밋·푸시했다. [PR #4784](https://github.com/Innvoaid/dentlink-client/pull/4784)의 제목은 `[DL-17011] 회원 권한 선택지 정렬 및 Viewer 제외`, base `release/v1.90.0`다. 이번 추가 변경은 24파일(+189/-93), PR 전체는 4commits·26files(+283/-81)다. 개인 상태 문서는 제품 저장소에 추가하지 않았다.
+- **검증:** 실제 공통 helper의 24개 순열, Viewer/unknown/중복 혼합·역순 API 응답, 세 앱의 실제 query hook, 입력 배열 불변·LAB 없는 MEMBER 미추가를 메모리에서 검증했다. 실제 Admin 폼 source를 평가해 모든 서비스의 기존 VIEWER 재저장·신규 생성 차단과 유효 권한 명시 선택 후 저장을 확인했다. Clinic 9검증 묶음(표시·초대 draft·승인·재발송·옵션 누락/실패·유효값 전환), Lab schema13·mutation19케이스 및 shared 표시 검증을 통과했다. 새 테스트/보조 파일·실서버 쓰기는 없다.
+- **필수 검사·기존 실패:** 직접 검사 및 정상 pre-commit의 Clinic/Lab/Admin 타입 모두 통과. 각 앱 변경파일 lint 오류0, 정상 pre-push의 서비스 lint 오류0(기존경고226/184/393), Admin DLOS guard60/baseline60, guard9·shared config21·hooks32 tests/coverage check 통과. shared UI 단독 lint는 원본에도 있는 조건부 useOutsideHandler 오류1건으로 실패한다. Lab i18n audit의 기존 logIn 키 누락과 check의 기존 locale6개 stale은 이번 변경과 분리한다. 새 번역 키·문구·locale/시트 변경은 없다.
+- **독립 리뷰·E2E:** 분담 코드에 대해 독립 검토하고 드롭다운 구현까지 추적했으며 추가 차단사항을 찾지 못했다. 전체 PR26파일의 E2E 영향은 NO_IMPACT: 기존 회원 관리 화면의 권한 선택을 소비하지 않고, 기존 팀 전환/주문 승인/가입/결제 및 API 준비·정리 흐름은 유지한다. 가드 해시 `fe3a6244c2c0557a6021ef799088db2eb48fb49f` 기록과 push 전 check 통과. 실제 계정 QA·브라우저 E2E는 미실행이다.
+- **리뷰 완료·재개점:** 최신 HEAD `9dcb644d5`의 CodeRabbit 검사는 SUCCESS다. 최근 리뷰 본문에서 `1d92a3c0c → 9dcb644d5`의 24파일을 실제 처리했고 `No actionable comments`임을 확인했다(리뷰 생략/한도 초과가 아님). 기존 지적1건은 resolved, 신규·미해결 스레드0건이다. 제품 local/origin/PR HEAD 일치·checkout clean, PR Open/비Draft/미병합·base `release/v1.90.0`를 재확인했다. 이 개인 문서만 커밋·푸시하고 다음 지시부터 이어간다. 팀 승인·실계정 QA·병합·배포는 별도 사용자 지시를 기다린다.
+
+## 권한 누락 전수 보완·리뷰 완료 — 2026-10-26 DL-17011
+
+- **최신 승인·범위:** 사용자가 회원 등록을 포함한 Admin의 필요한 곳 전체 재점검·수정과 CodeRabbit 전체 리뷰·커밋·푸시를 승인했다. 이어 Clinic/Lab 가입·초대·기타 경로 검토를 요청했고, 발견된 문제도 함께 수정하도록 추가 승인했다. 아래 과거 기록의 등록 제외·Clinic/Lab 검토만 경계는 이 요청으로 대체한다. 병합·배포·Jira 변경은 승인 범위 밖이다.
+- **현재 커밋·PR:** 기존 `/Users/parkjongsun/Repository/dentlink-client`, `feature/DL-17011`에서 **`1d92a3c0ce78ed813bfb8be9d50e7e4ccb280d30`** (`fix: 회원 등록 초대 권한 누락과 기존 뷰어 표시 보완`)을 정상 훅으로 커밋·푸시했다. [PR #4784](https://github.com/Innvoaid/dentlink-client/pull/4784)는 `release/v1.90.0` 대상이며 제목을 `[DL-17011] 어드민 권한 누락 및 클리닉·랩 Viewer 표시 수정`으로 갱신했다. 이번 추가 커밋은 11파일(+96/-32), PR 전체는 Admin9·Clinic1·공통UI1의 11파일(+133/-27)이다.
+- **Admin 완료 경로:** 회원 등록·수정의 OFFICE 선택지는 Admin / Billing Manager / Manager / Member 4개다. 회원 목록·상세 및 이를 재사용하는 그룹 상세·CRM, 초대 목록의 읽기/수정, 결제 대상 직원표의 권한 표시까지 보완했다. `useCreateInvitation`의 고정 `UserAuthorityTypeValueList`가 MEMBER 제출을 막던 누락을 발견하여 실제 API `authorityList` 값으로 Yup 검증한다. Admin 직접 enum map 소비는 공통 권한 유틸 내부에만 남는다. 도메인 CRUD 권한·Organization 권한·가입 직업 roleType은 직원 authorityType과 구분했다.
+- **서비스 확인·CodeRabbit 수정:** optional `employer.serviceType` 누락 지적은 유효했다. 등록은 실제 그룹 유형을 조회하고, 수정은 직원 응답에 유형이 없을 때 조회하며, 목록·상세도 그룹 정보로 보완한다. 미확인 상태는 선택지 비움·권한 원시값 표시·등록/수정 저장 차단으로 처리한다. 기존 `useEmployerQueries`는 동일 numeric key에 bare DTO와 envelope를 혼용하는 소비자가 있어 새 필수 경로에 그대로 쓰지 않았다. 기존 `services/employer/employer.query.ts`에 `useEmployerServiceTypeQuery`를 추가하고 `[EMPLOYER_SHOW, 숫자ID, "serviceType"]` 전용 키·양의 정수 guard·null fallback을 사용한다. 행별 N+1은 없고 그룹당 조회다.
+- **Clinic/Lab 감사·수정:** Clinic 회원 상세·신규 초대·가입신청/초대 수정은 공통 OFFICE 코드 API 4종을 실제 사용하며 일반 가입의 Office Manager 직업은 별도 roleType이다. 초대 수락/초대 가입은 기존 초대 권한을 유지한다. Lab 회원·초대는 LAB API의 OWNER/PAYMENT_MANAGER/EDITOR 3종을 사용한다(DEV/STG 공개 응답 재확인). 기존 Viewer 데이터가 있을 때 Clinic Pending Members는 빈칸, Lab 회원/초대 표는 Undefined로 표시되는 조건부 결함을 수정했다. Clinic `OfficePendingMembersTable`에 기존 label helper의 placeholder를 연결했고, 공통 `MemberUITableColumnDropdownType`은 AUTHORITY+VIEWER+옵션에 라벨 없음일 때만 기존 Viewer/조회자 번역으로 표시한다. 새 Viewer 선택지·자동 권한 변환·Lab Owner/Member 명칭·ROLE 필드는 변경하지 않는다.
+- **수정하지 않은 미확정 사항:** Lab API Admin/Manager와 기존 화면 Owner/Member 명칭 차이는 LAB 별도 정책으로 유지했다. Clinic 결제수단 할당 직원 `AssignerProfile`은 서버 권한 문자열을 그대로 표시하며 DTO 예시는 Owner지만 실제 응답 명칭은 확인하지 못했다. 이를 확정 버그나 완료 QA로 취급하지 않는다. 실제 기존 Viewer 데이터의 존재도 조회하지 않았다.
+- **검증:** 실제 소스를 메모리 평가하여 등록·수정 props, 서비스 누락 시 저장 차단, 기존 Viewer 값 보존, LAB/ADMIN 옵션, 모킹한 MEMBER POST payload를 확인했다. 실제 QueryClient로 기존 그룹 캐시 보존·전용 키·invalid ID·누락 null 동작을 확인했다. 초대 Yup6케이스(OFFICE Member허용/Viewer거부, LAB Member거부/Editor허용, empty/undefined 목록거부), Clinic/shared TSX11케이스(영문/한글 Viewer·메뉴 불변·LAB 명칭/ROLE/저장값 보존) 통과. 새 영구 테스트·보조 파일은 없다.
+- **필수 검사·기존 실패 구분:** Clinic/Lab/Admin 타입과 정상 pre-commit 통과. Admin·Clinic 변경파일 lint 오류0, 정상 pre-push의 서비스 lint 오류0(기존경고226/184/393), Admin DLOS guard60/baseline60, guard9·shared config21·hooks32 tests 및 coverage check 통과. 공통 UI 단독 lint는 원본에도 있는 useOutsideHandler 조건부 Hook 오류1건으로 실패했고 i18n audit는 기존 account.auth.actions.logIn 누락으로 실패했다. 기존 키만 재사용하며 번역파일·시트를 쓰지 않았다. 읽기 export 미리보기의 기존 전체 차이 missing1743/stale2/conflicts3은 이번 작업 산출물이 아니다.
+- **E2E·리뷰 상태:** 최종11파일 기준 독립 코드 리뷰와 E2E 영향 검토를 수행했다. NO_IMPACT: Admin 접점은 직접 API 준비·정리, Clinic 변경은 /office/managed/invites로 기존 팀전환 /office/managed와 분리, Lab 변경 소비 회원/초대 화면은 기존 배송/주문/피드백 E2E와 분리된다. 가드 해시 `07f03189c75dc2b59b4108b9f46e7511907149d1` 기록과 push 전 check 통과. 실제 계정 등록·초대·저장·서버 기능 QA 및 브라우저 E2E는 미실행이다. CodeRabbit 기존 스레드 `PRRT_kwDOJnA7-86wIkMS`에 수정 답변4373995419를 남기고 resolve했다. 최신 HEAD `1d92a3c0c`의 CodeRabbit **SUCCESS**, 실제 최신 리뷰가 `d49b1d139...1d92a3c0c` 11파일을 처리하고 신규 actionable0이라고 보고한 댓글6408048516을 확인했다. 전체 리뷰 스레드 재조회에서 미해결0건이며 초기1건은 resolved다. skip을 완료로 해석한 것이 아니다.
+- **완료·재개점:** 요청된 구현·누락 감사·CodeRabbit 전체 사이클·커밋·푸시를 완료했다. local/origin/PR head가 `1d92a3c0ce78ed813bfb8be9d50e7e4ccb280d30`으로 일치하고 checkout clean, PR Open/비Draft/미병합·3commits·11files·base release/v1.90.0를 확인했다. 개인 문서는 이 파일만 커밋·푸시한다. 실제 계정 기능 QA·팀 승인·병합·배포는 남아 있으며 별도 사용자 지시를 기다린다. 재개 시 실제 Git·PR·active writer를 다시 확인한다.
+
+## 후속 QA Viewer 선택지 정정·PR 갱신 — 2026-10-26 DL-17011
+
+- **정정 사유:** 사용자가 PM 의도는 병원과 동일한 드롭다운이며 Viewer가 남아 있는 것이 맞는지 지적했다. 최초 구현에서 기존 VIEWER 값 보존을 신규 선택 허용으로 확대한 판단은 잘못이었다. 기존 권한을 표시·미변경 저장하는 것과 새로 선택 가능하게 하는 것은 분리해야 한다. 아래 최초 구현의 5종 옵션·검증 결과는 요구사항 충족 근거로 사용하지 않는다.
+- **현행 근거 재확인:** Notion 기획은 Admin / Billing Manager / Manager / Member 4단계이며 Admin 그룹 멤버 수정과 포털 Members 동기화를 요구한다. DEV·STG `GET /codes/authority-type?serviceType=OFFICE` 공개 응답 모두 `OWNER / PAYMENT_MANAGER / EDITOR / MEMBER` 네 가지다. Clinic은 이 응답만 선택지로 사용한다. Clinic의 Viewer label helper나 API DTO의 VIEWER 타입 존재는 신규 Viewer 선택의 근거가 아니다. 기획의 기존 VIEWER 처리 방침은 여전히 Open이다.
+- **최종 구현:** Admin OFFICE 메뉴를 위 네 가지로 수정했다. `getEmployeeAuthorityLabel`은 목록·상세의 기존 Viewer 표시를 유지하며, 수정 Select의 `selectedOption`은 **OFFICE이고 현재 VIEWER인 경우에만** 현재값을 표시한다. DLOS는 메뉴를 options로만 렌더하므로 Viewer는 선택지에 없다. 기존 Viewer의 상태만 수정하면 VIEWER payload를 유지하고, 임의 권한 변환은 하지 않는다. LAB·ADMIN·서비스 정보 없음의 기존 메뉴/폼 동작, 회원 등록 제외, Admin 3파일 한정은 유지한다.
+- **커밋·원격:** 기존 `feature/DL-17011`에 **`d49b1d139088556c68d38bd1a55f16bddbd567d8`** (`fix: 어드민 치과 권한 선택지를 병원과 일치`)을 추가 커밋·푸시했다. [PR #4784](https://github.com/Innvoaid/dentlink-client/pull/4784)는 `release/v1.90.0` 대상 Open/비Draft/미병합이다. PR head·origin·local SHA 일치와 checkout clean을 확인했다. PR 전체는 commit2개·Admin3파일(+56/-14), 본문도 네 가지 선택과 Viewer 현재값 표시의 구분으로 수정했다.
+- **검증:** 실제 소스 평가로 OFFICE4종을 DEV·STG 코드 응답과 대조하고, Viewer 표시 전용 fallback·다른 서비스의 선택지/폼 보존·모킹한 기존 PUT의 EDITOR/MEMBER/VIEWER payload 보존을 확인했다. Admin 타입·변경파일 ESLint 오류0/기존경고8·Prettier·diff check·기존 DLOS Select 테스트4건 통과. 새 영구 테스트·보조 파일은 추가하지 않았다.
+- **필수 훅·리뷰:** 정상 pre-commit에서 Clinic/Lab/Admin 타입 통과. 정상 pre-push에서 3서비스 lint 오류0(기존경고226/184/393), Admin DLOS guard60/baseline60, guard9·shared config21·hooks32 tests와 coverage check 통과. 독립 리뷰 제안대로 현재값 fallback을 OFFICE/VIEWER로 제한하여 다른 서비스의 옵션 밖 값 동작을 보존했다.
+- **E2E·경계:** 최종 worktree 포함 독립 영향 검토는 NO_IMPACT. 기존 Billing/가입/온보딩 E2E의 Admin 접점은 직접 API 준비·정리 또는 서버 준비 확인이며 회원 수정 메뉴를 소비하지 않는다. 가드 해시 `0a6241196a7fa8abc7debb7073a2ed17c621b516` 기록과 push 전 check 통과. 실제 계정의 저장·재조회·포털 반영 QA 및 브라우저 E2E는 미실행이다. CodeRabbit 대응·병합·배포·Jira 변경은 하지 않았다. 다음 지시 전까지 PR 상태에서 대기하며 이 문서만 개인 컨텍스트에 커밋·푸시한다.
+
+## 최초 후속 QA 구현·PR 기록 — 2026-10-26 DL-17011 (Viewer 선택 보존 판단은 위 기록으로 정정)
+
+아래는 최초 구현 당시의 기록이며, Viewer 선택을 유지한 판단과 5종 옵션은 위 정정으로 대체한다.
+
+- **승인·완료:** 사용자가 앞선 요구/범위 설명 후 Admin 수정 구현·커밋·푸시·`release/v1.90.0` PR 생성을 명시 승인했다. OFFICE 회원 **수정과 목록·상세 표시**를 반영했다. 회원 등록은 추가 범위로 구분한 상태를 유지했으며 이번에는 수정하지 않았다. 아래 조사 단계의 구현 대기는 이 기록으로 대체한다.
+- **제품 위치:** 기존 `/Users/parkjongsun/Repository/dentlink-client` checkout에서 clean/active writer와 두 worktree 상태를 확인하고 원격을 갱신했다. 후속 QA base `origin/release/v1.90.0@f18b664c4367be419d70911eef1e4f0c3caa378d`에서 **`feature/DL-17011`**을 생성했다. 별도 worktree/프로젝트 폴더 없이 진행했으며 LBX `feature/DL-16387@f389c13cfbe497e0b864aa9399efafd9ecae305d`와 DLDS worktree는 유지했다.
+- **커밋·PR:** **`61b692a892cbe7e36307e2b586ed0d8845af68fd`** (`fix: 어드민 치과 회원 권한 선택과 표시 수정`)을 정상 훅으로 커밋·푸시했다. [PR #4784](https://github.com/Innvoaid/dentlink-client/pull/4784), 제목 `[DL-17011] 어드민 치과 회원 권한 선택과 표시 수정`, head `feature/DL-17011`, base `release/v1.90.0`를 재조회했다. Open/비Draft/미병합, commit1개·Admin3파일(+24/-4), head SHA와 원격 일치·checkout clean. 비변경 merge-tree 검사와 GitHub `mergeable=true` 확인은 충돌 부재 근거이며 CI/QA 완료 증거가 아니다.
+- **변경 파일:** `admin/src/common/utils.ts`에 서비스별 `getEmployeeAuthorityOptions`를 추가하고, `admin/src/lib/Employee/useEmployeeField.tsx`의 목록·상세 표시와 `admin/src/pages/employers/[employer_id]/employee/[employee_id]/edit.tsx`의 선택지에 함께 적용했다. OFFICE는 `OWNER=Admin / PAYMENT_MANAGER=Billing Manager / EDITOR=Manager / MEMBER=Member / VIEWER=Viewer`다. 다른 서비스·서비스 정보 없음은 기존 enum map을 그대로 반환한다. 공통 회원 필드를 재사용하는 그룹 상세·CRM 멤버 표에도 같은 OFFICE 표시가 적용된다.
+- **구현 판단:** 기존 Admin 구조가 고정 권한 목록이므로 API query 추가 대신 확정된 OFFICE 전용 목록을 기존 Admin map 유틸 파일에 두었다. 이로써 신규 파일·추가 네트워크/로딩/오류 동작 없이 기존 VIEWER 선택을 보존했다. shared 모델·Clinic/Lab/native·등록 화면·저장 API·초기값·상태/온보딩 payload는 변경하지 않았다. `employer.serviceType`은 기존 응답 필드를 이용하며, 미제공 시 임의로 OFFICE라고 추정하지 않는다.
+- **검증:** Admin 타입, 변경파일 ESLint 오류0/기존경고8, Prettier 및 diff check 통과. 외부 요청 없이 실제 소스 함수를 평가해 OFFICE5종·중복 없는 Member·VIEWER·LAB/ADMIN/SYSTEM/undefined의 기존 map 보존을 확인했고, 기존 Admin PUT을 모킹해 EDITOR/MEMBER/VIEWER의 권한·상태·온보딩 payload와 URL 보존을 확인했다. 새 영구 테스트/보조 파일은 추가하지 않았다.
+- **필수 훅:** pre-commit의 Clinic/Lab/Admin 타입 모두 통과. pre-push의 3서비스 lint 오류0(기존경고226/184/393), Admin DLOS guard60/baseline60, guard tests 및 shared config21·hooks32 tests와 coverage check 통과. 경고를 실패로 분류하거나 훅을 우회하지 않았다. 기존 소스의 env/auth 파일은 읽거나 변경하지 않았다.
+- **독립 리뷰·E2E 가드:** 코드 리뷰에서 추가 버그/회귀/불필요 구현을 발견하지 못했다. 현재 release의 `.codex/skills/e2e-guard/SKILL.md`를 적용하고 별도 읽기 전용 agent가 `origin/release/v1.90.0...HEAD + worktree`를 조사했다. **NO_IMPACT**: 기존 Billing/가입 E2E의 Admin 접점은 직접 API 준비·정리 또는 서버 준비 확인이며 회원 수정 UI를 소비하지 않는다. root가 해당 코드 근거를 확인한 뒤 `.git/e2e-guard/`에 판정과 변경 해시 `7992f2e1723f281acb1f035aa48e07af2967f912`를 기록했고 PR 생성 전 check 통과. E2E 수정0, 브라우저/실계정 E2E 미실행이다.
+- **남은 단계/재개점:** 요청된 구현·커밋·푸시·PR 생성은 완료했다. 실제 계정에서 OFFICE EDITOR↔MEMBER 저장·재조회·포털 Members 반영, VIEWER 및 LAB/ADMIN 회귀 QA는 미실행이다. PR CodeRabbit 대응·병합·서버 배포·Jira 상태/댓글 변경은 이번 실행에 포함하지 않았다. 다음 사용자 지시부터 진행하며, 제품 checkout writer/dirty/branch와 원격 PR을 다시 확인한다. 등록 화면 보완은 별도 범위로 남긴다. 개인 기록은 이 문서만 커밋·푸시하고 다른 세션 문서는 섞지 않는다.
+
+## 후속 QA 조사 완료·구현 대기 — 2026-10-26 DL-17011 Admin 그룹 회원 권한
+
+- **현재 요청/세션:** [DL-17011](https://innovaid.atlassian.net/browse/DL-17011), 상위 [DL-17010](https://innovaid.atlassian.net/browse/DL-17010). 새 세션 `01a17658-54e4-7b42-bd92-d0f790d7f2bd`에서 히스토리·작업내용 조사만 수행했다. 기존 메인 프로젝트 폴더를 사용하고 새 제품 worktree/프로젝트 폴더를 만들지 않았다. 제품 코드·branch·PR·Jira·배포 변경은 없으며 구현은 다음 사용자 지시를 기다린다.
+- **결론:** 확정 요구에 있던 **Admin 사이트의 OFFICE 그룹 멤버 권한 선택/표시 반영 누락**이다. Clinic 권한 UI와 공통 API 타입은 갱신했지만 Admin 수정 화면은 기존 고정 목록을 계속 사용했다. 보존 원본 feature부터 운영·master·stage까지 같은 코드여서, 확인한 이력에서는 구현 후 merge/cherry-pick 누락이나 후속 삭제/회귀 근거가 없다. 과거의 권한관리 전체 완료·배포 기록을 이 화면의 완료 증거로 사용하지 않는다.
+
+### 요구사항·QA 기록과 실제 관찰
+
+- DL-17011 본문/댓글은 비어 있다. 실제 요구는 DL-17010의 “OFFICE 그룹 회원 수정 화면에서 신규 권한 미노출, QA 때 완료한 것으로 확인했는데 관리자 수정 사항의 배포 누락인지 확인”이다. 댓글44629는 자동 확인요청 멘션이며 추가 요구가 아니다. 상위 fixVersion은 `v1.90.0`이지만 이 값만으로 구현 base를 정하지 않는다.
+- 원래 [권한관리 기획 정본](https://app.notion.com/p/3eace072e82f81aa955dc21cba5cf127), 최종 편집 **2026-10-22 15:59:44 KST**의 5번 “여정 밖 변경”에 **`[관리자] 그룹 멤버 수정 / 권한 드롭다운 Manager 추가, 포털 Members와 동기화 / 필수`**가 명시돼 있다. 8번 TC에도 **관리자 로그인 → 권한 드롭다운에서 Manager 저장 → 포털 Members에 동일 반영**, Desktop **✅**가 있다. 따라서 Admin을 처음부터 요구 범위 밖으로 제외했다고 설명할 수 없다. 다만 TC 체크의 테스트 시각·빌드·계정·실제 저장 증거는 없어, 무엇을 기준으로 통과했는지는 미확인이다.
+- DL-16317과 DL-16544가 연결한 [기존 알림센터 문서 8-1](https://app.notion.com/p/3c7ce072e82f811184a8e647444f01fd#e984570de2224ebdba3fd667a893cd51)에도 Admin 그룹 수정 TC가 있다. 이 문서는 현재 권한 정본으로 연결된다. 두 Notion 응답의 `truncated=true`는 각각 지원하지 않는 외부 객체/Drive 블록 1개를 포함하며 위 요구·TC 텍스트는 직접 읽었다. Figma direct tool은 이번 세션에 없어서 디자인 픽셀/원본 frame은 새로 검증하지 않았다.
+- DL-16319의 현재 설명과 이력 댓글은 Clinic/기공소 웹의 권한 제한을 중심으로 한다. 댓글의 Member/Admin 비교는 같은 치과 안의 **역할** 비교이며 Admin **사이트** 회원 수정 QA의 증거가 아니다.
+- 제보 환경은 **STG Admin** `https://stg-admin.dentlink.io/employers/2709/employee/3030/edit`, 제보 **2026-10-26 10:16:48.755 KST**다. 운영과 구분한다. 첨부31797은 권한 `Owner`가 선택된 닫힌 드롭다운이며 열린 옵션 목록은 찍혀 있지 않다. 첨부31798 콘솔에서 10:12~10:15의 직원 상세 GET 200, Next BUILD_ID `v37HJVRBldfUQgDFICLjb`를 확인했다. 직원 PUT/PATCH/DELETE와 `/codes/authority-type` 호출은 0건이며 `No stroke found!` 경고 1건 외 오류 로그는 없다. 첨부만으로 저장 실패나 신규 권한 저장 성공을 판정할 수 없다. 원문 로그의 개인정보는 체크포인트에 복제하지 않았다.
+
+### 코드·API 추적
+
+- 고정 소스: 웹 `/Users/parkjongsun/Repository/dentlink-client`, clean `master@c597f1fb3e7f5c03a76237926c3effad5bb84983`, upstream `origin/master`. 기본 checkout을 전환하거나 pull/fetch하지 않았다. 별도 DLDS detached worktree는 유지했고 로컬 LBX `feature/DL-16387@f389c13cfbe497e0b864aa9399efafd9ecae305d`도 변경하지 않았다. 앱 저장소는 이번 Admin 원인 조사에 불필요해 열지 않았다.
+- `admin/src/pages/employers/[employer_id]/employee/[employee_id]/edit.tsx`: 24~30행 기본값은 `authorityType=EDITOR`, 61~69행에서 서버 권한값을 그대로 폼에 넣고, **123행**은 `EnumMaps.EmployeeAuthorityTypeMap`을 options로 사용한다. 별도 resolver/권한 validation은 없다. 57~59행에서 `EmployeeApisAdmin.updateEmployee(values)`로 제출한다.
+- `shared/models/src/common/enum.maps.ts:43~48`은 **`OWNER→Owner / PAYMENT_MANAGER→Billing Manager / EDITOR→Member / VIEWER→Viewer`** 4개뿐이다. 신규 `MEMBER`가 없고 기존 `EDITOR`의 화면 이름도 Manager로 갱신되지 않았다. 신규 옵션만 추가하면 Member 표시가 두 개가 되므로 표시명 정합성도 필요하다.
+- `shared/models/src/employee/employee.apis.admin.ts:60~71`은 ID를 URL로 분리하고 `{status, authorityType, onboardingStep}`를 **PUT `/admin/employers/{employerId}/employee/{employeeId}`**에 전달한다. handwritten `employee.types.ts:70` 및 응답 DTO, generated `data-contracts.ts:6241`은 이미 `MEMBER`를 허용한다. 타입에 신규 권한이 있다는 사실과 UI에 선택지가 있다는 사실은 다르다.
+- 기존 MEMBER 회원은 폼 state에 MEMBER가 남지만 options에 항목이 없어 선택 표시가 비는 경로가 있다(`shared/dlos/src/components/Select.tsx:169~187,407`). 선택을 바꾸지 않은 제출은 state의 MEMBER를 그대로 보낸다. 이는 코드상 판단이며 실제 사용자 저장은 실행하지 않았다.
+- Clinic은 `useAuthorityTypeQuery`로 서비스별 코드 API를 사용하고 `office-member-authority.ts`에서 `OWNER→Admin`, `EDITOR→Manager`, `MEMBER→Member`로 표시한다. Clinic 저장은 별도 PATCH `/office/employers/own/employee/{employeeId}/authority`이므로 Admin PUT 검증을 대신하지 않는다.
+- **2026-10-26 12:57 KST 공개 API 읽기:** STG와 DEV `/codes/authority-type?serviceType=OFFICE`가 모두 200/`0000`, `OWNER=Admin / PAYMENT_MANAGER=Billing Manager / EDITOR=Manager / MEMBER=Member`를 반환한다. STG LAB 응답에는 MEMBER가 없다. DEV `/v3/api-docs`의 Admin PUT `UpdateEmployeeByAdminDto.authorityType`에도 MEMBER가 있다. STG `/v3/api-docs`는 404이므로 STG 쓰기 계약/실제 저장 수용 여부는 아직 미검증이다. 실제 env/auth 값 조회나 로그인·쓰기 API 호출은 하지 않았다.
+
+### 시간순 Git·배포 근거
+
+| 시점·근거 | 확인 사실 |
+| --- | --- |
+| 2025-11-10 `ec301cda9bb224381baa07c5400afa6e8093622f` / PR3359 | 공통 권한 map의 `EDITOR→Member` 설정. 현재 Admin이 그대로 사용한다. |
+| 2026-10-02 `f5a068e5000e266d6dde5af9c126038fd4158ea2` | Clinic 전용 helper/query에서 `EDITOR→Manager` 표시 변경. Admin 수정 없음. |
+| 2026-10-13 `d374b77e7286b218fb10e97033ee79c14a073161` | 공통 enum type에 MEMBER, Clinic helper에 MEMBER 표시 연결. Admin UI와 공통 map 수정 없음. |
+| 2026-10-16 [PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700), merge `047fcc585` | 원본 feature 최종 `f4bfaf1bf102a555ec6350aee97ea0a1ab2c7d05` 병합. 변경151파일에 `admin/`와 `enum.maps.ts` 없음. |
+| 후속 PR4706/4710/4716/4719/4736/4747/4750/4759 | Admin UI/map 변경 없음. 위9개 PR의 병합 커밋은 모두 운영 SHA 및 master의 조상이다. |
+| 운영 release/tag `a5e465561b953270b2925b2082845ba753f0572f` | 원격 `release/v1.89.0` 및 `prd/{clinic,lab,admin}/v1.89.0`와 일치. Admin [run40180269225](https://github.com/Innvoaid/dentlink-client/actions/runs/40180269225) completed/success, 10/25 18:20:56 시작, 배포job18:33:39 완료 KST. 실행 성공과 기능 QA는 구분한다. |
+| master `c597f1fb3e7f5c03a76237926c3effad5bb84983` | 운영 release를 포함하지만 Admin 해당 화면은 여전히 옛 map 사용. |
+| 제보 전 stage `a5ec733f6d591c4ca459b5afce83279e974f29a9` / 현재 stage `0749fc754` | 해당 폼·권한 map 동일. 현재 stage는 제보 후 10/26 11:48 KST PR4783으로 바뀌었다. 제보 전 SHA의 Actions 조회는 Lab Stage1건만이며 Admin run 없음. stage ref 자체를 제보 당시 Admin serving SHA로 취급하지 않는다. |
+
+- `git log --all -S MEMBER`로 공통 map에 MEMBER가 추가된 이력은 없었다. Admin edit 경로의 `-S/-G`, blame과 보존 원본 commit도 대조했다. 삭제한 브랜치를 복구하지 않았다.
+- Admin edit 파일의 blob은 `d374b77e / f4bfaf1bf / 047fcc585 / QA heads8200ba2·c5ff587·178a4ab / a5e465561 / c597f1fb / a5ec733f6 / 0749fc754` 모두 **`f2b168a2f8b3992f41515e1742bc81bfdc6b1552`**로 같다. 공유 map의 권한 항목도 이 revision들에서 같다. 이 증거가 최초 UI 반영 누락 판단의 근거다. 제보 BUILD_ID와 serving SHA 직접 대응은 미확인이다.
+
+### 최소 수정 제안·검증·다음 시작점
+
+- **확정 수정 목표:** Admin에서 OFFICE 회원을 수정할 때 기존 EDITOR는 Manager, 신규 MEMBER는 Member로 구분해 선택·표시·저장하고, 기존 MEMBER의 초기 선택 표시를 보장한다. 같은 흐름의 목록/상세(`admin/src/lib/Employee/useEmployeeField.tsx:101~116,187~201`)도 옛 map을 사용하므로 권한 표시를 함께 맞추는 것이 필요하다.
+- 기존 Admin `admin/src/services/code/hooks/useAuthorityTypeQuery.ts`와 상세의 `data.employer.serviceType`을 활용하는 방향을 우선 검토한다. 실제 OFFICE 코드 응답은 확인했다. 공유 map을 무조건 바꾸면 LAB/ADMIN 그룹까지 MEMBER 옵션이 생기므로 서비스 범위를 지켜야 한다. 코드 API에 없는 기존 VIEWER 값의 초기 표시/미변경 저장도 보존하고, 제거·마이그레이션은 별도 확정 없이 진행하지 않는다.
+- 인접 등록 화면 `admin/src/pages/employers/[employer_id]/employee/form.tsx:71~85`도 같은 옛 map을 사용한다. 이번 확정 TC는 수정 화면이므로 등록까지 포함할지는 구현 전 범위를 확인할 후보이며, 임의로 넓히지 않는다. 이번 작업으로 Clinic/Lab/native의 권한 정책을 다시 구현할 필요는 발견되지 않았다.
+- 구현 후 필요한 검증: OFFICE의 EDITOR/MEMBER 선택과 기존값 초기 표시, PUT payload·상태/온보딩 값 보존, 저장·재조회와 포털 Members 일치, 기존 VIEWER 보존, LAB/ADMIN 옵션 회귀 없음. 타입/정적 검증과 실제 STG 쓰기 QA를 분리한다. 이번에는 코드 수정이 없어 테스트/빌드/실계정 QA를 실행하지 않았다.
+- **미확인:** TC 통과 당시 환경·빌드·계정, 제보 당시 STG serving SHA, Admin PUT의 STG MEMBER 실제 저장. QA 통과 표시는 있으나 이를 재현/서버 반영 성공으로 승격하지 않는다.
+- **재개:** 사용자에게 조사 결과와 위 범위를 보고하고 구현 지시를 기다린다. 승인 후에도 기본 checkout의 active writer·dirty·branch·현재 release 통합을 다시 확인한다. 메인세션은 idle, DLDS/DL-17012는 active로 관찰되어 개인 기록은 이 문서만 수정하며 PROJECTS/HANDOFF/dentlink-fe와 다른 세션 변경을 섞지 않는다. 개인 컨텍스트만 별도 commit/push하고 제품 commit/push/PR/merge/deploy는 별도 승인 전 수행하지 않는다.
+
+## 완료 업무 로컬 작업 공간 정리 — 2026-10-26
+
+- 사용자 승인으로 권한관리·Billing 완료 업무의 불필요한 Repository 폴더만 정리했다. 디자인시스템·env 세션과 작업 공간은 유지했다. 신규 구현·QA·Jira·배포는 없다.
+- **제거한 worktree 3개:** `dentlink-client-permission`(178a4ab67), `dentlink-app-permission`(e4fb1aca), 웹 내부 `.claude/worktrees/pr-4700-review-f03f94`(detached10c30e3c). 미커밋/미추적 코드·사용 프로세스 없음과 관련 변경의 운영 Git 보존을 확인했다. 리뷰 source55ad768d도 최종f4bfaf1bf의 조상이며 관련 수정3가지가 운영 코드에 남아 있다.
+- **파일 보존:** `/Users/parkjongsun/.local/share/codex-closeout/20261026-permission-folders/files/`에 env21개(웹 빌드3·과거 리뷰9·Office9), Office debug keystore1개, 리뷰 로컬 설정1개, coverage baseline2개를 보존했다. 내용 조회/복사 없이 같은 파일시스템 rename으로 옮긴 뒤 inode·크기·mtime 일치를 확인했다. 폴더0700/파일0600이며 상위 `manifest.json`에 원래 경로와 정리 결과를 기록했다. 이 파일들은 개인 문서 push에 포함되지 않으며 필요시 사람이 설정을 확인해 복원한다.
+- 두 permission 경로의 watchman 감시만 해제했다. 공용 Watchman·기본 앱 node_modules·다른 감시는 유지했다. 재생성 가능한 빌드/의존성 캐시를 제거했고 기본 웹·치과 앱·기공소 앱 저장소는 보존했다.
+- **이번 브랜치 삭제는 없다.** 웹 `feature/v1.89.0-qa`, 과거 로컬 리뷰 branch, Office4개 feature·Lab3개 QA refs 및 기존 복구 bundle을 유지했다. 앱 OTA exactSHA/전 기기 QA의 미확인 경계도 유지한다.
+- 원격 웹 master는 `c597f1fb3e7f5c03a76237926c3effad5bb84983`(PR4776)으로 release a5e465561을 포함한다. 어제 남아 있던 원격 통합은 이후 완료됐다. 기본 로컬 master8772d6882는 clean/40behind이며 이번에는 fetch만 했다.
+- 새 요청 시 기본 저장소의 live Git부터 확인하고 필요한 worktree를 다시 준비한다. 기존 Sheet/타입·기기 검증 한계는 아래 이력에 보존하며 이번 정리로 새 필수 후속을 만들지 않는다. 개인 기록을 저장·푸시한 뒤 대기한다.
+
+## 운영 배포 확인·완료 브랜치 정리 — 2026-10-25
+
+- **범위:** 메인 세션에서 사용자가 승인한 배포 후 정리의 담당 세션으로 재개했다. 1단계 읽기 확인·복구 준비 후, 순번이 열린 2단계에서 검증된 웹 완료 refs만 삭제했다. 새 제품 구현/PR/병합/배포/쓰기 QA·번역 Sheet 작업은 하지 않았다.
+- **웹 운영 포함:** `prd/clinic/v1.89.0`, `prd/lab/v1.89.0`, `prd/admin/v1.89.0` 및 원격 `release/v1.89.0`은 **a5e465561b953270b2925b2082845ba753f0572f**. 권한관리·후속 PR **4700/4706/4710/4716/4719/4736/4747/4750/4759**의 병합 커밋이 모두 운영 이력에 포함됐다. 마지막 QA 이후 겹친 제품 파일의 변경은 Lab 태블릿/WebView 레이아웃 보완이며 권한 차단을 되돌리지 않았다. 생성 계약의 권한 관련 변경도 발견되지 않았다. 담당 열린 PR은 없다.
+- **배포 근거:** Clinic run40180395283은 18:51:26 KST, Lab40180309291은18:33:03, Admin40180269225는18:33:40에 completed/success. 모두 위 SHA이며 Clinic 서울·오하이오 배포와 circuit-breaker rollback 검증 성공. Lab/Admin의 별도 ECS 태스크 실측과 이번 운영 실계정 기능 QA는 하지 않았다. Actions 성공을 모든 기능/기기 QA 완료로 확대하지 않는다.
+- **앱 운영 관찰:** Office PR329/331/332/333은 운영 Git에 반영, main `49031ad64983715f87f92b4998284da1dbae7c23`과 release/v2.2.4의 tree가 같다. 양OS **Production v84/2.2.4** 활성·mandatory100%이며 각OS 패키지는 Stagingv341과 같다. Lab PR19/21/23도 반영, 원격 main/develop/release/v1.0.5가 **51441039751b63a08c82a1be9695c805c8af1539**, 양OS **Production v17/1.0.5** 활성·mandatory100%이고 각OS 패키지가 Stagingv47과 같다. OTA 설명이 비어 있어 **패키지와 정확한 Git SHA 직접 대응은 미확인**이며 모든 실기기 QA/스토어 배포까지 확인한 것은 아니다. 세부 기록은 각 앱 정본을 따른다.
+- **Jira:** DL-16317 하위 사용자 담당22건(16319/16751/16752/16848/16849/16850/16851/16852/16855/16857/16858/16859/16864/16867/16880/16881/16882/16904/16907/16917/16927/16929)과 별도 **DL-16916/16854** 모두 이미 **Done**임을 실조회했다. 상태·댓글·본문을 중복 변경하지 않았다. DL-16850의 조사 후 구현 제외와 DL-16916 동일 데이터 실화면 QA 미수행 경계는 유지한다.
+- **삭제 완료:** 정확한 SHA·PR 작성자 jongsunP/병합 상태·운영 포함·열린 PR head/base 부재·worktree 미사용을 재확인했다. 원격7개는 expected-SHA lease와 atomic push로 삭제하고 부재를 확인했다. 로컬8개는 expected-SHA transaction으로 삭제했다. 정상 pre-push 검증은 우회하지 않았다. 삭제 목록은 다음과 같다.
+
+| 브랜치 | 삭제 전 SHA | 정리 범위 |
+| --- | --- | --- |
+| `feature/DL-16317` | `f4bfaf1bf102a555ec6350aee97ea0a1ab2c7d05` | 로컬·원격 |
+| `feature/DL-16317-api-permissions` | `5bdad60e6da17a8a533622498ba334c9ad952eb1` | 로컬·원격 |
+| `feature/DL-16317-dentist-warning` | `e28b9c7e8ad37841baadde958ef088b6668a2343` | 로컬·원격 |
+| `feature/DL-16317-payment-banner` | `20be3ee65078f7b8c0be335e2bd421c85104b4d5` | 로컬·원격 |
+| `feature/DL-16317-qa` | `8200ba2ffc42dd091d6a8634486f3f1e0e65279a` | 로컬·원격 |
+| `feature/DL-16317-qa2` | `c5ff587b9150a1111bde5ffa8d868668a1acf62d` | 로컬·원격 |
+| `feature/DL-16880` | `108e98eccfaca989c2966acb1a7a0c3180224478` | 로컬·원격 |
+| `feature/DL-16882` | `bdbe43fb14bb63dfcbad8e2ff91c8ab5623f77a1` | 로컬만 |
+
+- **복구:** `/Users/parkjongsun/Repository/dentlink-client/.git/codex-closeout/permission-web-production-20261025/`의 `permission-web-branches.bundle`과 `manifest.json`에 원본8개 refs·소유/PR·SHA·정리 결과를 보존했다. bundle verify·8head 일치·SHA256 **19288c12035498a259f26abd4f2b6521ac594d43581cfd75ebf843c41012b551** 검증. 운영 태그 이력을 prerequisite로 하는 **로컬 증분 백업**이며 독립 clone용은 아니다. local-only16882는 운영 이력의 조상으로 manifest SHA에서 복구 가능하다. 새 env/인증 백업이나 파일 이동은 없었다.
+- **보존:** 현재 웹 `feature/v1.89.0-qa@178a4ab6745a81abc1ed56bae8bc7496b402775d`는 로컬·원격과 `dentlink-client-permission` worktree를 함께 보존했고 clean이다. `.next/standalone` 내 실제 env가 있어 해당 빌드 폴더를 포함한 worktree 전체 삭제는 하지 않았다(파일명 존재만 확인, 값 미조회). Office4개 feature refs/worktree, Lab3개 QA refs/기본checkout은 OTA exactSHA 미확인 경계에 따라 보존. 보호 브랜치/태그·기존 recovery refs·타 세션/리뷰 공간도 유지했다.
+- **별도 후속·재개:** 원격 웹 master는 여전히 `8772d68825cac6e23792d86a715153a67dc71078`로 release→master 통합이 남아 있으며 이 세션은 병합하지 않았다. Lab **웹** 번역 `detail.empty.accessDenied`/`detail.empty.goHome` Sheet 동기화 보류와 Lab **앱** 과거 전체타입11진단의 해결 여부는 미확인으로 보존한다. 배포 실패나 새 권한 QA 미완료로 재분류하지 않는다. 지난 Clinic/Admin 조사에서 FE의 토큰무효 응답 기반 로그아웃은 공통이며 BE 권한변경 시 세션폐기 정책은 미확인이라는 결론도 유지한다. 새 QA/명시 지시가 오면 정본·해당 원격을 갱신해 재개하며, 이번 개인 기록 commit/push 후 담당 세션을 보관한다.
+
+## 치과 앱 추가 전달 완료 — 2026-10-22 DL-16929 / Staging v340
+
+- **사용자 확인·종결:** 이후 사용자가 치과 앱 스테이징 **v340 적용과 수정 결과를 직접 확인**했다고 전달했다. DL-16929는 현재 **완료** 상태인 것을 실조회하여 그대로 유지했다. 실제 사용자 확인 완료로 갱신하되 OS별 전수QA로 확대하지 않는다. 추가 코드·배포·Jira 변경 없이 개인 기록 commit/push 후 새QA/지시 전 대기한다.
+- 사용자가 Lab DL-16904와동일한Office간격문제의코드확인후수정·검증·커밋푸시·PR병합·CodePush·별도Jira생성을명시승인했다. Office최신develop의연속템플릿0px을4px로1줄보완했고날짜/프로필10px과권한/API/버튼은유지했다. 기존권한변경으로생긴문제가아닌공통메시지표시결함이다.
+- **feature/DL-16929@e4fb1ac** → [Office PR333](https://github.com/Innvoaid/dentlink-app/pull/333) → **develop@7e6663be17fb4bd7aed62bc2824e6bd362208dc6** 스쿼시병합완료. 기존19tests·변경lint오류/경고0·버전2.2.4·독립검토통과, native/의존성변경0. 새제품파일/테스트추가없음.
+- 통합소스를 **Android·iOS Staging v340 / 대상2.2.4 / 활성·mandatory100%**로게시하고서버metadata/source·bundle map의src341파일씩일치확인. Lab/웹/DEV/Production·태그·스토어배포는변경하지않았다. 세부근거는 [Office기록](../dentlink-app.md) 최상단참조.
+- DL-16317 하위별도카드 **[DL-16929](https://innovaid.atlassian.net/browse/DL-16929)** 생성·Frankie담당·배포후 **READY FOR QA**, 원본DL-16904와DL-16916의Done은유지. 부모/기존카드댓글과Slack쓰기는없다. 요청된작업은완료이며실기기시각QA는미수행으로구분한다. 원본checkout/브랜치보존·clean, 개인기록commit/push후추가지시/QA결과전대기한다.
+
+## 최종 마감·대기 — 2026-10-22 오늘 Jira 알림 확인 및 DL-16916 Done 유지
+
+- **오늘 알림 확인:** Jira 직접 알림의 오늘 카드 7건과 관련 댓글만 확인했다. DL-16927/16917/16904/16882/16907/16881은 조회 당시 **완료**, DL-16916은 **READY FOR QA**였다. 이후 사용자가 DL-16916을 직접 Done으로 변경했다고 알렸으며 **Done 유지**를 명시했다. 오늘 확인한 범위에 새 미처리 개발 요청은 없었다. 모든 프로젝트·과거 알림의 전수 완료로 확대하지 않는다.
+- **처리 카드:** DL-16916 공통 Combobox 선택 유지, DL-16882 치과 선택 해제/변경 후 환자 검색·단계 초기화, DL-16881 Lab cut-off 접근 제한·로그인 유지, DL-16907 Lab 제한 주문 LinkTalk 접근 시 불필요한 로그아웃 방지, DL-16904 Lab 템플릿 간격4px, DL-16917 Lab Android 특수문자 파일명 다운로드, DL-16927 Office 동일 다운로드 보완. 실제 구현·검증·병합·배포 근거는 아래 각 절을 따른다.
+- **원인 구분 확정:** 사용자가 비교한 번호는 DL-16552가 아니라 **DL-16882**였다. DL-16916은 기존 Combobox 선택값/검색 결과 결합의 취약점이 DLDS 통합의 focus 복귀로 실제 드러난 회귀이므로 **DLDS 변경 영향**으로 분류한다. DL-16882는 master에도 있던 제품 환자 폼·조회 상태 처리 문제다. 같은 화면/선택 해제 과정에서 함께 발견됐지만 원인과 수정 위치는 다르다.
+- **DL-16916 검증 경계:** 이전 원본에서 회귀3건 실패→수정 후 DLDS18파일/159테스트 및 DLDS·Clinic·Lab·Admin 타입 통과, 실제 사용처/유사 UI 검토와 스테이징 배포까지 완료했다. 사용자는 스테이징에 DEV와 완전히 같은 데이터가 없어 원래 조건의 실제 화면 재확인을 하지 못했다고 설명했다. **동일 데이터의 스테이징 재현 QA는 미수행**이며 Done을 실제 화면 QA 성공으로 해석하지 않는다. 현재 확인된 추가 결함이나 반드시 선행할 FE 조치는 없고, 이 미확인 범위만 보존한다. QA용 데이터 생성·BE 문의·카드 재오픈을 자동 과제로 만들지 않는다.
+- **마감/재개:** 이번에는 제품 코드·브랜치·Jira 상태·댓글·배포를 변경하지 않고 개인 기록만 commit/push한다. 기존 worktree/브랜치를 보존하고 추가 QA·조사·모니터링 없이 대기한다. 사용자가 새 QA 결과나 재개 지시를 주면 컨텍스트와 해당 저장소를 갱신하고 제보 범위부터 재개한다.
+
+## 치과 앱 후속 전달 완료·대기 — 2026-10-22 DL-16927 / Staging v339
+
+- **최종 사용자 확인:** 기공소 앱 수정 결과는 사용자가 직접 확인했다고 전달했다. 치과 앱은 직접 실행 확인하지 않았으나 develop 병합·동일 통합 소스 Staging CodePush 완료를 기준으로 작업 마감을 수용했다. **양 앱의 요청된 개발·전달 작업은 완료이며 현재 추가 필수 FE 조치는 없다.** Lab 사용자 확인 완료와 Office 실기기 QA 미수행은 구분해 보존하고, Office 추가 QA를 세션의 필수 잔여 작업으로 강제하지 않는다. 이번 정리에서는 제품/Jira/배포 변경 없이 개인 기록만 commit/push하며 새 지시/문제 제보 전 대기한다.
+- Lab DL-16917과 같은 Android 파일명 URI 문제를 최신 Office develop에서도 확인하여 사용자 요청으로 동일 최소 수정(1파일+4/-1)을 적용했다. 권한·특정 화면에 국한되지 않으며 공통 다운로드 로직을 사용하는 Android 경로에 해당한다. 일반 파일명/확장자/중복 처리와 iOS/API/권한은 유지한다.
+- Office **feature/DL-16927@b2e29d3** 커밋·푸시, [PR332](https://github.com/Innvoaid/dentlink-app/pull/332) 생성 후 사용자 별도 병합 승인에 따라 **develop@1f89d867861ed77eb6fca48a71e0d99f5999dca4**로 15:06:20 KST 스쿼시 병합 완료. 기존 권한 작업과 동료 비밀번호 찾기 PR330 보존. 50 tests·파일명/URI·버전·diff 검사 통과, 기존 타입18진단·파일lint1error/29warnings에서 신규진단0.
+- 통합 소스를 Office **Android·iOS Staging v339 / target2.2.4 / 활성·mandatory100%**로 전달하고 서버 metadata/source를 확인했다. 원본 worktree symlink 의존성으로 첫 번들 실패(업로드 전)는 격리 archive+immutable 설치로 해소, 자체 앱 소스맵343파일씩 원본과 일치한다. 웹/Lab/Production/Development 변경 없음. 세부 원인·복구·로그·해시는 [Office 기록](../dentlink-app.md) 최신 절 참조.
+- 별도 치과 Jira **DL-16927 READY FOR QA**, 댓글 없이 상태 정리. 접수 시 기존 Lab DL-16917 및 부모 DL-16317이 이미 완료 상태인 것을 실조회했으며 그 상태를 되돌리지 않았다. Office 원본 checkout은 feature/DL-16927 clean·origin 동일, 기존 branch/worktree 보존. 개인 기록 commit/push 후 사용자 요청대로 대기하며, 다음은 실제 Android2.2.4/v339의 다운로드 QA 결과 접수다. 실제 기기 적용/QA는 아직 미수행이고 추가 BE 확인은 없다.
+
+## DL-16917 Lab 스테이징 전달 완료 — 2026-10-22
+
+- 사용자 승인으로 [Lab PR23](https://github.com/Innvoaid/dentlink-lab-app/pull/23)을 **release/v1.0.5**에 14:41:09 KST 스쿼시 병합했다. 통합SHA **b175d5f3f79ca370e3fb2ee770d6cb8713661c79**, 기존 검증 QA head06e8dfd와 전체tree 동일·버전1.0.5 확인. native/의존성 변경 없음.
+- 통합 릴리즈 소스로 Android·iOS **Staging v42**, 대상 **1.0.5**, 활성·mandatory·rollout100% 게시 및 서버 metadata/source 재조회 완료. Android14:42:24/iOS14:43:02 KST. 기존v41을 수동비활성화하거나 롤백하지 않았다. Slack 알림 없이 직접 CLI를 사용했다.
+- Jira **DL-16917 READY FOR QA** 상태만 변경. 이번 원인은 권한이 아닌 Android 파일명의# URI 해석이며 사용자도 이해/계속 진행을 확인했다. 웹 수정/배포·Office 변경·추가 BE 문의는 없다. iOS 동작은 유지하고 같은 릴리즈 소스만 맞췄다.
+- Lab checkout은 QA/DL-16917@06e8dfd로 복귀, clean·origin 동일·기존브랜치/worktree 보존. 개인 기록 commit/push 후 대기. 남은 일은 실제 Android1.0.5/v42 수신·재시작 후 제보 주문7000012231의 이미지 다운로드 QA다. 자세한 전달/검증은 [Lab 기록](../dentlink-lab-app.md) 최상단 참조.
+
+## 추가 QA DL-16917 처리·Lab PR23 완료 — 2026-10-22
+
+- 사용자가 추가한 Android·주문7000012231/승인2038·이미지 확대 다운로드 실패 정보를 기준으로 재개했다. 실제 승인 페이지의 파일명 `JB+Crown+Insert+#18.jpg`를 확인했고, Android 다운로드 라이브러리가 #를 file URI fragment로 해석한 뒤 원래 경로로 파일 존재를 검사하는 결함을 찾았다. 사용자 권한에 따른 다운로드 차단 문제가 아니며 추가 BE 정책 질의는 필요하지 않다.
+- Lab `/Users/parkjongsun/Repository/dentlink-lab-app`, **QA/DL-16917@06e8dfde967502a4830e9a93c018ce150702dc7c** → **release/v1.0.5** [PR23](https://github.com/Innvoaid/dentlink-lab-app/pull/23), 커밋·푸시·세션 연결 완료, clean·origin 동일. Android 전용 파일명 생성에 #/% 정규화와 원인 주석만 추가(1파일+4/-1). 일반명·확장자·중복번호·iOS/API/권한·동료 소스는 유지한다.
+- 기존 관련3suites/37tests·diff검사 통과, 독립 리뷰 추가결함0. 전체타입 기존11진단과 동일, 해당파일lint 기존1error/29warnings와 동일로 신규진단없음. 실제 Android 기기 다운로드 성공은 아직 재검증하지 않았으며 코드 수정/URI 경로 비교와 구분한다.
+- Jira16917 **Ready for Deploy** 상태만 변경했다. 댓글/본문·Slack 쓰기, 웹/Office 변경, 제품 병합·CodePush·배포는 하지 않았다. 조사 중 대기했던 OS/증상 질문은 답변 완료로 종결한다. 다음은 사용자 PR검토·병합·배포 후 해당 Android 다운로드 QA다. 자세한 원인/검증은 [Lab 기록](../dentlink-lab-app.md) 최상단 참조.
+
+## 전달 완료·QA 대기 — 2026-10-22 웹 Stage·Lab Staging v41
+
+- **마감 확정:** 사용자가 QA 결과가 나오면 직접 알려주겠다고 했으므로 여기서 대기한다. Jira/Slack/배포/E2E를 자동 재조회하거나 추가 수정·배포하지 않는다. 재개 시 개인 컨텍스트와 해당 제품 원격을 갱신하고, 전달된 QA 카드·댓글 및 실제 배포 소스를 확인한 뒤 그 범위만 처리한다. 기존·동료 앱 타입 오류11건은 기록된 별도 후속이며 지금 자동 착수하지 않는다.
+- **사용자 지시:** 웹PR4759를 직접release에병합한뒤 기존스테이징프로세스로웹배포를명시요청했다. 이어Lab메시지간격4px확인/추가수정불필요, 앱PR스쿼시병합·스테이징CodePush·Jira상태·메모정리까지승인했다. 앞선PR까지만경계는이범위에서대체됐다. Office앱과Production은대상아니다.
+- **웹 병합:** PR4759는12:08:25 KST `release/v1.89.0@909b90566646d483e9f0ab6d0bca7013c121c6c5`에사용자병합됐다. oldstage `bd1c0153af81748e2e96374f1f6ff14209f704a4` tree는이전release bda64fd28와같았고stage고유변경없음. local recovery ref `refs/recovery/stage-before-reset-20261022-permission-qa3`에보존후expectedSHAlease로원격stage삭제→최신master `8772d68825cac6e23792d86a715153a67dc71078`에서재생성했다. 최신release전체에는동료4754/4755도포함된다.
+- **웹 전달:** [PR4760](https://github.com/Innvoaid/dentlink-client/pull/4760) release/v1.89.0→stage 생성·세션연결, guard/verify통과후12:21:33 KST squash병합. 최종stage `1701952af0fe8002398fbdb31bd3fe8120dc9256` 전체tree=release909b90566 확인. 공통DLDS수정이있어3서비스모두실행확인: [Office run39716391008](https://github.com/Innvoaid/dentlink-client/actions/runs/39716391008)(12:21:36), [Lab39716391030](https://github.com/Innvoaid/dentlink-client/actions/runs/39716391030)/[Admin39716391072](https://github.com/Innvoaid/dentlink-client/actions/runs/39716391072)(12:21:37). 시작15분이후첫결과를확인했다. Lab12:32:59/Admin12:34:17배포job성공, Clinic서울12:42:22/오하이오12:48:30배포·안정화·rollback검증성공. Clinic자동E2E는마감시진행중이며이번범위밖으로기다리거나수정하지않았다.
+- **서버 관찰 경계:** 최종3개공개루트모두HTTP200. BUILD_ID는Clinic Chnwe5NJnmgn0tCJphBjR/Lab IgzVRd4RhH8nge9d7MUVo/Admin qyVaKJcnqI_ZhTOhrTjdQ. Clinic의ECS안정화/새taskDefinition확인은workflow가수행했다. Lab/Admin workflow는wait-for-service-stability=false이므로Actions성공+공개응답을확인한범위이며별도AWS태스크실측·BUILD_ID와SHA의직접대응까지확정한것은아니다. 로그인화면/전체기능QA통과로확대하지않는다.
+- **Lab 전달 완료:** 동료PR22 최신생산목록을유지한release에PR21스쿼시병합→통합 `e4b6277018e237d7ef981eba6266a7f01749866a`, 양OS Staging **v41/대상1.0.5/활성/mandatory100%** 게시·source설명재조회완료. 4px는사용자가확인한값이다. 버전검사·기존5suites56tests·양OS번들성공. 전체타입은기존5+동료22생성모델참조6=11진단으로실패(우리2파일무관), 세부원인/후속은 [Lab기록](../dentlink-lab-app.md)최상단참조. 동료코드임의수정없음.
+- **현재 Jira:** 웹16882/16916·앱16904/16907 모두 **READY FOR QA**로상태만변경완료. 기존16881 READY FOR QA유지. 댓글/본문/Slack직접쓰기없음. PR4760의배포확인체크만완료로갱신했다.
+- **보존/남은일:** 웹feature/v1.89.0-qa@178a4ab67, Lab QA/DL-16907@093cc67 원래checkout·branch/worktree보존,양쪽clean·origin동일. 새제품수정/추가커밋없음. 사용자가16907자동로그아웃방지까지포함됐는지물어코드·v41배포포함과실제현상해소QA미확인을구분해답했다. 다음은웹치과선택유지/치과전환환자단계, 앱4px간격/타기공소LinkTalk조회전용·로그인유지/정상읽음QA다. 기록commit/push후새지시나QA전까지대기하며실기기검수·추가모니터링·재배포·브랜치정리를자동진행하지않는다.
+
+## 최신 마감 — 2026-10-22 QA·DLDS 후속 PR 완료, 사용자 병합·배포 대기
+
+- **승인/경계:** 사용자가 기존 QA부터 마무리하고 DLDS 공통 수정·유사 UI 확대 점검·카드 관리를 함께 진행하도록 승인했다. 이어 최신 Jira 댓글·알림까지 재확인하고 웹·앱 모두 PR까지만 진행, 실제 병합·배포는 직접 확인 후 하겠다고 명시했다. 이번에 병합·CodePush·서버 배포·실기기 QA는 하지 않았다. Slack 쓰기와 Jira 부모/기존 카드 댓글 쓰기도 없음.
+- **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 최신 `origin/release/v1.89.0@bdbe43fb1`에서 `feature/v1.89.0-qa` 생성. 기존 feature/DL-16882와 다른 보존 브랜치는 유지했다. `cdce65134`(DL-16882 치과 변경 시 초기 신규 환자 단계 잠금 해제), `178a4ab67`(DL-16916 공통 Combobox 선택 보존·회귀 테스트)을 별도 커밋·푸시. [PR4759](https://github.com/Innvoaid/dentlink-client/pull/4759) → **release/v1.89.0**, 4파일(+243/-14), head `178a4ab6745a81abc1ed56bae8bc7496b402775d`. 작업트리 clean·원격 동일.
+- **DLDS 원인/수정:** 아래 실측대로 검색 응답에서 선택 ID가 빠질 때 포커스 복귀 뒤 blur가 선택을 해제했다. Combobox의 현재 value와 일치하는 마지막 선택만 보존하고 최신 options를 우선한다. 직접 clear·다른 입력 후 blur·부모 value 초기화·다른 ID 변경은 유지한다. 공통 focus 복귀를 되돌리거나 병원별 예외를 추가하지 않았다. 기존 테스트2파일에 8건만 추가, 새 테스트/스토리 파일 없음.
+- **확대 점검:** Dropdown 외 TextInput/InputBase/Password/Checkbox/Radio/Switch/Segment/ButtonGroup/Tabs/Category/Chip/Button, Calendar/DateField/DateRange/Stepper/Slider, Modal/Popup/Portal/Backdrop/Tooltip 및 실제 사용처를 이전 구현과 대조했다. 추가 확정 회귀 없음. 전체 제품 화면·기기 QA 완료를 의미하지 않는다. 패키지 npm 게시/Studio 반영은 이번 작업에 포함하지 않았다.
+- **웹 검증:** 원본에서 선택 유지 회귀 3건 실패 확인 → 수정 후 DLDS **18 files/159 tests** 전체 통과. DLDS 타입, Clinic/Lab/Admin 타입, 기본 커밋·푸시 훅(lint·Admin DLOS guard·shared coverage)과 diff 검사 통과. 기존 lint 경고는 남아 있으며 전체 경고0으로 보고하지 않는다.
+- **Lab 앱:** `/Users/parkjongsun/Repository/dentlink-lab-app`, `QA/DL-16907` → **release/v1.0.5** [PR21](https://github.com/Innvoaid/dentlink-lab-app/pull/21). base `c240548`, 별도 커밋 `04df3b0`(타 기공소/소속 미확인 LinkTalk 입력·읽음·낙관적 읽음 제한), `093cc67`(템플릿 간격 4px). 현재 head `093cc67c4721b637a766387f5cbc6f5dc752c88e`, clean·원격 동일, 2파일(+98/-43). 자동 PR 제목 변경 후에도 base/head/2파일 범위를 재확인했다. Office 앱 추가 변경 없음.
+- **Lab 검증:** 변경파일 ESLint 오류/경고0, 기존 **4 suites/33 tests** 통과, diff 검사·독립 리뷰에서 새 확정 결함 없음. 전체 타입은 기존5진단(Icon2/Tooltip1/order1/MessageText1)으로 실패, 변경파일 진단0. 실기기 로그아웃의 실제 실패 API를 재현한 것은 아니며 전역 fetcher/인증 예외는 추가하지 않았다.
+- **DL-16904 최신 판단:** Mimi 댓글44590(10/22 11:10)은 새 디자인이 아니라 라이브 간격 복원 요청. main@bb619010 및 v1.0.4 계열 태그도 템플릿은10/0px이고 일반 메시지만4px이어서, 4px을 라이브 확정값이라고 설명하지 않았다. 사용자에게 차이를 설명한 뒤 **“4px 보완을 PR에 유지하고 배포 후 QA”** 답변으로 승인받았다. PR21 본문에도 근거/승인/배포 후 QA를 기록했다. 새 BE 질의나 디자인 대기를 blocker로 남기지 않는다.
+- **최신 Jira 확인:** DL-16317 하위52개 전체 목록, 부모 포함42카드 댓글95개와 DLDS부모 DL-16437 하위7개·최신 댓글을 대조했다. 과거 디자인11개는 최신 갱신이 없고 API 일시 제한도 있어 댓글 재조회를 생략했다. Chrome Jira 알림의 직접/관찰 탭에서10/22·10/21 멘션/알림을 실제 확인했다. 16904/16907/16882/16881 및 이미 종결된16880/16876/16874 외 새 FE 요청 없음. 과거 모든 알림의 전수 완료로 확대하지 않는다.
+- **Jira 관리:** DLDS 부모 DL-16437 하위 [DL-16916](https://innovaid.atlassian.net/browse/DL-16916) 생성(Frankie, fixVersion v1.89.0). DL-16882/16916/16904/16907은 **Ready for Deploy**, 기존 DL-16881은 **READY FOR QA** 유지. 새 카드 본문과 상태만 정리했으며 기존 카드 댓글/본문을 덮어쓰지 않았다. 16904의 배포 후 알림 요청은 실제 배포 이후 사용자 지시에서 처리한다.
+- **다음:** 사용자가 웹 PR4759·Lab PR21을 확인해 병합·배포한다. 배포 후 치과 선택 유지/치과 전환 환자 단계, 타 기공소 조회 전용·로그인 유지/내 기공소 읽음·빠른 나가기, 템플릿4px 간격을 QA한다. 기존 Staging v39에는 오늘 PR21의 후속 수정이 포함되지 않는다. 추가 자동 리뷰·병합·배포·모니터링 없이 대기한다.
+
+## 조사 우선 전환 — 2026-10-22 치과 선택 후 외부 클릭 초기화
+
+- 사용자가 기존 Jira 작업을 잠시 정리/보류하고 Chrome 일반 DEV·시크릿 master의 치과 선택 초기화를 조사해달라고 요청했다. 기존 웹 feature/DL-16882의1파일(+5), Lab QA/DL-16907의2파일(+98/-43) 미커밋 수정을 그대로 보존했고 이 턴에서 제품 코드는 변경하지 않았다. Jira 상태/본문/댓글·Slack·제품커밋/PR/배포 변경 없음.
+- **실측:** 일반Chrome `https://dev-lab.dentlink.io/orders/create`, Leo Oh 관리자/Leo's lab에서 Leo Dentistry(id186) 선택 직후 환자 목록이 정상 표시되고 바깥 클릭 후 치과선택·환자영역이 초기화된다. Daniel Rudolph, D.D.S.도 같은 선택 해제를 확인했다. Joy's Office는 외부클릭 후 유지된다. 주문 제출/환자 생성은 하지 않았다.
+- **검색 응답:** 선택 직후 GET `/lab/employers/own/clients?officeName=Leo%20Dentistry`는 code0000/data에 id1391 `Leo Dentistry 2`만 있고 id186이 없다. Daniel 전체이름 검색은 code0000/data[]다. DevTools Preview로 직접 확인했으며 왜 BE 검색에서 빠지는지는 아직 조사하지 않았다. 무검색 목록에는 두 치과가 존재한다.
+- **master 대조:** 시크릿 `http://127.0.0.1:3005/orders/create`에서 같은계정 Leo Dentistry선택/외부클릭유지확인. 동일DEV API검색응답도 id1391만으로 같았다. port3005 PID35741 cwd는 dentlink-client/lab이며 해당root는 master8772d688/origin동일·clean이다. 따라서 데이터차이만으로 DEV/master의동작차이를설명할수없다.
+- **확인된 FE 메커니즘:** ComboboxDropdown 선택시 onChange(id)+onSearchChange(label)로 재검색→options교체→선택ID가없으면selectedLabel=''→blur에서keyword와다르므로onChange(undefined). 이 검색/blur판정은master에도있다. PR4692/f9a45fe02 DLDS통합의 DropdownPrimitive.close(110-120행)가 option선택후trigger input으로focus를복귀시키면서 응답후바깥클릭의추가blur에서잠재된선택초기화가드러난다. 실측API/포커스/선택유지대조와코드흐름이일치한다. permission권한차단/이번미배포QA5줄수정의원인은아니다.
+- **영향/다음 방향:** 검색응답에서선택ID가빠지는공통Combobox사용처에같은가능성이있다. 선택한ID/label을현재검색options와독립해유지하고명시적삭제·실제입력수정·외부value변경을구분하는수정이필요하다. 공통focus복귀/accessibility를일괄되돌리거나병원명하드코딩은피한다. 이번요청은조사까지이므로새제품수정은안했으며사용자후속지시에따라기존QA와별개로수정/비례검증한다. BE검색누락은부수확인사항이고 FE보완을전부그답변까지보류할필요는없다.
+
+## 최신 작업 — 2026-10-22 미완료 QA 코드 보완 (로컬, 미배포)
+
+- **승인 범위:** DL-16317 하위 Frankie 담당 미완료 카드의 처리 가능성을 확인한 뒤 사용자가 “QA나 실기기 확인 등이 아닌 너가 할 수 있는 것 진행”을 요청했다. FE 코드·기존 자동검증까지만 진행했고 제품 커밋/푸시/PR/병합/배포와 Jira/Slack 쓰기는 하지 않았다. 앞선 v39 배포 완료와 이번 새 로컬 수정은 별개다.
+- **Jira 확인:** 직접 하위52개 중 Frankie 담당19개, Done15개/미완료4개. DL-16881 READY FOR QA, DL-16882 CHECK REQUEST, DL-16904 TO DO, DL-16907 TO DO다. 네 카드 본문·댓글 전체16개(7/7/2/0)와16904 첨부를 확인했다. 기존16881은 cut-off 상세403/1018 대응이고16907의 타 기공소 LinkTalk 조회 경로와 구분한다.
+- **웹 DL-16882:** `/Users/parkjongsun/Repository/dentlink-client-permission`의 최신 `origin/release/v1.89.0@bdbe43fb1`에서 `feature/DL-16882`를 생성했다(upstream 없음). `lab/src/components/Order/OrderProfileForm/OrderProfileCreate.tsx` 한 파일 +5줄로 치과 변경/선택 해제 시 이전 치과의 초기 빈환자 상태를 해제한다. 빈 치과A→환자 있는B→신규환자→기존환자 복귀를 막던 상태 누수이며 최초 빈치과/URL patient 초기진입은 보존한다. Lab 전체 타입검사·파일ESLint·diff검사 통과, 실제 화면 QA 미실시다.
+- **웹 원인 경계:** 기존 무한로딩 수정 대상5파일과 OrderProfileForm 폴더는 release bdbe43fb1 / stage bd1c0153a / develop6f2177f9f 모두 동일하다. 따라서 DEV Git에 수정이 없다고 설명하지 않는다. 제보의 실제 DEV 배포 revision/환자 선택 불가 원인은 미확인이고 이번 상태 누수가 제보 원인이라고 확정하지 않는다.
+- **Lab DL-16907:** 최신 `origin/release/v1.0.5@c240548`에서 `/Users/parkjongsun/Repository/dentlink-lab-app`의 `QA/DL-16907` 생성(upstream 없음), 원래 QA/DL-16881 보존. `ChatDetailScreen.tsx`는 내 기공소 주문 확인 전 입력·읽음 POST·읽음 캐시 변경을 제한한다. 타 기공소 메시지 GET은 유지하며 `POST /lab/chats/read/{chatId}`는 보내지 않는다. 빠른 뒤로가기에서는 기존 주문 쿼리를 공유해 소속 확인 뒤 읽음 처리를 보존하고 비동기 응답 후 소속 변경도 확인한다. 기존 웹 getOrderAccess의 읽음 정책과 일치한다. 공통403 로그아웃 예외를 임의 확대하지 않았다. 실제 로그아웃 제보 API 응답/완전해결은 QA 미실시로 미확정이다.
+- **Lab DL-16904:** `MessageTemplate.tsx` 한 줄로 연속 템플릿 카드 상단0→기존 일반 메시지와 같은4px. 날짜/프로필 경계10px은 유지한다. 확정 Figma 수치를 확인했다는 뜻이 아니며 QA의 간격 추가 요구 범위에서 기존 값을 재사용했다. Office 동일 구현은 확인했지만 이번 Lab 카드 범위 밖이므로 변경하지 않았다.
+- **검증:** Lab 기존4suites/30tests(OrderDetailScreen, messageReply, appServiceIsolation, errorHandlers) 통과, 변경2파일ESLint·diff검사 통과. 전체 타입진단은 배포 전 로그와 byte 동일한 기존5개(Icon2/Tooltip1/order.priceType1/MessageText1), 신규0이다. 전체lint는 기존12844errors/1420warnings로 실패하므로 전체검사 통과로 쓰지 않는다. 독립 코드리뷰에서 이번 읽음 변경의 확정 회귀 없음. 새 테스트/파일/의존성/native/API모델/문구 변경 없음.
+- **현재 영향/다음:** 웹1파일·Lab2파일은 각 신규 로컬 브랜치에서 미커밋이며 release/스테이징/v39에 아직 없다. 다음 사용자 승인 범위에서 diff 재확인→제품 커밋/푸시/PR(웹 release1.89, Lab release1.0.5 QA)→사용자 병합/배포 후 QA 순서다. QA는16881의 v39 cut-off/로그인유지,16882의 실제DEV 및 치과해제/재선택,16907의 타기공소조회+로그인유지/정상채팅읽음,16904의 실제간격을 확인한다. 이번에는 사용자에게 반드시 물어야 할 새 BE 계약 질문은 없다. 원인 미확정인 실제 증상은 QA 결과/로그가 필요하다.
+
+## 최신 전달 완료 — 2026-10-22 Lab 1.0.5 Staging v39
+
+- 사용자 명시승인에 따라 최신 `release/v1.0.5@c240548`(우리PR19+동료PR20)을 설치·검증하고 **기공소 iOS/Android Staging v39, 대상1.0.5**로 게시했다. read-back에서 양OS 활성/mandatory/rollout100 및 소스SHA 일치. 기존v38/1.0.4의활성상태는 유지하고 수동배포설정 변경은 없다.
+- Yarn immutable·Ruby3.2.2/Bundler2.6.9의Pods설치·버전일치 검사·관련4suites/54tests·양OS Metro/Hermes 번들/업로드 성공. 전체타입검사는 기존5진단이남아 통과로표시하지않는다. 새제품코드/커밋/PR없음.
+- 원래Lab `QA/DL-16881@cd46b7c` clean·origin동일로복귀했고 worktree보존. 웹/Office배포·Jira/Slack쓰기없음. 다음은1.0.5설치본의v39수신·재시작 및 권한/cut-off/정상주문/밀링기능QA. 실제기기QA와기존1.0.4실행불가원인은미확인이다. 상세설치/검증/배포근거는 [Lab기록](../dentlink-lab-app.md) 최상단참조.
+
+## 재개 전 확인 — 2026-10-22 Lab 통합 소스 확인 완료
+
+- 사용자 요청으로 내용 확인만 진행했다. 개인·제품 Git pull 후 `origin/release/v1.0.5@c240548`에 우리 PR19와 동료 밀링 PR20이 함께 포함된 것을 확인했다. 동료 PR20 최종 head `56128917` 대비 전체 tree 차이는 우리2파일(+84/-9)뿐이고, 해당 파일은 PR19 당시와 동일하다. 동료 소스 누락 우려는 해소됐다.
+- package/Android/iOS 모두1.0.5. 현재 QA checkout `QA/DL-16881@cd46b7c`는 clean·원격동일로 보존했다. Staging OTA는 양OS 모두 기존v38/1.0.4/활성/source b04be101이며1.0.5 대상 새 배포는 없다.
+- 다음은 최신 통합release 기준 yarn/Pods·필요검증 후 승인 범위의1.0.5 Staging 전달과 기능 QA다. 이번에는 설치·제품코드·병합·배포·외부쓰기를 실행하지 않았다. 기존1.0.4 실행불가 원인은 별도미확인이다. [Lab 체크포인트](../dentlink-lab-app.md)의 10/22 상세 기록을 따른다.
+
+## 이전 인계 확인·대기 — 2026-10-21 Lab Slack 논의
+
+- **18:34 새 댓글 확인(기록만):** 사용자 요청으로 같은 Slack 스레드 본문+댓글7개 전체를 다시 읽었다. Daniel은18:34:35 KST(comment1792575275.313299)에 “작업 브랜치 릴리즈1.0.5에 머지해두었고, 만약 바로 스테이징 배포하시면, yarn && yarn pod 진행하고 해주십시오!”라고 알렸다. 이는 동료의 병합 완료 보고이며 이 턴에서 제품 원격fetch/HEAD/PR/포함관계는 재검증하지 않았다. 앞서18:25의 커밋예정 상태는 이 보고로 갱신한다.
+- **다음 재개 첫 순서:** 사용자가 재개하라고 할 때 개인 컨텍스트와 제품 원격을 갱신하고, 최신 release/v1.0.5에 동료 작업과 우리 PR19가 모두 포함됐는지·실제앱버전/native/lock 변경을 확인한다. 이후 동료가 안내한 yarn && yarn pod를 해당 checkout에서 수행하고 당시 사용자 승인 범위의 검증/배포를 진행한다. 이 댓글 자체를 설치/병합/CodePush의 실행 승인으로 사용하지 않는다. 지금은 메모 commit/push만 하며 제품코드·의존성·배포·Jira/Slack 쓰기·모니터링 없음.
+- **최신 사용자 지시:** 지금 답변을 기다리는 작업을 진행하지 말고 내용만 인지·기록한다. Slack 재조회/감시/자동 후속은 하지 않는다. 동료가 답변하거나 커밋하더라도 그 자체로 작업을 재개하지 않으며, 실제 후속은 사용자의 명시적 지시가 있을 때만 진행한다.
+- **최종 이해/재개 기준:** 우리 권한 수정 자체를 앱1.0.5에 포함하는 데 확인된 문제는 없다. 지금 보류한 핵심은 동료 최신 작업이 빠진 기존 release의 JS 번들을 게시하면 설치 앱의 동료 기능을 이전 상태로 덮을 수 있다는 점이다(Git 코드 삭제가 아님). 동료 최신 작업과 우리 수정이 함께 들어간 소스·설치본에 맞는 대상 버전으로 전달해야 하며, 아직 기능 QA나1.0.4 실행불가 원인 해결을 완료했다고 보지 않는다.
+- **마감 지시:** 사용자가 “메모리화·정리 후 대기, 후에 재개하라고 하면 그때”를 명시했다. 사용자 재개 지시 후에만 개인 컨텍스트/실제 원격 상태를 갱신하고, 동료 커밋·빌드 기준과 우리 PR19 포함관계를 확인하여 필요한 통합/배포 조치를 당시 승인 범위에서 진행한다. 그 전에는 Slack/원격/배포를 추적하거나 자동으로 변경하지 않는다.
+- 사용자 지정 [Slack 스레드](https://innovaidhq.slack.com/archives/C09613TBE5A/p1792574567701379) 본문+댓글6개 전체 확인. 우리 PR19 릴리즈 병합과 밀링 최신 작업의 배포 전 통합 필요가 전달됐고, Daniel은 계속 개발 중이며 곧 커밋하고 알리겠다고 답했다. 당시에는 통합/배포 완료 통보가 아니었으며, 이후18:34 병합 보고는 위의 새댓글 기록을 따른다.
+- 이 세션에서는 추가 코드/병합/CodePush/외부변경 없이 동료 커밋 안내·사용자 다음 지시를 기다린다. 개인 기록만 commit/push한다. 기존 v38 target1.0.4 양OS 활성 복구 상태 유지,1.0.5대상CodePush없음.
+- 1.0.4 실행불가 제보는 해당 스레드에 공유되지 않았으므로 원인미확정·별도미해결로 유지한다. 상세 근거와 재개 경계는 [Lab 체크포인트](../dentlink-lab-app.md) 최상단을 따른다. 자동 모니터링/추가조사 없음.
+
+## 최종 중단 — 2026-10-21 Lab 실행 불가를 앱 개발자와 확인
+
+- 사용자 보고:1.0.5 앱은 실행되지만1.0.4 설치본은 실행되지 않음. 이어 사용자가 앱 개발자와 직접 진행하겠다며 종료·대기를 지시했다. 원인은 미확정이며 플랫폼/실행 시점·로그 확인 전 진단을 중단했다.
+- 현재 양OS Staging v38(target1.0.4)은 복구된 활성 상태로 유지했다. 이번 증상 제보 후 재비활성화/롤백/재배포·제품 코드/PR/Jira 변경은 없다. release와 기존main의 Camera/Nitro native 차이가 유력 원인 후보이나 실제설치본 구성·crash로그 없이 확정하지 않는다. 자세한 확인 범위는 [Lab 인계 기록](../dentlink-lab-app.md) 최상단을 따른다.
+- 사용자→앱 개발자의 진단 결과/새 요청 전 추가 작업 없이 대기한다. 웹 상태·별도Sheet보류·모든 제품branch/worktree는 유지한다.
+
+## 최종 합의·대기 — 2026-10-21 Lab 병합/CodePush 유지
+
+- 사용자 확정: 우리 PR19의 릴리즈 병합과 기공소 Staging v38 게시 상태를 그대로 둔다. v38(iOS/Android, target1.0.4)은 agent의 비활성화를 원복해 현재 활성이다. 동료 미병합 feature 작업은 건드리지 않고 추가 코드 이동/병합/재배포를 진행하지 않는다.
+- 남은 확인은 사용자→앱 개발자의 QA 설치본 빌드 브랜치/커밋 및 우리 릴리즈 수정이 적용될 올바른 설치본/CodePush 대상이다. 기능 QA는 아직 미실시이며 배포 경로 확인과 구분한다. 구체적인 전달 질문은 [Lab 최종 기록](../dentlink-lab-app.md)의 최상단에 보존했다.
+- 개인 기록만 정리·commit/push하고 새 사용자 답변/QA 결과까지 대기한다. 제품 branch/worktree·Jira 상태를 유지하고 추가 코드/PR/배포/외부 글쓰기/모니터링 없음. 웹 전달 완료와 별도 Sheet 보류는 기존대로 유지한다.
+
+## 현재 상태 정정 — 2026-10-21 v38 재활성화·추가 작업 중단
+
+- 실제 소스는 release/v1.0.5@b04be101(우리 PR19 병합)이고, 해당 소스 package/native와 CodePush v38 대상은1.0.4다. 사용자는 별도로 설치한1.0.5 앱 실행만 확인했으며 우리 수정/OTA 수신은 미확인이다.
+- 후속 live 조사에서 동료의 feature/DL-16833@41a57ad에 release 미포함25커밋과 package/Android/iOS1.0.5 변경(fd9d508)이 있음을 확인했다. 공통조상a32acb02, 동료 변경259파일, 우리 수정2파일은 동료branch에서 공통조상 대비 변경0이다. “릴리즈가 동료 최신 작업을 전부 포함”한다는 앞선 설명은 잘못됐다. 실제1.0.5 설치본의 빌드source는 사용자도 모르며 Slack Fastlane 공지에는1.0.5/배포시각만 있다. 미확인 source에 대상버전만1.0.5로 바꿔 배포하지 않는다.
+- agent가 잘못된 대상 배포라고 판단해 양OS Staging v38만 수동 disabled=true로 바꿨고, 사용자가 중단을 지시했다. 이후 사용자가 “조치한 건 다시 복구”를 명시하여 **동일 v38을 양OS 모두 disabled=false로 재활성화 완료**했다. 서버 read-back에서1.0.4/mandatory/100% 활성 확인, label/appVersion/mandatory/rollout/description/packageHash/uploadTime 불변이다. 앱1.0.4 전체나 다른label/Production을 끈 것이 아니다.
+- 현재: PR19는release에 병합 유지, Staging v38은 다시활성,1.0.5 대상 재배포없음. 동료branch/코드는 손대지 않았다. Jira16881은 기존READY FOR QA에서 추가변경하지 않았다. 사용자 중단 지시는 활성화 복구 외에는 유지한다. 앱 개발자에게1.0.5 실제빌드 브랜치/커밋·원격반영 여부를 확인받은 뒤 그 기준에 우리2파일만 추가하는경로를 논의한다. 자동추가병합/재배포/QA/모니터링 금지.
+
+## 사용자 실행 확인·QA 대기 — 2026-10-21
+
+- 사용자가 기공소 앱1.0.5를 준비하여 배포 후 앱 실행을 확인했다. 이번 권한 기능 자체의 검수는 하지 않았으며 QA 결과가 나오면 전달하기로 했다. 설치본 준비·실행은 사용자 확인 완료, 기능 QA는 미실시로 구분해 기록한다.
+- 이전 Staging v38은 target1.0.4이므로1.0.5 실행만으로 v38 적용/이번 수정의 포함 여부까지 확인했다고 보고하지 않는다. 사용자가 준비한 바이너리의 내장 source와 OTA 수신은 필요 시 후속 QA에서 구분한다. 이 차이를 이유로 지금 임의 조사·버전 수정·CodePush를 다시 하지 않는다.
+- 추가 코드·배포·Jira/Slack/Figma 변경 없이 개인 기록만 저장하고 QA 결과 대기. 기존 웹 Sheet 동기화의 별도 보류는 유지한다.
+
+## 최신 전달 완료 — 2026-10-21 기공소 앱 Staging v38
+
+- 사용자 후속 답변으로 실기기 앱 버전·네이티브 구성은 직접 맞추기로 했으므로, 기존 조건부 승인의 코드·배포 확인 후 Lab PR19 병합·Staging CodePush를 진행했다. 기기 확인을 코드 병합의 blocker로 다시 요구하지 않는다.
+- live PR/독립 코드 점검에서 기존cd46b7c 두 파일 그대로·새 리뷰0·확정 결함0·CLEAN/MERGEABLE을 확인했다. PR19 → release/v1.0.5 squash merge b04be10111e70f20ec3c6151c521907009edd5df, 검증 QA HEAD와 최종release tree 동일이다.
+- 병합 최종 소스로 iOS/Android Metro·Hermes 번들 및 Staging 업로드 성공. 서버 read-back 양OS **v38 / target1.0.4 / active / mandatory /100%**, source SHA 일치. 사용자 Slack 금지에 따라 알림 없는 직접 CLI를 사용했다. main/develop·태그·스토어·제품 버전은 변경하지 않았다.
+- DL-16881은 **READY FOR QA**로 상태만 변경했다. 오늘 FE4건(16855/16880/16882/16881)은 모두 Staging 전달 및 READY FOR QA다. 앱 checkout은 원래 QA/DL-16881@cd46b7c로 복귀하여 clean·원격동일이며 원래 branch/worktree를 보존했다.
+- 남은 것은 사용자 설치본 준비/기능 QA와 웹 Sheet의 별도 보류다. 앱 코드·배포에 추가 blocker가 발견된 것은 없으며 아래의 PR19 미병합/OTA 보류는 이전 이력이다. 웹 재배포·추가 기능 QA·모니터링은 실행하지 않고 다음 사용자 결과를 기다린다. 상세 전달 명령/검증은 [Lab 앱 기록](../dentlink-lab-app.md)의 같은 날짜 최상단에 보존했다.
+
+## 이전 대기 확정 — 2026-10-21 사용자 마감 요청
+
+- 사용자가 최종 보고를 확인하고 “정리하고 대기”를 지시했다. 웹 스테이징 전달·Jira 상태 변경·확정 문구 복원 결과는 아래 최종 기록대로 보존한다.
+- 재개 지점은 사용자 QA 결과 또는 Lab 앱 최신 native 설치본 확인이다. Lab PR19는 미병합·CodePush 미실행, 번역 Sheet 전체 동기화도 별도 보류 상태다. 실제 기능 QA 완료로 간주하지 않는다.
+- 새 요청 전 추가 코드·PR·배포·CodePush·Jira/Slack/Figma 변경이나 배포/E2E 모니터링을 시작하지 않는다. 제품 브랜치와 worktree는 유지한다.
+
+## 최종 정리 — 2026-10-21 웹 스테이징 완료·Lab 앱 호환 확인 대기
+
+- **최신 승인:** 사용자가 웹 CodeRabbit 처리 후 강제 스쿼시 병합과 기존 절차의 Staging 배포를 명시했다. Lab 앱은 앱개발자 검토가 필요하면 PR 유지, 안전하면 병합·최종 Staging CodePush라는 조건부 지시다. Jira는 **상태만 변경**, 댓글·본문 수정 금지이며 Slack은 읽기만 한다. 아래의 오전 PR까지만 지시는 이 범위에서 대체된다.
+- **웹 리뷰:** PR4747의 CodeRabbit 1건은 접근 제한 en/ko 의미 차이였다. 처음 영문을 변경한 c5ff587b9를 검증·push하고 thread PRRT_kwDOJnA7-86un86z를 resolve했으며, 새 HEAD 재검토 SUCCESS/미해결0을 확인했다. 사용자 승인으로 PR4747을 15:15 KST 스쿼시 병합하여 release=f4eb8bf18이 됐다.
+- **문구 정정:** 사용자가 PM·디자이너 명세 우선을 재강조했다. Jira16876 댓글44541의 국문은 `접근 불가능한 주문입니다.` / `홈으로 돌아가기`이며 처음부터 그대로 반영되어 있다. Figma707:38240의 영문은 `No order data available.`다. 리뷰봇에 따라 영문을 바꾼 것은 불필요한 변경으로 판단해 release 기반 새 feature/DL-16880에서 108e98ecc로 복원, PR4750을 생성했다. 원래 한국어 화면/권한 로직은 변경하지 않았다. CodeRabbit의 의미 개선 제안보다 제품 소유자의 명시 문구가 우선한다.
+- **첫 Staging 전달:** stage602071d4/master8772d688/release의 live SHA·열린 stage PR0·보호 없음·stage만의 별도 제품 변경 없음 확인 후 `refs/recovery/stage-before-reset-20261021-permission-qa2`로 보존했다. expected-SHA lease 삭제 및 nonexistence lease로 master 기준 재생성했다. PR4749 release→stage 스쿼시 병합, stage82e1b1808과 releasef4eb8bf18 전체 tree 동일. 15:17:50 KST Clinic39554539803/Lab39554539810/Admin39554539821 실행 시작을 확인했으며 결과 첫 확인은 15:33 이후다. 문구 복원 후 최종 release/stage 반영과 배포 결과는 아래 후속 기록으로 확정한다.
+- **최종 문구 전달:** PR4750의 CodeRabbit은 Sheet 운영 결과 기록1건으로, 실제 명세 대조/보류 근거/검증 결과를 PR에 기록하고 resolve했다. CodeRabbit SUCCESS·미해결0 확인 후 15:27 KST 스쿼시 병합해 release=bda64fd28이다. 후속 stage PR4751은 기존 squash 이력 때문에 충돌하여 병합되지 않았고, 원래 배포 절차대로 stage82e1b1808을 `refs/recovery/stage-before-copy-final-20261021`에 보존·lease 삭제·master8772d688 기준 재생성 후 같은 PR을 재오픈했다. 최종 전체release 비교/base/head를 확인하여 PR4751을15:29:35 스쿼시 병합했다. stage=bd1c0153a, release=bda64fd28 전체tree 동일이다. 이전Lab/Clinic 실행은 중단 요청했고 Admin은 이미 종료되어 취소되지 않았다. 새 Clinic39555735111/Lab39555735124/Admin39555735040은15:29:38 KST 모두 최종stageSHA로 시작했으며 **첫 결과 확인은15:45 이후**다.
+- **최종 배포 결과:** 최종 run은 모두 stage bd1c0153a다. Lab39555735124/Admin39555735040은 SUCCESS, Clinic39555735111은 build-and-push 및 Seoul/Ohio deploy 두 job 모두 SUCCESS(15:50:08/15:50:24 KST)다. 15:52:23 조회에서 자동 e2e-and-notify만 진행 중이며 이를 배포 실패나 실제 QA 완료로 해석하지 않는다. Clinic 공개 응답200의 buildId84UQKmwAPVzM8wDSOP4Hx가 이번 빌드의 S3 업로드 ID와 일치한다. Lab 공개 번들에서 PM 국문·접근 제한 키·ORDER_DETAIL_ACCESS가 확인되고 임의 변경 영문은 없으며 Admin도 공개 응답200이다. Lab/Admin 워크플로는 ECS 안정화 대기가 없으므로 SUCCESS를 모든 태스크 안정화나 실계정 기능 QA로 확대하지 않는다. 사용자가 제외한 후속 기능 QA/E2E 수리를 추가 실행하지 않았다.
+- **Jira 최종 상태:** 실제 배포 단계에 맞춰 DL-16855/16880/16882를 READY FOR QA로 변경했다. DL-16881은 진행 중이며 PR19/설치본 호환 확인 대기다. 이번 후속에는 Jira 댓글·본문을 쓰지 않았고 Slack 직접 쓰기도 없다. DL-16874는 PM/BE가 DONE 처리한 결론을 유지한다.
+- **마감 Git/다음 시작점:** 웹 feature/DL-16880@108e98ecc, Lab QA/DL-16881@cd46b7c는 clean·원격 동일이다. 웹 release bda64fd28과 stage bd1c0153a는 전체 tree ded3daab9 동일이며 제품 branch/worktree는 보존했다. 다음은 사용자의 실제 QA 결과와 Lab 새 native 설치 여부 답변이다. 새 설치본 호환이 확인되어야 조건부 승인 범위의 PR19 병합·Staging CodePush를 재개한다. 지금 추가 FE 결함이나 새 BE 질의를 만들어 두지 않는다. 번역 Sheet의 아래 별도 보류를 배포된 코드 문구 미반영으로 설명하지 않는다.
+- **추가 검증 경계:** 최종 복원 커밋108e98ecc의 세서비스 타입/정상push검증 통과. check:i18n은 기존시트와 gnb/account/orders 양언어6파일 불일치로 실패, audit:i18n은 기존 account.auth.actions.logIn 누락으로 실패를 재확인했다. 전체Sheet동기화/재생성을 완료하거나 오류가 새복원으로 발생했다고 보고하지 않는다. CodeRabbit의 문구재번역/시트일괄쓰기 제안은 확정명세와 운영가이드에 따라 처리했다.
+- **Lab 앱 독립 검토:** PR19 두 파일(+84/-9)에 확정 결함이나 동료 QR/밀링/native 변경은 없고, GET 주문상세403/1018만 인증 만료에서 제외한다. 공통 WebView 메시지와 정상 인증 흐름도 보존한다. 다만 기반 release의 VisionCamera5/Nitro 등은 구 native에 OTA 호환되지 않을 수 있다. package/native/Staging 표시가 모두1.0.4라 새 설치본 포함 여부가 확인되지 않으며, 사용자에게 새 native 설치 여부만 질문했다. 확인 전 PR19/CodePush를 보존한다. 이 조건을 FE 코드 미완료나 새 BE 요구로 설명하지 않는다.
+- **재접수 감사:** 당일 갱신 Jira39카드, 댓글 있는11카드의42댓글 전체 페이지, 정확한 Frankie 당일 멘션10댓글/4카드를 확인했다. Slack 정확 ID 멘션2건·QA그룹9메시지+1답글·FE 배포 논의 후속을 읽었다. root가 Jira 직접 알림함을 다시 열어 최신44558까지 확인하고 Figma 알림/댓글25·26·27을 대조했다. 확인 범위에서 우리 FE4건 외 새 Frankie 요구 누락은 없었다. Figma26/27은 현재 구현에 맞춘 디자인 갱신,25 모바일은 기존16864 범위다. 알림센터는 계속 제외한다.
+- **조사 건 종결:** DL16874는 새 제보 주문7000012246을 BE가 컨설팅 주문(정산/가격 없음)으로 설명했고 PM이 수용하여 DONE(댓글44554~44557)이다. 이전 order7000012208 응답 확인을 현재 미결/추가 BE 문의로 남기지 않는다. BE16876은44549 DEV 완료,44558 14:01 STAGING 배포중 통보이며 실제 연동 QA 완료를 뜻하지 않는다.
+- **동료 범위:** 새 DL16883/16884/16885는 mimi 담당 밀링 QA이며 Frankie 멘션 없음. 임의 수정하지 않는다. Slack의 Stripe stage 합류 제안은 후속에서 Growth DEV 우선 테스트로 정리됐고 현재 stage에만 별도 Stripe 코드가 없음을 Git으로 확인했다.
+- **별도 유지:** Lab 번역2키 Sheet 동기화는 무관한 stale2/충돌3 때문에 운영 가이드상 보류다. locale JSON은 코드에 포함되며 런타임 Sheets 조회는 없다. Office 앱 신규 작업/CodePush는 없고 기존 PR331→develop 병합·Stagingv337 기록을 유지한다. 제품 브랜치/worktree를 삭제하지 않는다.
+
+## 이전 브리핑 — 2026-10-21 PR 전달 완료·사용자 배포 대기
+
+- 오늘 Jira/Figma/Slack 멘션과 v1.89 QA를 조사하고, 필요한 FE 카드3개(16880/16881/16882)를 생성했다. 기존16855를 합쳐 FE4건은 구현·정적/단위 검증·커밋·푸시·PR까지 완료했다. 알림센터는 제외, Slack 쓰기는 없었다. DL-16874는 표시 조건/API 조사와 전달 문구 제공만 했으며 제보 주문 실제 응답은 아직 미확인이다.
+- 마감 시 원격/로컬을 다시 대조했다. 웹 feature/DL-16317-qa2@a64a9cda9와 Lab QA/DL-16881@cd46b7c는 clean·원격동일이다. 웹PR4747→release/v1.89.0, LabPR19→release/v1.0.5 모두 OPEN/미병합이다. 웹 reviewDecision=REVIEW_REQUIRED이며 표시된 Auto Assign/CodeRabbit 상태는 SUCCESS다. 상태 조회만 했으며 CodeRabbit 개별 스레드의 검토·조치 완료를 뜻하지 않는다. OfficePR331→develop은 이전10/20 MERGED로 재확인했다.
+- 오늘 코드 검증은 웹3서비스 타입/필수훅/관련34tests, Lab22tests 및 기존 타입진단5→5(신규0)다. 수정 후 실제 서버·기기 QA, 오늘 변경분의 배포·CodePush·병합은 미실행이다. 조사 단계의 환자 검색 DEV/STG 재현과 수정 후 QA를 혼동하지 않는다.
+- 남은 순서는 PR 리뷰·병합 → 사용자 웹 배포/Lab 앱 업데이트 → 실제 계약 연동 QA다. 별도 미결은 Lab 번역2키 Sheet 동기화(기존 충돌, 코드 문구는 반영 완료)와 DL-16874 제보 주문 orderDetails 응답 확인이다. 사용자 최종 지시에 따라 추가 배포·QA·리뷰 수정을 자동으로 시작하지 않는다. 세부 구현/검증/호환성 근거는 아래 기록에 보존한다.
+
+## 이전 지시 — 2026-10-21 동료 최신 작업 보존·Lab PR19 유지, CodePush 취소
+
+- 사용자는 처음 Lab 작업브랜치 Staging CodePush를 요청했으나, 이후 **앱 업데이트는 직접 하며 동료의 최신 작업 위에 필요한 수정만 추가하고 PR까지만** 하도록 최종 정정했다. “기공소앱 코드푸쉬도하지말고 pr까지만”을 명시했다. 따라서 **업로드·활성화·네이티브 배포·실제 QA를 실행하지 않았다.** 이전 CodePush 승인을 재사용하지 않는다.
+- Lab live ref는 develop56cba674보다 release/v1.0.5 a32acb02에 동료의 QR/태블릿/Bluetooth 작업(PR16/17/18)이 더 반영된 상태다. 최신 작업 보존 지시에 따라 원래 **QA/DL-16881@cd46b7c → release/v1.0.5 PR19**를 유지한다. PR19 OPEN, 이번 수정 두 파일(+84/-9)만 포함하며 base/전체 diff를 다시 확인했다. 이 결정은 일반 앱 feature 정책 변경이 아니다.
+- 중간에 사용자의 develop 확인 질문을 develop 이전 지시로 해석하여 feature/DL-16881을 develop56cba674에서 만들고 기존 두 커밋만 옮겼다(65a817b/3413f74). 이후 최신 동료 작업을 보존하라는 정정에 따라 원래 QA 브랜치로 복귀했다. 임시 브랜치는 **푸시/PR 생성 없이** 중복 내용 검증 후 로컬에서 제거했다. PR19는 닫거나 base를 바꾸지 않았고 새 PR도 없다. 로컬 의존성은 원래 release lock 기준 immutable 설치로 복원했다. 기존 video 패치가 섞인 설치물은 임시 보존 후 해당 패키지만 깨끗하게 재설치하여 postinstall까지 성공했고 제품 코드·lock diff0을 확인했다.
+- 치과앱은 reflog/live GitHub에서 feature/DL-16317-qa가 origin/develop43f7879에서 생성됐고 PR331의 base도 develop이며 **10/20 이미 MERGED**임을 확인했다(merge472ecd97). 새 치과앱 수정/PR은 이번에 생기지 않았다. checkout HEAD1fa59ed·clean·원격동일이다.
+- **향후 Lab 배포 참고:** release Git 이름은1.0.5지만 package/Android/Xcode는 모두1.0.4다(validate:versions 통과). Revopush Staging 최신은 양OS v37/1.0.4/active/mandatory/100%,10/16 업로드·소스 설명 없음이며 이전v36은 main bb619010였다. 현재 설치본의 native 포함 여부는 확인되지 않았다. Git 이름만으로 설치 버전/CodePush 호환성을 판단하지 않는다.
+- main bb619010 → 기반release a32acb02에는 vision-camera4→5/Nitro/haptic/Bluetooth 등 package/native 변경이 있다. App→RootNavigator→AllScreens→HomeLabScanScreen→VisionCamera5→NitroModules 상위 import로 초기화돼, Nitro 없는 기존 설치본에 release 전체 OTA를 적용하면 시작 단계에서 실패할 수 있음을 독립 코드 검토로 확인했다. 이번 QA2파일의 native 변경0만으로 전체 release 번들의 구형 설치본 호환이 보장되지는 않는다. 사용자가 앱 업데이트를 직접 하므로 임의 우회·강제 CodePush를 진행하지 않는다.
+- **다음:** 웹PR4747·LabPR19는 리뷰/병합 대기, 앱 업데이트/배포/이후 QA는 사용자 진행이다. 동료 작업 롤백이나 develop/release 임의 동기화는 하지 않는다. 원래 제품 브랜치와 PR을 유지하며 개인 기록만 최신 지시로 저장한다.
+
+## 최신 구현 — 2026-10-21 13:25, 2차 QA 4건 코드·PR 전달 완료
+
+- **사용자 승인:** 확정된 BE 계약을 기준으로 신규 QA 브랜치를 각 release에서 생성하고 FE 4건을 구현·검증·커밋·푸시·PR까지 진행한다. **이후 실제 API/브라우저/기기 QA는 명시 제외**했다. BE 미배포를 구현 중단 사유로 삼지 않는다. DL-16874는 복사 가능한 설명을 먼저 제공하고 조사만 유지한다. Slack/Jira 댓글·상태, 병합·배포·CodePush는 이번 턴에서 변경하지 않았다. 알림센터 및 Office 앱 추가 작업은 범위 밖이다.
+- **웹:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317-qa2`. 생성 기준 `origin/release/v1.89.0@3786703e9d147927bfc3f1d98f90ca012ed9406d`; HEAD/원격 `a64a9cda98f3341f1bf4686d43c6be8eb47591a5`, clean. [PR #4747](https://github.com/Innvoaid/dentlink-client/pull/4747) OPEN/비Draft, 실제 base `release/v1.89.0`를 생성 후 재확인했다. 3커밋·25파일이며 기존 feature/DL-16317·이전 QA 브랜치와 worktree는 보존했다. 최초 PR 조회의 mergeStateStatus는 BLOCKED이며 체크/리뷰 완료나 병합 가능 판정이 아니다.
+- **Lab 앱:** `/Users/parkjongsun/Repository/dentlink-lab-app`, `QA/DL-16881`. 사용자의 release QA 지시에 따라 최신 `release/v1.0.5@a32acb02eea73c7771efa803a99709cf06a5e5a7`에서 생성했다. release에는 develop보다 최신 tablet/QR/milling 변경이 있어 develop으로 역변경하지 않았다. HEAD/원격 `cd46b7cd2a4710d8690251620a40d773009475a0`, clean. [PR #19](https://github.com/Innvoaid/dentlink-lab-app/pull/19) OPEN/비Draft, 자동화 후에도 실제 base `release/v1.0.5`, 2커밋·2파일을 재확인했다. 앱 저장소의 QA/DL-* 규칙을 따랐으며 Office 앱 저장소는 변경하지 않았다. 두 PR을 현재 세션에 연결했다.
+
+| 카드 | 구현·커밋 | 효과 |
+| --- | --- | --- |
+| DL-16855 / Clinic Web | `86a35337e` | Authority 텍스트와 물음표 아이콘 그룹 전체 밑줄. API·권한 동작 변경 없음 |
+| DL-16882 / Lab Web | `d7e4d14d5` | 생성·수정 1단계에서 치과 선택 해제 시 선택 단계/officeId/환자 검색 상태 초기화. 비활성 쿼리 pending 대신 실제 isLoading을 전달하여 무한 스피너 방지 |
+| DL-16880 / Lab Web | `a64a9cda9` | 주문 상세 HTTP403/code1018을 캐시보다 우선하고 접근 불가 화면·홈 이동 표시. 차단 시 주문 본문·후속 쿼리·액션·LinkTalk 숨김 |
+| DL-16881 / Lab App | `ae7c787`, `cd46b7c` | 해당 주문 상세 GET의 403/1018만 인증 만료와 분리하여 세션 유지/WebView 연결. 네이티브·웹 거절 중 하나라도 현재 주문을 거절하면 LinkTalk 숨김 |
+
+### 구현 경계와 검토 결과
+
+- 서버 계약은 기존 `GET /lab/orders/{orderId}`의 HTTP403 + code1018(string/number 허용)이다. FE에서 cut-off 시간을 계산하거나 다른403을 차단 정책에 포함하지 않았다. 일반 인증 만료 흐름은 유지한다. PM 범위대로 주문 상세만 보완하고 리메이크 신청·디자인컨펌의 별도 정책을 추가하지 않았다.
+- 기존 Clinic `OrderDetailUnavailable`를 shared/ui로 이동하고 기본 영문/스타일을 유지했다. Lab은 동일한 기존 SVG 3개를 자신의 public 경로에 복사해 사용하며 Figma707:36548의 기존 안내/홈 버튼과 PM 승인 국문 2개를 적용했다. 임의 안내/별도 디자인을 추가하지 않았다. Clinic 4개 사용처는 import만 바뀐다.
+- Lab 상세는 기본 주문 GET 성공 후에만 기존 본문을 마운트한다. 동일 GET을 별도 ORDER_SHOW_FILE 캐시로 중복 호출하던 상세 훅을 기존 주문 데이터의 files로 통합했다. 독립 리뷰에서 업로드 큐 완료 후 갱신 누락 가능성을 찾아 FloatFileUploadController의 ORDER_SHOW 무효화를 추가했다. 다른 단계 화면이 쓰는 ORDER_SHOW_FILE 무효화·훅은 보존했다.
+- 웹→앱 `ORDER_DETAIL_ACCESS` 메시지는 `{ orderId, accessible }`로 현재 주문만 전달한다. 성공 응답에는 true, 정확한1018에는 false, 로딩·일반 실패에는 메시지를 보내지 않는다. 앱은 현재 주문 일치 여부와 boolean을 검증하며 기존 MODAL 메시지가 차단 상태를 덮지 않는다. 홈 이동은 기존 BottomTabNavigator/HomeTab/HomeScreen 경로를 사용한다.
+- 새 테스트 파일·Story·의존성·네이티브 설정을 추가하지 않았다. 기존 AppProviders 테스트에 전역 오류 토스트 중복 방지 2건만 추가했다. DL-16874·Office 앱·미래 알림센터는 코드 수정하지 않았다.
+
+### 검증 및 남은 범위
+
+- 웹 Clinic/Lab/Admin 타입 검사 통과(커밋 훅도 통과). 관련 Jest 34개(Clinic30+Lab4), 임시 실제 TSX/메시지 직렬화 계약 검증13개, diff/포맷 검사 통과. 임시 검증은 실제 DOM/API/브라우저 QA 증거가 아니다.
+- 웹 정상 push의 필수 훅도 통과: 3개 서비스 lint 오류0(기존 경고 존재), Admin DLOS guard, 공용 패키지 coverage 검사(config21/hook32 tests 포함). 훅을 우회하지 않았다.
+- Lab 앱 기존 Jest22개, 임시 계약 검증8개, 변경 lint/포맷/diff 통과. 전체 타입 진단은 release 기준5개 그대로이고 신규0이다(기존 Icon2/Tooltip/OptionDto/MessageText). 전체 타입 통과라고 보고하지 않는다. 독립 웹·앱 리뷰에서 확인된 갱신 결함 수정 후 남은 확정 버그는 없었다.
+- **번역 Sheet 보류:** 확정 차단 안내 `detail.empty.accessDenied`와 홈 버튼 `detail.empty.goHome`은 en/ko 코드에 반영했다. Sheet export 사전 확인에서 무관한 stale2키·충돌3언어값·대량 미반영 항목이 발견되어 Lab 번역 운영 가이드의 “현재 작업과 무관한 행이 제거되는 상태라면 쓰기를 보류합니다” 지침에 따라 전체 export/generate를 하지 않았다. 이번 2개 키의 Sheet 동기화는 추후 별도 정리가 필요하다. `audit:i18n`은 기존 `account.auth.actions.logIn` 누락으로 실패하며 같은 누락/호출이 release 기준에도 존재한다. 현재 사용자 요청의 코드 구현 실패나 새 번역 누락으로 분류하지 않는다.
+- **DL-16874 전달문:** 0원 때문에 정산 상품 행을 숨기지 않는다. 상품 행은 주문 GET의 orderDetails 기준이며 Lab에는 전체 합계 행이 없어 표시할 상품/추가금액/할인이 없으면 제목만 남을 수 있다. 주문7000012208의 실제 응답 확인이 필요하며 이번 권한 변경 회귀는 확인되지 않았다. 먼저 복사용 문구를 제공했고 코드/카드 변경은 하지 않았다.
+- **다음 시작점:** 사용자 리뷰·병합·대상 서버 반영 후 필요 시 웹 PR4747과 Lab 앱 PR19를 함께 실제 QA한다. 이번에 실제 QA·BE 배포 여부 확인·웹/앱 배포·PR 병합·CodeRabbit 후속 주기는 실행하지 않았다. 현재 제품 작업은 요청한 PR 단계까지 완료이며 자동으로 배포/QA를 시작하지 않는다.
+
+## 최신 조사 — 2026-10-21 13:01, 환자 검색 재현 및 DL-16874 표시 기준
+
+- **범위/승인:** 사용자는 새 제보도 v1.89에 같은 개념이 있는지, 현재 스테이징 데이터와 무관하게 FE가 바로 처리할 수 있는지를 조사하고 보고하도록 했다. 추가로 [DL-16874 댓글44551](https://innovaid.atlassian.net/browse/DL-16874?focusedCommentId=44551)은 **조사만 해서 이 대화에 답변**하도록 지정했다. 알림센터 등 미래 작업은 계속 제외한다. 이번에는 제품 코드·브랜치·배포를 변경하지 않았고 Slack/Jira 댓글도 작성하지 않았다. 기존의 필요 시 QA 카드 생성 승인을 따라 확인된 환자 검색 결함만 신규 등록했다.
+- **즉시 FE 처리 대상은 총 4건:** 기존 DL-16855(Authority 그룹 밑줄), DL-16880(Lab Web cut-off 주문 상세 차단 화면), DL-16881(Lab App cut-off 403 세션 유지/상세 연결) + 신규 **DL-16882(Lab Web 주문 1단계 환자 검색 무한 로딩)**. Office 앱에는 이번 추가 조사에서 새 수정 필요를 확인하지 못했다. cut-off BE DL-16876은 현재 Ready for Deploy이며 댓글44549의 개발 서버 배포 중/API 형식 변경 없음·주문 상세 GET만 대응 지시는 유효하다. 이 상태를 Staging 응답 검증 완료로 해석하지 않는다.
+
+### DL-16882 — 실제 DEV·STG 재현, 기존 코드 결함
+
+- 출처는 [DL-16876 댓글44550](https://innovaid.atlassian.net/browse/DL-16876?focusedCommentId=44550), Leo의 개발 Lab 주문 1단계 환자명 검색 무한 스피너 제보다. 첨부31719는 환자 입력/스피너만 보여 치과 선택 상태는 알 수 없다. 따라서 아래 재현 경로가 최초 제보 경로와 정확히 동일하다고 단정하지 않는다.
+- **현재 Chrome 로그인으로 개발·스테이징 둘 다 직접 재현:** 유효한 치과를 선택하면 환자 목록과 특정 E2E 환자명 검색이 정상이다. 치과 입력을 목록에 없는 문자열로 바꾸고 blur하면 선택이 비워지지만 환자 입력은 활성 상태로 남는다. 그 상태에서 검색하면 스피너가 계속된다. 주문/환자 생성·수정·다음 단계 제출·권한 변경은 하지 않았다. 조사 탭에는 이 재현 상태를 남겼다.
+- **코드 원인:** `OrderProfileFormSelectedOffice.tsx:66–94`가 `onChange(undefined)`에도 `step=SELECTED`, `Number(undefined)=NaN`을 설정한다. Lab `usePatientInfiniteQuery.ts`는 `officeId>0`일 때만 쿼리를 켜지만 화면에 `isPending`을 전달한다. 비활성 쿼리도 pending/idle/isPending=true, 실제 isLoading=false여서 계속 로딩처럼 보인다. 설치된 query-core 동작도 확인했다. 실제 사용 API는 `GET /lab/patients?officeId=...&name=...&page=0&size=10`이다.
+- 관련 폼/훅/API 코드는 origin/master `8772d6882`, release/v1.89.0 `3786703e9`, stage `602071d40`, develop `5974fea94`에서 같았다. **권한 변경이 새로 만든 회귀는 아니지만 1.89 스테이징에서 재현되는 FE 수정 대상**이다. 치과 해제 시 기존 미선택 상태/유효한 비활성 officeId로 초기화하고 실제 조회 중 상태만 로딩에 전달하는 최소 2파일 변경으로 대응 가능하다. 정상 검색·0건·해제·재선택을 검증하며 전역 Combobox/Clinic 훅 변경은 불필요하다.
+- **제품 범위:** Clinic은 이 치과 선택 콤보를 사용하지 않고 활성 병원 기준으로 조회한다. Lab native develop `56cba67`에는 주문작성 진입이 없고 Lab 웹도 모바일 주문작성 시 미지원 팝업으로 폼을 반환하지 않는다. 별도 Office/Lab 네이티브 코드·카드를 만들 필요가 없다.
+- 중복 검색 후 [DL-16882](https://innovaid.atlassian.net/browse/DL-16882)를 DL-16317 하위/Frankie/해야 할 일로 생성하고 본문·담당자·상태를 다시 읽어 검증했다. 이전 12:35 기록의 '신규 FE 카드 불필요'는 그 시점 cut-off 추가 댓글 기준이며, 이후 들어온 환자 검색 제보로 1건이 추가됐다.
+
+### DL-16874 — 0원 숨김 아님, 응답 행 기준이며 실제 제보 응답은 미확인
+
+- 댓글44551에서 Leo가 FE 표시값과 제보 주문번호를 질문했다. **기존 본문의 주문은 `7000012208`, `/orders/7000012208/complete`**이다. 별도 Summary API 없이 `GET /lab/orders/{orderId}` 응답을 사용한다.
+- Lab 카드 전체는 `activeEmployee.authorityType !== EDITOR`이면 표시한다. 그러나 제보 첨부31704에는 **정산 요약 제목/카드가 이미 있고 내부 행만 비어 있으므로**, 이번 사진을 Editor의 전체 숨김으로 설명하면 안 된다.
+- 상품 행은 `order.orderDetails`를 반복하며 상품명이 `productName`, 기공소 정산 금액은 `(productSettlementPrice || 0) * (quantity || 1) + (totalOptionValueSettlementPrice || 0)`, 통화는 `order.lab.currency`다. **상품 행이 있으면 0원도 표시**한다. Leo 첨부31720의 Only Design/KRW0 표시도 이 동작과 맞는다.
+- 추가 금액 `extraFees`는 `totalAmount===0`인 행을 제외하고, 과거 할인은 `discountPrice>0`일 때만 표시한다. Lab에는 치과와 달리 Credit/refund/Total 합계 행이 없으므로 상품·추가금액·할인 등 표시할 행이 없으면 제목만 남을 수 있다. master/release/stage의 이 노출 규칙은 동일하여 이번 Member 권한 회귀로 확인되지 않았다.
+- QA 첨부31705 콘솔 로그에서 해당 주문의 당시 GET 성공200과 완료 화면 진입을 확인했다. 다만 로그에 응답 body가 없어 실제 `orderDetails`가 비었는지는 확정할 수 없다. 현재 Frankie Staging Lab 계정으로 해당 URL을 열면 '주문 데이터가 없습니다.'가 보여 그 주문의 유효한 응답을 비교하지 못했다. **다음 확인이 필요하다면 정확히 주문7000012208의 orderDetails/extraFees/discountPrice 응답**이며, 단순 0원·정산금액 없음·403 때문에 숨겨졌다고 단정하지 않는다. 요구사항 없이 합계 행이나 안내 문구를 새로 추가하지 않는다. 이 카드는 조사만 했고 코드/댓글/상태 변경은 없다.
+
+- **이전 QA 및 Figma:** 기존 전달12건은 9완료/2 READY FOR QA(16851·16854)/1 CHECK REQUEST(16855)라는 직전 실조회 결과를 유지한다. 권한 Figma #26/#27은 디자이너가 현재 구현에 맞춰 수정 완료한 항목이고 #25는 기존16864 완료 범위라 새 작업이 아니다. 16850/16860도 새 FE 수정 대상이 아니다. 알림센터/Change Office 별도 문의는 이번 목록에 다시 포함하지 않는다.
+- **다음 시작점:** 이 조사 결과를 사용자에게 보고한 뒤 구현 지시를 받으면 16855·16882 웹, 16880 웹, 16881 Lab 앱을 제품별 적합한 최신 release/develop base에서 진행한다. 기존 권한 QA 브랜치는 이미 병합된 상태로 보존했고 웹 clean을 재확인했다. 16874는 표시 기준 설명이 우선이며 실제 주문 응답 또는 새 요구가 확인되기 전 임의 수정하지 않는다. 제품 커밋·푸시·PR·병합·추가 배포는 이번에 하지 않았다.
+
+## 최신 추가 확인 — 2026-10-21 12:35, 범위는 권한관리·v1.89 QA
+
+- 사용자가 방금 추가된 내용까지 확인하여 최종 보고하도록 요청했고, **알림센터는 이번 범위가 아니며 권한관리와 v1.89 릴리즈 포함 내용만 보고**하도록 명확히 했다. 아래 이전 수집 기록의 알림센터 삭제/읽음 정책과 Change Office 토스트는 이번 작업·질문·후속 카드 대상에서 제외한다. 이를 다시 확인하려고 사용자 답변을 기다리지 않는다.
+- **새 댓글 확인:** [DL-16876 댓글44549](https://innovaid.atlassian.net/browse/DL-16876?focusedCommentId=44549), Leo 12:25 작성/12:26 수정: **개발 서버 배포 중, API 스펙 변경 없음, `/lab/orders/{orderId}` 주문 상세 조회 API에만 대응하면 됨.** 앞선403/1018 제안과 연결해 FE를 진행할 근거가 추가됐다. 새 검증 API/요청 형식 변경을 기다릴 필요는 없다. 현재 카드 상태는 진행 중으로 변경됐다. 이는 Leo의 개발 서버 배포 중 통보이며 Staging 반영 완료/실제 응답 성공을 검증한 것은 아니다.
+- 신규 FE 카드 추가는 불필요하며 기존 **DL-16855(밑줄), DL-16880(Lab 웹 차단 화면), DL-16881(Lab 앱 세션 유지·차단 연결)** 3건으로 진행 가능하다. 별도 남은 조사 DL-16874는 기존 정산 Summary 노출 규칙과 제보 계정/데이터 대조다. 권한 외 v1.89 공통 QA도 제외하지 않는다: CP16852·배송모달16857은 완료, 레드닷16854는 READY FOR QA를 유지한다.
+- 12:15 이후 갱신 Jira를 다시 조회해 추가 변경은 위 BE 카드와 이 세션이 만든 FE2카드임을 확인했다. Figma 알림을 새로고침해 권한 파일에 새 멘션이 없는 것도 확인했다. 같은 시각 이후 Slack QA 그룹·직접 멘션에는 새 내용이 없으며 읽기만 했다. 제품 코드/브랜치/배포를 변경하지 않았다. 다음은 사용자 구현 지시 후 위 FE3건 처리 및 실제 BE 응답 연동 확인이다.
+
+## 최신 검토 — 2026-10-21 2차 QA 멘션 수집 및 FE 후속 카드 생성
+
+- **승인 범위:** 사용자는 어제 2차 Staging 전달 이후 Jira 알림·본인 멘션(다른 담당자 카드 포함), Figma 댓글을 확인하고 QA 내용·처리 가능 여부·난이도·확인사항을 정리하며 필요 시 신규 Jira 카드를 만들도록 요청했다. Slack은 오늘 멘션/관련 스레드의 **읽기만** 명시적으로 허용했다. 이번에는 조사·카드 준비까지만 했으며 제품 구현·커밋·푸시·PR·배포를 시작하지 않았다. Slack 쓰기·댓글·리액션은 하지 않았다.
+- **확인 범위:** Jira 직접 알림의 오늘/어제 항목과 10/20 이후 갱신 DL 83카드의 댓글95개 전체 페이지를 대조했다. Frankie의 정확한 accountId 멘션은 5카드9댓글이며, 배포 후 신규 대응은 DL-16855 댓글44535, DL-16876 댓글44536/44539/44541/44548, DL-16879 댓글44545다. 이전 DL-16751/DL-16850 멘션은 배포 전 또는 종결 답변이다. DL-16871/DL-16821 환경변수 알림은 사용자 본인 보고이며 이번 QA에서 제외했다. 원본 수집은 `/tmp/dl16317-qa2-jira-mentions.json`에 있다(장기 보존 보장 없음).
+- **Figma:** Frankie 알림의 전체 탭에서 오늘·어제 댓글/답글을 확인했다. 권한 파일 `2OR0Gj7NUFEEeYBjQg5Y6v`의 #26 물음표 아이콘, #27 환자명/Office명은 현재 구현에 맞춰 디자인을 갱신하기로 했고 디자이너가 수정 완료했다. #25 모바일 동일 적용 요청은 기존 DL-16864 처리/완료 범위다. 이 댓글들을 새 FE 변경으로 중복 등록하지 않았다.
+- **기존 12건 QA 상태:** DL-16751/16848/16849/16852/16857/16858/16859/16864/16867 **9건 완료**, DL-16851/16854 **READY FOR QA**, DL-16855 **CHECK REQUEST**다. Slack의 '수정 반영건 QA 완료' 발언을 미완료 카드까지 종결됐다는 의미로 확대하지 않는다. DL-16850은 프로필 데이터 정상 확인으로 완료이며 코드 수정 제외를 유지한다.
+
+| 항목 | 현재 판단 / 다음 작업 | 난이도·의존성 |
+| --- | --- | --- |
+| **DL-16855** | Authority 글자만 아니라 글자+물음표 아이콘 그룹 전체 밑줄. `OfficeMemberAuthorityHelp.tsx`의 `text-decoration`을 그룹 밑줄로 최소 변경하면 목록·상세 동시 반영 가능. 기존 카드 재사용 | 낮음, 바로 FE 가능. 권한/API 변경 없음 |
+| **DL-16880 신규 / Web** | 기공소 cut-off 주문 상세의 접근 불가 화면. 본문·환자/케이스 정보·프린트 등 주문 액션을 숨기고, 재조회 실패 시 이전 데이터보다 차단 상태를 우선해야 함 | 중간, FE 준비 가능. 실제 BE 응답으로 연동 확인 필요 |
+| **DL-16881 신규 / Lab App** | Lab 앱 상세 사전 GET 실패가 WebView 진입을 막고, 현재 공통403 처리는 2004/2005 외에 세션을 종료함. 403/1018 수신 시 로그아웃 없이 차단 안내·홈 이동이 되도록 별도 보완 필요 | 중간, 웹만 수정해서 해결되지 않음. 정상 인증 만료와 구분 |
+| **DL-16874 기존 / Leo** | 정산 Summary 미노출 기준 질문. 현재 Lab 완료 화면은 `activeEmployee.authorityType !== EDITOR`면 표시하며 별도 Summary API 없이 주문 GET의 orderDetails/extraFees/lab.currency를 사용. master도 같은 조건 | 기존 정책/관측 계정·응답 대조 대상. 이번 FE 권한 회귀로 확정하지 않음 |
+| **DL-16860** | 강제 DRAFT 전환 시 scanner detail status를 잘못 설정한 QA 데이터 이슈. Leo 설명을 PM이 수용했고 완료 | FE 추가 수정 없음 |
+
+- **신규 카드 검증:** [DL-16880](https://innovaid.atlassian.net/browse/DL-16880) `[FE][Web] 기공소 cut-off 주문 상세 접근 불가 화면 적용`, [DL-16881](https://innovaid.atlassian.net/browse/DL-16881) `[FE][Lab App] cut-off 주문 상세 접근 제한 및 로그인 유지`를 중복 검색 후 DL-16317의 하위 작업으로 생성했다. 둘 다 Frankie 담당·해야 할 일·본문 저장을 다시 읽어 확인했다. 기존 BE DL-16876, 디자인 DL-16879를 재배정/종결하지 않았다. Office 앱은 이 Lab 건의 변경 대상이 아니다.
+- **cut-off 확정 범위:** DL-16876 댓글44541의 PM 지시는 주문 상세만이며 리메이크 신청/디자인컨펌 페이지는 제외한다. 안내는 **'접근 불가능한 주문입니다.' / '홈으로 돌아가기'**. 디자인 DL-16879의 `707:36548` screenshot은 중앙 안내·홈 버튼 및 주문 액션 없는 화면을 확인했지만 여전히 영문이므로 명시된 PM 국문을 따른다. 디자이너가 기존 헤더를 임시로 그렸다고 밝혔으므로 기존 헤더 전체 재디자인을 포함하지 않는다. 서버가 cut-off를 판단하며 FE 독자 시간 계산이나 모든403 차단 화면 전환은 하지 않는다.
+- **BE 현재 증거:** Leo가 댓글44548에서 HTTP403/error code1018을 제안했고, Slack 10/21 12:01에 주문 상세 조회 대응 작업 중이라고 밝혔다. 12:14 BE PR2602 생성 알림은 있으나 실제 배포 완료/응답 확인은 하지 않았다. 기존 권한 API 전반이 미완료라는 뜻이 아니라 이번 신규 QA 응답 연동 건이다. FE 준비를 모두 보류할 이유는 없으며 최종 연동 단계에서 실제 응답을 확인한다.
+- **코드 근거:** Web `lab/src/pages/orders/[order_id]/index.tsx`는 data 유무 중심이라 오류/캐시 우선순위 보완이 필요하고 `AppProviders.tsx`는1018을 일반 toast로 처리한다. `useOrderDetail.ts`의 ORDER_SHOW/ORDER_SHOW_FILE 중복 GET과 차단 후 후속 조회를 함께 점검한다. Lab 앱 `src/configs/utils/fetcher.ts:152–162`, `src/features/orderList/screens/OrderDetailScreen.tsx:58–80,151–161`에서403 세션종료/사전조회 오류복귀 경로를 확인했다. 이는 정적 코드 근거이며 실제 기기에서1018 로그아웃을 재현한 것은 아니다.
+- **권한 QA 외 Figma 멘션:** 알림센터 파일 `QLIzKYWzFFlptCYzN36Iq4` #2 답글([Change Office 토스트 제보](https://www.figma.com/design/QLIzKYWzFFlptCYzN36Iq4?node-id=29-7570#1969249684))에 오류 문구·웹/앱·계정이 없어서 원인/수정 제품은 미확정이다. 사용자에게 환경과 문구를 질문했으며 답변 전 임의로 오류라고 단정하거나 제품별 빈 카드를 만들지 않는다. 코드상 Office 앱에는 정상 성공 토스트 `Office has been successfully changed`와 실패 토스트가 모두 있고, 웹에는 성공 토스트가 없다. 웹 `OfficeSelectListModal.tsx`의 활성화와 병원/직원/크레딧 후속 조회, 앱 `EmployeeProfile.tsx`/`useEmployeeProfile.ts`의 전환 후 조회를 재현 시 대조한다. 아직 이 흐름의 결함을 확정한 것은 아니다. #8은 Oli의 **삭제 기능 제외·개별 읽음 버튼 보류·Read all 유지** 제안에 Yoonie가 동의한 통합알림센터 후속 요구사항이다. 이번 권한 QA 결함/즉시삭제 지시로 확장하지 않고 별도 기능에서 반영할 자료로 전달한다.
+- **Slack 근거:** [16855 재확인](https://innovaidhq.slack.com/archives/C0C651ZAX2A/p1792542599760639), [차단 액션 미노출](https://innovaidhq.slack.com/archives/C0C651ZAX2A/p1792549901272999), [디자인/임시 헤더 설명](https://innovaidhq.slack.com/archives/C0C651ZAX2A/p1792550587347819), [BE 작업 중](https://innovaidhq.slack.com/archives/C0C651ZAX2A/p1792551675843749), [Scanner 데이터 종결](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1792477991639059?thread_ts=1792472682.907309&cid=C04T5SU6A2U).
+- **현재 Git:** 개인 컨텍스트와 기존 권한 worktree를 pull/fetch한 뒤 비교했다. 웹 `dentlink-client-permission`의 `feature/DL-16317-qa@8200ba2ff`, Office `dentlink-app-permission`의 `feature/DL-16317-qa@1fa59ed`는 clean·원격 동일로 보존했다. 최신 Web release/v1.89.0=`3786703e9`, stage=`602071d40`, Office develop=`4e0597b`, Lab develop=`56cba67`를 읽기 비교했으며 브랜치를 전환하지 않았다. 최신 ref 확인을 오늘 배포/기기 QA 완료로 설명하지 않는다.
+- **다음 시작점:** 사용자 구현 지시 후 DL-16855 → DL-16880 웹 → DL-16881 Lab 앱을 제품별 현재 기준 branch에서 처리하고, 정상 주문/차단 주문/재조회/세션 만료를 확인한다. 현재 QA 브랜치는 이전 PR이 이미 병합됐으므로 변경 직전 최신 release/develop과 작업 base·소유권을 확인한다. BE 실제 응답 후 연동 검증, 16874 규칙 확인 및 Change Office 제보의 재현 정보 확인은 각각 분리한다. 지금은 제품 수정·추가 배포·자동 모니터링 없음.
+
+## 최신 대기 — 2026-10-20 사용자 담당 READY FOR QA 전체 12건 전달 대조 완료
+
+- 사용자가 권한 외 카드까지 본인 담당 READY FOR QA 전체가 이번 Staging 반영분에 포함되는지 확인하고, 2차 QA 요청을 위해 정리·메모리화·대기하도록 요청했다. 현재 Atlassian의 `assignee = currentUser() AND status = "READY FOR QA" ORDER BY key ASC`를 전체 조회했다. 인증 계정/담당자는 **Frankie(박종선), accountId 642a7f9580f8c2b1220fba09**이며 다음 페이지 없이 총 **12건**이다. 이전 세션의 11건은 그때 상태를 직접 전환한 수이고, 사용자가 미리 전환한 DL-16854를 포함한 현재 전체 수는 12건이다.
+- **웹 11건 포함:** PR4736의 DL-16751/16848/16849/16851/16855/16858/16864/16867 8건과, 별도 공통 QA **DL-16852(CP 부분 입력 내용, PR4732/merge d43389f96), DL-16854(레드닷, PR4730/8545aa57f), DL-16857(배송 모달 리메이크 글자, PR4731/149bfd207)** 3건이다. 실제 PR MERGED·수정 범위·현재 stage 포함을 확인했다. 공통3건은 각 PR head/병합본/현재 stage의 수정 파일이 동일하여 후속 덮어쓰기나 되돌림도 없다.
+- **웹 현재 revision:** 원격 fetch 후 stage `b4813779c9cfbc9455a9bd1e567e68a486e75042` 및 release `7a7e2fbf8087b1be1d2a39f83a074476f01f483d`를 재확인했다. 두 tree가 `15278b32843e5bb1ce1c12c88403a4ea5f22e194`로 같으며 위4개 수정 PR의 merge가 모두 stage에 포함된다. 웹 서비스 배포는 사용자의 기존 완료 간주 지시를 유지했고 Actions/서버/화면을 다시 확인하지 않았다.
+- **앱 1건 포함:** DL-16859는 PR331 MERGED → develop `472ecd97f233bc5b6314a83e5cd6be84a90bf6e1`이며, 최신 원격 develop과 방금 전달한 Office 양OS **Staging v337 / 2.2.4**의 sourceSHA가 같다. 양OS 성공 업로드/서버 readback과 source-map 일치 증거는 `/tmp/dl16859-stg-codepush-current.json`에 있다. 기기 적용·실제 QA는 별도이며, 앱 WebView 상세 수정은 위 웹 배포에서 전달된다.
+- **결론/다음:** 조회한 12건에서 배포 대상 코드 누락·미병합 항목은 발견하지 못했다. 추가 제품 수정·PR·배포·Jira 변경은 필요 없어 수행하지 않았다. 사용자/QA 담당자가 웹 Staging과 앱 v337 적용 후 **2차 QA**를 진행하고 결과가 오면 재개한다. DL-16850은 현재 READY FOR QA 목록에 없으며 기존 수정 제외 결정을 유지한다. 제품 브랜치/worktree는 clean 상태로 보존하고 대기 중 자동 모니터링은 하지 않는다.
+
+## 최신 — 2026-10-20 Staging 전달 및 READY FOR QA 정리 완료
+
+- **사용자 승인/현재 단계:** 웹은 기존 방식으로 원격 stage를 최신 master에서 재생성하고 release/v1.89.0 → stage PR을 준비하며, Office 앱은 병합된 develop 전체를 Staging CodePush하도록 승인했다. 이후 사용자가 웹 배포를 시작했다고 알리고 **웹은 배포된 것으로 보고 앱 CodePush 후 카드 상태를 변경**하라고 지시했다. 이에 웹 Actions/서버 배포 결과를 따로 확인하지 않고 사용자 지시 기준으로 QA 준비 완료 처리했다. 독립적으로 웹 배포 성공이나 실제 화면 QA를 검증했다는 뜻은 아니다.
+- **웹 전달:** 기존 stage `f4ebf42c5c4c2fdfa86344cb468a8838c052d1f7`를 `refs/recovery/stage-before-reset-20261020-permission-qa`에 보존하고, 열린 stage PR0·보호/유효 규칙 없음 확인 후 expected-SHA lease로 삭제했다. 비존재 lease로 최신 master `8772d68825cac6e23792d86a715153a67dc71078`에서 stage를 재생성했고 실제 원격/API SHA를 확인했다. 정상 pre-push hook 두 번 모두 통과했다.
+- **웹 PR4737:** [release-to-stage PR4737](https://github.com/Innvoaid/dentlink-client/pull/4737)을 비Draft로 생성·연결했고 사용자가 병합했다(2026-10-20 18:46:19 KST). 현재 stage `b4813779c9cfbc9455a9bd1e567e68a486e75042`와 release `7a7e2fbf8087b1be1d2a39f83a074476f01f483d`의 tree는 `15278b32843e5bb1ce1c12c88403a4ea5f22e194`로 같다. 전체 release PR은 21커밋·1729파일이며 직전 stage 대비 7 squash 커밋·100파일이다. 권한 QA 외 다른 release 변경도 포함되므로 권한 수정만 배포한 것으로 설명하지 않는다.
+- **앱 전달 완료:** PR331이 병합된 최신 develop `472ecd97f233bc5b6314a83e5cd6be84a90bf6e1`의 격리 archive에서 Office **iOS·Android 모두 Staging v336 → v337 / target 2.2.4** CodePush를 완료했다. mandatory=true, rollout100, enabled이며 양OS 업로드 exit0과 서버 history readback을 확인했다. 설명은 `DL-16859 Staging QA | develop @ 472ecd97f233bc5b6314a83e5cd6be84a90bf6e1`이다.
+- **앱 전달 검증/한계:** immutable install 성공, 추적 source967개가 전달 전후 develop과 동일하고 각OS 소스맵의 자체 JS/TS341개가 정확히 일치한다. v336 대비 native/package/lock/env 차이0이다. iOS 첫 실행은 출력 상위 디렉터리 누락으로 bundle/upload 전에 실패했고 서버 v336 유지 확인 후 디렉터리를 준비해 성공했다. OS별 성공 업로드는 1회씩이다. 기존 isv.mp4 크기 경고는 기존 --force 경로로 처리했다. 기기 다운로드·재시작·v337 적용 및 실제 권한 QA는 아직 확인하지 않았다.
+- **앱 패키지 hash:** iOS `7ea8edf04ad12a2a53dd4586490a435a37e409bdde544b2279428f162179b9a7`, Android `eafd177e497cca8d8819bd92711c33384633964c935eb566c60581f23a7b784d`. 임시 source/node_modules만 제거하고 bundle/maps/logs/metadata는 보존했다. Slack 메시지·Production/Development/Lab·스토어·태그·제품 코드는 변경하지 않았다.
+- **Jira 상태만 변경:** 완료 웹 QA8건 **DL-16751, DL-16848, DL-16849, DL-16851, DL-16855, DL-16858, DL-16864, DL-16867**, 추가 공통 QA **DL-16852, DL-16857**, Office 앱 **DL-16859**까지 총 **11건**을 유효한 `Staging 배포` 전환으로 `READY FOR QA`로 변경했고 각 응답의 최종 상태를 확인했다. 사용자가 이미 옮긴 **DL-16854**는 READY FOR QA 그대로 유지했다. 본문·댓글·담당자·부모 관계는 변경하지 않았다. **DL-16850**은 코드 변경 제외를 유지하고 외부에서 변경된 완료 상태를 건드리지 않았다.
+- **보존 상태:** 웹 `/Users/parkjongsun/Repository/dentlink-client-permission`의 `feature/DL-16317-qa@8200ba2ff`, 앱 `/Users/parkjongsun/Repository/dentlink-app-permission`의 `feature/DL-16317-qa@1fa59ed`는 로컬/원격 동일·clean이며 브랜치와 worktree를 보존한다. 이번 전달을 위한 추가 제품 수정/커밋은 없다. 기존 웹49tests·3제품 타입 PASS, 앱20tests·전체 타입진단18→18/신규0의 검증 경계를 유지한다.
+- **증거:** 웹 `/tmp/dl16317-stage-delete-20261020-qa.log`, `/tmp/dl16317-stage-create-20261020-qa.log`, `/tmp/dl16317-release-stage-qa-20261020.md`; 앱 `/tmp/dl16859-stg-codepush-current.json` 및 `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dl16859-stg-codepush-20261020-g_in5qh_`.
+- **다음 시작점:** Staging 웹 및 Office 앱 v337 적용 후 실제 QA 결과를 받아 대응한다. DL-16851·DL-16864 등 앱 주문상세 WebView 수정은 웹 배포에서, DL-16859는 이번 네이티브 CodePush에서 전달된다. 현재 추가 구현·배포·자동 모니터링 없이 대기하며, 신규 QA 때 실제 적용 버전/권한/재현 조건부터 확인한다. 재현용 Draft `7000012185`는 별도 삭제 지시 없이 보존한다.
+
+## 최신 — 2026-10-20 웹·앱 QA 병합 완료, Staging 재배포 판단
+
+- 사용자 앱 병합 통보 후 [PR331](https://github.com/Innvoaid/dentlink-app/pull/331) MERGED → develop을 실제 확인했다. merge SHA `472ecd97f233bc5b6314a83e5cd6be84a90bf6e1`가 최신 원격 develop과 같다. 이전 develop `43f7879` 이후 이번 squash 1커밋·소스5파일/테스트2파일만 있으며, 검토한 feature HEAD `1fa59ed`와 develop의 tree는 동일하다. ios/android/package/lock/앱 설정 차이0이다.
+- PR331의 Member LinkTalk 조회·미읽음·하단 배지·읽음 캐시 및 권한 전환을 다시 읽기 검토했고 병합을 막을 확정 문제는 발견하지 못했다. 실제 저장된 푸시 설정을 변경하지 않으며, 테스트20개 통과·신규 타입진단0의 기존 근거를 재확인했다. 전체 앱 타입검사 통과나 기기 QA 완료를 의미하지 않는다.
+- 웹 PR4736은 계속 MERGED → release/v1.89.0 `7a7e2fbf8`이다. 원격 stage는 `f4ebf42c5`(PR4724)로 아직 QA 추가분이 없다. release-to-stage 열린 PR은 0개다. 현재 stage와 release 전체 비교는 **7개 추가 squash 커밋·100파일**로, 권한 QA 외 QR/밀링센터/CP/디자인시스템 QA도 포함한다. 이 세션에서 검토한 권한 QA8건만 배포되는 것으로 설명하지 않는다. workflow/Docker/env 차이는 없으며 package 변경은 shared DLDS/DLOS/icons의 0.1.4→0.1.6 버전 값이다. 타 작업100파일 전수를 이 세션이 재검증한 것으로 주장하지 않는다.
+- 판단: **이번 권한관리 수정 기준 웹·앱 모두 Staging 재배포 후 QA 단계로 진행 가능**하다. 웹은 최신 release를 stage에 전달하는 별도 배포 준비/병합 절차, 앱은 최신 develop 전체로 Staging CodePush한다. DL-16850 코드 변경 제외 결정을 유지한다.
+- 사용자 요청은 재배포 가능 여부 판단이며 실제 배포 실행 지시는 아직 없다. 이번에 제품 변경·새 PR·병합·stage 재생성·CodePush·Jira 변경·배포 모니터링을 수행하지 않았다. 두 QA 작업 브랜치와 worktree는 clean 상태로 보존하고, 다음은 사용자 전달 지시에 따른 Staging 준비/배포 또는 QA 결과 대응이다.
+
+## 최신 대기 — 2026-10-20 웹 QA release 병합 완료, 앱 PR331 추후 병합
+
+- 사용자가 웹 PR4736 병합과 Jira 카드 상태 확인을 완료했다고 알렸다. 실제 GitHub 조회에서 [PR4736](https://github.com/Innvoaid/dentlink-client/pull/4736) **MERGED → release/v1.89.0**, 병합 시각 2026-10-20 18:35:09 KST, merge SHA `7a7e2fbf8087b1be1d2a39f83a074476f01f483d`를 확인했다. fetch한 원격 release도 같은 SHA다. 웹 QA 8건은 release에 반영됐으며, 이번 확인에서 새 배포 성공이나 실제 화면 QA를 확인한 것은 아니다.
+- 웹 작업 위치는 `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317-qa@8200ba2ff`를 그대로 유지한다. 로컬/원격 작업 브랜치 동일·clean이며, 병합 이후라는 이유로 브랜치나 worktree를 삭제·교체하지 않았다.
+- 앱은 사용자가 **나중에 병합할 예정**이다. [PR331](https://github.com/Innvoaid/dentlink-app/pull/331)을 다시 조회해 OPEN/비Draft → develop, HEAD `1fa59ed`, CLEAN을 확인했다. 앱 QA 브랜치도 clean이며 추가 수정·푸시·CodePush는 하지 않았다.
+- Jira 완료 수정 9건은 앞서 Ready for Deploy로 정리했고 사용자도 확인했다. 병합만으로 배포/QA 완료 상태로 바꾸지 않았으며 이번에는 Jira를 추가 수정하지 않았다. DL-16850은 이번 코드 전달에서 제외한 결정을 유지한다. 카드의 완료 상태는 앞서 외부에서 관측된 것이며 FE 수정 완료를 뜻하지 않는다.
+- 다음 순서: 웹 release 수정분의 Staging 배포 후 QA 재확인. 앱은 사용자/팀이 PR331을 develop에 병합한 뒤 별도 전달 지시에 따라 develop 전체 Staging CodePush 및 QA를 진행한다. 웹 배포 시 DL-16851·DL-16864 등 앱 WebView 주문상세도 함께 반영되고, DL-16859 네이티브 LinkTalk 수정은 앱 전달이 필요하다.
+- 현재 승인 범위에서 추가 제품 구현은 없다. 기존 검증 결과를 보존하고 제품 테스트/리뷰/배포 자동 모니터링을 재개하지 않는다. 다음 사용자 지시 또는 QA 결과가 오면 해당 제품·배포 버전부터 확인한다. 재현용 Draft `7000012185`는 별도 삭제 지시 없이 보존돼 있다.
+
+## 최신 — 2026-10-20 DL-16850 제외, 웹 QA PR4736 전달·Jira 상태 정리
+
+- 사용자 지시: DL-16850은 우선 제외하고 나머지 완료 QA를 PR로 전달하며 Jira는 현재 작업 상태에 맞춰 **상태만** 변경한다. 이번 작업은 PR 전달까지이며 병합·배포·CodePush·리뷰 대응을 실행하지 않는다.
+- 웹 `/Users/parkjongsun/Repository/dentlink-client-permission`의 `feature/DL-16317-qa@8200ba2ffc42dd091d6a8634486f3f1e0e65279a`를 정상 push하고 [PR4736](https://github.com/Innvoaid/dentlink-client/pull/4736)을 `release/v1.89.0` 대상으로 생성·현재 세션에 연결했다. OPEN/비Draft/MERGEABLE, 실제 7커밋·12파일, 로컬/원격/PR HEAD 동일·clean을 확인했다. 새 제품 수정이나 빈 커밋은 없다.
+- 포함한 웹 QA 8건: **DL-16751, DL-16851, DL-16848, DL-16849, DL-16855, DL-16858, DL-16864, DL-16867**. DL-16850의 `labDirectorProfile`·프로필 노출·LinkTalk 프로필 코드는 변경하지 않았다. 최신 release `d43389f96`의 추가 4커밋과 변경 파일이 겹치지 않고, `git merge-tree --write-tree`로 충돌 없음을 확인했다. 로컬 브랜치에 release를 병합하거나 rebase하지 않았다.
+- Office 앱 [PR331](https://github.com/Innvoaid/dentlink-app/pull/331)은 기존 OPEN/비Draft/CLEAN → `develop` 상태를 유지한다. `feature/DL-16317-qa@1fa59edf58f8d2dc8fc4ac8af17a9016be3a6149`의 DL-16859 1커밋·7파일이 로컬/원격/PR에 동일하며 clean이다. 추가 앱 push/PR은 불필요하다. DL-16851·DL-16864는 웹 상세 WebView로 반영되므로 앱 중복 구현은 없다.
+- 검증: 기존 최종 웹 관련 Jest 3 suites/49 tests·Clinic/Lab/Admin 타입 검사 통과 기록을 유지한다. 이번 전달에서 diff-check, 전달 범위, 병합 가능 여부를 재확인했다. 정상 pre-push hook도 성공했다(Clinic/Lab/Admin lint 오류 0·기존 경고 유지, Admin DLOS guard 9 tests, shared/config 21 tests, shared/hooks 32 tests 및 coverage 검사 통과). 앱 기존 20 tests PASS·전체 타입 진단 18→18/신규0 로그를 재확인했으며 재실행/기기 QA는 하지 않았다.
+- Jira: **DL-16848/16849/16855/16858/16859/16864/16867**을 유효한 워크플로우 `해야 할 일 → 진행 중 → Ready for Deploy`로 변경했다. 기존 **DL-16751/16851**은 이미 Ready for Deploy라 유지했다. 완료 수정 9건이 배포 대기 상태다. 본문·댓글·담당자·부모 카드는 변경하지 않았다. DL-16849의 첫 전환 요청 timeout 후 상태가 여전히 진행 중인 것을 확인하고 한 번 재시도하여 성공했다.
+- **DL-16850 상태 주의:** 처음 조회에서는 해야 할 일이었으나 보류 상태 전환을 시도하기 전후에 외부에서 상태가 바뀌었다. 본 세션의 진행 전환은 400으로 거절됐고 이후 조회에서 **완료**가 확인됐다. 본 세션이 완료 처리한 것이 아니며, 완료 상태를 되돌리거나 FE 수정·BE 원인 확정으로 해석하지 않는다. 사용자 지시대로 이번 PR 범위에서는 제외한다.
+- 다음: 사용자/팀이 웹 PR4736 → release, 앱 PR331 → develop 병합 후 각 환경에 배포하고 실제 화면 QA를 진행한다. 앱은 기존 합의대로 **develop 전체 소스로 Staging CodePush**하며 feature 직접 전달 예외를 반복하지 않는다. 이번에는 배포나 CodeRabbit/CI 후속 모니터링을 실행하지 않았다. 기존 브랜치·worktree와 아래 테스트 Draft는 보존한다.
+
+## 조사 결론 — 2026-10-20 DL-16850 실제 제보 주문 응답·상단 프로필 조건
+
+- 사용자가 마련한 Chrome 시크릿 **Office / Diamond District Dental** 세션으로 제보 주문에 접근했다. Lab 계정 로그인 대기가 현재 시작점이라는 아래 기록은 이 조사로 대체된다. 이번 세션의 권한 종류 자체를 별도 employee 응답으로 확정한 것은 아니다.
+- `GET /office/orders/7000012137`은 200이며 `data.lab.id=2698`, `name="sy test lab"`, `employeeId=3012`, `employeeName=null`, **`labDirectorProfile=null`**이었다. 상단 프로필 링크가 없지만 같은 주문 LinkTalk에는 `Poseb83499 Poseb83499` 프로필과 감독/검토 안내가 표시됐다.
+- 비교 주문 `7000012138`의 동일 API도 200이며 `data.lab.id=295`, `name="sy lab"`, `employeeId=408`, `employeeName=null`, **`labDirectorProfile`에 이름·소개 등 정보가 존재**하고 상단 링크가 표시됐다. 두 주문은 같은 환자/케이스지만 서로 다른 기공소다. 두 주문 모두 기공소는 배정돼 있지만, 현재 개별 기공사 배정 상태까지 독립 확인한 것은 아니다. Office 화면에 Lab용 ‘타 기공소’ 표시가 필요한 상황으로 해석하지 않는다.
+- FE Desktop/Mobile 상단은 `serviceType === "OFFICE"`이고 이름/사진/소개/수상 이력/전문 분야/경력 시작 연도 6필드 중 하나라도 null/undefined가 아닐 때 표시한다. Member/본인 주문 여부로 이 프로필을 별도 숨기지 않는다. 사진·소개 일부가 없어도 이름 등 값이 있으면 링크가 열리며, 객체 전체 null이면 모든 필드가 undefined여서 숨는다.
+- 링크 클릭은 전달받은 프로필을 모달에 표시할 뿐 별도 프로필 API를 호출하지 않는다. LinkTalk `LAB_DIRECTOR_PROFILE`은 별도 메시지의 `template.payload`를 직접 표시한다. 채팅 내용이 현재 주문의 담당자/기공소와 동일한지, 과거 데이터인지까지는 확인하지 않았으므로 임의 fallback이나 배정 확정의 근거로 쓰지 않는다.
+- PM 전달 문안을 제공했다. 결론은 **같은 주문 상세 API의 프로필 응답값 차이로 상단 표시가 달라짐**이다. null의 원인이 실제 프로필/노출 직원 설정인지 서버 응답 누락인지는 미확정이며 BE 확정 버그로 보고하지 않는다. 실제 프로필이 없어도 버튼을 제공해야 한다면 빈 상태 정책을 먼저 정해야 한다. 사용자 요청으로 이 건의 구현은 제외했다.
+- 실제 주문 응답 화면을 `/tmp/dl16850-reported-response.png`, `/tmp/dl16850-comparison-response.png`에 임시 보존했다. 다른 세 번째 주문의 통제 비교나 Lab 프로필 설정 변경은 수행하지 않았다. 이 조사에서 제품 코드/주문 데이터는 변경하지 않았다.
+
+## 이전 조사 — 2026-10-20 DL-16850 재현용 Draft 생성·비교 주문 응답 확인, Lab 로그인 대기
+
+- 사용자 요청: 제보 주문에 접근할 수 없으므로 본인 계정으로 테스트 주문을 만들어 조사한다. Chrome의 Staging `frankieStgOffice`/`jongsun.test1` 세션을 사용했다. 제보 주문 `7000012137`의 실제 `GET /office/orders/7000012137` 응답은 403/code2005/Access denied다. 이는 현재 계정의 접근 제한이며 제보 당시 프로필 누락 원인으로 동일시하지 않는다.
+- 사용자 승인 범위에서 테스트 환자 `QA DL16850 20261020`(합성 DOB 01/01/1990), 케이스 `QA DL16850 profile`, 담당 의사 본인 `frankie stgOffice1`로 **Draft 주문 `7000012185`**를 생성했다. 제품 선택 단계 `/orders/7000012185/product`에 보존했으며 제품 확정·최종 제출·결제·배송·타 주문 수정은 하지 않았다. 화면 증거 `/tmp/dl16850-test-draft.png`(임시 파일). 테스트 생성 사실을 나중에 누락하지 말고 정리 시 이 ID를 기준으로 판단한다.
+- 현재 계정의 기존 본인 담당 주문 `7000006148`을 읽기만 비교했다. `GET /office/orders/7000006148`은 200이고 `data.lab={id:92,name:"frankieStgLab",employeeId:96,employeeEmail:"jongsun.test5@dentlink.app",employeeName:null,labDirectorProfile:null}`이다. 헤더에도 기공사 프로필이 없다. 이 주문은 화면이 전달받은 프로필을 숨긴 경우가 아니라 응답에 프로필 데이터가 없는 경우라는 점까지만 확인했다. 프로필 미등록/노출 직원 미지정/서버 매핑 문제 중 어느 원인인지는 아직 미확정이며 제보 주문에 일반화하지 않는다.
+- FE 재확인: 헤더는 OFFICE이고 프로필 6필드 중 하나라도 non-null이면 표시한다. Member/본인 주문/주문 상태로 숨기는 별도 조건은 없다. LinkTalk는 별도 메시지 payload라 헤더 응답과 구분한다. Draft 1단계는 환자·케이스·담당 의사만 생성하며 Clinic 2~4단계에 기공소 직접 선택 코드가 없으므로 신규 주문 최종 제출만으로 프로필 재현을 보장할 수 없다.
+- Lab 확인 경로: 계정 메뉴 → My Profile(`/my`). `GET /lab/employee/own`의 `id`, `employer.id`, `employer.labProfileEmployeeId`, 최상위 `labDirectorProfile`을 확인한다. Introduction 행은 직원 ID와 `labProfileEmployeeId`가 같은 경우만 노출된다. Admin CRM의 ‘프로필 노출 유저’가 이 지정값을 관리한다. 사용자 사진/이름과 소개 정보는 별도이므로 사진 존재만으로 프로필 완성을 판단하지 않는다. 설정/프로필 PATCH는 이번에 호출하지 않았다.
+- 사용자가 Chrome 시크릿에서 Staging Lab 로그인 화면을 열었으나 로그인 완료는 아직 확인하지 못했다. `frankieStgLab` 계정(jongsun.test5) 로그인 가능 여부를 비동기 질문으로 요청했고 비밀번호는 요청하지 않았다. **다음 시작점은 Lab 로그인 완료 후 프로필 등록·노출 직원 지정 상태를 읽기 확인하고 위 주문 응답과 대조**하는 것이다. 별도 설정 변경은 승인 없이 하지 않는다. 이번 조사에서 제품 코드/Git/Jira/배포 변경은 없으며 웹 HEAD8200ba2ff clean·미푸시, 앱 PR331 전달 상태를 유지한다.
+
+## 최신 — 2026-10-20 앱 QA PR331 전달 완료, 웹은 DL-16850 이후 일괄 PR
+
+- 사용자 지시: 앱 완료분은 기존 작업브랜치/열린 PR에 반영하거나 없으면 PR까지 진행한다. 웹은 DL-16850을 마친 뒤 기존 QA와 한 번에 PR로 전달한다. DL-16850은 웹 주문상세 프로필 표시 건이며 원인 확정·처리는 아직 남았다.
+- 기존 Office PR329는 이미 develop에 병합됐고 현재 QA 브랜치에는 열린 PR이 없음을 확인했다. `/Users/parkjongsun/Repository/dentlink-app-permission`의 `feature/DL-16317-qa@1fa59edf58f8d2dc8fc4ac8af17a9016be3a6149`를 정상 push하고 [PR331](https://github.com/Innvoaid/dentlink-app/pull/331)을 `develop` 대상으로 생성·현재 세션에 연결했다. OPEN/비Draft, base `43f7879`, 정확히 1커밋·7파일, 원격 동일·worktree clean을 확인했다. 자동 제목은 저장소 규칙에 따라 `[DL-16317] [공통] 담당 환자 제한 (Member 권한 추가)`이다.
+- 이번 전달에서 새 코드 변경은 없다. 직전 검증 결과와 독립 읽기 전용 diff/로그 검토(앱 20 tests PASS, lint 오류 0, 기존 타입 진단 18→18/추가 0)를 PR에 기록했다. 전체 타입 통과·실제 기기 QA를 의미하지 않는다. 리뷰 완료·병합·CodePush·배포·Jira 변경은 하지 않았다.
+- 웹 `feature/DL-16317-qa@8200ba2ff`는 clean/미푸시를 유지한다. 다음은 DL-16850 별도 논의·실제 주문 응답에 따른 원인 확인/필요 수정 후 웹 기존 QA 커밋을 함께 release/v1.89.0 PR로 전달하는 것이다. 앱은 PR331 리뷰/병합 이후 사용자 지시에 따라 develop 전체 Staging CodePush하며 기존 v336을 이번에 변경하지 않았다.
+
+## 최신 — 2026-10-20 QA 7건 구현·검증·로컬 커밋 완료, DL-16850 보류
+
+- 사용자 승인: 분류한 8건 중 DL-16850만 제외하고 처리하되 **제품 로컬 커밋까지만** 진행한다. 제품 push/PR·Jira 댓글/상태·병합·배포·CodePush는 하지 않는다. DL-16850은 이후 별도 논의한다.
+- 웹: `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 `feature/DL-16317-qa`, HEAD `8200ba2ff`, upstream 없음·clean. 생성 기준 release/v1.89.0 `f1dab1b1ef086558cf81bdb42b1681b1dc8360ce`와 기존 QA 커밋 `1db28a295`/`b8233cb9a`를 보존했다. 이번 웹 6건은 5개 커밋이며, 브랜치 전체에는 이전 2개를 합쳐 로컬 QA 커밋 7개가 있다.
+- Office 앱: `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317-qa`, base develop `43f787909d29f4899a04fad04d3f452d98b53cad`, HEAD `1fa59edf58f8d2dc8fc4ac8af17a9016be3a6149`, upstream 없음·clean. 기존 feature/DL-16317과 worktree는 보존했다.
+
+| 카드 | 제품·로컬 커밋 | 완료 내용 |
+| --- | --- | --- |
+| DL-16848 | Web `520b57190` | Member 데스크탑 주문 목록의 검색·Status·Order Dates·Place Order를 한 행으로 배치. 좁은 폭에서는 두 행이며 다른 권한의 기존 배치·필터 동작은 유지 |
+| DL-16849 | Web `2c444d3c8` | 오더보드 검색/필터 입력 300px 통일. 해당 화면 안에서만 적용하며 Member 2개·다른 권한 3개 및 좁은 폭 줄바꿈 유지 |
+| DL-16855 | Web `45cd6f371` | 목록·상세 공용 권한 도움말에 밑줄과 아이콘 간격 2px 적용. 도움말 링크 동작 유지 |
+| DL-16858 | Web `de1ed1d05` | Lab 모바일 주문상세에서 Total Cases/Total Orders 숨김. OFFICE/ADMIN의 합계와 케이스 목록은 유지 |
+| DL-16864 | Web `de1ed1d05` | 기존 담당 의사 변경 권한이 없으면 모바일 연필 아이콘도 숨김. 기존 클릭 제한은 이미 있었으며 새 수정 권한 차단을 추가한 것은 아님. 앱 WebView에도 웹 배포로 적용 |
+| DL-16867 | Web `8200ba2ff` | Member의 본인/다른 케이스 이름 수정 모두 제한. 기존 공용 UI·모달·저장 시 권한 검사 경로를 사용하고 다른 역할 및 환자 수정 조건은 유지 |
+| DL-16859 | Office 앱 `1fa59ed` | Member LinkTalk의 My Orders Only 스위치를 숨기고 실제 목록·미읽음·탭 배지·읽음 캐시를 본인 주문 조건으로 통일. 저장된 개인/푸시 설정 자체는 변경하지 않음 |
+
+- 웹 변경은 기존 7파일, 앱은 기존 소스 5파일+테스트 2파일이다. 새 파일·스토리·env/package/lock 변경은 없다. 신규 사용자 문구·별도 권한 정책을 임의로 추가하지 않았다.
+- **검증:** 웹 관련 Jest 3 suites/49 tests PASS, 변경 파일 lint 오류 0, prettier/diff-check PASS. 정상 커밋 훅에서 Clinic/Lab/Admin `tsc --noEmit` 모두 PASS(훅 우회 없음). 앱 관련 Jest 4 suites/20 tests PASS, 변경 lint 오류 0/기존 경고 1, diff-check PASS. 앱 전체 타입 검사는 로컬 설치 환경에서 기존 18진단이 남으며, 수정 전 HEAD와 현재 소스를 같은 CompilerHost 환경에서 비교해 18→18, 신규 0을 확인했다. 앱 전체 타입 검사가 통과했다고 보고하지 않는다.
+- Jira 첨부와 DL-16858 Figma `2OR0Gj7NUFEEeYBjQg5Y6v`/`632:34309`를 대조했다. 실제 로그인 브라우저/시뮬레이터 QA·네이티브 빌드·배포는 이번에 실행하지 않았다. 기존 테스트를 보완했으며 제품 코드의 새 확정 문제는 발견하지 못했다.
+- 검증 로그: `/tmp/permission-order-detail-qa-tests.log`, `/tmp/permission-qa-16855-commit.log`, `/tmp/permission-qa-16849-commit.log`, `/tmp/permission-qa-16848-commit.log`, `/tmp/permission-qa-16858-16864-commit.log`, `/tmp/permission-qa-16867-commit.log`, `/tmp/dl16859-app-tests.log`, `/tmp/dl16859-app-typecheck-comparison.json`. 임시 로그는 장기 보존을 보장하지 않으며 현재 결과는 위 기록으로 남긴다.
+- **다음 시작점:** DL-16850의 헤더 프로필 누락을 별도 논의한다. 해당 영역은 이번에 수정하지 않았다. 제보 주문의 `order.lab.labDirectorProfile` 실제 응답 확인 전에는 FE/BE 원인을 확정하지 않는다. 7건 제품 코드는 로컬에만 있으며, 사용자 일괄 push/PR 지시 후 웹 release/v1.89.0·앱 develop 전달을 진행한다. 배포 후 실제 화면 QA는 별도다.
+
+## 이전 조사 — 2026-10-20 Frankie TO DO 하위 QA 8건 분류, 구현 미착수
+
+- 사용자 요청은 DL-16317 하위에서 본인(Frankie/박종선, accountId 642a7f9580f8c2b1220fba09)에게 배정된 TO DO 카드의 내용·권한 QA 해당 여부·처리 가능·난이도·확인사항을 표로 정리하는 것이다. Jira 직접 하위 카드 전체에서 `해야 할 일`인 8건을 조회했고 전부 본인 배정임을 확인했다. DL-16751/16851 등 Ready for Deploy는 대상에서 제외했다.
+- Jira 본문·댓글·첨부 이미지와 두 제품 QA 브랜치의 실제 코드를 읽었다. DL-16858 댓글44506의 Figma `2OR0Gj7NUFEEeYBjQg5Y6v` node `632:34309`도 screenshot으로 확인했다. 실제 로그인 화면/해당 주문 API 응답 검증은 하지 않았으며, 이번에는 제품 코드/Git/Jira/배포를 변경하지 않았다. 웹 HEAD b8233cb9a, 앱 HEAD43f7879, 양쪽 feature/DL-16317-qa/clean을 확인했다.
+
+| 카드 | 분류 | 처리 가능·난이도 | 확인 사항 |
+| --- | --- | --- | --- |
+| DL-16848 | Member 전용 주문 목록 레이아웃 QA | FE 가능·중 | 첨부의 검색/Status/Order Dates/Place Order 한 행 배치와 현재 두 행 차이. Dentist/My Orders 필터 숨김과 Assigned Dentist 표시는 이미 있음. 폭·간격·반응형과 타 권한 유지 확인 |
+| DL-16849 | 직접 권한 QA 아님, 권한 공통 UI 개선 | FE 가능·하 | 오더보드 입력 300px 통일. 현재 공용 flex:1 유동폭. Member2개/그 외3개 및 좁은 화면 확인, 공용 컴포넌트 전체 영향 방지 |
+| DL-16850 | 권한 변경과 인과 미확정, 주문상세 공통 프로필 문제 | 원인 조사 가능·중 예상 | 헤더는 order.lab.labDirectorProfile, LinkTalk는 별도 메시지 payload. 기존 헤더는 역할/본인 주문으로 숨기지 않음. 제보7000012137와 비교7000012138 주문 상세 응답의 프로필 데이터 대조 후 FE/BE 원인 구분 |
+| DL-16855 | 권한관리 화면 디자인 QA | FE 가능·하 | 목록/상세 공용 OfficeMemberAuthorityHelp의 현재 gap4px/밑줄없음 → 요구2px/밑줄. 양쪽 및 도움말 동작 확인 |
+| DL-16858 | Lab 조회 제한 관련 모바일 디자인 누락 | FE 가능·하 | Order Info의 Total Cases/Orders 숨김. Figma에는 없고 데스크탑은 이미 LAB만 숨김. 모바일도 LAB 한정 적용, OFFICE 보존 |
+| DL-16859 | Member LinkTalk 필터 누락 QA, Office 네이티브 | FE 가능·중 | My Orders Only 숨김+실효조건true. 목록/myOrderOnly, 미읽음/myOrdersOnly, 하단 배지·읽음캐시 조건 및 역할전환 일치. 공통 preference를 무조건 고쳐 푸시 알림 설정까지 바꾸지 않도록 주의. 현재 API로 가능 |
+| DL-16864 | Member 타 의사 주문 모바일 연필 표시 누락 QA | FE 가능·하 | Dentist 연필이 항상 렌더링되지만 클릭은 기존 권한 guard로 막힘. 실제 수정 허용 문제로 확대하지 않음. PC와 동일 노출조건 및 앱 WebView 확인 |
+| DL-16867 | Member 케이스 이름 변경 제한 QA | FE 가능·하 | 현재 본인 주문의 caseId이면 Member도 canEditCaseTitle 및 updatePatientCase 경로가 열림. 카드의 Member 전체 수정불가 요구에 맞춰 UI+실행조건 수정 가능, 다른 권한 유지 확인 |
+
+- 6건은 이번 권한/관련 디자인 QA, 1건(16849)은 공통 UI 개선, 1건(16850)은 연관 미확정이다. 7건은 FE에서 처리 가능하며 착수 전 추가 BE 문의가 필수라는 근거는 없다. 16850은 응답을 확인한 뒤 필요할 때만 BE 확인한다. 표의 확인사항은 대부분 구현/검증 단계에서 내부적으로 확인할 내용이며, 전부 사용자가 먼저 답해야 한다는 뜻이 아니다.
+- 다음 시작점: 사용자의 구현 지시가 오면 이 분류와 최신 카드 변경을 대조하여 웹·앱 기존 QA 브랜치에서 처리한다. 현재 8건은 분류만 완료했고 수정·테스트·커밋하지 않았다. 기존 웹 2개 로컬 커밋/제품 push 보류 및 앱 QA 브랜치 준비 상태는 아래와 같다.
+
+## 최신 — 2026-10-20 Office 앱 QA 브랜치 준비, DL-16851은 웹 수정으로 공통 대응
+
+- 사용자 요청: 앱도 QA를 시작하며 지금처럼 QA 브랜치를 만들고 필요한 수정은 로컬 커밋으로 모은다. 제품 push는 이후 일괄 진행하므로 보류한다.
+- `/Users/parkjongsun/Repository/dentlink-app-permission`에서 기존 `feature/DL-16317`을 정상 pull한 뒤 `origin/develop`을 fetch했다. 최신 develop `43f787909d29f4899a04fad04d3f452d98b53cad`에서 **`feature/DL-16317-qa`**를 `--no-track`으로 생성·checkout했다. HEAD=origin/develop, diff0, upstream 없음, clean이다. 기존 feature/DL-16317@f037c80와 원격 브랜치/worktree는 보존했다.
+- Jira DL-16851 본문 및 댓글44503 ‘앱에서도 동일현상’을 재확인했다. 앱의 `OrderDetailScreen.tsx`는 `/orders/${orderId}`를 WebView로 열고 Staging은 `stg-portal.dentlink.io`로 연결한다. WebView 캐시는 비활성화이며 별도 네이티브 담당 변경 모달/경고/실제 changeDentist 호출은 없다. 독립 읽기 전용 점검도 같은 결론이다.
+- **조치 판정:** 기존 웹 QA 커밋 `b8233cb9a`가 모바일/앱 WebView 경고까지 수정한다. 따라서 이 카드만을 위한 앱 코드 수정·빈 커밋·CodePush는 필요 없다. 앱 새 커밋은 0개이며 QA 브랜치만 준비했다. 웹 수정도 아직 로컬 미푸시·미배포다.
+- **검증/다음:** 앱 수정이 없어 새로운 테스트/네이티브 빌드/시뮬레이터 QA는 실행하지 않았다. 웹의 앞선 관련51tests 및 타입 검사 결과를 유지한다. 웹 수정 배포 후 앱 주문상세에 재진입해 Member 본인 주문 경고 표시와 Admin 미표시를 실제 화면에서 확인한다. 이후 앱 고유 QA가 나오면 이 QA 브랜치에서 수정·검증·로컬 커밋을 모으고, 사용자 지시 후 push/PR→develop 통합→develop 전체 Staging CodePush 순서를 따른다.
+- 이번에는 제품 push/PR·Jira 댓글/상태·배포·별도 제품 카드 생성은 하지 않았다. 이 건은 웹 구현으로 공통 대응하며 앱에서 중복 구현하지 않는다.
+- **종료 확인:** 사용자의 ‘동일하게 커밋하고 대기’ 요청 후 웹·앱 작업 트리가 모두 clean임을 재확인했다. 웹 2개 로컬 커밋(1db28a295/b8233cb9a)은 완료 상태이고 앱은 변경이 없어 추가/빈 커밋을 만들지 않았다. 제품 푸시 없이 두 QA 브랜치를 보존하고 다음 QA 또는 일괄 푸시 지시까지 대기한다.
+
+## 최신 — 2026-10-20 웹 QA 2건 구현·검증·로컬 커밋 완료, 제품 푸시 보류
+
+- 사용자 지시: 현재 `feature/DL-16317-qa`에서 앞선 DL-16751을 먼저 커밋하고 DL-16851을 구현·별도 커밋한다. 제품 푸시는 이후 모아서 진행하므로 이번에는 하지 않는다. 모델 변경 후 두 건을 다시 검토하라는 요청까지 반영했다.
+- 웹 위치: `/Users/parkjongsun/Repository/dentlink-client-permission`, branch `feature/DL-16317-qa`, base `f1dab1b1ef086558cf81bdb42b1681b1dc8360ce`(생성 당시 release/v1.89.0). HEAD `b8233cb9aa8655540f15d6abde2c82bd80e0b50d`, upstream 없음, worktree clean. 기존 권한 브랜치/worktree는 보존한다.
+- **DL-16751**: `1db28a295b53b2bf4d7b5ecf2386595bb10dcbe5`, `ui: 환자 목록 기공소 주문 현황 제목 위치 조정`. Lab 환자 목록의 ‘우리 기공소 주문 현황’ 제목·아이콘을 약 2px 아래로 조정했다. `PatientListLayerDesktop.tsx`의 padding 한 줄만 변경했고 높이·전체 상하 padding·문구·다른 열은 그대로다.
+- **DL-16851**: `b8233cb9aa8655540f15d6abde2c82bd80e0b50d`, `fix: 멤버 담당 의사 변경 경고를 주문 기준으로 표시`. Jira 본문과 첨부 디자인의 요구는 Member가 자기 주문의 담당 의사를 바꿀 때 기존 접근 권한 경고를 표시하는 것이다. 같은 환자의 다른 본인 주문이 있으면 경고를 숨기던 조건을 제거했다. Member+본인 주문의 기존 변경 권한 조건으로 경고를 표시하며, 이를 위해 환자 이력·타 주문을 추가 GET하지 않는다. 불필요해진 조회 상태/로딩 UI와 해당 테스트만 정리했다. 기존 실제 변경 권한 검사와 직원·주문·권한 변경/unmount 이후 오래된 callback 차단은 유지한다. 새 UI·문구·파일 추가는 없다.
+- **Office 앱 영향**: Jira 댓글44503의 앱 동일 증상도 확인했다. `dentlink-app-permission/src/features/orderList/screens/OrderDetailScreen.tsx`가 `/orders/${orderId}` 웹 상세를 WebView로 연다. 이번 웹 수정은 Desktop/Mobile 공통으로 반영되므로 웹 배포 후 앱 WebView에도 적용되며, 이 건을 위한 네이티브 코드/CodePush 변경은 없다. 앱 checkout은 clean으로 보존했다. 실제 앱 화면 확인은 아직이다.
+- **검증**: 관련 Jest 3 suites/51 tests PASS. 두 정상 commit hook에서 Clinic/Lab/Admin `tsc --noEmit` 모두 PASS. 수정 Clinic 4파일 ESLint는 오류0/기존 경고6, diff-check PASS. 처음 commit hook의 로컬 DLDS workspace module 누락은 `pnpm install --frozen-lockfile`로 해결했고 package/lock/env 추적 파일은 바뀌지 않았다. 모델 변경 후 실제 Git·diff·검증 로그 및 독립 읽기 전용 리뷰로 두 커밋을 재검토했고 추가 확정 문제는 발견하지 못했다.
+- **현재 영향/다음**: 두 제품 커밋은 로컬에만 있다. 제품 push·PR·Jira 댓글/상태·배포는 하지 않았다. 실제 화면의 최종 육안 QA는 남아 있다. 사용자 후속 지시에 따라 같은 QA 브랜치에 작업을 모은 뒤 일괄 push 및 release/v1.89.0 PR을 진행한다. 별도 확정 백엔드 수정 요청은 없다.
+
+## 이전 인수 대기 — 2026-10-20 DL-16751 웹 QA 이관
+
+- 디자인시스템 세션에서 사용자 요청에 따라 이관했다는 메시지를 받았다. 이관 메시지의 사용자 지침은 **권한관리 웹 QA를 카드별 브랜치 대신 `feature/DL-16317-qa`에 모아 처리**하는 것이며, 지금은 인수 상태만 확인하고 다음 지시까지 추가 구현·제품 커밋/푸시/PR 없이 대기한다.
+- 직접 확인: `/Users/parkjongsun/Repository/dentlink-client-permission`의 현재 브랜치 `feature/DL-16317-qa`, HEAD와 로컬 `origin/release/v1.89.0` 모두 `f1dab1b1ef086558cf81bdb42b1681b1dc8360ce`. upstream 없음. `feature/DL-16317-api-permissions`를 포함한 기존 권한 브랜치는 보존돼 있다. 새로 원격을 fetch하거나 제품 브랜치를 pull/변경하지 않았다.
+- 미커밋 수정은 `lab/src/components/PatientList/PatientListLayerDesktop.tsx` 한 파일 한 줄뿐이다. DL-16751의 환자 목록 ‘우리 기공소 주문 현황’ 제목·아이콘을 아래로 보이게 해달라는 요청에 따라 `StyledLabHeaderCell` padding이 `5px 5px 5px 16px` → `7px 5px 3px 16px`로 변경돼 있다. 전체 상하 padding 합과 높이는 유지한다. 직접 diff·변경 파일 목록·diff-check로 이 상태를 확인했다.
+- Lab 타입 검사는 이관 세션에서 통과했다고 보고받았으며 이 인수 단계에서 재실행하지 않았다. 실제 화면의 최종 육안 확인은 아직이다. 번역·문구·다른 열·공용 UI 수정은 없다. Jira 댓글/상태 변경, 제품 커밋·푸시·PR·배포도 실행하지 않았다.
+- 디자인시스템 checkout은 원래 `feature/DL-16852` clean으로 복귀했고 별도 PR4730/4731/4732는 이번 범위가 아니라는 인계 내용이다. 이번 인수에서는 해당 checkout/PR을 재검증하거나 변경하지 않았다.
+- 다음 시작점: 사용자 후속 지시를 받은 뒤 이 미커밋 수정과 브랜치 상태부터 다시 대조하고, 필요한 화면 확인·다른 권한 QA를 같은 웹 QA 브랜치에서 이어간다. 기존 Office 앱의 develop 통합·CodePush 정책과 과거 전달 이력은 아래 기록대로 유지한다. 지금은 제품 작업을 더 진행하지 않는다.
+
+## 최신 대기 — 2026-10-19 앱 develop 병합 완료, 이후 QA 전달 기준 확정
+
+- 사용자가 앱 작업브랜치를 develop에 병합했다고 알렸다. GitHub 실조회로 [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) **MERGED→develop**, mergedBy=jongsunP, 2026-10-19 18:13:16 KST, merge SHA `43f787909d29f4899a04fad04d3f452d98b53cad`를 확인했다. 조회 시 원격 develop도 같은 SHA다.
+- 기존 Staging 양OS v336/2.2.4는 `feature/DL-16317@f037c80153b328bbb14fcafd5fb756a59fd4cc8e`에서 전달한 빌드다. 사용자는 이를 유지하기로 했으며 병합만을 이유로 새 CodePush하지 않는다. 원격 feature와 로컬 worktree는 그대로 보존한다.
+- **소스 동등성 확인:** fetch한 develop43f7879와 v336 source featuref037c80의 전체 tree가 `355364f3d6b8c6971030170cad74dbe78e9a4be9`로 동일하다. 변경 파일0개, 네이티브/의존성 차이0개이며 worktree clean이다. 현재 병합만을 이유로 재배포할 필요가 없음을 코드로 확인했다.
+- **이후 이 Office 권한관리 QA의 전달 순서:** QA 내용을 작업브랜치에서 수정·검증 → develop에 PR/병합 → develop 전체 소스로 Staging CodePush. 이전의 feature 직접 Staging 전달 예외를 이후 QA에도 반복하지 않는다.
+- 다음 실제 전달 때는 develop에 함께 포함된 변경 및 설치 바이너리 호환성을 확인한다. 이 기록은 전달 계획이며 지금 새로운 코드 변경·병합·배포를 실행하라는 요청은 아니다. 다른 제품이나 운영/스토어 전달 정책까지 변경한 것으로 확대하지 않는다.
+- 앱 PR 병합은 완료됐으므로 남은 일로 유지하지 않는다. 현재는 QA 결과를 기다리며, 새로운 QA 또는 사용자 후속 지시가 있을 때만 재개한다. 웹 배포/전체QA의 이전 증거 경계는 그대로이고 이번에는 재조회하지 않았다.
+
+## 대기 체크포인트 — 2026-10-19 사용자 정리·메모리화·대기 지시
+
+- 사용자가 추가 수정 없음과 앱 양OS Staging v336 전달 완료를 확인하고 정리·메모리화 후 대기를 요청했다. 지금 확인된 필수 FE 추가 조치는 없다.
+- 웹 PR4719는 release, PR4720은 stage에 사용자 병합됐다. 웹 배포의 마지막 독립 관측은 진행 중이며 이 종료 단계에서는 재조회하지 않는다. 완료로 단정하지 않는다.
+- 앱 feature/DL-16317@f037c80는 iOS/Android Staging v336(2.2.4) 전달 완료. PR329는 최신 head LGTM 승인·미병합이며 CodeRabbit 미실행은 기존 지시에 따라 넘겼다. 제품 코드·배포를 추가 변경하지 않았다.
+- 다음 재개점은 사용자가 전달하는 Staging QA 결과 또는 별도의 PR 병합/후속 작업 지시다. 실제 기기 업데이트 적용·QA 및 사용자/팀의 앱 PR 병합은 별도 단계로 유지한다.
+- 기존 브랜치·worktree·시뮬레이터·Metro를 보존한다. 대기 중 자동 조회·리뷰 모니터링·테스트·배포·제품 Git 변경을 하지 않는다. 이번 종료는 개인 컨텍스트 기록·커밋·푸시만 수행한다.
+
+## 최신 리뷰 확인 — 2026-10-19 앱 PR329 승인 확인, 추가 조치 없음
+
+- 사용자가 Staging 전달 후 앱 PR 리뷰 확인을 요청했다. 개인 문서와 앱 worktree를 ff-only pull하여 최신 상태를 확인했다.
+- [앱 PR329](https://github.com/Innvoaid/dentlink-app/pull/329)는 OPEN/비Draft→develop, head `f037c80153b328bbb14fcafd5fb756a59fd4cc8e`, 로컬/origin 동일·clean이다. `reviewDecision=APPROVED`, `MERGEABLE/CLEAN`을 확인했다.
+- 앱 개발자 `myungjael`이 같은 최신 head에 **LGTM / APPROVED**를 남겼다(2026-10-19 05:59:58Z). GraphQL reviewThreads 0건(hasNextPage=false), REST 인라인 리뷰 댓글 전체 페이지 0건으로 미해결 지적이 없다.
+- CodeRabbit의 유일한 이슈 댓글은 `develop`이 자동리뷰 대상(release/*) 밖이라 **Review skipped**됐다는 내용이다. 체크 SUCCESS를 실제 코드리뷰 완료로 표현하지 않는다. 기존 사용자 지시대로 미실행 리뷰를 강제 재실행하지 않았다.
+- 추가 제품 수정·테스트 재실행·커밋·PR 병합·CodePush는 하지 않았다. 이번 검토는 등록된 리뷰 확인이며 새 전수 코드 감사나 실기기 QA가 아니다. 앱 Staging 양OS v336 상태는 유지한다.
+- 웹 최신 stage4b28c28a6의 Office39207769223/Lab39207769115/Admin39207769111은 단일 재조회에서도 in_progress였다. 추가 자동 polling 없이 배포 완료와 실제 QA는 별도로 둔다.
+- 다음은 사용자/팀의 앱 PR 병합 판단 및 Staging 실제 기기 업데이트·권한 QA다. 등록된 앱 개발자 리뷰는 이미 승인 완료이므로 미진행으로 남기지 않는다.
+
+## 현재 상태 — 2026-10-19 웹 PR4720 사용자 병합·배포 진행 / 앱 Staging v336 완료
+
+- **최신 사용자 승인:** 사용자가 웹 PR4719 release 병합을 완료했다고 알리고, 설명한 기존 stage 재생성→release-to-stage PR 절차 진행을 요청했다. 웹 전달 준비 후 앱도 다시 기존 feature/DL-16317에서 Staging CodePush하도록 명시 승인했다. 이번도 일반 앱 PR/develop 통합 정책을 바꾸는 승인이 아니다.
+- **웹 release 확인:** PR4719 MERGED, merge SHA `fef63000543c32780c82abf202e15e9cef3c3d9c`, 2026-10-19 05:49:54Z. 원격 release/v1.89.0과 일치한다. 별도 PR4708(Lab 입고 검사서 보완)도 최신 release에 포함돼 있다.
+- **웹 stage 재준비 완료:** 기존 stage `413ed3564af9d888a49da2b62666851a948eaf6b`, master `8772d68825cac6e23792d86a715153a67dc71078`, 열린 stage PR0, protected=false/effective rules=[] 확인. `refs/recovery/stage-before-reset-20261019-api-permissions`에 기존 SHA를 보존했다. expected-SHA lease 삭제 후 비존재 lease로 최신 master에서 원격 stage를 재생성했다. 정상 push hook 두 번 모두 성공, 기존 lint warning 유지.
+- **웹 PR 준비:** [PR4720](https://github.com/Innvoaid/dentlink-client/pull/4720), OPEN/비Draft, `release/v1.89.0@fef630005 → stage@8772d6882`, 12커밋/390파일의 전체 release PR. 직전 Staging 대비21파일 차이이며 권한 수정4파일만을 배포하는 PR은 아니다. 실제 base/head/full diff와 현재 작업 attach를 확인했다. 웹 task worktree는 feature/DL-16317-api-permissions@5bdad60e6 clean을 유지한다.
+- **웹 사용자 병합/배포:** 정리 중 사용자가 PR4720을 병합했다(mergedBy=jongsunP, 2026-10-19 06:03:47Z). stage `4b28c28a649a7a0cb7a32f6df67d7c7c1ed66c57`와 release `fef630005`의 tree가 동일함을 확인했다. 최신 SHA의 Office run39207769223 / Lab39207769115 / Admin39207769111 모두 **in_progress**인 것까지 확인했다. 웹 배포 최종 성공·화면QA 완료로 보고하지 않는다. 직접 PR 병합·workflow dispatch·E2E/Vercel 처리는 하지 않았으며 이후 자동 polling은 하지 않는다.
+- **웹 증거:** `/tmp/dl16317-stage-reset-api-permissions-20261019.json`, `/tmp/dl16317-stage-delete-api-permissions.log`, `/tmp/dl16317-stage-create-api-permissions.log`. 기존 feature/worktree/복구 ref는 보존했다.
+- **앱 배포 완료:** `/Users/parkjongsun/Repository/dentlink-app-permission`, `feature/DL-16317@f037c80153b328bbb14fcafd5fb756a59fd4cc8e`. iOS/Android 모두 **Staging v336**, target2.2.4, mandatory=true, rollout100, enabled. 기존 v335→v336으로 각 명령 한 번씩 실행 성공, 서버 history readback으로 소스 설명 f037c80·활성 설정을 확인했다. 주석 변경만이어도 실제 bundle hash가 달라 서버가 정상 신규 릴리스로 수락했으며 인위적으로 파일을 바꾸지 않았다.
+- **앱 검증:** git archive 격리 source967개 추적 파일이 HEAD와 동일하고 immutable install/lock/주요 SDK 버전이 이전 v335와 일치한다. v335 및 origin/main/develop 대비 네이티브·package·lock·env 차이0. 양OS 소스맵 자체 JS/TS341개(src339+App.tsx/index.js)가 최종 feature와 모두 일치한다. 기존 isv.mp4 1.48MiB 경고는 기존 --force 경로로 성공했으며 실패·중복 재시도 없음.
+- **앱 패키지 hash:** iOS `bbd7e3bdfe404cec947609162559fe52837142312c3391e8ee6f867491caa937`, Android `aa708c31cf9841f80fba1066af1d4d9c3edb1e778ae9f65aea9a15e8aef5342b`.
+- **앱 기록/정리:** `/tmp/dl16317-stg-codepush-repeat-current.json`; 산출물 `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dl16317-stg-repeat-20261019-5ab76uf4`. 번들/maps/logs/metadata는 보존하고 배포용 임시 source/node_modules만 삭제했다. 원본 worktree clean/원격 일치, Member 시뮬레이터·Metro 유지. Production/Development/Lab·태그·스토어 배포는 변경하지 않았다.
+- **PR/다음:** 앱 PR329 OPEN→develop/headf037c80 유지, 본문에 최신 Stagingv336과 기존v335 이력 구분. 실제 기기 다운로드·재시작·v336 적용 및 권한별 전체QA는 별도다. 웹은 현재 배포 완료 후 권한별 API 호출 여부를 확인한다. 앱 개발자 PR리뷰·병합/운영 전달은 별도이고, 추가 제품 코드 변경·Jira/Slack 등 메시지 전송은 하지 않았다.
+
+## 이전 상태 — 2026-10-19 권한별 결제 API 보완 커밋·푸시·PR 전달 완료
+
+- **최신 사용자 승인:** PM/백엔드에게 전달할 복사용 설명, 실제 코드·주석 반영 및 웹 새 feature→release PR, 앱 기존 PR 반영을 요청했다. 배포/병합/CodeRabbit 후속 리뷰는 이번 요청에 포함되지 않는다.
+- **웹 완료:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317-api-permissions@5bdad60e6da17a8a533622498ba334c9ad952eb1`, `fix: 결제 조회 API에 사용자 권한 조건 적용`. 최신 release `d28e1b114`와 같은 base를 재확인하고 기존 로컬 수정4파일을 정상 커밋·푸시했다. [PR4719](https://github.com/Innvoaid/dentlink-client/pull/4719) OPEN/비Draft → `release/v1.89.0`, head SHA·변경4파일·원격 일치·clean·현재 작업 attach 확인.
+- **웹 범위:** count2개 및 v2 결제수단 목록 GET를 OWNER/PAYMENT_MANAGER에서만 조회하고 직원/권한별 캐시를 분리한다. 기존 배너 제한 주석을 포함해 정확한 경로·허용/생략 역할을 코드에 남겼다. 아래 직전 체크포인트의 API 표와 실제 Staging/서버 계약 근거를 그대로 따른다.
+- **검증:** 직전 검증된 최종 소스의 관련28tests·변경 파일 lint/diff 검사를 유지한다. 이번 정상 commit hook에서 Clinic/Lab/Admin 타입 검사가 모두 통과했고 정상 push hook도 통과했다. 전체 lint의 기존 warning은 있었지만 실패한 검사는 없다. 별도 E2E/Vercel 조치나 CodeRabbit 스레드 검토/대기를 하지 않았다.
+- **앱 완료:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317@f037c80153b328bbb14fcafd5fb756a59fd4cc8e`, `docs: 홈 결제 안내 API 권한 조건 주석 보완`. HomePaymentReplacementBanner.tsx 주석5줄만 커밋·푸시, 단일파일 ESLint/diff PASS. 원격 일치·clean 및 [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) OPEN/비Draft → develop, 최신 head 확인·attach·본문 보완 완료.
+- **앱 영향:** 이번 웹 API3개는 네이티브 actual caller가 없으며 기존 배너도 이미 OWNER/PAYMENT_MANAGER 전용이다. 앱 기능/UI/요청 조건 변경 없음. 기존 Staging v335 소스는 `5c3504d`로 PR 본문에 구분해 보존했으며 주석만을 위한 추가 CodePush는 필요 없다.
+- **현재 영향:** 두 제품의 코드 전달은 완료했지만 PR은 미병합이고 이번 웹 수정은 아직 미배포다. 기존 웹 Staging·앱 양OS Staging v335/2.2.4·Developmentv139·Jira READY FOR QA 상태를 변경하지 않았다. 담당자에게 직접 메시지나 Jira 댓글을 전송하지 않고 복사용 내용을 사용자에게 제공한다.
+- **다음:** 사용자/개발자 PR 검토·웹 PR4719 release 병합 및 Staging 배포 후 Editor/Member의 대상3 API 요청 부재와 Admin/결제관리자 정상 조회를 확인한다. 앱 PR329의 개발자 리뷰·develop 병합과 기존 전체QA/운영 전달은 별도다. 추가 확정 BE 수정 요청은 없으며 기존 일반 주문·환자·크레딧 조회/주문 가능 조건은 보존됐다.
+
+## 이전 상태 — 2026-10-19 Editor 공통 화면 403 후속 수정·검증 완료, 제품 Git 전달 전
+
+- **재개 범위:** 사용자가 Member 외 Editor에서도 발생하는 불필요한 403 요청을 홈·주문목록·환자목록까지 조사하고, 웹부터 수정 후 앱 필요 여부 확인을 지시했다. 실제 Chrome Staging Admin/다른 권한 세션 사용도 승인했다. 공유할 권한/API 목록과 코드 주석을 요청했다.
+- **웹 작업 위치:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 새 `feature/DL-16317-api-permissions`, base `origin/release/v1.89.0@d28e1b114`. 원래 `feature/DL-16317-payment-banner@20be3ee65` 및 원본 feature/worktree는 보존했다. 최신 release에는 별도 Lab PR4708이 포함되며 이번 변경은 Clinic만이다.
+- **실제 Staging 확인:** 준비된 두 Chrome 세션의 `/office/employee/own` Preview에서 EDITOR와 OWNER를 각각 확인했다. Editor의 환자목록·주문목록에서 결제 건수 2개 GET가 403, 홈에서는 v2 결제수단 목록도 403이었다. Admin 홈에서는 아래 4개 GET 모두 200이었다. Editor의 주문·환자·직원 필터·크레딧 일반 조회는 200이므로 차단하지 않았다. 계정 역할 변경이나 데이터 생성/수정은 하지 않았다.
+- **서버 계약 확인:** Stage 성공 workflow39195277159의 backend `dl-16786@cbafdde2447d2efd2cc06df772a9cd7b3e2da45a`, `OfficeConstants` payment-manager group와 `SpringSecurityConfig` 실제 역할 검사를 대조했다. 아래 4 API는 OWNER/PAYMENT_MANAGER 전용이며 현재 main도 동일하다. 별도 BE 문의나 정책 추정 없이 확인 가능한 범위다.
+
+| GET API | 웹 상태 | Office 앱 상태 |
+|---|---|---|
+| `/office/payments/v2/status-count` | 공통 메뉴의 OWNER/PAYMENT_MANAGER 조건 추가 | 네이티브 실제 호출 없음, 생성 선언만 존재 |
+| `/office/payments/invoices/outstanding-count` | 공통 메뉴의 OWNER/PAYMENT_MANAGER 조건 추가 | 네이티브 실제 호출 없음, 생성 선언만 존재 |
+| `/office/v2/employers/own/payments` | 중앙 목록 query에 동일 조건 추가, 홈·요금표 보조 조회 및 기존 관리 화면 소비자 확인 | 네이티브 실제 호출 없음, 결제 관리 WebView는 이미 OWNER/PAYMENT_MANAGER 전용 |
+| `/office/employers/own/payments/replacement-required` | 기존 US 홈 + OWNER/PAYMENT_MANAGER 조건 유지, 주석 보완 | 기존 US + OWNER/PAYMENT_MANAGER의 최초 조회·복귀 재조회 조건 유지, 주석 보완 |
+
+- **호출 기준:** OWNER(Admin)/PAYMENT_MANAGER만 허용, EDITOR/VIEWER/MEMBER 및 현재 직원 권한 미확정 상태에서는 대상 조회 생략. 기존 배너도 Member만 제외했던 것이 아니라 이미 전체 역할에 이 allowlist가 적용돼 있었다. 이번에 웹의 남아 있던 3개 조회를 같은 서버 정책에 맞췄다.
+- **과잉 제한 방지:** `/office/credits/own/accounts`, 일반 주문·환자 조회, legacy `/office/employers/own/payments`를 결제 API라는 이유로 일괄 차단하지 않는다. 서버 `EMPLOYEE_SESSION_EDITOR_API_LIST`라는 이름만으로 Editor 이상 제한이라고 추론하지 않는다. 실제 설정은 해당 그룹에 서비스 권한만 검사한다.
+- **기존 Member 차이:** 담당의사 선택/필터가 없는 화면에서 직원 목록 GET를 생략하는 기존 조건은 유지한다. 직원 목록 API 자체를 전역 차단하는 것은 아니며 Editor는 계속 조회한다. 주문 상세 및 조건별 작성/승인 권한 정책은 이번 변경 범위 밖이다.
+- **웹 수정 파일:** `clinic/src/services/payment/payment.query.ts`(count 2건), `clinic/src/services/employer/employer.query.ts`(v2 목록), `clinic/src/components/GlobalBanner/GlobalBanner.tsx`(기존 조건 주석). 새 회귀 파일은 `clinic/src/services/payment/payment.query.test.tsx` 한 개만 추가했다. 직원ID·역할별 query key로 전환 전 결제 캐시 노출을 막고 기존 PAYMENTS prefix 갱신·상세 key와의 호환성을 확인했다. 홈 온보딩의 직원 응답 `hasPaymentProfile` fallback과 주문 `isOrderEnabled` 판단은 그대로다.
+- **앱 작업 위치/변경:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317@5c3504d`. `src/features/home/components/HomePaymentReplacementBanner.tsx`의 기존 제한을 설명하는 주석 5줄만 추가했다. 추가 로직·UI·생성 파일 변경은 필요 없다. 네이티브 호출과 WebView 내부 웹 호출을 구분했다.
+- **검증:** 실제 Staging 확인은 수정 전 증거다. 수정 후에는 queryFn 실제 호출/허용·차단 역할/직원 전환/캐시 격리/기존 결제 갱신을 포함한 신규13 + 기존 배너14 + 상세 갱신1 = 3 suites 28 tests PASS. Clinic TypeScript·변경4파일 ESLint·양 저장소 diff 검사 PASS. 앱은 주석 파일 ESLint PASS. 독립 scoped 코드 검토에서 추가 확정 회귀 없음. Member·Viewer·Payment Manager의 이번 검증은 로컬 테스트이며 실제 계정 QA로 확대하지 않는다.
+- **전달 경계:** 이번 추가 변경은 아직 **제품 커밋·푸시·새 PR 전의 로컬 수정**이다. 웹 3개 tracked 수정 + 새 테스트1, 앱 주석1 변경이 남아 있다. 제품 배포·CodePush·병합·Jira 변경·별도 메시지 전송은 하지 않았다. 기존 Staging 웹과 Office v335의 배포 상태는 그대로이며 이 웹 보완은 아직 배포되지 않았다. 기존 앱 PR329도 미병합 상태 유지다.
+- **다음 시작점:** 사용자가 Git 전달을 지시하면 이 검증된 diff를 웹 새 feature→release/v1.89.0 PR, 앱 기존 feature/PR329 주석 반영으로 정리한다. 이후 웹 Staging에 반영된 빌드에서 Editor/Member의 3개 요청 부재와 Admin/결제관리자 정상 조회를 확인한다. 앱 동작 변경이 없으므로 이 주석만을 위한 CodePush는 필요 없다. 그 외 기존 Staging QA와 앱 개발자 리뷰는 계속 별도다.
+
+## 이전 상태 — 2026-10-19 웹·Office Staging QA 대기 정리 완료
+
+- **최종 대기 지시:** 사용자가 QA 요청을 완료했으며 결과가 나오면 다시 전달하겠다고 확인했다. 추가 개발·배포·조회·모니터링 없이 대기한다.
+  다음 재개점은 사용자가 전달하는 QA 결과이며, 기존 브랜치·worktree와 앱 PR329 미병합 상태를 유지한다.
+- **최신 사용자 승인:** 개발 환경 확인은 끝났고 웹·앱을 Staging에서 QA한다. 앱 개발자의 추가 리뷰를 위해 PR329는 develop 대상 미병합을 유지하며,
+  **이번에만 feature/DL-16317에서 Staging으로 직접 CodePush**한다. 일반 앱 전달 정책의 변경이 아니며 이후 자동 반복 승인으로 해석하지 않는다.
+  사용자가 QA를 요청할 수 있도록 담당 Jira 카드 상태·전달 설명과 Git 기반 메모리까지 정리하도록 요청했다.
+- **앱 배포 완료:** `/Users/parkjongsun/Repository/dentlink-app-permission`, `feature/DL-16317@5c3504d85f65e9746cfbffbcf8ba8856ee079a2f`.
+  pull 후 원격 일치·clean 확인. Office iOS 및 Android **Staging v335**, target **2.2.4**, enabled, mandatory=true, rollout100.
+  두 release 명령 exit0와 서버 history 재조회로 확인했다. 최신 틀니 캐시586381f·채팅 타입5c3504d, 앞선 필터50:50·전체 역할 결제배너 보완 포함.
+  이전 Staging 양OS v334에서 갱신했으며 Development v139(be332c5)·Production·Lab 앱은 변경하지 않았다.
+- **배포 검증:** HEAD git archive와 `yarn install --immutable`의 격리 source로 번들/Hermes를 생성했다. 설치 후 모든 tracked 파일이 feature와 동일하고
+  Amplitude/Datadog/Firebase 의존성 버전도 lock과 일치한다. iOS·Android source map에 포함된 제품 TS/JS 각339파일 원문이 최종 source와 동일하다.
+  양OS2.2.4 네이티브 baseline 및 package/lock/env/Metro/Babel 차이 없음. 기존 영상 asset 1.48MiB 경고는 기존 force 배포 방식으로 처리했으며 새 asset은 아니다.
+  첫 iOS 호출은 outputDir가 CodePush로 끝나지 않아 업로드 전 실패했고 올바른 경로로 재실행해 성공했다. 별도 중복 release는 없다.
+  iOS packageHash `7cc1ea8be29ace851107e1df5fee1480702f94cb558a65ebb3276ab186e1e73c`,
+  Android `3575fb5d34f5f28b35210baff92673051250c7879aa7aedcb516ae28864514d6`.
+- **증거:** `/tmp/dl16317-stg-codepush-current.json` 및
+  `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dl16317-stg-codepush-20261019-oeu_6uzt/metadata.json`에 source SHA·정확한 설정·전후 history·검증 기록.
+  같은 디렉터리에 양OS release logs, CodePush 번들·source map 보존. 검증 후 배포용 임시 source/의존성만 삭제했다.
+  앱 원본 공용 node_modules·Member 시뮬레이터·Metro는 변경/종료하지 않았다.
+- **PR 상태:** [앱 PR329](https://github.com/Innvoaid/dentlink-app/pull/329) OPEN→develop, head5c3504d. 본문에 Staging v335 전달 및 이번 예외·기기 QA 경계를 반영했다.
+  제품 소스의 추가 변경·새 커밋·PR 병합·태그·스토어 배포는 하지 않았다. 이전 커밋·push·검증(235 tests, 동일 의존성 baseline과 같은6타입진단)은 아래 기록을 유지한다.
+- **웹 전달:** 사용자가 PR4717 병합 및 Staging 배포를 진행했다. stage413ed3564 / release8d209ada9는 동일 tree다.
+  Lab39194762505·Admin39194762571 성공, Clinic39194762561은 마지막 독립 조회에서 두 지역 ECS 배포 진행 중이었다.
+  이후 사용자가 **"웹 배포는 내가 확인할께. 이미 반영되긴 했어. 그거는 넘어가고 나머지 진행해"**라고 명시했다.
+  따라서 사용자 반영 확인을 기준으로 웹 QA 준비 완료로 정리하고 배포 polling을 즉시 종료했다. Clinic Actions 성공을 독립 검증했다고 쓰지 않는다.
+- **Jira:** Office [DL-16752](https://innovaid.atlassian.net/browse/DL-16752)를 Ready for Deploy→**READY FOR QA**로 변경하고
+  Staging v335·2.2.4·업데이트 적용 안내·권한별 QA 범위·PR 미병합 예외를 댓글로 저장했다. Jira MCP 재인증 오류로 기존 인증된 Chrome에서 작업했다.
+  웹 [DL-16319](https://innovaid.atlassian.net/browse/DL-16319)도 사용자 Staging 반영 확인 기준으로 **READY FOR QA**로 변경하고
+  release 반영·권한별 QA 범위·Office Staging 연계·BE 잔여 없음·QA/운영 별도 경계를 댓글로 저장했다. 양카드 본래 설명/담당자를 유지하고 상위 DL-16317은 변경하지 않았다.
+  Chrome 화면에서 상태/댓글 저장을 재확인했고 `/tmp/dl16317-staging-jira/{office,web}-ready-for-qa.png`에 증거를 남겼다.
+- **현재 영향/다음:** 사용자 추가 개발이나 BE 문의가 필요한 확정 항목은 없다. Staging2.2.4 앱에서 업데이트 적용 후 같은 병원의 Member/Admin으로
+  메뉴·필터·주문1단계 담당 지정·주문 상세3종·채팅·승인·임시저장·업로드가 QA 대상이다. 사용자 QA 요청은 완료됐다. 기존 개발 환경 사용자 확인과 Staging 실기기 전체QA는 구분한다.
+  앱 개발자 PR 리뷰·develop 병합, QA 통과 후 운영 전달은 별도다. 브랜치·worktree는 모두 보존하며 QA 결과가 다음 재개점이다.
+  E2E/Vercel은 사용자 제외 범위로 추가 조치하지 않았고 Slack·QA 담당자에게 별도 메시지는 보내지 않았다.
+
+## 이전 체크포인트 — 2026-10-19 웹 스테이징 전달·앱 최종 검토 및 보완 완료
+
+- **사용자 범위:** 웹 원격 stage를 최신 원격 master에서 삭제·재생성하고 release/v1.89.0→stage PR 생성 승인.
+  이후 앱 PR의 배포 전 코드/회귀/권한/성능 위험 검토와 필요한 수정·PR 반영을 승인했다.
+  앱은 기존 feature/DL-16317/PR329에 반영, 웹에 추가 수정이 필요할 때만 별도 feature→release PR.
+  **이후 실제 배포는 사용자가 담당하며 이번 턴은 코드·PR·기록 정리에서 종료한다.**
+- **웹 stage 준비 완료:** 삭제 전 stage `b98da6ff89229d8e31847e66a0a34800de842e3f`, master `8772d68825cac6e23792d86a715153a67dc71078`,
+  release `8d209ada93698208dcf407d61d3d5e5e3fe72b0b`. stage 관련 열린 PR0, protected=false, effective rules=[] 확인.
+  기존 stage는 로컬 `refs/recovery/stage-before-reset-20261019-122412`에 보존했다. 기대 SHA lease로 삭제 후 비존재 lease로 master SHA에서 재생성했다.
+  정상 push hook 모두 성공. snapshot `/tmp/dentlink-stage-reset-20261019.json`; 삭제/재생성 로그는 `/tmp/dentlink-stage-{delete,create}-20261019.log`.
+- **웹 PR/병합:** 결제 배너 [PR4716](https://github.com/Innvoaid/dentlink-client/pull/4716)은 release에 MERGED(`8d209ada9`).
+  [PR4717](https://github.com/Innvoaid/dentlink-client/pull/4717) `release/v1.89.0→stage` 생성·첨부 후 사용자가 병합했다(mergedBy=jongsunP, 03:27:15Z).
+  stage `413ed3564af9d888a49da2b62666851a948eaf6b`; 릴리즈 전체10커밋/385파일이며 최종 stage/release tree는 `04b5f1f6e26750b39919f81911e0e439e8ba8c72`로 동일.
+  Clinic run39194762561 / Lab39194762505 / Admin39194762571가 해당 SHA로 push 배포 실행 중인 것까지 확인했다. 배포 완료·화면 QA로 표현하지 않는다.
+  재생성 master SHA의 신규 배포 run은 관측되지 않았고 확인된 신규 run은 사용자 병합 SHA였다. 수동 dispatch·추가 merge·E2E/Vercel 조치 없음.
+- **앱 최종 리뷰/확정 회귀:** PR329의 전체81파일 최종 범위에서 권한, 작성·승인 경계, 채팅/피드백, 직원전환 캐시, 업로드/비동기복구,
+  네이티브·의존성 변경을 나눠 검토했다. Denture 저장 성공만 구3필드 캐시에 쓰고 조회자는 직원ID포함4필드+staleTime Infinity를 읽는 누락을 확인했다.
+  부모가 refreshedOrder 인수를 사용하지 않고 다음 단계로 이동하므로 신규 틀니는 옵션 단계 무한로딩, 기존 Draft는 이전 옵션 표시 가능성이 있었다.
+  `OrderDentureWorkflowSection.tsx`에서 employeeId와 기존 getOfficeOrderDetailQueryKey를 사용해 수정했다.
+- **앱 추가 타입 보완:** 정확한 lock 의존성 검사에서 이번 PR의 linktalk.service.ts 최근 채팅 GET에만 신규 Axios 설정 제네릭 충돌1건이 있었다.
+  기존 함수 반환계약에 맞춰 `$api.get<T>`로 응답 타입을 명시했다. 요청 경로·파라미터·권한·런타임 동작은 변경하지 않았다.
+- **앱 검증:** 현재 소스/테스트/config/lock667파일이 QA snapshot과 동일한 것을 확인하고, 관련23 suites **235 tests PASS**.
+  기존 OrderScreen.test.tsx에 실제 저장 callback+QueryObserver의 생성/변경 회귀2개를 추가했고 구키일 때2실패→수정후22PASS도 확인했다.
+  변경3파일 ESLint/diff PASS. 동일 exact 의존성의 origin/develop62e5864와 최종 feature tsc 출력은 **기존6진단으로 정확히 동일**하다.
+  앞선 다른 로컬 의존성의18진단 기록과 구분하며 전체타입통과로 주장하지 않는다. 네이티브/lock/package/env/배포workflow 변경0, 새파일·UI·문구·정책 없음.
+  증거 `/tmp/dl16317-app-final-review-jest-after-20261019.{json,log}`, `...-tsc-after-20261019.log`, `...-base-tsc-20261019.log`,
+  `/tmp/dl16317-denture-regression-{before,after}.log`. 실기기 재검수·실제 부하 계측은 이번 최종 리뷰에서 수행하지 않았다.
+- **앱 커밋/PR 반영 완료:** `586381f` 틀니 캐시+기존회귀테스트, `5c3504d85f65e9746cfbffbcf8ba8856ee079a2f` 채팅 타입.
+  기존 `feature/DL-16317`에 정상 커밋·푸시, [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) OPEN→develop·MERGEABLE/CLEAN·최신head 일치.
+  PR 본문을 최종 동작/검증/배포 경계로 갱신했고 로컬/origin 일치·clean. 앱 PR 병합·재배포는 하지 않았다.
+- **웹 좁은 재검토:** #4716 결제 배너 query/render 권한 일치, 앱 OrderDetailScreen→DentlinkWebView→네이티브 승인 연결,
+  타의사 주문 열람 유지와 승인·거절 차단/직원전환 경계를 확인했다. 추가 확정 웹 수정이나 새 BE 문의 없음.
+  이번 작업은 release의 다른 팀 기능 전체를 새로 검증했다는 의미가 아니다.
+- **남은 일/재개:** 사용자가 배포 후 같은 환경의 웹·앱으로 실제 QA한다. 기존 Development v139는 **be332c5**여서 이번 앱586381f/5c3504d는 미포함.
+  Development 앱은 dev-portal을 보므로 웹 stage 배포를 보지 않는다. 스테이징 통합 QA에는 PR329 최신 코드가 포함된 **Staging 앱**이 필요하다.
+  사용자 최신 지시에 따라 이후 배포는 진행하지 않는다. 기존 feature/worktree와 Member 시뮬레이터·Metro를 보존한다.
+
+## 이전 체크포인트 — 2026-10-19 앱 Member QA 보완·Development v139 완료 / 웹 QA PR4716 생성
+
+- **브랜치 규칙 정정:** 기존 `feature/` 규칙을 놓치고 만든 `codex/dl-16317-payment-banner`를 사용자 지적 후 정리했다.
+  현재 로컬·원격은 `feature/DL-16317-payment-banner@20be3ee65`, [PR4716](https://github.com/Innvoaid/dentlink-client/pull/4716) OPEN→release/v1.89.0이다.
+  GitHub에서 기존 PR head 교체를 지원하지 않아 동일 SHA/diff로 새 PR을 만들고 #4715에 교체 링크를 남겨 닫았다. 잘못된 codex ref만 삭제했다.
+  제품 코드·release 대상·원본 feature/worktree는 그대로이며 기존 SESSION_WORKFLOW의 브랜치 생성 전 접두사 검증을 적용한다.
+- **사용자 범위 확장:** 앱 Member 홈 오류/Action Required 카드 부재와 주문 필터 2개 탭 비율을 조사·보완하도록 요청했다.
+  시뮬레이터·Reactotron 사용과 Member 로그인을 직접 완료했다. 기존 결제 API 오류가 다른 역할에도 있었음을 지적한 뒤,
+  **앱부터 전체 권한 기준으로 완료 → 웹도 동일하게 진행**, 앱 Development CodePush 및 웹 release 기반 QA 브랜치→PR까지 명시 승인했다.
+- **원인 구분:** 앱 Member 실계정(jongsun.test2, frankieDevOffice)에서 `/office/employers/own/payments/replacement-required`가
+  403/code2005를 반복 반환하여 기존 일반 오류 토스트가 발생했다. 대표 trace `20261019025048902EK83122`.
+  반면 `/office/orders/pending-summary`는 200/code0000, pending/planning/design 모두0이었고 기존 로직대로 카드가 표시되지 않았다.
+  대표 trace `2026101902504890289R3120`. 오류와 카드 부재는 별개이며 카드 표시 로직·새 문구/빈 상태를 임의 변경하지 않았다.
+- **기존 결제 코드의 권한 대응 누락:** 앱 배너는10/2 `19f6810`, 웹은9/18 `388135276`(DL-16408/#4610)부터 기존 US 조건으로 조회했다.
+  이번 Member 작업이 새 결제 API를 추가한 것이 아니다. 과거 실제 다른 역할의 오류 이력은 별도 미검증이나 서버 권한 거절 자체는 정상이다.
+  처음 앱 Member만 제외한 `87cc46b`는 중간 단계이며 아래 서버 허용 목록으로 전체 역할을 정리한 `be332c5`가 최종이다.
+- **확정 서버 근거:** 접근 가능한 `Innvoaid/dentlink-backend` develop/main `3868da78413ca4734f0c0c313821938b9e43d084`에서 직접 확인.
+  `OfficeConstants.java`19–22의 ALLOW_PAYMENT_MANAGER_AUTHORITY_LIST는 OWNER/PAYMENT_MANAGER,94의 대상GET은 해당그룹에 포함된다.
+  `SpringSecurityConfig.java`148–153에서 그그룹에 실제hasAnyAuthority 적용. EDITOR/VIEWER/MEMBER/권한미확정은 FE조회·표시를 막는 것이 맞다.
+  Swagger설명에는 역할이 없고 Jira연결은 재인증요구였지만 서버코드로확정했으므로 별도BE질문불필요. 결제 처리·서버403·허용사용자 오류처리는 유지한다.
+- **앱 완료:** `dentlink-app-permission` feature/DL-16317에13b28d6(필터50:50),87cc46b(초기Member배너조건),be332c5(최종OWNER/PM기준) 커밋·푸시.
+  기존 제품2파일만 변경,새테스트/스토리/제품문서 없음. 배너 최초query/포커스refetch/캐시렌더를 같은기준으로 제한한다.
+  PR329 OPEN→develop 미병합 유지, head `be332c5708bb814af9c97767b4b6c3d27ab4e086` 및 본문 갱신 확인. 로컬/origin 동일·clean.
+- **앱 검증:** Figma2OR0Gj7NUFEEeYBjQg5Y6v/475:85361 두탭187.5/375 및 Admin기존3탭배치 대조.
+  iPhone17Pro/iOS26.5 Development Debug2.2.4 빌드 성공, 실제Member로그인 후Reactotron에서403과summary200 확인.
+  필터Status/OrderDates 양쪽50:50 및 전환 시각검수, 수정후JS전체새로고침·홈재진입22요청에서결제조회0·오류0 확인.
+  기존필터Jest3 PASS, 최종실제배너임시Jest10 PASS(OWNER/PM허용,EDITOR/VIEWER/MEMBER/undefined차단·캐시true/권한전환 포함).
+  중간9개테스트의EDITOR/VIEWER허용기대는폐기. 임시test삭제,배너lint/format PASS·필터기존unusedargs경고1. Android실기기·OTA적용완료와는구분한다.
+- **웹 완료:** 현재worktree `dentlink-client-permission`을 최신origin/release/v1.89.0@162422ab9 기반 `feature/DL-16317-payment-banner`로 전환했다.
+  원본feature와기존QA브랜치/worktree보존. GlobalBanner의확인된activeEmployee권한으로queryenabled+render제한,
+  기존payment helper/test확장. 기존3파일만 변경,응답은병원단위boolean이므로querykey변경·새helper/디자인/문구추가불필요.
+  웹은해당query오류toast설정이없으므로앱처럼토스트발생했다고단정하지않는다. 브라우저실계정QA는이번웹추가수정범위에서미실시.
+  관련Jest14/파일lint PASS. 최초커밋hook에서최근release의Lab jsqr설치누락으로실패하여frozen-lockfile설치(+1)후Clinic/Lab/Admin타입hook모두PASS.
+  정상pre-push의전체lint·Admin guard·coverage검사도PASS(기존lint경고있음). package/lock/env변경없음.
+  `20be3ee65078f7b8c0be335e2bd421c85104b4d5` 커밋·푸시 후 [PR4716](https://github.com/Innvoaid/dentlink-client/pull/4716) OPEN→release/v1.89.0 생성·채팅첨부.
+  GitHub base/head/변경3파일과로컬·원격SHA일치·clean 확인. 병합·웹배포는하지않았다.
+- **앱 Development v139 배포:** 사용자 최신 승인에 따라 최종be332c5를양OS에배포했다. iOS/Android 모두target2.2.4, enabled, mandatory=true,rollout100.
+  양release명령exit0·서버history read-back·설명SHA·양source map의배너/필터원문일치까지확인. PR병합·태그·Staging/Production/Lab배포없음.
+  iOS packageHash `65d190dbf2db1450c429cf4045ae8f34d0eaa1a128bbbfcfd5e8204dad6dee9e`,
+  Android `38069ea7feac38058ad1d7c2da9976737706e9b58880985779aa50a597b5777b`.
+  freshgitarchive+immutable설치·버전검증으로원본공용의존성미변경,네이티브/lock은v138과동일.
+  `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dl16317-dev-codepush-fix-20261019-sl5v0vhc/metadata.json`과로그/번들/maps보존,
+  배포용임시source/의존성만제거. `/tmp/dl16317-dev-codepush-current.json`은최신메타데이터참조. **실기기v139다운로드·재시작·적용완료는별도**다.
+- **사용자 재확인:** 배포 후 사용자가 앱 홈 오류 해소와 필터 디자인 적용을 확인했다. Action Required 세 카드 부재는 정상 응답의0/0/0과 기존 표시 조건에 따른 것이며 Member라서 일괄 숨기는 것은 아니라고 설명했다.
+  사용한 OS/실기기와 실제 적용 라벨은 별도 확인하지 않았으므로 양OS 전체QA나 v139기기라벨 검증으로 확대하지 않는다.
+- **다음/남은 일:** 이번보고된FE조치는완료,필수BE추가문의없음. 보고된 앱 홈 오류·필터는 사용자 재확인까지 완료했다.
+  웹은PR4716검토·사용자release병합/배포후권한별홈배너QA. 앱PR329의develop병합및전체권한/다른실기기QA는기존별도단계유지.
+  이번범위를전체QA/성능/출시완료로확대하지않으며다른실패API를일괄숨기거나결제업무를변경하지않았다.
+  원본웹feature/DL-16317와기존QA브랜치,앱feature/worktree모두보존. 향후웹후속은현재PR4716브랜치/최신release상태부터확인한다.
+- **로컬 QA 환경:** `/tmp/dl16317-member-qa-current.json`의격리source/Metro8081/iPhoneUDID 참조. 원본공용node_modules불일치로임시immutable설치와Pods를사용했다.
+  임시fetcher/Reactotron 진단변경은복원했고로컬진단receiver종료,제품소스외노출/커밋없음. 사용자Member로그인시뮬레이터와Metro는보존한다.
+  배포는별도freshgitarchive를사용하며시뮬레이터진단소스를재사용하지않는다. `/tmp/dl16317-member-qa-api.jsonl`은endpoint/status/code/trace/배열길이만저장했다.
+
+## 이전 체크포인트 — 2026-10-19 Office feature Development v138 CodePush 완료·QA 대기
+
+- **사용자 승인:** 앱 `feature/DL-16317`만 개발 환경에 CodePush할 수 있는지 확인한 뒤 사용자가 "진행해줘"라고 명시했다.
+  기존 QA 대기는 유지하고 이번 요청 범위인 Office iOS·Android Development 배포만 실행했다. PR 병합·웹/Lab·Staging/Production 배포는 하지 않았다.
+- **소스/Git:** `/Users/parkjongsun/Repository/dentlink-app-permission`의 `feature/DL-16317@6437dbb02b028bba51fdc59135a2d7c8599ad759`.
+  pull 후 로컬·원격 일치·clean을 확인했다. [PR329](https://github.com/Innvoaid/dentlink-app/pull/329)는 OPEN → develop이며 미병합을 유지했다.
+  CodePush는 이 브랜치의 전체 앱 번들이며 Git merge나 권한 변경 부분만 덧붙이는 작업이 아니다.
+- **배포 완료/read-back:** `Dentlink-Office-iOS / Development / v138`, `Dentlink-Office-Android / Development / v138`.
+  모두 `appVersion=2.2.4`, `isDisabled=false`, `isMandatory=true`, `rollout=100`을 실제 history로 확인했다.
+  설명은 `DL-16317 permission QA | feature/DL-16317 @ 6437dbb`; 직전 Development는 양쪽 v137이었다.
+  iOS packageHash `84f8a7e81baeb1cfa609191699c20a6c783bcfdf6a1a98d8e8333d726db67e64`,
+  Android packageHash `6c4f48adb6364a69f7de0c7d8b8da9d467cd734e0ea4042b5b4b3ab48e3d5ef5`.
+- **빌드 환경 보완:** 원래 worktree의 node_modules는 메인 앱 checkout symlink이며 선언/lock과 설치된 Amplitude·Datadog·Firebase가 달랐다.
+  이를 그대로 번들하지 않고 HEAD git archive의 별도 임시 폴더에 `yarn install --immutable`을 수행했다. 공용 node_modules·제품 env·lock·설정은 수정하지 않았다.
+  설치 후 모든 추적 소스가 원본 feature와 동일함을 확인했다. package/yarn.lock/ios/android/Podfile.lock은 기존 release/v2.2.4(cdfdb904) 및 main(62e5864)과 동일했다.
+  새 네이티브 기능 요구는 없으며 API·웹 환경은 설치된 Development 바이너리의 react-native-config 값을 사용한다.
+  **후속 로컬 검증/배포에서도 공용 symlink 의존성이 lock과 일치한다고 가정하지 않는다.** 10/16 테스트/타입 수치는 당시 환경의 기록이다.
+- **이번 검증/정리:** 양 OS release JS bundle·Hermes 변환·업로드 exit0 및 서버 read-back 완료.
+  양쪽 source map에 최종 채팅·피드백·승인 보완3파일 포함을 확인했다. 기존 isv.mp4(1.48MiB)의 CLI 경고는 저장소 기본 `--force` 방식으로 처리했다.
+  최초 outputDir 이름 검사는 업로드 전 종료했으며 `ios/CodePush`, `android/CodePush` 경로로 정상 재실행했다.
+  제품 코드 수정·새 커밋/태그·PR 변경·네이티브 바이너리 빌드·실기기 설치/적용 확인·사용자 QA는 하지 않았다.
+  임시 빌드 소스/의존성은 제거하고 로그·번들·source map·metadata만 아래 임시 증거 경로에 남겼다.
+  `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dl16317-dev-codepush-20261019-53o7kjwt/metadata.json`
+- **현재 영향/다음:** Development 채널을 쓰는 Office2.2.4 앱은 v138을 받을 수 있다. 실제 기기 다운로드·재시작·권한 QA 완료 증거는 아니다.
+  웹 WebView는 별도 DEV 웹 배포본을 계속 사용한다. 필수 BE 추가 질문 없음과 Draft 정책 종결을 유지한다.
+  사용자가 QA를 재개하면 양 OS 실제 라벨 v138 적용부터 확인하고 Member/Admin 권한 및 오류 복구를 검수한다.
+  이후 수정·병합·추가 배포는 새 지시/QA 결과에 따른다. 브랜치·worktree·테스트 Draft는 보존하고 대기한다.
+
+## 이전 체크포인트 — 2026-10-16 웹·앱 조치 완료·사용자 QA 재개 지시 대기
+
+- **최종 종료 지시:** 사용자가 현재 가능한 웹·앱 조치를 마무리하고 QA는 나중에 진행하겠다고 명시했다.
+  확인된 필수 FE 수정과 커밋·푸시·PR 반영은 완료이며 추가 필수 BE 문의도 없다.
+  QA 준비/실행·배포본 재확인·병합·배포·감시는 지금 시작하지 않는다. 브랜치·worktree·테스트 Draft를 보존한 채 대기한다.
+  재개 시 사용자의 QA 지시와 실제 배포 버전부터 확인하고 아래 다음 시작점을 따른다.
+
+- **사용자 승인/범위:** FE가 판단해 추가한 예외 처리가 정상 동작까지 막는지 재검토하고, 확정 문제는 수정·검증·커밋·푸시·PR·메모리 정리하도록 승인했다.
+  앱 추가 검토도 포함했으며 Vercel 관련 체크는 생략하라고 명시했다. 병합·배포는 실행하지 않는다.
+- **웹 결론:** 작성/Edit·Remake·승인·담당 변경·공통 권한 HOC·직원별 캐시·LinkTalk의 오류/회복/직원 전환을 교차 검토했다.
+  이번 감사에서 새로 고쳐야 할 확정 과잉 차단이나 입력 유실은 발견하지 못했다. 관련 테스트 그룹별 52개, 77개, 38개 PASS이며 중복을 합산한 전체 테스트 수로 표현하지 않는다.
+  담당 변경 보조 조회 실패는 잘못된 경고/접근 판단을 피하기 위한 일시 중단이며 재클릭 복구가 검증돼 있다.
+  `withAuthorization`의 직원 조회 network/5xx도 `/403`으로 보내는 처리는 권한 작업 이전부터 있던 동작으로, 이번 신규 회귀로 분류하거나 범위를 넓혀 수정하지 않았다.
+- **앱 확정 수정 3경로:**
+  1. 주문 채팅의 주문 GET이 network/500으로 실패하면 읽기 전용이 되면서 기존 refresh가 주문 조회를 재시도하지 않았다.
+     실패 종류와 무관하게 현재 직원의 refresh에서 오류 난 주문 GET을 재조회하여 복구하도록 했다.
+  2. 신규 피드백의 주문 권한 조회 실패에 기존 Retry를 연결했다. cached `isReviewable=true` 뒤 403/404도 편집·업로드·제출을 차단한다.
+     일시 오류 동안 입력·첨부와 이탈 확인을 유지한다. 같은 직원·병원·주문에서 저장/첨부 삭제가 완료된 결과는 반영하여,
+     조회 오류가 겹쳤다는 이유로 제출 실패 시 첨부를 삭제하거나 저장 성공 후 화면이 고착되거나 삭제된 첨부 ID가 남지 않게 했다.
+     작업 시작/업로드 중 권한 검사와 직원 왕복 전환 뒤 오래된 완료 응답 차단은 유지한다.
+  3. 승인 화면은 기존 성공 캐시로 재진입한 직후 GET500이면 입력은 보존하나 버튼이 잠기고 복구 경로가 없었다.
+     활성 승인 화면/앱 복귀 때 일시 실패한 GET만 다시 조회한다. 주문 오류는 주문만 재조회하고 기존 enabled 전환으로 승인 목록을 회복한다.
+     최초 추가 조회·숨겨진 화면 조회·중복 조회·자동 재시도 반복 없이, 승인 POST 조건과 403/404 차단은 유지한다.
+- **앱 Git/PR:** `/Users/parkjongsun/Repository/dentlink-app-permission`의 기존 `feature/DL-16317`에
+  `949e0f6`(채팅), `dafcad7`(피드백), `6437dbb02b028bba51fdc59135a2d7c8599ad759`(승인)를 정상 커밋·푸시했다.
+  로컬·origin SHA 일치·clean 및 [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) OPEN → develop을 확인하고 본문·검증 결과를 갱신했다.
+  기존 제품 파일3개와 기존 테스트3개만 변경했으며 신규 파일·UI·문구·정책·패키지·env·배포 설정은 추가하지 않았다.
+- **검증:** 최종 결합 실행 `yarn jest --config jest.config.js --runInBand --runTestsByPath ...`의 관련5 suites/69 tests PASS.
+  변경6파일 ESLint·diff 검사 PASS. 전체 tsc는 기존7cb4487과 같은18진단이며 출력도 동일하다(전체 타입 통과 아님).
+  승인 복구는 실제 React Query observer/cache와 요청 실패를 사용해 재현했다. 피드백 저장·삭제 완료 경합은 수정 전 실패 후 회복을 검증했다.
+  별도 주문 작성/Draft·직원 전환 코드/기존 테스트에서도 추가 확정 회귀는 발견하지 못했다.
+  초기에 Jest config를 생략한 실행은 기존 이중 config 때문에 실행 전 종료했으며 명시 config로 정상 재검증했다.
+  네이티브 빌드·실기기 QA·실제 서버 변경·CodePush·새 CodeRabbit 완료는 이번 검증에 포함하지 않는다. E2E/Vercel은 제외했다.
+- **웹 Git/배포 구분:** web QA worktree는 `feature/DL-16317-dentist-warning@e28b9c7e8`·clean이며 fetched release `8daac3561`과 소스 tree 차이가 없다.
+  PR4700/4706/4710은 release 병합 상태다. 원본 웹 `feature/DL-16317@f4bfaf1bf` 로컬·리모트와 모든 관련 worktree를 보존했다.
+  사용자 PR4710 기반 DEV 배포 진행 보고 이후 완료·새 배포본 검증은 아직 확인하지 않았다. 앱 PR329 의도적 미병합·미배포도 유지한다.
+- **다음 시작점(사용자가 QA 재개를 요청한 뒤):** 추가 필수 BE 질문은 없다. Draft는 내 환자 판단에서 제외한다는 사용자 전달 최종 답변으로 종결된 상태를 유지한다.
+  웹 DEV 배포 완료 확인 후 마지막 본인 주문/다른 본인 Draft만 있는 담당 변경 경고를 재확인하고 스테이징 정식 QA로 진행한다.
+  앱은 PR329 최신6437dbb 포함 버전으로 권한별/실기기 QA 후 사용자가 병합·전달한다. 구버전 앱과 Member 운영 활성화 순서도 함께 관리한다.
+  실제 쓰기·여러 역할 계정·다주문 환자 보조 GET 지연 등 아래 미실시 QA를 전체 완료로 확대하지 않는다. 새 지시/QA 결과 전 추가 수정·배포·감시는 하지 않는다.
+
+## 이전 체크포인트 — 2026-10-16 담당 변경 경고 PR4710 release 병합·사용자 DEV 배포 진행 중
+
+- **최신 전달 상태:** 사용자 PR4710 병합 및 해당 release 기반 DEV 배포 진행 중 보고.
+  GitHub에서 PR4710 MERGED → release/v1.89.0, merge `8daac356176169e6407f92c91a8bcf2753a1e09b`,
+  2026-10-16 18:28:16 KST 병합을 확인했다. DEV 배포 완료·새 배포본 경고 재검증은 아직 확인하지 않았다.
+  기존 브랜치·worktree는 보존하며 추가 배포·병합·삭제는 하지 않는다.
+
+- **디자인 출처와 구현 판단 재확인:** 사용자가 임의 UI·문구·정책 추가 여부를 질문해 실제 Figma/Notion과 웹·앱 코드를 대조했다.
+  Figma `2OR0Gj7NUFEEeYBjQg5Y6v`의 `475:75512` 모달/`475:75525` 텍스트에
+  `Changing the dentist will remove your access to this order.`가 실제 존재하며 경고 배너·18px 아이콘·729px 모달 구조도 있다.
+  Notion PRD Resolved #11은 다른 본인 담당 주문이 없을 때만 기존 문구를 표시하도록 명시한다.
+  공용 모달의 영문은 동일하고 한국어 locale은 그 번역이다. PR4710은 UI·문구 신설 없이 조건만 수정했다.
+  **다만 모든 동작이 디자인에 직접 명시된 것은 아니다.** 담당 변경 보조 조회 실패 시 기존 `Cannot Change a Dentist`
+  토스트를 재사용하고 모달을 열지 않는 처리, 초기 조회 실패 시 기존 조회 불가 화면/이동 재사용,
+  앱 승인 화면에서 기존 `Order details not found.` 토스트·뒤로가기, 일시 오류의 입력 보존/제출 중단,
+  직원·대상 변경 후 오래된 응답 차단은 FE 구현 판단이다. 오류 UX까지 전부 디자인 승인 사항이라고 설명하지 않는다.
+  기존에 우려한 PLANNING SKIP은 handler에서도 차단하도록 정리된 것은 맞으나, 두 실제 호출자는 customButton을 쓰지 않고
+  기본 display는 작업 전부터 DESIGN/PLANNING SKIP 모두 비클릭이었다. 새 실사용 제한이나 필수 정책 문의로 단정하지 않는다.
+  이번 확인에서 제품 코드·PR·디자인·정책 원문은 변경하지 않았다. 기존 경고를 임의 창작했다고 오인하거나,
+  반대로 오류 처리 판단까지 전부 명세 그대로라고 보증하지 않는 것이 다음 설명 기준이다.
+
+- **사용자 지시/최신 정책:** BE 문의와 별개로 승인된 FE 수정·검증·커밋·푸시·PR 흐름을 계속 진행했다.
+  사용자가 백엔드 답변을 전달했다: **"정책상 지금이 맞다. draft 주문의 환자는 아직 내환자로 판단 안한다."**
+  질문 대상은 Place Order 전체 환자 선택이 아닌 `GET /office/patients/consolidate?size=10&page=0` 통합 Patients 목록이었다.
+  아래 Draft9740 저장 후 환자217 미포함은 이 최신 정책에 따른 정상 동작으로 종결한다. BE 추가 수정/API 요청으로 남기지 않는다.
+  이전 PRD의 Draft 포함 문구보다 이번 사용자 전달 확정 답변을 우선한다. Notion/Jira 정책 원문을 직접 수정한 것은 아니다.
+- **FE 반영:** 마지막 본인 주문의 담당 변경 경고 누락을 수정했다. SSR의 문자열 `orderId`를 비교 시 `Number(orderId)`로
+  정규화해 현재 주문을 다른 본인 주문으로 세거나 불필요하게 재조회하지 않게 했다.
+  새 정책에 맞춰 다른 본인 DRAFT는 환자 접근 유지 근거에서 제외한다. 목록에서 DRAFT면 조회를 생략하고,
+  목록 상태가 빠진 경우 상세의 DRAFT 상태도 확인한다. 일반·CANCELED 주문의 기존 인정 조건은 유지한다.
+  `clinic/src/lib/Order/useOrderDetail.ts`, 기존 `useOrderDetailPermissions.test.tsx` 2개만 변경했다.
+  신규 파일·추상화·API·환경 파일·페이지 상시 조회는 추가하지 않았다. Admin 보조 조회도 기존대로 없다.
+- **Git/PR:** 최신 fetched release/v1.89.0 `24d3ff18a`에서 `feature/DL-16317-dentist-warning`을 분기했다.
+  `748c8f6bb`(SSR ID 수정), `e28b9c7e8ad37841baadde958ef088b6668a2343`(Draft 정책 반영) 정상 커밋·푸시 완료.
+  [PR4710](https://github.com/Innvoaid/dentlink-client/pull/4710)은 사용자 병합으로 MERGED → `release/v1.89.0`, head e28b9c7e8.
+  GitHub의 base/head/변경 파일2개와 로컬·원격 SHA 일치 확인. 이 채팅에 PR 첨부 완료. Codex가 병합·배포를 실행한 것은 아니다.
+- **검증:** 수정 전 문자열 ID 조건의 경고 누락1건, 추가 Draft 조건2건을 각각 실패 테스트로 재현했다.
+  수정 후 주문 상세 hook28개+화면9개=2 suites/37 tests PASS, Clinic·Lab·Admin tsc PASS,
+  정상 pre-commit/pre-push 검사 완료. push 중 기존 lint warning은 있으나 hook 실패 없음.
+  diff check와 기존 테스트 파일 Prettier 검사 PASS. hook 파일의 기존 포맷 차이2곳은 기준 코드와 같아 범위를 넓혀 수정하지 않았다.
+  최종 diff 독립 검토에서 추가 조치할 확정 문제 없음. 이 결과는 새 코드의 DEV 배포/실계정 재검증을 대신하지 않는다.
+- **보존:** `/Users/parkjongsun/Repository/dentlink-client-permission`은 현재 QA 브랜치 e28b9c7e8·clean이다.
+  이전 detached10c30e3cb 기록은 과거 상태이며 이번 QA 수정 때문에 의도적으로 새 브랜치를 체크아웃했다.
+  원본 웹 `feature/DL-16317` 로컬·리모트 f4bfaf1bf와 기존 worktree를 유지한다. 삭제된 codex 후속 브랜치는 복구하지 않았다.
+  Office worktree는 `feature/DL-16317@7cb4487`·clean, [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) OPEN → develop.
+  앱의 의도적 미병합·미배포를 유지했다. 앱 주문 상세도 이 웹 화면을 사용하므로 이번 수정의 별도 native 코드 변경은 없다.
+- **QA/다음:** 아래 DEV Admin·Member 핵심 권한 차이 및 합성 Draft 담당 변경/복구 검증은 완료된 기록이다.
+  사용자 DEV 배포 완료 확인 → Member 마지막 본인 주문 및 다른 본인 Draft만 남은 조건의 경고 재확인 → 스테이징 정식 QA.
+  앱 native QA는 PR329 포함 버전으로 진행한다. BillingManager/Manager 계정·직원 전환·승인 대기 실제 쓰기·ISV 저장·
+  파일/메시지 전송·실기기·다주문 환자의 1+N 조회 지연은 이번 실계정 QA 완료 범위가 아니다.
+  일반 Draft 진입은 작성 폼을 사용한다. 직접 Draft 상세에서 담당 변경 시 cases GET403 가능성은 미재현·기존 로직이라
+  추측성 우회나 필수 BE 질문을 추가하지 않았다. 실제 해당 QA 결과가 나오면 조사한다.
+  새 PR의 CodeRabbit 완료나 새 DEV 배포 검증은 이번에 주장하지 않는다. 테스트 Draft3건은 아래 상태로 보존했다.
+
+## 이전 체크포인트 — 2026-10-16 DEV Admin·Member 쓰기 포함 사전 QA 당시 발견
+
+- **사용자 승인/범위:** Admin 로그인 완료 후 “필요하면 주문을 만들던 환경을 만들어서라도 최대한” 비교 요청.
+  DEV 화면 비교와 테스트 Draft 생성·합성 테스트 Draft 담당 변경/원복까지 진행했다. 종전 읽기 전용 제한은 이 요청으로 확장됐다.
+  코드 수정·새 PR·배포·계정 역할 변경은 이번에 하지 않았다. 실제 주문 제출/결제·승인/거절·메시지/파일 전송도 하지 않았다.
+- **계정:** `https://dev-portal.dentlink.io`, 같은 frankieDevOffice(office86).
+  일반 Chrome test2=Member(employee386), 시크릿 test1=Admin/OWNER(employee213), Office Members의 본인 표시로 대조.
+- **정상 확인:** Admin Billing/Dashboard/Office 관리 메뉴와 Dentist/My Orders/My Patients 필터가 제공되고 Member에는 숨겨진다.
+  Member Status/날짜 필터는 유지되고 Billing·Dashboard 직접 URL도 Forbidden이다.
+  Admin 주문 목록은 PENDING_ORDER/OFFICE_APPROVAL_PENDING 자동 필터38건, Member는 기존 본인 주문5건으로 시작했다.
+  주문1단계 NEW에서 Admin은 Assigned Dentist/Assign Myself 제공·선택값 저장, Member는 영역 없음·본인 자동 배정 저장을 확인했다.
+  Member 기존 타 의사 Case FOLLOW_UP도 본인386으로 저장하며 원래 Case 담당 의사(박 병원)는 유지된다.
+- **상세/링크 정상:** Member 본인5214는 일반 상세·수정/취소/담당 변경/채팅 입력 제공,
+  타 의사3943은 부분 상세(이력/파일 읽기 유지, 주문 수정/취소/담당 변경/채팅 입력/업로드 없음),9123은 No order data.
+  같은3943·9123은 Admin에서 정상 전체 상세·입력 기능 제공. Member의3943 추가정보 수정 URL은403.
+  Pickup의 타 의사4066 주문번호 클릭은 새 상세 탭으로 이동한 뒤 No order data로 제한된다(링크 자체 차단 없음).
+  공유 환자3437에서 다른 Case3200 주문 링크 이동·부분 조회, Approved Planning 자료2개 미리보기 확인.
+  이 완료된 승인 이력의 액션 부재를 승인 대기 주문의 승인/거절 차단 검증으로 확대하지 않는다.
+- **실제 담당 변경 검증:** 아래 합성 Draft9739를 Admin 화면에서 Member→Admin으로 변경 저장하니 Member product URL이403.
+  Admin에서 Member로 원복 저장 후 Member product 화면 정상 접근·담당 test2 확인. 기존 임상 주문은 변경하지 않았다.
+
+### 발견1 — FE 확정 결함: 마지막 본인 주문의 담당 변경 경고 누락
+
+- Member5214 담당 변경 모달에서 타 의사 선택 전후 모두 접근 상실 경고가 없다. 변경 Done은 실행하지 않았다.
+- 실제 `GET /office/patients/1345/cases/orders`200은 case2790/order5214 **한 건만** 반환한다.
+  `orderId:9000005214`는 숫자이고 traceId=`20261016084327788pzs0773`.
+- `clinic/src/pages/orders/[order_id]/index.tsx:69-80`은 SSR orderId를 문자열로 전달하나 Props는 number로 선언한다.
+  `clinic/src/lib/Order/useOrderDetail.ts:151-171`의 `item.orderId !== orderId` 비교에서 현재 주문이 제외되지 않아,
+  자기 주문을 보조 조회한 뒤 “다른 본인 주문 있음”으로 잘못 판정하고 경고를 숨긴다.
+  공개 SSR의 문자열 ID와 배포 chunk의 동일 로직/경고 문구·props까지 대조했다. 라디오·CSS·모달 props 문제가 아니다.
+- **최소 수정안:** 비교 시 `Number(orderId)`로 현재 ID 정규화. 기존 테스트에 SSR 문자열 ID/목록 숫자 ID/현재 주문1건 조건을 추가해
+  경고 표시와 불필요한 현재 주문 상세 GET0회를 검증한다. 전체 SSR/cache 키 형식 변경으로 범위를 넓히지 않는다.
+  제품 코드는 아직 수정하지 않았다. 기존 number-only 테스트가 실제 route 경계 문제를 포착하지 못했다.
+
+### 발견2 — 당시 PRD와 Draft 환자 목록 차이 관찰(이후 정상 정책으로 종결)
+
+- **최신 정정:** 위 현재 상태의 사용자 전달 BE 답변으로 Draft는 내 환자 판단에서 제외됨을 확인했다.
+  다음은 문의 당시의 관찰/정책 비교 이력이며 현재 BE 장애나 미완료 작업이 아니다.
+
+- Member가 기존 환자217·Case219에 FOLLOW_UP Draft9740 생성. 새 `GET /office/orders/9000009740`200에서
+  patientId217/patientCaseId219/dentistId386/creatorId386/purpose FOLLOW_UP/status DRAFT/detailStatus OFFICE_DRAFT/step PROFILE 확인.
+  임시 로컬 입력만 남은 상태가 아니며 paymentStatus NOT_CREATED, 결제/최종 주문 제출 없음.
+- 이후 새 `GET /office/patients/consolidate?size=10&page=0`200과 전체 화면 재조회 모두 기존5명만 반환한다.
+  환자217(테스트 이름 `asdsadasdsad`)이 누락된다. totalElements5, traceId=`20261016084838372MNY1146`.
+- 현행 [권한 PRD](https://www.notion.so/3eace072e82f81aa955dc21cba5cf127) §5-2는 본인 담당 주문1건 이상인 환자의 접근을 허용하며
+  **Draft·취소 포함** 및 Patients 목록 반영을 명시한다. 원문 최종 편집2026-10-15 16:06:54 KST를 재확인했다.
+- FE는 최초 Draft 저장부터 patientId/CaseId/dentistId를 전달하고 Patients 응답을 표시한다.
+  근거 `clinic/src/lib/OrderForm/OrderProfileForm/order-profile-form-helper.ts:160-181`,
+  `clinic/src/services/patient/usePatientConsolidateListQuery.ts`.
+  **서버 내부 원인은 미확인**이며 “새 API 미개발”로 단정하지 않는다. 이 실제 QA 사례와 trace/정책을 BE에 전달해 반환 조건을 조사할 필요가 있다.
+  이전 “필수 BE 질문 없음” 판단은 추측성 선행 질문에 관한 것이었고, 이번에 재현된 정책/응답 불일치는 신규 QA 결과다.
+
+### 생성 데이터·보존·다음
+
+- DEV Draft3건 보존(제출/결제 없음):
+  - `9000009738`: Admin 신규 환자 `QA DL16317 1016 Admin`, Case `QA Permission Shared Case`, 담당213. Member 상세 차단 확인.
+  - `9000009739`: Member 신규 환자 `QA DL16317 1016 Member`, Case `QA Member Assigned`, 담당386.
+    담당386→213→386 변경 검증 후 **원복 완료**. Member Draft 보드 노출, Admin9738 제외 확인.
+  - `9000009740`: 기존 환자217/Case219 FOLLOW_UP, 담당386. 위 서버 반환 불일치 재현 데이터.
+- 화면 증거는 로컬 `/Users/parkjongsun/.codex/visualizations/2026/10/16/permission-dev-qa/`에 저장했다:
+  member-warning-missing.jpg, member-partial-3943.jpg, member-blocked-9123.jpg, member-followup-9740.jpg,
+  admin-draft-9738.png, admin-full-3943.png, member-draft-reassigned-denied.jpg, member-draft-restored-9739.jpg.
+  사진은 Git에 넣지 않고 재현 조건/ID/결론을 이 문서에 보존한다.
+- **Git 유지:** 웹 worktree10c30e3cb detached clean·원본 featuref4bfaf1bf 보존, 앱feature7cb4487 clean·PR329 보존.
+  DEV buildId T-HN6Soh-Ok2Djun68obD의 권한 코드 일치는 확인했으나 정확한 전체 배포 SHA는 미확인.
+- **다음 순서:** FE 경고1건 수정 지시 시 최신 release/v1.89.0에서 새 QA 브랜치 → 최소 수정/회귀검증/PR.
+  BE에는 발견2의 실제 데이터·응답 조건 확인을 요청 → 수정본 DEV 재배포 후 두 건 재검증 → 스테이징 정식 QA.
+  앱 PR329 포함 버전의 실기기 검증은 별도이며, 승인 대기 실제 쓰기/파일·메시지 전송/ISV 저장/직원 전환/다주문 지연 측정은 이번에 완료하지 않았다.
+  권한 차이 핵심 흐름은 실제 검증했지만 “추가 조치 없이 QA 대기만 하면 됨”으로 종결하지 않는다.
+
+## 이전 체크포인트 — 2026-10-16 최종 코드 재검토·개발서버 사전 검증 단계
+
+- **최신 사용자 기준:** 웹·Office 앱 FE 구현은 완료됐고 웹 PR4700·4706은 release에 병합됐다.
+  사용자가 BE·FE 공동 사전 테스트를 위해 **개발서버에만 배포 완료**했다고 명확히 했다.
+  정식 QA는 이후 스테이징에서 진행하며 상용 출시와는 별개다. 직전의 포괄적인 '배포 전' 표현을 이 단계 구분으로 정정한다.
+  개발서버 배포는 사용자 보고이며 이번 검토에서 실제 배포 SHA·런타임/계정·성능을 추가 측정하지 않았다.
+- **실제 Git 재확인:** 웹 `feature/DL-16317` 로컬·리모트는 삭제 전 `f4bfaf1bf102a555ec6350aee97ea0a1ab2c7d05`,
+  upstream 정상. `/Users/parkjongsun/Repository/dentlink-client-permission`은 `10c30e3cb` detached HEAD·clean이다.
+  인용된 '현재 #4706 이전 소스'는 이미 지난 상태다. 최종 권한 작업 병합 소스가 보존됨을 실제 Git으로 확인했다.
+  브랜치·워크트리 추가 복구/삭제/전환은 하지 않았다. 원래 feature에는 #4706이 없으므로 QA는 보존한 release 소스 기준이다.
+  `codex/dl-16317-permission-followup`은 삭제 상태를 유지한다.
+  현재 origin/release/v1.89.0은 24d3ff18a로 전진했다. 추가분은 비밀번호 변경 PR4701이며 권한 구현 파일 변경은 없다.
+  worktree10c30e3cb는 권한 최종 병합 snapshot이고 원격 release의 최신 HEAD 자체는 아니다. 전체 release 신규 변경 검증과 구분한다.
+- **메인세션 사용자 추가 설명:** 살려두려는 대상은 원본 작업 브랜치이며 release 통합 이후
+  부분 수정·QA용 파생 브랜치는 아니다. PR4706 후속은 이 파생 범주이고 변경은 release에 보존돼 있다.
+  메인세션에서 이 후속까지 필수 복구로 안내한 판단은 정정했다. 현재 원본 feature·권한 최종 release 병합
+  worktree 보존 상태를 유지하며 추가 복구는 필요 없다.
+- **병합:** PR4700→047fcc585, PR4706→10c30e3cb 모두 release에 반영돼 있다.
+  10c30e3cb tree는 최종d5f896740 tree와 동일하다. PR4700은 원래feature f4bfaf1bf 전체 tree 자체와 같지는 않다.
+  당시 release a065b39e4와 f4bfaf1bf를 merge-tree한 결과0a14f88dc가 실제047fcc585 tree와 같아 권한 작업 누락이 없음을 확인했다.
+- **검증:** 기존 Clinic353/Lab399 tests 로그와 Clinic/Lab/Admin 타입·정상 push 검사 통과 기록을 재확인했다.
+  worktree10c30e3cb는 최종d5f896740 검증 소스와 동일하다. 976097e85 Clinic production build195페이지 PASS는
+  작은 승인 ID 수정 전 결과다. Office394 tests·iOS/Android production JS bundle PASS, 타입18건은 기존 진단과 동일하다.
+  앱 전체 타입/모든 native 테스트 통과나 실제 binary·실기기 QA 완료로 확대하지 않는다.
+  이번 읽기 전용 최종 검토에서는 전체 테스트/빌드를 중복 실행하지 않았다.
+- **최종 검토 판단:** 현재 확정 범위에서 신규 확정 구현 누락·회귀·개발서버 사전 테스트 차단 사유를 발견하지 못했다.
+  권한/직원별 상세 캐시, 쓰기/승인 직전 검사, 전환·unmount 이후 오래된 조회 결과 폐기, 중복 클릭 방지를 코드 교차 검토했다.
+  불필요한 페이지 상시 조회나 Admin 보조 조회는 없다. 다만 Member 담당 변경은 클릭 시 최대1+N 순차 GET이며,
+  현재/중복/삭제 주문 제외·다른 본인 주문 발견 즉시 중단한다. 환자 주문이 많은 경우 지연은 미측정이므로
+  성능 검증 전체 완료로 표현하지 않는다. DEV 사전 테스트에서 해당 사례를 실측하고 실제 문제가 있으면 개선한다.
+- **다른 에이전트 우려 1(담당 변경 보조 GET403):** 오류이면 모달을 열지 않는 코드는 맞고 기존 회귀 테스트도 있다.
+  다만 현행 [권한 PRD](https://www.notion.so/3eace072e82f81aa955dc21cba5cf127) 5-2/5-3을 직접 재조회해,
+  본인 담당 주문1건이 있는 환자의 모든 케이스·타 의사 주문 읽기가 허용됨을 확인했다. 변경 진입은 본인 주문에서만 가능하다.
+  따라서 '같은 환자의 다른 주문은 정상적으로403일 수 있다'를 전제로 새 BE 확인/FE 우회를 필수 잔여로 만들지 않는다.
+  실제 QA에서403이 나오면 담당 변경 경합·목록/상세 응답 불일치 등을 요청/응답 근거로 조사한다. 정상 API계약대로면 추가조치 없음.
+- **우려 2(구버전 앱 승인 UI): 조건부 타당한 배포 호환성 항목.** 웹 PendingApproval:125는 native
+  DesignConfirmationScreen으로 이동한다. native bridge가 이를 전달하며, 앱 PR329에는 본인 담당 여부에 따른 승인·거절 UI/제출 제한이 있다.
+  비교한 origin/develop62e5864에는 이 guard가 없어, PR329 미포함 앱에서 주문·승인 GET이 성공하면 버튼 노출 가능성이 있다.
+  실제 설치/배포 앱 버전 및 서버 mutation 거절은 미확인이다. '서버가 막으니 무해'나 현재 발생 중인 사고로 단정하지 않는다.
+  PRD5-1도 권한 체계 선배포와 MEMBER 실제 지정(신규 가입 기본값 포함, 알림센터 릴리즈 이후)을 분리한다.
+  Member 운영 활성화 전에 PR329 포함 앱 버전 적용/검증을 함께 관리한다. 새 BE API가 필요한 코드 누락으로 분류하지 않는다.
+- **기타 Low:** Admin 승인 페이지는 현재 주문 확인 이후 자료/액션을 제공하며, 이미 확인한 주문의 일시 오류는 보존한다.
+  PLANNING SKIP도 비활성인 현 코드 동작은 확인했으나 이를 확정 정책 위반으로 볼 추가 근거는 없다. 즉시 되돌릴 확정 회귀는 발견하지 못했다.
+- **Office:** `/Users/parkjongsun/Repository/dentlink-app-permission` feature/DL-16317@7cb4487 로컬·원격동일·clean,
+  PR329 OPEN → develop. 사용자가 의도적으로 아직 병합·배포하지 않은 상태이며 누락 작업이 아니다.
+  native 앱 권한 테스트는 PR329 포함 버전으로 진행해야 한다. 앱/웹 배포 순서와 Member 활성화를 함께 확인하며 이번 앱 변경 없음.
+- **CodeRabbit 현재:** PR4706 기존 thread1개 resolved, 추가 unresolved thread0/페이지없음. d5f896740의 봇 빈 리뷰가 있고
+  체크는 여전히 PENDING이다. 표시된 새 지적은 없지만 재검토 성공으로 단정하지 않으며 대기/재실행하지 않는다.
+- **다음:** 브랜치·워크트리 보존 → BE·FE 개발서버 사전 테스트 → 스테이징 정식 QA → 팀의 배포/Member 활성화 결정.
+  주문1단계 권한·이력 조건, 상세 기본/부분/차단, 승인·변경 제한 및 다주문 환자 담당 변경 대기시간을 실제 데이터로 확인한다.
+  필수 BE 추가 요청이나 확정된 추가 FE 구현 대기는 없다. 제품 코드·브랜치·PR·배포는 이번에 변경하지 않았다.
+  실제 문제나 추가 지시 전 제품 수정·새 PR·병합·배포·자동 감시는 하지 않는다.
+
+## 이전 체크포인트 — 2026-10-16 사용자 지시로 원래 웹 feature 브랜치 복구·워크트리 보존
+
+- **최신 사용자 지시:** release가 아직 상용에 완전히 반영되지 않았으므로 `feature/DL-16317`을 다시 살리고,
+  워크트리도 아직 삭제하지 않는다. 직전 정리 요청의 이 브랜치 삭제 부분을 대체한다.
+- **웹 복구:** `feature/DL-16317`을 삭제 전 커밋 `f4bfaf1bf102a555ec6350aee97ea0a1ab2c7d05`로
+  로컬·리모트 복구하고 upstream 연결 완료. 원격/로컬 SHA 일치와 워크트리 clean을 확인했다. 원래 feature를 복원하는 요청이므로 후속 PR4706의 d5f896740으로 덮어쓰지 않는다.
+  `codex/dl-16317-permission-followup`은 별도 복구 요청이 없어 삭제 상태를 유지한다.
+- **워크트리:** `/Users/parkjongsun/Repository/dentlink-client-permission`은 삭제하지 않고
+  최신 병합 release `10c30e3cb` detached HEAD·clean을 유지한다. 브랜치 ref만 복원하며 로컬 소스가 과거 상태로 바뀌지 않는다.
+  다른 worktree도 변경하지 않는다. Office 앱 `feature/DL-16317@7cb4487`/PR329는 기존대로 보존한다.
+- **보존/다음:** 해당 feature 브랜치와 워크트리는 아직 정리 대상이 아니다. 상용 반영 여부와 사용자 후속 지시를 확인하기 전
+  다시 삭제하지 않는다. 개발서버 배포 보고와 상용 출시/실제 QA는 구분한다. 후속 QA는 최신 release 내용에서 시작한다.
+
+## 이전 체크포인트 — 2026-10-16 웹 배포 보고 및 병합 브랜치 정리 완료
+
+- **사용자 보고/요청:** 배포 완료 후 메모리·정리, 작업 로컬/리모트 브랜치 삭제 및 종료를 요청했다.
+  앞선 문맥상 개발서버 배포 완료로 기록하며, 실제 배포 SHA·런타임·운영 배포·QA 통과를 별도 확인한 것은 아니다.
+- **실제 웹 병합 확인:** [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706)은
+  `release/v1.89.0`에 MERGED, 2026-10-16 15:13:18 KST,
+  merge `10c30e3cbf5a31ecd7f051abe5b3d29c8bbd03d5`, 마지막 feature head `d5f896740808864780420c6d8ee24e2f5ce33106`.
+  PR4700도 MERGED(merge047fcc585), 두 PR은 squash 병합이므로 단순 commit ancestry와 구분한다.
+  PR4706의 최종 feature/release tree 및 patch-id가 같으며, PR4700은 당시 release a065b39e4와 feature f4bfaf1bf의
+  merge-tree `0a14f88dcb87f509cf3f1cd119809abbdf338012`가 실제 merge047fcc585 tree와 같음을 확인했다.
+- **삭제 완료 — 웹 저장소 한정:**
+  - `codex/dl-16317-permission-followup` 로컬·리모트(삭제 전 d5f896740)
+  - `feature/DL-16317` 로컬·리모트(삭제 전 f4bfaf1bf)
+  원격 예상 SHA lease로 변경 경합을 방어한 삭제 push가 정상 hook을 통과했다. 이후 로컬/원격/tracking ref 없음 확인.
+  squash 병합의 동등성을 확인한 뒤 로컬 branch -D를 사용했다. 추가 백업 브랜치는 만들지 않았다.
+- **로컬 위치 보존:** `/Users/parkjongsun/Repository/dentlink-client-permission`은
+  실제 release merge `10c30e3cb`의 detached HEAD·clean으로 남겼다. 최종 feature와 tree가 같아 소스 내용 변화 없음.
+  폴더·ignored 환경 파일·의존성·서버 및 다른 작업용 worktree는 삭제/수정하지 않았다.
+- **Office 앱 보존:** 실제 [PR329](https://github.com/Innvoaid/dentlink-app/pull/329)는 여전히 OPEN → develop,
+  head `7cb4487023001714ee3247ca454b97fdc9d1fca7`. 미병합 앱의 `feature/DL-16317`은 로컬/리모트 모두 삭제하지 않았다.
+  웹 배포 소식을 앱 병합·배포 완료로 확대하지 않는다.
+- **검증/리뷰 경계:** 기존 FE 검증과 CodeRabbit 승인 ID 수정은 아래에 보존한다. 새 커밋 리뷰 대기는 사용자 요청으로
+  앞서 중단했으며 이번 정리에서 자동 리뷰를 다시 조회/실행하지 않았다. 실제 계정·기기 QA는 별도다.
+- **다음 시작점:** 개발서버 QA 결과가 오면 현재 release/v1.89.0을 fetch하고 해당 QA 후속용 새 작업 브랜치를 만들어 수정한다.
+  삭제한 브랜치를 현재 활성 브랜치로 가정하지 않는다. 앱 작업 재개는 보존한 feature/PR329 상태부터 확인한다.
+  필수 BE 추가 요청 없음. 지금은 추가 구현·배포·모니터링 없이 종료한다.
+
+## 이전 체크포인트 — 2026-10-16 웹 PR4706 CodeRabbit 후속 검토
+
+- **승인/범위:** 사용자 요청은 PR4706 CodeRabbit 리뷰 확인이다. 개인 AGENTS의 기존 합의에 따라 유효 지적 수정,
+  검증·커밋/푸시·답변·resolve 및 최신 리뷰 재확인까지 처리한다. 다른 기능 재조사나 앱 PR 변경·배포는 하지 않는다.
+- **웹:** `codex/dl-16317-permission-followup@d5f896740808864780420c6d8ee24e2f5ce33106`,
+  `fix: 승인 링크에 지정된 대상 정보 유지`. 정상 commit/push 후 원격 head 일치.
+  기존 [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706) → `release/v1.89.0` 유지.
+- **유효 지적 수정:** 읽기 전용 승인 링크에 명시된 approvalId가 현재 approvals에 없으면 첫 DESIGN 승인으로 바뀌던 문제를
+  실제 테스트2개로 재현했다. 명시 ID를 유지하고 다른 현재 AUTO 미리보기로 대체하지 않도록 수정했다.
+  ID 생략 때 기존 DESIGN/AUTO fallback은 유지한다. 제품/기존 테스트2파일만 수정, 새 파일 없음.
+- **검증:** Clinic35 suites/353 tests, Lab38 suites/399 tests PASS. 정상 commit의 Clinic/Lab/Admin 타입과
+  정상 push의 3서비스 lint·Admin DLOS guard·shared coverage PASS(기존 warning 있음), diff/테스트포맷 PASS.
+  최신2파일 독립 검토에서 추가 결함 없음. 이번 단순 대상 선택 수정에서 production build는 반복하지 않았으며,
+  직전976097e85 빌드195페이지/standalone PASS 증거는 아래에 구분해 보존한다.
+- **리뷰 답변:** [승인 ID thread](https://github.com/Innvoaid/dentlink-client/pull/4706#discussion_r4291452818)에
+  재현/수정 내용을 답변하고 resolved 처리했다.
+  [순차 조회/Docstring 판단](https://github.com/Innvoaid/dentlink-client/pull/4706#issuecomment-6209294669)을 기록했다.
+  순차 조회 지연은 유효한 성능 개선 제안이지만 기능 오류는 아니다. 병렬 묶음의 추가 요청 및 묶음 완료 대기와
+  클릭할 때만 조회하고 본인 주문 발견 시 즉시 중단하는 현 구조를 비교해 이번에는 순차 조회를 유지한다.
+  많은 주문 사례의 실측 지연은 QA에서 확인한다. Docstring 수치 경고만을 위한 주석 증가는 하지 않았다.
+- **최신 자동 리뷰/중단:** d5f896740에 대한 CodeRabbit 상태는 마지막 확인에서 PENDING이었다.
+  사용자가 "처리했으면 더 안기다리고 마무리"라고 지시하여 대기/추가 상태 조회를 중단한다. 기존 지적 thread는 resolved이나
+  새 커밋 리뷰 완료·추가 지적 없음까지 확인한 결과는 아니다. 이후 사용자 요청 시 해당 결과부터 확인한다.
+- **그 외/다음:** 필수 BE 후속 없음, Office native7cb4487/PR329 유지. 팀 리뷰/병합 → 사용자 QA 배포 → 실제 계정·기기 QA.
+  merge/배포/CodePush/E2E/유료 CodeRabbit 실행은 하지 않는다.
+
+## 이전 체크포인트 — 2026-10-16 담당 변경 경고 완료, 사용자 배포/QA 대기
+
+- **최신 요청/판단:** BE는 완료됐다는 사용자 기준으로 FE가 가능한 보완을 마치고 웹·앱 PR까지만 전달한다.
+  배포는 사용자가 진행한다. 아래 이전 체크포인트의 '담당 변경 경고 BE 확인 필요'는 해제한다.
+- **BE로 분류했던 이유와 정정:** 환자 Case 주문 목록에는 담당 ID가 없고 주문 목록에는 환자 필터가 없어
+  단일 응답으로 경고를 판정할 수 없었다. 이를 필수 BE 보완으로 분류한 것은 과했다.
+  기존 환자 Case 주문 API와 주문 상세 GET을 조합하면 정확히 확인 가능하며 새 API/필드가 필수는 아니다.
+- **웹:** 기존 `codex/dl-16317-permission-followup`에 `976097e85f8b1c6561924379ee2f716384d8ec1f`
+  (`fix: 담당 변경 전 환자 주문에 따른 접근 경고 보완`)을 추가했다.
+  정상 commit/push 후 원격 head 일치·clean을 확인했다.
+  [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706) → `release/v1.89.0` OPEN/MERGEABLE과 본문 갱신을 확인했다.
+  - Member가 담당 변경을 열 때 현재 환자의 Case 주문을 1회 조회한 뒤 현재/중복/삭제 주문을 제외한다.
+    나머지 주문 상세에서 본인 담당을 찾으면 경고를 생략하고 즉시 조회를 끝낸다. DRAFT/CANCELED는 포함한다.
+  - 다른 본인 주문이 없을 때 기존 접근 해제 경고를 표시한다. 페이지 진입과 Admin에는 보조 조회가 없다.
+    최악의 경우 같은 환자 주문 수 N에 대해 1+N GET이며 병원 전체 목록 조회는 하지 않는다.
+  - 조회 실패/누락 응답에서는 존재 여부를 추측하지 않고 기존 오류 알림 후 모달을 열지 않는다. 다시 클릭해 재시도한다.
+    중복 클릭, 직원/권한/환자/주문 변경, unmount 후 이전 결과/콜백을 차단한다.
+    보조 상세 GET에는 employee-id와 skipOfficeSwitchRequired를 전달한다.
+  - PC/mobile 제목 컴포넌트와 기존 페이지에 연결했다. 이번 추가는 기존8파일만 변경, 신규파일/스토리/env/패키지 없음.
+- **Office 앱:** 기존 `feature/DL-16317@7cb4487023001714ee3247ca454b97fdc9d1fca7` 및
+  [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → `develop`을 유지한다.
+  담당 변경은 OrderDetailScreen → DentlinkWebView → 웹 orders 상세/mobile 제목 → 공용 모달 경로다.
+  이번 경고 보완은 웹 배포로 함께 적용되므로 네이티브 중복 구현/빈 커밋은 만들지 않았다. PR 본문에 배포 의존성을 반영했다.
+- **검증:** Clinic 전체35 suites/349 tests, Lab 전체38 suites/399 tests PASS.
+  최종 타입 보완 후 hook24 tests 재검증 PASS. 정상 commit hook Clinic/Lab/Admin 타입 PASS.
+  정상 push hook 세 서비스 lint(기존 warning 있음)·Admin DLOS guard·shared coverage PASS.
+  최종976097e85와 소스 차이0인 격리 snapshot의 frozen 설치/정식 Clinic production build exit0:
+  TypeScript·webpack·195/195페이지·standalone 생성 확인, 임시 snapshot 삭제. 실제 배포/실계정 쓰기 QA와 구분한다.
+  증거: `/tmp/dl16317-warning-{clinic-tests,lab-tests,commit,push,clinic-build,clinic-snapshot}-20261016.*`.
+  독립 검토에서 추가 제품 결함을 발견하지 못했다. 기존 PRD의 환자 전체 읽기 허용으로 보조 상세 GET 경로도 대조했다.
+  앱 코드는 이번에 바뀌지 않았으며 직전394 tests/양 플랫폼 JS bundle 증거는 아래와 같다.
+- **다음:** 웹 PR4706·앱 PR329 팀 리뷰/병합 및 사용자 QA 배포 → Member/Admin 실계정·실기기 QA.
+  담당 변경 경고 유/무, 변경 후 부분 조회/접근 차단, 신규/기존 Case·ISV 담당 배정, 읽기/쓰기 제한을 확인한다.
+  현재 확정 범위의 필수 BE 요청이나 추가 FE 구현 대기는 없다. 서버 실제 데이터·쓰기·실기기 결과는 QA 증거로 남긴다.
+  merge/배포/CodePush/E2E/자동 리뷰 대기·유료 재실행은 수행하지 않는다. Jira connector403은 직전 제한이며 이번 재시도 없음.
+
+
+## 이전 체크포인트 — 2026-10-16 정책 재대조 후 웹·Office 앱 후속 보완
+
+- **사용자 승인:** 주문 1단계 조건 누락을 포함해 가능한 권한 작업 전반을 재검토하고 수정·검증·커밋/푸시·PR까지 진행한다.
+  웹은 이미 release에 병합되어 `origin/release/v1.89.0`에서 새 브랜치로 진행한다. Office 앱은 아직 미병합이므로
+  기존 `feature/DL-16317`과 PR329에 이어서 반영하라는 답을 받았다. merge/배포/CodePush는 수행하지 않는다.
+- **웹 전달:** `/Users/parkjongsun/Repository/dentlink-client-permission`,
+  `codex/dl-16317-permission-followup@f173d49f734312cb748e321d31a6984235c920a1`.
+  시작점은 PR4700 실제 merge인 `047fcc585`다. 기존 feature/DL-16317은 f4bfaf1bf로 보존했다.
+  정상 commit/push 후 원격 동일·clean, [PR4706](https://github.com/Innvoaid/dentlink-client/pull/4706)
+  → release/v1.89.0 OPEN/MERGEABLE을 확인했다. 웹 develop은 관련 없다.
+- **정책 원문 재확인:** 기존 링크의 알림센터 문서와 별개로 실제 권한 PRD
+  [담당 환자 제한](https://www.notion.so/3eace072e82f81aa955dc21cba5cf127)을 확인했다.
+  최종 편집 2026-10-15, 관련 본문·Resolved 결정·TC 및 댓글 5 discussions/10 comments를 읽었다.
+  문서의 AI 초안 표기 자체를 승인으로 취급하지 않고 PM/BE 댓글, 결정표, Figma와 대조했다.
+  Figma `2OR0Gj7NUFEEeYBjQg5Y6v`의 주문 1단계 23:22253/22675/23851/24863,
+  Draft 조건107:23961, 주문 상세475:75511 및 앱 주문47:21715를 직접 다시 확인했다.
+- **웹 보완:**
+  - Member NEW의 담당 의사 영역 전체를 숨기고 후보 의사 GET을 중단한다. Admin/Manager·Lab/Admin 기본 선택은 유지한다.
+  - Member는 NEW뿐 아니라 기존 Case 추가 주문(FOLLOW_UP)도 본인 담당이다. 폼 복원과 제출 직전 모두 보장한다.
+    기존 patientCaseId는 유지하며 Case 자체의 담당자를 수정하는 별도 요청은 없다.
+    과거의 'NEW만 본인 고정, FOLLOW_UP는 Case 담당 유지' 해석은 이 원문 확인으로 정정한다.
+  - 부분 상세에서도 정책상 예외인 번역 재시도, DESIGN/PLANNING 승인 자료 조회, 완료된 C.P. 조회를 허용한다.
+    메시지 쓰기·승인/거절·Workflow·C.P. 요청/대리 제한은 유지하며 저장된 이전 콜백도 쓰기 모달을 열지 않는다.
+  - 기존 15파일만 수정했다. 신규 파일·스토리·환경/ignore·패키지/lock·API 생성물 변경은 없다.
+- **웹 검증:** Clinic 전체35 suites/324 tests, Lab 전체38 suites/399 tests PASS.
+  commit hook Clinic/Lab/Admin 타입, push hook 세 서비스 lint·Admin DLOS guard·shared coverage PASS.
+  주문 1단계와 상세/채팅을 별도로 교차 검토했다. f173d49f7 스냅샷에서 pnpm8.6.9 frozen 설치 후
+  `pnpm build:clinic` exit0: TypeScript·webpack·195/195페이지·standalone 확인. 설치/빌드 후 추적 소스 차이0,
+  snapshot만 삭제했고 원본 .next/로컬 서버는 유지했다. macOS Node24 검증이며 Docker/실제 런타임 QA와 구분한다.
+  `/tmp/dl16317-followup-clinic-{build.log,snapshot.json,source-manifest.json}`에 증거를 보존했다.
+- **Office 앱 전달:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317`에
+  `0c6bc84`(후속/ISV 주문 담당), `de9be1f`(읽기 전용 채팅),
+  `7cb4487023001714ee3247ca454b97fdc9d1fca7`(승인 입력 보존)을 정상 commit/push했다.
+  [PR329](https://github.com/Innvoaid/dentlink-app/pull/329) → develop의 head 일치·OPEN/MERGEABLE·clean 확인.
+  웹과 달리 새 앱 PR을 만들거나 release로 대상을 변경하지 않았다. 기존 PR 본문은 최종 동작/검증으로 갱신했다.
+- **리뷰 경계:** 앱 CodeRabbit 댓글6187728788은 2026-10-16에도 Review skipped로 갱신됐으며 실제 리뷰 통과가 아니다.
+  웹 새 PR의 자동 리뷰는 생성 직후 진행 중이었고 별도 재실행·유료 실행·스레드 처리 완료를 주장하지 않는다.
+  이번 요청은 코드 재검토와 수정/PR까지이며 별도 자동 리뷰 대기 루프를 시작하지 않는다.
+- **Office 앱 보완:**
+  - Member 기존 Case 후속 주문과 별도 ISV 경로에 본인 담당 고정, ISV 담당 선택/My Patients Only 숨김 및 직원 후보 조회 중단.
+  - 읽기 전용 번역 재시도, DESIGN/PLANNING 승인 메시지6종 조회 허용. 실제 승인/반려 및 메시지 쓰기는 제한한다.
+  - 번역 재시도에 기존 ScopedRequestConfig를 연결해 직원/메시지 변경·unmount 후 오래된 작업을 차단한다.
+  - 확인한 주문/승인 자료의 network/408/429/5xx 재조회 실패에서 반려 입력·첨부를 보존하고 제출을 막는다.
+    403/404·직원/대상 변경은 자료와 입력을 제거한다.
+  - 주문/채팅403/404에서는 캐시 대화도 숨긴다. 서버 재조회 시작과 이전 응답 반영 조건을 분리하여
+    재접근이 허용되면 같은 캐시도 다시 표시한다. 새 반복 API나 권한 endpoint를 추가하지 않았다.
+  - 독립 검토에서 발견한 보완 중 회귀(ISV 비Member 선택 덮어씀,403 후 재조회까지 차단)를 수정하고 재현2개 PASS.
+  - 기존21파일(제품13/테스트8)만 수정했다. 새 파일·스토리·env·패키지/lock 변경은 없다.
+- **Office 앱 검증:** 관련 Jest41 suites/394 tests PASS, 변경 파일 lint오류0/기존경고2, diff검사 PASS.
+  변경 전 HEAD df3c79a를 별도 추출해 같은 의존성으로 TypeScript 진단18건을 대조했으며 줄번호 외 전체 내용 동일.
+  전체 실행의 App 네이티브 mock/Datadog 환경 실패2suite도 HEAD에서 동일 재현했다. 이 결과를 전체 타입/테스트 PASS로
+  확대하지 않는다. E2E는 제외한다. 증거는 `/tmp/dl16317-app-{final-unit-tests,final-lint,head-baseline-type,final-type,head-baseline-test}-20261016.log`.
+- **Office bundle:** 최종7cb4487 기준 iOS/Android production JS bundle 모두 exit0, source map에 변경 제품13파일 포함.
+  기존 외부 node_modules symlink 때문에 첫 Metro 해석은 실패했으며 /tmp 설정의 watchFolders로 실제 경로만 추가한 뒤 통과했다.
+  제품 Metro/env/의존성/서버를 변경하지 않았다. 빌드 전후 소스 hash동일·clean.
+  `/tmp/dl16317-followup-office-{ios-bundle.log,android-bundle.log,bundle.json}`에 증거가 있다.
+  이는 JS bundle이며 실제 native binary/실기기/CodePush 검증이 아니다.
+- **API 재대조:** DEV Swagger955paths/1432schemas, SHA256
+  `4b5dc8a18960451465f2fe35d340d6e4fa6bec26780a539775f82f155a795be0`.
+  현재 Office 생성 클라이언트와 method/path 증감0, 관련 DTO14개 필드 변화0이다.
+  관계없는 비Office 삭제 API9개를 반영하기 위한 대량 재생성은 하지 않았다. 새 별도 주문 접근 API를 기다리지 않는다.
+- **확정 잔여 1건:** 담당 변경 경고는 Resolved #11에 따라 같은 환자 내 다른 본인 담당 주문이 없을 때만 표시해야 한다.
+  현재 `/office/orders`는 patientId/제외 주문 필터가 없고 목록에는 환자·담당 ID가 없으며,
+  환자 Case 주문 응답에도 dentistId가 없다. 정확한 존재 여부/건수 등을 기존 응답에 제공할지 BE 확인이 필요하다.
+  `size=2` 추정, 이름 비교, 전체 목록/개별 상세 반복 요청은 하지 않는다. 기존 경고는 유지한다.
+- **그 외 판단:**
+  - 디자인의 '주문 이력 없음/있음' 예시는 현재 코드의 환자 존재(total===0) 분기와 구분한다.
+    등록 환자는 있지만 주문0인 경우의 초기 노출을 바꾸라는 확정 근거는 없어 기존 전체 환자 선택을 유지한다.
+  - Draft 본문 '본인만'과 구체 TC/Figma '미지정+본인'은 표현 차이가 있다. 구체 TC/Figma와 기존 구현을 유지한다.
+    Scanner는 현재 항상 담당자가 배정된다는 PM 댓글이 있으며 실제 서버 정제는 QA로 확인한다.
+  - Pickup 모든 주문번호는 상세로 이동, 상세 기본/부분/차단과 기존 페이지·필터 권한 경계는 유지한다.
+    권한 HOC·직원별 캐시·비동기 가드는 사용 근거가 있어 불필요 코드로 제거하지 않는다.
+  - Lab 신규 정책/기간 cutoff와 별도 알림센터 개편은 확장하지 않는다. 과거 E2E/ISV 테스트 실패 제외는 유지하며,
+    이번 앱의 ISV 주문 권한 누락 보완과 그 과거 카탈로그/E2E 이슈를 혼동하지 않는다.
+- **증거/한계:** Figma·Notion·DEV Swagger·현행 코드 및 테스트를 확인했다. Jira connector는403
+  ('The app is not installed on this instance')으로 최신 댓글 재조회/카드 수정은 하지 못했다.
+  실계정 저장/승인·실기기·이번 후속 배포 결과는 확인하지 않았다. 이전 'FE 잔여 없음'은 이번 새 발견 전 체크포인트다.
+- **다음 순서:** 팀 리뷰 후 웹 PR4706 → release/v1.89.0, 앱 PR329 → develop 전달/QA 버전 준비.
+  Member/Admin으로 신규/기존 Case·ISV 저장, 기본/부분/차단 상세, 번역/승인 조회와 쓰기 제한,
+  직원 전환 및 일시 오류/접근 회복을 실제 환경에서 QA한다. BE에는 위 담당 변경 경고 판정 정보만 구체적으로 확인한다.
+  문서 표현 차이는 근거 없이 새 FE 동작으로 확장하지 않는다. 자동 배포/CodePush/리뷰 모니터링은 시작하지 않는다.
+
+## 이전 체크포인트 — 2026-10-16 웹 개발서버 배포 후 사용자 검토 결과 대기
+
+- **최신 사용자 소식:** 개발서버에 배포했으며 검토 후 발견 사항이 있으면 다시 알려주겠다고 했다.
+  개발서버 배포 완료는 사용자 보고이며, Codex가 배포 커밋·실제 화면·QA 결과를 추가 확인한 것은 아니다.
+  운영 배포나 master 반영 완료로 확대하지 않는다.
+
+- **사용자 승인/범위:** 최종 검토의 조치 사항을 수정·검증·커밋/푸시하고 살아 있는 PR4700에 반영한다.
+  사용자가 PR4700을 release/v1.89.0에 병합했다고 알려 실제 GitHub/Git을 확인했다.
+  merge 시각은 2026-10-16 13:03:46 KST, 커밋 `047fcc585cf0b514087e0b89dd88045e9bd89b5d`다.
+  Codex가 별도 merge/배포/Jira 댓글/앱 수정을 수행한 것은 아니다.
+- **제품 Git:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 `feature/DL-16317`,
+  `f4bfaf1bf102a555ec6350aee97ea0a1ab2c7d05` (`fix: 주문 재조회 입력 보존과 승인 접근 확인 보완`).
+  정상 commit/push hook 통과·원격 ls-remote/PR head 일치·clean. 기존 10파일만 수정했고 신규 파일은 없다.
+- **완료:**
+  - Member 리메이크는 현재 주문/담당이 확인된 기존 데이터가 있을 때 network/408/429/5xx 재조회 실패로
+    작성 폼을 제거하지 않는다. 최초 실패는 기존 조회 불가 화면, 실제 403/담당·직원 변경/2131 처리는 유지한다.
+  - 승인 페이지의 siblings/recently 조회 및 파일/URL 표시는 현재 주문 확인 후 시작한다. 최초 pending과 실패를
+    분리하고, 403/404에서 캐시 자료와 잔여 콜백을 차단한다. 이미 확인된 주문의 일시적 재조회 실패에서는
+    Reject 입력·첨부 상태를 유지한다. 비동기 다운로드도 기존 ref/version으로 대상·열람 상태를 다시 확인한다.
+  - 두 화면은 기존 officeOrderActionPermissions 파일의 같은 일시 오류 판정을 사용한다.
+  - Member에게 숨긴 주문목록 Dentist 필터용 직원 조회를 PC/모바일에서 중단한다. 공용 훅의 기존 호출은 기본값 true로 유지한다.
+- **검증:** Clinic 전체35 suites/303 tests PASS(기존 테스트 확장, 신규 파일 없음).
+  commit hook Clinic/Lab/Admin 타입 PASS. push hook 3서비스 lint오류0(경고222/186/393),
+  Admin DLOS guard 및 shared coverage PASS. 읽기 전용 교차리뷰에서 추가 병합 차단 회귀를 발견하지 못했다.
+- **빌드 미완료 해소/이전 설명 정정:** 별도 snapshot에 pnpm8.6.9 frozen-lockfile 설치 후 정식
+  `pnpm build:clinic`를 실행해 TypeScript·webpack·정적195페이지·trace·standalone 서버까지 exit0으로 완료했다.
+  snapshot10파일 hash가 최종 커밋과 일치한다. 이전 date-fns/@toast-ui/editor 해석 실패는 수동 node실행으로
+  pnpm wrapper의 의존성 경로를 생략한 검증방식 한계였으며 정상 명령에서는 재현되지 않았다.
+  제품 manifest/lock/env/config 변경이나 임의 dependency/alias 추가는 없다. macOS/Node24 로컬 production build이며
+  Docker Node20/Alpine 이미지 빌드·실제 배포·쓰기 QA를 수행한 결과와 구분한다. 임시 snapshot은 삭제했다.
+- **릴리즈 호환:** 실제 release/v1.89.0 `a065b39e4`와 충돌 없이 합쳐지는 tree
+  `0a14f88dcb87f509cf3f1cd119809abbdf338012` 확인, 해당 통합소스 Clinic 타입 PASS.
+  사용자 병합 후 원격 release `047fcc585`의 실제 tree도 이 검증 tree와 일치한다.
+  앞선 통합 전 3서비스 타입 결과 및 기존 전체 Lab 테스트36 suites/382 PASS 기록은 아래에 보존한다.
+- **PR:** [PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700) → release/v1.89.0,
+  MERGED·head f4bfaf1bf·merge 047fcc585를 실제 확인했다. 최종 동작·검증·QA 경계 본문은 유지한다.
+  자동 리뷰를 강제 재실행하거나 유료 한도를 사용하지 않았다. 이번 상태 확인은 배포나 실제 QA 증거가 아니다.
+- **증거:** `/tmp/dl16317-fix-{clinic-tests,commit,push}-20261016.log`,
+  `/tmp/dentlink-pr4700-final-production-build-20261016.log`,
+  `/tmp/dentlink-pr4700-final-merged-clinic-type-20261016.log`,
+  `/tmp/dentlink-pr4700-final-build-snapshot-20261016.json`.
+- **다음:** 웹 release 통합 및 사용자 보고 기준 개발서버 배포 완료. 사용자 검토/QA 결과 또는 재개 지시를 기다린다.
+  feature 브랜치·worktree는 유지하며 별도 화면 검수·제품 수정·Jira 변경·자동 모니터링은 시작하지 않는다.
+
+## 이전 체크포인트 — 2026-10-16 웹 PR4700 최종 머지 전 검토
+
+- **요청/범위:** 디자인 재검수보다 배포 위험·부작용·성능·불필요한 코드/개발 방식을 전수 검토한다.
+  이번 요청은 검토이며 제품 수정·커밋/푸시·PR/Jira 댓글·병합·배포는 하지 않았다. Office 앱은 별도 범위다.
+- **현재 Git:** 정식 웹 worktree `feature/DL-16317@55ad768d54c3ffc9948f22051aad36ba49ba293c`, 원격 동일·clean.
+  PR4700은 OPEN/MERGEABLE, REVIEW_REQUIRED/BLOCKED. 최신 CodeRabbit SUCCESS, 3 threads 모두 resolved·추가 페이지 없음.
+  실제 원격 release/v1.89.0은 `a065b39e48afbeff4ef6b2e052ed2d82d6966f25`로 feature에 없는 2커밋
+  (#4681 입고검사·#4699 Invoice)이 있다. GitHub PR API의 base SHA는 이전 `af636cac8`이므로 현재 원격 ref와 구분한다.
+  `git merge-tree --write-tree`는 충돌 없이 `5a6671a891f328f6de1ef423af48f1e0ccb6a9fa`를 만들었다. 실제 merge/ref 변경은 없다.
+- **머지 전 보완 권장 2건(P2):**
+  1. `clinic/src/common/hocs/withRemakeOrderAuthorization.tsx:36-52`: Member의 본인 주문 확인 후에도
+     창 복귀 등 background 원주문 재조회가 네트워크/500으로 실패하면 `isError`만으로 폼을 unmount하고
+     `/remakes`로 이동한다. 기존 데이터/권한이 유효해도 미저장 입력을 잃는다. 권한 거절/담당 변경과
+     일반 조회 실패를 분리하고, 일반 실패에서는 입력 보존·재시도/저장 제한 방향으로 보완해야 한다.
+  2. `clinic/src/lib/Order/useOrderApprovalPage.ts:115-122,187-189`: 주문 GET의 403만 없으면 열람 허용으로
+     계산하고 siblings는 병렬 조회한다. Member의 주문 GET 대기 또는500 + siblings200에서 승인 파일·다운로드·URL이
+     검증 완료 전 노출된다. 현재 주문 조회 성공과 승인 데이터 조회/표시 순서를 연결하고 로딩·일반 오류·거절을
+     구분해야 한다. FE 순서 문제는 재현했지만 siblings 서버의 독립 권한 검증까지 우회됐다고 확인한 것은 아니다.
+- **재현:** 저장소 밖 `/tmp/dl16317-final-review-repro-20261016/order-access`에 기존 fixture를 복사한 임시 테스트
+  2 suites/3 cases로 위 현동작을 재현했다. PASS는 문제 동작의 assertion이 통과했다는 뜻이다.
+  실제 서버 장애/쓰기 요청은 유발하지 않았으며 제품 테스트 파일은 추가하지 않았다.
+- **비차단 정리 후보:** Member 주문목록에서 숨긴 Dentist 필터용 직원 GET이 Desktop/Mobile 훅에 남아 있다
+  (`useOrderListDesktop.tsx:22`, `useOrderListMobile.tsx:36`). 기존 조회 재사용으로 요청 폭증이나 실제 오류는 없지만
+  Member에서 enabled를 끌 수 있다. 이를 보안 결함/머지 차단 사유로 보지는 않는다.
+- **불필요 코드/영향 검토:** withAuthorization/리메이크 가드·역할별 캐시·비동기 쓰기 가드에는 실제 사용 경로가 있다.
+  ORDER 채팅 GET/POST/폴링/원문 찾기 전환, Support 유지, 직원 캐시 writer3곳, Lab/Admin 공용 UI 기본 동작을 확인했다.
+  새로운 반복 조회/무한 렌더링이나 대규모로 제거할 미사용 추상화는 발견하지 못했다. 기존 목록 PC/모바일 이중
+  마운트 및 상세 파일/요약 별도 GET은 PR 이전 구조다. diff151파일(+9828/-863) 중24개는 테스트(+6464)다.
+- **HEAD 검증:** Clinic 전체35 suites/283 tests, Lab 전체36 suites/382 tests PASS(합71 suites/665 tests).
+  Clinic/Lab/Admin 타입3개 PASS. lint3개 오류0(경고222/186/393), Admin DLOS guard PASS, diff check PASS.
+- **릴리즈 통합 검증:** 충돌 없이 합쳐질 tree `5a6671a891`를 별도 snapshot에 반영한 뒤
+  Clinic/Lab/Admin `tsc --noEmit --incremental false` 모두 통과했다. Lab generated `next-env.d.ts`는
+  archive 제외 파일이므로 임시 snapshot에만 복원했다. 원본 checkout/branch/로컬 실행 서버는 그대로다.
+- **Production build 한계:** HEAD를 git archive한 별도 /tmp snapshot에서 Clinic build를 시도했다.
+  TypeScript 통과 후 webpack이 `@toast-ui/editor` CSS·`date-fns`를 해석하지 못해 실패, static generation 미실행.
+  관련4개 source와 package/lock은 PR에서 변경되지 않았고 원본에서도 같은 module resolution 실패를 확인했다.
+  의존성 설치/제품 설정 변경으로 범위를 넓히지 않았다. 빌드/배포 성공을 주장하지 않는다.
+- **증거:** `/tmp/dl16317-final-{clinic,lab}-{tests,type,lint}-20261016.log`,
+  `/tmp/dl16317-final-admin-{type,lint}-20261016.log`, 임시 재현 `order-access/results.log`,
+  `/tmp/dentlink-pr4700-production-build-20261016.log`,
+  `/tmp/dentlink-pr4700-merged-{clinic,lab,admin}-type-20261016.log`.
+- **다음:** 사용자에게 위2건 보완 후 머지를 권고한다. 수정 요청 시 기존 feature에서 실제 결함을 고치고
+  재현을 회귀 테스트로 바꿔 검증·승인된 커밋/푸시를 진행한다. 이후 팀 리뷰 승인·정상 build 환경 검증·QA/배포다.
+  과거의 “즉시 할 FE 잔여 없음” 판단은 이번 새 결함 발견 전의 체크포인트로만 읽는다.
+
+## 이전 체크포인트 — 2026-10-15 Office PR329 생성·웹 리뷰 확인 후 대기
+
+- **사용자 요청:** Office 앱 PR을 생성하고 CodeRabbit 유효 지적을 처리하되, 리뷰가 실행되지 않거나
+  한도에 걸리면 건너뛴다. 웹도 남은 확인을 마치고 커밋/푸시·메모리 정리 후 대기한다.
+- **Office PR:** [PR329](https://github.com/Innvoaid/dentlink-app/pull/329),
+  `feature/DL-16317 → develop`, head `df3c79a5efa51e9c9160c9f0d6d260be93310584`.
+  OPEN/MERGEABLE, develop `62e5864`가 이미 포함되어 최종 diff 75파일/11커밋(+7581/-791)이다.
+  자동 제목·본문·라벨 workflow 성공 후에도 실제 base develop과 의도한 본문을 재확인했다.
+  앱은 확인된 develop 대상 정책을 적용하며 웹의 release/v1.89.0 전달 경로와 구분한다.
+- **Office CodeRabbit:** [댓글6187728788](https://github.com/Innvoaid/dentlink-app/pull/329#issuecomment-6187728788)에
+  Review skipped가 명시되어 있다. 자동 리뷰 대상 패턴이 `release/*`여서 develop 대상은 실행하지 않았다.
+  체크 SUCCESS는 실제 리뷰 완료가 아니다. reviews0/reviewThreads0이며, 사용자 지시에 따라 별도 재실행·과금·
+  설정/대상 브랜치 변경은 하지 않았다. 새 수정 지적이 없어 제품 코드/커밋은 추가하지 않았다.
+- **웹:** [PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700),
+  `feature/DL-16317@55ad768d54c3ffc9948f22051aad36ba49ba293c → release/v1.89.0` 유지.
+  OPEN/MERGEABLE/REVIEW_REQUIRED. 최신 HEAD에 대한 CodeRabbit 실제 리뷰를 확인했고
+  전체 3개 스레드 모두 resolved·추가 페이지 없음·신규 유효 지적 없음이다.
+  docstring coverage 안내 경고만으로 불필요한 주석/파일을 추가하지 않았다.
+- **Git/검증:** 두 제품은 기존 커밋이 원격과 동일하고 clean이다. 앞선 Office 26 suites/235 tests,
+  lint오류0·iOS/Android JS bundle PASS 및 기존 타입 오류18개/추가0, 웹 관련4 suites/38 tests 결과를 유지한다.
+  이번 단계는 PR/리뷰 확인이며 코드 변경이 없어 테스트를 반복하지 않았고 실기기/쓰기 QA를 새로 수행하지 않았다.
+- **Jira:** Office DL-16752 댓글44462에 PR329·자동 리뷰 생략·다음 QA를 반영했다.
+  Web DL-16319 댓글44459의 앱 PR 미생성 문구도 PR329 링크로 갱신했다. 두 카드 Ready for Deploy 유지.
+  부모 카드·Lab 앱은 변경하지 않았다.
+- **완료/재개점:** 현재 확정 계약에서 즉시 필요한 추가 FE 개발이나 BE 확인 질문은 발견하지 못했다.
+  다음은 두 PR의 팀 리뷰 → 웹 릴리즈/앱 QA 버전 준비 → 같은 병원 Member/Admin 실제 기기와 쓰기 QA
+  (기본/부분/차단 상세, 직원 전환, 채팅·승인/거절, 본인/미지정/타 의사 Draft, 업로드) → 승인된 배포다.
+  PR 병합·배포·CodePush는 하지 않았다. 추가 변경·자동 모니터링 없이 사용자 재개 지시를 기다린다.
+
+### 추가 읽기 QA — 2026-10-15 로컬 Admin/Member 초기 Pending 필터 차이
+
+- 사용자 질문으로 현재 실행 중인 웹 서버 PID97531의 cwd가 정식 permission/clinic이고
+  HEAD `55ad768d5`·clean인 것을 확인했다. 일반 Chrome Admin localhost와 시크릿 Member 127.0.0.1을 비교했다.
+- 양쪽 모두 DEV `GET /office/orders/filter-hint`를 실제 호출한다. Admin 응답은
+  `{code:"0000", data:"PENDING"}`, 자동 선택된 `PENDING_ORDER`+`OFFICE_APPROVAL_PENDING` 목록은 38건이었다.
+  Member 응답은 `{code:"0000", data:"ALL"}`이고 기본 상태 필터 없이 전체 5건을 표시했다.
+- Member에도 두 상태를 명시해 조회했다. 정확한 두 query와 size10/page0 요청의 HTTP200 및
+  화면 0 Orders/No Result를 확인했다. 따라서 현재 Member가 조회 가능한 Pending 주문이 없어
+  서버가 ALL을 돌려주고 FE가 이를 반영한 결과이며, 이 흐름의 FE 호출/필터 전달 누락은 발견하지 못했다.
+- 코드상 기본 필터는 역할 공통으로 hint=PENDING·진입 URL query 없음일 때 마운트당 1회만 적용한다.
+  Member 제거 필터는 dentistIds/myOrderOnly뿐이다. 직원·권한별 cache/enabled 조건은 연결돼 있고,
+  현행 DEV Swagger도 별도 Member 필수 인자를 요구하지 않는다. `/pending-summary`는 앱 전용으로 구분한다.
+- 확인 후 Member `/orders`·Status 미선택·전체5건으로 복원했다. 창 전환/주소 입력 중 섞인 잘못된 query의
+  결과는 증거에서 제외하고 정확한 query의 응답만 위 결론에 사용했다. 제품/PR/Jira 수정이나 쓰기 QA는 없다.
+  이는 현재 계정의 반환 데이터 확인이며 BE가 정한 환자/주문 전체 접근 범위의 최종 QA 증거는 아니다.
+
+## 이전 체크포인트 — 2026-10-15 중단 작업 복구·Office 보완 및 develop 통합 완료
+
+- **사용자 요청/범위:** 토큰 중단 전 Office 구현을 이어서 가능한 보완·검증·커밋/푸시·메모리·Jira 정리까지 완료.
+  중간에 Claude가 웹 PR4700의 CodeRabbit만 처리한 변경도 인수 검토했다. 미커밋 Office 변경은 앞선 Codex 작업임을
+  작업 기록과 diff로 확인해 이어받았다. 웹의 master → feature → release/v1.89.0 전달 경로는 유지한다.
+- **웹 인수 결과:** 정식 `/Users/parkjongsun/Repository/dentlink-client-permission`을 pull하여
+  `feature/DL-16317@55ad768d54c3ffc9948f22051aad36ba49ba293c` 원격 동일·clean으로 맞췄다.
+  Claude의 Place Order/조회 실패 안내/권한 ref 갱신 3커밋에서 새 회귀를 찾지 못했고 추가 웹 수정은 하지 않았다.
+  현재 코드의 관련 기존 4 suites/38 tests PASS. PR4700은 OPEN/MERGEABLE, base release/v1.89.0이다.
+  CodeRabbit은 최신 head까지 실제 실행했으며 신규 지적 0·전체 3 threads 모두 resolved를 재확인했다.
+  이전 '새 리뷰 미확인/정식 worktree 3커밋 뒤' 상태는 해소됐다. 유료 재실행은 요청하지 않았다.
+- **Office 최종 Git:** `/Users/parkjongsun/Repository/dentlink-app-permission`, 기존 `feature/DL-16317`,
+  `df3c79a5efa51e9c9160c9f0d6d260be93310584` 정상 push 완료·원격 HEAD/ls-remote 일치·clean.
+  1. `323466a` 주문 채팅 API와 직원별 요청 범위 적용
+  2. `5c9e57e` 주문 접근 거절과 승인 권한 처리 보완
+  3. `7a43819` 주문의 미사용 권한 입력과 숨긴 필터 조회 정리
+  4. `df3c79a` 최신 origin/develop `62e5864`를 feature로 통합한 merge commit
+  원격 develop/main/release를 변경하거나 앱 PR·배포·CodePush를 실행한 것은 아니다. 앱 열린 PR 없음 확인.
+- **완료된 Office 기능:**
+  - 403/code2152는 로그인 만료로 처리하지 않는다. 제한 상세는 기존 웹 조회 불가 화면으로 진입하며,
+    다른 오류는 기존 toast/back을 유지한다. 목적 주문 조회가 실패하면 이전 주문 데이터/채팅 버튼을 재사용하지 않는다.
+  - ORDER GET/POST `/office/chat-messages/orders/{orderId}`로 전환. support/reply/read/page/translation 계약 유지.
+    DEV Swagger 생성기를 실제 실행한 결과에서 필요한 DTO/alias/2method 76줄만 반영해 무관한 대량 생성 변경은 제외했다.
+    원본 `/tmp/dentlink-office-permission-implementation-swagger-20261015.json`, SHA256
+    `62be4515a489e803b69a2f18b4d78aa4886a6c9b95a64549054281ee50ef5f12`, 936 paths.
+  - 메시지/신규/최근/미읽음/주문정보/승인목록을 직원·권한별로 구분하고 직접 cache writer도 일치시켰다.
+    직원/권한 변경 시 이전 로컬 메시지·답글·낙관적 읽음 상태 및 지연 응답/작업을 차단한다.
+    EmployeeProfile 활성 직원 writer도 reader의 employeeId 포함 키와 일치시켰다.
+  - 승인 화면은 주문 GET 성공 후 siblings를 조회한다. 주문/승인 조회 실패 시 과거 파일을 가리고,
+    2152는 기존 OrderDetail로 연결, 다른 오류는 기존 toast/back. 공유 Member의 파일/URL/버전 조회는 유지한다.
+    승인·거절/첨부 준비 동안 직원·권한·대상이 바뀌면 이전 작업을 차단한다.
+  - 주문/채팅 업로드는 최신 직원 권한을 요청 전후 재확인한다. multipart 중 권한/주문 전환은 기존
+    abort/delete cleanup 큐를 재사용한다. 이미 첨부 요청이 전송됐을 가능성이 있는 파일은 임의로 삭제하지 않는다.
+  - 미사용 외부 권한 prop은 제거하고 실제 역할·담당자 판정을 유지했다. 숨긴 Member 의사 필터 조회를 중단한다.
+- **develop 통합:** 충돌 11파일을 양쪽 의미를 보존해 해결했다. 덴처 다음 단계 주문 POST와 shouldReturnOnBack,
+  날짜 형식/생년월일 검증, Submission Method, 중복 업로드 방지·첨부/재조회 대기·실패 정리를 유지했다.
+  덴처 다음 주문 API에도 현재 직원/권한 확인을 연결했다. 독립 코드 검토에서 추가 실행 경로 결함을 찾지 못했다.
+  최종 origin/develop 대비 권한 feature diff는 75파일이며 env/ignore/stories/package/lock/native/배포 workflow 변경 없음.
+- **검증:** 통합 전 관련 22 suites/173 tests, 통합 후 권한+업스트림 충돌 영향 26 suites/235 tests PASS.
+  전체 feature 변경 TS/TSX lint 0 errors(기존 warning10), Prettier/diff PASS.
+  전체 타입 검사는 기존 18개 진단이 동일(라인번호 정규화 비교 시 추가/제거 0). 타입 전체 PASS라고 보고하지 않는다.
+  iOS JS bundle+74 assets, Android JS bundle+78 assets 생성 PASS. worktree node_modules symlink 때문에
+  `/tmp/dentlink-office-permission-metro-20261015.cjs`에 watchFolders만 보완했고 저장소 설정은 변경하지 않았다.
+  실기기·실계정 쓰기 QA/네이티브 빌드는 하지 않았다(부팅 시뮬레이터·연결 Android 없음, ios/Pods 없음).
+- **검증 로그:** `/tmp/dentlink-office-final-{tests,lint,format,type,ios-bundle,android-bundle}-20261015.log`,
+  `/tmp/dentlink-web-resume-review-20261015.log`. 신규 테스트 파일은 실제 승인조회·세션·업로드 회귀 검증용이며
+  Storybook/검수용 UI/개인 인수 파일은 제품 저장소에 추가하지 않았다.
+- **Jira:** Web DL-16319 댓글44459로 Claude 리뷰 처리 재확인, Ready for Deploy 유지.
+  Office DL-16752 댓글44460에 개발 완료/검증/실기기·PR·배포 잔여를 반영하고 transition12로 Ready for Deploy 전환 확인.
+  기존 요구사항 본문은 충분하여 유지했다. 부모/다른 담당 카드와 Lab 앱은 변경하지 않았다.
+- **남은 것/재개점:** 현재 계약 기준 즉시 처리할 개발 잔여나 추가 BE API 확인 질문은 발견하지 못했다.
+  다음은 Office 앱 PR·팀 리뷰 → QA 버전 준비(웹 상세는 PR4700 릴리즈와 함께) → 같은 병원 Member/Admin 실제 기기의
+  기본/부분/차단 상세·직원전환·채팅/승인/거절 쓰기·본인/미지정/타 의사 Draft·업로드 QA → 승인된 배포다.
+  앱 PR 기본 대상은 확인된 정책 develop이며, 10/12 앱 개발자 release 전달 설명은 별도 합의 전 참고 자료로 유지한다.
+  이번 작업으로 웹 PR 병합/릴리즈 배포·앱 PR 생성/병합·CodePush를 실행하지 않았다. 재개 지시 전 대기한다.
+
+
+## 이전 체크포인트 — 2026-10-15 Claude 인수·PR4700 CodeRabbit 3건 처리
+
+- **이번 요청:** 사용자가 PR4700 CodeRabbit 지적의 처리·commit/push·resolve를 Claude에 요청했다.
+  이전 에이전트(Codex) 작업을 이어받도록 이 저장소와 Codex transcript로 의도를 파악했다.
+  작업 위치는 Claude 전용 worktree `/Users/parkjongsun/Repository/dentlink-client/.claude/worktrees/pr-4700-review-f03f94`
+  (로컬 branch는 `origin/feature/DL-16317` 추적)이며 `HEAD:feature/DL-16317`로 push했다.
+- **기록 정정:** 앞선 'CodeRabbit review-limit으로 리뷰 0건' 기록과 달리 CodeRabbit은 05:33Z에 `b725934a7`을 실제 리뷰해
+  스레드 3건을 남겼다. 1건은 '96ff683에서 해결'로 resolved 표시였으나 `handleChangeOrder`만 반영되고
+  `handlePlaceOrder` 가드가 남아 있었다.
+- **웹 수정 (원격 `55ad768d5`, 3커밋):**
+  1. `9578b2b31` `fix: 부분 제공 상세의 새 주문 작성 링크 허용` — `useOrderDetail`의 `handlePlaceOrder` 편집 권한 가드 제거.
+     사이드패널 Place Order가 항상 보이는데 Member 타 의사 부분 상세에서 무반응이던 결함이다.
+     근거: 부분 상세 제한 범위(변경/취소·Case 제목·승인/거절·채팅 작성)에 새 주문 작성은 없고, 주문 1단계는
+     치과 전체 환자 선택·NEW Case 본인 고정이 확정 정책이다. 수정·Remake·담당 변경 가드는 유지.
+  2. `7cca1ddf4` `fix: 주문 작성 화면의 조회 실패 시 조회 불가 안내 표시` — `[step].tsx`에서 403이 아닌 조회 실패
+     (5xx·네트워크)가 빈 fragment로 남던 것을 기존 `OrderDetailUnavailable`(Go to Home, 앱 WebView는 네이티브 홈)로 표시.
+     CodeRabbit 제안의 403 페이지 이동은 '401/네트워크는 권한 거절로 바꾸지 않음' 기준에 맞지 않아 따르지 않았다.
+     403은 기존 403 이동, 2131 병원 전환은 제외 유지. 판정은 `officeOrderActionPermissions.ts`에 `isOfficeOrderLoadFailed` 추가.
+     사용자 확인: 이번 인수의 목적은 완성된 작업의 리뷰 지적 처리뿐이며, 이 수정은 리뷰 대응 범위로 별도 승인 대상이 아니다.
+  3. `55ad768d5` `fix: 시스템 메시지 액션 권한을 커밋 단계에서 갱신` — shared `OrderDetailLayout`의
+     `canUseSystemMessageActionRef` 렌더 중 대입을 `useLayoutEffect`로 이동(커밋 직후·입력 전 동기 갱신).
+- **검증:** 1·2는 기존 테스트 파일 안에서 수정 전 실패 → 수정 후 통과. 관련 Jest 14 suites/131 tests 통과.
+  pre-commit의 Clinic/Lab/Admin 타입 검사 통과. 3서비스 lint 0 error(기존 경고만), Admin DLOS guard,
+  shared coverage(변화 없음) 통과. 새 테스트 파일·Storybook은 추가하지 않았다. 실계정·화면 QA는 하지 않았다.
+- **Push 방식 주의:** `.claude/worktrees/` 중첩 worktree에서는 ESLint가 상위 checkout의 `.eslintrc.json`까지 읽어
+  storybook plugin 충돌로 pre-push hook이 실패한다. 같은 항목을 `--no-eslintrc -c ../.eslintrc.json`로 직접 실행해
+  통과를 확인한 뒤 `--no-verify` push했다. 타입 검사에는 gitignore된 `{clinic,lab,admin}/next-env.d.ts`가 필요했다.
+- **PR/리뷰:** PR4700 OPEN/MERGEABLE/REVIEW_REQUIRED, head `55ad768d5`. 스레드 3건 모두 근거 답글 후 resolved.
+  새 커밋의 CodeRabbit 체크는 기록 시점 PENDING이며 새 스레드 재확인은 하지 않았다.
+- **Worktree 상태:** 정식 웹 worktree `/Users/parkjongsun/Repository/dentlink-client-permission`은 `96ff6836b`(clean)로
+  원격보다 3커밋 뒤다. 다른 worktree 변경이 권한 정책에 막혀 맞추지 않았으므로 재개 시 `git pull --ff-only`부터 한다.
+  Office 앱 `/Users/parkjongsun/Repository/dentlink-app-permission`(`72a7914`)에는 **기록되지 않은 미커밋 변경 34항목**이
+  있고 확인 중에도 32→34로 늘었다. 다른 세션이 작성 중일 수 있어 손대지 않았으며 소유권 확인이 필요하다.
+- **다음:** 웹은 PR4700 팀 리뷰 → release/v1.89.0 병합·배포 → 쓰기/Draft QA.
+  앱은 미커밋 변경 소유권 확인 후 기존 잔여 순서(2152 세션·상세 진입 → ORDER 채팅/역할 캐시 → 직원 정보 갱신)를 따른다.
+
+## API 사용처 재검토 — 2026-10-15 별도 조회 세션 대기
+
+- **범위:** 사용자 요청으로 웹 Office·Lab·Admin과 Office·Lab 앱의 실제 API 호출부를 읽기 전용으로 조사했다.
+  이 조회 세션(`01a1337c-cad1-7e02-bc3b-9a25801be537`)의 결과이며, 위 권한관리 구현·리뷰 상태를 변경하지 않는다.
+- GET `/office/order-chats`, GET `/lab/order-chats`: 웹은 생성 API 정의만 존재한다.
+  각 앱은 `LinkTalkService.findOrderChats`와 `useFindOrderChatsInfiniteQuery`가 남아 있지만
+  해당 훅을 소비하는 화면이 없다. 실제 Office·Lab LinkTalk 목록은 각각 GET
+  `/office/chats/latest`, `/lab/chats/latest`를 사용하며 Admin 웹도 두 `order-chats` 경로를 호출하지 않는다.
+- PATCH `/office/orders/{orderId}/revisions`: 미사용이라는 이전 결론을 재확인했다.
+  웹 `shared/models/src/order/order.apis.clinic.ts:83`의 함수만 남아 있고 호출부는 없다.
+  같은 파일의 `approve()` 주석은 `/revisions`로 잘못 표시되지만 실제 요청은 `/approve`다.
+- 별개 PATCH `/lab/orders/{orderId}/revisions`는 Lab 웹 `useOrderDetailForm.ts:502`에서
+  `PENDING_ORDER → NEW` 변경에 사용한다. `/admin/orders/{orderId}/revisions`는 생성 정의만 존재한다.
+  Office·Lab 네이티브에는 직접 호출부가 없고, Lab 앱 WebView도 상태 변경 버튼을 숨긴다
+  (`OrderDetailBoxTitleDesktop`의 `!isDentlinkApp`, Mobile의 Office 앱 전용 조건).
+  앱에서 상태 변경 모달을 여는 메시지·라우트 플래그도 찾지 못해 간접 호출 진입 없음으로 확인했다.
+- **최신성:** 조회 중 fetch한 웹 `origin/master 8772d6882`, `origin/feature/DL-16317 55ad768d5`,
+  `origin/release/v1.89.0 af636cac8`에서 revisions 결론이 같다. 앱은 Office `origin/main/develop 62e5864`,
+  Lab `origin/main bb61901`·`origin/develop 56cba67` 및 로컬 권한 작업 코드에서 확인했다.
+- **한계:** 정적 호출 경로·화면 연결 확인이며 운영 트래픽, 구버전 앱, 실기기 실행 증거는 아니다.
+  10월 13일 POST 채팅/pending-summary 조사 결과는 당시 기록이며 이번에 현재 경로를 다시 확인한 것으로 취급하지 않는다.
+  제품 코드·PR·Jira·배포 변경이나 실제 변경 API 요청은 하지 않았다.
+- **대기:** 사용자가 `오케이 대기`로 종료했다. 개인 체크포인트 저장 후 이 조회 세션은 추가 외부 조회·개발 없이
+  다음 명시적 요청을 기다린다. 다른 권한관리 구현 세션을 중단하거나 대신 진행하라는 지시는 아니다.
+
+## 이전 체크포인트 — 2026-10-15 앱 재점검·웹 주문 이동 보완
+
+- **이번 요청:** Office/Lab 앱의 현재 구현 확인과 제품별 Jira 정리, 웹에 남은 결함이 있으면 보완.
+  개인 컨텍스트와 기존 두 permission worktree를 pull하고 live Jira·PR·DEV Swagger를 대조했다.
+- **웹 추가 수정:** Member의 타 의사 부분 상세에서 사이드패널 다른 주문번호를 눌러도 이동하지 않던
+  `handleChangeOrder`의 편집 권한 검사를 제거했다. 링크는 목적 주문으로 이동하고 목적지 GET에서
+  기본/부분/차단을 판정한다. 수정·Remake·담당 의사 변경 제한은 그대로 유지한다.
+  기존 hook·기존 테스트 2파일만 변경했으며 새 파일/Storybook은 추가하지 않았다.
+  커밋 `96ff6836b` (`fix: 부분 제공 상세의 다른 주문 이동 허용`) 정상 commit/push 완료·원격 일치·clean.
+  PR4700은 release/v1.89.0 대상으로 OPEN/MERGEABLE이며 본문도 수정 동작과 검증으로 갱신했다.
+- **웹 검증:** 수정 전 실제 hook 회귀 1건 실패(이동 0회), 수정 후 관련 3 suites/32 tests 통과.
+  Prettier·diff 및 정상 commit의 Clinic/Lab/Admin 타입 검사 통과.
+  정상 push의 3서비스 lint·Admin DLOS guard·shared coverage도 통과했다(기존 lint 경고 별도).
+  로그 `/tmp/dentlink-permission-web-navigation-{before,after,commit,push}-20261015.log`.
+  기존 24 suites/217 tests는 직전 정리 시점 결과이며 이번에는 관련 3묶음을 실행했다.
+  이번 추가 검증은 코드 수준이며 새 실계정·기기 QA는 하지 않았다.
+- **Office 앱은 개발 잔여:** `/Users/parkjongsun/Repository/dentlink-app-permission`,
+  `feature/DL-16317@72a79146a` 로컬/원격 동일 clean. origin/develop `2bc7d04d` 대비 17/7커밋 분기,
+  3-dot diff 60파일이며 이 feature의 PR은 없다. 이번 앱은 확인 요청 범위로 코드·Git 변경 없이 감사했다.
+  1. 상세 GET의 **403/code2152를 로그인 만료로 처리**한다. fetcher.ts:147과 실제 상세 query/service 경로 확인.
+     실제 모듈을 격리 실행하여 loggedIn=false 및 세션키8개 삭제를 확인했다. 2005/2004는 세션 유지.
+     현재 origin/develop도 같다. 실제 사용자 계정에서 로그아웃을 일으키는 시험은 하지 않았다.
+  2. ORDER 채팅 GET/POST가 아직 `/office/chat-messages`다. 현재 제공된
+     `/office/chat-messages/orders/{orderId}`로 전환해야 한다. 고객지원·답글·읽음·페이지·번역은 기존 계약 유지.
+     구 API도 Swagger에 남아 있으므로 모든 기존 호출이 실패한다고 단정하지 않는다.
+  3. 메시지/신규 메시지/최근 대화/미읽음 query key에 직원·권한 구분이 빠져 있다.
+     같은 병원 내 직원/권한 변경 전후 key 동일함을 격리 실행으로 확인했다. 명시적 병원 전환에는
+     latest/unread reset이 이미 있으나 동일 직원 역할 변경과 메시지 state/cache는 별도 보완이 필요하다.
+  4. EmployeeProfile의 활성화 성공 writer는 EMPLOYEE_OWN 3요소, reader는 employeeId 포함 4요소다.
+     현재 reader가 활성화 응답을 받도록 맞춰야 한다. 후속 조회가 있어 항상 화면 실패인 것은 아니다.
+  5. native 상세는 최초 GET 성공 전 WebView를 막고 실패는 toast/back이다. 2152 세션 보존 후에도
+     웹 조회 불가 화면으로 연결되도록 확정된 접근 거절만 구분해야 한다. 다른 오류를 일괄 바꾸지 않는다.
+  추가 정적 잔여: 파일 업로드 후 attach 전 현재 직원/권한/화면 종료 재확인,
+  숨긴 의사 필터의 불필요한 조회 및 미사용 외부 권한 입력 정리. 무단 저장 성공을 재현한 것은 아니다.
+  Draft DTO에 담당 정보가 없어 상세 재조회하는 실제 검사는 제거 대상이 아니다.
+- **Office 검증:** 이번 기존 변경 관련 Jest 18 suites/128 tests PASS
+  (`--config jest.config.js` 명시, `/tmp/dentlink-office-permission-audit-tests-20261015.log`).
+  위 2152 인터셉터 문제는 이 기존 테스트가 다루지 않아 별도 격리 실행으로 확인했다.
+- **Lab 앱:** origin/develop `56cba674`, origin/main `bb619010`의 tree 동일.
+  환자 카드의 전체 주문/Case 수 제거·우리 Lab 주문 수 및 제목 중앙 정렬은 이미 반영되어 있다.
+  상세 Case/주문 트리는 Lab 웹 WebView를 사용한다. DEV 명세는 기존 `/lab/chat-messages` GET/POST이며
+  Lab 주문별 신규 경로는 없다. 이번 Office 전환을 Lab에 복제하거나 빈 Lab 카드를 만들 필요를 찾지 못했다.
+  현재 별도 i18n checkout은 보존했다. 실기기·배포 확인은 이번 감사에 포함하지 않았다.
+- **API/협의:** 최신 원본 `/tmp/dentlink-permission-app-audit-swagger-20261015.json`(936 paths),
+  부모 최신 합의 댓글44436 유지. 별도 내 주문/환자 판정 API 대기는 불필요하다.
+- **Jira:** Web DL-16319는 본문에 실제 범위/3상태/Pickup 링크/앱 경계를 정리하고,
+  댓글44456에 구현/QA/앱 경계를 보고한 뒤 **Ready for Deploy**로 전환·확인했다.
+  Office DL-16752는 오래된 BE 미배포 대기 문구를 현재 계약으로 정정하고 댓글44455에 개발 잔여를 반영했다.
+  Office는 진행 중 유지. 부모 DL-16317과 다른 담당자 카드는 변경하지 않았다.
+- **다음:** 웹은 PR4700 팀 리뷰·release 병합/배포 및 앞서 정리한 쓰기/Draft QA.
+  앱은 2152 세션·상세 진입 → ORDER 채팅/역할 캐시 → 직원 정보 갱신 및 비동기 경계 보완 →
+  develop 통합/PR 준비 → Member/Admin 실기기 QA 순서다. 새 BE API를 기다릴 작업이 아니다.
+
+## 이전 체크포인트 — 2026-10-15 PR4700 미사용 준비 코드·테스트·Storybook 정리
+
+- **사용자 지침:** 테스트는 실제 필요한 경우에만 유지하고, Storybook은 이제 사용하지 않는 방향이다.
+  이번 PR 전체에서 불필요한 파일과 준비 코드를 다시 점검·정리하도록 요청했다.
+  이 기능의 후속 작업에서 검수 편의만을 이유로 stories/테스트/helper를 추가하지 않는다.
+- **제품:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
+  `b725934a7` (`refactor: 권한 관리의 미사용 준비 코드와 검증 파일 정리`).
+  정상 commit/push 완료. 기존 PR4700의 대상 `release/v1.89.0` 및 master 파생 전달 경로를 유지한다.
+- **Storybook:** 신규 5파일 삭제, 기존 2파일의 이번 예제 추가분 원복. 최종 PR에 stories 변경은 없다.
+  다른 기능이 갖고 있던 기존 Storybook 파일을 일괄 삭제한 것은 아니다.
+- **미사용 제품 코드:** 실제 호출자가 없는 Draft `canContinueDraft`/`canDeleteDraft` 입력·전달과 행별 UI 준비,
+  상세 페이지 외부 권한 입력 6개 및 승인 페이지/hook 외부 권한 입력을 제거했다.
+  테스트도 가상 권한 prop 대신 실제 직원 역할·주문 담당 의사·GET403/2152 응답으로 검증하도록 바꿨다.
+- **범위 밖 Lab 선행 확장:** Clinic에는 Memo 탭이 없고 Lab/Admin에서 실제 제한 조건을 공급하지 않던
+  Memo 권한 확장 6파일을 release 기준으로 복원했다. Lab의 미사용 `isReadOnly` 전달도 제거했다.
+  추가금·배송일 편집·상태 변경은 실제 Lab 전용이고 제한 조건이 공급되지 않아 관련 준비 코드를 원복했다.
+  함께 도입됐던 일반 unmount/지연 callback 방어까지 원복되는 경로는 기존 release 동작 복원으로 구분한다.
+  실제 Lab 시스템 메시지 액션 전달과 기존 `isInputHidden`은 유지한다.
+- **실제 기능 보존:** Member 메뉴·필터, 상세 기본/부분/차단, 직접 작성 URL의 본인·미지정 Draft 검사,
+  `isCurrentDraftContext`의 직원·역할·화면 종료 검사, Clinic 채팅 읽기 전용과 직원/권한별 캐시는 유지한다.
+  이름이 같은 직접 작성 페이지의 지역 변수 `canContinueDraft`는 실제 검사이므로 제거하지 않았다.
+- **테스트 정리:** 미사용 Memo/Draft UI 전용 테스트와 제품 변경이 없는 Pickup 링크 테스트 3파일 삭제.
+  정적인 HOC 옵션을 런타임에 바꾸던 테스트, Lab 전용 미연결 제한 테스트 및 반복 fixture를 정리했다.
+  신규 테스트는 27파일/7,610줄 → 24파일/6,424줄, 전체 PR은 174파일 → 151파일이다.
+  이번 정리 커밋은 41파일 +306/-2,076, 순 1,770줄 감소다.
+- **검증:** 남은 관련 Jest 24 suites/217 tests 전부 통과. 독립 호출 경로/diff 검토에서 실제 Member
+  연결 누락을 발견하지 못했다. 정상 commit의 Clinic/Lab/Admin 타입 검사와 `git diff --check` 통과.
+  정상 push의 Clinic/Lab/Admin lint, Admin DLOS guard, shared coverage 검사도 통과했다.
+  기존 lint/Prettier 설정 경고는 있으나 검사 실패는 아니다. PR 본문도 최종 범위와 검증 결과로 갱신했다.
+  기존 Swagger 생성물·SVG 3개는 실사용/생성 계약을 확인해 유지하며 env/ignore/package/배포 workflow 변경은 없다.
+  로그: `/tmp/dentlink-permission-cleanup-final-tests-20261015.log`,
+  `/tmp/dentlink-permission-cleanup-commit-20261015.log`, `/tmp/dentlink-permission-cleanup-push-20261015.log`.
+- **다음:** PR 팀 리뷰·release 병합/배포 후 아래 실데이터 쓰기 QA와 Draft 사례 QA를 진행한다.
+  이번 정리는 코드 검증이며 새 실계정 화면 QA·네이티브 수정·E2E·배포·Jira 댓글은 하지 않았다.
+  CodeRabbit은 사용자의 한도 초과 시 생략 지시를 유지하며 유료 재실행하지 않는다.
+
+## PR 생성 이력 — 2026-10-15 release/v1.89.0 대상 PR4700
+
+- **최신 리뷰 결정:** 사용자가 PR4700 CodeRabbit 확인·필요 수정·커밋/푸시·메모리화를 요청했으나,
+  실제 조회 결과 CodeRabbit은 리뷰 한도 초과로 실행되지 않았다. 체크 상태 SUCCESS를 리뷰 완료로 해석하지 않는다.
+  [봇 댓글6184540498](https://github.com/Innvoaid/dentlink-client/pull/4700#issuecomment-6184540498)은
+  현재 HEAD7bf2b72a7·대상171파일·유료 재실행 최대 US$42.75를 안내한다. reviews0/전체 reviewThreads0을 확인했다.
+  비용 확인 질문에 사용자가 **“한도 넘었으면 넘겨 그냥”**이라고 답해 CodeRabbit 리뷰를 생략하기로 확정했다.
+  유료 재실행·자동 수정·대체 전수 리뷰는 하지 않는다. CodeRabbit 미검토 상태를 보존하며 팀 리뷰/QA 단계로 진행한다.
+  이번에는 리뷰 지적으로 인한 제품 수정·추가 제품 커밋/푸시가 없고 HEAD7bf2b72a7을 유지한다.
+
+- **사용자 확정 전달 경로:** `master`에서 파생 → `feature/DL-16317` → `release/v1.89.0` → `master`.
+  `develop`은 이번 작업의 기반·릴리즈 경로·완료 판정과 무관하다. 이전 develop PR은 임시 개발서버 확인 이력일 뿐이며
+  이번 작업의 통합·배포 단계나 다음 할 일에 연결하지 않는다.
+  2026-10-15 재확인: 최초 feature 커밋 `5ffe7e054`의 부모 `9bed1f7bd`는 master 이력이며,
+  이후 통합은 master 및 release 이력이다. develop 코드를 유입한 이력은 없고 현재 원격 SHA와 로컬이 일치한다.
+  PR4700은 `feature/DL-16317@7bf2b72a7` → `release/v1.89.0@af636cac8`, OPEN/MERGEABLE이다.
+- 사용자가 기존 PR 유무를 확인하고 없으면 `release/v1.89.0` 대상으로 생성하도록 명시 요청했다.
+  생성 전 열린 PR은 없었다.
+- **[PR4700](https://github.com/Innvoaid/dentlink-client/pull/4700)**:
+  `[DL-16317] Member 권한과 주문 상세 접근 제한 적용`, `feature/DL-16317` → `release/v1.89.0`, OPEN·일반 PR.
+  생성 후 실제 base/head와 MERGEABLE, 174파일(+11,701/-1,065)을 확인하고 현재 채팅에 연결했다.
+- **PR 생성 당시 제품 HEAD는 `7bf2b72a752c831e63069d6f37364f37647e2cb1`**.
+  PR 준비 중 release `af636cac8`와 generated `PaymentProfileRequestDto.name` 설명 주석 한 곳의 충돌을 발견해
+  feature에 release를 통합하고 릴리즈 설명을 유지했다. normal commit/push 완료·원격 일치·clean 확인.
+  독립 대조에서 릴리즈 단독 변경47파일 보존 및 generated 필드/타입 손실 없음을 확인했다.
+  최종 PR diff는 권한관리 누적 변경이며 package/lock/env/ignore/배포 workflow 변경은 없다.
+- 통합 HEAD에서 Clinic/Lab/Admin 타입, 3서비스 lint, Admin DLOS guard, shared coverage 정상 hook 통과.
+  아래 실제 계정 QA는 앞선 `e5c8a3e19` 기준이며 통합 HEAD의 화면 QA를 새로 한 것은 아니다.
+  로그: `/tmp/dentlink-permission-release-pr-commit-20261015.log`, `/tmp/dentlink-permission-release-pr-push-20261015.log`.
+- **다음:** PR 팀 리뷰·release 병합 → 릴리즈 환경 배포·아래 남은 실데이터 QA → 승인 후 master 반영.
+  이번 요청은 PR 생성까지이므로 CodeRabbit 대응/지속 감시·병합·배포·Jira 댓글은 진행하지 않았다.
+
+## 구현·로컬 QA 체크포인트 — 2026-10-15 Member/Admin 확인·홈 채팅 캐시 보완 완료
+
+- **최신 승인:** 사용자가 BE 예정 API가 모두 완료된 기준으로 기존 작업 브랜치에서 로컬 연동 검증·가능한 수정·커밋/푸시·메모리화를 요청했다.
+  시크릿 localhost의 Member 로그인을 직접 완료해 주었다. 아래 실계정 결과가 이전의 포괄적인 QA/BE 대기 기록보다 우선한다.
+- **제품:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`.
+  `e5c8a3e19ae0153b6be71ed2a12850e08bbd88ea` (`fix: 직원과 권한 변경 시 홈 채팅 캐시 분리`) normal commit/push 완료.
+  원격 feature SHA 일치·작업 트리 clean 확인. 기존 Lab UI 2건 `7c724ad0a`도 그대로 포함한다.
+  이번에 PR 생성/병합/배포·Jira 댓글·네이티브/E2E 변경은 하지 않았다. env/ignore도 수정하지 않았다.
+- **추가 API 대기는 해제된 상태 유지.** 현재 DEV API로 아래 기능이 실제 동작한다.
+  기존 주문 GET200 + 담당 의사 비교 + GET403/2152 계약을 사용하며, FE 임의 목록 필터나 별도 판정 API를 추가하지 않는다.
+  API가 없다는 포괄적인 문의는 불필요하다. 재현되는 응답/권한 불일치가 생겼을 때만 좁혀 문의한다.
+
+### 이번에 수정한 결함과 검증
+
+- 홈 최근 LinkTalk가 같은 직원의 권한 변경 뒤 이전 목록·전체 건수를 재사용하고, 미읽음 건수는 소속/직원 변경 뒤 이전 캐시를 재사용할 수 있었다.
+  수정 전 회귀 테스트 2건 실패로 확인했다. 직원·권한별 query key를 분리하고 현재 직원/권한이 확인된 뒤 조회하도록 했다.
+  전환 첫 렌더부터 이전 목록·건수·필터를 제거하며, 수동 refetch도 유효한 직원 맥락에서만 수행한다.
+  서버 API 경로/파라미터/목록 정제 정책은 바꾸지 않았다.
+- 변경 4파일: `clinic/src/components/Dashboard/Dashboard.tsx` 호출 1줄,
+  `clinic/src/lib/Dashboard/useDashboardLinkTalk.ts`, `clinic/src/services/chat/chat.query.ts`,
+  신규 `clinic/src/lib/Dashboard/useDashboardLinkTalk.test.tsx`.
+- 독립 검토, 신규 회귀 4건 포함 관련 7 suites/54 tests 및 별도 기존 권한 9 suites/90 tests 통과.
+  Clinic 타입·변경 hook/query/test ESLint·Prettier·diff 검사 통과.
+  정상 commit의 Clinic/Lab/Admin 타입과 정상 push의 3서비스 lint·Admin DLOS guard·shared coverage 검사도 통과했다.
+  기존 lint/Prettier 설정 경고는 실패와 구분한다.
+  로그: `/tmp/dentlink-permission-chat-commit-20261015.log`, `/tmp/dentlink-permission-chat-push-20261015.log`.
+
+### 실제 계정으로 확인한 범위
+
+- 로컬 Clinic `http://localhost:3000` + 기존 DEV API. Admin `jongsun.test1`(직원213, OWNER),
+  Member `jongsun.test2`(직원386, MEMBER), 같은 frankieDevOffice. 사용자 비밀번호/토큰을 추출하거나 저장하지 않았다.
+- **메뉴/필터:** Member는 Billing/Dashboard 메뉴 없음, 주문 Dentist/My Orders Only·환자 My Patients Only 필터 없음.
+  Admin은 해당 메뉴/필터 유지. Member 주문 목록5건·환자 목록5건, 보드 In Review4건/Draft0건 및 의사 필터 없음을 확인했다.
+  보드는 표시 상태 범위가 목록과 달라 총건수 차이만으로 결함으로 판단하지 않는다.
+- **홈:** Admin Active624/Pending38, LinkTalk All203/Unread4.
+  Member Active5/Pending0, 최근 주문5214/4393/3988/3437/2912 모두 본인 담당, LinkTalk All1/Unread0(2912).
+  캐시 수정 후 새로고침/새 탭에서도 각각의 범위를 확인했다. 실제 계정의 권한을 변경한 것은 아니며 전환 경계는 회귀 테스트로 확인했다.
+- **기본 상세:** Member 본인 `9000005214`는 Cancel/Edit·담당의사 변경·채팅 입력/파일 업로드가 표시된다.
+  `/orders/9000005214/additional`의 본인 수정 폼과 본인 Assigned Dentist/Save Changes 표시까지 확인했다. 저장은 누르지 않았다.
+- **부분 상세:** 공유 환자 목록에서 타 의사 주문 `9000003943`으로 이동 가능.
+  환자/Case/주문 트리와 Details/Files/Timeline 유지, 주문 Cancel/Edit·담당의사 변경·채팅 입력/업로드 숨김.
+  기존 파일1건 선택 시 Download(1) 활성화 확인 후 선택 해제했다. Admin의 같은 주문은 전체 기능이 표시된다.
+  `/orders/9000003943/additional` 직접 진입은 `/403`으로 이동해 차단됐다.
+- **차단 상세:** Member `9000009123`은 No order data available/Go to Home.
+  Query Devtools의 해당 `order_show` 오류 응답에서 HTTP403, code2152, FORBIDDEN 및 Member own orders/patients 제한 메시지를 직접 확인했다.
+  Admin의 같은 주문은 상세/수정/채팅 입력이 열린다. 이를 단순한 공통 데이터 없음과 구분한다.
+- **승인/Remake:** Admin `/orders/9000009248/approvals/1469`는 파일 미리보기와 Approve/Reject,
+  Member는 No order data available로 내용/버튼 미노출. Member의 공유 주문 `/remakes/9000003943/info`는 Remake 선택 목록으로 되돌아갔고 목록은 No Result였다.
+  이 Remake 사례는 해당 주문의 자격/상태 조건도 관여하므로 역할별 단독 증거로 확대하지 않는다.
+- **Pickup 링크:** Member가 기존 Pickup의 타 의사 주문 `9000004066` 링크를 누르면 새 탭의 해당 주문 상세로 이동한다.
+  링크 단계 차단 없음 확인. 도착 화면은 No order data available이며 이 사례는 과거 Admin에서도 데이터 없음이었으므로
+  4066을 역할별 상세 차단 증거로 쓰지 않는다. 역할별 거절 증거는 위9123이다.
+- **신규 주문:** Member Place Order 시작 화면, 본인 환자 검색과 기존 Case 선택까지 확인했다.
+  서버에 Draft를 만드는 Next/저장/주문 제출은 하지 않았다. 기존 Draft 이어하기용 실제 사례가 없어 미지정/본인/타 의사 Draft3종은 실데이터로 검증하지 못했다.
+- **Lab UI2건:** 기존 로컬 Lab 로그인([LAB-DEV] E2E Lab), `http://localhost:3005`에서 환자 목록 제목의 실제 `vertical-align: middle`을 확인했다.
+  환자→`9000009704` 상세에서 패널을 펼쳐 전체·Case/주문 트리 유지 및 Cases/Orders 건수 숨김을 확인했다.
+  단일 주문 환자 사례이며 DL-16747의 타 기공소 이후 주문 경계 전체 검증은 아니다.
+- 증거: `/Users/parkjongsun/.codex/visualizations/2026/10/15/permission-local-qa/`의 Member home/partial3943/blocked9123,
+  Admin3943/9123, Lab patients/detail-panel 캡처.
+- 로컬 QA 위젯 `/api/qa-users`의 Jira 설정500·ChannelIO 미로딩 등 기존 개발환경 경고는 별도다.
+  HMR 직후 React queue 오류는 전체 새로고침으로 해소됐으며, 한 시크릿 탭 정지는 동일 계정/URL 새 탭에서 재현되지 않았다.
+  Lab 상단 Order는 인쇄 버튼이었다. 인쇄 임시 탭은 닫았고 실제 패널 화살표로 검수했다. 인쇄/파일 저장은 실행하지 않았다.
+- 검수 종료 후 직접 실행한 Clinic/Lab 서버를 정상 종료하고 임시 Admin/Lab·중복 시크릿 탭을 닫았다.
+  사용자가 로그인한 Member 세션을 잃지 않도록 시크릿 홈 탭1개는 남겼다. 서버 재시작 후 기존 로그인 유효성을 확인한다.
+
+### 남은 것과 다음 시작점
+
+1. **현재 확인된 FE 구현 결함은 조치 완료.** 위 범위를 근거로 FE 전체 QA/출시까지 완료했다고 확대하지 않는다.
+2. 다음에는 준비된 테스트 데이터로 실제 주문 저장·승인/거절·채팅/파일 전송과 Draft 미지정/본인/타 의사3종을 검증한다.
+   담당자 변경 전후·공유/과거 담당 경계·Lab DL-16747의 여러 기공소 전후 주문 사례도 필요하다.
+   정상 운영 데이터의 권한 변경/임의 fixture 생성은 하지 않는다. 이번에는 저장·승인/거절·전송·업로드 등의 제출 버튼을 실행하지 않았다.
+3. BE에 지금 반드시 새로 질문할 API 누락/재현 오류는 없다. Lab 경계 등 준비된 사례가 기대 결과와 다를 때
+   주문번호·현재 직원/기공소·응답status/code와 기대 기준을 모아 좁혀 확인한다.
+4. 재개 시 개인 Git pull → 위 feature/원격/clean 확인 → 로컬 Clinic(3000)·필요시 Lab(3005) 실행 → 기존 브라우저 로그인 유효성 확인 순서.
+   PR/통합/배포는 별도 요청으로 진행한다.
+
+## 이전 체크포인트 — 2026-10-15 확정 UI 반영·필수 API 존재 확인
+
+### 최신 정정 — API 추가 출시 대기 아님
+
+- 사용자가 **BE는 어제 예정된 API가 모두 나왔다고 안내했다**고 전달했고, Swagger에 있는 것으로 충분한지 재검토하도록 요청했다.
+  앞서 미검증 동작을 포괄적으로 BE 추가 작업/답변 대기로 안내한 것은 부정확하다. BE 미구현으로 단정하지 않는다.
+- DEV 전체 Swagger 재조회는 아래 SHA256/936 paths와 동일하며, Office API 276 paths·Lab API 259 paths도 확인했다.
+  대상 route의 전체/그룹 명세 차이는 summary 표기·operationId 접미사뿐이며 요청/응답 계약 차이는 없다.
+- **현재 확정 기능을 구현하기 위한 필수 신규 API/응답 필드 누락은 발견하지 못했다.**
+  현재 직원 own의 `id`·`authorityType=MEMBER`, 주문 GET의 `dentist.id`/`dentistId`, 주문별 채팅 GET/POST,
+  Member 홈/최근 채팅/미읽음 건수/Draft 및 Lab 환자 주문 트리/상세는 모두 존재하고 실제 FE wrapper/hook도 사용 중이다.
+  403/2152는 Jira 44435/44436 계약이며 Swagger 상세 GET에는 200만 기재되어 있다. Swagger의 오류 설명 누락은 API 미출시 증거가 아니다.
+- **추가 판정 API, 목록의 담당자 ID/권한 플래그, 강제 필터 파라미터를 새로 요청할 근거는 없다.**
+  서버가 반환 범위를 결정하는 기존 계약으로 가능하다. 홈/최근 채팅/건수/Draft의 권한별 실제 결과는 실계정 QA 항목이다.
+  공개명세가 동일해도 기존 GET 내부 권한 정제는 변경될 수 있으므로 Swagger 해시로 BE 미반영을 단정하지 않는다.
+- **새 Lab 범위 DL-16747은 별도:** ‘이후’ 기준이 공개 Jira에 구체화되지 않았지만, 이 또한 기존 목록 GET 정제와 상세 GET 거절로 구현 가능하다.
+  별도 신규 API나 FE 판정 필드를 선제 요구하지 않는다. BE가 말한 완료 범위에 이 변경도 포함되는지와 적용 기준만 필요시 좁혀 확인한다.
+  이 질문 때문에 기존 Member 연동 검증 전체를 대기시키지 않는다.
+- 이번 재점검은 읽기 전용이다. Swagger 변경이 없어 재생성·제품 수정·추가 테스트 실행은 하지 않았으며 제품은 `7c724ad0a`로 유지한다.
+
+- **최신 승인 범위:** 사용자가 기존 `feature/DL-16317`에서 즉시 가능한 UI 2건을 구현·검증하고
+  커밋·푸시·Git 기반 메모리 정리까지 요청했다. 새 PR·develop/master 통합·배포·실계정 QA·E2E는 이번 범위에 포함하지 않는다.
+  이어서 혼자 가능한 부분을 처리하고 디자인·기획 검토 완결성 및 사용자/BE 확인 질문·다음 순서를 재점검하도록 요청했다.
+- **작업 경로/출발점:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
+  출발 `f749491593ef1977976bc1c801b24e89bb5f5984`. 개인/제품 저장소 모두 pull 완료·출발 clean이었다.
+  제품 최종 커밋은 **`7c724ad0afdd9b5c0e6ba30693fa2abefedd33ff`**
+  (`fix: 기공소 주문 건수 노출과 환자 목록 제목 정렬 수정`). 정상 커밋·푸시 완료, 원격 feature SHA 일치·작업 트리 clean 확인.
+
+### 반영한 UI와 근거
+
+1. **Lab 주문상세 사이드패널 Cases·Orders 건수 숨김.**
+   오늘 Figma #24/#25와 [신규 설명 576:32704](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=576-32704),
+   [화면 576:32702](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=576-32702)를 확인했다.
+   `shared/ui/src/OrderDetailUI/extra/OrderDetailSidePannel/OrderDetailSidePannel.tsx`에서
+   `serviceType !== "LAB"` 조건으로 건수 라벨·숫자·구분자 블록만 감쌌다.
+   전체(Total), 환자 정보, 케이스·주문 트리와 주문 이동은 유지한다. Clinic의 OFFICE 표시도 유지한다.
+2. **Lab 환자 목록 ‘우리 기공소 주문현황’ 제목 세로 정렬.**
+   [DL-16751 댓글44409](https://innovaid.atlassian.net/browse/DL-16751?focusedCommentId=44409)의 기존 UI 백로그다.
+   환자명 열 공백은 긴 이름을 위한 설계이므로 유지한다. `lab/src/components/PatientList/PatientListLayerDesktop.tsx`의
+   `StyledLabHeaderCell`에 `vertical-align: middle` 한 줄만 추가해 전역 styled-reset의 baseline을 덮어썼다.
+   다른 헤더와 같은 정렬이며 높이·padding·열 너비·색·문구는 유지한다.
+- 위 두 소스 파일만 변경했다. API·generated DTO·권한 guard·env/ignore·번역 호출/key/리소스는 변경하지 않았다.
+  i18n 가이드를 읽었으며 기존 번역 호출을 유지하므로 번역 시트 동기화 변경도 없다.
+
+### 검증과 한계
+
+- 독립 코드 리뷰에서 수정 필요 결함 없음. Lab 페이지의 LAB 전달, Clinic의 OFFICE 전달,
+  Total/트리 유지와 Lab 전용 제목 CSS의 적용 범위를 확인했다. Admin에는 현재 해당 sidebar 호출부가 없다.
+- 변경 2파일 Prettier·diff 검사, Lab 제목 파일 scoped ESLint 통과.
+  정상 커밋의 Clinic/Lab/Admin 타입 검사 및 정상 푸시의 3서비스 lint·Admin DLOS guard·shared coverage 검사 통과.
+  전체 lint의 기존 경고와 Prettier의 기존 설정 옵션 경고는 실패와 구분한다.
+  푸시 로그: `/tmp/dentlink-permission-ui-push-20261015.log`.
+- 추가 `pnpm audit:i18n`은 기존 `account.auth.actions.logIn` 키 누락 판정으로 실패했다.
+  수정 전 HEAD에도 shared SigninForm의 OFFICE 전용 `actions.logIn` 호출과 Lab en/ko 키 부재가 동일함을 확인했다.
+  실제 Lab 로그인 호출부는 `serviceType="LAB"`이며 `actions.signIn` 분기를 사용한다.
+  **후속 코드 대조로 감사기의 서비스 분기 오탐임을 확인했다.** `getRelevantConditions`는 삼항식의 true/false 구분 없이
+  조건을 기록하고 `conditionExcludesLab`은 OFFICE 전용 조건을 제외하지 못한다. 관련 5파일은 merge-base 대비 변화가 없고
+  Lab `signIn` 한/영 키가 모두 존재한다. 제품 번역 key 추가·시트 수정은 불필요하며 별도 감사 도구 개선 범위로 분리한다.
+  로그: `/tmp/dentlink-permission-ui-i18n-20261015.log`.
+- 후속 요청으로 수정된 실제 컴포넌트를 외부 API·인증·전송이 차단된 임시 로컬 fixture에서 렌더했다.
+  Lab의 Cases/Orders 건수 숨김·Total/케이스 및 주문 트리 유지, Office의 기존 Cases 2/Orders 3 표시를 확인했다.
+  Lab 환자 목록 제목의 실제 computed `vertical-align`은 `middle`이고 위/아래 여백은 17px/18px였다.
+  브라우저 오류 로그는 없었다. 샘플 props와 별도 wrapper를 사용한 컴포넌트 검증이며 제품 전체 페이지의 스타일·폰트 QA는 아니다.
+  임시 파일은 `/tmp/dentlink-permission-ui-preview-20261015`, 검수 주소는 `127.0.0.1:3097`이었다.
+  검수용 서버 PID 30610만 정상 종료했으며 3097 listener가 없음을 확인했다.
+- Member/Admin 실계정·서버 데이터 범위·저장 동작은 이번에 검증하지 않았다.
+  정적/컴포넌트 검증을 배포·실계정 기능 QA 완료 근거로 확대하지 않는다.
+
+### 현재 계약과 추가 확인할 것
+
+- **조사 범위 보완:** 최초 보고에서 일부 연결 Jira가 빠져 있었다. 사용자 재확인 요청 뒤 DL-16317 하위 30개와
+  DL-16747/16799, DL-16652를 직접 읽어 UI 백로그 DL-16751 및 기공소 열람 범위 기획을 추가했다.
+  Figma 댓글 #1~25(목록에 #13 없음), 최신/과거 디자인과 현재 코드를 대조했다.
+  후속으로 DL-16544가 연결한 [원기획/TC](https://app.notion.com/p/3c7ce072e82f811184a8e647444f01fd#e984570de2224ebdba3fd667a893cd51)의
+  권한 5-4·TC 8-1, 전체 discussion 6개/댓글 8개와 하위 leo를 확인했다. 포함 Drive 블록 1개는 도구가 읽지 못했으므로
+  모든 첨부까지 확인했다고 확대하지 않는다. 문서 전체 수정 시각이 권한 TC 수정 시각을 뜻하지도 않는다.
+  원 TC의 Pickup 링크 비활성·타 의사 주문 상세 일괄 차단 등은 후속 사용자/Figma/Jira 결정으로 대체됐으므로 복원하지 않는다.
+- **기존 계약 유지:** 부모 최신 댓글은 여전히 [44436](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44436).
+  기존 주문 GET200·담당 의사 비교·403/2152 방식 및 주문 채팅 API 전환은 이미 반영돼 있다.
+  DL-16782의 별도 검증 API 카드 제목은 그보다 오래된 기록이고 추가 계약이 없어 새 API 대기 사유로 삼지 않는다.
+- **DEV Swagger 변경 없음:** 10/15 재조회 SHA256은 `62be4515a489e803b69a2f18b4d78aa4886a6c9b95a64549054281ee50ef5f12`,
+  936 paths/1,383 schemas로 10/14 생성 기준과 동일하다. 이번에는 재생성하지 않았다.
+  권한 코드 공개 응답도 Admin → Billing Manager → Manager → Member 순서로 확인돼 dropdown 추가 정렬은 불필요하다.
+- **BE/기획 확인 1 — [DL-16747](https://innovaid.atlassian.net/browse/DL-16747):** 기공소가 처리한 주문 이후 주문의 열람 제한.
+  Yoonie 기획 진행 중이며 하위 DL-16799에도 세부 계약은 없다. ‘이후’의 판정 기준,
+  `GET /lab/patients/{patientId}/cases/orders` 목록 정제, `GET /lab/orders/{orderId}` 직접 조회 거절 status/code 확인이 필요하다.
+  DTO에는 마지막 처리 주문 경계/조회 허용 정보가 없어 FE가 날짜·ID로 임의 필터링하지 않는다.
+- **BE 확인 2 — Member 홈/최근 LinkTalk 범위:** `/office/orders/main`, `/office/chats/latest`와 관련 전체·미읽음 건수를
+  본인 담당 주문 범위로 반환하는지 확인한다. 공유 환자의 타 의사 담당 주문까지 최근 목록에 넣는다는 뜻이 아니다.
+  현 DTO로는 담당 의사 ID를 확실히 비교할 수 없어 FE 임의 필터를 추가하지 않는다.
+- **Draft 정책 정정:** 원 TC 8-1에 Member는 **미지정 또는 본인 담당 Draft만 목록에 표시**한다고 명시돼 있다.
+  5-4·TC와 DL-16785에는 신규 주문의 본인 Assigned Dentist 고정도 명시돼 있다. 이 두 방향을 미확정으로 질문하지 않는다.
+  현재 직접 주문 form gate는 본인/미지정 DRAFT 이어하기를 허용하고 타 의사는 제한하며,
+  생성 payload는 Member+NEW에서 본인 의사 정보를 사용한다. 관련 기존 3 suites/38 tests를 10/15 재실행해 모두 통과했다.
+  로그: `/tmp/dentlink-permission-draft-check-20261015.log`.
+  BE에는 해당 Draft의 목록·직접 GET·이어하기 허용 및 본인 자동 할당의 실제 적용 요청/응답을 확인한다.
+  재개 시 본인 할당 시점과 삭제 권한은 원문에 없으므로, 기존 동작과 BE 계약으로 해결되지 않을 경우에만 좁혀 기획 확인한다.
+- **실계정 QA 유지:** Member 기본/부분/차단·공유/과거 담당 범위·담당 변경 이후 접근·직접 승인/Remake·쓰기 동작은
+  추후 확정 계약/준비된 사례로 확인한다.
+  DL-16783/16785의 Ready for Deploy는 배포 증거가 아니며, 완료 카드 DL-16653의 타 기공소 주문 진입 QA 체크도 미완료다.
+  DL-16784 AOP 트랜잭션 테스트·DL-16786 Annotation 런타임 검증은 해야 할 일이며, 추가 FE API 계약은 없다.
+- **범위 분리:** DL-16652 모바일 환자 카드는 Lab native 작업으로 확인돼 웹 누락으로 계산하지 않는다.
+  Office native DL-16752의 채팅/API·실기기·통합/배포 잔여도 이번 웹 UI 변경으로 완료되지 않는다.
+
+### 다음 시작점
+
+1. **API 추가 출시 대기는 해제한다.** 개인 Git pull → 이 기록 → 기존 feature/원격 확인 후 현재 API를 기준으로 연동 검증할 수 있다.
+2. 화면 QA 재개 요청이면 이 feature를 로컬에서 실행하고 기존에 준비한 Member/Admin 계정과 해당 사례로 확인한다.
+   DEV 웹에 feature가 올라갔다고 가정하지 않는다. 새 계정 준비를 불필요하게 반복 요청하지 않는다.
+   홈/최근 채팅/건수·Draft·기본/부분/차단을 실제 응답으로 확인하고, 발견한 차이만 BE에 요청한다.
+3. **BE/Leo 문의는 좁힌다:** 이번 완료 범위에 DL-16747도 포함되는지, 포함된다면 ‘이후’ 판정·동일/다른 Case 적용 기준이 무엇인지.
+   기획 협의가 필요하면 레오가 확인 후 FE에 공유하도록 요청하며 사용자에게 별도 기획 창구를 추가하지 않는다.
+4. 확인된 계약 차이나 실제 오류가 있을 때 필요한 FE만 반영한다. 별도 검증 API나 임의 필터는 추가하지 않는다.
+5. 현재 확정 요구에서 추가 FE 결함은 발견하지 못했다. 제품은 `7c724ad0a`로 유지하며 추가 제품 커밋은 없다.
+   새 사용자 지시 없이 PR·병합·배포·외부 댓글·자동 모니터링을 진행하지 않는다.
+
+## 이력 — 2026-10-14 가능한 로컬 화면 검수·정리 완료 후 대기
+
+- **최신 사용자 설명/요청:** DEV 웹은 원복되어 권한 feature를 확인할 배포 화면이 없다. 기존 코드를 로컬 실행해서라도 확인하도록 요청했다.
+  따라서 아래 코드 작업의 화면 QA 제외 지시는 이번 **로컬 읽기 화면 검수** 범위에서 갱신됐다.
+  DEV 웹 재조사·재배포·E2E는 재개하지 않으며, 주문/권한 저장·승인/거절·채팅 전송·업로드는 실행하지 않는다.
+  이후 사용자가 **로컬에서 현재 가능한 만큼만 확인하고 정리·마무리**하라고 지시했다.
+  Member 추가 로그인 요청은 반복하지 않고 미검증으로 남긴 뒤 검수 환경을 종료했다.
+  최종적으로 **여기까지 중단하고 다음 재개 시 상태를 바로 알 수 있게 인계**하도록 요청했다. 명시적 재개 전 추가 작업은 하지 않는다.
+- **실행 코드:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
+  `f749491593ef1977976bc1c801b24e89bb5f5984`. 양쪽 저장소 pull은 up to date였고 제품 소스 수정 없이 실행했다.
+  실행 명령은 `pnpm --filter dentlink-clinic-web dev --hostname 127.0.0.1 --port 3000`이다.
+  **로컬 URL `http://localhost:3000`**, 기존 `.env.development`의 **DEV API**에 연결한다.
+  프런트만 로컬이며 BE까지 독립 mock 환경인 것은 아니다. DEV 웹의 원복/서빙 상태는 확인하지 않았다.
+- **런타임 정리 완료:** 이 작업에서 실행한 서버의 cwd가 permission/clinic인지 확인한 후 정상 종료 신호를 보냈다.
+  localhost:3000 listener 없음·exec session80669 종료를 확인했다. 생성했던 일반/시크릿 localhost 탭만 닫았고,
+  사용자가 열어둔 DEV 탭과 계정 로그인 상태는 유지했다. 로그 `/tmp/dentlink-permission-local-20261014.log`와 이미지는 보존한다.
+
+### 로컬 Admin에서 직접 확인한 범위
+
+- Chrome 기본 창의 localhost 기존 로그인은 **jongsun.test1 / frankieDevOffice**다. 프로필에서 계정을 확인했다.
+  Billing/Dashboard 메뉴, Orders의 Dentist·My Orders Only, Patients의 My Patients Only,
+  Board의 Dentist Name 필터가 표시된다. Patients612·Board559를 관찰했으며 Orders38은 기존 Pending 조건이 적용된 목록이다.
+- 주문9123은 상세/Case 트리·Edit/Cancel·담당 변경 버튼·채팅 메시지와 입력을 표시한다.
+  공유 비교용3943은 Cases4/Orders4·Files1·Edit/Cancel·담당 변경·채팅 입력이 표시된다. 이 화면에서 No Messages를 관찰했다.
+  이번에는 응답 본문을 수집하지 않았으므로 빈 채팅의 서버 원인까지 새로 확정하지 않는다.
+- 승인9248/1469는 PNG 실제 미리보기·Download·Approve/Reject가 표시된다. 승인/거절·다운로드는 실행하지 않았다.
+- 마무리 때 주문3943의 Files 탭에서 파일1개 표시·선택 후 Download(1) 활성화·선택 해제 후 비활성화를 추가 확인했다.
+  선택 상태를 원래대로 돌렸고 실제 다운로드·업로드는 실행하지 않았다.
+- Pickup의 예약 항목을 펼쳐 주문4066을 클릭하면 새 localhost 주문 상세 탭으로 이동한다.
+  도착 화면은 No order data available이다. 이 번호는 Admin도 조회 불가이므로 Member 전용 거절 사례로 쓰지 않는다.
+- 위 화면 범위에서 새 권한 FE 결함은 발견하지 못했다. Member 제한·현재 API 2152 응답·전체 디자인 일치를 검증했다는 뜻은 아니다.
+- 로컬 로그의 부가 `GET /api/qa-users` 500은 QA 제보 위젯의 Jira 담당자 조회 경로다.
+  해당 route는 Jira 설정 누락/접근 실패 때 500을 반환하며 권한 주문 GET과 별개다. 비밀값·환경은 읽거나 변경하지 않아
+  정확한 설정 원인은 확정하지 않았고 이번 권한 검수로 확대 수정하지 않는다.
+- 이미지: `~/.codex/visualizations/2026/10/14/permission-local-qa/`의
+  `admin-approval-9248.jpg`, `admin-shared-3943.jpg`, `admin-board.jpg`, `admin-file-selection-3943.jpg`.
+  다른 기기에서는 이 기록을 기준으로 화면을 다시 확인한다.
+
+### 마감 상태와 다음 재개 조건
+
+1. 시크릿 localhost는 마감 직전에도 로그인 화면이었다. **Member의 메뉴/필터·기본/부분/차단·승인·Remake 직접 진입은
+   이번 로컬 QA에서 미검증**이다. 과거 DEV 결과나 단위 테스트로 이번 실계정 확인을 대체하지 않는다.
+2. 사용자에게 지금 추가 준비를 요구하지 않고 대기한다. 추가 BE/기획 계약 또는 명시적인 QA 재개 요청이 오면
+   먼저 `codex-personal-context`를 pull하고 이 문서를 읽은 뒤 `dentlink-client-permission`의 branch/dirty/원격을 확인하고 안전하게 pull한다.
+   기존 `feature/DL-16317`과 f74949159를 출발점으로 삼되 새 원격 변경을 우선한다. DEV 웹에 이 feature가 배포됐다고 가정하지 않는다.
+   새 BE 계약 전달이면 Swagger/코드 차이부터, 로컬 QA 재개 요청이면 서버 실행·Member 로그인부터 진행한다.
+   그때 본인5214·부분3943·차단9123·승인9248/1469 및 준비된 기존 Remake draft를 확인하며 새 draft를 임의 생성하지 않는다.
+3. 현재 제품은 f74949159 그대로 원격 일치·clean이다. 이번에는 로컬 실행/읽기 검수만 했으므로 제품 신규 커밋·PR·병합·배포는 없다.
+   완료/미검증·보조 QA 위젯 오류·서버/탭 종료를 개인 Git 기록에 커밋·푸시하고 마무리한다.
+   확정 정책 외 구현 대기와 Office native 별도 범위는 아래 기록을 유지한다. 자동 모니터링은 없다.
+
+## 이력 — 2026-10-14 확정 계약 기준 웹 FE 정리
+
+- **최신 사용자 지시:** 현재 개발서버 상태는 판단 기준에서 제외하고, 원래 작업하던 웹 feature 코드에서
+  논의로 정해진 FE 작업과 Swagger 재생성을 진행한다. 실제 API/실계정 테스트·화면 검수·E2E·배포는 이번 범위에서 제외한다.
+  기존 커밋·푸시·개인 기록 정리 지시는 유지한다. develop/master 통합이나 새 PR·병합·배포는 진행하지 않는다.
+- **작업 기준:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 `feature/DL-16317` 유지.
+  시작 `e106405ad92f8d3820a31bf28ee0c3f5de784477`, 이번 커밋 **`f749491593ef1977976bc1c801b24e89bb5f5984`**
+  (`fix: 주문 권한 조회 재사용과 API 명세 갱신`). Clinic 3파일 + Swagger 생성물 4파일이다.
+  normal commit/push 완료, 원격 feature SHA 일치·working tree clean을 확인했다.
+
+### 확정 계약과 코드 대조
+
+- 근거는 Leo의 [DL-16317 댓글44435](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44435)와 실제 feature 코드다.
+  별도 내 환자/내 주문 검증 API를 기다리거나 새로 추가하지 않는다.
+  기존 `GET /office/orders/{orderId}` 성공으로 조회 가능 여부를 판단하고, 주문 담당 의사와 현재 직원 ID로 Member 행동 권한을 구분한다.
+- **200 + 본인 담당:** 기본 상세와 허용된 행동. **200 + 타 의사 담당:** 부분 상세·변경 행동 제한.
+  **403 / code 2152:** 해당 환자 접근 불가이므로 상세 차단.
+  활성 직원 응답의 실제 ID 필드는 `id`다. `activeEmployeeId`와 profile의 ID가 일치한 상태에서 판단한다.
+- 기존 `isOfficeOrderAccessDenied`는 병원 전환용 `2131`을 제외한 403을 처리하므로 `2152`도 이미 포함한다.
+  2152만 처리하도록 좁히거나 기존 병원 전환 동작을 바꾸지 않았다.
+  담당 의사 helper의 `order.dentist?.id ?? order.dentistId`는 두 필드 불일치 근거가 없어 그대로 유지했다.
+- 상세·승인·주문 수정·리메이크의 판정은 이미 이 계약과 맞는다. `withAuthorization`은 직원/역할별 페이지 접근,
+  개별 guard는 직접 URL 진입·변경 행동, 직원/역할별 query key는 캐시 분리를 담당하므로 일괄 제거하지 않는다.
+  승인/리메이크 직접 진입에서 사용하는 기존 주문 GET은 여전히 필요하다.
+  Pickup은 모든 주문번호 링크를 열고 도착한 상세에서 제한하는 기존 구현을 유지한다.
+- 사용자는 위 검토 의견을 Jira에 직접 전달했다고 알렸다. 이번 작업에서 Codex가 Jira/Slack에 추가로 게시하지 않았다.
+
+### 이번 반영과 로컬 검증
+
+- `pnpm generate:api-type`으로 현행 `https://dev-api.dentlink.io/v3/api-docs`를 재생성했다.
+  `shared/models/src/{Office,Lab,Admin,data-contracts}.ts` 4파일이 변경됐다.
+  원문 SHA256: `62be4515a489e803b69a2f18b4d78aa4886a6c9b95a64549054281ee50ef5f12`.
+  생성물에는 다른 BE 기능의 스키마 변화도 함께 포함되며, 해당 기능의 수동 FE 구현까지 변경한 것은 아니다.
+- 새 ORDER 채팅 GET/POST와 `OrderChatMessageCreateDto(message, fileIds)`가 생성물에 반영됐다.
+  기존 수동 ORDER adapter는 이미 이 경로·본문을 사용하고 있어 재전환하지 않았다. 고객지원/답글/읽음 등 기존 경로는 유지한다.
+  `OrderDto`, `OrderDentistDto`, `AffiliatedEmployeeProfileDto`, `ApprovalGroupDto`, `ChatMessageDto`는 직전 생성물과 동일하다.
+  **2152 의미는 Jira 댓글 근거**이며 Swagger 주문 GET은 여전히 200만 문서화하므로 Swagger에 오류 계약이 명시됐다고 표현하지 않는다.
+- Member의 Remake Additional은 guard가 받은 주문을 optional prop으로 재사용하고 자체 ADDITIONAL 조회만 비활성화했다.
+  직원/역할 query scope·focus 재조회·직접 URL 제한·권한 상실 시 폼 제거는 유지한다.
+  비 Member는 기존 Additional 조회를 그대로 사용한다. 저장 후 상세 이동·Remake 파일 업로드의 기존 재조회도 바꾸지 않았다.
+- **로컬 검증:** Remake 14건 + 기존 권한 helper/주문 query/채팅 adapter·요청 41건 = 5 suites / 55건 통과.
+  Member 응답 재사용·응답 변경·2152 이후 폼 제거·비 Member 조회 유지 회귀를 포함한다.
+  normal commit의 Clinic/Lab/Admin 타입 검사, 변경 파일 포맷·diff 검사, 독립 코드 리뷰를 통과했다.
+  normal push의 3서비스 lint(오류 0, 기존 경고 존재)·Admin DLOS guard·shared coverage 검사도 통과했다.
+  이는 로컬 코드/모의 응답 검증이며 실제 서버 권한 적용·화면 디자인 검수 증거로 확대하지 않는다.
+
+### 남은 범위와 다음 시작점
+
+1. **현재 확정된 웹 FE 계약의 코드 반영은 처리했다.** 별도 상세 판정 API 부재를 개발 대기 사유로 삼지 않는다.
+2. **BE/기획 확인이 추가로 필요한 범위만 대기:** 미지정 Draft 처리 등 아직 확정되지 않은 정책이나 추가 기능별 계약이 나오면
+   기존 feature 코드와 차이를 확인하고 필요한 부분만 반영한다. 계약 없이 제한·API·화면을 추가하지 않는다.
+3. **QA는 이번 범위 밖:** 부분 승인·본인/타 의사/미지정 Draft·3D·담당 변경 후 접근 상실·실제 저장/승인/채팅 전송은
+   추후 사용자가 테스트를 재개할 때 준비된 사례로 확인한다. E2E는 계속 제외한다.
+4. **Office native는 별도:** 앱 `72a7914`의 ORDER API/cache·통합·실기기·배포 잔여는 이번 웹 변경으로 완료되지 않는다.
+5. 개발서버 상태 조사·브라우저 조작·새 PR·병합·배포·자동 모니터링은 이번에 하지 않는다.
+   이번 정리 후 대기하며 다음 재개 시 이 기록과 원격 feature부터 확인한다. 아래 10/13 배포·QA 근거는 과거 이력이다.
+
+## 이력 — 2026-10-13 PR4696 병합·DEV 배포·재검증 정리 후 대기
+
+- **최신 범위 정정:** 사용자가 E2E 관련은 현재 작업과 무관하므로 우선 넘기라고 명시했다.
+  E2E/ISV 잔여는 참고 이력만 보존하고 이번 권한 FE의 잔여 작업·대기/재개 조건에서 제외한다.
+  추가 E2E 조사·수정·재실행·모니터링은 하지 않는다. CI 설정이나 테스트 소스는 변경하지 않는다.
+- **최신 사용자 승인:** Codex가 PR4696을 develop에 직접 병합하고, DEV 자동배포 및 배포 후 실계정 재검증까지 진행한다.
+  기존 feature를 보존하며 FE가 현재 확인할 수 있는 것을 처리한 뒤 커밋·푸시·개인 기록을 정리하고 대기한다.
+- **병합·원격:** [PR4696](https://github.com/Innvoaid/dentlink-client/pull/4696), **19:33:51 KST MERGED**,
+  `feature/DL-16317 → develop`, merge **`03e62121e988418b944de0b7d71dfdb3ea4559cb`**.
+  head `e106405ad92f8d3820a31bf28ee0c3f5de784477`를 match하여 일반 merge했다. 강제/admin override는 사용하지 않았다.
+  `/Users/parkjongsun/Repository/dentlink-client-permission`의 feature는 삭제/이동하지 않았고,
+  feature와 develop 전체 tree 동일·원격 feature 일치·작업 checkout clean을 확인했다. 이번 병합 후 추가 소스 수정은 없다.
+- **실제 배포 완료:** [DEV38384223907](https://github.com/Innvoaid/dentlink-client/actions/runs/38384223907), 위 merge SHA와 일치.
+  ECS 배포 단계 **19:45:16**, build/deploy job **19:45:45 success**. 새 BUILD_ID **`Kd6ikAQrMpzBT5J6qW4k0`**를
+  **19:47:23 공개 DEV HTML HTTP200**에서 확인했고 CI 새 버전 probe도 **19:47:57 success**다.
+  이후 두 실계정 화면을 새로 읽어 아래 항목을 검증했다. 빌드·배포·실제 서빙과 자동 E2E 결과는 구분한다.
+
+### 새 배포의 실계정 재검증
+
+| 항목 | 직접 확인한 결과 |
+| --- | --- |
+| Admin 승인 주문9248 | 채팅 메시지와 Review 버튼 복구. Review 클릭으로 `/orders/9000009248/approvals/1469`에 진입하며 PNG 미리보기·Download·Approve/Reject 표시. 실제 승인/거절은 하지 않음 |
+| Member 본인5214 | 기본 상세·Edit/Cancel·담당 변경·채팅 입력 유지. 새 `GET /office/chat-messages/orders/9000005214?page=0&size=20` **HTTP200**, `data: []`, `totalElements: 0` |
+| Member 공유3943 | Case4/Order4·Patient Info Edit·상세/Files1 유지, 주문 변경·채팅 입력 숨김. 새 채팅 GET **HTTP200**, code0000·빈 data·totalElements0 |
+| Admin 공유3943 | Edit/Cancel·담당 변경·채팅 입력 표시. 같은 새 채팅 GET **HTTP200**, code0000·빈 data·totalElements0. 양쪽 No Messages는 이 주문의 실제 빈 응답과 일치 |
+| 주문9123 비교 | Member는 No order data available / Go to Home, Admin은 Case8/Order10·상세·Edit/Cancel·채팅 메시지와 입력 표시 |
+| 승인9248/1469 비교 | 같은 직접 URL에서 Member는 No order data available, Admin은 승인 파일·Approve/Reject 표시. Member 부분 승인 조회 사례는 여전히 별도 준비 필요 |
+| Member 주문 목록 | Orders5와 Member 메뉴·My Orders Only/Dentist 필터 숨김 유지. 이전 배포의 전체 목록/필터 QA와 구분해 최소 회귀 범위를 재검증함 |
+
+- 문자열 주문번호 때문에 HTTP 요청 전 차단되던 회귀는 실제 새 GET200 및 Admin 메시지/Review 표시로 해결을 확인했다.
+  현재 읽기 QA에서 추가 FE 결함은 발견하지 못했다. 전체 BE 권한 계약 완료나 실제 쓰기 동작 검증을 뜻하지 않는다.
+- 개인 테스트 주문의 채팅 전송·업로드·주문/담당/권한 저장·승인/거절은 실행하지 않았다.
+  기존 자동 E2E는 병합 workflow로 시작된 별도 테스트 계정 흐름이며 수동 실계정 검증과 구분한다.
+- 로컬 스크린샷은 기존 `~/.codex/visualizations/2026/10/13/01a132e9-6555-7a02-9c72-4dad9c04cc64/permission-post-deploy-qa/`의
+  `admin-chat-review-9248-after-fix.png`, `admin-approval-review-recovered.png`, `member-denied-9123-after-fix.jpg`,
+  `member-orders-after-chat-fix.jpg`에 저장했다. 다른 기기에서는 원격 코드·CI·이 기록으로 이어간다.
+
+### 자동 E2E와 다음 순서
+
+- **이전 run38379072202 최종:** 19:33:47 KST failure. 109수집 / 85통과 / 4실패 / 5허용제외 / 15미실행, flaky0·전역오류0.
+  승인 거절·승인 후 피드백 2건은 6개 trace에서 정상 OWNER/승인 상태인데 SSR 문자열 주문 ID로 채팅 HTTP 요청0·Review 부재였다.
+  이번 수정과 직접 일치하는 회귀이며 아래 새 CI에서 회복을 확인했다. Review는 채팅 승인 메시지의 버튼이다.
+  ISV 상품→옵션·Step4 진입 2건은 카테고리 API200의 13개 목록에 Insta Smile Vision이 없어 테스트 전제와 DEV 카탈로그가 달랐다.
+  더 이전 run38354572860에서도 실패한 별도 건이며 채팅 회귀나 권한 FE 결함으로 분류하지 않는다.
+- **새 run38384223907 최종:** **20:05:49 KST E2E 종료 / failure**. **109수집 / 97통과 / 2실패 / 5허용제외 / 5미실행**,
+  flaky0·전역오류0. 실제 Clinic SHA03e62121와 BUILD_ID Kd6ikAQrMpzBT5J6qW4k0를 확인했다.
+  **승인 거절 Review(`05_labStatus.spec.ts:270`)와 승인 후 Completed/Feedback(`08_orderFeedback.spec.ts:189`)는 모두 최초 시도 PASS**,
+  해당 파일 전체도 각각 **12/12, 10/10 PASS**다. 이전 채팅 회귀로 미실행됐던 후속10건도 회복됐다.
+  남은 실패는 이전과 동일한 ISV2건(`instasmile.spec.ts:36`, `step4-ui-state.spec.ts:56`),
+  `Insta Smile Vision` 버튼 대기90초 timeout / `order-step2-product.ts:97`, 각각3시도 실패다.
+  오류/실패 위치는 동일하며 새 원인으로 바뀐 증거는 없다. 이전 trace의 카테고리 누락 진단과 현재 같은 실패 증상을 구분한다.
+  최종 근거는 `/tmp/dentlink-dev-38384223907-artifacts.zip`의 report.json과 원격 CI다. 자동 검증 전체 통과로 표현하지 않는다.
+- **BE/사용자 다음 준비:** 기능별 최종 범위·오류 계약, Member 부분 조회 가능한 승인 주문, 본인/타 의사/미지정 Draft,
+  실제3D, 담당 변경 후 접근 상실과 쓰기 테스트 사례.
+  같은 GET 내부 정제도 가능하며 별도 상세 검증 API를 선행 가정하지 않는다.
+- **FE 다음:** 준비된 기능·사례부터 새 명세/실응답·디자인에 대조하고 필요한 부분만 구현/QA한다.
+  기존 필요 guard/cache는 유지하고 BE 동등 계약이 확인되면 선행 GET 등을 통합·축소한다.
+- **Office native 별도:** feature72a7914의 앱 ORDER API/cache·실기기 QA·통합/배포 잔여는 그대로이며 이번에 수정하지 않았다.
+- **현재 가능한 FE 수정·배포·읽기 화면 재검증은 완료, 추가 FE 결함 미발견으로 대기한다.**
+  BE 후속 계약·권한 검증 사례가 준비되면 해당 범위부터 재개한다. E2E는 현재 범위에서 제외하며 임시 모니터는 종료했다.
+  별도 Jira/Slack 수동 전달·상용 배포·장기 자동 모니터링은 수행하지 않았다.
+
+## 이력 — 2026-10-13 19:28 KST DEV 실계정 QA·채팅 회귀 수정 후 대기
+
+- **최신 사용자 지시:** BE 추가 작업 전 FE가 할 수 있는 것을 최대한 처리한다. 검토 후 커밋·푸시·메모리를
+  정리하고 문제를 보고한 뒤 대기한다. 이번 화면 QA는 읽기 범위였으며 실제 전송·업로드·주문/담당/승인 변경은 하지 않았다.
+- **기존 배포 확정:** 사용자 병합 PR4695 / develop `97529d847a73e899d15c9590a80615645b2c176d`의
+  [DEV38379072202](https://github.com/Innvoaid/dentlink-client/actions/runs/38379072202) build/deploy job은
+  **19:03:57 KST success**, 새 BUILD_ID 대기 단계 **19:05:55 success**다.
+  **19:06:47 공개 DEV HTML HTTP200 / `UowKnn4x6iXWck7cKODV7`**를 새 manifest와 대조했다.
+  이후 준비된 두 브라우저를 새로고침하여 아래 화면 QA를 진행했다. 자동 E2E는 **19:27:18 최종 관측에서 실행 중**이며
+  최종 성공/실패·건수는 아직 미확정이다. 이전 실행의 97/2 결과와 혼합하지 않는다.
+- **새 FE 회귀 발견·수정:** Admin 주문9123 화면의 Network에서 주문/직원/Case API는 발생하지만
+  `chat-messages/orders/` 및 `chat` 요청은 0건이고 LinkTalk는 No Messages였다.
+  SSR `orders/[order_id]/index.tsx`가 주문번호를 문자열로 넘기는데 새 adapter의 `Number.isSafeInteger`가 이를 거절해
+  HTTP 호출 전 예외가 났다. 권한/profile enabled 문제라는 초기 가설은 원인이 아니다.
+  Admin 직원 API는 id213, authorityType OWNER, displayAuthorityType Admin을 반환했다.
+- **수정 방법:** ORDER adapter 내부에서 정규 양의 정수 문자열을 number로 변환한 뒤 safe integer를 검증한다.
+  숫자/문자열 정상 ID를 GET·POST에 허용하고 빈값·공백·지수·소수·음수·0·leading zero·unsafe ID 차단과
+  DENTLINK 기존 경로/본문을 유지한다. 전역 DTO·SSR·UI·직원 scope를 불필요하게 확대 변경하지 않았다.
+- **웹 원격:** `/Users/parkjongsun/Repository/dentlink-client-permission`, 기존 **`feature/DL-16317` 유지**,
+  **`e106405ad92f8d3820a31bf28ee0c3f5de784477`** (`fix: 문자열 주문번호의 채팅 요청 차단 수정`), normal commit/push 성공, 원격 일치·clean 확인.
+  shared adapter1 + Clinic 회귀 테스트2 = 3파일/1커밋이다.
+  [후속 PR4696](https://github.com/Innvoaid/dentlink-client/pull/4696), **feature/DL-16317 → develop**, OPEN/MERGEABLE,
+  정확히 위 1커밋/3파일을 확인하고 chat에 연결했다. Clinic의 실제 회귀 테스트 변경이 `clinic/**` 배포 조건을 충족한다.
+  사용자 병합 전이며 이 수정은 아직 DEV에 배포되지 않았다.
+- **검증:** 기존 코드에서 새 회귀 5실패/26통과 → 수정 후 채팅4 suites/48건 통과.
+  전체 Clinic **37 suites / 302건 통과**, Clinic 별도 타입 검사 및 normal commit의 **3서비스 타입 통과**.
+  변경 lint/Prettier/diff-check, 독립 코드 리뷰, normal push의 3서비스 lint(기존 warning 존재)·Admin DLOS guard·shared coverage 통과.
+  이번 최소 후속 수정의 production build는 별도 재실행하지 않았으며 앞선 3서비스 build 성공과 구분한다.
+  PR의 `dentlink-dlos` Vercel preview는 **Blocked / FAILURE**, CodeRabbit은 **develop 자동 리뷰 제외로 skipped**다.
+  각 bot 댓글을 확인했으며 CodeRabbit SUCCESS를 실제 리뷰 완료로 확대하지 않는다. 별도 preview 차단 원인은 미확정이다.
+
+### 새 DEV에서 직접 확인한 화면
+
+| 항목 | Member jongsun.test2 | Admin jongsun.test1 / 판단 |
+| --- | --- | --- |
+| 계정·메뉴 | frankieDevOffice, Members의 Me=Member; Billing/Dashboard 없음, Office는 Members | 같은 병원 Me=Admin; Billing/Dashboard 및 Office Dashboard/Members/Billing Contact 있음 |
+| 전체 목록 | Orders5, Patients5, Board4 | Orders1033, Patients612, Board559. 이전과 달리 Orders/Board도 실제 범위 차이가 관측됨. 전체 BE 계약 완료라는 뜻은 아님 |
+| 숨긴 필터 | Orders My Orders Only/Dentist, Patients My Patients Only, Board Dentist Name 없음 | Admin에는 유지됨. Member 직접 URL의 myOrderOnly/dentistIds/myPatientOnly/dentistName 제거와 기존 검색어 보존 확인 |
+| 본인 주문5214 | 기본 상세, Edit/Cancel/담당 변경/채팅 입력 표시, Case1/Order1 | 담당 변경 모달의 접근 상실 안내만 확인하고 저장 없이 닫음 |
+| 공유 주문3943 | 부분 상세, Case4/Order4 트리/Patient Info Edit/상세/파일1 유지, 주문 변경·채팅 입력 숨김 | 같은 주문 Admin에는 Edit/Cancel/담당 변경/채팅 입력 표시. 파일 선택 시 Member Download(1) 활성화 확인, 실제 다운로드는 하지 않음 |
+| 타 의사 주문9123 | No order data available / Go to Home | Admin은 Case8/Order10·상세·Edit/Cancel/채팅 입력 표시. 이전 부분형 관측과 달리 이번에는 Member 차단을 실제 대조함 |
+| 승인9248/1469 | 주문 조회 불가 화면 | Admin은 PNG 미리보기·Download·Approve/Reject 표시. 이 주문은 이제 Member 부분 승인 조회 사례로 사용할 수 없음 |
+| Pickup | 타 의사 주문4066 링크 클릭 → 새 주문 상세 탭으로 이동 | 링크를 목록에서 막지 않음 확인. 도착 화면은 조회 불가이며 이 번호는 예전에도 두 역할 모두 불가여서 Member 전용 차단 증거로 쓰지 않음 |
+| 채팅 | 기본/부분 화면의 No Messages | 문자열 ID 회귀로 실제 조회가 실행되지 않았으므로 대화 없음/정상 조회 증거가 아님. 수정 후 재배포 QA 필요 |
+
+- Figma 부분 상세475:77743·Member 필터475:85345를 새로 읽고 비교했다.
+  차단 화면의 형태도 확인했지만 이번에는 API HTTP 거절 코드/본문까지 수집하지 않았으므로 BE 오류 계약 확정으로 표현하지 않는다.
+  기본·부분·차단의 실제 화면 분기는 위 준비된 주문에 한해 확인했다.
+- 로컬 시각 증거: `~/.codex/visualizations/2026/10/13/01a132e9-6555-7a02-9c72-4dad9c04cc64/permission-post-deploy-qa/`
+  `member-own-5214.jpg`, `member-partial-3943.jpg`, `member-denied-9123.jpg`, `admin-detail-9123.png`.
+  이 이미지와 `/tmp/dentlink-permission-chat-fix-*20261013.log`, `/tmp/dentlink-order-chat-runtime-string-*`는 로컬 보조자료이며
+  다른 기기에서는 원격 코드·테스트·이 기록으로 이어간다.
+
+### 다음 순서와 대기 경계
+
+1. **사용자:** PR4696 확인·병합 → 기존 DEV 자동배포. Codex가 병합/재배포를 실행하지 않았다.
+2. **FE:** 재배포 후 새 BUILD_ID를 확인하고 Admin/Member 주문 채팅 GET 발생·응답·대화 표시를 재확인한다.
+   현재 DEV의 No Messages를 정상으로 처리하지 않는다. 실제 전송/업로드 검증은 별도 테스트 범위가 준비될 때 진행한다.
+3. **현재 자동 E2E:** run38379072202 최종 결과는 다음 재개 시 확인한다. 배포 성공·실계정 읽기 QA와 별개다.
+4. **BE/사용자:** 기능별 최종 범위·오류 계약과 추가 사례를 준비한다. 같은 GET의 내부 정제도 가능하며 별도 검증 API를 선행 가정하지 않는다.
+   Member 부분 조회 가능한 승인 주문, 본인/타 의사/미지정 Draft, 실제3D, 담당 변경 후 접근 상실과 저장·승인·취소·전송 사례가 남았다.
+   기존 필요 guard/cache는 유지하고 BE 동등 계약이 확인되면 선행 GET 등을 통합·축소한다.
+5. **Office native 별도:** feature72a7914의 상태와 앱 ORDER API/cache·실기기 QA·통합/배포 잔여는 그대로다. 이번에 수정하지 않았다.
+6. 정리 후 **대기**한다. 장기 BE/배포 자동 모니터링은 만들지 않았으며 다음 사용자 전달 또는 재개 지시에서 이어간다.
+
+## 이력 — 2026-10-13 18:51 KST PR4695 사용자 병합·DEV 배포 진행 breakpoint
+
+- **사용자 승인:** 준비된 Member/Admin 브라우저를 필요시 활용해 하던 작업을 이어가고, 완료 후
+  커밋·푸시·메모리와 브리핑까지 하라는 직접 지시를 받았다. 아래 전수 감사에서 확인한 **웹 DEV 후속 범위**를 구현했다.
+  Office native 소스·PR·배포/CodePush는 이번 전달에 포함하지 않았다.
+  이후 사용자는 현재 feature를 유지한 채 clinic 변경을 포함해 개발서버에 추가 배포할 수 있도록 준비하고
+  완료/잔여를 정리하도록 요청했다. 이 지시에 따라 develop 후속 PR을 생성했다.
+  **최신 지시:** 사용자가 병합했고 배포 중이다. 먼저 breakpoint를 저장하고, 새 배포가 완료되면
+  준비된 Member/Admin 화면 QA를 순서대로 이어서 진행한다. BE 추가 기능은 계속 기다리는 상태다.
+- **웹 원격 보존:** `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`,
+  **`812aff0d4d49d7e82c1e3d54708d236a77e07bee`** (`fix: 주문 채팅 전환과 멤버 권한 후속 처리 보완`).
+  normal commit/push hook 성공, 원격 ls-remote 일치, working tree clean을 확인했다.
+  기존 `1c67612c3` 뒤 1커밋이다. PR 당시 후속 diff43파일은 사용자 병합되었으며,
+  현재 develop97529d847과 feature812aff0d4의 전체 tree는 동일하다. feature는 이동/삭제하지 않았다.
+- **DEV 후속 PR:** [#4695](https://github.com/Innvoaid/dentlink-client/pull/4695),
+  `[DL-16319] 개발서버용 주문 채팅 API와 Member 권한 후속 보완`, **MERGED 2026-10-13 18:49:26 KST**,
+  **`feature/DL-16317 → develop`**, head `812aff0d4`, 병합 commit
+  **`97529d847a73e899d15c9590a80615645b2c176d`**를 원격에서 확인했다. PR은 현재 chat에 연결돼 있다.
+  커밋1개/43파일(**Clinic26 + shared17**)이며 source branch·HEAD는 유지했다. 새 제품 수정/빈 커밋은 없다.
+- **배포 조건:** 현행 `clinic_dev_build_and_deploy.yml`은 develop push + `clinic/**` 변경으로 실행되며
+  base/head에서 동일하다. 실제 Clinic26파일 변경으로 조건을 충족하므로 배포용 dummy 변경이 필요 없다.
+  병합하면 Docker/ECR·정적파일S3·DEV ECS 배포, BUILD_ID 확인 및 후속 DEV E2E가 자동 실행된다.
+  E2E는 배포 뒤 실행되므로 배포 성공과 E2E 성공을 별도로 확인한다.
+- **병합 전 PR 검사 이력:** GitHub `MERGEABLE`, `mergeStateStatus=UNSTABLE`. Auto Assign SUCCESS,
+  CodeRabbit SUCCESS 표시는 **develop 자동 리뷰 제외로 skipped**이며 실제 리뷰 통과가 아니다.
+  별도 `dentlink-dlos` Vercel 미리보기는 **Deployment was blocked / FAILURE**다.
+  현재 상태에서 차단 사유를 작성자 권한 등으로 추측하지 않았고 Clinic DEV workflow와 구분한다.
+- **진행 중 배포:** [Office DEV workflow38379072202](https://github.com/Innvoaid/dentlink-client/actions/runs/38379072202),
+  merge97529d847 대상, 18:49:29 KST 생성, 18:51 조회에서 Docker build/push 진행 중이다.
+  새 BUILD_ID 서빙은 아직 미확인이다. build/deploy step 성공과 실제 dev-portal 새 빌드 반영,
+  후속 자동 E2E 및 실계정 UI QA를 각각 확인한다. 실행 중 배포를 중복 실행/재배포하지 않는다.
+- **breakpoint 후 계속할 순서:** 배포 job/새 BUILD_ID → 준비된 일반 Chrome Member와 시크릿 Admin 새로고침 →
+  역할별 메뉴·Orders/Patients/Board 숨긴 필터/URL 정리 → 기본5214·부분9123/3943·승인9248·Pickup 링크 →
+  주문 채팅 새 경로와 화면 표시를 가능한 근거로 확인한다. 실제 전송/업로드/주문 저장/권한 변경은 이번 화면 QA에 포함하지 않는다.
+  FE 문제는 원인 확인 후 기존 feature에서 보완·검증·커밋/푸시한다. 후속 병합/배포는 별도 단계로 유지한다.
+
+### 이번 완료 범위
+
+| 항목 | 반영 결과 |
+| --- | --- |
+| 주문 채팅 API | 댓글44423과 현행 Swagger에 맞춰 ORDER GET·POST를 `/office/chat-messages/orders/{orderId}`로 전환. GET page/size/repeated sort, POST message/fileIds만 전달. 유효하지 않은 주문 ID는 요청하지 않음 |
+| 기존 채팅 흐름 | 동일 adapter를 쓰는 초기·페이지·폴링·원문 이동·전송에 적용. 같은 응답/chatId를 유지하며 DENTLINK 고객지원·답글·읽음·페이지 위치·latest/unread·번역 경로는 유지 |
+| 채팅 역할 전환 | query key에 직원·권한을 포함하고 현재 직원 profile 확인 전 ORDER 조회를 대기. wrapper remount로 이전 대화·pending 메시지·입력 draft·이미지 carousel을 비움. 이전 역할의 늦은 응답은 현재 화면에 반영되지 않음 |
+| 캡처 로딩 | 승인 파일 URL·variant·캡처 권한 변경 시 무효화된 캡처/저장 busy를 회수. 이전 작업 완료가 새 캡처/저장 상태를 덮지 않도록 기존 version guard 유지 |
+| 직원 캐시 | 결제·스캐너·요금표 writer와 온보딩 reader를 `[EMPLOYEE_OWN_SHOW, employeeId]`로 일치시킴. 소속 전환 중 ID가 다른 profile로 새 직원 cache를 쓰지 않음 |
+| Member 숨긴 필터 | Orders dentistIds/myOrderOnly, Patients myPatientOnly, Board dentistName을 URL·표시·요청에서 제거. 역할 미확정/Admin의 조건과 나머지 검색·날짜·상태·페이지는 유지. 서버 rows/total을 FE에서 재필터링하지 않음 |
+| Board 전환 검증 | reset의 invalidate도 현재 직원·권한·유효 조건으로 좁혀 이전 Admin 필터 재요청을 방지. 리뷰에서 발견한 역할 전환 시 정렬 초기화는 제거해 기존 정렬 유지 |
+| Pickup 정리 | 사용되지 않는 canOpenOrder prop·전달·차단 분기와 제한 Story/test 제거. 모든 주문번호는 기존처럼 상세로 이동하며 제한은 상세에서 판단 |
+
+- **with/guard 판단:** 기존 withAuthorization, 메뉴·필터 표시, 직접 URL/action guard, 직원·권한별 cache는
+  각각 필요한 경계를 담당하므로 유지했다. Remake/승인 선행 order GET은 현재 DTO로 담당/행동 권한을
+  대체할 수 없어 유지했다. BE가 동등한 판정/응답을 제공하면 그 근거로 통합·축소한다.
+  새 검증 endpoint·UI·문구나 전체 readonly 정책을 추측해서 추가하지 않았다.
+- **명세:** 이번 재조회 `/tmp/dentlink-permission-implementation-swagger-20261013.json` SHA256
+  `95beaf4e7797538f1f95a06ed18773c320de0422bc10bf04d81a329e9e718057`로 감사 당시와 같다.
+  별도 상세 검증 endpoint는 현재 공개 명세에서 식별되지 않았다. 동일 GET의 BE 내부 정제는 별도로 확인한다.
+
+### 검증과 실제 브라우저 경계
+
+- 최종 Clinic Jest **37 suite / 281건 전부 통과**. API 계약·실제 useLinkTalk 호출 흐름·역할/직원 scope 16건,
+  직원 cache5건, 숨긴 필터6건(기존 목록 cache2건과 함께8건), 캡처17건, Pickup 전링크3건을 포함한다.
+  새 테스트 fixture의 Router/type 문제는 수정했고 최종 전체 실행 및 normal 타입 검사에서 통과했다.
+- **Clinic/Lab/Admin 타입 및 production build 모두 통과.** Board 최종 소스 변경 뒤 Clinic build도 재확인했다.
+  normal push: 3서비스 lint 오류0(기존 warning은 남음), Admin DLOS guard6건, shared coverage check 통과.
+  root와 별도 agent가 API/cache·필터·chat scope를 독립 리뷰했고 유효 지적을 반영한 뒤 재확인했다.
+- 검증 로그: `/tmp/dentlink-permission-clinic-tests-20261013.log`,
+  `/tmp/dentlink-permission-{clinic,lab,admin}-build-20261013.log`,
+  `/tmp/dentlink-permission-commit-20261013.log`, `/tmp/dentlink-permission-push-20261013.log`.
+  임시 로그는 로컬 보조 증거이며 원격 코드·테스트·이 기록으로 다른 기기에서 이어간다.
+- **기존 DEV 화면 읽기 비교:** 준비된 Chrome 일반 Member `jongsun.test2`와 시크릿 Admin `jongsun.test1`,
+  같은 병원의 주문 `9000003943`을 다시 비교했다. 두 화면 모두 Case/Orders4/4·트리·파일을 제공했고,
+  Member는 Billing/Dashboard 메뉴·주문 Cancel/Edit·채팅 입력이 없으며 Admin에는 표시된다.
+  Patient Info Edit은 Member에도 남는 현재 부분 조회 정책과 일치한다. 양쪽 대화는 No Messages였다.
+- 위 브라우저는 **기존 DEV 버전**이며 새 커밋의 배포 QA가 아니다. 실제 채팅 전송·파일 업로드·주문 변경·
+  권한 변경·저장은 실행하지 않았다. 새 POST는 mock transport로 body/URL/응답 연결을 검증했다.
+- 이전 DEV E2E **97통과/2실패/5제외/5미실행**(ISV 버튼 timeout)은 여전히 별도 미해결이다.
+  이번 로컬 검사로 DEV 자동 E2E나 전체 실계정 QA가 통과했다고 처리하지 않는다.
+
+### 남은 일과 다음 담당 순서
+
+1. **DEV 자동배포 → FE 확인:** PR4695 사용자 병합은 완료했고 workflow38379072202가 진행 중이다.
+   실제 배포 완료/BUILD_ID 확인 뒤 이번 지시에 따라 Member/Admin 화면 QA를 계속한다.
+   실제 전송/업로드/주문 변경은 화면 QA와 구분하며 필요한 테스트 대상/승인 범위가 준비될 때 확인한다.
+2. **BE:** 기능별 준비 범위를 알려준다. 같은 GET이어도 목록/total/filter-hint 정제,
+   주문 기본·부분·거절 판단과 관련 Case/파일/채팅 범위·오류 계약을 실제 endpoint/응답과 함께 확인한다.
+   별도 검증 API를 반드시 신설해야 한다고 가정하지 않고 준비된 기능부터 연결한다.
+3. **BE/사용자 테스트 준비 → FE 확인:** Admin만 성공하고 Member는 거절되는 주문,
+   본인/타 의사/미지정 Draft, 실제3D, 담당 변경 후 접근 상실, 실제 저장·승인·취소·전송 대상이 필요하다.
+   이미 준비된 두 계정은 계속 활용한다. `9000009248`/`9000009123`의 부분 Case/대화는 정책·응답 대조 잔여다.
+4. **Office native 별도:** checkout `dentlink-app-permission`, feature `72a79146aaba1054827ab3dbd4540f274373a4ef`,
+   원격 동일 clean을 재확인했다. 앱 ORDER API 전환·직원 cache writer/채팅 scope·기기 QA·통합/배포는 남아 있다.
+   이전 157개 검사/양OS bundle·기존 type18오류는 과거 기록이며 이번에 재실행하지 않았다.
+5. **진행 경계:** 사용자는 이번 배포 완료 후 화면 QA를 계속 진행하도록 지시했다. 이 breakpoint 저장이 작업 종료는 아니다.
+   현재 run을 확인하면서 새 빌드가 준비되면 바로 QA를 이어간다. 별도 재배포·장기 BE 모니터링은 하지 않는다.
+   화면 검증까지 마치고 남은 BE 범위·확인 불가 사례를 다시 정리한다.
+
+## 이력 — 2026-10-13 breakpoint 이후 API·권한 구현 전수 재검토 (후속 구현 전)
+
+- **범위:** 사용자 요청에 따라 중단된 댓글 44423 확인과 `with…`·페이지·컴포넌트 제한의 적정성을
+  다시 검토했다. 이번 작업은 조사·검증이며 **제품 코드 수정, API 전환, 제품 커밋/푸시·PR·배포는 하지 않았다.**
+  웹·Office 앱 checkout은 기존 원격 HEAD와 같고 clean이다. 개인 진행 기록만 갱신한다.
+- **이전 판단 정정:** 아래 17:17 breakpoint의 '즉시 고칠 FE 단독 오류 없음/계약 준비 통보 대기'는
+  이번 결과로 대체한다. **주문 채팅 GET·POST는 BE의 명시적 교체 요청이 있어 지금 FE 전환 대상**이며,
+  독립 FE 보완과 미사용 코드 정리도 확인했다. '주문 상세 검증만 남음' 또는 '전부 BE 대기'로 보고하지 않는다.
+- **사용자 의도 유지:** FE는 역할별 메뉴·필터·가능한 행동과 주문별 기본/부분/차단 화면을 담당한다.
+  GET의 조회 범위·total/filter-hint 정제는 BE가 담당하며, 응답을 FE에서 임의로 잘라 권한을 구현하지 않는다.
+  Pickup은 모든 주문 링크로 진입한 뒤 상세에서 판단한다. 준비된 API만 순차 연결하며 전체 BE 완성을 기다리지 않는다.
+
+### 최신 근거와 감사 기준
+
+- [DL-16317 댓글 44423](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44423):
+  Leo(태경), **2026-10-13 17:07:03 KST**. GET·POST `/office/chat-messages`를
+  `/office/chat-messages/orders/{orderId}`로 교체해 달라는 명시적 요청이다. 댓글 생성 시각은
+  이전 breakpoint보다 앞서며, 이번에 사용자가 지정한 댓글을 읽어 반영 필요성을 확인했다.
+- **Swagger 재조회 17:41 KST:** `https://dev-api.dentlink.io/v3/api-docs`, 935 paths,
+  SHA256 `95beaf4e7797538f1f95a06ed18773c320de0422bc10bf04d81a329e9e718057`.
+  `/tmp/dentlink-permission-full-audit-swagger-20261013.json`; 17:17 저장본과 동일하다.
+  별도의 상세 접근 검증 endpoint는 현재 공개 명세에서 식별되지 않았다. 같은 GET의 BE 내부 정제 여부는 별도다.
+- **웹:** `feature/DL-16317 / 1c67612c3506090706704c558ac07852d739a518`, 원격 동일.
+  PR #4693의 실제 기준 `aff278a43...HEAD` 변경 167파일을 범위로 source·연결 경로를 점검했다.
+  현재 fetch된 master는 `8772d68825cac6e23792d86a715153a67dc71078`로 이동했으며, 이를 feature에 합치지 않았다.
+  develop은 기존 사용자 병합 `e6cfea705e4dadd3ec6c3c81d2b8432245f5b35c`다.
+- **제품·디자인:** 부모 Jira의 원본 Notion 5-4 권한 범위를 재조회했으나 전체 응답은 truncated였다.
+  완전한 PRD를 모두 검증했다고 확대하지 않는다. 이후 사용자 확정인 공유 주문 부분 조회와 Pickup 전링크 정책이
+  이전 제안보다 우선한다. Figma `2OR0Gj7NUFEEeYBjQg5Y6v / 475:77743` 부분 상세 화면을 다시 받아
+  이전 실계정 스크린샷과 대조했다. 새 브라우저 QA·실제 권한 변경·데이터 변경은 실행하지 않았다.
+
+### 바로 반영할 수 있는 범위
+
+| 항목 | 확인한 근거·상태 | 최소 후속 범위 |
+| --- | --- | --- |
+| 주문 채팅 GET·POST | 댓글 44423과 공개 명세가 일치하나 Web/App 실제 adapter는 구 경로 유지 | ORDER만 새 주문 경로로 분기. GET page/size/sort 유지, POST body는 message/fileIds. DENTLINK 고객지원·답글·page·read·latest·unread·번역은 현행 경로 유지 |
+| 승인 파일 전환 시 캡처 로딩 | **원본 hook으로 재현한 회귀.** PNG A 캡처 대기 중 PNG B로 전환하면 version이 바뀌어 finally의 busy 해제가 생략됨 | 무효화된 캡처의 busy 상태 회수. 새 작업의 상태를 오래된 완료가 덮지 않도록 검증. 권한 상실 차단은 유지 |
+| 직원 캐시 갱신 불일치 | **원본 helper/QueryClient로 재현.** reader는 `[EMPLOYEE_OWN_SHOW, employeeId]`, 결제·스캐너·요금표 writer는 옛 단일 key | 현재 직원의 scoped cache에 갱신. atom은 갱신되므로 즉시 화면 오류로 단정하지 않지만 query 데이터는 옛값임. 기존 온보딩 reader도 함께 정렬 |
+| Member에게 숨긴 필터의 URL·요청 잔존 | **실행 경로를 소스로 확인.** Admin→Member 또는 직접 URL의 myOrderOnly/dentistIds/myPatientOnly가 요청에 남고 해당 chip/reset UI 없음 | Clinic의 역할별 유효 요청 조건과 URL 정규화. Board dentistName도 숨긴 채 요청에 남지만 공통 Reset은 가능. BE가 실제 행을 줄이는지는 별도 미확인 |
+| Pickup 미사용 링크 제한 | 실제 Clinic/Lab caller가 canOpenOrder를 전달하지 않아 런타임은 전링크 유지. shared source 13개·story 1개·test 1개에 옛 차단 분기가 남음 | 확정 정책에 필요 없는 optional prop 전달·차단 분기·제한 Story/test 제거. 모든 링크 유지 검증은 보존 |
+
+- Web 전환 중심: `shared/models/src/chat/chat.apis.clinic.ts:16,34`의 두 adapter.
+  `clinic/src/lib/LinkTalk/useLinkTalk.tsx` 초기/페이지 조회·폴링·원문 이동의 반복 조회·전송이 여기에 모인다.
+  응답 DTO가 같고 메시지에 chatId가 있으므로 별도 chatId 선행 조회나 채팅 전체 구조 교체는 필요하지 않다.
+  새 경로에 유효한 orderId만 전달하는 검증과 실제 URL/query/body·고객지원·답글 회귀 확인이 필요하다.
+- 캡처 근거: `shared/ui/src/OrderApprovalUI/useOrderApprovalCapture.ts:533,538,574`.
+  `OrderApprovalUI.tsx`는 캡처 중 파일 전환을 허용하고 RejectForm은 isCapturing으로 버튼을 비활성화한다.
+  임시 실제 hook 검사 **2개 중 1 실패/1 통과**: 파일 URL 변경은 busy=true 잔존, 권한 OFF는 false 복구.
+  `/tmp/dentlink-permission-capture-leaf-repro-20261013.pvtmfxvh/`에 test/run.log/results.json 보존.
+- 캐시 근거: `clinic/src/services/employee/employee.query.ts:15`,
+  `lib/Billing/syncEmployerHasPaymentProfile.ts:19`, `lib/Scanner/syncEmployerOralScannersPreference.ts:32`,
+  `services/employer/employer.query.ts:493`, `pages/office/onboard/landing.tsx:32`.
+  임시 원본 helper 검사 **3개 중 2 실패/1 통과**: 현재 직원 key에 기대한 payment/scanner 값은 갱신되지 않고
+  옛 단일 key와 atom만 갱신됨. `/tmp/dentlink-permission-cache-audit-20261013/`에 test/run.log/results.json 보존.
+  즉시 UI는 atom 병합으로 보완되므로 실제 결제/온보딩 화면 장애가 실계정에서 재현됐다고 표현하지 않는다.
+- 숨긴 필터 근거: `lib/OrderList/order-list.helpers.ts:96,148`, `useOrderListDesktop.tsx:53,93`,
+  `lib/PatientList/patient-list.helpers.ts:37`, `lib/Order/useOrderKanbanBoard.tsx:54`,
+  shared `OrderListLayerMobileFilter.tsx:131,155,190`. NEW 환자 선택은 이미 hidden myPatientOnly=false로 정규화한다.
+  서버 목록의 FE 재필터링과 위 입력 상태 정규화는 다른 작업이다.
+
+### with·페이지·컴포넌트 처리 판정
+
+| 처리 | 판정과 이유 |
+| --- | --- |
+| 기존 withAuthorization | **역할별 직접 URL 접근 처리는 필요.** 이번에 새로 만든 HOC가 아니다. 로그인·현재 소속·역할 검증과 이전 소속 응답 무효화는 유지할 이유가 있다 |
+| 메뉴/버튼 숨김과 page/action guard | 서로 다른 진입 경계를 담당한다. UI 숨김만으로 열린 모달·직접 URL·이미 시작한 비동기 동작까지 처리되지 않으므로 일괄 중복으로 제거하지 않는다 |
+| Orders/Patients/Case 등 employee+authority query key | BE가 새 응답을 정제해도 이전 역할 캐시는 남을 수 있으므로 필요한 FE 처리다. 다만 reader/writer와 관련 chat 경계를 함께 맞춰야 한다 |
+| 공통 직원 정보 조회 | `_app`의 query와 withAuthorization의 직접 GET이 cold/mismatched 상태에서 겹칠 수 있다. **기존 구조의 통합 후보**, 이번 Member 기능이 전부 불필요하다는 근거는 아니다 |
+| withRemakeOrderAuthorization | Member일 때 전체 order GET으로 담당자를 확인하는 새 선행 조회가 있다. 현재 Remake DTO에 담당자/행동 권한이 없어 바로 삭제할 근거는 부족하다. 관련 API가 동등한 판정을 제공하면 통합·축소할 후보 |
+| 승인 페이지 order GET | useOrderApprovalPage가 전체 역할에 추가 조회한다. 현재 approval DTO만으로 Member 담당자를 알 수 없어 관계 확인이 필요하지만, 향후 반환 권한/동등한 검증 계약에 맞춰 조회를 합치거나 범위를 줄일 수 있다 |
+| 직접 주문 수정 step | 기존 order GET의 결과로 gate하며 별도 검증 endpoint를 새로 만들지 않는다. Member 본인/미지정 Draft와 타 의사 주문을 구별한다 |
+| 부분 상세 | 조회·파일·환자 수정 등과 주문 변경/승인/채팅 전송은 별도 허용 범위다. 전체 readonly 하나로 합치면 현재 확정 동작을 바꿀 수 있다 |
+| 관련 Case 제목 편집 | 현재 Member 본인 주문의 현재 Case만 허용한다. 다른 관련 Case 편집 범위는 확정 근거 부족으로 과도 제한/필수 누락을 단정하지 않는다 |
+| 403·2131·기타 실패 | 2131 소속 전환을 별도 처리하고 나머지 403을 조회불가로 본다. 최종 BE 오류 계약과 대조 필요. 기존 withAuthorization의 일반 요청 실패→403은 이전부터 있던 한계다 |
+
+### 채팅 캐시·Office 앱 별도 확인
+
+- **웹 채팅 역할 전환은 정적 위험:** `clinic/src/lib/LinkTalk/useLinkTalk.tsx:84`의 CHAT_LIST key는
+  params만 포함하고 employee/role이 없다. 주문 상세 page의 LinkTalk와 AppProviders에 역할별 cache 제거도 없어,
+  동일 직원 EDITOR→MEMBER 전환 후 서버가 범위를 줄이면 새 GET 전 이전 대화를 재사용할 수 있는 경로가 남는다.
+  기존 구조이며 실제 대화 노출을 실계정으로 재현한 것은 아니다. ORDER API 전환 때 함께 범위를 검증할 항목이다.
+- **앱 기준:** `feature/DL-16317 / 72a79146aaba1054827ab3dbd4540f274373a4ef`, 원격 동일 clean.
+  현행 origin/develop `2bc7d04dd92136b7a63a3d8c4d4e288afa867102`, merge-base `19f68100`.
+  3-dot 변경60파일(source42·test18)과 연결된 navigator/provider/직원 활성화 경로를 대조했다.
+  이번 앱 감사에서는 테스트·번들·기기 실행이나 코드 변경을 하지 않았다.
+- **이번 앱 변경에서 놓친 cache writer:** `src/queries/useUserQueries.ts:34`는 EMPLOYEE_OWN 4요소 key를
+  읽지만 `src/features/common/components/EmployeeProfile.tsx:101`의 활성화 응답은 3요소 key에 써
+  확인된 응답을 새 reader가 재사용하지 못한다. 소스에서 확인한 누락이며 실기기 장애 재현은 아니다.
+- **앱 채팅 역할 cache:** `src/queries/useLinkTalkQueries.ts:130,179` 메시지 key는 직원/역할이 없고
+  `useCommonServiceQueries.ts:107` 최신 목록은 소속만 포함한다. 동일 직원 역할 변경 시
+  `src/libs/useEmployeeProfile.ts:65` reset은 주문 상세/ORDER_INFO에 한정된다. 명시적 소속 전환에는
+  latest/unread reset이 있으므로 모든 전환이 초기화되지 않는다고 확대하지 않는다. 정적 위험/기기 QA 잔여다.
+- **앱 주문 채팅:** `src/services/linktalk.service.ts:38,102` 두 adapter는 구 경로다. ORDER만 교체하고
+  고객지원·답글·페이지 번호·읽음·번역을 유지하면 초기/폴링/페이지/push/종료 fallback 연결을 함께 바꿀 수 있다.
+  native 소스 수정·통합·배포는 웹 DEV 전달과 별도 범위로 유지한다.
+- **기존 native 진입 예외:** `src/features/orderList/screens/OrderDetailScreen.tsx:119,258`은 최초 order GET
+  성공 전 WebView를 비우며 실패는 toast/back으로 처리한다. 웹 NoData와 다르고 이번에 도입한 회귀는 아니다.
+  상세3상태를 native 진입에도 맞출 때 해당 오류 계약과 함께 검토한다. 일반403을 일괄 치환하지 않는다.
+- **기존 앱 비동기 경계:** OrderAdditionalInfoSection.tsx:482 및 useUploadOrderFile.ts:49는 upload 대기 후
+  captured orderId에 attach를 시작하며 현재 actor/화면 종료를 재확인하지 않는다. 실행 가능한 후속 요청 경로의
+  정적 위험으로 기록한다. 이번 diff는 cache key만 변경했고 서버 변경 성공/실기기 오류 재현은 없다.
+- **앱 단순화 후보:** Member에게 숨긴 Dentist UI에서도 OrderNewCaseSection.tsx:49와
+  OrderFilterBottomSheet.tsx:137의 직원 조회가 실행된다. 신규 리뷰 eligibility GET+저장 직전 재조회도 통합 후보다.
+  Draft DTO에 담당자가 없어 이어하기/삭제 직전 상세를 확인하는 처리는 현재 계산 근거가 있으므로 일괄 제거하지 않는다.
+
+### 검토·검증 범위와 다음 시작점
+
+- 웹 source 검토: Clinic 변경 source 37개+조회불가 SVG 3개, shared UI 변경 source **72개 전체**,
+  Lab 동반 변경 6개, 별도 HOC/atom/조회 query·route export와 generated model/enum diff를 확인했다.
+  실제 연결을 확인하기 위해 변경되지 않은 메뉴·목록 parser·chat adapter·고객지원·승인 버튼 등도 읽었다.
+  이 범위는 정적 감사이며 모든 화면/권한 조합의 실제 사용 QA 완료와 다르다.
+- 이번 새 실행 검증은 위 임시 재현 **총 5개: 예상 동작 assertion 실패 3개, 대조군 통과 2개**다.
+  Jest runner 실패가 아닌 두 회귀의 재현이다. 제품 파일에는 임시 테스트를 추가하지 않았다.
+  기존 257개 웹 검사·3서비스 타입/빌드·157개 앱 검사 통과는 이전 동일 HEAD 기록이며 이번에 재실행하지 않았다.
+- 기존 DEV 자동 E2E 97통과/2실패/5제외/5미실행과 ISV 버튼 timeout 원인 미확정은 유지한다.
+  이번 정적 감사나 재현 검사로 DEV 자동 E2E/실계정 최종 QA가 통과했다고 갱신하지 않는다.
+- **다음 FE 순서:** ORDER adapter 전환 → 독립 FE 회귀와 숨긴 필터 보완 → Pickup 미사용 제한 정리 →
+  해당 범위 로컬 검사·리뷰 → 승인된 제품 커밋/푸시와 DEV PR → 사용자 merge/DEV 반영 후 실제 두 계정 QA.
+  이번 요청은 검토이므로 위 제품 변경은 아직 실행하지 않았다.
+- **BE·사용자 준비:** 목록/total/filter-hint 정제 완료 범위, 상세 기본/부분/거절 및 관련 Case·파일·채팅 허용 기준,
+  실제 사용 endpoint/응답/오류 코드와 구별 가능한 주문을 제공한다. 새 상세 검증 API가 반드시 필요하다고 가정하지 않는다.
+  Admin은 성공하고 Member만 거절되는 주문, 본인/타 의사/미지정 Draft, 3D, 담당 변경 후 접근 상실과 실제 저장 QA는 남아 있다.
+- 앱과 상용 release는 별도 전달 범위다. 새 사용자 지시 없이 추가 구현·배포·자동 조회/모니터링은 시작하지 않는다.
+
+## 이력 — 2026-10-13 17:17 기능별 BE 준비 후 이어갈 breakpoint
+
+- **최신 사용자 지시:** BE 권한 작업은 아직 전부 배포되지 않았다. 주문 목록에서 역할별 차이가
+  없거나 주문 상세의 검증 계약이 보이지 않는 상태를 전체 연동 완료로 계산하지 않는다.
+  다만 전체 BE 완성을 일괄 선행조건으로 삼지 않고, **준비된 기능부터 FE가 빠르게 함께 연결·검증**한다.
+  지금까지 완료한 코드·검증을 보존하고 현재 Git/QA/명세와 담당별 다음 순서를 정리해 원격에 저장한다.
+- **현재 판단:** 확정 디자인과 실제 UI 비교에서 즉시 고칠 새 FE 단독 오류는 확인하지 못했다.
+  일부 Case/대화 빈 표시와 승인대기 안내는 실제 응답·허용 정책 대조가 먼저다. BE가 준비되지 않은
+  목록 범위를 FE가 임의 필터링하거나, 상세 판정 API를 추측해 만들거나, 기존 with/선행 GET을
+  일괄 삭제하지 않는다. 아래의 기능별 준비 통보를 다음 재개점으로 삼는다.
+
+### 완료·원격 보존 상태
+
+| 구분 | 현재 확인 | 남은 경계 |
+| --- | --- | --- |
+| 치과 웹 소스 | `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`, 로컬·원격 HEAD `1c67612c3506090706704c558ac07852d739a518`, clean | 이번 마감에서 새 제품 변경/빈 커밋 없음 |
+| 웹 DEV 전달 | 사용자 merge한 [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693), 현행 원격 develop `e6cfea705e4dadd3ec6c3c81d2b8432245f5b35c`, master `aff278a433b2d4bc6f8e606a7fb12b6a5b18a407` | 전체 BE 완료·상용 release와 별개 |
+| 웹 FE 구현·로컬 검증 | Member 메뉴/필터·NEW 본인 담당·주문 행동/직접 접근·Draft/승인 제어 구현, 기존 치과 테스트 257개와 3서비스 타입/빌드 통과 | 이번 문서 마감에서 제품 테스트를 새로 실행하지 않음 |
+| 실제 Member/Admin UI | 같은 병원 역할 확인, 메뉴/필터·NEW·본인 기본 상세·타 의사 부분 상세/승인·공유 Case/파일·Pickup 링크 유지 확인 | Admin도 거절되는 사례는 Member 전용 차단 증거가 아님. 자세한 주문별 증거는 아래 2026-10-13 UI 비교 이력 |
+| Office 앱 소스 | `/Users/parkjongsun/Repository/dentlink-app-permission`, `feature/DL-16317`, 로컬·원격 `72a79146aaba1054827ab3dbd4540f274373a4ef`, clean. 관련 테스트 157개·iOS/Android JS bundle 통과 | 전체 타입 기존 18개 오류, develop 통합·PR·실기기·배포/CodePush 미완료. 이번 웹 breakpoint에 자동 포함하지 않음 |
+
+### 17:17 KST 마감 재조회와 잔여
+
+- **현행 DEV Swagger 변화:** `https://dev-api.dentlink.io/v3/api-docs` 원본 및 no-cache 재조회.
+  저장본 `/tmp/dentlink-permission-breakpoint-swagger-20261013.json`, SHA256
+  `95beaf4e7797538f1f95a06ed18773c320de0422bc10bf04d81a329e9e718057`.
+  14:04 비교본 이후 **GET `/office/chat-messages/orders/{orderId}`가 추가**됐다. 기존에 확인했던
+  POST도 존재하며 GET은 같은 `ApiPageResponseListChatMessageDto`, page/size/sort 계약이다.
+  `/office/chats/{chatId}/messages` GET/POST는 공개 명세에서 제거됐다. 활성 web/app 조회·발송은
+  아직 deprecated GET/POST `/office/chat-messages`를 사용한다. 이전 '새 주문 경로는 POST만' 기록은
+  이 재조회로 대체한다. 공개 명세 존재만으로 배포 동작·권한 조회 완성·최종 전환 합의를 확정하지 않는다.
+- **목록·상세:** 이 비교에서 주문 관련 operation/DTO 변경은 확인되지 않았다. 별도의 주문 상세
+  접근 검증 endpoint도 현재 공개 명세에서 식별되지 않았다. BE 내부 정제만 바뀔 수 있으므로
+  명세가 같다는 사실로 배포 전후 동작을 단정하지 않는다. 사용자 확인대로 전체 BE는 미완료다.
+  주문 목록/Board/승인대기 건수·filter-hint의 역할별 범위와 기본/부분/Member 전용 차단을
+  실제 응답·예시 주문으로 재확인해야 한다. 새 권한 필드/검증 API가 반드시 필요하다고 미리 가정하지 않는다.
+- **부분 조회 잔여:** `9000009248`/`9000009123`의 Member Case `-`/트리 없음/대화 없음은
+  응답과 허용 정책 대조 전 미확인이다. `9000003943`은 두 계정 모두 Case/Order 4/4와 트리를 제공했다.
+  canWrite=false가 메시지 GET을 막거나 Member 조건이 Case GET을 꺼서 생긴 현상은 아니다.
+  실제 flat patientId 누락이 확인되면 연결 보완을 검토하되 현재는 확정 버그가 아니다.
+- **채팅 전환 잔여:** 새 주문별 GET/POST를 실제 caller에 적용하지 않았다. ORDER 조회/발송의
+  사용·배포 시점과 고객지원(DENTLINK)·답글·빈 채팅·chatId/읽음/페이지 동작을 해당 계약 단위로
+  확인한다. 해당 주문 채팅 계약이 준비되면 다른 BE 전체 완료를 기다리지 않고 그 범위부터 전환한다.
+- **추가 UI/행동 QA 잔여:** Admin은 조회 가능하고 Member만 거절되는 실제 주문,
+  본인/타 의사/미지정 Draft(현재 두 Board Draft 0), 실제 STL/3D, 담당 변경 후 접근 상실,
+  저장/전송/승인/취소 이후 상태는 미검증이다. 실제 데이터 변경 QA는 필요한 테스트 대상과 범위를
+  준비한 뒤 진행한다. Office 앱/실기기와 상용 전달은 별도다.
+- **자동 E2E 종료 확인:** [Office DEV workflow 38354572860](https://github.com/Innvoaid/dentlink-client/actions/runs/38354572860)은
+  build/deploy 및 새 빌드 반영 성공, 후속 E2E는 15:33:24 KST failure로 종료됐다.
+  development 전체 수집 109, 통과 97/실패 2/허용 제외 5/미실행 5/flaky 0/전역 오류 0이다.
+  이전 '진행 중' 관찰을 이 종료 결과로 대체하며 자동 E2E 통과로 보고하지 않는다.
+  읽기 전용 report 확인에서 실패는 `instasmile.spec.ts`의 `2. product → option`과
+  `step4-ui-state.spec.ts`의 ISV Step4 진입이며, 둘 다 `order-step2-product.ts:97`의
+  `Insta Smile Vision` 버튼 90초 대기 timeout이다. 후속 5건은 serial 미실행이다.
+  직접 오류는 권한 거절이 아니며 이전 DEV ISV 실패 기록과 같은 영역이다. 현재 상품 설정/
+  렌더링/테스트 중 원인은 확정하지 못했다. 권한 UI 구현과 별도의 미해결 E2E 조사 항목으로
+  보존하고, 테스트 기대값을 임의 약화하거나 실제 서버 테스트를 다시 실행하지 않았다.
+  진단 요약/report/verdict는 `/tmp/dentlink-permission-dev-e2e-readonly-20261013/`에 저장됐다.
+  정상 실행 전 runner 검사 219개 통과와 실제 browser 테스트 실행을 확인했으므로 optional
+  canvas 설치 경고를 직접 실패 원인으로 기록하지 않는다.
+
+### 다음 순서와 담당
+
+1. **BE:** 준비된 기능 단위로 DEV 배포 여부·실제 사용할 endpoint/요청/응답·기존 API 유지/대체
+   범위를 알려준다. 목록이면 데이터/total/filter-hint 정제, 상세면 기본/부분/거절 기준과 관련
+   환자·Case·파일·채팅 조회 허용 범위, 채팅이면 새 주문 GET/POST 사용 시점과 남는 경로를 제공한다.
+   GET이 그대로이고 내부 정제만 달라지면 그 사실만 명시해도 된다.
+2. **사용자·BE:** 현재 Member/Admin 계정을 유지하고 해당 기능을 구별할 주문번호/환자/Case를
+   준비한다. 차단 검증에는 Admin은 성공하고 Member만 거절되는 같은 주문이 필요하다.
+   Draft/3D/담당 변경 등은 해당 검증용 데이터가 준비됐을 때 범위를 정한다.
+3. **Codex/FE:** 통보된 부분의 현재 Swagger·실제 요청/응답·소스를 대조한다. 서버 내부 정제면
+   그대로 UI QA하고, 실제 caller/필드/상태 계약이 바뀌었으면 필요한 FE만 연결·보완한다.
+   중복 with/선행 GET은 최종 해당 계약으로 필요성이 없어짐을 확인한 것만 줄인다. 확정 디자인의
+   권한 UI/필터와 주문번호별 세 상태를 같은 두 Chrome 계정에서 재확인한다.
+4. **Codex → 사용자:** 변경 범위에 맞는 로컬 검증·커밋/푸시·진행 기록과 개발서버 PR을 준비한다.
+   사용자가 merge/DEV 반영을 진행한 뒤 해당 배포 화면을 재확인한다. 상용 release/Office 앱 전달은
+   별도 범위로 정하고, native 통합 때에만 최신 develop과 알려진 충돌 후보를 다시 검증한다.
+
+- **breakpoint 동작:** 현재 제품 소스는 보존하고 이번 정리까지 마감한다. 새로운 준비 통보가 오면
+  그 기능부터 재개한다. 이후 Swagger/배포/Jira/Figma를 자동 조사·모니터링하거나 명세를 추측해
+  계속 구현하지 않는다. 작업 완료 판정은 'FE 구현/로컬 검증/DEV 반영/실계정 UI 확인/BE 연동/최종 QA'를 구분한다.
+- Web DL-16319의 기존 진행 댓글 `44418`에 실제 UI 확인·현행 Swagger·BE 잔여·E2E 종료와
+  기능별 재개 순서를 17:22 KST에 갱신하고 댓글과 진행 중 상태를 재조회했다.
+  상위 DL-16317/Office 앱 댓글은 이번에 변경하지 않았다.
+
+## 이력 — 2026-10-13 Member·Admin 실계정 웹 UI 비교 완료·BE 연동 확인 잔여
+
+- **사용자 준비와 실제 역할 확인:** Chrome 기본 창 `jongsun.test2`는 Member, 시크릿 창
+  `jongsun.test1`은 같은 `frankieDevOffice`의 Admin이다. 각 Office Members의 `(Me)`와
+  Member/Admin 표시를 실제 화면에서 확인했다. 이전 '테스트 계정 준비 전' 상태는 이 기록으로 대체한다.
+- **이번 범위:** 준비된 실제 DEV PC 웹을 직접 조작해 FE가 확인 가능한 UI·필터·제한 표시와
+  확정 Figma를 비교했다. BE 내부 정제/권한 완성도를 판정하거나 새 채팅 API를 전환하지 않았다.
+  제품 checkout은 pull 후 `feature/DL-16317 / 1c67612c3`, 마감 확인에서도 clean이다.
+  제품 소스·생성본·권한/계정·Jira·PR·배포는 이번 검토에서 변경하지 않았다.
+
+### 실제 UI에서 확인한 항목
+
+| 항목 | Member와 Admin의 실제 비교 | 판정 |
+| --- | --- | --- |
+| 상단·Office 메뉴 | Member Billing·Dashboard 숨김, Office는 Members만. Admin Billing·Dashboard와 Dashboard/Members/Billing Contact 탭 제공 | 의도 확인 |
+| Patients | Member My Patients Only 숨김, Admin 표시. 당시 목록 5 vs 612는 관찰값이며 정제 정확성 전체 판정은 아님 | 필터 UI 확인 |
+| Orders·Board | Member My Orders Only/Dentist 숨김, 상태·날짜 유지. Board는 Order Number/Patient Name만, Admin은 Dentist Name도 제공 | 디자인 방향 확인 |
+| 신규 Case 첫 화면 | 같은 제공된 환자에서 Member는 본인 담당 표시 고정, Find Dentist/Assign Myself 없음. Admin은 두 선택 버튼 제공 | 의도 확인 |
+| 본인 기본 상세 `9000005214` | Member도 수정·취소·담당 변경과 채팅 입력 UI 제공. 담당 변경 modal에 접근 상실 경고 표시 | 기본 상태 확인 |
+| 타 의사 In Review `9000009123` | 같은 상태·ID에서 Admin은 Cancel/Edit·담당 변경·채팅 입력 제공, Member는 모두 숨김. 내용·Patient Edit 유지 | 부분 상태의 행동 제한 확인 |
+| 제공된 공유 환자 상세 `9000003943` | Member는 Case/Order 4/4와 트리 유지, Admin은 수정·취소·담당 변경 제공하고 Member는 숨김. 파일 1개 선택 시 Download(1) 활성화, 실제 다운로드/변경은 안 함 | 조회 유지·행동 제한 확인 |
+| 승인 `9000009248/approvals/1469` | Member도 PNG 미리보기·파일 목록·Download UI 유지, Approve/Reject 없음. Admin에는 두 버튼 제공 | 부분 승인 UI 확인 |
+| Pickup `9000004066` | 타 의사 주문번호도 새 탭의 상세로 이동. 중앙 No order data available./Go to Home 표시 | 링크 유지·조회 불가 모양 확인 |
+| Billing 직접 진입 | Member가 `/billing/statement`에 직접 진입하면 `/403` Forbidden 화면 | FE 페이지 제한 표현 확인 |
+
+- 조회 불가 `9000004066`은 **Admin도 동일**했다. 삭제/소속/데이터/권한 중 원인은 이번에
+  확정하지 않았다. 조회 불가 디자인은 확인했으나 'Admin 가능, Member 권한 때문에 차단' 검증으로 계산하지 않는다.
+- Member 본인 → 타 의사 → 다른 화면 → 상세 직접 재진입을 실제 확인했고, 본인 주문의 행동 UI가
+  타 의사 상세에 남는 현상은 확인하지 않았다. 두 원래 창은 최종 비교용 동일 주문 `9000003943`의
+  상세에 남겼다. Pickup 클릭으로 생긴 QA 임시 탭은 닫았고 파일 선택도 해제했다.
+- Next·저장·주문 생성·승인/반려·취소·담당 변경·메시지 전송·첨부·삭제를 실행하지 않았다.
+  초기 `/orders/create`는 진입/환자·NEW Case 선택까지 조회·로컬 폼 설정만 한다는 코드를 확인했다.
+
+### 확인한 차이와 다음 재확인
+
+1. **일부 부분 상세의 조회 데이터 차이:** `9000009248`/`9000009123`에서 Admin은 Case 8/Order 10과
+   트리·기존 대화를 보지만 Member는 건수 `-`, 트리 없음, `No Messages`다. 이 환자는 Member 목록 5건에
+   없었다. 반면 Member에게 제공된 환자의 `9000003943`은 두 계정 모두 Case/Order 4/4와 트리가 있고,
+   두 계정 모두 대화 없음이다. 모든 Member 부분 상세에서 FE가 트리/대화를 숨기는 현상은 아니다.
+   최종 BE의 주문별 기본/부분/차단 기준·관련 환자/Case/채팅 조회 허용 범위와 실제 응답을 대조한다.
+2. **코드 읽기 전용 진단:** canWrite=false는 메시지 GET을 막지 않고, 기존 `/office/chat-messages`를
+   계속 조회한다. `No Messages`는 빈 list 표현이며 빈 응답·오류를 이 화면만으로 구분할 수 없다.
+   Case GET도 Member에게 enabled이며 행동 제한이 트리를 숨기지 않는다. 상세 page는 `order.patient`
+   와 평면 `order.patientId` 둘 다 있어야 patientId를 설정하므로, 실제 응답에 평면 ID가 없다면
+   nested ID 연결 보완 후보다. 현재 응답은 조사하지 않았으므로 이 후보를 확정 FE 버그로 기록하지 않는다.
+3. **승인대기 안내·범위:** 두 계정에서 초기 승인대기 38, 전체 Orders 1033, Board 559를 관찰했다.
+   Member에도 `Orders waiting for your approval`이 보였다. FE는 `/office/orders/filter-hint`의 PENDING으로
+   초기 필터·안내를 설정하고 조회 건수를 그대로 표시한다. 최종 서버 역할별 필터/허용 응답과 문구를
+   맞춰 확인할 항목이다. Member도 본인 주문 승인이 가능하므로 모든 Member의 안내를 임의 제거하지 않는다.
+4. **미검증:** Admin은 조회 가능하고 Member만 거절되는 실제 주문 사례, Draft 이어하기/삭제 UI
+   (두 Board Draft 0), STL/3D 실제 조회, 실제 저장/전송/승인/담당 변경 이후 상태, 모바일 웹/Office 앱/실기기는
+   이번 검토의 완료 판정에 포함하지 않았다. 최종 BE 조회 기준과 채팅 전환·with/선행 GET 정리 원칙은 유지한다.
+
+- **디자인 근거 재확인:** Orders `475:85345`, Patients `43:44977`, Board `43:44991`, NEW `395:66740`,
+  기본 상세 `344:49964`, 부분 상세 `475:77743`/Sidebar `475:77776`, 승인 `475:76737`,
+  채팅 `475:76744`, 조회 불가 `475:77664`를 공식 Figma에서 재확인했다.
+  [부분 상세](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=475-77743)의 트리/조회 유지와
+  작성 UI 제거를 비교했다. Pickup의 모든 링크 유지라는 사용자 확정을 계속 우선한다.
+- **로컬 증거:** `/Users/parkjongsun/.codex/visualizations/2026/10/13/01a132e9-6555-7a02-9c72-4dad9c04cc64/permission-ui-qa/`
+  에 실제 역할·필터·NEW·기본/부분/조회 불가·승인·파일·Pickup 화면을 저장했다. `member-shared-order-9000003943.png`
+  와 `admin-shared-order-9000003943.png`, `member-partial-order-9000009123.png`와 `admin-order-9000009123.png`가
+  같은 주문 비교 증거다. 로컬 PNG는 다른 기기에 자동 전달되지 않으며 이 Git 기록이 휴대 가능한 결과다.
+- 현재 확인한 주요 권한 UI는 의도대로다. 부분 조회 데이터 차이·승인대기 안내는 BE 응답/정책과 함께
+  재확인할 대상으로 남긴다. 이 UI 검토를 전체 BE 연동·권한 QA 완료나 코드 변경 승인으로 확장하지 않는다.
+
+## 이력 — 2026-10-13 Member 테스트 계정 준비 후 FE 화면 확인 대기
+
+- **사용자 관찰:** 개발서버 배포를 확인했고 BE 동료가 일부 화면에서 작업된 모습을 확인했다.
+  사용자는 현재 Member 역할이 없어 전체를 보지 못했으며, 모든 동작이 정확한지는 아직 확인하지 않았다.
+  이 관찰은 부분 구현 노출 확인이며 전체 Member QA/BE 권한 정책 완료 판정이 아니다.
+- **계정 준비는 사용자·BE 담당:** 현재 사용자가 Member 상태를 직접 변경할 수 없다.
+  사용자가 BE에 역할 변경과 테스트 계정 준비를 요청하고, 준비되면 이 세션에 다시 알려준다.
+  FE에 임시 역할 전환 기능을 추가하거나 가정한 역할로 실제 Member QA를 대체하지 않는다.
+- **재개 경로를 구분:** 계정 준비 통보가 오면 실제 Member 로그인 화면의 FE 확인부터 진행한다.
+  BE 최종 명세 전체가 나올 때까지 이 화면 점검 자체를 미룰 필요는 없다.
+  별도로 최종 BE 명세/응답이 준비되면 기존 with·선행 GET의 필요 여부와 채팅 전환을 재검토한다.
+  GET 범위/데이터 정제는 BE, 권한별 UI·필터·실제 변경 API 연결·주문별 상세 세 상태는 FE라는 원칙을 유지한다.
+- **다음 FE 화면 점검 범위(치과 웹 DEV):** 실제 인증된 Member 역할이 반영된 상태를 먼저 확인한 뒤,
+  1. 진입 화면에서 권한별 메뉴·페이지·버튼이 확정 정책대로 보이거나 숨겨지는지 확인한다.
+     준비된 Case/Draft 화면에서 본인/기존 담당 표시와 변경 허용 UI도 확인 범위에 둔다.
+  2. Member에 제공하지 않는 My Orders/My Patients/Dentist 필터가 화면에서 제거되는지 확인한다.
+  3. 준비된 주문번호별 기본·부분 조회·조회 불가 화면과 확정 Figma 디자인을 비교한다.
+     Pickup의 모든 주문 링크는 상세로 이동하고 상세에서 제한한다.
+  4. 부분 조회에서 내용·파일·3D·대화 조회를 유지하면서 수정·승인/거절·채팅 작성 등 제한 UI가
+     확정 디자인대로 표시되는지 확인한다. 확인 목적은 실제 데이터 변경 수행이 아닌 FE 화면/제한 표시다.
+  5. Member 로그인 후 첫 화면과 새로고침/다시 진입에서 UI 제한이 바로 반영되고,
+     확정 디자인의 문구·배치·표시/숨김·활성 상태가 일치하는지 확인한다.
+- **판정 경계:** FE가 직접 화면에서 확인한 결과와 디자인 불일치는 증거와 함께 기록한다.
+  주문별 상태를 볼 계정/주문이 없거나 BE 응답이 준비되지 않은 항목은 미확인으로 남긴다.
+  화면 노출만으로 서버 내부 GET 정제·우회 요청 거절·전체 접근 권한 완성도를 판정하지 않는다.
+  Office 앱/실기기 QA는 이번 웹 화면 점검에 자동 포함하지 않는다.
+- **지금은 준비·메모리 저장 후 대기:** 제품 구현·계정 변경·실계정 QA를 시작하지 않고,
+  Swagger/배포/E2E/Jira/Figma를 자동 재조회하거나 모니터링하지 않는다. 이전 기록의 자동 E2E는
+  15:17 KST 당시 진행 중인 관찰이며 이번 대기 지시에서 종료 결과를 새로 확인하지 않았다.
+  계정 또는 BE 변경이 준비됐다는 새 사용자 통보를 다음 시작점으로 삼는다.
+
+## 이력 — 2026-10-13 사용자 웹 PR merge·DEV 배포 확인·최종 BE 명세 대기
+
+- **사용자가 직접 merge:** 웹 [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693)은
+  2026-10-13 **15:02:51 KST**에 MERGED다. 원격 develop은 실제 재조회에서
+  **`e6cfea705e4dadd3ec6c3c81d2b8432245f5b35c`**, master는 `aff278a43`,
+  feature/DL-16317은 `1c67612c3`다. 이번 목적은 완료한 화면을 개발서버에 올려 BE 개발자가
+  사용할 수 있게 하는 것이다. 상용 전달이나 Office 앱 통합/배포까지 완료한 의미가 아니다.
+- **15:13 KST DEV 확인:** 같은 merge SHA의
+  [Office DEV workflow 38354572860](https://github.com/Innvoaid/dentlink-client/actions/runs/38354572860)은
+  `office-dev-build-and-deploy` job 성공(15:13:30 KST), Docker build/push·S3 정적 파일·ECS 배포
+  step 성공이다. 후속 `e2e-and-notify`는 진행 중이며 전체 workflow/E2E 성공은 아직 확인하지 않았다.
+  ECS step은 서비스 안정화까지 기다리지 않는 설정이므로 배포 step 성공과 새 빌드 서빙 증거를 구분한다.
+  [Lab DEV workflow 38354572871](https://github.com/Innvoaid/dentlink-client/actions/runs/38354572871)은
+  같은 SHA로 전체 성공(15:11:58 KST)이다. 이는 보존된 Lab diff로 자동 실행된 결과이며 신규 Lab 정책 구현이 아니다.
+- **새 Clinic 빌드 서빙 확인:** 15:14:46 KST 비로그인 `https://dev-portal.dentlink.io`는 HTTP 200,
+  Next BUILD_ID **`hbVeD1fi0LvvqQFsJJUPG`**를 제공했다. 동일 workflow의 S3 manifest 업로드 ID와
+  일치하며, 후속 job의 `Wait for new version to be live`도 성공했다. 실제 DEV 새 빌드 반영은 확인됐다.
+  자동 E2E는 실행 중이고 인증된 Member 권한/주문 범위/실기기 QA나 BE 전체 배포 완료 증거는 아니다.
+- **사용자 확정 FE/BE 책임:** GET의 조회 범위·데이터 정제는 BE 내부에서 처리할 수 있고
+  API 형태는 유지될 수 있다. FE는 접속한 사용자 권한에 따른 UI/페이지/행동과 필터 제공,
+  실제 바뀐 API의 caller 연결, 주문번호별 상세 **기본 / 부분 조회 / 조회 불가** 표현을 담당한다.
+  기존 `with...`나 선행 GET이 모두 최종 설계로 확정된 것은 아니다. 최종 BE 응답에 맞춰
+  필요한 FE 처리만 남기고 중복된 관계 예측/추가 조회를 줄일 수 있다. 지금 임의 삭제하지 않는다.
+- **현재 코드 읽기 전용 검토 결과:** 로그인·소속·역할 진입 제어와 소속 변경 후 이전 승인 폐기,
+  기본 폼 데이터 GET·거절 화면·직원별 cache/callback 보호는 필요한 FE 책임이다.
+  `withAuthorization`의 직원 GET은 기존 `_app` 직원 cache 재사용 후보다.
+  `withRemakeOrderAuthorization`의 Member 전용 선행 주문 GET과 `useOrderApprovalPage`의
+  담당 확인용 주문 GET은 최종 Remake/승인 응답 계약이 충분하면 축소/통합할 후보다.
+  직접 주문 폼·`canPerformOfficeOrderActions`의 담당 관계 판정과 Case 제목 허용 연결도
+  최종 부분 조회/행동 계약에 맞춰 재검토한다. 동일 query key의 hook 둘을 중복 네트워크 GET으로 단정하지 않는다.
+- **지금 할 일/대기할 일:** DEV 새 빌드 반영 증거와 자동 E2E 결과를 현재 확인 가능한 범위에서
+  확인·기록한다. 최종 BE 명세 전 추가 guard 삭제·채팅 API 전환·FE 목록 데이터 정제를 시작하지 않는다.
+  다음 재개 시 BE 최종 문서와 실제 요청/응답으로 위 후보 및 채팅 전환 범위를 검증하고,
+  실제 Member 주문/환자 범위·상세 세 상태를 QA한다. 별도 테스트 계정은 아직 없다.
+- 제품 소스·feature commit은 이번 사후 확인에서 변경하지 않았다. CodeRabbit develop 자동 리뷰는
+  skip이었고 Vercel DLOS check는 blocked였다. 이들은 실제 코드 리뷰 완료/전체 PR checks 성공 증거가 아니다.
+  사용자의 merge 이후 DEV Office/Lab workflow 결과와 분리해 기록하며 리뷰/설정을 임의 변경하지 않는다.
+- Web DL-16319의 기존 댓글 `44418`에 15:17 KST 사용자 merge·새 DEV 빌드 반영·자동 E2E 진행과
+  BE 최종 명세 후 잔여를 갱신하고 재조회했다. 카드 진행 중을 유지하며 상위/Office 앱 댓글은 이번에 변경하지 않았다.
+  이번 사용자 질문으로 필요한 사후 확인과 메모리 정리를 한 것이며, 새 지시 없이 자동 조사/채팅 전환/
+  guard 제거/배포/모니터링을 이어가지 않는다.
+
+## 이력 — 2026-10-13 개발서버용 develop 재생성·웹 PR #4693 생성
+
+- **최신 사용자 명시 지시:** 이번 작업은 웹 개발서버용이다. 원격 develop을 삭제하고 현재 원격
+  master에서 새 develop을 만든 뒤 현재 작업 브랜치의 develop PR을 생성하도록 요청해 실행했다.
+  이는 이번 개발서버용 웹 PR의 대상 예외이며 일반 웹 release 전달 정책을 변경하지 않는다.
+- 삭제 전 `origin/develop`은 **`e9d3f3509bc808bd7a21de8c8b76b083d9966298`**였다.
+  develop을 base/head로 사용하는 열린 PR 및 feature/DL-16317의 기존 열린 PR은 없었다.
+  삭제는 해당 SHA의 lease로, 생성은 develop 부재의 lease로 진행해 중간 외부 변경을 덮지 않았다.
+- 기존 develop을 로컬 Git 참조
+  `refs/codex-backup/develop-before-dl-16317-dev-20261013-e9d3f3509`와 복구 bundle
+  `/Users/parkjongsun/.codex/backups/dentlink-client/develop-before-dl-16317-dev-20261013-e9d3f3509.bundle`
+  에 보존했다. `git bundle verify` 성공. master에 있는 prerequisite를 사용하는 증분 bundle이며
+  이 로컬 산출물은 다른 기기에 자동 전달되지 않는다. 복구가 필요하면 현재 develop 상태와 사용자 지시를 먼저 확인한다.
+- 원격 develop 삭제·신규 생성 성공. **새 develop과 원격 master가 모두
+  `aff278a433b2d4bc6f8e606a7fb12b6a5b18a407`**임을 실제 원격 재조회로 확인했다.
+  삭제/생성 모두 정상 pre-push lint·DLOS guard·coverage를 통과했고 훅을 우회하지 않았다.
+- 웹 [PR #4693](https://github.com/Innvoaid/dentlink-client/pull/4693)
+  **`feature/DL-16317 → develop`**, 일반 Open PR으로 생성하고 이 채팅에 attach했다.
+  title `[DL-16317] 개발서버용 Member 권한과 주문 상세 제한 적용`.
+  실제 base `develop/aff278a43`, head `feature/DL-16317/1c67612c3`를 생성 후 다시 확인했다.
+  diff **167파일(+10,307/-1,310), 14커밋**, `git diff --check` 통과, GitHub `MERGEABLE`이다.
+  제품 코드는 변경하지 않았고 해당 worktree는 clean이다.
+- **검토 상태:** Auto Assign 성공. CodeRabbit은 develop base 자동 리뷰 설정이 꺼져
+  `Review skipped: reviews are disabled for this base branch`였다. success 표시는 실제 리뷰 완료가 아니다.
+  Vercel `dentlink-dlos` check는 `Deployment was blocked` failure이며 HEAD에 붙은 기존
+  상태(생성 시각 02:37:17 UTC)다. [현재 Vercel 상태](https://vercel.com/innovaid-2c855104/dentlink-dlos/HAGJqQDiZLaZDYqvWzWHQesMTkv1),
+  [CodeRabbit 설명](https://github.com/Innvoaid/dentlink-client/pull/4693#issuecomment-6139211802).
+  PR의 mergeStateStatus는 `UNSTABLE`이며 충돌 없음과 checks/review 완료를 구분한다.
+- PR 생성은 제품 배포 trigger가 아니다. develop push의 경로 필터에 따라 Office/Lab/Admin DEV
+  자동 배포가 가능하지만, 이번 aff278 develop push에 대응하는 새 workflow run은 확인 시점에 없었다.
+  수동 배포·PR merge는 실행하지 않았고 권한관리 feature의 실제 개발서버 배포 완료 증거도 아니다.
+- PR 본문에 확정 Member/UI 범위·257개 테스트·서비스 타입/빌드와 기존 Lab optional 보존분,
+  전체 Swagger 생성 동반 변경, 새 채팅 API 미전환·BE 최종 명세/실계정 QA 잔여를 명시했다.
+  Web DL-16319 댓글 `44418`에도 개발서버용 PR과 미머지·미배포 확인 상태를 반영했다.
+  상위 DL-16317에는 댓글을 쓰지 않았다. Office 앱 저장소/브랜치/PR은 이번 요청에서 조작하지 않았다.
+- **후속:** 이 웹 PR의 리뷰와 현재 checks를 처리하고 실제 develop merge/DEV 반영은 별도 사용자
+  지시 범위에서 진행한다. 채팅 API 전환은 BE 최종 명세 확인 후라는 지시를 유지한다.
+  이전의 '웹 release 대상 미결정으로 PR 미생성' 상태는 이번 DEV PR에 적용하지 않는다.
+  최종 상용 release 전달·Office 앱 develop 통합·실계정/실기기 QA는 별도 후속으로 남는다.
+
+## 이력 — 2026-10-13 가능한 범위 마감·BE 최종 명세 후 재개 대기
+
+- **최종 사용자 지시:** 완료된 작업은 그대로 보존한다. 채팅 API 전환은 **백엔드 최종 명세 확인 후**
+  진행한다. 지금 확정된 범위에서 할 수 있는 확인·정리·원격 저장을 마치고 대기한다.
+  제품 코드를 새 채팅 경로로 임의 전환하거나 임의 권한 계약을 추가하지 않는다.
+- **우선 완료·보존:** 확정 UI/상세 기본·조회 불가·부분 조회, Member enum·기존 담당 정보 기반
+  필터/본인 지정/행동 제어, 로컬 검증, 최신 웹 master 통합, 제품 commit/push.
+  웹 `feature/DL-16317 / 1c67612c3`, Office 앱 `feature/DL-16317 / 72a79146a`는
+  실제 원격과 일치하고 clean임을 마감 직전 다시 확인했다. 이번 마감에서 제품 코드 변경은 없다.
+- **현재 가능한 확인 완료:** DEV Swagger의 삭제 4개 채팅 경로는 활성 웹/앱 사용처가 없고,
+  기존 deprecated 메시지 조회/발송은 실제 사용 중임을 확인했다. 신규 주문 발송 및 chatId 경로와
+  ORDER/DENTLINK/답글의 전환 범위를 구분해 아래에 기록했다. 불변 코드의 검증을 반복하지 않았다.
+- **BE 명세 후 후속 개발:** 필수 전환 대상·시점·chatId 확보·빈 채팅·주문/고객지원/답글 지원을
+  확정하고 Swagger와 실제 요청/응답을 대조한 뒤 채팅 caller와 필요한 최종 계약 연결을 진행한다.
+  현재 전체 잔여를 QA만으로 취급하지 않는다. deprecated 표시만으로 기존 호출 실패를 단정하지 않는다.
+- **별도 남은 작업:** 인증된 DEV Member/실기기 QA, 웹 전달 release 결정·대상 diff 확인,
+  앱 develop 통합 시 예상 충돌 6파일 및 새 덴처 상세 캐시 키 정리, 실제 PR 생성·review·merge·배포.
+  앱 작업 트리에 현재 충돌이 남아 있다는 의미가 아니다. PR/merge/배포/CodePush는 아직 수행하지 않았다.
+- **대기:** 개인 체크포인트·제품별 하위 Jira에 완료/보류/검증 범위를 정리한 뒤,
+  새 사용자 지시 전 자동 Swagger/Jira/Git 조사·추가 개발·QA·모니터링 없이 대기한다.
+- **마감 기록:** Web DL-16319 댓글 `44418`, Office App DL-16752 댓글 `44419`를
+  완료한 기존 계약/UI 범위와 채팅 전환·최종 BE 연동/QA 잔여, 명세 후 재개 대기로 갱신·재조회했다.
+  두 카드 모두 진행 중을 유지했고 상위 DL-16317에는 댓글을 쓰지 않았다.
+
+- 사용자가 승인한 개발서버 Swagger 확인/generate, 확정 디자인과 실제 계약 연결,
+  최신 웹 master 통합, 로컬 검증, 제품 commit/push, 개인 체크포인트·하위 Jira 정리를 마쳤다.
+  **스테이징은 확인하지 않았다. PR 생성·protected branch merge·배포·CodePush는 하지 않았다.**
+  기공소 웹/앱의 신규 정책 구현은 제외하고 최신 master의 기존 Lab 변경은 보존했다.
+- 현재 세션은 `01a132e9-6555-7a02-9c72-4dad9c04cc64`다. 아래 새 세션 인수인계와
+  10월 12일 이하 기록은 당시 상태를 보존한 이력이며 현재 API 미연결/merge 진행 상태가 아니다.
+- 사용자는 **별도로 준비된 테스트 계정이 없다**고 답했다. 개발서버 포털은 로그인 화면까지
+  확인했으며, 인증된 Member 실계정·실기기 QA는 수행하지 못했다. 임시 브라우저 탭은 닫았다.
+  자동 테스트·빌드·Swagger 응답은 실제 사용자의 주문/환자 범위나 배포·릴리즈 완료 증거가 아니다.
+
+### 2026-10-13 사용자 확정에 따른 완료 범위 정정
+
+- 사용자가 **Pickup의 모든 주문번호 링크는 주문 상세로 이동하고, 제한은 상세에서 처리**한다고
+  명시했다. 타 의사 주문 링크 제거·공유 Case 링크 예외는 현재 요구가 아니다.
+  오래된 Figma/Pickup 설명을 근거로 이 조건을 개발 잔여로 분류했던 Codex 판단을 철회했다.
+  아래 과거 Pickup 조건 준비 이력은 당시 작업 기록이며 현재 요구를 대체하지 않는다.
+- 주문 상세는 **기본 / 조회 불가 / 부분 조회**의 세 상태로 구분한다. Figma 정상 상세
+  `344:49964`, No Data `475:77664`(App `475:77704`), 조회 가능한 타 의사 주문
+  `475:77743`/상위 설명 `475:75588`을 재확인했다. 부분 조회는 내용·파일·3D 조회를 유지하면서
+  승인/반려·주문 수정/취소·채팅 작성·Case 제목 편집 등 허용되지 않은 기능을 제한하는 상태다.
+- **확정 화면 정책·현재 연결한 Member/기존 API 기준의 웹·Office 앱 FE 개발과 제품 commit/push는 완료**다.
+  이는 새 채팅 API 전환이나 최종 BE 권한 계약 전체 연동 완료를 뜻하지 않는다.
+  실계정/실기기 QA와 실제 서버 조회 범위·접근 거절 확인도 별도 잔여다. 전체 잔여를 QA만으로 축소하지 않는다.
+- 본인 주문의 현재 Case 이외 관련 Case 전체를 편집 가능하게 확장하는 요구는 확정되지 않았다.
+  담당 필드 부재만으로 이를 FE 개발 잔여나 필수 BE 대기로 분류하지 않는다.
+  native 최초 조회 실패의 기존 fallback 유지 역시 승인된 범위이며 새 매핑을 개발 잔여로 단정하지 않는다.
+- 웹의 개발 기준인 `master`와 Office 앱 PR 대상 `develop`에 대한 전체 diff를 확인한다.
+  웹의 실제 전달 PR 대상은 의도한 배포 버전의 `release/vX.Y.Z`이며 master 기준과 구분한다.
+  리뷰를 위한 PR 준비 단계와 실계정 QA·최종 merge/배포 준비는 구분한다. PR은 아직 생성하지 않았다.
+
+### 2026-10-13 PR 검토 준비 확인
+
+- 제품 feature HEAD/원격 일치와 clean을 재확인했다. 사용자 질문은 PR 준비 단계 확인이며
+  이번 확인에서 PR 생성·실제 target 통합·merge·배포는 수행하지 않았다.
+- 웹 target `origin/master=aff278a43`는 feature HEAD의 조상이다. behind 0/ahead 14,
+  실제 diff **167파일(+10,307/-1,310)**이고 미해결 충돌은 없다. 권한관리와 전체 DEV Swagger
+  생성에 따른 DTO/메서드 변경, 이전 Lab optional 조건·번역 보존분을 PR 설명에서 구분한다.
+  `.github`/scripts/package/lockfile/Admin 제품 소스/DLOS/icons에는 target 대비 차이가 없다.
+  master 기준 코드 검토는 가능하다. 웹 전달 PR은 배포 대상 release를 정한 뒤 그 target의
+  실제 diff를 다시 확인해야 한다. 현재 DL-16317/DL-16319 fixVersions는 빈 값이며,
+  확인한 원격의 최신 버전 release는 이미 완료된 `release/v1.88.0`이다.
+  현재 master나 완료된 release를 임의 전달 대상으로 선택하거나 새 release를 만들지 않는다.
+- Office 앱 target **`origin/develop=2bc7d04dd92136b7a63a3d8c4d4e288afa867102`**,
+  merge-base `19f68100`이며 develop만 17커밋/feature만 7커밋이다.
+  feature의 7개 커밋은 모두 권한관리이고 실제 PR diff **60파일(+5,574/-403)**은
+  src 42·테스트 18파일이다. legacy monorepo/native/lockfile/workflow의 관계 없는 변경은 없다.
+- 읽기 전용 `merge-tree`에서 앱 충돌 **6파일**을 확인했다: `MessageInput.test.tsx`,
+  `MessageInput.tsx`, `MessageTemplate.tsx`, `DesignConfirmationScreen.tsx`, `OrderScreen.tsx`,
+  `useUploadOrderFile.ts`. Draft PR로 코드 검토는 가능하지만, 정상 통합/merge 준비까지 끝난 것은 아니다.
+  앱 PR 진행 작업에서는 develop의 업로드 잠금·덴처 동작·이전 화면 복귀와 feature 권한 guard를
+  함께 보존해 통합해야 한다. develop의 `OrderDentureWorkflowSection.tsx:437` 상세 캐시 쓰기도
+  직원 기준의 새 상세 키 helper에 맞춰야 한다. 실제 코드 변경/통합 뒤에는 비례 검증이 필요하다.
+- Web 하위 Jira 댓글 **44418**의 잘못된 Pickup/관련 Case 개발 잔여 문구도 사용자 확정 기준으로
+  수정했다. 개발 완료와 실계정 QA 잔여를 분리하며 진행 중 상태를 유지한다. 상위 댓글은 쓰지 않았다.
+
+### 2026-10-13 백엔드 부분 배포 보고·계약 재확인
+
+- 사용자는 백엔드가 아직 전부 배포된 것은 아니며 어제 변경도 API 교체보다 Member 추가로
+  보인다고 전했다. BE 전체 배포 완료로 취급하지 않는다.
+- `d374b77e7^ → d374b77e7`의 이전/이후 생성본 비교에서 권한관리 관련 계약 변화는
+  MEMBER enum 추가가 중심이다. `OrderDto` 전체는 동일하고 dentist/dentistId/patientCaseId/
+  isReviewable, 환자/Case/주문/Draft의 기존 계약도 유지됐다. 앱 isReviewable 타입 추가는
+  오래된 앱 생성본 보완이며 신규 Member용 BE 필드가 아니다(웹에서는 9월 11일 이미 존재).
+- 이번 확인의 최신 DEV 원본은 `/tmp/dentlink-permission-member-contract-check-20261013.json`이다.
+  오늘 첫 generate 때 보존한 `/tmp/dentlink-permission-dev-swagger-20261013.json`과 비교하면
+  **POST `/office/chat-messages/orders/{orderId}`가 추가**되고 기존 `/office/chat-messages`
+  GET/POST에 deprecated 표시가 추가됐다. 새 본문 `OrderChatMessageCreateDto`는 message/fileIds,
+  orderId는 path다. 기존 endpoint의 본문/응답 구조는 유지된다. 결제 관련 변경도 별도로 있다.
+  따라서 현재 Swagger 전체가 Member enum만 바뀐 상태라고 단정하지 않는다.
+- 어제 배포 직전/직후의 Swagger 원본은 현재 임시 경로에 없어 어제 배포 전체 diff를 확정하지
+  않는다. 위 새 채팅 선언은 오늘 보존본과 현재 조회 사이의 차이이며 어제 배포로 날짜를 붙이지 않는다.
+- 새 담당/공유/과거 참여/행동 권한 필드나 전용 거절 code 명세는 확인되지 않았다. 서버 내부의
+  조회 범위/권한 검사는 기존 API 구조 그대로도 바뀔 수 있으므로 Swagger만으로 시행 완료를 증명하지 못한다.
+- 이번 확인은 읽기 전용이며 제품 HEAD/코드는 그대로다. 새 채팅 선언을 제품 generated 파일이나
+  실제 caller에 반영하지 않았다. BE 최종 범위가 확정돼 재개하면 Swagger를 갱신하고 새 주문별 채팅
+  발송 계약과 기존 deprecated 경로의 지원/전환 정책을 확인한 뒤 필요한 FE 연결을 검토한다.
+
+### 2026-10-13 14:04 KST Swagger·실사용 채팅 재확인
+
+- 같은 DEV `/v3/api-docs`를 재조회하고 요청에 no-cache도 지정했다. 두 응답의 JSON과 SHA256이
+  동일했고 응답 Date는 05:04:48 UTC, Cache-Control은 no-cache/no-store다.
+  `/tmp/dentlink-permission-chat-recheck{,-nocache}-20261013.json`이 해당 원본이다.
+- 현재 문서에는 새 주문 발송 POST `/office/chat-messages/orders/{orderId}`가 있다.
+  기존 `/office/chat-messages` GET/POST는 남아 있고 deprecated다. chatId 기반
+  `/office/chats/{chatId}/messages` GET/POST도 문서에 있으나 이들은 첫 보존본에도 있던 경로다.
+  따라서 '교체 Swagger 전체가 아직 미배포'라는 전달과 현재 조회 문서의 대상/환경/버전을 맞춰야 한다.
+  이 문서 조회로 실제 인증 요청 성공이나 BE 최종 정책 배포까지 확인한 것은 아니다.
+- 빠진 4개 GET(`/office/chats`, `/office/chats/{chatId}/messages/participants`,
+  `/office/chats/latest/participants`, `/office/chat-messages/participants`)은 웹/앱의 실제 화면 caller가 없다.
+  앱에는 일부 미사용 서비스/query와 옛 generated 선언이 남아 있으나 활성 화면 호출은 없다.
+- 반대로 deprecated GET/POST `/office/chat-messages`는 웹 `useLinkTalk`, 앱 `useMessage`에서
+  조회/폴링/페이지/일반 발송에 실제 사용 중이다. 주문 ORDER와 고객지원 DENTLINK가 같은 경로를 쓴다.
+  신규 주문 POST와 chatId 기반 GET/POST로의 실제 caller 전환은 **아직 미적용**이다.
+- 새 주문 POST는 ORDER 일반 전송에 대응하며 기존 GET·고객지원·별도 답글까지 일괄 교체하는
+  계약이 아니다. 필수 전환 대상/시점, 빈 채팅·chatId 확보·주문/고객지원 분기·답글 지원을 BE와 확정한 뒤
+  해당 FE 전환을 별도 작업으로 진행해야 한다. deprecated를 즉시 서버 호출 실패나 삭제로 해석하지 않는다.
+- 우선 완료: 확정 UI/상세 세 상태·Member enum·기존 담당 정보 기반 행동 제어·로컬 검증·제품 원격 보존.
+  미완료/재확인: 채팅 전환 범위와 실제 caller 적용, 최종 BE 조회/접근 정책 및 실계정·실기기 QA,
+  앱 develop 통합 충돌/웹 전달 release 선택과 실제 PR·merge·배포.
+
+### 실제 계약과 디자인 기준
+
+- 웹 `pnpm generate:api-type`, 앱 `yarn swagger-typescript-api-dev`를 실제 실행해
+  `https://dev-api.dentlink.io/v3/api-docs`의 계약을 생성했다. 공개
+  `/codes/authority-type?serviceType=OFFICE` 응답에서도 OWNER=Admin,
+  PAYMENT_MANAGER=Billing Manager, EDITOR=Manager, **MEMBER=Member**와 code `0000`을 확인했다.
+- 생성 계약에 MEMBER와 기존 employee/dentist ID, `OrderDto.isReviewable`이 있다.
+  담당 의사 선택 값과 활성 직원의 본인 ID는 employee ID 기준이다. 담당·공유·과거 참여의
+  새로운 관계 플래그, `canAction` 같은 필드, 새로운 접근 거절 업무 code는 확인되지 않았다.
+  목록 GET의 서버 응답 범위를 사용하며 FE에서 담당 이름 비교나 임의 목록 잘라내기를 하지 않는다.
+- [확정 Figma 475:75511](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=475-75511&m=dev)은
+  **조회 가능한 타 의사 주문을 보는 Member** 화면이다. 주문 변경/취소·Case 제목 수정·승인/거절·
+  채팅 작성/첨부는 제한하고 파일·URL·3D·대화 조회를 유지한다. **환자 정보 Edit은 유지한다.**
+  Member 전체를 읽기 전용으로 만들지 않으며 기존 EDITOR 허용 경로는 Member도 허용한다.
+  비용/청구 경로의 OWNER/PAYMENT_MANAGER 조건은 그대로다.
+- NEW Case는 본인 담당으로 고정하고 FOLLOW_UP은 기존 담당을 유지한다. 일반 환자 목록은
+  서버 범위를 사용하며 주문 1단계는 치과 전체 환자/Case 선택을 유지한다. 담당 미지정 또는
+  본인 담당 Draft는 이어하기/삭제를 허용한다. 미확정 역할/직원/담당 상태의 행동은 허용하지 않는다.
+- 리뷰 대상은 서버의 `isReviewable`로 확인하고 본인이 작성한 기존 리뷰 수정은 유지한다.
+  to-review는 담당된 작성 대상, own은 로그인한 사용자가 여러 소속에서 작성한 리뷰라는
+  기존 정책을 보존했다. 단순 Member 역할만으로 리뷰를 일괄 금지하지 않는다.
+
+### 웹 구현·Git 위치
+
+- `/Users/parkjongsun/Repository/dentlink-client-permission`, `feature/DL-16317`.
+  **HEAD/upstream/실제 원격 `1c67612c3506090706704c558ac07852d739a518`**, clean.
+  마지막 원격 확인의 master **`aff278a433b2d4bc6f8e606a7fb12b6a5b18a407`**가 HEAD의 조상이다.
+- 기존 진행 중이던 693b8b4 통합을 보존해 `1718b2cd5`로 마쳤고, 이후 원격 전진
+  b229a944/aff278a43을 각각 `b90dd3234`/`d3bda388e`로 통합했다. reset/stash/rebase하지 않았다.
+  실제 계약 연결 `d374b77e7`, 종료된 화면의 리뷰 저장 차단 `c015a9bc9`, 테스트 lint 정리
+  `31a9e2920`, 소속 전환 뒤 이전 요청의 화면 이동 차단 `1c67612c3`을 정상 commit/push했다.
+- generated Admin/Lab/Office/data-contracts 4개를 최신 DEV 생성물로 갱신했다. Member의
+  주문/환자/보드 필터, 역할 표시, 초대 분석 라벨, 새 Case UI/RHF/최종 전송값에 실제 역할을 연결했다.
+  현재 역할·직원 ID를 목록/건수/보드/타임라인/Draft/주문 1단계 쿼리 키에 반영하고 소속/역할
+  변경 시 이전 누적 보드·응답을 재사용하지 않는다. 서버 결과 범위나 prefix invalidation은 유지했다.
+- 주문 상세·직접 편집/승인·Remake에 현재 직원/주문/역할/담당 조건을 연결했다. 실제 주문 GET
+  HTTP 403은 기존 NoData/홈 이동으로 처리하되 기존 소속 전환 code `2131`은 유지한다.
+  401/네트워크 오류는 권한 거절로 바꾸지 않는다. 확인된 담당 변경은 현재 직원의 주문 캐시에
+  새 담당 정보를 먼저 반영해 후속 조회 실패가 이전 본인 담당 상태를 되살리지 않게 했다.
+- 환자 Edit은 조회 가능한 주문에서 유지하고, Case 편집은 본인 주문의 현재 Case ID만 편집 허용하도록 구현했다.
+  다른 관련 Case의 담당은 `CaseListDto`에 없고 Pickup도 dentistName만 있어 이름으로 추정하지 않는다.
+  Pickup은 기존 링크 이동을 유지하며 상세의 현재 접근 조건으로 처리한다.
+  현재 Case 이외 관련 Case 편집 확대는 확정 요구가 아니며 개발 잔여로 분류하지 않는다.
+  비동기 검증·화면 종료·직원/주문 변경 후 보관된 작성/삭제/다음 주문/승인 callback은 차단한다.
+  이미 전송한 HTTP 자체를 취소하거나 서버 변경을 되돌리는 기능은 추가하지 않았다.
+
+### 치과 앱 구현·Git 위치
+
+- `/Users/parkjongsun/Repository/dentlink-app-permission`, `feature/DL-16317`.
+  **HEAD/upstream/실제 원격 `72a79146aaba1054827ab3dbd4540f274373a4ef`**, clean.
+  기존 오래된 feature base를 보존했다. 이번에 앱 main/develop merge·재기준화·PR 생성은 하지 않았다.
+- 앱 전체 generator 결과는 unrelated Product/Option/OptionGroup 계약 변화로 기존 타입 진단
+  18개에서 321개로 늘어났다. 전체 생성물은 임시 경로에 보존하고, **실제 generator 출력의
+  authority 필드 14곳과 `OrderDto.isReviewable` 블록만 자동 추출해 반영**했다.
+  임의 역할/DTO를 작성하지 않았고 관계 없는 전체 상품 계약 마이그레이션은 제외했다.
+- Member 필터/NEW Case 본인 지정, 최신 주문 정보 확인 후 직접 편집/승인/채팅 작성,
+  Draft 이어하기·삭제, 리뷰 작성 허용 여부를 연결했다. 기존 본인 리뷰 수정은 유지한다.
+  직접 주문 제출에는 역할/직원 context 변경과 Member 본인 담당 검사를 연결했다.
+  Draft 행동과 리뷰·첨부/업로드 경로에서는 화면 종료·대상 변경·지연 처리 차단도 검증했다.
+- native 주문 상세/직원 조회 키를 직원 기준으로 통일하고 역할 변경 시 해당 소속 상세를 다시 읽는다.
+  주문/건수/Draft·환자 일반/1단계/Case·홈 요약 조회에는 확인된 직원+권한을 추가했다.
+  미확정/mismatch 상태의 자동/수동 조회는 실제 API 전에 차단한다.
+- 웹 일반 resource HTTP 403 처리는 적용했지만 **native는 알려진 code `2005` 및 기존 세션 처리,
+  최초 조회 실패 toast/back을 유지**한다. Swagger에 새 거절 규칙이 없어 모든 native 403을
+  신규 NoData로 바꾸지 않았다. 승인된 기존 fallback이며 실제 거절 응답 확인은 QA 항목이다.
+
+### 검증·증거 경계
+
+- 최종 Clinic Jest **32 suites / 257 tests 통과**, Clinic/Lab/Admin 타입 검사와 production build 통과.
+  icons/DLOS 타입·build, DLOS **45 files / 381 tests**, 최신 package artifact 테스트 **17개** 통과.
+- 정상 pre-push 통과: Clinic/Lab/Admin lint **오류 0개**, 경고 각각 **223/186/393개**.
+  Admin DLOS guard **60/baseline 60**, guard 테스트 **6개**, shared configs **21개**,
+  shared hooks **32개** 및 coverage 비교 통과. 첫 push의 신규 테스트 fixture lint 오류 2개는
+  수정·회귀 검증 후 정상 재실행했다. 훅 우회/coverage baseline 변경은 하지 않았다.
+  서비스 검사 통과를 shared 전체 타입/lint 통과라고 확대하지 않는다.
+- 앱 관련 Jest **23 suites / 157 tests 통과**, scoped lint 오류 0개/기존 경고 8개,
+  prettier/diff 통과. 앱 전체 타입 로그는 기존 **18개 진단과 동일**하며 전체 타입 통과는 아니다.
+- iOS **70 assets**, Android **74 assets** JS bundle 생성 성공. 실제 symlinked node_modules를
+  드러내는 임시 Metro 설정을 `/tmp`에서 사용했으며 제품 Metro 설정/lockfile은 바꾸지 않았다.
+  실행 중인 iOS simulator/ADB device가 없어 실제 앱 실행·실기기 QA 증거는 아니다.
+- Swagger snapshot·전체 앱 생성물·검증 로그·임시 설정은 `/tmp/dentlink-permission-*`에 있다.
+  원격에 보존된 코드는 다음 기기에서 재검증할 수 있으나 임시 산출물 자체는 휴대되지 않는다.
+
+### Jira·대기·다음 시작점
+
+- 사용자 담당 Web [DL-16319](https://innovaid.atlassian.net/browse/DL-16319)에 댓글 **44418**,
+  Office App [DL-16752](https://innovaid.atlassian.net/browse/DL-16752)에 댓글 **44419**로
+  실제 계약 연결·코드 보존·검증·실계정/실기기 잔여를 기록하고 재조회했다.
+  두 카드 모두 **진행 중**을 유지했다. 상위 DL-16317에는 댓글을 쓰지 않았다.
+- 승인된 이번 FE/검증/원격 정리를 마쳤으며 **추가 지시 전 대기**한다. 자동 외부 상태 확인,
+  새 테스트 계정 설정, PR/merge, staging/배포/CodePush를 이어가지 않는다.
+- 재개 시 개인 context와 해당 feature를 안전하게 refresh하고 아래를 확인한다.
+  0. **BE 최종 명세·채팅 전환 범위 확인을 먼저** 한다. 현재 deprecated GET/POST의 최종 대체 대상,
+     ORDER/DENTLINK/빈 채팅·chatId/답글 흐름과 기존 경로 지원 시점을 확인해 후속 구현 범위를 정한다.
+  1. Member 실계정 및 본인/타 의사/공유/과거 참여 주문, 담당 미지정 Draft·전체 환자 선택 데이터.
+     FOLLOW_UP 생성·Draft 복원 뒤 담당 지정 결과도 서버 업무 정책과 대조한다.
+  2. 실제 서버 GET 범위·담당 변경 후 조회 상실·직접 주소 접근과 native 거절 code/응답.
+  3. Pickup 링크 이동 후 정상/조회 불가/부분 조회 상태를 확인한다. 관련 Case 편집 확대 등
+     미확정 정책은 새 요구가 제시될 때 검토하며 현재 개발 잔여로 취급하지 않는다.
+  4. 인증된 개발서버 화면과 앱 실기기 QA. 앱 일반 PR 정책은 develop이며 기존 feature base와
+     현재 delivery reference 차이를 확인한 뒤, PR/릴리즈 작업은 새 승인 범위에서 진행한다.
+
+## 이력 — 2026-10-13 새 세션 인수인계·개발서버 기준 재개
+
+- 같은 등록 권한관리 프로젝트에 후속 세션
+  **`01a132e9-6555-7a02-9c72-4dad9c04cc64`**를 생성했다. 실제 적용 설정
+  **gpt-6.1-sol/ultra**와 같은 프로젝트 cwd를 새 turn_context에서 확인했다.
+  새 세션이 진행 중인 merge 보존·개발서버 Swagger 생성/실제 계약 연결·최신 master
+  통합과 검증·commit/push·개인 메모리·하위 Jira 정리를 이어가겠다고 응답하고 작업을 시작했다.
+  신규 사용자 지시는 생성 prompt에 원문 그대로 포함했다. 기존 세션은 인수인계 후 보관한다.
+- 사용자가 이 대화에서 응답 재연결이 반복돼 **같은 권한관리 프로젝트 폴더에 새 세션을
+  만들고 진행 상태를 인수인계한 뒤 기존 세션을 보관**하도록 요청했다. 기존 진행 내용을
+  그대로 이어가며 아래 신규 지시를 추가한다. 이 세션에서는 이후 제품 구현을 중복 진행하지 않는다.
+- **새 지시:** 스테이징 서버는 확인하지 않는다. 개발서버에 백엔드가 배포된 것으로
+  보인다는 사용자 보고를 기준으로 개발서버 Swagger를 실제 확인·generate한 뒤,
+  생성된 응답/역할/관계 계약과 최신 master·확정 디자인을 대조해 필요한 FE 작업을 진행한다.
+  배포 여부와 계약은 새 세션에서 확인할 사항이며 이번 세션에서 Swagger 생성/실연동은 하지 않았다.
+- **최신 master 통합 진행 상태:** 웹 HEAD/원격은 여전히
+  `a6392cc67862590aea48889f927944d192baa002`. `git merge --no-commit --no-ff origin/master`로
+  `693b8b4c4d247716db05ea415bc7bd1d33dab4cc`를 통합 중이다. **MERGE_HEAD가 남아 있고
+  merge commit/push는 아직 하지 않았다.** 기존 커밋으로 임의 reset/stash/rebase하지 않는다.
+- 3개 충돌(Lab LinkTalk·mobile title buttons·title buttons hook)을 해소했고 unmerged
+  파일은 없다. master의 Lab 주문 소유/읽음/context 보호, 신규 밀링 버튼,
+  의사 이름 추적·앱 Next Order를 유지했다. 새 밀링 버튼도 기존 주문 변경 조건과
+  보관 callback 실행 guard를 적용해 권한 제어 우회를 방지했다. Lab 신규 정책을 추가하지 않았다.
+- 웹 index에는 master 변경 **1,463파일 staged**가 있고, 기존
+  `clinic/src/lib/Order/orderDetailActionPermissions.test.tsx`에 밀링 desktop/mobile
+  회귀 2개가 **unstaged**로 남아 있다. untracked 없음. 새 세션은 실제 index/worktree를
+  재확인해 테스트 파일까지 stage하고 통합 검토/필수 훅 후 merge commit/push를 마무리한다.
+- `pnpm install --frozen-lockfile` 성공, icon workspace 링크/최신 패키지 동기화 완료.
+  통합 후 Clinic/Lab/Admin 타입 검사 모두 통과, Clinic **25 suites/182 tests** 통과,
+  icons/DLOS 패키지 타입 검사 통과, DLOS **45 files/381 tests** 통과,
+  해소 파일·추가 테스트 포맷 및 diff 검사 통과. production build·새 pre-push
+  Admin DLOS guard/coverage·통합 commit/push는 아직 미완료다.
+- 치과 앱은 HEAD/원격 `445ced6eba5093d2cdc63d050d00bee15396e6c7`, clean이다.
+  feature **16 suites/108 tests**를 재실행해 통과했다. 이번 웹 master 통합에서 앱
+  develop/main을 병합하지 않았고 앱 제품 코드도 추가 변경하지 않았다.
+- 10월 13일 인수인계 직전 `git ls-remote`로 웹 master가
+  **`b229a944ebc77cd1ec6fc68a531edfbdfb78a6bb`**로 추가 전진한 것을 확인했다.
+  새 세션은 기존 merge 작업을 보존하면서 다시 fetch하고 이 최신 변경도 통합·검증한다.
+  로컬 `origin/master`/MERGE_HEAD의 693b8b4 기준과 실제 원격 최신 SHA를 혼동하지 않는다.
+- **API 사용 조사:** GET `/office/chats/{chatId}/messages`는 확인한 웹·치과 앱에서
+  실제 호출자가 없다. 웹 generated 선언과 앱 `findChatMessagesByChatId` 서비스 함수만
+  남았고 실제 조회는 GET `/office/chat-messages`를 사용한다. 삭제/백엔드 폐기는 수행하지 않았다.
+- 기존 승인 유지: 필요한 FE 구현/검증, 제품 commit/push, Git 개인 메모리와 사용자
+  담당 하위 Jira 정리까지 진행하고 대기한다. Web DL-16319·Office App DL-16752를
+  제품별로 정리하며 **상위 DL-16317 댓글 금지**, 기공소 웹/앱 신규 구현 제외를 유지한다.
+  PR 생성·merge·배포·CodePush는 별도 승인 범위다. feature 브랜치로 master를 통합하는
+  이번 허용과 protected branch/PR merge는 서로 다르다.
+- 새 세션은 기존 세션 실제 설정 **gpt-6.1-sol/ultra**를 확인해 같은 설정으로 준비한다.
+  개인 체크포인트와 실제 Git 상태를 기준으로 인수인계하고, 오래된 대화 전체를 복제하지 않는다.
+
+## 현재 상태 — 2026-10-12 확정 디자인 보완·최신 master 참조·원격 보존
+
+- 사용자가 확정 디자인의 누락과 디자이너가 글로 설명한 조건까지 확인·수정하도록
+  재개했다. 아래 10월 6일의 중단 기록은 당시 이력이며 이번 재개 범위에는 적용하지
+  않는다. 기준은 [Figma 주문 상세 475:75511](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=475-75511&m=dev).
+  **기공소 웹·앱은 사용자가 별도 작업 완료·배포 예정이라고 하여 이번 구현에서 제외했다.**
+  백엔드는 아직 배포되지 않았다는 사용자 설명을 기준으로, 임의 서버 계약을 만들지 않았다.
+- 기존 제품 commit/push·개인 Git 메모리·사용자 담당 하위 Jira 정리 승인을 유지해
+  이번 보완을 구현·검증·commit/push했다. PR 생성·merge·배포·CodePush는 하지 않았다.
+  상위 DL-16317에는 댓글을 쓰지 않았다.
+
+### 이번에 보완한 범위
+
+- **치과 주문 상세 실제 페이지:** 준비한 주문 조회·주문 변경·환자/Case 수정·LinkTalk
+  읽기 전용·담당 의사 변경 경고 조건을 실제 페이지에서 전달할 수 있게 연결했다.
+  아직 실제 Member/관계 API에서 조건을 계산하는 연결은 아니다. 기본값은 기존 동작을 유지한다.
+- **조회 불가 화면:** 디자인의 `No order data available.`·`Go to Home`과 실제 SVG
+  일러스트를 적용했다. 조회 불가일 때 주문 내용·사이드패널·관련 모달을 숨기며,
+  PC는 홈 경로, 앱은 기존 네이티브 HomeTab/HomeScreen 메시지로 이동한다.
+  조회 권한이 사라지면 열린 상세 모달을 정리하고 오래된 RN 수신 callback의 재진입도 막는다.
+  기존 404 이동·앱 최초 조회 실패의 toast/back은 서버 거절 계약이 없어 변경하지 않았다.
+- **Case/담당 의사 설명:** 모바일 Case 제목 수정은 제공하지 않는다는 디자인 설명을
+  적용하고 이전 수정 callback도 차단했다. 담당 의사 변경 경고가 표시되는 모달은
+  디자인 높이 729px을 적용하고 일반 모달은 기존 692px을 유지했다.
+- **웹 직접 승인 화면:** 주문 변경과 별도의 승인 조건을 page/hook/UI/capture까지
+  전달했다. 읽기 전용일 때 승인·거절·주석 작성을 숨기고 파일·URL·버전 조회와
+  다운로드는 유지한다. 제한 변경·대상 변경·unmount 후 이전 callback, 파일 처리와
+  지연 capture가 행동을 재개하지 않는지 확인했다. Planning/Design 승인 화면이 대상이며
+  별도의 Case Preference 설문에는 확인되지 않은 제한을 추가하지 않았다.
+- **치과 앱 직접 승인 화면:** 같은 범위의 조회/행동 분리와 이전 callback·비동기
+  파일 처리·지연 주석 차단을 준비했다. 기존 native LinkTalk는 읽기 전용 전달과
+  입력/첨부 제한이 이미 있어 재검토만 했다. 앱 주문 상세는 WebView 공통 화면이다.
+- Figma PC/모바일/앱 화면과 내부 설명을 MCP context·screenshot으로 대조했다.
+  3D 미리보기·채팅 조회·파일 조회는 유지하고 읽기 전용 작성/첨부 조건을 확인했다.
+  기공소 caller 수정·배포 예정 작업의 재적용은 하지 않았다. 기존 branch의 과거 Lab
+  사전 작업은 보존하며 이번 Lab 완료 보고를 우리 배포/런타임 증거로 간주하지 않는다.
+
+### 최신 master 참조와 Git 위치
+
+- 사용자 요청으로 `origin/master`를 다시 fetch하고
+  **`693b8b4c4d247716db05ea415bc7bd1d33dab4cc` / Release/v1.88.0 (#4688)**를 확인했다.
+  기존 기준점에서 대규모 변경과 Lab/shared 충돌이 예상돼 **master 전체를 merge한 상태는 아니다.**
+  이번 치과 구현에 필요한 출시 동작을 선별해 반영했다.
+- 최신 master의 앱 Denture 다음 주문 지원을 보존했다. 모바일 Next Order의 과거
+  사용 불가 팝업을 제거하고 권한 guard는 유지했다. 다음 주문 생성 성공 시 앱의
+  `OrderScreen` 이동을 최신 `useOrderDetail.ts`와 동일하게 반영했다.
+- 향후 통합에서는 master의 밀링 callback/의사 이름 추적·아이콘 패키지와 generated
+  경로·승인 첨부 한도 변경을 보존해야 한다. 현재 Clinic은 밀링 callback을 전달하지
+  않으며 Lab 정책을 임의 확장하지 않았다. 전체 최신 패키지 통합·통합 후 QA는 남았다.
+- 웹 worktree `/Users/parkjongsun/Repository/dentlink-client-permission`,
+  `feature/DL-16317 / origin/feature/DL-16317`.
+  **HEAD/upstream/실제 원격 `a6392cc67862590aea48889f927944d192baa002`**, clean.
+  디자인 보완 `26aaa0747`, 최신 앱 다음 주문 호환 `a6392cc67`를 push했다.
+  기존 master base `9bed1f7bd753e229478302413c0ec9a7e7a11dc2`는 그대로다.
+- 치과 앱 worktree `/Users/parkjongsun/Repository/dentlink-app-permission`,
+  `feature/DL-16317 / origin/feature/DL-16317`.
+  **HEAD/upstream/실제 원격 `445ced6eba5093d2cdc63d050d00bee15396e6c7`**, clean.
+  기존 오래된 main 기준 feature를 보존했다. 현재 앱 정책상 새 일반 기능의 기준과 PR
+  대상은 develop이며, 이번에 브랜치 변경/재기준화/PR 생성은 하지 않았다.
+
+### 검증과 증거 경계
+
+- Clinic 전체 Jest **24 suites / 177 tests 통과**. 이번 승인 11·실제 페이지 5·
+  모바일 Case 1·앱 Next Order 1개를 포함한다. Next Order는 실제 mobile title/button과
+  workflow label helper를 사용해 허용 시 실행/팝업 없음, 제한 후 보관 callback 차단을 검증했다.
+- 웹 Clinic/Lab/Admin 타입 검사 통과. 일반 pre-commit/pre-push를 정상 실행해
+  제품 push가 성공했다. 전체 세 서비스 lint는 각각 기존 경고 223/189/410개·오류 0개이며,
+  shared coverage 비교는 baseline과 같다. 훅을 우회하거나 baseline을 수정하지 않았다.
+- 이번 승인 shared 검사에서는 기존 타입 진단 579개가 그대로이고, scoped shared
+  lint의 기존 오류 1개·경고 2개도 그대로였다. shared 전체 타입/lint 통과라고 보고하지 않는다.
+- 치과 앱 feature Jest **16 suites / 108 tests 통과**, 직접 승인 회귀 8개 포함.
+  실행은 `yarn jest --config jest.config.js --runInBand __tests__/features`를 사용한다.
+  전체 앱 타입 오류는 기존 **18개 동일**, 추가 진단 없음. scoped lint 오류 0개,
+  기존 array-index-key 경고 2개·기존 RN StrictMode 경고는 별도로 남았다.
+- 실제 NoData 컴포넌트를 임시 외부 fixture로 렌더링해 1440×1080/375×812에서
+  200×195px 내용·SVG 원래 크기·홈 버튼 실행을 확인했다. 임시 서버는 종료했고
+  제품 테스트 페이지/preview harness/설정은 추가하지 않았다. 임시 자료와 로그는 /tmp에
+  있어 Git으로 이동하지 않는다. 실제 로그인 페이지 전체/실기기/서버 Member QA 증거는 아니다.
+- 실제 Member·담당/공유/과거 참여 API 연결, 서버 GET 범위/거절 code,
+  담당 변경 후 조회 상실 응답, 계정/상태별 UI·직접 URL·실기기 QA는 여전히 남았다.
+  API 미연결 상태를 실제 신규 권한 시행 완료라고 보고하지 않는다.
+
+### Jira·다음 시작점
+
+- Web **DL-16319** 제목을 `[FE][Web] 담당 환자 제한 및 Member 권한 적용`으로
+  정리하고 진행 댓글 **44414**에 보완·검증·남은 실연동/통합 QA를 기록했다.
+  기존 본문 null은 유지했다.
+- 영향을 받는 제품별 카드 규칙에 따라 치과 앱 **DL-16752**를 상위 DL-16317의
+  별도 하위 카드로 만들었다. 제목은 `[FE][Office App] 담당 환자 제한 및 Member 권한 적용`,
+  담당 Frankie, 진행 중이며 작업 구분과 실제 연동/실기기 잔여는 댓글 **44415**에 기록했다.
+  두 카드의 제목·상태·담당·상위·최신 댓글을 재조회했다. 기공소 카드는 만들지 않았다.
+- 현재 확정 디자인에서 API 없이 가능한 이번 보완은 원격에 보존했다. 다음 시작은
+  실제 응답 설계/예시를 받아 준비한 개별 조건에 매핑하는 작업이며, 그 전에는 기존
+  페이지/승인 화면에 임시 조건을 연결해 수동 확인할 수 있다. 서버 role 값만 바꿔 모든
+  제한이 자동 적용되는 상태는 아니다. 신규 정책/enum/endpoint를 추정해 추가하지 않는다.
+- 반복된 Codex 응답 끊김은 코드 결과와 구분했다. 요청 ID
+  `bb4c7d1b-a0ae-4bd2-96a6-e483c19e9621`의 10월 12일 18:30:39 KST 스트림 오류와
+  자동 retry 기록을 로컬 로그에서 확인했다. 앱 26.1007.30912/build 20156은 업데이트 검사
+  `up_to_date`였다. 원인은 미확정이며 오류 해결·서비스 장애·네트워크 문제를 단정하지 않았다.
+  로그 전송·앱 재시작·설정 변경은 하지 않고 코드/원격 상태를 재확인해 마무리했다.
+
+## 현재 상태 — 2026-10-06 하위 Jira 정리·메모리 저장 후 대기
+
+- 사용자는 현재 상태를 저장하고 대기하라고 명시했다. 이번에 허용된 작업은
+  개인 메모리와 사용자 담당 Jira 하위 카드 정리이며, 추가 제품 개발·테스트·
+  테스트용 UI 연결·자동 모니터링은 사용자 재개 지시 전까지 진행하지 않는다.
+- **Jira 정리 위치는 사용자 담당 하위 카드다. 상위 카드 댓글은 명시 요청이
+  있을 때만 작성한다.** 사용자는 기존 상위 댓글을 직접 삭제했다고 알렸다.
+  이 삭제 보고를 보존하며 삭제한 상위 댓글을 복구하거나 새 댓글을 쓰지 않는다.
+  공통 규칙은 `AI_WORKFLOW.md`의 Jira Work Updates에 저장했다.
+- DL-16319 담당 Frankie·진행 중 상태를 확인하고 제목을
+  **`[FE] 담당 환자 제한 및 Member 권한 적용`**으로 변경했다. 본문은 현재 별도
+  작업 전 준비 사항 추가가 필요하지 않아 기존 null을 유지했다. 진행 경과는
+  **댓글 44298**에 정리하고 제목·본문·담당·상태·댓글을 재조회해 확인했다.
+  개인 대기를 Jira ON HOLD나 전체 완료로 변경하지 않았다.
+- 댓글은 웹·치과 앱의 준비 범위, 실제 Member/담당·공유·과거 참여 연동과 기공소
+  잔여/상태별 화면 확인, 임시 조건을 실제 화면에 연결할 경우의 로컬 확인 방법,
+  10월 6일 이전 턴의 기존 관련 40개 테스트 재검증과 현재 개발 대기를 구분했다.
+  테스트용 연결·브라우저 시연이 이미 완료됐다고 기록하지 않았다.
+- 제품 코드는 기존 원격 보존 상태를 유지한다. 이번 closeout에서 웹
+  `53f1f9a0f4987114e2ea518ea2ea94894613b4c3`, 앱
+  `1dc7a361b06baa000edaca5361ec5fae26a7dabe`의 HEAD/upstream 일치와 clean을
+  재확인했다. 제품 파일 변경·새 테스트 실행·제품 commit/push·PR/배포는 없었다.
+- 최신 Git 개인 컨텍스트에는 Lab 앱 정본이 별도
+  `Innvoaid/dentlink-lab-app`, 기본 checkout
+  `/Users/parkjongsun/Repository/dentlink-lab-app`으로 등록돼 있다.
+  [Lab 앱 체크포인트](../dentlink-lab-app.md)를 다음 재개 때 참조한다. 아래 이전
+  조사 당시의 Lab checkout 미확인은 현재 정본 저장소 부재라는 뜻이 아니다.
+  권한관리 Lab 앱 구현/런타임 검증은 수행하지 않았다.
+- 다음 재개는 웹 치과의 기존 화면에 준비된 조건을 임시로 연결해 상태별 확인을
+  진행하거나 실제 API 설계에 연결하는 작업이다. 신규 서버 역할값만 하드코딩해서
+  모든 UI가 자동으로 바뀌는 상태는 아니다. 현재 상태와 이번 Jira 정리 규칙을
+  Git 개인 컨텍스트에 commit/push하고 대기한다.
+
+## 현재 상태 — 2026-10-06 FE 단독 조건 가정·화면 검증 방향
+
+- 사용자는 현재 상태를 저장한 뒤 외부 담당자를 제외하고 FE/Codex가 할 수 있는
+  작업·테스트를 진행하려고 한다. 서버가 특정 권한값을 준다고 가정해 UI/페이지
+  제한을 직접 확인하는 방법을 문의했다. 이 요청 범위의 FE 독립 검토·테스트는
+  이전 중단 이후 새로 허용된 범위이며, 실제 API 계약 확보만을 모든 작업의
+  착수 조건으로 삼지 않는다. 아직 제품에 테스트용 연결을 구현한 상태는 아니다.
+- 추천은 **웹 치과의 기존 실제 화면에 가정한 UI 조건을 주입하고, 필요한 API 응답을
+  fixture로 제공하는 로컬 검증**이다. 새 서버 enum/endpoint를 만들지 않고,
+  역할 이름·대상 관계·행동별 허용 조건은 테스트의 가정임을 명확히 구분한다.
+  기존 실제 로그인 역할은 유지하고 테스트 입력을 준비된 optional props에
+  연결한다. 서버 역할값만 MEMBER로 바꾸면 UI 전달은 바뀌지 않거나 기존
+  withAuthorization allowlist에서 거절될 수 있어 이것만으로 시연하지 않는다.
+- 시나리오는 기본 허용·주문 변경 제한·환자/Case 수정 제한·채팅 작성 제한·
+  시스템 CTA 제한·화면을 연 뒤 허용→제한 전환을 각자 독립 검증한다.
+  Member를 전부 조회 전용으로 해석하지 않는다. 공유/과거 참여처럼 정책 미확정인
+  관계는 조건 주입에 따른 FE 동작만 확인하고 실제 정책을 확정했다고 보고하지 않는다.
+- 수동 확인은 기존 페이지에서 PC/모바일 폭으로 메뉴·입력·버튼 표시와 실제 클릭을
+  확인한다. 자동 검증은 조건에 따라 보호된 행동 callback/요청이 실행되지 않는지와
+  허용 시 정상 동작을 확인한다. 목록/건수 mock은 서버 GET 필터링·서버 접근 제어의
+  검증이 아니다. 기본 권한과 신규 조건의 화면 연결 검증도 구분한다.
+- 기존 Pickup/LinkTalk Storybook 예시는 컴포넌트 조건 비교에 활용 가능하지만
+  기준선 버전/순환 import 문제와 시각 검증 미완료가 있어 첫 경로로 추천하지 않는다.
+  기존 E2E `page.route` fixture 방식을 참고할 수 있으나 공식 runner globalSetup은
+  실제 서버 계정/팀/온보딩을 준비한다. FE fixture 검증을 단순히 전체 E2E 실행으로
+  대체하지 말고 실행·준비 범위를 먼저 한정한다. 별도 제품 페이지/권한 엔진이나
+  정책을 추측한 서버 타입 변경을 전제하지 않는다.
+- 오늘 기존 Clinic의 `withAuthorization`, `linkTalkActions`,
+  `orderDetailLinkTalkActions`, `useOrderDetailPatientForm` 4 suites/40 tests를
+  실제 재실행해 전부 통과했다. 조건 변경 후 오래된 callback·검증 후 저장 제한과
+  기본 허용 동작의 기존 회귀 검증이다. 제품 파일 변경, 브라우저/실기기 시연,
+  전체 E2E/전체 테스트 재실행, 새 Member 서버 연동을 완료한 것은 아니다.
+- 제품 HEAD는 웹 `53f1f9a0f4987114e2ea518ea2ea94894613b4c3`, 앱
+  `1dc7a361b06baa000edaca5361ec5fae26a7dabe`의 앞선 확인 상태를 보존한다.
+  이번 웹 focused 테스트 뒤 Git clean을 재확인했다. 외부 담당자 메시지/Jira 수정은
+  하지 않고 이 체크포인트만 Git 개인 컨텍스트에 commit/push한다.
+
+## 현재 상태 — 2026-10-06 현황 재확인·담당별 다음 작업 정리
+
+- 사용자는 현재 상황과 사용자/Codex/다른 담당자의 다음 작업 브리핑을 요청했다.
+  이번 요청은 현황 조사이며 10월 2일의 구현 중단을 유지한다. 제품 수정·테스트
+  재실행·제품 commit/push·Jira 수정·PR/배포는 하지 않았다.
+- 개인 컨텍스트와 두 permission worktree를 `git pull --ff-only`로 동기화했다.
+  웹 `53f1f9a0f4987114e2ea518ea2ea94894613b4c3`, 앱
+  `1dc7a361b06baa000edaca5361ec5fae26a7dabe`로 기록과 같고 clean이다.
+  각 HEAD·upstream·실제 원격이 일치한다. 기존 optional UI 조건은 준비돼 있지만
+  실제 화면 호출부의 신규 Member/관계 응답 주입은 여전히 미완료다.
+- 공개 DEV Swagger를 `/tmp/dentlink-permission-status-20261006-swagger.json`으로
+  재조회했다. 937 paths/1374 schemas이며 10월 2일 phase4 JSON과 완전히 동일하다.
+  공개 문서에서 새 역할 enum·관계별 허용 행동 계약을 확인하지 못했다.
+  이것이 서버 작업/비공개 설계가 존재하지 않는다는 증거는 아니다.
+- Jira 상위 19개 하위 상태 및 FE/BE/기획/디자인 관련 본문·댓글을 확인했다.
+  FE DL-16319는 진행 중, BE DL-16320/16543/16564는 Leo 담당으로 진행 중이며
+  응답 명세는 해당 티켓에 없다. 기공소 디자인 DL-16595는 Oli 담당 진행 중,
+  기획 변경 반영 DL-16589는 Oli 담당 해야 할 일이다. 기획/기존 치과 디자인/TC
+  완료 상태는 실연동 완료나 남은 정책 차이 해소를 뜻하지 않는다.
+- 현재 Figma WF `1:6`과 연결 Notion의 권한표·TC를 재조회했다. Notion의 최종 편집은
+  9월 29일이며 권한 밖 Drive embed 1개는 여전히 미지원이다. 최신 WF의 현재 담당
+  환자 범위·Home의 내 주문+담당 환자 주문·주문1단계 전체 환자/Case·Draft 미지정/
+  본인·Pickup 공유 Case 예외를 확인했다. Pickup section 제목과 상세 설명도 달라
+  일반 TC의 일괄 차단 규칙을 임의 확정하지 않는다.
+- 앱 기존 fetcher는 일부 예외를 제외한 403에서 세션 만료를 처리한다. 새 권한 거절
+  HTTP/업무 code를 받아 접근 거절과 인증 만료를 구분해야 한다. 별도 Lab 앱 checkout은
+  `~/Repository` 바로 아래와 등록 worktree 범위에서 미확인이다. Office 전용 코드에
+  Lab 정책을 복제하지 않고 정본 저장소·브랜치·담당 범위를 Lab 담당에게 확인한다.
+
+### 다음 작업의 추천 순서와 요청
+
+1. **BE(Leo):** 기존 API 추가 필드 또는 신규 조회 API의 응답 설계/예시·적용 환경/
+   예정일을 받는다. 새 Member wire 값과 기존 역할 매핑, 로그인 직원/담당 의사 ID,
+   담당·공유·과거 참여별 허용 행동, GET 목록/건수/Draft 범위, 거절 code가 핵심이다.
+   전체 서버 구현 완료가 아니라 FE 조건에 매핑할 수준의 설계면 착수 가능하다.
+2. **기획(Yoonie)·디자인(Oli):** 남은 정책 차이만 확인한다. 현재/과거 담당·공유
+   대상의 조회/수정/채팅 범위, Pickup 공유 예외와 직접 URL 처리, 담당 변경 후 이동,
+   자동 담당 지정과 NEW/FOLLOW_UP/Draft 복원 정책을 동일 기준으로 맞춘다.
+   기공소 최신 화면 node와 치과/기공소 적용 범위도 확인한다.
+3. **사용자:** 위 자료와 제공 일정을 담당자와 조율하고 웹·앱/치과·기공소의 배포
+   묶음·우선순위를 확인한다. 기술적으로는 웹 치과부터 연결을 추천한다.
+4. **Codex:** 사용자 재개 지시와 매핑 가능한 계약이 갖춰지면 준비한 UI 조건에
+   실제 응답을 연결하고, 웹 치과 → 웹 기공소·치과 앱 → 확정된 기공소 앱 범위로
+   진행한다. 서버 GET 범위를 FE 필터로 대체하지 않는다. 직접 진입·담당/권한/소속
+   변경·거절·Draft 복원·실제 상태 QA를 검증하고 사용자/QA가 실제 기기와 최종
+   업무 동작을 확인할 수 있게 정리한다. 기존 역할 정상 동작도 함께 검증한다.
+
+## 현재 상태 — 2026-10-02 추가 개발 중단·재개 기준 정리 후 대기
+
+### 중단 결정과 재개 기준
+
+- 사용자가 추가 작업을 그만하고 대기 여부를 재고하라고 한 뒤, 대기 추천에 따라
+  정리하고 기다리라고 명시했다. **이번 중단 지시가 이전 자율 진행 지시보다 우선한다.**
+  사용자 재개 또는 구체적인 검토 지시 전에는 개발·테스트·추가 조사·자동 모니터링을
+  이어서 진행하지 않는다. 기존 permission worktree와 원격 branch를 보존한다.
+- 다시 검토하고 독립 점검한 결과, 현재는 대기를 추천한다. API 없이 준비할 주요 UI/
+  실행 조건과 확인된 보완은 정리했고, 다음 핵심 진도는 실제 역할·관계 응답의 연결이다.
+  API 없이 가능한 개선이 전혀 없다는 뜻은 아니다. 작은 보완의 가치는 실제 연동 시
+  구체적인 조건과 결함을 확인하면서 다시 판단한다.
+- 재개 기준은 사용자의 재개 지시와, 기존 제어 조건에 매핑할 수준의 역할·담당·공유·
+  과거 참여·허용 행동 응답 설계/자료다. 서버 조회 범위와 거절 응답도 함께 확인한다.
+  백엔드 구현 전체 완료나 모든 기획·디자인의 완벽한 확정을 기다려야 한다는 뜻은 아니다.
+  자료가 새로 생겼다는 이유만으로 자동 재개하지 않는다.
+- 이번 정리에서는 제품 코드와 테스트를 변경하지 않았다. 웹/앱의 clean 상태와
+  HEAD·upstream·실제 원격 SHA 일치를 재확인했다. Jira 기존 댓글 44240/44241에도
+  완료·잔여 범위가 정확히 남아 있어 중복 댓글이나 상태 변경은 하지 않았다.
+  현재 개인 대기를 Jira ON HOLD·전체 완료·PR/배포 완료로 해석하지 않는다.
+- 이 결정과 현재 체크포인트만 Git 개인 컨텍스트에 commit/push하고 대기한다.
+
+- 사용자가 반복해서 “혼자 할 수 있는 게 더 있으면 계속하고, 다 되면 이전처럼
+  마무리”하라고 지시했다. 기존 추천대로 진행·제품 commit/push·Git 메모리·Jira
+  정리 승인을 유지했다. 직전 메모·앱 채팅/Draft/Case 준비 이후 다시 검토해,
+  환자·Case 검증 후 저장 확인, 앱 숨긴 필터의 건수 정렬·환자 단계·채팅 부모 전달을 보완했다.
+  실제 API 연결에 필요한 계약과 계약 없이 준비할 수 있는 UI/실행 조건을 구분했다.
+  PR 생성·merge·배포·CodePush는 하지 않았다.
+- **신규 Member 실연동은 아직 미완료다.** 기존 EDITOR에 새 Member 제한을 적용하거나
+  임의 역할 enum·관계 API·권한 store/route 계약을 만들지 않았다. optional UI 조건은
+  기본값으로 기존 동작을 유지하며, 실제 역할·담당·공유·과거 참여 응답 연결이 남았다.
+  Member를 모든 non-GET이 막히는 조회 전용 역할로 해석하지 않는다.
+
+### 원격에 보존한 작업 위치
+
+- 웹: `/Users/parkjongsun/Repository/dentlink-client-permission`,
+  `feature/DL-16317 / origin/feature/DL-16317`.
+  master base `9bed1f7bd753e229478302413c0ec9a7e7a11dc2`.
+  **HEAD/원격 `53f1f9a0f4987114e2ea518ea2ea94894613b4c3`**, clean.
+  최신 `fix: 환자와 케이스 저장 전 제한 조건 재확인` — 제품 4·통합 테스트 1개 파일.
+  이전 메모 커밋 `e8dd7dafb1f7d2abbff253dcd503ef7938d4dd97`도 보존했다.
+  이전 상세·채팅·Draft 커밋 `3b045e4882284c925c3fc43724f97ebc85a874bb`와
+  `5ffe7e0549d7cb57ab58a7daeed4b934e9ebaa2a`·
+  `f5a068e5000e266d6dde5af9c126038fd4158ea2`도 같은 branch에 있다.
+- 앱: `/Users/parkjongsun/Repository/dentlink-app-permission`,
+  `feature/DL-16317 / origin/feature/DL-16317`.
+  앱에는 master가 없어 실제 기본 브랜치 main의
+  `19f68100f7ce40e40c15d2d1e82c2e9737ca296a`에서 별도 Git worktree를 만들었다.
+  **HEAD/원격 `1dc7a361b06baa000edaca5361ec5fae26a7dabe`**, clean.
+  최신 커밋 `cbf1a89105d2c32fca6f872598e45e431f15f23c`
+  `fix: 앱 권한별 목록 정렬과 환자 필터 표시 보완` — 제품 2·기존 테스트 2개 파일과
+  `1dc7a361b06baa000edaca5361ec5fae26a7dabe`
+  `feat: 앱 채팅 화면의 권한 제어 조건 연결` — 제품 1·통합 테스트 1개 파일이다.
+  이전 채팅 `4ad003cda4e53d5830b7d3ddb8d5df39c2a19d1f`,
+  Draft/Case `9ed78d31be81c71679592999c410fd77ec37e66c`도 보존했다.
+  이전 필터 커밋 `340faa64be55a5ed873ec5ede1383bd6f36687b5`도 보존했다.
+- 두 제품의 검증 당시 파일·커밋 내용·원격 SHA 일치를 확인했다.
+  최신 추가 웹 5·앱 6개 파일은 SHA-256 snapshot과 HEAD 내용이 모두 일치했다.
+  기존 웹 checkout·DLDS·앱 main checkout은 수정하지 않았다.
+  앱 의존성은 원본 main의 기존 node_modules를 로컬 symlink로 재사용했다.
+  symlink는 로컬 info/exclude로 무시되며 package/lockfile·Jest 설정은 변경하지 않았다.
+  다른 기기로 Git을 옮겨도 이 로컬 의존성·/tmp 로그가 전달되지는 않는다.
+
+### 추가 구현 범위
+
+기존 웹 목록·보드·Pickup·권한 표시와 첫 구현 단위는 아래 이전 기록도 참조한다.
+
+| 범위 | 구현과 보존한 경계 |
+| --- | --- |
+| 웹 주문 상세·사이드패널 | `canPerformOrderActions`로 제목·삭제·취소·상태·배송일·담당 변경 등을 표시/실행 제어. `canEditPatient`, Case별 `canEditCaseTitle(case)`는 별도로 제어. 이미 열린 팝업·비동기 GET 후 실행·Case 전환 뒤 오래된 submit도 최신 조건으로 차단 |
+| 웹 환자·Case 저장 | 실제 submit 두 번째 optional `canSubmit(validatedId)`를 RHF onValid의 mutate 직전에 호출. SidePanel에서 mounted·현재 권한·편집 대상/현재 form ID·version을 재확인. 검증 중 제한 또는 대상 변경→복귀, unmount가 과거 저장을 재개하지 않음. 기존 guard 없는 호출·성공 callback/refetch와 주문 변경 권한 독립 유지 |
+| Credit·승인·추가금 | `canUpdateCredit`의 수동/자동 업데이트 경계를 normal·Remake Summary에 전달. Pending Approval·Remake History의 변경 진입과 Lab 추가금 생성/취소도 제어. 가격·이력·도움말과 순수 디자인 파일 미리보기는 유지 |
+| 웹 LinkTalk | `isReadOnly`로 전송·답장·업로드·재전송·수정·삭제·POST 번역 재시도 제어. `isSystemMessageActionEnabled`는 template별 CTA 입력. 상세 Layout의 실제 clone 경계도 조건 전달. DESIGN/AUTO 순수 미리보기와 기존 input hidden/disabled·Lab 타기공소 조건 보존 |
+| 웹 Draft | `canContinueDraft`, `canDeleteDraft(orderId)`로 카드·연필·삭제 UI와 실제 부모 handler 제어. 목록/카운트/서버 GET 범위는 바꾸지 않고 SYSTEM_DRAFT의 기존 삭제 제한 유지 |
+| 웹 Lab 메모 | Layout TabMemo에서 주문 변경 조건을 자식의 `canEditMemo`와 합쳐 전달. 입력·수정·삭제·첨부·임시 파일 삭제 진입과 실제 Lab handler 제어. 열린 편집기·파일 선택의 이전 callback과 unmount 이후 실행 차단. 조회·다운로드와 기존 undefined upload props 동작 유지 |
+| 치과 앱 목록 | OrderSearchForm의 내 주문·내 환자·담당 의사 필터 표시 입력과 BottomSheet Dentist 탭 조건. 숨김 후 이전 toggle/chip/tab/선택 callback 차단. 열린 Dentist→Status, 저장된 imperative present에도 최신 조건 적용. 숨긴 외부 selectedDentists를 Done/Reset이 덮거나 지우지 않음. 내 주문/환자 토글이 숨겨진 행의 건수는 Figma대로 우측 정렬 |
+| 치과 앱 주문 1단계 환자 | OrderScreen의 optional `isShowMyPatientOnly=true`를 OrderPatientListSection까지 전달. 자식의 이전 callback 차단 유지. 제공된 전체 환자·검색·선택·신규 등록·Next·다음 페이지 유지. Member 판단·조회 범위는 하드코딩하지 않음 |
+| 치과 앱 native LinkTalk | ChatDetailScreen의 optional `isReadOnly=false`를 실제 useMessage·MessageInput·MessageList에 함께 전달. 부모 `isSystemMessageActionEnabled=true`는 leaf 타입의 bool/template predicate를 그대로 List에 전달. 전송·답장·업로드·재전송·POST 번역 재시도 차단. 시스템 메시지의 `isSystemMessageActionEnabled`는 별도 조건. DESIGN/AUTO 비동기 응답은 권한 또는 메시지/주문 변경·unmount 후 이전 작업을 재개하지 않음. 복사·원문·파일 열람과 허용된 순수 미리보기 유지 |
+| 치과 앱 Draft | OrderScreen과 카드에 `canContinueDraft(draft)`, `canDeleteDraft(draft)` 전달. 실제 이어하기·삭제, scanner GET 이후 복원도 최신 조건 확인. false→true 전환이 과거 응답을 되살리지 않고 unmount·다른 주문 시작 시 무효화. SYSTEM_DRAFT 삭제 금지와 일반 진행 주문 편집 보존 |
+| 치과 앱 신규 Case | Screen에서 `isShowAssignedDentist` 전달해 담당 의사 영역 전체와 sheet 숨김. 이전 찾기/변경/선택 callback·100ms 지연 실행과 unmount 이후 호출 차단. 기존 선택값·Next 검증 유지. 담당 의사 자동 지정이나 저장 payload 변경은 하지 않음 |
+
+- 입력/메뉴/파일 선택의 남아 있는 callback을 제어한 것이며 이미 시작된 HTTP·S3
+  업로드를 취소하거나 서버 권한을 보장하지 않는다. 환자·Case 폼은 검증 후에도 준비된
+  조건을 재확인하며, 실제 서버 관계 응답 연결과 나머지 주문 취소/상태/추가금 폼의 최종
+  mutation 경계는 API 연동 시 함께 확인한다. 주문 변경·환자/Case 수정·채팅·Feedback
+  권한은 구분하며 모든 non-GET을 한 조건으로 막지 않는다.
+- 앱 OrderDetail은 기존 웹 상세 WebView를 사용하고 native 채팅은 별도다.
+  native UI/hook과 ChatDetailScreen의 조건 전달까지 준비했지만 실제 관계 응답을
+  주입하는 연결은 남았다. 기존 ConfirmBanner와 승인/CP 직접 화면의 허용 행동은
+  별도 정책 경계라 채팅 template 제한만으로 숨기거나 차단하지 않았다.
+  `isDifferentLab=false` 익명 표시 상수는 권한이 아니다.
+- 앱 신규 Case의 Member 디자인은 담당 의사 영역 전체가 없는 것으로 확인했다.
+  일반 Draft가 PROFILE/PRODUCT/OPTION 이후로 복원되는 경우까지 담당 고정을 보장하려면
+  응답·복원 정책이 필요하다. 자동 profile 변경·자기 자신 지정·1단계 강제 이동을 만들지 않았다.
+  App Profile 권한 badge/help 디자인은 확인되지 않았으므로 웹 디자인을 복제하지 않았다.
+
+### 검증과 자료 재확인
+
+- **웹 Clinic 전체 Jest 22 suites / 159 tests 통과.** 직전 149개에 실제 RHF/Yup/
+  React Query mutation·공용 SidePanel을 사용한 검증 후 저장 회귀 10개를 추가했다.
+  guard 없는 정상 호출, 기본 UI 저장, revoke→복귀·대상 변경→복귀·form ID 불일치·
+  양쪽 unmount를 확인했다. 직전 Memo 회귀 7개와 기존 upload props 검증도 유지했다.
+- 웹 Clinic/Lab/Admin 전체 type 통과. 정상 pre-commit과 pre-push도 통과해 push했다.
+  세 서비스 lint 오류 0이며 shared/configs 21·shared/hooks 24개 테스트와 기존
+  coverage baseline 검사 통과. 이번 push에 훅 우회나 baseline 재설정은 없었다.
+- 이번 Clinic 변경 2개 파일 scoped lint 오류/경고 0, shared 변경 3개 파일 scoped lint
+  오류 0·기존 경고 28개가 동일했다. Clinic TS program의 변경 5파일 진단 0,
+  실제 필수 훅 Clinic/Lab/Admin type 통과, Prettier·diff check 통과.
+  직전 Memo 단위에서 sharedUI 전체 type의 579개 기존 진단 메시지 집합은 동일했고,
+  과거 LinkTalk scoped lint 8 errors/49 warnings도 기존 문제였다.
+  이번 sharedUI 전체 lint/type가 성공했다고 표현하지 않는다.
+- **앱 features 전체 Jest 15 suites / 100 tests 통과.** 권한 관련 62개는 직전 필터/
+  native 채팅/Draft/Case 57개와 새 부모 환자 단계 2개·실제 채팅 화면 통합 3개다.
+  기존 order/patient 필터 회귀 2개에 숨김/복원 시 정렬 검사도 보완했다.
+  실제 ChatDetailScreen/useMessage/MessageInput/MessageList로 이전 전송·재전송·파일
+  callback 차단, 새 메시지·읽음·refresh 유지, 재허용 후 전송, template별 CTA 판정과
+  기존 ConfirmBanner 진입 보존을 검증했다. 앱 전체 테스트 통과는 아니다.
+  이번 추가 6개 파일 scoped ESLint 오류/경고 0, Prettier·diff check 통과.
+  전체 tsc는 main 기준의 기존 **18개 오류 출력과 완전히 동일**하다.
+  새 채팅 통합 테스트를 포함한 별도 TS program의 해당 파일 진단도 0이다.
+  앱 전체 타입 검사가 통과했다고 쓰지 않는다. StrictMode의 기존 RN findNodeHandle
+  경고는 숨기거나 설정을 바꾸지 않았다. 제품 변경을 서로 독립 검토했다.
+- 최신 검증 로그: `/tmp/dentlink-permission-phase4-clinic-jest-all.log`,
+  `/tmp/dentlink-permission-phase4-app-features-jest-all.log`,
+  `/tmp/dentlink-permission-phase4-app-type-final.log`.
+  최신 검증 snapshot: `/tmp/dentlink-permission-phase4-web-digest.json`,
+  `/tmp/dentlink-permission-phase4-app-digest.json`.
+  웹 정상 필수 commit/push 로그는 `/tmp/dentlink-permission-phase4-web-{commit,push}.log`.
+- 로그인 Member 실계정·브라우저/실기기·시뮬레이터·제품 build/배포 검증은 하지 않았다.
+  기존 Storybook 환경 문제와 i18n Sheet 미동기화는 아래 이전 기록대로 남았다.
+  이번 추가분에는 새 UI 문구/i18n key가 없다.
+- 상위 Jira의 하위 티켓 19개 목록과 FE DL-16319·BE DL-16320/16543·Lab 디자인
+  DL-16595를 다시 읽었다. 신규 역할·관계 API 계약과 Lab 확정 디자인은 여전히 미확인이다.
+  DEV `https://dev-api.dentlink.io/v3/api-docs`를 이번에 다시 받아 937 paths와
+  직전 대비 path 추가/삭제 0, authority enum이 기존 4종임을 확인했다.
+  `/tmp/dentlink-permission-phase4-swagger.json`은 익명 DEV 확인본이며 운영 증거는 아니다.
+  invitation/employee wire enum은 기존 OWNER/PAYMENT_MANAGER/EDITOR/VIEWER다.
+  기존 메뉴/domain 접근 API와 새 Member·담당/공유/과거 관계 행동 계약을 구분한다.
+  AuthorityTypeDto의 key는 string이므로 서버 표시명 응답과 확정 wire 계약도 구분한다.
+- 현재 Jira 디자인 Figma `2OR0Gj7NUFEEeYBjQg5Y6v`, WF page `1:6`,
+  App section `36:34356`을 다시 읽었다. 신규 Case Member `56:17363`에 담당 의사
+  영역이 없는 것이 확인되어 기존 앱 표시 입력의 근거로 사용했다.
+  이번 WF metadata는 직전 XML과 동일했다. Orders/Patients 건수 행
+  `36:42271`/`36:42294`의 우측 정렬을 확인했고 Orders 행의 design context도 읽었다.
+  App Home `141:30768` 설명은 내 주문+담당 환자의 주문 범위이므로 myOrdersOnly=true나
+  FE 임의 필터링으로 대체하지 않는다. 서버 조회 범위 계약을 받아야 한다.
+- FE DL-16319의 기존 댓글 44240과 상위 DL-16317 댓글 44241을 22:35 KST에 갱신하고
+  재조회했다. 웹 159개·앱 관련 기능 100개 검증과 준비/실연동 경계를 기록했다.
+  두 티켓은 진행 중(10016)을 유지했다. 대기를 ON HOLD나 전체 완료로 바꾸지 않았다.
+  개인 컨텍스트도 이 기록만 commit/push해 다음 세션에 보존한다.
+
+### 남은 작업과 다음 시작점
+
+1. 개인 컨텍스트와 위 두 permission worktree를 pull/fetch하고 실제 HEAD·원격·clean을
+   확인해 재사용한다. 신규 Member enum·역할 표시/배정 계약과 관계별 행동 응답을 받는다.
+2. 기존 optional UI 조건을 실제 응답에 연결하고, 목록·카운트·Draft 서버 조회 범위,
+   직접 URL·소속/권한 변경·담당 변경 후 이동/재조회·거절 응답·캐시 갱신을 검증한다.
+   현재/과거 담당 환자와 공유 Case의 허용 행동·FOLLOW_UP 담당 관계 정책을 맞춘다.
+3. 앱 native 채팅의 실제 응답 연결, Home 담당 환자 조회 범위, 담당 의사 자동 지정과
+   일반 Draft의 전체 복원 정책,
+   기타 화면과 Lab의 확정 디자인 범위를 반영한다. 앱 Lab 코드 checkout은 현지에서
+   확인되지 않았으며 Office 정책을 Lab에 복제하지 않는다. 웹 Lab 신규 Remake 생성/
+   직접 진입 등도 실제 관계 조건과 함께 후속 감사한다. Lab Remake 목록/선택/info/
+   additional은 상세 flag와 별도 페이지이며, 목록에는 관계 판단 데이터가 부족하다.
+   승인·CP 직접 화면과 주문 폼의 최종 mutation 조건도 이 단계에서 함께 맞춘다.
+   웹 Lab Memo 입력 준비는 완료다.
+4. 실제 API 상태별 화면 QA·번역 검토를 보완한다. 현재 구현과 자동 테스트를
+   신규 Member 정책 시행·전체 권한관리 완료로 해석하지 않는다.
+5. 현재 선행 단위와 중단 결정은 제품 원격·Jira·Git 개인 메모리 정리를 마쳐 대기한다.
+   사용자 재개 지시 이후 계약/디자인·구체적 결함을 다시 확인해 다음 범위를 선정하며,
+   추측으로 정책을 만들지 않는다.
+
+## 이전 상태 — 2026-10-02 웹 1차 선행 구현·검증·원격 보존
+
+아래는 첫 구현 단위의 기록이다. 현재 작업 위치·완료·잔여 범위는 위 추가 구현 기록을 따른다.
+
+- 사용자가 분석 이후 **판단이 꼭 필요한 사항 외에는 추천대로 스스로 구현을 진행**하라고
+  지시했다. 앞선 분석 전용 제한은 이번 제품 코드 수정 지시로 해제됐다.
+  웹부터 현재 Jira/Figma의 확정된 표시와 진입 제어를 준비했다. 이후 **작업 완료 시
+  commit/push·메모리화·Jira 정리 후 대기**하라고 명시 승인했다. 해당 권한관리 작업의
+  완료 단위에는 이 지시를 유지하며 같은 승인을 다시 요청하지 않는다.
+  제품 PR 생성·merge·배포는 포함되지 않는다. 현재 작업분 마무리를 완료하고 대기한다.
+- 작업 위치는 `/Users/parkjongsun/Repository/dentlink-client-permission`,
+  branch/upstream `feature/DL-16317 / origin/feature/DL-16317`,
+  base `9bed1f7bd753e229478302413c0ec9a7e7a11dc2`,
+  **HEAD/원격 `f5a068e5000e266d6dde5af9c126038fd4158ea2`**, clean이다.
+  이번 **49개 변경(기존 36·신규 13)을 두 커밋으로 원격에 보존**했고 로컬 파일·커밋
+  내용이 검증 당시 49개 파일의 SHA-256과 동일함을 확인했다.
+  기존 웹 checkout과 DLDS 작업 위치, 앱 checkout은 수정하지 않았다.
+- 개인 컨텍스트를 `git pull --ff-only`로 먼저 갱신했다. permission worktree에
+  `pnpm install --frozen-lockfile`을 완료했고 제품 package/lockfile은 변경하지 않았다.
+  Node 24.4.1, pnpm 8.6.9. 선택적 구버전 canvas 설치 경고는 있었지만 설치는 성공했다.
+- **실제 신규 Member 시행은 아직 아니다.** BE 역할 enum·권한 API·응답/오류 계약이
+  미확정이라 기존 `EDITOR`에 Member 제한을 연결하지 않았다. 공용 UI의 optional
+  표시·행동 입력과 Storybook 예시를 준비하고 기본 동작을 유지했다.
+  Clinic의 EDITOR 표시명 Manager 변경, 도움말과 기존 HOC 오류 수정은 실사용 코드에 있다.
+
+### 이번 마무리 결과
+
+- 제품 커밋 두 개:
+  - `5ffe7e0549d7cb57ab58a7daeed4b934e9ebaa2a` —
+    `fix: 소속과 권한 변경 시 접근 상태 갱신` (HOC·회귀 2개 파일).
+  - `f5a068e5000e266d6dde5af9c126038fd4158ea2` —
+    `feat: 권한별 웹 화면 제한을 위한 UI 조건 추가` (UI·상태 예시·회귀 47개 파일).
+- `git push -u origin feature/DL-16317` 성공. `git ls-remote`와 upstream/HEAD의
+  동일 SHA, 제품 worktree clean을 확인했다. PR 생성·merge·배포는 하지 않았다.
+- 필수 pre-commit의 Clinic/Lab/Admin type, pre-push의 세 서비스 lint 및 shared
+  테스트·coverage 검사까지 실행했다. 세 서비스 lint는 오류 0(기존 경고 각각
+  Clinic 223·Lab 189·Admin 410), shared/configs 21·shared/hooks 24개 테스트 통과.
+- 최초 push는 **새 worktree의 무시된 `coverage-baseline.json` 부재**로 실패했다.
+  검사 대상 shared/configs·hooks와 관련 모델/의존성에 feature 변경이 없음을 확인하고,
+  coverage에 포함된 **64개 파일이 시작 commit과 byte 단위로 동일**함을 확인했다.
+  그 검사 결과로 `pnpm coverage:baseline`을 실행한 뒤 필수 훅을 다시 통과해 push했다.
+  baseline·coverage는 ignored 로컬 검증 산출물이며 제품 커밋에 넣지 않았다.
+  기존 기준보다 coverage가 개선됐다는 주장이나 훅 우회는 하지 않았다.
+- Jira 댓글 작성 후 재조회 확인:
+  [FE DL-16319 댓글 44240](https://innovaid.atlassian.net/browse/DL-16319?focusedCommentId=44240)에
+  선행 UI·기존 오류 보완·92개 검증·잔여 범위를 기록했고,
+  [상위 DL-16317 댓글 44241](https://innovaid.atlassian.net/browse/DL-16317?focusedCommentId=44241)에는
+  FE 결과를 연결하고 전체 잔여 범위를 짧게 정리했다.
+  두 티켓 모두 **진행 중(10016)**을 유지했다. 전체 구현/실연동은 미완료라 완료나
+  Ready for Deploy로 전환하지 않았다. Codex 대기를 Jira ON HOLD로 해석하지 않는다.
+- 개인 컨텍스트의 이 체크포인트를 갱신하고 commit/push한다. 다른 세션의 기록이나
+  제품 코드는 이 마무리 작업에 섞지 않는다. 다음 사용자 지시 전 추가 개발·PR/배포는 하지 않는다.
+
+### 구현한 범위
+
+| 범위 | 변경과 경계 |
+| --- | --- |
+| Office | Clinic의 기존 EDITOR 표시를 Manager로 변경, 디자인의 분홍 칩·Authority 도움말 적용. 목적지는 `https://portal.dentlink.io/help/articles/20`. OWNER/Billing Manager/VIEWER wire 값은 유지. 미지의 enum은 중립 표시로 처리해 깨짐 방지 |
+| Orders/Patients/Board | PC·모바일에 `isShowMyOrderOnly`, `isShowMyPatientOnly`, `isShowDentistFilter` 조건 준비. Member 모바일의 검색+52px outline 필터/적용 표시, 열린 Dentist 탭 숨김 전환 및 숨긴 외부 필터값 보존. Board 필터는 기존 구성 그대로 작은 공용 컴포넌트로 추출 |
+| 주문1단계 | 환자 My Only 표시 조건과 `fixedDentist` 입력 준비. 새 Case(`purpose=NEW`)에서 담당 변경/Assign Myself 진입을 막고 입력 초기화·Draft reset·제출 직전 지정 의사를 복원. 기존 Case(`FOLLOW_UP`) 담당 값은 임의로 덮지 않음 |
+| 담당 의사 변경 | PC·모바일 상세에서 경고 조건을 모달로 전달. 문구는 최신 디자인의 `Changing the dentist will remove your access to this order.`. 기존 모달의 높이 제한 재사용. Lab en/ko locale에 대응 key 추가 |
+| Pickup | `canOpenOrder(row)` 조건을 Today/Reschedule/Scheduled/Past PC·모바일과 Today 라벨 모달까지 전달. false는 일반 주문번호 텍스트와 클릭 handler 제거, 기본/true는 기존 링크. 환자 공유 예외는 서버 조건을 전달할 수 있도록 행별 입력이며 담당자 비교를 하드코딩하지 않음 |
+| 기존 HOC | 권한·activeEmployeeId 변경/로그아웃 시 이전 승인 상태로 보호 페이지가 계속 보이는 문제 수정. 비동기 결과를 token+employeeId에 결부하고 오래된 조회 결과를 무시. null 프로필과 응답 id 불일치 방어. 응답 id 생략 및 정상 token refresh의 같은 소속 profile 유지 동작은 보존. 기존 /403·code2131 Office 전환 정책 변경 없음 |
+
+주요 신규 파일과 진입점:
+
+- `clinic/src/components/OfficeMemberList/office-member-authority.ts`,
+  `OfficeMemberAuthorityHelp.tsx`, `useAuthorityTypeQuery.ts`.
+- `shared/ui/src/OrderKanbanUI/OrderKanbanFilters.tsx`와 Clinic Board 호출부.
+- `shared/ui/src/Order/OrderForm/OrderProfileForm/useFixedOrderDentist.ts` 및
+  `OrderProfileForm.tsx`의 내부 Next → 복원 → 부모 RHF 제출 경계.
+- `shared/ui/src/OrderUI/DentistFind/extras/ModalSearchDentist.tsx`와 상세 제목 PC·모바일.
+- `shared/ui/src/PickupUI/PickupUI.type.ts`의 `PickupOrderAccessPropsType` 및 하위 전달.
+- 기존 주문1단계 Story 보완, Orders/Patients/Board/담당 변경/Pickup 상태 Story 추가.
+  별도의 신규 제품 화면이나 권한 엔진, API 계약·역할 enum을 만들지 않았다.
+
+### 검증 결과와 한계
+
+- Clinic 전체 Jest **14 suites / 92 tests 통과**. 신규 회귀 31개:
+  HOC 12, 필터 6, 담당 고정 4, Pickup 9. 서버 정책과 실제 로그인 Member 검증은 아니다.
+- Clinic/Lab/Admin 전체 `type` **모두 통과**. 새 worktree의 무시된 Next 이미지 타입
+  파일이 없어 생긴 최초 PNG 오류는 Clinic/Lab `next typegen`으로 정리했다.
+  제품 타입 설정은 수정하지 않았다.
+- Clinic 변경 파일 ESLint, Prettier 및 `git diff --check` 통과.
+  sharedUI는 기존 root/UI eslint-plugin-storybook 중복 resolve로 기본 명령이 실패했다.
+  정본 UI 설정을 단독 지정한 변경 파일 검사는 **오류 0·경고 39**이며 기존 any/Hook
+  경고와 Story export 경고가 있다. 전체 sharedUI 타입 명령은 기존 hook/icon 오류가
+  남아 있으므로 별도로 전체 성공했다고 쓰지 않는다.
+- **Storybook 시각 검증 미완료:** 기준선의 Storybook core/addon 버전 불일치,
+  react-device-detect resolve, config/models 순환 import 및 prebundle entry 문제를
+  겪었다. 임시 설정만 사용했으며 제품 deps/config를 고치지 않았다. 추가 환경 우회를
+  중단하고 실제 컴포넌트를 렌더링한 Jest로 클릭과 상태를 검증했다. 임시 서버·브라우저 종료.
+- Lab 신규 경고 문구는 en/ko JSON에 있으며 추가 key의 누락은 없다. 전체 i18n 검사는
+  **기준선 실패 + 신규 key 시트 미동기화**를 구분한다. 변경 전 HEAD 대비 Sheet는
+  `orders.detail.approval.fabrication.readyInHours` 값 차이와 `orders.filters.category`
+  누락이 이미 있었다. `audit:i18n`의 `account.auth.actions.logIn` 누락도 HEAD에서 확인했다.
+  신규 경고 key의 Sheet 반영/PM 번역 검토는 남았고 외부 Sheet 쓰기는 하지 않았다.
+  관련 없는 번역값을 권한 작업에 섞어 수정하지 않았다.
+- 제품 build/배포, 로그인 브라우저·실기기, 신규 Member 실계정 및 업무 API 연동은
+  실행하지 않았다. Type/Jest 성공을 실제 권한 정책 시행으로 설명하지 않는다.
+
+### 남은 작업과 다음 시작점
+
+1. 개인 컨텍스트와 `origin/feature/DL-16317`을 갱신하고 위 기존 permission worktree를
+   재사용한다. 제품 HEAD/원격/clean을 실시간 확인한다. 이번 구현은 원격에 보존됐으며
+   후속 동일 권한관리 작업의 완료 단위에도 사용자의 commit/push·Jira 정리 승인을 유지한다.
+2. 상세·사이드패널·Draft·Remake·LinkTalk/첨부·승인/삭제의 표시/실행 handler 경로를
+   최신 정책과 대조해 다음 선행 범위로 진행한다. 현재 모든 non-GET 차단 완료가 아니다.
+3. BE 명세가 나오면 실제 역할/관계 응답을 UI 조건에 연결하고 서버 목록·카운트·Draft
+   범위와 직접 URL/변경 후 거절·캐시 갱신을 검증한다. 현재/과거 담당 환자, 공유 Case의
+   행동 범위, FOLLOW_UP 생성 시 담당 관계는 아래 기존 미확정점과 함께 대조한다.
+4. Lab 확정 디자인과 네이티브 앱 작업은 별도 다음 단계다. 현재 모바일 대응은 웹의
+   반응형 UI이며 네이티브 앱 완료가 아니다. 기존 Lab 가격/타기공소 조건을 보존한다.
+5. Storybook 기준선 및 i18n 시트 미동기화가 정리되면 상태별 화면 QA와 번역 검토를
+   보완한다. 현재 확정 UI/입력 준비를 실제 신규 Member 배포 완료로 표현하지 않는다.
+
+## 이전 분석 — 2026-10-02 웹 착수 준비·분석 완료
+
+아래는 최초 분석 단계 기록이다. 이후 사용자가 구현을 지시했으므로 현재 승인 범위와
+제품 변경·검증·다음 시작점은 위 선행 구현 기록을 따른다.
+
+- 사용자는 권한관리 착수를 요청했으며 이번 단계는 **master 기준 신규 웹
+  branch/worktree 준비 + Jira/하위 티켓/연결 문서/Figma/현행 코드 조사 + 계획 브리핑**이다.
+  **제품 구현은 아직 하지 말라는 명시 조건**이 있다. 이 조건을 유지하고 다음 구현
+  지시를 기다린다. 제품 commit/push/PR/merge/배포, Jira 댓글·상태 변경도 하지 않았다.
+- 개인 컨텍스트 `git pull --ff-only` 후 공통 지침과 이 체크포인트를 읽었다.
+  웹 원격은 `git fetch --prune origin`으로 갱신했다. 기존 제품 checkout의 branch는
+  전환하지 않고 별도 작업 위치를 준비했다.
+- 웹 전용 작업 위치: `/Users/parkjongsun/Repository/dentlink-client-permission`.
+  branch **`feature/DL-16317`**, base/HEAD
+  **`origin/master / 9bed1f7bd753e229478302413c0ec9a7e7a11dc2`**.
+  clean, upstream 없음, 제품 수정·commit·push 없음.
+- 앱 worktree/branch는 만들지 않았다. 현지 앱 checkout은 `main /
+  19f68100f7ce40e40c15d2d1e82c2e9737ca296a`이며 현재 Office 전용 `src` 구조다.
+  웹 먼저 진행한다는 사용자 방향에 맞추며 앱의 base를 master로 추정하지 않는다.
+- 기존 웹 기본 checkout은 `release/v1.88.0 /
+  3a4b1b2cf0632a683f5961488351d3863ea3e1c9`, 별도 DLDS worktree는
+  `feature/DL-16471`이다. 둘 다 권한관리 작업 위치로 재사용하지 않는다.
+- 이 채팅은 제품 Git 바깥 컨텍스트 폴더에 연결돼 있어 앱 `create_worktree`가
+  `Not a git repository`로 실패했다. 실제 웹 저장소에서 직접
+  `git -c branch.autoSetupMerge=false worktree add -b feature/DL-16317
+  /Users/parkjongsun/Repository/dentlink-client-permission origin/master`를 실행했다.
+  앱 managed attachment가 아닌 Git worktree이며 중복 생성하지 않는다.
+
+### 확인한 자료와 정본 경계
+
+- 상위 [DL-16317](https://innovaid.atlassian.net/browse/DL-16317): 본문·댓글 6개·관계·remote links.
+  **직접 하위 19개 전부** 본문·댓글·관계·remote links를 읽었다. 추가 하위·issue links·
+  remote links는 없었다. 연결 문서는 상위 본문과 TC 티켓에 있다.
+- **최종 화면 기준:** [Figma Design WF](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=1-6).
+  페이지 metadata뿐 아니라 Office 역할/드롭다운, PC·모바일 목록/필터, Draft·주문1단계,
+  Pickup, 의사변경 경고, 상세·사이드패널 하위 화면과 설명을 읽었다.
+  큰 frame이 sparse metadata만 반환하면 실제 하위 instance/frame의 design context로
+  내려갔다. 주요 화면 screenshot도 확인했다.
+- 연결 [구 FigJam Member 범위](https://www.figma.com/board/U9Qpm6ACzjGFKyrCoaAuvA?node-id=68-463)는
+  보조 근거다. 새 Design과 차이가 있는 규칙을 새 요구사항으로 자동 채택하지 않는다.
+- [기획 5-4 권한표](https://app.notion.com/p/innovaid/3c7ce072e82f811184a8e647444f01fd?source=copy_link#98f5af8127554b148e279f483c727836),
+  [8-1 권한 TC](https://app.notion.com/p/innovaid/3c7ce072e82f811184a8e647444f01fd?source=copy_link#e984570de2224ebdba3fd667a893cd51)의
+  **TC 27행**과 토론 6개를 확인했다. 문서 제목은 `[공통] 알림센터 개편`, 상태 작성 중,
+  last edited 2026-09-29다. 권한에 해당하는 영역만 본 작업 근거로 사용한다.
+- 연결 [8/20 피드백 회의](https://app.notion.com/p/3c1ce072e82f8037bb9cdbfa32266882)와
+  [leo 링크톡 자동발송 목록](https://app.notion.com/p/3d1ce072e82f80cbbe61f505afe96d0c)도 읽었다.
+  전자는 초기 명칭·배경, 후자는 시스템 발송 목록이며 신규 권한 API 명세가 아니다.
+- Notion 전체 응답의 `truncated=true`는 알림 현황의 지원하지 않는 Drive embed 1개에
+  해당하며 그 내용은 읽지 못했다. 권한표와 TC 텍스트는 읽었다. 알림센터의 별도
+  Sheet/Drive/Slack/회의 참고자료까지 권한관리 구현 범위로 확대하지 않는다.
+- 디자인의 Authority 도움말 목적지 `https://portal.dentlink.io/help/articles/20`은
+  웹 도구로 접근 실패했다. 링크 목적지는 확인했지만 게시물 본문은 미확인이다.
+  운영 admin 사용자 페이지는 권한정책 문서가 아니므로 실제 운영 데이터에 접근하지 않았다.
+
+| Jira 하위 작업 | 확인 상태와 의미 |
+| --- | --- |
+| DL-16319 FE | 해야 할 일. 본문·댓글에 구현 계획/명세 없음 |
+| DL-16320 BE API List up / DL-16543 BE 접근 가드 / DL-16564 BE 기획 분석·설계 | 진행 중. 본문은 null 또는 공백, 댓글·연결 명세 없음. 실제 endpoint/응답/enum/오류 계약 확인 불가 |
+| DL-16405 기획 / DL-16411 기획검토 공수산정 / DL-16318 디자인 | 완료. 구현 완료를 뜻하지 않음 |
+| DL-16427 Office / DL-16428 Order List / DL-16429 Order Board / DL-16430 주문1단계 / DL-16431 Patient | 완료. 웹 PC·모바일 디자인 작업이며 코드 완료 증거 없음 |
+| DL-16432 앱 프로필 / DL-16433 앱 Orders / DL-16434 앱 주문1단계 | 완료. 앱 디자인 작업이며 코드 완료 증거 없음 |
+| DL-16544 TC 작성 | 완료. 연결 Notion TC를 읽음; 최신 Design과 일부 조건 불일치 |
+| DL-16545 내부 릴리즈 노트 / DL-16589 기획 변경 반영 | 해야 할 일 |
+| DL-16595 기공소 디자인 | 진행 중. 치과 Member 정책을 Lab에 그대로 적용하지 않음 |
+
+### 현재 이해한 요구사항
+
+1. **기존 화면의 조건 제한이 중심이며 웹부터 선행 개발 가능**하다. 공용 UI는 이미
+   목록·필터값·handler를 props로 받으므로 표시와 사용 가능 조건을 추가하고 샘플 상태로
+   확인한 다음 실제 서버 계약에 연결할 수 있다. API 없이 문서만 준비할 수 있다는
+   판단은 지나치게 좁다. 새 페이지나 별도 권한 엔진을 전제하지 않는다.
+2. 기획은 **기존 `EDITOR(DB)/Member(화면)` → Manager**, 새 의사 Member 추가,
+   Billing Manager/Admin 유지 방향이다. 현재 API 타입은 `OWNER / PAYMENT_MANAGER /
+   EDITOR / VIEWER`이다. 표시명과 실제 enum·데이터 전환 규칙은 별개이므로 `MANAGER`,
+   `MEMBER` wire 값을 임의로 넣거나 기존 EDITOR에 새 Member 제한을 연결하지 않는다.
+3. **Member는 조회 전용이 아니다.** 허용된 대상에서 기존 주문 처리 기능을 쓰는 역할이다.
+   역할만으로 모든 non-GET을 막지 않고 조회/클릭/수정/삭제/전송 등 행동별로 제한한다.
+4. 새 Design의 Member 목록은 My Orders/My Patients 토글 및 해당 Dentist 필터를
+   제거하고 모바일 필터 표현을 조정한다. Board의 Dentist 필터도 제거한다.
+5. **주문1단계는 일반 목록과 조회 범위가 다르다.** Member도 병원 전체 환자·Case를
+   선택할 수 있고 Draft는 담당 의사 미지정 또는 본인인 항목만 노출한다
+   ([설명 node107:23961](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=107-23961)).
+6. Pickup은 내 주문이 아니면 주문번호 링크를 없애되 환자 공유 Case의 주문에는 클릭
+   예외가 있다 ([설명 node107:21457](https://www.figma.com/design/2OR0Gj7NUFEEeYBjQg5Y6v?node-id=107-21457)).
+   타의사 주문이라는 이유만으로 모든 링크를 막으면 최신 Design과 다르다.
+7. 담당 의사 변경 모달은 접근을 잃을 수 있다는 경고와 모바일 높이 제한이 그려져 있다.
+   경고 표현을 준비할 수 있으나 실제 변경 후 이동/유지/재조회는 정책 및 API 계약에
+   맞춰야 한다. placeholder `팝업/CTA`는 완성된 문구·화면으로 간주하지 않는다.
+
+### 문서 차이·API 연결 전 확인점
+
+- **환자 목록:** 새 Design43:44977은 현재 담당 환자, 구 FigJam359:10333은 한 번이라도
+  담당 주문이 있었던 환자를 노출한다. TC15는 미결이다. 사용자 지정 최신 Design을
+  기준으로 계획하되 이 차이를 기록하고 실연동 전 동일 정책으로 맞춘다. 과거 참여 규칙이
+  최신 Design에 확정돼 있다고 설명하지 않는다. 주문1단계의 전체 환자 범위는 별도다.
+- **조회와 행동:** 구 TC12/13의 타의사 direct URL·Pickup 일괄 차단은 새 Pickup 공유
+  예외와 맞춰야 한다. 공유 대상 상세/채팅/승인/다운로드/Remake의 행동 범위를
+  클릭 허용만 보고 확대하지 않는다. 구 TC20/21의 담당 변경 후 접근 소멸도 대조 대상이다.
+- **역할과 관계 계약:** 실제 역할 enum·기존 계정/VIEWER 매핑, 현재 담당·환자공유·
+  기공소 관계를 판단할 응답, ID의 의미, 허용 필터·카운트·Draft 범위가 필요하다.
+  신규 사전조회 API인지 기존 DTO 추가인지 아직 정하지 않는다.
+- **오류·갱신 계약:** 직접 링크 접근 거절, 담당/권한 변경 후 상태와 이동, 세션 즉시 반영,
+  소속 전환 시 cache 재조회 범위를 맞춘다. 현재 `403/code2131`은 Office 전환 용도라
+  모든 403을 새 권한 부족으로 일괄 처리하면 안 된다.
+- GET은 서버가 허용한 응답을 렌더링하는 방향이 맞다. FE에서 페이지별 목록을 다시
+  잘라 전체 수·페이지네이션을 바꾸지 않는다. 다만 숨긴 필터의 URL 잔여 조건과
+  조회 범위별 필드 누락/변경을 고려해야 하며 GET 처리까지 완전히 무변경이라고 단정하지 않는다.
+- Notion 알림센터 Inbox·수신 설정 신설·치과 전환 배지·발송 DB 개편은 별도 기능이다.
+  권한에 따른 알림 수신 원칙과 연관돼 있어도 본 작업에 알림센터 전체를 포함하지 않는다.
+
+### 제안한 웹 선행 순서 — 아직 구현하지 않음
+
+| 단계 | 범위 | 완료 기준/경계 |
+| --- | --- | --- |
+| 1. Clinic 확정 UI | Office 권한 표시·도움말·옵션 표현, Orders/Patients/Board PC·모바일 필터, 주문1단계 표현, 의사변경 경고 | 기존 UI에 조건 입력을 분리해 샘플 상태 확인. 실제 역할 enum/저장값/신규 endpoint 임의 작성 금지 |
+| 2. Clinic 행동 조건 | 목록·Pickup 클릭, 상세·사이드패널, Draft 삭제/이어쓰기, Remake·생성·수정·승인·LinkTalk/첨부 진입 | 역할·대상 관계·주문 상태를 구분. 버튼뿐 아니라 메뉴/팝업/직접URL/실행 handler 경로 목록 대조 |
+| 3. API 연동 | 생성 모델 갱신, 실제 역할/행동 조건 연결, 서버 목록·카운트·Draft 응답, 거절·변경 후 갱신 | 명세+실제 응답 확인 후 연결. 동일 사용자의 소속 전환과 이전 권한/담당 상태 cache 점검 |
+| 4. Lab·앱 확장 | Lab 디자인 확정 부분, Clinic/Lab sharedUI, 앱 네이티브 화면·LinkTalk | Lab 기존 가격/타기공소 제한 보존. 앱 상세 WebView는 웹 재사용되지만 네이티브 채팅은 별도 검증 |
+
+현행 코드 근거(이번 master snapshot):
+
+- `clinic/src/components/OfficeMemberList/OfficeMemberAuthorityChip.tsx:15`: 역할 라벨/칩의
+  하드코딩이 있어 enum 추가 시 함께 수정해야 한다. unknown 역할을 그대로 넣으면 칩
+  설정 접근이 깨질 수 있다. 역할 옵션 일부는 코드 조회 API에 연결돼 있다.
+- `clinic/src/common/hocs/withAuthorization.tsx:16`: 현재 페이지 역할 확인만 하며
+  담당·참여·공유 관계를 판단하지 않는다.
+- `shared/ui/src/OrderListUI/OrderListLayer/OrderListLayerDesktop.tsx:28`,
+  `shared/ui/src/PatientListUI/PatientListLayerDesktop.tsx:19`: 목록과 UI 제어 props 구조라
+  API와 분리한 표시 조건 선행 가능.
+- `clinic/src/lib/Order/useOrderDetail.ts:135`,
+  `clinic/src/lib/OrderForm/OrderProfileForm/useOrderProfileCreateForm.tsx:58`,
+  `clinic/src/lib/Remake/select/useRemakeSelectCreate.tsx:48`,
+  `clinic/src/lib/LinkTalk/useLinkTalk.tsx:118`: 상세/주문/Draft/Remake/채팅 실행 경로가
+  분산돼 있다. Remake 버튼은 즉시 Draft mutation을 호출할 수 있다.
+- `lab/src/atoms/common.ts:21`, `lab/src/lib/Order/useOrderDetail.ts:261`,
+  `shared/ui/src/OrderDetailUI/OrderDetailLayout/OrderDetailLayout.tsx:185`: 기존 Lab
+  EDITOR 가격 제한과 현재 기공소/주문 기공소 불일치 제한은 서로 다른 조건이다.
+  후자가 과거 참여 여부를 뜻하지 않는다. Clinic 공용 화면 수정 시 보존한다.
+- `shared/ui/src/FileListDownloadUI/FileListDownloadUI.tsx:138`,
+  `shared/ui/src/LinkTalkUI/parts/LinkTalkListItem/LinkTalkListItem.tsx:95`: 개별/전체 파일,
+  채팅 표시/답장/프로필 경로를 함께 점검할 필요가 있다. 익명화 응답은 아직 미확정이며
+  프론트에서 이름만 가린 결과를 데이터 접근 제한 완료로 부르지 않는다.
+- 앱 `src/features/orderList/screens/OrderDetailScreen.tsx:48,282,307`: 상세는 웹 경로
+  WebView를 사용하지만 네이티브 LinkTalk(288~301행)는 별도다. 로컬 Lab 앱 checkout은
+  확인되지 않아 같은 공용 앱 구조라고 추정하지 않는다.
+
+### 산정·검증·다음 시작점
+
+- 이전 사용자가 채택한 **전체 6~9영업일(구현·연동·검증)**은 조건부 가산정으로 유지한다.
+  기획·디자인 확정 및 BE API 설계 시점 기준이며 BE 대기와 배포는 포함하지 않는다.
+  이번 조사만으로 새 최종 일정이나 특정 배포일을 약속하지 않는다. Lab 확정 범위와
+  최종 API가 확인될 때 선행 완료분을 반영해 남은 일정을 갱신한다.
+- 검증 계획: Admin/Manager/Billing Manager/새 Member의 노출·행동, 본인/타인/공유
+  대상, Draft 미지정/본인/타인, 직접 URL·Pickup·사이드패널·채팅/파일·승인/Remake,
+  담당/권한/소속 변경 후 상태, 기존 Lab 제한, PC·모바일 웹을 확인한다.
+- 이번 단계는 **정적 코드 및 외부 문서/디자인 조사**다. 제품 코드 수정, 의존성 설치,
+  환경 파일 복사, 서버·브라우저·실기기 실행, 빌드/테스트, 실제 업무 API 요청은 하지 않았다.
+  따라서 런타임 권한 차단·BE 정책 시행·배포 완료 증거는 없다.
+- 다음 구현 지시가 오면 개인 컨텍스트와 Git/요구사항 변경을 확인하고 위 웹 worktree를
+  재사용한다. **Clinic의 Office 권한 표시와 Orders/Patients/Board 필터 UI부터** 시작하는
+  것이 제안 순서다. 실제 역할 연결은 BE 계약 대조 뒤 수행한다.
+- 상세 Jira/Notion 원문 및 Figma 확인 이미지는 임시
+  `/tmp/dentlink-permission-planning`에 있다. 이 임시 폴더는 기기 간 이전·영구 보존을
+  보장하지 않는다. 복구 근거는 이 기록과 원본 Jira/Notion/Figma/Git이다.
+
+## 이전 상태 — 2026-09-29 복구 체크포인트
+
+아래 기록은 당시 조사 이력이다. 현재 상태·승인 범위·작업 위치·다음 시작점은
+상단의 2026-10-02 기록을 따른다.
+
+- 목적: 통합알림센터에 앞서 진행할 [DL-16317 권한관리](https://innovaid.atlassian.net/browse/DL-16317)를 담당한다.
+  FE 전체 조율은 [dentlink-fe.md](../dentlink-fe.md), 통합알림센터의 별도 기록은
+  [dentlink-unified-notification-center.md](../dentlink-unified-notification-center.md)다.
+- **완료:** 세션 초기 설정과 공통 지침 읽기. 이후 사용자의 별도 요청으로
+  백엔드가 확인을 요청한 Office API 4개의 웹·앱 사용처를 정적으로 조사해 답변했다.
+  초기 설정만 했다는 이전 기록은 이 API 조사 진행 상황을 포함하지 않는다.
+- **대기:** 요청받은 API 조사 답변까지 완료했으며 진행 중인 구현이나 테스트는 없다.
+  기존 세션을 유지하고 추가 API 조사 또는 권한관리 착수 지시를 기다린다.
+- **미착수:** 권한관리 본 요구사항 분석·설계·구현. Jira 본문·댓글·관련 외부 자료는
+  아직 조회하지 않았다. 웹·앱 영향, 권한 정책과 API 계약, 구현 branch/worktree,
+  base와 배포 release는 미정이다. 이 세션의 제품 PR·merge·배포 작업도 없다.
+- 승인 범위는 초기 설정, 사용자 지정 API의 읽기 전용 코드 조사와 이번 개인
+  체크포인트 정리·commit·push다. API 조사 결과를 코드/API 삭제 승인이나
+  권한관리 구현 지시로 해석하지 않는다. 통합알림센터 정책도 전용 요구사항으로
+  추정하지 않는다. 제품 수정·commit·push·PR 변경·배포는 별도 명시 지시가 필요하다.
+
+### API 사용처 조사 결과 — 2026-09-28
+
+| GET API | 웹 Clinic/Lab/Admin 조사 결과 | 모바일 앱 조사 결과 |
+| --- | --- | --- |
+| `/office/orders/status-count` | 생성된 API·타입 정의만 있고 실제 호출부 없음 | 생성된 API·타입 정의만 있고 실제 호출부 없음 |
+| `/office/orders/pending-summary` | 생성된 API·타입 정의만 있고 실제 호출부 없음 | Office 홈의 **Action Required**에서 사용 |
+| `/office/orders/drafts` | 새 주문 작성(`/orders/create`)의 **Draft 목록·작성 이어하기**에서 사용 | Office **Place Order → Draft 선택 화면**에서 사용 |
+| `/office/order-chats` | 생성된 API·타입 정의만 있고 실제 호출부 없음 | 서비스·쿼리 훅은 남아 있으나 그 훅을 사용하는 화면이 없어 실제 사용처 없음 |
+
+조사 당시의 제품 코드와 비교 브랜치를 기준으로 한 결론이다. 운영 요청 로그,
+실기기·브라우저 실행, 배포 버전별 사용량은 확인하지 않았다. API가 정의되어 있다는
+사실과 실행되는 화면에서 호출된다는 사실을 구분했으며, 이 결과만으로 구버전 앱이나
+다른 소비자까지 포함한 백엔드 API 삭제 가능 여부를 확정하지 않는다.
+
+복구 시 확인할 코드 근거(줄 번호는 당시 snapshot 기준):
+
+- `status-count`: 웹 `shared/models/src/Office.ts:4637`, 앱
+  `shared/models/Api.ts:43758`에 정의만 존재했다. `/lab/orders/status-count`와
+  `/admin/orders/status-count`는 별도 API이므로 이 결론에 포함하지 않는다.
+- `pending-summary`: 앱 `shared/services/serviceTypeService.ts:186`의
+  `getPendingSummary`가 `/${serviceType.toLowerCase()}/orders/pending-summary`를 호출한다.
+  `shared/queries/useCommonServiceQueries.ts:57` →
+  [useHomeOrdersData.ts:106](https://github.com/Innvoaid/dentlink-app/blob/7403721151f3d2135799a995bccdd2214783822d/shared/libs/useHomeOrdersData.ts#L106)의
+  `enabled: serviceType === "OFFICE"` →
+  `apps/office/src/features/home/sections/HomeOfficeActionRequiredSection.tsx:74,166`으로 이어진다.
+  `pending/planning/design`을 각각 최대 10개 추려 Pending Order / Planning Approval /
+  Design Confirmation 카드에 표시하며 홈 진입·당겨서 새로고침 경로가 있다.
+- `drafts` 웹: `shared/models/src/order/order.apis.clinic.ts:289`의 `findDraftOrders`
+  → `clinic/src/services/order/order.query.ts:38`의 `useOrderDraftQuery`
+  → [OrderProfileCreate.tsx:34](https://github.com/Innvoaid/dentlink-client/blob/347909945b091324e7134673525203de14e122fd/clinic/src/components/Order/OrderProfileForm/OrderProfileCreate.tsx#L34).
+  새 주문 폼이 렌더링되면 조회를 활성화하고 응답을 `draftProps.list`에 전달한다.
+  Draft 삭제 성공 후 목록을 재조회한다.
+- `drafts` 앱: `shared/services/office.service.ts:200`의 `findDraftOrders`
+  → `shared/queries/useOfficeQueries.ts:186`의 `useOfficeDraftOrdersQuery`
+  → [OrderScreen.tsx:146](https://github.com/Innvoaid/dentlink-app/blob/7403721151f3d2135799a995bccdd2214783822d/shared/features/order/screens/OrderScreen.tsx#L146).
+  Office 조건으로 조회하며 Insta Smile Vision 항목을 제외한 Draft 목록으로
+  선택·작성 이어하기·삭제 화면을 구성한다. 삭제·주문 제출 후 쿼리 갱신 경로가 있다.
+- `order-chats` 앱: `shared/services/linktalk.service.ts:220`의 `findOrderChats`
+  → [useLinkTalkQueries.ts:74](https://github.com/Innvoaid/dentlink-app/blob/7403721151f3d2135799a995bccdd2214783822d/shared/queries/useLinkTalkQueries.ts#L74)의
+  `useFindOrderChatsInfiniteQuery`까지만 존재하며 이를 import/호출하는 화면은 없었다.
+  실제 웹 홈 LinkTalk·앱 LinkTalk 목록은 `/office/chats/latest`를 사용했다.
+  웹 근거는 `clinic/src/lib/Dashboard/useDashboardLinkTalk.ts:26`,
+  앱 근거는 `shared/features/linkTalk/sections/LinkTalkListSection.tsx`의
+  `useGetLatestChatInfiniteQuery` 연결과 `shared/services/serviceTypeService.ts:167`이다.
+
+조사 snapshot:
+
+- 웹 기본 checkout: `feature/DL-16387`,
+  `347909945b091324e7134673525203de14e122fd`. 읽기 전용 조사에 사용했으며 LBX의
+  작업 브랜치를 권한관리 소유로 가져온 것이 아니다.
+- 웹 비교 ref: `origin/master / de2ffdd9e`, `origin/release/v1.87.0 / bb5bff410`,
+  `origin/stage / bf955dfe2`, `origin/develop / 1d0140ca3`에서 같은 결론을 확인했다.
+- 앱: `main / 7403721151f3d2135799a995bccdd2214783822d`,
+  `origin/develop / 589286ad58ad22752d5bcd82f46dcd48a817d89d`에서 같은 결론을 확인했다.
+- 조사 시작 시 두 제품에 `git pull --ff-only`를 실행했고 당시 checkout은 변경 없이
+  최신이었다. 이후 코드·branch·worktree·PR·Jira 변경, 실제 API 요청, 테스트·서버
+  실행은 하지 않았다. 위 답변은 사용자에게 전달했으며 백엔드에 직접 메시지를
+  보내거나 Jira에 게시하지 않았다.
+
+### 제품 경계와 Git 확인 — 2026-09-29
+
+이번에는 `status`, HEAD/upstream, 등록 worktree, `ls-remote`만 읽었으며 제품
+fetch/pull/checkout은 하지 않았다. 아래 값은 확인 시점의 상태이며, API 분석을
+오늘 원격 HEAD에서 다시 수행했다는 뜻이 아니다.
+
+| 저장소·로컬 조사 경로 | 로컬 branch / HEAD / upstream | 작업 상태·원격 확인 |
+| --- | --- | --- |
+| [dentlink-client](https://github.com/Innvoaid/dentlink-client), `/Users/parkjongsun/Repository/dentlink-client` | `feature/DL-16387` / `347909945b091324e7134673525203de14e122fd` / `origin/feature/DL-16387` | clean, 추적 ref 대비 0/0. `ls-remote`의 동일 branch SHA도 일치해 원격 보존 확인 |
+| [dentlink-app](https://github.com/Innvoaid/dentlink-app), `/Users/parkjongsun/Repository/dentlink-app` | `main` / `7403721151f3d2135799a995bccdd2214783822d` / `origin/main` | clean, **로컬 추적 ref** 대비 0/0. 실제 원격 main/develop은 아래와 같이 변경됨 |
+
+- 이 세션이 생성하거나 소유한 권한관리 제품 branch/worktree와 미커밋 코드는 없다.
+  웹에는 기본 checkout 및 다른 기능의 `dentlink-client-dlds` worktree가 등록돼 있고,
+  앱에는 기본 checkout 하나가 있다. 기존 체크아웃의 소유권은 별도로 확인해야 한다.
+- 웹 실시간 원격: `master / 9bed1f7bd753e229478302413c0ec9a7e7a11dc2`,
+  `release/v1.87.0 / 8a612494737db71c93e1e25a9cd8e3a9c337f2e8`로 조사 당시와 다르다.
+  `stage / bf955dfe2ee0dfbe8a41e9a51da354c5149e0c85`,
+  `develop / 1d0140ca3b0af345f742bb9fdd2ab8d54e38b1da`는 당시와 같다.
+- 앱 실시간 원격 `main`과 `develop`은 모두
+  `a681df51e3864f37720b1f2178c939cfe734fdf4`다. fetch하지 않았으므로 현재 원격 대비
+  ahead/behind 수와 이전 조사 commit의 최신 원격 이력 포함 여부는 미검증이다.
+  로컬 추적 ref의 0/0을 최신 원격과 동기화됐다는 의미로 쓰지 않는다.
+- 앞으로 현재 버전의 API 사용 여부를 판단할 때는 허용된 범위에서 제품 Git을 갱신하고
+  달라진 코드를 대조한다. 다른 기능 브랜치를 임의 전환하거나 재사용하지 않는다.
+
+## 이전 복구 절차 — 2026-09-29 이력
+
+1. `https://github.com/jongsunP/codex-personal-context`를 clone하거나 기존 사본에서
+   `git pull --ff-only` 후 공통 지침과 이 문서를 읽는다. 이 파일이 작업 상태의 정본이다.
+   새 기기의 첫 대화에도 본 기능은 **API 사용처 조사 완료 / 권한관리 본 작업 미착수·대기**로 복구한다.
+2. 추가 API 조사 지시라면 위 두 제품 저장소를 별도로 준비하고, 해당 기기의 정확한
+   경로·branch·HEAD·upstream·dirty·worktree 소유권을 확인한다. 현재 분석은 위 snapshot으로
+   재현할 수 있으나, 최신 원격에서는 코드가 달라졌을 수 있다. `feature/DL-16387`을
+   권한관리 구현 브랜치로 자동 선택하지 않는다. 권한관리 전용 복구 branch는 아직 없다.
+3. 권한관리 본 작업 착수 지시가 오면 개인 컨텍스트와 해당 제품 Git을 갱신하고
+   DL-16317 및 관련 요구사항·댓글·API·코드를 확인한다. 웹·앱 영향과 미정 정책을
+   정리한 뒤 실제 작업 checkout·단일 작성 세션 소유권·base·branch·release를 결정한다.
+   범위 확인과 구현·제품 Git 변경 승인을 구분한다.
+4. 정적 코드 조사에는 저장소 접근 권한과 Git/검색 도구가 필요하다. 실행 검증을
+   새로 요청받으면 각 저장소의 README/지침에 따라 Node·웹 pnpm·앱 Yarn 및 필요한
+   네이티브 도구·의존성·환경파일·테스트 계정/로그인·Jira/Figma 등 연결 인증을 해당
+   기기에서 확인한다. 이 세션은 런타임 환경·서버·테스트 계정을 준비하거나 검증하지 않았다.
+   Git checkpoint가 설치 파일·환경변수·인증 세션을 이전해 주지는 않는다.
+5. 진행 중인 수정이나 재개를 막는 확인된 기술 장애는 없다. 남은 조건은 사용자의
+   다음 업무 지시와, 실제 착수 시 요구사항·작업 위치 결정이다. 운영 트래픽과
+   9/29 변경된 원격 코드에서의 사용 여부는 필요시 별도로 확인해야 한다.
+
+### 이 기기의 세션 폴더와 로컬 자료
+
+- 2026-09-29 실경로 확인: `/Users/parkjongsun/Documents/ChatGPT/권한관리 프로젝트`.
+  제품 checkout이 아닌 세션 컨텍스트 폴더다. 옛 `권한관리 프로젝트 폴더 2`는 없다.
+  기존 task에 옛 cwd가 남을 수 있으므로 모든 명령에 존재하는 절대 workdir을 명시한다.
+- 폴더에는 `.git`과 `START_PROMPT.md`가 있다. 일반 작업 branch에는 commit이 없고
+  remote도 없으며 안내문은 untracked다. **이 안내문은 이 기기에만 있다.**
+  원본 파일 자체가 필요하면 별도 보존해야 한다. 초기 범위·제품 경계·대기 조건은
+  이 원격 체크포인트에 정리했으므로 업무 상태 복구가 안내문 원본에 의존하지는 않는다.
+  이번 작업에서 안내문이나 폴더를 수정·commit하지 않았다.
+- 기존 task는 **권한관리세션** `01a0e6fa-384c-7671-abb8-53d33c42c738`, 프로젝트 ID는
+  `52bd24fb-ff53-41fb-a9df-f074b3e608ec`다. 앱 표시 이름 **권한관리 프로젝트 폴더**와
+  위 실제 디바이스 경로는 별개다. ID는 기존 기기에서의 연결 참고값이다.
+- 이 문서는 요약 체크포인트이며 대화 전체 백업·앱 프로젝트 자동 생성·기존 세션의
+  타 기기 자동 이전을 보장하지 않는다. 중요한 미푸시 제품 코드나 조사 산출물은
+  이 세션에서 만들지 않았다. 기존 세션을 종료·보관하거나 중복 세션을 만들지 않는다.
+
+## 이력 — 2026-09-28 초기 설정 및 폴더 이동
+
+- 사용자는 통합알림센터의 선행 작업으로 권한관리를 준비하도록 요청했고,
+  최초에는 프로젝트·세션 초기 설정과 공통 지침 읽기까지만 승인했다.
+  `권한관리 초기 설정`이라는 task로 시작 프롬프트를 전달받아 초기화 후 대기했다.
+  그 뒤 별도 API 사용처 조사 요청이 추가됐으며 결과는 최상단에 정리했다.
+- 최초 숫자 없는 `권한관리 프로젝트 폴더`는 안내문 이동 후 빈 상태에서 제거됐고,
+  미등록·미사용 `권한관리 프로젝트 폴더 3`도 사용자 파일·작업 commit·원격이 없는
+  빈 Git임을 확인한 뒤 메인세션에서 삭제했다. 당시 등록된 `권한관리 프로젝트 폴더 2`를 유지했다.
+- 이후 사용자가 디바이스 폴더와 앱 연결을 `권한관리 프로젝트`로 수동 변경했다.
+  메인세션은 연결 경로 일치를 확인하고 `START_PROMPT.md`의 경로를 갱신했다.
+  프로젝트 경로 변경이 기존 task의 기록된 cwd까지 갱신한 것은 아니다.
+- 2026-09-29 메인세션을 통해 새 기기 복구용 개인 기록 정리와 해당 파일의
+  commit·push를 승인받았다. 제품 조사·구현을 재개하지 않고 Git·폴더 상태만 대조해
+  이 문서를 갱신한다. 공통 색인은 메인세션이 별도로 취합한다.

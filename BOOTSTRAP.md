@@ -22,9 +22,8 @@ When starting a new session:
 
 1. Sync this repository.
 2. Read this file first.
-3. Read `SESSION_WORKFLOW.md`.
-4. Read the relevant profile, workflow, decision, and personal project
-   checkpoint documents.
+3. Follow the core read order below.
+4. Load the additional topic or history documents only when the task needs them.
 5. For project work, verify the checkpoint against live Git and read stable
    team-owned project documentation relevant to the task.
 6. Preserve existing design before proposing new structure.
@@ -58,20 +57,35 @@ explicitly says to preserve or promote local unpushed changes.
 
 ## Read Order
 
-Read these files when available:
+This is the canonical read order for new sessions and substantive work resumption.
+Other guidance should reference this section rather than maintain a separate list.
+Applicable `AGENTS.md` instructions remain in force throughout.
 
-- `BOOTSTRAP.md`
-- `SESSION_WORKFLOW.md`
-- `PROFILE.md`
-- `AI_WORKFLOW.md`
-- `DEVELOPMENT_STYLE.md`
-- `DECISION_FRAMEWORK.md`
-- `PROJECTS.md`
-- `FITNESS.md`
-- `VEHICLE.md`
-- `HANDOFF.md`
-- `MEMORY_CHANGELOG.md`
-- `projects/<project>.md` for the active project's personal progress history
+Read the core files in this order:
+
+1. `BOOTSTRAP.md`
+2. `SESSION_WORKFLOW.md`
+3. `PROFILE.md`
+4. `AI_WORKFLOW.md`
+5. `DEVELOPMENT_STYLE.md`
+6. `PROJECTS.md`
+7. The relevant `projects/<project>.md`: current checkpoint, applicable durable
+   rules, open work, and next starting point. Follow its task-specific read
+   references when relevant; do not load every project's detailed history.
+
+Load additional documents by purpose:
+
+- `DECISION_FRAMEWORK.md`: decisions, comparisons, or recommendations.
+- `FITNESS.md` / `VEHICLE.md`: the corresponding personal topic.
+- `HANDOFF.md`: cross-project orientation or finding the right resume document.
+- `MEMORY_CHANGELOG.md`: tracing when a rule or checkpoint changed; search the
+  relevant date/topic rather than reading the entire log at every start.
+- Linked history/archive documents: a prior decision, regression, migration,
+  or recovery question requires their evidence. Old checkpoints remain dated
+  history and do not override the current checkpoint or verified live state.
+
+Skipping an unrelated optional document is intentional scope selection, not
+permission to skip the core rules, the active checkpoint, or necessary evidence.
 
 For project-specific work, also read stable team-owned files in the target
 project when they exist and are relevant:

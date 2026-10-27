@@ -95,10 +95,14 @@ answering from chat history or local assumptions.
 At the beginning of work:
 
 1. Sync `codex-personal-context`.
-2. Read `BOOTSTRAP.md`.
-3. Read the topic-specific context files.
-4. If working on a project, read `projects/<project>.md`, then the relevant
-   stable documentation in the project repository.
+2. Follow the canonical [Read Order](BOOTSTRAP.md#read-order), including the
+   core guidance and the active project's current checkpoint.
+3. Use the task-specific document and history references required by that
+   read path. Unrelated personal topics and entire change logs are not startup
+   requirements.
+4. For product work, follow **Start Or Resume Workflow** in
+   `SESSION_WORKFLOW.md` to reconcile the checkpoint with the exact live
+   repository and relevant stable team documentation.
 
 ## Long-Term Memory Behavior
 

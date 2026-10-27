@@ -14,8 +14,8 @@ Do not store secrets or private customer data here.
    the existing checkout. The preferred location is `~/Repository/codex-personal-context`;
    use the actual path on the current device.
 2. Run `./setup-local-codex.sh` when local Codex guidance may be stale.
-3. Read `AGENTS.md`, `BOOTSTRAP.md`, `SESSION_WORKFLOW.md`, and
-   `DEVELOPMENT_STYLE.md`.
+3. Apply the applicable `AGENTS.md` instructions and follow the canonical
+   [Read Order](BOOTSTRAP.md#read-order), starting with `BOOTSTRAP.md`.
 4. Read `PROJECTS.md` and the relevant personal checkpoint under `projects/`.
    For Dentlink, start with the active-session links in `projects/dentlink-fe.md`.
 5. Restoring context alone does not resume implementation, QA, or servers, or
@@ -30,35 +30,45 @@ Do not store secrets or private customer data here.
    by pulling this repository. Follow each checkpoint's device-specific preparation
    notes and use the actual local paths; never record secrets here.
 
+Using a phone to control the same running Mac continues the existing session;
+it is not the other-PC recovery described above. Follow
+[Phone Remote Continuity](SESSION_WORKFLOW.md#phone-remote-continuity).
+
 ## Project Checkpoints
 
-- Action Sports Journal: `projects/action-sports-journal-app.md`
-- Dentlink frontend coordination: `projects/dentlink-fe.md`
-  — 2026-10-26 메인 정리 후 DLDS detached worktree만 추가 준비했다. DL-17012 기공소 앱 우선순위 산정과 DL-17011 관리자 권한 수정 이력 조사를 같은 메인 프로젝트의 새 세션에 배정했다. 두 조사의 별도 worktree/제품 변경은 없다. 세션 ID·승인 범위는 공통 정본 최상단을 따른다.
-- Dentlink DLDS·AI 프롬프트 / DL-16437·DL-16466·DL-16830·DL-16471:
-  [projects/dentlink-fe-opportunities.md](projects/dentlink-fe-opportunities.md)
-  — 2026-10-26 세션 유지. 옛 작업 공간 정리 후 사용자 요청으로 최신 master c597f1fb3 기준 `/Users/parkjongsun/Repository/dentlink-client-dlds`를 detached HEAD로 새로 준비했다. 브랜치 생성·구현·설치 없이 대기한다. 재개 대상은 Jira DL-16471 ‘2단계 · AI 프롬프트·하네스 정비’이며 기존 복구 자료·Studio 원격 권한403 등 별도 후속은 상세 정본을 따른다.
-- Dentlink 요구사항 외 UI 변경 조사:
-  [projects/dentlink-client-ui-requirements-audit.md](projects/dentlink-client-ui-requirements-audit.md)
-  — 승인된 UI 정리 PR #4642가 반영된 완료 이력. 미착수 조사로 되돌리지 않는다.
-- Dentlink web order feedback: `projects/dentlink-client-order-feedback.md`
-- Dentlink Office app: `projects/dentlink-app.md`
-- Dentlink Lab app: `projects/dentlink-lab-app.md`
-- Dentlink Admin LBX: `projects/dentlink-client-lbx.md`
-  — 10/26 최신 master 기반 로컬 feature/DL-16387@f389c13cf 준비·검증 완료. 기본 checkout은 master clean, 원격 LBX는 옛 원본 b69dd84b6 유지·로컬 upstream 해제. 세션/운영 홀드 유지, 새 제품 push/PR/배포 없음.
-- Dentlink 권한관리 / DL-16317: [projects/dentlink-permission-management.md](projects/dentlink-permission-management.md)
-  — 웹 운영 포함·앱 Production 활성 확인 후 업무 완료/세션 보관. 10/26 웹/Office/리뷰 worktree3개는 제거하고 설정을 별도 로컬 보관했다. 원본 refs와 OTA exactSHA/전 기기 QA 한계를 유지하며 과거 QA 대기를 새 미완료 업무로 만들지 않는다.
-  — 별도 후속 DL-17011은 새 세션에서 Admin OFFICE 회원 권한 미노출의 이력·요구사항부터 조사한다. 제보 환경은 STG이며 배포 누락 여부는 미확정, 구현은 아직 시작하지 않는다.
-- Dentlink 기공소 앱 미지원 기능 우선순위 / DL-17012:
-  [projects/dentlink-mobile-web-app-parity.md](projects/dentlink-mobile-web-app-parity.md)
-  — DL-16825 댓글44617의 후속 우선순위 산정. 새 세션에서 기존 기공소 비교표와 현재 근거를 대조해 추천안을 작성한다. 치과 영역은 보존하고 제품 구현은 하지 않는다.
-- Dentlink 웹 환경변수 관리: [projects/dentlink-client-env-management.md](projects/dentlink-client-env-management.md)
-  — 2026-10-26 기본 master 로컬 준비·전용 worktree 제거·세션 보관 완료. 후속 사용자 요청으로 이번 임시 env 백업11개 삭제, 실제 로컬 env6개 유지. 새 기능 QA/E2E는 미실행이며 별도 DEV/보안 후속은 새 지시 전 보류한다.
+Read each linked file's current checkpoint first. Do not copy changing SHAs,
+PR states, checkout inventories, or task progress into this resume index.
+Older dated sections explain history; they do not reopen completed work.
 
-- Dentlink Billing Statement 명칭 변경 / DL-16796:
-  `projects/dentlink-client-billing-statement.md` — 2026-10-25 PR4699 운영 포함 확인·로컬/원격 완료 브랜치 정리·세션 보관. 추가 예정 작업 없음.
-- Dentlink 통합알림센터: [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
-  — REST 방향·사전 조사 보존, 구현 미착수. 2026-10-26 이번 정리 대상에서 제외해 세션 유지·재개 지시 대기.
+- [Action Sports Journal](projects/action-sports-journal-app.md): use its
+  project-specific resume order and canonical workstream list.
+- [Dentlink frontend coordination](projects/dentlink-fe.md): main-session
+  ownership, active assignments, and cross-product decisions.
+- [DLDS / Studio gallery / harness](projects/dentlink-fe-opportunities.md):
+  follow the latest gallery scope and explicit resume conditions; do not
+  automatically start the older harness plan.
+- [Admin LBX](projects/dentlink-client-lbx.md): preserve the original work;
+  test-environment delivery does not lift the production hold.
+- [통합알림센터](projects/dentlink-unified-notification-center.md): planning
+  and estimation are separate from authorization to implement.
+- [Office app](projects/dentlink-app.md) / [Lab app](projects/dentlink-lab-app.md):
+  separate repositories, runtime evidence, and delivery boundaries.
+- [Office LinkTalk SIGSEGV investigation](projects/dentlink-app-linktalk-sigsegv-investigation.md):
+  bounded investigation and unresolved cause; no automatic further investigation.
+- [권한관리 / DL-16317·DL-17011](projects/dentlink-permission-management.md):
+  original delivery and later QA have separate evidence; follow the latest
+  closeout rather than an older implementation-wait entry.
+- [모바일웹·앱 비교 / DL-17012](projects/dentlink-mobile-web-app-parity.md):
+  preserve the latest approved Notion scope and user edits. Documentation
+  completion does not authorize product implementation.
+- [웹 환경변수 관리](projects/dentlink-client-env-management.md): preserve
+  active local settings; separate completed transition from optional security
+  follow-ups and another developer's setup.
+- [Billing Statement / DL-16796](projects/dentlink-client-billing-statement.md)
+  and [피드백 요구사항 외 UI 정리](projects/dentlink-client-ui-requirements-audit.md):
+  completed work history; do not recreate old pending tasks.
+- [주문 피드백](projects/dentlink-client-order-feedback.md): product contracts,
+  implementation, QA, and delivery history.
 
 Use `PROJECTS.md` for repository paths and the broader project index.
 

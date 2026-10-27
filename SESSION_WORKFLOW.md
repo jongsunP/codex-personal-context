@@ -29,8 +29,8 @@ The desired loop is:
 
 ```text
 pull personal context
-pull project repo
-read in the documented order
+follow BOOTSTRAP core read order and relevant checkpoint
+verify and refresh the assigned project repo when doing product work
 apply recorded rules
 write only to canonical locations
 commit and push durable changes
@@ -659,10 +659,11 @@ deployment still requires this separate instruction.
 4. Test the feature as part of the assembled release on staging. Only after the
    release QA is complete does that release proceed to production deployment.
 
-For PR #4512 specifically, the absence of a separate CodeRabbit review means
-the next expected state is teammate approval, followed by merge into
-`release/v1.85.0`, testing as part of the assembled 1.85 staging release, and
-then production deployment when the release passes its completion criteria.
+Historical example: at the PR #4512 checkpoint, no separate CodeRabbit review
+was present, so the recorded next steps were teammate approval, merge into
+`release/v1.85.0`, assembled-release staging QA, and then production delivery.
+This explains the workflow at that time; it is not the PR's current status or
+an instruction to resume those steps.
 
 ### Terminology And Prior Experience
 
@@ -740,12 +741,17 @@ the strategy must be replaced. When helping with Dentlink branches:
 ## Start Or Resume Workflow
 
 When the user asks to start, resume, continue, or pick up work, follow the
-documented read order exactly. Do not skip, reorder, or replace it with a chat
-summary unless a file is genuinely missing.
+canonical [Read Order](BOOTSTRAP.md#read-order). Do not replace the required
+core guidance or active checkpoint with a chat summary. The optional documents
+and historical evidence listed there are read when relevant, not in full at
+every start. Report a genuinely missing required document.
 
 1. Pull `codex-personal-context`.
-2. Read the global guidance and `projects/<project>.md` personal checkpoint.
-3. Pull the relevant project repository.
+2. Read the core guidance and relevant project's current checkpoint in the
+   canonical order, then any needed topic/history references.
+3. For product work, pull the relevant assigned project repository under the
+   existing ownership and authorization rules. Personal-context maintenance
+   alone does not require refreshing unrelated product checkouts.
 4. Check the live project branch, HEAD, remote divergence, worktree, and recent
    commits before touching files.
 5. Read stable team-owned project documentation that is relevant to the task.
