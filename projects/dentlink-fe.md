@@ -244,6 +244,7 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Session Ownership
 
+- **원격화 구분(2026-10-27):** 기본 의미는 켜진 이 Mac의 기존 세션을 휴대폰에서 그대로 이어 쓰는 것이다. 다른 PC로 실행 환경을 옮겨 Git 기반 컨텍스트를 복구하는 경우와 구분하고, 각 세션에서 같은 의미를 다시 묻지 않는다. 신규 세션은 정상 등록·프로젝트·호스트·초기 턴 확인과 초기 개인 기록 저장/푸시를 기본으로 챙긴다. 연결 설정은 사용자가 관리한다. 사용자의 '메모리화 후 휴대폰에서 보였다'는 경험은 관찰로 기록하며 Git 저장이 모바일 표시를 유발한다는 인과나 현재 표시 완료를 단정하지 않는다. 정본은 [Phone Remote Continuity](../SESSION_WORKFLOW.md#phone-remote-continuity)이다.
 - **메인세션 유지 규칙(2026-10-27):** 이 최상위 세션 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`는 보관하지 않고 계속 유지·대기한다. 보관/영구 종료 요청이나 다른 작업 세션용으로 보이는 대상 불명확 마감 지시가 들어오면 사용자에게 대상을 먼저 되묻는다. 메인 자체가 대상임을 재확인하기 전에는 보관하지 않으며, 일반적인 기록 정리·대기는 그대로 수행한다. 이 추가 확인은 다른 기능 세션 전체에 적용하지 않는다. 정본은 [Dentlink FE Main Session Retention](../SESSION_WORKFLOW.md#dentlink-fe-main-session-retention)이다.
 - 직전의 'QA 없이 배포 완료, 정리 후 세션 보관' 메시지는 사용자가 다른 세션에 쓸 내용을 잘못 보낸 것으로 철회했다. 그 메시지를 근거로 SIGSEGV 조사나 다른 업무의 배포/완료 상태를 변경하지 않는다.
 - 2026-10-27 **API 사용처 확인 세션** (`01a17b41-6ead-7fc1-9387-42f68aaa86e2`,

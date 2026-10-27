@@ -6,6 +6,11 @@
 - Read `BOOTSTRAP.md` first in a new session.
 - Read `SESSION_WORKFLOW.md` for session start, resume, wrap-up, and
   repository-boundary rules.
+- Follow **Phone Remote Continuity** in `SESSION_WORKFLOW.md`: the user's
+  default meaning of `원격화` is using a phone to continue the same Mac's
+  existing Codex sessions, not moving execution to another PC. Do not ask
+  this meaning again per session. Include registration verification and an
+  initial Git-backed checkpoint in authorized new-session setup.
 - Prefer documented context over AI memory.
 - Codex is the user's active development and repository-management agent.
   `claude-personal-context` is a remote archive, not an active context source;

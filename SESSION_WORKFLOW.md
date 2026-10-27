@@ -283,6 +283,9 @@ main session or asking about checkout separation for every small task.
    before creating the session: explicitly pass the selected `model` and
    `thinking`, then verify the actual applied values. A small task or a new
    project folder does not justify reducing the model or reasoning level.
+7. Apply **Phone Remote Continuity** below: verify the new session's normal
+   registration, project, host, and initial turn, then save its initial
+   Git-backed checkpoint without waiting for a separate memory request.
 
 The routing preference does not itself authorize product commits, pushes,
 PR changes, merges, deployment, or environment-branch changes. Apply existing
@@ -765,13 +768,47 @@ the same repository does not make it part of that session's scope. Do not move
 implementation or Git operations across that boundary unless the user
 explicitly redirects the session after the target path is confirmed.
 
-Assume project-internal Codex sessions are local-device-bound technically, but
-do not use the device as the unit of work organization. Preserve one logical
-feature scope across devices through Git-backed checkpoints, and reconstruct or
-continue that feature context on the available device rather than creating an
-office session and a home session as separate responsibilities. For remote work
-continuity, treat Git-backed documents as the durable source of truth, not the
-current device's local session state.
+Preserve one logical feature scope across devices; do not create separate
+office/home responsibilities merely because the user changes devices. Apply
+the distinction below before deciding whether environment recovery is needed.
+
+## Phone Remote Continuity
+
+This is the user's standing preference, clarified on 2026-10-27.
+
+- **Phone remote access:** the phone controls Codex on the same running Mac.
+  Continue the existing session identity, history, project, worktree, code,
+  and execution environment. The user expects existing and newly created
+  sessions to be accessible there. This is the default meaning of `원격화`;
+  do not ask the user to redefine it in every session.
+- **Another PC:** the execution host changes and may need its own checkout,
+  dependencies, environment, and session setup. Use Git-backed checkpoints to
+  recover the same logical work. Pulling personal context does not itself
+  recreate Codex projects or session history on that PC.
+- A phone connection alone is not a host migration or a request to recreate,
+  fork, move, archive, or restart sessions, resume paused work, or change
+  product code. Apply ordinary start/resume checks when work actually resumes,
+  not merely because the controlling screen changed.
+- For authorized new-session creation, use supported app tools and verify
+  the actual thread ID, intended project and execution host, registration,
+  and initial turn. Save a concise initial checkpoint with purpose, scope,
+  session ID, product checkout if assigned, and next step; commit/push personal
+  context at meaningful setup completion. Do not wait for another request to
+  `메모리화` or `원격화`. Keep personal history out of shared product repos.
+- The user observed that some new sessions appeared on the phone after a
+  memory save. Treat this as an observation, not proof that a Git commit/push
+  triggers mobile visibility. Verify registration and checkpoint persistence
+  separately; do not claim actual phone visibility or identical sidebar layout
+  without observation or user confirmation.
+- The user manages phone pairing and connection settings. Do not change
+  authentication, power/network settings, execution host, cloud placement, or
+  internal app databases to force visibility. For a reported missing session,
+  first inspect its existing identity, project, host, and archive state through
+  supported tools; report any unavailable visibility control honestly.
+
+Product reference: [Codex phone remote walkthrough](https://developers.openai.com/training/walkthroughs/working-on-your-phone)
+describes phone control of a connected computer. It does not establish that
+Git-backed memory publication controls the chat list.
 
 ## Deployment Result Checks
 
