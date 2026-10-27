@@ -226,6 +226,29 @@ This session hierarchy does not require a combined product repository, parent
 workspace, or new worktree. Its portable source of truth is
 `projects/dentlink-fe.md` plus the relevant web and app checkpoint files.
 
+### Dentlink FE Main Session Retention
+
+The user's standing instruction, confirmed on 2026-10-27, protects the
+designated Dentlink FE main session as the continuing top-level control center.
+Its identity is recorded in `projects/dentlink-fe.md`.
+
+- Keep this main session unarchived and idle between requests. Completing a
+  feature, deployment, investigation, or cleanup does not complete the main
+  session's ongoing role.
+- If a message asks to archive/delete/permanently close this main session, or
+  a feature-closeout instruction appears misdirected here with an unclear
+  target, first ask which session/work the user means. Do not archive this
+  main session or execute the ambiguous task cleanup before that clarification.
+  Explain briefly that this confirmation is required by the user's main-session
+  retention rule. Act on this main session's archival only after the user
+  explicitly confirms that this main session itself is the intended target.
+- Ordinary "정리하고 대기", "마무리", or memory closeout means curate/push
+  the relevant personal context and remain available; no confirmation is needed
+  merely to save records and wait. A withdrawn or misdirected request is not
+  evidence that the referenced product work was completed or deployed.
+- This additional confirmation requirement applies only to the designated
+  Dentlink FE main session, not to ordinary authorized feature-session cleanup.
+
 ### New Work Intake And Session Routing
 
 This is the user's standing Dentlink routing preference, clarified on

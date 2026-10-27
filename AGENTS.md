@@ -153,6 +153,12 @@
 - When the user says to wrap up, finish, close out, end, pause, hand off, or
   summarize a session checkpoint, proactively organize the current state
   instead of only saying goodbye.
+- For the designated Dentlink FE main session only, follow **Dentlink FE Main
+  Session Retention** in `SESSION_WORKFLOW.md`: retain it unarchived as the
+  ongoing control center. Confirm the intended target before acting on a
+  request to archive/close this main session or an ambiguous, apparently
+  misdirected feature closeout. Ordinary record cleanup and waiting need no
+  extra confirmation; this rule does not apply to other feature sessions.
 - For project work, include completed work, decisions, verified facts, open
   questions, changed files when relevant, what was learned, what is needed,
   future tasks, and the next starting point.
