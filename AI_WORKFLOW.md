@@ -294,6 +294,37 @@ Dentlink-specific intake rules remain limited to Dentlink.
 - Apply the nondeveloper-facing QA/comment style above. Change titles,
   descriptions, or comments only within the user's authorized scope.
 
+## Figma Comments And Personal Review Notes
+
+The user confirmed on 2026-10-27 that self-addressed Figma comments are
+development notes to review, not noise to exclude from mention searches.
+
+- For comment-based requirement review, read the comment, its replies and
+  corrections, and the exact pinned design region together. Distinguish a
+  question or provisional personal interpretation from an agreed requirement.
+- The Figma connector supplies design content but may not expose comments.
+  Notification email can locate comments, including the user's self-mentions,
+  but is not proof of the complete current thread or its exact pin location.
+- A verified local fallback is the signed-in Chrome UI: open the exact supplied
+  Figma comment URL, identify its Chrome window through CoreGraphics, capture
+  only that window with `screencapture -x -o -l <current-window-id> <temp.png>`,
+  and inspect it with `view_image`. Use this direct window check consistently
+  when reviewing comments that the connector cannot read; do not stop at an
+  email snippet when the live comment and its screen can be checked.
+- Resolve the window ID each time; Chrome AppleScript tab/window IDs are not
+  CoreGraphics capture IDs. `CGWindowListCopyWindowInfo` can be queried with
+  Swift to select the exact owner/title/bounds. A window-specific capture also
+  avoids capturing unrelated monitors or depending on the foreground app.
+- On the current device, Chrome AppleScript JavaScript execution is disabled.
+  Do not silently enable that security setting or read browser credentials.
+  Window capture worked without changing it. Do not use the voice-only screen
+  context tool in a text chat.
+- Observe the user's read-only limits: no comment submission, editing,
+  resolution, reactions, deletion, or explicit notification read-state changes.
+  Do not activate notification/email tracking links merely to resolve a URL.
+  If a target or older replies cannot be read, record the exact remaining gap;
+  one visible thread is not evidence that all comments were reviewed.
+
 ## Truthfulness And Uncertainty Calibration
 
 This applies to all Codex work for the user, across projects and sessions.

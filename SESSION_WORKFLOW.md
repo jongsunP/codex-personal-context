@@ -132,6 +132,43 @@ Do not automatically send progress or completion messages to a main or
 coordinating session. Send them only when the user explicitly requests that
 transfer. This user preference was confirmed on 2026-10-06.
 
+## Product Planning, Estimation, And Delivery
+
+The user confirmed this normal product-work sequence on 2026-10-27. Keep it
+in the common guidance so future feature sessions use the same process;
+project-specific exceptions should be recorded explicitly.
+
+1. The PM reviews the wireframe, usually in FigJam.
+2. The designer reviews the design based on the organized requirements,
+   usually in Figma.
+3. Each discipline estimates its own story points. Dentlink uses the time
+   scale in **Dentlink Story Point Estimation** in `DEVELOPMENT_STYLE.md`:
+   one point is one working day with 6 productive hours; roughly 2 hours of
+   an 8-hour day are reserved for meetings.
+4. BE and FE carry out their respective development work.
+5. When BE development is complete, BE shares the result with FE.
+6. FE continues the remaining development and actual API integration.
+7. QA follows development completion.
+8. Deployment follows QA and the separately authorized delivery process.
+
+- FE can review UX feasibility, inspect reuse points, identify dependencies,
+  and prepare a provisional estimate while planning, design, or BE work is
+  still in progress. This is preparation, not implementation approval or a
+  declaration that all requirements are final.
+- Do not interpret BE completion as requiring every FE activity to wait.
+  Within authorized development, separate work that can proceed with an
+  agreed contract from work that requires the available BE implementation.
+- State which source versions and product scope an estimate covers, its
+  implementation and verification allowance, unresolved assumptions, and
+  excluded work. Effort in developer days is not elapsed delivery time;
+  external waiting and parallel staffing affect the latter.
+- Reconcile material design/policy/API changes before treating a provisional
+  estimate as final. Do not count shared work twice or re-add already completed
+  preparation to the remaining development estimate.
+- This process does not grant implementation, Jira field changes, product
+  Git/PR mutations, merge, or deployment permission. Existing authorization
+  and final-code app runtime-verification rules remain in force.
+
 ## Dentlink Frontend Top-Level Session Model
 
 Dentlink frontend work spans `dentlink-client` (Web/Admin), `dentlink-app`

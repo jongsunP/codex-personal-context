@@ -46,6 +46,10 @@
 - For development work, CTO handoffs, implementation notes, decision records,
   and cross-session summaries, include as much detail as the work requires.
 - Explain important engineering decisions clearly when detail is necessary.
+- For product planning and effort estimates, follow **Product Planning,
+  Estimation, And Delivery** in `SESSION_WORKFLOW.md` and **Dentlink Story
+  Point Estimation** in `DEVELOPMENT_STYLE.md`. Preserve the distinction
+  between preliminary FE review, implementation, QA, and deployment.
 - For every project, treat Jira and other QA-card comments as answers to the
   nondeveloper who reported the issue, not as engineering changelogs. State the
   confirmed outcome, use a familiar comparable product behavior as evidence

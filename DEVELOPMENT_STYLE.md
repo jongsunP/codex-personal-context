@@ -317,8 +317,10 @@ applying them.
 Dentlink uses a time-based story-point convention rather than Fibonacci-style
 relative complexity.
 
-- `1 point` means one developer working day: 6 hours of planned implementation
-  work, with the remaining 2 hours of an 8-hour day kept as normal buffer.
+- `1 point` means one developer working day: 6 productive work hours. The
+  user clarified on 2026-10-27 that roughly 2 hours of an 8-hour day are
+  excluded for meetings; do not add that same daily allowance again as a
+  blanket estimation buffer.
 - Use `0.5 point` for about 3 hours and `0.25 point` for about 1.5 hours.
 - Use the same proportional scale for work longer than one day, such as `1.5`
   for about 9 hours and `2` for about 12 hours.
@@ -327,6 +329,11 @@ relative complexity.
 - Treat Codex estimates as drafts when API, design, native-app ownership, or
   another material dependency is unresolved, and state what could change the
   estimate so the user can make the final adjustment.
+- Follow **Product Planning, Estimation, And Delivery** in
+  `SESSION_WORKFLOW.md`. Explicitly state whether estimates include API
+  integration, developer testing, review/QA corrections, user QA, and delivery.
+  Separate product effort and dependency waiting; an estimate is not a
+  promised calendar date or authority to write Jira story-point fields.
 
 ## App Screen Runtime Verification Before Merge
 
