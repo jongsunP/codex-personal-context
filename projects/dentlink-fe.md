@@ -244,6 +244,9 @@ Detailed implementation history remains in the relevant existing project file.
 
 ## Session Ownership
 
+- 2026-10-27 `PATCH /office/users/own/sms/service`를 조사한 채팅은 앞으로도
+  단순 API 사용처 확인용으로 사용한다. 조회 과정과 개별 결과를 매번 저장하지 않고,
+  재사용할 결정이나 원칙만 필요할 때 짧게 개인 정본에 남긴다.
 - 메인세션은 항상 Dentlink FE 전체를 감독·조율하는 최상위 세션이다.
   신규 업무 접수, 웹·앱 영향 범위, 공통 결정·우선순위, 진행 상태,
   release·배포 단계, 구현 세션 인계와 마무리를 관리한다.
