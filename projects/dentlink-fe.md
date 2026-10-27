@@ -4,6 +4,12 @@ This is the personal cross-repository coordination checkpoint for Dentlink
 frontend work. It is not a product repository, combined workspace, or worktree.
 Detailed implementation history remains in the relevant existing project file.
 
+## 앱 SIGSEGV 알림 조사 배정 — 2026-10-27
+
+- 사용자 요청으로 기존 **메인 프로젝트 폴더**에 **앱 SIGSEGV 오류 원인 조사** 세션 `01a17c4f-57cb-7592-8b7e-b8b937ee7d32`(local)를 생성했다. 실제 적용 모델/추론 `gpt-6-astra / ultra`와 조사 시작을 확인했으며 별도 폴더·worktree·브랜치는 만들지 않았다.
+- 대상은 [Slack 16:35:05 KST 알림](https://innovaidhq.slack.com/archives/C0CC6EDL78T/p1793086505051709), Datadog monitor337287804 / issue `d5629b34-d1d8-11f1-b947-da7ad0900002`의 **SIGSEGV(SEGV_ACCERR)**다. 조회 당시 파일명·댓글은 없었으며 실제 앱/환경/버전·native stack·영향·배포 이력을 조사하도록 전달했다. 오전 컨펌 JS Render Error와 동일 원인이라고 추정하지 않는다.
+- 새 세션에서 사용자에게 직접 조사 결과와 미확인 사항·후속안을 보고한다. 현재 승인 범위는 읽기 전용 원인 조사이며 제품 수정/PR/배포/Jira·Slack 쓰기는 없다. 이전에 종료한 앱 런타임은 불필요하게 재실행하지 않는다. 메인은 조율 색인만 기록하며 다른 작업의 공통지침3파일 미커밋은 보존한다.
+
 ## 앱 머지 전 화면 실검증 의무화 — 2026-10-27
 
 - 사용자 지시에 따라 모든 앱 작업의 머지 필수 조건을 [App Screen Runtime Verification Before Merge](../DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge)에 정리했다. 영향 화면 전체·공통 코드의 간접 영향·권한별 실제 동작을 확인하며 자동 검사 통과만으로 머지 가능으로 보고하지 않는다. AGENTS·세션 절차·앱 개발/온보딩 문서에서 정본을 참조한다.
