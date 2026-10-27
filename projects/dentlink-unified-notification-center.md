@@ -1,8 +1,39 @@
 # Dentlink 통합알림센터 — 사전 검토 체크포인트
 
-최종 갱신: 2026-10-27 19:31 KST — **시트 랜딩·Slack 운영/용어/일정·사용자가 수정한 Jira 산정 전제까지 대조한 사전 검토 마감. 현재 자료에서 기존 병행 계획을 바꿔야 할 새 장애는 확인되지 않았다.** 총13작업일/잔여약12작업일(QA 제외), 제품별8.5/11.5/9.5SP·하위합계31SP를 유지한다. **잔여12일은 FE 선행 개발과 BE 병행을 포함하며, BE·디자인 최종 완료 후부터 다시 계산하는 기간이 아니다.** 목표는10/29 시트·디자인 정리, 다음 주 API 규약 선공유,11/10 BE완료,11/16·19 QA,11/23 배포다. UX DL-17048 완료, 공통설계1개·제품개발11개 대기라는 마지막 검증 상태를 유지한다. **제품 구현 미착수. 실제 착수는 별도 사용자 요청 후이며 자동 감시 없이 대기**한다.
+최종 갱신: 2026-10-27 22:07 KST — **현재 코드·DEV Swagger를 대조한 FE→BE API 제안서 작성 완료. 웹 기존 알림 개선과 앱 인박스 신규를 공통 서버 데이터·설정으로 통합하는 협의용 초안이며, BE 확정 계약이나 구현 완료가 아니다.** 이전 시트·UX·일정 검토를 보존하고 총13작업일/잔여약12작업일(QA 제외), 제품별8.5/11.5/9.5SP·하위합계31SP는 변경하지 않았다. **잔여12일은 FE 선행 개발과 BE 병행을 포함하며, BE·디자인 최종 완료 후부터 다시 계산하는 기간이 아니다.** 목표는10/29 시트·디자인 정리, 다음 주 API 규약 선공유,11/10 BE완료,11/16·19 QA,11/23 배포다. UX DL-17048 완료, 공통설계1개·제품개발11개 대기라는 마지막 검증 상태를 유지한다. **제품 구현 미착수. 실제 착수는 별도 사용자 요청 후이며 자동 감시 없이 대기**한다.
 
 ## 최신 체크포인트 — 2026-10-27 사전 기획·검토 유지
+
+### FE 관점 API 역제안서 — 2026-10-27 22:07 KST
+
+- 사용자께서 오늘까지의 기획·디자인·조사와 현재 코드를 토대로 BE에 필요한 API를 역으로 제안하는 문서 작성을 승인했다. 화면별 AS-IS/TO-BE, method/path, payload/response, 유지·변경·신규·FE 미사용을 표로 정리하며 필요한 추가 제안도 포함한다. **웹은 기존 알림 개선, 앱 인박스는 신규, 양쪽의 데이터·설정을 함께 관리하는 것이 목적**이다. 기존 앱 푸시 설정·토큰까지 없었다는 의미는 아니다.
+- 산출물: [통합알림센터 API 제안서 2026-10-27](dentlink-unified-notification-api-proposal-2026-10-27.docx). 8쪽의 표 중심 Word 문서이며, 신규 경로·키는 가칭/협의안으로 표시했다. 기존 UX·권한·호환성·서버 API 없이 가능한 처리·BE 확인사항을 포함한다. 모든 페이지를 렌더링해 한글, 표 잘림, 넘침, 빈 페이지가 없는 것을 확인했다. 임시 스크립트·Swagger 원문·렌더 PDF/PNG·폰트는 제품 저장소에 넣지 않았다.
+- 개인 정본은 `main@ebb31b6` clean에서 `git pull --ff-only` 최신 확인 후 사용했다. 작업 중 세션 목록상 메인은 idle, 관련 다른 세션은 notLoaded이며 보조 에이전트는 웹/Office/Lab 읽기만 수행했다. root만 개인 제안서와 이 체크포인트·변경로그를 쓴다.
+
+**이번에 새로 확인한 근거**
+
+- 개발 Swagger `https://dev-api.dentlink.io/v3/api-docs`를 10/27 저녁 HTTP GET으로 읽었다(OpenAPI 3.0.1, path 967개). 문서에 사용한 기존 method/path는 모두 이 스펙과 대조했고, 생성 선언만으로 실제 호출을 단정하지 않고 화면→hook/query→service를 추적했다. 인증된 실제 API 요청·제품 서버 실행·기기 QA는 하지 않았다.
+- Notion PRD를 읽기 전용으로 재조회했고 마지막 수정은 **10/27 17:28:36 KST**였다. 인박스·설정·담당 주문·Home·LinkTalk 정책 등 관련 본문을 대조했다. 반환은 `truncated=true`, 미반환 임베드1개라 전체 문서·댓글을 무누락 확인했다고 하지 않는다. Figma 메모6개 위치·Sheet·Slack·Jira는 오늘 Git-backed 검토를 재사용했으며 이번 API 작성에서 외부 전수 재조사는 하지 않았다.
+- 제품 소스 기준은 웹 `feature/DL-17011@9dcb644d566cee06fa0019c16b7f47cdf10e8d36`, Office `main@7f586790e0bbd7b288458e29f00654d38ba68da2`, Lab `QA/DL-16917@06e8dfde967502a4830e9a93c018ce150702dc7c`. 제품 fetch/pull·checkout·코드 변경은 하지 않았다. 현재 브랜치를 알림센터 구현 브랜치로 지정한 것이 아니다.
+
+**확인된 현재 계약과 제안의 구분**
+
+| 구분 | 확인된 현재 상태 | 제안서의 방향 |
+| --- | --- | --- |
+| 목록/읽음 | `GET /messages/notifications`는 id/serviceType/size와 `NotificationDto[]`, 부분 읽음은 `PATCH .../read/partial`의 `unreadNotificationIds[]`, 모두 읽음은 `PATCH .../read/all`. 웹 실제 호출, 앱 인박스 연결 없음 | 기존 경로·배열 구조를 재사용하고 `unreadOnly`, `scope=INBOX` 등 선택적 확장 검토. 단건 읽음도 배열1개면 가능 |
+| 집계/다른 소속 | `GET .../unread`는 boolean, `GET .../employers`는 string[]. 타 소속 조회는 Clinic 웹 실제 사용 | 기존 응답을 깨지 않도록 `GET /messages/notifications/summary` 가칭 후보. 현 소속 및 타 소속 미읽음 수, 필요 소속 식별자. 소속명은 기존 목록으로 연결 |
+| 공통 설정 | 앱 `GET/POST /app/users/own/push-preferences`, `PATCH .../push-preferences/{preferenceId}`, `PATCH .../push-settings/{pushSettingId}`. 웹 신규 설정용 공통 호출 없음 | `GET/PATCH /messages/notification-preferences` 가칭 후보. Employee 기준 domain/category/상위 enabled/MAIL·PUSH 하위, 담당 주문 수신 orderOnly. platform은 표시 필터이며 저장 공간 분리 아님 |
+| 삭제 | 웹 `DELETE /messages/notifications/{notificationId}` 실제 사용 | 새 FE에서 UI/호출 제외. 서버 API 폐기 승인이나 다른 소비자 미사용 판정은 아님 |
+| 소속/토큰/배지 | 기존 소속 조회·activates, devices 등록·tokens 해제·badge-count 유지 가능. 배지0 초기화는 알림 REST 읽음과 별개 | 새 이동이력·OS권한·안내1회 API 없음. 집계 범위와 기존 배지0 경로만 맞춤 |
+| Home/LinkTalk | 웹 orders/main, Office orders+pending-summary, Lab POST orders/search, 양쪽 chats/latest와 unread-count 실제 연결. Lab 검색 DTO에는 담당 주문 필터 없음 | 기존 API 필터 확장 후보. 목록/count 일치, 수신 orderOnly와 플랫폼별 Home 표시 필터 분리. 홈 로컬 저장·온보딩을 위해 서버 API부터 신설하지 않음 |
+
+- 앱 실제 헤더는 Bearer+employee-id/employer-id 등, 웹 공통 axios는 Bearer+employee-id다. Swagger에 두 헤더가 나온다는 이유로 웹도 현재 두 헤더를 필수 전송한다고 쓰지 않았다.
+- 기존 NotificationDto의 `landingUrl`을 유지하고 domain/category, 필요한 대상소속, 앱 랜딩/무이동 구분을 추가하는 안이다. **플랫폼별 목적지와 인박스/PUSH 클릭 목적지는 별도 축**이며 URL 필드2개 자체가 필수는 아니다. 앱 URL 누락을 무조건 WebView/무이동으로 해석하지 않는다.
+- 푸시 읽음은 기존 ID 배열 방식 또는 BE가 특정 발생 건을 식별할 조합/문맥을 정의하는 방식 모두 가능하게 남겼다. `readContext`는 설명용 가칭일 뿐이며 notificationId 필수나 신규 resolver API로 확정하지 않았다. 소속·수신 권한 검증, 정상 랜딩과 읽음 실패 분리, 같은 업무 대상의 과거 알림 임의 일괄 처리 금지를 유지한다.
+- 상위 OFF→하위 OFF, 재ON→지원 하위 ON, 하위 모두OFF여도 상위유지는 기존 확정 UX다. 서버 단일 변경으로 일관성을 맞추는 안이며, 웹에 숨은 PUSH의 상위 연동 범위와 상위OFF에서 특정PUSH만ON하는 처리만 최종 계약으로 남겼다.
+- **기존 PUSH OFF 보존은 해당 채널에 대한 것**이며 신규 인박스 상위/MAIL까지 OFF로 확대하지 않는다. 신규 기본값·구 pushType 매핑은 별도로 정한다. 구버전 앱의 자동 초기화 POST/기존 PATCH가 새 공통 설정을 덮지 않도록 BE의 호환 매핑·처리 기준도 확인한다. 현재 결함을 입증한 것이 아니라 이행 설계 확인사항이다.
+- 남은 계약: 제품/역할별 카탈로그·기본값/매핑, 목록·집계·배지 범위, 랜딩·읽음 식별 정보, 상세 실패/대상 삭제 시 읽음·Read All 기준. 기존 목록/클릭 정책 전체를 미정으로 되돌리지 않는다.
+- **다음 시작점:** 사용자 검토 또는 BE 명세가 오면 제안서의 가칭 항목과 차이를 대조한다. 이번 문서 작성은 사전 플래닝이며 공통설계 카드 완료·제품 구현·외부 공유를 뜻하지 않는다. Jira/Slack/Figma/Sheet/Notion 쓰기, branch/worktree/PR/배포 변경은 없다. 기존 일정/SP는 그대로이며 실제 구현은 별도 요청을 기다린다.
 
 ### 시트·연관 Slack·산정 전제 최종 정리 — 2026-10-27 저녁
 
