@@ -24,7 +24,8 @@ Use multiple Codex sessions when separation improves ownership and context:
   explicitly coordinates otherwise.
 - Durable continuity remains Git-backed in `codex-personal-context`; chat and
   device-local session history are supplementary.
-- Distinguish phone control of the same Mac from moving work to another PC.
+- Keep the primary Mac as the execution host when a phone or another computer
+  controls it; distinguish this from explicitly moving execution to another PC.
   Follow **Phone Remote Continuity** in `SESSION_WORKFLOW.md` for the user's
   established meaning of `원격화` and routine new-session registration and
   initial checkpoint requirements. Git-backed recovery and mobile chat-list

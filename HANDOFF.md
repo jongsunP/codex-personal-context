@@ -30,8 +30,9 @@ Do not store secrets or private customer data here.
    by pulling this repository. Follow each checkpoint's device-specific preparation
    notes and use the actual local paths; never record secrets here.
 
-Using a phone to control the same running Mac continues the existing session;
-it is not the other-PC recovery described above. Follow
+Using a phone or another computer to control the primary Mac continues its
+existing session. This does not move execution to that controlling device.
+For remote continuity and a requested pairing PIN, follow
 [Phone Remote Continuity](SESSION_WORKFLOW.md#phone-remote-continuity).
 
 ## Project Checkpoints

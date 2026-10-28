@@ -83,7 +83,8 @@ For detailed current state, read:
 - 기능별 보관/대기 상태와 다른 기기의 첫 대화에서 읽을 체크포인트:
   [projects/dentlink-fe.md](projects/dentlink-fe.md)의 **다른 기기에서 이어가기** 절.
   세션 배정·정리의 공통 결과는 이 조율 문서에, 상세 상태는 각 기능 정본에 둔다.
-- 같은 Mac에 휴대폰으로 접속하는 경우는 별도 PC 복구와 구분한다.
+- 현재 Mac을 기본 실행 PC로 두고 휴대폰·다른 컴퓨터에서 원격 제어한다.
+  실행 환경 자체를 다른 PC로 이전하는 경우와 구분하며 연결 PIN 확인도
   [Phone Remote Continuity](SESSION_WORKFLOW.md#phone-remote-continuity)를 따른다.
 
 ### Dentlink Billing Statement 명칭 변경 — DL-16796

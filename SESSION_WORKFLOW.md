@@ -780,18 +780,26 @@ the distinction below before deciding whether environment recovery is needed.
 
 ## Phone Remote Continuity
 
-This is the user's standing preference, clarified on 2026-10-27.
+This is the user's standing preference, clarified on 2026-10-27 and
+confirmed through successful phone/other-computer control on 2026-10-28.
 
-- **Phone remote access:** the phone controls Codex on the same running Mac.
-  Continue the existing session identity, history, project, worktree, code,
-  and execution environment. The user expects existing and newly created
-  sessions to be accessible there. This is the default meaning of `원격화`;
-  do not ask the user to redefine it in every session.
-- **Another PC:** the execution host changes and may need its own checkout,
+- **Primary execution computer:** keep the current Mac as the default host.
+  Phones and other computers can control the sessions, repositories, files,
+  tools, and execution environment on that Mac. On 2026-10-28 the user
+  confirmed this arrangement works as intended; this is user-confirmed
+  connection evidence, not a claim that every product or device flow was tested.
+- **Remote access from a phone or another computer:** continue the same Mac's
+  existing session identity, history, project, worktree, code, and execution
+  environment. The user expects existing and newly created sessions to be
+  accessible there. This is the default meaning of `원격화`; do not ask the
+  user to redefine it in every session. Another computer can be a controller
+  without becoming the execution host.
+- **Moving execution to another PC:** only an explicit host-migration request
+  changes this arrangement. The new host may need its own checkout,
   dependencies, environment, and session setup. Use Git-backed checkpoints to
   recover the same logical work. Pulling personal context does not itself
   recreate Codex projects or session history on that PC.
-- A phone connection alone is not a host migration or a request to recreate,
+- A remote connection alone is not a host migration or a request to recreate,
   fork, move, archive, or restart sessions, resume paused work, or change
   product code. Apply ordinary start/resume checks when work actually resumes,
   not merely because the controlling screen changed.
@@ -806,15 +814,62 @@ This is the user's standing preference, clarified on 2026-10-27.
   triggers mobile visibility. Verify registration and checkpoint persistence
   separately; do not claim actual phone visibility or identical sidebar layout
   without observation or user confirmation.
-- The user manages phone pairing and connection settings. Do not change
+- When the user asks Codex to show a pairing PIN or set up remote access,
+  use the pairing procedure below within that request. Otherwise, the user
+  manages pairing and connection settings. Do not change unrelated
   authentication, power/network settings, execution host, cloud placement, or
   internal app databases to force visibility. For a reported missing session,
   first inspect its existing identity, project, host, and archive state through
   supported tools; report any unavailable visibility control honestly.
 
-Product reference: [Codex phone remote walkthrough](https://developers.openai.com/training/walkthroughs/working-on-your-phone)
-describes phone control of a connected computer. It does not establish that
-Git-backed memory publication controls the chat list.
+### Finding A Remote Pairing PIN
+
+Use this procedure when the user asks to connect another device or show a PIN.
+The following Korean UI labels were verified on the current Mac on 2026-10-28;
+refresh the actual UI if an app update changes them.
+
+1. On the primary Mac, open ChatGPT/Codex **설정 → 연결 → 이 Mac 제어**.
+   The supported deep link is `codex://settings/connections/computer`;
+   on macOS it can be opened with
+   `open 'codex://settings/connections/computer'`.
+2. Select **추가** (or **설정** / Set up on an unconfigured host).
+   In the pairing dialog, choose **컴퓨터** to display the manual pairing PIN.
+   Read the code from the current screen and give it directly to the user.
+   The **전화** tab shows the QR code for phone pairing.
+3. On the controlling computer, use **설정 → 연결 → 다른 기기 제어 → 추가**
+   and enter that code. The supported settings deep link there is
+   `codex://settings/connections/devices`. Use the same ChatGPT account and
+   workspace, and complete any verification presented by the app.
+4. Verify that the intended primary Mac is selected and the existing session
+   can be continued. Separate the agent's observed UI from the user's
+   confirmation of actual remote control. Already-paired devices normally use
+   their existing connection; a new code is for pairing/re-pairing, not every
+   ordinary access.
+
+The PIN is a temporary pairing code, not the Mac's permanent identifier.
+Do not save its literal value as reusable configuration or repeat an old chat's
+PIN as current. When pairing is needed, read the current dialog; if it has
+expired, use the dialog's refresh control or restart the pairing flow. Record
+the retrieval method and confirmed connection outcome, not the PIN or QR
+payload. Do not assume a fixed expiration duration without current evidence.
+The installed desktop bundle was checked on 2026-10-28: the manual-code UI
+calls `remoteControl/pairing/start`, uses the returned `expiresAt` to schedule
+renewal, and its refresh button requests a new pairing response. The total
+validity duration and immediate invalidation after use were not established.
+
+Practical UI recovery from the 2026-10-28 session: the installed app's process
+name was `ChatGPT` with bundle ID `com.openai.codex`, rather than `Codex`.
+Prefer the supported deep link; if UI automation is needed, inspect current
+controls/screens and verify each resulting screen. Do not reuse screenshot
+coordinates. If a saved chat's working directory no longer exists, execute
+read-only UI helpers from an existing directory (for example `/`) rather than
+creating that old project directory merely to open settings.
+
+References: [remote connections](https://learn.chatgpt.com/docs/remote-connections),
+[settings deep links](https://learn.chatgpt.com/docs/app/commands), and
+[short-lived pairing codes](https://learn.chatgpt.com/docs/cli/reference#codex-remote-control).
+These references do not establish that Git-backed memory publication controls
+the chat list.
 
 ## Deployment Result Checks
 

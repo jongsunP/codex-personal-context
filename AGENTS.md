@@ -7,8 +7,11 @@
 - Read `SESSION_WORKFLOW.md` for session start, resume, wrap-up, and
   repository-boundary rules.
 - Follow **Phone Remote Continuity** in `SESSION_WORKFLOW.md`: the user's
-  default meaning of `원격화` is using a phone to continue the same Mac's
-  existing Codex sessions, not moving execution to another PC. Do not ask
+  default meaning of `원격화` is using a phone or another computer to
+  continue the primary Mac's existing Codex sessions. Keep that Mac as the
+  execution host unless migration is explicitly requested. For a requested
+  pairing PIN, follow **Finding A Remote Pairing PIN** there and read the
+  current temporary code instead of storing/reusing an old value. Do not ask
   this meaning again per session. Include registration verification and an
   initial Git-backed checkpoint in authorized new-session setup.
 - Prefer documented context over AI memory.
