@@ -2,13 +2,14 @@
 
 ## Current checkpoint — 2026-10-29
 
-- 사용자 추가 승인으로 **원본 commit/push와 별도 develop 대상 PR 생성**까지 완료했다. **병합·배포는 사용자가 직접 수행**하며 에이전트는 실행하지 않는다. 원본 브랜치는 후속 작업용으로 보존한다.
+- 사용자 추가 승인으로 **원본 commit/push와 별도 develop 대상 PR 생성**까지 완료했다. 이후 사용자가 병합·배포를 직접 진행했다고 전달했고 **정리 후 대기**를 요청했다. PR 병합은 실조회로 확인했으며 배포 결과·서빙 revision·배포 후 QA는 별도 조회하지 않았다. 원본 브랜치는 후속 작업용으로 보존하고 사용자 재개 요청까지 추가 작업·모니터링을 하지 않는다.
 - 상위 [DL-17099](https://innovaid.atlassian.net/browse/DL-17099)는 동료 원본으로 **읽기만 했고 수정·댓글을 남기지 않았다.** Frankie 담당 하위 [DL-17101](https://innovaid.atlassian.net/browse/DL-17101)에 작업 정의를 설명으로, 구현·검증·PR·미완료 사항을 댓글 `44705`로 기록했다. 상태는 진행 중을 유지했다. 상위의 협력기공소 확장보다 이번 대화의 **INTERNAL만 변경, 다른 타입 유지** 범위가 우선한다.
 - 원본 checkout `/Users/parkjongsun/Repository/dentlink-client`, `feature/DL-17101@ee59a7e2a4ec222b74c8badad091a02dfbff19ba`를 origin에 push했다. 부모는 최신 확인 `origin/master@57bb759ca08e3752140ceffdae2a5421934ec242`이며 master 대비 0 behind/1 ahead다. 원래 Cursor checkout과 localhost:3005 서버를 유지했다.
 - 배포 전용 checkout `/Users/parkjongsun/Repository/dentlink-client-dl-17101-develop`, `feature/DL-17101-develop@8ee2b9ec76faf84aa406b8be2ee14dc67e097ae5`를 origin에 push했다. `origin/develop@8e40e9cb6487e0b983065c0bd4a250a6d1293bd5`에서 원본을 충돌 없이 cherry-pick했다. app managed-worktree 도구가 workspace 경계로 거절해 일반 git worktree로 준비했다.
-- [PR #4801](https://github.com/Innvoaid/dentlink-client/pull/4801): `feature/DL-17101-develop` → `develop`, open/일반 PR, 1커밋·19파일(+412/-148), 생성 후 base/head/SHA와 mergeable을 확인했다. 원본과 stable patch-id `66016ba691ee96fd21576e4c2b2af0720ec7c8b2` 및 변경 19파일의 최종 내용이 동일하다. CodeRabbit 확인·CI 완료·DEV 배포 성공을 주장하지 않는다.
+- [PR #4801](https://github.com/Innvoaid/dentlink-client/pull/4801): `feature/DL-17101-develop` → `develop`, **2026-10-29 17:58:21 KST 병합 완료**를 GitHub에서 확인했다. merge commit `9a745cfb22aae22a621ea8542d0c8e9f5f55cafa`, 1커밋·19파일(+412/-148). 원본과 stable patch-id `66016ba691ee96fd21576e4c2b2af0720ec7c8b2` 및 변경 19파일의 최종 내용이 동일하다. 사용자 배포 진행 전달과 에이전트의 CI·배포 결과·QA 확인은 구분한다.
+- 대기 전 읽기 전용 확인에서 원본/배포 checkout 모두 위 branch·HEAD 그대로이며 clean이었다. 브랜치와 worktree를 삭제하거나 로컬 서버를 종료하지 않았다. 하위 DL-17101에 병합 확인·사용자 배포 진행 전달·번역 시트 미완료·대기를 후속 댓글로 기록했다. Jira 상태는 진행 중을 유지하며 상위 DL-17099는 수정하지 않았다.
 - 로컬 브라우저의 frankieDevLab은 사용자가 Admin에서 변경한 **INTERNAL**이며 employee own 응답의 employer.labType으로 확인했다. 타입/권한/배송 상태/API 비즈니스 규칙은 이번 코드에서 변경하지 않았다.
-- 구현과 로컬 런타임 검증 및 PR 준비를 마쳤으며 **사용자 확인·병합·배포 대기**다. 번역 운영 시트 동기화는 아래 별도 미완료 항목이다.
+- 구현·로컬 런타임 검증·원본 보존·개발용 PR 병합까지 기록했고 **사용자 재개 요청 대기**다. 번역 운영 시트 동기화는 아래 별도 미완료 항목이다.
 
 ## Confirmed behavior
 
@@ -41,7 +42,7 @@
 
 ## Resume point
 
-1. 개인 컨텍스트와 원본/배포 checkout의 branch·원격 SHA·PR 상태를 확인한다. 원본 `feature/DL-17101`을 보존하며 사용자 QA 피드백부터 처리한다. 사용자의 별도 요청 없이 PR 병합·배포·CodeRabbit 리뷰 대응을 시작하지 않는다.
+1. 사용자가 재개를 요청하면 개인 컨텍스트와 원본/배포 checkout의 branch·원격 SHA를 확인하고 QA 피드백부터 처리한다. 원본 `feature/DL-17101`은 계속 보존한다. 대기 중에는 번역 시트 작업·QA·배포 조회·CodeRabbit 대응을 자동 재개하지 않는다.
 2. 필요시 localhost:3005/shipping에서 각 형식의 개별·일괄 출력과 프린터 용지/배율을 사용자와 확인한다. 실제 배송 수정·물리 프린터·다른 타입 실제 계정은 아직 별도 확인 범위다.
 3. 번역 시트 충돌과 동시편집 조건이 정리되면 승인 범위 내4키 동기화를 해결하고 최종 영향 범위만 재검증한다. Jira 후속 기록은 DL-17101만 수정하며, DL-17099에는 수정·댓글을 남기지 않는다.
 
