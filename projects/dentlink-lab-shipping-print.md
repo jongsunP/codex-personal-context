@@ -1,23 +1,29 @@
 # Dentlink Lab Shipping Print UX — DL-17101
 
-## Current checkpoint — 2026-10-29
+## Current checkpoint — 2026-10-29 23:12 KST
 
-- **정리 완료·사용자 로컬 QA 대기:** 사용자가 로컬에서 계속 확인하는 동안 추가 구현·QA·배포 감시를 중단한다. localhost:3005 PID76183의 cwd가 원본 워크트리의 lab임을 재확인했으며 서버·브라우저·원본/배포 워크트리를 유지했다. PR #4802는 마감 조회 시 open/unmerged였다.
-- 사용자 요청으로 Jira DL-17101을 **Ready for Deploy**(요구사항 개발 완료)로 전환하고 기존 후속 댓글44707에 사용자 로컬 확인 중·최종 QA/병합/배포 미완료를 명시했다. 아래 구현 시점의 진행 중 상태보다 이 최신 상태를 우선한다. 상위 DL-17099는 변경하지 않았다.
-- 새 세션/워크트리의 env 상속 규칙을 공통 AGENTS와 SESSION_WORKFLOW의 **Local Env Inheritance**에 정리하고 기존 setup-local-codex.sh로 전역 ~/.codex 지침 동기화를 완료했다. 두 파일의 정본 일치를 cmp로 확인했고 이 세션에도 새 AGENTS가 다시 제공됐다. 다른 실행 중 세션의 자동 재로드까지 확인한 것은 아니다. 기존 사용자 설정 보존, Git 제외, 실제 실행 cwd/port 확인까지 포함하며 값 관리/외부 전송/배포 설정 변경 권한으로 확대하지 않는다.
+- **추가 구현·원본/배포용 커밋·푸시·PR 정리 완료, 사용자 병합/배포 및 실물 QA 대기.** 열린 DL-17101 PR은 [#4802](https://github.com/Innvoaid/dentlink-client/pull/4802) 1개다. 최신 제목은 `[DL-17101] 자체기공소 출력물별 용지·회전·배치 설정`, open/non-draft/unmerged/mergeable이며 develop 대상 2커밋·14파일(+1469/-55). CI 완료나 배포 성공을 뜻하지 않는다. 사용자 요청 없이 병합·배포·추가 구현·반복 감시는 하지 않는다.
+- 사용자 최종 목적: 여러 프린터를 사용하는 사람이 자기 환경에 맞는 값을 넣고 **출력물 3종별로 독립 기억하는 기반**이다. 특정 프린터/용지 규격을 고정하거나 프린터 자동 선택/서버 공유 기능을 만드는 것이 아니다.
+- 원본 전용 `/Users/parkjongsun/Repository/dentlink-client-dl-17101`: `feature/DL-17101@3a1efad6fbb4ac23fcbd250373fc6667587ab2dc`, origin 일치·clean. `origin/master@57bb759ca` 직계 0 behind/3 ahead. 이후 구현도 이 경로와 원본 브랜치를 사용한다.
+- 별도 배포 checkout `/Users/parkjongsun/Repository/dentlink-client-dl-17101-develop`: `feature/DL-17101-print-settings-develop@e34c1b805fa8387feb6eb18a7922a9385ed52adc`, origin 일치·clean. 최신 `origin/develop@9a745cfb2` 위 설정2커밋이다. 새 추가 커밋과 원본 patch-id `cd61b2591f381d33c2afbeeacc1cf33b318c3635` 일치, 14개 변경 파일 내용도 동일하다. 이전 설정 patch-id `6203bc4d50c253f1ffd66117477d35596d4695c4` 일치 기록 유지.
+- 이전 배포 `feature/DL-17101-develop@8ee2b9ec7`와 원본·배포 워크트리를 보존한다. 메인 master 및 다른 작업 checkout은 건드리지 않았다. 두 작업 checkout은 수동 Git worktree이므로 명령 cwd를 매번 명시한다.
+- 설정 모달에 용지 너비/높이(mm/cm), 상하좌우 공통 여백, 회전0/90/180/270°, 배율1–300%, 가로·세로 signed 이동을 제공한다. mm/cm 변경은 치수·여백·이동값을 함께 환산한다. 기본 새 설정은 A4·여백10mm이나 모두 사용자가 바꿀 수 있다.
+- `shipmentPrintSettings:ATTACHMENT/SHIPPING/ORDER_SHEET` 각각 저장한다. 같은 브라우저+origin+같은 형식의 다른 창에는 storage event로 전달되지만 형식끼리 섞이지 않으며 PC/브라우저/서버 계정 동기화는 없다. version2에서 width/height는 **용지 크기**이며 구버전 저장값은 크기·회전·배율 유지, 여백/이동0으로 읽기 변환한다(자동 저장 덮어쓰기 없음).
+- 콘텐츠100%는 여백과 배송 안내 공간을 제외한 영역 안에 비율을 유지해 맞춘다. 기본은 왼쪽 위이며 강제 가로 중앙정렬을 제거했다. 회전 내부 중앙 transform은 콘텐츠의 회전 경계를 맞추는 용도다. 용지·여백을 화면에 표시하고 `@page size/margin`과 동일 배치를 인쇄한다. 확대/이동으로 실제 용지 밖으로 벗어나면 화면에서 잘림 경고와 잘린 결과를 보여준다.
+- 배송용 안내 문구는 회전하지 않고 같은 용지 안에 폭/높이를 맞춰 확보하며 운송장은 남은 공간을 사용한다. 주문서는 기존 페이지별 내용을 조정한다. 설정 없음/비INTERNAL/스티커/배송 API·업무 규칙은 기존 경로를 유지한다. 실물 프린터·대응 용지·인쇄 배율 선택은 브라우저 대화상자에서 사용자 담당이다.
+- 원본·배포 반영 코드 Clinic/Lab/Admin 타입 검사 통과, 설정/레이아웃 Jest **56개** 통과. 양쪽 정상 push 훅의 lint·Admin DLOS 가드·공유 테스트/coverage 통과(기존 lint 경고 유지, 훅 우회 없음). 독립 코드 리뷰 지적1건(print display:block이 비INTERNAL까지 적용)은 설정 있는 INTERNAL에만 제한해 반영했다.
+- 최종 원본 Chrome: 기존 A4210×297mm·100%·270° 부착용은 **1장**(기존2장 밀림 해소), 이미지 왼쪽 위 좌표=용지 원점 확인. 100×150mm·여백3mm·80%·90°·X2/Y3mm, cm 환산/새로고침 저장 유지,150% 확대 잘림 경고를 확인했다. 배송용 안내 포함1장,90°회전 주문서1장, 3형식 각2건=각2장 native 인쇄 미리보기 확인. 일괄 검증 URL은 배송목록의 실제 두 링크에서 구성했으며 목록 선택 UI를 이번에 재검증한 것은 아니다.
+- 사용자 원래 부착용 값은 이 재개 시210×297mm·100%·270°였으며 최종 해당값+여백0/이동0으로 복원했다. 배송용과 주문서는 새 기본 A4·여백10·100%·0°·이동0 설정을 저장해 확인했다. 다른 창으로 옮겨도 형식별 설정을 유지했다. 임시 일괄검증 탭만 닫고 사용자 기존 부착용 출력창과 배송목록을 유지했다.
+- localhost:3005 PID76183 cwd는 원본 `/lab`임을 최종 재확인했고 서버를 유지했다. 설정 UI 증거 `/tmp/dl17101-paper-settings.png`; 타입/테스트/commit/push/i18n 로그 `/tmp/dl17101-paper-*`. 임시 로그 존재와 코드 일치는 재개 시 확인한다.
+- E2E 가드 `NO_IMPACT`: 04_labShipment/05_labStatus/원본08_orderFeedback helper의 locator·API 대기·업무 단계 계약 보존. 원본 mark/커밋 후 check, 배포 mark/열린 PR push check 통과. E2E 수정·실행은 없으며 브라우저 인쇄 증거와 구분한다.
+- 하위 [DL-17101](https://innovaid.atlassian.net/browse/DL-17101) 설명의 설정 범위를 최종 목적/용지 기준으로 갱신하고 댓글 **44708**에 PR·검증·남은 범위를 기록했다. **Ready for Deploy** 유지 및 설명 read-back 일치 확인. 상위 DL-17099는 수정/댓글 없음.
+- **남은 확인:** 실제 라벨/A4 프린터의 용지 지원·인쇄 불가 여백/드라이버 설정, 배송 수정부터 SSE 자동창까지 전체 흐름, 비INTERNAL 실제 계정 런타임, 대량 행 주문서의 실제 다페이지 데이터. 배포 checkout 별도 서버 런타임은 실행하지 않았고 파일 동일성·타입/테스트로 확인했다. 운영 번역 시트 동기화/PM 검토는 아래 조건으로 보류다.
+- env 상속 지침은 이미 공통 AGENTS/SESSION_WORKFLOW의 **Local Env Inheritance** 및 전역 ~/.codex에 반영·일치 확인했다. 새 세션/워크트리의 승인된 로컬 준비는 메인의 해당 서비스 env를 값 열람 없이 상속하고 기존 대상 보존·Git ignore·실제 cwd/port를 확인한다. 이번 추가 작업은 env/전역 지침을 다시 변경하지 않았다.
 
-- 사용자가 출력물별 설정 구현 후 커밋·푸시와 별도 develop PR 생성을 다시 승인했다. **원본 커밋·푸시 및 [PR #4802](https://github.com/Innvoaid/dentlink-client/pull/4802) 생성 완료**, 병합·배포는 사용자 담당이다. PR은 open/non-draft/unmerged, develop 대상·충돌 없음으로 확인했다. CI 완료·배포 완료를 뜻하지 않는다.
-- 원본 전용 `/Users/parkjongsun/Repository/dentlink-client-dl-17101`: `feature/DL-17101@2945333b9cc765906384ada4674710441f749106`, origin과 일치하고 clean. 최신 확인 master `57bb759ca` → 기존 출력 분리 `ee59a7e2a` → 이번 설정 `2945333b9` 직계이며 master 대비 0 behind/2 ahead다. 이후 구현은 계속 이 경로·원본 브랜치에서 한다.
-- 배포 checkout `/Users/parkjongsun/Repository/dentlink-client-dl-17101-develop`: 새 `feature/DL-17101-print-settings-develop@025919c0ac28af1e7f9bb805ab56437f7b495343`, origin과 일치하고 clean. 최신 develop `9a745cfb22aae22a621ea8542d0c8e9f5f55cafa`에서 새 설정 커밋만 cherry-pick했다. 원본과 14개 파일 내용 및 patch-id `6203bc4d50c253f1ffd66117477d35596d4695c4`가 동일하다. PR은 1커밋·14파일(+860/-25).
-- 이전 배포 브랜치 `feature/DL-17101-develop@8ee2b9ec76faf84aa406b8be2ee14dc67e097ae5`는 보존했다. 메인 `/Users/parkjongsun/Repository/dentlink-client`는 `master@57bb759ca` clean이며 다른 작업 워크트리는 건드리지 않았다. 두 작업 checkout은 수동 Git worktree이므로 도구 cwd를 매번 명시한다.
-- 3종별 콘텐츠 너비·높이(mm/cm), 배율1–300%, 회전0/90/180/270°을 출력창 설정 모달에서 각각 localStorage에 저장한다. 설정 없음은 기존 경로, 비INTERNAL·스티커·API·배송 업무 로직은 유지한다. 크기는 콘텐츠 영역이며 프린터·용지는 브라우저 인쇄창에서 고른다.
-- 사용자 제보로 실제 Chrome에서 회전 기준 불일치를 재현했다. 기존 세로 이미지 자동90° 정렬과 새 원본 기준90°가 같아 보였으며, 기존 화면을0° 기준으로 사용자 회전을 더하도록 수정했다. 이미지/PDF에만 적용하며 주문서 HTML은 사용자 각도를 그대로 적용한다.
-- 최종 원본·반영 코드 Clinic/Lab/Admin 타입 통과. 설정 저장/검증/치수/회전 테스트27개 통과. 양쪽 push 훅 lint·Admin DLOS 가드·공유 테스트/coverage 통과, 기존 lint 경고 있음. coverage 기준선은 이전 develop에서 생성한 것을 공유 코드 동일성 확인 후 원본 새 checkout으로 복사했으며 훅 우회 없음.
-- 최종 코드 로컬 INTERNAL 부착용 PDF: 90°/270°에서 세로 표시, 50% 축소 확인. Chrome native 인쇄 미리보기에서90°·50%는1페이지로 정상 유지됐다. 해당 샘플은270°에서 글자가 정방향이다. 검증 후 사용자 기존210×297mm·100%·90°를 복원했다. 210×297mm·100%는 현재 프린터 여백 포함 영역을 넘어2페이지가 되는 것을 관찰했다. 실제 용지에 맞춘 크기/배율 조정이 필요하며 자동 용지/프린터 설정 기능은 없다.
-- **남은 QA:** 실물 인쇄, 설정 적용 후3종 전체·일괄 출력·다른 기공소 실제 계정 런타임은 미완료다. 사용자가 로컬 검증을 직접 하겠다고 했으며, 이번 에이전트 브라우저 확인은 회전 제보 재현·수정 범위다. 아래 기존 출력 분리 런타임 기록을 새 설정 전체 검증으로 재사용하지 않는다.
-- E2E 가드 `NO_IMPACT`: 04_labShipment/05_labStatus의 실제 helper·locator·API 대기·업무 단계는 변경되지 않으며, E2E는 출력 팝업 설정을 조작하지 않는다. 최종 develop diff 동일성 확인 및 mark/check 완료. E2E 수정·실행 없음.
-- 하위 [DL-17101](https://innovaid.atlassian.net/browse/DL-17101)의 설명에 추가 설정 범위를 반영하고 댓글44707에 PR·회전 확인·미완료 QA/번역을 기록했다. 상태 진행 중 유지. 동료 상위 [DL-17099](https://innovaid.atlassian.net/browse/DL-17099)는 읽기 전용이며 수정·댓글 없음.
-- 로그: `/tmp/dl17101-settings-rotation-tests.log`, `dl17101-settings-source-commit.log`, `dl17101-settings-source-push.log`, `dl17101-settings-delivery-types.log`, `dl17101-settings-delivery-push.log` (모두 /tmp). 회전 화면 `/tmp/dl17101-rotation-proof.png`. 임시 증거이므로 재개 시 존재와 해당 코드 일치를 확인한다.
+## Previous checkpoint — content-size settings (superseded)
+
+- 최초 출력물별 설정은 원본 `2945333b9`/배포 `025919c0a`와 PR4802로 준비했고 회전/저장 테스트27개를 통과했다. 이때 width/height는 콘텐츠 영역이었으며 A4100%에서 실제 여백 때문에2장으로 나뉘었다. 현재 용지 기준 구현과56개 검증이 이 한계를 대체한다.
+- 라벨 세로 원본을 자동90° 정렬하던 기존 화면을0°로 보고 사용자 회전을 합산한다. 이 기준은 현재도 유지된다. 샘플 PDF는270°가 정방향이며 다른 원본의 방향을 강제로 정방향이라 보장하지 않는다.
 
 ## Local environment decision
 
@@ -57,16 +63,16 @@
 
 ## Translation pending
 
-- 기존 출력 분리4키와 이번 설정12키를 shipping en/ko에 반영했다. 신규 설정 문구는 로컬 화면에서 확인했으며 운영 시트는 아직 미동기화다.
-- 최신 읽기 전용 export preview: 로컬3356키, missing1760/stale2/conflicts3. 충돌은 labHeadline(ko), readyInHours(en/ko), stale2는 기존 master 삭제가 시트에 남은 것이다.
-- audit:i18n은 기존 OFFICE 분기 account.auth.actions.logIn 누락으로 실패했고 이번 신규 누락은 없다. check:i18n은10파일 stale이며 shipping2개에 추가 설정12키 차이가 있고 나머지8개는 기존 불일치다.
-- 운영 가이드의 동시편집 중단 조건을 확보하지 못해 시트 쓰기/전체 덮어쓰기/강제 생성을 하지 않았다. 번역 완료로 보고하지 않는다. 승인 범위16키를 기존 타 작업·PM 문구를 보존하며 동기화할 방법과 편집중단 조건을 다음에 정리한다.
+- 기존 출력 분리4키와 설정23키(최초12+이번 용지 관련11키)를 shipping en/ko에 반영했다. 신규 설정 문구는 로컬 화면에서 확인했으며 운영 시트는 아직 미동기화다.
+- 최신 읽기 전용 export preview: 로컬3367키, missing1771/stale2/conflicts3. 충돌은 labHeadline(ko), readyInHours(en/ko), stale2는 기존 master 삭제가 시트에 남은 것이다.
+- audit:i18n은 기존 OFFICE 분기 account.auth.actions.logIn 누락으로 실패했고 이번 신규 누락은 없다. check:i18n은10파일 stale이며 shipping2개에 설정23키와 문구 변경 차이가 있고 나머지8개는 기존 불일치다.
+- 운영 가이드의 동시편집 중단 조건을 확보하지 못해 시트 쓰기/전체 덮어쓰기/강제 생성을 하지 않았다. 번역 완료로 보고하지 않는다. 승인 범위27키를 기존 타 작업·PM 문구를 보존하며 동기화할 방법과 편집중단 조건을 다음에 정리한다.
 
 ## Resume point
 
 1. 사용자가 후속 작업을 요청하면 개인 컨텍스트와 원본 `feature/DL-17101`의 live Git을 갱신하고 정확한 전용 cwd에서 QA 피드백을 처리한다. 원본·이전 배포·새 배포 브랜치를 유지한다. 요청 없이 PR 병합/배포/CI 반복 조회/CodeRabbit 대응을 하지 않는다.
 2. PR #4802의 사용자 병합·배포 여부는 전달과 실제 확인을 구분한다. 로컬 테스트는 해당 서비스 메인 env를 값 열람 없이 상속하는 위 승인 원칙을 따른다. 기존 대상 설정이 있으면 덮어쓰기 전에 보존한다.
-3. 3종 개별/일괄 출력,90/270회전,크기/배율,새로고침/다른출력창 저장독립, 실제 라벨프린터와A4 인쇄 가능영역을 확인한다. 현재210×297mm·100%가 인쇄영역을 넘어2페이지가 되는 관찰을 고려한다.
+3. 최종 코드의 3종/각2건 인쇄 미리보기와 회전/크기/저장 검증은 위 현재 체크포인트를 따른다. 사용자에게 남은 것은 실제 라벨/A4 프린터별 용지·인쇄 불가 여백·배율 확인이다. 기존2장 밀림 관찰은 수정 전 이력이며 현재 재현 사실로 취급하지 않는다.
 4. 번역 시트 동시편집·충돌 조건이 해결되면 승인 범위 동기화를 진행한다. Jira 기록은DL-17101에만 남기며 상위DL-17099는 수정하지 않는다.
 
 ## Session identity
