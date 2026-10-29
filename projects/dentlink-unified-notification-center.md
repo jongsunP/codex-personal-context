@@ -1,8 +1,24 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-10-29 17:41 KST — **사용자 요청으로 현재 작업을 정리하고 재개 요청까지 대기한다.** 인박스·설정·다른 소속 선택 UI, 웹 화면 왕복, 양 앱의 독립 OS 권한 조회를 선행 구현·프리뷰 검증했다. Slack의 사용자 공유와 BE의 ‘FCM 식별 ID 추가·처리 API에 ID 전달 예정’ 답변을 확인했으며 URL·필드명·상세 계약은 확정 전이다. 실제 서비스 진입·REST 저장·OS 설정 복귀 후 저장·소속 전환·푸시 읽음/클릭 기록 연결은 후속이고, 전체 기능 최종 QA/merge 준비 완료가 아니다. hide 범위는 보류한다. 세 feature 위치의 로컬 변경을 보존하며 **제품 commit/push/PR/배포는 하지 않았다.**
+최종 갱신: 2026-10-29 22:41 KST — **사용자의 추가 승인에 따라 웹·Office·Lab 선행 작업을 각각 commit/push하고 원격 SHA 일치·clean을 확인했다. PR/배포 없이 재개 요청까지 대기한다.** Web28c53d81a, Officeb1753912, Lab72b1a205이다. 인박스·설정·다른 소속 선택 UI, 웹 화면 왕복, 양 앱의 독립 OS 권한 조회를 선행 구현·프리뷰 검증했다. 모든 Figma 화면이나 전체 기능 완료가 아니며 홈 진입/전역 안내·실제 API/설정 저장·소속 전환·푸시 연결은 후속이다. BE 식별 ID 방향은 확인했으나 URL·필드명·상세 계약과 hide 범위는 확정 대기다.
 
 ## 최신 체크포인트 — 2026-10-29 구현 착수
+
+### 세 제품 작업 commit/push와 대기 — 2026-10-29 22:41 KST
+
+- **권한 변경:** 사용자가 세 제품의 작업 결과와 commit/push 여부를 물어, 당시 개인 컨텍스트만 원격 반영됐고 제품은 로컬 미커밋임을 구분해 답했다. 이후 **‘각각 작업들 모두 커밋푸쉬까지도 해줘. PR은 다 하고 할껀데 작업은 푸쉬까지는 해도 되’**라고 명시 승인했다. 통합알림센터 작업 commit/push를 허용하며 PR은 후속 별도 단계로 유지한다. 추가 기능 구현을 재개하라는 지시로 확대하지 않는다.
+- **디자인 완료 범위 재확인:** 웹·Office·Lab 모두 목록·설정·다른 소속 선택을 Figma 기반 실제 코드로 작성했고 브라우저/양 OS 프리뷰에서 검증했다. 웹의 화면 왕복과 양 앱 OS 조회도 준비됐다. **전체 Figma의 모든 화면/진입/동작을 구현했다는 뜻은 아니며**, Home 관련 진입·앱 전역 OS 안내와 실제 데이터/저장/소속·푸시 연동은 후속이다. 현재 확인된 범위의 주요 FE 선행 작업은 대부분 마쳤으며 번역 동기화 등 보조 작업은 남는다. 리뷰/계약 없이 추가 기능 범위를 억지로 넓히지 않는다.
+
+| 제품 | 정확한 checkout | 브랜치 / 원격 upstream | 저장한 commit | 범위 / 원격 확인 |
+| --- | --- | --- | --- | --- |
+| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` / `origin/feature/DL-17058` | `28c53d81a86e70c72459f967459f74ab663fe430` | 10파일, 원격 SHA 일치·clean·0/0 |
+| Office(클리닉앱) | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` / `origin/feature/DL-17059` | `b1753912d56149c3d7b9d0b0c44946bf5d2409fb` | 16파일, 원격 SHA 일치·clean·0/0 |
+| Lab(기공소앱) | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` / `origin/feature/DL-17060` | `72b1a205d36d02f997be9fd7110afbf18863af90` | 15파일, 원격 SHA 일치·clean·0/0 |
+
+- **커밋/검증 범위:** 제품별 알림센터 선행 준비를 한 커밋으로 묶었다. Web commit-work, 양 앱 commit-changes 지침을 읽고 명시한 파일만 stage했다. 기존 최종 런타임 검증 이후 알림 소스 추가 수정은 없었다. diff/임시파일/비밀값 흔적을 확인했고 env·fixture·개인 인계 문서를 제품 commit에 포함하지 않았다. PR 생성·변경·merge·release·배포는 하지 않았다. 해당 feature push는 확인한 workflow의 자동 PR/배포 트리거 대상이 아니다.
+- **Web 저장 시 로컬 준비 보완:** 최초 pre-commit은 PNG 원본 부재가 아니라 새 worktree의 Next 자동 생성 `next-env.d.ts` 부재로 실패했다. 설치된 Next의 생성 함수로 Clinic/Lab/Admin에 Git-ignored 타입 파일만 준비했고 실제 `.env` 값은 읽거나 바꾸지 않았다. 이후 세 제품 typecheck가 모두 통과했다. pre-push의 Clinic/Lab/Admin ESLint는 오류0(기존 경고226/184/393), Admin DLOS 검사와 테스트, shared/configs21·shared/hooks32테스트를 통과했다. 최초 push는 ignored `coverage-baseline.json`이 없어 중단됐으며, 해당 검사 대상 shared/configs·shared/hooks 및 설정·lockfile·coverage scripts가 feature base와 동일함을 git diff로 확인한 뒤 저장소의 coverage:baseline으로 기준을 생성했다. 전체 pre-push를 다시 수행해 baseline 변화0·push 성공을 확인했다. 훅을 생략하거나 기준 임계값/제품 소스를 바꾸지 않았다. 이 coverage는 shared/ui 새 화면의 커버리지 증거가 아니다. 근거 `/tmp/notification-web-commit.log`, `/tmp/notification-web-push.log`, `/tmp/notification-web-push-retry.log`.
+- **개인 기록/동시 작성:** 개인 정본의 다른 세션이 수정 중인 AGENTS·SESSION_WORKFLOW·MEMORY_CHANGELOG·다른 프로젝트 파일을 보존하고 이 기능 체크포인트만 별도 커밋한다. 사용자가 새로 제공한 Local Env Inheritance 지침을 읽었다. 추후 승인된 로컬 셋업 시 확인된 메인 worktree의 필요한 env만 값을 열지 않고 복사할 수 있으며, 이번 commit/push에는 env 복사나 서버 실행이 필요하지 않아 하지 않았다.
+- **재개 지점:** 사용자 요청까지 대기한다. 재개 시 이 원격 feature 세 곳에서 이어가며 최신 리뷰/BE 계약과 hide 범위를 대조한 후 실제 진입·조회/저장·OS 복귀 처리·소속/푸시 연결을 진행한다. 홈/전역 안내 잔여 UI, 웹 번역 관리 Sheet 동기화와 전체 기능 최종 런타임/QA는 별도로 남겨 둔다. 이후 PR/merge/release/배포는 저장 완료와 구분한다.
 
 ### Slack 공유 확인과 사용자 요청에 따른 정리·대기 — 2026-10-29 17:41 KST
 
