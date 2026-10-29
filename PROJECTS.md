@@ -179,11 +179,11 @@ For detailed current state, read:
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
-### Dentlink 통합알림센터 — 사전 검토
+### Dentlink 통합알림센터 — 구현 착수
 
-- 웹·Office·Lab 알림 목록·설정·딥링크의 사전 기획·검토다.
+- 웹·Office·Lab 알림 목록·설정·딥링크를 함께 구현한다. 2026-10-29 사용자 착수 승인 후 확정 디자인의 선행 UI부터 병행한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.
-- 세션을 유지하며 사전 검토·산정을 제품 구현 승인으로 해석하지 않는다.
+- 이 기능 세션에서 제품별 작업 위치·작성자를 분리하며, 미확정 BE 계약과 제품 commit/push/PR/배포 권한은 구분한다.
 - [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
 
 ### Dentlink E2E Stabilization
