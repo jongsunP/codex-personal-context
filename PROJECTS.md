@@ -21,6 +21,11 @@ Check this folder first when finding or continuing local projects.
 
 ## Projects
 
+### Dentlink 자체기공소 배송 출력 UX — DL-17101
+
+- INTERNAL 기공소의 부착용 라벨·배송용 라벨·배송용 주문서 분리와 관련 화면을 관리한다.
+- 다른 기공소와 기존 배송 비즈니스 규칙 보존, 로컬 QA 및 번역 시트 경계는 [전용 체크포인트](projects/dentlink-lab-shipping-print.md)를 따른다.
+
 ### Dentlink 웹 env Git 제외·환경변수 관리
 
 - DL-16821의 환경변수 Git 제외·사람 수동 관리 전환과 후속 로컬 정리 기록이다.
