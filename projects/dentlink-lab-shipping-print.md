@@ -2,11 +2,13 @@
 
 ## Current checkpoint — 2026-10-29
 
-- 사용자 승인 범위는 자체기공소의 배송 출력 UX 구현과 **기존 IDE/로컬 서버에서 사용자 확인 준비**다. 제품 commit/push/PR/merge/deploy는 승인받지 않았으며 실행하지 않았다.
-- 상위 [DL-17099](https://innovaid.atlassian.net/browse/DL-17099), Frankie 담당 하위 [DL-17101](https://innovaid.atlassian.net/browse/DL-17101)을 실제 조회했다. 상위 설명의 협력기공소 확장보다 이번 대화의 **INTERNAL만 변경, 다른 타입 유지** 범위가 우선한다. Jira 변경·댓글 없음.
-- 제품 checkout `/Users/parkjongsun/Repository/dentlink-client`, 로컬 `feature/DL-17101`, 기반 `origin/master@57bb759ca08e3752140ceffdae2a5421934ec242`. 원래 Cursor checkout과 localhost:3005 서버를 그대로 사용했다. 새 worktree 없음. 제품 변경 19파일은 미커밋 상태다.
+- 사용자 추가 승인으로 **원본 commit/push와 별도 develop 대상 PR 생성**까지 완료했다. **병합·배포는 사용자가 직접 수행**하며 에이전트는 실행하지 않는다. 원본 브랜치는 후속 작업용으로 보존한다.
+- 상위 [DL-17099](https://innovaid.atlassian.net/browse/DL-17099)는 동료 원본으로 **읽기만 했고 수정·댓글을 남기지 않았다.** Frankie 담당 하위 [DL-17101](https://innovaid.atlassian.net/browse/DL-17101)에 작업 정의를 설명으로, 구현·검증·PR·미완료 사항을 댓글 `44705`로 기록했다. 상태는 진행 중을 유지했다. 상위의 협력기공소 확장보다 이번 대화의 **INTERNAL만 변경, 다른 타입 유지** 범위가 우선한다.
+- 원본 checkout `/Users/parkjongsun/Repository/dentlink-client`, `feature/DL-17101@ee59a7e2a4ec222b74c8badad091a02dfbff19ba`를 origin에 push했다. 부모는 최신 확인 `origin/master@57bb759ca08e3752140ceffdae2a5421934ec242`이며 master 대비 0 behind/1 ahead다. 원래 Cursor checkout과 localhost:3005 서버를 유지했다.
+- 배포 전용 checkout `/Users/parkjongsun/Repository/dentlink-client-dl-17101-develop`, `feature/DL-17101-develop@8ee2b9ec76faf84aa406b8be2ee14dc67e097ae5`를 origin에 push했다. `origin/develop@8e40e9cb6487e0b983065c0bd4a250a6d1293bd5`에서 원본을 충돌 없이 cherry-pick했다. app managed-worktree 도구가 workspace 경계로 거절해 일반 git worktree로 준비했다.
+- [PR #4801](https://github.com/Innvoaid/dentlink-client/pull/4801): `feature/DL-17101-develop` → `develop`, open/일반 PR, 1커밋·19파일(+412/-148), 생성 후 base/head/SHA와 mergeable을 확인했다. 원본과 stable patch-id `66016ba691ee96fd21576e4c2b2af0720ec7c8b2` 및 변경 19파일의 최종 내용이 동일하다. CodeRabbit 확인·CI 완료·DEV 배포 성공을 주장하지 않는다.
 - 로컬 브라우저의 frankieDevLab은 사용자가 Admin에서 변경한 **INTERNAL**이며 employee own 응답의 employer.labType으로 확인했다. 타입/권한/배송 상태/API 비즈니스 규칙은 이번 코드에서 변경하지 않았다.
-- 구현과 로컬 런타임 검증을 마쳤으며 **사용자 로컬 QA 대기**다. 번역 운영 시트 동기화는 아래 별도 미완료 항목이다.
+- 구현과 로컬 런타임 검증 및 PR 준비를 마쳤으며 **사용자 확인·병합·배포 대기**다. 번역 운영 시트 동기화는 아래 별도 미완료 항목이다.
 
 ## Confirmed behavior
 
@@ -20,13 +22,15 @@
 
 ## Verification
 
+- 원본 commit 훅과 별도 배포 checkout에서 Clinic·Lab·Admin 타입 검사 통과. 양쪽 push 전 lint·test·coverage 검사도 통과했으며 기존 경고는 남아 있다. 배포 checkout의 누락된 Next 타입 선언/Husky 설치/coverage 기준선을 정상 생성한 뒤 검사했다. coverage 기준선은 실제 미변경 origin/develop에서 생성했으며 훅을 우회하지 않았다.
+- 배포 diff 독립 리뷰 결과 원본 19파일과 동일하고 develop 인접 코드와 충돌하지 않는다. E2E 영향 가드 **NO_IMPACT**: 04_labShipment·05_labStatus·08_orderFeedback의 locator·경로·API 대기·업무 단계 계약을 유지한다. E2E 수정·실행은 없으며 PR 직전 guard check 통과. 배포 checkout의 별도 브라우저 런타임은 실행하지 않았고 아래 런타임 증거는 최종 원본 코드 기준이다.
 - 최종 Lab TypeScript exit0, 공유 UI를 소비하는 Clinic TypeScript exit0. 변경 파일 ESLint 오류0, 경고13개는 HEAD 원본과 동일. 기존 root/shared Storybook 플러그인 중복 문제로 Lab/shared 검사를 분리했다. Prettier와 git diff --check 통과.
 - 저장소 밖 `/tmp` Jest/jsdom 검증 **13개 통과**: 실제 URL 훅·LabelList/Item의 INTERNAL 기본/3형식, 비INTERNAL 기존 URL/통합 문서, 자동출력 플래그, 스티커 URL, 2건 순번, 안내 포함/제외, PDF 분기. API와 이미지/PDF leaf는 mock이며 실제 브라우저 증거와 구분한다.
 - Chrome localhost 실제 INTERNAL: 목록3열·일괄3메뉴, 개별 부착용, 각 형식 2건 일괄 열기, 선택 초기화, 11건 선택 시 출력 비활성화(기존 동작), 배송 상세3버튼/스티커 제외, 주문 상세 QR·Order 유지/스티커 제외를 확인했다.
 - Chrome native 인쇄 미리보기: 부착용1건=운송장1페이지/안내없음, 부착용2건=운송장2페이지, 배송용2건=기존 통관안내 포함2페이지, 주문서2건=Order List2페이지/첫 빈페이지없음. 최종 부착용과 주문서에서 개발 버튼 미출력도 확인했다. 실제 종이 인쇄는 하지 않았다.
 - 출력창 내3종 전환·새로고침 유지 확인. 기존 형식 URL에 isUpdateShipping 플래그를 넣어 INTERNAL 부착용 기본/새 라벨 안내를 확인했다. **실제 배송 수정 요청/SSE 전체 시나리오는 실행하지 않았다.**
 - 비INTERNAL 실제 계정 전환/브라우저 실측은 없으며 기존 동작 보존은 diff 리뷰·타입검사·13개 회귀테스트로 확인했다. 동일 계정의 Admin 타입을 바꿔 시험하지 않았다.
-- 실행 로그: `/tmp/dl17101-lab-final-types.log`, `/tmp/dl17101-clinic-types.log`, `/tmp/dl17101-eslint-lab.log`, `/tmp/dl17101-eslint-shared-ui.log`, `/tmp/dl-17101-print-regression.log`. 임시 파일이므로 다음 세션에는 존재와 소스 일치를 다시 확인한다.
+- 실행 로그: `/tmp/dl17101-lab-final-types.log`, `/tmp/dl17101-clinic-types.log`, `/tmp/dl17101-eslint-lab.log`, `/tmp/dl17101-eslint-shared-ui.log`, `/tmp/dl-17101-print-regression.log`, `/tmp/dl17101-source-commit.log`, `/tmp/dl17101-source-push.log`, `/tmp/dl17101-delivery-push.log`. 임시 파일이므로 다음 세션에는 존재와 소스 일치를 다시 확인한다.
 
 ## Translation pending
 
@@ -37,9 +41,9 @@
 
 ## Resume point
 
-1. 개인 컨텍스트와 exact checkout의 branch/dirty diff를 확인한다. 현재 미커밋 작업을 보존하며 사용자 QA 피드백부터 처리한다.
+1. 개인 컨텍스트와 원본/배포 checkout의 branch·원격 SHA·PR 상태를 확인한다. 원본 `feature/DL-17101`을 보존하며 사용자 QA 피드백부터 처리한다. 사용자의 별도 요청 없이 PR 병합·배포·CodeRabbit 리뷰 대응을 시작하지 않는다.
 2. 필요시 localhost:3005/shipping에서 각 형식의 개별·일괄 출력과 프린터 용지/배율을 사용자와 확인한다. 실제 배송 수정·물리 프린터·다른 타입 실제 계정은 아직 별도 확인 범위다.
-3. 시트 동기화 미완료를 해결하고 최종 영향 범위만 재검증한다. 제품 commit/push/PR 요청 전까지 로컬 상태로 유지한다.
+3. 번역 시트 충돌과 동시편집 조건이 정리되면 승인 범위 내4키 동기화를 해결하고 최종 영향 범위만 재검증한다. Jira 후속 기록은 DL-17101만 수정하며, DL-17099에는 수정·댓글을 남기지 않는다.
 
 ## Session identity
 
