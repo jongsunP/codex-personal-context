@@ -4,13 +4,16 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
-## DL-14899 헬프센터 조사 접수 — 2026-10-29
+## DL-14899 헬프센터 News 미노출 조사 완료·구현 승인 대기 — 2026-10-29
 
 - [DL-14899](https://innovaid.atlassian.net/browse/DL-14899)는 헬프센터 모바일 웹의 **New 영역 미노출**을 확인하는 Frankie 담당 하위 작업이다. 상위 DL-14898과 함께 `해야 할 일`이며 두 카드 모두 댓글은 없다(접수 시점 실조회).
-- [2026-05-25 Slack 원문](https://innovaidhq.slack.com/archives/C09613TBE5A/p1779715031187929)에서 앱 담당자는 웹뷰 영역이라고 설명했고 제보자는 모바일 웹에서도 동일 현상을 확인했다. 현재 코드의 원인·재현 여부는 아직 미확정이다.
+- [2026-05-25 Slack 원문](https://innovaidhq.slack.com/archives/C09613TBE5A/p1779715031187929)과 첨부 `F0B5TUUBCP5`를 실제로 읽었다. 카드의 ‘New’는 화면상 **News 게시물 목록**을 뜻한다. Order/Shipping·View More 아래 News 제목만 있고 회색 콘텐츠 영역이 비어 있다. 당시 앱 담당자는 웹뷰 영역이라고 설명했고 제보자는 모바일 웹에서도 동일 현상을 확인했다. 두 Jira 카드의 댓글 0개와 Slack 답글 7개는 별개다.
 - 사용자 요청에 따라 같은 **메인 프로젝트 폴더**, 기존 Mac `local` 호스트에 **DL-14899 헬프센터 New 영역 조사** 세션(`01a18601-2719-77a3-8d2a-1962bc49e5b8`)을 생성했다. 프로젝트 연결과 초기 조사 턴, 메인과 같은 `gpt-6-astra / ultra` 적용을 확인했다. 실제 휴대폰 목록 노출은 별도 확인 대상이다.
-- 웹 저장소를 우선 읽고 원문 첨부·New 영역의 의미·노출 조건·최신 코드·웹뷰 영향과 수정 범위를 조사한다. 별도 폴더/worktree/branch는 만들지 않으며 제품 코드·Jira·PR 변경은 승인되지 않았다.
-- 다음 시작점: 담당 세션에서 확인한 사실과 가설, 수정 범위·난이도·필수 질문을 사용자에게 보고한 뒤 구현 승인 전 대기한다. 이 기록은 초기 인계이며 조사 완료를 뜻하지 않는다.
+- **현재 운영 재현:** 로그인된 Chrome에서 `https://portal.dentlink.io/help` 직접 진입. 데스크톱에는 News 4개가 표시됐지만 DevTools iPhone SE(375×667, 모바일 UA)로 새로고침하면 원문과 같은 빈 News 영역이 재현됐다. Release Note도 동일했다. 이는 Chrome 기기 에뮬레이션 관찰이며 실제 iOS/Android 앱·실기기 검증은 아니다. 단순 viewport 축소는 UA 기반 분기를 타지 않아 이 재현을 대신하지 못한다. 임시 viewport·기기 모드·DevTools 필터는 조사 후 복구했다.
+- **원인 근거:** 모바일 전용 `shared/ui/src/HelpCenterUI/Main/ThumbnailListSwiper.tsx`는 `swiper/react`만 import하며 `swiper/css`가 없다. 운영 DOM에는 섹션별 카드 4개가 존재하고 관련 게시글 GET은 200이었다. `.swiper-wrapper`는 `display:block`, 높이 764px, translateX(-440px)이고 모든 카드의 x 범위가 -440~-205px로 화면 밖이었다. 부모 overflow:hidden으로 가려진다. 실제 로드된 v1.90.0 CSS(`435cb33a3ae9e4d0.css`)에도 swiper 규칙이 없고 inline에는 부분 스타일만 있다. **모바일 슬라이더 기본 CSS 누락으로 인한 레이아웃 문제**를 확인했다. 5월 당시 서버·브라우저 상태까지 같은 원인이었다고 소급 확정하지 않는다.
+- **담당 범위:** 자체 Next `/help`와 `/office/contents/boards`·게시글 API이며 외부 헬프센터/iframe 설정이 아니다. Clinic·Lab의 `HelpCenterMainContents.tsx`가 `react-device-detect.isMobile`로 공용 Swiper를 선택한다. Office·Lab 앱은 각각 portal/lab의 `/auth/redirect?next=/help`를 WebView로 열고 모바일 UA에 `-DentlinkAppWebView-`를 붙인다. News 렌더링은 웹 소유다. 공용 웹 스타일 로드 보완이 작은 수정 후보이며 앱 네이티브 코드 변경 필요 근거는 없다.
+- **코드 기준/보존:** web `origin/master@57bb759ca08e3752140ceffdae2a5421934ec242`; checkout `feature/DL-17011@9dcb644d566cee06fa0019c16b7f47cdf10e8d36` clean, 관련 파일은 master와 동일. Office `origin/main@7f586790e0bbd7b288458e29f00654d38ba68da2`, Lab `origin/main@51441039751b63a08c82a1be9695c805c8af1539`를 읽었다. 앱 checkout의 알림센터 작업 변경(`feature/DL-17059`, `feature/DL-17060`)은 보존했다. 필요한 fetch 외 제품 코드·checkout·branch·worktree·commit/push·PR·Jira 변경 없음.
+- **남은 일/재개점:** 구현 승인 후 사용 가능한 정확한 checkout에서 Swiper 기본 CSS를 컴포넌트와 함께 로드하도록 최소 수정하고 Clinic·Lab 모바일웹의 News/Release Note, 직접 진입·홈 경유 및 양 앱 웹뷰를 회귀 확인한다. Lab 운영·실제 앱 현상은 아직 미검증이다. 데이터 유무에 따른 빈 상태 개선이나 UA 분기 재설계는 이번 수정 요구로 추가하지 않는다. PM에게 먼저 물어야 할 필수 정책 질문은 현재 없으며 사용자 브리핑 후 구현 승인 전 대기한다.
 
 ## 앱 공통 브랜치 전략 변경 — 2026-10-29
 
