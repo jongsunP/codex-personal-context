@@ -324,6 +324,45 @@ routine Sheet-sync request. This applies to web Lab and the separate Lab app.
 This is a Codex work requirement. The presence of scripts does not imply that
 every code edit, app launch, or CI run automatically writes the spreadsheet.
 
+## Local Env Inheritance
+
+The user explicitly approved this workflow on 2026-10-29 and requested its
+global application to future sessions and worktrees. During authorized local
+development setup, inherit the needed service's existing env files from the
+same repository's verified main worktree. Do not ask again for this same
+local copy merely because the session or worktree is new.
+
+1. Verify the repository's main worktree and the assigned target with Git.
+   Select only files required by the intended service and execution mode.
+   A new session using an already-prepared checkout does not require recopying.
+2. Copy existing files as opaque files, preserving their contents. Do not
+   open, print, parse, summarize, or change values; do not reconstruct missing
+   files from Git history, process environments, logs, or `.env.example`.
+   Use independent copies so target edits cannot change the main worktree.
+3. Confirm both runtime files and any necessary local preservation copies
+   are Git-ignored and untracked before writing. Preserve an existing different
+   destination configuration before replacement; do not overwrite unrelated
+   services or another active session's setup. Keep restrictive permissions.
+4. Verify the copied files exist, match without exposing contents, and remain
+   outside the staged/committed file set. If the verified main worktree lacks
+   the required files, report that specific gap for human preparation without
+   guessing values or requesting their contents in chat.
+5. Verify the development server's actual cwd and port. Restart only the
+   relevant server when env inheritance is applied, and report application
+   readiness separately from login, API behavior, and feature QA. Preserve
+   servers and worktrees the user is currently using for local verification.
+
+This is a narrow, explicitly authorized exception to older guidance that
+delegated all local env preparation to a human. Actual values remain
+human-managed: no GitHub Variables/Secrets access, value editing, secret
+recovery, external transfer, or production/deployment configuration changes
+are authorized by this rule. It does not bypass tool-enforced restrictions.
+
+Keep this rule in the Git-backed personal context and sync its AGENTS.md
+entry point and this file through `setup-local-codex.sh`. An already-running
+session must read the refreshed guidance when resuming; a successful file
+sync alone is not proof that all running sessions reloaded their instructions.
+
 ## Main Worktree And Feature Session Model
 
 For Dentlink, apply New Work Intake And Session Routing above: prefer a
@@ -342,15 +381,8 @@ and handle work that explicitly belongs to the main worktree. A small feature
 session may use that checkout when it has sole writing ownership and an
 approved task branch. Do not mix independent active implementations there.
 
-For authorized local setup in a new session or worktree, inherit the needed
-service's existing local env files from the repository's verified main
-worktree. The user explicitly approved this on 2026-10-29 after a new Dentlink
-Lab worktree started without its API configuration. Copy the existing files
-as-is without opening, printing, documenting, or changing their values; keep
-them Git-ignored and preserve any existing destination configuration before
-replacement. This is authorization for local file inheritance, not for
-inventing values or changing GitHub Variables/Secrets. Verify the server runs
-from the intended worktree and restart it when env inheritance is applied.
+Apply **Local Env Inheritance** above when preparing a new feature checkout
+for local execution. Creating a worktree alone does not prepare its runtime.
 
 For each substantial new feature, use this flow when the user requests it:
 

@@ -87,6 +87,14 @@
 
 - The user prefers Codex to proceed proactively and request required approvals directly when tools need elevated permissions.
 - Still follow Codex/system permission prompts when they appear.
+- For authorized local setup in every new session or worktree, follow
+  **Local Env Inheritance** in `SESSION_WORKFLOW.md`: copy the needed
+  service's existing env files from the verified main worktree without
+  inspecting or changing values, preserve destination settings, and verify
+  Git ignore and the actual server directory/port. This is the user's
+  standing 2026-10-29 authorization for opaque local file inheritance;
+  do not repeat the same approval question. The narrow exception does not
+  authorize value management, secret retrieval, or deployment changes.
 - When creating a delegated work session, follow **New Session Model And
   Reasoning Default** in `AI_WORKFLOW.md`: explicitly select the main session's
   verified model and reasoning level, or the highest available combination

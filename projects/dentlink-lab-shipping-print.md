@@ -2,6 +2,10 @@
 
 ## Current checkpoint — 2026-10-29
 
+- **정리 완료·사용자 로컬 QA 대기:** 사용자가 로컬에서 계속 확인하는 동안 추가 구현·QA·배포 감시를 중단한다. localhost:3005 PID76183의 cwd가 원본 워크트리의 lab임을 재확인했으며 서버·브라우저·원본/배포 워크트리를 유지했다. PR #4802는 마감 조회 시 open/unmerged였다.
+- 사용자 요청으로 Jira DL-17101을 **Ready for Deploy**(요구사항 개발 완료)로 전환하고 기존 후속 댓글44707에 사용자 로컬 확인 중·최종 QA/병합/배포 미완료를 명시했다. 아래 구현 시점의 진행 중 상태보다 이 최신 상태를 우선한다. 상위 DL-17099는 변경하지 않았다.
+- 새 세션/워크트리의 env 상속 규칙을 공통 AGENTS와 SESSION_WORKFLOW의 **Local Env Inheritance**에 정리하고 기존 setup-local-codex.sh로 전역 ~/.codex 지침 동기화를 완료했다. 두 파일의 정본 일치를 cmp로 확인했고 이 세션에도 새 AGENTS가 다시 제공됐다. 다른 실행 중 세션의 자동 재로드까지 확인한 것은 아니다. 기존 사용자 설정 보존, Git 제외, 실제 실행 cwd/port 확인까지 포함하며 값 관리/외부 전송/배포 설정 변경 권한으로 확대하지 않는다.
+
 - 사용자가 출력물별 설정 구현 후 커밋·푸시와 별도 develop PR 생성을 다시 승인했다. **원본 커밋·푸시 및 [PR #4802](https://github.com/Innvoaid/dentlink-client/pull/4802) 생성 완료**, 병합·배포는 사용자 담당이다. PR은 open/non-draft/unmerged, develop 대상·충돌 없음으로 확인했다. CI 완료·배포 완료를 뜻하지 않는다.
 - 원본 전용 `/Users/parkjongsun/Repository/dentlink-client-dl-17101`: `feature/DL-17101@2945333b9cc765906384ada4674710441f749106`, origin과 일치하고 clean. 최신 확인 master `57bb759ca` → 기존 출력 분리 `ee59a7e2a` → 이번 설정 `2945333b9` 직계이며 master 대비 0 behind/2 ahead다. 이후 구현은 계속 이 경로·원본 브랜치에서 한다.
 - 배포 checkout `/Users/parkjongsun/Repository/dentlink-client-dl-17101-develop`: 새 `feature/DL-17101-print-settings-develop@025919c0ac28af1e7f9bb805ab56437f7b495343`, origin과 일치하고 clean. 최신 develop `9a745cfb22aae22a621ea8542d0c8e9f5f55cafa`에서 새 설정 커밋만 cherry-pick했다. 원본과 14개 파일 내용 및 patch-id `6203bc4d50c253f1ffd66117477d35596d4695c4`가 동일하다. PR은 1커밋·14파일(+860/-25).
