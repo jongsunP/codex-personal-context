@@ -8,8 +8,8 @@
 
 - 사용자가 질문을 별도 세션에서 이어가기 위해 **공유기공소·밀링센터 세션**(`01a18682-0535-7aa3-9d30-9440b0b90a01`)을 요청했다. 기존 메인 프로젝트 폴더·Mac `local` 호스트에 정상 등록했으며 메인과 같은 `gpt-6-astra / ultra` 적용 및 초기 지침 읽기 시작을 확인했다.
 - 기본 지침·제품 저장소 분리·검증 및 승인 경계·기공소 번역/i18n·개인 컨텍스트 관리 방법을 전달했다. 별도 프로젝트/worktree/branch는 만들지 않았다. 초기 등록 기록은 메인에서 저장하며 휴대폰 표시 자체를 확인한 것은 아니다.
-- 이후 사용자 승인으로 DL-17101 자체기공소 배송 출력 UX를 구현하고 master 기반 원본 `feature/DL-17101@ee59a7e2a`를 commit/push해 보존했다. 별도 `feature/DL-17101-develop@8ee2b9ec7` → `develop` [PR #4801](https://github.com/Innvoaid/dentlink-client/pull/4801)의 병합을 확인했다(`9a745cfb2`). 사용자가 개발서버 배포를 직접 진행했다고 전달했으며 배포 결과·배포 후 QA는 별도 재확인하지 않았다. **정리 후 사용자 재개 요청 대기**이고 번역 운영 시트는 미동기화다. 하위 DL-17101만 작업 정의·결과·후속 상태를 기록했고 상위 DL-17099는 읽기만 했다. 구현·검증·정확한 checkout·남은 일은 [전용 체크포인트](dentlink-lab-shipping-print.md)를 정본으로 따른다.
-- 후속 작업 보존 요청으로 기존 `feature/DL-17101`을 전용 `/Users/parkjongsun/Repository/dentlink-client-dl-17101` 워크트리에 연결했고 메인 dentlink-client는 master로 복귀했다. 배포용 워크트리·브랜치는 그대로 유지한다. 이후 구현은 원본 전용 워크트리에서만 이어가며 새 워크트리 실행 환경은 별도 준비 대상이다.
+- DL-17101 자체기공소 배송 출력 분리는 PR #4801로 develop 병합 후 사용자 배포 전달을 받았다. 후속3종별 크기·배율·회전 설정과 회전 기준 수정을 원본 `feature/DL-17101@2945333b9`에 커밋·푸시했고, 별도 `feature/DL-17101-print-settings-develop@025919c0a` → develop [PR #4802](https://github.com/Innvoaid/dentlink-client/pull/4802)를 생성했다. 병합·배포는 사용자 담당이다. 타입/테스트27개/양쪽push훅 통과, 로컬 부착용PDF의90/270회전·50%축소와 인쇄미리보기 확인. 설정 적용3종전체/실물QA·운영번역시트는 미완료다. 하위DL-17101만 갱신하고 상위DL-17099는읽기만했다. [전용 체크포인트](dentlink-lab-shipping-print.md)가 정본이다.
+- 원본 워크트리 `/Users/parkjongsun/Repository/dentlink-client-dl-17101`과 원본 브랜치를 함께 유지한다. 메인은master clean, 기존배포브랜치도보존했다. 사용자 명시 승인으로 새세션/워크트리의 로컬준비는 메인의 해당서비스 env를 값조회 없이 그대로 상속하며, 이번Lab에 적용해3005서버를 원본경로에서 실행했다.
 
 ## DL-14899 헬프센터 News 사전조사·메모리화 완료·사용자 재개 대기 — 2026-10-29
 

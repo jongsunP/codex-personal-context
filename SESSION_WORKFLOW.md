@@ -342,6 +342,16 @@ and handle work that explicitly belongs to the main worktree. A small feature
 session may use that checkout when it has sole writing ownership and an
 approved task branch. Do not mix independent active implementations there.
 
+For authorized local setup in a new session or worktree, inherit the needed
+service's existing local env files from the repository's verified main
+worktree. The user explicitly approved this on 2026-10-29 after a new Dentlink
+Lab worktree started without its API configuration. Copy the existing files
+as-is without opening, printing, documenting, or changing their values; keep
+them Git-ignored and preserve any existing destination configuration before
+replacement. This is authorization for local file inheritance, not for
+inventing values or changing GitHub Variables/Secrets. Verify the server runs
+from the intended worktree and restart it when env inheritance is applied.
+
 For each substantial new feature, use this flow when the user requests it:
 
 First assess the verified scope using the routing rule above. A small task
