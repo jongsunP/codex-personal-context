@@ -1,8 +1,31 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-10-29 13:45 KST — **사용자 승인으로 구현에 착수했다.** Web은 `feature/DL-17058` 별도 worktree, Office는 `feature/DL-17059`, Lab은 `feature/DL-17060`에서 Figma 기반 인박스 표현 계층을 병행한다. **사용자 최신 결정으로 Office·Lab 모두 main→feature→release→main이며 develop은 운용하지 않는다.** Office 작업을 보존해 최신 main 기준으로 맞췄고 Lab도 main에서 시작했다. DL-17057/17058/17059/17060 진행 중, UX DL-17048 완료 유지. **BE 계약·API 연결·최종 런타임 검증은 아직 완료되지 않았으며 제품 commit/push/PR/배포는 별도 권한으로 구분한다.**
+최종 갱신: 2026-10-29 14:09 KST — **첫 인박스 UI 작성·독립 프리뷰 검증을 마쳤다.** Web은 `feature/DL-17058` 별도 worktree, Office는 `feature/DL-17059`, Lab은 `feature/DL-17060`에 로컬 변경을 보존했다. 웹 브라우저와 양 앱 iOS/Android에서 표시 상태·콜백을 확인했으며 **실제 서비스 진입·REST·소속/권한 연결과 전체 기능 최종 QA는 아직 완료되지 않았다.** Office·Lab 공통 main→feature→release→main 전략은 지침/원격에 반영됐다. PM의13:55 답변에 따라 푸시 클릭을 읽음 기준으로 반영하며 BE 식별/별도 클릭 기록 API는 미정이다. DL-17057/58/59/60 진행 중, UX DL-17048 완료 유지. **제품 commit/push/PR/배포는 하지 않았다.**
 
 ## 최신 체크포인트 — 2026-10-29 구현 착수
+
+### PM 답변 반영 — 푸시 클릭을 읽음 기준으로 — 2026-10-29 13:55:57 KST
+
+- 사용자 요청으로 [알림 항목 전체 리뷰 스레드](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793244658608799)의 부모와 답글5개를 읽기 전용으로 확인했다. Yoonie(`U08856QGP38`)의 [13:55:57 답변](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793249757598429)은 **“클릭으로 잡는게 맞을 것 같아요!”**였다. 앞선 Frankie의 푸시 읽음 시점/랜딩 실패 질문에 대한 답변이다.
+- **반영할 기획 방향:** 푸시를 클릭한 시점을 읽음 기준으로 삼는다. 화면 정상 진입을 읽음의 선행조건으로 두지 않으므로 대상 삭제·화면 접근 권한 부족으로 랜딩하지 못해도 클릭한 알림을 읽음 처리하는 방향이다. 추가 기획 질문 없이 이 방향을 반영한다고 사용자에게 설명했다. API 저장 성공 자체를 보장한다는 의미는 아니다.
+- **별도로 남는 BE 계약:** 클릭한 발송 건과 알림센터 기록 연결 정보, 실제 읽음 요청 규약/권한 검증, 자체 클릭 이력 저장 API는 이 한 줄 답변으로 확정되지 않는다. notificationId 직접 전달은 여전히 필수가 아니다. 로그인·대상 소속 준비 이후 올바른 문맥으로 요청하며 랜딩 성공을 기다리지 않는다는 의미이지 인증 전 또는 다른 계정/소속으로 요청하라는 뜻이 아니다.
+- 현재 Inbox 표시 UI 구현 범위를 확대하지 않는다. 공통 딥링크/푸시 연결 작업 때 적용하며 이번에는 관련 코드나 Slack 댓글을 수정하지 않았다. 과거의 ‘읽음 시점·랜딩 실패 정책 합의 대기’ 기록은 이 답변 이전 상태다.
+
+### 첫 선행 UI 구현과 검증 — 2026-10-29
+
+- **구현 범위:** Web·Office·Lab 인박스의 독립적인 표시 컴포넌트를 작성했다. 전체/안읽음 탭, 읽음 여부 표시, 모두 읽음 버튼, 빈 목록, 다른 소속 알림 안내를 Figma 원본과 대조했다. 데이터를 받는 props와 콜백만 정의했으며 서버 조회·읽음 저장·앱 navigation·기존 웹 알림창 교체는 아직 하지 않았다. 개발 프리뷰의 fixture 상태 변경을 실제 서버 저장 성공으로 취급하지 않는다.
+- **Web — 5파일:** `shared/ui/src/NotificationUI/NotificationInbox.tsx`, `NotificationInbox.stories.tsx`, shared/ui export, Lab en/ko sharedUi 번역을 추가했다. Clinic/Lab 공용 표시 컴포넌트이며 Lab의 한 줄 빈 화면과 Clinic의 두 줄 빈 화면을 구분한다. 시간 문구는 호출자가 전달한다. 기존 `formatDateNotification`의 Today/Yesterday 표현은 새 디자인의 M/H/date 정책과 달라 아직 재사용하지 않았다. 기존 알림 서비스·스크롤 읽음·삭제 구현은 그대로 남아 있으며 새 화면에 연결할 때 변경한다.
+- **Web 검증:** 개발 프리뷰 9상태, 키보드 탭 이동·선택, 좁은 폭 320/280px, 긴 본문, Read All 비활성 상태, 스크롤만으로 읽지 않음을 브라우저로 확인했다. root도 ClinicAll/LabEmpty/NarrowWidth를 별도 렌더해 overflow·console error가 없음을 확인했다. scoped ESLint와 신규 파일 TS 진단은 통과했다. 전체 Storybook은 기존 8.0.10/8.6.14 패키지 혼재로 실행되지 않아 `/tmp`의 최소 설정으로 실제 컴포넌트를 실행했고 패키지/lockfile/제품 설정은 바꾸지 않았다. 전체 tsc 및 기존 `account.auth.actions.logIn` i18n audit 오류는 별개다. 번역 키 en/ko 일치는 확인했지만 **번역 관리 Sheet 반영은 아직 미완료**다. 프리뷰 서버6006은 종료하고 임시 설정은 제거했다.
+- **Web 근거:** Figma89:12309~12313, Lab119:22594/22596/22598; root 캡처 `/tmp/dentlink-notification-root-review/web-{clinic-all,lab-empty,narrow-width}.png`. 순수 빈 화면 디자인의 Read All 파랑과 모두 읽은 후 회색 상태는 별도 preview 상태로 표현했으며 실제 활성 조건을 임의 서버 정책으로 확정하지 않았다.
+- **Office/Lab:** 각각 기존 Layout/Header/Chip/Typography와 Figma SVG를 재사용/추가했다. 알림 서버 원문은 자동 번역을 적용하지 않으며 읽음 상태와 분류도 접근성 이름에 포함한다. 마지막 행의 구분선을 제거했다. Office는 표시 타입·컴포넌트3개·SVG4개·export의 9파일, Lab은 표시 타입·컴포넌트3개·SVG3개·export·로컬 번역3파일의 11파일 범위다. Lab은 현재 저장소의 로컬 번역/registry 정책을 따랐다. 임시 preview/index는 검증 후 복원해야 하며 제품 진입 경로로 남기지 않는다.
+- **Office 최종 검증:** 최신 main 기반 최종 코드로 iOS/Android의 목록·안읽음·Read All 후 빈 화면·다른 병원 안내·긴 내용·설정/뒤로/행/안내 콜백을 재검증했다. Maestro4flow 통과, 각 플랫폼 콜백9건을 확인했다. 마지막 행 divider 없음·서버 원문 보존도 확인했다. Android 기존 설치 앱의 과거 `/apps/office/index.bundle` 경로404는 정상 DEV native 빌드(assembleDevelopmentDebug, arm64, 7분11초)와 데이터 유지 재설치로 해소했다. scoped ESLint/Prettier/diff 통과, 전체 typecheck는 미변경4경로6오류·신규0이다. root도 최종 Android 목록/iOS 빈 상태 원본을 독립 확인했다. `index.js` 원복·fixture 삭제·Office 앱/Metro/본인 adb reverse 정리를 마쳤다. 실제 navigation/API/소속권한 통합 검증은 아직 아니다. 근거: `/tmp/office-inbox-final-{ios,android}-{list,unread,empty,other,long-content}.png`, `*-events.json`, `/tmp/office-inbox-android-native-build-retry.log`.
+- **Lab 최종 검증:** 호환되는 설치 앱이 없어 기존 설정 그대로 iOS Development/Android Development native를 빌드했고 모두 성공했다(Android11분35초). 양 플랫폼에서 기본·하단 스크롤·안읽음·모두 읽음 후 빈 상태·다른 기공소 안내·콜백을 확인했다. 영어320pt에서 필터/Read All 겹침이 없고 빈 상태에도 제목·뒤로·설정이 유지된다. 변경 파일 ESLint/Prettier/diff와 기존 번역 테스트3개는 통과했다. 전체 typecheck는 미변경4파일5오류, 전체 lint는 기존 파일/Pods 오류로 실패했다. root도 iOS 다른 소속/빈 상태 및 Android 영어320 원본을 확인했다. `index.js` HEAD 일치·임시 fixture 제거·Lab 앱/Metro/추가한 adb reverse 정리 후 Office에 실행 자원을 인계했다. API/실제 진입/역할별 기능 검증은 아직 아니다. Android는 제스처 탐색 모드였다.
+- **앱 캡처 판독 정정:** Office/Lab 일부 상태에서 헤더가 안 보인다는 중간 판독은 원본과 추가 캡처/hierarchy에서 정상임을 확인했다. 공통 Layout/Header를 수정하지 않았으며 제품 결함·수정 완료로 기록하지 않는다. Lab 근거는 `/tmp/dentlink-lab-dl17060-{ios,android}-{all,unread,empty,other-labs,english-320,bottom}.png`, `*-empty-confirmed.png`, `*-preview.log`. Android 마지막 빈 상태의 back[42,171][95,224], title[184,166][896,229], settings[975,166][1038,229]도 확인했다.
+- **로컬 도구 보정:** Office Android 첫 빌드는 설치된 RN CLI 실행 파일 권한0644 때문에 실패했다. package bin 연결과 현재 사용자 소유임을 확인한 뒤 해당 node_modules 파일 한 개에만 사용자 실행 권한을 추가해 정상 config 출력을 확인했다. 추적 소스·환경값·native 설정·버전·보안 정책을 변경하지 않았다.
+- **Jira:** DL-17058 진행 댓글44682에 UI 작성/브라우저 확인과 아직 실제 서비스 미연결임을 기록했다. DL-17060 댓글44684와 DL-17059 댓글44685에는 각각 앱 iOS/Android 표시 UI 검증과 실제 진입/서버 연결 전임을 기록했다. DL-17057 댓글44683에는 PM의 클릭 기준 읽음 답변을 반영했다. DL-17057/58/59/60은 진행 중이며 완료 처리하지 않는다. 상위 카드와 다른 담당자 카드는 변경하지 않았다.
+- **최종 Git/실행 상태:** Web `57bb759`/Office `7f586790`/Lab `5144103`에서 각각5/9/11파일 로컬 변경만 남았다. 각 upstream은 여전히 base인 origin/master 또는 origin/main을 가리키며 ahead/behind0·0은 변경분이 원격에 올라갔다는 뜻이 아니다. 제품 commit/push/PR/merge/배포는 없다. root가 index 원복·diff check 및6006/8081 리스너 없음을 재확인했다. 실행에 사용한 iPhone17Pro 시뮬레이터·emulator5554는 켜진 상태이며 해당 앱/개발 서버만 종료했다. 임시 로그/캡처는 `/tmp` 근거로 보관돼 영구 보존 파일은 아니다.
+- **다음 구현 순서:** (1) 웹 신규 번역 키의 관리 Sheet 반영을 기존 지침에 따라 마무리 (2) BE 목록/집계/읽음·카탈로그 계약을 기존 service/query와 대조해 실제 진입 연결 (3) 설정 구현 전에 최신 PRD의 OS OFF 비활성 문구와 Figma/사용자 정상 복귀 흐름 정렬 (4) 소속 전환·딥링크·푸시 읽음/별도 클릭 기록 연결은 각 계약/정책 확인 후 진행한다. 푸시 읽음은 이번 PM 답변에 따라 클릭 기준이다. 전체 기능의 최종 앱 화면·진입·역할/권한 검증과 사용자 QA·merge·release·배포는 별도 단계다.
+- **기록 충돌 확인:** 개인 정본에는 다른 세션의 `9c859dc`와 `953d9e8`(FE 문서 헬프센터 인계/조사)이 추가돼 있었다. 해당 변경을 보존했고 이 마무리에서는 통합알림센터 상세 파일만 작성한다. 브랜치 전략8문서 정리는 앞선 `00ac226`으로 이미 원격 반영됐다.
 
 ### 앱 공통 전략 정정과 기준 반영 — 2026-10-29 13:45 KST
 
