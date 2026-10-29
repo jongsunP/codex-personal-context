@@ -18,10 +18,10 @@
 
 - 저장소: [Innvoaid/dentlink-app](https://github.com/Innvoaid/dentlink-app)
 - 기본 checkout: `/Users/parkjongsun/Repository/dentlink-app`, 기본 branch `main`.
-- 일반 feature의 기준·PR 대상은 `develop`이다. 실제 준비 시
+- **10/29 사용자 변경:** 일반 feature는 최신 `origin/main`에서 시작하고 해당 release를 PR 대상으로 한다. release는 main으로 병합하며 develop은 운용하지 않는다. 실제 준비 시
   [앱 배포 정책](../SESSION_WORKFLOW.md#dentlink-app-release-and-delivery-policy)과
   [앱 온보딩](dentlink-app-onboarding.md)의 현재 지침을 먼저 읽는다.
-  앱 개발자의 10/12 전달 흐름은 별도 합의 전 참고이며 자동 정책 교체나 배포 승인이 아니다.
+  앱 개발자의 10/12 전달 흐름 중 다른 부분은 과거 참고이며, 현재 전략이나 배포 승인으로 재사용하지 않는다.
 - Office/Lab은 9/30 저장소 분리 이후 별도 제품이다. 이 저장소의 `APP_SERVICE_TYPE=OFFICE`,
   `/office/patients/consolidate` 확인은 10/06 기록이다. 과거 공용 Lab 빌드·경로를 현재
   기공소 앱 작업 위치로 사용하지 않는다.

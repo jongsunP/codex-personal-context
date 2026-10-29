@@ -1,8 +1,15 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-10-29 13:30 KST — **사용자 승인으로 구현에 착수했다.** Web은 `feature/DL-17058` 별도 worktree, Office는 `feature/DL-17059`에서 Figma 기반 인박스 표현 계층부터 병행한다. Lab은 원격 develop 부재로 최신 main 사용 확인을 기다리며 읽기 검토 중이다. DL-17057/17058/17059 진행 중, UX DL-17048 완료 유지. **BE 계약·API 연결·최종 런타임 검증은 아직 완료되지 않았으며 제품 commit/push/PR/배포는 별도 권한으로 구분한다.** 상세 위치와 승인 범위는 아래 최신 체크포인트를 따른다.
+최종 갱신: 2026-10-29 13:45 KST — **사용자 승인으로 구현에 착수했다.** Web은 `feature/DL-17058` 별도 worktree, Office는 `feature/DL-17059`, Lab은 `feature/DL-17060`에서 Figma 기반 인박스 표현 계층을 병행한다. **사용자 최신 결정으로 Office·Lab 모두 main→feature→release→main이며 develop은 운용하지 않는다.** Office 작업을 보존해 최신 main 기준으로 맞췄고 Lab도 main에서 시작했다. DL-17057/17058/17059/17060 진행 중, UX DL-17048 완료 유지. **BE 계약·API 연결·최종 런타임 검증은 아직 완료되지 않았으며 제품 commit/push/PR/배포는 별도 권한으로 구분한다.**
 
 ## 최신 체크포인트 — 2026-10-29 구현 착수
+
+### 앱 공통 전략 정정과 기준 반영 — 2026-10-29 13:45 KST
+
+- Lab 원격 develop 부재 질문에 사용자는 최근 브랜치 전략이 바뀌어 **기공소뿐 아니라 병원 앱도 모두 main→feature→release→main**이라고 답했다. 남은 develop은 점진적으로 없애며 더 이상 운용하지 않는다. 공통 AGENTS/SESSION_WORKFLOW·앱 온보딩·제품별 현재 지침·PROJECTS·FE 조율 문서에 반영한다. 기존 브랜치를 삭제하라는 지시로 확대하지 않는다.
+- **Office 현재 위치:** `feature/DL-17059@7f586790e0bbd7b288458e29f00654d38ba68da2`, upstream `origin/main`. writer가 임시 preview/index와 서버를 복원·정지한 뒤 root가 최신 main을 fetch했다. 기존 base `fc127bd`가 main의 조상임을 확인하고 fast-forward로 맞췄다. 새 알림 표현 코드/아이콘은 전부 보존했다. main 추가분은 useOrderAddProduct/useOrderConfirm 및 DesignConfirmationScreen.test 3파일이며 알림 UI와 겹치지 않았다. 최종 base에서 런타임 영향분을 재확인한다.
+- **Lab 현재 위치:** `feature/DL-17060@51441039751b63a08c82a1be9695c805c8af1539`, upstream `origin/main`. clean인 기존 QA checkout을 확인한 뒤 새 feature를 생성하고 담당 writer에게 배정했다. 기본 기준 질문은 해결됐으며 DL-17060도 진행 중으로 전환했다.
+- **확인된 운영 차이:** 두 앱 현재 main의 auto-pr-title workflow는 feature PR base를 여전히 develop으로 지정한다. 사용자 정책보다 우선하지 않으며 PR 준비 전에 정렬할 항목이다. 이번에는 읽기만 했고 workflow/PR/기존 develop 삭제는 하지 않았다.
 
 ### 착수 승인과 작업 위치 — 2026-10-29 13:30 KST
 

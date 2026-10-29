@@ -140,7 +140,7 @@ For detailed current state, read:
   [모바일웹·앱 기능 비교 조사](projects/dentlink-mobile-web-app-parity.md)를 따른다(2026-10-19 정적 조사, 실기기 QA 별도).
 - `dentlink-app`은 앱 저장소 분리 이후 Office 전용이다.
   실제 checkout, 기능 시작 기준과 작업 공간은 매번 live Git으로 확인한다.
-  일반 feature PR은 `develop`이 기본 대상이며 release는 QA·배포 단계다.
+  일반 feature는 최신 `origin/main`에서 시작해 release에 통합하고, release를 main으로 병합한다(10/29 변경). develop은 운용하지 않는다.
   [공통 앱 지침](projects/dentlink-app-onboarding.md)을 따른다.
 - [projects/dentlink-app.md](projects/dentlink-app.md)
 
@@ -161,7 +161,7 @@ For detailed current state, read:
 
 - 기공소 네이티브 앱은 별도 저장소 `Innvoaid/dentlink-lab-app`을 사용한다.
   기본 경로는 `/Users/parkjongsun/Repository/dentlink-lab-app`이며 실제 checkout은 확인한다.
-  일반 feature PR은 `develop`이 기본 대상이며 CodePush마다 새 release를 만들지 않는다.
+  일반 feature는 최신 `origin/main`에서 시작해 release에 통합하고, release를 main으로 병합한다(10/29 변경). develop은 운용하지 않으며 CodePush마다 새 release를 만들지 않는다.
   [공통 앱 지침](projects/dentlink-app-onboarding.md)에서 바이너리·태그·배포와 자료 현행성을 구분한다.
 - [projects/dentlink-lab-app.md](projects/dentlink-lab-app.md)
 

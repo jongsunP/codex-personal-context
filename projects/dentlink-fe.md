@@ -4,6 +4,11 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
+## 앱 공통 브랜치 전략 변경 — 2026-10-29
+
+- 통합알림센터 세션에서 사용자가 **Office·Lab 앱 모두 `main → feature → release → main`** 전략으로 변경했다고 확정했다. 신규 `feature/<Jira>`는 최신 origin/main에서 시작하며 develop은 더 이상 운용하지 않는다. 남은 develop은 점진적 정리 대상이고 이번 지시만으로 삭제하지 않는다.
+- 공통 AGENTS/SESSION_WORKFLOW와 [앱 온보딩 지침](dentlink-app-onboarding.md)에 반영했다. 과거 develop 기준·PR 대상·release→develop 동기화 기록은 현재 전략으로 사용하지 않는다. 구현 상세는 기능 정본에 유지한다.
+
 ## 웹 v1.90.0 배포 기준 확인 — 2026-10-27
 
 - 사용자 요청으로 원격 refs와 실행 대상을 한 번 확인했다. `release/v1.90.0`과 `prd/clinic/v1.90.0`, `prd/clinic-ohio/v1.90.0`, `prd/lab/v1.90.0`, `prd/admin/v1.90.0`은 모두 **`4168fba5aad347e6958412057b4bf35d856f4473`**를 가리킨다. 릴리스 커밋에서 태그를 만들어 배포한다는 목적과 일치한다.
@@ -27,7 +32,7 @@
 | 메인세션 | 상시 중앙 조율·개인 컨텍스트 관리. 보관하지 않고 유지 | 이 문서의 Session Ownership |
 | LBX / DL-16387 | 원본 수정·별도 develop 전달 및 사용자 개발 배포 완료 기록. 원본 보존·운영 홀드 유지 | [LBX](dentlink-client-lbx.md) |
 | 디자인시스템정비 | 원천/통합 운영 반영 완료. DL-17046 Studio 갤러리는 관련 동료 코드와 사용자 재개 지시 대기. 하네스는 별도 판단 | [DLDS](dentlink-fe-opportunities.md) |
-| 통합알림센터 | 사전 기획·디자인 검토와 산정. 제품 구현 미착수 | [통합알림센터](dentlink-unified-notification-center.md) |
+| 통합알림센터 | 10/29 사용자 승인 후 웹·Office·Lab 선행 UI 구현 착수. BE 계약·실제 연결과 최종 검증은 구분 | [통합알림센터](dentlink-unified-notification-center.md) |
 | DL-17012 앱 미지원 기능 우선순위 | Notion 최종 표 정리·검토 완료, 추가 요청 대기. 제품 구현 아님 | [모바일웹·앱 비교](dentlink-mobile-web-app-parity.md) |
 | 권한관리 / DL-16317 | 배포·정리 완료 기록. 이후 발견된 회귀·후속 QA는 개별 근거로 구분 | [권한관리](dentlink-permission-management.md) |
 | 후속 QA / DL-17011 | 구현·PR 병합 후 10/27 사용자 배포 완료·추가 QA 없음 확인. 업무 종료·세션 보관 요청 기록 | [권한관리](dentlink-permission-management.md) |

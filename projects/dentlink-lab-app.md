@@ -173,14 +173,14 @@
 - 신규 작업은 정확한 앱을 먼저 구분하고 제품별 branch·worktree·API·runtime·release를 확인한다.
   웹의 `origin/master` 전략이나 Office 설정을 그대로 적용하지 않는다.
 
-## 앱 공통 작업 정책 — 2026-10-08
+## 앱 공통 작업 정책 — 2026-10-29 갱신
 
 - [앱 온보딩·작업·배포 정본](dentlink-app-onboarding.md)을 함께 읽는다.
-  후속 사용자 정정으로 일반 feature PR은 `develop`이 기본 대상이며 CodePush마다 release를 새로 만들지 않는다.
+  사용자 정정으로 Office·Lab 모두 최신 `origin/main`에서 feature를 만들고 release에 통합한 뒤 main으로 병합한다. develop은 운용하지 않으며 CodePush마다 release를 새로 만들지 않는다.
 - 정책 조사 당시 `release/v1.0.4 / cb585775ca21e27949e67758a5933139cfc567d8`에 #2·#3이 향해 있었다.
   이 release는 분리 전 트리라 당시 PR에 다른 작업이 섞여 있었다. 분리 전체를 필수 기반으로 보았던
   판단은 수정했다. 당시 명시 승인된 release 전달 정리는 요청한 변경만 옮기고 전체 diff·실제 의존성을 검증했다.
-  일반 신규 feature는 develop 기준이며, 이 release 전달 이력을 일반 시작 기준으로 재사용하지 않는다.
+  현재 일반 신규 feature는 최신 main 기준이며, 이 과거 release 전달 이력을 일반 시작 기준으로 재사용하지 않는다.
   단순 MERGEABLE/CLEAN이나 레이아웃 차이를 범위/필수 통합 증거로 쓰지 않는다.
 - 최신 번역 지침 전달은 문서 전용 #5이며 [전달 기록](dentlink-lab-app-i18n.md)을 따른다.
   온보딩 최초 조사 당시 제품 변경은 없었으며 아래 후속 사용자 승인 작업과 구분한다.

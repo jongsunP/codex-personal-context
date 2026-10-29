@@ -470,7 +470,7 @@ recoverable across devices and future AI sessions.
 
 ## Dentlink App Release And Delivery Policy
 
-This is the user's standing app policy, corrected on 2026-10-08. It applies
+This is the user's standing app policy, corrected on 2026-10-29. It applies
 independently to `dentlink-app` (Office) and `dentlink-lab-app` (Lab); the web
 release-train policy below is unchanged. Details and source coverage belong
 in [App onboarding and delivery](projects/dentlink-app-onboarding.md).
@@ -484,29 +484,31 @@ both that handoff and merge readiness; later changes require affected-case
 rechecks on the resulting final code. This applies to features, QA fixes, and
 shared app changes alike.
 
-The user's 2026-10-12 app-developer handoff is saved there as **reference
-material pending alignment**. Its ordinary feature integration target and
-post-delivery synchronization path differ from the confirmed policy below;
-the hotfix flow is also reference material. Read both before planning an app
-delivery, verify the actual task target and automation, and align unresolved
-differences before performing the affected Git/delivery action. The handoff
-does not itself retarget existing PRs or authorize merges or deployments.
+The user's 2026-10-29 instruction replaces the earlier develop-based policy
+for **both Office and Lab**: `main -> feature -> release -> main`, the same
+release-train concept as web with `main` as the stable app branch. The
+2026-10-12 handoff remains historical reference where it differs. This does
+not itself retarget existing PRs or authorize merges, deployment, or cleanup.
 
-- Ordinary app feature PRs target `develop`; this supersedes the earlier
-  same-day interpretation that ordinary app features target release. For an
-  authorized new feature, normally prepare its base from latest fetched
-  `origin/develop`. Honor an explicit task base or verified release-QA context.
+- For an authorized ordinary app feature, create `feature/<Jira>` from latest
+  fetched `origin/main`. Its integration PR targets the applicable release
+  branch; after QA/delivery, release is merged into `main` with separate user
+  authorization. Honor an explicit task base or verified release-QA context.
+- Do not operate `develop` as an integration branch, feature base, PR target,
+  or post-release synchronization destination. Remaining develop branches
+  will be retired gradually; do not recreate a missing one or delete an
+  existing one without separate cleanup authorization.
 - Release is the QA/delivery branch. Choose the existing applicable release
   for the product's current compatible binary; CodePush does not require a
   new release every time. Verify live releases, app versions, and task context.
   Old `release/office/*` or `release/lab/*` monorepo refs are not automatically
   current delivery targets. Version/release creation remains a separate decision.
 - Keep already-completed release deliveries and current PRs unless the user
-  specifically requests another change. Synchronize approved release changes
-  back to `develop` with a `release -> develop` PR when needed. Creating a sync
-  PR does not authorize merging it or deploying either branch.
+  specifically requests another change. Prepare the authorized `release -> main`
+  delivery/integration PR when needed. PR creation does not authorize merge
+  or deployment; do not add a release-to-develop synchronization step.
 - Keep PR destination and feature starting commit distinct. Inspect the
-  actual app's `main`, `develop`, release tree, and task dependencies before
+  actual app's `main`, release tree, and task dependencies before
   selecting a compatible base. Do not apply web `origin/master`, obsolete
   monorepo paths, or a numerically latest but incompatible release
   mechanically. Report a real integration conflict before writing or retargeting.
@@ -520,7 +522,7 @@ does not itself retarget existing PRs or authorize merges or deployments.
   PR, compare against its actual intended target. For explicitly authorized
   release-based QA/delivery, a fresh branch from that release can port only the
   task's changes into its existing structure. Ordinary new features still use
-  `develop`; do not make direct release work the general rule. Recheck the
+  latest `origin/main`; do not make direct release work the general rule. Recheck the
   full diff, affected product behavior, API, translations, bundle, and baseline
   diagnostics. Do not prepare a broad foundation PR merely to make the feature
   review smaller. If the existing PR already contains only the intended actual
@@ -529,10 +531,10 @@ does not itself retarget existing PRs or authorize merges or deployments.
   replacement, and preserve source branches for recovery unless deletion is
   requested. This preparation does not authorize a PR merge or deployment.
 - After PR creation or reopening, let relevant automation finish and verify
-  its actual base and diff again. Current app automation's ordinary Jira
-  feature target of `develop` agrees with this corrected policy. Explicit
-  release-QA exceptions and release sync PRs still require actual target
-  verification. Do not modify workflows outside the authorized task.
+  its actual base and diff again. Historical automation may still retarget
+  features to `develop`; that behavior does not override the main-to-release
+  policy. Verify live workflows and address any mismatch within explicit
+  authorization; do not modify workflows outside the authorized task.
 - For compatible JS/TS, styles, and bundle assets on the same installed
   binary, keep the existing app version/release and identify source changes
   with tags under the current product's convention. Native code/SDKs,
