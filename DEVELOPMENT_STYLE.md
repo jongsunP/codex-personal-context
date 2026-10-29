@@ -66,6 +66,20 @@ appear nowhere else in the app.
 - Separate original PM/design/user sources from Codex-authored Jira descriptions,
   plans, and checklists. An AI-authored document cannot retroactively authorize
   the AI's own addition. State when the original source or approval is unavailable.
+- Requirements and design documents may lag behind the actual decisions. Across
+  all work, compare the latest substantive edits, Slack discussions and follow-up
+  decisions, direct user instructions, and current code, then select the supported
+  current interpretation and proceed. A document's overall edit time alone is not
+  proof that every section supersedes a later discussion. Record the sources and
+  reasoning; do not repeatedly ask the user to reconfirm settled decisions merely
+  because an older document or duplicate platform frame was not updated.
+  This is the user's explicit cross-project direction from 2026-10-29.
+- For an already-confirmed cross-product flow, use its latest applicable design
+  and established project components for equivalent platform UI when the evidence
+  supports that adaptation. Record an adaptation as such, not as a separately
+  verified design. Ask only when source reconciliation cannot resolve a genuinely
+  new product/design decision. This does not authorize inventing requirements,
+  backend contracts, or expanding Git/publication permissions.
 - Audit suspected additions before changing them. Missing evidence is not proof
   that an existing behavior is wrong; distinguish confirmed deviations, additions
   needing a decision, and unavailable evidence. Report impact and a proposed
