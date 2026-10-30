@@ -1,6 +1,17 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-10-26 문서 표시명 develop 병합·사용자 배포 완료 / 원본 보존·대기
+## 현재 체크포인트 — 2026-10-30 스테이징 PR 준비 완료 / 사용자 병합 대기
+
+- 사용자가 LBX 스테이징 반영을 요청하면서, 필요하면 별도 전달 브랜치를 만들고 필요 없으면 직접 PR을 생성하도록 승인했다. **PR 머지는 사용자가 직접 한다.** 운영 릴리스 홀드는 유지한다.
+- 라이브 원본 `feature/DL-16387`은 로컬·원격 모두 `8a860f080fea9574c5da5db5907d513529bba7ee`다. 최신 `origin/master / 57bb759ca08e3752140ceffdae2a5421934ec242`와 `origin/stage / b3dedd8482283635880a1000c1aaa24bf35349d4`는 전체 코드 tree가 동일했다. 공통 기반 `c597f1fb3` 이후 stage 변경 129파일과 LBX 변경 19파일의 교집합은 0개이며, 병합 충돌과 추가 호환 수정이 없다.
+- 이번에는 사용자가 허용한 직접 PR 방식을 선택했다. [PR #4804](https://github.com/Innvoaid/dentlink-client/pull/4804), **`feature/DL-16387` → `stage`**, 제목 `[DL-16387] LBX 배송 기능 스테이징 반영`, OPEN·일반 PR·MERGEABLE을 확인했다. LBX 2커밋·19파일(+1518/-28)만 포함한다. 별도 전달 브랜치와 제품 신규 커밋은 만들지 않았고 원본을 변경·삭제하지 않았다. 원본은 master의 최신 이력을 아직 흡수하지 않았지만, stage 병합 결과에는 최신 master 코드와 LBX 변경이 함께 보존된다.
+- 원본 유지 요구를 PR 본문에 명시했고 저장소 `delete_branch_on_merge=false`도 확인했다. 이번 직접 PR 허용은 호환 수정이 필요 없는 이번 전달의 판단이며, 기능 수정은 원본 먼저, 환경별 호환 변경은 별도 전달 브랜치에서 처리하는 기존 원칙을 폐기하지 않는다.
+- **검증:** stage에 LBX patch를 적용한 임시 detached checkout의 tree가 `git merge-tree` 결과 `e8a5f0faeaf9912d7daf5e9f7fbfb7d96e04909c`와 정확히 같았다. 이 최종 병합 코드에서 Clinic/Lab/Admin 타입 검사, Admin 전체 lint(오류0·기존 경고393), DLOS guard60/60, 변경 공용8파일 ESLint(오류0·기존 경고2), 변경19파일 Prettier·diff 검사를 통과했다. 공용 ESLint CLI의 기존 Storybook 중복 plugin 해석 충돌은 동일 설치 plugin을 주입해 검사했으며 저장소 설정·규칙은 바꾸지 않았다.
+- **E2E 영향 가드:** 독립 정적 검토 `NO_IMPACT`. 공용 pickup의 기존 기본값·라벨·검증·제출 경로와 Admin 결제/직원정리 API 접점이 유지됨을 실제 E2E helper와 대조했다. 가드 기록과 PR 생성 직전 검사를 통과했다. E2E 코드 수정·브라우저 실행·실제 업무 API 요청은 없으며 스테이징 화면/실데이터 QA 완료를 뜻하지 않는다.
+- **정리:** 제품 기본 checkout은 clean `master / 57bb759ca`를 유지했다. 검증용 임시 checkout은 patch/tree 일치와 사용자 추가 변경 없음 확인 후 제거했다. 다른 feature worktree는 건드리지 않았다. 기기 한정 근거는 `/Users/parkjongsun/.local/share/codex-closeout/20261030-lbx-stage-pr/`의 `state.json`, `lbx.patch`, `e2e-guard-result.json`, PR 본문과 검사 로그에 있다.
+- **남은 일/재개:** 사용자가 PR을 병합하고 스테이징에 배포한 뒤 실제 LBX 목록·상세·세 모달 조회/UI QA를 별도로 확인한다. 이번 작업은 PR 생성까지만 완료했으며 merge·배포·CodeRabbit/CI 모니터링을 시작하지 않는다. 이후 원본 수정이나 환경 전달은 새 요청과 최신 refs를 기준으로 진행한다.
+
+## 이전 체크포인트 — 2026-10-26 문서 표시명 develop 병합·사용자 배포 완료 / 원본 보존·대기
 
 ### 최신 수정·전달 상태
 
