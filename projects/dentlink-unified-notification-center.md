@@ -1,6 +1,38 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-10-30 18:01 KST — **BE 도메인·카테고리 구조와 FE 표시 계층을 분리하는 기준을 사용자 확인으로 기록했다. 지금 구현하지 않고 다음 작업에 반영한다.** 오늘 작업용 로컬 실행은 17:38 마감 때 종료했으며 사용자 재개 요청까지 대기한다. 제품 구현은 Web `6557a10cf`, Office `9d378e4`, Lab `e9d69ef`까지 push된 직전 상태를 보존한다. 새 화면/안내는 개발 빌드·목데이터 범위이며 실데이터 통합·전체 기능 최종 QA/merge 준비 완료는 아니다.
+최종 갱신: 2026-10-30 19:04 KST — **앱 미지원 기능 조사 이력과 이메일·푸시·알림센터 랜딩의 앱 연결 가능성을 읽기 전용으로 검토했다. 설치 앱 열기와 목적 화면 도달은 구현 가능한 방향이지만, 현재 모든 웹/이메일 주소가 앱으로 연결되는 구조는 아니다.** 신규 구현·링크/정책 확정은 없고 사용자 재개 요청까지 대기한다. 18:01 표시 계층 매핑 기준과 제품 push 상태(Web `6557a10cf`, Office `9d378e4`, Lab `e9d69ef`)를 보존하며, 종료된 로컬 서버·기기는 다시 켜지 않았다.
+
+## 외부 이메일·푸시 랜딩과 앱 연결의 초기 검토 — 2026-10-30 19:04 KST
+
+### 요청·확인 자료·현재 단계
+
+- **사용자 목적:** 앱 미지원 기능 조사와 알림센터의 관계를 검토한다. 모바일에서 이메일의 링크를 누를 때 앱이 설치되어 있으면 앱을 열고 해당 화면까지 보낼 수 있는지, 푸시/이메일/알림센터 URL을 함께 고려할 부분을 조사한다. **지금 수정·개발하는 지시가 아니며 초기 검토만** 한다. 미설치 사용자의 다운로드 유도는 별도 판단이고 필수로 추가하지 않는다.
+- [2차 회의록 · 앱 미지원 기능 종합 및 작업 계획](https://app.notion.com/p/405ce072e82f80a9a1f7ccd329fa2d3d)과 [Slack part-fe 이력](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793250259916639)을 읽었다. Slack 부모+답글8개 전체 반환·추가 페이지 없음 확인. 사용자 Frankie(U051EKTLWQK)의 10/29 14:28–14:30 의견은 설치 앱의 이메일 랜딩 개선 제안이며 14:41 Joy 답변은 ‘프랭키: 알림센터–앱 연동 가능 기능들 파악’이다. 구현 완료·전체 이메일 전환 정책 확정으로 취급하지 않는다. 치과 주문 상세 우선/기공소 native 전환 대기 등의 당시 의견은 해당 별도 기능 범위를 유지한다.
+- 회의록은 반환 마지막 편집10/29 14:08:35.200 KST, fetch 본문 표기 as-of10/29 15:56:02.017 KST다. 관련 DB `collection://a1ee4eee-13e0-42cb-be82-940b62b6a27b` schema를 읽고 실제36행의 서비스·화면 경로·앱 지원/조건을 조회했다(`has_more=false`). 댓글 전수 확인이나 모든 기능의 현재 실기기 검증은 아니다. DB의 우선순위나 작업 상태를 수정하지 않는다.
+- 알림 현황 Sheet metadata와 `전체 알림!A1:P178`(반환175행), `메일!A1:Y12`·`A13:N70`을 읽었다. NOTIFICATION/PUSH의 WEB/APP 목적지는 있으나 **읽은 MAIL 행과 메일 탭 랜딩은 공란**이다. 공란이 이메일에 링크가 없다는 뜻은 아니며, 현재 실제 발송 HTML의 href·추적/리다이렉트 주소·원본 최종 URL은 확인하지 못했다. 이전 ‘빈 랜딩은 현재 불필요한 PM 질문으로 확대하지 않는다’와 구분해, 이번 외부 메일 진입 기술 검토에 필요한 발송 원본 근거로 남긴다.
+
+### 현재 코드·공개 연결 파일 확인
+
+| 계층 / 제품 | 확인한 사실 | 의미 / 한계 |
+| --- | --- | --- |
+| Office 앱 | `src/configs/constants/deepLink.ts`는 dentlink 환경별 scheme와 portal 웹 prefix, 주문/채팅/승인/도움말/결제수단 등의 앱 route를 보유. iOS entitlements와 Android VIEW/autoVerify는 `dentlink.airbridge.io`, `dentlink.abr.ge`를 등록 | **JS에서 portal URL을 해석할 수 있음 ≠ OS가 이메일의 portal URL을 앱으로 보내 줌**. 확인한 native 설정에는 portal 호스트 직접 연결이 없음 |
+| Lab 앱 | dentlink-lab 환경별 scheme·lab 웹 prefix·기존 업무 route/밀링 action을 보유. iOS는 lab 도메인과 Airbridge 도메인 등록, Android lab 호스트는 `/q/` pathPrefix | 일반 `/orders`·billing 이메일 링크까지 lab 도메인 앱 직접 연결이 확장된 상태는 아님 |
+| 실제 Production 공개 파일 | `portal.dentlink.io/.well-known/apple-app-site-association` 및 `assetlinks.json`은 이번 HTTP 조회404. `lab.dentlink.io`의 두 파일은200 JSON이며 iOS `/q/*`, Android Lab package 연결을 확인 | 앱/웹 체크아웃뿐 아니라 공개 파일 상태도 확인. OS 캐시·설치 바이너리·사용자 선택·실제 메일 앱 클릭까지 검증한 것은 아님. Office 루트 경로 등 다른 가능한 제공 위치까지 전수 조사하지 않았으나 native 미등록과 함께 판단 |
+| 양 앱 공통 진입 | Airbridge4.9.0, Linking, FCM/Notifee 및 Root의 로그인/업데이트/navigation 준비 이후 보관 링크 처리 기반이 있음. FCM `data.deeplink`를 `convertURLForApp`으로 변환하고 `landBy=push` 등을 덧붙임 | 공통 진입 재사용 가능. 임의 모든 URL 변환이 아니라 기존 허용 경로 중심이며 공통 읽음·클릭 이력 실연동은 아직 별도 미완료 |
+| 웹 기존 안내 | `clinic/src/lib/AppRequired/useAppRequiredPage.ts`와 shared `appRequired.ts`에 승인/Case Preference 등의 앱 열기·Airbridge 링크 생성이 있고, 미실행 추정 시1.5초 후 스토어 이동하는 기존 처리도 있음 | 모든 메일 URL에 적용된 자동 연결이 아님. 이번 ‘미설치 시 웹 유지’ 후보에 기존 코드를 그대로 쓰면 스토어 유도 정책이 섞일 수 있으므로 재사용 범위 확인 필요 |
+
+- 확인 checkout은 기존 feature 그대로: Web `/Users/parkjongsun/Repository/dentlink-client-notification-center@6557a10cf`, Office `/Users/parkjongsun/Repository/dentlink-app@9d378e4`, Lab `/Users/parkjongsun/Repository/dentlink-lab-app@e9d69ef`. 시작 Git은 clean이며 제품 코드는 읽기만 했다. 이 feature의 존재를 최신 배포 바이너리나 main 전체와 동일하다고 보지 않는다.
+- **실제 앱 지원과 native 전환을 구분:** 주문 상세는 양 앱에서 이미 WebView로 제공되고 기존 딥링크 후보가 있다. ‘앱 미지원’ DB에 native 전환 대상으로 올라 있다는 이유로 랜딩 불가능으로 분류하지 않는다. 반대로 명세서/결제 내역·초대 수락·비밀번호 재설정 등은 현재 지원이 없거나 제한적이어서 링크만 앱으로 바꾸어도 기능이 생기지는 않는다. 특히 계정 복구/초대는 로그인 완료를 무조건 선행시키는 일반 업무 진입과 다른 흐름이 필요하다.
+- **제품/환경 구분 주의:** 현재 두 앱의 Production native 설정에 일부 Airbridge 호스트가 공통으로 남아 있고, 시트의 일부 LAB APP 목적지도 `dentlink://`로 표기된다. Lab의 URL 변환기는 기존 app scheme를 현재 Lab scheme로 무조건 치환하지 않는다. 이는 시트 설명을 실제 발송값·콘솔 설정과 대조할 항목이며 잘못된 앱 실행을 이번에 재현했다는 뜻은 아니다. 두 앱 동시설치·DEV/STG/운영 혼재 시 정확한 앱으로 연결되는지 별도 검증한다.
+
+### 가능한 설계 방향과 알림센터 연결 조건 — 아직 제안
+
+- **가능:** 지원되는 HTTPS 링크를 iOS Universal Links / Android App Links 또는 기존 Airbridge를 통해 설치 앱으로 전달하고, 앱 준비/소속 확인 후 지정 화면으로 이동시킬 수 있다. 미설치 시 기존 웹 목적지를 여는 fallback도 구성할 수 있어 다운로드 유도가 필수는 아니다. 기존 Airbridge 재사용과 일반 웹 도메인 직접 연결 확장을 비교하되 아직 어느 방식도 새 확정 정책/작업으로 승인받은 것은 아니다. native domain/intent 설정 변경이 필요하면 OTA JS 변경만으로 끝나지 않는다.
+- **공통화 범위:** 앱 내 알림 클릭·푸시 클릭·이메일 클릭은 진입 방법이 다르지만, 앱에 들어온 뒤의 목적지 해석·로그인/계정·대상 병원/소속 확인·권한/대상 유효성·화면/action 실행은 공통 흐름으로 재사용할 수 있다. 실제 payload에는 제품/환경·목적 화면/업무 식별·필요한 대상 소속·진입 출처가 유실되지 않아야 한다. 모든 채널에 같은 URL을 강제하지 않고 기존 WEB/APP × 인박스/PUSH/MAIL의 목적 차이를 보존한다.
+- **읽음/이력 별도:** 앱 열기·랜딩, 해당 알림 읽음, 푸시/이메일 클릭 이력은 다른 기능이다. 기존 PM 푸시 클릭 읽음 결정을 이메일 클릭으로 자동 확대하지 않는다. 이메일 전용 이벤트는 대응 인박스 레코드가 없을 수 있다. 연결할 때는 직접 notificationId 또는 다른 정보 조합으로 원본 발송 건/알림을 식별하며, 동일 주문 ID만으로 과거 알림을 임의 일괄 읽지 않는다. 이메일 링크의 서버 GET/미리보기만을 사용자 읽음 성공으로 취급하는 구조를 새로 만들지 않는다.
+- **외부 링크 특성:** 설치 여부만으로 앱 열기를100% 보장하지 않는다. OS/사용자의 링크 열기 선택, 이메일 앱 내 브라우저·추적 링크/리다이렉트, 구버전 앱·미지원 화면, 기존 발송 링크와 향후 발송 링크를 구분해 검증해야 한다. 동일 앱 WebView를 벗어났다가 자기 앱으로 다시 여는 루프도 피한다. 링크가 앱을 열어도 인증·소속·권한 실패와 대상 삭제를 별도로 처리하며 다른 세션의 신규 화면 개발을 이 기능에 임의 포함하지 않는다.
+- **공식 근거:** [Apple Universal Links](https://developer.apple.com/documentation/xcode/allowing-apps-and-websites-to-link-to-your-content), [Android App Links 검증](https://developer.android.com/training/app-links/verify-applinks), [Airbridge RN4 딥링크](https://help.airbridge.io/ja/developers/react-native-sdk-v4). Apple 공식 Markdown 본문을 읽어 앱/웹 상호 연결·미설치 웹 열기·Safari 동일 도메인 유지 조건을 대조했고, Android는 manifest/domain 검증 조건, Airbridge는 scheme 복원·플랫폼별 웹 fallback을 확인했다. 공식 문서 설명을 현재 Dentlink 원격 콘솔 설정/실기기 성공 증거로 대신하지 않는다.
+- **다음 검토에 필요한 자료:** 실제 이메일 유형별 최종 href/추적 URL 예시(민감한 토큰은 기록하지 않음), 발송측 템플릿과 Airbridge 제품별 연결 설정, 앱 지원 목적지/기존 WebView 사용 가능 여부. 이를 기존 알림 현황표의 채널별 목적지와 대조해 ‘기존 앱 재사용 / 앱 화면·진입 보완 필요 / 웹 유지’로 분류한 뒤 구현 범위를 정한다. 지금은 조사만 했고 제품/외부 문서·댓글·Jira·PR·branch/worktree·서버/기기를 변경하지 않았다. 개인 컨텍스트의 이 기능 문서만 갱신·commit/push해 재개 근거를 보존한다.
 
 ## 도메인·카테고리의 FE 표시 기준 확정 기록 — 2026-10-30 18:01 KST
 
