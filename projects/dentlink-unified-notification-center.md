@@ -1,6 +1,15 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-10-30 13:50 KST — **Notion 정책서 최신 본문·댓글 전체 반환분과 미지원 첨부를 보완 확인했다. 추가 코드 수정이 필요한 새 확정사항은 없으며, 아래 Web·Office·Lab 선행 구현·push 상태를 유지한다.** 웹은 반응형 팝업 호스트와 화면 복귀, 양 앱은 최신 OS 안내 배너·알림 벨·native 목록↔설정 연결을 준비했다. 실제 제품 Header/Root 진입 및 BE 조회·저장·병원 전환·푸시 연결은 아직 교체하지 않았다. 새 UI를 더미 데이터로 운영에 노출하지 않으며, BE 계약과 남은 정책이 확정되면 현재 표시/동선 계층에 연결한다.
+최종 갱신: 2026-10-30 14:40 KST — **Clinic 로컬 env 누락을 복구해 기존 서비스 홈 실행을 확인했다. 새 알림센터 디자인은 별도 UI 컴포넌트로 구현·push되어 있으나 실제 제품 화면에는 아직 연결되지 않았다. ‘디자인 적용 완료’나 ‘FE에서 할 일이 없다’고 보고하면 현재 상태를 과장하게 된다.** 아래 Web·Office·Lab 선행 구현·push 상태를 유지한다. 실제 제품 Header/Root 진입 및 BE 조회·저장·병원 전환·푸시 연결은 아직 교체하지 않았다. 새 UI를 더미 데이터로 운영에 노출하지 않으며, BE 계약과 남은 정책이 확정되면 현재 표시/동선 계층에 연결한다.
+
+## Clinic 로컬 실행 복구 및 완료 범위 정정 — 2026-10-30 14:40 KST
+
+- **사용자 확인:** 현재 IDE·브라우저에서 로컬이 열리지 않는 원인 조사와 env 준비 요청. 이어 새 디자인이 보이지 않는데 왜 작업 완료라고 했는지 질문했다. 기존 UI 구현/격리 검증을 실제 제품 화면 적용 완료와 분명히 구분해 답해야 한다.
+- **원인과 조치:** Web `feature/DL-17058@364ed3d`의 `clinic/.env.development`가 없었다. CDN 설정 부재로 이미지가 query가 붙은 상대 주소가 되어 Next 이미지 오류가 발생했고, API도 localhost로 향했다. 같은 Git 저장소의 주 worktree `dentlink-client/clinic/.env.development`를 값 열람·출력·변경 없이 복사했다. 대상 파일 기존 부재, 복사 동일성, ignore·미추적을 확인했다. Lab env는 이번 범위가 아니다.
+- **실행 근거:** 이전 Clinic 서버 PID3088을 정확한 cwd 확인 후 Codex에서 종료하고, `dentlink-client-notification-center`에서 `pnpm dev:clinic`으로 재시작했다. 사용자 IDE 터미널은 조작하지 않았다. 새 Next PID3523, Codex exec session95051, 실제 cwd는 해당 worktree의 `clinic`, 포트3000. Chrome `[DEV-Office] Dentlink`의 실제 기존 홈 렌더링 및 DEV API GET200을 확인했다. 서버는 사용자 확인을 위해 켜둔다. 화면 근거 `/tmp/notification-local-browser-env-ready.png`. ChannelIO 미로드 콘솔 메시지는 별도 잔존하며 이번에 수정하지 않았다.
+- **새 디자인이 보이지 않는 이유:** 현재 `clinic/src/components/Layout/Header.tsx`는 기존 `../Notifications/Notifications`를 계속 렌더링한다. 새 `NotificationCenterPopup`은 shared UI와 Storybook에서 사용되며 Clinic/Lab 실제 제품 호출처에는 연결되어 있지 않다. env 복구와 제품 디자인 적용은 별개다.
+- **이전 검증의 정확한 범위:** 웹은 Storybook에서 실제 새 UI 컴포넌트의 모양·상호작용을 검증했고, 앱은 격리 native 프리뷰로 검증했다. 이는 서비스 env 준비, 실제 제품 진입, 실데이터/API 통합 완료를 증명하지 않는다. 로컬 env 준비가 빠졌던 점과 완료 보고의 범위 혼동을 인정한다. 제품 소스/commit/PR 변경은 없으며 세 제품의 기존 push 상태는 유지한다.
+- **다음 시작점:** 새 UI를 실제 제품 진입에 연결하는 남은 작업과 BE·정책 대기를 분리해 판단한다. 모든 화면 연결이 BE 확정 없이는 불가능하다고 단정하지 않는다. 현재 질문 자체를 새 제품 구현 지시로 확대하지 않는다.
 
 ## Notion 본문·댓글·첨부 재확인 마감 — 2026-10-30 13:50 KST
 
