@@ -2,6 +2,7 @@
 
 ## 현재 체크포인트 — 2026-10-30
 
+- PR 생성 후 사용자가 "과거만 막는 목적을 기준으로 현재 PR을 판단"하도록 요청해 추가 검토했다. 현재 PR은 신고된 화면의 과거 선택·프리필 진행 차단은 해결했지만, 별도 확인 팝업의 최종 버튼에는 날짜 재검증이 없다. 오늘 날짜로 팝업 진입 후 자정을 넘겨 "Continue with the current date"를 누르면 어제 날짜가 저장 함수에 전달되는 것을 실제 Popup + 합성 데이터/spy 테스트로 재현했다. 서버 저장은 호출하지 않았다. 날짜 형식 전반의 기존 문제는 분리하되, 최종 확인 경로의 과거 재검증은 이번 PR 목적에 해당하므로 최소 보완을 권고한다. 아직 추가 제품 수정·commit/push는 하지 않았다.
 - 상위 [DL-17124](https://innovaid.atlassian.net/browse/DL-17124), Frankie 하위 [DL-17125](https://innovaid.atlassian.net/browse/DL-17125). 제목을 `[FE] 기공소 출고 예정일의 과거 날짜 선택 방지`로 변경하고 증상·수정 범위·완료 조건을 작성했다. 결과 댓글 `44732`를 하위에만 남겼다. 상위 댓글·카드 상태는 변경하지 않았다.
 - 사용자 지시로 제품 commit/push 및 [PR #4807](https://github.com/Innvoaid/dentlink-client/pull/4807) 생성을 완료했다. 실제 base `release/v1.91.0`, head `feature/DL-17125`, 일반 Open PR이며 변경은 1커밋·2파일·36 additions / 7 deletions로 확인했다. 리뷰 대기이며 merge/배포는 하지 않았다. 현재 운영/STG에는 이 수정이 반영되지 않았다.
 - 작업 위치 `/Users/parkjongsun/Repository/dentlink-client`, 브랜치 `feature/DL-17125`, HEAD `e8e15ed66629f3aa389e484215116ed90fa21f13`, upstream `origin/feature/DL-17125`와 0/0이고 clean. 시작 base는 `57bb759ca08e3752140ceffdae2a5421934ec242`(origin/master), PR base SHA는 `fc23d9084dbc4e0b375960481e692b350c08001d`. 기존 기본 checkout을 단독 작성 위치로 사용했고 새 worktree/프로젝트는 만들지 않았다.
@@ -26,6 +27,7 @@
 - 일회성 합성 데이터 검증 17/17 통과. 실제 Modal/DateField/Calendar/DLDS와 RHF 사용, 서버 경계는 spy. 과거 프리필 보존·오류·disabled·요청 0회, 오늘/미래 선택 후 정상 callback, 과거 클릭/Enter·월 이동·주말/공휴일·readonly, 빈 제작일/NEW 빈값 기존 동작, 검토→디자인·디자인 생략→제작·출고일 편집, LA/서울 기준일, 오늘 휴무 시 다음 영업일, 비배송/Admin 기본값 보존을 확인했다.
 - Chrome 실제 localhost:3005 (기존 DEV 연결·로그인 유지) 주문 상세에서 제작 전환을 열어 과거값과 활성 변경 버튼을 수정 전에 확인했다. 최종 코드에서 과거값 오류/변경 disabled → 오늘 선택 활성 → 다음 달 미래 영업일 선택 활성 → 닫고 다시 열면 원래 과거값 보존/차단을 확인했다. 실제 서버의 주문 날짜/상태 변경을 제출하지 않았다.
 - 실서버 저장 성공·배포 QA는 미검증이다. 기존 dd/MM/yyyy의 전반적인 문자열 재해석 및 확인 팝업을 자정 넘게 유지하는 경계 사례는 이번 최소 수정에 포함하지 않았으며 해결됐다고 표현하지 않는다.
+- 추가 경계 검증 `/private/tmp/dl17125-check/popup-midnight.audit.test.tsx`: 2026-10-30 23:59:50 KST에 오늘 출고일로 확인 팝업 표시 → 10-31 00:00:10 KST에 계속 버튼 클릭 시 `inFabrication` spy가 1회 호출되어 "호출되지 않아야 한다" 검증이 실패했다. 과거값 차단의 남은 경로로 확인했으며 기존 17개 통과와 별도로 기록한다. Popup 재검증 누락은 이전 코드부터 존재하지만, 오늘 선택 허용 후에는 한 번의 날짜 변경으로 발생할 수 있어 무관한 기존 문제로 일괄 제외하면 안 된다.
 - 관련 독립 코드 리뷰에서 최종 2파일 수정에 추가 차단 이슈 없음. 중간 확대 구현 검증은 최종 결과로 혼용하지 않았다.
 - 기존 메인 checkout의 ignored/untracked `lab/.env.local`, `lab/.env.development`를 그대로 사용했으며 값을 읽거나 변경하지 않았다. server cwd=`dentlink-client/lab`, port3005 확인. 이 세션의 서버 PID23854와 테스트 탭은 검증 후 종료했다.
 
@@ -34,4 +36,4 @@
 - 테스트: `/private/tmp/dl17125-check/status-date.test.tsx`, `vitest.config.mjs`(일회성 파일, 제품 branch에 미포함). 재실행은 설치된 shared/dlds의 Vitest로 이 config를 지정한다.
 - 실제 브라우저 화면: `/private/tmp/dl17125-verified-screen.png`. Jira 원본 첨부는 세션의 메인 프로젝트 폴더에 다운로드했다. 임시 파일·브라우저 인증은 Git으로 다른 기기에 복원되지 않는다.
 - 최종 파일 SHA256: Modal `1e50af0c32520c1f7ffe07d6b2a3e972549d0bc57b79302649764b253ca757f9`; Item `ca7e046ffa8a9eb941fa22a2eef20a62586613cb4f913ae69c4bb224d1f2eb19`.
-- 다음 시작: 개인 컨텍스트 pull → 정확한 checkout/branch/원격 HEAD와 PR #4807 상태를 새로 확인한다. 현재 동료 리뷰 대기. CodeRabbit 대응은 사용자 요청 시 수행하고, merge·배포는 별도 지시 후 진행한다. 구현은 원격 feature 브랜치에서 복원 가능하며 임시 테스트·로컬 화면 증거는 같은 Mac에만 남아 있다.
+- 다음 시작: 개인 컨텍스트 pull → 정확한 checkout/branch/원격 HEAD와 PR #4807 상태를 새로 확인한다. 사용자는 현재 추가 수정 여부의 판단을 요청한 상태이며, 최종 확인 팝업의 과거 재검증 최소 보완을 권고한 결과부터 이어간다. 추가 구현 시 직원 시간대·기존 문구·정상 오늘/미래 진행·자정 경계를 검증하고 E2E 가드를 갱신한다. CodeRabbit 대응은 사용자 요청 시 수행하고, merge·배포는 별도 지시 후 진행한다. 구현은 원격 feature 브랜치에서 복원 가능하며 임시 테스트·로컬 화면 증거는 같은 Mac에만 남아 있다.
