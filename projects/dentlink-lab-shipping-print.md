@@ -1,6 +1,23 @@
 # Dentlink Lab Shipping Print UX — DL-17101
 
-## Current checkpoint — 2026-10-30 keep current implementation; await physical-printer feedback
+## Current checkpoint — 2026-10-30 common label/sticker restored; attachment-only settings; PR 4805 ready
+
+- **사용자 최종 변경 승인:** 기존 라벨·스티커는 모든 기공소가 공통 사용하고, INTERNAL에만 `라벨(부착용)`을 마지막 컬럼/일괄 메뉴로 추가한다. 배송용 라벨·배송용 주문서 분리는 종료하고 기존 통합 라벨(운송장 + 인쇄 안내 + Order List)로 복원한다. 새 설정 패널·실시간 미리보기·확장 출력창은 명시적 INTERNAL 부착용에만 적용한다. 아래 3종 분리/3종 설정·유지 결정은 이전 이력이며 이 최종 합의가 우선한다.
+- 원본 `/Users/parkjongsun/Repository/dentlink-client-dl-17101`: `feature/DL-17101@a7aa540a268d63b5d9fafc13e4b3d7f85d499c1b`, 정상 커밋·푸시 완료·origin 일치·clean. origin/master 대비0 behind/5 ahead이며 원본에 추가 커밋만 누적했고 develop을 섞지 않았다.
+- 배포 `/Users/parkjongsun/Repository/dentlink-client-dl-17101-develop`: 최신 `origin/develop@61da80eaee3d272216e7784b00806007e36b3b56`에서 새 `feature/DL-17101-common-print-develop@46bb74fd65dc7409be5541e15d625f48108c9d28`를 만들고 이번 원본 커밋만 cherry-pick·푸시했다. 이전 배포 브랜치 `feature/DL-17101-print-settings-develop@9e64614a8` 등과 원본 worktree는 보존했다.
+- [PR #4805](https://github.com/Innvoaid/dentlink-client/pull/4805): develop 대상, OPEN·non-draft·MERGEABLE·미병합을 생성 후 조회 확인했다. 열린 DL-17101 PR은 이것 하나다. PR4802는 이미 develop 병합된 이전 이력이다. 이번 병합·배포는 사용자가 진행하며 CI/CodeRabbit 완료 또는 실제 배포 성공으로 보고하지 않는다.
+- 변경16파일의 내용 및 patch-id `00e15bd1cd1d49bef0494acbe2ccd0ff44458268`가 원본/배포에서 일치한다. 배송/주문 상세 스티커를 복원했고 해당 주문 상세·배송 주문정보 파일은 origin/master와 동일하다. PRE_DELIVERY 재시도는 공통 라벨 한 곳에 유지한다. 기존 SHIPPING/ORDER_SHEET URL은 공통 라벨로 열리며 형식 전환 메뉴는 제거했다.
+- 배송 수정 후 자동창은 기존 조건/SSE를 유지하고 기본 공통 라벨을 연다. 배송 업무/API/주문 상태/라벨10건·스티커30건 제한은 유지했다. 기존 qs 파싱 기본 한계 때문에 스티커22~30건이 배열로 복원되지 않는 문제를 `arrayLimit:30`으로 보정했고 실제 PrintPage 테스트로 확인했다. 공통 일괄 라벨의 exportTradeCodes 미전달은 master의 기존 제한 그대로이며 코드 안내 줄을 별도 개선하지 않았다.
+- 저장값: 부착용 `shipmentPrintSettings:ATTACHMENT`만 신규 UI에서 사용한다. 과거 SHIPPING/ORDER_SHEET 키는 삭제하지 않고 공통 라벨에 적용하지 않는다. 스티커는 기존 `stickerProperties`·기존 크기 설정/계산을 유지한다. 브라우저·프로필·origin 기준 저장이며 계정별/PC간 공유는 아니다.
+- **최종 코드 검증:** 양쪽 focused6 suites/120tests(신규38 + 기존82), Clinic·Lab·Admin 타입, 정상 push훅 lint/Admin guard9/shared coverage 모두 통과했다. 독립 source/delivery 리뷰 finding없음, E2E NO_IMPACT mark/check 완료. develop에 가드스크립트가 없어 원본의 동일 스크립트를 배포 cwd에서 실행했다. 실제 E2E/배송변경 요청은 하지 않았다.
+- **Chrome 로컬:** 실제 INTERNAL 배송 목록 컬럼/일괄 메뉴 `라벨 → 스티커 → 라벨(부착용)`, 부착용에서 공통 라벨로 선택 전환 시 형식/체크박스 초기화, 실제2건 일괄 URL·출력 확인. 부착용 설정 패널·즉시 회전·취소 복원, 스티커 기존50×25mm/100% 크기 설정, 배송 상세 공통+부착용/주문별 스티커, 주문 상세 스티커, 과거 SHIPPING URL의 통합 라벨 호환을 확인했다. 사용자 저장값은 변경하지 않았다.
+- **native 인쇄 미리보기:** 부착용2건=2장(운송장만), 공통 라벨2건=4장(운송장·Order List 및 기존 인쇄 안내)을 확인하고 취소했다. 실물 출력/비INTERNAL 실제 계정/긴 주문서 실제 데이터/자동배송수정 전체흐름은 미검증이다. 배포 checkout은 브라우저를 따로 실행하지 않고 파일동일성·타입·테스트로 검증했다.
+- 이번 후속 수정의 locale JSON diff는0이며 기존 키만 사용했다. audit 기존누락1키, export missing1781/stale2/conflicts3, check10파일 stale를 재확인했다. 동시편집 중단 미확보·기존 충돌 때문에 시트 쓰기/강제 생성은 하지 않았고 기존 번역 보류는 유지한다.
+- 하위 DL-17101 설명을 최종 정의로 교체하고 댓글44725에 결과·PR·남은 실물 확인을 기록했다. 상태 Ready for Deploy 유지. 상위 DL-17099 수정·댓글 없음.
+- 검증 서버 PID11691/11685의 cwd가 원본 `/lab`·port3005임을 확인 후 종료했고 부모11677/3005 listener도 없음을 확인했다. 검증 탭4개만 닫고 사용자 Figma 탭은 유지했다. 제품 두 worktree는 origin 일치·clean이며 원본·이전 배포·새 배포 브랜치 및 기존 ignored env를 유지했다. env값 조회/변경은 없었다. 로그 `/tmp/dl17101-common-label-*`는 임시 증거이므로 후속 시 현재 코드와 일치를 재확인한다.
+- **다음 시작점:** 사용자 PR4805 리뷰·병합·개발서버 배포/실물 프린터 피드백을 기다린다. 추가 구현·공용 설정 적용·번역 시트·CI/배포 감시·CodeRabbit 대응은 자동으로 재개하지 않는다.
+
+## Previous checkpoint — 2026-10-30 three-format implementation before the final scope change
 
 - **최종 결정: 추가 수정 없이 현재 구현 유지.** 사용자가 일반적인 출력 UX 접근과 기존 대비 방향성을 확인한 뒤 “실제 프린터로 확인해보고 문제 있으면 다시 말할게”라고 확정했다. 현재 검토 범위에서 필수 추가 수정이나 전면 재설계 필요사항은 확인되지 않았다. 프리셋·고급 설정 분리는 선택적인 개선 후보이며 구현 요구/필수 후속 작업으로 전환하지 않는다. 실물 프린터 검증은 아직 완료되지 않았고 사용자의 결과/문제 전달을 기다린다.
 - **공통 설정 패널·실시간 미리보기 검토 종료, 구현 보류.** 사용자가 기존 결과가 의도대로임을 확인한 뒤 다른 기공소에도 설정/미리보기 UX만 공통 적용할 수 있는지 읽기 전용 검토를 요청했다. 검토 후 “더 진행은 하지 않아도 되니 정리하고 메모리 … 대기”로 확정했다. 공통 적용 또는 기존 구현의 추가 개선·변경을 사용자가 다시 요청할 때만 재개한다. 추가 조사·구현·테스트·서버 시작·자동 감시는 하지 않는다.
@@ -108,9 +125,9 @@
 
 ## Resume point
 
-1. 추가 수정 없이 현재 구현을 유지하고 사용자의 실제 프린터 확인 결과/문제 전달을 기다린다. 사용자가 **실물 출력 문제**, **공통 적용** 또는 **현재 구현의 개선/변경**을 요청할 때 해당 범위로만 재개한다. 프리셋/고급 설정 제안을 자동 실행하지 않는다. 개인 컨텍스트와 원본 `feature/DL-17101`의 live Git을 갱신하고 정확한 전용 cwd를 사용한다. 원본·이전 배포·새 배포 브랜치를 유지한다. 요청 없이 PR 병합/배포/CI 반복 조회/CodeRabbit 대응을 하지 않는다.
-2. PR #4802는 develop으로 병합 완료(61da80eae). 배포 결과·실물 출력은 별도이며 사용자 추가 요청 전 조회/감시를 하지 않는다. 로컬 테스트는 해당 서비스 메인 env를 값 열람 없이 상속하는 위 승인 원칙을 따른다. 기존 대상 설정이 있으면 덮어쓰기 전에 보존한다.
-3. 로컬 서버는 종료됐으므로 후속 요청 시 원본 worktree의 env 상속 원칙/cwd/port를 확인하고 필요할 때만 다시 시작한다. 최종 정렬·미리보기·창 확대·인쇄/저장 검증과 사용자 확인은 위 현재 체크포인트를 따른다. 사용자에게 남은 것은 실제 라벨/A4 프린터별 용지·인쇄 불가 여백·배율 확인이다. 기존2장 밀림 관찰은 수정 전 이력이며 현재 재현 사실로 취급하지 않는다.
+1. 최종 범위는 **공통 라벨·스티커 + INTERNAL 부착용 추가**, 신규 설정은 부착용만이다. 사용자의 후속 요청이 있으면 개인 컨텍스트와 원본 `feature/DL-17101`의 live Git을 갱신하고 전용 cwd에서 시작한다. 과거3종 분리/3종 설정을 현재 요구로 복원하지 않는다.
+2. PR #4805는 develop 대상 미병합으로 준비했다. 사용자 리뷰·병합·배포/실물 프린터 결과를 기다리며 요청 없이 PR 병합·배포·CI 반복 조회·CodeRabbit 대응을 하지 않는다. 원본·이전 배포·새 배포 브랜치 및 두 worktree를 유지한다.
+3. 로컬 검증 서버/검증 탭은 종료했다. 후속 실행 시 메인의 해당 서비스 env를 값 조회 없이 상속하는 standing authorization을 따르고 기존 대상 env는 보존한다. 실제 라벨/A4 프린터별 용지·인쇄 불가 여백·배율은 미검증이다. 이전3종 사용자QA는 이전 코드의 증거이며 이번2+1 최종 범위의 사용자QA를 대신하지 않는다.
 4. 번역 시트는 자동 재개하지 않는다. 사용자가 후속 작업을 요청하고 동시편집·충돌 조건이 해결된 경우 승인 범위 동기화를 진행한다. Jira 기록은DL-17101에만 남기며 상위DL-17099는 수정하지 않는다.
 
 ## Session identity
