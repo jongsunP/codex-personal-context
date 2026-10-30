@@ -1,6 +1,38 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-10-30 15:10 KST — **사용자가 목데이터를 명시적으로 허용하여 Web Clinic·Lab의 실제 헤더와 Office·Lab 앱의 실제 Home/Root에 Figma 화면을 연결하고 세 제품 feature에 commit·push했다. 개발 빌드에서 목록·설정·소속 선택을 확인할 수 있다.** Web 실제 페이지 경로와 Office 실제 로그인 Home의 iOS·Android 검증을 수행했다. **Lab 앱은 양 OS 로그인 화면까지 기동했지만 로그인 세션이 없어 Home 이후 최종 화면 검증은 남았다.** BE 조회·저장·실제 소속 전환·푸시/랜딩 연결은 미완료이며, 운영 빌드는 기존 동작을 유지한다. 이번 진입 연결과 실데이터 통합·최종 QA/merge 준비를 혼동하지 않는다.
+최종 갱신: 2026-10-30 16:35 KST — **Web Clinic·Lab과 Office·Lab 앱의 실제 진입에 연결한 Figma UI를 개발용 목데이터로 확인할 수 있다. 사용자가 Lab 양 OS에 직접 로그인한 뒤 iOS·Android Home/Inbox/Settings/소속 선택/Profile 검증을 마쳤고, Office 양 OS의 미확인 Profile도 보완했다.** 세 제품 코드는 앞선 commit·push 상태 그대로이며 이번 후속은 런타임 검증·기록이다. BE 조회·저장·실제 소속 전환·푸시/랜딩, OS 권한과 서버 설정 분리는 미완료다. UI 선행 구현을 실데이터 통합·최종 QA/merge 준비 완료로 확대하지 않는다.
+
+## Lab 로그인 후 서비스·OS별 실제 화면 검증 — 2026-10-30 16:35 KST
+
+### 범위와 현재 코드
+
+- 사용자 요청: Android에 이어 iOS Lab에도 직접 로그인 완료. **기기·서비스별로 확인하고 가능한 디자인 작업부터 진행**한다. 이번에는 기존 최종 코드에서 남았던 실제 화면 검증을 이어갔으며 새 정책·API·디자인을 추정하거나 제품 코드를 추가 변경하지 않았다.
+- 개인 정본과 양 앱을 `git pull --ff-only`로 갱신해 최신 상태를 확인했다. 종료 시 세 feature 모두 clean이며 원격 SHA 일치를 다시 확인했다: Web `0b281c3b15e89d77a9a9e7227c3b5da9a40a1081`, Office `859529253d631cbadd1adc01a2b7f8bfd587b189`, Lab `891d600a9fa8aa7d722165d83c26f7ab8be8ad03`. 정확한 경로·브랜치는 아래 15:10 표와 같다. 제품 추가 commit/PR/merge/배포는 없다.
+- 앱은 사용자가 로그인한 실제 개발 앱/Home에서 진입했다. 알림센터 데이터·읽음·설정·소속 선택 자체는 승인된 인메모리 목데이터다. 인증을 우회 주입하거나 사용자 비밀번호를 입력·보관하지 않았다. 기존 OS 권한은 바꾸지 않았다.
+
+### 검증표
+
+| 제품 / 환경 | 화면·진입 / 조건 | 확인 동작과 결과 | 남은 범위 |
+| --- | --- | --- | --- |
+| Web Clinic·Lab / localhost, desktop·mobile 폭 | 기존 헤더·모바일 메뉴 → 새 알림 팝업, 합성 로그인·홈 API fixture | 앞선 최종 코드 검증을 재사용. Clinic1280/375/320, Lab1280/375. 필터·개별/전체읽음·빈 상태·설정·Clinic 주문범위·목 소속 선택/토스트·닫기/재진입 통과 | 실제 BE 데이터·권한·저장·소속 전환은 미연결 |
+| Office / iOS26.5 iPhone17Pro, Android API36 | 실제 로그인 Home 벨 → Inbox/Settings, 기존 테스트 계정 | 앞선 목록·설정·주문범위·소속 선택·dot 검증 유지. 이번 양 OS Profile 진입·스크롤·구 알림설정 영역 숨김·Home 복귀도 통과 | OS 차단 분기의 Office 실제 검증, 실데이터 역할/권한 검증은 별도 |
+| Lab / Android API36 | 실제 로그인 Home 벨 → Inbox/Settings, 기존 OS 알림 허용 상태 | 최초 안읽음, All/Unread, 개별/전체읽음·빈 상태, 상하위 토글과 단독 Push 토글, 다른 기공소 선택 시트/목 전환/토스트, Home dot, Profile/기존 알림영역 숨김, 뒤로/재진입 통과 | 실제 API·소속·랜딩 및 권한별 통합은 별도 |
+| Lab / Android API36 | 알림에서 다른 목 기공소 선택 후 앱을 배경으로 이동·복귀 | 선택한 목 기공소 목록 유지. Home의 실제 로그인 기공소명은 그대로임을 확인하여 목 선택이 실제 소속 변경이 아님을 검증 | 앱 종료 뒤 복원·실제 계정/소속 전환 경합은 실제 통합 단계 |
+| Lab / iOS26.5 iPhone17Pro | 실제 로그인 Home → Inbox/Settings, 기존 OS 알림 차단 상태 | 목록 필터·읽음/빈 상태·선택 시트/토스트·Home dot·Profile·재진입 통과. 파란 OS 배너, Push 선택 안내 팝업, 취소 후 선택값 유지, 배너 닫기, 상위 항목 토글 통과 | OS 권한을 켠 뒤 선택 저장/기기 로컬1회 안내는 미구현 |
+| Lab / iOS26.5 | 안내의 설정으로 이동 → OS 설정 앱 → 기존 앱으로 복귀 | 설정 앱 실행·복귀 후 차단 배너와 목 설정/목 소속 유지 확인 | 시뮬레이터에서는 OS 설정 첫 화면이 열렸다. 앱별 알림 설정 직접 도달은 미확인으로 남겨 실기기에서 재검증; 플랫폼 공통 정상 동작이라고 단정하지 않음 |
+
+- 현재 앱 바이너리는 Office2.2.4.debug, Lab1.0.5.debug이며 각각 해당 checkout의 Metro8081/8082를 사용한다. iOS UDID `5C0E7639-2345-4B3F-9979-56AFDDA1C708`, Android `emulator-5554`/`Dentlink_API_36`에서 확인했다. 기존 로그인 계정 범위의 확인이며 모든 실제 역할·제한 권한을 확인한 것은 아니다.
+- 이번 실행에서 화면 크래시·조작 불가 문제는 관찰하지 않았다. Android 두 앱의 현재 프로세스 ReactNativeJS/AndroidRuntime 오류 로그는0줄이다. iOS는 위 화면 조작·캡처 근거이며 시스템 전체 로그 무오류로 확대하지 않는다. 제품 소스가 바뀌지 않아 앞선 정적 검사를 불필요하게 반복하지 않았다.
+- 자동화 도구의 iOS 공통 팝업은 버튼 문구가 하나의 접근성 노드로 묶였고 checkbox는 `value: checkbox, checked`와 `checked:false`를 함께 반환했다. 원래 코드와 화면을 대조한 뒤 문구 포함 검색/실제 버튼 좌표/반환 value로 검증했다. 최초 정확문구·checked selector 실패와 Office의 기존 Settings 화면에서 재개한 초기 Home assertion 실패는 제품 결함으로 기록하지 않는다. 검증을 위해 공통 팝업 코드를 임의 수정하지 않았다.
+
+### 실행 유지·근거·다음 시작점
+
+- 로그인 키보드: Android Gboard 필기 도구에서 화면 키보드를 표시하고 에뮬레이터 `show_ime_with_hard_keyboard`를1로 설정해 사용자 입력을 도왔다. 로그인 입력은 사용자가 직접 수행했다.
+- 현재 Xcode 설치는 `open -a Simulator`로 열리지 않아 `/Applications/Xcode.app/Contents/Applications/DeviceHub.app`을 열었다. 실제 `iPhone 17 Pro – iOS 26.5` 창에서 사용자가 로그인했다. 다음에도 실행 중 기기/호스트 앱을 먼저 확인하며 과거 Simulator 경로를 무조건 재사용하지 않는다.
+- Clinic3000 PID3523/cwd web worktree clinic, Lab3005 PID4814/cwd lab, Office Metro8081 PID5323/cwd dentlink-app, Lab Metro8082 PID5943/cwd dentlink-lab-app의 리스너·cwd를 재확인했다. 서버·Chrome·에뮬레이터·Device Hub를 종료하지 않았고 양 기기는 Lab 앱을 다시 전면에 두었다.
+- 증거는 `/tmp`에만 보관: `lab-notification-{android,ios}-{entry,actions,blocked-actions,open-os-settings,os-return,resume}.yaml/.log` 중 실행한 플랫폼별 파일, `lab-notification-{android,ios}-{inbox,settings,all,empty,labs,selected-lab,profile,profile-bottom}.png`, iOS `permission-guide`, `blocked-settings`, `os-settings-loaded`, `os-return` 캡처. Office `office-notification-{android,ios}-profile-check.yaml/.log`와 `...-final-profile{,-bottom}.png`. 프로필 캡처에는 테스트 계정 정보가 있어 외부 공유나 제품 저장소 추가를 하지 않았다.
+- **남은 작업:** BE 계약이 나오면 목록/집계/설정/읽음/실제 소속·랜딩·푸시를 연결하고 목데이터/개발 분기를 전부 제거한다. OS 복귀 저장·1회 안내와 기존 PermissionProvider의 OS/서버 설정 결합 해소는 함께 진행한다. 해당 변경 후 실제 데이터·역할/권한·OS별 영향 화면을 다시 검증한다. 지금 결과는 디자인/UI 선행 검증이며 전체 기능 최종 QA 인계·merge 준비는 아니다.
+- **기록 경계:** 개인 repo clean 상태 및 다른 세션 상태를 확인했다. 메인 세션이 active여서 공통 파일·FE 메인 기록은 건드리지 않고 이 기능 문서만 갱신한다. 외부 문서·Jira·Slack은 변경하지 않는다.
 
 ## 실제 제품 진입에 Figma 화면 연결 — 2026-10-30 15:10 KST
 
