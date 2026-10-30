@@ -1,6 +1,28 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-10-30 16:35 KST — **Web Clinic·Lab과 Office·Lab 앱의 실제 진입에 연결한 Figma UI를 개발용 목데이터로 확인할 수 있다. 사용자가 Lab 양 OS에 직접 로그인한 뒤 iOS·Android Home/Inbox/Settings/소속 선택/Profile 검증을 마쳤고, Office 양 OS의 미확인 Profile도 보완했다.** 세 제품 코드는 앞선 commit·push 상태 그대로이며 이번 후속은 런타임 검증·기록이다. BE 조회·저장·실제 소속 전환·푸시/랜딩, OS 권한과 서버 설정 분리는 미완료다. UI 선행 구현을 실데이터 통합·최종 QA/merge 준비 완료로 확대하지 않는다.
+최종 갱신: 2026-10-30 16:52 KST — **Web Clinic·Lab과 Office·Lab 앱의 실제 진입에 연결한 주요 Figma UI를 개발용 목데이터로 확인할 수 있다. 양 앱 iOS·Android의 화면 검증에 이어 작은 화면을 추가 점검했고, 웹의 다른 소속 미읽음 표시 누락을 수정·검증·push했다(`6557a10cf`).** 앱은 직전 push 상태 그대로다. BE 조회·저장·실제 소속 전환·푸시/랜딩, OS 권한과 서버 설정 분리는 미완료다. UI 선행 구현을 실데이터 통합·최종 QA/merge 준비 완료로 확대하지 않는다.
+
+## 정리 후 가능한 FE 보완 — 2026-10-30 16:52 KST
+
+- **사용자 의도:** 지금까지의 상태를 정리·저장하고, **현재 확정 정보만으로 FE가 할 수 있는 작업이 있으면 진행**한다. 전체 기능/API 완료를 요구한 것이 아니며, 임의 계약·정책이나 목 전용 구조를 과하게 추가하지 않는다. 기존 제품 commit/push 승인은 유지하고 PR/merge/배포는 하지 않는다.
+- **추가 구현:** Web 개발용 `NotificationCenterMock`의 벨 dot이 현재 소속만 검사해, 다른 소속에 미읽음이 남아도 현재 소속을 모두 읽으면 사라지는 것을 실제 브라우저에서 재현했다. `hasAnyUnread`만 전체 목 소속 기준으로 계산해 벨에 전달하고, 현재 소속의 기본 탭·Read All 활성화/대상은 기존 기준을 유지했다. 변경은 해당 파일4줄 추가·1줄 교체뿐이며 서버 집계 계약·실시간 동기화를 추가하지 않았다.
+- **원문 근거:** [FigJam `33:3714`](https://www.figma.com/board/U9Qpm6ACzjGFKyrCoaAuvA?node-id=33-3714)의 읽기 전용 원문 이미지에서 **다른 병원에 알림이 있는 경우에도 알림 종 레드닷 노출**을 직접 확인했다. 기획 신규 제안이 아니라 기존 확정 동작에 맞춘 UI 보완이다.
+- **웹 검증:** 수정 전 브라우저 assertion 실패를 확인한 뒤 최종 코드로 Clinic/Lab ×1280/320px 네 조합에서 현재 소속 전체읽음 후 dot 유지, 모든 목 소속 전체읽음 후 dot 제거, 재진입 시 All 기본 선택을 확인했다. 기존 목록/설정/소속 선택 동선도 통과했으며 브라우저 page error0·알림 REST/소속 activate 호출0이었다. 합성 로그인/목 홈 응답의 UI 확인이며 실제 서버 동기화 증거가 아니다.
+- **작은 화면 추가 확인:** 기존 Android 에뮬레이터를 잠시320dp 폭으로 조정해 Office/Lab 실제 로그인 앱의 목록·설정과 긴 안내 문구를 확인했다. 글자/버튼 겹침 등 이번에 추가 수정할 문제는 관찰하지 않았다. `font_scale=1.3`도 시도했으나 공통 Typography가 `allowFontScaling=false`라 확대 글꼴 지원 검증으로 주장하지 않는다. 종료 시 물리1080×2400·density420·font_scale1.0으로 복원하고 Lab 앱을 전면에 뒀다. iOS는 소스가 바뀌지 않아 직전 화면 검증을 재사용한다.
+- **필수 검사/원격:** Web scoped ESLint·Prettier·diff check와 실제 pre-commit Clinic/Lab/Admin 타입검사 통과. pre-push lint·DLOS guard/tests·shared 검사/coverage baseline 변화0 통과, `check.sh --push` 통과. 관련 E2E 테스트/설정은 수정하지 않았고 실제 DEV/STG 데이터를 쓰는 E2E도 실행하지 않았다. Web `feature/DL-17058@6557a10cf56e58830cca54470017c49d3fa015e9`의 원격 SHA 일치·clean·0/0을 확인했다. Office `8595292`, Lab `891d600`도 clean·0/0이다.
+- **OS 안내를 임의 구현하지 않은 이유:** Figma `248:24779`의 화면 무관1회 팝업과 `248:24758`의 디자인을 다시 읽었다. 기기 로컬에 노출 이력을 저장하는 구현 자체는 BE 없이 가능하지만, 10/30 새 설정 배너와 전역 팝업의 중복 노출·각각의 빈도는 최신 기록상 미정이다. 사용자께서 지정했던 과거 설정 배너1회 대상을 최신 별도 배너에도 자동 적용하거나 새 문구/정책을 만들지 않았다. 이 항목은 **기획 정렬 대기**이며 기술적으로 BE가 없어서 못 하는 항목으로 설명하지 않는다.
+- **외부 확인 한계:** Notion PRD fetch의 마지막 수정은10/29 18:44:30 KST로 종전과 같았다. 이번 응답은 `truncated=true`, unknown block1개이며 댓글 preview만 반환했다. 이번에 최신 본문·댓글 전체를 다시 검토했다고 하지 않는다. 위 수정 근거는 별도로 직접 확인한 FigJam 원문이다. Figma/FigJam/Notion은 읽기 전용이며 Slack/Jira·Sheet 쓰기는 없다.
+
+| 다음 작업 | 지금 진행할 수 있는 조건 / 남은 의존성 |
+| --- | --- |
+| 확정 디자인·화면 동작의 누락/결함 보완 | FE 독립 진행 가능. 이번 벨 표시 보완 완료. 추가 문제 근거 없이 새 화면·오류/재시도 UX·목 전용 관리 구조를 늘리지 않는다 |
+| 전역 OS 안내1회 로컬 기록 | BE는 불필요. 새 설정 배너와의 노출 관계·적용 대상만 정렬하면 기존 팝업/저장소를 재사용해 진행 |
+| 목록/집계/설정/읽음 실연동 | 최종 endpoint·DTO·카탈로그/권한·기존값 매핑 확인 후 연결. 기존 표시 컴포넌트·진입 구조 재사용, 목데이터/개발 분기 전량 제거 |
+| 실제 소속 전환·푸시/랜딩·선택 복귀 저장 | 소속·발송 식별/읽음·클릭 API와 정상 복귀 정책을 대조한 뒤 연결. 현재 UI 목 전환/읽음을 실제 성공으로 간주하지 않음 |
+| Lab 홈 최근 메시지·domain/category hide | 기존 보류 유지. 범위/대상/디자인 설명이 나오면 필요한 FE 작업만 재개 |
+
+- **근거/실행 유지:** `/tmp/notification-web-unread-scope.cjs`, `notification-web-unread-before.log`, `notification-web-{clinic,lab}-{1280,320}-unread-final.log`, `notification-*-other-unread-dot.png`, `notification-*-all-affiliations-read.png`, commit/push log. Android320px flow·캡처는 `/tmp/notification-small-android-*`, `/tmp/notification-{office,lab}-android-320*`. 실행 서버 Clinic3000/Lab3005/Office8081/Lab8082와 사용자 Chrome·시뮬/에뮬을 유지했다.
+- **개인 기록 경계:** 시작 시 개인 repo pull·clean을 확인했다. 이후 메인은 active이며 기록 직전 `projects/dentlink-client-lbx.md`, `projects/dentlink-fe.md`에 다른 세션의 변경이 생긴 것을 확인해 보존하고 이 기능 파일만 갱신·커밋한다. 이번 저장에는 완료 범위·미정·다음 조건만 기록하며 이전 조사/결정 이력은 보존한다.
 
 ## Lab 로그인 후 서비스·OS별 실제 화면 검증 — 2026-10-30 16:35 KST
 
