@@ -1,6 +1,47 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-10-30 12:07 KST — **사용자 요청으로 Notion 정책서를 중심으로 공유 자료와 웹·Office·Lab의 선행 코드를 재대조했다. 이번 범위는 조사이며 구현은 재개하지 않았다.** 세 제품 원격 feature commit(Web28c53d81a/Officeb1753912/Lab72b1a205)과 clean을 재확인했다. 기존 UI 기반은 유지 가능하나 OS 안내의 최신 디자인/노출 규칙, 기공소 홈의 새 메시지 영역, hide 범위와 최종 BE 계약을 맞춘 뒤 실제 연결을 이어간다. 오늘 Figma의 PM 국문 배너 답변까지 확인했으며 외부 문서는 수정하지 않았다.
+최종 갱신: 2026-10-30 13:27 KST — **사용자 승인으로 현재 확정된 FE 선행 범위를 추가 구현·검증하고 Web·Office·Lab 모두 commit/push 및 원격 SHA 일치를 확인했다.** 웹은 반응형 팝업 호스트와 화면 복귀, 양 앱은 최신 OS 안내 배너·알림 벨·native 목록↔설정 연결을 준비했다. 실제 제품 Header/Root 진입 및 BE 조회·저장·병원 전환·푸시 연결은 아직 교체하지 않았다. 새 UI를 더미 데이터로 운영에 노출하지 않으며, BE 계약과 남은 정책이 확정되면 현재 표시/동선 계층에 연결한다.
+
+## 추가 FE 선행 구현 마감 — 2026-10-30
+
+### 승인 범위와 현재 효과
+
+- 사용자 지시: **“FE가 지금 상황에서 할 수 있는 것은 가능한 해놓고, 완료하면 push까지”**. 변경 가능성은 감안하되 미정 정책·BE 계약을 가정하지 않는다. 기존 feature checkout을 그대로 사용했고 새 branch/worktree/PR·merge·배포는 하지 않았다. Figma 등 외부 문서는 읽기 전용을 유지했다.
+- 시작 시 개인 정본과 세 feature를 `git pull --ff-only`, branch/HEAD/upstream/dirty/worktree 및 활성 작성자를 확인했다. 마감 시 개인 정본은 다른 작업 기록으로 2c06837까지 진행됐지만 이 기능 파일의 마지막 수정은 b71ab0a로 유지되어 있었다. 다른 활동 세션은 출고 예정일·헬프센터였으며 이 기능 파일만 갱신했다. FE 메인/다른 프로젝트 기록은 수정하지 않는다.
+- 이번 단계는 **FE 표시·화면 이동 연결 준비**다. 제품 서비스의 실제 알림센터 진입을 열거나 BE 통신을 완료한 단계, 최종 사용자 QA/merge 준비 완료 단계와 구분한다.
+
+### 저장 위치와 원격 반영
+
+| 제품 | 정확한 checkout / branch | 최종 HEAD | 상태 |
+| --- | --- | --- | --- |
+| Web Clinic/Lab | `/Users/parkjongsun/Repository/dentlink-client-notification-center` / `feature/DL-17058` | `364ed3d49466583e2f69f3bc75e3c6853ca533ae` | push·ls-remote 일치, upstream0/0, clean |
+| Office 앱 | `/Users/parkjongsun/Repository/dentlink-app` / `feature/DL-17059` | `858c401a9aeaceb7265b0b0d02fa11e69b738fc4` | push·ls-remote 일치, upstream0/0, clean |
+| Lab 앱 | `/Users/parkjongsun/Repository/dentlink-lab-app` / `feature/DL-17060` | `d82e953169759c96c81ba559a1522965bebd204f` | push·ls-remote 일치, upstream0/0, clean |
+
+Office 기능 commit은 `0ac9007`, 이후 `858c401`은 주석 형식만 정리했다. GitHub 조회에서 세 feature의 열린 PR은 없었다. PR은 이번에 생성하지 않았다.
+
+### 구현한 것
+
+- **Web — 5파일:** `shared/ui/src/NotificationUI/NotificationCenterPopup.tsx`를 추가했다. 기존 DLDS Modal/IconBadge/포커스 처리를 사용해 벨→PC 팝업/모바일 전체 화면→목록↔설정·다른 소속 선택을 조합한다. 데이터·초기 필터·열기·성공 여부는 호출자가 전달한다. React 이벤트 경로를 사용해 portal 소속 선택을 바깥 클릭으로 오인하지 않도록 했으며 닫기 후 벨 포커스, 설정 복귀 시 목록 스크롤·설정 버튼 포커스, account/employer `contextKey` 변경 시 화면 초기화를 준비했다. 기존 Content/Inbox와 export·Storybook 연결을 보완했다. localStorage·전역 handoff store·URL hash는 추가하지 않았다.
+- **Office — 5파일 / Lab — 6파일:** `NotificationPermissionBanner`, `NotificationBellButton`, `NotificationNavigator` 추가. 기존 아이콘/Typography/ShadowedView와 native stack을 재사용한다. 설정→목록·상위 화면 복귀 및 context 변경 시 이전 native route 제거를 준비했다. 첫 검증에서 navigator component key만으로는 이전 설정 route가 유지되는 문제를 찾아 `Stack.Group navigationKey`로 수정 후 양 OS 재검증했다. Office에는 설정 배너 slot과 목록/설정 safe area 하단 여백을 추가했다. Lab은 기존 notice slot을 활용했다.
+- **최신 디자인 근거:** Figma `314:23295` 배너, `22:5315` 홈 헤더, `119:22594` 웹 팝업의 design context·이미지와 기존 코드를 대조했다. Lab 배너는 Figma#47의 오늘 PM 국문 ‘기기 알림이 꺼져 있어요.’ / ‘알림을 켜서 중요 알림을 빠르게 받아보세요’ / ‘알림 켜기’를 적용했다. 영어는 기존 Figma 문구를 유지했다. Lab local ko/en·registry를 연결했으며 영문 실행 화면에서 발견한 CTA 미번역도 수정·재확인했다. 웹 새 번역 키/관리 Sheet 변경은 없다.
+- 배너는 표시·닫기·활성화 callback만 제공한다. 닫기 이력의 영구 저장/1회 제한, OS 설정창 열기·복귀 후 특정 토글 저장을 새로 확정하거나 구현하지 않았다. 알림 벨의 `hasUnread`는 표시 입력이며 전체/현재 소속 집계 계약을 가정하지 않는다.
+
+### 검증과 제한
+
+- **Web 실행:** 실제 변경 컴포넌트를 Storybook 프리뷰에서 Chromium으로 Clinic/Lab 각 1280/375/320px, 총6조합 검증. 목록↔설정, 스크롤 유지, 중첩 소속 팝업 클릭/Escape, 포커스 복귀, 외부 닫기/재열기, context 교체, 열기·스크롤 시 읽음 부수효과 없음, 모바일 body scroll 해제 통과. Figma와 실행 캡처를 비교했다. 결과 `/tmp/notification-web-result.json`, 검사 `/tmp/notification-web-check.cjs`, 캡처 `/tmp/notification-web-{clinic,lab}-{1280,375,320}.png`.
+- **앱 실행:** 기존 DEV 바이너리에서 최종 UI 소스를 격리 프리뷰로 실행했다. Office·Lab 각각 iPhone17Pro iOS26.5와 Dentlink_API_36 Android16 에뮬레이터에서 벨→인박스→설정, 배너 활성화 callback1회·닫기, native 뒤로가기, context 변경 시 Inbox 초기화, 상위 화면 복귀 통과. Lab KO→EN→KO 및 영문 CTA까지 확인했다. 앱 서버·실제 OS 설정값·수신 설정 저장은 변경하지 않았다. `/tmp/notification-{office,lab}-{ios,android}-final.log`, 해당 `-banner.png`, Lab `-banner-en.png`가 근거다. 프리뷰용 fixture/toolbar는 제품 코드에 포함하지 않는다.
+- **정적/필수 검사:** 변경 앱 ESLint/Prettier·diff check 통과. 앱 전체 tsc는 기존 Office4파일6진단(Icon/Tooltip/MessageText/useOrderAddProduct), Lab4파일5진단(Icon/Tooltip/order/MessageText)이 남고 변경 파일 진단은0이다. Web은 실제 pre-commit의 Clinic/Lab/Admin typecheck 전부 통과, pre-push 세 제품 lint 오류0(기존 경고 유지), Admin DLOS guard 및9테스트, shared/configs21·shared/hooks32테스트·coverage변화0을 통과한 뒤 push됐다. 검사 훅은 생략하지 않았다. 이 coverage는 새 UI 자체의 커버리지 수치가 아니다.
+- **도구 제한:** 기존 기본 Storybook은 addon 버전 불일치로 실행 실패해 일회성 addons 없는 설정으로 같은 컴포넌트를 검증했다. shared/ui 단독 lint는 상위/하위 Storybook plugin 중복 오류가 있어 `--no-eslintrc --config .eslintrc.cjs`로 변경 범위를 검사했고 오류0·기존 Storybook export 경고1이었다. shared/ui 단독 전체 tsc도 기존 주변 파일 오류가 있으나 변경 파일 진단0이며 실제 세 제품 typecheck는 위와 같이 통과했다. 저장소 설정/의존성을 수정해 우회하지 않았다.
+- **정리:** 양 앱 index.js 원복·임시 preview 제거, Web 임시 Storybook 설정 제거, 본인 Metro/Storybook 및 adb reverse 정리, 이번에 켠 시뮬/에뮬 종료. 세 제품 Git clean,6006/8081 리스너 없음 확인. 외부 댓글·Jira 상태/설명·Notion 내용 변경은 없다.
+
+### 남은 확인과 다음 시작점
+
+1. **BE 규약 수령 후 연결:** 목록/집계·설정 카탈로그/저장·읽음·푸시 발송 식별과 클릭 기록 endpoint/key/권한/중복 계약을 실제 Swagger·응답과 대조한다. 확정 후 현재 표시 props와 실제 Header/Root 진입을 연결한다.
+2. **설정 연동 전:** OS OFF 조작/설정창 복귀 흐름과 새 배너의 노출·닫기 이력/기존1회 팝업 관계를 최신 합의로 확정한다. 기존 PermissionProvider의 OS 허용→구 설정 자동 upsert, Office My Orders와 pushEnable 결합을 신규 서버 설정과 충돌하지 않게 정리한다.
+3. **남은 기획·디자인:** category/domain hide, Lab 홈 최근 메시지1건의 위치·대상·읽음 범위, 숫자/dot 집계 표현. 설명되지 않은 내용을 임의 구현하지 않는다. Lab My Orders 제외는 유지한다.
+4. **소속·푸시 실연동:** activate 성공/실패와 캐시·계정 전환, Inbox 재오픈/토스트, 기존·신규 딥링크/deferred 경로의 식별값 보존, 클릭 읽음과 클릭 이력 저장을 각각 검증한다. notificationId 직접 전달은 필수로 가정하지 않는다.
+5. **마무리 단계:** 기존 Web 번역7키 Sheet 동기화 대기 유지. 실제 연동 후 역할별/권한별·실데이터 진입으로 최종 코드 실행, 사용자 QA, PR/review, release·배포를 각 단계로 진행한다. 현재 안전하게 확정 UI/동선을 추가 준비한 상태이며 BE·기획을 대신 정하는 추가 구현은 하지 않는다.
 
 ## 최신 재점검 — 2026-10-30 정책·디자인·작업 대비
 
