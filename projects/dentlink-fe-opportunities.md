@@ -5,6 +5,7 @@
 - **요청·결과:** 사용자가 새 변경/병합 여부만 확인 요청했습니다. Studio 원격을 fetch하고 GitHub PR 메타데이터와 실제 diff를 조회했습니다. 이전 확인 `957d07b9` → 현재 `origin/main@9cb8aa4a3ae1f2984dbe4c0228ffa32735bccc14`에 새 병합 5건이 있습니다.
 - **병합 내역:** #44·#46은 DL-16945 ISV 정의서/PRD/와이어프레임, #45는 DL-16926 치과의사별·미수금 statement 와이어프레임, #47은 DL-00002 카테고리별 담당자 배정, #41은 Next.js 16.4.0 → 16.4.3 갱신입니다. 갤러리 보완 작업과 구분합니다.
 - **갤러리 판정:** `packages/dlds-preview`, `packages/dlos-preview`, `apps/studio/app/design-system`은 비교 구간의 diff와 신규 경로 커밋 모두 없습니다. 마지막 관련 반영은 기존 `17b4d3d`이며, 기다리던 메뉴 뎁스·누락 예제 보완 코드가 새로 반영된 근거는 없습니다.
+- **Client 추가 확인:** 사용자가 두 저장소 모두에 필요한 변경이 없는지 재질문하여 `dentlink-client-dlds`에서 master를 fetch했습니다. 현재 `origin/master@57bb759ca08e3752140ceffdae2a5421934ec242`는 v1.90.0 병합(#4794)입니다. 이전 `c597f1fb3` 대비 `shared/dlds`, `shared/dlos`, 패키지 공개 workflow·디자인시스템 구조 문서 변경은 없습니다. icons에는 Stripe QA #4788의 `SvgLoadingAnimationOrange` 에셋·생성 코드가 추가되어 StatusChip에서 사용됩니다. 에셋 추가는 있으나 기다리던 갤러리 보완 코드나 구조 변경은 아니므로 현재 재개 조건을 충족한 것으로 보지 않습니다. 로컬 detached checkout과 제품 파일은 유지했습니다.
 - **보존·미실행:** Studio 로컬 `main@0b304d510dd65869541b336e0df3b9c4f474af26`·clean 유지, 원격 추적 ref만 최신화했습니다. 제품 pull·설치·브랜치·코드·테스트·서버·PR·Jira 변경은 하지 않았습니다. GitHub 플러그인 조회가 422로 실패하여 기존 인증의 gh 조회와 Git 증거로 확인했습니다.
 - **다음:** 사용자의 동료 후속 코멘트/재개 지시를 기다립니다. 아래 비교·보완 계획과 관련 코드 조건은 유지하며, 자동 조회·구현·하네스·병합·배포는 하지 않습니다. DL-17046 실행 카드의 기존 기록은 유지하되 이번에는 Jira를 새로 조회하지 않았습니다.
 
