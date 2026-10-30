@@ -12,6 +12,15 @@
 - **이번 검증:** E2E 가드 독립 재검토 `NO_IMPACT`; 새 stage의 기존 E2E·공용 픽업 소비자를 대조해 기본값·라벨·검증·제출 및 Admin 결제/직원 정리 API가 유지됨을 확인했다. 가드 marker `8dc2d530fab488cea6f58c2c25cb418a4e3834bb`와 PR 전 검사를 통과했다. 이 판정은 LBX 추가분에 한정하며 v1.91.0 자체의 `NEEDS_RUN`을 해제하지 않는다. 이전 동일 LBX patch의 타입/lint 검증은 아래 이력이며 이번 v1.91.0 통합본에서 새 전체 검사나 실제 E2E를 실행한 것은 아니다.
 - **보존/다음 확인:** LBX 원본 로컬·원격 `feature/DL-16387@8a860f080fea9574c5da5db5907d513529bba7ee`, release와 master는 변경하지 않았다. 제품 기본 checkout은 다른 작업 `feature/DL-17125@e8e15ed66`·clean 그대로다. 새 worktree·제품 코드 수정·원본 신규 커밋은 없다. LBX 운영 릴리스 홀드는 유지한다. 남은 확인은 새 Admin 배포 결과와 별도 실데이터 QA이며, 배포 시작을 배포 성공으로 간주하지 않는다. 기기 한정 증거는 `/Users/parkjongsun/.local/share/codex-closeout/20261030-lbx-stage-reapply/`에 있다.
 
+## 별도 QA 검토 — 2026-10-30 DL-17157 필터 기능 미작동 / 구현 변경 없음
+
+- 사용자가 [DL-17157](https://innovaid.atlassian.net/browse/DL-17157)을 메인 전달 작업과 별도로 검토 요청하며 이전 구현 여부를 물었다. 카드의 요청은 스테이징 `/shipments`의 **LBX Mother 번호 검색 / LBX Baby만 보기** 미작동이며, 보고 시각은 2026-10-30 15:48 KST, 댓글은 0개였다. Jira 상태·댓글·제품 코드는 변경하지 않았다.
+- 두 필터는 이전에 구현된 범위다. 2026-09-22 커밋 `b815f4e7c`에서 Mother 번호와 Baby 필터 위치/표시를 정리했고, 9월 최종 검토에 필터·query 검증 이력이 있다. 현재 원본 `8a860f080`과 stage `155acfbfe`의 필터·배송 목록·API wrapper·목록 query hook은 동일하며 `motherNumber`, `isConsolidated` 연결이 유지된다. 과거 검증을 이번 STG 실제 성공 증거로 사용하지 않는다.
+- **첨부 로그 근거:** 15:47:19 및 15:47:23 KST에 `GET /admin/shipments?motherNumber=240843484`가 실제 전송되어 HTTP 200을 받았다. 따라서 해당 기록에서 프런트의 Mother query 누락은 아니다. 로그에 응답 본문은 없으므로 서버 필터링 결과가 맞았는지는 확정하지 못한다.
+- **토글 동작:** 현재 공용 필터는 토글로 입력 state를 변경한 뒤 **Search 또는 Ctrl+Enter**로 적용한다. 첨부 로그에는 배송 목록 `/admin/shipments`에 `isConsolidated=true`를 적용한 요청이 없다. `/admin/shipments/collectible`의 같은 파라미터 요청은 픽업 모달용이므로 목록 필터 검증으로 혼동하지 않는다. 사용자가 Search를 누르지 않았다고 단정하지 않고, 토글 적용 후 요청/결과를 확인해야 한다.
+- 같은 첨부 로그의 15:22:47 KST Mother 생성 요청은 `/mothers/240843484%0D/waybill`로 번호 끝에 CR 문자가 포함되어 실패했다. Mother 생성 폼은 조회 응답의 번호를 그대로 선택/전달한다. 서버 번호 데이터의 숨은 개행과 일반 숫자 검색값 불일치 가능성은 있으나, 응답/저장 데이터 미확인으로 **필터 오류의 확정 원인은 아니다**. 이번 카드의 두 필터 문제와 별도로 구분한다.
+- **경계/재개:** 신규 기능 누락보다는 기존 필터의 STG 동작 QA다. 실제 STG Mother 검색 응답/데이터와 Baby 토글 후 Search 요청을 대조하면 FE/BE 원인을 더 좁힐 수 있다. 이번에는 Jira·첨부 스크린샷/로그·Git/코드만 읽었고 브라우저·업무 API·생성/수정 요청·테스트·코드 수정·PR 작업은 하지 않았다. 첨부 근거는 기기 한정 `/Users/parkjongsun/.local/share/codex-closeout/20261030-dl17157-review/`에 있다. 원본과 메인 작업 checkout `feature/DL-17125`를 보존했다.
+
 ## 이전 체크포인트 — 2026-10-30 오전 stage 병합 완료 / 원본 보존
 
 - 사용자가 LBX 스테이징 반영을 요청하면서, 필요하면 별도 전달 브랜치를 만들고 필요 없으면 직접 PR을 생성하도록 승인했다. **PR 머지는 사용자가 직접 한다.** 운영 릴리스 홀드는 유지한다.
