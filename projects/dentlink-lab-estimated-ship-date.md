@@ -2,8 +2,8 @@
 
 ## 현재 체크포인트 — 2026-10-30
 
-- 사용자 최종 범위 정리: 이번 작업은 Jira에 신고된 화면의 과거 날짜 선택·기존 과거 프리필 진행 차단이며, 해당 범위의 구현·UI 검증·PR 생성은 **완료**다. 날짜 형식 처리와 확인 팝업을 자정 넘게 유지하는 문제는 별도 기존 이슈로 설명하고 이번 PR의 미완료 조건으로 섞지 않는다. 앞서 자정 재검증을 이번 PR의 필수 보완처럼 판단한 것은 범위를 넓힌 설명이었으며 이 결정으로 정정한다. 추가 제품 수정·commit/push는 하지 않았다.
-- 상위 [DL-17124](https://innovaid.atlassian.net/browse/DL-17124), Frankie 하위 [DL-17125](https://innovaid.atlassian.net/browse/DL-17125). 제목을 `[FE] 기공소 출고 예정일의 과거 날짜 선택 방지`로 변경하고 증상·수정 범위·완료 조건을 작성했다. 결과 댓글 `44732`를 하위에만 남겼다. 상위 댓글·카드 상태는 변경하지 않았다.
+- 사용자 최종 범위 정리 및 마무리: 이번 작업은 Jira에 신고된 화면의 과거 날짜 선택·기존 과거 프리필 진행 차단이며, 해당 범위의 구현·UI 검증·PR 생성은 **완료**다. 사용자는 PR을 그대로 유지하고 Jira 상태·기록을 정리해 마무리하도록 지시했다. 날짜 형식 처리와 자정 확인 팝업은 이번 완료 조건에서 제외하며 추후 필요할 때 별도로 다룬다. 앞서 자정 재검증을 이번 PR의 필수 보완처럼 판단한 것은 범위를 넓힌 설명이었으며 이 결정으로 정정한다. 추가 제품 수정·commit/push 및 별도 이슈 생성은 하지 않았다.
+- 상위 [DL-17124](https://innovaid.atlassian.net/browse/DL-17124), Frankie 하위 [DL-17125](https://innovaid.atlassian.net/browse/DL-17125). 제목은 `[FE] 기공소 출고 예정일의 과거 날짜 선택 방지`. 하위를 `해야 할 일 → 진행 중 → Ready for Deploy`로 변경했고 최종 상태를 재확인했다. 사용한 최종 transition 12의 이름은 `요구사항에 대해 개발 완료`다. 결과 댓글 `44732`를 갱신해 PR #4807 링크와 리뷰 대기·미배포를 명시했다. 상위에는 댓글·상태 변경을 직접 수행하지 않았다.
 - 사용자 지시로 제품 commit/push 및 [PR #4807](https://github.com/Innvoaid/dentlink-client/pull/4807) 생성을 완료했다. 실제 base `release/v1.91.0`, head `feature/DL-17125`, 일반 Open PR이며 변경은 1커밋·2파일·36 additions / 7 deletions로 확인했다. 리뷰 대기이며 merge/배포는 하지 않았다. 현재 운영/STG에는 이 수정이 반영되지 않았다.
 - 작업 위치 `/Users/parkjongsun/Repository/dentlink-client`, 브랜치 `feature/DL-17125`, HEAD `e8e15ed66629f3aa389e484215116ed90fa21f13`, upstream `origin/feature/DL-17125`와 0/0이고 clean. 시작 base는 `57bb759ca08e3752140ceffdae2a5421934ec242`(origin/master), PR base SHA는 `fc23d9084dbc4e0b375960481e692b350c08001d`. 기존 기본 checkout을 단독 작성 위치로 사용했고 새 worktree/프로젝트는 만들지 않았다.
 - 세션 `01a18af5-8028-71b1-a8ce-83ee0aadfee0`, 이름 `DL-17125 기공소 출고 예정일 수정`, Mac local·메인 프로젝트 폴더 등록 확인. 같은 Mac 세션을 원격에서 이어간다. 실제 휴대폰 목록 노출까지 확인한 것은 아니다.
@@ -37,4 +37,5 @@
 - 테스트: `/private/tmp/dl17125-check/status-date.test.tsx`, `vitest.config.mjs`(일회성 파일, 제품 branch에 미포함). 재실행은 설치된 shared/dlds의 Vitest로 이 config를 지정한다.
 - 실제 브라우저 화면: `/private/tmp/dl17125-verified-screen.png`. Jira 원본 첨부는 세션의 메인 프로젝트 폴더에 다운로드했다. 임시 파일·브라우저 인증은 Git으로 다른 기기에 복원되지 않는다.
 - 최종 파일 SHA256: Modal `1e50af0c32520c1f7ffe07d6b2a3e972549d0bc57b79302649764b253ca757f9`; Item `ca7e046ffa8a9eb941fa22a2eef20a62586613cb4f913ae69c4bb224d1f2eb19`.
-- 다음 시작: 개인 컨텍스트 pull → 정확한 checkout/branch/원격 HEAD와 PR #4807 상태를 새로 확인한다. 이번 구현은 완료·리뷰 대기이며 날짜 형식과 자정 팝업은 별도 작업으로 다룬다. 사용자 지시 없이 이번 PR을 확대하거나 별도 Jira 카드를 만들지 않는다. CodeRabbit 대응은 사용자 요청 시 수행하고, merge·배포는 별도 지시 후 진행한다. 구현은 원격 feature 브랜치에서 복원 가능하며 임시 테스트·로컬 화면 증거는 같은 Mac에만 남아 있다.
+- 세션 마무리 상태: 추가 구현 없음. 제품 checkout clean, local/remote `feature/DL-17125` 0/0. PR #4807은 Open·일반 PR·base `release/v1.91.0`, head `e8e15ed66`이며 `REVIEW_REQUIRED`다. Jira Ready for Deploy는 개발 완료 전환 상태이며 PR 승인·merge·실제 배포 완료를 뜻하지 않는다. 개발 서버와 테스트 브라우저는 앞서 종료했고 이번 정리에서 다시 실행하지 않았다.
+- 다음 시작: 사용자 재개 지시 후 개인 컨텍스트 pull → 정확한 checkout/branch/원격 HEAD와 PR #4807 상태를 새로 확인한다. 남은 후속 단계는 PR 리뷰·승인, 별도 승인 후 merge·배포다. 날짜 형식·자정 팝업은 추후 실제 필요가 생길 때 별도 검토하며, 현재 PR 확대·별도 Jira 생성·자동 추적은 하지 않는다. 구현은 원격 feature 브랜치에서 복원 가능하며 임시 테스트·로컬 화면 증거는 같은 Mac에만 남아 있다.
