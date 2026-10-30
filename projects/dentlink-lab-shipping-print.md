@@ -1,13 +1,17 @@
 # Dentlink Lab Shipping Print UX — DL-17101
 
-## Current checkpoint — 2026-10-30 PR 4805 merged and Lab DEV deployed; awaiting user feedback
+## Current checkpoint — 2026-10-30 original feature PR 4817 targets release/v1.91.0; awaiting review and user merge
+
+- **최신 전달 요청:** 사용자가 `release/v1.91.0` 대상 PR 생성을 요청하고 “개발 배포용은 신경쓰지 말고 원본 기반, 스테이징 배포용”이라고 재확인했다. 원본 `feature/DL-17101@a7aa540a268d63b5d9fafc13e4b3d7f85d499c1b`에서 직접 [PR #4817](https://github.com/Innvoaid/dentlink-client/pull/4817)을 생성했다. base `release/v1.91.0@ffd4f05c8db70e7577cfce061ee5d6f20b98b7dc`, head 원본 동일, OPEN·non-draft·MERGEABLE·미병합·5커밋·32파일을 read-back 확인했다. stage 대상 PR이나 배포 실행이 아니다.
+- 원본은 pull 후에도 clean·동일SHA·origin일치였다. 추가 제품 코드/커밋/브랜치/서버 없이 PR만 준비했다. `git merge-tree` 충돌없음(tree00ec20f9bbf3d890bc3004b6da26153db5835de2), 병합 결과의 기능32파일이 검증된 원본과 전부 동일했다. release 추가9커밋의 변경파일과 겹침이 없고 E2E 트리도 동일하다. E2E 가드가 release 대비04 배송/05 상태/08 피드백·공통출력/i18n 접점을 재검토해 NO_IMPACT, mark/check 통과. 실제 E2E·타입·120tests·Chrome을 이번 PR 준비에서 재실행한 것은 아니며 아래 동일HEAD 검증을 재사용했다.
+- 하위 DL-17101 댓글44751에 릴리스 PR과 아직 병합/스테이징 배포 전임을 기록했다. 상태 Ready for Deploy 유지, 상위 DL-17099 무변경. PR 생성 후 CodeRabbit/CI 감시는 하지 않았다. 원본/기존 개발배포 브랜치와 두 전용worktree는 보존한다.
 
 - **사용자 최종 변경 승인:** 기존 라벨·스티커는 모든 기공소가 공통 사용하고, INTERNAL에만 `라벨(부착용)`을 마지막 컬럼/일괄 메뉴로 추가한다. 배송용 라벨·배송용 주문서 분리는 종료하고 기존 통합 라벨(운송장 + 인쇄 안내 + Order List)로 복원한다. 새 설정 패널·실시간 미리보기·확장 출력창은 명시적 INTERNAL 부착용에만 적용한다. 아래 3종 분리/3종 설정·유지 결정은 이전 이력이며 이 최종 합의가 우선한다.
 - 원본 `/Users/parkjongsun/Repository/dentlink-client-dl-17101`: `feature/DL-17101@a7aa540a268d63b5d9fafc13e4b3d7f85d499c1b`, 정상 커밋·푸시 완료·origin 일치·clean. origin/master 대비0 behind/5 ahead이며 원본에 추가 커밋만 누적했고 develop을 섞지 않았다.
 - 배포 `/Users/parkjongsun/Repository/dentlink-client-dl-17101-develop`: 최신 `origin/develop@61da80eaee3d272216e7784b00806007e36b3b56`에서 새 `feature/DL-17101-common-print-develop@46bb74fd65dc7409be5541e15d625f48108c9d28`를 만들고 이번 원본 커밋만 cherry-pick·푸시했다. 이전 배포 브랜치 `feature/DL-17101-print-settings-develop@9e64614a8` 등과 원본 worktree는 보존했다.
 - [PR #4805](https://github.com/Innvoaid/dentlink-client/pull/4805): 최초에는 develop 대상 OPEN·non-draft·MERGEABLE로 전달했고, 후속 읽기 전용 조회에서 **2026-10-30 12:44:42 KST develop 병합 완료**를 확인했다(merge `80411ee7812a146e5ee0aeb7866901fd5680d10d`). 사용자가 병합·배포를 담당했고 에이전트는 수행하지 않았다. PR4802는 이전 병합 이력이다.
 - **Lab 개발서버 배포 성공 확인:** 사용자 요청으로 해당 merge SHA의 [Actions run40999077849](https://github.com/Innvoaid/dentlink-client/actions/runs/40999077849)를 읽기 전용 확인했다. `Lab Dev Development Environment Deployment Workflow`, push, 2026-10-30 12:44:45 KST 시작·12:53:04 KST 완료·success. job123878994955 `lab-dev-build-and-deploy` 및 Docker build/push·`Deploy Amazon ECS task definition` 단계 success를 확인했다. 배포 직후 15분보다 뒤인13:12 KST경 한 번 조회했으며 재실행/배포/추가감시는 하지 않았다.
-- 최종 패치 이후 제품 코드는 추가 변경하지 않았다. 열린 DL-17101 PR 없음도 확인했으므로 **현재 작업에 추가 PR은 필요 없다.** 개발 배포 성공은 실물 프린터·전체 업무 QA·staging/운영 출시 완료를 뜻하지 않는다.
+- DEV 배포 완료 확인 당시에는 최종 패치 이후 제품 변경/열린 관련PR이 없어 추가 **개발용** PR이 필요 없었다. 이후 사용자 요청으로 위 릴리스 PR4817을 별도로 생성했다. 이전 DEV 배포 성공은 해당 시점의 증거이며 실물 프린터·전체 업무 QA·staging/운영 출시 완료를 뜻하지 않는다.
 - 변경16파일의 내용 및 patch-id `00e15bd1cd1d49bef0494acbe2ccd0ff44458268`가 원본/배포에서 일치한다. 배송/주문 상세 스티커를 복원했고 해당 주문 상세·배송 주문정보 파일은 origin/master와 동일하다. PRE_DELIVERY 재시도는 공통 라벨 한 곳에 유지한다. 기존 SHIPPING/ORDER_SHEET URL은 공통 라벨로 열리며 형식 전환 메뉴는 제거했다.
 - 배송 수정 후 자동창은 기존 조건/SSE를 유지하고 기본 공통 라벨을 연다. 배송 업무/API/주문 상태/라벨10건·스티커30건 제한은 유지했다. 기존 qs 파싱 기본 한계 때문에 스티커22~30건이 배열로 복원되지 않는 문제를 `arrayLimit:30`으로 보정했고 실제 PrintPage 테스트로 확인했다. 공통 일괄 라벨의 exportTradeCodes 미전달은 master의 기존 제한 그대로이며 코드 안내 줄을 별도 개선하지 않았다.
 - 저장값: 부착용 `shipmentPrintSettings:ATTACHMENT`만 신규 UI에서 사용한다. 과거 SHIPPING/ORDER_SHEET 키는 삭제하지 않고 공통 라벨에 적용하지 않는다. 스티커는 기존 `stickerProperties`·기존 크기 설정/계산을 유지한다. 브라우저·프로필·origin 기준 저장이며 계정별/PC간 공유는 아니다.
@@ -20,7 +24,7 @@
 - **모델 변경 후 재검토:** 사용자의 “오늘 아침에 한 것들 검토만” 요청으로 최종 원본/배포 diff·설정 경계·목록/상세·자동창·기존 URL을 다시 검토하고 focused6 suites/120tests를 재실행해 통과했다. 신규 회귀 finding 없음, patch-id 일치 재확인, 제품 코드·Jira·PR 변경 없음. PR check에는 add-reviews/CodeRabbit success만 있었으며 CodeRabbit 본문은 develop 자동 리뷰 제외로 skipped였다. 실제 코드 리뷰 완료 또는 배포 성공으로 해석하지 않는다. 로그 `/tmp/dl17101-readonly-review-tests.log`.
 - **최종 범위 재확인:** 사용자는 기존 수출 코드 문구가 단건에만 전달되고 일괄에는 빠지는 기존 차이를 그대로 두라고 명시했다. 기존 라벨·스티커 동작은 유지하고 자체기공소 부착용 하나를 추가하는 목적이며, 기존 제한의 개선까지 범위를 넓히지 않는다.
 - **종료 확인:** 원본a7aa540a2/배포46bb74fd6의 branch·HEAD·clean을 재확인하고 보존했다. 새로 관측된 port3005 PID23854는 메인 `/Users/parkjongsun/Repository/dentlink-client/lab`에서 실행 중인 다른 작업 서버이므로 종료하지 않았다. 이번 검토에서 시작한 서버·브라우저 작업은 없다.
-- **다음 시작점:** 사용자가 배포 완료 메모리 정리와 대기를 요청했다. Lab DEV 배포는 완료 상태로 두고 실제 사용/프린터 피드백 또는 명시적 추가 요청을 기다린다. 추가 구현·PR·공용 설정 적용·번역 시트·CI/배포 감시·CodeRabbit 대응은 자동으로 재개하지 않는다.
+- **다음 시작점:** 원본 기반 릴리스 PR4817의 리뷰·사용자 병합·이후 스테이징 QA/실물 프린터 피드백을 기다린다. 명시적 요청 없이 병합·배포·추가 구현/PR·공용 설정 적용·번역 시트·CI 감시·CodeRabbit 대응을 하지 않는다.
 
 ## Previous checkpoint — 2026-10-30 three-format implementation before the final scope change
 
@@ -131,7 +135,7 @@
 ## Resume point
 
 1. 최종 범위는 **공통 라벨·스티커 + INTERNAL 부착용 추가**, 신규 설정은 부착용만이다. 사용자의 후속 요청이 있으면 개인 컨텍스트와 원본 `feature/DL-17101`의 live Git을 갱신하고 전용 cwd에서 시작한다. 과거3종 분리/3종 설정을 현재 요구로 복원하지 않는다.
-2. PR #4805 develop 병합 및 해당 merge SHA의 Lab DEV 배포 성공(run40999077849)을 확인했다. 현재 추가 PR은 필요 없고 사용자 피드백 대기다. 요청 없이 재배포·CI 반복 조회·CodeRabbit 대응을 하지 않는다. 원본·이전 배포·새 배포 브랜치 및 두 worktree를 유지한다.
+2. 현재 전달 대상은 원본 feature/DL-17101 → release/v1.91.0 PR4817(OPEN·미병합)이다. PR4805/DEV 배포는 이전 이력으로 보존하고 개발배포용 브랜치를 릴리스 작업에 사용하지 않는다. 리뷰·사용자 병합·스테이징 QA 대기이며 요청 없이 재배포·CI 반복 조회·CodeRabbit 대응을 하지 않는다. 원본·이전 배포·새 배포 브랜치 및 두 worktree를 유지한다.
 3. 이 세션의 로컬 검증 서버/탭은 종료된 상태다. 메인worktree의 다른 작업3005서버는 보존했으므로 후속 실행 전에 실제 cwd/port 소유권을 확인한다. env는 메인의 해당 서비스 파일을 값 조회 없이 상속하는 standing authorization을 따르며 기존 대상 env는 보존한다. 실제 라벨/A4 프린터별 용지·여백·배율은 미검증이며 이전3종 사용자QA를 이번2+1 범위의 사용자QA로 간주하지 않는다.
 4. 번역 시트는 자동 재개하지 않는다. 사용자가 후속 작업을 요청하고 동시편집·충돌 조건이 해결된 경우 승인 범위 동기화를 진행한다. Jira 기록은DL-17101에만 남기며 상위DL-17099는 수정하지 않는다.
 
