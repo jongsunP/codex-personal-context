@@ -1,6 +1,52 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-10-30 16:52 KST — **Web Clinic·Lab과 Office·Lab 앱의 실제 진입에 연결한 주요 Figma UI를 개발용 목데이터로 확인할 수 있다. 양 앱 iOS·Android의 화면 검증에 이어 작은 화면을 추가 점검했고, 웹의 다른 소속 미읽음 표시 누락을 수정·검증·push했다(`6557a10cf`).** 앱은 직전 push 상태 그대로다. BE 조회·저장·실제 소속 전환·푸시/랜딩, OS 권한과 서버 설정 분리는 미완료다. UI 선행 구현을 실데이터 통합·최종 QA/merge 준비 완료로 확대하지 않는다.
+최종 갱신: 2026-10-30 17:30 KST — **Web Clinic·Lab의 기존 UI 선행 작업에 이어 Office·Lab 앱의 전역 OS 알림 안내를 기기에서 가능하면 한 번만 표시하도록 구현·검증·push했다.** 현재 Web `6557a10cf`, Office `9d378e4`, Lab `e9d69ef`이며 세 feature 모두 clean·원격 일치다. 새 화면/안내는 개발 빌드 범위다. BE 조회·저장·실제 소속 전환·푸시/랜딩, OS 권한과 서버 설정 분리는 미완료이며 실데이터 통합·전체 기능 최종 QA/merge 준비 완료로 확대하지 않는다.
+
+## 독립 FE 보완·커밋·푸시 마감 — 2026-10-30 17:30 KST
+
+### 이번 승인과 판단
+
+- **사용자 요청:** 단독으로 더 할 수 있는 일이 있으면 진행하고 제품 commit/push와 정리·메모리화까지 완료한다. PR은 전체 작업 이후 진행하므로 이번에는 생성하지 않는다. 새 branch/worktree·merge·배포도 없다.
+- **직전 보류 범위를 좁혀 재판단:** 화면 무관 OS 안내1회 팝업은 이미 사용자·PM·디자이너가 합의한 동작이다. 새 설정 배너의 빈도/이력 미정과 구분하면, 이 팝업의 기기 로컬 기록은 BE 없이 진행할 수 있다. 아래 16:52 기록의 ‘전역 팝업도 기획 정렬 대기’ 판단은 이번 근거 대조와 구현으로 대체한다. **설정 화면 파란 배너의 빈도까지 새로 확정한 것은 아니다.**
+- **읽기 전용 근거:** [Slack 기존 UX 스레드](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793063024060739)의 전체 반환 대화와 사용자 공유 최종안·PM/디자이너 답변을 다시 확인했다. Figma `248:24779`의 화면 무관1회 안내, [`248:24758` 실제 팝업](https://www.figma.com/design/QLIzKYWzFFlptCYzN36Iq4?node-id=248-24758)의 디자인·이미지를 대조했다. 연결 도구에 댓글 기능이 없어 로그인 Chrome에서 **댓글 #40 및 답글4개를 직접 열고 핀의 화면 위치까지 확인**했다. 설정에서 수동으로 띄우는 안내와 앱 진입 자동 안내 문구를 구분하라는 PM 답변을 적용했다. 이번에 다른 모든 Figma/Notion 댓글을 다시 전수 조사했다는 뜻은 아니다.
+- **적용 문구:** Office 자동 안내는 ‘Don’t miss updates from your Lab. / Turn on notifications in / Settings → Notifications → Dentlink → Allow Notifications’, Lab KO는 ‘알림을 켜서 주문 현황과 치과 메시지를 실시간으로 받을 수 있어요. / 설정 → 알림 → Dentlink for lab → 알림 허용’. Lab EN은 같은 의미의 로컬 번역을 추가했다. 실제 설정 화면의 기존 수동 안내 문구는 별도로 유지한다. 문구의 ‘실시간’은 사용자 노출 푸시 안내이며 제외된 기기 간 읽음/삭제 동기화를 추가한다는 뜻이 아니다.
+
+### 구현과 저장 위치
+
+| 제품 | 정확한 checkout / branch | HEAD·origin 일치 / 상태 | 이번 변경 |
+| --- | --- | --- | --- |
+| Web Clinic·Lab | `/Users/parkjongsun/Repository/dentlink-client-notification-center` / `feature/DL-17058` | `6557a10cf56e58830cca54470017c49d3fa015e9` / clean·upstream0/0 | 앞선 전체 소속 미읽음 dot 보완 그대로. 이번 추가 코드 변경 없음 |
+| Office 앱 | `/Users/parkjongsun/Repository/dentlink-app` / `feature/DL-17059` | `9d378e460ae19e00c511de0a6c1944e7f3de4e5f` / clean·upstream0/0 | 전역 안내 컴포넌트·실제 Root 연결·로컬 키, 3파일 |
+| Lab 앱 | `/Users/parkjongsun/Repository/dentlink-lab-app` / `feature/DL-17060` | `e9d69eff8f08f7c99ec71a67cfc2541039c3f128` / clean·upstream0/0 | Office와 같은 동작 + en/ko/registry 문구, 6파일 |
+
+- 양 앱 commit 제목은 `feat: 앱 진입 시 OS 알림 안내를 기기에 한 번 기록`. push 후 `git ls-remote`의 SHA 일치, clean·ahead/behind0/0을 다시 확인했다. PR·외부 문서/댓글·Jira 상태/설명 변경은 없다.
+- 기존 `Popup`, Typography, UI store, `useNotificationPermission`, AsyncStorage를 재사용한다. 로그인/소속·navigation·최초 진입/업데이트 준비 완료 후 앱이 활성 상태이고 OS 알림이 denied/blocked일 때만 자동 안내를 표시한다. 확인 중·조회 오류·granted/limited/unavailable을 차단 상태로 취급하지 않는다.
+- 다른 팝업·모달·홈 프로모션 배너가 있으면 이를 덮지 않고 기다린다. 안내 본문이 **실제로 layout된 시점**에만 새 로컬 키 `notification-permission-notice-shown=true`를 저장하며, 표시 시도만으로 이력을 소비하지 않는다. 앱 내부 재진입·프로세스 재시작 뒤 반복을 막고 계정/병원 변경으로 이 키를 초기화하지 않는다. 재설치/로컬 저장소 초기화·저장 실패 등까지 완벽한1회를 보장하는 계약은 아니다.
+- 배경 이동·준비 상태 해제·컴포넌트 해제 시 자신이 연 안내만 닫고, 다른 업무 팝업으로 교체됐다면 이를 닫지 않는다. Android는 기존 `notifee.openNotificationSettings()`, iOS는 `Linking.openSettings()`를 사용한다. 자동 안내를 소비한 뒤에도 설정 화면의 수동 안내는 별도 동작한다.
+- **적용 경계:** 실제 Root 진입에 연결했지만 다른 신규 UI와 같이 `__DEV__`에서만 활성화된다. 운영 빌드는 기존 흐름이다. OS 권한이나 서버 수신 설정을 새 컴포넌트에서 바꾸지 않으며 신규 API/추정 DTO/주기적 조회·실시간 동기화는 없다. 기존 `PermissionProvider`의 OS 허용→구 설정 초기화 결합은 아직 남아 있다.
+
+### 최종 코드 검증
+
+| 제품 / 실제 OS 상태 | 실제 앱 진입·조작 | 확인 결과와 제한 |
+| --- | --- | --- |
+| Lab iOS / denied | 사용자 로그인 Home → 자동 안내, 취소 → Profile/Home → Inbox/Settings, 앱 종료·재실행 | 최초 표시 후 새 로컬 키 true, 화면 이동/재실행 시 자동 안내 재노출 없음. 설정 배너에서 수동 안내는 열리며 자동 안내와 다른 문구 확인 |
+| Lab iOS / denied | 검증 목적으로 **새 안내 이력 키만** 삭제 → 재시작 → 자동 안내 ‘설정으로 이동’ → OS 설정 → 기존 앱 복귀 | 설정 앱 실행·복귀 및 재노출 없음 확인. 시뮬레이터에서는 설정 첫 화면이 열려 앱별 알림 설정 직접 도달은 실기기 확인 항목으로 남김. 최종 새 이력 키 true |
+| Office iOS·Android / granted | 실제 로그인 Home → Inbox/Settings → Home/Profile 왕복 | 최종 안내 모듈 로드, 자동 차단 안내 없음, 새 이력 키 null 확인. 허용 상태에서 최초 노출 기회를 소비하지 않음 |
+| Lab Android / granted | 실제 로그인 Home → Inbox/Settings → Home/Profile 왕복 | 자동 차단 안내 없음, 새 이력 키 null, 최종 안내 모듈 로드 확인 |
+
+- 기기는 기존 iPhone17Pro/iOS26.5 (`5C0E7639-2345-4B3F-9979-56AFDDA1C708`), Android `emulator-5554`/API36을 그대로 사용했다. 사용자 로그인 세션으로 실행했고 OS 권한은 변경하지 않았다. 기존 Provider가 권한 변경 시 구 서버 설정을 저장할 수 있어 **Office denied 및 Lab Android denied는 실제 기기에서 미검증**이다. 역할/권한 전체·실데이터 최종 QA 증거로 확대하지 않는다. 알림 목록/설정/소속 선택은 여전히 승인된 목 UI다.
+- 임시 React Test Renderer 검사는 양 앱 실제 최종 컴포넌트 소스를 불러와 **각16개 경우 통과**: 실제 표시 후1회 기록·저장된 이력·OS 상태별 미노출·준비/조회 오류·기존 UI 대기·배경/복귀·로그아웃 준비 해제·대체 팝업 보존·플랫폼별 설정 열기. OS/저장소 의존성은 mock이므로 위 실제 OS 미검증을 대신하지 않는다. 제품 저장소에 별도 테스트/도구/Storybook 파일은 추가하지 않았다.
+- 변경 범위 ESLint 오류0(양 앱 기존 경고 각9개), Prettier·diff check 통과. 전체 tsc는 기존 Office4파일6진단·Lab4파일5진단 그대로이며 변경 범위 진단0이다. **전체 tsc 통과로 보고하지 않는다.** Lab 기존 i18n translator 테스트3/3과 새 KO/EN·registry 실제 매핑 검사도 통과했다. 기존 바이너리 Office2.2.4.debug/Lab1.0.5.debug와 최종 Metro JS로 실행했으며 새 native build는 하지 않았다.
+- iOS 공통 팝업의 본문/버튼이 하나의 접근성 노드로 묶여 개별 testID assertion은 실패했다. 실제 화면·문구 정규식과 확인한 버튼 좌표로 보완해 최종 flow를 통과했다. Office 초기 Home assertion은 기존 프로모션 배너를 닫은 뒤 통과했다. 자동화를 위해 공통 Popup이나 업무 UI를 수정하지 않았고 이 초기 selector/setup 실패를 제품 결함으로 기록하지 않는다.
+
+### 로컬 유지·남은 일·다음 시작점
+
+- Office Android가 기존 개발 번들 주소 `10.0.2.2:8081`에 연결하지 못해 cold start가 멈췄다. Metro 정상 응답과 adb reverse8081을 확인한 뒤 **Office development preference의 `debug_http_host`만 `localhost:8081`로 변경**, 다른 XML 설정은 보존했다. 최종 소스 모듈 로드·화면 동작을 재검증했다. 인증·OS 권한·env·제품 코드는 이 실행 설정 복구 때문에 변경하지 않았다.
+- Clinic3000/Lab3005/OfficeMetro8081/LabMetro8082, Chrome 로컬 탭·Device Hub·Android 에뮬레이터를 유지한다. 시뮬레이터는 Lab Inbox, Android는 Lab Home으로 돌려뒀다. IDE 터미널을 조작하거나 서버를 새로 늘리지 않았다.
+- 근거는 `/tmp`에만 있다: `notification-notice-component-check.cjs`, `{office,lab}-notice-component-check.log`, `lab-notice-ios-{first,repeat,settings-action}.log`, `lab-notice-ios-return-after-settings.log`, `office-notice-{ios,android}-allowed.log`, `lab-notice-android-allowed.log`, 각 실제 화면 캡처. Figma 댓글 근거는 `notification-figma-comment40-ax.txt`/`notification-figma-comment40-window.png`. 정적 검사는 `{office,lab}-notice-{lint,prettier-check,typecheck}.log`, 번역 검사는 `lab-notice-i18n-test.log`/`lab-notice-translation-check.log`. 테스트 계정 정보가 들어갈 수 있는 캡처는 제품 repo·외부에 게시하지 않는다.
+- **현재 확정 정보로 근거가 확인된 추가 FE 보완은 마무리했다.** 다음은 목록/집계/카탈로그/저장/읽음 실제 API, 권한·구 설정 매핑, 실제 소속 전환, 푸시 발송 식별·클릭/읽음 계약이 나오면 연결한다. notificationId 직접 전달은 필수로 가정하지 않는다. 연결 시 목데이터·개발 분기를 전량 제거한다.
+- **남은 정책/영향 검토:** 특정 Push 선택→OS 설정→정상 복귀 후 선택 저장, 중단 시 임시 선택 폐기, 기존 PermissionProvider의 OS/서버 결합 해소, 새 설정 파란 배너의 이력/빈도, domain/category hide, Lab 홈 최근 메시지 범위는 각각 종전 의존성을 유지한다. 이번 자동 안내 완료를 이 항목들 완료로 취급하지 않는다. 이후 최종 코드/실데이터/영향 역할·OS 화면 검증 → 사용자 QA → PR/review → release/배포를 구분한다.
+- **개인 기록 경계:** 시작/정리 시 개인 repo `git pull --ff-only`와 clean을 확인했고, 기록 직전 다른 관련 세션은 idle임을 확인했다. 공통/다른 프로젝트 파일은 건드리지 않고 이 기능 체크포인트만 갱신·commit/push한다. 기록 전 개인 main은 다른 세션의 `df1a272`였으며 해당 이력을 보존한다.
 
 ## 정리 후 가능한 FE 보완 — 2026-10-30 16:52 KST
 
