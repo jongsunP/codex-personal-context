@@ -4,6 +4,15 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
+## v1.91.0 스테이징 PR 준비 완료 — 2026-10-30
+
+- 사용자 목적은 **11월 2일 월요일 운영 배포 예정인 release/v1.91.0을 먼저 스테이징에 반영**하는 것이다. 이후 필요하면 LBX만 별도 추가한다. 마지막으로 사용자가 말한 배포 프로세스를 `원격 stage 삭제 → 최신 master에서 stage 재생성 → release PR`로 명확히 했으므로 이번 실행은 PR 준비에서 멈췄다.
+- 원격 master `57bb759ca08e3752140ceffdae2a5421934ec242`, release/v1.91.0 `4dd8f4097bde14838c2fab5b8a706c0609d4fc84`, 이전 stage `dcc32cd5dc73cc32c8118ce5bf8729f0b4c7c9ba`를 실조회했다. stage 보호·유효 ruleset·열린 base/head PR은 없었다. 이전 stage를 로컬 `refs/recovery/stage-before-v1.91.0-20261030`에 보존하고 SHA lease로 삭제, nonexistence lease로 정확한 master에서 재생성했다. 원격 stage=master를 확인했으며 로컬 feature/DL-17125@e8e15ed66·clean은 유지했다.
+- [PR #4810](https://github.com/Innvoaid/dentlink-client/pull/4810) **release/v1.91.0 → stage** 생성·세션 첨부 완료. 실제 base/head SHA와 6커밋·54파일(+2750/-83), 전체 경로 일치를 확인했다. 충돌 없이 예상 병합 트리 `6715064b3d96d24417b5dba281e35faab45dfb9c`가 release 트리와 같다. PR은 OPEN·일반 PR·미병합이며 생성 직후 CodeRabbit/add-reviews 성공, guard 진행 중으로 최종 CI 통과를 선언하지 않는다.
+- 기존 stage의 master 대비 차이는 LBX PR4804였다. 이번 릴리스에는 해당 변경이 없고 사용자도 후속 별도 반영을 명확히 했다. LBX 원본 branch/worktree는 변경하지 않았으며 자동 재추가하지 않는다.
+- 저장소 E2E 가드의 전체 릴리스 정적 판정은 **NEEDS_RUN**으로 기록하고 PR 생성 전 check를 통과했다. 확정 파손은 발견하지 못했으나 출고일 수정으로 `04_labShipment`의 첫 valid 날짜가 오늘로 바뀔 수 있어 실행 검증이 필요하다. 05 상태 전환·08 피드백도 공통 모달 회귀 후보다. 별도 E2E 실행/수정은 하지 않았다. 정상 push hook 성공은 현 checkout 검사이며 release 전체 런타임 검증과 구분한다.
+- **남은 일:** 사용자 병합/배포 지시 후 최신 PR·release·stage를 재확인하고 Clinic/Lab/Admin 배포 및 전체 STG E2E·QA를 각각 확인한다. 서비스별 변경 경로는 이번 diff에 모두 포함됐고 workflow 변경은 없다. stage 재생성 직후 조회에는 새 push 배포 실행이 없었지만 이후 실행 여부·서비스 반영까지 확인한 것은 아니다. 이번 PR 병합·workflow dispatch·LBX 반영·배포 결과 감시는 수행하지 않았다.
+
 ## DL-17124 / DL-17125 출고 예정일 수정 인계 — 2026-10-30
 
 - 사용자 승인: 상위 [DL-17124](https://innovaid.atlassian.net/browse/DL-17124)의 기존 Frankie 하위 [DL-17125](https://innovaid.atlassian.net/browse/DL-17125)를 재사용해 제목·본문을 정리하고 구현·검증한다. 접수 당시 하위 제목은 `[Bug] d`, 본문·댓글 없음이었다. 상위 댓글 4개를 확인했으며 과거 출고 예정일 선택은 의도된 동작이 아니고 FE 수정 대상이다. 제작 단계별 알림·치과 노출 정책 변경은 범위에 넣지 않는다.
