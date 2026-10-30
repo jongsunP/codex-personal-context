@@ -1,6 +1,51 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-10-30 14:40 KST — **Clinic 로컬 env 누락을 복구해 기존 서비스 홈 실행을 확인했다. 새 알림센터 디자인은 별도 UI 컴포넌트로 구현·push되어 있으나 실제 제품 화면에는 아직 연결되지 않았다. ‘디자인 적용 완료’나 ‘FE에서 할 일이 없다’고 보고하면 현재 상태를 과장하게 된다.** 아래 Web·Office·Lab 선행 구현·push 상태를 유지한다. 실제 제품 Header/Root 진입 및 BE 조회·저장·병원 전환·푸시 연결은 아직 교체하지 않았다. 새 UI를 더미 데이터로 운영에 노출하지 않으며, BE 계약과 남은 정책이 확정되면 현재 표시/동선 계층에 연결한다.
+최종 갱신: 2026-10-30 15:10 KST — **사용자가 목데이터를 명시적으로 허용하여 Web Clinic·Lab의 실제 헤더와 Office·Lab 앱의 실제 Home/Root에 Figma 화면을 연결하고 세 제품 feature에 commit·push했다. 개발 빌드에서 목록·설정·소속 선택을 확인할 수 있다.** Web 실제 페이지 경로와 Office 실제 로그인 Home의 iOS·Android 검증을 수행했다. **Lab 앱은 양 OS 로그인 화면까지 기동했지만 로그인 세션이 없어 Home 이후 최종 화면 검증은 남았다.** BE 조회·저장·실제 소속 전환·푸시/랜딩 연결은 미완료이며, 운영 빌드는 기존 동작을 유지한다. 이번 진입 연결과 실데이터 통합·최종 QA/merge 준비를 혼동하지 않는다.
+
+## 실제 제품 진입에 Figma 화면 연결 — 2026-10-30 15:10 KST
+
+### 사용자 지시와 작업 경계
+
+- 이전의 격리 UI/Storybook 검증만으로 실제 화면 작업까지 완료했다고 표현한 범위를 바로잡았다. 사용자는 **웹·양 앱에서 가능한 디자인을 실제 화면에 구현**, 필요하면 목데이터를 사용하고 API가 나오면 **이전 목데이터를 정확히 전부 제거**하라고 지시했다. 목데이터 구조는 미래 BE 계약으로 고정하지 않는다.
+- 새 Storybook·불필요한 파일은 추가하지 않는다. 이번 기능에서 추가했던 Web Storybook 3개를 제거했고 기존 제품의 다른 Storybook은 건드리지 않았다. 런타임 확인 스크립트·캡처는 `/tmp`에 두었고 제품 테스트/인계 파일을 추가하지 않았다.
+- 사용자 승인 범위의 기존 feature에서 이어서 작업했다. 기존 Web worktree와 Office/Lab checkout을 유지하고 앱은 각각 분담했다. 새 branch/worktree/PR/merge/배포는 없다. 외부 문서·Slack은 쓰지 않았다.
+- 사용자 요청으로 **Codex 관리 서버와 기존 Chrome을 계속 켜둔다.** Clinic/Lab 웹, 시뮬레이터·에뮬레이터 동시 실행/유지 허용. IDE 터미널은 조작하지 않았다.
+
+### 구현과 원격 저장
+
+| 제품 | 정확한 위치 / branch | commit·origin 반영 | 이번 연결 범위 |
+| --- | --- | --- | --- |
+| Web Clinic·Lab | `/Users/parkjongsun/Repository/dentlink-client-notification-center`, `feature/DL-17058` | `0b281c3b15e89d77a9a9e7227c3b5da9a40a1081` | 실제 기존 헤더/모바일 메뉴 알림 버튼 → 새 Inbox·Settings·소속 선택 모달. Clinic 주문범위 DLDS dropdown 추가. 전체/미읽음, 개별·전체읽음, 상하위 설정, 목 소속 선택·토스트를 메모리 데이터로 연결. 개발 모드만 새 화면, 운영 빌드는 기존 Notifications 유지 |
+| Office 앱 | `/Users/parkjongsun/Repository/dentlink-app`, `feature/DL-17059` | `859529253d631cbadd1adc01a2b7f8bfd587b189` | 실제 Home 벨·Root route·새 Screen 연결. Inbox/Settings/주문범위/소속 시트, 설정 안내 팝업·토스트. 개발 빌드의 구 Profile 알림영역·홈 배너 숨김. 기존 OS 조회 hook 재사용, 실제 설정 저장은 하지 않음 |
+| Lab 앱 | `/Users/parkjongsun/Repository/dentlink-lab-app`, `feature/DL-17060` | `891d600a9fa8aa7d722165d83c26f7ab8be8ad03` | 실제 Home 벨·Root route·새 Screen 연결. Inbox/Settings/기공소 선택·토스트·OS 안내 팝업. 개발 빌드의 구 Profile 알림영역·홈 배너 숨김. My Orders 제외 유지. 안내/토스트 문구3개 로컬 en/ko/registry 반영, 앱 지침에 따라 Sheet 쓰기 없음 |
+
+- 세 제품 모두 `git ls-remote`의 feature SHA가 위 HEAD와 일치하고 worktree clean, upstream ahead/behind 0/0을 확인했다. Web pre-commit/pre-push를 생략하지 않았다. Web/Office 열린 PR 없음 확인. Lab GitHub connector 검색은422 접근 제한이 있었지만 Git push와 origin SHA 확인은 성공했다. PR 생성/변경은 하지 않았다.
+- Figma 디자인-코드 skill로 기존 컴포넌트와 실제 화면을 대조했다. 주요 노드: Web Inbox `119:22594`, Clinic settings `97:28747`, `97:28748`, `98:21449`, Lab settings `123:24602`, 다른 치과 모달 `48:13837`, Clinic 범위 `89:13439`; 앱 Home `22:5315`, Office settings `36:8562`, Lab settings `167:25825`, 구 Profile 제거 `36:11368`, Lab OS 안내 `173:28110`.
+- Web 설정·목록의 기존 표시 컴포넌트와 DLDS를 재사용했다. 실제 화면에서 처음 보인 탭 색상 불일치는 전환 애니메이션 도중 캡처였으며 안정화 후 선택색·문자색 정상임을 확인했다. 이를 제품 코드 버그 수정으로 기록하지 않는다.
+
+### 검증 근거와 한계
+
+- **Web:** 실제 localhost 홈 경로/전체 provider/헤더에서 Clinic1280·375·320px, Lab1280·375px 확인. 목록 필터·설정 왕복·상하위 토글·Clinic 주문범위·개별/전체읽음·빈 상태·소속 선택·Escape/재진입 통과. 실제 auth 소속을 바꾸지 않고 알림/소속 활성화 REST 호출이 없음을 확인했다. 별도 Playwright 브라우저의 합성 로그인/홈 API 응답을 사용한 UI 검증이며, 실제 서버 데이터 통합 증거가 아니다. 모바일 Lab의 기존 개발용 query/QA 위젯이 메뉴를 가려 테스트 브라우저에서만 위젯을 숨겼다. 제품 위젯 코드는 바꾸지 않았다.
+- **Web 정적/필수 검사:** 변경 범위 ESLint·diff check, 실제 pre-commit Clinic/Lab/Admin 타입검사, pre-push 세 제품 lint 오류0(기존 경고 유지)·Admin DLOS guard/tests·shared/configs/hooks 검사와 coverage 기준 변화0 통과. coverage는 새 UI 자체의 커버리지로 주장하지 않는다.
+- **Office:** 최종 코드로 실제 로그인 Home → 벨 → Inbox → Settings를 iOS/Android에서 확인. All/Unread·개별/전체읽음·빈 상태·상하위 토글·주문범위·다른 목 치과 선택·뒤로/재진입 통과. 마지막 홈 dot 보완도 두 OS에서 재확인했다. 기존 Profile 알림영역 제거는 코드 확인이며 최종 화면 검증은 미완료(XCTest 연결 끊김/Android 해당 진입 증거 부재). OS 차단 분기도 실제 권한 변경 시 구 PermissionProvider가 기존 서버 설정을 바꿀 수 있어 기기 권한을 조작하지 않았고 실기기 미검증으로 남긴다.
+- **Lab:** iOS/Android 실제 앱 번들 실행과 로그인 화면 확인. 로그인 세션 부재로 실제 Home 이후 검증은 못 했으며 사용자에게 기기에서 직접 테스트 로그인 요청 중이다. 인증/소속 스토어를 우회 주입하지 않았다. 실제 mock store 실행으로 소속별 읽음 격리·전체읽음·상하위 토글·문맥 초기화·production 빈 데이터 확인. 이 검사를 실제 Home/OS 팝업 검증으로 바꾸지 않는다.
+- **앱 정적:** 두 앱 변경 파일 lint 오류0(기존 Root console 경고3), diff check 통과. 전체 tsc는 기존 Office4파일6진단, Lab4파일5진단만 남고 변경 영역 진단 없음. 전체 typecheck 통과나 최종 QA/merge 가능으로 보고하지 않는다.
+- **증거:** `/tmp/notification-web-runtime.cjs`, `/tmp/notification-{clinic,lab}-{1280,375}-*.png`와 Clinic320 캡처. Office `/tmp/office-notification-{ios,android}-{inbox,settings,scope,empty,offices,selected-office}.png`, 마지막 dot `...-final-home-other-unread.png`, `/tmp/office-notification-final-tsc.log`. Lab `/tmp/lab-actual-{ios,android}-signin.png`, `/tmp/lab-notification-actual-final-{lint,typecheck}.log`, `/tmp/lab-notification-mock-controller-check.log`.
+
+### 목데이터 제거 목록·남은 연결
+
+- Web `shared/ui/src/NotificationUI/NotificationCenterMock.tsx`와 `notificationMockData.ts`를 통째로 제거하고 Clinic/Lab `Notifications.tsx`의 개발 분기를 실제 query/service 연결로 교체한다. Figma 예시/임시 카탈로그·라벨·가짜 ID·목 토스트를 운영 기본값으로 남기지 않는다.
+- Office/Lab 각각 `src/store/useNotificationMockStore.ts`를 통째로 제거하고 `NotificationCenterScreen`, Home/header, Root의 모든 mock import/초기화/표시 매핑을 실제 데이터로 교체한다. `__DEV__` 진입·기존 Profile/Home 표시 분기도 실제 배포 범위에 맞게 정리한다. UI 컴포넌트·검증된 내비게이션 구조는 재사용한다.
+- 현재 모든 새 읽음/설정/소속 선택은 **인메모리 목 상태**다. 실제 계정·병원 변경/앱 재시작/페이지 새로고침 시 초기화되며 서버/AsyncStorage/auth store를 저장하지 않는다. mock 소속 전환 토스트는 실제 서버 소속 전환 성공 증거가 아니다.
+- 실제 API 계약·카탈로그/권한·조회/저장/읽음/집계, 실제 소속 전환·실제 랜딩·푸시 클릭 연결, OS 복귀 후 선택 저장·전역1회 안내/새 배너 빈도는 후속이다. 기존 PermissionProvider는 유지되어 앱 전체 OS/서버 설정 분리 완료가 아니다. 미정 hide/최근 메시지 정책은 임의 구현하지 않았다.
+- **다음 시작점:** 사용자 Lab 테스트 로그인 후 두 OS 실제 Home부터 최종 변경 화면·Profile·설정 안내를 검증한다. Office의 미검증 Profile/OS 차단 분기도 별도로 확인한다. 이후 BE/정책 확정 시 실제 query·소속·푸시 계층을 연결하고 위 목데이터 전량 제거를 검증한다. 현재 결과는 UI 선행 작업 저장이며 최종 QA/merge 인계가 아니다.
+
+### 유지 중인 로컬 실행
+
+- Clinic `http://localhost:3000/`: Next PID3523, exec95051, cwd Web worktree의 `clinic`.
+- Lab `http://localhost:3005/`: Next PID4814, exec41170, cwd 같은 worktree의 `lab`. 이번에 `lab/.env.development`를 동일 저장소 주 worktree에서 값 열람/출력 없이 복사했고 동일성·ignore·미추적을 확인했다. 기존 Clinic env도 유지한다.
+- 사용자 Chrome에 위 두 로컬 탭이 그대로 열려 있음을 재확인했다. 창/탭을 닫거나 IDE 터미널을 건드리지 않았다.
+- Office Metro8081 PID5323, Lab Metro8082 PID5943(exec13801) 유지. iOS `5C0E7639-2345-4B3F-9979-56AFDDA1C708`, Android `emulator-5554` 실행 상태 유지. Lab 로그인 화면에서 사용자 입력을 기다린다. 재개 시 PID/포트/실제 cwd와 기기 상태를 다시 확인한다.
 
 ## Clinic 로컬 실행 복구 및 완료 범위 정정 — 2026-10-30 14:40 KST
 
