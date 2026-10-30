@@ -1,6 +1,8 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-10-30 v1.91.0 위 LBX 재반영 / Admin STG 배포 시작
+## 현재 체크포인트 — 2026-10-30 v1.91.0 위 LBX 재반영 / 배포 시작 확인·정리 완료·대기
+
+- **사용자 확인 및 마감:** 사용자가 새 어드민 배포가 진행 중임을 직접 확인했고, 기존 어드민 배포 취소 완료 후 LBX만 PR #4811로 **스쿼시 머지**했다는 순서를 확인했다. 이어 정리 후 대기를 지시했다. 이번 요청 처리는 완료로 마감하며 추가 배포 결과 조회·감시·QA·Git/PR 변경은 시작하지 않는다. 최종 배포 성공·화면/API QA는 아래의 미확인 상태를 유지하고, 추후 명시적으로 재개하면 해당 run과 최신 refs부터 확인한다.
 
 - 메인세션에서 stage를 최신 master로 재생성하고 release/v1.91.0 → stage [PR #4810](https://github.com/Innvoaid/dentlink-client/pull/4810)을 준비했다. 사용자가 16:41:47 KST 병합한 stage는 `4fc1d2f75ecb7cf0f50d1e7585199e48a3044184`이며, 이 초기화로 앞선 LBX #4804는 제외된 상태였다.
 - 사용자가 **진행 중인 어드민 배포만 중지 → LBX만 stage에 재추가 → 그 코드로 어드민 배포**를 명시했다. 이번 추가 지시에 따라 메인세션이 병합·배포 시작까지 수행했다. 이전 Admin [run 41021662707](https://github.com/Innvoaid/dentlink-client/actions/runs/41021662707)은 취소 요청 후 `completed/cancelled`를 확인했다. Clinic/Lab 실행은 취소하거나 다시 실행하지 않았다.

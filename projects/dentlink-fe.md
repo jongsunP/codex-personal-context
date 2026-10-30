@@ -6,6 +6,7 @@
 
 ## v1.91.0 + LBX 스테이징 반영·Admin 배포 시작 — 2026-10-30
 
+- **마감:** 사용자가 배포 진행과 기존 Admin 취소 → LBX만 스쿼시 머지 → 새 Admin 배포 순서를 확인하고 정리·대기를 지시했다. 개인 기록을 정리해 요청 처리를 마감한다. 추가 결과 조회·감시·QA·제품 변경 없이 메인세션을 보관하지 않고 대기하며, 최종 배포 성공을 확인한 것으로 기록하지 않는다.
 - 아래 준비한 [PR #4810](https://github.com/Innvoaid/dentlink-client/pull/4810)은 사용자가 **16:41:47 KST 병합**했다. release/v1.91.0 코드가 stage에 반영됐고 서비스별 배포가 시작됐다. 이후 사용자가 **어드민 배포만 취소하고 LBX를 재추가한 코드로 어드민 배포**를 명시했다.
 - 기존 Admin run `41021662707`은 `completed/cancelled` 확인 완료. LBX 원본을 그대로 사용한 [PR #4811](https://github.com/Innvoaid/dentlink-client/pull/4811)을 생성·검사 후 병합했다. 현재 stage `155acfbfe3c301727c4b5c25380e6ae05e9e0b99`는 **v1.91.0 + 기존 LBX만 포함**하며 예상 tree와 일치한다. release/master/LBX 원본은 유지하고 Clinic/Lab 배포는 취소·재실행하지 않았다.
 - **Admin 새 배포:** [run 41022675810](https://github.com/Innvoaid/dentlink-client/actions/runs/41022675810), **16:51:42 KST 시작**, source SHA는 위 stage와 같다. 시작 시 `in_progress`이며 최종 성공·실제 서비스 반영·QA 완료는 아직 확인하지 않았다. 결과 확인 가능 시각은 17:06:42 KST 이후다.
