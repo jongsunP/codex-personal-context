@@ -4,7 +4,14 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
-## v1.91.0 스테이징 PR 준비 완료 — 2026-10-30
+## v1.91.0 + LBX 스테이징 반영·Admin 배포 시작 — 2026-10-30
+
+- 아래 준비한 [PR #4810](https://github.com/Innvoaid/dentlink-client/pull/4810)은 사용자가 **16:41:47 KST 병합**했다. release/v1.91.0 코드가 stage에 반영됐고 서비스별 배포가 시작됐다. 이후 사용자가 **어드민 배포만 취소하고 LBX를 재추가한 코드로 어드민 배포**를 명시했다.
+- 기존 Admin run `41021662707`은 `completed/cancelled` 확인 완료. LBX 원본을 그대로 사용한 [PR #4811](https://github.com/Innvoaid/dentlink-client/pull/4811)을 생성·검사 후 병합했다. 현재 stage `155acfbfe3c301727c4b5c25380e6ae05e9e0b99`는 **v1.91.0 + 기존 LBX만 포함**하며 예상 tree와 일치한다. release/master/LBX 원본은 유지하고 Clinic/Lab 배포는 취소·재실행하지 않았다.
+- **Admin 새 배포:** [run 41022675810](https://github.com/Innvoaid/dentlink-client/actions/runs/41022675810), **16:51:42 KST 시작**, source SHA는 위 stage와 같다. 시작 시 `in_progress`이며 최종 성공·실제 서비스 반영·QA 완료는 아직 확인하지 않았다. 결과 확인 가능 시각은 17:06:42 KST 이후다.
+- 상세 증거·배포 재개점은 [LBX 정본](dentlink-client-lbx.md)의 최신 체크포인트에 기록했다. LBX 추가분 가드는 `NO_IMPACT`지만 아래 릴리스 전체 `NEEDS_RUN`은 유지한다. LBX 운영 릴리스 홀드도 유지한다.
+
+## 앞선 v1.91.0 스테이징 PR 준비 — 2026-10-30
 
 - 사용자 목적은 **11월 2일 월요일 운영 배포 예정인 release/v1.91.0을 먼저 스테이징에 반영**하는 것이다. 이후 필요하면 LBX만 별도 추가한다. 마지막으로 사용자가 말한 배포 프로세스를 `원격 stage 삭제 → 최신 master에서 stage 재생성 → release PR`로 명확히 했으므로 이번 실행은 PR 준비에서 멈췄다.
 - 원격 master `57bb759ca08e3752140ceffdae2a5421934ec242`, release/v1.91.0 `4dd8f4097bde14838c2fab5b8a706c0609d4fc84`, 이전 stage `dcc32cd5dc73cc32c8118ce5bf8729f0b4c7c9ba`를 실조회했다. stage 보호·유효 ruleset·열린 base/head PR은 없었다. 이전 stage를 로컬 `refs/recovery/stage-before-v1.91.0-20261030`에 보존하고 SHA lease로 삭제, nonexistence lease로 정확한 master에서 재생성했다. 원격 stage=master를 확인했으며 로컬 feature/DL-17125@e8e15ed66·clean은 유지했다.

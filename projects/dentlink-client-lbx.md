@@ -1,6 +1,16 @@
 # Dentlink Admin LBX — DL-16279 / DL-16387
 
-## 현재 체크포인트 — 2026-10-30 stage 병합 완료 / 스테이징 배포 중·원본 보존·대기
+## 현재 체크포인트 — 2026-10-30 v1.91.0 위 LBX 재반영 / Admin STG 배포 시작
+
+- 메인세션에서 stage를 최신 master로 재생성하고 release/v1.91.0 → stage [PR #4810](https://github.com/Innvoaid/dentlink-client/pull/4810)을 준비했다. 사용자가 16:41:47 KST 병합한 stage는 `4fc1d2f75ecb7cf0f50d1e7585199e48a3044184`이며, 이 초기화로 앞선 LBX #4804는 제외된 상태였다.
+- 사용자가 **진행 중인 어드민 배포만 중지 → LBX만 stage에 재추가 → 그 코드로 어드민 배포**를 명시했다. 이번 추가 지시에 따라 메인세션이 병합·배포 시작까지 수행했다. 이전 Admin [run 41021662707](https://github.com/Innvoaid/dentlink-client/actions/runs/41021662707)은 취소 요청 후 `completed/cancelled`를 확인했다. Clinic/Lab 실행은 취소하거나 다시 실행하지 않았다.
+- [PR #4811](https://github.com/Innvoaid/dentlink-client/pull/4811), **feature/DL-16387 → stage**, 19파일(+1518/-28)을 생성·첨부하고 guard/add-reviews 성공, CodeRabbit 상태 success, MERGEABLE/CLEAN 및 정확한 base/head·파일 목록을 확인한 뒤 squash 병합했다. CodeRabbit 상태만으로 정식 전체 리뷰 완료를 주장하지 않는다.
+- **최종 원격 stage:** `155acfbfe3c301727c4b5c25380e6ae05e9e0b99`, tree `e30129eeaa626042cc7d1b8e6f1c1d3736892f84`. 예상 병합 tree와 정확히 같다. release `4dd8f4097bde14838c2fab5b8a706c0609d4fc84`가 조상으로 포함되며 release 변경과 LBX 19파일의 교집합은 0개다. LBX 추가 patch는 이전 #4804와 byte 단위로 동일하다.
+- **배포 시작 확인:** [Admin STG run 41022675810](https://github.com/Innvoaid/dentlink-client/actions/runs/41022675810), 16:51:42 KST, stage push, head SHA `155acfbfe3c301727c4b5c25380e6ae05e9e0b99`. 최초 조회 `in_progress`. Admin 경로 변경으로 자동 시작되어 별도 dispatch는 하지 않았다. 이번 기록은 **배포 시작**이며 최종 workflow 성공·실제 서비스 반영·화면/API QA는 미확인이다. 결과 확인은 공통 15분 규칙에 따라 **17:06:42 KST 이후**, 이후 조회 간격은 3분 이상이다.
+- **이번 검증:** E2E 가드 독립 재검토 `NO_IMPACT`; 새 stage의 기존 E2E·공용 픽업 소비자를 대조해 기본값·라벨·검증·제출 및 Admin 결제/직원 정리 API가 유지됨을 확인했다. 가드 marker `8dc2d530fab488cea6f58c2c25cb418a4e3834bb`와 PR 전 검사를 통과했다. 이 판정은 LBX 추가분에 한정하며 v1.91.0 자체의 `NEEDS_RUN`을 해제하지 않는다. 이전 동일 LBX patch의 타입/lint 검증은 아래 이력이며 이번 v1.91.0 통합본에서 새 전체 검사나 실제 E2E를 실행한 것은 아니다.
+- **보존/다음 확인:** LBX 원본 로컬·원격 `feature/DL-16387@8a860f080fea9574c5da5db5907d513529bba7ee`, release와 master는 변경하지 않았다. 제품 기본 checkout은 다른 작업 `feature/DL-17125@e8e15ed66`·clean 그대로다. 새 worktree·제품 코드 수정·원본 신규 커밋은 없다. LBX 운영 릴리스 홀드는 유지한다. 남은 확인은 새 Admin 배포 결과와 별도 실데이터 QA이며, 배포 시작을 배포 성공으로 간주하지 않는다. 기기 한정 증거는 `/Users/parkjongsun/.local/share/codex-closeout/20261030-lbx-stage-reapply/`에 있다.
+
+## 이전 체크포인트 — 2026-10-30 오전 stage 병합 완료 / 원본 보존
 
 - 사용자가 LBX 스테이징 반영을 요청하면서, 필요하면 별도 전달 브랜치를 만들고 필요 없으면 직접 PR을 생성하도록 승인했다. **PR 머지는 사용자가 직접 한다.** 운영 릴리스 홀드는 유지한다.
 - 라이브 원본 `feature/DL-16387`은 로컬·원격 모두 `8a860f080fea9574c5da5db5907d513529bba7ee`다. 최신 `origin/master / 57bb759ca08e3752140ceffdae2a5421934ec242`와 `origin/stage / b3dedd8482283635880a1000c1aaa24bf35349d4`는 전체 코드 tree가 동일했다. 공통 기반 `c597f1fb3` 이후 stage 변경 129파일과 LBX 변경 19파일의 교집합은 0개이며, 병합 충돌과 추가 호환 수정이 없다.
