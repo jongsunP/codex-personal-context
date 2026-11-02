@@ -180,6 +180,7 @@ For detailed current state, read:
 ### Dentlink 모바일웹·앱 비교 / 우선순위 — DL-17012
 
 - 모바일웹 대비 Office·Lab 앱 기능 차이, 담당별 1차 조사와 통합 2차 작업 목록을 관리한다.
+- 원 조사와 Notion 정리는 완료했다. 2026-11-02 후속 회의·알림센터 인계를 기록하고 이 세션을 보관하지 않은 채 유지·대기한다. 알림센터와 병행할 DL-17179 후보 선별의 주력은 [통합알림센터 세션](projects/dentlink-unified-notification-center.md)이며 중복 조사·구현을 시작하지 않는다.
 - 최신 사용자 승인 범위·우선순위·Notion 변경을 정본에서 확인한다.
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
