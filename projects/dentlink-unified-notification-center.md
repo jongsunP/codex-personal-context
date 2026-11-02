@@ -1,6 +1,48 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-11-02 20:29 KST — **이메일 HTTPS 연결 후속 코드를 Web·Office·Lab 각각 커밋·푸시하고 원격 반영을 확인했다.** 개념 비교 Notion·개인 체크포인트를 정리하고 로컬 서버/기기를 종료했다. 사용자 재요청까지 대기한다. Office iOS 새 바이너리 빌드, Android 초기 진입 지연, staging Android 서명, 배포 후 실제 이메일/OS 연결은 미완료 검증으로 남는다. PR·merge·배포 없음.
+최종 갱신: 2026-11-02 21:07 KST — **오늘 세 회의 스레드와 현재 코드를 다시 대조하고, 두 앱의 로그인 대기 링크·연속 이동 보완을 추가 커밋·푸시했다.** Office iOS는 제품 설정 변경 없이 로컬 Pods를 기존 lock에 맞춰 새 바이너리 빌드·설치·실행까지 확인했다. Web은 기존 커밋 유지. 최종 발송 URL/분석·읽음 계약, Office staging Android 서명, 배포 후 실제 이메일/OS 자동 연결 및 전체 QA는 남는다. PR·merge·배포 없음. 로컬 실행 정리 후 사용자 재요청까지 대기한다.
+
+## 오늘 논의 재점검과 로그인·연속 링크 보완 마감 — 2026-11-02 21:07 KST
+
+### 재검토한 범위와 유지할 결정
+
+- 사용자는 앞선 작업을 마친 뒤 오늘 이야기한 내용을 검토해 필요한 FE 작업이 있으면 수행하라고 승인했다. 개인 컨텍스트와 제품별 정확한 feature checkout을 안전하게 `pull --ff-only`하고 작성자를 분리했다. 이미 받은 제품 커밋·푸시 권한을 유지하며 PR·merge·배포로 확대하지 않았다.
+- 오늘의 세 Slack 스레드를 한 번 읽기 전용으로 재확인했다. 기존 최종 정리 대비 새 요구 변경은 없었다. [Tom 앱 지원 논의](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793596568281269)는 마지막15:00:03 KST(`1793599203.192389`), [밀링 앱 링크 기술 참고](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793595080497859)는17:05:55(`1793606755.008169`), [이메일 CTA/분석 논의](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793589700410469)는18:09:12(`1793610552.549949`)까지 대조했다. 댓글·반응·읽음 상태를 쓰거나 폴링을 재개하지 않았다.
+- 현재 이메일→FE 진입→Amplitude/필요 시 BE 기록 방향을 유지한다. Airbridge 캠페인을 구현한 것으로 부르지 않고, DL-17183의 서버 선행 추적은 후속 선택지다. 알림 읽음·클릭·웹/앱 진입·메일 열람을 구분한다. 새 API/이벤트명/전달 키/미정 메뉴·랜딩 정책을 임의로 만들지 않았다.
+- [개념 비교 Notion](https://app.notion.com/p/innovaid/40cce072e82f81e491c2ec9420136498)은 앞선 사용자 확인 상태를 유지한다. 이번 로컬 디버깅·개인 확인 목록을 팀 공유 페이지나 Jira에 중복 추가하지 않았다.
+
+### 추가 보완과 최종 Git 위치
+
+| 제품 | checkout / branch | 원격 반영 HEAD | 이번 추가 작업 |
+| --- | --- | --- | --- |
+| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` / `feature/DL-17058` | `6dca5142ba4b179c92d580bc19a4b089f9718b6d` 유지 | 읽기 검토만 수행. 즉시 수정할 명백한 웹 회귀는 발견하지 못함 |
+| Office | `/Users/parkjongsun/Repository/dentlink-app` / `feature/DL-17059` | `e983956b17202e436ebda323eb2b471403ba2b38` | 로그인 전 cold 링크 보관, 탭 복원, 처리한 URL만 소비, 늦은 주문 응답의 이전 화면 이동 차단 |
+| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` / `feature/DL-17060` | `c3120118a1d9628be900fa96051e5eae36c59ce4` | 로그인 전 cold 링크·탭 복원, 새 대기 URL 보존, 오래된 밀링 조회/전환 차단, 전환 중 최신 링크 대기·재개 |
+
+- Office는 `useNavigationConfig.ts`, `RootNavigator.tsx`, 새 `configs/utils/pendingDeepLink.ts`, 관련 테스트 총4파일이다. 저장소 조회/삭제를 기다리는 동안 새 링크가 들어오면 보존한다. DRAFT 주문 조회가 늦게 끝나도 뒤에 선택한 Help 등을 덮지 않으며, 같은 주문의 raw Linking→FCM 정보 보강은 기존 요청을 취소하지 않아 일반 상세/조회 실패 fallback도 유지한다.
+- Lab은 `useNavigationConfig.ts`, `RootNavigator.tsx`, `useMillingOrderDeepLink.ts`, `useMillingAccountSwitch.ts` 총4파일이다. 밀링은 기존 공통 링크 소비자의 회귀 방어이며 신규 밀링 기능 개발이 아니다. 이전 요청의 GET/소속 목록 조회 완료 후 실제 활성화 전 유효성을 확인한다. 이미 활성화가 시작됐다면 임의 취소/롤백하지 않고 기존 전환 중 상태 동안 최신 링크를 보관했다가 완료 후 실행한다. 취소된 pending 때문에 다른 주문이나 같은 주문의 새 요청이 유실되지 않게 했다. 일반 전환 버튼 동작은 유지한다.
+- 두 앱의 Home/Order/Profile/LinkTalk 탭은 기존 React Navigation config를 재사용해 deferred 상태에서도 복원한다. 새 큐·라우팅 프레임워크·메뉴·서버 계약은 추가하지 않았다. 최종 diff 독립 리뷰에서 진행을 막는 추가 회귀/명백한 지속 실행 루프를 발견하지 못했다.
+- 각 제품 HEAD와 원격 feature SHA 일치·clean 확인. Web은 원격과0/0이며 변경 없음. Office 커밋 `fix: 로그인 대기 링크와 최신 주문 이동 보존`, Lab 커밋 `fix: 로그인 후 링크 복원과 연속 이동 보호`.
+
+### 검증 결과와 이전 기록 정정
+
+- Office: Jest73개, 실제 소스 기반 임시 검증34개 통과. 로그인 전 보관·4탭 복원·최신 URL 소비·DRAFT/일반 주문/GET 실패에서 Linking→FCM 중복 보강을 포함한다. 변경 파일 lint 오류0·기존 경고3. 전체 TypeScript는 변경 범위 밖 기존6개 진단이다.
+- Office Android 최종 코드:4탭 deferred 복원 후 메모리/저장소 pending 비움, Help·일반 주문 상세, 크레딧 실조회 확인. 실제 주문 응답(OFFICE_APPROVAL_PENDING)을1.8초 늦춘 사이 Help를 열고 응답 완료 뒤에도 Help가 유지되는 것을 확인했다. 지연 래퍼는 제거했다. 금융 cold는 이번1회 native2.616초, CreditScreen의 account/details 각1회 success/idle 및 로딩 완료 화면을 확인했다. **이전 지연의 원인이 밝혀지거나 모든 기기에서 성능 문제가 해결됐다는 뜻은 아니다.**
+- Office iOS: 현재 커밋된 Podfile은 이미 simulator 대응이 있었으나 로컬 설치 Pods가 lock과 달랐고, 이전 빌드 명령의 EXCLUDED_ARCHS 인자 해석도 잘못돼 destination 단계에서 실패했다. 기존 lock 고정 `pod install --deployment` 후 Manifest.lock 일치, 정상 xcodebuild로 **BUILD SUCCEEDED**. 제품 Podfile/Podfile.lock/Xcode 프로젝트는 변경하지 않았다. 앞선 실패를 확정된 MLKit 링크 오류로 설명한 기록을 정정했다.
+- 새 iOS 개발 바이너리(`com.innovaid.dentlink.development`)를 데이터 보존 설치했다. User/Office Credits 실조회,4탭 복원, 명시 전달한 dev portal HTTPS→CreditScreen, OWNER 소속 Statements 실데이터 표시·원래 소속 복원, 최종 Help를 확인했다. 생성 simulator entitlements와 실행파일의 `applinks:dev-portal.dentlink.io` 포함은 확인했지만 배포 서명/공개 도메인 OS 검증과는 다르다.
+- Lab: 기존 Jest32개, 임시 실제 소스 검증118개(34+64+20), 변경 파일 lint 오류0·기존 경고3, format/diff 통과. 전체 TypeScript 기존5개 진단 유지. 전체 `eslint .`는 범위 밖 기존 오류로 통과하지 않았으며 관련 파일 통과와 구분한다. 저장소 지침에 따라 새 테스트 파일을 만들거나 기존 테스트를 바꾸지 않았다.
+- Lab 양 OS 최종 코드: Help cold,4탭 deferred 복원·pending 소모, 실제 주문1000000151 상세 GET/표시와 path ID 우선 확인. 전환 중 플래그를 로컬로 모의해 현재 Profile 유지→새 Help 링크 보관→전환 완료 상태에서 Help 자동 재개를 확인했다. **실제 밀링 서버 활성화 성공 검증은 아니며** 요청/전환 경합은 실제 함수 기반 검증으로 구분한다.
+- 두 앱 모두 사용자 세션 보존을 위해 실제 로그아웃→사용자 재로그인은 실행하지 않았다. 해당 조건 분기는 소스 검증으로 확인했다. 실제 푸시 중복 콜백, 전체 역할/권한, 공개 배포 후 이메일 앱별 자동 링크는 최종 QA 전에 별도 확인해야 한다.
+- 증거: Office `/tmp/dentlink-office-pending-runtime-20261102.json`, 같은 prefix 테스트/린트/타입 로그·캡처, `/tmp/dentlink-office-ios-build-recheck-20261102.log`; Lab `/tmp/dentlink-lab-deferred-20261102/`. root도 Android 크레딧·Lab 주문·iOS Statements/Help 캡처와 경합 결과를 직접 확인했다. 임시 로컬 자료의 영구 보존을 보장하지 않는다.
+- 정리: 양 앱 임시 관찰값/지연 래퍼 제거, pending·전환 상태 해제, 원래 로그인·소속 보존. Office8081/Lab8082 종료, 웹3000/3001도 listener 없음. 이번에 사용한 iPhone17Pro 시뮬레이터와 Dentlink_API_36 에뮬레이터 종료. 다른 세션 IDE/서버는 조작하지 않았다.
+
+### 남은 연결과 다음 시작점
+
+- **발송 URL:** 최종 이메일/알림 URL과 대상 병원·업무 데이터·분석 정보 계약을 대조한다. 새 URL 지원 코드가 모든 알림의 기존 목적지를 변경한 것은 아니다. 기존 결제내역 범위/메뉴 위치도 임의 확정하지 않는다.
+- **웹 병원 문맥:** 현재 웹 크레딧/청구서는 활성 소속으로 조회하며 URL employerId를 자동 적용하지 않는다. 로그인 복귀는 전체 `router.asPath`/query를 보존하지만, 이것만으로 특정 병원의 이메일 목록 랜딩이 완성되지는 않는다. 실제 발송 URL에 대상 병원이 필요한 것으로 확정되면 화면 진입 앞에 기존 소속 전환을 연결한다. 명세 없이 전역 자동 전환부터 추가하지 않았다.
+- **배포 서명/OS:** Office staging Android의 배포 서명은 공개 파일/기존 로컬 산출물로 확인되지 않아 `assetlinks.json`의 빈 배열을 유지한다. 검증된 staging 서명이 필요하다. 웹 연결 파일·앱 바이너리·메일 주소 적용 후 실제 이메일 클라이언트/OS의 자동 앱 열기·웹 fallback을 확인한다. 새 native 설정은 CodePush만으로 전체 반영되지 않는다.
+- **분석/읽음:** 새 Amplitude 이벤트·추가 정보와 알림 읽음/필요 시 BE 클릭 기록은 실제 계약으로 연결한다. notificationId 직접 전달을 필수로 만들지 않는다. 서버 선행 추적은 DL-17183의 후속 결정이며 현재 구현의 필수 선행 조건이 아니다.
+- 현재 승인된 추가 보완은 커밋·푸시까지 마감했다. 코드·개발기기 검증과 사용자 QA·review·merge·배포·운영 확인을 구분한다. 개인 컨텍스트를 커밋·푸시하고 사용자 재요청까지 추가 구현/감시 없이 대기한다.
 
 ## 이메일 HTTPS 연결 후속 구현·개념 문서 정리 — 2026-11-02 20:29 KST
 
@@ -37,7 +79,7 @@
 - Web: Clinic156/Lab131 Jest, 변경 파일 lint/TS·diff 통과. 커밋 hook의 Clinic/Lab/Admin 전체 TypeScript와 push hook의 lint/관련 테스트도 통과했다(기존 lint 경고 유지). Clinic3000/Lab3001 실제 공개 GET200·환경 JSON·HEAD 빈 응답·POST/미지원파일404·redirect 없음 확인. 각 서버 종료 완료.
 - Office: Jest67개·lint 오류0(기존 경고1), 전체 tsc는 미변경4파일의 기존6개 오류. 새 Android 개발 바이너리 빌드 성공. 기존 iOS 설치본에서 최종 JS의 USER/OFFICE 크레딧·OWNER 청구서 진입, 실제 소속 전환 PATCH200 완료→새 소속 finance GET200 순서 확인. 전환 응답을 지연한 상태에서 새 링크를 열어도 이전 화면으로 덮지 않는 것을 확인했고 런타임 지연/관찰값을 제거했다. 원래 로그인·소속 복원.
 - Office Android: 새 APK에서 HTTPS 금융 화면 진입·주문 alias 선택·승인 하위 경로 미포착·미소속 URL의 Chrome 이동/앱 소속 유지 확인. package를 명시한 진입이므로 공개 도메인 OS 검증 성공과 다르다. Chrome 최초 실행 화면 이후 웹 로그인/본문은 이번 검증에 포함하지 않았다.
-- Office iOS 새 native 빌드는 기존 Pod의 simulator arm64 제외/MLKit 관련 환경 제약으로 destination 불일치에 막혔다. Podfile/의존성을 임의 수정하지 않았으며 **이번 Associated Domains가 들어간 iOS 새 바이너리 설치·실행은 미검증**이다. 기존 설치본의 JS 검증으로 대체 완료 처리하지 않는다.
+- Office iOS 새 native 빌드는 당시 destination 선택 단계에서 실패해 **이번 Associated Domains가 들어간 iOS 새 바이너리 설치·실행이 미검증**이었다. 후속 재검토에서 현재 커밋된 Podfile에는 simulator 대응이 이미 있으며, 로컬 설치 Pods/Manifest.lock이 Podfile.lock과 다르고 이전 xcodebuild의 EXCLUDED_ARCHS 인자도 잘못 해석된 것을 확인했다. 당시 로그는 MLImage 링크 실패까지 도달하지 않았으므로 이를 제품의 확정된 MLKit 제약으로 설명하지 않는다. 아래 과거 JS 실행 근거는 새 native 바이너리 검증을 대신하지 않으며, 후속 복구·빌드 결과는 최신 체크포인트를 따른다.
 - Office 최종9ae3cf3 재검증: iOS cold에서 portal 금융 URL→CreditScreen, 잘못된 Lab 금융 URL→Safari 웹 로그인까지 확인했다. Android Profile cold→금융 warm은 CreditScreen·기존 소속 유지, account/details 각각1회·success/idle이며 잘못된 Lab 금융 URL은 Chrome으로 반환됐다. 다만 Android 금융 cold에서 초기 다운로드/렌더 지연(한 번은16.7초 후 제목 표시·초기 조회 로딩)이 관찰됐고 Home cold에서도 같은 지연이 재현됐다. 새 useEmployeeProfile 구독만 잠깐 제외해도 동일했으며 비교용 변경/관찰값을 모두 제거하고 원본을 복원했다. 반복 API 요청이나 그 구독 한 줄이 원인이라는 근거는 없다. 환경 문제/기존 버그/이번 회귀를 단정하지 않으며, **Android cold의 원인 확인·다른 기기 재검증은 최종 QA 전에 남은 항목**이다.
 - Lab: 기존 Jest32개·임시 실제 소스 검증64개·설치 APK 경로 매칭16개, lint/format/XML/diff 통과. 전체 tsc는 기존5개 진단. 새 Android APK 빌드·데이터 보존 설치 후 Help cold 진입, 실제 주문 상세 GET/표시, query 충돌에도 path ID 유지, 밀링 create/타소속 주문의 Chrome 반환·원 소속 유지 확인. iOS 최종 JS도 Help·주문 상세·타소속 Safari 반환 확인. 밀링 실제 업무 상세·로그아웃/역할 전체 검증은 미수행이며 신규 공개 AASA의 OS 연결은 미배포 상태다.
 - 증거: Office `/tmp/dentlink-office-direct-links-runtime.json`, 동일 prefix build/tests/lint/typecheck 로그, `/tmp/dentlink-office-links-*.png`. root가 Statements/전환 중 새 랜딩 캡처를 직접 확인했다. Lab `/tmp/dentlink-lab-app-links-20261102/`의 build/typecheck 로그와 두 OS 주문/Help/브라우저 캡처; root도 양 OS 주문 화면을 직접 확인했다. 임시 로컬 증거의 보존을 보장하지 않는다.
