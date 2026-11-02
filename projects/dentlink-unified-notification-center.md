@@ -1,6 +1,52 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-11-02 15:16 KST — **사용자 요청으로 후속 Notion 페이지를 ‘모바일 웹 대비 앱 미지원 기능 현황’ 대문 바로 아래로 이동했다.** 기존 검토표와 후속 정리가 같은 깊이에 놓이며, 앞으로 이 묶음의 별도 정리 페이지는 불필요하게 중첩하지 않는다. 두 스레드의 후속 댓글도 요청에 따라 한 번 대조했다. 자동 폴링/제품 구현은 재개하지 않았다.
+최종 갱신: 2026-11-02 16:34 KST — **오늘의 앱 지원·이메일 운영·밀링 링크 회의 3개와 현재 웹/Office/Lab 코드를 대조하고, 후속 Notion을 간소화했다.** 밀링 `app-links.ts`는 Universal Links/App Links 설정이며 별도 방식이 아니다. 동적 랜딩·기기/캠페인 이벤트는 가능하지만 현재 코드에 이메일 추적·중복 처리가 완성된 것은 아니다. 사람에게 필요한 확인만 추렸다. 제품 구현·실기기 실행·Slack 쓰기·폴링은 하지 않았다.
+
+## 오늘 회의 최종 정리·링크 방식과 분석 검증 — 2026-11-02 16:34 KST
+
+### 요청·저장 범위
+
+- 사용자는 긴 후속 Notion을 읽기 쉽게 줄이고 문서·코드로 먼저 확인한 뒤 꼭 필요한 대외 질문만 남기도록 요청했다. 이어 밀링 회의 링크와 `app-links.ts`를 추가하며 동적 주소, 이메일 클릭 기기, Amplitude의 1회 기록 가능성을 확인하고 오늘 전체 업무를 브리핑해 달라고 했다. 이번은 조사·기록이며 구현 승인이 아니다.
+- 개인 컨텍스트는 clean/main에서 `git pull --ff-only`로 Already up to date 확인. 조사자는 동일 문서를 수정하지 않는 읽기 전용 역할로 분리했다. 제품 체크아웃/브랜치/HEAD는 아래 기준 그대로이며 변경하지 않았다. 외부 댓글·알림 읽음 상태·Jira·Sheet도 수정하지 않았다. 중단한 자동 폴링을 재개하지 않았다.
+- [후속 Notion](https://app.notion.com/p/40cce072e82f81fda0e2d123259d5501)은 최신 본문과 대문 직속 parent를 읽은 뒤 사용자 요청에 따라 전체 내용을 축약했다. 6행 작업표, 밀링/추적 핵심, 필요한 확인, 다음 순서와 근거만 남겼다. update_page 성공·경고 없음. 원조사/기존 사용자 의견표, 제목·위치는 유지했다. 성공 후 확인만을 위한 재조회는 하지 않았다.
+
+### 세 회의의 관계
+
+1. [Tom 앱 지원 회의](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793596568281269): 알림센터에서 관련 내용을 앱으로 볼 수 없는 목적지를 추리고 가능한 만큼 함께 보완한다. Office 개인/병원 크레딧 잔액·이력, Statements가 우선 후보이며 Payment History는 필요 여부 논의 후 판단한다. Lab 밀링 주문 상세는 기존 화면 연결이지 새 화면이 아니다. 메일에서 목적지로 직접 가는 경우도 함께 검토하지만 모든 앱 미지원 화면 구현 확정은 아니다.
+2. [이메일 운영 회의](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793589700410469): 메일 CTA를 기기에 맞는 목적지로 연결하고 캠페인으로 클릭/유입을 측정하려는 방향. Daniel의 이벤트·Campaign 전달은 예정 단계이며 PM의 미설치 웹 목적지는 답변 대기. 알림센터 배포와 분리한다. 원문 마지막 확인은 Frankie15:02:49이며 이번에 무의미한 재조회는 하지 않았다.
+3. [추가 밀링 링크 회의](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793595080497859): 부모+22답글을 읽었다. Frankie15:56/16:03 밀링 방식 적용 의견,15:58 Universal Link와 설치 유도 관련 설명,16:10 `app-links.ts`, Joy16:25:35 웹 인증 파일·OS 앱 연결 설명 확인. ‘Universal Links는 설치 유도용이고 이번은 다른 방식’이라는 해석은 코드/공식 문서와 다르므로 아래처럼 정정한다. 첨부 이미지 자체는 별도 검증하지 않았고 텍스트·실제 코드로 판단했다.
+
+### 현재 코드로 확정한 사항
+
+- Web `/Users/parkjongsun/Repository/dentlink-client-notification-center`, `feature/DL-17058@6557a10cf56e58830cca54470017c49d3fa015e9`, Office `/Users/parkjongsun/Repository/dentlink-app`, `feature/DL-17059@9d378e460ae19e00c511de0a6c1944e7f3de4e5f`, Lab `/Users/parkjongsun/Repository/dentlink-lab-app`, `feature/DL-17060@e9d69eff8f08f7c99ec71a67cfc2541039c3f128`. 조사 시 clean/upstream 일치. 이 코드 검토는 운영 배포/이메일 클릭/Amplitude 수집의 실행 검증과 다르다.
+- 웹 `lab/src/lib/app-links/app-links.ts:8`은 환경별 AASA·assetlinks JSON 선택기다. `lab/src/pages/api/well-known/[file].ts`와 next.config rewrite가 인증 없이 JSON을 제공한다. iOS AASA components는 `/q/*`만 포함한다. **일반 HTTPS URL을 설치 앱이 처리하도록 연결하는 iOS Universal Links/Android App Links의 구현**이며, 앱 미설치→설치 후 목적지 복원(deferred deep link)은 별도 범위다.
+- Lab native는 환경별 Lab 도메인/iOS Associated Domains 및 Android autoVerify `/q/` 등록이 있다(`android/app/src/main/AndroidManifest.xml:48`, `ios/DentlinkLabApp/DentlinkLabApp.entitlements:7`). Office는 해당 native 설정에 Airbridge 도메인만 등록돼 있다. 따라서 Lab 인증 파일 재사용만으로 Office portal 주소도 곧바로 앱으로 열리는 것은 아니다. 도메인/경로 확장 시 native 설정과 실제 앱 빌드/배포 범위를 함께 확인한다.
+- Lab `src/configs/utils/qrDeepLink.ts:14,57`은 `/q/{type}/{id}`의 동적 ID를 처리한다. 앱 초기진입 URL 보관과 로그인·소속·navigation 준비 후 재처리 기반도 있다(`useNavigationConfig.ts:759`, `RootNavigator.tsx:421`). 지원 대상별 화면 연결은 별도이며 모든 QR 타입 지원을 뜻하지 않는다.
+- **기존 QR에 UTM을 붙이기만 하면 안 된다.** Lab `qrDeepLink.ts:57-83`은 query/hash를 거절한다. 웹 `lab/src/pages/q/[[...target]].tsx`도 target 외 query를404 처리하고, `qr-context.ts`는 query 없는 경로만 소속 전환 뒤 보존한다. 기존 QR 영구 주소의 의미/검증을 훼손하지 말고 이메일에 필요한 명시적 경로/전달 계약을 정한다.
+- Office/Lab `src/configs/utils/airbridge.ts:122/126`은 허용 업무 ID로 URL을 재조립하므로 임의 캠페인 query는 소실될 수 있다. deferred URL도 변환 후 저장되어 이후 복구되지 않는다. 로그인/병원 전환 뒤 목적지·캠페인을 보존하는 연결이 필요하다.
+- 앱 JS에는 이메일 캠페인/UTM 전용 Amplitude 전송이 확인되지 않는다. 현재 `push_click`은 `landBy=push`와 pushType/pushTitle 중심이다(Office `useNavigationConfig.ts:232`, Lab228). 기존1.5초 URL/경로 중복 이동 방지를 이메일 이벤트 1회 처리로 간주하지 않는다. 대시보드에만 있는 Airbridge→Amplitude 연동 설정은 코드에서 확인할 수 없다.
+
+### Amplitude·동적 주소의 가능성과 한계
+
+- **동적 업무 ID에 맞는 웹/앱 목적지 이동 및 진입한 기기의 OS/플랫폼·캠페인 이벤트 전송은 가능하다.** 현재 모든 이메일 주소에 구현·검증 완료된 것은 아니다. 설치 여부뿐 아니라 사용자가 선택한 앱 연결/브라우저 환경에 따라 웹으로 열릴 수 있다.
+- OS가 앱으로 바로 전달하면 웹 JS는 실행되지 않을 수 있으므로 웹 진입 코드에 이벤트 하나를 넣어 모든 클릭을 측정할 수 없다. 이메일 CTA 클릭(링크에서 측정), 웹/앱 진입, 목적지 도착, 알림센터 읽음, 자체 BE 클릭 이력을 분리한다. 앱 진입 기기 정보는 앱에 도달하지 않은 클릭의 정보까지 증명하지 않는다.
+- 동일 클릭의 복수 콜백/재전송은 제어할 수 있으나 모든 상황의 무누락·정확히1회 전송은 보장하지 않는다. 링크/웹/앱의 전송 담당을 맞추고 재클릭과 중복 콜백을 구분해야 한다. Amplitude HTTP V2의 중복 제거는 같은 device_id/insert_id의7일 범위이며 서로 다른 수집원이 다른 ID로 보낸 이벤트를 자동 병합해 주는 것은 아니다. Airbridge 연동 전송과 앱 직접 전송의 중복에도 주의한다. 이는 제외된 실시간 읽음 동기화와 무관하다.
+- 공식 근거: [Apple Universal Links](https://developer.apple.com/documentation/Xcode/allowing-apps-and-websites-to-link-to-your-content), [Android App Links](https://developer.android.com/training/app-links/about), [Airbridge deferred](https://help.airbridge.io/en/guides/retargeting-with-deep-links), [추적 링크](https://help.airbridge.io/en/guides/understanding-tracking-link), [Amplitude 이벤트 필드·중복 제거](https://amplitude.com/docs/apis/analytics/http-v2), [Airbridge–Amplitude 중복 주의](https://help.airbridge.io/en/guides/amplitude).
+
+### 이미 스스로 확인했으므로 다시 묻지 않을 것
+
+- Joy 작업은 [DL-16926](https://innovaid.atlassian.net/browse/DL-16926)/[FE DL-17007](https://innovaid.atlassian.net/browse/DL-17007), [PR4800](https://github.com/Innvoaid/dentlink-client/pull/4800)에서 확인했다. NO_CHARGE, 해당 상태 주문내역 이동 제한, 처리 중 금액, 치과의사별 PDF 분할 등을 앱 청구서 검토 시 대조한다. Tom11/1댓글의 v1.92/11월9일 포함은 예정이며 배포완료가 아니다. DL-17137 어드민 결제 개선을 치과 앱 Payment History 제공 결정으로 해석하지 않는다.
+- 실제 웹 페이지→hook→service 연결을 따라 크레딧 `GET /office/credits/own/accounts`, `/office/credits/own/details`, Statements `/office/payments/invoices`, Payment History `/office/payments/v2`, `/office/payments/v2/status-count` 사용을 확인했다. 이들 목록을 위해 신규 조회 API를 먼저 요청할 근거는 없다. Billing은 OWNER/PAYMENT_MANAGER 권한, 크레딧은 같은 Billing 제한을 적용하지 않는 기존 차이를 유지한다. API 실호출/최신 Swagger 재조회는 하지 않았다.
+- 읽음은 웹이 실제 `PATCH /messages/notifications/read/partial`에 `{unreadNotificationIds:number[]}`를 보낸다. 기존 API 재사용 가능 여부와 발송 payload→알림 레코드 연결 계약은 별개다. notificationId 직접 전달은 여전히 비필수다.
+- 이메일은 FE 소스에 최종 발송 HTML 정본이 없지만 admin `/notifications/email`→`GET /admin/messages/emails`의 templateContent/variables 미리보기 경로가 있다. 필요 시 권한 있는 실제 샘플부터 최소 범위로 확인할 수 있으므로 모든 메일 내용을 BE에게 먼저 요구하지 않는다. 이번에 발송 본문/개인정보를 읽지는 않았다.
+
+### 남은 최소 확인·다음 시작점
+
+1. **Daniel/분석 운영 담당:** 예정 연동이 메일 CTA 클릭/앱 진입 중 무엇을 포함하는지, 이벤트명·캠페인 전달 키·기기 속성·중복 처리·작업 위치/담당을 공유받는다. 구현 가능성 자체를 다시 묻는 질문이 아니라 기존 작업과의 계약/역할을 맞추는 확인이다. 운영 대시보드 연동 유무도 여기서 확인한다.
+2. **Jun:** Tom이 언급한 앱 Payment History 필요 여부의 기존 운영 논의 결론. 관련 공개 Slack/Jira에서 확정 답변을 찾지 못했으며 논의가 없었다고 단정하지 않는다. 크레딧·청구서 후보와 구분한다.
+3. **PM:** 미설치/웹 목적지는 이미 확인 중이므로 답변을 기다리고 같은 질문을 반복하지 않는다. Tom에게 막연한 추가 확인을 만들 필요는 없다. 선정 화면의 제공 범위/방식은 실제 구현 재개 시 확정한다.
+4. **BE:** 실제 연결 시 발송 payload/메일 템플릿의 목적지 ID·소속·추적 정보 및 알림 읽음 연결값을 대조하고 부족분만 요청한다. 새 API나 자체 클릭 저장 API를 필수로 선요구하지 않는다. 서명 PDF/초대값/외부 택배 링크의 원래 의미를 보존한다.
+5. 재개 시 화면 후보 확정→대표 메일/알림 URL과 기존 기능 매핑→이벤트/전달 계약 합의→승인 범위 구현→웹·iOS·Android의 설치/로그인/소속/권한/반복 클릭·실제 이벤트 속성 검증 순서다. 현재는 문서 정리까지 완료 후 사용자 지시를 기다린다. 기존 알림센터의 REST·실시간 동기화 제외 원칙, 제품별 커밋/PR/배포 단계는 유지한다.
 
 ## Notion 위치 정정·후속 확인 원칙 — 2026-11-02 15:16 KST
 
