@@ -1,6 +1,16 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-11-02 17:11 KST — **오늘 공유·검토 내용을 최종 정리했다. 추가 앱 화면은 기존 웹의 모바일 디자인을 FE가 앱 화면에 적용하며, 별도 디자인 리소스/디자인팀 확정 대기로 분류하지 않는다.** 필요한 공유는 사용자 완료 보고. 이메일 직접 연결·Amplitude 진입 측정 방향은 공유됐고 PM의 측정 범위 답변은 마지막17:07 확인 시 없었다. 기존 알림센터는 유지하며 오늘 추가 구현은 하지 않았다.
+최종 갱신: 2026-11-02 17:23 KST — **PM17:15 답변으로 이메일 유입 사용자 행동의 캠페인별 Amplitude 분석 요구를 확인했다.** 별도로 이메일 링크를 통해 서버에 클릭 기록을 남기는 방식을 제안했다. 이번 이메일 연결은 Airbridge 미경유 방향을 유지한다. 캠페인은 브라우저가 자동 제공하는 값이 아니라 메일/링크에 정의해 전달할 값이며, 서버 GET 기록→redirect는 가능한 일반 방식이나 앱 직접 열기와의 호환은 별도 검증 대상이다. 조사만 진행했다.
+
+## PM 답변·서버 클릭 기록 조사·캠페인 의미 — 2026-11-02 17:23 KST
+
+- [PM17:15:38](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793607338710559): ① 메일로 진입한 유저의 행동을 캠페인 기준으로 Amplitude에서 확인 필요 ② 메일 버튼의 링크 수정으로 서버에 클릭 여부를 전달하는 방식 고려 제안(Leo 참조). ②는 설계/개발 확정이 아니다. 사용자17:16:58 ‘링크는 API가 아니어서 BE와 무관’ 답변은 아래 HTTP 원리상 정정이 필요하다고 설명했다.
+- **1번 가능·Airbridge 미사용 유지:** 이번 이메일 링크는 직접 웹/앱 연결 후 FE/앱의 Amplitude SDK에 유입 정보를 보내는 방향이다. 캠페인은 이메일 종류/발송 목적 등의 분류값으로, 메일 URL의 명시적 파라미터 또는 합의된 매핑으로 전달한다. 캠페인 값이 Airbridge 전용인 것도, 브라우저가 자동 생성하는 것도 아니다. OS/브라우저/기기 속성은 웹·앱 SDK/실행 환경에서 수집하는 별도 정보다. 사용자/기기 식별과 캠페인 전달을 연결하면 이후 행동 분석이 가능하나 현재 이메일 연동 완료는 아니다. 이 설명을 Airbridge 재도입이나 기존 앱 전체 SDK 제거로 해석하지 않는다.
+- **2번 기술 원리:** 이메일의 href를 추적용 HTTPS 주소로 두면 브라우저가 그 주소에 GET을 보낸다. 서버는 발송/링크 식별값으로 접근을 기록하고 302 Location으로 목적지에 보낼 수 있다. 이메일 내부에 JavaScript/fetch를 넣는 방식이 아니며, 서버가 JSON 대신 이동 응답을 준다는 차이다. 따라서 BE와 관련될 수 있다. 이 시점에 새 API를 필수로 요구하는 뜻은 아니다.
+- **공식 사례:** [SendGrid click tracking](https://www.twilio.com/docs/sendgrid/glossary/clicks), [AWS SES click tracking](https://docs.aws.amazon.com/ses/latest/dg/faqs-metrics.html)은 메일 링크를 추적 주소로 바꾸고 기록 후 원래 목적지로 보내는 방식을 설명한다. [SendGrid Event Webhook](https://www.twilio.com/docs/sendgrid/for-developers/tracking-events/event), SES event publishing 등 기존 발송 기능의 재사용 가능성을 먼저 확인할 수 있다. Dentlink의 실제 발송 서비스/추적 설정까지 확인했다는 뜻은 아니다.
+- **앱 연결과의 관계:** [Apple Universal Links](https://developer.apple.com/documentation/xcode/allowing-apps-and-websites-to-link-to-your-content)에서 설치 앱으로 직접 전달될 때 웹사이트/브라우저를 거치지 않으므로 최초 URL 서버 요청만으로 모든 앱 진입을 잡을 수 없다. [TN3155](https://developer.apple.com/documentation/technotes/tn3155-debugging-universal-links)는 일반 링크→Universal Link 리다이렉트도 허용하지만 브라우저를 경유하며 사용자 선택/환경의 영향을 받음을 설명한다. 302 이후 모든 이메일앱/OS에서 자동 앱 열림이 보장된다고 하지 않는다. AASA 파일 자체의 리다이렉트 금지와 일반 클릭 링크의 redirect를 혼동하지 않는다.
+- **현재 코드 조사 범위:** Web/Office/Lab에서 이메일 클릭 자체 BE 기록→302 연결은 찾지 못했다. Clinic `/redirect`는 앱 scheme/store 이동, Lab `/q/*`는 검증 후 진입 UI이며 클릭 저장 코드가 없다. 관리자 이메일 GET은 발송이력 조회일 뿐 클릭 기록 증거가 아니다. BE 소스·운영 설정은 미조사이므로 서버 기능 자체가 없다고 단정하지 않는다. 제품 코드/branch/서버·외부 문서는 변경하지 않았다.
+- **현재 결론:** 1번은 현재 직접 연결+Amplitude 방향으로 구현 가능. 2번도 일반적인 기술로 가능하지만 별도 클릭 측정/서버 기록 범위이며 기존 발송/추적 재사용과 앱 열기 양립 여부를 먼저 확인해야 한다. 원래 알림센터 REST 읽음·푸시 클릭 읽음과 별도이며 PM 제안만으로 추가 서버 개발을 시작하지 않는다.
 
 ## 오늘 최종 결론·디자인 적용 기준 정정 — 2026-11-02 17:11 KST
 
