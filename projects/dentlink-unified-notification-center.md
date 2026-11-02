@@ -1,6 +1,33 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-11-02 18:42 KST — **사용자가 후속 FE 구현 재개를 승인했다.** Office 크레딧 잔액·이력/청구서 목록과 기존 앱 URL 처리 보완을 진행 중이며 미정 메뉴·네비게이션·분석 계약은 임의로 추가하지 않는다. 이메일→프론트→Amplitude/필요 시 BE가 현재 기준이다. DL-17183에서 향후 이메일→BE 기록→프론트 구조를 선택할 가능성을 별도로 기록했으며 이번 구현 범위로 확대하지 않는다. 자동 폴링은 재개하지 않는다.
+최종 갱신: 2026-11-02 18:55 KST — **추가 FE 선행 구현을 검증·커밋·푸시했다.** Office 크레딧 잔액·이력/청구서 조회 화면과 두 앱의 기존 URL 처리를 보완했다. 미정 메뉴·알림/메일 랜딩·분석 계약·native 도메인 확장은 연결하지 않았고 최종 QA/merge 준비 완료는 아니다. 이메일→프론트→Amplitude/필요 시 BE가 현재 기준이며 DL-17183 서버 선행 기록은 향후 선택지로 별도 비교·기록했다. 자동 폴링·PR·배포는 실행하지 않았다.
+
+## 추가 조회 화면·기존 URL 보완 구현 마감 — 2026-11-02 18:55 KST
+
+### 완료한 범위와 정확한 Git 위치
+
+- **Office:** `/Users/parkjongsun/Repository/dentlink-app`, `feature/DL-17059`, `3d53d95`(크레딧/청구서 화면) + `eff8111dcff5a7fe345bf87af87703573c08e41e`(URL 보완). 개인/병원 크레딧 잔액·이력·All/Earned/Used 필터, Statements 목록·페이지네이션·당겨서 새로고침·실패 재시도를 기존 모바일 웹 구성으로 구현했다. 기존 GET `/office/credits/own/accounts`, `/office/credits/own/details`, `/office/payments/invoices`를 service/query로 연결했다. DEV Swagger를 공개 read-only GET으로 재확인했으며 BANK_DEBIT/NO_CHARGE는 생성 모델을 손대지 않고 서비스 응답 타입에 보완했다. 사용자/병원/소속/권한별 캐시, 요청 시 소속 검증, 청구서 OWNER/PAYMENT_MANAGER 제한을 유지한다.
+- **두 앱 공통:** URL 전체를 먼저 decode해 query의 `%26`, `%3F`, 중첩URL 등을 깨뜨리던 흐름을 보완했다. 전체 인코딩 URL만 해제하고 query는 구분한 뒤 개별 값을 decode한다. scheme 제거를 문자열 시작에 한정하고 cold 초기진입도 공통 변환 결과를 사용한다. Office는 잘못된 인코딩의 nullable 결과를 모든 호출자에서 막는다. 기존 Feedback/주문/채널톡·FCM/Airbridge 특수 동작은 유지하고 Lab QR 환경·경로·query/hash 제한을 넓히지 않았다.
+- **Lab:** `/Users/parkjongsun/Repository/dentlink-lab-app`, `feature/DL-17060@09541349c4383dce5f50ef4dc61aa2d6f844560b`, `src/configs/utils/deepLink.ts`·`src/libs/useNavigationConfig.ts` 2개 파일 변경. 새로운 Lab 조회 화면/API는 이번 범위에 추가하지 않았다.
+- **Web:** `/Users/parkjongsun/Repository/dentlink-client-notification-center`, `feature/DL-17058@6557a10cf56e58830cca54470017c49d3fa015e9` 유지. 기존 모바일 화면/API·app-links 기반을 참조했으며 이번 추가 제품 코드 변경·커밋은 없다. `origin/master` fetch 결과가 바뀌었어도 현재 feature에 임의 병합하지 않았다.
+- 세 checkout 모두 재개 시 상태·worktree/작성자 확인 후 `git pull --ff-only`했다. 마감 시 모두 clean, upstream 대비0/0. Office/Lab push 후 `git ls-remote`로 위 HEAD가 실제 원격 브랜치에 반영된 것을 확인했다. root와 하위 실행자는 한 checkout의 작성 소유권을 순서대로 인계했고 branch/worktree는 만들거나 바꾸지 않았다. PR·merge·CodePush·서버 배포 없음.
+
+### 검증 근거와 한계
+
+- **정적/리뷰:** Office 관련 Jest48개, Lab 기존 Jest32개 + 임시 실제 함수 검증27개 통과. 변경 파일 ESLint·diff 검사 통과(Office 기존 경고3). 전체 TypeScript는 Office6개·Lab5개의 기존 미변경 오류가 남고 이번 변경 파일의 새 오류는 없다. 독립 읽기 검토에서도 API/필터/페이지네이션·권한/캐시·nullable URL 가드에 중요한 신규 회귀를 발견하지 못했다. Lab 지침에 따라 새 테스트 파일을 만들지 않았고 Office 기존 유틸 회귀 테스트만 확장했다.
+- **Office iOS MEMBER:** 기존 로그인 그대로 USER 이력2건·OFFICE0건 실제200, 두 종류 각3필터·빈 목록·로컬 요청 실패→오류/Retry→실제GET 복구를 확인했다. 청구서는 GET을 보내지 않고 이전 화면으로 복귀했다.
+- **Office Android OWNER:** 실제 USER10+3건·OFFICE0건, 각3필터, 청구서10+2건과 마지막 페이지 종료를 확인했다. 목록 UI는 기존 모바일 웹의 제목→잔액→카드 밖 설명 순서로 맞췄다.
+- **Office 임시 진입:** 메뉴 위치가 미정이므로 검증 중에만 실제 RootNavigator의 화면으로 이동하는 임시 참조를 사용했다. 실제 API를 호출했으며 토큰/계정/역할을 바꾸거나 API 권한을 우회하지 않았다. 임시 index.js 코드·전역 nav 참조를 완전히 제거한 뒤 양 기기 콜드 재시작·기존 Profile 딥링크·로그인 유지·임시 전역undefined를 확인했다. 영구 프리뷰/Storybook/목데이터는 추가하지 않았다. 임시 화면 진입은 최종 메뉴/알림 진입 검증을 대신하지 않는다.
+- **Lab iOS/Android:** 최종 코드의 HelpCenter warm/cold 진입과 Android query가 붙은 QR의 거절 후 기존 화면 유지를 확인했다. Android 일반 HTTPS HelpCenter는 explicit Activity Intent로 앱 내부 변환을 검증했다. 현재 native 선언 밖 `/help`의 OS 자동 App Link 지원 확대를 검증했다는 뜻이 아니다. 실제 푸시/로그아웃 deferred/타 소속/밀링 실데이터는 이번 실행 범위에 포함되지 않았다.
+- **기기/증거:** iPhone17Pro iOS26.5 `5C0E7639-2345-4B3F-9979-56AFDDA1C708`, Android `Dentlink_API_36`/`emulator-5554`. Office `/tmp/dentlink-office-credit-user-final-ios.png`, `/tmp/dentlink-office-statements-android.png`, `/tmp/dentlink-office-credit-error-ios.png`, `/tmp/dentlink-office-finance-{ios,android}-results.json`; Lab `/tmp/dentlink-lab-deeplink-20261102/` 캡처·Maestro 기록. root가 대표 화면도 직접 확인했다. `/tmp`는 임시 로컬 근거이며 이후 파일이 남는 것을 보장하지 않는다. 개발용 Metro는 Office8081(PID22837/exec6431), Lab8082(PID21436/exec67803)로 정확한 checkout에서 실행했다.
+- **실행 정리:** 검증 후 이번 작업에서 띄운 위 두 Metro와 Android emulator/iOS simulator를 종료했다. 로그인·앱 데이터는 초기화하지 않았다. 8081/8082 listener 없음, adb 연결 emulator 없음, booted simulator 없음까지 확인했다. IDE 터미널이나 다른 작업의 서버는 조작하지 않았다.
+
+### 남은 일과 다음 시작점
+
+- **사용자가 제외한 결정:** 새 화면의 홈/탭/메뉴 배치, 알림/메일에서 어느 목록으로 갈지, Payment History/PDF/결제/자동사용 설정 범위. 이번에는 조회 화면 내부 등록만 했으므로 사용자가 일반 메뉴에서 바로 열 수 있는 상태라고 설명하지 않는다.
+- **이메일/앱 링크:** 새 Amplitude 이벤트/추가 분석 정보 계약, 알림 읽음 식별·BE 기록 API, Office portal native 도메인 등록, Lab `/q/*` 밖 링크 지원은 미연결이다. native 등록은 서명/환경/대상 경로 확인 및 앱 바이너리 배포와 관련되며 단순 CodePush로 완료할 수 있는 부분으로 보지 않는다. 이번 공통 URL 보완만으로 이메일 전체 흐름이 구현됐다고 보고하지 않는다.
+- **추가 런타임:** iOS 청구서 조회 허용 계정, PAYMENT_MANAGER/EDITOR/VIEWER, 실제 병원·계정 전환, 청구서 빈 목록/실패와 최종 사용자 진입점을 확인해야 최종 QA/merge 준비로 넘어간다. 지금은 승인된 FE 선행 화면/조회 구현·제한된 실제 실행 검증·제품 push까지다.
+- **현재 다음 대화:** DL-17183에 대해 아래 방식 비교를 사용자에게 설명한다. 자체 DB가 필요하다는 이유만으로 BE 선행 redirect를 필수로 정하지 않는다. 서버 선행 구현은 별도 요구/실제 BE 계약을 받은 뒤 범위를 정하며 지금 추가하지 않았다.
 
 ## 후속 구현 재개·이메일 서버 선행 기록의 향후 가능성 — 2026-11-02 18:42 KST
 
@@ -10,6 +37,27 @@
 - **앱 링크와의 관계:** 서버의 클릭 요청 기록과 웹/앱 목적지 연결은 별도 역할이며 함께 사용할 수 있다. 서버 기록 뒤 기존에 준비하는 HTTPS→앱 연결(Universal Links/Android App Links)·앱 내부 경로 처리 기반을 재사용하는 방향이다. Airbridge로 바꾸거나 앱 랜딩을 전부 다시 만드는 뜻은 아니다. 단 서버를 반드시 먼저 거치려면 최초 추적 주소를 OS가 앱으로 바로 가로채지 않도록 해야 하며, redirect 이후 자동 앱 열기는 실제 이메일 클라이언트/브라우저·OS에서 확인한다. BE의302 응답만으로 모든 환경의 앱 자동 실행을 보장하지 않는다. 필요 시 프론트의 앱 열기/웹 fallback을 연결한다. 기존 밀링 app-links.ts 자체는 Universal Links/App Links 인증 파일 선택기이며 이와 다른 독립 기술이 아니다.
 - **측정 의미:** 이 구조가 직접 기록하는 것은 메일 본문 열람이 아니라 CTA URL에 들어온 요청이다. 따라서 ‘메일 읽음을 정확히 보장’한 것으로 표현하지 않는다. 보안 스캐너 등의 자동 요청·반복 클릭은 향후 실제 추적 요구를 확정할 때 다룬다. 메일 열람, CTA 요청, 웹/앱 진입, 알림센터 읽음을 구분한다. 근거: [Chrome 앱 실행/리다이렉트 제한](https://developer.chrome.com/docs/android/intents), 기존 앱 링크 코드 조사와 이번 Jira 본문/사용자 확인.
 - **다음 원칙:** 현재 구현은 계속한다. DL-17183의 서버 선행 기록은 필요 시 후속 범위로 판단하며 현재 알림센터나 추가 목록 화면의 선행 조건으로 만들지 않는다. 제품별 최종 검증·커밋/푸시·PR·배포는 각각 구분한다.
+
+## DL-17183 구현 방식 비교 — 2026-11-02 후속 검토
+
+- **사용자 요청:** 진행 중인 화면·URL 보완을 먼저 마무리·커밋·푸시·기록하고, 현재 FE 중심 방식과 향후 BE 선행 방식의 구현 차이·필요 작업·위험을 상세 설명한다. DL-17183을 당장 같이 구현해야 한다는 근거가 있으면 먼저 알린다. 이번 비교 검토는 서버 추적 기능의 새 구현 승인이 아니다.
+- **카드 범위와 결론:** 현재 카드의 ‘메일 읽음 여부 추적’이라는 목적 표현과 실제 작업인 CTA 링크 변경·Amplitude 차트·버튼 클릭 DB 저장 리소스 검토를 구분한다. 서버 선행 redirect는 아직 확정되지 않았다. DB 저장만 필요하다면 FE 진입 후 기존/신규 BE 기록 API로도 가능하다. 따라서 현재 방향은 잘못되지 않았고, BE 선행까지 지금 이중 구현할 필요는 없다. 프론트에 도달하기 전 URL 요청까지 기록해야 한다는 요구가 실제로 확정될 때 BE 선행을 선택한다. DL-17184(링크 분석, PM 담당)와 DL-17187(버튼 링크 교체, Frankie 담당)은 현재 진행 중임을 읽기 확인했다. 이 두 카드에서 별도 서버 추적 구현 근거는 확인되지 않았다. 카드/댓글/상태는 수정하지 않았다.
+
+| 항목 | 현재: 이메일→프론트→분석/필요 시 BE | 향후: 이메일→BE 기록→프론트 |
+| --- | --- | --- |
+| 기록 시점 | 웹 또는 앱의 코드가 실행된 시점 | 추적 URL의 요청이 서버에 도착한 시점 |
+| FE 진입 실패 | 진입 전 실패는 놓칠 수 있음 | 서버 도달 후 랜딩 실패도 요청 기록 가능; 서버에 오지 않은 요청까지 알 수는 없음 |
+| 자체 DB | 필요 시 프론트가 기록 API 호출 | 서버가 추적 URL 처리 중 직접 기록 |
+| 웹/앱 랜딩 | 동일 목적지·로그인·소속·권한·앱 링크 기반 | 기존 랜딩 기반 재사용 + 서버 redirect 후 앱 열기 검증 |
+| 새 BE 범위 | DB 필요 시 기록 API의 기존 기능 여부 확인 | 추적 URL·발송 건 연결·기록/redirect 처리·메일 URL 교체·운영 확인 필요 |
+| 공통 한계 | 진입/전송 누락, 중복 콜백 관리 | 봇/미리보기/중복 요청 가능; 실제 본문 열람 증명이 아님 |
+
+- **BE 최소 역할(향후 선택 시):** 기존 발송 서비스/BE에 클릭 추적·webhook 등 재사용 기능이 있는지 먼저 확인한다. 없다면 별도 프록시 인프라를 전제하지 않고 기존 BE 안의 추적 endpoint부터 설계할 수 있다. 발송 건/CTA를 구별할 불투명 식별 정보, 원래 목적지 매핑, 요청 기록, HTTP redirect, 메일 템플릿 링크 교체가 필요하다. API 경로/필드·저장 정책은 아직 제안 단계다. 임의 외부 URL로 보내는 open redirect가 되지 않도록 목적지 매핑/허용 범위를 제한하고, URL에 토큰·개인정보를 새로 노출하지 않는다.
+- **FE 역할:** 서버가 넘기는 최종 URL에서 원래 업무 ID·소속·분석 정보를 보존하고, 지원 웹/앱 화면·로그인 후 복원·권한 처리를 연결한다. 현재 만드는 조회 화면과 URL 파서는 재사용 가능하다. 서버의 링크 요청 이벤트와 프론트의 진입/행동 이벤트를 같은 클릭 건수로 이중 집계하지 않게 수집 역할을 구분한다. BE 선행이라고 FE 작업이 0이 되거나 앱 열기가 자동 보장되지는 않는다.
+- **앱 연결상 핵심:** 최초 추적 URL을 앱의 직접 연결 대상으로 등록하면 OS가 BE 요청 없이 앱을 열 수 있다. 반드시 BE 기록이 먼저여야 한다면 최초 추적 주소/경로와 실제 앱 연결 주소/경로를 구분한다. BE가302로 보내는 최종 주소는 기존 Universal Links/App Links 기반과 연결할 수 있지만, 실제 메일 클라이언트·iOS/Android·설치 여부·앱 종료 상태·로그인 상태에서 확인해야 한다. Office의 portal native 도메인 등록과 Lab의 현재 `/q/*` 범위 차이는 별도 미완료 사항이다. 이번 URL 파서 보완만으로 모든 이메일 HTTPS 링크의 OS 앱 자동 열기까지 완료됐다고 말하지 않는다.
+- **운영상 차이:** 현재는 분석 전송 실패가 곧 화면 이동 실패를 뜻하지 않는다. BE 선행은 추적 서버의 가용성/지연이 랜딩에도 영향을 준다. 저장 실패 시 이동을 계속할지 정하고 기록 처리로 이동을 불필요하게 막지 않도록 한다. 서버 자체 장애는 저장 실패와 별개다. 일반적인 구현 가능한 구조지만 endpoint·데이터·중복/자동 요청 처리·운영 책임이 생겨 FE 수정만의 공수로 볼 수 없다.
+- **측정 정확성:** 서버 선행은 FE 진입 전 요청의 누락을 줄이는 방식이지 ‘사람이 메일을 읽었음’의 완벽한 증명이 아니다. 보안 검사/미리보기 봇의 링크 접근은 실제 사용자 클릭과 다를 수 있다. 본문 열람을 직접 측정하려면 별도의 메일 열람 추적 문제이며 CTA redirect만으로 해결되지 않는다. 정확히1회·무누락을 새 목표로 추가하지 않는다.
+- **공식 기술 근거:** [Apple Universal Links](https://developer.apple.com/documentation/technotes/tn3155-debugging-universal-links)는 OS가 앱으로 직접 여는 동작 및 일반 링크→Universal Link redirect의 지원/제약을 설명한다. [Android App Links](https://developer.android.com/training/app-links/about)는 검증된 웹 링크의 앱 직접 실행 기반이다. [Mailgun 자동 열람/클릭 검사](https://documentation.mailgun.com/docs/mailgun/user-manual/tracking-messages/open-click-bot-detect)는 보안 검사 등의 자동 요청이 클릭 통계에 포함될 수 있음을 설명한다. 이 문서는 기술 일반 근거이며 Dentlink가 Mailgun을 사용한다는 의미가 아니다.
 
 ## 구두 합의 팀 문서 반영·최종 중단 지점 — 2026-11-02 18:26 KST
 
