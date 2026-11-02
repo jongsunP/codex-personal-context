@@ -1,6 +1,52 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-11-02 21:07 KST — **오늘 세 회의 스레드와 현재 코드를 다시 대조하고, 두 앱의 로그인 대기 링크·연속 이동 보완을 추가 커밋·푸시했다.** Office iOS는 제품 설정 변경 없이 로컬 Pods를 기존 lock에 맞춰 새 바이너리 빌드·설치·실행까지 확인했다. Web은 기존 커밋 유지. 최종 발송 URL/분석·읽음 계약, Office staging Android 서명, 배포 후 실제 이메일/OS 자동 연결 및 전체 QA는 남는다. PR·merge·배포 없음. 로컬 실행 정리 후 사용자 재요청까지 대기한다.
+최종 갱신: 2026-11-02 22:35 KST — **기존 구현을 보존하고 SES·BE 선행 이메일 추적·Airbridge·OS 앱 연결 원리를 추가 조사해 팀 공유 Notion 후속 페이지를 생성했다.** SES 추적→기존 FE 랜딩과 BE 비동기 수집이 우선 비교 후보이며 자체 redirect API가 필수인 것은 아니다. 사내 SES 설정과 실제 발송/앱 연결은 미확인이고 구조 변경은 미확정이다. 제품 코드·PR·배포 변경 없이 개인 컨텍스트 저장 후 대기한다.
+
+## SES·BE 선행 이메일 추적 추가 조사 — 2026-11-02 22:35 KST
+
+### 요청 범위와 문서 위치
+
+- 사용자는 기존 구현을 정리된 상태로 유지하고, BE도 지원 가능한 경우 SES·자체 BE 선행·Airbridge의 원리와 타당한 구조를 추가 조사하라고 지시했다. 이번에는 구현·AWS 설정·테스트 발송·PR·배포를 수행하지 않는다. 이전 FE 중심 선택을 되돌린 확정 계약도 아니다.
+- 팀 공유 후속 Notion: [이메일 클릭에서 앱 실행까지 — SES·Airbridge·BE 추적 구조](https://app.notion.com/p/40cce072e82f81a5909ee40aef18985f).
+- 위 페이지는 대문 `3fece072-e82f-80d5-a02f-da9a76cd51b7`의 **직접 하위**에 생성했다. 기존 [FE 선행/BE 선행 비교](https://app.notion.com/p/innovaid/40cce072e82f81e491c2ec9420136498) 다음의 형제 페이지이며 기존 본문은 유지했다. 개인 할 일/사람별 문의 대신 HTTP 예시, 역할, 구조 비교, 데이터 의미, 조건·검증을 담았다.
+- Slack [이메일 CTA 스레드](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793589700410469)를 읽기 전용으로 35개 답글까지 확인했다. 추가 근거는 Tom21:50:47의 SES FAQ,21:52:34(`1793623954.032559`)의 “SES를 쓰는 것으로 안다”·열람/CTA 추적 제안, 사용자22:05:57(`1793624757.398199`)의 BE 선행 후 웹/앱 랜딩 검토 의견이다. 마지막 답글 이후 폴링 없음.
+- 현재 Atlassian 커넥터로 DL-17183 본문·댓글을 조회했다.18:32갱신, 진행 중이며 메일 CTA 딥링크/메일 읽음 추적/버튼 클릭 DB 기록 리소스 검토가 적혀 있다. 이 카드는 정확한 이벤트 계약이나 SES 적용 완료의 근거가 아니다. Jira·Slack에는 쓰지 않았다.
+
+### 공식 자료로 확인한 결론
+
+1. **이메일 링크는 BE GET을 가리킬 수 있다.** 메일 앱·브라우저가 요청하고 서버의302/Location을 따라 다음 주소로 이동한다. BE가 FE에 새 접속을 걸거나 WebSocket으로 앱을 실행하는 것이 아니다. 앞단의 “클라이언트”는 아직 Dentlink FE가 실행되기 전의 메일 앱/브라우저다. 일반 href에는 앱 Bearer·Employee 헤더/PATCH body가 자동 부착되지 않는다.
+2. **앱 열기의 핵심은 OS의 Universal Links/App Links 검증이다.** 웹 AASA/assetlinks와 앱 native 등록·실제 URL 핸들러가 함께 필요하다. 브라우저가 모든 설치 앱을 조회하는 공통 API나 새 미들웨어가 필수인 구조가 아니다. `app-links.ts`는 환경별 연결 JSON 선택이며 클릭 추적·설치 감지 코드가 아니다.
+3. **Airbridge도 동적 URL을 지원한다.** 공식 문서에 query/path 매크로와 링크 생성 API가 있다. “동적 주문 URL이라 Airbridge는 불가능”으로 일반화하지 않는다. Airbridge 캠페인과 자체 URL metadata/Amplitude는 다르며, 설치 후 deferred deep link와 현재 로그인 대기 URL 복원도 다르다. 이번 이메일에 Airbridge 추적 링크를 추가하지 않은 선택과 기존 앱 SDK 보존은 양립한다.
+4. **SES 재사용은 새 설계 후보이다.** HTML 메일의 링크를 추적 URL로 바꾸어 클릭을 관측한 뒤 원래 목적지로 리다이렉트한다. 사용자 이동은 `email→SES→기존HTTPS→web/app`, 자체 기록은 별도로 `SES→SNS/EventBridge 등→BE→DB`가 가능하다. BE가 지원돼도 자체 공개 클릭 리다이렉트 API 신설이 반드시 필요한 것은 아니다.
+5. **SES 관측과 우리 DB 저장 시점은 다르다.** 이벤트 수집은 비동기여서 DB 저장 전에 사용자가 FE에 도착할 수 있다. “자체 DB 기록을 완료한 뒤에만 이동”이 필수이거나 SES가 충족하지 못하는 제어가 있으면 직접 BE GET→302를 비교한다. 해당 최초 추적 URL을 OS가 앱으로 먼저 가로채지 않도록 최종 앱 URL과 역할을 분리해야 한다.
+6. **SES 사용과 추적 활성화는 다르다.** configuration set·Open/Click event destination·실제 발송 적용과 기존 수집기를 확인해야 한다. `mail.messageId`는 SES 발송 ID이며 업무/알림 ID가 아니다. `mail.tags`/`click.linkTags`가 최종 FE URL에 자동으로 전달되는 것도 아니다. SNS 수신을 선택하면 구독확인·검증·재전송 중복 처리 등이 BE 범위다.
+7. **측정 단계는 분리한다.** Delivery=수신 서버 전달, Open=추적 이미지 요청, Click=추적 URL 요청, FE entry=실제 계측 코드 실행, 알림 읽음=정책에 따른 인증 REST 성공이다. SES 클릭만으로 알림센터 읽음을 자동 갱신하지 않는다. 한 발송 건의 재클릭과 같은 이벤트 재전송은 다른 문제다.
+8. **2026-08-07 SES 봇 가능성 필드가 추가됐다.** Open/Click의 `isBotEvent: Likely|Unlikely`는 자동 접근 가능성이지 사람의 실제 읽음/클릭을 완전 보장하지 않는다. 프록시/캐시/이미지 차단·전달된 메일·요청 userAgent와 실제 진입 기기 차이를 문서화했다. HTML만 추적하며 수신자별 구분이면 발송 단위도 확인한다.60일 추적을 링크 자체의60일 만료로 확대하지 않는다.
+9. **SES custom-path 앱 연결도 공식 선택지로 존재한다.** 사용자 지정 tracking domain·`ses:custom-path`·`/CL1/...` URL을 OS가 직접 앱에 전달하는 경우 원래 목적지 복원과 HTTP를 우회한 SES 클릭 관측은 별도 검증이 필요하다. 현재 앱 파서에 도메인만 추가하면 된다고 단정하지 않았다. 기본 redirect→기존 목적지를 우선 검증하는 비교안이다.
+10. Apple 공식 문서는 클릭 URL의 redirect→Universal Link 흐름을 허용 가능한 사례로 설명하지만 Safari 같은 도메인 이동·메일 앱/사용자 설정에 따라 웹에 남을 수 있다. AASA 파일 자체는 redirect 없이 제공해야 하는 별도 규칙이다. 설치만 돼 있으면 모든 환경에서 앱이 반드시 열린다고 보장하지 않는다.
+
+### 기존 코드와 현재 미확인 범위
+
+- 제품 Git을 읽기 확인했고 변경하지 않았다. Web `feature/DL-17058@6dca5142ba4b179c92d580bc19a4b089f9718b6d`, Office `feature/DL-17059@e983956b17202e436ebda323eb2b471403ba2b38`, Lab `feature/DL-17060@c3120118a1d9628be900fa96051e5eae36c59ce4` 모두 clean, tracking branch와 차이 표시 없음. 정확한 checkout은 바로 아래 구현 마감 표를 유지한다.
+- 웹 `clinic/src/lib/app-links/app-links.ts`·`lab/src/lib/app-links/app-links.ts`의 환경 JSON 선택을 직접 대조했다. 앱 URL/화면 연결과 로그인·소속 흐름은 선행 작업 재사용 범위이며 SES click collection/Amplitude 전체 구현 완료가 아니다.
+- 범위 내 FE 소스에는 SES 발송/수집 구현을 찾지 못했지만 **BE 저장소·실제 AWS 설정은 확인하지 않았다.** 사내 SES 사용·리전/configuration set·활성화·기존 수집기·발송 단위는 미확인이다.
+- 실 발송 후 공개 도메인 앱 자동 실행, Office staging Android 서명, 웹 특정 병원 문맥·최종 URL/분석/읽음 계약은 이전 미완료 상태 그대로다. 이번 공식 문서 조사가 실제 메일/기기 통합 QA를 대신하지 않는다.
+- 조사에 AWS SES/SNS, Airbridge, Apple/Android, HTTP 표준/MDN의 1차 자료를 사용했다. SES·OS/redirect·Airbridge를 독립 검토한 뒤 초안도 교차 검토했다. HTML 추적 전제, 최초 추적 URL의 OS 우회 방지, AASA redirect 금지, 기존 Airbridge SDK 보존 표현을 보완했다.
+
+### 다음 시작점
+
+- 현재는 **조사·공유 문서 마감 후 대기**한다. 기존 구현을 유지하고 새 구조 구현/배포를 자동 시작하지 않는다.
+- BE 협의 시 먼저 SES 실제 발송·추적 설정·기존 수집 여부를 확인한다. 이미 구성돼 있다면 재사용하고, 없다면 최소 configuration set/event destination·발송 ID 연결·수집 범위를 판단한다. 자체 클릭 API를 먼저 요구하지 않는다.
+- 구조 선택 전 목적지가 정해진 메일1종으로 `SES→기존HTTPS→web/app` 실제 발송/설치·미설치/로그인·소속/주요 메일 클라이언트와 SES·DB·FE 기록을 대조한다. 그 결과 부족한 제어가 있을 때 자체 BE 또는 Airbridge 필요성을 결정한다.
+- notificationId 직접 전달 비필수·REST 기반·기기 간 실시간 동기화 제외를 유지한다. 기술 조사에 따라 이전 판단은 수정 가능하나, 이벤트·payload·API·landing 정책은 이 문서만으로 새 확정 계약이 되지 않는다.
+
+### 주요 공식 근거
+
+- [SES 추적 FAQ](https://docs.aws.amazon.com/ses/latest/dg/faqs-metrics.html), [SES 이벤트 발행](https://docs.aws.amazon.com/ses/latest/dg/monitor-using-event-publishing.html), [이벤트 구조](https://docs.aws.amazon.com/ses/latest/dg/event-publishing-retrieving-sns-contents.html)
+- [SES custom tracking domain/app links](https://docs.aws.amazon.com/ses/latest/dg/configure-custom-open-click-domains.html), [봇 가능성 필드 발표](https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ses-automated-email-interactions/)
+- [SNS HTTP 수신·검증·중복 전달](https://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.prepare.html), [Airbridge 동적 deep link](https://help.airbridge.io/en/deeplink-guides/retargeting-with-deep-links)
+- [Apple TN3155](https://developer.apple.com/documentation/technotes/tn3155-debugging-universal-links), [Android App Links](https://developer.android.com/training/app-links/about), [HTTP302](https://www.rfc-editor.org/rfc/rfc9110.html#name-302-found)
+- 참고: SES FAQ의 “SES API로 Open/Click을 조회할 수 없다”를 일반화하지 않는다. 최신 SESv2 GetMessageInsights/InsightsEvent와 VDM 기능이 있으므로 문서에서는 필요한 자체 이벤트 수집 방식만 설명했다.
 
 ## 오늘 논의 재점검과 로그인·연속 링크 보완 마감 — 2026-11-02 21:07 KST
 
