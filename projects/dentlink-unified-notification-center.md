@@ -1,6 +1,80 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-10-30 19:21 KST — **외부 링크→설치 앱의 업무 화면 연결은 이메일을 대표 사례로 검토하되 SMS·메신저·공유 링크·QR에서도 기존 공통 진입 처리를 재사용할 수 있는지 챙긴다. 채널별 신규 기능/API 추가가 아니라 기존 기반 재사용 후 실제 부족한 부분만 최소 보완하는 후속 검토 기준이다.** 지금 구현/외부 변경은 하지 않고 재개 요청까지 대기한다. 19:04 초기 검토와 18:01 표시 매핑 기준, 제품 push 상태(Web `6557a10cf`, Office `9d378e4`, Lab `e9d69ef`)를 유지하며 종료된 로컬 서버·기기는 다시 켜지 않았다.
+최종 갱신: 2026-11-02 — **DL-17179의 앱 지원 확대 병행 후보를 기존 조사36행·현행 코드·알림 현황표와 대조했다. 기존 알림센터 범위는 유지하며, 이번 추가 검토의 주력도 이 세션이다.** 기존 화면으로 외부 링크를 연결하는 보완은 병행 후보, 치과 크레딧·청구 조회의 WebView 추가는 범위 확인 후 조건부 후보, 새 업무 기능·네이티브 전환은 별도 작업으로 분류했다. 구현·제품 변경·서버 실행은 하지 않았다. Web `6557a10cf`, Office `9d378e4`, Lab `e9d69ef` 유지. 아래 10/30 기록은 당시 근거이며 Office 비밀번호 재설정에 대한 오래된 설명은 이번 코드 확인으로 정정한다.
+
+## DL-17179 — 앱 지원 확대 병행 범위 사전 검토 — 2026-11-02
+
+### 사용자 목적·세션 경계
+
+- [DL-17174](https://innovaid.atlassian.net/browse/DL-17174) `[치과] 앱 기능 지원 확대`의 하위 [DL-17179](https://innovaid.atlassian.net/browse/DL-17179) `알림센터 작업시 처리할 이슈 리스트업`은 사용자 Frankie 담당, 조회 당시 해야 할 일·본문 없음·댓글0개다. 상위의 Tom 댓글2개는 앱 프로젝트를 해당 카드에서 관리하고 Frankie의 리스트업 후 공유를 요청한다. 이 조회는 Jira 상태/내용 변경이 아니다.
+- 사용자는 알림센터 기존 작업을 부정하거나 교체하지 않고, 앱 미지원 조사 중 함께 처리할 만한 것을 추가로 선별하라고 했다. **이번은 사전 검토이며 추가 구현 승인 아님.** 원래 알림센터도 이번 조사 지시만으로 자동 재개하지 않는다.
+- 사용자가 [Slack 스레드](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793250259916639)를 **선행 1차 회의 결과**로 지정했고 그 뒤 이번 리스트업 지시가 내려왔다고 설명했다. 부모+답글8개를 읽었으며 추가 페이지 없음. Frankie의 이메일→설치 앱 연결 검토, Joy의 `프랭키: 알림센터-앱 연동 가능 기능들 파악 / 조이: 치과 주문 상세 작업` 분담을 기준으로 한다. Lab 주문 상세 native 전환 대기 의견도 유지한다.
+- `앱 미지원 기능 우선순위 세션`(`01a17657-caad-70f1-9a40-dbde874a3d42`)은 전체 조사·우선순위 정본을 유지한다. 이 통합알림센터 세션은 현재 주력으로 병행 후보 선별을 계속한다. 사용자가 필요한 발견·정정만 원래 세션에 전달하도록 명시 승인했다. 전체 업무 이관·중복 구현·외부 문서 수정 지시로 확대하지 않는다.
+- 기존 REST 기반, 기기 간 실시간 동기화 제외, notificationId 직접 전달 비필수, Web/App 및 채널별 목적지 구분, 최소 리소스 원칙을 유지한다. 로그인·병원/소속·읽음 연결은 원래 알림센터 통합 범위이므로 새 미지원 기능으로 중복 산정하지 않는다.
+
+### 이번 확인 근거·한계
+
+- 개인 정본 main clean에서 `git pull --ff-only` 완료. 기존 조사 세션 최근20턴과 `projects/dentlink-mobile-web-app-parity.md`를 참고했다. [Notion 2차 종합 목록](https://app.notion.com/p/405ce072e82f80a9a1f7ccd329fa2d3d) 본문·DB schema 및 **36행(치과27/기공소9), has_more=false**를 재조회했다. 본문 반환 lastEdited는10/29 14:08:35.200 KST, as-of는10/29 15:56:02.017 KST. 댓글 도구는 `suggested_edits_status: upgrade_required`만 반환해 댓글 전체 확인으로 주장하지 않는다.
+- 현재 DB의 가입 등 직접 우선순위는 과거 저장본과 다르며 일부 설명에는 과거 P0 문구가 남아 있다. 현재 속성값을 보존하고 이번 선별을 이유로 우선순위·문서를 수정하지 않는다. 오래된 설명은 코드/후속 합의와 구분한다.
+- [알림 현황표](https://docs.google.com/spreadsheets/d/1w1xwwEWRE0KgiJsOvldxIFbtNgWguohurf5kemIrW_g/edit?gid=614410508) metadata와 `전체 알림!A1:P178`(실제175행)을 읽었다. 현 metadata에는 커버/전체 알림/시스템 발송 링크톡/푸시 현황 4탭만 반환돼 과거 메일 탭을 이번에 다시 읽었다고 하지 않는다.
+- 표의 치과 결제 NOTIFICATION(117·119·124·126·128행) APP은 **액션 없음**이다. 크레딧 NOTIFICATION은 **알림센터 오픈**, PUSH는 **알림 인박스 오픈**(130–137행)이다. 초대·가입 승인 요청의 APP 공란(146·148행)을 기능 개발 지시로 해석하지 않는다. MAIL20행의 WEB/APP 목적지는 공란이며 실제 발송 href·추적/최종 URL은 아직 확보하지 않았다.
+- 제품은 정확한 feature를 읽고 원격 기본 브랜치만 범위 제한 fetch했다. checkout/merge/pull/새 branch/worktree/서버·시뮬/에뮬 실행 없음. 아래 핵심 공통 링크·인증·WebView·계정 코드가 fetch한 기본 브랜치와 같은지도 대조했다. **정적 코드 검토이며 실제 메일 클릭·OS 앱 열기·API 성공·역할별 화면 QA·배포 증거가 아니다.**
+
+| 제품 | checkout / branch / HEAD | fetch한 base / 상태 |
+| --- | --- | --- |
+| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center`, `feature/DL-17058`, `6557a10cf56e58830cca54470017c49d3fa015e9` | `origin/master@57bb759ca08e3752140ceffdae2a5421934ec242`, base대비4/0, clean |
+| Office | `/Users/parkjongsun/Repository/dentlink-app`, `feature/DL-17059`, `9d378e460ae19e00c511de0a6c1944e7f3de4e5f` | `origin/main@7f586790e0bbd7b288458e29f00654d38ba68da2`, base대비5/0, clean |
+| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app`, `feature/DL-17060`, `e9d69eff8f08f7c99ec71a67cfc2541039c3f128` | `origin/main@51441039751b63a08c82a1be9695c805c8af1539`, base대비4/0, clean |
+
+### 선별 결론 — 검토 후보이며 구현 확정 아님
+
+| 분류 | 대상 | 함께 할 범위 / 분리할 범위 |
+| --- | --- | --- |
+| 병행 우선 후보 | 이메일 등 외부 업무 링크→설치된 올바른 앱의 **기존 지원 화면** | 알림센터와 공통인 URL 해석·로그인 후 보관 링크·대상 소속·기존 화면/action 처리를 재사용. 실제 발송 URL과 앱/환경 설정을 확인해 필요한 차이만 보완. SMS·메신저·공유 URL도 같은 기반 재사용 가능성만 챙기며 채널 기능을 새로 만들지 않음 |
+| 병행 우선 후보 | 기존 주문 상세·승인·LinkTalk·헬프센터, Office Case Preference·결제수단·피드백, Lab 밀링 | 이미 존재하는 화면의 목적지 연결을 활용. 모든 URL이 현재 동작하거나 양 앱이 모든 화면을 똑같이 지원한다고 단정하지 않음. 주문상세·헬프센터 native 전환은 별도 |
+| 기존 알림센터 범위 | 로그인·병원/소속 활성화·화면 이동·REST 읽음 연결 | 외부 진입에서도 재사용할 수 있게 확인. 별도 신규 앱 기능으로 재산정하지 않음. 현재 notification mock의 읽음/소속 선택은 실제 API 성공이 아님 |
+| 조건부 추가 후보 | **Office 크레딧 잔액·이력**을 기존 모바일웹으로 제공 | 기존 `/credit`, `/office/credit` 모바일 UI·조회 API와 앱 인증 WebView 재사용 여지가 있음. 앱 route/뒤로가기/권한·소속/정책 링크 등을 확인한 뒤 제한된 추가로 끝나는지 판단. 웹에 자동 사용 토글도 있어 그대로 넣으면 조회 전용이 아니므로 화면 범위 합의 필요. 현재 알림은 인박스 오픈이므로 필수 누락이 아님 |
+| 조건부 추가 후보 | **Office 청구서·결제내역·문서/PDF 조회** | 웹 화면·다운로드 기반은 있으나 Owner/Payment Manager 권한, 새창/PDF, 결제 경로·복귀가 얽힘. 조회 목적지를 제한하고 기존 웹 사용을 허용하는 경우만 추가 후보. 전체 결제/미납 처리·신규 메뉴까지 포함하면 별도 기능. 현재 앱 알림 액션 없음 정책을 임의 변경하지 않음 |
+| 조건부 작은 연결 | 기존 정책 문서·도움말 글 열기 | 실제 알림/메일 목적지로 필요할 때 기존 화면/외부 링크 열기 재사용. 알림과 무관한 정책 메뉴 확대·네이티브 재작성은 별도 |
+| 별도 작업 | 치과 주문 상세 native 전환 | Joy 담당 [DL-17175](https://innovaid.atlassian.net/browse/DL-17175) 유지. 현재 WebView로 알림 랜딩할 수 있으며 전환 완료를 모든 공통 링크 작업의 선결 조건으로 삼지 않음. 변경될 화면의 진입 인자·복귀만 조율 |
+| 별도 작업 | 신규 가입·초대 수락·직원/오피스/조직 관리·추천인·탈퇴 | 링크 입구는 공유할 수 있지만 신규 인증/토큰/계정 일치·소속 생성·권한·성공 후 native 상태 반영이 별도 업무 기능. 범용 WebView 하나로 완료 가능하다고 보지 않음 |
+| 별도 작업 | 주문 검색·날짜/긴급지연 집계·배송 전체/라벨·픽업/리메이크·가격표·환자관리·칸반·스캐너 | 알림 목적지 연결과 별개의 화면/업무 범위. 추후 실제 알림 대상에 필요한 제한된 진입만 재검토 |
+
+### 원 조사36행과의 대응
+
+| 제품 | 원 조사 항목 | 현재 선별 |
+| --- | --- | --- |
+| Office | 주문 상세 | 기존 WebView 랜딩 병행 / native 전환 별도 |
+| Office | 결제수단 관리·카드 등록·3DS 인증 | 기존 화면 재사용. 결제 실행 전체를 신규 개발로 중복 포함하지 않음 |
+| Office | 결제 정책 안내 | BillingPolicyScreen 로컬 HTML 이미 있음. 대상 문서 진입만 후보 |
+| Office | 헬프센터 | 기존 WebView/게시판·글 진입 병행 / native 전환 별도 |
+| Office | 내 정보 수정·비밀번호 변경·재설정 | **찾기→인증코드→새 비밀번호 저장 이미 native 코드 구현**. 로그인 중 변경/프로필 전체편집·외부 reset-link 연결은 별도 확인 |
+| Office | 청구서(Statements), 결제 내역, 크레딧 잔액·이력 조회, 영수증·명세서 PDF (4행) | 범위 승인·앱 WebView 검증 후 조건부 후보 |
+| Office | 미납 인보이스 및 결제 진입 | 별도 결제 업무·복귀/재조회 검증 |
+| Office | 약관·개인정보·보증 정책 | 알림의 실제 문서 링크만 작은 후보 / 일반 메뉴 확대는 별도 |
+| Office | Fee Schedule(가격표), 추천인, 픽업 목록 및 요청, 멤버 초대 및 초대 수락, 오피스 Overview 및 멤버 관리, 회원 탈퇴, 회원가입, 리메이크 목록, 리메이크 요청, 스캐너 계정 설정 및 연동, 오피스 등록·찾기·데모, 오피스 정보 수정, 조직 대시보드·오피스·빌링·미수금, 주문 보드, 주문 생성 및 스캔 파일 가져오기 설정, 환자 목록 관리 (16행) | 별도 기능 범위. 기존 일부 지원과 남은 확장을 구분; 알림센터에 전부 포함하지 않음 |
+| Lab | 주문 상세, 헬프센터 (2행) | 기존 WebView 랜딩 병행 / native 전환 별도 |
+| Lab | 회원가입 및 비밀번호 찾기, 전체 배송 관리 및 라벨 생성, 직원 초대 및 직원 관리, 초대 수락 및 소속 가입, 긴급·지연 주문 집계 및 모아보기, 주문 목록 상세 검색 및 날짜 조건, 비밀번호 변경 및 탈퇴 (7행) | 별도 기능 범위. 초대/계정 링크 입구만 공유 가능하며 일반 업무 로그인 경로로 강제하지 않음 |
+
+### 실제 코드 근거·기존 설명 정정
+
+- **Office 찾기/재설정 정정:** `src/features/auth/screens/SigninScreen.tsx:157`→`ForgotPasswordScreen.tsx:41,155`→`src/libs/useForgotPassword.ts:101,111,128,186`→`src/services/user.service.ts:111,130,149`에 인증코드 발송·검증·새 비밀번호 저장 호출이 있다. 기존 API `POST /office/messages/emails/verifications`, `POST /office/messages/emails/verifications/verify`, `PATCH /office/users/own/password/reset`이다. feature와main 동일. Notion/10/30 기록의 ‘앱에서 시작 후 반드시 웹에서 재설정’ 설명은 이 일반 찾기 흐름에 대해서는 오래된 내용이다. **웹에서 발송한 reset-link를 앱으로 수신하는 기능까지 구현됐다는 뜻은 아니다.** 이번 설치본·운영 성공 검증은 하지 않음.
+- **앱 공통:** 양 앱 `src/configs/constants/deepLink.ts`, `src/configs/utils/dentlinkWebURL.ts`, `src/libs/useNavigationConfig.ts`, `src/navigations/RootNavigator.tsx`에서 기존 변환/라우팅/보관 링크 흐름 확인. 일반 딥링크의 store 소속 변경과 `useEmployeeProfile`의 서버 활성화 완료는 동일하지 않음. 기존 실제 전환을 연결할 순서를 보존해야 함.
+- **Office:** `src/features/orderList/screens/OrderDetailScreen.tsx:70–103,222`의 활성화 후조회, `src/features/common/components/DentlinkWebView.tsx:467–541,628–649,691–693`의 인증 전달/메시지/다운로드 기반을 재사용할 수 있음. 코드 선언에 없는 청구·크레딧 전용 route를 이미 지원으로 보고하지 않음.
+- **Lab:** `OrderDetailScreen.tsx:46–56`은 orderId만 받아 `/orders/{id}`를 만든다. 딥링크의 shipmentId/custom 선언만으로 특정 배송 상세 자동 열기까지 지원한다고 보지 않음. `HelpCenterScreen.tsx:62`는 게시판/게시글별 URL 처리. `useEmployeeProfile.ts:37`, `useMillingAccountSwitch.ts:29`의 실제 소속 활성화 재사용. notification 화면의 mock.read/mock.selectLab은 그대로 미연결.
+- **Lab 결제수단은 제외:** `PaymentMethodScreen.tsx:41,66–89`는 false 권한/Forbidden/return null. route가 남았다고 Office와 같은 지원 기능으로 분류하지 않음.
+- **외부 링크 제품 구분:** Web `shared/configs/utils/appRequired.ts:39,45,78`, `lab/src/lib/AppRequired/useAppRequiredPage.ts:46,132`는 Office 중심 scheme/허용 목록/공용 Store fallback을 사용. 그대로 양 앱 이메일 진입에 확장하지 않음. 실제 Airbridge 콘솔 대상/잘못된 앱 실행 재현은 미확인. Office native는 Airbridge 등록, Lab의 웹 직접 연결은 `/q/` 제한 기반이므로 일반 업무 URL 확장은 필요한 설정/바이너리 영향 대조 후 결정.
+- **QR 예외:** Lab `src/configs/utils/qrDeepLink.ts:57–83` 및 Web `lab/src/pages/q/[[...target]].tsx:12`에 query/hash/환경 제한이 있다. 모든 링크에 알림 식별 query를 일괄 추가하지 않음.
+- **조회 웹 재사용 근거:** Web `clinic/src/pages/credit/index.tsx:57,107`, `office/credit` 모바일 UI, `clinic/src/pages/billing/statement/index.tsx:80`, `clinic/src/lib/Billing/useBillingStatement.tsx:218`, `useBillingPaymentHistory.tsx:142`. 인증은 `clinic/src/pages/auth/redirect.tsx:40`/Lab동일 `:38`이 native 토큰/소속→next 연결. 화면 존재만으로 권한·새창·PDF·모바일 뒤로가기까지 검증된 것은 아님.
+
+### 다음 시작점·최소 확인 사항
+
+1. 기존 알림센터 작업은 그대로 유지하고 **실제 발송 이메일 URL 예시/템플릿·중간추적·최종 URL 구조**를 확보한다. 민감 토큰의 실값은 요청·저장하지 않는다. 기존 화면으로 연결되는 항목부터 목적지별로 확정한다.
+2. FE가 기존 앱/WebView·제품/환경별 Airbridge/OS 연결과 대조한다. 부족한 제품·업무·소속 식별값이 실제로 있을 때만 BE에 최소 URL/payload 보완을 요청한다. 신규 API를 기본 전제로 하지 않는다.
+3. 추가 기능을 고르면 크레딧/청구 **조회 범위·기존 WebView 허용·원래 액션 없음/인박스 정책의 변경 여부**만 PM과 정한다. 미설치/미지원 시 기존 웹 유지 또는 설치 유도도 근거가 없는 범위만 확인한다.
+4. 이메일 앱 열기와 알림 읽음/클릭 이력은 분리. 기존 푸시 정책을 이메일에 자동 확대하지 않는다. 읽음 대상 식별은 직접ID 또는 충분한 기존 정보 조합으로 정한다.
+5. 이번은 후보 선별/기록까지다. 제품 코드/브랜치/PR/배포·Jira/Notion/Slack/Sheet를 변경하지 않았다. 이후 승인된 범위에서 구현하며 실제 앱/메일·로그인/계정/소속·권한/삭제·iOS/Android/외부브라우저 검증을 진행한다. 원래 조사 세션에는 필요한 정정과 담당 경계만 인계하고 현재 주력은 이 세션에 유지한다.
+
 
 ## 외부 링크 앱 연결 후속 검토 기준 — 2026-10-30 19:21 KST 최종 정리
 
