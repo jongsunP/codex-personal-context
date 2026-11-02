@@ -1,6 +1,37 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-11-02 13:23 KST — **앱 병행 후보 표를 사용자가 확인했으며 직접 Notion을 공유할 예정이다. 새로 나온 근거·최종 순위만 원본 ‘앱 미지원 기능 우선순위 세션’에 전달했고 수신 확인까지 완료했다.** 이번 추가 후보 정리는 마감하며, 이 세션은 원래 통합알림센터 업무를 이어갈 준비 상태다. 새 구현을 시작한 것은 아니다. 기존 웹·Office·Lab의 UI 선행 구현과 BE/정책 연동 대기 경계를 유지한다.
+최종 갱신: 2026-11-02 13:47 KST — **사용자 요청으로 앱 병행 후보 최종 1–4순위의 실제 웹 기능·앱 지원 범위를 상세 조사했다. 네 항목은 Clinic 웹·Office 앱 대상이다.** 웹에는 PC/모바일 화면과 문서 기능이 있고, 앱에는 독립 크레딧/결제내역/청구서 조회 및 금융 PDF의 정식 진입이 없다. 단 주문 중 크레딧 사용과 일반 PDF 뷰어·다운로드 기반은 이미 있다. 청구서는 월별뿐 아니라 주별도 지원한다는 새 정정을 기록했다. Notion 표·원본 DB·제품 코드는 수정하지 않았고, 구현 선정/착수는 아니다. 원래 알림센터는 UI 선행 구현 및 BE/정책 연동 대기 상태를 유지한다.
+
+## 최종 1–4순위의 기능 정의·웹/앱 차이 상세 조사 — 2026-11-02 13:47 KST
+
+- **요청·범위:** 사용자는 [공유 검토표](https://app.notion.com/p/40cce072e82f81439d7bc253192e966b)의 최종 1–4순위가 ‘웹은 있으나 앱은 없는 것’인지, 각각 정확히 어떤 기능인지 자세히 조사하도록 요청했다. 공유 표와 원조사 4개 레코드를 읽고 실제 메뉴→route→hook→API 및 앱 진입 경로를 대조했다. 원조사의 서비스는 모두 치과이며 기공소앱에 같은 4기능을 신설한다는 뜻이 아니다. 원조사 속성의 과거 병행 검토 이유/미선정 문구는 공유 표의 최신 재검토 의견과 구분했다. 원본 속성·사용자 의견·순위는 수정하지 않았다.
+- **정확한 미지원 의미:** Office의 전용 조회 메뉴/화면/서비스 호출/딥링크 연결이 미제공이라는 뜻이다. 공통 `DentlinkWebView.tsx:440`은 기본 웹 요청을 허용하므로 다른 웹뷰의 링크를 통해 우연히 해당 웹 페이지에 들어가는 모든 가능성까지 ‘불가능’으로 단정하지 않는다. URL 변환 allowlist(`src/configs/utils/dentlinkWebURL.ts:48`)에 네 후보의 경로는 없고 결제 관련 등록은 payment-method만 있다. generated Api.ts 선언만으로 앱 실사용으로 계산하지 않았다.
+
+| 최종 순위 | 웹에서 제공하는 정확한 기능 | Office 앱에 있는 기반 / 없는 기능 | 제한해 검토할 추가 범위 |
+| --- | --- | --- | --- |
+| 1 크레딧 잔액·이력 | 개인 `/credit`, 병원 `/office/credit`. 잔액, 지급·환불·사용·만료 이력, 증감액/날짜/유무료/해당 건 만료일, 병원 이력 사용자명. PC 페이지·모바일 추가 로딩, All/Earned·Refunded/Used·Expired 필터. 개인 화면 자동 사용 설정은 별도 동작. | 주문 마지막 단계에서 담당 치과의사 기준 잔액 조회, My Credits 시트의 최대/지정금액/미사용 선택, 주문 요약의 사용·환불 표시는 있음. 로그인 사용자/병원의 독립 잔액·전체 거래 이력 화면·정식 진입은 없음. | 개인/병원 범위와 메뉴를 정한 읽기 전용 잔액·이력·필터·페이지·빈값/오류 UI. 자동 사용 설정은 별도이며 현재 인박스 랜딩 정책을 자동 변경하지 않음. |
+| 2 결제내역 조회 | `/billing/payment-history`. 개별 청구·결제 건의 주문번호/일자/치과의사/상품·설명/금액·통화/결제수단/상태. 완료 건만이 아니라 Unpaid/Failed/Paid/Canceled/Refunded 및 진행 상태를 표현. 검색·상태별 건수/필터, 주문 상세, Invoice/Receipt, 선택 결제 Pay Now. PC 표·모바일 카드. | Payment Method는 카드 등 결제수단 조회·등록이므로 이 조회 기능과 다름. 결제내역 전용 메뉴·화면·조회 연결은 없음. | 읽기 전용 목록·검색/상태 필터·페이지·기존 주문 상세 연결. Pay Now/Export/PDF는 별도 범위로 분리 가능. |
+| 3 청구서 조회 | `/billing/statement`. 청구 주기별 Consolidated Statement의 번호·주기·기간·발행일·결제수단·총액/통화·상태. MONTHLY와 WEEKLY를 모두 지원. View는 명세서 번호로 검색한 결제내역으로 이동, PDF는 별도 문서. 목록 조회는 page/size이며 날짜 필터 없음. | 독립 명세서 목록·진입·조회 연결 없음. | PDF 없이 주기별 목록을 제공 가능. View 포함 시 2순위 결제내역의 검색 진입을 재사용. 과거 ‘월별 청구서만’ 설명은 이번 주/월 확인으로 보완. |
+| 4 영수증·명세서 PDF | 결제내역의 Invoice(`/pdf/billing-statement?paymentId=...`), Receipt/Refund Receipt(`/pdf/receipt?paymentId=...`), 청구서의 Consolidated Statement(`/pdf/statement?invoiceId=...`) 생성·열기·저장. PC/모바일 진입 존재. | 디자인 확인 첨부에서 react-native-pdf 실제 사용, 공통 파일 다운로드·DOWNLOAD_FILES bridge 존재. 금융 문서의 전용 진입·데이터 조회·생성 결과 전달 연결은 없음. | 2·3순위에서 필요한 문서만 열기/저장/복귀. 새 범용 PDF 뷰어·전체 문서함 개발이 아님. Commercial Invoice/통관 문서는 이번 범위가 아님. |
+
+### 실제 웹 호출 API와 재사용 주의
+
+| 기능 | 기존 GET 계약 | 조사된 용도·주의 |
+| --- | --- | --- |
+| 크레딧 잔액 | `/office/credits/own/accounts` | userCreditByCurrency/officeCreditByCurrency. 앱 주문 조회 `/office/credits/{employeeId}/accounts`는 주문 담당 dentistId 기준이므로 자기 이력 조회와 혼용 금지. |
+| 크레딧 이력 | `/office/credits/own/details` | creditType USER/OFFICE, page, size, actions 배열. 개인 자동 사용 설정은 별도 mutation. |
+| 결제내역 | `/office/payments/v2` | page/size/keyword/status 등. UI 상태는 거래 유형 PAYMENT/REFUND/PARTIALLY_REFUND와 PENDING/PROCESSING/COMPLETED/FAILED/CANCELED를 조합해 표시하며 raw status와 동일 값으로 가정하지 않음. |
+| 결제 상태별 건수 | `/office/payments/v2/status-count` | keyword/payableOnly, 상태별 건수. |
+| 통합 명세서 목록 | `/office/payments/invoices` | page/size, PaymentInvoiceListDto. billingCycle MONTHLY/WEEKLY; UNPAID/PARTIALLY_PAID/PAID/PAYMENT_CANCELED. |
+| Invoice 문서 데이터 | `/office/reports/finance-invoice` | paymentId로 JSON 조회. 경로/컴포넌트명은 billing-statement지만 실제 문서 제목은 INVOICE. 완료 환불 건은 원 청구 originId 연결 분기 있음. |
+| Receipt 문서 데이터 | `/office/reports/finance-receipt` | paymentId로 JSON 조회. 환불·부분환불이면 REFUND RECEIPT 표시. |
+| Consolidated Statement 문서 데이터 | `/office/reports/payment-invoice` | invoiceId로 JSON 조회. 외부 공유 링크의 `/presigned` 경로도 있으나 사용자 token/권한 계약을 임의로 동일 취급하지 않음. |
+
+- **권한 차이:** 결제내역·청구서 웹 페이지는 OWNER/PAYMENT_MANAGER. 크레딧은 별도 진입이며 병원 관리 페이지가 OWNER/PAYMENT_MANAGER/EDITOR/MEMBER/VIEWER를 허용하므로 동일 결제 권한으로 일괄 제한하지 않는다. FE 코드의 권한 분기 확인과 실제 서버 인가 검증은 구분한다.
+- **PDF의 남은 연결:** 위 3개 문서 API는 PDF 파일 URL이 아닌 JSON을 반환하고 웹 `@react-pdf/renderer`가 PDF/blob URL을 생성한다. HTML `/pdf/...` URL이나 웹 blob URL을 native 뷰어·다운로더에 단순 전달해서 완료되는 구조가 아니다. 기존 생성 결과의 앱 전달/표시/저장 방식, 문서 권한·소속·환불 원본 ID·미발행/오류·iOS/Android 복귀를 검토해야 한다. 새 BE API 필수라는 근거도, 기존 뷰어만으로 즉시 완료된다는 근거도 없다.
+- **공통 남은 선택:** 실제 앱 메뉴, 개인/병원 범위, 네이티브 화면 또는 기존 모바일웹 재사용 방식, 읽기 전용에 포함할 동작을 먼저 정한다. 1은 독립 조회, 2는 개별 건, 3은 기간별 묶음, 4는 2·3에서 여는 문서다. 이 연결 관계를 4개 완전히 독립적인 대형 기능으로 과대 산정하거나, 전부 링크 한 줄 추가로 축소하지 않는다. 기존 조회 API로 재사용할 근거는 있으나 실제 앱 인증/소속/서버 계약 확인은 연동 단계에 필요하다.
+- **근거 위치:** Web `clinic/src/pages/credit/index.tsx:26`, `pages/office/credit/index.tsx:25`, `components/Credit/CreditItem.tsx:23`, `lib/Billing/useBillingPaymentHistory.tsx:69`, `lib/Billing/useBillingStatement.tsx:22,214`, `shared/models/src/payment/payment.types.ts:918`, `payment.apis.clinic.ts:106,139,179`, `shared/models/src/report/report.apis.clinic.ts:14,30`; Office `src/features/order/steps/step4OrderDetailsAndSubmit/OrderAdditionalInfoSection.tsx:301`, `OrderCreditsBottomSheet.tsx:175`, `src/features/designConfirm/components/DesignConfirmFileListItem.tsx:399`, `src/hooks/useFileDownload.ts:353`, `src/features/common/components/DentlinkWebView.tsx:691,725`.
+- **검증 범위:** feature HEAD는 Web6557a10cf/Office9d378e4/Labe9d69ef로 유지. 각 origin/master 또는 main만 fetch해 Web57bb759ca/Office7f58679/Lab5144103을 확인했으며 관련 금융 코드에 새 기본 브랜치 차이는 없었다. checkout/pull/branch 전환·제품 코드 수정·API 실요청·브라우저/기기/서버 실행·테스트·외부 쓰기는 하지 않았다. ‘웹 기능/앱 진입 현황’은 코드 정적 근거이며 운영·설치 앱 성공 검증이 아니다. 이번 조사 결과는 개인 체크포인트에만 기록하고, 사용자가 공유할 Notion과 원 조사 세션에는 임의 재편집/추가 전송하지 않는다.
 
 ## 앱 병행 후보 정리 마감·원본 세션 전달·본래 업무 복귀 준비 — 2026-11-02 13:23 KST
 
