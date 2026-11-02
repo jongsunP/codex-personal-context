@@ -1,6 +1,56 @@
 # Dentlink 통합알림센터 — 구현 체크포인트
 
-최종 갱신: 2026-11-02 18:55 KST — **추가 FE 선행 구현을 검증·커밋·푸시했다.** Office 크레딧 잔액·이력/청구서 조회 화면과 두 앱의 기존 URL 처리를 보완했다. 미정 메뉴·알림/메일 랜딩·분석 계약·native 도메인 확장은 연결하지 않았고 최종 QA/merge 준비 완료는 아니다. 이메일→프론트→Amplitude/필요 시 BE가 현재 기준이며 DL-17183 서버 선행 기록은 향후 선택지로 별도 비교·기록했다. 자동 폴링·PR·배포는 실행하지 않았다.
+최종 갱신: 2026-11-02 20:29 KST — **이메일 HTTPS 연결 후속 코드를 Web·Office·Lab 각각 커밋·푸시하고 원격 반영을 확인했다.** 개념 비교 Notion·개인 체크포인트를 정리하고 로컬 서버/기기를 종료했다. 사용자 재요청까지 대기한다. Office iOS 새 바이너리 빌드, Android 초기 진입 지연, staging Android 서명, 배포 후 실제 이메일/OS 연결은 미완료 검증으로 남는다. PR·merge·배포 없음.
+
+## 이메일 HTTPS 연결 후속 구현·개념 문서 정리 — 2026-11-02 20:29 KST
+
+### 승인 범위와 이전 완료 표현 정정
+
+- 사용자는 이메일 랜딩도 가능한 FE 작업을 계속 수행하고, Notion 정리 후 제품별 커밋·푸시·개인 컨텍스트 기록까지 마친 뒤 대기하라고 지시했다. 앞선 18:55의 ‘가능한 FE 선행 작업 완료’는 HTTPS→앱 실제 연결이 남아 있어 과도한 표현이었다. 이번에는 그 연결 코드를 추가했으며, 코드 구현·로컬 검증과 배포 후 실제 이메일/OS 자동 연결을 구분한다.
+- 밀링 `app-links.ts`는 방식의 참고이며 이번 지원 범위를 `/q/*`로 제한하지 않는다. 직접 HTTPS 연결도 iOS Universal Links/Android App Links 기반이며 Airbridge와 다른 독립적인 링크 표준이 생긴 것이 아니다. 기존 Airbridge·FCM/Notifee·QR·특수 딥링크 동작은 보존한다.
+- 새 BE API·추적 식별값·Amplitude 이벤트 계약, 미정 메뉴 위치/결제내역/PDF 범위는 임의로 만들지 않았다. REST 기반·실시간 동기화 제외·notificationId 직접 전달 비필수 원칙 유지. PR·merge·CodePush·웹/앱 배포·Slack 쓰기/폴링 없음.
+
+### 코드와 원격 Git 위치
+
+| 제품 | 정확한 checkout | branch / 최종 HEAD | 이번 변경 |
+| --- | --- | --- | --- |
+| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058@6dca5142ba4b179c92d580bc19a4b089f9718b6d` | Clinic 공개 AASA/assetlinks handler·rewrite·환경별 파일, Lab AASA의 지원 경로 확장 |
+| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059@9ae3cf3cbf7d9cea583538c3efbc1f72e84fbc9e` | portal native 도메인·경로 등록, 금융 조회 URL 연결, 서버 병원 활성화 후 랜딩, 전환 중 조회/이전 요청/복원 보호 |
+| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060@28ebcd8f4b5ef4501f628652bb65821abd260203` | Android 지원 HTTPS 경로 확장, 잘못된 웹 경로·타 소속 주문의 브라우저 이동, path 업무 ID 보존 |
+
+- 세 제품의 기존 feature/checkouts를 유지했다. 재개 시 `pull --ff-only`, 작성자 분리 후 구현했으며 마감 시 각 원격 feature와 HEAD 일치·ahead/behind0/0·clean을 확인했다. 웹 열린 PR 없음 확인 후 push했으며 별도 PR은 만들지 않았다.
+- Web 주요 파일: `clinic/next.config.js`, `clinic/src/lib/app-links/*`, `clinic/src/pages/api/well-known/[file].ts`, `lab/src/lib/app-links/*` 총16개. 미확인 환경은404, 공개 GET/HEAD만 지원. Office Android staging 배포 서명이 확인되지 않아 해당 assetlinks는 빈 배열이며 연결 완료가 아니다.
+- Office 주요 파일: native manifest/환경 host·entitlements·Android BrowserPackage, `deepLink.ts` 설정/타입/매칭·`dentlinkWebURL.ts`·`browser.ts`, `useNavigationConfig.ts`, `useEmployeeProfile.ts`, activation mutation key·finance query guard, 기존 유틸 테스트2개 등22개.
+- Lab 주요 파일: Android manifest·BrowserPackage 등록·API31 bool resources, `deepLink.ts` matcher·`dentlinkWebURL.ts`·`browser.ts`·`useNavigationConfig.ts` 총9개. Lab iOS native 소스는 이번 변경 없음.
+
+### 지원 경로와 안전한 처리
+
+- Office: `/credit`, `/office/credit`, `/billing/statement`를 새 조회 화면에 연결하고 기존 결제수단·피드백·Help 및 숫자 주문/Help 상세를 지원한다. 새 금융 경로는 Lab 도메인에서 Office 화면으로 잘못 변환하지 않는다.
+- Office에 employerId가 있으면 로그인 사용자 소속에서 employeeId를 검증하고 기존 서버 활성화 절차를 기다린 뒤 이동한다. 활성화 중 finance GET을 막고 사용자·소속·권한 캐시를 요청 직전 대조한다. 다른 링크/계정/소속으로 바뀌면 이전 비동기 이동이 덮지 않도록 하며 실패 복원도 현재 요청 문맥이 같을 때만 수행한다.
+- Lab: 기존 `/q/*` 유지, Help·숫자 주문 상세·기존 밀링 상세를 연결한다. 명시 employerId가 현재 소속과 다르거나 잘못된 일반 주문 URL은 새 전환 정책을 만들지 않고 웹으로 넘긴다. 로그인/소속 준비 전에는 기존 deferred 흐름을 사용한다.
+- 두 앱 모두 path의 orderId/orderNo 등 실제 대상 ID를 query가 덮지 않도록 했다. 생성/목록/승인 하위 경로 등 앱의 해당 상세와 대응하지 않는 주소는 임의 상세로 보내지 않는다. Android는 브라우저를 지정해 미지원 URL을 다시 앱으로 반복 전달하는 것을 막는다.
+- Android API31+의 엄격한 동적 경로 매칭은 별도 alias로 제한했다. API24~30에서는 그 alias를 비활성화해 지원하지 않는 패턴이 전체 도메인을 잡지 않도록 한다. 고정 경로와 기존 QR는 유지하되 구형 OS의 동적 링크는 웹으로 남으며 실제 구형 기기 검증은 미수행이다.
+- 새 URL 연결이 준비됐다고 알림 시트의 ‘알림센터 오픈’ 목적지나 이메일 미발송/미정 항목을 금융 화면으로 바꾼 것은 아니다. 실제 발송 URL·추가 분석 정보와 지원 화면 매핑은 최종 계약에 맞춘다.
+
+### 검증과 실제 한계
+
+- Web: Clinic156/Lab131 Jest, 변경 파일 lint/TS·diff 통과. 커밋 hook의 Clinic/Lab/Admin 전체 TypeScript와 push hook의 lint/관련 테스트도 통과했다(기존 lint 경고 유지). Clinic3000/Lab3001 실제 공개 GET200·환경 JSON·HEAD 빈 응답·POST/미지원파일404·redirect 없음 확인. 각 서버 종료 완료.
+- Office: Jest67개·lint 오류0(기존 경고1), 전체 tsc는 미변경4파일의 기존6개 오류. 새 Android 개발 바이너리 빌드 성공. 기존 iOS 설치본에서 최종 JS의 USER/OFFICE 크레딧·OWNER 청구서 진입, 실제 소속 전환 PATCH200 완료→새 소속 finance GET200 순서 확인. 전환 응답을 지연한 상태에서 새 링크를 열어도 이전 화면으로 덮지 않는 것을 확인했고 런타임 지연/관찰값을 제거했다. 원래 로그인·소속 복원.
+- Office Android: 새 APK에서 HTTPS 금융 화면 진입·주문 alias 선택·승인 하위 경로 미포착·미소속 URL의 Chrome 이동/앱 소속 유지 확인. package를 명시한 진입이므로 공개 도메인 OS 검증 성공과 다르다. Chrome 최초 실행 화면 이후 웹 로그인/본문은 이번 검증에 포함하지 않았다.
+- Office iOS 새 native 빌드는 기존 Pod의 simulator arm64 제외/MLKit 관련 환경 제약으로 destination 불일치에 막혔다. Podfile/의존성을 임의 수정하지 않았으며 **이번 Associated Domains가 들어간 iOS 새 바이너리 설치·실행은 미검증**이다. 기존 설치본의 JS 검증으로 대체 완료 처리하지 않는다.
+- Office 최종9ae3cf3 재검증: iOS cold에서 portal 금융 URL→CreditScreen, 잘못된 Lab 금융 URL→Safari 웹 로그인까지 확인했다. Android Profile cold→금융 warm은 CreditScreen·기존 소속 유지, account/details 각각1회·success/idle이며 잘못된 Lab 금융 URL은 Chrome으로 반환됐다. 다만 Android 금융 cold에서 초기 다운로드/렌더 지연(한 번은16.7초 후 제목 표시·초기 조회 로딩)이 관찰됐고 Home cold에서도 같은 지연이 재현됐다. 새 useEmployeeProfile 구독만 잠깐 제외해도 동일했으며 비교용 변경/관찰값을 모두 제거하고 원본을 복원했다. 반복 API 요청이나 그 구독 한 줄이 원인이라는 근거는 없다. 환경 문제/기존 버그/이번 회귀를 단정하지 않으며, **Android cold의 원인 확인·다른 기기 재검증은 최종 QA 전에 남은 항목**이다.
+- Lab: 기존 Jest32개·임시 실제 소스 검증64개·설치 APK 경로 매칭16개, lint/format/XML/diff 통과. 전체 tsc는 기존5개 진단. 새 Android APK 빌드·데이터 보존 설치 후 Help cold 진입, 실제 주문 상세 GET/표시, query 충돌에도 path ID 유지, 밀링 create/타소속 주문의 Chrome 반환·원 소속 유지 확인. iOS 최종 JS도 Help·주문 상세·타소속 Safari 반환 확인. 밀링 실제 업무 상세·로그아웃/역할 전체 검증은 미수행이며 신규 공개 AASA의 OS 연결은 미배포 상태다.
+- 증거: Office `/tmp/dentlink-office-direct-links-runtime.json`, 동일 prefix build/tests/lint/typecheck 로그, `/tmp/dentlink-office-links-*.png`. root가 Statements/전환 중 새 랜딩 캡처를 직접 확인했다. Lab `/tmp/dentlink-lab-app-links-20261102/`의 build/typecheck 로그와 두 OS 주문/Help/브라우저 캡처; root도 양 OS 주문 화면을 직접 확인했다. 임시 로컬 증거의 보존을 보장하지 않는다.
+- 독립 읽기 리뷰에서 병원 활성화·finance 요청·복원 보호에 진행을 막는 신규 회귀는 발견하지 못했다. 실사용 모든 역할·로그아웃→로그인·실제 메일 앱·구형 OS·배포된 association 전체 검증이 끝난 것은 아니며 최종 QA/merge 준비 완료로 보고하지 않는다.
+- 로컬 실행 정리: 이 작업의 웹3000/3001·Office Metro8081·Lab Metro8082를 종료하고 listener 없음 확인. 이번에 부팅한 iPhone17Pro 시뮬레이터와 Dentlink_API_36 에뮬레이터도 종료하고 booted/adb 목록 없음 확인. 로그인·앱 데이터는 보존했고 다른 작업의 IDE/서버/브라우저는 조작하지 않았다.
+
+### Notion 개념 문서와 다음 시작점
+
+- 대문 `3fece072-e82f-80d5-a02f-da9a76cd51b7` 바로 아래 [이메일 연결·추적 — FE 선행과 BE 선행 방식 비교](https://app.notion.com/p/innovaid/40cce072e82f81e491c2ec9420136498)를 만들고, 사용자 요청에 따라 표 위주 구성을 읽기 쉬운 설명·흐름·예시로 재정리했다.
+- ‘BE 선행’은 메일 앱/브라우저라는 클라이언트를 생략한 서비스 처리 순서다. 링크는 FE 화면 URL일 수도, BE 추적 URL일 수도 있다. 메일 앱/브라우저 GET→BE 기록→302 Location 응답→클라이언트가 최종 URL 요청→지원 웹/앱 화면 순서이며 WebSocket이나 BE의 FE 화면 실행 호출이 아니다.
+- 가상 URL/응답, 짧은 발송 식별값과 서버 매핑, 목적지에 필요한 정보 전달, 재클릭·보안 스캐너·실패/캐시·권한·리다이렉트 검증과 공식 참조를 추가했다. 가상 예시는 실제 API 계약이 아니며 서버 요청 기록을 사람의 메일 읽음으로 부르지 않는다.
+- 현재는 FE 진입 후 Amplitude/필요 시 BE 기록, DL-17183의 서버 선행 기록은 후속 선택지다. 자체 DB 저장만으로 BE 선행이 필수는 아니며 이번 서버 추적 구현은 없다. 페이지의 구현 상태도 코드 보완과 배포/OS 검증을 구분해 갱신했다.
+- **대기:** 제품·개인 컨텍스트 커밋·푸시 후 사용자 재요청까지 새 구현/감시를 하지 않는다. 재개 시 최신 정책/BE 명세·발송 URL을 대조하고 읽음/분석 계약 연결, 미정 메뉴/범위, Office iOS native 빌드와 staging Android 배포 서명, 웹·앱 배포 후 실제 이메일 링크 검증을 구분해 이어간다. 기존 공통 딥링크/로그인/소속 전환 회귀 검증도 포함한다.
 
 ## 추가 조회 화면·기존 URL 보완 구현 마감 — 2026-11-02 18:55 KST
 
