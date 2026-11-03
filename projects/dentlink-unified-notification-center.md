@@ -1,6 +1,44 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-최종 갱신: 2026-11-03 17:50 KST — 앱 영향 화면의 iOS/Android 실행 범위를 확대해 4건을 보완하고 Office/Lab commit·push 및 원격 HEAD 일치를 확인했다. 가능한 실데이터 화면 검증을 마쳤고 특정 역할·데이터·장비 조건은 미검증이다. Office Support의 현재 DEV 계약 불일치는 BE 확인 사항으로 남긴다. 검증용 서버·기기는 종료했고 개발 계정 키체인 입력창은 사용자 입력을 위해 열어두었다. PR·merge·배포는 하지 않았다.
+최종 갱신: 2026-11-03 18:28 KST — 앱 확대 점검의 딥링크/전환 보완4건과 추가 Web/Office 설정 권한·배송 UI 보완까지 검증·commit/push 완료. 세 제품 원격 HEAD 일치·clean 확인. 키체인4계정 실제 DEV 인증 검증 및 DL-17202 진행 중 변경 완료. 실제 알림 BE 연결·일부 실역할/데이터 검증·기존 Office Support API 확인은 남는다. PR·merge·배포는 하지 않았다.
+
+## 설정 권한·서비스 정책 보완 완료 — 2026-11-03 18:26 KST
+
+- 사용자가 권한/기기/서비스별 제공 메뉴 차이의 개발 반영 여부를 질문했고, 실제 정책/현재 UI를 대조하자 MEMBER 범위 변경 UI 및 Payments 권한 분기, Web Clinic Shipping 누락이 확인됐다. 사용자가 **미완료 항목도 진행·검증·최종 브리핑**을 승인했다. 이전 마감 기록을 전체 FE 누락 없음의 근거로 재사용하지 않는다.
+- 현재 Notion PRD 5-2~5-5와 #14, Figma 관련 설정 화면을 재대조했다. PRD 최종편집은 10/29 18:44 KST. 필요한 구간을 읽었으며 도구가 누락한 블록이 있어 문서 전체를 완전 조회했다고 주장하지 않는다.
+- Office 권한 정본 매핑은 ADMIN→OWNER, BILLING MANAGER→PAYMENT_MANAGER, MANAGER→EDITOR, MEMBER→MEMBER다. 새 ADMIN API enum을 만들지 않는다. 현재 소속에 일치하는 실제 authority를 전달해 MEMBER의 담당 주문 범위 고정/선택 UI 숨김, OWNER·PAYMENT_MANAGER만 Payments 노출을 Web Clinic/Office 앱에 보완했다. 숨긴 원본 설정은 지우지 않고 실제 수신·목록 필터는 BE와 연결할 때 적용한다.
+- Web Clinic Shipping은 PRD 채널표와 Office 기존 항목에 근거해 기존 row 형태로 추가했다. 웹의 PUSH 미노출, Lab My Orders 제외, Lab Email/SMS 제외 등 기존 서비스 구분은 유지한다.
+- **Lab 밀링 Payments는 미정으로 분류했던 중간 보고를 정정한다.** PRD #14가 MANUFACTURING 하위 Order Updates/Payments를 Resolved로 명시하고 Figma167:25825에도 밀링 결제·주문 업데이트 앱Push가 있어 현재 mock 유지 근거가 충분하다. 채널 요약표 누락만으로 삭제하거나 추가 PM 질문을 만들지 않는다.
+- 양 앱 PermissionProvider의 OS 허용→legacy POST 초기화는 현재 production 구설정 및 누락 타입 생성에도 쓰인다. 신규 Employee catalog/default/migration·저장 연결 없이 통째 제거하지 않는다. usePersonalOrdersPreference의 pushEnable 결합도 새 BE 저장 계약으로 이관할 때 함께 정리해야 하며 현재 분리 완료로 표시하지 않는다.
+- Web/Office 각각 단독 writer를 배정해 변경 후 독립 리뷰까지 마쳤다. Lab 앱은 이 추가 정책 보완에서 변경하지 않았다. 검사 중 재가동한 이 세션의 runtime을 종료했으며 아래에 결과를 남긴다.
+
+### 최종 코드와 실행 확인
+
+| 제품 | checkout / branch | 원격 반영 HEAD |
+| --- | --- | --- |
+| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` / `feature/DL-17058` | `d11fb875940f76a0254ffc14514fd2b7ae654c28` — 실제 소속 권한 전달·MEMBER 범위선택 숨김·Payments 노출·Shipping 추가 |
+| Office | `/Users/parkjongsun/Repository/dentlink-app` / `feature/DL-17059` | `6bf1c584a5884de1b68b6ca40f67a25c56386626` — 실제 권한별 설정 UI·오래된 권한/소속 callback 거부 |
+| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` / `feature/DL-17060` | `be4512bb8def094e867fbe0753b018858de9a097` — 앞선 딥링크/밀링 전환 보완, 이번 정책 재검토로 추가 수정 없음 |
+
+- Web: 실제 로그인한 Clinic/Lab OWNER에서 표시되는 Chrome for Testing의 PC1280·모바일390 설정·Back/닫기, Clinic Shipping 토글·Payments/Scope, Lab 기존 구성 유지 확인. 해당 화면의 uncaught JS·가로 넘침 없음. Clinic 저장계정에 실제 MEMBER 소속은 없어 MEMBER/다른 역할은 실제 controller 하네스10건으로 구분 검증했다.
+- Office: 최종 추가 코드에서 iOS 실제 MEMBER→OWNER→MEMBER 전환 및 Android OWNER 설정/뒤로 재검증. MEMBER 범위선택/Payment 숨김, OWNER 표시, 숨긴 원본값 유지, 이전 설정·채널·OS 안내 callback 거부를 확인했다. 실제 TSX 하네스14건과 ESLint 통과. 일부 역할·실제 OS ON 복귀 교차는 기기 미검증이며 전체 최종 QA 완료로 확대하지 않는다. 세부는 [11/3 앱 실행 기록](dentlink-unified-notification-center-runtime-2026-11-03.md)의 마지막 보완 절을 따른다.
+- Web commit/push hook의 Clinic/Lab/Admin 타입검사, lint 및 기존 공통 테스트·검사가 통과했다. 기존 lint warning은 남지만 errors는 없었다. 별도 실제 controller10건·변경분 lint·diff 검사 통과. 제품 테스트/스토리북/개인 상태 파일 추가 없음. 독립 리뷰에서 추가 수정이 필요한 확정 버그/회귀 없음.
+- 전용 `browser-profile`을 실제로 다시 열자 Clinic/Lab 모두 재로그인 없이 Home으로 진입했다. 처음 독립 context에서 실패한 `web-auth-state.json`은 양 origin을 실제 탐색한 연결에서 다시 내보냈고, 이후 새 독립 headless context에서도 **두 서비스 로그인 재사용 성공**을 확인했다. 파일0600·profile0700을 유지했다. 파일 존재만으로 성공 판단하지 않았으며 필요 시 이미 검증한 Keychain 계정을 사용한다.
+- 새 알림 설정/목록은 여전히 DEV mock 경계다. 실제 수신 대상 제한·조회/집계·저장·읽음/푸시 identity는 BE 계약 이후 연결한다. 이번 UI 완료를 OS 권한과 서버 preference의 완전한 분리나 production 배포 완료로 표현하지 않는다.
+
+### 이번 마감과 다음 시작점
+
+- 실제 cwd·port·PGID를 대조한 뒤 Clinic3000/Lab3005/Office8081을 종료했다. Lab8082는 추가 검증에서 실행하지 않았다. 전용 Chrome for Testing supervisor를 정상 종료해 로그인 상태를 저장했고 CDP9233도 종료했다. 기존 Android AVD/iPhone17Pro를 shutdown하고 해당 DeviceHub 창을 닫았으며 일반 Chrome·IDE·다른 작업은 건드리지 않았다. 로그인 profile·키체인·기기 앱 데이터는 보존했다.
+- 구현·검증 상세와 개발 계정 참조·Jira 상태는 이 개인 컨텍스트에 유지한다. 새 비밀번호/토큰/로그인 응답은 Git·로그·채팅에 남기지 않았다. Web/Office/Lab 제품 commit/push는 완료이며 PR·merge·배포는 미실행이다.
+- **지금은 추가 정책/API를 가정한 작업 없이 대기한다.** 다음은 BE 목록/집계/수신 설정 및 읽음·푸시 식별 계약을 받아 실제 연결하고 대체한 mock을 제거하는 단계다. OS permission과 legacy preference 초기화의 분리도 같은 계약 이관 때 확인한다.
+- 기존 Office Support의 `/office/chat-messages` 404는 아래 Swagger 대조 근거와 함께 BE의 현재 지원/대체 계약 확인이 필요하다. 실역할·실데이터·실수신 FCM·OS 권한 복귀 조건을 마련한 뒤 남은 실행 검증을 수행한다. 확정된 화면/메뉴에 대한 현재 FE 보완을 완료한 것이며 모든 서비스 기능의 최종 QA 완료는 아니다.
+
+### 개발 계정 검증·Jira 확정 결과
+
+- 사용자가 Mac 보안창에서 네 제품 계정을 저장한 뒤 검증을 요청했다. Web Clinic, Web Lab, Office app, Lab app **모두 키체인 값을 로컬 검증 프로세스 안에서만 읽어 실제 DEV 로그인 및 own profile 조회 성공**을 확인했다. HTTP200·code0000·accessToken 존재·서비스 일치·프로필 계정 일치를 검증했다. 비밀번호/토큰/응답 본문은 출력·Git저장하지 않았다.
+- 검증 경로: Web `/office/auth/login`·`/lab/auth/login`, 앱 `/app/auth/login`, 이어 해당 서비스 `/users/own`. 소속 활성화, 디바이스 등록, 푸시 설정 API는 호출하지 않았다. 독립 HTTP 세션을 사용했으며 기존 앱/브라우저 저장 상태를 덮어쓰지 않았다. 이는 인증 정보의 정확성 검증이고 각 제품 UI 재로그인 자동화를 실행한 것은 아니다.
+- 보안 입력창은 사용자가 닫았고 `entry-status.json`은 closed·savedAccounts4다. `keychain-references.json`에 비밀 없는 서비스/계정 참조와 verifiedAt을 저장했다. `credential-validation.json`에는 제품별 성공 boolean/HTTP상태만 있으며 둘 다0600이다. 다음 로그인은 기존 유효 세션 우선, 필요할 때 이 키체인 계정을 사용한다.
+- [DL-17202](https://innovaid.atlassian.net/browse/DL-17202)는 사용자 승인으로 **해야 할 일→진행 중**으로 17:55 KST 변경하고 재조회 확인했다. 제목은 ‘[치과앱] 알림센터 연계 크레딧·청구서 목록 추가’. 설명·댓글·parent·다른 카드는 변경하지 않았다.
 
 ## 앱 실행 범위 확대·오류 보완 — 2026-11-03 17:50 KST
 

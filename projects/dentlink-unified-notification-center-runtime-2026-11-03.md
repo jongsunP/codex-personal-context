@@ -2,7 +2,7 @@
 
 ## 상태와 범위
 
-**2026-11-03 실행 검증 마감 기록이다. Office `8f09cb1`·Lab `be4512b`에서 실행 가능한 양 OS 영향 화면과 마지막 Help 정상 진입 경로 확인을 마쳤다.** 실역할·실데이터/장비 부족으로 미검증인 범위가 있어 최종 사용자 QA·merge 준비 완료를 뜻하지 않는다. 전체 기능 상태와 BE 대기는 [통합알림센터 체크포인트](dentlink-unified-notification-center.md)를 따른다.
+**2026-11-03 실행 검증 기록이다. 확대 점검은 Office `8f09cb1`·Lab `be4512b`에서 수행했고, 이후 Office 설정 정책 보완 `6bf1c58`의 영향 화면을 양 OS에서 추가 검증했다.** 실역할·실데이터/장비 부족으로 미검증인 범위가 있어 최종 사용자 QA·merge 준비 완료를 뜻하지 않는다. 전체 기능 상태와 BE 대기는 [통합알림센터 체크포인트](dentlink-unified-notification-center.md)를 따른다.
 
 | 제품 | 실제 checkout / branch | 검증 시작 코드 | 현재 추가 수정 |
 | --- | --- | --- | --- |
@@ -146,3 +146,20 @@ Office service의 숫자 가드는 main에도 존재한다. 외부 URL이 만든
 3. 두 앱 추가 수정은 root가 commit/push했으며 위 최종 SHA의 원격 일치, checkout clean·upstream 0/0까지 확인했다. 이 상세 기록과 메인 체크포인트를 개인 컨텍스트의 같은 마감 커밋으로 저장한다.
 4. root가 audit의 포트·cwd·PGID를 대조한 뒤 Office8081/Lab8082 종료, Android emulator 종료, iPhone17Pro shutdown·기기창 닫기를 완료했다. 3000/3005/8081/8082/9233 listener 및 실행 중 기기 없음 확인. 로그인 상태는 보존했다. 이후 승인된 Mac 개발 계정 보안 입력창만 열어 사용자 입력을 기다린다. 실제 비밀번호 저장과 앱 로그인 검증 완료는 별도다.
 5. 남은 실역할·데이터/환경 검증과 BE 알림 명세 연결이 해소되기 전에는 최종 사용자 QA 인계·merge 준비 완료라고 표시하지 않는다. PR·merge·배포는 이번 기록 작업에서 실행하지 않는다.
+
+
+## 추가 확인: Office 설정의 실제 소속 권한 — 2026-11-03 18시
+
+- 확대 점검 이후 사용자가 설정 메뉴의 권한·서비스·기기 차이를 다시 물었고, 확정된 FE 누락 보완을 승인했다. `NotificationCenterScreen.tsx` 한 파일을 수정해 `6bf1c584a5884de1b68b6ca40f67a25c56386626`으로 commit/push했고 원격 SHA 일치·clean을 확인했다. 아래는 이 최종 추가 수정의 영향 화면 재검증이며 위 전체 화면을 같은 SHA에서 전수 재실행했다고 주장하지 않는다.
+- `useEmployeeProfile`의 실제 현재 소속 authority/isCurrentEmployee를 재사용했다. MEMBER 범위 선택 행·sheet 숨김과 화면상 assigned 고정, OWNER/PAYMENT_MANAGER만 Payment 노출, 숨긴 원본값 보존을 반영했다. 권한 로딩/소속 교체 중 설정 노출과 이전 권한·소속의 설정/OS 복귀 callback을 차단했다. 실제 알림 수신·목록 필터·서버 저장은 새 BE 계약 연결 범위다.
+
+| 최종 코드 실행 조건 | 진입·행동 | 결과 |
+| --- | --- | --- |
+| Android 실제 OWNER | 전체 앱 재시작 → Home bell → 알림함 → 설정, 본문 스크롤, 원래 scope callback으로 All/My 변경·복원, OS Back | Scope/Payment/Shipping 정상 표시·조작, 설정→알림함→Home 복귀 |
+| iOS 실제 MEMBER | 전체 앱 재시작 → Home bell → 알림함 → 설정, 본문 스크롤 | Scope 행·sheet/Payment 없음, 숨긴 Payment/Email 원본 값 유지 |
+| iOS MEMBER→OWNER→MEMBER | 기존 소속 선택 callback과 실제 활성화 API로 전환 후 설정 재진입, 원래 소속으로 복귀 | OWNER에서 Scope/Payment 표시, MEMBER 복귀 후 다시 숨김. 서버 role 위조 없음 |
+| iOS 이전 callback | OWNER에서 보관한 설정·채널·OS 안내 confirm을 MEMBER 복귀 뒤 호출 | 현재 mock 변경·OS 설정 열림 없음. 직접 callback 검사이며 실제 OS ON 복귀 검증과 구분 |
+
+- 최종 ESLint·diff 검사, 실제 TSX render 하네스14건 통과. 같은 하네스는 수정 전 실패했다. 독립 코드 검토에서도 추가 수정이 필요한 확정 결함 없음. Android/iOS의 해당 최종 실행 구간 fatal·render loop가 관찰되지 않았다.
+- 실제 PAYMENT_MANAGER/EDITOR/VIEWER, 같은 소속의 서버 권한 갱신 중간 상태, 실제 OS 권한 ON 복귀의 권한 교차·로그아웃은 기기 미검증이며 하네스 근거만 있다. 전체 역할 QA·merge 준비 완료가 아니다.
+- 증거: `/tmp/office-settings-policy-1103.md`, `/tmp/office-notification-role-1103.cjs`, `/tmp/office-settings-policy-{android-owner,android-owner-bottom,ios-member,ios-member-bottom,ios-owner-bottom,android-final-home,ios-final-home}.png`. 앱 mock 외 저장·메시지/결제/권한 변경 없음. 양 OS 원래 소속의 Home으로 복귀한 뒤 Office Metro·해당 emulator/simulator를 종료했으며 로그인 데이터는 유지했다.
