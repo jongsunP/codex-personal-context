@@ -2,13 +2,31 @@
 
 최종 갱신: 2026-11-03 — 승인된 FE 선행 보완과 로컬 검증을 끝냈고 Web·Office·Lab 각각 commit/push·원격 HEAD 일치를 확인했다. PR·merge·배포는 하지 않았다. 새 알림 BE 계약/실데이터 연결은 남으며, 현재 열린 웹·시뮬레이터·에뮬레이터와 서버는 사용자 요청대로 유지한다.
 
-## 현재 대기 상태와 브라우저 후속 확인 — 2026-11-03
+## 현재 대기 상태와 로컬 환경 정리 — 2026-11-03
 
-- 사용자가 개발 결과를 이해했고, 현재 FE가 범위를 더 넓히기보다 **BE 목록/설정/집계·푸시 읽음/클릭 계약 또는 추가 기획·디자인 변경을 기다리는 단계**임을 재확인했다. 새 요청/자료가 오면 변경분과 기존 코드를 대조해 이어간다. 자동 외부 폴링·추가 구현·PR은 하지 않는다.
-- 중간 요청 중 로그인 재사용 저장/공통 지침·로컬 동기화, 제품/개인 context commit/push는 완료다. 브라우저 경고는 원인 확인만 완료했으며 **제거한 상태가 아니다**. 현재 테스트 Chrome 프로세스는 --no-sandbox로 실행 중이다. 창 보존 요청에 따라 재시작/옵션 교체는 하지 않았다.
-- CDP9233의 Clinic3000(windowId2087526547), Lab3005(windowId2087526550)를 다시 확인했다. 둘 다 readyState complete, 열린 오류 dialog 없음. 두 창의 bounds는 동일한 left1920/top30/1920x1050, maximized였다. 따라서 하나가 다른 창 뒤에 가려질 수 있으나 실제 사용자가 보던 창의 가시성을 확정한 것은 아니다.
-- Lab 검증 상당 부분은 별도 headless로 진행했다. 이후 연결된 Lab 페이지의 알림함/설정 이동도 확인했지만, 사용자에게 계속 보이는 조작으로 제공했다는 보고는 과장이었다. 창을 둘로 나눈 것 자체가 제품 오류라는 근거는 없다. 다음 화면 검증에서는 실제 표시 창/전면 상태부터 맞추고 headless와 구분한다.
-- 이번 요청은 상태 확인/대기 정리이며 브라우저·서버·기기를 종료하거나 배치를 변경하지 않았다.
+- 개발은 BE 목록/설정/집계·푸시 읽음/클릭 계약 또는 추가 기획·디자인 변경을 기다린다. 새 자료/재개 요청이 오면 변경분을 대조한다. 제품 코드를 추가 변경하거나 자동 외부 폴링·PR 작업을 하지 않는다. 세 제품은 위 완료 SHA와 원격 일치/clean 상태를 재확인했다.
+- **브라우저 경고 조치:** 이전 테스트 Chrome의 --no-sandbox를 제거하고 기본 보안 샌드박스 상태로 재실행했다. Browser.getBrowserCommandLine에서 sandboxDisabled:false, automationEnabled:true를 확인했다. 자동화 제어 표시도 활성화했다. 앞선 ‘원인 확인만 완료/경고 미조치’ 기록을 이 결과가 대체한다.
+- **다음 브라우저 재사용:** 먼저9233 listener를 확인해 살아 있으면 기존 CDP에 붙는다. 새 기동이 필요할 때는 위 영구 프로필을 사용하고 --no-sandbox를 추가하지 않는다. Playwright로 띄운다면 chromiumSandbox:true로 기본 샌드박스를 유지한다. 이전 임시 login.cjs의 기본 옵션을 그대로 재사용하지 않는다.
+- **실행 수명 보완:** 점검 중 Web3000/3005·검증Chrome9233·Lab Metro8082의 종료를 발견했다. 담당 에이전트가 종료하지 않았음을 확인했고, 이전 exec 세션이 사라졌으며 로그에 종료 원인이 남지 않아 정확한 원인은 확정하지 않는다. 웹·Lab Metro는 분리된 프로세스 세션으로, Chrome은 macOS LaunchServices로 재기동했다. Office Metro8081은 살아 있어 재시작하지 않았다.
+- **로그인 보존:** 종료된 전용 임시 브라우저 프로필을 값 열람 없이 Git 밖 `~/.local/share/codex-test-sessions/dentlink/development/browser-profile`로 복사해 재사용했다(0700). 이전 auth-state.json(0600)도 유지한다. 재로그인 없이 Clinic/Lab 모두 홈·알림함을 열었고, 준비된 서버에서 새로고침 후 pageerror0/알림 dialog1개씩 확인했다. 재시작 중 발생한 이전 devtools chunk 오류는 새로고침 후 재현되지 않았다.
+- **창 표시 확인:** 두 창은 기존 위치·크기(외부 모니터의 동일 좌표에 최대화)를 복원했다. 하나씩 전면으로 가져와 실제 알림함을 확인했으며 마지막 Lab 페이지에서 visibility:visible, focused:true, dialogCount:1을 확인했다. 창 두 개 자체가 제품 오류 원인이라는 근거는 없다. 창이 겹치면 한쪽이 가려질 수 있으므로 ‘두 창에서 동시에 조작이 보인다’고 설명하지 않는다. 반복 headless 검증과 사용자 표시 창 조작을 계속 구분한다.
+- **현재 런타임:** Clinic3000 PID39188, Lab3005 PID39187, Office Metro8081 PID21312, Lab Metro8082 PID39778, 전용Chrome9233 PID39157. exact cwd를 확인했고 실제 PID는 재개 때 다시 확인한다. 로컬 실행 메타/제한 로그는 같은 전용 디렉터리의 web-runtime.json/runtime-logs에 보관하며 인증 내용은 출력/커밋하지 않는다.
+- 로그인 재사용 공통 지침과 ~/.codex 동기화는 완료다. 비밀번호를 새로 저장한 것은 아니다. 앱·웹 창과 서버를 유지하며 개발 대기로 돌아간다.
+
+## 별도 디자이너 문의: 앱 헤더 높이 — 2026-11-03
+
+사용자가 현재 시뮬레이터의 알림 헤더와 다른 화면 높이를 질문했다. 제품 변경 없이 양 앱의 코드값을 확인하고 복사 가능한 공유문을 전달했다. **실제 렌더 픽셀 실측은 아니다.** 수치는 RN 논리 단위(iOS pt)이며 App.tsx의 상단 safe area는 별도다.
+
+| 영역 | 높이 | 코드 근거 |
+| --- | --- | --- |
+| 양 앱 알림함 / 알림 설정 | 50 / 50 | Office NotificationInbox.tsx:45·NotificationSettings.tsx:43, Lab 동일 파일:80·:54 |
+| 공통 뒤로가기 / Office Credits·Statements | 44 | configs/constants/constant.ts, components/app-ui/Layout/Header.tsx 기본값; 추가 목록은 override 없음 |
+| 양 앱 채팅 상세 | 56 | features/chat/screens/ChatDetailScreen.tsx |
+| Orders/Profile/LinkTalk 큰 제목 영역 | 54 | components/app-ui/Layout/Layout.tsx screenTitle |
+| Lab 홈 소속 표시 | 64 | features/home/components/HomeProfileHeader.tsx |
+| Lab 밀링 공정 / 자재 헤더 | 48 / 56 | MillingProcessHeader.tsx / MillingMaterialHeader.tsx |
+
+모든 화면을50으로 바꾸라는 구현 지시는 아니며, 이 문의를 알림센터 추가 요구로 합치지 않는다.
 
 ## 이번 구현 승인과 기준 — 2026-11-03
 
@@ -48,7 +66,7 @@
 ### 로컬 화면·로그인 재사용
 
 - 사용자 배치대로 Clinic3000·Lab3005는 서로 다른 Chrome for Testing 창이다. CDP9233에서 별도 windowId를 확인했고 창 크기/위치는 바꾸지 않았다. 반복 검증 일부는 별도 headless였으며, 사용자가 진행을 볼 수 있도록 요청한 뒤 root가 기존 Lab 창에서 알림함→알림 설정을 실제 조작해 열어두었다. headless 실행을 사용자 창 조작으로 보고하지 않는다. 사용자는 이후에도 Lab 조작이 보이지 않는다고 회신했다. CDP의 페이지 전환은 확인했지만 사용자 디스플레이에서의 가시성까지 확인한 것으로 기록하지 않는다. 후속 작업에서는 사용자가 보고 있는 실제 창과 조작 대상을 먼저 대조한다.
-- 샌드박스 경고는 해당 테스트 Chrome의 실제 `--no-sandbox` 실행 옵션을 확인했다. 웹 지연 당시 Next 재컴파일 부하가 높았으며 최종 두 제품 화면/요청은 정상 확인했다. 경고 제거만을 위해 현재 창을 재시작하지 않았다.
+- 초기에는 샌드박스 경고 원인만 확인해 창을 유지했다. 이후 사용자가 로컬 환경 정리를 승인해 위 최신 절처럼 해당 옵션을 제거하고 전용 프로필로 재기동했다. 웹 지연 당시 Next 재컴파일 부하와 브라우저 경고를 구분한다.
 - 웹 인증 상태는 Git 밖 `/Users/parkjongsun/.local/share/codex-test-sessions/dentlink/development/web-auth-state.json`에 저장했고 새 context에서 양제품 로그인 재사용을 검증했다. 폴더0700/파일0600. 현재 열린 임시 browser profile을 사용자 확인 중 이동/종료하지 않았다.
 - 공통 AGENTS/SESSION_WORKFLOW에 전용 로컬 로그인 재사용과 필요 시 로컬 보안 저장소의 테스트 비밀번호 사용 기준을 추가했다. **이번에는 로그인 상태를 저장했으며 비밀번호를 새로 제공받거나 저장한 것은 아니다.**
 - Clinic3000/Lab3005, Office Metro8081/Lab8082, Android emulator-5554, iPhone17Pro DeviceHub를 유지한다. 두 앱을 각각 양 OS에서 확인했으며 마지막 표시 제품은 Android Office, iOS Lab이다. 세션 정리 요청만으로 화면/서버를 종료하지 않는다.
