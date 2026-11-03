@@ -1,6 +1,24 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 브레이크포인트 — 2026-11-03 · Studio DLDS 갤러리 로컬 보존, 실제 푸시 403 확인·동료 답변 대기
+## 현재 브레이크포인트 — 2026-11-03 · Studio DLDS 갤러리 커밋·푸시·PR #56 완료, 검사/Preview 설정 후속
+
+- **최신 지시·경계:** 동료의 권한 설정 안내 후 사용자가 기존 작업의 커밋·푸시·main 대상 PR을 승인했습니다. GitHub Write만 추가되고 공통 작업자 목록은 그대로인 점을 안내하자, 사용자가 **작업자 등록이 안 됐어도 정상적으로 push/PR이 되면 그대로 제출**하라고 명시했습니다. 이 승인은 제출에 관한 것이며 정책·이메일·훅·CI 검사 변경이나 병합·배포·하네스 개발은 포함하지 않습니다. 이전의 '공통 작업자 등록 전 커밋/PR 중단' 조건은 이번 제출 승인으로 대체됐습니다.
+- **원격 보존 완료:** `/Users/parkjongsun/Repository/dentlink-studio`, `feat/dlds-gallery`, 커밋 `39069b9dd8587eb7ceec175111bc1bc4a1203d8f` (`feat: DLDS 갤러리 탐색과 누락된 컴포넌트 예제 보완`). 원격 `origin/feat/dlds-gallery`와 같은 SHA이고 작업 트리는 clean입니다. [PR #56](https://github.com/Innvoaid/dentlink-studio/pull/56), 제목 `[DL-17046] DLDS 갤러리 메뉴와 컴포넌트 예제 보완`, base=`main`, head=`feat/dlds-gallery`, OPEN·일반 PR(Draft 아님)입니다. **병합하지 않았습니다.** 이제 제품 변경도 원격에 있으므로 다른 디바이스에서 해당 브랜치를 받아 이어갈 수 있습니다.
+- **main 동기화·변경 범위:** `4808a67` → `86ca14a23c9fb67b064d2af09080039e865d0bba`로 `git pull --ff-only origin main`을 실행했습니다. 새 PR #55의 `workspaces/DL-14918/` 기획·시안만 추가됐고, 갤러리 5개 파일의 staged full-index patch는 기존 복구 패치와 바이트 일치했습니다. PR diff도 `packages/dlds-preview/`의 README·App·AdditionalExamples·DateExamples·GalleryNavigation 5개(828추가/76삭제)뿐입니다. npm 원천·버전·설정·다른 workspace 수정은 없습니다.
+- **검증:** 최신 main 반영 후 `pnpm verify` 성공(182통과·실패0·기존 Codex native permission profile 검사1skip), `pnpm build`, `pnpm check:studio-trace`, staged diff-check 성공. 로그는 기존 백업 폴더의 `verify-main-86ca14a.log`, `build-main-86ca14a.log`입니다. 최종 정적 재검토에서 34개 메뉴 링크 대상 존재·ID 중복 없음·누락10종 유지 확인, 새 중대 오류 없음. 동일 갤러리 코드의 이전 1280/390px 브라우저 검증을 유지하며 이번 main 동기화 후 런타임을 다시 실행한 것은 아닙니다. Preview/production 접속은 아직 검증하지 않았습니다.
+- **해결된 권한:** `jongsunP`의 GitHub API 권한이 `push=true/triage=true`로 변경됐고, 실제 정상 `git commit`·`git push -u origin feat/dlds-gallery`·`gh pr create`가 모두 성공했습니다. 과거 HTTP403 대기와 '코드가 로컬에만 있음'은 아래 역사 기록이며 현재 상태가 아닙니다.
+- **남은 Project scope:** main의 `.github/project-access.json`은 여전히 inkyookoh만 공통 작업자로 등록하고 있습니다. 실제 [Project scope 실행 41602121665](https://github.com/Innvoaid/dentlink-studio/actions/runs/41602121665)도 공통 갤러리5개 경로를 거부(exit1)했습니다. 검사는 base 브랜치 정책과 PR 작성자 계정을 사용하므로 작업자 등록은 공식 경로로 처리해야 합니다. 로컬 검사 실패와 실제 PR 검사 실패를 모두 PR 본문에 공개했고 검사 우회는 하지 않았습니다.
+- **남은 Vercel Preview:** 커밋 상태가 `Git author jongsunP must have access to the project on Vercel to create deployments.`로 실패했습니다. Vercel 봇도 innovaid 팀/프로젝트 접근 또는 기존 계정의 GitHub 연결 확인을 안내하며 Preview는 Blocked입니다. 원격 빌드 실패로 추정하거나 성공한 Preview가 있다고 보고하지 않습니다. 팀 가입·계정 연결·권한 변경·배포 재실행은 하지 않았습니다.
+- **원격 코드 검사:** [Verify monorepo 실행 41602121530](https://github.com/Innvoaid/dentlink-studio/actions/runs/41602121530)은 최종 COMPLETED/SUCCESS를 확인했습니다. Project scope·Vercel의 설정 문제와 코드 검사 성공을 구분합니다. PR 본문도 재조회해 준비한 내용과 같고 Jira 연결이 추가한 참조 링크만 뒤에 붙었음을 확인했습니다. 배포/Preview 반복 조회나 새 예약은 만들지 않았습니다.
+- **Jira:** 현재 Atlassian의 innovaid 사이트에서 사용자 담당 DL-17046(진행 중)을 읽고 댓글 `44794`에 PR·검증·설정 후속을 기록한 뒤 반환 내용을 확인했습니다. 상태·본문·담당자·상위 카드는 변경하지 않았습니다. DL-16471 하네스는 제외입니다.
+
+### 이어서 할 순서
+
+1. 사용자가 코드 오너와 **공통 작업자 등록** 및 **Vercel 팀/프로젝트 접근·GitHub 연결**을 확인합니다. 요청을 대신 보내거나 계정·정책을 임의 변경하지 않습니다.
+2. 사용자 재개 후 최신 PR/base 정책을 읽고 Project scope와 Verify monorepo 상태를 확인합니다. 검사 재실행·Preview 배포는 그때 승인된 범위에서만 처리합니다. 계정 이름을 바꾸거나 검사/훅을 끄지 않습니다.
+3. PR #56 리뷰와 Preview 확인을 거친 뒤 병합 여부는 사용자가 결정합니다. 별도 명시적 지시 전에는 **병합·추가 배포·하네스 작업 없이 대기**합니다. 코드 수정이 필요하면 같은 브랜치에서 범위를 유지하고 영향 검증 후 반영합니다.
+
+## 이전 브레이크포인트 — 2026-11-03 · Studio DLDS 갤러리 로컬 보존, 실제 푸시 403 확인·동료 답변 대기
 
 - **최신 지시:** 사용자가 추가 동료 코드를 더 기다리지 않고 최신 Studio main의 기존 초안에서 보완하도록 명시 승인했습니다. 구현·검증·커밋/push·PR·Jira·메모리 정리까지 승인됐으며 **하네스·병합·배포는 제외**입니다. 이전의 '관련 추가 코드가 없으면 구현하지 않음' 조건은 이 요청으로 대체됐습니다. 현재는 권한 요청을 전달한 뒤 **사용자가 동료 답변을 알려줄 때까지 메모리 정리 후 대기**하라는 지시입니다. 자동 권한 조회·재시도·추가 구현·외부 댓글은 하지 않습니다.
 - **작업 위치:** `/Users/parkjongsun/Repository/dentlink-studio`, `feat/dlds-gallery`. clean main을 pull해 `4808a67d2aac711de7f6e2bdd1967413dd70fca7`에서 분기했습니다. Node24.4.1/pnpm8.6.9, frozen install 성공. DLDS/DLOS/icons0.1.7과 manifest/lockfile은 유지했습니다. Client checkout·원천 컴포넌트는 변경하지 않았습니다.
