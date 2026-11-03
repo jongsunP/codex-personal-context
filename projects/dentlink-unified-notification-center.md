@@ -1,6 +1,49 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-최종 갱신: 2026-11-03 14:05 KST — 오늘 확정한 범위로 Web/Office/Lab 기존 변경을 읽기 점검하고 공통 딥링크·외부 HTTPS 앱 진입·혼재 코드를 분류했다. DEV Swagger도 필요한 계약만 재확인했다. 제품 파일·브랜치·PR·배포·서버·기기는 변경/실행하지 않았으며 코드 분리·추가 구현은 아직 하지 않았다.
+최종 갱신: 2026-11-03 — 승인된 FE 선행 보완과 로컬 검증을 끝냈고 Web·Office·Lab 각각 commit/push·원격 HEAD 일치를 확인했다. PR·merge·배포는 하지 않았다. 새 알림 BE 계약/실데이터 연결은 남으며, 현재 열린 웹·시뮬레이터·에뮬레이터와 서버는 사용자 요청대로 유지한다.
+
+## 이번 구현 승인과 기준 — 2026-11-03
+
+- 사용자는 범위 점검 뒤 공통/이메일 코드 분리 → 알림센터 연결 보완 → 추가 앱 목록 → 실행 검증 → commit/push·메모리 정리 순서로 진행을 승인했다. PR·merge·배포는 제외한다.
+- 추가 Office 크레딧 잔액·이력과 청구서 목록은 별도 Figma/디자인 발주를 기다리지 않는다. **현재 웹에 구현된 모바일 디자인을 기준으로 앱에 적용**하고 기존 구현의 부족한 부분을 보완한다. 결제내역·PDF·Pay Now·추가 메뉴까지 자동 확장하지 않는다.
+- BE 미정 필드·푸시 식별 key·새 API를 임의 정의하지 않는다. 실제 소속 전환은 기존 API로 연결하며, 서버 알림/설정 데이터가 없는 부분은 개발 전용 mock 경계를 유지한다.
+- 현재 웹·두 앱 모두 이 세션 내부에서 저장소별 단독 작성자를 배정했다. 다른 활성 기능 세션과의 중복 작성은 확인되지 않았다.
+- 사용자 웹 테스트 로그인 완료. 이후 반복 로그인을 줄이기 위해 전용 로컬 프로필/기기 세션 보존과 필요 시 로컬 보안 저장소의 테스트 비밀번호 재사용을 공통 지침에 승인했다. [공통 로그인 재사용 규칙](../SESSION_WORKFLOW.md#reusable-local-test-login). 비밀번호 자체를 제공받거나 새로 저장한 것은 아니다.
+- 시뮬레이터 창은 이 Mac의 DeviceHub `devices://device/open?id=5C0E7639-2345-4B3F-9979-56AFDDA1C708`로 연다. `Simulator.app`은 없으며 iPhone17Pro/iOS26.5 기기창 표시를 확인했다.
+
+## 이번 구현·검증 결과 — 2026-11-03
+
+### 구현한 것
+
+- **Web:** 실제 소속 목록/기존 활성화 API를 사용해 전환 성공 후 대상 홈→알림 팝업 한 번 열기·토스트까지 연결했다. 실패·계정 변경·늦은 응답은 이전 동작을 적용하지 않는다. Clinic 전환 직후 첫 소속으로 되돌아가는 캐시 경합, Lab PC/모바일 host가 팝업을 중복 여는 문제를 실행 중 발견해 수정했다. 랜딩은 기존 hook을 공유하고 제공된 URL만 사용한다.
+- **Office:** 알림 소속 선택에 실제 소속/활성화 API를 연결했다. 성공 전 현재 소속을 바꾸지 않고, 성공 후 인박스를 유지한다. 일반 딥링크의 기존 setEmployerId 경로도 같은 활성화 완료를 기다린다. 명시적 대상 헤더·토큰 refresh·계정/소속 변경·후속 링크의 늦은 응답을 보호했다. 취소된 조회의 불필요한 Error 토스트는 제거하고 실제 오류는 유지했다.
+- **Lab:** 공통 딥링크의 auth store 선변경/실패 rollback 대신 실제 소속 활성화 성공 후 이동한다. 기존 주문/채팅/Support/action·탭·밀링 소비자를 보존한다. Lab 소속 선택 UI는 미읽음/ID 계약 대기 mock이므로 실제 데이터 연결 완료로 보고하지 않는다.
+- **두 앱:** 실제로 받은 landingUrl만 공통 처리에 전달한다. 상대 경로는 현재 서비스 origin과 기존 지원 경로 검증을 재사용하며 protocol-relative 외부 주소는 내부 경로로 변환하지 않는다. OS 설정으로 나간 뒤 정상 복귀하여 허용됐을 때 선택한 항목만 적용하고, 미허용·재시작·계정/소속 변경 등은 임시 선택을 폐기한다. 현재 적용 대상은 mock 설정이며 REST 저장 완료가 아니다.
+- **추가 Office 목록:** 웹 모바일 실제 화면/코드와 대조해 Credits 이력의 유형 배지·긴 설명 표시를 보완했다. Credits/Statements 기존 REST 연결을 유지하고 사용자/병원 크레딧·필터·청구서 역할 제한을 실행 확인했다. PDF·Pay Now·결제내역·추가 메뉴는 새로 만들지 않았다.
+- **이메일 분리:** 이메일 전용 OS 진입/association 설정만 제거했다. 공통 파싱/로그인 대기·기존 Airbridge·Lab /q/*·browser fallback은 보존했다. 자세한 복구/분리 경계는 아래와 이메일 정본에 있다.
+
+### 최종 코드의 검증 근거
+
+| 제품/환경 | 실제 확인한 경로·결과 | 범위/제약 |
+| --- | --- | --- |
+| Clinic Web | 저장 인증을 새 브라우저 context에 로드→실제 다른 병원 선택→활성화 성공→홈/팝업/토스트→원소속 복귀. PC1280·모바일390/320 넘침 없음·pageerror0 | 알림/설정 데이터는 mock. 실패·늦은 응답은 합성/단위 검증 |
+| Lab Web | 실제 로그인→홈/알림/설정, PC1280·390/320 정상. 합성 API 성공/실패 전환과 모바일 시작 전환에서 dialog1개·토스트 확인 | 실제 테스트 계정 다른 소속0개. 실서버 다중 소속 성공은 미검증. 자동화 context에서만 개발도구/QA 위젯 overlay 숨김 |
+| Office iOS | 새 native Debug 빌드. Home→인박스→실제 소속 전환 후 인박스 유지·설정·전체읽음·Home 다른소속 점, 원소속 복귀. User/Office Credits·필터·OWNER Statements 조회, MEMBER 접근 차단/Home 복귀. 임시 상대 landing 클릭→해당 소속 Credits, 기존 Support/Feedback | 실제 OS ON 변경 후 복귀는 iOS에서 미검증. iOS 설정 링크가 Settings 홈을 열어 환경 제약 기록 |
+| Office Android | 새 native Debug 빌드·기존 로그인 유지. Credits/Statements·인박스/설정. OS OFF 유지→Back은 기존 선택 유지, 선택 항목→OS ON→Back은 해당 PUSH만 ON | 해당 계정 소속1개. OS OFF 변경으로 프로세스 재시작됨을 관찰; 임시 선택 폐기 경계 유지 |
+| Lab Android | 새 Debug 빌드. Home/인박스/설정·상대 /help 클릭. 실제 OS 스위치 ON→Back→선택 항목만 ON/다른 항목 OFF·정상 설정 화면 | am start 강제 task 복귀에서 흰 화면 관찰, 실제 사용자 Back 복귀에서는 재현 안 됨. 흰 화면 캡처는 성공 근거 제외 |
+| Lab iOS | 기존 로그인 유지·8082 최종 JS로 Home→인박스→설정. OS 미허용 복귀 값 유지/정상 화면. 같은 소속 Profile, 잘못된 소속 차단, 기존 /q/o/ 주문 상세 | 안내 확인 callback은 한글 자동화 selector 한계로 디버거 호출 보완. iOS OS ON 실제 변경은 미검증. 다중소속 성공은 harness 검증 |
+
+- **자동 검사:** Web Clinic/Lab/Admin 타입검사·전체 lint 필수 훅 통과(기존 경고만), Lab association8개·임시 랜딩/헤더6개. Office 관련8 suites/123개·변경 ESLint 오류0, 전체 타입검사 기존6진단/변경 소스 신규 오류 없음. Lab 기존32개+임시 harness31건·변경 ESLint 오류0; 전체 타입검사는 기존4파일5진단 동일. 단위/합성 결과를 실제 서버/기기 성공과 구분한다.
+- OS 검증 때 기존 PermissionProvider가 보내려는 구 preference 저장 요청은 임시 런타임 interceptor로 차단해 실계정 수신값을 바꾸지 않았다. 이후 interceptor/fixture를 제거하고 OS 원상태·원소속·mock 상태를 복원했다. 임시 검증 코드는 제품 커밋에 없다.
+- 근거: `/tmp/notification-web-1103/`의 final/synthetic/mobile-switch 로그·스크린샷, `/tmp/office1103-native-notifications.log`, `/tmp/office1103-android-grant.log`, `/tmp/lab-1103-os-back-final.png`, `/tmp/lab-1103-ios-denied-return.png`. 실제 푸시 수신→BE 읽음/클릭 저장, 전체 역할과 로그아웃/재로그인 전체 흐름까지 완료한 것은 아니다. **현재는 최종 사용자 QA/merge 준비 완료 선언이 아니다.**
+
+### 로컬 화면·로그인 재사용
+
+- 사용자 배치대로 Clinic3000·Lab3005는 서로 다른 Chrome for Testing 창이다. CDP9233에서 별도 windowId를 확인했고 창 크기/위치는 바꾸지 않았다. 반복 검증 일부는 별도 headless였으며, 사용자가 진행을 볼 수 있도록 요청한 뒤 root가 기존 Lab 창에서 알림함→알림 설정을 실제 조작해 열어두었다. headless 실행을 사용자 창 조작으로 보고하지 않는다. 사용자는 이후에도 Lab 조작이 보이지 않는다고 회신했다. CDP의 페이지 전환은 확인했지만 사용자 디스플레이에서의 가시성까지 확인한 것으로 기록하지 않는다. 후속 작업에서는 사용자가 보고 있는 실제 창과 조작 대상을 먼저 대조한다.
+- 샌드박스 경고는 해당 테스트 Chrome의 실제 `--no-sandbox` 실행 옵션을 확인했다. 웹 지연 당시 Next 재컴파일 부하가 높았으며 최종 두 제품 화면/요청은 정상 확인했다. 경고 제거만을 위해 현재 창을 재시작하지 않았다.
+- 웹 인증 상태는 Git 밖 `/Users/parkjongsun/.local/share/codex-test-sessions/dentlink/development/web-auth-state.json`에 저장했고 새 context에서 양제품 로그인 재사용을 검증했다. 폴더0700/파일0600. 현재 열린 임시 browser profile을 사용자 확인 중 이동/종료하지 않았다.
+- 공통 AGENTS/SESSION_WORKFLOW에 전용 로컬 로그인 재사용과 필요 시 로컬 보안 저장소의 테스트 비밀번호 사용 기준을 추가했다. **이번에는 로그인 상태를 저장했으며 비밀번호를 새로 제공받거나 저장한 것은 아니다.**
+- Clinic3000/Lab3005, Office Metro8081/Lab8082, Android emulator-5554, iPhone17Pro DeviceHub를 유지한다. 두 앱을 각각 양 OS에서 확인했으며 마지막 표시 제품은 Android Office, iOS Lab이다. 세션 정리 요청만으로 화면/서버를 종료하지 않는다.
 
 ## 현재 범위와 완료 경계
 
@@ -9,13 +52,15 @@
 - **사용자 확정:** 추가 목록은 노티·푸시 외 별도 메뉴가 없어도 수용한다. 메뉴 개선은 후속이며 현재 작업의 선행 조건이 아니다. 이미 목록이 생겼다는 이유로 시트의 ‘알림센터 오픈’이나 이동 없음 정책까지 임의 변경하지 않는다.
 - **이메일은 완전히 별도:** 이메일 CTA·앱 설치 여부에 따른 웹/앱 연결·웹 fallback·SES·이메일 분석/클릭 추적은 이 기능의 검토·구현·검증·완료 조건에 포함하지 않는다. [별도 이메일 체크포인트](dentlink-email-cta-tracking.md)와 DL-17183→DL-17187에서 관리한다.
 - 기존 알림 설정의 **Email 수신 채널 표시·저장**은 이메일 CTA/추적과 다른 기능이다. 이번 분리를 승인된 수신 설정 UI 삭제 근거로 확대하지 않는다.
-- **현재 구현:** 실제 진입점에 연결한 알림 UI 선행 개발 + 추가 Office 목록의 기존 REST 연결까지 있다. 알림 목록·읽음·수신 설정·소속 전환의 실제 BE 연결은 미완료다. PR·merge·배포·최종 QA 완료가 아니다.
+- **현재 구현:** 실제 진입점의 알림 UI, 추가 Office 목록의 기존 REST 조회, Web/Office 실제 소속 선택·활성화, 양 앱 공통 딥링크의 소속 활성화와 OS 정상 복귀 연결까지 보완했다. 알림 목록·읽음·수신 설정·소속별 미읽음 집계는 아직 개발용 mock/계약 대기이며, Lab 소속 선택 UI도 mock이다. PR·merge·배포·최종 QA 완료가 아니다.
 
 ## 코드 범위 점검 결과 — 2026-11-03 14:05 KST
 
+**착수 전 조사 이력이다.** 아래 표의 미구현 상태와 다음 순서는 당시 기준이며, 이후 구현 결과는 문서 상단과 현재 작업 위치 절을 우선한다.
+
 ### 확인 범위와 Git
 
-- 기존 선행 변경의 실제 diff·소비자를 세 제품에서 병렬로 읽었다. 각 checkout의 branch/HEAD/upstream/dirty/worktree를 확인하고 feature `pull --ff-only`는 변경 없이 끝났다. 필요한 stable ref를 fetch했으며 merge/rebase/branch 전환은 하지 않았다. 세 feature HEAD는 아래 작업 위치 표와 동일하고 clean/원격 일치다.
+- 기존 선행 변경의 실제 diff·소비자를 세 제품에서 병렬로 읽었다. 각 checkout의 branch/HEAD/upstream/dirty/worktree를 확인하고 feature `pull --ff-only`는 변경 없이 끝났다. 필요한 stable ref를 fetch했으며 merge/rebase/branch 전환은 하지 않았다. 당시 Web6dca5142b·Officee983956·Labc312011은 clean/원격 일치였다. 이후 구현한 현재 HEAD는 아래 작업 위치 표를 따른다.
 - Web 비교 merge-base `57bb759ca08e3752140ceffdae2a5421934ec242`, 최신 origin/master `5452871eac0e23a429995381abf673c580d236b9`. master에만14개, feature에만5개 커밋이다. **원격 feature와 일치한다고 최신 master까지 반영한 것은 아니다.** 실제 구현 재개 시 관련 base 변경 영향만 대조하며 이번에 통합하지 않았다.
 - Office origin/main/merge-base `7f586790e0bbd7b288458e29f00654d38ba68da2`, Lab `51441039751b63a08c82a1be9695c805c8af1539`.
 - 이번 근거는 정적 코드/계약 점검이다. 테스트·시뮬레이터·에뮬레이터·서버를 실행하지 않았고 신규 회귀 검증 또는 merge 준비 완료가 아니다. Notion/Jira/Slack 원문도 추가 수정하지 않았다.
@@ -67,7 +112,7 @@
 
 ## 문서 정리·원 조사 인계 이력 — 2026-11-03 13:54 KST
 
-아래는 코드 범위 점검 전 마감 이력이다. 현재 다음 시작점은 위 14:05 점검 결과를 따른다.
+아래는 코드 범위 점검 전 마감 이력이다. 현재 다음 시작점은 문서 상단의 최신 구현 결과와 남은 일 절을 따른다.
 
 - 사용자가 최종 Notion 변경을 확인했다. 문서·Jira·개인 정본의 범위 정리는 완료이며 코드 작업을 재개한 상태가 아니다.
 - 마감 확인: Web/Office/Lab 세 checkout이 clean이고 각각의 HEAD가 실제 원격 feature SHA와 일치했다. 제품 commit/push 상태 확인이며 PR·배포·새 런타임 성공을 뜻하지 않는다.
@@ -102,27 +147,25 @@
 
 ## 제품 작업 위치와 검증 근거
 
-아래는 **2026-11-03 브레이크포인트에서 로컬 Git·실제 원격 feature SHA를 재확인**한 결과다. 세 checkout 모두 clean이고 각 HEAD와 원격 feature가 일치한다. 마지막 코드 구현·기기 실행 근거는 11/2 이력이며 이번에 원격 제품 배포나 새 런타임을 검증한 것은 아니다.
+2026-11-03 이번 구현을 각 제품 feature에 commit/push했다. root가 실제 `git ls-remote`와 로컬 HEAD 일치를 다시 확인했으며 세 checkout은 clean이다. PR·merge·배포·CodePush는 수행하지 않았다.
 
-| 제품 | checkout | branch | HEAD |
+| 제품 | checkout | branch | 최종 HEAD |
 | --- | --- | --- | --- |
-| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` | `6dca5142ba4b179c92d580bc19a4b089f9718b6d` |
-| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` | `e983956b17202e436ebda323eb2b471403ba2b38` |
-| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` | `c3120118a1d9628be900fa96051e5eae36c59ce4` |
+| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` | `eceb6bbe120c395b95c8fc791f61f8945b8a463f` |
+| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` | `c85865deaa29afa5b0bca6b8092d27987e91d1d8` |
+| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` | `d8f7fc6a38f967b416e9d42c6708e351c4b22e23` |
 
-- **Web:** 실제 헤더·모바일 메뉴에 알림함·수신 설정·소속 선택 UI를 연결했다. 전체/안읽음·목록 상태·전체읽음·소속 이동 토스트 등은 선행 UI이며 새 알림 데이터/설정/활성화는 메모리 mock 상태다.
-- **두 앱:** 실제 Home bell/Root 경로의 알림함·설정·소속 선택, OS 상태 조회/설정 안내와 전역 OS OFF 1회 팝업을 선행 구현했다. 서버 설정 저장·실제 소속 활성화·푸시 읽음 연결은 아직 아니다.
-- **Office 추가 목록:** 크레딧 잔액·이력과 청구서 목록에 기존 REST를 연결했다. 지정된 노티/푸시의 최종 진입·계정/소속·권한은 실제 계약과 맞춰 검증해야 한다.
-- **공통 URL 처리:** 로그인 전 URL 보관·탭 복원·최신 URL 소비·늦은 이전 요청의 화면 덮어쓰기 방지를 보완했다. 기존 특수 동작과 다른 기능 소비자를 보존해야 한다.
-- 웹 PC/모바일 및 양 앱 iOS/Android UI 실행 검증 이력이 있다. 11/2 최종 코드의 Office Credits/Statements 실조회, 두 앱 탭/deferred·주문/Help 검증과 제한은 [전체 이력](archive/dentlink-unified-notification-center-through-2026-11-03.md)에 보존했다.
-- 실제 로그아웃·재로그인 전체 경로, 실제 푸시 중복 콜백, 전체 역할·권한 및 최종 BE 연결 QA를 모두 끝낸 것은 아니다. 전체 tsc/lint의 기존 범위 밖 오류와 변경 범위 통과를 구분한다. 이후 코드 변경 시 영향 화면·소비자·역할을 최종 코드로 다시 실행 검증한다.
-- 새 Storybook 파일은 제거했다. 실제 화면을 구현하며 불필요한 Storybook·개인 인계 파일을 제품 저장소에 추가하지 않는다.
+- Web `5cde12f8f` 이메일 설정 분리, `eceb6bbe1` 알림 연결·소속 전환. Office `b78947f` native 분리, `35425f2` 공통 연결·OS 복귀, `c85865d` Credits 표시. Lab `04cfe7f` native 분리, `d8f7fc6` 공통 연결·OS 복귀.
+- 새 branch/worktree·새 PR은 만들지 않았다. 최신 Web master의14개 변경을 대조했고 현재 작업과 관련한 필수 충돌을 발견하지 않아 전체 merge/rebase는 하지 않았다. 원격 feature 일치와 최신 master 반영은 다른 상태다.
+- 새 알림 화면은 Web development/앱 __DEV__ 제한과 mock 경계를 유지한다. 사용자가 보는 로컬 화면 구현과 운영 배포/서버 저장 완료를 구분한다. Storybook·제품 저장소의 개인 인계 파일은 추가하지 않았다.
+- 실행 근거와 제한은 상단 표를 따른다. 이후 동작 변경이 생기면 영향 사례를 최종 코드로 다시 검증한다.
 
 ### 문서 분리와 코드 분리
 
-- 기존 feature에는 공통 URL 처리와 이메일을 고려한 HTTPS/native 도메인·AASA/assetlinks 변경이 함께 있다. **이번에는 코드 분리·제거를 하지 않았다.**
-- 11/3 코드 범위 점검으로 공통 노티/푸시·추가 목록·외부 웹 진입·혼재 영역을 구분했다(상단 결과). 아직 실제 코드 분리는 하지 않았다. 전체 revert 대신 기존 소비자를 보존하는 변경 단위로 적용해야 한다.
-- 이메일 전용 검증/서명·배포 문제를 알림센터 차단 조건으로 되돌리지 않는다. 실제 공통 코드나 전달 단위에 영향이 있는 부분만 이 기능에서 다룬다.
+- 11/3 승인 구현에서 Web 이메일 association 16파일은 `6dca5142b` 직전 내용으로 복원했다. 기존 Lab `/q/*` handler·assetlinks·Airbridge는 유지한다. 원 커밋은 이력에 남으며 전체 feature revert나 이력 재작성은 하지 않았다.
+- Office portal HTTPS native 등록과 Lab q외 HTTPS 신규 등록만 분리했다. 앱에 이미 전달된 URL 해석·로그인 pending·최신 링크 보호·지원 업무 화면 전환은 노티/푸시에서도 사용하므로 유지했다.
+- Android browser module/fallback은 미지원 URL과 기존 소비자가 사용해 보존했다. URL이 HTTPS라는 이유만으로 이메일 전용으로 분류하지 않는다.
+- 이메일 작업은 별도 재개 지시 전까지 대기한다. native 도메인 제거를 검증하기 위한 로컬 빌드는 알림센터 범위 분리 검증이며 이메일 구현 재개가 아니다.
 
 ## 유지할 기능 정책
 
@@ -158,16 +201,13 @@
 
 ## 남은 일과 다음 코드 작업 순서
 
-지금은 코드 범위 점검 완료 후 대기한다. 아래 장기 순서와 함께 상단 14:05의 구체적인 다음 작업을 따른다. 이번 점검에서 구현을 시작하지 않았다.
+1. 최신 BE 공유본/Swagger에서 알림 목록·소속별 집계, Employee별 수신 catalog·default·migration, 푸시 식별·클릭/읽음 계약의 변경분을 확인한다. 미정 payload·enum이나 알림 외부 경로를 발명하지 않는다.
+2. 실제 목록/설정/읽음/미읽음 데이터를 현재 controller에 연결하고 대체된 mock·개발 분기를 정확히 제거한다. Lab 선택 UI도 실제 소속·미읽음 데이터와 연결한다.
+3. 기존 PermissionProvider의 OS 허용→구 preference upsert, Office My Orders의 pushEnable 결합을 새 저장 계약에 맞춰 정리한다. 이번 정상 복귀 callback 보완만으로 OS/서버 분리가 끝난 것은 아니다.
+4. 새 푸시 identity로 중복 callback·같은 화면의 서로 다른 알림을 구분하고 올바른 계정/소속에서 읽음·클릭을 요청한다. 현재 실제 FCM 발송부터 REST 완료까지 끝난 상태가 아니다.
+5. 최종 코드/실데이터로 전체 역할·권한·iOS/Android 영향 화면을 다시 검증한 뒤 사용자 QA·PR·release를 별도 진행한다. 현재 PR 생성 권한은 없다.
 
-1. 정확한 checkout·Git·활성 작성자를 다시 확인하고, 이번에 분류한 공통 딥링크/이메일 전용/혼재 변경을 필요한 전달 단위로 정리한다. 기존 완료 작업을 보존한다.
-2. 최신 Notion 정책·Figma 변경 및 DEV Swagger를 현재 구현과 대조한다. 과거 조사 전체를 재시작하지 않는다. 새 API를 요구하기 전에 실제 명세를 확인한다.
-3. 목록·미읽음/소속별 집계·수신 catalog/default/migration·읽음/푸시 클릭·Web/App 랜딩 계약에 맞춰 연결 범위를 정한다. 미확정 BE payload/enum을 임의 확정하지 않는다.
-4. 노티/푸시→로그인 준비→올바른 소속→지정 화면/동작 및 정책상 읽음을 연결한다. 추가 Office 목록도 시트에서 정한 진입으로 검증한다. 별도 메뉴·이메일 자동 앱 실행을 선행 조건으로 추가하지 않는다.
-5. 실제 API 연결 시 임시 catalog/ID/mock store·data·개발 분기를 정확히 제거한다. OS/preference 결합·숨긴 채널·소속/계정 전환·중복 콜백도 함께 검증한다.
-6. 최종 코드로 웹 PC/모바일과 두 앱 iOS/Android의 영향 화면·공통 소비자·역할/권한을 실행 검증한다. 정적 검사·에이전트 검증·사용자 QA·PR·merge·release·배포를 구분한다.
-
-남은 구체적 확인은 목록/집계·설정 catalog·기존값 보존·푸시 식별/클릭 계약, 파란 설정 배너 정책, Lab Home 최근 메시지/Support·자동 메시지 숨김의 실제 범위 등이다. **해당 구현에 도달했을 때 최신 문서/코드로 먼저 해결하고 정말 남는 결정만 사용자에게 질문한다.** 전체 기획·BE가 미완성이라는 이유로 확정 UI까지 다시 미착수로 돌리지 않는다.
+설정 화면 새 파란 배너의 영속 노출 주기와 Lab Home 최근 메시지/Support·자동 메시지 hide 범위는 후속 근거를 확인한다. 기존 전역 OS OFF 1회 팝업과 새 설정 배너를 혼용하지 않는다. 실제 구현 시 문서/코드로 먼저 해결하고 남는 결정만 사용자에게 질문한다. 추가 목록의 별도 메뉴와 이메일 자동 앱 실행을 알림센터의 선행 조건으로 추가하지 않는다.
 
 ## 정본 자료·Jira·이력
 
@@ -182,5 +222,5 @@
 
 - 이 세션은 통합알림센터 기능을 Web/Office/Lab 함께 담당하며 [FE 상위 세션](dentlink-fe.md)은 공통 조율을 담당한다. 새 세션·worktree를 자동 생성하지 않는다.
 - 제품마다 정확한 저장소·활성 작성자를 확인한다. Web 신규 일반 작업은 최신 origin/master, 두 앱은 origin/main 기반 feature/<Jira>→해당 release→main이다. 남은 develop을 신규 기준으로 쓰지 않는다.
-- 제품 commit/push는 기존 명시 권한 범위에서만 수행하고 PR·merge·배포는 별도 권한이다. 현재 요청은 코드 범위 점검이므로 제품 파일 변경/실행을 재개하지 않는다.
-- Slack은 읽기 전용이며 자동 폴링은 중단 상태를 유지한다. 팀 공유 문서와 개인 작업 메모를 구분하고 의미 있는 마감에 개인 컨텍스트만 commit/push한다.
+- 11/3 사용자가 이번 FE 선행 범위의 구현·검증·세 제품 commit/push를 승인했다. PR 생성·merge·배포는 승인 범위가 아니다. 다음 미정 정책/새 기능을 자동 확장하지 않는다.
+- Slack은 읽기 전용이며 자동 폴링은 중단 상태를 유지한다. 팀 공유 문서와 개인 작업 메모를 구분하고 의미 있는 마감에 개인 컨텍스트를 commit/push한다. 제품 commit/push는 해당 작업의 명시적 승인을 따른다.
