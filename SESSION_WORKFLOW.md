@@ -788,6 +788,14 @@ Do not call the current model classic `Git Flow`:
   separate. Stage workflows have product path filters, so verify Clinic, Lab,
   and Admin Actions separately after promotion. A branch recreation push may
   also trigger CI; do not assume either that it deployed or that no job ran.
+- Before calling staging preparation complete, compare the actual PR paths
+  against the requested service's deployment workflow filters. A correct code
+  tree or mergeable PR with no changes under that service's path does not
+  prepare its automatic deployment. When the user requests the stage reset
+  and PR process, follow that authorized process instead of substituting a
+  manual `workflow_dispatch` instruction. The 2026-11-03 LBX correction is the
+  concrete example: a Lab-only diff did not prepare the requested Admin
+  deployment. PR merge and deployment execution remain separately authorized.
 
 ### Assistance Rules For Parallel Releases
 
