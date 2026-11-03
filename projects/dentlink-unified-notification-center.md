@@ -1,8 +1,29 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-최종 갱신: 2026-11-03 — 승인된 FE 선행 보완과 로컬 검증을 끝냈고 Web·Office·Lab 각각 commit/push·원격 HEAD 일치를 확인했다. PR·merge·배포는 하지 않았다. 새 알림 BE 계약/실데이터 연결은 남으며, 현재 열린 웹·시뮬레이터·에뮬레이터와 서버는 사용자 요청대로 유지한다.
+최종 갱신: 2026-11-03 16:45 KST — 오늘 변경된 범위를 유지한 채 세 제품 최종 코드 검토에서 발견한 5건을 추가 수정·검증하고 각각 commit/push·원격 HEAD 일치/clean을 확인했다. 사용자 요청으로 전용 웹 브라우저·로컬 서버·Metro·시뮬레이터·에뮬레이터를 종료했다. 새 BE 계약/실데이터 연결과 최종 QA는 남으며 PR·merge·배포는 하지 않았다.
 
-## 현재 대기 상태와 로컬 환경 정리 — 2026-11-03
+## 최종 코드 검토·마감 — 2026-11-03 16:45 KST
+
+- 사용자가 브라우저의 보안 경고가 사라지고 정상 자동화 표시만 보이며 시뮬레이터·에뮬레이터도 잘 보인다고 확인했다. 이어 오늘 정책·개발 방향을 포함한 마감 검토와 미완료 처리, 로컬 종료를 요청했다. **이 명시적 종료 지시가 앞선 화면/서버 유지 지시를 대체한다.**
+- 오늘 확정 범위는 웹/앱 알림함·수신 설정, 노티/푸시 공통 랜딩·읽음 연결, Office 크레딧 잔액·이력/청구서 목록이다. 추가 목록은 기존 웹 모바일 디자인을 따르며 별도 메뉴 없이 노티/푸시 진입만 우선 허용한다. 이메일 CTA·설치 여부 연결·SES·분석은 별도 범위를 유지한다. BE 미정 API·식별자·enum을 새로 가정하지 않았다.
+- 16:25의 기록/Git 대조 후 이번에는 실제 코드·공통 소비자·비동기 실행과 화면 가려짐까지 추가 검토했다. 그 결과 아래 5건을 발견하고 수정했다. 이는 새 기획 추가가 아니라 승인된 동작의 예외 상황 보완이다.
+
+| 제품 | 최종 검토에서 수정한 문제 | 최종 검증 |
+| --- | --- | --- |
+| Web | 소속 A→B 이동 도중 A로 복귀한 뒤 일반 B 진입 시 과거 팝업/토스트가 되살아나는 문제. 모바일 토스트가 전체화면 알림 모달 뒤에 가려지는 문제. 기존 entry에 대상 소속 적용 여부를 보관하고 해당 Toast만 기존 modal-root Portal로 옮김 | 실제 React hook 재현은 수정 전 2건 실패→9/9 통과. Clinic/Lab PC1280·모바일390에서 정상 전환/팝업·토스트1개/실제 Toast 최상단 표시/소멸 후 잔여 overlay 없음/실패 시 소속 유지/재열림·넘침·pageerror 없음. 화면 검증은 headless+합성 API이며 실제 계정 mutation 아님. 기존 association8개·변경 lint·Clinic/Lab/Admin 타입검사·필수 push 훅 통과(기존 경고 유지) |
+| Office | raw Linking 처리 중 FCM 중복 보강이 소속 활성화 전에 주문 GET/sideEffect를 실행하는 문제. 주문 조회 중 사용자가 바꾼 소속·계정을 오래된 랜딩이 되돌리는 문제. 중복 상태 조회 제거, 활성화 후 user/service/employer/employee/request guard를 두 진입점에 적용 | 실제 소스 harness11건·기존77 tests·변경 lint 통과. iOS/Android 최종 bundle에서 guard 존재 확인. OS URL로 Profile/Help/Credit·실제 주문 상세 확인, 실제 존재 주문 URL→landBy=push URL 연속 진입 정상. 이것은 실제 FCM 수신 증거가 아님. 인박스/설정은 렌더된 onPress를 CDP로 호출해 표시 확인, Android Back/iOS onPress로 Home 복귀 |
+| Lab | 소속 활성화 뒤 USER 갱신 또는 쿠키 저장을 기다리는 동안 다른 소속으로 바뀌어도 이전 랜딩이 계속되는 문제. 각 await 이후 목표 소속·계정·service·요청을 재확인 | 실제 함수 비동기 harness 수정 전5건 실패→10/10 통과. 기존53 tests·변경 lint 통과. 양OS 최종 bundle 확인, 현소속 Profile/Help 정상·잘못된 소속 차단·알림함/설정 화면 확인. 일부 진입은 기존 onPress/CDP 호출이며 물리 탭 QA와 구분. 실제 다중소속 계정이 없어 경합은 harness 근거 |
+
+- Office/Lab 기기 확인은 기존 로그인·원래 소속을 유지했고 OS 권한·수신 설정·계정 정보를 변경하지 않았다. Help/Credit/주문 조회는 실데이터 읽기, 알림함/설정은 DEV mock이다. 기존 밀링·채팅·action과 정상 토큰 갱신을 보존했다. 이번 수정은 TS/TSX뿐이며 새 native 빌드는 필요하지 않았다. 제품 테스트 파일을 추가/수정하지 않았다.
+- 근거: Web `/tmp/notification-web-1103/{clinic,lab}-review-final.json` 및 `*-review-{1280,390}-{success,failure}.png`; `/tmp/notification-entry-review-1103.cjs`; Office `/tmp/office-review-1103.cjs`, `/tmp/office-1103-review-{ios,android}-{profile,help,credit,order,inbox,settings}.png`; Lab `/tmp/lab-1103-review-{ios,android}-{profile,help,inbox,settings}.png`. 임시 검증 파일과 인증 상태는 제품 커밋에 넣지 않았다.
+- **마감 Git:** Web `056056c92bb73dc75fc03e1bcd4a6b3389dc6bc3`, Office `358b400375ae583d4cf9557126f5fbe3b803ad1b`, Lab `7ebc124fe01e4a46edc54b6e142ccae2e239709d`. 16:45 실제 ls-remote와 HEAD 일치 및 세 checkout clean 확인. 작업 branch는 그대로이며 PR·merge·배포·CodePush 없음.
+- **실행 환경 종료:** 이번 전용 Chrome9233만 정상 종료하고 로그인 상태를 보존했다. Clinic3000/Lab3005/Metro8081·8082는 정확한 cwd/프로세스 그룹 확인 후 종료했다. `Dentlink_API_36` 종료, iPhone17Pro `Shutdown`과 DeviceHub 기기창 닫기를 확인했다. 3000/3005/8081/8082/9233 listener 없음, adb 연결 기기 없음, 해당 qemu 프로세스 없음. 일반 사용자 Chrome/IDE·앱 데이터·저장 프로필은 유지한다. 검토 중 수정 검증을 위해 잠깐 재기동한 환경까지 모두 종료했다.
+- **개발 외 요청:** Notion/Jira의 원 조사·추가 앱 목록·이메일 범위 분리와 원 세션 인계는 앞선 기록대로 완료됐다. 이번 마감에 원문을 다시 수정하거나 Slack에 게시하지 않았다. 로컬 로그인 세션 보존·공통 지침 동기화·브라우저 경고 조치 완료, 디자이너 헤더 확인은 사용자가 공유 완료했다. 비밀번호를 새로 저장한 것은 아니다. 추가 미답변 요청은 발견하지 못했다.
+- **다음 시작점:** 새 BE 목록/설정/집계·푸시 식별/읽음/클릭 명세 또는 추가 정책/디자인을 받은 뒤 필요한 변경분만 대조하고 연결한다. 실제 데이터로 대체된 mock을 제거하고 Lab 소속 목록·기존 OS 권한→구 preference 결합을 함께 정리한다. 미정 배너/메시지 hide 정책, 실제 iOS OS ON 복귀·전체 역할/로그인·실수신 FCM 검증은 남는다. 현재 단계는 FE 선행 작업 마감이며 최종 QA/merge 준비 완료가 아니다. 사용자 재요청까지 폴링·추가 구현 없이 대기한다.
+
+## 로컬 환경 복구 이력 — 2026-11-03
+
+아래는 최종 종료 전 복구 과정이다. 현재 실행 상태는 위 마감 기록을 따른다.
 
 - 개발은 BE 목록/설정/집계·푸시 읽음/클릭 계약 또는 추가 기획·디자인 변경을 기다린다. 새 자료/재개 요청이 오면 변경분을 대조한다. 제품 코드를 추가 변경하거나 자동 외부 폴링·PR 작업을 하지 않는다. 세 제품은 위 완료 SHA와 원격 일치/clean 상태를 재확인했다.
 - **브라우저 경고 조치:** 이전 테스트 Chrome의 --no-sandbox를 제거하고 기본 보안 샌드박스 상태로 재실행했다. Browser.getBrowserCommandLine에서 sandboxDisabled:false, automationEnabled:true를 확인했다. 자동화 제어 표시도 활성화했다. 앞선 ‘원인 확인만 완료/경고 미조치’ 기록을 이 결과가 대체한다.
@@ -186,11 +207,12 @@
 
 | 제품 | checkout | branch | 최종 HEAD |
 | --- | --- | --- | --- |
-| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` | `eceb6bbe120c395b95c8fc791f61f8945b8a463f` |
-| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` | `c85865deaa29afa5b0bca6b8092d27987e91d1d8` |
-| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` | `d8f7fc6a38f967b416e9d42c6708e351c4b22e23` |
+| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` | `056056c92bb73dc75fc03e1bcd4a6b3389dc6bc3` |
+| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` | `358b400375ae583d4cf9557126f5fbe3b803ad1b` |
+| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` | `7ebc124fe01e4a46edc54b6e142ccae2e239709d` |
 
 - Web `5cde12f8f` 이메일 설정 분리, `eceb6bbe1` 알림 연결·소속 전환. Office `b78947f` native 분리, `35425f2` 공통 연결·OS 복귀, `c85865d` Credits 표시. Lab `04cfe7f` native 분리, `d8f7fc6` 공통 연결·OS 복귀.
+- 최종 검토 보완: Web `056056c92` 전환 취소/모바일 토스트, Office `358b400` 중복 푸시/준비된 소속 경합, Lab `7ebc124` 활성화 후 최종 소속 확인. 앞선 런타임 증거에 더해 상단의 최종 수정본 검증을 수행했다.
 - 새 branch/worktree·새 PR은 만들지 않았다. 최신 Web master의14개 변경을 대조했고 현재 작업과 관련한 필수 충돌을 발견하지 않아 전체 merge/rebase는 하지 않았다. 원격 feature 일치와 최신 master 반영은 다른 상태다.
 - 새 알림 화면은 Web development/앱 __DEV__ 제한과 mock 경계를 유지한다. 사용자가 보는 로컬 화면 구현과 운영 배포/서버 저장 완료를 구분한다. Storybook·제품 저장소의 개인 인계 파일은 추가하지 않았다.
 - 실행 근거와 제한은 상단 표를 따른다. 이후 동작 변경이 생기면 영향 사례를 최종 코드로 다시 검증한다.
