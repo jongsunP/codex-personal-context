@@ -2,7 +2,7 @@
 
 ## 상태와 범위
 
-**2026-11-03 실행 검증 기록이다. 확대 점검은 Office `8f09cb1`·Lab `be4512b`에서 수행했고, 이후 Office 설정 정책 보완 `6bf1c58`의 영향 화면을 양 OS에서 추가 검증했다.** 실역할·실데이터/장비 부족으로 미검증인 범위가 있어 최종 사용자 QA·merge 준비 완료를 뜻하지 않는다. 전체 기능 상태와 BE 대기는 [통합알림센터 체크포인트](dentlink-unified-notification-center.md)를 따른다.
+**2026-11-03 실행 검증 기록이다. 확대 점검은 Office `8f09cb1`·Lab `be4512b`, 이후 Office 설정 정책은 `6bf1c58`, 마지막 배너 1회 보완은 Office `b57bfbe`·Lab `1fbcacc`의 최종 코드에서 각 영향 범위로 검증했다.** 마지막 배너 검증과 OS 제한은 문서 끝에 별도 기록했다. 실역할·실데이터/장비 부족으로 미검증인 범위가 있어 최종 사용자 QA·merge 준비 완료를 뜻하지 않는다. 전체 기능 상태와 BE 대기는 [통합알림센터 체크포인트](dentlink-unified-notification-center.md)를 따른다.
 
 | 제품 | 실제 checkout / branch | 검증 시작 코드 | 확대 점검 당시 추가 수정 |
 | --- | --- | --- | --- |
@@ -10,7 +10,7 @@
 | Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` / `feature/DL-17060` | `7ebc124fe01e4a46edc54b6e142ccae2e239709d`, base `5144103` | 타이머 `3686fc0`, 밀링 `be4512bb8def094e867fbe0753b018858de9a097`, push 완료·clean·upstream 0/0·원격 SHA 일치 확인 |
 
 - 범위는 변경된 공통 딥링크·소속 전환·fetcher/query·알림 provider·bottom sheet의 실제 소비자다. 무관한 기능 전체를 새로 조사하거나 제품 테스트를 추가하지 않았다.
-- 실제 로그인·서버 데이터를 재사용했다. 역할·소속·API 응답을 임의 주입하지 않았다. 메시지 전송, 주문 저장·제출, 승인·반려, 결제·등록·삭제는 하지 않았다. Office의 승인된 실제 소속 전환은 검증 후 원래 소속으로 복귀하는 조건이다.
+- 확대 점검은 실제 로그인·서버 데이터를 재사용했다. 역할·소속·서버 API 응답을 임의 주입하지 않았다. 메시지 전송, 주문 저장·제출, 승인·반려, 결제·등록·삭제는 하지 않았다. Office의 승인된 실제 소속 전환은 검증 후 원래 소속으로 복귀하는 조건이다. 후속 Office iOS 배너 검증의 native 권한 조회 대체는 아래에 제한으로 분리한다.
 - 시뮬레이터/에뮬레이터 실제 앱, 등록 navigator·렌더된 onPress 호출, OS URL 열기, 화면상 버튼 조작을 사용했다. route 이름만으로 성공 처리하지 않고 본문·응답·뒤로·프로세스 생존을 대조했다. 실제 FCM 발송, 손가락 탭 전수, 실물 QR/HID 장비 검증과는 구분한다.
 - 새 알림함·설정은 DEV mock 화면이다. 실제 소속 조회·활성화, 기존 크레딧·청구서 조회 API의 성공과 알림 REST 저장 완료를 합치지 않는다.
 
@@ -164,6 +164,27 @@ Office service의 숫자 가드는 main에도 존재한다. 외부 URL이 만든
 - 실제 PAYMENT_MANAGER/EDITOR/VIEWER, 같은 소속의 서버 권한 갱신 중간 상태, 실제 OS 권한 ON 복귀의 권한 교차·로그아웃은 기기 미검증이며 하네스 근거만 있다. 전체 역할 QA·merge 준비 완료가 아니다.
 - 증거: `/tmp/office-settings-policy-1103.md`, `/tmp/office-notification-role-1103.cjs`, `/tmp/office-settings-policy-{android-owner,android-owner-bottom,ios-member,ios-member-bottom,ios-owner-bottom,android-final-home,ios-final-home}.png`. 앱 mock 외 저장·메시지/결제/권한 변경 없음. 양 OS 원래 소속의 Home으로 복귀한 뒤 Office Metro·해당 emulator/simulator를 종료했으며 로그인 데이터는 유지했다.
 
-## 브레이크포인트 정정 — 2026-11-03
+## 브레이크포인트 정정 — 2026-11-03 18:46 (아래 후속 구현으로 해소)
 
 설정 파란 OS 배너의 “가능하면 기기 내1회”는 사용자 합의이며 BE 대기 정책이 아니다. 마감의 읽기전용 코드 대조에서 양 앱의 닫기 상태가 메모리/화면 state에만 있어 영속1회가 미완료임을 확인했다. 위 runtime 결과는 배너 최초 렌더·닫기 등 관찰 범위이며 앱 재시작/계정·소속 변경 후1회 보장 성공의 근거가 아니다. 전역 OS OFF 팝업의 별도 AsyncStorage1회는 기존 구현이다. 추가 제품 수정/기기 재실행 없이 다음 FE 작업으로 기록했다.
+
+## 후속 완료: 양 앱 설정 파란 배너 1회 — 2026-11-03 19:19
+
+사용자가 “2번은 혼자 할 수 없으니 1번까지 마무리하고 기다리자”라고 승인해 위 누락을 보완했다. BE 계약·이메일·기존 Support 404·추가 메뉴는 새로 구현하지 않았다.
+
+- Office `b57bfbe8568c0ee8cf2062ab6e430fbf0a369948`, Lab `1fbcacc27eff258c95b916473f70be4c76bd7ac0`으로 commit/push·원격 SHA 일치·clean 확인. 최종 실행 후 코드 추가 수정은 없다.
+- 양 앱의 `src/configs/utils/asyncStorage.ts`, `src/features/notifications/components/NotificationPermissionBanner.tsx`, `src/features/notifications/screens/NotificationCenterScreen.tsx`를 변경했다. Office만 `src/store/useNotificationMockStore.ts`의 임시 닫기 상태도 제거했다.
+- 별도 기기 키 `notification-permission-banner-shown`을 실제 표시 시 기록한다. 이력 조회 전 숨김, focus·active 상태에서 native `onLayout` 기록, 현재 화면의 배너는 유지, 닫기/재진입/재시작 후 숨김이다. 서버 설정·문구·레이아웃·OS 설정 action·기존 전역 팝업 키는 그대로다.
+
+| 최종 코드 / 기기 | 실제 진입·동작 | 결과와 근거 범위 |
+| --- | --- | --- |
+| Office Android | Home 벨 원본 callback→인박스→설정, native OS ON→OFF→ON, 실제 닫기 탭/Back, force-stop 후 재진입 | ON일 때 배너·이력 없음 → OFF 첫 실제 렌더에서 이력 저장/현재 표시 유지 → 닫기·재진입·cold restart 후 숨김. 원래 OWNER 소속/Home·OS ON 복원, 마지막 프로세스 fatal0 |
+| Lab Android | 실제 Maestro 탭으로 Home→인박스→설정, native OS ON→OFF→ON, 닫기/Back/force-stop | 같은 1회 흐름 통과, 전역 팝업 이력 별도 유지. 원래 실제 단일 소속/Home·OS 권한/flags 복원, 마지막 프로세스 fatal0 |
+| Lab iOS | 실제 OS OFF, Maestro Home→인박스→설정·닫기·재진입·Profile 왕복·cold restart | 최초 실제 배너 이후 다시 숨김, 배너 키/전역 팝업 키 독립 확인. mock 표시소속 A→B→A에서도 숨김. 실제 로그인 소속은 변경하지 않았으므로 실제 다중소속 검증 아님 |
+| Office iOS | 실제 OS ON, Maestro 화면 진입. 이후 native 권한 조회 응답만 임시 OFF로 대체해 첫 표시/닫기/재진입/cold restart·실제 MEMBER→OWNER→MEMBER 전환 | 실제 ON에서 배너·이력 없음 확인. 임시 OFF에서 native 배너 렌더·이력 보존과 실제 소속 전환 후 미노출 확인. **iOS OS 설정의 실제 OFF 전환 성공은 아님.** 최종 원 함수·실제 ON 상태·원래 소속/Home으로 복원 후 다시 cold start 정상 |
+
+- Android 권한 OFF로 OS가 앱 프로세스를 재시작한 것은 제품 크래시로 분류하지 않았다. OS ON 복귀 시 기존 `PermissionProvider`의 legacy preference 쓰기는 임시 runtime interceptor로 제품별1건 차단했고 서버 수신값을 변경하지 않았다. 검증 후 인터셉터/임시 native 함수/상태를 모두 복원했다. 차단 코드·테스트용 데이터는 제품 소스에 추가하지 않았다.
+- 실제 컴포넌트 lifecycle 하네스 Office10/10·Lab11/11 통과: 저장 읽기 전 숨김, native layout 기록·중복 방지, 현재 표시 유지, 닫기/remount/focus/background, 늦은 읽기 취소·이력 유실 등. 변경 파일 ESLint 오류0, 기존 AsyncStorage 경고6은 각 앱에 남는다. Lab 전체 타입 검사 기존4파일5진단은 변화 없고 변경 파일 신규 진단 없음. 독립 diff 검토에서 추가 확정 결함 없음.
+- 실제 로그아웃/다른 계정/재설치는 수행하지 않았다. 로그아웃이 auth·일부 사용자 키만 지우고 신규 배너 키는 보존하는 것은 소스 검토 근거다. iOS 실제 OS ON/OFF 교차와 Lab 실제 다중소속은 여전히 미검증으로 구분한다. 이력 유실·저장 실패 때 재노출되는 것은 사용자 합의한 best-effort 범위다.
+- 상세 근거: `/tmp/office-banner-once-runtime-1103.md`, `/tmp/lab-banner-runtime-1103.md`; 실제 화면 캡처·Maestro·임시 하네스 경로는 해당 기록에 있다. Office iOS 테스트 helper의 잘못된 JS module 조회가 유발한 RedBox1회는 경로 수정/전체 재시작 후 제품 화면에서 미재현이므로 제품 결함으로 세지 않았다.
+- 19:19 KST Office8081/Lab8082·이 작업 Android AVD·iPhone17Pro를 종료했다. 3000/3005/8081/8082/9233 listener 없음, adb 기기 없음, booted simulator 없음, 해당 iPhone 창 닫힘 확인. 로그인·앱 데이터와 정상 검증으로 남은 배너 이력은 보존했다. Jira/Notion 추가 카드/페이지는 만들지 않았고 BE 명세 또는 사용자 재개 요청까지 대기한다.
