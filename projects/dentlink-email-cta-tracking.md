@@ -58,6 +58,14 @@
 - 요청 userAgent와 실제 웹/앱 실행 기기는 다를 수 있고, 전달된 이메일의 원 수신자와 로그인 사용자도 같다고 단정하지 않는다.
 - 실제 이벤트명·key·자체 DB API·추적 방식은 후속 계약으로 정한다. 예시 필드나 조사 문서를 구현 완료·확정 명세로 바꾸지 않는다.
 
+## 알림센터에서 확인한 코드 분리 경계 — 2026-11-03 14:05 KST
+
+- 알림센터 코드 범위 점검에서 현재 feature diff를 읽어 분류했다. 이메일 구현을 재개하거나 제품 코드를 분리/제거한 것은 아니다. 상세 근거는 [알림센터 현재 정본](dentlink-unified-notification-center.md)의 코드 범위 점검 절에 유지한다.
+- Web `6dca5142b`는 Clinic association 파일/handler/rewrite 신규와 Lab AASA 경로 확대16파일로, 앞의 알림 UI4커밋과 구분된다. 기존 Lab `/q/*`·handler·assetlinks는 base부터 존재하므로 전체 폴더 제거 대상이 아니다.
+- Office `9ae3cf3`의 portal native 도메인/OS 입구와 Lab `28ebcd8`의 q외 HTTPS/native browser fallback은 분리 후보지만, 같은 커밋에 공통 화면 route·소속 활성화·안전한 URL 변환이 섞여 있다. 전체 커밋 revert를 하지 않는다.
+- FCM이 이미 `convertURLForApp`을 호출하므로 앱 내부 HTTPS→앱 경로 변환은 이메일 전용이 아니다. 로그인 pending·최신 링크 보존·기존 밀링 소비자 보호·추가 Office 조회 route도 알림센터에서 보존한다. browser fallback은 JS 호출부와 native 등록을 함께 검토하는 혼재 영역이다.
+- 기존 Airbridge SDK/scheme·push_click·Email 수신 설정은 유지한다. SES·이메일 신규 이벤트/DB 추적은 이 범위 점검으로 구현된 것이 아니다.
+
 ## 이메일 작업 재개 순서
 
 1. 이메일 작업의 별도 재개 지시를 받은 뒤 최신 Git·DL-17183/17187·메일 CTA 시트·BE 계약을 대조한다.
