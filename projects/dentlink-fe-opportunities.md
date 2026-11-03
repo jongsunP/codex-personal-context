@@ -1,6 +1,25 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 브레이크포인트 — 2026-11-03 · 두 저장소 재확인, 갤러리 변경 없어 대기 유지
+## 현재 브레이크포인트 — 2026-11-03 · Studio DLDS 갤러리 보완·검증 완료, 커밋/PR 권한 대기
+
+- **최신 지시:** 사용자가 추가 동료 코드를 더 기다리지 않고 최신 Studio main의 기존 초안에서 보완하도록 명시 승인했습니다. 구현·검증·커밋/push·PR·Jira·메모리 정리까지 승인됐으며 **하네스·병합·배포는 제외**입니다. 이전의 '관련 추가 코드가 없으면 구현하지 않음' 조건은 이 요청으로 대체됐습니다.
+- **작업 위치:** `/Users/parkjongsun/Repository/dentlink-studio`, `feat/dlds-gallery`. clean main을 pull해 `4808a67d2aac711de7f6e2bdd1967413dd70fca7`에서 분기했습니다. Node24.4.1/pnpm8.6.9, frozen install 성공. DLDS/DLOS/icons0.1.7과 manifest/lockfile은 유지했습니다. Client checkout·원천 컴포넌트는 변경하지 않았습니다.
+- **완료한 코드:** `packages/dlds-preview/`의 README와 `src/App.tsx` 수정, `GalleryNavigation.tsx`·`AdditionalExamples.tsx`·`DateExamples.tsx` 추가. 분류→개별 컴포넌트34개 메뉴·검색·hash 직접 링크, 레이아웃 토큰, 입력/선택 상태, 긴 Modal/Popup 예제를 보완했습니다. 이전 Client `56bc1be5ce975c6726637be51347911d730410ba:shared/ui/dlds-gallery`의28개 등록 항목과 실제 공개 API를 대조해 빠진10개(Slider·ComboboxDropdown·FilterDropdown·ChartDropdown·Legacy Dropdown·DateField·CalendarPicker·DateRangeFieldV2·CalendarRangePicker·CategoryTab)를 추가했습니다. 기존 Studio 예제는 유지했습니다.
+- **검증에서 수정한 갤러리 오류:** Tooltip의 label/children 사용법, INFO 트리거, 아이콘 입력의 위치/여백, 중첩 shadow 토큰 표시, 0-based PaginationUI(1/5~5/5), 좁은 화면의 Tabs 가로 넘침, 긴 Modal 본문 여백을 바로잡았습니다. npm 컴포넌트 구현·업무 기능·API는 수정하지 않았습니다.
+- **정적 검증:** 최종 `pnpm verify` exit0(173통과·실패0·1skip), `pnpm build` exit0, staged diff-check 통과. skip은 기존 Codex native permission profile 검사입니다. 신규 테스트 파일은 추가하지 않았고 기존 검사와 실제 브라우저 동작으로 확인했습니다.
+- **실제 화면 검증:** 1280px/390px에서 메뉴 검색·hash 새로고침 위치 복원, 검색/다중최대2개·필터·차트(form 제출0회)·기존 검색 Dropdown, Slider 증가, CategoryTab 전환(form 제출0회), 날짜 직접입력/비활성/달력선택, 기간 취소시 기존값 보존·확정 반영, 주말 제한, 단일/기간 Calendar, Modal Escape·Save, 긴 Popup 버튼, Tooltip 키보드 포커스, Pagination 경계, 좁은 화면 모달/드롭다운과 페이지 가로 넘침을 확인했습니다. DLOS 갤러리도 기존 경로에서 열렸습니다. 개발 콘솔 error0이며 npm 컴포넌트의 styled-components prop 전달 경고는 관측·유지했습니다. 전체 서비스/모든 상태 QA라는 뜻은 아닙니다.
+- **추가 실행의 한계:** production build는 성공했습니다. `pnpm --filter @dentlink/studio start`의 접근은 기존 production 접속 설정이 없어 안내 화면에서 중단됐으므로 production 인증/접속 검증 성공으로 보고하지 않습니다. 인증/환경 설정은 변경하지 않았습니다. 이번에 띄운 dev/start 프로세스는 종료했습니다. 로컬 확인은 Studio 루트에서 `pnpm dev` 후 `http://127.0.0.1:4100/design-system/dlds`입니다.
+- **미처리·확정 차단:** 제품 커밋·push·PR은 하지 못했습니다. `node scripts/project-access.mjs check --staged`가 공통 경로5개를 거부(exit1)했습니다. 현재 정책 `.github/project-access.json`은 inkyookoh/tata@dentlink.app만 공통 작업자로 등록하며 jongsun@dentlink.app은 project 모드입니다. 별도 GitHub API에서도 jongsunP의 Studio 권한은 pull=true/push=false입니다. 이메일·훅·정책을 우회하지 않았습니다. 사용자 승인 자체는 유지되지만 정식 공통 작업자 등록과 저장소 쓰기 권한이 필요합니다. 권한 확대/타인 명의 커밋/개인 fork 우회는 하지 않습니다.
+- **보존:** 위5개 파일은 해당 브랜치에 stage된 상태, unstaged diff0입니다. 별도 `/Users/parkjongsun/.codex/backups/2026-11-03-dlds-gallery/`에 전체5개 파일을 복원하는 `dlds-gallery.patch`, SHA manifest, RESTORE 안내, 검증 로그, 화면 캡처를 저장했습니다. patch SHA256 `a17aab1eb656edffe18b453435e084939d14198e0f59377c40f0a0ae08701448`. 임시 기준 파일에 실제 적용 후 현재5개 파일과 바이트 일치 검증 완료. 이 복구 파일은 Mac 로컬이며 개인 context push만으로 코드가 원격 보존되는 것은 아닙니다.
+- **Jira:** 기존 [DL-17046](https://innovaid.atlassian.net/browse/DL-17046)을 재사용하고 해야 할 일→진행 중, 시작 조건을 기존 초안 기준으로 수정했습니다. 상위 DL-16437의 대기 문구도 현재 범위로 수정했고 상위 진행 댓글은 쓰지 않았습니다. DL-17046 진행 댓글44791에 구현·검증·미반영·권한 문제/후속을 기록했습니다. DL-16471 하네스는 Todo 그대로, 신규 카드0개입니다. 본문·상태와 작성 댓글 반환 내용을 확인했습니다.
+
+### 이어서 할 순서
+
+1. 코드 오너에게 **Studio 저장소 쓰기 권한 + 공통 코드 작업자 등록**을 요청합니다. 대상 `jongsunP` / `jongsun@dentlink.app`; 현행 정책을 유지한다면 `.github/project-access.json`과 해당 CODEOWNERS 기준을 정식으로 반영해야 합니다. 또는 코드 오너가 준비된 패치를 받아 자신의 공통 변경 PR로 제출할 수 있습니다. 아직 어느 방식도 실행하지 않았습니다.
+2. 권한 정리 후 이 브랜치/5개 변경을 보존하면서 최신 main의 동료 변경을 비교하고 필요한 갤러리 충돌만 조정합니다. 범위 검사·영향 검사 통과 후 커밋→push→main 대상 PR을 만듭니다. 사용자의 기존 승인 범위이며 **병합하지 않습니다**.
+3. PR 링크·검증 결과를 DL-17046과 이 기록에 반영하고 리뷰를 기다립니다. 하네스·새 기능으로 자동 진입하지 않습니다. 새 디바이스에는 아직 제품 변경이 원격에 없으므로 이 Mac의 작업폴더 또는 위 패치 전달이 먼저 필요합니다.
+
+## 이전 브레이크포인트 — 2026-11-03 · 두 저장소 재확인, 갤러리 변경 없어 대기 유지
 
 - **요청·확인:** 사용자는 관련 변경이 올라왔는지 조회만 요청했습니다. 개인 context를 pull하고 두 제품 원격을 fetch하여 이전 확인 SHA와 비교했습니다. 제품 로컬 checkout·파일·설치·실행 상태는 유지했으며 구현·테스트·Jira·PR 변경은 하지 않았습니다.
 - **Client:** `57bb759ca` → `origin/master@5452871eac0e23a429995381abf673c580d236b9`, 11/02 v1.91.0 병합 #4824입니다. `shared/dlds`, `shared/dlos`, `shared/icons`, `docs/design-systems.md`, `.github/workflows/packages_publish.yml`은 diff 및 새 경로 커밋이 없습니다. 제품 기능 변경과 현재 갤러리 작업을 구분합니다.
