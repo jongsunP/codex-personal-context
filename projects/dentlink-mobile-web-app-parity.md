@@ -4,8 +4,8 @@
 
 - 원 조사·담당별1차·통합2차 표는 완료 상태로 보존하며 이번 정리로 재조사하지 않는다. 원 조사 세션의 유지·대기 경계도 그대로다.
 - Notion 원 조사 대문은 [모바일 웹 대비 앱 미지원 기능 현황](https://app.notion.com/p/innovaid/3fece072e82f80d5a02fda9a76cd51b7)이며 원래1차2개·2차회의록만 하위에 유지했다.
-- [앱 지원 추가 항목 검토·구현](https://app.notion.com/p/innovaid/40cce072e82f81439d7bc253192e966b)은 원 조사와 같은 상위 위치로 분리했다. 기존 사용자 의견/후보 표를 보존하고 현재 크레딧·청구서 목록 범위와 별도 메뉴 없이 노티/푸시 진입만 있어도 수용하는 기준을 명시했다. 구현 기록은 DL-17202와 [알림센터 정본](dentlink-unified-notification-center.md)이며 DL-17179는 후보 조사 완료 기록이다.
-- 이메일 CTA·설치 여부·웹 fallback·SES·이메일 분석은 알림센터의 검토·개발·완료 조건에서 제외하고 [별도 이메일 정본](dentlink-email-cta-tracking.md), DL-17183/17187에 둔다. [이메일 Notion](https://app.notion.com/p/innovaid/40cce072e82f81fda0e2d123259d5501)도 같은 상위 위치다.
+- 새 [앱 지원 추가 항목 대문](https://app.notion.com/p/innovaid/40dce072e82f8126a565f98fbc783f89)을 원 조사 대문과 같은 위치에 만들고, 기존 [검토·구현 상세](https://app.notion.com/p/innovaid/40cce072e82f81439d7bc253192e966b)를 그 아래로 이동했다. 사용자 의견/후보 표, 현재 크레딧·청구서 목록 범위와 별도 메뉴 없이 노티/푸시 진입만 있어도 수용하는 기준은 보존했다. 구현 기록은 DL-17202와 [알림센터 정본](dentlink-unified-notification-center.md)이며 DL-17179는 후보 조사 완료 기록이다.
+- 이메일 CTA·설치 여부·웹 fallback·SES·이메일 분석은 알림센터의 검토·개발·완료 조건에서 제외하고 [별도 이메일 정본](dentlink-email-cta-tracking.md), DL-17183/17187에 둔다. 새 [이메일 Notion 대문](https://app.notion.com/p/innovaid/40dce072e82f819ca557c474effabaea)도 같은 상위 위치이며 기존 범위·진행 정리/비교/SES 세 문서를 직접 하위에 배치했다. 기존 상세 링크는 유지했다.
 - 아래11/2의 '병행 우선 후보'·이메일 다음 작업은 당시 인계 이력이며 최신 범위를 다시 넓히는 지침이 아니다. 문서/업무 경계 정리이고 제품 코드 분리·구현 재개가 아니다.
 
 ## 이전 상태 — 2026-11-02 원 조사 완료 유지·후속 회의와 알림센터 병행 검토 인계·세션 유지 후 대기

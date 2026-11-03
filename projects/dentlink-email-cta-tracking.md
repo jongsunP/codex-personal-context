@@ -12,10 +12,11 @@
 
 ## 팀 공유 문서와 근거
 
-- 이메일 대문: [이메일 CTA 웹·앱 연결·추적](https://app.notion.com/p/innovaid/40cce072e82f81fda0e2d123259d5501).
+- 이메일 대문: [이메일 CTA 웹·앱 연결·추적](https://app.notion.com/p/innovaid/40dce072e82f819ca557c474effabaea).
+- 범위·진행 상세: [이메일 CTA — 작업 범위·진행 정리](https://app.notion.com/p/innovaid/40cce072e82f81fda0e2d123259d5501). 기존 공유 링크는 그대로다.
 - 비교 문서: [FE 선행과 BE 선행 방식 비교](https://app.notion.com/p/innovaid/40cce072e82f81e491c2ec9420136498).
 - 기술 조사: [SES·Airbridge·BE 추적 구조](https://app.notion.com/p/innovaid/40cce072e82f81a5909ee40aef18985f).
-- **문서 분리 확인:** 이메일 대문은 모바일웹 비교·앱 지원 추가 항목 문서와 같은 Development Documents data-source 직속이다. 비교·SES 페이지는 이메일 대문 하위로 이동했다. 11/3 fetch로 부모·제목·자식 구조를 확인했으며 기존 페이지 ID/공유 링크를 유지했다.
+- **문서 분리 확인:** 사용자 후속 정정에 따라 새 이메일 대문을 원 모바일웹 비교 대문·새 앱 지원 추가 항목 대문과 같은 Development Documents data-source 직속에 만들었다. 기존 범위·진행 정리, 비교, SES 세 상세 페이지를 새 대문의 직접 하위에 나란히 배치했다. 11/3 fetch로 최종 부모·자식 관계와 본문 보존을 확인했으며 기존 상세 페이지 ID/공유 링크를 유지했다.
 - [메일 CTA 현황표](https://docs.google.com/spreadsheets/d/1XCtAfe5nwsH90APhw1BxsMAmuAzWouqYoJfJCxPvFJU/edit?gid=1262427502#gid=1262427502)는 이메일용이다. 알림센터의 NOTIFICATION/PUSH 랜딩 시트와 목적지를 혼용하지 않는다.
 - [이메일 회의 Slack](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793589700410469): 마지막 조사 근거는 11/2 22:05:57 KST 답글까지이며, 11/3 신규 댓글 조회 결과가 아니다. 폴링하지 않는다.
 - 이전 상세 이력은 [범위 분리 전 기록](archive/dentlink-unified-notification-center-through-2026-11-03.md)의 날짜가 붙은 11/2 절에 보존한다. 그 안의 이메일 다음 작업은 이 문서의 최신 분리 지시보다 우선하지 않는다.
