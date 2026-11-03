@@ -4,7 +4,7 @@
 
 **2026-11-03 실행 검증 기록이다. 확대 점검은 Office `8f09cb1`·Lab `be4512b`에서 수행했고, 이후 Office 설정 정책 보완 `6bf1c58`의 영향 화면을 양 OS에서 추가 검증했다.** 실역할·실데이터/장비 부족으로 미검증인 범위가 있어 최종 사용자 QA·merge 준비 완료를 뜻하지 않는다. 전체 기능 상태와 BE 대기는 [통합알림센터 체크포인트](dentlink-unified-notification-center.md)를 따른다.
 
-| 제품 | 실제 checkout / branch | 검증 시작 코드 | 현재 추가 수정 |
+| 제품 | 실제 checkout / branch | 검증 시작 코드 | 확대 점검 당시 추가 수정 |
 | --- | --- | --- | --- |
 | Office | `/Users/parkjongsun/Repository/dentlink-app` / `feature/DL-17059` | `358b400375ae583d4cf9557126f5fbe3b803ad1b`, base·확인한 origin/main `7f58679` | 타이머 `18033bc` 및 채팅 ID 정규화 `8f09cb1eff03f10c96a6cca52aacaf09751112c7`, push 완료·clean·upstream 0/0·원격 SHA 일치 확인 |
 | Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` / `feature/DL-17060` | `7ebc124fe01e4a46edc54b6e142ccae2e239709d`, base `5144103` | 타이머 `3686fc0`, 밀링 `be4512bb8def094e867fbe0753b018858de9a097`, push 완료·clean·upstream 0/0·원격 SHA 일치 확인 |
@@ -144,7 +144,7 @@ Office service의 숫자 가드는 main에도 존재한다. 외부 URL이 만든
 1. 가능한 양 OS 실행 결과와 마지막 Help 정상 경로 확인을 위 표에 반영했다. 채팅 타이머/ID 수정은 최종 코드 전체 재시작 후 실제 조회·본문·10초 체류·뒤로까지 재검증했다.
 2. 실제 역할·밀링 데이터·실기기 장비가 없어 못 한 검증과 Office Support의 기존 DEV 404는 남는다. 필요 시 해당 실조건 및 BE의 Support 조회 계약을 확보해 이어간다.
 3. 두 앱 추가 수정은 root가 commit/push했으며 위 최종 SHA의 원격 일치, checkout clean·upstream 0/0까지 확인했다. 이 상세 기록과 메인 체크포인트를 개인 컨텍스트의 같은 마감 커밋으로 저장한다.
-4. root가 audit의 포트·cwd·PGID를 대조한 뒤 Office8081/Lab8082 종료, Android emulator 종료, iPhone17Pro shutdown·기기창 닫기를 완료했다. 3000/3005/8081/8082/9233 listener 및 실행 중 기기 없음 확인. 로그인 상태는 보존했다. 이후 승인된 Mac 개발 계정 보안 입력창만 열어 사용자 입력을 기다린다. 실제 비밀번호 저장과 앱 로그인 검증 완료는 별도다.
+4. root가 audit의 포트·cwd·PGID를 대조한 뒤 Office8081/Lab8082 종료, Android emulator 종료, iPhone17Pro shutdown·기기창 닫기를 완료했다. 3000/3005/8081/8082/9233 listener 및 실행 중 기기 없음 확인. 로그인 상태는 보존했다. 당시 보안 입력창을 연 뒤, 사용자가 입력을 완료했고 후속 검증에서 네 제품 계정 모두 실제 DEV 로그인·own profile 조회에 성공했다. 현재 입력창은 닫혔으며 비밀 없는 참조만 Git 밖에 보관한다. 최신 계정/로컬 마감은 메인 체크포인트를 따른다.
 5. 남은 실역할·데이터/환경 검증과 BE 알림 명세 연결이 해소되기 전에는 최종 사용자 QA 인계·merge 준비 완료라고 표시하지 않는다. PR·merge·배포는 이번 기록 작업에서 실행하지 않는다.
 
 
@@ -163,3 +163,7 @@ Office service의 숫자 가드는 main에도 존재한다. 외부 URL이 만든
 - 최종 ESLint·diff 검사, 실제 TSX render 하네스14건 통과. 같은 하네스는 수정 전 실패했다. 독립 코드 검토에서도 추가 수정이 필요한 확정 결함 없음. Android/iOS의 해당 최종 실행 구간 fatal·render loop가 관찰되지 않았다.
 - 실제 PAYMENT_MANAGER/EDITOR/VIEWER, 같은 소속의 서버 권한 갱신 중간 상태, 실제 OS 권한 ON 복귀의 권한 교차·로그아웃은 기기 미검증이며 하네스 근거만 있다. 전체 역할 QA·merge 준비 완료가 아니다.
 - 증거: `/tmp/office-settings-policy-1103.md`, `/tmp/office-notification-role-1103.cjs`, `/tmp/office-settings-policy-{android-owner,android-owner-bottom,ios-member,ios-member-bottom,ios-owner-bottom,android-final-home,ios-final-home}.png`. 앱 mock 외 저장·메시지/결제/권한 변경 없음. 양 OS 원래 소속의 Home으로 복귀한 뒤 Office Metro·해당 emulator/simulator를 종료했으며 로그인 데이터는 유지했다.
+
+## 브레이크포인트 정정 — 2026-11-03
+
+설정 파란 OS 배너의 “가능하면 기기 내1회”는 사용자 합의이며 BE 대기 정책이 아니다. 마감의 읽기전용 코드 대조에서 양 앱의 닫기 상태가 메모리/화면 state에만 있어 영속1회가 미완료임을 확인했다. 위 runtime 결과는 배너 최초 렌더·닫기 등 관찰 범위이며 앱 재시작/계정·소속 변경 후1회 보장 성공의 근거가 아니다. 전역 OS OFF 팝업의 별도 AsyncStorage1회는 기존 구현이다. 추가 제품 수정/기기 재실행 없이 다음 FE 작업으로 기록했다.
