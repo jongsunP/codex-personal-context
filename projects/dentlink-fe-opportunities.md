@@ -1,22 +1,24 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 브레이크포인트 — 2026-11-03 · Studio DLDS 갤러리 커밋·푸시·PR #56 완료, 검사/Preview 설정 후속
+## 현재 브레이크포인트 — 2026-11-03 · Studio DLDS 갤러리 PR #56 제출 완료, Tom의 공통 코드 반영 처리 대기
 
 - **최신 지시·경계:** 동료의 권한 설정 안내 후 사용자가 기존 작업의 커밋·푸시·main 대상 PR을 승인했습니다. GitHub Write만 추가되고 공통 작업자 목록은 그대로인 점을 안내하자, 사용자가 **작업자 등록이 안 됐어도 정상적으로 push/PR이 되면 그대로 제출**하라고 명시했습니다. 이 승인은 제출에 관한 것이며 정책·이메일·훅·CI 검사 변경이나 병합·배포·하네스 개발은 포함하지 않습니다. 이전의 '공통 작업자 등록 전 커밋/PR 중단' 조건은 이번 제출 승인으로 대체됐습니다.
+- **최종 대기 결정:** 사용자는 역할별 권한 구조를 이해했고, **사용자/Codex의 구현·검증·커밋·푸시·PR 제출은 완료된 것으로 정리하여 Tom의 공통 코드 반영 처리를 기다리기로 했습니다.** 현재 확인된 추가 코드 작업이나 사용자에게 다시 물을 사항은 없습니다. 사용자가 반드시 공통 작업자 권한까지 받아야 한다고 반복 요청하지 않습니다. 이는 PR 병합 조건까지 모두 통과했다는 뜻은 아니며, 아래 검사/Preview 후속은 관리자가 처리할 항목으로 남습니다. 사용자가 리뷰·동료 답변·병합 진행을 알려주기 전에는 자동 조회·추가 구현·재실행·권한 변경·병합·배포를 하지 않습니다.
 - **원격 보존 완료:** `/Users/parkjongsun/Repository/dentlink-studio`, `feat/dlds-gallery`, 커밋 `39069b9dd8587eb7ceec175111bc1bc4a1203d8f` (`feat: DLDS 갤러리 탐색과 누락된 컴포넌트 예제 보완`). 원격 `origin/feat/dlds-gallery`와 같은 SHA이고 작업 트리는 clean입니다. [PR #56](https://github.com/Innvoaid/dentlink-studio/pull/56), 제목 `[DL-17046] DLDS 갤러리 메뉴와 컴포넌트 예제 보완`, base=`main`, head=`feat/dlds-gallery`, OPEN·일반 PR(Draft 아님)입니다. **병합하지 않았습니다.** 이제 제품 변경도 원격에 있으므로 다른 디바이스에서 해당 브랜치를 받아 이어갈 수 있습니다.
 - **main 동기화·변경 범위:** `4808a67` → `86ca14a23c9fb67b064d2af09080039e865d0bba`로 `git pull --ff-only origin main`을 실행했습니다. 새 PR #55의 `workspaces/DL-14918/` 기획·시안만 추가됐고, 갤러리 5개 파일의 staged full-index patch는 기존 복구 패치와 바이트 일치했습니다. PR diff도 `packages/dlds-preview/`의 README·App·AdditionalExamples·DateExamples·GalleryNavigation 5개(828추가/76삭제)뿐입니다. npm 원천·버전·설정·다른 workspace 수정은 없습니다.
 - **검증:** 최신 main 반영 후 `pnpm verify` 성공(182통과·실패0·기존 Codex native permission profile 검사1skip), `pnpm build`, `pnpm check:studio-trace`, staged diff-check 성공. 로그는 기존 백업 폴더의 `verify-main-86ca14a.log`, `build-main-86ca14a.log`입니다. 최종 정적 재검토에서 34개 메뉴 링크 대상 존재·ID 중복 없음·누락10종 유지 확인, 새 중대 오류 없음. 동일 갤러리 코드의 이전 1280/390px 브라우저 검증을 유지하며 이번 main 동기화 후 런타임을 다시 실행한 것은 아닙니다. Preview/production 접속은 아직 검증하지 않았습니다.
 - **해결된 권한:** `jongsunP`의 GitHub API 권한이 `push=true/triage=true`로 변경됐고, 실제 정상 `git commit`·`git push -u origin feat/dlds-gallery`·`gh pr create`가 모두 성공했습니다. 과거 HTTP403 대기와 '코드가 로컬에만 있음'은 아래 역사 기록이며 현재 상태가 아닙니다.
-- **남은 Project scope:** main의 `.github/project-access.json`은 여전히 inkyookoh만 공통 작업자로 등록하고 있습니다. 실제 [Project scope 실행 41602121665](https://github.com/Innvoaid/dentlink-studio/actions/runs/41602121665)도 공통 갤러리5개 경로를 거부(exit1)했습니다. 검사는 base 브랜치 정책과 PR 작성자 계정을 사용하므로 작업자 등록은 공식 경로로 처리해야 합니다. 로컬 검사 실패와 실제 PR 검사 실패를 모두 PR 본문에 공개했고 검사 우회는 하지 않았습니다.
-- **남은 Vercel Preview:** 커밋 상태가 `Git author jongsunP must have access to the project on Vercel to create deployments.`로 실패했습니다. Vercel 봇도 innovaid 팀/프로젝트 접근 또는 기존 계정의 GitHub 연결 확인을 안내하며 Preview는 Blocked입니다. 원격 빌드 실패로 추정하거나 성공한 Preview가 있다고 보고하지 않습니다. 팀 가입·계정 연결·권한 변경·배포 재실행은 하지 않았습니다.
+- **남은 Project scope·담당 구분:** main의 `.github/project-access.json`은 inkyookoh만 공통 작업자로 등록하며, 비개발자들도 이 목록에 없습니다. 일반 팀원은 자신의 `workspaces/<ID>/` 변경만 제출하므로 검사를 통과하고, 이번 PR은 공통 갤러리 변경이라 제한에 걸립니다. 실제 [Project scope 실행 41602121665](https://github.com/Innvoaid/dentlink-studio/actions/runs/41602121665)도 갤러리5개 경로를 거부(exit1)했습니다. 이는 공통 관리자를 한 명으로 둔 역할 구분이며 사용자 계정의 기본 쓰기 권한 누락은 이미 해결됐습니다. Tom이 공통 코드 반영 경로를 처리하는 것이 현재 방향입니다. 필요시 공식 정책 변경이나 코드 오너의 별도 PR 같은 방법이 가능하지만 사용자 공통 권한 확대만이 유일한 해법은 아닙니다. 기존 PR의 작성자는 jongsunP이므로 Tom의 Approve나 단순 재실행만으로 이 검사가 통과하지는 않습니다. 검사 우회는 하지 않습니다.
+- **병합 조건 실조회:** main의 활성 ruleset `25054614`는 필수 승인0명·코드 오너 승인 필수 아님, 필수 검사 `Project scope`/`Verify monorepo`, 최신 base 동기화 필요로 확인했습니다. PR은 코드 충돌 없음(MERGEABLE)·behind0이지만 필수 검사 실패로 BLOCKED입니다. 본인 PR을 스스로 Approve하지 못하는 것은 GitHub 기본 제한이며 별도 권한 누락이 아닙니다. 일반 다른 사람의 승인만으로 해결된다고 설명하지 않습니다. 관리자 우회 병합 가능 여부를 단정하거나 실행하지 않습니다.
+- **남은 Vercel Preview:** 커밋 상태가 `Git author jongsunP must have access to the project on Vercel to create deployments.`로 실패했습니다. Vercel 봇도 innovaid 팀/프로젝트 접근 또는 기존 계정의 GitHub 연결 확인을 안내하며 Preview는 Blocked입니다. **현재 main의 필수 병합 검사에는 Vercel이 없으므로 Preview 문제와 직접 병합 차단을 구분**합니다. 원격 빌드 실패로 추정하거나 성공한 Preview가 있다고 보고하지 않습니다. 팀 가입·계정 연결·권한 변경·배포 재실행은 하지 않았습니다.
 - **원격 코드 검사:** [Verify monorepo 실행 41602121530](https://github.com/Innvoaid/dentlink-studio/actions/runs/41602121530)은 최종 COMPLETED/SUCCESS를 확인했습니다. Project scope·Vercel의 설정 문제와 코드 검사 성공을 구분합니다. PR 본문도 재조회해 준비한 내용과 같고 Jira 연결이 추가한 참조 링크만 뒤에 붙었음을 확인했습니다. 배포/Preview 반복 조회나 새 예약은 만들지 않았습니다.
 - **Jira:** 현재 Atlassian의 innovaid 사이트에서 사용자 담당 DL-17046(진행 중)을 읽고 댓글 `44794`에 PR·검증·설정 후속을 기록한 뒤 반환 내용을 확인했습니다. 상태·본문·담당자·상위 카드는 변경하지 않았습니다. DL-16471 하네스는 제외입니다.
 
 ### 이어서 할 순서
 
-1. 사용자가 코드 오너와 **공통 작업자 등록** 및 **Vercel 팀/프로젝트 접근·GitHub 연결**을 확인합니다. 요청을 대신 보내거나 계정·정책을 임의 변경하지 않습니다.
-2. 사용자 재개 후 최신 PR/base 정책을 읽고 Project scope와 Verify monorepo 상태를 확인합니다. 검사 재실행·Preview 배포는 그때 승인된 범위에서만 처리합니다. 계정 이름을 바꾸거나 검사/훅을 끄지 않습니다.
-3. PR #56 리뷰와 Preview 확인을 거친 뒤 병합 여부는 사용자가 결정합니다. 별도 명시적 지시 전에는 **병합·추가 배포·하네스 작업 없이 대기**합니다. 코드 수정이 필요하면 같은 브랜치에서 범위를 유지하고 영향 검증 후 반영합니다.
+1. **Tom의 공통 코드 반영 처리와 사용자 후속 안내를 기다립니다.** 사용자에게 추가 권한 요청을 의무처럼 요구하거나, 대신 메시지를 보내지 않습니다. 현재 사용자 측 추가 구현은 없습니다.
+2. 사용자가 리뷰·동료 답변·병합 진행을 알려주면 최신 PR/base 정책과 실제 검사·반영 상태를 확인합니다. 필요시 코드 수정·검사 재실행·Preview 확인을 그때 승인된 범위에서 진행합니다. 정책이 바뀌었어도 과거 run은 옛 base를 쓸 수 있으므로 새 기준으로 검증됐는지 구분합니다.
+3. 코드 오너의 공식 반영 방법이 무엇이든 **이 세션에서는 별도 명시적 지시 전 병합·추가 배포·하네스 작업을 하지 않습니다.** 미해결 검사 문제를 '이미 해결됨'으로 기록하거나, 반대로 사용자 코드 작업이 아직 미완료라고 되돌리지 않습니다.
 
 ## 이전 브레이크포인트 — 2026-11-03 · Studio DLDS 갤러리 로컬 보존, 실제 푸시 403 확인·동료 답변 대기
 
