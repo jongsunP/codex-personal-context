@@ -1,6 +1,37 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-최종 갱신: 2026-11-03 16:45 KST — 오늘 변경된 범위를 유지한 채 세 제품 최종 코드 검토에서 발견한 5건을 추가 수정·검증하고 각각 commit/push·원격 HEAD 일치/clean을 확인했다. 사용자 요청으로 전용 웹 브라우저·로컬 서버·Metro·시뮬레이터·에뮬레이터를 종료했다. 새 BE 계약/실데이터 연결과 최종 QA는 남으며 PR·merge·배포는 하지 않았다.
+최종 갱신: 2026-11-03 17:50 KST — 앱 영향 화면의 iOS/Android 실행 범위를 확대해 4건을 보완하고 Office/Lab commit·push 및 원격 HEAD 일치를 확인했다. 가능한 실데이터 화면 검증을 마쳤고 특정 역할·데이터·장비 조건은 미검증이다. Office Support의 현재 DEV 계약 불일치는 BE 확인 사항으로 남긴다. 검증용 서버·기기는 종료했고 개발 계정 키체인 입력창은 사용자 입력을 위해 열어두었다. PR·merge·배포는 하지 않았다.
+
+## 앱 실행 범위 확대·오류 보완 — 2026-11-03 17:50 KST
+
+- 사용자가 이전 앱 크래시 이력을 들어 수정 화면뿐 아니라 공통 코드의 영향 화면을 실제 시뮬레이터·에뮬레이터에서 확인하도록 요청했다. 앞선 일부 화면·정적 검사만으로 앱 전체가 검증됐다고 표현하지 않는다. **화면이 열림, 데이터 조회 성공, 실제 본문, 체류 후 오류, 뒤로가기까지 구분**한다.
+- Office/Lab 각 iOS·Android에서 현재 계정으로 열 수 있는 알림함·설정·목록·채팅·주문 상세·추가 조회 화면·프로필·도움말과 공통 소비자를 확인했다. 실제 DRAFT·피드백 상세가 있는 Office Android에서는 해당 화면도 조회·뒤로를 확인했다. 저장·주문 제출·승인·결제·메시지 전송은 하지 않았다. 새 알림 데이터는 여전히 DEV mock이다.
+- 상세 화면/진입/실역할/데이터/결과/미검증은 [11/3 앱 런타임 검증 기록](dentlink-unified-notification-center-runtime-2026-11-03.md)에 유지한다. 직접 navigator/onPress 호출, 실제 화면 탭, OS URL 진입과 실제 FCM 수신을 구분했다.
+
+| 제품 | 이번 추가 수정 | 저장·검증 |
+| --- | --- | --- |
+| Office | Android raw chat/contact 딥링크의 700ms 대기가 재구독 때 사라지는 기존 경합. URL 문자열 orderId가 기존 숫자 전용 채팅 API에서 거절돼 메시지가 계속 로딩되는 문제 | `18033bc` + `8f09cb1`. 최종 양 OS cold restart 후 raw/push 및 기존 목록행의 숫자 ID·실제 query success·메시지 본문·10초 체류·뒤로 확인. 원격 `feature/DL-17059` HEAD 일치/clean |
+| Lab | 같은 Android raw 링크 대기 경합. 밀링 딥링크의 최신 요청 callback을 소속 활성화까지 전달하지 않던 누락 | `3686fc0` + `be4512b`. 양 OS 최종 raw/push·채팅/주문 왕복·접근 가능한 밀링 화면 확인. 실제 SHARED 자동전환은 해당 소속/데이터 없어 미검증이며 비동기 하네스8/8로 별도 검증. 원격 `feature/DL-17060` HEAD 일치/clean |
+| Web | 이번 앱 확대 점검에서 추가 코드 변경 없음 | `056056c92bb73dc75fc03e1bcd4a6b3389dc6bc3`·원격 feature 일치/clean 유지 |
+
+- 자동 검사: 양 앱 raw 타이머 각9/9, Office 실제 parser→service ID12/12, Lab 밀링 guard8/8. 기존 Office71·Lab32 테스트 및 관련 ESLint 통과. 전체 tsc의 기존 오류 Office6건/Lab5건은 수정 전후 동일하고 변경 파일 신규 오류 없음. 제품 테스트 파일·불필요한 문서/스토리북은 추가하지 않았다.
+- Lab HMR 직후 `getSnapshot of null` 개발 RedBox를 관찰했다. 해당 시도는 검증에서 제외했고 전체 재시작 후 최종 양 OS에서 미재현이었다. 훅 순서 보존 문제 가능성은 추정이며 원인 확정/운영 크래시 해결로 보고하지 않는다.
+- Android WebView renderer code -1은 처음 크래시를 의심했지만 두 로그 모두 로딩 중 Back 직후였다. 주문 상세·결제수단·Help 재진입에서 실제 본문·40~58초 체류가 정상이며 활성 화면 크래시는 재현되지 않았다. 기존 WebView 복구/설정은 main과 같고 이 로그만으로 추가 패치를 만들지 않았다.
+
+### 남은 실제 문제와 검증 조건
+
+1. **Office 기존 Support 본문 조회:** 양 OS의 `/office/chat-messages`가 404이며 17:40 KST DEV Swagger에도 없다. 주문용 `/office/chat-messages/orders/{orderId}`는 Support 대체 계약이 아니다. BE가 지원 기능/현재 조회 경로를 확인해야 한다. 기존 로딩 종료 처리가 성공에만 연결된 상태도 기록했으며 임의 새 API/오류 UX를 추가하지 않았다.
+2. **실데이터·역할 미검증:** Office iOS DRAFT/Feedback 상세 대상, PAYMENT_MANAGER/EDITOR/VIEWER, Lab SHARED/다중소속 및 유효 밀링 상세·공정·자재 데이터, 인증 해제/deferred·NoAccess 조건 등이 필요하다. 빈 화면·권한 차단·하네스를 정상 데이터 화면의 검증으로 대체하지 않는다. 실제 촬영·QR/HID/FCM은 별도 기기·실수신 조건이 필요하다.
+3. **기존 남은 연결:** 신규 알림 BE 계약·목록/집계/설정 저장·읽음/푸시 identity 연결은 그대로 대기한다. 현재 모든 역할의 최종 QA 인계·merge 준비 완료가 아니다. 이메일 범위도 별도 대기한다.
+4. **제한된 진입의 관찰:** Android Help 정상 Profile→root→board→article→Back은 정상이다. 직접 boardId로 시작한 테스트의 history 왕복은 일반 메뉴 경로 결함으로 확정하지 않고 직접 외부 진입의 후속 확인 여지로 남긴다. Lab 결제 Forbidden의 화면상 뒤로는 정상이며 OS Back만으로 팝업이 닫히는 기존 null 화면 관찰도 상세 기록에 남긴다.
+
+### 로컬 종료와 개발 계정 저장
+
+- 이번 audit의 Office8081/Lab8082 프로세스는 포트·cwd·PGID가 기록과 맞는 것을 확인하고 종료했다. Android `Dentlink_API_36` 종료, iPhone17Pro shutdown 및 DeviceHub 기기창 닫기 완료. 3000/3005/8081/8082/9233 listener 없음, adb 기기 없음, booted simulator 없음을 확인했다. 기존 앱 로그인/전용 브라우저 프로필은 보존했다.
+- 사용자 순서에 따라 앱 점검 후 Mac 보안 입력창을 준비했다. Swift AppKit의 NSSecureTextField에서 입력받아 Security의 SecItemAdd/Update로 이 Mac 키체인에 저장한다. 프로그램 stdout/stderr는 폐기하며 비밀번호를 인수·파일·Git·로그·대화로 전달하지 않는다.
+- 비밀 없는 실행 위치: `~/.local/share/codex-test-sessions/dentlink/development/secure-login-entry/secure-login-entry`. 창이 닫혀 있으면 이 실행 파일을 실행한다. 서비스는 Web Clinic/Web Lab/Office app/Lab app, 환경은 development로 한정한다.
+- 키체인 service 참조는 `codex.dentlink.development.{web-clinic|web-lab|app-office|app-lab}`. 같은 디렉터리의 `keychain-references.json`은 서비스·계정 참조만 저장하고 비밀번호는 포함하지 않는다. directory0700·소스/참조/status0600·실행파일0700이다. 개인 일반 브라우저/기존 키체인 전체를 열람하지 않는다.
+- 창 표시 직후 확인은 `ready`, 저장 계정0개였다. **입력창 준비와 실제 비밀번호 저장, 실제 로그인 성공은 다른 상태**다. 사용자가 입력 후 저장 완료를 알리면 status/참조와 필요한 서비스 로그인만 확인한다. 입력 중 화면/값을 캡처하거나 비밀번호를 출력하지 않는다. 공통 [Reusable Local Test Login](../SESSION_WORKFLOW.md#reusable-local-test-login) 지침은 계속 적용한다.
 
 ## 최종 코드 검토·마감 — 2026-11-03 16:45 KST
 
@@ -208,8 +239,8 @@
 | 제품 | checkout | branch | 최종 HEAD |
 | --- | --- | --- | --- |
 | Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` | `056056c92bb73dc75fc03e1bcd4a6b3389dc6bc3` |
-| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` | `358b400375ae583d4cf9557126f5fbe3b803ad1b` |
-| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` | `7ebc124fe01e4a46edc54b6e142ccae2e239709d` |
+| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` | `8f09cb1eff03f10c96a6cca52aacaf09751112c7` |
+| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` | `be4512bb8def094e867fbe0753b018858de9a097` |
 
 - Web `5cde12f8f` 이메일 설정 분리, `eceb6bbe1` 알림 연결·소속 전환. Office `b78947f` native 분리, `35425f2` 공통 연결·OS 복귀, `c85865d` Credits 표시. Lab `04cfe7f` native 분리, `d8f7fc6` 공통 연결·OS 복귀.
 - 최종 검토 보완: Web `056056c92` 전환 취소/모바일 토스트, Office `358b400` 중복 푸시/준비된 소속 경합, Lab `7ebc124` 활성화 후 최종 소속 확인. 앞선 런타임 증거에 더해 상단의 최종 수정본 검증을 수행했다.
