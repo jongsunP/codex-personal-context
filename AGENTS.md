@@ -114,6 +114,15 @@
   deployment or run the deployment process does not authorize merging that
   PR or starting deployment automatically. Wait for a separate explicit
   merge/deploy instruction; this also applies to release-to-stage PRs.
+- For every deployment preparation, follow **Deployment Preparation And
+  Monorepo Triggers** in `SESSION_WORKFLOW.md`. Verify each requested service's
+  actual workflow trigger against the final PR base/head and changed paths
+  before calling preparation complete; a mergeable PR or matching code tree
+  is insufficient. For the authorized Dentlink staging reset process, preserve
+  the original feature, recreate remote `stage` from latest `origin/master`,
+  then prepare the intended PR with the target service's deployment-triggering
+  diff. Do not substitute manual dispatch for the requested reset/PR process.
+  This is mandatory common guidance, not an LBX-session-only note.
 - For server-deployment result checks, follow **Deployment Result Checks** in
   `SESSION_WORKFLOW.md`: first check no earlier than 15 minutes after the
   deployment starts, then leave at least 3 minutes between any later polls.

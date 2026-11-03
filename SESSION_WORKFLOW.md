@@ -788,14 +788,9 @@ Do not call the current model classic `Git Flow`:
   separate. Stage workflows have product path filters, so verify Clinic, Lab,
   and Admin Actions separately after promotion. A branch recreation push may
   also trigger CI; do not assume either that it deployed or that no job ran.
-- Before calling staging preparation complete, compare the actual PR paths
-  against the requested service's deployment workflow filters. A correct code
-  tree or mergeable PR with no changes under that service's path does not
-  prepare its automatic deployment. When the user requests the stage reset
-  and PR process, follow that authorized process instead of substituting a
-  manual `workflow_dispatch` instruction. The 2026-11-03 LBX correction is the
-  concrete example: a Lab-only diff did not prepare the requested Admin
-  deployment. PR merge and deployment execution remain separately authorized.
+- Apply **Deployment Preparation And Monorepo Triggers** below before
+  declaring a staging PR prepared. The requested service's actual trigger,
+  not only code equality or mergeability, is part of completion.
 
 ### Assistance Rules For Parallel Releases
 
@@ -964,6 +959,48 @@ References: [remote connections](https://learn.chatgpt.com/docs/remote-connectio
 [short-lived pairing codes](https://learn.chatgpt.com/docs/cli/reference#codex-remote-control).
 These references do not establish that Git-backed memory publication controls
 the chat list.
+
+## Deployment Preparation And Monorepo Triggers
+
+This is mandatory common working guidance across projects, explicitly
+confirmed by the user on 2026-11-03. It is not limited to LBX or this chat.
+
+Before declaring deployment preparation complete:
+
+1. Identify the requested environment and every service to deploy. Read the
+   actual service workflows at the relevant revision, including event,
+   branch/tag, `paths`/`paths-ignore`, job-level `if`/dependencies, and other
+   execution conditions.
+2. Refresh the target/base and source/head refs. Compare the final PR's actual
+   changed paths against each requested service's conditions. Record whether
+   the intended action triggers that service, with the per-service evidence
+   in the PR description. In a monorepo, shared code or another service's
+   changes alone may not trigger the requested service.
+3. Do not treat a clean merge, matching tree, tests passing, or a PR existing
+   as sufficient deployment preparation when the intended service will not
+   start. Verify the final GitHub PR base/head and file list before reporting
+   completion. Do not add artificial file changes solely to trigger a build.
+4. For the user's authorized Dentlink staging reset process, preserve the
+   original feature and old stage recovery point, check open PRs/protection,
+   delete remote `stage` with its expected-SHA lease, and recreate it from
+   exact latest `origin/master` with a nonexistence lease. Then prepare the
+   intended feature/release PR and confirm its actual service path changes.
+   The user's 2026-11-03 correction requires this process instead of retaining
+   an already-integrated stage and telling them to dispatch Admin manually.
+5. Follow the requested delivery process. Do not substitute manual
+   `workflow_dispatch`, an empty commit, or another deployment path without
+   the user's explicit change of direction. These checks do not independently
+   authorize branch deletion, protected-branch bypass, PR merge, or deployment.
+6. Stop after the authorized preparation step. PR merge, workflow triggering,
+   final deployment success, serving-revision confirmation, and QA are separate
+   states. Branch recreation itself may trigger workflows; do not assume no
+   deployment occurred without evidence or begin unrequested monitoring.
+
+For reference, the 2026-11-03 LBX PR #4825 had no Admin path changes and
+therefore did not prepare Admin automatic deployment. Recreating stage from
+master and preparing PR #4826 introduced 11 Admin paths, matching the
+`stage` push + `admin/**` trigger. Preserve this lesson as a verification rule,
+not as permission to reset every environment unconditionally.
 
 ## Deployment Result Checks
 
