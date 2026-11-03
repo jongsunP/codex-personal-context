@@ -1,6 +1,14 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 브레이크포인트 — 2026-10-30 · 새 병합 5건 확인, 갤러리 변경 없어 대기 유지
+## 현재 브레이크포인트 — 2026-11-03 · 두 저장소 재확인, 갤러리 변경 없어 대기 유지
+
+- **요청·확인:** 사용자는 관련 변경이 올라왔는지 조회만 요청했습니다. 개인 context를 pull하고 두 제품 원격을 fetch하여 이전 확인 SHA와 비교했습니다. 제품 로컬 checkout·파일·설치·실행 상태는 유지했으며 구현·테스트·Jira·PR 변경은 하지 않았습니다.
+- **Client:** `57bb759ca` → `origin/master@5452871eac0e23a429995381abf673c580d236b9`, 11/02 v1.91.0 병합 #4824입니다. `shared/dlds`, `shared/dlos`, `shared/icons`, `docs/design-systems.md`, `.github/workflows/packages_publish.yml`은 diff 및 새 경로 커밋이 없습니다. 제품 기능 변경과 현재 갤러리 작업을 구분합니다.
+- **Studio:** `9cb8aa4` → `origin/main@4808a67d2aac711de7f6e2bdd1967413dd70fca7`, 새 병합은 #48·49·50·52·53·54 총6건입니다. `packages/dlds-preview`, `packages/dlos-preview`, `apps/studio/app/design-system`은 diff 및 새 경로 커밋이 없고 DLDS 갤러리 마지막 반영은 기존 `17b4d3d`입니다.
+- **참고할 별도 공통 변경:** Tom의 [PR #52](https://github.com/Innvoaid/dentlink-studio/pull/52)는 Ego Lite 기반 로컬 QA CLI·기록·Studio QA 탭·공용 qa 스킬·Jira 연동을 추가했습니다. 나머지5건은 담당자 배정/statement 관련 문서·와이어프레임입니다. #52는 DLDS 갤러리 보완이나 AI 화면 생성 하네스 완료가 아니며, PR 본문 자체도 실제 PRD QA 기록→탭 표시 및 Jira 생성은 미검증으로 구분합니다. 이번에 직접 실행하지 않았습니다.
+- **현재·다음:** Studio 로컬 main `0b304d5`·Client detached `c597f1fb3`는 clean 상태로 보존했습니다. 기다리던 갤러리 추가 코드가 없어 대기를 유지합니다. 동료 후속 코멘트/사용자 재개 지시가 오면 아래 비교·보완 계획을 따르며 하네스·병합·배포·자동 모니터링은 하지 않습니다. Jira는 이번에 조회·변경하지 않았습니다.
+
+## 이전 브레이크포인트 — 2026-10-30 · 새 병합 5건 확인, 갤러리 변경 없어 대기 유지
 
 - **요청·결과:** 사용자가 새 변경/병합 여부만 확인 요청했습니다. Studio 원격을 fetch하고 GitHub PR 메타데이터와 실제 diff를 조회했습니다. 이전 확인 `957d07b9` → 현재 `origin/main@9cb8aa4a3ae1f2984dbe4c0228ffa32735bccc14`에 새 병합 5건이 있습니다.
 - **병합 내역:** #44·#46은 DL-16945 ISV 정의서/PRD/와이어프레임, #45는 DL-16926 치과의사별·미수금 statement 와이어프레임, #47은 DL-00002 카테고리별 담당자 배정, #41은 Next.js 16.4.0 → 16.4.3 갱신입니다. 갤러리 보완 작업과 구분합니다.
