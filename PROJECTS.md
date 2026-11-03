@@ -180,17 +180,23 @@ For detailed current state, read:
 ### Dentlink 모바일웹·앱 비교 / 우선순위 — DL-17012
 
 - 모바일웹 대비 Office·Lab 앱 기능 차이, 담당별 1차 조사와 통합 2차 작업 목록을 관리한다.
-- 원 조사와 Notion 정리는 완료했다. 2026-11-02 후속 회의·알림센터 인계를 기록하고 이 세션을 보관하지 않은 채 유지·대기한다. 알림센터와 병행할 DL-17179 후보 선별의 주력은 [통합알림센터 세션](projects/dentlink-unified-notification-center.md)이며 중복 조사·구현을 시작하지 않는다.
+- 원 조사와 Notion 정리는 완료했다. 2026-11-02 후속 회의·알림센터 인계를 기록하고 이 세션을 보관하지 않은 채 유지·대기한다. DL-17179 후보 조사는 완료 기록이고, 선정한 앱 조회 목록은 DL-17202와 [통합알림센터 정본](projects/dentlink-unified-notification-center.md)에서 관리한다. 이메일 작업은 별도 정본이며 중복 조사·구현을 시작하지 않는다.
 - 최신 사용자 승인 범위·우선순위·Notion 변경을 정본에서 확인한다.
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
 ### Dentlink 통합알림센터 — 구현 착수
 
-- 웹·Office·Lab 알림 목록·설정·딥링크를 함께 구현한다. 2026-10-29 사용자 착수 승인 후 확정 디자인의 선행 UI부터 병행한다.
+- 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.
 - 이 기능 세션에서 제품별 작업 위치·작성자를 분리하며, 미확정 BE 계약과 제품 commit/push/PR/배포 권한은 구분한다.
 - [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
+
+### Dentlink 이메일 CTA 웹·앱 연결·추적 — DL-17183 / DL-17187
+
+- 이메일 CTA, 설치 여부에 따른 웹/앱 연결, Amplitude 유입 분석과 SES·BE 추적 방식은 통합알림센터와 별도 작업이다.
+- 기존 조사/선행 코드·미확정 계약을 보존하고 별도 재개 지시를 기다린다. 문서 분리와 실제 코드·배포 범위 분리는 구분한다.
+- [projects/dentlink-email-cta-tracking.md](projects/dentlink-email-cta-tracking.md)
 
 ### Dentlink E2E Stabilization
 
