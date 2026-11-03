@@ -363,6 +363,48 @@ entry point and this file through `setup-local-codex.sh`. An already-running
 session must read the refreshed guidance when resuming; a successful file
 sync alone is not proof that all running sessions reloaded their instructions.
 
+## Reusable Local Test Login
+
+The user authorized reusable local test-account sessions and, when needed,
+stored test-account passwords on 2026-11-03. This applies across projects and
+sessions; do not ask the user to sign in again when an authorized, valid local
+test session can be reused.
+
+- Prefer a dedicated persistent browser profile or the existing simulator /
+  emulator app login. Keep product, environment, and account roles separate;
+  verify the actual environment and role before testing. A test login does not
+  authorize unrelated data changes, production actions, or deployment.
+- Store reusable browser profiles and authentication state outside all Git
+  repositories, under a restricted local directory such as
+  `~/.local/share/codex-test-sessions/<project>/<environment>/`. Use directory
+  permissions `0700` and standalone authentication-file permissions `0600`.
+  Do not place reusable state in `/tmp`, publish it, or attach it to reports.
+- Prefer reusing the dedicated profile in place. When preserving a temporary
+  profile created for this work, close that browser normally before moving it,
+  then reopen and verify the retained login. Do not copy or inspect the user's
+  general browser profile or extract its saved passwords/cookies.
+- A dedicated test browser's authentication state may be exported without
+  closing the user's inspection windows. Verify reuse in a separate test
+  context before reporting it as saved; a nonempty file alone is not proof of
+  a usable login. Do not print its contents.
+- If password-based automatic login is needed, use an explicitly identified
+  test credential in macOS Keychain or the project's approved local credential
+  store. The user's instruction authorizes this local reuse; it does not mean
+  a password has already been provided or saved. If no credential exists,
+  obtain the initial entry through a secure local UI rather than a chat, Git
+  file, command-line argument, or logged output. Never print credential values.
+- Record only the profile location, environment, role/purpose, and the
+  nonsecret credential-store reference in personal context. Keep actual
+  passwords, tokens, cookies, and browser state out of Git-backed context,
+  product code, screenshots, logs, and cross-session messages.
+- Reuse valid sessions first. Ask for login only when the saved session is
+  absent/expired or interactive authentication is required. Do not reset app
+  data, erase simulators, or delete the saved profile as routine cleanup.
+- Local preservation supports chats on the same execution Mac. It does not
+  establish that credentials were synchronized to another computer or that
+  every role has been tested. Report saved login state and saved password as
+  distinct facts.
+
 ## Main Worktree And Feature Session Model
 
 For Dentlink, apply New Work Intake And Session Routing above: prefer a

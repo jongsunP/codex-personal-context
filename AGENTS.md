@@ -95,6 +95,11 @@
   standing 2026-10-29 authorization for opaque local file inheritance;
   do not repeat the same approval question. The narrow exception does not
   authorize value management, secret retrieval, or deployment changes.
+- For local test accounts, follow **Reusable Local Test Login** in
+  `SESSION_WORKFLOW.md`: reuse dedicated local browser/device sessions and,
+  when needed, an authorized test password from a local secure store. Keep
+  credentials outside Git and logs; do not repeatedly request login when a
+  valid saved session exists. This is the user's standing 2026-11-03 direction.
 - When creating a delegated work session, follow **New Session Model And
   Reasoning Default** in `AI_WORKFLOW.md`: explicitly select the main session's
   verified model and reasoning level, or the highest available combination
