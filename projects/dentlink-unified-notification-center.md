@@ -1,19 +1,32 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-최종 구현 마감: 2026-11-04 — Leo의13:06:40 Jira 답변과 사용자의 후속 진행 승인에 따라 **기공소 밀링 결제 알림 설정·샘플을 제거**했다. Web `08505823a`, Lab 앱 `5d21853` commit/push·원격 일치/clean 확인. Web PC/모바일 및 Lab iOS/Android 영향 화면 검증 완료. 신규 BE 계약·실제 알림 연결은 계속 대기이며 PR·merge·배포·최종 QA 완료가 아니다.
+최종 구현 마감: 2026-11-04 — PM의15:49 수정 요청에 따라 **치과 Credits Email 수신 채널을 Web/Office UI에 추가**했다. Web `873fb2556`, Office `826eebd` commit/push·원격 일치/clean 확인, PC/모바일 웹·앱 양 OS 영향 화면 검증 완료. 앞서 완료한 Lab 밀링 결제 알림 제외(`5d21853`)는 유지한다. USER 단위 알림은 정책·와이어프레임 후속 공유 예정이며 새 BE 계약·실제 저장 연결은 계속 대기다. PR·merge·배포·최종 QA 완료가 아니다.
 
 이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리** 보완·검증·양 앱 commit/push 완료. 이번11/4 작업은 Lab 제외 항목만 반영했으며 배너·인증·OS 권한·실제 서버 수신 설정은 변경하지 않았다.
 
-- **현재 지시:** “지금 당장 할 게 있으면 하고 없으면 정리·메모리 후 대기” 승인에 따라 확정된 Lab 제외 반영까지 마쳤다. BE 명세 또는 사용자 재개 요청을 기다리며 자동 구현·폴링·서버 재실행을 하지 않는다.
+- **현재 지시:** 확정된 Lab 제외 반영 후, 추가로 전달한 Slack을 확인하고 처리하라는 승인에 따라 치과 Credits Email UI까지 반영했다. BE 명세·USER 단위 정책/와이어프레임 또는 사용자 재개 요청을 기다리며 자동 구현·폴링·서버 재실행을 하지 않는다.
 - **추가 자료 확인 — 2026-11-04:** Jira 댓글44798의 설정 템플릿 초안을 현재 세 제품 코드와 대조했고, 후속44802에서 Lab 밀링 결제 제외를 확인했다. 템플릿 초안 자체는 공개 API·BE 배포 완료 근거가 아니다. 후속 구현은 아래 제외 항목 반영에 한정한다.
 - **상태 읽는 순서:** 이 문서의 최신 상태 → [앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md) → 필요할 때 [11/3 단계별 구현·검증 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/입력 대기/서버 유지 문구를 현재로 재사용하지 않는다.
 - **기획 근거:** Notion 정책서와 확인한 Figma/Slack을 대조하되 최신 명시적 사용자 정정을 우선한다. 오늘 필요한 PRD 5-2~5-5/#14는 재대조했고 일부 조회 누락 블록이 있어 전체 본문·댓글을 완전 최신 조회했다고 주장하지 않는다. 이번 마감은 외부 자료 전수 재조사가 아니다.
+
+## 2026-11-04 PM 수정 요청 — Credits 메일 및 USER 단위 알림 예고
+
+- 사용자 요청: [수정 작업 공유 스레드](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793774409809179)를 확인하고 처리할 사항이 있으면 진행. 부모15:40:09 및 [Yoonie 답글15:49:02](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793774942782799), 답글1개/더 없음까지 읽었다. Slack은 읽기 전용이며 게시·반응·읽음 상태 변경·폴링은 하지 않았다.
+- **이번 확정 변경:** 치과 Credits 수신 채널에 Mail 추가. 연결된 [Notion OFFICE 권한별 표](https://app.notion.com/p/innovaid/3c7ce072e82f811184a8e647444f01fd#3470192568044aeca30c23b5d747e6a7)와 Slack 첨부 `F0CEP5HTP0E` 이미지를 직접 대조했다. Credits는 모든 역할에 허용되고 Notification/Push/Mail을 지원한다. Web은 기존대로 Push를 숨기고 Email만, Office 앱은 기존 Push에 Email을 추가한다. Lab 변경은 없다.
+- **자료 최신화 범위:** Notion 반환 편집 시각15:45:28 KST. 해당 권한표는 Mail이 추가됐지만 위 가입 기본값 표의 Credit Mail은 아직 `-`다. 지원 채널은 최신 PM 명시 지시로 반영하되, 서버 초기값·기존 사용자 마이그레이션을 확정하지 않는다. 페이지 응답은 truncated/unknown block1개이므로 전체 본문·모든 댓글을 완전 재검토했다고 주장하지 않는다.
+- **정책·와이어프레임 후속 공유 예정:** USER 단위에 Promotion(SMS, MAIL), Benefits > Credit(PUSH, MAIL)을 추가/정리하겠다는 예고다. 기존 Promotional SMS·Promotional Mail(도스 추가 요청)·유저 크레딧 메일/푸시를 설명한 AS-IS와 TO-BE를 기록한다. 이번에 새 화면·섹션·진입점·서버 계약을 만들거나 기존 수신 동의를 옮기지 않는다.
+- **USER 후속 적용 기준:** 현재 Employee/소속별 설정과 USER 설정을 구분한다. 표시 위치, 기존 Credits와의 관계, 소속 전환과 무관하게 유지할 값, 조회·저장·알림 귀속은 예정된 정책/와이어프레임/BE 계약을 받은 뒤 대조한다. 알림 설정의 Mail 수신 채널이며 별도 이메일 CTA·SES·앱 설치 랜딩 작업을 재개한 것이 아니다. 지금 불필요한 확인 질문을 추가하지 않는다.
+- **선행 구현 범위:** Web Clinic `notificationMockData.ts`의 Credit에 기존 Email 채널 배열을 연결하고, Office `useNotificationMockStore.ts`의 Credit에 기존 `email()`을 추가했다. 새 문구·번역·식별자·API·USER 범위 모델은 추가하지 않았다. Web 상위 초기 OFF/Office 초기 ON 등 기존 mock 예시는 유지하며, 신규 채널의 mock 표시값을 서버 기본값으로 취급하지 않는다. 실제 저장은 신규 BE 명세 연결 때 구현한다.
+- **검증:** Web 실제 OWNER 저장 로그인으로 PC1280/모바일390에서 Credit ON→Email 표시, Email만 OFF 시 상위 유지, 상위 OFF/ON과 채널 복원·뒤로 확인. Lab 양언어 데이터 불변·Web Push 미노출 확인. 필수3서비스 타입/lint 오류0·admin9/shared21+32 통과. Office는 최종 코드의 Android OWNER/iOS MEMBER에서 Email/Push 각각 변경 시 다른 채널 유지, 부모 OFF/ON·복귀를 확인했다. Email은 실제 기기 탭, 일부 다른 토글은 원래 onPress 실행과 native 렌더/state 대조 근거로 구분한다. 양 OS 관찰된 fatal/render loop0, 실제 OS 권한/서버 설정은 변경하지 않았다.
+- **독립 코드 검토:** 추가 결함 없음. 기존 소속별 mock 갱신/초기화, 권한 노출, 상위/하위 변경 로직을 재사용한다. Office OS 차단 조건은 `channel.key === 'push'`에만 적용되어 Email을 차단하지 않는다. 실제 OS OFF 전환은 이번 실행에서 하지 않았으며 해당 조건은 소스 근거다. BE 저장/실제 메일 발송·전체 QA·merge 준비 완료는 아니다.
+- **전달·마감:** Web `873fb2556bee54bcc2bfe836478048cb78ee91c9`, Office `826eebd110eaf48c8c1c2bacb4690d09a637cb1c` 각각 commit/push·원격 SHA 일치·clean 확인. 임시 Clinic3000·Office8081·전용 브라우저·양 기기/DeviceHub 창 종료, 로그인·기존 권한·데이터 보존. Lab은 `5d21853` 그대로이며 재실행/수정하지 않았다. PR·외부 문서/댓글 변경 없음.
+- **실행 근거:** `/tmp/notification-credit-web-1104-final.md`, `/tmp/clinic-credit-email-1104-{1280,390}.png`, `/tmp/office-credit-mail-runtime-1104.md`. 실제 서버 저장이나 메일 발송까지 완료했다고 표현하지 않는다. 개인 정본 기록·commit/push 후 대기한다.
 
 ## 2026-11-04 BE 설정 템플릿 초안 확인 — 수정본 기준
 
 - 정본: [DL-16140 댓글44798](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44798), Leo. 작성12:23:26, **최종 수정12:29:28 KST**. 설정 조회를 템플릿/개인설정으로 나눌 예정이며, 현재 댓글은 **치과(OFFICE)·기공소(LAB) 예시가 구분**돼 있다. 템플릿 설계 예시이며 공개 API·BE 배포 완료 공지가 아니다.
 - 최신 필드는 `orderScopes`, `categories[{domain,category,toggleChannel,channels}]`다. `defaultChannel`·`orderScopeOptions`는 최초12:23 버전에 있던 이름이며 현재 필드로 재사용하지 않는다.
-- Office는 범위 `ALL_ORDERS`/`MY_ORDERS_ONLY`와 설정8개다. CHAT/LINKTALK(PUSH, 추가채널 없음), ORDERS/DESIGN_CONFIRMATION·ORDER_UPDATES(NOTIFICATION, PUSH/MAIL), ORDERS/FEEDBACK·SHIPPING(NOTIFICATION, PUSH), USERS/CASE_PREFERENCE(NOTIFICATION, PUSH/MAIL), PAYMENTS/PAYMENTS(NOTIFICATION, MAIL), BENEFITS/CREDITS(NOTIFICATION, PUSH). 현재 병원앱8개와 채널이 대응하고 웹은 Push 표시를 제외하면 된다.
+- Office는 범위 `ALL_ORDERS`/`MY_ORDERS_ONLY`와 설정8개다. CHAT/LINKTALK(PUSH, 추가채널 없음), ORDERS/DESIGN_CONFIRMATION·ORDER_UPDATES(NOTIFICATION, PUSH/MAIL), ORDERS/FEEDBACK·SHIPPING(NOTIFICATION, PUSH), USERS/CASE_PREFERENCE(NOTIFICATION, PUSH/MAIL), PAYMENTS/PAYMENTS(NOTIFICATION, MAIL), BENEFITS/CREDITS(NOTIFICATION, PUSH). 이는12:29 BE 예시 기준이다. **후속15:49 PM 요구로 Credits MAIL을 UI에 추가했으므로 실제 catalog/설정 명세 연결 시 이 채널이 반영됐는지 대조한다.** 웹은 Push 표시를 제외한다.
 - Lab은 `orderScopes:null`, CHAT/LINKTALK·DENTLINK_SUPPORT(PUSH, 추가채널 없음), ORDERS/DESIGN_CONFIRMATION·ORDER_UPDATES(NOTIFICATION, PUSH), MANUFACTURING/MILLING_ORDER_UPDATES(NOTIFICATION, PUSH)의5개다. Support Push와 밀링 주문 업데이트는 **이미 예시가 있다**. 기존 Lab UI의6개 중 밀링센터 결제만 예시에 없었으나, 후속 답변44802에서 **범위 제외**로 해소됐고 아래 승인 구현으로5개에 맞췄다.
 - **이 초안에 남겨둔 BE 질문은 해소:** 밀링센터 결제의 domain/category를 추가 요구하지 않는다. 병원/기공소 구분, Support, 밀링 주문 업데이트, 과거 이름 `defaultChannel`도 다시 묻지 않는다. `toggleChannel`/`channels`는 현재 상위/하위 UI 구조와 대응 가능하며 개인설정 조회·저장 초안이 나오면 독립 ON/OFF 상태·식별자·초기값·숨긴 채널 보존을 대조한다.
 - BE domain/category를 화면 배치 그대로 노출할 의무는 없다. Shipping·Case Preference·Credit의 독립 영역과 표시는 FE가 가공하고 원래 row 식별자를 보존한다. 필드·정렬·표시명·기존 authority 기반 노출 제한 때문에 불필요한 신규 API를 먼저 요구하지 않는다.
@@ -66,12 +79,12 @@
 
 ## 제품 작업 위치와 Git
 
-2026-11-04 후속 마감: 기존 checkout/branch/worktree를 유지했다. Web/Lab은 밀링 결제 알림 제외만 추가 commit/push·원격 SHA 일치/clean 확인, Office는 이전 HEAD/clean 그대로다. 작성 담당들은 해당 검증·정리 후 제어권을 반환한다.
+2026-11-04 최종 후속 마감: 기존 checkout/branch/worktree를 유지했다. Web은 Lab 밀링 결제 제외와 Clinic Credits Email, Lab은 밀링 결제 제외, Office는 Credits Email까지 각 commit/push·원격 SHA 일치/clean 확인했다. 작성 담당들은 검증·정리를 끝내고 제어권을 반환했다.
 
 | 제품 | checkout | branch / upstream | 원격 반영 HEAD |
 | --- | --- | --- | --- |
-| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` / `origin/feature/DL-17058` | `08505823a9574461ca0dde4852107af3e55dc346` |
-| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` / `origin/feature/DL-17059` | `b57bfbe8568c0ee8cf2062ab6e430fbf0a369948` |
+| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` / `origin/feature/DL-17058` | `873fb2556bee54bcc2bfe836478048cb78ee91c9` |
+| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` / `origin/feature/DL-17059` | `826eebd110eaf48c8c1c2bacb4690d09a637cb1c` |
 | Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` / `origin/feature/DL-17060` | `5d21853bb7cd2efa17fbe65d13a0c3cf35442ee1` |
 
 - Web 오늘 주요 단위: `5cde12f8f` 이메일 설정 분리 → `eceb6bbe1` 실제 소속 연결 → `056056c92` 전환 취소/모바일 토스트 → `d11fb8759` 권한/Shipping.
@@ -90,6 +103,7 @@
 
 ## 로컬 환경·개발 계정 마감
 
+- **11/4 Credits Email 후속 마감:** Clinic Web3000/Office Metro8081·전용 브라우저·양 OS 기기/DeviceHub 창을 실행해 영향 검증한 뒤 종료했다. 기존 로그인·권한·앱 데이터는 보존했다. 앞선 Lab 검증 서버/기기도 계속 종료 상태다.
 - **11/4 후속 검증 마감:** 위 밀링 결제 제외 검증에 필요한 Lab Web3005/Metro8082·iOS/Android만 잠시 실행 후 종료. 3000/3005/8081/8082/9233 listener 없음, adb 기기 없음, booted simulator 없음을 재확인했다. 아래11/3 보관 로그인·Keychain·기기 데이터는 그대로다.
 - 18:46 종료 후 배너 검증에만 Office8081/Lab8082·Android AVD·iPhone17Pro를 잠시 재실행했다. **19:19 KST 다시 종료:** 3000/3005/8081/8082/9233 listener 없음, Android adb 기기 없음, booted simulator 없음, 해당 iPhone 창 닫힘을 확인했다. 각 기기 원래 소속/Home·OS 권한·테스트 함수/인터셉터를 복원하고 로그인·앱 데이터는 유지했다. Web 서버/브라우저는 재실행하지 않았으며 일반 Chrome·IDE·다른 세션은 건드리지 않았다.
 - 로그인 참조는 Git 밖 `~/.local/share/codex-test-sessions/dentlink/development/`. `browser-profile`0700, `web-auth-state.json`0600이며 새 독립 context 재사용까지 검증했다. 기기 앱 데이터·로그인은 보존했다.
@@ -129,6 +143,7 @@
 ### 수신 설정·OS 권한
 
 - Employee 기준 서버 수신 설정을 웹·앱에서 공유하고 기기 OS 권한은 분리한다. 웹 PUSH 조작은 숨긴다. Office/Lab 지원 채널을 구분하며 Office 구성을 Lab에 그대로 복제하지 않는다.
+- **Office Credits Mail 추가:** 11/4 15:49 PM 수정 요청으로 Web/Office UI의 Email 수신 채널을 추가했다. 서버 초기값·저장·마이그레이션은 명세 확인 대상이다. USER 단위 Promotion/Benefits 알림 추가는 별도 정책·와이어프레임 공유 예정이며, 현재 Employee 설정을 임의로 이관하지 않는다.
 - **Lab 밀링센터 주문 > 결제 제외:** 11/4 Leo 답변44802 기준으로 mock 설정/샘플 제거 완료. 밀링 주문 업데이트는 유지한다. 이 결정은 실제 밀링 업무 결제나 Clinic/Office 결제·크레딧의 제외를 뜻하지 않는다.
 - 신규 가입·신규 소속 PUSH ON, 기존 PUSH 선택 보존 방향을 유지한다. 실제 초기값·마이그레이션은 BE 계약으로 확인한다. **Lab My Orders는 제외 확정**이며 과거 제안/티켓 제목으로 되살리지 않는다.
 - 상위 OFF는 하위 OFF, 상위 다시 ON은 하위 기본 ON이다. 하위를 모두 OFF해도 상위까지 자동 OFF하지 않는다. 숨긴 채널을 저장 시 덮어쓰지 않도록 실제 catalog/저장 규칙과 맞춘다.
@@ -159,6 +174,7 @@
 
 - **병행 확인:** 기존 Office Support의 현재 BE 조회 계약과 필요한 실제 역할/데이터를 확보하면 해당 미검증을 해소할 수 있다. 메일 CTA/SES·추가 메뉴·새 디자인 발주를 알림센터 선행 조건으로 만들지 않는다.
 - **남은 정책 근거:** Lab Home 최근 메시지/Support·자동 메시지 hide의 적용 범위는 후속 명시 근거를 확인한다. 파란 배너 1회는 이미 합의·구현된 항목이므로 다시 정책 미정/불필요한 질문으로 되돌리지 않는다.
+- **11/4 후속 정책 대기:** USER 단위 Promotion(SMS/MAIL), Benefits > Credit(PUSH/MAIL)의 정책·와이어프레임을 받으면 현재 Employee 설정과의 경계 및 화면/계약을 대조한다. 현재 Credits Mail 지원은 먼저 반영했으나 실제 초기값·저장 계약을 추측하지 않는다.
 - **누락 보완 이력:** 11/3 배너 영속 보완,11/4 후속 승인에 따른 Lab 밀링 결제 알림 제외까지 완료했다. 다음은 공개 BE 계약을 실제로 확인한 범위부터 이어가며, 임의 API/정책 가정이나 자동 조회·폴링은 하지 않는다.
 
 ## 정본 자료·Jira·이력
