@@ -280,8 +280,13 @@ Dentlink-specific intake rules remain limited to Dentlink.
   completion criterion. A large product-wide estimate may need several cards;
   do not default to one card per product when that hides progress. Keep UI,
   API integration, and ordinary failure handling together for that flow rather
-  than creating a card per file or API. Reuse existing cards, preserve total
-  estimated effort, and distinguish task splitting from starting implementation.
+  than creating a card per file or API. Reuse existing cards and distinguish
+  task splitting from starting implementation. A pure split preserves the
+  reviewed total; a re-estimate may change it when scope, reuse, actual effort,
+  or duplicate allowances provide new evidence. Do not force new estimates
+  to reproduce an old total. Apply **Dentlink Story Point Estimation** before
+  proposing or writing points; AI-generated card content does not validate
+  the estimate, and Jira field-write authorization remains separate.
 - Apply this rule to new intake and resumed work when needed. A request to
   save the policy is not authorization to bulk rewrite existing Jira issues,
   rename existing branches/PRs, or mutate a product repository.

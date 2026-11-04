@@ -57,7 +57,9 @@
 - For product planning and effort estimates, follow **Product Planning,
   Estimation, And Delivery** in `SESSION_WORKFLOW.md` and **Dentlink Story
   Point Estimation** in `DEVELOPMENT_STYLE.md`. Preserve the distinction
-  between preliminary FE review, implementation, QA, and deployment.
+  between preliminary FE review, implementation, QA, and deployment. Treat
+  AI-generated story points as reviewable drafts with task-level time and
+  reuse evidence; do not treat AI card creation as approval of its points.
 - For every project, treat Jira and other QA-card comments as answers to the
   nondeveloper who reported the issue, not as engineering changelogs. State the
   confirmed outcome, use a familiar comparable product behavior as evidence
@@ -129,7 +131,10 @@
   Respect a user-specified delay, one-time check, or instruction to wait.
 - For every branch creation or rename, follow **Branch Naming And Draft PR
   Metadata** in `DEVELOPMENT_STYLE.md`. Use only the user's exact name or the
-  repository's documented naming patterns. Agent prefixes such as `codex/`
+  repository's documented naming patterns. From 2026-11-04, new Dentlink task
+  branches use `feat/<Jira>` across Web/Admin, Office, and Lab; this replaces
+  `feature/<Jira>` without automatically renaming existing branches or changing
+  PR-title prefixes. Agent prefixes such as `codex/`
   and `claude/` are forbidden for QA, follow-up, temporary, backup, delivery,
   sync, and worktree branches as well as ordinary features. Check the intended
   and actual branch name; tool defaults and historical names are not exceptions.

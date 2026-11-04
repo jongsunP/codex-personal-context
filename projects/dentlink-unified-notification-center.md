@@ -147,10 +147,11 @@
 - 추가 목록: DL-17174→DL-17202, 후보 검토 DL-17179. 원본 앱 비교 세션 역할은 [모바일웹/앱 차이 체크포인트](dentlink-mobile-web-app-parity.md)를 참조한다.
 - 마지막 DEV Swagger 조사: **11/4 12:33 KST**. 설정 템플릿 초안과 같은 신규 계약은 미공개이며 위 후속 확인에 근거를 남겼다. 11/3 기존 목록·부분/전체읽음·미읽음·구 preference 검토는 [당일 14:05 점검 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md), Office Support 404와17:40 공개 계약 불일치는 실행 기록을 따른다.
 - 과거 FE API 제안서는 확정 BE 계약이 아니다. 상세 조사·UX 합의·소스/기기 증거·공수 산정·이전 정확한 Git 이력은 [2026-11-03 분리 전 전체 이력](archive/dentlink-unified-notification-center-through-2026-11-03.md)에 보존했다. 과거 ‘현재/다음’ 지시는 최신 범위를 되돌리지 않는다.
+- **11/4 산정 검토 맥락:** [Tom의 Slack](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765218878199)은 AI로 Jira 카드를 만드는 것은 좋으나 스토리포인트 점검이 필요하다고만 했다. 사용자는 최근 산정인 통합알림센터를 지적했을 가능성을 제시했지만 특정 카드·기간 과다·잘못된 근거는 원문에 없다. 이력의 10/27 카드합계31SP와 병행13작업일(당시 잔여12일, 별도QA제외)은 당시 기록이며 현재 잔여공수로 재사용하지 않는다. 다음 산정 검토 시 공수의 측정 대상, 카드별 실제 남은 시간·재사용·완료분·AI 활용·공통 중복을 [공통 산정 지침](../DEVELOPMENT_STYLE.md#dentlink-story-point-estimation)에 따라 대조한다. 이번에는 Jira 현재값 조회·점수 변경·새 일정 확정을 하지 않았다.
 
 ## 운영 경계
 
 - 이 세션은 통합알림센터 기능을 Web/Office/Lab 함께 담당하며 [FE 상위 세션](dentlink-fe.md)은 공통 조율을 담당한다. 새 세션·worktree를 자동 생성하지 않는다.
-- 제품마다 정확한 저장소·활성 작성자를 확인한다. Web 신규 일반 작업은 최신 origin/master, 두 앱은 origin/main 기반 feature/<Jira>→해당 release→main이다. 남은 develop을 신규 기준으로 쓰지 않는다.
+- 제품마다 정확한 저장소·활성 작성자를 확인한다. Web 신규 일반 작업은 최신 origin/master, 두 앱은 origin/main 기반 feat/<Jira>→해당 release→main이다. 11/4 이후 신규 브랜치에는 feat/를 쓰고 기존 feature/ 원본은 별도 지시 없이 바꾸지 않는다. 남은 develop을 신규 기준으로 쓰지 않는다.
 - 11/3 사용자가 이번 FE 선행 범위의 구현·검증·세 제품 commit/push를 승인했다. PR 생성·merge·배포는 승인 범위가 아니다. 다음 미정 정책/새 기능을 자동 확장하지 않는다.
 - Slack은 읽기 전용이며 자동 폴링은 중단 상태를 유지한다. 팀 공유 문서와 개인 작업 메모를 구분하고 의미 있는 마감에 개인 컨텍스트를 commit/push한다. 제품 commit/push는 해당 작업의 명시적 승인을 따른다.

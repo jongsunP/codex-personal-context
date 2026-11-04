@@ -22,7 +22,8 @@
 
 ## 최신 브랜치 전략 — 2026-10-29 사용자 확정
 
-- **병원 Office와 기공소 Lab 앱 모두** 최신 `origin/main`에서 `feature/<Jira>`를 만들고, 해당 release에 통합한 뒤 release를 `main`에 병합한다. 웹과 같은 release-train 개념이며 웹의 안정 브랜치명 `master`와 앱의 `main`은 구분한다.
+- **병원 Office와 기공소 Lab 앱 모두** 최신 `origin/main`에서 `feat/<Jira>`를 만들고, 해당 release에 통합한 뒤 release를 `main`에 병합한다. 웹과 같은 release-train 개념이며 웹의 안정 브랜치명 `master`와 앱의 `main`은 구분한다.
+- **11/4 명명 갱신:** 팀 공지에 따라 신규 브랜치의 `feature/`를 `feat/`로 줄인다. PR 제목 prefix 변경은 아니며 기존 branch/PR을 자동 rename하지 않는다. 적용 정본은 [Branch Naming And Draft PR Metadata](../DEVELOPMENT_STYLE.md#branch-naming-and-draft-pr-metadata)다. 시작 기준·release 대상·검증/배포 권한은 유지한다.
 - `develop`은 더 이상 운용하지 않는다. 신규 작업 기준·PR 대상·release 이후 동기화 대상으로 사용하지 않는다. 남아 있는 develop은 점진적으로 없애는 방향이며, 기존 ref가 남아 있다는 이유로 과거 전략을 다시 적용하지 않는다.
 - 이 정책 변경은 기존 develop의 즉시 삭제·원격 브랜치 정리·열린 PR 변경·병합·배포의 포괄 승인이 아니다. 해당 작업의 명시 권한을 유지한다.
 - 아래 10/8·10/12 이력 중 develop 기반 시작·대상·동기화 설명은 이 결정으로 대체됐다. 실제 workflow가 develop으로 PR을 다시 지정하는지 live 코드로 확인하되 자동화의 과거 동작을 정책으로 삼지 않는다.

@@ -4,6 +4,13 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
+## 브랜치명·스토리포인트 지침 갱신 — 2026-11-04
+
+- Slack [브랜치 공지](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765529562549), [Frankie의 범위 질문](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765593806349), 채널 후속 [Tom의 확인](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765642512149)을 읽었다. 신규 작업 브랜치는 Dentlink Web/Admin·Office·Lab 모두 **`feat/<Jira>`**를 사용한다. PR 제목 prefix 변경은 아니며 기존 feature 브랜치/PR과 역사적 이름은 보존한다. 13:15의 “길어서요”는 브랜치명 축약 이유이지 스토리포인트 산정 비판의 근거가 아니다.
+- [스토리포인트 피드백](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765218878199)은 AI 카드 생성 자체는 괜찮지만 점수 점검이 필요하다는 내용이다. 특정 업무·수치·과다 산정 이유는 언급하지 않았다. 통합알림센터일 가능성은 사용자 추측으로 구분한다.
+- 공통 정본 `DEVELOPMENT_STYLE.md`의 명명/산정 규칙과 `AGENTS.md`, `SESSION_WORKFLOW.md`, `AI_WORKFLOW.md`, 앱 온보딩의 현행 예시를 맞췄다. **1SP=6시간 유지**, AI 점수는 초안, 카드별 실제 시간·재사용/완료분·중복 버퍼·AI 활용 근거 검토, 공수/병행 일정 구분, 사용자 검토 및 Jira 쓰기 권한을 명확히 한다. 카드 분할 시 합계 보존과 근거가 바뀐 재산정을 구분한다.
+- [통합알림센터 정본](dentlink-unified-notification-center.md)에 다음 산정 검토 맥락만 남겼다. 이번은 개인 지침 정비이며 제품 코드·기존 branch/PR·Jira 점수는 변경하지 않았다. 현재 카드값과 적정 조정치는 재산정하지 않았으므로 과거31SP를 그대로 옹호하거나 임의 감액하지 않는다.
+
 ## 알림센터·추가 앱 목록·이메일 범위 분리 — 2026-11-03
 
 - 사용자 확정: [통합알림센터](dentlink-unified-notification-center.md)는 웹/앱 알림함·설정, 노티/푸시 클릭 처리와 합의한 추가 앱 목록(DL-17202)을 담당한다. 추가 목록은 전용 메뉴 없이 노티·푸시 진입만으로 진행하며 메뉴 개선은 후속이다.

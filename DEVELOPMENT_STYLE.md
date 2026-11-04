@@ -330,6 +330,9 @@ applying them.
 
 Dentlink uses a time-based story-point convention rather than Fibonacci-style
 relative complexity.
+The 2026-11-04 [team feedback](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765218878199)
+asks for AI-generated points to be checked; it does not change this scale or
+identify a particular issue, excessive duration, or required reduction.
 
 - `1 point` means one developer working day: 6 productive work hours. The
   user clarified on 2026-10-27 that roughly 2 hours of an 8-hour day are
@@ -340,9 +343,29 @@ relative complexity.
   for about 9 hours and `2` for about 12 hours.
 - Estimate Jira FE work in this unit by default. Do not translate a conventional
   Fibonacci estimate such as 3, 5, or 8 directly into Dentlink story points.
-- Treat Codex estimates as drafts when API, design, native-app ownership, or
-  another material dependency is unresolved, and state what could change the
-  estimate so the user can make the final adjustment.
+- Treat every AI-generated estimate as a reviewable draft, even when the
+  requirements look settled. State material API/design/ownership uncertainty
+  and let the user review the basis and make the final adjustment. Creating a
+  Jira card with AI does not validate or authorize its story-point value.
+- Before proposing points, show a compact task-level basis: confirmed scope,
+  reusable or completed work, remaining implementation/integration/checks,
+  estimated productive hours, assumptions, and resulting hours / 6 points.
+  Compare with relevant actual work where available. Avoid adding completed
+  preparation, shared work, or the same risk/meeting allowance more than once.
+- Define whose effort is measured. Account for the user's actual one-person
+  plus Codex workflow and observed reuse or AI assistance; do not store
+  hypothetical unaided developer-days as actual effort while separately
+  assuming AI makes the calendar shorter. Unmeasured AI speedups and agent
+  counts are not evidence for a fixed multiplier or divisor. Preserve the
+  necessary human review, integration, and final-code runtime checks.
+- Show material uncertainty as an explicit assumption or justified range,
+  not unexplained padding on every card and again on the total. Revisit the
+  basis when scope or actual progress changes; do not preserve an old total
+  merely because it has already been shared, or reduce it merely to look fast.
+- A vague request to check points does not identify a specific card or prove
+  overestimation. Separate the source statement from hypotheses and inspect
+  the estimate before proposing a change. Jira point writes still require
+  authorization for the reviewed value or an explicitly labeled draft.
 - Follow **Product Planning, Estimation, And Delivery** in
   `SESSION_WORKFLOW.md`. Explicitly state whether estimates include API
   integration, developer testing, review/QA corrections, user QA, and delivery.
@@ -484,7 +507,14 @@ conditional on whether the current crash investigation reproduces a failure.
   branches, and branches created by worktree or delegated-session tools.
 - Use the user's exact branch name when supplied. Otherwise stay within the
   repository's documented naming patterns; never invent another prefix or
-  namespace. Dentlink task branches use `feature/<Jira>` by default.
+  namespace. From 2026-11-04, Dentlink task branches use `feat/<Jira>` by default
+  across Web/Admin, Office app, and Lab app. The [team notice](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765529562549)
+  shortens `feature` to `feat`; the [follow-up confirmation](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765642512149)
+  confirms that it concerns branch names across projects, not PR-title prefixes.
+  Apply the new prefix to future branches; preserve existing branch names,
+  PR heads, and historical records unless a rename is explicitly authorized.
+  Historical `feature/` examples are not the current creation default. Other
+  projects retain their own naming contracts unless this policy applies there.
   Agent-specific prefixes such as `codex/`, `claude/`, or `agent/` are forbidden.
   An agent/tool default, an old branch with that prefix, isolation needs, or a
   QA/release-based starting commit does not create an exception.
@@ -492,11 +522,11 @@ conditional on whether the current crash investigation reproduces a failure.
   only for its explicitly authorized purpose. Being authorized to do QA or
   follow-up work does not authorize inventing `qa/`, `backup/`, or another
   prefix. If an existing task branch must be preserved, use a permitted
-  descriptive suffix within `feature/<Jira>` rather than a new namespace.
+  descriptive suffix within `feat/<Jira>` rather than a new namespace.
 - Name a branch for its intended delivery scope. When a branch is meant to
   collect multiple QA fixes for one release, use the release QA purpose rather
-  than the first Jira card alone; for example, `feature/v1.79.0-qa` for fixes
-  targeting `release/v1.79.0`.
+  than the first Jira card alone; for example, `feat/vX.Y.Z-qa` for fixes
+  targeting `release/vX.Y.Z`.
 - Before creation or rename, compare the full intended name with the exact
   user instruction and the allowed repository pattern. After any tool or
   automation creates the branch, verify its actual name before editing,

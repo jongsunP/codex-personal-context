@@ -165,6 +165,10 @@ project-specific exceptions should be recorded explicitly.
 - Reconcile material design/policy/API changes before treating a provisional
   estimate as final. Do not count shared work twice or re-add already completed
   preparation to the remaining development estimate.
+- AI-generated points remain drafts for user review. Apply the task-level
+  time/reuse/actual-progress check in **Dentlink Story Point Estimation**
+  before Jira values are finalized; card creation or splitting does not
+  establish the correctness of a number or require retaining an old total.
 - This process does not grant implementation, Jira field changes, product
   Git/PR mutations, merge, or deployment permission. Existing authorization
   and final-code app runtime-verification rules remain in force.
@@ -445,7 +449,7 @@ unless their move or cleanup is authorized.
    children, comments, and accessible linked sources together with the closest
    current production code. Report the understood scope, evidence gaps, and
    only the questions that materially affect implementation.
-4. In each affected repository, create the dedicated `feature/<Jira>` branch
+4. In each affected repository, create the dedicated `feat/<Jira>` branch
    and sibling worktree needed for that repository from the requested or
    default base. Push and set upstream only when the user requests remote
    setup.
@@ -569,12 +573,14 @@ rechecks on the resulting final code. This applies to features, QA fixes, and
 shared app changes alike.
 
 The user's 2026-10-29 instruction replaces the earlier develop-based policy
-for **both Office and Lab**: `main -> feature -> release -> main`, the same
+for **both Office and Lab**: `main -> feat/<Jira> -> release -> main`, the same
 release-train concept as web with `main` as the stable app branch. The
 2026-10-12 handoff remains historical reference where it differs. This does
 not itself retarget existing PRs or authorize merges, deployment, or cleanup.
+The `feat/<Jira>` spelling above incorporates the separate 2026-11-04 naming
+update in **Branch Naming And Draft PR Metadata**; the base policy is unchanged.
 
-- For an authorized ordinary app feature, create `feature/<Jira>` from latest
+- For an authorized ordinary app feature, create `feat/<Jira>` from latest
   fetched `origin/main`. Its integration PR targets the applicable release
   branch; after QA/delivery, release is merged into `main` with separate user
   authorization. Honor an explicit task base or verified release-QA context.
@@ -659,7 +665,7 @@ Treat the following as the branch strategy for the Dentlink web repository
 - **Ordinary new work always starts from the latest fetched `origin/master`.**
   This is a standing user decision, reaffirmed on 2026-10-06, not an open
   question to ask again for each task. Prepare the authorized task's
-  `feature/<Jira>` branch from that commit, regardless of whether the current
+  `feat/<Jira>` branch from that commit, regardless of whether the current
   clean checkout happens to be on an older release.
 - A Jira fixVersion or parent issue's planned release (for example v1.89.0)
   is scheduling metadata that may change; it does not select the feature base.
@@ -679,14 +685,16 @@ Treat the following as the branch strategy for the Dentlink web repository
   an existing task branch, or uncertainty about which release produced the QA.
   This rule does not authorize commits, pushes, PR mutations, merges, or
   release/develop/stage changes beyond the user's existing authorization.
-- `feature/*` branches are the only normal implementation branches.
+- New ordinary implementation branches use `feat/*` under the 2026-11-04
+  naming update. Existing `feature/*` branches remain valid until separately
+  authorized cleanup or rename; the naming change does not change their base.
 - Apply **Branch Naming And Draft PR Metadata** in `DEVELOPMENT_STYLE.md` to
   every branch purpose, including QA, release follow-up, temporary/backup,
   delivery/sync, and worktree-created branches. Verify the full permitted name
   before and after creation or rename. Agent/tool defaults such as `codex/`
   never replace the repository rule; changing the base to a release does not
   change the naming rule. When preserving another branch for the same Jira,
-  append a short description within `feature/<Jira>`.
+  append a short description within `feat/<Jira>`.
 - `release/vX.Y.Z` branches are deployment-only release trains cut from
   `master`; they are not feature-development branches.
 - A feature PR targets the release branch for its intended deployment version.
@@ -772,7 +780,7 @@ Do not call the current model classic `Git Flow`:
 - In current Dentlink usage, branches named `develop` and `stage` primarily
   drive one development server and one staging server. They are environment
   branches, not equivalents of classic Git Flow's `develop` integration
-  authority. Stable product history remains `feature -> release -> master`.
+  authority. Stable product history remains `feat/<Jira> -> release -> master`.
 - The exact staging-server branch name is `stage`, not `staging`. Before
   deleting, recreating, or targeting an environment branch, verify the live
   remote refs and documented deployment convention; do not derive a branch
