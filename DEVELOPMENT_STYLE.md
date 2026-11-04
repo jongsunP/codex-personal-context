@@ -358,6 +358,12 @@ identify a particular issue, excessive duration, or required reduction.
   assuming AI makes the calendar shorter. Unmeasured AI speedups and agent
   counts are not evidence for a fixed multiplier or divisor. Preserve the
   necessary human review, integration, and final-code runtime checks.
+- Check the units before sharing both points and an elapsed schedule. State
+  whether card hours represent expected human effort with AI assistance or
+  another explicitly labeled comparison; do not silently mix those measures.
+  Explain any gap between summed effort and available human hours through
+  task ownership, dependencies, justified overlap, and review/integration
+  capacity. A numerically correct sum alone does not validate the estimate.
 - Show material uncertainty as an explicit assumption or justified range,
   not unexplained padding on every card and again on the total. Revisit the
   basis when scope or actual progress changes; do not preserve an old total
@@ -379,15 +385,23 @@ identify a particular issue, excessive duration, or required reduction.
 - Show product-level effort separately from the elapsed working-day plan.
   Shared decisions, prerequisite patterns, review, integration, and final
   runtime verification constrain overlap; do not simply sum all product days
-  or divide them by the number of agents. Label assumed overlap and any
-  unmeasured productivity gain, and recalibrate against actual progress.
+  or divide them by the number of agents. Taking only the longest product's
+  duration is not a justified schedule unless independent execution capacity,
+  prerequisite handoffs, and the human's shared work have been accounted for.
+  Label assumed overlap and any unmeasured productivity gain, and recalibrate
+  against actual progress. When scope changes, rebuild the affected schedule
+  rather than retaining an unsupported earlier parallelism assumption.
 - Include FE analysis, UX feasibility review, and design in planning/development
   estimates. Separate already-completed planning from remaining work so it is
   counted once, and label a planning allocation separately from measured worklogs.
 - When the user asks for a development-only estimate, exclude the separate QA
-  phase, QA-driven follow-up fixes, deployment, and external waiting. State
-  whether basic implementation checks are included. This scheduling boundary
-  does not waive the app runtime evidence required before final QA or merge.
+  phase, QA-driven follow-up fixes, deployment, and external waiting. Keep
+  required developer checks, integration checks, and final-code app runtime
+  verification explicitly allocated within development. If a previous QA line
+  bundled those checks with a separate QA phase, split it before subtracting;
+  do not remove its entire effort while keeping the same verification duties.
+  This scheduling boundary does not waive the app runtime evidence required
+  before final QA or merge, or authorize starting verification outside scope.
 - Record each Jira product card's own effort; put the parallel elapsed schedule
   and its assumptions in the shared planning explanation. Do not make a sum of
   product estimates appear to be the promised delivery duration.

@@ -169,6 +169,9 @@ project-specific exceptions should be recorded explicitly.
   time/reuse/actual-progress check in **Dentlink Story Point Estimation**
   before Jira values are finalized; card creation or splitting does not
   establish the correctness of a number or require retaining an old total.
+  Reconcile the effort units with the elapsed schedule, justify overlapping
+  work against the actual staffing/review capacity, and retain required
+  developer verification when excluding a separate QA phase.
 - This process does not grant implementation, Jira field changes, product
   Git/PR mutations, merge, or deployment permission. Existing authorization
   and final-code app runtime-verification rules remain in force.
