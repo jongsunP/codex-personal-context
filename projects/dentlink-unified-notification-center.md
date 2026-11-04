@@ -12,7 +12,7 @@
 ## 2026-11-04 앱 심사 일정·네이티브 영향 확인 — 읽기 전용
 
 - 사용자 지정 [FE 스레드](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793784745210489)의 부모18:32:25 및 답글6개(마지막18:37:05 KST, 더 없음)를 확인했다. Daniel은 라이브러리 변경으로 이번 주 심사·다음 주 월요일11/9 배포를 생각하지만 요일은 유연하며 병원앱도 가능하면 함께 올리겠다고 했다. Joy는 주문 상세 작업을 다음 날 마무리할 것으로 보고 동시 배포 여부를 검토 중이다. 심사 제출·배포 완료나 알림센터 포함 확정이 아니다.
-- Frankie의18:36:57 답변은 “현재 기준 네이티브 변경은 없을 것 같지만 다시 검토 후 답변”이라는 잠정 의견이다. **실제 누적 diff에는 양 앱 Android 네이티브 변경이 남아 있으므로 최종 답변에서는 이 점을 정정해야 한다.**
+- Frankie의18:36:57 답변은 “현재 기준 네이티브 변경은 없을 것 같지만 다시 검토 후 답변”이라는 잠정 의견이다. 실제 누적 diff에는 양 앱 Android 네이티브 변경이 남지만, **이메일을 제외한 확정 요구사항 때문에 새 네이티브 변경·심사가 필수라는 뜻은 아니다.** 사용자 후속 지적에 따라 코드의 잔존과 요구사항의 필요성을 구분해 재검토했다. 앞서 모듈의 존재만으로 심사 빌드 포함을 우선 안내한 판단은 부정확했다.
 
 | 제품 | 현재 feature / 비교 기준 | 실제 기능 누적 네이티브 변경 |
 | --- | --- | --- |
@@ -20,9 +20,10 @@
 | Lab | `5d21853`, upstream 일치·clean. fetch 후 main `26623e0`, merge-base `5144103`, main-only4/feature-only14 | 같은 위치의 `BrowserPackage.kt` 신규40줄 + `MainApplication.kt` 등록1줄. 최초 추가 `28ebcd8` |
 
 - 두 앱 모두 merge-base→feature 기준 iOS/entitlements/Manifest/Gradle·Podfile/lock/package 의존성 변경은 없다. Lab 최신 main에만 들어온 기존 밀링/배포 변경을 feature 신규 변경으로 잘못 세지 않았다. 새 npm 라이브러리·OS 권한은 추가하지 않았다.
-- 이메일용 도메인/OS 연결은 Office `b78947f`, Lab `04cfe7f`에서 분리했으나 **공통 브라우저 열기 모듈까지 제거한 것은 아니다.** `src/configs/utils/browser.ts`가 Android에서 `NativeModules.DentlinkBrowser.openURL`을 호출한다. Office `useNavigationConfig.ts`의 잔여 HTTP(S)/소속 해석 불가 웹 fallback, Lab의 미지원 Dentlink 웹 URL 처리에서 사용하므로 이메일 전용 미사용 코드로 판단해 지우지 않는다.
+- **잔존 원인:** 모듈은 Office `9ae3cf3`·Lab `28ebcd8`의 이메일 HTTPS 진입 작업에서, 미지원 웹 링크를 브라우저로 돌릴 때 앱으로 재진입하는 것을 막으려고 추가됐다. Office `b78947f`, Lab `04cfe7f`에서 이메일용 도메인/OS 연결은 분리했지만 이 모듈과 JS 호출은 남겼다. 현재 공통 알림 경로가 호출한다는 사실만으로 새 native가 필수인 것은 아니다.
+- **확정 범위 재검토:** Office에는 portal HTTPS 앱 등록이 더 이상 없고 기존 scheme/Airbridge만 남는다. Lab의 자체 웹 등록은 기존 `/q/*`이며 `resolveIncomingUrl`에서 QR을 먼저 처리해 앱 scheme 또는 null로 끝나므로 현재 일반 browser fallback을 거치지 않는다. 지원 노티/푸시 URL은 기존 앱 화면/action으로 변환된다. 남은 일반 미지원 HTTPS는 기존 `Linking.openURL` 재사용으로 처리할 코드상 근거가 있다. 다만 기존 Airbridge 도메인은 앱에 계속 등록돼 있어 raw URL을 무조건 일괄 치환하지 않고 분기·회귀를 확인해야 한다.
 - **전달 영향:** 현재 구현을 그대로 유지하려면 이 모듈이 Android 바이너리에 포함돼 있어야 한다. 현재 origin/main에는 없으며, 모듈이 없는 구 바이너리에 JS만 배포하면 해당 브라우저 열기는 catch 후 false로 끝난다(현재 Android에 Linking 대체 경로 없음). 이것을 앱 전체가 반드시 크래시한다거나 모든 알림 화면에 새 native가 필요하다는 뜻으로 확대하지 않는다. iOS는 기존 Linking 경로이며 이번 기능 누적 native 변경 없음.
-- **다음 판단:** 이번 심사 빌드에 해당 공통 모듈만 미리 포함할지, 공통 랜딩 처리를 기존 기능으로 대체해 native 변경을 없앨지 작업/전달 범위를 별도로 결정한다. 모듈 포함을 택해도 미완료 알림 UI 전체를 심사 release에 합칠 필요가 있다는 결론은 아니다. JS 대체 가능성과 실제 심사 빌드·CodePush target 호환성은 이번 소스 감사로 확정하지 않았다.
+- **다음 시작점:** 추가 심사를 전제로 삼기보다 알림센터 범위에서 불필요해진 native 의존을 기존 JS 기능으로 정리할 수 있는지 우선 처리한다. 사용자 후속 구현 지시를 받은 뒤 모듈·등록·호출을 함께 정리하고 지원 노티/푸시, 미지원 HTTPS, 소속 실패, 기존 Airbridge/Lab QR 경계를 양 OS에서 검증한다. 이번은 소스 감사만 했으며 대체 구현·기기 검증·CodePush 호환성 확정은 아직 하지 않았다. 현 요구사항만으로 별도 심사 필요를 단정하거나 이메일 작업을 다시 포함하지 않는다.
 - 이번에는 코드·branch/worktree·PR·릴리즈·배포·runtime·Slack/외부 문서를 변경하지 않았다. 필요한 main/feature ref만 fetch하고 두 저장소의 정확한 누적 diff/소비자를 읽었다. 실제 포함 여부·통합은 사용자 후속 지시에 따른다.
 
 ## 2026-11-04 PM 수정 요청 — Credits 메일 및 USER 단위 알림 예고
@@ -191,7 +192,7 @@
 - **병행 확인:** 기존 Office Support의 현재 BE 조회 계약과 필요한 실제 역할/데이터를 확보하면 해당 미검증을 해소할 수 있다. 메일 CTA/SES·추가 메뉴·새 디자인 발주를 알림센터 선행 조건으로 만들지 않는다.
 - **남은 정책 근거:** Lab Home 최근 메시지/Support·자동 메시지 hide의 적용 범위는 후속 명시 근거를 확인한다. 파란 배너 1회는 이미 합의·구현된 항목이므로 다시 정책 미정/불필요한 질문으로 되돌리지 않는다.
 - **11/4 후속 정책 대기:** USER 단위 Promotion(SMS/MAIL), Benefits > Credit(PUSH/MAIL)의 정책·와이어프레임을 받으면 현재 Employee 설정과의 경계 및 화면/계약을 대조한다. 현재 Credits Mail 지원은 먼저 반영했으나 실제 초기값·저장 계약을 추측하지 않는다.
-- **앱 전달 전 필수 확인:** 양 앱 Android 공통 `DentlinkBrowser` 모듈의 심사 바이너리 포함 여부 및 실제 CodePush 호환 대상을 확인한다. 현재 feature에는 native2파일이 있으므로 “네이티브 변경 없음/구 바이너리에 CodePush만 가능”으로 안내하지 않는다. Lab main-only4커밋의 반영 여부도 실제 통합 전에 대조하며 자동 merge/rebase는 하지 않는다.
+- **앱 전달 전 필수 확인:** 이메일 분리 후 잔존한 Android `DentlinkBrowser` 의존의 필요성을 재검토했고, 확정 알림센터 요구 때문에 추가 심사가 필수인 근거는 없다. 기존 JS 방식으로 정리·회귀 검증할 일이 남아 있다. 현재 feature에 native2파일이 남은 상태를 수정 완료/CodePush 호환 확정으로 표현하지 않는다. Lab main-only4커밋의 반영 여부도 실제 통합 전에 대조하며 자동 merge/rebase는 하지 않는다.
 - **누락 보완 이력:** 11/3 배너 영속 보완,11/4 후속 승인에 따른 Lab 밀링 결제 알림 제외까지 완료했다. 다음은 공개 BE 계약을 실제로 확인한 범위부터 이어가며, 임의 API/정책 가정이나 자동 조회·폴링은 하지 않는다.
 
 ## 정본 자료·Jira·이력
