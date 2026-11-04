@@ -1,30 +1,31 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-최종 구현 마감: 2026-11-04 — PM의15:49 수정 요청에 따라 **치과 Credits Email 수신 채널을 Web/Office UI에 추가**했다. Web `873fb2556`, Office `826eebd` commit/push·원격 일치/clean 확인, PC/모바일 웹·앱 양 OS 영향 화면 검증 완료. 앞서 완료한 Lab 밀링 결제 알림 제외(`5d21853`)는 유지한다. USER 단위 알림은 정책·와이어프레임 후속 공유 예정이며 새 BE 계약·실제 저장 연결은 계속 대기다. PR·merge·배포·최종 QA 완료가 아니다.
+최종 구현 마감: 2026-11-04 — **확정된 알림센터 범위에 맞춰 이메일 작업에서 남은 Android 브라우저 모듈 의존을 양 앱에서 정리**했다. Office `cefac786`, Lab `b92207c`이며 모듈 없는 Android 빌드·양 OS 영향 경로 검증을 완료했다. 누적 네이티브/라이브러리 변경은 없다. Web `873fb2556`과 앞선 Credits Email·Lab 밀링 결제 제외는 유지한다. 새 BE 계약·USER 정책/와이어프레임은 계속 대기이며 PR·merge·배포·최종 QA 완료가 아니다.
 
-이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리** 보완·검증·양 앱 commit/push 완료. 이번11/4 작업은 Lab 제외 항목만 반영했으며 배너·인증·OS 권한·실제 서버 수신 설정은 변경하지 않았다.
+이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리** 보완·검증·양 앱 commit/push 완료. 이후11/4 범위 정리에서도 배너·인증·OS 권한·실제 서버 수신 설정은 변경하지 않았다.
 
-- **현재 지시:** 확정된 Lab 제외 반영 후, 추가로 전달한 Slack을 확인하고 처리하라는 승인에 따라 치과 Credits Email UI까지 반영했다. BE 명세·USER 단위 정책/와이어프레임 또는 사용자 재개 요청을 기다리며 자동 구현·폴링·서버 재실행을 하지 않는다.
+- **현재 지시:** 사용자 후속 승인으로 확정 범위·잔존 코드·전달 답변을 재점검하고 정리했다. 심사 일정이 기능 범위의 기준이 아니다. 마감 후 BE 명세·USER 단위 정책/와이어프레임 또는 사용자 재개 요청을 기다리며 자동 구현·폴링·서버 재실행을 하지 않는다.
 - **추가 자료 확인 — 2026-11-04:** Jira 댓글44798의 설정 템플릿 초안을 현재 세 제품 코드와 대조했고, 후속44802에서 Lab 밀링 결제 제외를 확인했다. 템플릿 초안 자체는 공개 API·BE 배포 완료 근거가 아니다. 후속 구현은 아래 제외 항목 반영에 한정한다.
 - **상태 읽는 순서:** 이 문서의 최신 상태 → [앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md) → 필요할 때 [11/3 단계별 구현·검증 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/입력 대기/서버 유지 문구를 현재로 재사용하지 않는다.
 - **기획 근거:** Notion 정책서와 확인한 Figma/Slack을 대조하되 최신 명시적 사용자 정정을 우선한다. 오늘 필요한 PRD 5-2~5-5/#14는 재대조했고 일부 조회 누락 블록이 있어 전체 본문·댓글을 완전 최신 조회했다고 주장하지 않는다. 이번 마감은 외부 자료 전수 재조사가 아니다.
 
-## 2026-11-04 앱 심사 일정·네이티브 영향 확인 — 읽기 전용
+## 2026-11-04 확정 범위에 맞춘 잔존 코드 정리·검증
 
-- 사용자 지정 [FE 스레드](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793784745210489)의 부모18:32:25 및 답글6개(마지막18:37:05 KST, 더 없음)를 확인했다. Daniel은 라이브러리 변경으로 이번 주 심사·다음 주 월요일11/9 배포를 생각하지만 요일은 유연하며 병원앱도 가능하면 함께 올리겠다고 했다. Joy는 주문 상세 작업을 다음 날 마무리할 것으로 보고 동시 배포 여부를 검토 중이다. 심사 제출·배포 완료나 알림센터 포함 확정이 아니다.
-- Frankie의18:36:57 답변은 “현재 기준 네이티브 변경은 없을 것 같지만 다시 검토 후 답변”이라는 잠정 의견이다. 실제 누적 diff에는 양 앱 Android 네이티브 변경이 남지만, **이메일을 제외한 확정 요구사항 때문에 새 네이티브 변경·심사가 필수라는 뜻은 아니다.** 사용자 후속 지적에 따라 코드의 잔존과 요구사항의 필요성을 구분해 재검토했다. 앞서 모듈의 존재만으로 심사 빌드 포함을 우선 안내한 판단은 부정확했다.
+- **최신 사용자 기준:** 심사를 피하려고 기능을 바꾸는 것이 아니라, 지금까지 확정한 통합알림센터 범위와 코드·기록을 일치시킨다. 이메일 CTA는 별도이며 노티/푸시 공통 랜딩, 기존 Airbridge·Lab QR, 합의된 추가 조회 화면과 Email 수신 설정은 유지한다.
+- [FE 심사 일정 스레드](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793784745210489)를 재조회했다. 부모18:32:25와 답글6개(마지막18:37:05 KST, 더 없음)이며, Daniel은 라이브러리 변경으로 이번 주 심사·다음 주 월요일11/9 배포를 고려하되 요일은 유연하다고 했다. Joy의 주문 상세 동시 배포는 검토 중이다. 이 일정에 알림센터 포함을 확정하거나 Slack에 답변을 게시하지 않았다.
+- **이전 판단 정정:** 양 앱에 네이티브 코드가 남았다는 사실만으로 이번 심사 빌드 포함을 요구한 안내는 부정확했다. Office `9ae3cf3`·Lab `28ebcd8`의 이메일 HTTPS 진입 보완으로 추가한 브라우저 모듈이, Office `b78947f`·Lab `04cfe7f`의 도메인 분리 후에도 남았다. 공통 호출자가 있다는 이유와 새 native가 필수라는 판단을 혼동했다.
+- **코드 정리:** 양 앱 `BrowserPackage.kt`와 `MainApplication.kt` 등록을 제거하고 `browser.ts`는 기존 `Linking.openURL` 및 실패 boolean을 재사용한다. 지원 URL 변환·로그인 대기·소속 준비·기존 화면/action은 유지했다. Office는 이미 OS/SDK가 받은 미해석 Airbridge HTTP(S) 주소만 수신입구3곳에서 재전달하지 않게 한다. 인박스/FCM의 최초 직접 호출은 보존하며, SDK가 해석한 앱/일반 웹 URL도 통과한다. Lab은 기존 Dentlink 웹 도메인 분기와 QR 우선 처리로 경계가 분리돼 추가 가드가 필요 없다.
+- **누적 범위 확인:** 두 앱 모두 feature merge-base 대비 Android/iOS·Manifest/entitlements·package/lock의 변경0. Office 기준 `7f586790`, Lab 기준 `5144103`이며 Lab 최신 main `26623e0`에만 있던 다른 밀링/배포 변경을 이번 feature의 수정으로 오인하지 않는다. 웹 `873fb2556`은 이메일 확장 `6dca5142b`의16파일이 모두 추가 전 상태와 동일하므로 수정하지 않았다. 기존 Lab `/q/*`는 유지한다.
 
-| 제품 | 현재 feature / 비교 기준 | 실제 기능 누적 네이티브 변경 |
+| 제품·최종 코드 | 최종 실행·검사 근거 | 결과와 한계 |
 | --- | --- | --- |
-| Office | `826eebd`, upstream 일치·clean. fetch 후 main과 merge-base 모두 `7f586790` | `android/app/src/main/java/com.innovaid.android.dentlink/BrowserPackage.kt` 신규40줄 + `MainApplication.kt` 등록1줄. 최초 추가 `9ae3cf3` |
-| Lab | `5d21853`, upstream 일치·clean. fetch 후 main `26623e0`, merge-base `5144103`, main-only4/feature-only14 | 같은 위치의 `BrowserPackage.kt` 신규40줄 + `MainApplication.kt` 등록1줄. 최초 추가 `28ebcd8` |
+| Office `cefac786` | 기존 Jest77건/3suite, 실제 소스 임시 검사14건, 변경 lint/diff. 모듈 제거 Android 빌드·재설치 후 native 모듈 없음 확인. Android OWNER/iOS MEMBER에서 Credit 실제 조회·Back, 인박스/설정, 일반HTTPS·잘못된소속 브라우저 처리, raw/resolved Airbridge 경계 | 영향 경로 정상, 관찰된 fatal/render loop0. Android push는 합성 URL이며 실제 FCM 발송 아님. 초기 SDK/deferred/오류 분기는 합성 검사, 실제 캠페인 서버·로그아웃 E2E는 미실행 |
+| Lab `b92207c` | 기존 딥링크6건·실제 소스24건, lint/diff. Android 새APK의 DEX 및 runtime 모듈 없음. 양 OS 기존 INTERNAL/OWNER/DIRECTOR에서 Home·인박스/설정, raw/push 채팅 실제본문, 대표 `/q/o` 주문 상세·Back, Airbridge 형식 URL, 일반HTTPS 브라우저 이동 | 영향 경로 정상. 실제 FCM 발송·캠페인 서버·QR 촬영/모든 QR유형 검증으로 확대하지 않음. 전체 tsc5건은 기존 진단과 동일, 변경 파일 신규 진단0 |
 
-- 두 앱 모두 merge-base→feature 기준 iOS/entitlements/Manifest/Gradle·Podfile/lock/package 의존성 변경은 없다. Lab 최신 main에만 들어온 기존 밀링/배포 변경을 feature 신규 변경으로 잘못 세지 않았다. 새 npm 라이브러리·OS 권한은 추가하지 않았다.
-- **잔존 원인:** 모듈은 Office `9ae3cf3`·Lab `28ebcd8`의 이메일 HTTPS 진입 작업에서, 미지원 웹 링크를 브라우저로 돌릴 때 앱으로 재진입하는 것을 막으려고 추가됐다. Office `b78947f`, Lab `04cfe7f`에서 이메일용 도메인/OS 연결은 분리했지만 이 모듈과 JS 호출은 남겼다. 현재 공통 알림 경로가 호출한다는 사실만으로 새 native가 필수인 것은 아니다.
-- **확정 범위 재검토:** Office에는 portal HTTPS 앱 등록이 더 이상 없고 기존 scheme/Airbridge만 남는다. Lab의 자체 웹 등록은 기존 `/q/*`이며 `resolveIncomingUrl`에서 QR을 먼저 처리해 앱 scheme 또는 null로 끝나므로 현재 일반 browser fallback을 거치지 않는다. 지원 노티/푸시 URL은 기존 앱 화면/action으로 변환된다. 남은 일반 미지원 HTTPS는 기존 `Linking.openURL` 재사용으로 처리할 코드상 근거가 있다. 다만 기존 Airbridge 도메인은 앱에 계속 등록돼 있어 raw URL을 무조건 일괄 치환하지 않고 분기·회귀를 확인해야 한다.
-- **전달 영향:** 현재 구현을 그대로 유지하려면 이 모듈이 Android 바이너리에 포함돼 있어야 한다. 현재 origin/main에는 없으며, 모듈이 없는 구 바이너리에 JS만 배포하면 해당 브라우저 열기는 catch 후 false로 끝난다(현재 Android에 Linking 대체 경로 없음). 이것을 앱 전체가 반드시 크래시한다거나 모든 알림 화면에 새 native가 필요하다는 뜻으로 확대하지 않는다. iOS는 기존 Linking 경로이며 이번 기능 누적 native 변경 없음.
-- **다음 시작점:** 추가 심사를 전제로 삼기보다 알림센터 범위에서 불필요해진 native 의존을 기존 JS 기능으로 정리할 수 있는지 우선 처리한다. 사용자 후속 구현 지시를 받은 뒤 모듈·등록·호출을 함께 정리하고 지원 노티/푸시, 미지원 HTTPS, 소속 실패, 기존 Airbridge/Lab QR 경계를 양 OS에서 검증한다. 이번은 소스 감사만 했으며 대체 구현·기기 검증·CodePush 호환성 확정은 아직 하지 않았다. 현 요구사항만으로 별도 심사 필요를 단정하거나 이메일 작업을 다시 포함하지 않는다.
-- 이번에는 코드·branch/worktree·PR·릴리즈·배포·runtime·Slack/외부 문서를 변경하지 않았다. 필요한 main/feature ref만 fetch하고 두 저장소의 정확한 누적 diff/소비자를 읽었다. 실제 포함 여부·통합은 사용자 후속 지시에 따른다.
+- **독립 검토:** 웹 범위 감사와 양 앱 최종 diff를 별도 담당자가 재검토했고 새 결함·필요 공통 기능 삭제를 발견하지 못했다. exact host/resolved 경계 추가8케이스 통과. 새 제품 테스트 파일이나 라이브러리를 추가하지 않았다.
+- **Git·로컬 마감:** Office `cefac78668b77a1fd3781cfa01b7da0860808a03`, Lab `b92207c5e36747e811a23001868cde9b46c860bc` commit/push·ls-remote 일치·clean 확인. Web은 `873fb2556` 그대로다. Office 첫 push의 GitHub `commit_refs_rules` 서버 오류는 재시도 성공으로 해소됐고 개인 컨텍스트의 이전 미반영2커밋도 원격 반영했다. 양 앱의 원래 소속/Home·로그인·OS 권한을 유지하고 임시 observer/변수를 제거했다. Metro8081/8082·Android·iOS·해당 DeviceHub 창 종료, 남은 로컬 서버 없음.
+- **전달할 결론:** 현재 확정 범위의 알림센터 때문에 이번 심사 빌드에 추가로 선반영을 요청할 네이티브 변경은 없다. 실제 release 통합·CodePush 대상 호환·최종 QA·배포는 별도 단계이며 이번 정리로 완료 처리하지 않는다. 새 BE 계약/USER 정책 대기 상태도 그대로다.
+- **기록 경계:** Notion/Jira의 기존 이메일 분리 정의는 바꾸지 않았다. 새 댓글·상태 변경·PR·merge·배포는 하지 않았다. 상세 실행 근거는 `/tmp/office-native-scope-cleanup-20261104.md`, `/tmp/lab-native-scope-cleanup-20261104.md`이며 주요 결과는 이 표에 Git으로 보존한다.
 
 ## 2026-11-04 PM 수정 요청 — Credits 메일 및 USER 단위 알림 예고
 
@@ -96,13 +97,13 @@
 
 ## 제품 작업 위치와 Git
 
-2026-11-04 최종 후속 마감: 기존 checkout/branch/worktree를 유지했다. Web은 Lab 밀링 결제 제외와 Clinic Credits Email, Lab은 밀링 결제 제외, Office는 Credits Email까지 각 commit/push·원격 SHA 일치/clean 확인했다. 작성 담당들은 검증·정리를 끝내고 제어권을 반환했다.
+2026-11-04 최종 후속 마감: 기존 checkout/branch/worktree를 유지했다. Web은 앞선 Lab 밀링 결제 제외·Clinic Credits Email 상태이며, Office/Lab은 이메일 분리 후 불필요해진 native 의존까지 정리했다. 원격 확인·로컬 실행 종료 결과는 아래 마감 기록을 따른다.
 
 | 제품 | checkout | branch / upstream | 원격 반영 HEAD |
 | --- | --- | --- | --- |
 | Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` / `origin/feature/DL-17058` | `873fb2556bee54bcc2bfe836478048cb78ee91c9` |
-| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` / `origin/feature/DL-17059` | `826eebd110eaf48c8c1c2bacb4690d09a637cb1c` |
-| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` / `origin/feature/DL-17060` | `5d21853bb7cd2efa17fbe65d13a0c3cf35442ee1` |
+| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` / `origin/feature/DL-17059` | `cefac78668b77a1fd3781cfa01b7da0860808a03` |
+| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` / `origin/feature/DL-17060` | `b92207c5e36747e811a23001868cde9b46c860bc` |
 
 - Web 오늘 주요 단위: `5cde12f8f` 이메일 설정 분리 → `eceb6bbe1` 실제 소속 연결 → `056056c92` 전환 취소/모바일 토스트 → `d11fb8759` 권한/Shipping.
 - Office: `b78947f` native 분리 → `35425f2` 공통 연결/OS 복귀 → `c85865d` Credits 표시 → `358b400` 중복/소속 경합 → `18033bc` raw 링크 타이머 → `8f09cb1` 채팅 ID → `6bf1c58` 설정 권한 → `b57bfbe` 설정 배너 1회.
@@ -120,6 +121,7 @@
 
 ## 로컬 환경·개발 계정 마감
 
+- **11/4 확정 범위 정리 후 최종 마감:** Office/Lab 양 OS 영향 검증을 위해 재실행한 Metro8081/8082·Android AVD·iPhone17Pro·해당 DeviceHub 창을 모두 종료했다. 3000/3005/8081/8082 listener 없음, adb 기기0·booted simulator0 확인. 양 앱 원래 Home/소속·로그인·OS 권한과 Keychain은 보존했다. Office Android OWNER/iOS MEMBER, Lab 양 OS 기존 소속에서 확인한 범위와 미검증은 최신 범위 정리 절을 따른다.
 - **11/4 Credits Email 후속 마감:** Clinic Web3000/Office Metro8081·전용 브라우저·양 OS 기기/DeviceHub 창을 실행해 영향 검증한 뒤 종료했다. 기존 로그인·권한·앱 데이터는 보존했다. 앞선 Lab 검증 서버/기기도 계속 종료 상태다.
 - **11/4 후속 검증 마감:** 위 밀링 결제 제외 검증에 필요한 Lab Web3005/Metro8082·iOS/Android만 잠시 실행 후 종료. 3000/3005/8081/8082/9233 listener 없음, adb 기기 없음, booted simulator 없음을 재확인했다. 아래11/3 보관 로그인·Keychain·기기 데이터는 그대로다.
 - 18:46 종료 후 배너 검증에만 Office8081/Lab8082·Android AVD·iPhone17Pro를 잠시 재실행했다. **19:19 KST 다시 종료:** 3000/3005/8081/8082/9233 listener 없음, Android adb 기기 없음, booted simulator 없음, 해당 iPhone 창 닫힘을 확인했다. 각 기기 원래 소속/Home·OS 권한·테스트 함수/인터셉터를 복원하고 로그인·앱 데이터는 유지했다. Web 서버/브라우저는 재실행하지 않았으며 일반 Chrome·IDE·다른 세션은 건드리지 않았다.
@@ -192,7 +194,7 @@
 - **병행 확인:** 기존 Office Support의 현재 BE 조회 계약과 필요한 실제 역할/데이터를 확보하면 해당 미검증을 해소할 수 있다. 메일 CTA/SES·추가 메뉴·새 디자인 발주를 알림센터 선행 조건으로 만들지 않는다.
 - **남은 정책 근거:** Lab Home 최근 메시지/Support·자동 메시지 hide의 적용 범위는 후속 명시 근거를 확인한다. 파란 배너 1회는 이미 합의·구현된 항목이므로 다시 정책 미정/불필요한 질문으로 되돌리지 않는다.
 - **11/4 후속 정책 대기:** USER 단위 Promotion(SMS/MAIL), Benefits > Credit(PUSH/MAIL)의 정책·와이어프레임을 받으면 현재 Employee 설정과의 경계 및 화면/계약을 대조한다. 현재 Credits Mail 지원은 먼저 반영했으나 실제 초기값·저장 계약을 추측하지 않는다.
-- **앱 전달 전 필수 확인:** 이메일 분리 후 잔존한 Android `DentlinkBrowser` 의존의 필요성을 재검토했고, 확정 알림센터 요구 때문에 추가 심사가 필수인 근거는 없다. 기존 JS 방식으로 정리·회귀 검증할 일이 남아 있다. 현재 feature에 native2파일이 남은 상태를 수정 완료/CodePush 호환 확정으로 표현하지 않는다. Lab main-only4커밋의 반영 여부도 실제 통합 전에 대조하며 자동 merge/rebase는 하지 않는다.
+- **앱 전달 전 확인:** 이메일 분리 후 잔존했던 Android 모듈은 제거·기존 JS 방식으로 대체·영향 기기 검증까지 완료했다. 현재 기능 때문에 추가 native 심사 선반영을 요구하지 않는다. 실제 release/CodePush 대상 호환과 Lab main-only 변경의 통합 여부는 전달 단계에서 별도로 대조하며 자동 merge/rebase는 하지 않는다.
 - **누락 보완 이력:** 11/3 배너 영속 보완,11/4 후속 승인에 따른 Lab 밀링 결제 알림 제외까지 완료했다. 다음은 공개 BE 계약을 실제로 확인한 범위부터 이어가며, 임의 API/정책 가정이나 자동 조회·폴링은 하지 않는다.
 
 ## 정본 자료·Jira·이력
