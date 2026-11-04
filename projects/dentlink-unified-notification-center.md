@@ -7,22 +7,23 @@
 - **상태 읽는 순서:** 이 문서의 최신 상태 → [앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md) → 필요할 때 [11/3 단계별 구현·검증 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/입력 대기/서버 유지 문구를 현재로 재사용하지 않는다.
 - **기획 근거:** Notion 정책서와 확인한 Figma/Slack을 대조하되 최신 명시적 사용자 정정을 우선한다. 오늘 필요한 PRD 5-2~5-5/#14는 재대조했고 일부 조회 누락 블록이 있어 전체 본문·댓글을 완전 최신 조회했다고 주장하지 않는다. 이번 마감은 외부 자료 전수 재조사가 아니다.
 
-## 2026-11-04 BE 설정 템플릿 초안 확인
+## 2026-11-04 BE 설정 템플릿 초안 확인 — 수정본 기준
 
-- 출처: [DL-16140 댓글44798](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44798), Leo, 작성·수정 2026-11-04 12:23:26 KST. 설정 조회를 **템플릿 / 개인설정** 두 가지로 나눌 예정이며 먼저 템플릿 응답을 화면에 매핑해 의견을 요청했다. 사용자 Frankie가 12:24:56 답글44799에서 확인 후 필요한 의견을 주겠다고 답한 것도 확인했다. 이슈 댓글6개 전체 조회 결과 추가 답변은 없었다.
-- 응답 초안은 `orderScopeOptions[{code,displayName}]`, `categories[{domain,category,defaultChannel,channels}]`다. 범위 코드는 `ALL_ORDERS`/`MY_ORDERS_ONLY`. 예시8개는 CHAT/LINKTALK(PUSH, 추가채널 없음), ORDERS/DESIGN_CONFIRMATION·ORDER_UPDATES(NOTIFICATION, PUSH/MAIL), ORDERS/FEEDBACK·SHIPPING(NOTIFICATION, PUSH), USERS/CASE_PREFERENCE(NOTIFICATION, PUSH/MAIL), PAYMENTS/PAYMENTS(NOTIFICATION, MAIL), BENEFITS/CREDITS(NOTIFICATION, PUSH)다. endpoint·개인설정 응답·저장 payload는 이 댓글에 없다.
-- **현재 코드 매핑:** Office의8개 설정 row와 채널 조합은 모두 대응한다. Clinic 웹은 같은 항목에서 Push를 숨기고 LinkTalk Push 전용 항목도 제외하는 현재 표시 정책을 적용하면 된다. `MAIL`→현재 UI의 Email, scope code→화면 값은 FE 변환 가능하며 응답 형식 자체의 표현 불가를 발견하지 않았다. `ORDERS/SHIPPING`, `USERS/CASE_PREFERENCE`, `BENEFITS/CREDITS`를 독립 영역으로 보이는 것은 기존 도메인/카테고리 표시 가공 합의와 맞고 서버 row 식별자는 보존한다.
-- **지금 최소 확인할 내용:** `defaultChannel`이 상위 스위치가 제어하는 채널인지, 단순 기본 발송 채널인지 정확한 뜻. 또한 이 예시가 병원용인지와 기공소용 구성의 별도 제공 여부. 현 Lab UI에는 Support Push·밀링센터 결제/주문 업데이트가 있어 이 샘플만으로 전체 Lab 설정을 매핑할 수 없다. 이를 전체 명세의 누락으로 확정하거나 미확정 enum을 만들어 연결하지 않는다.
-- **개인설정 초안이 나올 때 확인:** 카테고리 상위 ON/OFF와 각 채널 ON/OFF를 구분해 표현/저장할 수 있는지(상위 ON·하위 모두 OFF 허용), 식별자 연결, 설정 없음/초기값, 숨긴 채널 값 보존. `MY_ORDERS_ONLY`는 기존 Assigned Dentist 기준과 의미를 맞춘다. 표시명·정렬·웹/앱 표시 차이·기존 authority 기반 노출 제한을 이유로 불필요한 신규 API 필드를 먼저 요구하지 않는다.
-- 검토 근거: Web `shared/ui/src/NotificationUI/notificationMockData.ts`·`NotificationSettings.tsx`, Office/Lab `src/store/useNotificationMockStore.ts`와 설정 화면/타입. Web `d11fb8759`, Office `b57bfbe`, Lab `1fbcacc`에서 읽기만 수행했다. Figma/Notion/Swagger 전수 재조회, 제품 코드·branch·PR·서버 실행, Jira/Notion/Slack 작성은 하지 않았다. 다음은 이 초안의 최소 의미 확인과 후속 개인설정/저장 계약 대조다.
+- 정본: [DL-16140 댓글44798](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44798), Leo. 작성12:23:26, **최종 수정12:29:28 KST**. 설정 조회를 템플릿/개인설정으로 나눌 예정이며, 현재 댓글은 **치과(OFFICE)·기공소(LAB) 예시가 구분**돼 있다. 템플릿 설계 예시이며 공개 API·BE 배포 완료 공지가 아니다.
+- 최신 필드는 `orderScopes`, `categories[{domain,category,toggleChannel,channels}]`다. `defaultChannel`·`orderScopeOptions`는 최초12:23 버전에 있던 이름이며 현재 필드로 재사용하지 않는다.
+- Office는 범위 `ALL_ORDERS`/`MY_ORDERS_ONLY`와 설정8개다. CHAT/LINKTALK(PUSH, 추가채널 없음), ORDERS/DESIGN_CONFIRMATION·ORDER_UPDATES(NOTIFICATION, PUSH/MAIL), ORDERS/FEEDBACK·SHIPPING(NOTIFICATION, PUSH), USERS/CASE_PREFERENCE(NOTIFICATION, PUSH/MAIL), PAYMENTS/PAYMENTS(NOTIFICATION, MAIL), BENEFITS/CREDITS(NOTIFICATION, PUSH). 현재 병원앱8개와 채널이 대응하고 웹은 Push 표시를 제외하면 된다.
+- Lab은 `orderScopes:null`, CHAT/LINKTALK·DENTLINK_SUPPORT(PUSH, 추가채널 없음), ORDERS/DESIGN_CONFIRMATION·ORDER_UPDATES(NOTIFICATION, PUSH), MANUFACTURING/MILLING_ORDER_UPDATES(NOTIFICATION, PUSH)의5개다. Support Push와 밀링 주문 업데이트는 **이미 예시가 있다**. 현 Lab UI의6개 중 **밀링센터 결제**만 예시 매핑이 확인되지 않는다.
+- **현재 BE에 남길 최소 질문:** 기공소 설정 화면의 ‘밀링센터 주문 > 결제’가 어떤 domain/category로 제공될 예정인지. 병원/기공소 구분, Support, 밀링 주문 업데이트, 과거 이름 `defaultChannel`을 다시 묻지 않는다. `toggleChannel`/`channels`는 현재 상위/하위 UI 구조와 대응 가능하며 개인설정 조회·저장 초안이 나오면 독립 ON/OFF 상태·식별자·초기값·숨긴 채널 보존을 대조한다.
+- BE domain/category를 화면 배치 그대로 노출할 의무는 없다. Shipping·Case Preference·Credit의 독립 영역과 표시는 FE가 가공하고 원래 row 식별자를 보존한다. 필드·정렬·표시명·기존 authority 기반 노출 제한 때문에 불필요한 신규 API를 먼저 요구하지 않는다.
+- 검토 근거: Web `shared/ui/src/NotificationUI/notificationMockData.ts`·`NotificationSettings.tsx`, Office/Lab `src/store/useNotificationMockStore.ts` 및 설정 화면/타입. Web `d11fb8759`, Office `b57bfbe`, Lab `1fbcacc`에서 읽기만 했다. Figma/Notion 전수 재조사·제품 코드/branch/PR/runtime·외부댓글 쓰기는 하지 않았다.
+- **조사 정정:** Codex가 최초12:23 버전을 읽은 후12:29 수정본을 재조회하지 않고 ‘기공소 예시 여부/Support·밀링 전체 코드/defaultChannel 의미’의 질문을 안내했다. 사용자 지적 후 원문 재조회로 오류를 확인·사과했다. [사용자 답글44800](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44800)의 마지막 수정12:38:15에는 defaultChannel과 Support·밀링 결제/업데이트 질문이 남아 있었다. 사용자가 수정할 복사문은 **밀링센터 결제 한 항목만** 남기며 Codex가 외부 댓글을 직접 수정하지 않는다. 이전 커밋83af533/4762a9e의 초안 표현은 이 정정으로 대체한다.
 
 ### 후속 DEV Swagger 확인 — 2026-11-04 12:33 KST
 
-- 사용자가 “꼭 필요한 BE 질문만 복사할 수 있게 주고, 실제 Swagger에 있으면 진행·없으면 인지/정리/메모리”를 지시했다. [DEV OpenAPI 원문](https://dev-api.dentlink.io/v3/api-docs)을 직접 HTTP GET하여200을 확인했다. 웹 열기 도구는 접근 오류였으나 로컬 HTTP 조회는 성공했다. 974 paths/1490 schemas, SHA256 `65e61e41dbd9547954ec082bee3b3bffc59a20861a36f5ec53b522959d507028`, 로컬 읽기 근거 `/tmp/dentlink-notification-swagger-20261104.json`이다.
-- **결과: 이번 새 설정 템플릿·개인설정 계약은 공개 DEV Swagger에서 미확인.** 전체 path의 summary/description/operationId와 schema/property를 대조했고 `orderScopeOptions`, `defaultChannel`, `orderScope`, `channels`, `ALL_ORDERS`, `MY_ORDERS_ONLY`는 없다. 독립 읽기 검토도 같은 결과다. BE 내부 구현 여부나 미공개 endpoint의 존재까지 부정하지 않는다.
-- 이름이 비슷한 기존 API는 대체 계약이 아니다. `/admin/messages/templates/notifications`는 제목/본문/타입/랜딩을 관리하는 관리자 발송 템플릿, `/codes/preference`는 `key/optionValues[]` 코드, `/app/users/own/push-preferences`는 `preferenceId/pushEnable/enablePersonalOrders/settings[{id,type,enable}]`의 구 앱 설정이다. 기존 알림 목록·읽음 API가 공개돼 있다는 이유로 이번 새 설정 명세가 제공됐다고 보지 않는다.
-- **외부 전달할 최소 질문은2개:** (1) `defaultChannel`은 해당 항목 상위 ON/OFF가 제어하는 채널이며 `channels`는 하위 추가 선택 채널인지. (2) 이번 예시가 병원용인지와 기공소 Support Push·밀링센터 결제/주문 업데이트가 어떤 domain/category로 제공되는지. 현재 병원 화면 매핑은 가능하며 추가 UI용 필드/새 API를 먼저 요구하지 않는다. 개인설정 응답·저장 형태는 후속 명세에서 확인한다.
-- 따라서 이번 조건부 구현은 시작하지 않고 초안과 확인사항만 기록한다. 제품 코드/API 생성물·branch·PR·서버·기기는 그대로 종료 상태이며 외부 댓글/문서는 수정하지 않았다. 사용자가 명세 또는 후속 답변을 전달하면 현재 공개 계약을 다시 대조해 연결하고, 그 전 자동 조회·폴링은 하지 않는다.
+- 사용자 지시: 실제 Swagger에 있으면 가능한 계약 범위로 진행하고 없으면 인지/정리/메모리한다. [DEV OpenAPI 원문](https://dev-api.dentlink.io/v3/api-docs)을 직접 HTTP GET하여200 확인. 웹 열기 도구는 접근 오류였으나 직접 조회는 성공했다. 974 paths/1490 schemas, SHA256 `65e61e41dbd9547954ec082bee3b3bffc59a20861a36f5ec53b522959d507028`, 근거 `/tmp/dentlink-notification-swagger-20261104.json`.
+- **결과: 새 설정 템플릿·개인설정 계약은 공개 DEV Swagger에서 미확인.** 전체 path의 summary/description/operationId·schema/property를 대조했다. 최초 이름 `orderScopeOptions`/`defaultChannel`뿐 아니라 수정본 `orderScopes`/`toggleChannel`도 이12:33 응답에0건임을 후속 독립 대조했다. BE 내부 구현 여부나 미공개 endpoint 존재까지 부정하지 않는다.
+- 이름이 비슷한 기존 API는 대체 계약이 아니다. `/admin/messages/templates/notifications`는 제목/본문/타입/랜딩을 관리하는 관리자 발송 템플릿, `/codes/preference`는 `key/optionValues[]` 코드, `/app/users/own/push-preferences`는 `preferenceId/pushEnable/enablePersonalOrders/settings[{id,type,enable}]`의 구 앱 설정이다.
+- 따라서 이번 조건부 구현은 시작하지 않고 수정된 초안과 최소 확인사항만 기록한다. 제품 코드/API 생성물·branch·PR·서버·기기는 그대로 종료 상태다. 후속 명세/답변을 받으면 실제 공개 계약을 다시 대조하며 그 전 자동 조회·폴링은 하지 않는다.
 
 ## 2026-11-03 요구와 마감 상태
 
