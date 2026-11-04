@@ -16,6 +16,14 @@
 - **개인설정 초안이 나올 때 확인:** 카테고리 상위 ON/OFF와 각 채널 ON/OFF를 구분해 표현/저장할 수 있는지(상위 ON·하위 모두 OFF 허용), 식별자 연결, 설정 없음/초기값, 숨긴 채널 값 보존. `MY_ORDERS_ONLY`는 기존 Assigned Dentist 기준과 의미를 맞춘다. 표시명·정렬·웹/앱 표시 차이·기존 authority 기반 노출 제한을 이유로 불필요한 신규 API 필드를 먼저 요구하지 않는다.
 - 검토 근거: Web `shared/ui/src/NotificationUI/notificationMockData.ts`·`NotificationSettings.tsx`, Office/Lab `src/store/useNotificationMockStore.ts`와 설정 화면/타입. Web `d11fb8759`, Office `b57bfbe`, Lab `1fbcacc`에서 읽기만 수행했다. Figma/Notion/Swagger 전수 재조회, 제품 코드·branch·PR·서버 실행, Jira/Notion/Slack 작성은 하지 않았다. 다음은 이 초안의 최소 의미 확인과 후속 개인설정/저장 계약 대조다.
 
+### 후속 DEV Swagger 확인 — 2026-11-04 12:33 KST
+
+- 사용자가 “꼭 필요한 BE 질문만 복사할 수 있게 주고, 실제 Swagger에 있으면 진행·없으면 인지/정리/메모리”를 지시했다. [DEV OpenAPI 원문](https://dev-api.dentlink.io/v3/api-docs)을 직접 HTTP GET하여200을 확인했다. 웹 열기 도구는 접근 오류였으나 로컬 HTTP 조회는 성공했다. 974 paths/1490 schemas, SHA256 `65e61e41dbd9547954ec082bee3b3bffc59a20861a36f5ec53b522959d507028`, 로컬 읽기 근거 `/tmp/dentlink-notification-swagger-20261104.json`이다.
+- **결과: 이번 새 설정 템플릿·개인설정 계약은 공개 DEV Swagger에서 미확인.** 전체 path의 summary/description/operationId와 schema/property를 대조했고 `orderScopeOptions`, `defaultChannel`, `orderScope`, `channels`, `ALL_ORDERS`, `MY_ORDERS_ONLY`는 없다. 독립 읽기 검토도 같은 결과다. BE 내부 구현 여부나 미공개 endpoint의 존재까지 부정하지 않는다.
+- 이름이 비슷한 기존 API는 대체 계약이 아니다. `/admin/messages/templates/notifications`는 제목/본문/타입/랜딩을 관리하는 관리자 발송 템플릿, `/codes/preference`는 `key/optionValues[]` 코드, `/app/users/own/push-preferences`는 `preferenceId/pushEnable/enablePersonalOrders/settings[{id,type,enable}]`의 구 앱 설정이다. 기존 알림 목록·읽음 API가 공개돼 있다는 이유로 이번 새 설정 명세가 제공됐다고 보지 않는다.
+- **외부 전달할 최소 질문은2개:** (1) `defaultChannel`은 해당 항목 상위 ON/OFF가 제어하는 채널이며 `channels`는 하위 추가 선택 채널인지. (2) 이번 예시가 병원용인지와 기공소 Support Push·밀링센터 결제/주문 업데이트가 어떤 domain/category로 제공되는지. 현재 병원 화면 매핑은 가능하며 추가 UI용 필드/새 API를 먼저 요구하지 않는다. 개인설정 응답·저장 형태는 후속 명세에서 확인한다.
+- 따라서 이번 조건부 구현은 시작하지 않고 초안과 확인사항만 기록한다. 제품 코드/API 생성물·branch·PR·서버·기기는 그대로 종료 상태이며 외부 댓글/문서는 수정하지 않았다. 사용자가 명세 또는 후속 답변을 전달하면 현재 공개 계약을 다시 대조해 연결하고, 그 전 자동 조회·폴링은 하지 않는다.
+
 ## 2026-11-03 요구와 마감 상태
 
 | 요구 | 오늘 처리와 현재 상태 |
@@ -135,7 +143,7 @@
 - 결정 근거: [UX 논의](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793063024060739), [푸시 클릭/읽음](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793244658608799), [앱 추가 목록 회의](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793596568281269). 최신 명시적 사용자 정정과 날짜 있는 후속 결정을 오래된 문장보다 우선한다.
 - 알림센터 상위 [DL-16140](https://innovaid.atlassian.net/browse/DL-16140). 공통 DL-17057, Web DL-17058/17061/17062, Office DL-17059/17063/17064/17065, Lab DL-17060/17066/17067/17068, UX 사전 검토 DL-17048. 실제 카드 상태·범위는 재개 시 확인하며 카드명만으로 제외 범위를 복원하지 않는다.
 - 추가 목록: DL-17174→DL-17202, 후보 검토 DL-17179. 원본 앱 비교 세션 역할은 [모바일웹/앱 차이 체크포인트](dentlink-mobile-web-app-parity.md)를 참조한다.
-- 마지막 DEV Swagger 조사: **11/3 14:01 KST**. 기존 목록·부분/전체읽음·미읽음·구 preference 계약을 재확인했다. 정확한 공개 명세 범위는 [당일 14:05 점검 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md)을 따른다. 17:40에는 기존 Office Support 404 경로를 추가 대조했다. 문서 마감 때 Swagger 전체를 다시 조회하지 않았다.
+- 마지막 DEV Swagger 조사: **11/4 12:33 KST**. 설정 템플릿 초안과 같은 신규 계약은 미공개이며 위 후속 확인에 근거를 남겼다. 11/3 기존 목록·부분/전체읽음·미읽음·구 preference 검토는 [당일 14:05 점검 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md), Office Support 404와17:40 공개 계약 불일치는 실행 기록을 따른다.
 - 과거 FE API 제안서는 확정 BE 계약이 아니다. 상세 조사·UX 합의·소스/기기 증거·공수 산정·이전 정확한 Git 이력은 [2026-11-03 분리 전 전체 이력](archive/dentlink-unified-notification-center-through-2026-11-03.md)에 보존했다. 과거 ‘현재/다음’ 지시는 최신 범위를 되돌리지 않는다.
 
 ## 운영 경계
