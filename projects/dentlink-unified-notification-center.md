@@ -3,10 +3,20 @@
 최종 갱신: 2026-11-03 19:19 KST — 사용자가 승인한 잔여 1번, **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리**를 보완하고 영향 화면 검증·양 앱 commit/push를 완료했다. 세 feature 원격일치/clean, 로컬 실행 종료. 신규 알림 BE 연결·일부 실제 역할/데이터/OS 조건 검증은 남는다. PR·merge·배포·최종 QA 완료가 아니다.
 
 - **현재 지시:** “2번은 혼자 할 수 없으니 1번까지 마무리하고 기다리자”에 따라 배너 보완을 끝냈다. BE 명세 또는 사용자 재개 요청을 기다리며 자동 구현·폴링·서버 재실행을 하지 않는다.
+- **추가 자료 확인 — 2026-11-04:** 사용자가 지정한 Jira 댓글44798의 설정 템플릿 초안을 읽고 현재 세 제품 코드와 대조했다. 아래 검토는 초안 의견이며 구현 재개·API 확정·BE 배포 확인이 아니다. 제품 작업 위치/HEAD는 11/3 마감과 동일하고 clean이다.
 - **상태 읽는 순서:** 이 문서의 최신 상태 → [앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md) → 필요할 때 [11/3 단계별 구현·검증 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/입력 대기/서버 유지 문구를 현재로 재사용하지 않는다.
 - **기획 근거:** Notion 정책서와 확인한 Figma/Slack을 대조하되 최신 명시적 사용자 정정을 우선한다. 오늘 필요한 PRD 5-2~5-5/#14는 재대조했고 일부 조회 누락 블록이 있어 전체 본문·댓글을 완전 최신 조회했다고 주장하지 않는다. 이번 마감은 외부 자료 전수 재조사가 아니다.
 
-## 오늘 요구와 최종 상태
+## 2026-11-04 BE 설정 템플릿 초안 확인
+
+- 출처: [DL-16140 댓글44798](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44798), Leo, 작성·수정 2026-11-04 12:23:26 KST. 설정 조회를 **템플릿 / 개인설정** 두 가지로 나눌 예정이며 먼저 템플릿 응답을 화면에 매핑해 의견을 요청했다. 사용자 Frankie가 12:24:56 답글44799에서 확인 후 필요한 의견을 주겠다고 답한 것도 확인했다. 이슈 댓글6개 전체 조회 결과 추가 답변은 없었다.
+- 응답 초안은 `orderScopeOptions[{code,displayName}]`, `categories[{domain,category,defaultChannel,channels}]`다. 범위 코드는 `ALL_ORDERS`/`MY_ORDERS_ONLY`. 예시8개는 CHAT/LINKTALK(PUSH, 추가채널 없음), ORDERS/DESIGN_CONFIRMATION·ORDER_UPDATES(NOTIFICATION, PUSH/MAIL), ORDERS/FEEDBACK·SHIPPING(NOTIFICATION, PUSH), USERS/CASE_PREFERENCE(NOTIFICATION, PUSH/MAIL), PAYMENTS/PAYMENTS(NOTIFICATION, MAIL), BENEFITS/CREDITS(NOTIFICATION, PUSH)다. endpoint·개인설정 응답·저장 payload는 이 댓글에 없다.
+- **현재 코드 매핑:** Office의8개 설정 row와 채널 조합은 모두 대응한다. Clinic 웹은 같은 항목에서 Push를 숨기고 LinkTalk Push 전용 항목도 제외하는 현재 표시 정책을 적용하면 된다. `MAIL`→현재 UI의 Email, scope code→화면 값은 FE 변환 가능하며 응답 형식 자체의 표현 불가를 발견하지 않았다. `ORDERS/SHIPPING`, `USERS/CASE_PREFERENCE`, `BENEFITS/CREDITS`를 독립 영역으로 보이는 것은 기존 도메인/카테고리 표시 가공 합의와 맞고 서버 row 식별자는 보존한다.
+- **지금 최소 확인할 내용:** `defaultChannel`이 상위 스위치가 제어하는 채널인지, 단순 기본 발송 채널인지 정확한 뜻. 또한 이 예시가 병원용인지와 기공소용 구성의 별도 제공 여부. 현 Lab UI에는 Support Push·밀링센터 결제/주문 업데이트가 있어 이 샘플만으로 전체 Lab 설정을 매핑할 수 없다. 이를 전체 명세의 누락으로 확정하거나 미확정 enum을 만들어 연결하지 않는다.
+- **개인설정 초안이 나올 때 확인:** 카테고리 상위 ON/OFF와 각 채널 ON/OFF를 구분해 표현/저장할 수 있는지(상위 ON·하위 모두 OFF 허용), 식별자 연결, 설정 없음/초기값, 숨긴 채널 값 보존. `MY_ORDERS_ONLY`는 기존 Assigned Dentist 기준과 의미를 맞춘다. 표시명·정렬·웹/앱 표시 차이·기존 authority 기반 노출 제한을 이유로 불필요한 신규 API 필드를 먼저 요구하지 않는다.
+- 검토 근거: Web `shared/ui/src/NotificationUI/notificationMockData.ts`·`NotificationSettings.tsx`, Office/Lab `src/store/useNotificationMockStore.ts`와 설정 화면/타입. Web `d11fb8759`, Office `b57bfbe`, Lab `1fbcacc`에서 읽기만 수행했다. Figma/Notion/Swagger 전수 재조회, 제품 코드·branch·PR·서버 실행, Jira/Notion/Slack 작성은 하지 않았다. 다음은 이 초안의 최소 의미 확인과 후속 개인설정/저장 계약 대조다.
+
+## 2026-11-03 요구와 마감 상태
 
 | 요구 | 오늘 처리와 현재 상태 |
 | --- | --- |
