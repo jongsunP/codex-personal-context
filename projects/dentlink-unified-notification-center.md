@@ -1,6 +1,8 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-최종 갱신: 2026-11-03 19:19 KST — 사용자가 승인한 잔여 1번, **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리**를 보완하고 영향 화면 검증·양 앱 commit/push를 완료했다. 세 feature 원격일치/clean, 로컬 실행 종료. 신규 알림 BE 연결·일부 실제 역할/데이터/OS 조건 검증은 남는다. PR·merge·배포·최종 QA 완료가 아니다.
+최종 자료 확인: 2026-11-04 — Leo의13:06:40 Jira 답변으로 **기공소 밀링센터 주문 > 결제는 알림센터 범위 제외**임을 확인했다. 관련 설정·샘플 제거는 다음 코드 작업에 반영하며 이번에는 자료 확인·기록만 했다.
+
+마지막 구현 마감: 2026-11-03 19:19 KST — 사용자가 승인한 잔여 1번, **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리**를 보완하고 영향 화면 검증·양 앱 commit/push를 완료했다. 세 feature 원격일치/clean, 로컬 실행 종료. 신규 알림 BE 연결·일부 실제 역할/데이터/OS 조건 검증은 남는다. PR·merge·배포·최종 QA 완료가 아니다.
 
 - **현재 지시:** “2번은 혼자 할 수 없으니 1번까지 마무리하고 기다리자”에 따라 배너 보완을 끝냈다. BE 명세 또는 사용자 재개 요청을 기다리며 자동 구현·폴링·서버 재실행을 하지 않는다.
 - **추가 자료 확인 — 2026-11-04:** 사용자가 지정한 Jira 댓글44798의 설정 템플릿 초안을 읽고 현재 세 제품 코드와 대조했다. 아래 검토는 초안 의견이며 구현 재개·API 확정·BE 배포 확인이 아니다. 제품 작업 위치/HEAD는 11/3 마감과 동일하고 clean이다.
@@ -12,12 +14,14 @@
 - 정본: [DL-16140 댓글44798](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44798), Leo. 작성12:23:26, **최종 수정12:29:28 KST**. 설정 조회를 템플릿/개인설정으로 나눌 예정이며, 현재 댓글은 **치과(OFFICE)·기공소(LAB) 예시가 구분**돼 있다. 템플릿 설계 예시이며 공개 API·BE 배포 완료 공지가 아니다.
 - 최신 필드는 `orderScopes`, `categories[{domain,category,toggleChannel,channels}]`다. `defaultChannel`·`orderScopeOptions`는 최초12:23 버전에 있던 이름이며 현재 필드로 재사용하지 않는다.
 - Office는 범위 `ALL_ORDERS`/`MY_ORDERS_ONLY`와 설정8개다. CHAT/LINKTALK(PUSH, 추가채널 없음), ORDERS/DESIGN_CONFIRMATION·ORDER_UPDATES(NOTIFICATION, PUSH/MAIL), ORDERS/FEEDBACK·SHIPPING(NOTIFICATION, PUSH), USERS/CASE_PREFERENCE(NOTIFICATION, PUSH/MAIL), PAYMENTS/PAYMENTS(NOTIFICATION, MAIL), BENEFITS/CREDITS(NOTIFICATION, PUSH). 현재 병원앱8개와 채널이 대응하고 웹은 Push 표시를 제외하면 된다.
-- Lab은 `orderScopes:null`, CHAT/LINKTALK·DENTLINK_SUPPORT(PUSH, 추가채널 없음), ORDERS/DESIGN_CONFIRMATION·ORDER_UPDATES(NOTIFICATION, PUSH), MANUFACTURING/MILLING_ORDER_UPDATES(NOTIFICATION, PUSH)의5개다. Support Push와 밀링 주문 업데이트는 **이미 예시가 있다**. 현 Lab UI의6개 중 **밀링센터 결제**만 예시 매핑이 확인되지 않는다.
-- **현재 BE에 남길 최소 질문:** 기공소 설정 화면의 ‘밀링센터 주문 > 결제’가 어떤 domain/category로 제공될 예정인지. 병원/기공소 구분, Support, 밀링 주문 업데이트, 과거 이름 `defaultChannel`을 다시 묻지 않는다. `toggleChannel`/`channels`는 현재 상위/하위 UI 구조와 대응 가능하며 개인설정 조회·저장 초안이 나오면 독립 ON/OFF 상태·식별자·초기값·숨긴 채널 보존을 대조한다.
+- Lab은 `orderScopes:null`, CHAT/LINKTALK·DENTLINK_SUPPORT(PUSH, 추가채널 없음), ORDERS/DESIGN_CONFIRMATION·ORDER_UPDATES(NOTIFICATION, PUSH), MANUFACTURING/MILLING_ORDER_UPDATES(NOTIFICATION, PUSH)의5개다. Support Push와 밀링 주문 업데이트는 **이미 예시가 있다**. 현 Lab UI의6개 중 밀링센터 결제만 예시에 없었으나, 후속 답변44802에서 **범위 제외**로 해소됐다.
+- **이 초안에 남겨둔 BE 질문은 해소:** 밀링센터 결제의 domain/category를 추가 요구하지 않는다. 병원/기공소 구분, Support, 밀링 주문 업데이트, 과거 이름 `defaultChannel`도 다시 묻지 않는다. `toggleChannel`/`channels`는 현재 상위/하위 UI 구조와 대응 가능하며 개인설정 조회·저장 초안이 나오면 독립 ON/OFF 상태·식별자·초기값·숨긴 채널 보존을 대조한다.
 - BE domain/category를 화면 배치 그대로 노출할 의무는 없다. Shipping·Case Preference·Credit의 독립 영역과 표시는 FE가 가공하고 원래 row 식별자를 보존한다. 필드·정렬·표시명·기존 authority 기반 노출 제한 때문에 불필요한 신규 API를 먼저 요구하지 않는다.
 - 검토 근거: Web `shared/ui/src/NotificationUI/notificationMockData.ts`·`NotificationSettings.tsx`, Office/Lab `src/store/useNotificationMockStore.ts` 및 설정 화면/타입. Web `d11fb8759`, Office `b57bfbe`, Lab `1fbcacc`에서 읽기만 했다. Figma/Notion 전수 재조사·제품 코드/branch/PR/runtime·외부댓글 쓰기는 하지 않았다.
 - **조사 정정:** Codex가 최초12:23 버전을 읽은 후12:29 수정본을 재조회하지 않고 ‘기공소 예시 여부/Support·밀링 전체 코드/defaultChannel 의미’의 질문을 안내했다. 사용자 지적 후 원문 재조회로 오류를 확인·사과했다. [사용자 답글44800](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44800)의 마지막 수정12:38:15에는 defaultChannel과 Support·밀링 결제/업데이트 질문이 남아 있었다. 사용자가 수정할 복사문은 **밀링센터 결제 한 항목만** 남기며 Codex가 외부 댓글을 직접 수정하지 않는다. 이전 커밋83af533/4762a9e의 초안 표현은 이 정정으로 대체한다.
-- **사용자 최종 질문 확인:** 요청에 따라 Jira를 한 번 더 읽었다. [새 답글44801](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44801), 2026-11-04 12:43:26 KST에 **‘기공소의 밀링센터 주문 > 결제 항목은 어떤 domain/category로 제공되는지’만 질문**한 것을 확인했다. 이전44800은 현재 댓글 목록에 없고 최종 질문 정리는 적절하다. Leo 원문은12:29 수정본 그대로이며 추가 답변은 아직 없다. Swagger는 이번 요청에서 다시 조회하지 않았고,12:33 공개 명세 미반영 결과를 기준으로 초안 상태·구현 대기를 유지한다. 자동 폴링·외부 댓글 수정은 하지 않는다.
+- **사용자 최종 질문 확인:** [새 답글44801](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44801), 2026-11-04 12:43:26 KST에 **‘기공소의 밀링센터 주문 > 결제 항목은 어떤 domain/category로 제공되는지’만 질문**한 것을 확인했다. 이전44800은 현재 댓글 목록에 없고 최종 질문 정리는 적절하다. 이 질문의 후속 답변은 아래44802로 반영했다.
+- **최신 BE 답변 확인:** [Leo 답글44802](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44802), 2026-11-04 13:06:40 KST: “기공소 밀링센터 주문 > 결제는 알림센터 스펙 아웃입니다!” 기존11/3 PRD #14/Figma 근거의 유지 판단보다 최신인 명시적 범위 답변이다. 해당 항목은 알림 설정·알림 샘플에서 제외할 대상으로 정리한다. **밀링 주문 업데이트·실제 밀링 업무 결제 기능·Clinic/Office 결제/크레딧/추가 조회 화면은 제거하지 않는다.**
+- **다음 코드 반영 범위(읽기 확인, 미수정):** Lab 앱 `src/store/useNotificationMockStore.ts`의 밀링 결제 설정 및 인박스 예시, Web `shared/ui/src/NotificationUI/notificationMockData.ts`의 Lab 분기 밀링 결제 설정. 웹 인박스 `mock-payment`는 Lab에서 실제로 밀링 주문 업데이트를 표시하므로 이름만 보고 삭제하지 않는다. Web `d11fb8759`/Lab `1fbcacc` clean 확인. 사용자 요청은 Jira 확인이므로 제품 코드·runtime·Jira/Notion/Slack은 변경하지 않았다. Swagger도 다시 조회하지 않았으며 **마지막 확인12:33에는 신규 설정 계약이 미반영**이었다. 이 답변을 새 API 배포 완료로 해석하지 않는다.
 
 ### 후속 DEV Swagger 확인 — 2026-11-04 12:33 KST
 
@@ -33,7 +37,7 @@
 | 알림센터·앱 추가 목록·이메일 범위 분리 | Notion/Jira/개인 정본 분리와 원 조사 세션 인계 완료. 승인 후 코드에서도 이메일 전용 native/association 설정만 분리했고 노티/푸시의 공통 URL 처리·기존 Airbridge/Lab `/q/*`는 유지 |
 | FE가 할 수 있는 디자인·연결 선행 작업 | 기존 알림 UI를 유지·보완하고 Web/Office 실제 소속 활성화·Web 팝업/토스트·공통 랜딩 연결을 보완. 실제 알림 데이터/설정 저장/집계/읽음은 DEV mock 및 BE 계약 대기 |
 | 추가 Office 조회 목록을 웹 모바일 기준으로 구현 | Credits/Statements 및 기존 REST는 이전 선행 구현. 오늘 크레딧 배지·긴 설명·소속/권한/진입·뒤로를 보완/검증. 별도 메뉴·PDF·Pay Now·미확정 결제내역을 추가하지 않음 |
-| 권한·제품·기기별 알림 설정 메뉴 | MEMBER 범위 선택 숨김·담당 범위 고정, OWNER/PAYMENT_MANAGER만 Payments, Web Clinic Shipping 추가. Lab My Orders/Email/SMS 제외·Web Push 미노출 유지. Lab 밀링 Payments는 PRD #14 Resolved와 Figma 근거로 유지 확정 |
+| 권한·제품·기기별 알림 설정 메뉴 | MEMBER 범위 선택 숨김·담당 범위 고정, OWNER/PAYMENT_MANAGER만 Payments, Web Clinic Shipping 추가. Lab My Orders/Email/SMS 제외·Web Push 미노출 유지. Lab 밀링 Payments는11/3 당시 PRD #14/Figma 근거로 유지했으나 **11/4 Leo 답변44802로 범위 제외**. 해당 설정·샘플의 코드 제거는 다음 작업 |
 | 공통 딥링크·소속 변경 예외 | 실제 활성화 완료 후 이동, 계정/소속 변경·늦은 응답·중복 푸시 callback·Android 구독 타이머·채팅 ID 변환 문제를 보완. 수정 내역은 제품 commit과 실행 기록에 보존 |
 | 앱 영향 화면 크래시 점검 | 양 앱 iOS/Android에서 현재 실계정으로 접근 가능한 공통 소비자까지 확대 점검. 발견한 동작 오류 수정 후 영향 화면 재검증. HMR/종료 중 renderer 관찰을 운영 크래시 해결로 합치지 않음 |
 | 브라우저 경고·Lab 화면 조작·창 유지 | `--no-sandbox` 제거 및 정상 자동화 표시 확인. 두 제품 실제 표시 창에서도 검증. 별도 headless 검사와 표시 창 조작을 구분하며 창 겹침/가시성을 기능 성공 근거로 삼지 않음 |
@@ -108,6 +112,7 @@
 ### 수신 설정·OS 권한
 
 - Employee 기준 서버 수신 설정을 웹·앱에서 공유하고 기기 OS 권한은 분리한다. 웹 PUSH 조작은 숨긴다. Office/Lab 지원 채널을 구분하며 Office 구성을 Lab에 그대로 복제하지 않는다.
+- **Lab 밀링센터 주문 > 결제 제외:** 11/4 Leo 답변44802 기준. 밀링 주문 업데이트는 유지한다. 이 결정은 실제 밀링 업무 결제나 Clinic/Office 결제·크레딧의 제외를 뜻하지 않는다. 기존 mock 설정/샘플은 다음 코드 재개 시 제거한다.
 - 신규 가입·신규 소속 PUSH ON, 기존 PUSH 선택 보존 방향을 유지한다. 실제 초기값·마이그레이션은 BE 계약으로 확인한다. **Lab My Orders는 제외 확정**이며 과거 제안/티켓 제목으로 되살리지 않는다.
 - 상위 OFF는 하위 OFF, 상위 다시 ON은 하위 기본 ON이다. 하위를 모두 OFF해도 상위까지 자동 OFF하지 않는다. 숨긴 채널을 저장 시 덮어쓰지 않도록 실제 catalog/저장 규칙과 맞춘다.
 - Office 정책상의 Admin은 `OWNER`, Billing Manager는 `PAYMENT_MANAGER`, Manager는 `EDITOR`다. 현재 소속에 일치하는 실제 authority를 사용하며 새 `ADMIN` API enum을 발명하지 않는다.
@@ -129,6 +134,7 @@
 
 | 순서 | 할 일 | 필요한 조건 / 완료 기준 |
 | --- | --- | --- |
+| 다음 코드 재개 시 먼저 | Lab 밀링 결제 알림 범위 제외 반영 | Leo 답변44802를 근거로 Lab 앱 결제 설정/인박스 예시와 Web Lab 결제 설정 제거. 밀링 주문 업데이트 및 다른 제품 결제는 보존. 아직 코드 미수정 |
 | 1 | 새 BE 명세와 기존 구현 대조 | 목록/페이지·필터, 소속별 미읽음, Employee catalog/default/migration/설정 저장, 푸시 식별·클릭/읽음 계약을 확인. 새 API/notificationId 필수를 먼저 요구하지 않음 |
 | 2 | 실제 데이터 연결 및 mock 제거 | 제공된 계약 범위부터 연결, 대체된 mock만 정확히 삭제. Lab 소속 선택/미읽음 포함. 숨긴 채널을 임의 덮어쓰지 않음 |
 | 3 | OS와 기존 서버 preference 이관 | PermissionProvider의 OS 허용→legacy upsert와 Office My Orders의 pushEnable 결합을 새 저장 계약에 맞춰 분리. 구 production 설정 초기화를 계약 없이 통째 제거하지 않음 |
@@ -137,7 +143,7 @@
 
 - **병행 확인:** 기존 Office Support의 현재 BE 조회 계약과 필요한 실제 역할/데이터를 확보하면 해당 미검증을 해소할 수 있다. 메일 CTA/SES·추가 메뉴·새 디자인 발주를 알림센터 선행 조건으로 만들지 않는다.
 - **남은 정책 근거:** Lab Home 최근 메시지/Support·자동 메시지 hide의 적용 범위는 후속 명시 근거를 확인한다. 파란 배너 1회는 이미 합의·구현된 항목이므로 다시 정책 미정/불필요한 질문으로 되돌리지 않는다.
-- **누락 보완 이력:** 18:46 마감에서 배너 영속 처리가 빠져 있음을 정정했고, 사용자의 “1번까지 마무리 후 대기” 승인으로 19:19 보완을 마쳤다. 현재 승인 범위에서 더 임의 확장하지 않고 위 BE 계약 확인부터 재개한다.
+- **누락 보완 이력:** 18:46 마감에서 배너 영속 처리가 빠져 있음을 정정했고, 사용자의 “1번까지 마무리 후 대기” 승인으로19:19 보완을 마쳤다. 11/4 Jira 확인은 구현 재개 지시가 아니며, 다음 코드 작업 시 확정된 Lab 제외 반영부터 하고 공개 BE 계약 범위를 대조한다.
 
 ## 정본 자료·Jira·이력
 
