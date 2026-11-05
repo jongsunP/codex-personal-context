@@ -1,6 +1,17 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 브레이크포인트 — 2026-11-05 · DLDS 갤러리 누락 보완 PR62 제출, 오너 반영 대기
+## 현재 브레이크포인트 — 2026-11-05 · DL-17251 누락 재대조·추가 보완 완료, PR62 오너 반영 대기
+
+- **최신 요청·범위:** 사용자가 새 Jira 카드가 필요한지와 코드의 아예 누락/미작업까지 마무리할 것을 요청했습니다. 이전 완료 DL-17046과 분리해 상위 DL-16437 아래 **DL-17251 (Studio · DLDS 갤러리 누락 예제·상태 추가 보완)** 하위 카드를 생성하고 사용자 담당으로 진행 중→완료 처리했습니다. 완료는 구현·검증·PR 제출 기준이며 오너 병합·배포와 구분합니다. DL-16471 아카이브/하네스 제외는 유지합니다.
+- **저장 위치·PR:** `/Users/parkjongsun/Repository/dentlink-studio`, 기존 `feat/DL-17046-gallery-examples`에 후속 커밋 **c804254bddc3bb926cc012670bc87c9cc5dee1ad**를 추가하고 push 완료했습니다. 로컬 HEAD=origin 작업 브랜치, clean. 기존 브랜치 이름은 유지하고 [PR62](https://github.com/Innvoaid/dentlink-studio/pull/62) 제목을 `[DL-17251] DLDS 갤러리 누락 예제와 상태 조합 보완`으로 갱신했습니다. base main, OPEN·일반 PR·MERGEABLE. 병합/배포0. 최초383bfad와 이번c804254가 같은PR에 포함됩니다.
+- **대조 기준·결론:** Client의 보존 커밋56bc1be5ce975c6726637be51347911d730410ba `shared/ui/dlds-gallery/`의28개 등록 항목/실행 예제, 현재 Studio 구조 및 설치된 npm0.1.7 타입·실제소스를 비교했습니다. 모든28개에 대응 예제가 있고, 확인된 핵심 사용사례 누락을 보완했습니다. '모든 공개export가 독립메뉴', '모든props조합을 제공', '전체서비스/Figma 전수QA완료'라는 뜻은 아닙니다. 아이콘/로고 에셋 전체대조·내부helper 독립등록·하네스·원천UI는 제외합니다.
+- **추가 코드:** PR 총9개파일1076+/206-, 이번후속7개847+/211-. FoundationExamples/InputStateExamples/FeedbackExamples 분리, App/AdditionalExamples/DateExamples/README 보완. Typography h2/h3/h4 포함11종·편집문구·responsive정보, 색상96/팔레트99전체검색·radius8/shadow6/border3/deviceSizes6, 입력 내부라벨·필수·Password상태, SelectDropdown숫자0/비활성/empty/error/30목록, Dropdown4종긴목록/오류·legacy체크선택, Checkbox부분선택해제/복원·크기, Radio/Chip숫자0·count0·삭제복원, Segment오류, Slider음수/중앙선/step3, 날짜형식·달력버튼/하단입력창·값복원, Modal취소only/배경닫기/최신값/trapFocus, Popup이미지·버튼배치·배경닫기·실제color명시, Tooltip5종/장문/HELP링크/BASIC닫기, Toast위치/offset/장문/동작버튼유지/일반4초닫기. 새원천컴포넌트/패키지/lockfile/정책/의존성/회귀테스트파일변경0.
+- **최종 검증:** 최종코드 `pnpm verify` exit0(203개중202pass/0fail/기존1skip), DLDS typecheck, build, studio-trace, diff-check 통과. 독립코드리뷰에서 추가필수문제없음. 실제 Chromium1440/1280/390px에서 기존회귀11묶음+추가입력/선택/날짜9묶음+Additional6묶음+Feedback10항목+Foundation검색/토큰/숫자0 실행 확인. Popup최종color수정은 해당Popup만재검증. 실제페이지오류0·가로페이지넘침없음, 기존styled-components DOM prop경고유지. 임시테스트의 이름/역할·offscreenTooltip포커스실패는 실제DOM/viewport조건에맞춰재검증통과했으며 제품오류로기록하지않습니다.
+- **현재 원격 영향·남은 일:** head c804254의 Verify monorepo **SUCCESS**(run41987641194). Project scope는 공통코드오너정책으로FAILURE(run41987638975, 실제실패로그확인), Vercel은 `Deployment was blocked` FAILURE입니다. 앞선head의Vercel계정접근권한오류와구분해현재반환문구를기록합니다. 이메일/훅/정책변경·우회0; 사용자명시승인범위에서정상Gitcommit/push/PR을수행했으며오너반영절차는남습니다. 지금 추가개발·신규권한요청·반복조회는하지않고 Tom리뷰/공통코드반영 또는사용자후속안내를기다립니다.
+- **Jira 정리:** DL-17251 범위·완료기준을본문에, 실제완료/PR/검증/남은오너처리를댓글44840에기록하고반환본문확인. 작업완료transition5→완료확인. DL-17046의기존댓글44838에는새카드로분리한다는링크만추가해기존역사유지. 상위DL-16437와아카이브DL-16471본문/상태/댓글은이번에변경하지않았습니다.
+- **재개·증거:** 본인dev서버4100·검증브라우저종료. 로컬확인은이브랜치에서 `pnpm dev`→`http://127.0.0.1:4100/design-system/dlds`. 개인검증자료는 `~/.codex/backups/2026-11-05-dlds-gallery-followup/`(최종verify/build/trace로그,각브라우저스크립트·결과JSON·스크린샷,PR본문;최초검증실패이력도보존). 코드원격저장과개인Git메모리로다른디바이스에서재개가능. 개인context의다른세션 `projects/dentlink-unified-notification-center.md` 수정은보존하고본인커밋에포함하지않습니다.
+
+## 이전 브레이크포인트 — 2026-11-05 · DLDS 갤러리 누락 보완 PR62 최초 제출, 오너 반영 대기
 
 - **최신 사용자 승인·범위:** 통합된 Studio 구조에 맞춰 원래 의도한 DLDS 갤러리 누락/미작업 예제를 보완하고 브리핑·PR까지 진행하도록 승인했습니다. 하네스·원천 UI·npm 변경은 제외하며 병합하지 않습니다. 이전의 구현 전 보고/전체 대기보다 이 한정 후속 요청이 우선합니다.
 - **작업 위치·저장:** `/Users/parkjongsun/Repository/dentlink-studio`, clean main을 pull한 `d5d83af17fcffba339d2e499c8c0aca0c5353c34`에서 새 `feat/DL-17046-gallery-examples` 생성. 커밋 `383bfadff43a95591bbd023c965598ed75d54d81`, origin push 완료, worktree clean. [PR #62](https://github.com/Innvoaid/dentlink-studio/pull/62)는 main 대상 OPEN·일반 PR이며 이 채팅에 연결했습니다. 이전 feat/dlds-gallery 원본/PR60은 그대로 보존합니다.
