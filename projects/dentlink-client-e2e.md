@@ -1,10 +1,13 @@
 # Dentlink E2E Reliability Checkpoint - 2026-11-05
 
-## 배포·E2E 분리 결과 사용자 확인 및 현행 유지 — 2026-11-05
+## 배포·E2E 분리 결과 사용자 확인·1회 실조회 및 현행 유지 — 2026-11-05
 
 - **사용자 확인:** GitHub Actions에서 배포는 정상 성공으로, 독립 E2E는 실패(빨간색)로 각각 표시되는 것을 직접 확인했다. [Slack 알림](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793857189841349)도 기존처럼 도착했고, 의도한 동작이므로 현재 상태를 유지하겠다고 확정했다.
 - **의미:** 배포 결과와 E2E 결과를 분리하는 이번 작업의 목적은 사용자 확인 기준 충족했다. E2E 실패 표시·Slack 알림은 유지한다. E2E 자체가 통과했거나 실패 원인이 해결됐다는 뜻은 아니다.
-- **증거 경계/마감:** 이번에는 사용자 확인 결과와 제공 링크를 기록했으며 Actions·Slack 원문·실제 화면을 추가 조회하지 않았다. 제품 코드·워크플로우·알림 설정 변경, 실패 조사·재실행·자동 모니터링 없이 대기한다. 별도 요청이 있을 때만 해당 범위를 재개한다.
+- **후속 1회 실조회:** 사용자가 Slack 최근 몇 개와 Actions를 직접 확인해 달라고 요청해 현재 연결 도구로 읽었다. stage `aa01dd4d6bb354b8d8bab28daf62cb2f80a67b3d`의 [Clinic 배포41970557142](https://github.com/Innvoaid/dentlink-client/actions/runs/41970557142), [Lab 배포41970557080](https://github.com/Innvoaid/dentlink-client/actions/runs/41970557080), [Admin 배포41970557193](https://github.com/Innvoaid/dentlink-client/actions/runs/41970557193)는 모두 success다. Clinic은 빌드·서울/오하이오 배포·롤백 방지·새 버전 반영 확인·E2E 인계 artifact까지 성공했다.
+- **독립 E2E/알림 연결:** [E2E41973156725](https://github.com/Innvoaid/dentlink-client/actions/runs/41973156725)는 `workflow_run`으로 시작해 배포 identity 검증 성공 후 실제 테스트와 최종 gate가 failure다. Slack 14:39:49 KST 알림은 E2E 실패를 명시하며 통과97/실패2/flaky0/허용제외5, 미허용skip0/미실행5/중단0/전역오류0을 보고한다. 같은 배포 SHA와 배포 run41970557142 attempt1, 별도 E2E 리포트41973156725 링크가 연결되어 있다. 배포 성공과 E2E 실패·알림이 독립적으로 보존되는 목적을 실조회로도 확인했다.
+- **별도 표시:** Actions 최근 목록에는 PR4836의 [packages_publish41975648516](https://github.com/Innvoaid/dentlink-client/actions/runs/41975648516)도 failure이며 실패 단계는 Release check다. 이번 배포/E2E 분리와 다른 PR 검사이고, 모든 빨간 실행이 E2E라는 뜻은 아니다. 원인 조사는 하지 않았다.
+- **마감:** 최초 기록은 사용자 보고였으며 위 후속 요청에서 1회 실조회로 보완했다. 제품 코드·워크플로우·알림 설정 변경, 실패 원인 조사·재실행·자동 모니터링 없이 현행 유지·대기한다. 별도 요청이 있을 때만 해당 범위를 재개한다.
 
 ## v1.92.0 스테이징 병합·사용자 배포 보고 후 마감 — 2026-11-05
 
