@@ -1,5 +1,13 @@
 # Dentlink E2E Reliability Checkpoint - 2026-11-05
 
+## 사이드이펙트 재검토와 자동 E2E 알림 의존성 보완 — 2026-11-05
+
+- 사용자가 PR #4831의 E2E QA·배포·본서비스 부작용을 우려하여 재검토했다. DEV build/deploy 및 STG build·서울·오하이오 단계는 origin/master와 바이트 단위 동일하다. 제품 코드·Dockerfile·package/lock·운영 workflow 변경 없음. 신규 scripts는 Docker builder context에는 복사되지만 제품 빌드/서버 시작에서 호출하지 않는다. 새 인계 단계는 배포 후 임시 JSON/GitHub artifact만 다루며 서비스 중단·롤백 경로는 없다. 이는 실제 빌드 산출물 동일성/배포 안전성의 실증 완료를 뜻하지 않는다.
+- 실제 QA 회귀 1건을 찾았다. 자동 STG가 기존 수동 workflow의 시작 Slack 알림을 필수 단계로 사용해, 알림 장애가 테스트까지 막을 수 있었다. 기존 자동 실행과 같이 workflow_run에서 시작 알림을 제외하고 수동·repository_dispatch만 유지했다. 결과 알림·리포트·gate·테스트 내용은 그대로다.
+- 후속 커밋 `65dd71ddf7da0d275da34eddc1e90f3a56a58acb` (`fix: 자동 E2E의 시작 알림 의존성 제거`)을 같은 `feat/e2e-deploy-status` 및 master 대상 [PR #4831](https://github.com/Innvoaid/dentlink-client/pull/4831)에 push했다. 변경은 workflow 조건 1줄과 실제 조건식의 3가지 이벤트 회귀 assertion이다. 관련 계약 테스트14/14·actionlint·Prettier·diff check·독립 diff 검토·정상 commit/push hooks·열린 PR E2E 가드 통과. 제품 checkout은 원격과 동일·clean이다.
+- 남은 구체적 위험: 배포 후 manifest 생성/업로드 실패는 서비스가 정상이어도 배포 workflow 실패와 자동 E2E 미실행을 만든다. GitHub API/download 장애도 E2E 준비 실패로 드러난다. 배포 green은 E2E 통과를 뜻하지 않으므로 독립 E2E 결과를 확인해야 한다. 저장소 내부의 자동 운영배포 연결은 발견하지 못했으며 외부 연계/required check 설정은 별도 미확인이다.
+- PR 본문에 이 실패 영향과 보완을 반영했다. 실제 배포·실계정 E2E·GitHub 인계 런타임 검증·merge·CodeRabbit 대응은 수행하지 않았다. 바로 배포 안전성 검증 완료로 판단하지 않는다. 다음 검증은 서비스/계정에 닿지 않는 GitHub Actions 인계 확인과 별도로 승인된 DEV 적용 확인이며, 현재는 추가 실행 지시를 기다린다.
+
 ## 배포 결과·E2E 결과 분리 PR 전달 완료 — 2026-11-05
 
 - 사용자 승인 범위인 구현·검증·commit/push·master 대상 일반 PR 생성까지 완료했다. [PR #4831 — 웹 배포와 E2E 실행 결과 분리](https://github.com/Innvoaid/dentlink-client/pull/4831)는 `OPEN / non-draft`, base `master@5452871eac0e23a429995381abf673c580d236b9`, head `feat/e2e-deploy-status@fa4384eb5691969adf29d1ce89ad464c7284b0a0`다. 생성 뒤 원격 base/head/7개 변경 파일을 재확인했다. 제품 checkout은 원격과 동일하고 clean이다. 기존 `feature/DL-17125`는 보존했다.
