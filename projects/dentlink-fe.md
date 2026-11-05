@@ -4,6 +4,13 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
+## DL-17138 치과 지연 라벨 접수·승인 대기 — 2026-11-05
+
+- [상위 DL-17138](https://innovaid.atlassian.net/browse/DL-17138), Frankie 담당 [하위 DL-17141](https://innovaid.atlassian.net/browse/DL-17141)의 본문 및 모든 댓글을 현재 Atlassian 연결로 읽었다. 확정 기준은 Frankie 댓글44828: **치과 웹·앱에서 지연 true + 완료/취소 주문의 라벨을 숨긴다.** 실제 코드 필드/enum은 `isDelayed`, `COMPLETED`, `CANCELED`다. 기공소는 대상이 아니며 기존 정상/진행 중 표시나 날짜·상태값 자체를 바꾸지 않는다. 사용자 요청은 먼저 이해·브리핑 후 승인이다. 제품/Jira/브랜치/작업 세션 생성은 아직 하지 않았다.
+- 코드 대조: 웹 최신 master c5a4b5e37 및 release/v1.92.0 05243d50c의 PC/모바일 주문목록은 이미 완료·취소에서 badge를 표시하지 않는다. 공통 주문상세 `OrderDetailBoxDeliverySchedule`는 날짜 조건만으로 표시하므로 OFFICE에 한정해 요구 조건을 추가할 대상이다. Office 앱 main7f586790e/release/v2.2.4 ed1d03fa의 `OrderStatusBadge`는 완료 제외가 없어 홈 Track Your Order·주문목록이 영향 대상이다. 취소는 두 호출부에서 이미 제외된다. 앱 주문상세는 웹 `/orders/{id}` WebView로 웹 수정을 소비한다.
+- 작업 배치 제안: 승인 후 현재 메인 프로젝트 폴더에 웹·치과앱 세션을 각각 분리한다. 웹 기본 checkout은 기존 E2E 세션 마감 후 clean이므로 재사용 가능하며 신규 작업은 최신 origin/master 기반이다. 앱 기본 checkout은 통합알림센터 `feature/DL-17059@09a777ad9`·clean/upstream동일·worktree1개이므로 별도 임시 worktree를 최신 origin/main에서 준비한다. 기존 하위 카드와 별도 Office 카드로 제품 범위를 구분하며 빈 Lab 카드는 만들지 않는다. 아직 카드 분리·branch/worktree 준비 권한을 실행한 것이 아니다.
+- 다음: 사용자 범위 승인 후 구현을 인계한다. 최종 코드로 완료/취소/진행 중 × 지연/정상, 웹 PC/모바일 상세·기존 목록, 앱 홈/목록·상세 WebView 진입/복귀 및 영향 권한을 검증한다. 앱은 에이전트 시뮬레이터/에뮬레이터 선검증 후 사용자 QA 목록을 전달한다. 이번에는 조사만 했으며 테스트·commit/push/PR·배포는 별도 단계다.
+
 ## v1.92.0 스테이징 병합·사용자 배포 보고 후 마감 — 2026-11-05
 
 - **완료:** 원격 stage 삭제 → 최신 master에서 재생성 → [PR #4833 release/v1.92.0 → stage](https://github.com/Innvoaid/dentlink-client/pull/4833) 준비 후 사용자가 직접 머지·배포했다고 보고하고 정리·대기를 지시했다. GitHub에서 13:53:20 KST merged:true, merge `aa01dd4d6bb354b8d8bab28daf62cb2f80a67b3d`를 확인했다. 준비 당시 실제 diff·서비스별 배포 조건·병합 결과=릴리즈 tree를 검증했다. 상세 SHA·복구 참조·가드 근거는 [E2E 정본](dentlink-client-e2e.md)에 기록한다.
