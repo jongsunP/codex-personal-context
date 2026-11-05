@@ -1,6 +1,18 @@
 # 치과 웹 완료·취소 주문 지연 라벨 — DL-17141
 
-## 현재 체크포인트 — 사용자 스테이징 배포 완료 보고·대기, 2026-11-05
+## 현재 체크포인트 — 치과 전체 표시부와 기공소 서버 판정 구분, 2026-11-05
+
+- **최종 요구:** 치과만 `isDelayed === true && (COMPLETED || CANCELED)`일 때 Delayed 라벨을 숨긴다. 기공소는 라벨 숨김이 아니라 앱의 수동 날짜 판정을 서버 `isDelayed`로 전환한다. 기공소 BE는 미배포이나 치과처럼 필드를 제공한다는 사용자 계약 가정으로 진행한다. 잘못 해석한 중간 LAB 숨김 코드는 커밋·배포하지 않고 폐기했다.
+- **웹 완료:** [PR #4837](https://github.com/Innvoaid/dentlink-client/pull/4837), `feat/DL-17141-delay-label → release/v1.92.0`, 일반 OPEN/mergeable/4파일 확인. 최신 release `6a953cb1a`에서 후속 branch 생성, 최종 HEAD/upstream `3d3344fef2fce7070820bfc3e7082a28efc6e9aa`, clean. 원본 feat/DL-17141 보존. merge·배포는 하지 않았다.
+- **변경:** shared/configs/utils/order.ts의 `shouldHideOfficeDelayedBadge`를 상세·PC 목록·모바일 목록 3곳에서 공통 사용. 상세133–134행에 치과만 숨김/LAB 서버값 사용/BE 반영 확인 주석을 남겼다. 목록은 기존에도 완료=날짜, 취소=`-`여서 기존 release 대비 가시 결과는 동일하다. 날짜·기존 On Time·진행 중 Delayed를 보존했다.
+- **기존 웹 현황:** 치과 목록은 row.isDelayed와 officeEstimatedArrivalAt 존재 조건, 양 서비스 상세·앱 상세 WebView는 deliverySchedule.isDelayed를 사용한다. 실제 목록 응답에 필드가 있어 항상 라벨이 뜬다는 뜻은 아니다. 앞선 합성 검증에서 날짜 필드를 보충했던 점과 실노출 단정 오류를 사용자에게 정정했다. LAB 목록(table/kanban)에는 개별 배지 없음. dashboard delayCount는 별도 집계다.
+- **기공소 웹:** GET `/lab/orders/{orderId}` → useOrderShowQuery → 공통 DeliverySchedule로 서버값을 그대로 전달하며 기존부터 날짜 수동 판정이 없다. 완료·취소여도 서버 true면 Delayed 유지. 따라서 이 요구만으로 LAB 웹 신규 동작 변경/배포가 필요한 근거는 없다.
+- **앱 읽기 전용 감사:** Office 홈 Track Your Order·주문목록은 GET `/office/orders`의 서버 isDelayed를 사용하며 선행 DL-17248에서 숨김 적용 완료(기존 기록 기준 PR340 병합/Staging v343, 이번 배포 재조회 없음). LAB 일반목록에는 배지 없음. LAB 홈은 기존에 일반/리메이크 요청일과 예상도착일을 비교했다. 별도 `/Users/parkjongsun/.codex/worktrees/lab-delayed-api/dentlink-lab-app`, feat/DL-17262에서 item.isDelayed 사용으로 수정 중이며, POST `/lab/orders/search` 각 주문 필드 제공·Swagger 타입 갱신·날짜 fallback 없음 주석을 확인했다. 사용자도 앱 세션에 동일 요구를 직접 전달했다고 확인했으므로 앱 수정·기기·추가 메시지는 하지 않았다.
+- **검증:** 실제 컴포넌트 ReactDOM 렌더80/80(최종 소스, 기존 release와 동일), 관련 Jest32, Clinic/Lab/Admin 타입, 변경 UI lint/Prettier, push hook의 lint·DLOS guard·공유53 tests/coverage 통과(기존 경고 유지). 렌더 검증은 무관 자식/번역 문맥을 격리했으며 브라우저·실계정·기기 증거가 아니다. E2E NO_IMPACT mark/check 통과, 실제 E2E 미실행. 증거 `/tmp/dl-17141-followup/`.
+- **배포 대상:** 웹 공통화는 PR4837 병합 후 Clinic 웹 반영 대상이며 앱 상세는 웹 배포를 소비한다. LAB BE의 POST `/lab/orders/search` isDelayed 제공/판정 반영 후 Lab iOS·Android 변경을 활성화해야 한다. 미제공이면 undefined가 기존 On Time 분기로 흐른다. 상세 GET의 deliverySchedule.isDelayed도 BE 정책 확인 대상. 서버 판정 전환만으로 LAB 웹 재배포는 불필요하다. shared-only diff는 STG clinic/**·lab/** trigger를 직접 충족하지 않으므로 이후 배포 준비 때 정해진 release→reset-stage 최종 diff로 다시 확인한다.
+- **남은 일:** 사용자 PR 검토/병합 및 별도 요청에 따른 웹 배포. LAB 앱 구현·검증·배포는 앱 세션 담당이며 BE 반영 확인은 실제 전달 시 필요하다. 자동 머지·배포·리뷰 대응·감시를 하지 않는다. 아래는 선행 이력이다.
+
+## 선행 스테이징 배포 완료 보고 당시 기록 — 2026-11-05
 
 - **완료:** 치과 완료·취소 주문의 Delayed 라벨 수정·검증·구현 PR4835와 v1.92.0 stage reset/recreate·배포 PR4836 준비를 완료했다. 사용자가 이후 “머지하고 배포까지 완료했어. 메모리 정리하고 대기해줘.”라고 보고했다.
 - **현재 영향:** [PR4836](https://github.com/Innvoaid/dentlink-client/pull/4836)의 병합 및 v1.92.0 스테이징 배포 완료는 **사용자 보고**로 기록한다. 이번 마감에서는 GitHub 병합 SHA·Actions 최종 결과·서빙 리비전·실제 Staging 화면·독립 E2E 결과를 추가 조회하지 않았다. 사용자 배포 완료를 에이전트 런타임 QA나 E2E 통과로 확대하지 않는다.
