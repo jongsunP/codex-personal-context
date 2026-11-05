@@ -1,6 +1,10 @@
 # Dentlink E2E Reliability Checkpoint - 2026-11-05
 
-## v1.92.0 스테이징 재생성·PR 준비 — 2026-11-05
+## v1.92.0 스테이징 병합·사용자 배포 보고 후 마감 — 2026-11-05
+
+- **최신 마감:** 사용자가 직접 머지·배포했다고 보고한 뒤 정리·메모리·대기를 지시했다. GitHub API로 [PR #4833](https://github.com/Innvoaid/dentlink-client/pull/4833)의 CLOSED / merged:true, base stage, head release/v1.92.0 `05243d50c4125166d723a4c3ed683bdd17cf75f3`, **13:53:20 KST** 병합 및 merge SHA `aa01dd4d6bb354b8d8bab28daf62cb2f80a67b3d`를 확인했다. 아래 PR 미병합/머지 대기 상태는 준비 당시 이력이다.
+- **증거 구분:** stage 통합은 GitHub 실조회 확인, 배포 완료는 사용자 보고다. 이번 마감에서는 Actions 최종 결과·서비스별 실제 반영·BUILD_ID·독립 E2E 자동 연결/결과를 조회하지 않았다. E2E 가드 NEEDS_RUN은 실제 통과 증거로 대체하지 않으며 사용자 배포 보고를 E2E 성공으로 기록하지 않는다.
+- **마감 범위:** 개인 기록 commit/push 후 추가 실행 없이 대기한다. 별도 구현 세션은 이미 보관됐고 메인세션은 유지한다. 제품 checkout·원본/릴리즈/환경 브랜치·복구 참조·worktree는 변경하거나 삭제하지 않는다. DEV 전파·운영 배포·실계정 E2E 재실행·추가 조사/감시는 이번 요청 범위가 아니다.
 
 - 사용자 요청: 스테이징 삭제/재생성 프로세스로 이번 릴리즈를 확인할 준비를 하고 별도 구현 세션은 저장·종료한다. 공통 `SESSION_WORKFLOW.md`에 따라 배포 준비는 PR까지이며 merge/실배포는 별도 승인 단계다.
 - 기존 원격 stage `6f9f3339fa40864a28f1ac9b87424750c6f89ecd`, master `c5a4b5e372fb7734c72a5faec6807e7b554c1dd6`, release/v1.92.0 `05243d50c4125166d723a4c3ed683bdd17cf75f3`를 확인했다. 열린 base/head stage PR 없음, branch protection false·effective rules []를 확인하고, 이전 stage를 로컬 `refs/recovery/stage-before-v1.92.0-e2e-20261105`에 보존했다. 예상 SHA lease 삭제 → stage 부재/최신 master 재확인 → 비존재 lease로 위 master에서 stage 재생성 → 실제 원격 stage=master 확인 완료다. GitHub의 과거 stage→main rename 안내가 push에 출력됐으나 실조회에서 stage가 요청 SHA로 생성됐고 main ref는 없음을 확인했다.
@@ -9,7 +13,7 @@
 - 전체 릴리즈 E2E 가드는 **NEEDS_RUN**이다. 독립 읽기 전용 분석에서 미대응 locator 파손은 발견하지 못했다. 디자인 승인 Change→Upload는 head `e2e/clinic/utils/lab.ts:456`에도 반영됐고 CAD 첨부0건 허용·추가 저장 API의 파일존재 조건으로 기존 URL 승인 경로를 유지한다. `04_labShipment`·`05_labStatus`·`08_orderFeedback`의 배송 예상일 실패/상태전환·승인 모달 연결은 STG 실증이 필요하다. `07_billing`의 API 생성→Unpaid→Pay Now→Checkout은 정적으로 유지된다. 새 PDF/ZIP·NO_CHARGE·Admin 목록·CAD 첨부 자체는 기존 전체 E2E 직접 범위가 아니므로 제품 QA는 별도다.
 - `mark.sh NEEDS_RUN stage release/v1.92.0`을 기록하고 PR 직전 check·diff check를 통과했다. 정상 원격 삭제/생성 push hooks는 현재 feat/e2e-deploy-status checkout의 lint(기존 경고·오류0), Admin가드9, shared53/coverage를 통과했으며 릴리즈 전체 런타임 검사로 보지 않는다. 제품 파일/branch checkout은 수정하지 않았고 최종 checkout은 `feat/e2e-deploy-status@65dd71ddf`, upstream 동일·clean이다.
 - 담당 구현 세션은 5919c6f로 체크포인트를 저장·푸시한 뒤 마감했고, 메인이 세션 `01a1a9c1-bd30-7de3-963d-b548000fa550` 보관 성공을 확인했다. 메인세션은 보관하지 않는다. 원본 feature branch·기존 worktrees는 유지한다.
-- 다음: 사용자 별도 승인 후 PR4833 병합/배포 및 정확한 SHA·BUILD_ID·run/attempt에 연결된 독립 E2E를 확인한다. 결과 조회는 배포 시작15분 이후·후속3분 이상 간격을 따른다. 이번 준비에는 merge·dispatch·실계정 E2E·자동 감시가 포함되지 않았다.
+- 다음 재개점: 결과 확인 요청이 있을 때 merge `aa01dd4d6bb354b8d8bab28daf62cb2f80a67b3d`의 Clinic/Lab/Admin 배포와 정확한 SHA·BUILD_ID·부모 run/attempt에 연결된 독립 E2E 결과를 대조한다. 사용자의 대기 지시를 유지하며 자동 조회를 시작하지 않는다. 결과 조회가 승인되면 공통 배포 시작15분 이후·후속3분 이상 간격 지침을 따른다.
 
 ## 작업 세션 마감 — 2026-11-05
 
