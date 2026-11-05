@@ -1,14 +1,67 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+최종 상황 점검: **2026-11-05** — 사용자에게서 BE의 어제 Jira 설계 변경 없음·Swagger 미배포를 전달받고, 세 제품 코드/Git·Jira·DEV Swagger·정책서 반환 범위를 읽기 전용으로 재대조했다. FE 화면·공통 이동 선행 구현과 새 서버 계약 연결은 별개다. **Lab 알림센터의 실제 소속 조회·전환은 기존 API로 더 진행할 수 있는 제한적인 FE 잔여 작업**으로 확인했으며, 관련 전부를 BE 대기로 묶던 표현을 정정한다. 제품 코드·외부 문서는 변경하지 않았다. 점검 후 사용자 추가 요청으로 화면 확인용 실행 환경을 다시 준비하며 아래 후속 실행 상태를 따른다.
+
 최종 구현 마감: 2026-11-04 — **확정된 알림센터 범위에 맞춰 이메일 작업에서 남은 Android 브라우저 모듈 의존을 양 앱에서 정리**했다. Office `cefac786`, Lab `b92207c`이며 모듈 없는 Android 빌드·양 OS 영향 경로 검증을 완료했다. 누적 네이티브/라이브러리 변경은 없다. Web `873fb2556`과 앞선 Credits Email·Lab 밀링 결제 제외는 유지한다. 새 BE 계약·USER 정책/와이어프레임은 계속 대기이며 PR·merge·배포·최종 QA 완료가 아니다.
 
 이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리** 보완·검증·양 앱 commit/push 완료. 이후11/4 범위 정리에서도 배너·인증·OS 권한·실제 서버 수신 설정은 변경하지 않았다.
 
-- **현재 지시:** 사용자 후속 승인으로 확정 범위·잔존 코드·전달 답변을 재점검하고 정리했다. 심사 일정이 기능 범위의 기준이 아니다. 마감 후 BE 명세·USER 단위 정책/와이어프레임 또는 사용자 재개 요청을 기다리며 자동 구현·폴링·서버 재실행을 하지 않는다.
-- **사용자 최종 확인·대기:** 11/4 사용자가 “요구사항 변경으로 불필요하게 남은 코드를 정상 개발 범위대로 정리한 결과, 추가 심사가 필요한 변경이 없는 것”으로 이해·확인했다. 사용자가 직접 이 결론을 전달할 예정이며 게시 완료로 기록하지 않는다. 현 승인 범위에서 즉시 추가할 구현·정리는 없고, 남은 BE 계약/USER 정책을 받거나 사용자가 재개하면 해당 변경분부터 대조한다. 제품 커밋·푸시/검증과 로컬 종료는 완료 상태로 유지한다.
+- **현재 지시:** 11/5는 완료·현재 상태·남은 구현·API/기획/디자인/심사 요건을 정리하는 브레이크포인트 검토다. 심사 일정이 기능 범위의 기준이 아니다. 새 계약을 추측하거나 제품 구현·폴링을 시작하지 않고, 실제 가능한 FE 작업과 외부 계약 대기를 구분해 보고한다. 이후 명시적으로 요청한 현재 화면 확인용 실행은 아래 후속 요청을 따른다.
+- **직전 사용자 확인:** 11/4 사용자가 “요구사항 변경으로 불필요하게 남은 코드를 정상 개발 범위대로 정리한 결과, 추가 심사가 필요한 변경이 없는 것”으로 이해·확인했다. 사용자가 직접 이 결론을 전달할 예정이며 게시 완료로 기록하지 않는다. 제품 커밋·푸시/검증과 로컬 종료는 완료 상태로 유지한다. 당시 ‘즉시 추가할 FE 구현 없음’은 아래11/5 Lab 소속 연결 조사로 보완하며, 조사한 것을 구현 완료로 바꾸지 않는다.
 - **추가 자료 확인 — 2026-11-04:** Jira 댓글44798의 설정 템플릿 초안을 현재 세 제품 코드와 대조했고, 후속44802에서 Lab 밀링 결제 제외를 확인했다. 템플릿 초안 자체는 공개 API·BE 배포 완료 근거가 아니다. 후속 구현은 아래 제외 항목 반영에 한정한다.
 - **상태 읽는 순서:** 이 문서의 최신 상태 → [앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md) → 필요할 때 [11/3 단계별 구현·검증 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/입력 대기/서버 유지 문구를 현재로 재사용하지 않는다.
 - **기획 근거:** Notion 정책서와 확인한 Figma/Slack을 대조하되 최신 명시적 사용자 정정을 우선한다. 오늘 필요한 PRD 5-2~5-5/#14는 재대조했고 일부 조회 누락 블록이 있어 전체 본문·댓글을 완전 최신 조회했다고 주장하지 않는다. 이번 마감은 외부 자료 전수 재조사가 아니다.
+
+## 2026-11-05 브레이크포인트 — 구현 상태와 대기 조건
+
+### 확인한 근거와 범위
+
+- 개인 정본 `ccd58e9`에서 clean 확인·`git pull --ff-only` 최신 상태 확인 후 조사했다. 세 제품은 아래 기록의 Web `873fb2556`, Office `cefac786`, Lab `b92207c`이며 원격 feature SHA 일치·clean·ahead/behind0/0를 재확인했다. 최신 master/main 통합을 뜻하지 않으며 제품 fetch/pull/merge/rebase는 하지 않았다.
+- [DL-16140](https://innovaid.atlassian.net/browse/DL-16140)의 현재 댓글8개를 확인했다. BE [44798](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44798)은11/4 12:29:28 수정본 그대로이고, 최신 [44802](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44802)는13:06:40 Lab 밀링 결제 제외다. BE 개인설정/인박스 카드 DL-17114·17115는 진행 중이며 새 계약 본문은 없다. 초안에 이미 답변된 치과/기공소 구분·Support·밀링 업데이트·과거 `defaultChannel` 질문은 다시 만들지 않는다.
+- **DEV Swagger 11:17:50 KST:** [원문](https://dev-api.dentlink.io/v3/api-docs) HTTP200,977 paths/1491 schemas, SHA256 `fe9427183b408bba82dd94735b98821f59c8147db82cec94621bfc7f5ab3b01c`. 이전11/4의974/1490과 전체 문서는 달라졌지만 신규 알림설정 템플릿/개인설정 계약은 공개되지 않았다. `orderScopes`·`toggleChannel`은0건이다. 과거 원문 파일이 없어 새3개 path를 특정하지 않았고, 전체 Swagger 불변이라고 표현하지 않는다.
+- [Notion PRD](https://app.notion.com/p/innovaid/3c7ce072e82f811184a8e647444f01fd) 반환 편집 시각은11/4 15:45:28 KST다. 필요한5-2/5-3/5-5·권한/기본값 표를 대조했고 일반 댓글은13개 모두 조회했으며 최신은10/29 18:51:34 KST다. 본문 응답에 truncated/unknown block1개가 있어 전체 본문 완전 재조회로 보고하지 않는다. Figma·FigJam·Sheet·Slack 전체를 오늘 다시 읽은 것은 아니며 이전 확인된 디자인·합의 근거를 재사용했다.
+- [DL-17235](https://innovaid.atlassian.net/browse/DL-17235)는11/4 PM 수정에 따른 Credits Mail 보완 및 **USER 단위 구조/정책·와이어프레임 후속** 카드다. 카드 상태가 할 일이어도 이미 반영한 Credits Mail UI를 미구현으로 되돌리지 않는다. [DL-17202](https://innovaid.atlassian.net/browse/DL-17202)는 합의된 Office 조회 화면과 알림 랜딩 통합 작업으로 진행 중을 유지한다.
+
+### 완료된 선행 구현과 실제 연결 경계
+
+| 영역 | 현재 구현되어 있는 것 | 남은 것 |
+| --- | --- | --- |
+| Clinic/Lab 웹 | PC/모바일 알림 팝업·설정, 전체/안읽음·읽음 동작 UI, 권한/제품별 항목, 실제 소속 조회·활성화, 알림 전환 후 팝업1회 열기·토스트 | 새 목록/읽음/설정/미읽음은 로컬 mock. 새 UI는 development에서만 노출하고 다른 환경은 기존 알림 유지 |
+| Office/Lab 앱 | 알림함·설정 화면, Home 진입, 권한/제품별 표시, OS 안내/정상 복귀 흐름·기기별1회 이력, 공통 딥링크의 로그인/소속 준비·화면/action 이동 | 새 알림 데이터/읽음/설정/미읽음은 mock. 알림함 새 route와Home벨은 `__DEV__` 제한, 실제 서버 연결 후 운영 전환 필요 |
+| 소속 전환 | Web/Office 실제 소속 조회·활성화, Lab 공통 딥링크의 실제 소속 준비와 기존 전환 기반 | **Lab 알림센터 선택 UI만 mock 소속을 바꿈. 기존 API로 조회/전환 연결을 더 진행할 수 있음.** 소속별 미읽음 집계는 별도 대기 |
+| Office 추가 목록 | 크레딧 잔액·이력, 청구서 목록의 웹 모바일 디자인/기존 REST 조회·권한/소속 처리 | 최종 NOTIFICATION/PUSH 랜딩값과 통합 검증. 별도 메뉴 없는 상태는 사용자 수용, 추가 메뉴 설계는 선행 조건 아님 |
+| OS와 서버 설정 분리 | OS 조회·앱 복귀 확인과 신규 UI 흐름 준비 | 기존 `PermissionProvider`의 OS 허용→구 preference upsert, Office My Orders의 `pushEnable:true` 결합이 남음. 실제 새 설정 저장 계약에 맞춰 이관 필요 |
+| 검증·전달 | 11/3~11/4 기록의 웹 PC/모바일·양 앱 iOS/Android 영향 경로 실행, 정적 검사, 제품 commit/push | 오늘 runtime 재실행 없음. 실제 FCM→읽음/클릭 저장·일부 역할/다중소속/OS·로그인 케이스, 최종 통합QA·PR·release·배포는 미완료 |
+
+### API별 재사용 기반과 필요한 계약
+
+아래는 필요한 **계약 묶음**이며 모두 신규 endpoint를 요구한다는 의미가 아니다. 일부부터 공개되면 해당 범위를 연결하고 대체한 mock을 삭제한다.
+
+| 묶음 | 현재 공개·사용 가능한 기반 | 남은 계약/연결 |
+| --- | --- | --- |
+| 설정 템플릿 | Jira의 `orderScopes`, `categories[{domain,category,toggleChannel,channels}]` 초안 | 실제 path·요청·응답, Office/Lab/권한별 지원 범위. 후속 PM Credits MAIL 반영 여부도 확인 |
+| 개인 설정 조회·저장 | 구 `/app/users/own/push-preferences`, 항목별 `/push-settings/{id}`는 존재 | 새 웹·앱 공통 개인값, 상위/채널 독립 ON/OFF, 초기값·기존 사용자 이관·숨긴 Web Push 보존. 구 API를 신규 계약으로 오인하지 않음 |
+| 알림 목록 | `GET /messages/notifications`, query `id/serviceType/size`, `landingUrl/isRead` 등 응답 | 안읽음 필터·페이지, 새 domain/category 표시, 제품/채널별 랜딩 전달 방식. 새 endpoint나 특정 필드명을 먼저 강제하지 않음 |
+| 미읽음·다른 소속 | `/messages/notifications/unread` boolean, `/messages/notifications/employers` string[] | 전체 소속 미읽음 존재·각 소속 ID와 개수 연결. 소속명/주소는 기존 조회 재사용 가능 |
+| 읽음 | `PATCH /messages/notifications/read/partial`에 `{unreadNotificationIds:[]}`, `/read/all` | 실제 목록 식별자·소속/필터 범위에 연결. 새 읽음 API나 푸시의 notificationId 직접 전달을 필수로 요구하지 않음 |
+| 푸시 클릭 이력·읽음 연결 | 기존 FCM/Notifee/딥링크·읽음 REST | 발송건↔알림 매칭, 대상 소속, 클릭 기록/읽음 처리의 API 분담. 한 API나 별도 API 여부는 BE 계약으로 확인 |
+| Office 추가 목록 | `/office/credits/own/accounts`, `/office/credits/own/details`, `/office/payments/invoices` | 이미 실제 조회 연결. 신규 API 대기가 아니라 최종 알림 랜딩 통합·실제 데이터 검증 대상 |
+
+### 남은 정책·디자인·검증과 지금 가능한 것
+
+- **FE 단독 잔여 후보:** Lab `src/services/user.service.ts`의 `GET /lab/users/own/employee?type=activate`·`PATCH /lab/employee/activates` 및 `useEmployeeProfile.handleChangeEmployee`가 이미 있다. `useMillingAccountSwitch`의 재조회/경합 보호/활성화/쿠키 처리 패턴을 참고해 알림센터의 실제 소속 선택·전환을 연결할 수 있다. 밀링 전용 동작을 그대로 끌어오지 않는다. ‘미읽음 있는 소속만’과 숫자는 집계 계약이 필요하므로 표시 정책을 임의 변경하거나 mock 알림을 실데이터로 가장하지 않는다. 실제 Lab 다중 소속 검증 계정/데이터는 확보되지 않은 검증 조건이다. **오늘은 조사만 했고 구현하지 않았다.**
+- **PM 후속 자료:** USER 단위 Promotion(SMS/MAIL), Benefits > Credit(PUSH/MAIL)의 정책·와이어프레임과 기존 Employee 설정의 관계를 기다린다. 이미 확정한 기본 알림함 디자인/파란배너1회/추가목록의 웹모바일 디자인/별도메뉴 후속을 다시 질문하지 않는다.
+- **관련 홈/채팅 적용:** Office Home My Orders의 웹·앱별 표시/최초 안내는 알림 수신 범위와 동일 개념이 아니다. 실제 저장·초기화 계약과 대조할 때 구분한다. Lab 최근 메시지/Support 노출·자동 이벤트 메시지 hide의 적용 범위/배치도 후속 근거 확인이 남으며, 오래된 DL-17068 제목으로 제외된 Lab My Orders를 되살리지 않는다.
+- **기존 연관 장애:** Office Support `/office/chat-messages`는 이전 실제404에 이어 오늘 Swagger에도 없다. 현재 지원/대체 조회 계약 확인이 필요하다. 새로운 알림 API를 만들어야 한다는 근거로 확대하지 않는다.
+- **심사:** 현재 확정 범위의 양 앱 native/package/lock 누적 변경0이 유지된다. 이메일 잔존 의존을 요구사항에 맞춰 정리한 결과이며 심사를 피하기 위한 기능 축소가 아니다. 현재 알림센터 때문에 추가 native 심사 선반영을 요청할 필요는 없다. 실제 release/CodePush 대상 호환·통합검증은 전달 단계에서 별도 확인한다.
+- **다음 순서:** Lab 실제 소속 연결의 제한된 FE 잔여 → 공개되는 API 묶음별 실제 연결/mock 제거/구 preference 이관 → USER·관련 홈 정책 변경분 반영 → 실제 발송/권한/다중소속 포함 최종 검증 → 사용자 승인 범위의 PR/배포 단계. 새 계약이 나오기 전 저장 규칙을 추측해 선연결하지 않는다. 오늘은 새 제품 구현·외부 질문/댓글/상태 변경 없이 개인 정본을 정리한다.
+
+### 후속 사용자 요청 — 현재 구현 화면 확인 환경
+
+- 사용자가 보고서를 읽고 현재까지의 화면을 직접 보기 위해 Web Clinic/Lab·시뮬레이터·에뮬레이터 실행을 요청했다. **이번 웹은 명시적 지시에 따라 Cursor 내부 터미널에서 실행하며 Codex 별도 웹서버로 대체하지 않는다.** 앱은 Codex 자체 실행을 허용했다. 이는 이 요청의 실행 방식이며 공통 기본 지침을 무단 수정하지 않는다.
+- **앱 화면 준비 완료:** 기존 로그인/빌드/디바이스를 보존하고 Office8081(PID3396, cwd `dentlink-app`)·Lab8082(PID3397, cwd `dentlink-lab-app`)를 재기동했다. DeviceHub의 iPhone17Pro/iOS26.5에 Office 영문 알림함, Android Dentlink_API_36:5554에 Lab 한글 알림함이 실제 표시된다. 각 Home→벨로 진입했으며 현재 crash/RedBox 없음. 양 기기에 두 제품이 설치돼 필요 시 전환 가능하다. 신규 설치·권한 변경·제품 코드 변경 없이 창/서버를 켜두었다. 알림은 mock이며 전체 QA 재실행이나 실제 BE 연동 검증이 아니다. 화면 근거 `/tmp/office-inbox-preview-final-1105.png`, `/tmp/lab-preview-now-1105.png`; 세션 Office43643/Lab41797/Android74859. PID/세션은 다음 재개 때 재확인한다.
+- 웹은 기존 env/의존성이 있고3000/3005는 비어 있으나 Cursor가 Agents 화면으로 열리며 IDE/새 터미널 전환이 반응하지 않았다. 사용자에게 웹 워크트리를 IDE 화면으로 열어달라고 요청했고, 이 단계에서는 웹서버를 별도 실행하지 않았다. 초기화나 사용자 Cursor 종료는 하지 않았다.
+- 이 요청은 코드 추가 구현·PR·배포가 아니라 현재 코드의 화면 확인 환경 준비다. 11/4 로컬 종료 기록은 당시 마감 근거로 보존하되 현재 실행 상태로 재사용하지 않는다.
 
 ## 2026-11-04 확정 범위에 맞춘 잔존 코드 정리·검증
 
@@ -186,11 +239,12 @@
 
 | 순서 | 할 일 | 필요한 조건 / 완료 기준 |
 | --- | --- | --- |
-| 1 | 새 BE 명세와 기존 구현 대조 | 목록/페이지·필터, 소속별 미읽음, Employee catalog/default/migration/설정 저장, 푸시 식별·클릭/읽음 계약을 확인. 새 API/notificationId 필수를 먼저 요구하지 않음 |
-| 2 | 실제 데이터 연결 및 mock 제거 | 제공된 계약 범위부터 연결, 대체된 mock만 정확히 삭제. Lab 소속 선택/미읽음 포함. 숨긴 채널을 임의 덮어쓰지 않음 |
-| 3 | OS와 기존 서버 preference 이관 | PermissionProvider의 OS 허용→legacy upsert와 Office My Orders의 pushEnable 결합을 새 저장 계약에 맞춰 분리. 구 production 설정 초기화를 계약 없이 통째 제거하지 않음 |
-| 4 | 푸시 읽음/클릭·실역할 실행 검증 | 현재 로그인·해당 소속 준비와 identity를 검증한 뒤 REST 연결. 실제 FCM 수신·중복/동일화면의다른알림, 실패/삭제, 실제 역할/OS/기기 조건 검증 후 사용자 QA |
-| 5 | PR/release | 구현·에이전트 실행 검증·사용자 QA를 구분. 현재 PR 생성/merge/배포 지시는 없으며 자동 진행하지 않음 |
+| 1 | Lab 실제 소속 조회·전환 연결 | 11/5 확인한 기존 API·전환 로직 재사용 가능. 미읽음 조건/숫자는 별도 계약 대기, 실제 다중소속 검증 필요. 오늘은 조사만 수행 |
+| 2 | 새 BE 명세와 기존 구현 대조 | 목록/페이지·필터, 소속별 미읽음, Employee catalog/default/migration/설정 저장, 푸시 식별·클릭/읽음 계약을 확인. 새 API/notificationId 필수를 먼저 요구하지 않음 |
+| 3 | 실제 데이터 연결 및 mock 제거 | 제공된 계약 범위부터 연결, 대체된 mock만 정확히 삭제. 소속별 미읽음 포함. 숨긴 채널을 임의 덮어쓰지 않음 |
+| 4 | OS와 기존 서버 preference 이관 | PermissionProvider의 OS 허용→legacy upsert와 Office My Orders의 pushEnable 결합을 새 저장 계약에 맞춰 분리. 구 production 설정 초기화를 계약 없이 통째 제거하지 않음 |
+| 5 | 푸시 읽음/클릭·실역할 실행 검증 | 현재 로그인·해당 소속 준비와 identity를 검증한 뒤 REST 연결. 실제 FCM 수신·중복/동일화면의다른알림, 실패/삭제, 실제 역할/OS/기기 조건 검증 후 사용자 QA |
+| 6 | PR/release | 실제 연결 후 새 UI의 DEV 제한 해제·운영 진입 전환. 구현·에이전트 실행 검증·사용자 QA를 구분. 현재 PR 생성/merge/배포 지시는 없으며 자동 진행하지 않음 |
 
 - **병행 확인:** 기존 Office Support의 현재 BE 조회 계약과 필요한 실제 역할/데이터를 확보하면 해당 미검증을 해소할 수 있다. 메일 CTA/SES·추가 메뉴·새 디자인 발주를 알림센터 선행 조건으로 만들지 않는다.
 - **남은 정책 근거:** Lab Home 최근 메시지/Support·자동 메시지 hide의 적용 범위는 후속 명시 근거를 확인한다. 파란 배너 1회는 이미 합의·구현된 항목이므로 다시 정책 미정/불필요한 질문으로 되돌리지 않는다.
@@ -204,7 +258,7 @@
 - 결정 근거: [UX 논의](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793063024060739), [푸시 클릭/읽음](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793244658608799), [앱 추가 목록 회의](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793596568281269). 최신 명시적 사용자 정정과 날짜 있는 후속 결정을 오래된 문장보다 우선한다.
 - 알림센터 상위 [DL-16140](https://innovaid.atlassian.net/browse/DL-16140). 공통 DL-17057, Web DL-17058/17061/17062, Office DL-17059/17063/17064/17065, Lab DL-17060/17066/17067/17068, UX 사전 검토 DL-17048. 실제 카드 상태·범위는 재개 시 확인하며 카드명만으로 제외 범위를 복원하지 않는다.
 - 추가 목록: DL-17174→DL-17202, 후보 검토 DL-17179. 원본 앱 비교 세션 역할은 [모바일웹/앱 차이 체크포인트](dentlink-mobile-web-app-parity.md)를 참조한다.
-- 마지막 DEV Swagger 조사: **11/4 12:33 KST**. 설정 템플릿 초안과 같은 신규 계약은 미공개이며 위 후속 확인에 근거를 남겼다. 11/3 기존 목록·부분/전체읽음·미읽음·구 preference 검토는 [당일 14:05 점검 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md), Office Support 404와17:40 공개 계약 불일치는 실행 기록을 따른다.
+- 마지막 DEV Swagger 조사: **11/5 11:17:50 KST**, 신규 설정 계약은 미공개. 전체 문서 변경과 필요한 계약 미공개를 구분하며 수치·API별 결과는 위11/5 점검을 따른다. 11/3 기존 API 검토는 [당일 14:05 점검 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md), Office Support404 실행은 별도 실행 기록을 따른다.
 - 과거 FE API 제안서는 확정 BE 계약이 아니다. 상세 조사·UX 합의·소스/기기 증거·공수 산정·이전 정확한 Git 이력은 [2026-11-03 분리 전 전체 이력](archive/dentlink-unified-notification-center-through-2026-11-03.md)에 보존했다. 과거 ‘현재/다음’ 지시는 최신 범위를 되돌리지 않는다.
 - **11/4 산정 역추적 완료:** [Tom의 Slack](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765218878199)은 AI로 Jira 카드를 만드는 것은 좋으나 스토리포인트 점검이 필요하다고만 했다. 사용자는 통합알림센터를 지적했을 가능성을 제시했지만 특정 카드·기간 과다·잘못된 근거는 원문에 없다. 이후 메인세션에서 사용자 요청으로 FE 하위13개와 [공통 설계 DL-17057](https://innovaid.atlassian.net/browse/DL-17057), [상위 일정 댓글44666](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44666)을 읽었다. 현재 등록 합계31SP와 당시 병행13작업일/잔여12일 설명을 확인했으며 오늘의 잔여공수로 해석하지 않는다.
 - **검토 결과:** 합산 `37-7.5+UX1+설계0.5=31SP`는 맞고 Lab의 Office 패턴 재사용도 이미 반영돼 있다. 다만 31SP=186시간과 사용자1명+Codex의13일=78사람시간을 연결하는 측정 기준·생산성 근거, `1+0.5+max(8.5,11.5,9.5)` 병행식의 공통 인간 검토/통합·선행 관계, 카드별24시간/18시간 등 계획치를 뒷받침하는 비교·실측 근거가 부족하다. 별도QA를 빼면서 필수 최종 앱 검증은 유지한 공수 배분도 불분명하다. 검토 요청은 타당하지만 명백한 과다 산정·중복 계산이나 Tom의 실제 지적 이유가 입증된 것은 아니다. PM의 기존 구두 일정 싱크 댓글44669도 보존한다.
