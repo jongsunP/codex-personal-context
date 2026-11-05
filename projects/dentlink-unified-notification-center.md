@@ -1,6 +1,6 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-현재 후속: **2026-11-05 — 웹 알림센터 아이콘 버튼 상태 보완.** 사용자 승인에 따라 톱니바퀴·설정 X뿐 아니라 같은 방식의 뒤로가기와 소속 선택 X까지5곳을 Figma와 대조해 수정했다. Web `39689690c`로 commit/push했고 원격 SHA 일치·clean·ahead/behind0/0을 확인했다. Office `be825ad6`, Lab `193ee8b5`는 변경하지 않았고 기존 앱 미리보기·웹 창/서버는 유지한다. BE 연결/미정 정책 대기는 그대로다.
+현재 후속: **2026-11-05 — 웹 소속 전환 토스트를 기존 전역 표시 방식으로 통일하고 웹·앱 공용 UI 사용을 점검했다.** Web `38153dc1a`로 commit/push했고 원격 SHA 일치·clean·ahead/behind0/0을 확인했다. Office `be825ad6`, Lab `193ee8b5`는 이미 기존 공용 호출을 사용하고 있어 수정하지 않았다. 별도 요구/디자인이 없는 일반 동작은 기존 컴포넌트뿐 아니라 호출 방식·위치·시간·포커스 등도 따르도록 공통 지침에 보강했다. 기존 로컬 서버/브라우저/양 기기와 BE·미정 정책 대기는 유지한다.
 
 **대기 기준 — 2026-11-05:** 현재 확인된 확정 요구에서 추가로 착수할 FE 선행 작업은 없으며 전체 기능/실API/최종 QA 완료를 뜻하지 않는다. 실제 API·미읽음 집계, USER 설정/집계(#20–22) 및 Lab Home 최근 메시지(#19)의 확정 자료 또는 사용자 요청을 받으면 변경분부터 재개한다. 처음에는 제품 변경을 로컬에만 보존했으나 이후 명시적 commit/push·앱 재실행 요청을 받아 아래와 같이 완료했다. 새 조사/폴링·PR·배포는 하지 않고 사용자 미리보기용 기기/서버는 유지한다.
 
@@ -16,11 +16,21 @@
 
 이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리**를 당시 합의대로 구현했다. **11/5 14:49 Slack 후속으로 배너는 OS OFF 동안 상시 노출로 변경됐으며 아래 최신 정책이 우선한다.** 자동 안내 팝업의 기기별 1회는 별개로 유지한다.
 
-- **현재 지시:** 11/5 웹 아이콘 버튼 상태 보완·검증·commit/push를 추가 승인받았다. 그 직전 공통 헤더·Figma 주석 누락 재검토·보완 뒤, 사용자가 남은 제품 변경의 commit/push와 앱 재실행을 명시적으로 승인했다. 웹은 사용자가 직접 구동한다. 과거 '디자인 명시 근거 없음/임시 UX' 설명은 주석 확인 오류로 정정됐으며 현재 범위는 Home·Orders·LinkTalk·Profile 1뎁스다. PR·배포 및 미정 BE/정책의 임의 구현은 승인하지 않았다.
+- **현재 지시:** 11/5 아이콘 보완 뒤 사용자가 웹 병원 전환 토스트 수정과 웹·앱의 같은 종류 공용 UI 불일치 검토/수정, 공통 지침 반영을 승인했다. 기존 commit/push까지의 작업 권한은 유지하며 PR은 만들지 않는다. 그 직전 웹 아이콘 버튼 상태 보완·검증·commit/push를 추가 승인받았다. 그 직전 공통 헤더·Figma 주석 누락 재검토·보완 뒤, 사용자가 남은 제품 변경의 commit/push와 앱 재실행을 명시적으로 승인했다. 웹은 사용자가 직접 구동한다. 과거 '디자인 명시 근거 없음/임시 UX' 설명은 주석 확인 오류로 정정됐으며 현재 범위는 Home·Orders·LinkTalk·Profile 1뎁스다. PR·배포 및 미정 BE/정책의 임의 구현은 승인하지 않았다.
 - **직전 사용자 확인:** 11/4 사용자가 “요구사항 변경으로 불필요하게 남은 코드를 정상 개발 범위대로 정리한 결과, 추가 심사가 필요한 변경이 없는 것”으로 이해·확인했다. 사용자가 직접 이 결론을 전달할 예정이며 게시 완료로 기록하지 않는다. 제품 커밋·푸시/검증과 로컬 종료는 완료 상태로 유지한다. 당시 ‘즉시 추가할 FE 구현 없음’은 아래11/5 Lab 소속 연결 조사로 보완하며, 조사한 것을 구현 완료로 바꾸지 않는다.
 - **추가 자료 확인 — 2026-11-04:** Jira 댓글44798의 설정 템플릿 초안을 현재 세 제품 코드와 대조했고, 후속44802에서 Lab 밀링 결제 제외를 확인했다. 템플릿 초안 자체는 공개 API·BE 배포 완료 근거가 아니다. 후속 구현은 아래 제외 항목 반영에 한정한다.
 - **상태 읽는 순서:** 이 문서의 최신 상태 → [앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md) → 필요할 때 [11/3 단계별 구현·검증 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/입력 대기/서버 유지 문구를 현재로 재사용하지 않는다.
 - **기획 근거:** Notion 정책서와 확인한 Figma/Slack을 대조하되 최신 명시적 사용자 정정을 우선한다. 오늘 필요한 PRD 5-2~5-5/#14는 재대조했고 일부 조회 누락 블록이 있어 전체 본문·댓글을 완전 최신 조회했다고 주장하지 않는다. 이번 마감은 외부 자료 전수 재조사가 아니다.
+
+## 2026-11-05 후속 — 기존 토스트 연결·웹/앱 공용 UI 사용 감사
+
+- **사용자 기준:** 새로운 요구/디자인이 아닌 일상적인 동작은 제품의 기존 UX를 따른다. 같은 컴포넌트를 가져와 임의 위치/호출 방식으로 표시하는 것도 올바른 재사용으로 보지 않는다. 공유 컴포넌트 자체의 버그와 사용처의 의도적 차이를 구분한다. 이를 `AGENTS.md`와 `DEVELOPMENT_STYLE.md/Existing UI First`의 웹·앱 공통 지침으로 기록했다. 새 화면/정책을 ‘상식’으로 발명하라는 뜻은 아니다.
+- **Web 원인·수정:** `NotificationCenterMock`가 공용 DLDS Toast를 사용하되 `modal-root` Portal·`BOTTOM_CENTER`·별도 state/타이머로 직접 렌더했다. 이 경로를 제거하고 Clinic/Lab의 기존 `useToast.openToast`를 `onShowToast`로 전달한다. 기존 전역 ToastMessage가 위치/레이어/3초 표시를 처리하며 PC 우측 상단·모바일 헤더 아래로 통일한다. initialOpen 한 구간을 ref로1회 소비해 불안정한 callback identity/StrictMode 재실행으로 중복 표시하지 않으며 다음 전환은 정상 허용한다. 실제 소속 활성화/목적지 준비 조건·메시지 문구·실패 처리·읽음/미읽음 데이터는 변경하지 않았다.
+- **Web 추가 감사:** 알림 진입·설정·소속 선택·모달의 닫기/뒤로가기·포커스/스크롤 복원·Dropdown/Switch/Checkbox를 기존 공용 구현과 비교했다. 토스트/앞선 아이콘 외 추가로 수정할 명확한 이탈은 찾지 못했다. PC 팝업/모바일 전체 화면은 확인된 요구이고 헤더 종의 IconBadge hover는 기존 공통 동작이므로 유지한다.
+- **Office 감사:** 정확한 `feature/DL-17059@be825ad6`·최신 origin·clean을 확인했다. 전환 Toast.show(success/error)는 기존 EmployeeProfile과 같은 CustomToast→공통 ToastMessage 경로(bottom55/2초)이며 위치/renderer override가 없다. Popup·CustomBottomSheetModal·Layout/Header·Switch·Typography/Icon 및 추가 목록의 Layout/Spinner/Chip/RootStack을 재사용한다. 빨간 배지/OS배너/335폭 팝업 등은 확인된 Figma/웹모바일 기준 차이여서 유지한다. 근거 `/tmp/office-notification-common-ui-audit-1105.md`.
+- **Lab 감사:** `feature/DL-17060@193ee8b5`·최신 origin·clean을 확인했다. RootNavigator/useNotificationLabSwitch의 토스트는 공통 Toast.show→CustomToast/appToastConfig(bottom55/2초)를 사용한다. disableLabI18n은 이미 번역된 소속명 문장의 중복 번역 방지이며 스타일 차이가 아니다. Layout/Header·CustomBottomSheetModal·Switch·useUiStore.popup 재사용을 확인했다. 헤더50/팝업335/Unread pill은 명시 디자인이라 유지한다. 양 앱은 코드/기기/Metro 변경이 없어 기존 최종 코드 런타임 근거를 재사용하며 새 전체 QA 완료로 확대하지 않는다.
+- **Web 검증:** 실제 `NotificationCenterMock + 각 제품 useToast + ToastMessage`를 임시 headless Chromium에서 Clinic/Lab × PC1280/모바일390으로 렌더했다. PC top85/92·right20, 모바일 top77/72·left12(기존 제품 헤더 여백) 및 단일 토스트를 확인했다. StrictMode/연속 재렌더1회·3초 자동 닫힘·다음 진입 재표시·진입 소비 후 재표시 없음 통과, pageErrors0. 원본 코드 diff를 별도 읽기 리뷰했고 계정/소속 key·준비 후 진입 경계는 보존됐다. scoped ESLint/diff 및 commit 훅의 Clinic/Lab/Admin 타입검사 통과. 근거 `/tmp/notification-toast-results-1105.json`, `/tmp/notification-toast-check-1105.cjs`, `/tmp/notification-toast-{clinic,lab}-{1280,390}-1105.png`. 사용자 실제 로그인/다중소속 서버 전환을 이번에 재실행한 증거는 아니다.
+- **마감:** Web3파일 `38153dc1a58ba601a26238d0b247f61388a9d9da` commit/push·원격 SHA 일치·clean·ahead/behind0/0 확인 완료. 필수 push 훅의 Clinic/Lab/Admin lint 오류0(기존 경고 유지), Admin guard9·configs21·hooks32·coverage baseline 검사 통과. 근거 `/tmp/notification-toast-push-1105.log`. 제품 공용 토스트 자체·앱 코드·새 API·Jira/Notion/Slack·PR/배포는 변경하지 않았다. 사용자 미리보기 서버/브라우저/기기는 그대로 유지하고 후속 요구 또는 BE/정책 확정을 기다린다.
 
 ## 2026-11-05 후속 — 웹 아이콘 버튼 hover/pressed 보완
 

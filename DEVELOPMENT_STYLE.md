@@ -126,6 +126,19 @@ appear nowhere else in the app.
 
 ## Existing UI First
 
+- Across web and apps, ordinary behavior that has no separately confirmed new
+  requirement or design follows the product's existing user experience. Reuse
+  the established invocation path as well as the component: toast placement and
+  header offsets, providers/portals, duration, focus, dismissal, navigation and
+  loading/disabled behavior are part of that contract. This is the user's
+  explicit 2026-11-05 direction after the notification-center toast review.
+- Do not deliberately give a feature a different default merely because the
+  component exposes a prop or a standalone preview is easier to implement.
+  Inspect the nearest production usage first. Follow confirmed new designs where
+  they intentionally differ; do not use "common sense" to invent new screens,
+  controls or unresolved product policy. An apparent bug in the shared component
+  must be distinguished from a feature-specific override and assessed by its
+  actual affected consumers before changing the global behavior.
 - Use existing Button `size`, `variant`, `color`, `width`, and state props
   before creating styled action-button variants.
 - Use Typography variants and theme colors instead of restating font metrics

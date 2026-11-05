@@ -87,6 +87,12 @@
   Confirmed policy takes first priority; confirmed policy and backend contracts
   take precedence over conflicting design frames. Reconcile current sources
   before asking about stale or duplicated design details.
+- Follow **Existing UI First** in `DEVELOPMENT_STYLE.md` across web and apps:
+  absent a confirmed new requirement/design, preserve the product's established
+  interaction and invocation path, including toast placement and providers.
+  Reusing the same component while arbitrarily changing its default behavior
+  is not consistent reuse. Distinguish a shared-component bug from a local
+  override, and do not invent new product policy under "common sense".
 
 ## Permission Preference
 
