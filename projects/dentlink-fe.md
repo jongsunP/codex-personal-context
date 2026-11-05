@@ -4,12 +4,16 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
-## 웹 배포·E2E 결과 분리 착수 — 2026-11-05
+## 웹 배포·E2E 결과 분리 PR 전달 완료 — 2026-11-05
+
+- **완료:** 담당 세션이 `feat/e2e-deploy-status@fa4384eb5`를 커밋·푸시하고 [PR #4831](https://github.com/Innvoaid/dentlink-client/pull/4831)을 **master** 대상으로 생성했다. 메인에서 OPEN·일반 PR·미병합·head/base·변경 7개 파일을 재확인했다. checkout은 원격과 동일하고 clean이다.
+- **현재 영향/검증:** Clinic DEV/STG 배포 성공과 독립 E2E 실패를 구분하는 CI 변경이 PR에 준비됐다. 새 버전 반영 확인과 E2E 실패 판정은 유지한다. 브라우저 없는 회귀 247/247, 최종 알림 보완 후 관련 14/14, 타입·actionlint·Prettier·정상 Git hook·독립 리뷰를 통과했다. 실제 배포·실계정 E2E·GitHub 자동 연결/부분 재실행은 미검증이다.
+- **남은 일:** 리뷰/병합은 별도 지시를 기다린다. master 반영 뒤 stage·develop 및 수동/태그 배포 소스에도 변경을 전파해야 실제 배포부터 분리된다. 현재 배포 상태가 바뀐 것으로 보지 않으며 자동 리뷰 대응·merge·배포·감시는 하지 않는다. 상세 증거와 적용 순서는 [E2E 정본](dentlink-client-e2e.md)에 기록했다.
 
 - [Slack 요청](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793846894550259): 배포가 성공했는데 E2E 실패 때문에 배포 실행까지 실패로 보이는 혼동을 없앤다. [실행41950270234](https://github.com/Innvoaid/dentlink-client/actions/runs/41950270234)는 빌드·서울/오하이오 배포·롤백 방지·새 버전 반영 확인이 성공했고 E2E와 최종 gate만 실패했다. 기능 검증 성공으로 해석하지 않는다.
 - 사용자 승인: 최신 `origin/master` 기반 신규 브랜치에서 구현·검증·커밋·푸시 후 **master 대상 PR**까지 진행한다. 별도 질문에 master 대상을 명시 확인했으며 merge·배포·실계정 테스트 재실행·CodeRabbit 대응은 포함하지 않는다.
-- 같은 메인 프로젝트·기존 Mac에 **웹 배포·E2E 결과 분리** 세션 `01a1a9c1-bd30-7de3-963d-b548000fa550`을 생성했다. 프로젝트 등록·초기 작업 시작·실제 `gpt-6-astra / ultra` 적용을 확인했다. 새 폴더/worktree 없이 clean인 `/Users/parkjongsun/Repository/dentlink-client`를 맡겼으며 기존 `feature/DL-17125`는 보존한다. 제안 브랜치는 `feat/e2e-deploy-status`, 착수 기준 origin/master는 `5452871ea`다. 실제 생성·최종 검증·PR은 담당 세션의 후속 결과로 확인한다.
-- 배포 성공과 독립 E2E 실패를 구분하며 기존 실패 판정·리포트·Slack·동시성 및 배포 SHA/BUILD_ID 검증을 보존한다. 상세 작업 기록은 [E2E 정본](dentlink-client-e2e.md)을 따른다. 메인세션은 코드 작성 없이 최종 결과를 확인한다.
+- 같은 메인 프로젝트·기존 Mac에 **웹 배포·E2E 결과 분리** 세션 `01a1a9c1-bd30-7de3-963d-b548000fa550`을 생성했다. 프로젝트 등록·초기 작업 시작·실제 `gpt-6-astra / ultra` 적용을 확인했다. 새 폴더/worktree 없이 clean인 `/Users/parkjongsun/Repository/dentlink-client`를 맡겼으며 기존 `feature/DL-17125`는 보존했다. `feat/e2e-deploy-status`를 착수 기준 origin/master `5452871ea`에서 생성한 결과도 확인했다.
+- 배포 성공과 독립 E2E 실패를 구분하며 기존 실패 판정·리포트·Slack·동시성 및 배포 SHA/BUILD_ID 검증을 보존했다. 메인세션은 코드 작성 없이 인계·독립 리뷰·최종 결과 확인을 맡았다.
 
 ## 브랜치명·스토리포인트 지침 갱신 — 2026-11-04
 
