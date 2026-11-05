@@ -1,5 +1,14 @@
 # Dentlink E2E Reliability Checkpoint - 2026-10-20
 
+## 배포 결과·E2E 결과 분리 착수 — 2026-11-05
+
+- 기능 세션 `웹 배포·E2E 결과 분리` (`01a1a9c1-bd30-7de3-963d-b548000fa550`)가 기존 메인 프로젝트·local Mac에서 active로 등록된 것을 확인했다. 메인세션은 조율만 하며 이 세션이 제품 작성자다.
+- 사용자 승인: 최신 master 기준 구현·합성/로컬 CI 계약 검증·commit/push·master 대상 일반 PR 생성. merge·배포·실계정 E2E·CodeRabbit 자동 대응은 제외한다. 결과는 이 세션과 이 체크포인트에 남긴다.
+- 제품 경로 `/Users/parkjongsun/Repository/dentlink-client`. clean/upstream동일인 `feature/DL-17125@e8e15ed66629f3aa389e484215116ed90fa21f13`을 보존하고 pull/fetch 후 `origin/master@5452871eac0e23a429995381abf673c580d236b9`에서 `feat/e2e-deploy-status`를 생성했다. 동명 local/remote branch 부재 및 실제 생성 이름을 확인했다.
+- 요구사항: [Slack 논의](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793846894550259)의 배포 성공·E2E 실패 혼동을 독립 workflow 실행으로 분리한다. 실패 리포트/Slack/gate, 배포 SHA·BUILD_ID 검증, 환경별 concurrency와 수동 경로는 유지한다. 시나리오 실패 원인·skip 변경은 범위 밖이다.
+- STG 실패 사례 run41950270234 SHA6f9f3339fa40864a28f1ac9b87424750c6f89ecd와 master의 관련 workflow/runner 문서는 동일하다. DEV에도 같은 inline E2E 구조가 있어 함께 분리할 대상으로 확인 중이다.
+- 다음 단계: 부모 실행/attempt에 묶인 배포 식별 정보와 독립 E2E 연결 구현, 실패·스킵·버전 불일치·셋업/테스트 실패·성공 계약 검증, 독립 diff 리뷰와 정상 hook 후 PR 생성.
+
 ## 환경변수 전환 후 전체 STAGE 확인 — 2026-10-20
 
 - 환경변수 전환 작업의 사용자 위임으로 Admin·Clinic·Lab 스테이징 배포 후 전체 E2E를 확인했다. 첫 실행39408726298은 가입2건이 `signup-step1.ts:67`에서 `getByLabel("Password")`의 부분 일치로 입력칸과 `Show password` 버튼을 함께 선택해 실패했다(89통과/2실패/13미실행/기존 허용제외5).
