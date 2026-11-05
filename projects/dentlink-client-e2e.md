@@ -1,4 +1,16 @@
-# Dentlink E2E Reliability Checkpoint - 2026-10-20
+# Dentlink E2E Reliability Checkpoint - 2026-11-05
+
+## 배포 결과·E2E 결과 분리 PR 전달 완료 — 2026-11-05
+
+- 사용자 승인 범위인 구현·검증·commit/push·master 대상 일반 PR 생성까지 완료했다. [PR #4831 — 웹 배포와 E2E 실행 결과 분리](https://github.com/Innvoaid/dentlink-client/pull/4831)는 `OPEN / non-draft`, base `master@5452871eac0e23a429995381abf673c580d236b9`, head `feat/e2e-deploy-status@fa4384eb5691969adf29d1ce89ad464c7284b0a0`다. 생성 뒤 원격 base/head/7개 변경 파일을 재확인했다. 제품 checkout은 원격과 동일하고 clean이다. 기존 `feature/DL-17125`는 보존했다.
+- 현재 영향은 **PR에 준비된 CI 변경**이다. 아직 병합·배포되지 않았으므로 실제 Actions 동작이 변경됐다고 보지 않는다. 메인세션이 결과를 확인하며 다른 세션/Slack/Jira에 별도 메시지를 보내지 않았다.
+- Clinic DEV/STG의 inline E2E를 독립 workflow로 분리했다. 배포 쪽에는 기존 BUILD_ID 반영 대기(DEV 30회/STG 15회, 간격 60초)와 실패/중단 Slack을 남겨 배포 성공의 의미를 유지한다. 독립 E2E의 실패 report·Slack 카운터·최종 gate, runner의 실행 전후 버전 검사와 기존 concurrency 그룹을 보존했다.
+- 부모 배포의 SHA·BUILD_ID·환경·source ref·run ID/attempt를 단일 artifact로 전달한다. 기본 브랜치 workflow revision의 검증 코드로 same repository/workflow/event/success/attempt를 API 대조하고 artifact 소유 정보·digest·JSON을 검증한 후 exact 배포 SHA를 checkout한다. 빈 BUILD_ID·누락·중복·만료·불일치는 준비 실패다. 이전 build 출력을 재사용하는 부분 재실행도 현재 attempt에 새 인계 정보를 만드는 계약이다.
+- prepare와 실제 E2E job을 분리하여 실패한 부모·구형 inline 이벤트가 정상 E2E의 pending concurrency를 취소하지 않게 했다. workflow 취소를 존중하며, 준비 실패는 계정 접근 전에 막고 실패 알림/gate를 실행한다. 구형 inline 배포는 요약에 **독립 E2E 미실행**을 명시하고 E2E job을 skip한다. 기존 STG 수동/repository dispatch와 태그·수동 배포 경로는 유지했다.
+- 변경: `.github/workflows/clinic_{dev,stg}_{build_and_deploy,e2e}.yml` 4개(DEV 독립 E2E 신규), `scripts/e2e-deployment.js`, 합성 계약 테스트, `e2e/README.md`. Lab/Admin 배포·운영·앱·E2E 시나리오/assertion/skip/verdict 조건·실제 env값은 변경하지 않았다. 새 secret 없음.
+- 검증: `pnpm e2e:check` **247/247** 통과. 마지막 알림 보완 뒤 관련 계약 테스트 **14/14** 재통과. E2E TypeScript(Clinic workspace tsc 사용), actionlint 1.7.12, 변경 JS/YAML Prettier, diff check, 독립 최종 diff 리뷰 통과. 정상 commit hook Clinic/Lab/Admin type, push hook lint(기존 경고 **804**, 오류0), Admin guard9, shared tests53·coverage 통과. hook 우회·baseline 재생성 없음. 앱 코드 변경이 없어 E2E 영향 가드 대상 없고 PR 전 check 통과.
+- 미검증: 실제 GitHub 자동 연결·부분 재실행·artifact 전달의 런타임, 실계정 E2E, 실제 배포/서빙 동작. 합성 테스트는 이 실증을 대신하지 않는다. CodeRabbit 대기·조회/자동 대응·merge·배포는 수행하지 않았다.
+- 다음 시작점: 사용자의 별도 리뷰/병합/적용 지시를 기다린다. 기본 브랜치(master)에 receiver 반영 후 변경을 stage·develop 및 수동/태그 배포 소스에도 전파해야 한다. master PR 병합만으로 환경 브랜치의 push YAML은 바뀌지 않는다. 이후 승인된 실제 배포/E2E 실행에서 부모 성공·독립 E2E 실패/성공과 정확한 SHA/BUILD_ID/attempt를 확인한다. PR에도 적용 순서와 미검증 한계를 기록했다.
 
 ## 배포 결과·E2E 결과 분리 착수 — 2026-11-05
 
