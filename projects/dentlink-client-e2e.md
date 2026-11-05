@@ -1,13 +1,16 @@
 # Dentlink E2E Reliability Checkpoint - 2026-11-05
 
-## master·v1.92.0 양쪽 반영 PR 준비 완료 — 2026-11-05
+## master·v1.92.0 순차 병합 확인 — 2026-11-05
+
+- 사용자가 #4831 → #4832 순서로 머지했다고 알렸고, 메인세션에서 GitHub API로 **두 PR 모두 CLOSED / merged:true**를 확인했다. #4831은 **13:43:44 KST**에 master로 병합됐으며 merge SHA는 `c5a4b5e372fb7734c72a5faec6807e7b554c1dd6`이다. #4832는 **13:44:07 KST**에 release/v1.92.0으로 병합됐으며 merge SHA는 `05243d50c4125166d723a4c3ed683bdd17cf75f3`이다. 공통 소스 head는 `65dd71ddf7da0d275da34eddc1e90f3a56a58acb`다.
+- 현재 영향: master의 독립 E2E 수신 workflow와 release/v1.92.0의 배포/E2E 분리 코드 통합이 완료됐다. 실제 stage/develop 전파·배포·독립 E2E 자동 연결 성공은 이 병합 확인에 포함하지 않는다. 이번 메인세션에서는 개인 기록만 갱신하며 제품 checkout/브랜치/PR·환경을 변경하거나 배포·테스트·감시를 시작하지 않았다.
 
 - 사용자가 실제 v1.92.0의 스테이징 배포에도 이번 변경이 적용되어야 한다는 의도를 재확인하고, 필요하다고 판단하면 먼저 답한 뒤 작업하라고 승인했다. 기본 브랜치의 workflow_run 수신기와 release/stage의 배포 쪽 전달 정보 생성이 모두 필요하므로 **master PR 유지 + 같은 소스의 release PR 추가**로 진행했다. merge·배포는 사용자가 직접 확인 후 수행한다.
 - [master PR #4831](https://github.com/Innvoaid/dentlink-client/pull/4831)은 유지했고 [release/v1.92.0 PR #4832](https://github.com/Innvoaid/dentlink-client/pull/4832)를 일반 PR로 생성했다. 두 PR은 같은 `feat/e2e-deploy-status@65dd71ddf7da0d275da34eddc1e90f3a56a58acb`를 사용한다. 새 브랜치·제품 코드 수정·commit/push는 필요하지 않았다. 양쪽 PR 본문에 상대 PR과 적용 순서를 연결했다.
-- 사용자에게 master 병합 완료 보고가 있었으나, 이번 최종 GitHub API 재조회에서는 **두 PR 모두 OPEN / non-draft / merged:false**였다. 확인된 master는 `5452871eac0e23a429995381abf673c580d236b9`, release는 `9107e82cdca2807e24bf606d01797dbc733025c0`다. 사용자 보고와 관측을 구분하며 다음 실행 전에 실제 원격 반영 상태를 다시 확인한다.
+- 준비 당시에는 두 PR 모두 OPEN / non-draft / merged:false였으며 base는 master `5452871eac0e23a429995381abf673c580d236b9`, release `9107e82cdca2807e24bf606d01797dbc733025c0`였다. 당시 미병합 기록은 위의 순차 병합 실조회로 대체됐다.
 - release와 source의 merge-tree `cdf96e538ad03cbba3c4e647fdff7ded92121c85`는 충돌 없이 생성됐다. release 대비 결과는 기존 CI/문서/계약 테스트 7개 파일만 변경되며, 모두 기존 검증 source와 내용이 완전히 동일하다. release 제품 변경 원복이나 무관한 앱 코드 유입 없음. diff check·PR 전 E2E 가드·독립 읽기 전용 검토 통과. 동일 코드라 실제 테스트를 반복하지 않았고 기존 247/247 및 후속 관련14/14 검증 범위는 유지한다.
 - 실제 자동 배포는 기존 STG stage+clinic/** 또는 stg/clinic/** 태그·수동, DEV develop+clinic/** 또는 수동 조건이다. master/release PR 생성·병합 자체는 배포 실행이 아니다. 이 작업에서 stage 배포 PR·reset·workflow 실행·실계정 E2E·CodeRabbit 대응은 하지 않았다.
-- 다음 순서: 사용자가 #4831 master 병합을 확인 → #4832 release 병합 → 승인된 release의 stage 전파/기존 트리거 조건에 따른 배포 → 정확한 SHA/BUILD_ID/attempt 및 독립 E2E 실행 검증. master 수신기가 준비되기 전에 배포 소스의 inline E2E를 제거하지 않는다. 현재 제품 checkout은 원격과 동일·clean이며 추가 실행 지시를 기다린다.
+- 다음 시작점: 별도 승인된 release의 stage 전파/기존 트리거 조건에 따른 배포 → 정확한 SHA/BUILD_ID/attempt 및 독립 E2E 실행 검증이다. DEV 적용에는 develop 배포 소스의 전파도 별도로 필요하다. 두 PR 병합은 완료됐으며 추가 실행 지시를 기다린다. 제품 checkout의 마지막 확인은 준비 당시 원격과 동일·clean이었고, 이번 병합 확인에서는 로컬 상태를 변경하거나 재검사하지 않았다.
 
 ## PR #4831 master 대상 복원·사용자 머지 대기 — 2026-11-05
 

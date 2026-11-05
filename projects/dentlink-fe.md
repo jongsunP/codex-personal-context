@@ -4,11 +4,11 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
-## 웹 배포·E2E 결과 분리 PR 전달 완료 — 2026-11-05
+## 웹 배포·E2E 결과 분리 master·v1.92.0 병합 완료 — 2026-11-05
 
-- **완료:** 담당 세션이 `feat/e2e-deploy-status@fa4384eb5`를 커밋·푸시하고 [PR #4831](https://github.com/Innvoaid/dentlink-client/pull/4831)을 **master** 대상으로 생성했다. 메인에서 OPEN·일반 PR·미병합·head/base·변경 7개 파일을 재확인했다. checkout은 원격과 동일하고 clean이다.
-- **현재 영향/검증:** Clinic DEV/STG 배포 성공과 독립 E2E 실패를 구분하는 CI 변경이 PR에 준비됐다. 새 버전 반영 확인과 E2E 실패 판정은 유지한다. 브라우저 없는 회귀 247/247, 최종 알림 보완 후 관련 14/14, 타입·actionlint·Prettier·정상 Git hook·독립 리뷰를 통과했다. 실제 배포·실계정 E2E·GitHub 자동 연결/부분 재실행은 미검증이다.
-- **남은 일:** 리뷰/병합은 별도 지시를 기다린다. master 반영 뒤 stage·develop 및 수동/태그 배포 소스에도 변경을 전파해야 실제 배포부터 분리된다. 현재 배포 상태가 바뀐 것으로 보지 않으며 자동 리뷰 대응·merge·배포·감시는 하지 않는다. 상세 증거와 적용 순서는 [E2E 정본](dentlink-client-e2e.md)에 기록했다.
+- **완료:** 최종 소스 `feat/e2e-deploy-status@65dd71ddf`의 [PR #4831 → master](https://github.com/Innvoaid/dentlink-client/pull/4831), [PR #4832 → release/v1.92.0](https://github.com/Innvoaid/dentlink-client/pull/4832)를 사용자가 순서대로 머지했다. 메인에서 GitHub API의 merged:true 및 13:43:44 → 13:44:07 KST 순서를 확인했다.
+- **현재 영향/검증:** 기본 브랜치의 독립 E2E 수신 workflow와 v1.92.0의 배포/E2E 분리 코드 통합이 완료됐다. 새 버전 반영 확인과 E2E 실패 판정은 유지한다. 기존 검증은 브라우저 없는 회귀 247/247, 후속 알림 보완 관련 14/14, 타입·actionlint·Prettier·정상 Git hook·독립 리뷰 통과다. 실제 배포·실계정 E2E·GitHub 자동 연결/부분 재실행은 미검증이다.
+- **남은 일:** 승인된 release의 stage 전파·배포 후 독립 E2E 연결을 확인한다. DEV 적용은 develop 전파도 별도로 필요하다. 이번 병합 보고로 배포/테스트·브랜치 정리·추가 감시를 시작하지 않으며 기록만 갱신한다. 상세 merge SHA·증거·재개점은 [E2E 정본](dentlink-client-e2e.md)에 기록했다.
 
 - [Slack 요청](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793846894550259): 배포가 성공했는데 E2E 실패 때문에 배포 실행까지 실패로 보이는 혼동을 없앤다. [실행41950270234](https://github.com/Innvoaid/dentlink-client/actions/runs/41950270234)는 빌드·서울/오하이오 배포·롤백 방지·새 버전 반영 확인이 성공했고 E2E와 최종 gate만 실패했다. 기능 검증 성공으로 해석하지 않는다.
 - 사용자 승인: 최신 `origin/master` 기반 신규 브랜치에서 구현·검증·커밋·푸시 후 **master 대상 PR**까지 진행한다. 별도 질문에 master 대상을 명시 확인했으며 merge·배포·실계정 테스트 재실행·CodeRabbit 대응은 포함하지 않는다.
