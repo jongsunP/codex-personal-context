@@ -55,6 +55,17 @@ appear nowhere else in the app.
 
 ## Requirement And Design Scope
 
+- Across all projects, confirmed product policy is the first source of truth.
+  Follow the design for presentation, but give confirmed policy and backend
+  requirements/contracts higher priority when they conflict with a design
+  frame. A duplicated or stale frame does not create a new setting, data field,
+  or behavior. This is the user's explicit 2026-11-05 instruction.
+- Reconcile the latest substantive policy decisions and applicable backend
+  contract before treating a design difference as a question. If those sources
+  settle it, implement the supported result and record the reason. Use an
+  equivalent confirmed platform design where applicable; ask only if a material
+  conflict remains. Backend drafts and current implementation are evidence, not
+  permission to invent a contract or silently override confirmed product policy.
 - Implement the user's confirmed requirements and design. Before adding or
   changing user-visible controls, copy, layout, or interaction outside that
   scope, explain the missing requirement, evidence, reason, and concrete proposal

@@ -84,6 +84,9 @@
   silently add user-visible UI, copy, or behavior outside confirmed requirements.
   Present the evidence and proposed change for user approval first; an existing
   project pattern or an AI-authored ticket is not itself a requirement.
+  Confirmed policy takes first priority; confirmed policy and backend contracts
+  take precedence over conflicting design frames. Reconcile current sources
+  before asking about stale or duplicated design details.
 
 ## Permission Preference
 
