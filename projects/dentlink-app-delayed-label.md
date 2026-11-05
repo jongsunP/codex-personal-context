@@ -1,10 +1,10 @@
 # Office 완료·취소 주문 지연 라벨 — DL-17248
 
-## 현재 체크포인트 — 2026-11-05 PR 검토 대기
+## 현재 체크포인트 — 2026-11-05 Staging CodePush 완료·사용자 PR 검토 대기
 
 - 세션: `01a1aa21-103b-7e82-b530-9b203c18cfe9`, `치과앱 완료·취소 주문 지연 라벨`, local Mac / 메인 프로젝트 등록 확인.
 - 부모 [DL-17138](https://innovaid.atlassian.net/browse/DL-17138), Office 하위 [DL-17248](https://innovaid.atlassian.net/browse/DL-17248). 웹은 별도 세션, Lab 제외.
-- 구현·최종 코드 iOS/Android 검증·commit/push·일반 PR 완료. **최신 사용자 지시: PR을 먼저 검토하고 CodePush는 다시 승인한 뒤 진행.** 최초 Staging 승인보다 이 지시가 우선한다. 이번 작업의 OTA 업로드/활성화·PR 병합·Production·스토어 출시는 수행하지 않았다. 자동 CodeRabbit 대응도 미승인.
+- 구현·최종 코드 iOS/Android 검증·commit/push·일반 PR 완료. 사용자가 코드 위험 판단 후 작업 브랜치에서 Staging CodePush를 재승인하여 **양 플랫폼 v343 업로드·활성화 완료**. **PR merge는 사용자가 리뷰 후 직접 수행**한다. Production·스토어 출시·자동 CodeRabbit 대응은 미승인/미수행.
 - 기본 checkout `/Users/parkjongsun/Repository/dentlink-app`의 `feature/DL-17059@09a777ad9` 보존.
 - 별도 도구 생성 worktree `/Users/parkjongsun/.codex/worktrees/office-delayed-label/dentlink-app`, `feat/DL-17248`, 시작 SHA `7f586790e0bbd7b288458e29f00654d38ba68da2` (최신 origin/main).
 - [PR #340](https://github.com/Innvoaid/dentlink-app/pull/340): `feat/DL-17248 → release/v2.2.4@ed1d03fa221599bf6b352b062b3d4e1d862f118f`. 마지막 조회 시 open/non-Draft/unmerged, 1파일 +8/-0.
@@ -16,10 +16,10 @@
 
 - 실제 `isDelayed === true`이고 `status`가 `COMPLETED`/`CANCELED`인 Office 주문의 라벨 자체를 숨긴다. `false`로 치환하지 않는다.
 - 기존 `On Time`, 진행 중 `Delayed`, 날짜는 유지한다. 공통 OrderStatusBadge에서 Office 조건만 변경한다.
-- 홈 Track Your Order, 주문목록, 상세 WebView 진입·복귀 및 Owner/Member 조건을 양 플랫폼에서 최종 코드로 확인한다.
+- 이번에 홈·목록 및 상세/Owner·Member까지 검증했으나, 사용자가 무관한 권한/경로 검증을 과도하게 확대한 점을 정정했다. 이후 범위는 실제 코드 영향과 오류 가능성으로 정한다. 이번 배지 숨김은 대표 계정의 관련 표시 조건·날짜 유지 확인이면 충분하며 권한 반복은 불필요하다.
 - 상세는 웹 변경을 소비하며 네이티브 상세 UI 추가는 없다. Fixtures와 실제 서버 데이터 검증을 구분하고 테스트 주문 강제 완료 등 서버 변경은 하지 않는다.
 - 변경 파일 `src/features/orderList/components/OrderStatusBadge.tsx` 8줄. 홈 `HomeTrackOrderCard → OrderProgressStatus → OrderStatusBadge`, 목록 `OrderOfficeListItem → OrderStatusBadge`가 영향 경로다.
-- 이 개인 파일만 관리하며 PROJECTS.md/FE 메인 문서는 메인세션 담당. 작업 공간/branch/세션 자동 정리 금지, 사용자 승인 대기.
+- PROJECTS.md/FE 메인 문서는 메인세션 담당. 이번에는 사용자의 작업지침 업데이트 요청으로 공통 검증 지침도 수정했다. 작업 공간/branch/세션은 자동 정리하지 않는다.
 
 ## 최종 코드 검증 결과와 한계
 
@@ -34,17 +34,27 @@
 - 전체 TypeScript는 원본과 동일한 오류 6개(Icon 2/Tooltip 1/MessageText 1/useOrderAddProduct 2), 신규 0개. 전체 lint는 변경 외 범위 50 errors/157 warnings로 실패한다. 전체 검사가 모두 통과했다고 표현하지 않는다.
 - 임시 증거: `/tmp/dl-17248-ios/`의 Maestro 결과/화면과 `owner-matrix-results.json`, `/tmp/dl-17248-badge-check-results.json`, `/tmp/dl-17248-ts-diagnostics-results.json`, `/tmp/dl-17248-jest.log`, `/tmp/dl-17248-lint.log`. iOS Member 초기 조합은 세션 CUA AX 관찰 기록에 있다. `/tmp` 자료는 영구 보관을 보장하지 않는다.
 
-## CodePush 읽기 전용 조사
+## Staging CodePush 결과
 
-- 조사 당시 양 플랫폼 Staging은 v342, target 2.2.4, enabled/mandatory=true/rollout=100%, 업로드 KST 2026-10-27 08:45:30(iOS)/08:45:40(Android). 이번 작업에서 바뀐 배포가 아니다.
+- 사용자 지시: 코드 자체가 깨질 가능성을 기준으로 판단하고, 위험이 낮으면 merge 없이 작업 브랜치로 Staging CodePush를 진행한다. 기존 null guard 뒤의 표시 반환 조건만 추가되었고 훅·상태·권한·API·native 변경이 없어 저위험으로 판단했다. 줄 수만으로 무위험이라고 단정하지 않았다.
+- 실행: `ENVFILE=env/.env.staging yarn codepush-force:staging-mute`, 작업 worktree/`feat/DL-17248@7f325896e3ed0a862a7f8a2099d50c809e576ba1`. `index.js`, target 2.2.4, mandatory, enabled, rollout 100%. Slack 알림·Git tag/merge·native build·version 변경 없음.
+- **iOS Staging v343**: KST 2026-11-05 15:00:08, package hash `fbe90f3f4bd78f538d01c106e9f2dac3740fcd59040e75edc5ac647ab8234520`.
+- **Android Staging v343**: KST 2026-11-05 15:01:00, package hash `8547adbb7e1509a8fc8c4762c8679c20de6c683c1ee230baf7854e73614d4454`.
+- CLI 종료 0 및 배포 history의 label/target/enabled/mandatory/rollout/전체 source SHA를 확인했다. 증거 `/tmp/dl-17248-codepush-result.json`. 실제 Staging 기기의 OTA 수신·적용은 확인하지 않았으며 Debug/Metro 검증으로 대체하지 않는다.
+- 기존 ISV 영상 asset 1.48MiB가 500KiB 경고를 냈으나 기존 force 경로로 업로드 성공했다. 이번 표시 변경으로 추가된 asset은 아니다. 제품 worktree는 clean이며 최종 소스는 그대로다.
+
+### 이전 배포 조사 이력
+
+- 작업 전 양 플랫폼 Staging은 v342, target 2.2.4, enabled/mandatory=true/rollout=100%, 업로드 KST 2026-10-27 08:45:30(iOS)/08:45:40(Android)였다. 위 v343으로 갱신되었다.
 - 설명이 비어 있어 조회 history만으로 v342의 정확한 Git SHA를 확정하지 못했다. Production 태그 `v2.2.4.86`은 Staging 소스 증거가 아니다. main/release의 src/native/lock tree가 같다는 사실로 이 공백이 해결되지는 않는다.
-- OTA bundle 다운로드/디코딩 추가 조사는 메인 지시로 중단했다. 재승인 시 당시 PR/head·실제 Staging source·binary 호환성·변경 범위를 다시 확인한다.
+- OTA bundle 다운로드/디코딩 추가 조사는 메인 지시로 중단했다. 이번 재승인 후 PR/head·release 대비 1파일+8줄·native/lock/package 동일·2.2.4 호환성을 확인하고 새 배포에 source SHA를 명시했다. 이전 v342의 정확 SHA 불명은 역사적 한계로 유지한다.
 - release wrapper에는 Slack 자동 알림이 있다. 별도 메시지 승인 없이 실행하지 않으며 무알림 경로를 검토한다.
 
 ## 다음 시작점과 환경 보존
 
-- 사용자 PR 검토 대기. 변경 요청 시 영향 검사/화면을 다시 확인한다. **별도 재승인 전 CodePush를 시작하지 않는다.** merge·Production·스토어는 각각 별도 승인이다.
+- 사용자 PR 검토/직접 merge 대기. Staging CodePush는 완료되었으므로 자동 재배포·추가 감시는 하지 않는다. 변경 요청 시 실제 영향 검사/화면만 재확인한다. Production·스토어는 별도 승인이다.
 - 사용자는 작은 JS 수정에 비해 소요 시간이 길다고 지적했다. 필수 화면 검증은 유지하되 환경 우회·배포 소스 조사·반복 확인으로 과도하게 확대하지 말고, 충분한 검증 증거가 확보되면 마감한다.
-- 사용자 QA 기대값은 PR 본문의 표에 정리했다. 배포본 QA와 상세 웹 변경 확인은 해당 버전 제공 이후 남아 있다.
+- 사용자 QA 기대값과 Staging v343 전달 상태는 PR 본문에 정리했다. 남은 확인은 실제 Staging 기기의 v343 수신·표시와 별도 웹 버전의 상세 표시다.
+- 공통 검증 지침은 개인 context commit `818aa0b`에 저장·push 후 `setup-local-codex.sh`로 Mac의 AGENTS/DEVELOPMENT_STYLE/SESSION_WORKFLOW까지 동기화했다. 앱 실행 확인은 유지하되 단순 UI는 관련 조건만, 권한/상태/훅/native 위험은 관련 경로만 확인하며 충분한 증거 후 중복 검증을 중단한다.
 - 전용 Metro 8093, iOS `5C0E7639-2345-4B3F-9979-56AFDDA1C708`, Android `emulator-5554` 보존. Android reverse 8081→8093/9090은 유지하고 임시 3000 reverse는 제거했다. 기존 checkout Metro PID29705/8081은 침범하지 않았다.
 - credentials는 출력/파일/Git에 기록하지 않고 기존 전용 테스트 로그인만 재사용했다. 임시 도구는 `/tmp`에만 두었으며 팀 제품 저장소에 개인 QA/인계 파일을 추가하지 않았다.
