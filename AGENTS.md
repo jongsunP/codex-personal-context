@@ -187,6 +187,12 @@
   and stop when relevant checks pass. Missing relevant evidence blocks final-QA
   handoff/merge readiness; unrelated combinations do not. This is the user's
   2026-11-05 clarification of the mandatory app-runtime rule.
+- After every authorized app deployment, proactively follow **App Deployment
+  Handoff** in `SESSION_WORKFLOW.md` without waiting for the user to ask. Report
+  the delivered version/environment, evidence-based crash/regression assessment,
+  and only the screens, actions and expected results the user actually needs to
+  inspect. Record user-confirmed deployment separately from agent verification;
+  then close out and wait when requested, without automatic extra monitoring.
 - For Dentlink apps, follow **Dentlink App Release And Delivery Policy** in
   `SESSION_WORKFLOW.md` and `projects/dentlink-app-onboarding.md`. App PRs
   for ordinary new features start from latest `origin/main` and target the

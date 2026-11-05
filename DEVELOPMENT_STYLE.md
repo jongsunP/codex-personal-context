@@ -500,6 +500,10 @@ the user's presence or terminal arrangement does not replace agent verification.
   evidence that their integration is safe.
 - Passing this gate does not authorize merge or deployment and does not prove
   OTA receipt, store release, or production QA. Preserve those separate stages.
+- After an authorized deployment, proactively provide the risk assessment and
+  proportional human screen-check guide under
+  [App Deployment Handoff](SESSION_WORKFLOW.md#app-deployment-handoff), without
+  waiting for the user to request either. Reuse the completed agent evidence.
 
 ## Figma And QA
 

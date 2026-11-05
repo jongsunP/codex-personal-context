@@ -1,10 +1,11 @@
 # Office 완료·취소 주문 지연 라벨 — DL-17248
 
-## 현재 체크포인트 — 2026-11-05 Staging CodePush 완료·사용자 PR 검토 대기
+## 현재 체크포인트 — 2026-11-05 사용자 배포 확인·정리 후 대기
 
 - 세션: `01a1aa21-103b-7e82-b530-9b203c18cfe9`, `치과앱 완료·취소 주문 지연 라벨`, local Mac / 메인 프로젝트 등록 확인.
 - 부모 [DL-17138](https://innovaid.atlassian.net/browse/DL-17138), Office 하위 [DL-17248](https://innovaid.atlassian.net/browse/DL-17248). 웹은 별도 세션, Lab 제외.
 - 구현·최종 코드 iOS/Android 검증·commit/push·일반 PR 완료. 사용자가 코드 위험 판단 후 작업 브랜치에서 Staging CodePush를 재승인하여 **양 플랫폼 v343 업로드·활성화 완료**. **PR merge는 사용자가 리뷰 후 직접 수행**한다. Production·스토어 출시·자동 CodeRabbit 대응은 미승인/미수행.
+- 사용자가 "배포된건 확인했어. 다 되면 정리하고 대기"라고 전달했다. 배포는 사용자 확인 완료로 기록하며, 어느 기기/플랫폼의 전체 화면 QA까지 확인했는지는 확대 해석하지 않는다. 추가 배포 조회·기기 조작·자동 감시는 하지 않고 대기한다.
 - 기본 checkout `/Users/parkjongsun/Repository/dentlink-app`의 `feature/DL-17059@09a777ad9` 보존.
 - 별도 도구 생성 worktree `/Users/parkjongsun/.codex/worktrees/office-delayed-label/dentlink-app`, `feat/DL-17248`, 시작 SHA `7f586790e0bbd7b288458e29f00654d38ba68da2` (최신 origin/main).
 - [PR #340](https://github.com/Innvoaid/dentlink-app/pull/340): `feat/DL-17248 → release/v2.2.4@ed1d03fa221599bf6b352b062b3d4e1d862f118f`. 마지막 조회 시 open/non-Draft/unmerged, 1파일 +8/-0.
@@ -40,7 +41,7 @@
 - 실행: `ENVFILE=env/.env.staging yarn codepush-force:staging-mute`, 작업 worktree/`feat/DL-17248@7f325896e3ed0a862a7f8a2099d50c809e576ba1`. `index.js`, target 2.2.4, mandatory, enabled, rollout 100%. Slack 알림·Git tag/merge·native build·version 변경 없음.
 - **iOS Staging v343**: KST 2026-11-05 15:00:08, package hash `fbe90f3f4bd78f538d01c106e9f2dac3740fcd59040e75edc5ac647ab8234520`.
 - **Android Staging v343**: KST 2026-11-05 15:01:00, package hash `8547adbb7e1509a8fc8c4762c8679c20de6c683c1ee230baf7854e73614d4454`.
-- CLI 종료 0 및 배포 history의 label/target/enabled/mandatory/rollout/전체 source SHA를 확인했다. 증거 `/tmp/dl-17248-codepush-result.json`. 실제 Staging 기기의 OTA 수신·적용은 확인하지 않았으며 Debug/Metro 검증으로 대체하지 않는다.
+- CLI 종료 0 및 배포 history의 label/target/enabled/mandatory/rollout/전체 source SHA를 확인했다. 증거 `/tmp/dl-17248-codepush-result.json`. 이후 사용자가 배포 확인을 보고했다. 이는 사용자 확인이며 agent가 실제 Staging 기기의 OTA 수신·적용을 독립 관찰한 것으로 기록하지 않는다.
 - 기존 ISV 영상 asset 1.48MiB가 500KiB 경고를 냈으나 기존 force 경로로 업로드 성공했다. 이번 표시 변경으로 추가된 asset은 아니다. 제품 worktree는 clean이며 최종 소스는 그대로다.
 
 ### 이전 배포 조사 이력
@@ -54,7 +55,8 @@
 
 - 사용자 PR 검토/직접 merge 대기. Staging CodePush는 완료되었으므로 자동 재배포·추가 감시는 하지 않는다. 변경 요청 시 실제 영향 검사/화면만 재확인한다. Production·스토어는 별도 승인이다.
 - 사용자는 작은 JS 수정에 비해 소요 시간이 길다고 지적했다. 필수 화면 검증은 유지하되 환경 우회·배포 소스 조사·반복 확인으로 과도하게 확대하지 말고, 충분한 검증 증거가 확보되면 마감한다.
-- 사용자 QA 기대값과 Staging v343 전달 상태는 PR 본문에 정리했다. 남은 확인은 실제 Staging 기기의 v343 수신·표시와 별도 웹 버전의 상세 표시다.
+- 사용자에게 홈 Track Your Order와 주문목록에서 완료·취소 Delayed 숨김, 진행 중 Delayed·기존 On Time·날짜 유지를 확인하도록 안내했다. 이번 앱 변경 때문에 권한별 반복이나 상세 화면 확인을 추가로 요구하지 않는다. 사용자 배포 확인을 받았으므로 현재 추가 검증 작업은 없고 PR 검토/직접 merge 방침만 남긴다. 별도 웹 작업은 이 앱 마감 범위로 확대하지 않는다.
 - 공통 검증 지침은 개인 context commit `818aa0b`에 저장·push 후 `setup-local-codex.sh`로 Mac의 AGENTS/DEVELOPMENT_STYLE/SESSION_WORKFLOW까지 동기화했다. 앱 실행 확인은 유지하되 단순 UI는 관련 조건만, 권한/상태/훅/native 위험은 관련 경로만 확인하며 충분한 증거 후 중복 검증을 중단한다.
+- 추가 사용자 지시로 모든 앱 배포 후 위험 판단·사람이 볼 화면/행동/기대 결과를 먼저 안내하는 App Deployment Handoff를 공통 지침에 반영했다. 사용자 확인 후 정리·대기하며, 이 흐름을 따로 요청받을 때까지 미루지 않는다.
 - 전용 Metro 8093, iOS `5C0E7639-2345-4B3F-9979-56AFDDA1C708`, Android `emulator-5554` 보존. Android reverse 8081→8093/9090은 유지하고 임시 3000 reverse는 제거했다. 기존 checkout Metro PID29705/8081은 침범하지 않았다.
 - credentials는 출력/파일/Git에 기록하지 않고 기존 전용 테스트 로그인만 재사용했다. 임시 도구는 `/tmp`에만 두었으며 팀 제품 저장소에 개인 QA/인계 파일을 추가하지 않았다.

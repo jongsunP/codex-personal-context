@@ -659,6 +659,36 @@ then promote, revise, or remove it based on actual use. Record meaningful
 changes in `MEMORY_CHANGELOG.md` so the evolution of the workflow remains
 recoverable across devices and future AI sessions.
 
+## App Deployment Handoff
+
+This is standing guidance for every app project and session, confirmed by the
+user on 2026-11-05. Follow it proactively after each authorized app deployment;
+the user should not have to ask whether the change can crash or which screens
+need a human check.
+
+- Brief in the order **completed work → current effect → remaining work**.
+  Identify the app/environment/platform and delivered version or OTA label;
+  include branch/revision when it helps identify what was shipped. Distinguish
+  upload/activation from actual device receipt and store release.
+- State the crash/regression assessment with its code-based reason and completed
+  agent verification. Say no new issue was found within the checked scope when
+  that is the evidence; do not promise zero risk or infer safety from line count.
+  Reuse the proportional final-code verification under
+  [App Screen Runtime Verification Before Merge](DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge).
+- If human inspection is useful or necessary, name only the relevant screens,
+  entry paths, actions and expected results in a short checklist. Include roles,
+  platforms or device-only conditions only when the change actually depends on
+  them. For a simple label-visibility fix, identify the affected home/list area
+  and hidden/retained labels and dates, without adding unrelated permission,
+  detail-navigation or full-flow QA. If no additional manual check is needed,
+  say so instead of inventing one.
+- Record the user's deployment confirmation as user-confirmed evidence with its
+  stated scope. Do not turn a general confirmation into proof of both platforms,
+  every screen or agent-observed OTA receipt, and do not re-request confirmation
+  or start extra polling without a concrete need. When asked to wrap up and wait,
+  save the checkpoint and stop. PR review/merge, production and store delivery
+  retain their separate authorization boundaries.
+
 ## Dentlink App Release And Delivery Policy
 
 This is the user's standing app policy, corrected on 2026-10-29. It applies
