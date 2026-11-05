@@ -20,6 +20,7 @@
 
 ## 2026-11-05 Slack 마지막 댓글·Figma 최신 멘션 반영
 
+- **후속 로컬 확인 — 15:23 KST:** 사용자 관찰대로 iOS Office Home에는 벨이 있고 Android Office Home에는 없었다. iOS는 이 세션의 `/Users/parkjongsun/Repository/dentlink-app`·`feature/DL-17059`·`ddf9e766`·Metro8081에 연결돼 있다. Android의 같은 Office Development 앱은 별도 `/Users/parkjongsun/.codex/worktrees/office-delayed-label/dentlink-app`·`feat/DL-17248`·`7f325896`·Metro8093에 연결돼 있었으며, adb reverse도 기기8081→호스트8093이었다. 해당 코드에는 NotificationCenter/Bell이 없고 알림센터 브랜치 Home에는 명시적으로 있다. 앱 종류 차이나 알림센터 코드 누락이 아닌 실행 연결 차이다. 이 확인은 읽기 전용으로 했고 사용자는 이후 **개발 작업을 마감한 뒤 별도 로컬 미리보기로 양 기기를 동일한 알림센터 Office 작업본에 맞춰 열기**를 명시적으로 요청했다. 웹은 사용자가 checkout/branch로 직접 실행하며 Codex가 재설정하지 않는다.
 - **대기 브레이크포인트 재확인:** 확정된 웹·앱 UI/공통 흐름의 FE 선행 작업은 수정·검증·세 제품 push까지 완료했다. 현재 FE가 단독으로 추가 진행할 확정 작업은 없으며, 공개될 BE 목록·읽음·수신 설정·미읽음 계약 및 USER 후속 정책/디자인을 받아 대조·연결하고 대체한 mock을 제거하는 것이 다음 시작점이다. 전체 기능·최종 QA·배포 완료를 뜻하지 않는다. 사용자는 이 상태를 저장한 뒤 현재 켜진 iOS/Android의 제품·로컬 연결과 알림 표시 차이를 확인하도록 요청했으며, 이는 새 기능 구현 재개와 구분한다.
 - **확인한 최신 요청:** [Oli 14:49:47 답글](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793857787199209), 부모1793774409.809179·답글11개를 확인했다. Unread 탭만 숫자(기반 구현 완료), 앱 OS OFF 자동 안내 팝업1회/설정 배너상시, Order 하위 Shipping, Credits Email이다. Credit Email은 기존11/4 구현을 보존한다.
 - **Figma 근거:** 오늘 사용자 멘션 메일14:50:20/14:50:24/14:51과 실제 댓글 #40/#50/#51을 직접 화면에서 열어 문맥·위치를 확인했다. #40 PM 최신 문구는 `Get Lab updates instantly`, `Go to Settings`; Lab 한글은 ‘알림으로 주문 현황과 치과 메시지를 바로 확인하세요.’다. #50은 OS OFF 배너, #51은 권한별 알림 설정 목록 위치다. 댓글/반응/해결·디자인 편집은 하지 않았다. Figma 화면 열람 자체의 읽음 표시는 서비스에서 변할 수 있으므로 미변경을 보장하지 않는다.
