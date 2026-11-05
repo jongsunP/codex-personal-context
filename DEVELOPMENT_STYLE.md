@@ -139,6 +139,10 @@ appear nowhere else in the app.
   controls or unresolved product policy. An apparent bug in the shared component
   must be distinguished from a feature-specific override and assessed by its
   actual affected consumers before changing the global behavior.
+- When a user reports an issue in one product, also inspect the equivalent web
+  or app flow if it shares the same behavior or credible failure mode. Keep the
+  review limited to that related scope, even when the user named only the web.
+  This is the user's 2026-11-05 clarification.
 - Use existing Button `size`, `variant`, `color`, `width`, and state props
   before creating styled action-button variants.
 - Use Typography variants and theme colors instead of restating font metrics
@@ -214,6 +218,11 @@ appear nowhere else in the app.
   child API.
 - Scope loading and duplicate-request guards to the affected row, field, or
   action. Do not disable every dropdown for an unrelated mutation.
+- If a list or action cannot be used while loading, show the product's existing
+  loading feedback in that area. Do not leave an apparently actionable list and
+  silently discard clicks. Track loading state during rendering as well as in
+  action guards so the UI recovers when the request finishes; a missing design
+  frame is not a reason to omit the established loading behavior.
 - Use optimistic cache updates only with a clear rollback path, then invalidate
   the narrow query scope needed after success.
 - Preserve default refetch behavior unless a demonstrated problem justifies a
