@@ -418,9 +418,11 @@ In both modes:
   rearrange or rebuild the workspace merely to match a fixed layout.
   In user-preview mode, inspect the actual displayed service/device; a live
   process or a different headless browser alone does not prove that window works.
-- App simulator/emulator checks, including crashes and affected screens,
-  roles and platforms on the final code, remain mandatory under
+- App simulator/emulator checks on the final code remain mandatory under
   [App Screen Runtime Verification Before Merge](DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge).
+  Select screens, states, roles, routes and regression depth by actual code
+  impact and plausible failures. Simple UI visibility changes need their display
+  conditions checked, not unrelated permission or navigation combinations.
   User observation does not replace agent verification, and a setup-only check
   is not a full runtime QA result.
 - Keep services and windows needed for the active development/preview loop
@@ -666,12 +668,14 @@ in [App onboarding and delivery](projects/dentlink-app-onboarding.md).
 
 Before final human QA handoff and merge readiness, apply the mandatory
 [App Screen Runtime Verification Before Merge](DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge)
-gate: the agent runs the final code on every affected screen and relevant
-role/permission state in each affected platform's simulator/emulator, then
-provides results and the user's final QA checklist. Missing evidence blocks
-both that handoff and merge readiness; later changes require affected-case
-rechecks on the resulting final code. This applies to features, QA fixes, and
-shared app changes alike.
+gate: the agent runs the final code on affected screens in the relevant
+platforms' simulator/emulator and selects checks by actual code impact and
+credible failure modes. Check roles only when permission/role-dependent behavior
+is affected; do not multiply unrelated roles or routes for a simple display
+change. Provide concise results and a proportional final QA checklist. Missing
+relevant evidence blocks handoff/merge readiness; unrelated combinations do not.
+Later changes require only affected-case rechecks. The user's 2026-11-05 scope
+clarification applies to features, QA fixes, and shared app changes alike.
 
 The user's 2026-10-29 instruction replaces the earlier develop-based policy
 for **both Office and Lab**: `main -> feat/<Jira> -> release -> main`, the same

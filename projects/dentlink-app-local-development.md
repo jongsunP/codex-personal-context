@@ -19,8 +19,11 @@ scripts before using older monorepo command examples from this playbook.
 This playbook prepares the runtime; launching the app and connecting Metro or
 Reactotron do not complete feature verification. Before handing work to the
 user for final QA, the agent must test the final code in the simulator/emulator
-on every affected screen and role state under
+on affected screens with checks scoped to actual code impact and plausible
+failures under
 [App Screen Runtime Verification Before Merge](../DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge).
+For simple display changes, use a representative account and verify the changed
+conditions; add role/route coverage only when the code can affect those behaviors.
 Manual environment setup or user QA does not replace that agent verification.
 
 ## Configuration Model
