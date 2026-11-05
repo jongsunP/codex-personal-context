@@ -21,6 +21,13 @@ Check this folder first when finding or continuing local projects.
 
 ## Projects
 
+### Dentlink 치과 완료·취소 주문 지연 라벨 — DL-17138
+
+- 치과 웹·Office 앱에서 지연된 완료/취소 주문의 Delayed 라벨을 숨긴다. 기공소와 기존 날짜·정상/진행 중 표시는 유지한다.
+- 웹 상세와 앱 홈·주문목록을 제품별 세션에서 진행하며 앱 상세 WebView는 웹 변경을 소비한다.
+- [웹 DL-17141 체크포인트](projects/dentlink-client-delayed-label.md) · [치과앱 DL-17248 체크포인트](projects/dentlink-app-delayed-label.md)
+- 웹 release PR과 앱 release PR·Staging CodePush의 종합 상태는 [FE 조율 문서](projects/dentlink-fe.md)를 따른다.
+
 ### Dentlink 자체기공소 배송 출력 UX — DL-17101
 
 - INTERNAL 기공소의 부착용 라벨·배송용 라벨·배송용 주문서 분리와 관련 화면을 관리한다.
