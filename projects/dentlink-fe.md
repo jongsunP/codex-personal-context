@@ -4,6 +4,13 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
+## 웹 배포·E2E 결과 분리 착수 — 2026-11-05
+
+- [Slack 요청](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793846894550259): 배포가 성공했는데 E2E 실패 때문에 배포 실행까지 실패로 보이는 혼동을 없앤다. [실행41950270234](https://github.com/Innvoaid/dentlink-client/actions/runs/41950270234)는 빌드·서울/오하이오 배포·롤백 방지·새 버전 반영 확인이 성공했고 E2E와 최종 gate만 실패했다. 기능 검증 성공으로 해석하지 않는다.
+- 사용자 승인: 최신 `origin/master` 기반 신규 브랜치에서 구현·검증·커밋·푸시 후 **master 대상 PR**까지 진행한다. 별도 질문에 master 대상을 명시 확인했으며 merge·배포·실계정 테스트 재실행·CodeRabbit 대응은 포함하지 않는다.
+- 같은 메인 프로젝트·기존 Mac에 **웹 배포·E2E 결과 분리** 세션 `01a1a9c1-bd30-7de3-963d-b548000fa550`을 생성했다. 프로젝트 등록·초기 작업 시작·실제 `gpt-6-astra / ultra` 적용을 확인했다. 새 폴더/worktree 없이 clean인 `/Users/parkjongsun/Repository/dentlink-client`를 맡겼으며 기존 `feature/DL-17125`는 보존한다. 제안 브랜치는 `feat/e2e-deploy-status`, 착수 기준 origin/master는 `5452871ea`다. 실제 생성·최종 검증·PR은 담당 세션의 후속 결과로 확인한다.
+- 배포 성공과 독립 E2E 실패를 구분하며 기존 실패 판정·리포트·Slack·동시성 및 배포 SHA/BUILD_ID 검증을 보존한다. 상세 작업 기록은 [E2E 정본](dentlink-client-e2e.md)을 따른다. 메인세션은 코드 작성 없이 최종 결과를 확인한다.
+
 ## 브랜치명·스토리포인트 지침 갱신 — 2026-11-04
 
 - Slack [브랜치 공지](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765529562549), [Frankie의 범위 질문](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765593806349), 채널 후속 [Tom의 확인](https://innovaidhq.slack.com/archives/C09613TBE5A/p1793765642512149)을 읽었다. 신규 작업 브랜치는 Dentlink Web/Admin·Office·Lab 모두 **`feat/<Jira>`**를 사용한다. PR 제목 prefix 변경은 아니며 기존 feature 브랜치/PR과 역사적 이름은 보존한다. 13:15의 “길어서요”는 브랜치명 축약 이유이지 스토리포인트 산정 비판의 근거가 아니다.
