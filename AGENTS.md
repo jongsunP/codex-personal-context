@@ -103,6 +103,10 @@
   integrated service terminals and external browser/devices; an IDE browser
   is unnecessary. Preserve the user's layout and explicit service exceptions.
   App runtime and crash verification requirements are the same in both modes.
+  In solo and parallel work, keep each product's iOS simulator and Android
+  emulator on the same task/source and environment and switch them together.
+  Split work by device only when the user explicitly requests it; follow
+  **Paired iOS And Android Environments** in `SESSION_WORKFLOW.md`.
 - For authorized local setup in every new session or worktree, follow
   **Local Env Inheritance** in `SESSION_WORKFLOW.md`: copy the needed
   service's existing env files from the verified main worktree without

@@ -429,6 +429,30 @@ In both modes:
   available until they are no longer needed or the user requests shutdown.
   This mode choice does not authorize additional product, PR or delivery work.
 
+### Paired iOS And Android Environments
+
+The user's 2026-11-05 instruction applies across projects, in both solo and
+parallel work and in both local execution modes.
+
+- Treat the iOS simulator and Android emulator as a pair for each product.
+  Keep both on the same task's checkout/worktree, branch and current source
+  revision, with the same backend environment and compatible development builds.
+  Platform-specific bundle IDs and native build details can naturally differ.
+- When switching tasks or products, switch the pair together and verify both
+  actual app/server connections and visible screens. A branch name, running
+  Metro process or matching app name alone does not prove the pair is aligned.
+  Do not leave one device connected to the previous task after a handoff.
+- Products such as Clinic/Office and Lab may have separate work streams and
+  device pairs. When sessions share one pair, coordinate its use and switch it
+  as a unit; do not assign iOS to one task and Android to another merely to
+  parallelize verification. Device-specific work splitting requires the user's
+  explicit instruction. If alignment is blocked, report it rather than silently
+  treating a mixed pair as ready. This rule does not authorize extra devices or
+  unrelated environment changes.
+- Preserve existing windows, login state and task boundaries. Pair alignment
+  is an execution rule, not a requirement to repeat unrelated QA: keep runtime
+  verification proportional to actual code impact under DEVELOPMENT_STYLE.md.
+
 ## Local Env Inheritance
 
 The user explicitly approved this workflow on 2026-10-29 and requested its
