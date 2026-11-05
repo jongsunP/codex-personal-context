@@ -123,6 +123,12 @@
   or hand it off. Once session registration and prompt delivery are confirmed,
   stop automatic progress reads, polling and duplicate supervision. Let the
   assigned session execute and report; check again only when the user asks.
+- Across every project and session, follow **Tool Scope And Polling** in
+  `SESSION_WORKFLOW.md`: make only calls needed for the authorized request.
+  Do not add repetitive checks, monitoring or unrelated investigation. If the
+  intended scope or need for extra calls is ambiguous, ask the user first and
+  wait before starting that extra work. Do not ask again for clearly authorized
+  necessary execution or verification.
 - Shared project code, commits, pushes, and PR mutations require the user's
   explicit authorization. Personal memory maintenance in
   `codex-personal-context` is different: at meaningful session closeout, commit

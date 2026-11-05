@@ -176,6 +176,29 @@ project-specific exceptions should be recorded explicitly.
   Git/PR mutations, merge, or deployment permission. Existing authorization
   and final-code app runtime-verification rules remain in force.
 
+## Tool Scope And Polling
+
+The user's standing instruction, confirmed on 2026-11-05, applies to every
+project and session, not only main-session handoffs or deployment checks.
+
+- Make only tool calls necessary to complete the current authorized request.
+  Reuse adequate current evidence; do not repeat reads, status checks or tests
+  without a concrete need. Stop when the requested result is established.
+- Do not turn a one-time lookup, handoff, closeout or wait instruction into
+  ongoing polling, monitoring, duplicate supervision or additional research.
+  A progress briefing is not a reason to fetch unchanged state again.
+- If the requested scope or the need for extra calls is ambiguous, ask one
+  concise question and wait for the user's answer before starting that extra
+  work. Do not probe speculatively or launch a polling loop to resolve the
+  ambiguity. Independent, clearly authorized work may continue.
+- Necessary execution and verification already covered by the request do not
+  require repeated approval. When the user explicitly requests monitoring
+  through completion, keep it bounded by that purpose, use the agreed cadence,
+  and stop at the requested condition. Deployment timing rules constrain an
+  authorized check; they do not themselves authorize continued polling.
+- After a feature-session handoff, follow the main-session rule below: confirm
+  delivery once, record it, and leave execution and reporting to that session.
+
 ## Dentlink Frontend Top-Level Session Model
 
 Dentlink frontend work spans `dentlink-client` (Web/Admin), `dentlink-app`
