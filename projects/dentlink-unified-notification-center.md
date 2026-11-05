@@ -1,6 +1,8 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-최종 구현: **2026-11-05 — Lab 알림센터 실제 소속 조회·전환 연결**을 기존 API로 구현·검증·commit/push했다. Lab `c6debf246b2a40443a203bbec1c55d6a1266dc29` (`feature/DL-17060`). 실제 소속 목록·활성화를 연결하고 새 소속 알림함을 한 번 복원하며, 가짜 소속 목록은 제거했다. **소속별 미읽음 집계는 추정하지 않고 미제공**이다. 양 OS 실제 단일소속 및 합성 다중소속 검증을 구분했고 실제 다중소속 서버 전환은 테스트 계정 한계로 남는다. PR·배포·최종 QA 단계는 아니다.
+최종 구현: **2026-11-05 — 최신 Slack/Figma의 OS OFF 배너·팝업과 Shipping 배치를 반영·검증·commit/push 완료.** 양 앱 설정 배너는 OS OFF 동안 상시 표시, 자동 팝업은 기기별1회 유지, 문구·레이아웃은 최신 시안을 따른다. Clinic/Office Shipping은 정책/BE 근거에 따라 Orders 하위 한 번만 표시한다. Web `3f44fc507`, Office `ddf9e766`, Lab `1b328196`. 새 BE 연결·PR·배포·최종 전체 QA 완료가 아니다.
+
+직전 구현: **2026-11-05 — Lab 알림센터 실제 소속 조회·전환 연결**을 기존 API로 구현·검증·commit/push했다. Lab `c6debf246b2a40443a203bbec1c55d6a1266dc29` (`feature/DL-17060`). 실제 소속 목록·활성화를 연결하고 새 소속 알림함을 한 번 복원하며, 가짜 소속 목록은 제거했다. **소속별 미읽음 집계는 추정하지 않고 미제공**이다. 양 OS 실제 단일소속 및 합성 다중소속 검증을 구분했고 실제 다중소속 서버 전환은 테스트 계정 한계로 남는다. PR·배포·최종 QA 단계는 아니다.
 
 직전 구현: **2026-11-05 — Figma399:23417의 Unread 숫자 표시를 Web·Office·Lab에 반영**했다. Web `eb609ddd7`, Office `09a777a`, Lab `91534d2`. All 숫자 없음·Unread 양수만 빨간 배지·0미노출이며, 실제 서버 저장/미읽음 집계는 여전히 명세 대기다. 사용자 확인용 화면 실행은 이후 보류됐고 Cursor 전환을 더 요청하지 않는다. 변경 검증·마감은 아래 Figma 후속 절을 따른다.
 
@@ -8,13 +10,26 @@
 
 직전 구현 마감: 2026-11-04 — **확정된 알림센터 범위에 맞춰 이메일 작업에서 남은 Android 브라우저 모듈 의존을 양 앱에서 정리**했다. Office `cefac786`, Lab `b92207c`이며 모듈 없는 Android 빌드·양 OS 영향 경로 검증을 완료했다. 누적 네이티브/라이브러리 변경은 없다. 앞선 Credits Email·Lab 밀링 결제 제외도 유지한다. 새 BE 계약·USER 정책/와이어프레임은 계속 대기이며 PR·merge·배포·최종 QA 완료가 아니다.
 
-이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리** 보완·검증·양 앱 commit/push 완료. 이후11/4 범위 정리에서도 배너·인증·OS 권한·실제 서버 수신 설정은 변경하지 않았다.
+이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리**를 당시 합의대로 구현했다. **11/5 14:49 Slack 후속으로 배너는 OS OFF 동안 상시 노출로 변경됐으며 아래 최신 정책이 우선한다.** 자동 안내 팝업의 기기별 1회는 별개로 유지한다.
 
-- **현재 지시:** 허용된 Lab 실제 소속 조회·전환과 후속 Figma 최신 알림·멘션 점검을 완료했다. 확인한 최신 디자인은 이미 반영되어 추가 제품 수정 없이 대기하며 PR은 만들지 않는다. 이후 사용자 로컬 확인을 위해 양 앱과 Metro를 다시 켰고, 사용자가 Cursor 하단 터미널에서 웹 두 서비스를 실행했다. 현재 배치와 실행을 유지하고 새로 확정한 공통 두 실행 방식 지침을 적용한다. 미읽음 집계·새 BE 계약·USER 정책을 추측하거나 별도 구현/폴링으로 확장하지 않는다.
+- **현재 지시:** 11/5 사용자가 Slack 마지막 댓글과 최신 Figma 알림·실제 화면의 누락을 확인·처리하도록 요청했다. 확정 정책을 디자인보다 우선하여 Shipping 단일 배치와 OS OFF 배너·팝업 변경을 구현·검증·push했다. 개인 정본 정리 후 기존 실행/배치를 유지하고 대기한다. 미읽음 집계·새 BE 계약·USER 정책은 추측하지 않으며 PR은 만들지 않는다.
 - **직전 사용자 확인:** 11/4 사용자가 “요구사항 변경으로 불필요하게 남은 코드를 정상 개발 범위대로 정리한 결과, 추가 심사가 필요한 변경이 없는 것”으로 이해·확인했다. 사용자가 직접 이 결론을 전달할 예정이며 게시 완료로 기록하지 않는다. 제품 커밋·푸시/검증과 로컬 종료는 완료 상태로 유지한다. 당시 ‘즉시 추가할 FE 구현 없음’은 아래11/5 Lab 소속 연결 조사로 보완하며, 조사한 것을 구현 완료로 바꾸지 않는다.
 - **추가 자료 확인 — 2026-11-04:** Jira 댓글44798의 설정 템플릿 초안을 현재 세 제품 코드와 대조했고, 후속44802에서 Lab 밀링 결제 제외를 확인했다. 템플릿 초안 자체는 공개 API·BE 배포 완료 근거가 아니다. 후속 구현은 아래 제외 항목 반영에 한정한다.
 - **상태 읽는 순서:** 이 문서의 최신 상태 → [앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md) → 필요할 때 [11/3 단계별 구현·검증 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/입력 대기/서버 유지 문구를 현재로 재사용하지 않는다.
 - **기획 근거:** Notion 정책서와 확인한 Figma/Slack을 대조하되 최신 명시적 사용자 정정을 우선한다. 오늘 필요한 PRD 5-2~5-5/#14는 재대조했고 일부 조회 누락 블록이 있어 전체 본문·댓글을 완전 최신 조회했다고 주장하지 않는다. 이번 마감은 외부 자료 전수 재조사가 아니다.
+
+## 2026-11-05 Slack 마지막 댓글·Figma 최신 멘션 반영
+
+- **확인한 최신 요청:** [Oli 14:49:47 답글](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793857787199209), 부모1793774409.809179·답글11개를 확인했다. Unread 탭만 숫자(기반 구현 완료), 앱 OS OFF 자동 안내 팝업1회/설정 배너상시, Order 하위 Shipping, Credits Email이다. Credit Email은 기존11/4 구현을 보존한다.
+- **Figma 근거:** 오늘 사용자 멘션 메일14:50:20/14:50:24/14:51과 실제 댓글 #40/#50/#51을 직접 화면에서 열어 문맥·위치를 확인했다. #40 PM 최신 문구는 `Get Lab updates instantly`, `Go to Settings`; Lab 한글은 ‘알림으로 주문 현황과 치과 메시지를 바로 확인하세요.’다. #50은 OS OFF 배너, #51은 권한별 알림 설정 목록 위치다. 댓글/반응/해결·디자인 편집은 하지 않았다. Figma 화면 열람 자체의 읽음 표시는 서비스에서 변할 수 있으므로 미변경을 보장하지 않는다.
+- **디자인 원본:** 배너405:23592, 자동팝업248:24758, 설정팝업405:27110, 권한섹션405:25991 및 Web167:25417/405:27128/167:25673, App405:25725/410:28040/410:28402를 대조했다. 배너 닫기 없음·가로 벨30/본문14/화살표14, 팝업335/제목20/본문16·간격2/20을 기존 컴포넌트로 맞춘다.
+- **Shipping 판단:** 앱 시안의 Order 하위+별도 Shipping 중복은 그대로 복제하지 않는다. 사용자가 정책 우선, 불명확하면 BE/웹 기준으로 처리하도록 지시했다. Notion OFFICE 표는 Orders 하위 Shipping 한 건(Notification/Push), BE44798 초안도 ORDERS/SHIPPING 한 row이며 웹 시안도 Order 내부 한 번이다. 기존 식별자·값·채널을 보존하고 Web Clinic/Office에서 Order Updates 다음·Feedback 이전으로 이동한다. Lab에는 해당 항목을 신설하지 않는다. 이 판단 기준은 모든 프로젝트 공통 AGENTS/DEVELOPMENT_STYLE에96b6fd2로 기록·push·로컬 동기화했다.
+- **정책서 확인 범위:** Notion PRD 반환 최종수정11/4 15:45:28 KST. 필요한 OFFICE 기본값/역할표·Shipping은 확인했다. 반환은 truncated=true이며 unknown block1개(drive embed)이므로 전체 원문/댓글 완전 조회로 표현하지 않는다. 오래된 ‘OS OFF 조작 불가’ 문구보다 이후 사용자·PM 합의의 선택→OS 설정→정상복귀 흐름을 유지한다. 서버 초기값·마이그레이션은 제공될 계약과 대조하며 preview mock의 ON/OFF를 서버 기본값으로 취급하지 않는다.
+- **범위:** USER Promotion/Benefits 정책·와이어프레임 예고와 아직 공개되지 않은 새 알림 API는 별도 대기다. 소속 전환·미읽음·읽음·네이티브 설정·이메일 CTA를 이번 스타일/표시 보완으로 확장하지 않는다.
+- **Web 완료:** `feature/DL-17058`의 `3f44fc50724c5ea971c0654fdfbecd62e427ba51`, 원격 동일·clean·ahead/behind0/0. 변경은 Clinic mock 설정의 Shipping 배치1파일이다. PC1280/모바일390 실제 NotificationCenterMock→설정 컴포넌트에서 Shipping 한 번·Order 순서·인접 토글 독립·Credit Email 보존을 확인했고 pageErrors0이다. 통합 로그인 화면 재검증으로 표현하지 않는다. 필수 commit/push hook의 Web3제품 타입·lint(기존 warning만)·Admin guard·configs21/hooks32·coverage 기준 검사 통과. 증거 `/tmp/dentlink-web-shipping-results-1105.json`, `/tmp/dentlink-web-shipping-{1280,390}-1105.png`.
+- **Office 완료:** `feature/DL-17059`의 `ddf9e766c3a1220ede5515cc972ed0661621a3e3`, 원격 동일·clean·0/0. 최종7파일로 배너 상시/닫기 제거·기존 Popup 선택적 bodyStyle(기본값400 보존)/공통 안내335·Shipping 단일 배치를 반영했다. iOS 대표 계정에서 자동팝업 실제 표시/NOTICE 이력 저장·취소, 수동 안내→실제 Settings 앱 이동·복귀, 설정 재진입 배너 유지/자동팝업 미반복, ON 응답 시 숨김, Shipping OFF/ON과 Order Updates/Feedback 보존을 확인했다. **iOS 실제 권한은 granted이며 OS OFF/ON 조회 응답을 런타임 대체한 조건 검증**이다. 시뮬레이터가 앱별 알림 설정 대신 Settings 대문을 열어 실제 OS 토글 검증과 구분한다. 조회 함수·저장키3개·mock 복원 및 legacy 쓰기 차단 가드 제거 완료. lint/diff 통과, 전체 tsc 기존6진단·변경파일 신규0. 증거 `/tmp/office-notification-policy-runtime-1105.md`, `/tmp/office-ios-policy-{auto-popup,banner,manual-popup,shipping-on}-1105.png`.
+- **Lab 완료:** `feature/DL-17060`의 `1b328196fc15ba39064836a8ba222bfab862d6e2`, 원격 동일·clean·0/0. 최종9파일로 같은 배너/팝업을 적용하고 한글/영문 registry를 정리했다. Android 대표 한국어 계정에서 **실제 OS ON→OFF**, 배너 재진입·닫기 없음, 새 문구·취소, 자동팝업 실제 onLayout 후 이력 저장·재시작 미재노출, 앱 알림 설정 이동→ON 복귀 시 배너 숨김을 확인했다. OS ON·NOTICE 이력true 복원, 임시 legacy 쓰기 interceptor 제거, 로그인/소속 유지. fatal/RedBox 관찰 없음. 기존 Jest24/24·lint/diff 통과, 전체 tsc 기존5진단·변경파일 신규0. 증거 `/tmp/lab-notification-policy-runtime-1105.md` 및 그 안의 캡처/실행 파일.
+- **검증 범위·마감:** 코드 영향에 맞춰 Web PC/모바일 실제 컴포넌트, Office iOS, Lab Android를 검증했다. 권한 로직을 바꾸지 않아 무관한 역할·전체 기능/OS 조합을 재실행하지 않았다. 실제 새 API 저장·전체 발송/권한 QA·release 준비 완료로 확대하지 않는다. 기존 앱 Metro8081/8082와 기기창·로그인·사용자 창 배치를 유지했고 다른 checkout의3000 서버는 건드리지 않았다. 제품/개인 정본 push 후 추가 확인·폴링 없이 대기한다.
 
 ## 2026-11-05 창 배치 공통 지침과 조사 제외 후속 확정
 
@@ -123,7 +138,7 @@
 ### 남은 정책·디자인·검증과 지금 가능한 것
 
 - **FE 단독 잔여 후보:** Lab `src/services/user.service.ts`의 `GET /lab/users/own/employee?type=activate`·`PATCH /lab/employee/activates` 및 `useEmployeeProfile.handleChangeEmployee`가 이미 있다. `useMillingAccountSwitch`의 재조회/경합 보호/활성화/쿠키 처리 패턴을 참고해 알림센터의 실제 소속 선택·전환을 연결할 수 있다. 밀링 전용 동작을 그대로 끌어오지 않는다. ‘미읽음 있는 소속만’과 숫자는 집계 계약이 필요하므로 표시 정책을 임의 변경하거나 mock 알림을 실데이터로 가장하지 않는다. 실제 Lab 다중 소속 검증 계정/데이터는 확보되지 않은 검증 조건이다. **오늘은 조사만 했고 구현하지 않았다.**
-- **PM 후속 자료:** USER 단위 Promotion(SMS/MAIL), Benefits > Credit(PUSH/MAIL)의 정책·와이어프레임과 기존 Employee 설정의 관계를 기다린다. 이미 확정한 기본 알림함 디자인/파란배너1회/추가목록의 웹모바일 디자인/별도메뉴 후속을 다시 질문하지 않는다.
+- **PM 후속 자료:** USER 단위 Promotion(SMS/MAIL), Benefits > Credit(PUSH/MAIL)의 정책·와이어프레임과 기존 Employee 설정의 관계를 기다린다. 이미 확정한 기본 알림함 디자인/추가목록의 웹모바일 디자인/별도메뉴 후속(파란배너는 위11/5 후속 정책이 우선)을 다시 질문하지 않는다.
 - **관련 홈/채팅 적용:** Office Home My Orders의 웹·앱별 표시/최초 안내는 알림 수신 범위와 동일 개념이 아니다. 실제 저장·초기화 계약과 대조할 때 구분한다. Lab 최근 메시지/Support 노출·자동 이벤트 메시지 hide의 적용 범위/배치도 후속 근거 확인이 남으며, 오래된 DL-17068 제목으로 제외된 Lab My Orders를 되살리지 않는다.
 - **기존 연관 장애:** Office Support `/office/chat-messages`는 이전 실제404에 이어 오늘 Swagger에도 없다. 현재 지원/대체 조회 계약 확인이 필요하다. 새로운 알림 API를 만들어야 한다는 근거로 확대하지 않는다.
 - **심사:** 현재 확정 범위의 양 앱 native/package/lock 누적 변경0이 유지된다. 이메일 잔존 의존을 요구사항에 맞춰 정리한 결과이며 심사를 피하기 위한 기능 축소가 아니다. 현재 알림센터 때문에 추가 native 심사 선반영을 요청할 필요는 없다. 실제 release/CodePush 대상 호환·통합검증은 전달 단계에서 별도 확인한다.
@@ -246,13 +261,13 @@
 
 ## 제품 작업 위치와 Git
 
-2026-11-05 후속 구현: 기존 checkout/branch/worktree에서 Unread 숫자 표시를 추가했다. 앞선 Lab 밀링 결제 제외·Clinic Credits Email·이메일 잔존 native 정리는 유지한다. 검증·원격·로컬 실행 상태는 각 날짜의 최신 마감 기록을 따른다.
+2026-11-05 최신 후속: 기존 checkout/branch/worktree에서 Unread 숫자·Lab 실제 소속 연결에 이어 OS OFF 배너/팝업·Shipping 위치를 반영했다. 앞선 Lab 밀링 결제 제외·Clinic Credits Email·이메일 잔존 native 정리는 유지한다. 검증·원격·로컬 실행 상태는 각 날짜의 최신 마감 기록을 따른다.
 
 | 제품 | checkout | branch / upstream | 원격 반영 HEAD |
 | --- | --- | --- | --- |
-| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` / `origin/feature/DL-17058` | `eb609ddd72b4e9f618ae0585aabcee979136c9d4` |
-| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` / `origin/feature/DL-17059` | `09a777ad92b8c356e71db0877aef1678f45fdb55` |
-| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` / `origin/feature/DL-17060` | `91534d29e703de3edabee563f08f8c7671143f80` |
+| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` / `origin/feature/DL-17058` | `3f44fc50724c5ea971c0654fdfbecd62e427ba51` |
+| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` / `origin/feature/DL-17059` | `ddf9e766c3a1220ede5515cc972ed0661621a3e3` |
+| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` / `origin/feature/DL-17060` | `1b328196fc15ba39064836a8ba222bfab862d6e2` |
 
 - Web 오늘 주요 단위: `5cde12f8f` 이메일 설정 분리 → `eceb6bbe1` 실제 소속 연결 → `056056c92` 전환 취소/모바일 토스트 → `d11fb8759` 권한/Shipping.
 - Office: `b78947f` native 분리 → `35425f2` 공통 연결/OS 복귀 → `c85865d` Credits 표시 → `358b400` 중복/소속 경합 → `18033bc` raw 링크 타이머 → `8f09cb1` 채팅 ID → `6bf1c58` 설정 권한 → `b57bfbe` 설정 배너 1회.
@@ -322,7 +337,7 @@
 - OS OFF에서 특정 PUSH 선택→OS 설정→정상 복귀 후 권한 ON이면 선택한 항목만 저장한다. 재시작·계정/소속 변경 등 흐름이 끊기면 과거 선택을 버리고 서버 저장값을 유지한다. 임의 유효시간이나 복잡한 복구 정책을 발명하지 않는다.
 - 기존 `PermissionProvider`의 OS 허용과 서버 preference 초기화/upsert 결합은 남아 있다. 새 OS 조회 hook이 있다는 이유로 분리가 완료됐다고 판단하지 않는다.
 - **전역 OS OFF 팝업:** 10/30 17:30 기기별 로컬 1회 노출 선행 구현 완료. 실제 표시 후 기록하며 계정·병원 변경으로 초기화하지 않는다. 재설치·이력 유실로 재노출되는 것은 수용한다.
-- **설정 화면 파란 배너:** “가능하면 기기 내 1회, 재설치/이력 유실에 따른 재노출 수용” 합의에 따라 11/3 구현·push 완료. 양 앱이 각각 별도 `NOTIFICATION_PERMISSION_BANNER_SHOWN` 기기 키를 사용하며 전역 팝업 키와 혼용하지 않는다. 저장 이력 확인 전에는 숨기고, 설정 화면 focus·앱 active 상태의 실제 `onLayout`에서 기록한다. 현재 배너는 닫기/화면 이탈까지 유지하고 재진입·재시작부터 숨긴다. 계정/소속별 mock reset과 분리했고 로그아웃 코드도 이 키를 지우지 않는다. OS ON으로 실제 노출되지 않았으면 이력을 소비하지 않으며, 저장 실패/이력 유실에 따른 재노출은 수용한다. 서버 설정·문구·OS 설정 action은 변경하지 않았다.
+- **설정 화면 파란 배너:** 11/5 14:49 Slack 및 Figma405:23592 기준으로 **OS OFF 동안 상시 표시**하며 닫기 버튼은 없다. 과거 기기1회 배너 키/조회/저장은 제거하고 기존 저장값은 더 이상 노출 판단에 사용하지 않는다. OS ON이면 숨긴다. 자동 안내 팝업의 `NOTIFICATION_PERMISSION_NOTICE_SHOWN` 기기1회 정책과 구분한다. 11/3 배너1회 구현은 과거 이력이며 현재 정책이 아니다.
 - **도메인/카테고리 표시:** 10/30 18:01 사용자 결정으로 BE 계층/명칭을 그대로 노출할 의무가 없다. 같은 원본 row 안에서 하위 카테고리를 상위처럼 보이게 하거나 도메인을 숨길 수 있다. 저장 식별자를 유지하고 무관한 row는 합치지 않는다. `title`, `key/label` 분리는 준비됐지만 실제 enum/catalog adapter는 미확정이다. [디자인 기준](https://www.figma.com/design/QLIzKYWzFFlptCYzN36Iq4?node-id=314-23253)
 
 ### 소속 전환·미읽음 표시
@@ -343,7 +358,7 @@
 | 6 | PR/release | 실제 연결 후 새 UI의 DEV 제한 해제·운영 진입 전환. 구현·에이전트 실행 검증·사용자 QA를 구분. 현재 PR 생성/merge/배포 지시는 없으며 자동 진행하지 않음 |
 
 - **병행 확인:** 기존 Office Support의 현재 BE 조회 계약과 필요한 실제 역할/데이터를 확보하면 해당 미검증을 해소할 수 있다. 메일 CTA/SES·추가 메뉴·새 디자인 발주를 알림센터 선행 조건으로 만들지 않는다.
-- **남은 정책 근거:** Lab Home 최근 메시지/Support·자동 메시지 hide의 적용 범위는 후속 명시 근거를 확인한다. 파란 배너 1회는 이미 합의·구현된 항목이므로 다시 정책 미정/불필요한 질문으로 되돌리지 않는다.
+- **남은 정책 근거:** Lab Home 최근 메시지/Support·자동 메시지 hide의 적용 범위는 후속 명시 근거를 확인한다. 배너는11/5 최신 합의의 OS OFF 상시 노출, 자동팝업만 기기1회를 따른다. 이미 해소한 내용은 정책 미정으로 되돌리지 않는다.
 - **11/4 후속 정책 대기:** USER 단위 Promotion(SMS/MAIL), Benefits > Credit(PUSH/MAIL)의 정책·와이어프레임을 받으면 현재 Employee 설정과의 경계 및 화면/계약을 대조한다. 현재 Credits Mail 지원은 먼저 반영했으나 실제 초기값·저장 계약을 추측하지 않는다.
 - **앱 전달 전 확인:** 이메일 분리 후 잔존했던 Android 모듈은 제거·기존 JS 방식으로 대체·영향 기기 검증까지 완료했다. 현재 기능 때문에 추가 native 심사 선반영을 요구하지 않는다. 실제 release/CodePush 대상 호환과 Lab main-only 변경의 통합 여부는 전달 단계에서 별도로 대조하며 자동 merge/rebase는 하지 않는다.
 - **누락 보완 이력:** 11/3 배너 영속 보완,11/4 후속 승인에 따른 Lab 밀링 결제 알림 제외까지 완료했다. 다음은 공개 BE 계약을 실제로 확인한 범위부터 이어가며, 임의 API/정책 가정이나 자동 조회·폴링은 하지 않는다.
