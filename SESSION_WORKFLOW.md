@@ -198,6 +198,11 @@ project and session, not only main-session handoffs or deployment checks.
   authorized check; they do not themselves authorize continued polling.
 - After a feature-session handoff, follow the main-session rule below: confirm
   delivery once, record it, and leave execution and reporting to that session.
+- For the separate app session, send updates or assign work only when the user
+  explicitly requests that transmission. A completed one-time sharing request
+  is not standing permission to relay later feature updates automatically.
+  The user confirmed this boundary on 2026-11-05: leave messages already sent
+  as they are, and do not send a correction or follow-up unless asked.
 
 ## Dentlink Frontend Top-Level Session Model
 
