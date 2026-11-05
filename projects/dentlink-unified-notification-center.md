@@ -1,6 +1,6 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-현재 후속: **2026-11-05 — 사용자 추가 승인으로 공통 헤더·시간 표시·OS 안내 배너 보완을 세 제품 모두 commit/push 완료했다.** Web `6a0bd7caf`, Office `be825ad6`, Lab `193ee8b5`이며 원격 SHA 일치·clean이다. 검증했던 코드 그대로 반영했으며 PR·CodePush·배포는 하지 않았다. 종료 상태였던 앱 서버·기기를 재시작하여 iOS/Android 모두 같은 Office8081 작업본의 알림함을 열어두었다. 웹 실행은 사용자에게 맡기며 BE 연결/미정 정책 대기는 유지한다.
+현재 후속: **2026-11-05 — 웹 알림센터 아이콘 버튼 상태 보완.** 사용자 승인에 따라 톱니바퀴·설정 X뿐 아니라 같은 방식의 뒤로가기와 소속 선택 X까지5곳을 Figma와 대조해 수정했다. Web `39689690c`로 commit/push했고 원격 SHA 일치·clean·ahead/behind0/0을 확인했다. Office `be825ad6`, Lab `193ee8b5`는 변경하지 않았고 기존 앱 미리보기·웹 창/서버는 유지한다. BE 연결/미정 정책 대기는 그대로다.
 
 **대기 기준 — 2026-11-05:** 현재 확인된 확정 요구에서 추가로 착수할 FE 선행 작업은 없으며 전체 기능/실API/최종 QA 완료를 뜻하지 않는다. 실제 API·미읽음 집계, USER 설정/집계(#20–22) 및 Lab Home 최근 메시지(#19)의 확정 자료 또는 사용자 요청을 받으면 변경분부터 재개한다. 처음에는 제품 변경을 로컬에만 보존했으나 이후 명시적 commit/push·앱 재실행 요청을 받아 아래와 같이 완료했다. 새 조사/폴링·PR·배포는 하지 않고 사용자 미리보기용 기기/서버는 유지한다.
 
@@ -16,11 +16,20 @@
 
 이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리**를 당시 합의대로 구현했다. **11/5 14:49 Slack 후속으로 배너는 OS OFF 동안 상시 노출로 변경됐으며 아래 최신 정책이 우선한다.** 자동 안내 팝업의 기기별 1회는 별개로 유지한다.
 
-- **현재 지시:** 11/5 공통 헤더·Figma 주석 누락 재검토·보완 뒤, 사용자가 남은 제품 변경의 commit/push와 앱 재실행을 명시적으로 승인했다. 웹은 사용자가 직접 구동한다. 과거 '디자인 명시 근거 없음/임시 UX' 설명은 주석 확인 오류로 정정됐으며 현재 범위는 Home·Orders·LinkTalk·Profile 1뎁스다. PR·배포 및 미정 BE/정책의 임의 구현은 승인하지 않았다.
+- **현재 지시:** 11/5 웹 아이콘 버튼 상태 보완·검증·commit/push를 추가 승인받았다. 그 직전 공통 헤더·Figma 주석 누락 재검토·보완 뒤, 사용자가 남은 제품 변경의 commit/push와 앱 재실행을 명시적으로 승인했다. 웹은 사용자가 직접 구동한다. 과거 '디자인 명시 근거 없음/임시 UX' 설명은 주석 확인 오류로 정정됐으며 현재 범위는 Home·Orders·LinkTalk·Profile 1뎁스다. PR·배포 및 미정 BE/정책의 임의 구현은 승인하지 않았다.
 - **직전 사용자 확인:** 11/4 사용자가 “요구사항 변경으로 불필요하게 남은 코드를 정상 개발 범위대로 정리한 결과, 추가 심사가 필요한 변경이 없는 것”으로 이해·확인했다. 사용자가 직접 이 결론을 전달할 예정이며 게시 완료로 기록하지 않는다. 제품 커밋·푸시/검증과 로컬 종료는 완료 상태로 유지한다. 당시 ‘즉시 추가할 FE 구현 없음’은 아래11/5 Lab 소속 연결 조사로 보완하며, 조사한 것을 구현 완료로 바꾸지 않는다.
 - **추가 자료 확인 — 2026-11-04:** Jira 댓글44798의 설정 템플릿 초안을 현재 세 제품 코드와 대조했고, 후속44802에서 Lab 밀링 결제 제외를 확인했다. 템플릿 초안 자체는 공개 API·BE 배포 완료 근거가 아니다. 후속 구현은 아래 제외 항목 반영에 한정한다.
 - **상태 읽는 순서:** 이 문서의 최신 상태 → [앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md) → 필요할 때 [11/3 단계별 구현·검증 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/입력 대기/서버 유지 문구를 현재로 재사용하지 않는다.
 - **기획 근거:** Notion 정책서와 확인한 Figma/Slack을 대조하되 최신 명시적 사용자 정정을 우선한다. 오늘 필요한 PRD 5-2~5-5/#14는 재대조했고 일부 조회 누락 블록이 있어 전체 본문·댓글을 완전 최신 조회했다고 주장하지 않는다. 이번 마감은 외부 자료 전수 재조사가 아니다.
+
+## 2026-11-05 후속 — 웹 아이콘 버튼 hover/pressed 보완
+
+- **요구·근거:** 사용자가 웹 톱니바퀴의 길게 누르기·설정 X의 hover 이상을 지적하고 동일 방식 아이콘까지 디자인대로 수정·검증·commit/push하도록 승인했다. Figma `QLIzKYWzFFlptCYzN36Iq4`의 인박스 헤더 `I89:13848;48:10910`, 설정 헤더 `I167:25417;98:20975`와 아이콘 `I89:13848;48:10916`, `I167:25417;98:20983`, `I167:25417;98:20978`를 design context·스크린샷으로 대조했다. 해당 아이콘은24px이며 별도 네모 배경·테두리 상태의 지정 근거를 찾지 못했다.
+- **원인·변경:** DLDS ghost/black Button의 hover gray100·pressed gray300와 기본 radius6이 남아 있었다. `NotificationUI/NotificationIconButton.tsx`에서 기존 Button을 국소 확장하고 투명 배경·border/radius0·24px 중앙정렬을 적용했다. 인박스 뒤로가기/설정, 설정 뒤로가기/X, 소속 선택 X의5곳에서 재사용한다. 기존 SVG·색상·onClick·aria-label·설정 복귀 식별자·소속 전환 중 disabled를 보존했다. 공용 Button의 키보드 focus-visible 표시도 유지한다.
+- **범위 점검:** 새 NotificationUI와 Clinic/Lab 알림 진입부를 확인했다. 기존 헤더 종의 IconBadge hover는 별도 공통패턴이므로 이번 ghost Button 보완과 구분하며 변경하지 않았다. 텍스트 버튼·필터·목록 행·토글·전역 DLDS/DLOS·앱·API는 변경하지 않았다. Storybook/제품 테스트용 화면도 추가하지 않았다.
+- **검증:** 실제 최종 컴포넌트를 임시 headless Chromium에서 렌더하여 Clinic/Lab × PC1280/모바일390의18개 아이콘 상태를 확인했다. 기본/hover/pressed 배경 투명·border0·shadow없음·24px SVG, 포인터 조작 outline없음, Tab focus-visible2px, Enter/Space, 설정 진입/뒤로가기/닫기/모바일 목록 닫기 및 소속 선택 중 닫기 비활성화가 통과했고 pageErrors0이다. 눌린 상태의 톱니/X/뒤로가기 캡처도 Figma 원본과 시각 대조했다. 변경 scoped ESLint·diff-check와 commit 훅의 Clinic/Lab/Admin 타입검사가 통과했다. 근거 `/tmp/notification-icon-results-1105.json`, `/tmp/notification-icon-check-1105.cjs`, `/tmp/notification-icon-*-pressed.png`. 이 검증은 실제 컴포넌트 상태 검증이며 사용자 표시 창·서버 API 전체 QA로 확대하지 않는다.
+- **검증 과정:** 최초 ESLint 호출은 저장소의 기존 중첩 Storybook/react-hooks 버전 충돌로 실행되지 않아 설정 변경 없이 `--no-eslintrc --config shared/ui/.eslintrc.cjs --resolve-plugins-relative-to shared/ui`로 통과했다. 임시 브라우저 스크립트의 포커스 transition 대기·React 재렌더 대기·모바일 모달 진입 순서를 보완한 뒤 최종18건을 통과했으며 이는 제품 오류 수정과 구분한다.
+- **Git/다음 시작점:** Web `feature/DL-17058`·`39689690c81c4f70e8183366be8fe0d78b8d2bee`(4파일)로 commit/push했고 `ls-remote` 원격 SHA 일치·clean·ahead/behind0/0을 확인했다. 필수 push 훅의 Clinic/Lab/Admin lint는 오류0(기존 warning 유지), Admin guard9·configs21·hooks32·coverage baseline 검사가 통과했다. 근거 `/tmp/notification-icon-push-1105.log`. 기존 PR은 없으며 새 PR·배포·앱 재실행·사용자 웹 서버/창 배치 변경은 없다. 사용자 로컬 확인 또는 후속 정책/BE 계약 변경을 기다린다.
 
 ## 2026-11-05 후속 승인 — 제품 commit/push·앱 다시 실행
 
