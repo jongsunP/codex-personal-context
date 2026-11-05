@@ -1,5 +1,12 @@
 # Dentlink E2E Reliability Checkpoint - 2026-11-05
 
+## PR #4831 대상 변경 — release/v1.92.0, 2026-11-05
+
+- 사용자 요청으로 [PR #4831](https://github.com/Innvoaid/dentlink-client/pull/4831)의 base를 master에서 `release/v1.92.0@9107e82cdca2807e24bf606d01797dbc733025c0`으로 변경했다. 현재 `OPEN / non-draft`, head `feat/e2e-deploy-status@65dd71ddf7da0d275da34eddc1e90f3a56a58acb`. 원격 API 재조회로 실제 base/head를 확인했다. 코드·head commit은 변경하지 않았다.
+- 새 base 대비 변경 파일은 같은 CI/문서/합성 테스트 7개다. diff check 및 로컬 merge-tree 충돌 없음. 코드 재검증/실제 배포는 수행하지 않았다. 앞의 master PR 승인·전달 기록은 당시 이력이며 현재 대상은 이 절을 따른다.
+- 적용상 필수 주의: 원격 기본 브랜치 master의 STG E2E에는 아직 workflow_run이 없고 DEV 독립 E2E 파일도 없다. release 변경을 master보다 먼저 stage/develop에 전파하면 inline E2E가 제거되지만 새 자동 consumer는 실행되지 않아 자동 E2E 공백이 생긴다. release base 변경만으로 이 제약은 해결되지 않는다.
+- PR 본문의 적용 순서를 새 대상으로 갱신했다. 환경 적용 전 master에 수신 workflow를 먼저 반영하거나, master 반영 전까지 기존 inline E2E를 유지하는 별도 대응이 필요하다. 어느 추가 조치도 이번 타겟 변경 요청만으로 실행하지 않았다. merge·배포·CodeRabbit 대응 없음.
+
 ## 사이드이펙트 재검토와 자동 E2E 알림 의존성 보완 — 2026-11-05
 
 - 사용자가 PR #4831의 E2E QA·배포·본서비스 부작용을 우려하여 재검토했다. DEV build/deploy 및 STG build·서울·오하이오 단계는 origin/master와 바이트 단위 동일하다. 제품 코드·Dockerfile·package/lock·운영 workflow 변경 없음. 신규 scripts는 Docker builder context에는 복사되지만 제품 빌드/서버 시작에서 호출하지 않는다. 새 인계 단계는 배포 후 임시 JSON/GitHub artifact만 다루며 서비스 중단·롤백 경로는 없다. 이는 실제 빌드 산출물 동일성/배포 안전성의 실증 완료를 뜻하지 않는다.
