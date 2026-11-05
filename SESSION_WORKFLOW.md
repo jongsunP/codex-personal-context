@@ -331,6 +331,20 @@ routine Sheet-sync request. This applies to web Lab and the separate Lab app.
 This is a Codex work requirement. The presence of scripts does not imply that
 every code edit, app launch, or CI run automatically writes the spreadsheet.
 
+## Existing Windows And Layout
+
+The user confirmed on 2026-11-05 that this applies to all agent screen
+interaction, not only local development or this notification-center session.
+
+- Reuse an already open, appropriate window/tab/device screen for the task.
+  Preserve its placement, size, monitor/desktop and tab/window grouping as
+  far as practical; do not move, resize, maximize, regroup, close/reopen or
+  create duplicates merely for agent convenience.
+- Necessary navigation, tab selection and interaction within the existing
+  screen remain allowed within the task. Avoid disrupting unrelated windows.
+  If a temporary layout change is necessary, keep it minimal and restore the
+  prior arrangement when practical. Explicit user layout instructions prevail.
+
 ## Local Development And User Preview
 
 The user confirmed these two local execution modes on 2026-11-05. Apply them
@@ -358,8 +372,8 @@ In both modes:
 - Verify the exact checkout/branch, service working directory and port. Reuse
   matching servers, browser/device sessions and terminals; avoid duplicate
   services or interference with another task's processes.
-- Preserve the user's window placement, sizes and chosen tab/window grouping.
-  Do not rearrange or rebuild the workspace merely to match a fixed layout.
+- Follow [Existing Windows And Layout](#existing-windows-and-layout). Do not
+  rearrange or rebuild the workspace merely to match a fixed layout.
   In user-preview mode, inspect the actual displayed service/device; a live
   process or a different headless browser alone does not prove that window works.
 - App simulator/emulator checks, including crashes and affected screens,
