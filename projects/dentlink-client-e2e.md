@@ -1,5 +1,10 @@
 # Dentlink E2E Reliability Checkpoint - 2026-11-05
 
+## PR #4831 master 대상 복원·사용자 머지 대기 — 2026-11-05
+
+- 적용 순서와 사이드이펙트 설명 후 사용자가 PR을 다시 master로 변경하고 머지는 직접 확인 후 하겠다고 지시했다. [PR #4831](https://github.com/Innvoaid/dentlink-client/pull/4831)을 `master` 대상으로 복원했고 API에서 `OPEN / merged:false`, 동일 head `feat/e2e-deploy-status@65dd71ddf7da0d275da34eddc1e90f3a56a58acb`, 변경 파일7개를 확인했다. 코드·커밋은 변경하지 않았다.
+- PR 본문도 master 수신 workflow 먼저 → release/DEV/STG 전파 순서로 맞췄다. 이전 release/v1.92.0 대상 변경은 아래의 역사적 기록이다. **현재 대상은 master이며 머지는 사용자가 담당한다.** 별도 지시 없이 merge·배포·실계정 E2E·CodeRabbit 대응을 진행하지 않는다.
+
 ## PR #4831 대상 변경 — release/v1.92.0, 2026-11-05
 
 - 사용자 요청으로 [PR #4831](https://github.com/Innvoaid/dentlink-client/pull/4831)의 base를 master에서 `release/v1.92.0@9107e82cdca2807e24bf606d01797dbc733025c0`으로 변경했다. 현재 `OPEN / non-draft`, head `feat/e2e-deploy-status@65dd71ddf7da0d275da34eddc1e90f3a56a58acb`. 원격 API 재조회로 실제 base/head를 확인했다. 코드·head commit은 변경하지 않았다.
