@@ -1,8 +1,8 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-현재 후속: **2026-11-05 — 공통 헤더에 이어 Figma TOBE 주석·정책과 세 제품 코드를 재대조하고, 시간 표시 계산·앱 OS 안내 배너 전체 터치 보완 및 변경 범위 검증을 완료했다.** 기존 Home·Orders·LinkTalk·Profile 알림 벨의 로컬 변경을 함께 보존한다. Web5파일·Office10파일·Lab12파일은 제품 commit/push·CodePush·PR 없이 로컬에 남긴다. 양 기기는 Office8081/Home으로 복원했으며 기존 창/서버 배치를 유지한다. BE 연결 대기와 새 USER 정책의 미결 사항은 구분한다.
+현재 후속: **2026-11-05 — 사용자 추가 승인으로 공통 헤더·시간 표시·OS 안내 배너 보완을 세 제품 모두 commit/push 완료했다.** Web `6a0bd7caf`, Office `be825ad6`, Lab `193ee8b5`이며 원격 SHA 일치·clean이다. 검증했던 코드 그대로 반영했으며 PR·CodePush·배포는 하지 않았다. 종료 상태였던 앱 서버·기기를 재시작하여 iOS/Android 모두 같은 Office8081 작업본의 알림함을 열어두었다. 웹 실행은 사용자에게 맡기며 BE 연결/미정 정책 대기는 유지한다.
 
-**대기 확정 — 2026-11-05:** 사용자가 현재까지 한 작업을 간단히 설명하고, FE에서 더 진행할 확정 작업이 없으면 기록 후 대기하도록 요청했다. 공통 헤더 진입 확대·세 제품 시간 표시·양 앱 배너 전체 터치와 그 변경 범위 검증은 완료 상태로 정리한다. 현재 확인된 확정 요구에서 추가로 착수할 FE 선행 작업은 없으며 전체 기능/실API/최종 QA 완료를 뜻하지 않는다. 실제 API·미읽음 집계, USER 설정/집계(#20–22) 및 Lab Home 최근 메시지(#19)의 확정 자료 또는 사용자 요청을 받으면 변경분부터 재개한다. 세 제품의 branch/HEAD·로컬 변경5/10/12파일은 다시 확인했고 보존했다. 제품 commit/push·새 조사/폴링·기기/서버 종료는 하지 않으며 개인 정본만 commit/push 후 대기한다.
+**대기 기준 — 2026-11-05:** 현재 확인된 확정 요구에서 추가로 착수할 FE 선행 작업은 없으며 전체 기능/실API/최종 QA 완료를 뜻하지 않는다. 실제 API·미읽음 집계, USER 설정/집계(#20–22) 및 Lab Home 최근 메시지(#19)의 확정 자료 또는 사용자 요청을 받으면 변경분부터 재개한다. 처음에는 제품 변경을 로컬에만 보존했으나 이후 명시적 commit/push·앱 재실행 요청을 받아 아래와 같이 완료했다. 새 조사/폴링·PR·배포는 하지 않고 사용자 미리보기용 기기/서버는 유지한다.
 
 직전 push 완료: **2026-11-05 — 최신 Slack/Figma의 OS OFF 배너·팝업과 Shipping 배치를 반영·검증·commit/push 완료.** 양 앱 설정 배너는 OS OFF 동안 상시 표시, 자동 팝업은 기기별1회 유지, 문구·레이아웃은 최신 시안을 따른다. Clinic/Office Shipping은 정책/BE 근거에 따라 Orders 하위 한 번만 표시한다. Web `3f44fc507`, Office `ddf9e766`, Lab `1b328196`. 새 BE 연결·PR·배포·최종 전체 QA 완료가 아니다.
 
@@ -16,11 +16,19 @@
 
 이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리**를 당시 합의대로 구현했다. **11/5 14:49 Slack 후속으로 배너는 OS OFF 동안 상시 노출로 변경됐으며 아래 최신 정책이 우선한다.** 자동 안내 팝업의 기기별 1회는 별개로 유지한다.
 
-- **현재 지시:** 11/5 로컬 확인 후 공통 헤더의 알림 진입을 승인했고, 이어 Figma12:1495/36:11358의 요구 확인과 현재 FE가 할 수 있는 누락 재검토·보완을 요청했다. 원문에 Home·Orders·LinkTalk·Profile 1뎁스 헤더 적용이 명시돼 있음을 확인했다. 앞서 '디자인 명시 근거 없음/임시 UX'로 설명한 것은 해당 주석을 놓친 확인 오류이며 아래 정정이 우선한다. 기존 로컬 변경을 보존하고 확정 근거의 FE 보완만 진행한다. 제품 commit/push·PR과 미정 BE/정책의 임의 구현은 하지 않는다.
+- **현재 지시:** 11/5 공통 헤더·Figma 주석 누락 재검토·보완 뒤, 사용자가 남은 제품 변경의 commit/push와 앱 재실행을 명시적으로 승인했다. 웹은 사용자가 직접 구동한다. 과거 '디자인 명시 근거 없음/임시 UX' 설명은 주석 확인 오류로 정정됐으며 현재 범위는 Home·Orders·LinkTalk·Profile 1뎁스다. PR·배포 및 미정 BE/정책의 임의 구현은 승인하지 않았다.
 - **직전 사용자 확인:** 11/4 사용자가 “요구사항 변경으로 불필요하게 남은 코드를 정상 개발 범위대로 정리한 결과, 추가 심사가 필요한 변경이 없는 것”으로 이해·확인했다. 사용자가 직접 이 결론을 전달할 예정이며 게시 완료로 기록하지 않는다. 제품 커밋·푸시/검증과 로컬 종료는 완료 상태로 유지한다. 당시 ‘즉시 추가할 FE 구현 없음’은 아래11/5 Lab 소속 연결 조사로 보완하며, 조사한 것을 구현 완료로 바꾸지 않는다.
 - **추가 자료 확인 — 2026-11-04:** Jira 댓글44798의 설정 템플릿 초안을 현재 세 제품 코드와 대조했고, 후속44802에서 Lab 밀링 결제 제외를 확인했다. 템플릿 초안 자체는 공개 API·BE 배포 완료 근거가 아니다. 후속 구현은 아래 제외 항목 반영에 한정한다.
 - **상태 읽는 순서:** 이 문서의 최신 상태 → [앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md) → 필요할 때 [11/3 단계별 구현·검증 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/입력 대기/서버 유지 문구를 현재로 재사용하지 않는다.
 - **기획 근거:** Notion 정책서와 확인한 Figma/Slack을 대조하되 최신 명시적 사용자 정정을 우선한다. 오늘 필요한 PRD 5-2~5-5/#14는 재대조했고 일부 조회 누락 블록이 있어 전체 본문·댓글을 완전 최신 조회했다고 주장하지 않는다. 이번 마감은 외부 자료 전수 재조사가 아니다.
+
+## 2026-11-05 후속 승인 — 제품 commit/push·앱 다시 실행
+
+- **원격 보존:** Web `6a0bd7caf1dc05502730e1d85b69442cc461586f`(시간 표시5파일), Office `cbd7a41`(헤더)→`be825ad6c0ad9cf08c7ee64bb5f52d721ef0ea64`(시간/배너), Lab `4765855`(헤더)→`b0372cd`(시간/번역)→`193ee8b5668f345357bea5dd9d9a6fd9ffb90b5d`(배너). 각 기존 feature/DL-17058·17059·17060에서 승인 파일만 commit/push했고 원격 ls-remote 일치·clean·upstream0/0를 확인했다. 새 branch/worktree·PR·merge·배포는 없다.
+- **검증 재사용/필수 검사:** 앞선 최종 코드와 동일함을 소스 hash로 확인해 Web33경계/6렌더·Office양OS/Jest10·Lab양OS/경계20/Jest3 근거를 재사용했다. Web commit/push hook의 Clinic/Lab/Admin 타입·lint 오류0(기존 경고만), Admin guard9·shared configs21/hooks32·coverage 검사를 통과했다. 앱의 기존 타입 진단 Office6/Lab5는 이번 추가 오류가 아니며 신규 변경은 없다.
+- **앱 미리보기:** 시작 시 두 기기/Metro가 종료된 상태여서 기존 설치·로그인을 유지해 재실행했다. Office8081 PID93362/session66913(cwd dentlink-app), Lab8082 PID93363/session90547(cwd dentlink-lab-app), Android AVD Dentlink_API_36:5554/session2873, iPhone17Pro/iOS26.5 UDID5C0E7639-2345-4B3F-9979-56AFDDA1C708. 실행 ID는 재개 시 재확인한다. 두 기기 모두 Office8081의 정확한 앱 식별자로 연결됐으며 홈 공지를 Close로 닫고 벨→알림함을 실제 터치해 열었다. 기존 권한·계정·소속·설정은 변경하지 않았다. 실제 표시 창까지 캡처해 정상 알림함을 확인했으며 새 API 연결이나 전체 QA 재실행 근거로 확대하지 않는다.
+- **iOS 표시 도구:** 이 Mac은 기존 Simulator.app 경로 대신 `/Applications/Xcode.app/Contents/Applications/DeviceHub.app`을 사용한다. `open -a <해당 경로> --args -CurrentDeviceUDID <기존 UDID>`로 기존 기기 창을 표시했다. Accessibility process 이름은 DeviceHub, CoreGraphics 창 owner는 Device Hub다. 기존 창 위치/크기를 임의 조정하지 않았다.
+- **근거/마감:** `/tmp/office-final-pushed-{ios,android}-1105.png`, 실제 창 `/tmp/office-preview-visible-{ios,android}-1105.png`; 기존 서버를 덮어쓰거나 웹/IDE를 조작하지 않았다. 사용자 요청대로 웹 서버는 시작하지 않았고 앱 미리보기는 켜둔다. 개인 체크포인트를 새 제품 SHA로 갱신·commit/push 후 다음 명세/요청을 기다린다.
 
 ## 2026-11-05 TOBE 주석 재감사·FE 누락 보완
 
@@ -311,9 +319,9 @@
 
 | 제품 | checkout | branch / upstream | 원격 반영 HEAD |
 | --- | --- | --- | --- |
-| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` / `origin/feature/DL-17058` | `3f44fc50724c5ea971c0654fdfbecd62e427ba51` |
-| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` / `origin/feature/DL-17059` | `ddf9e766c3a1220ede5515cc972ed0661621a3e3` |
-| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` / `origin/feature/DL-17060` | `1b328196fc15ba39064836a8ba222bfab862d6e2` |
+| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` / `origin/feature/DL-17058` | `6a0bd7caf1dc05502730e1d85b69442cc461586f` |
+| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` / `origin/feature/DL-17059` | `be825ad6c0ad9cf08c7ee64bb5f52d721ef0ea64` |
+| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` / `origin/feature/DL-17060` | `193ee8b5668f345357bea5dd9d9a6fd9ffb90b5d` |
 
 - Web 오늘 주요 단위: `5cde12f8f` 이메일 설정 분리 → `eceb6bbe1` 실제 소속 연결 → `056056c92` 전환 취소/모바일 토스트 → `d11fb8759` 권한/Shipping.
 - Office: `b78947f` native 분리 → `35425f2` 공통 연결/OS 복귀 → `c85865d` Credits 표시 → `358b400` 중복/소속 경합 → `18033bc` raw 링크 타이머 → `8f09cb1` 채팅 ID → `6bf1c58` 설정 권한 → `b57bfbe` 설정 배너 1회.
