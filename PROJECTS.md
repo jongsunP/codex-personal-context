@@ -127,8 +127,9 @@ For detailed current state, read:
 
 ### Dentlink DLDS / Studio 갤러리 / AI 화면 제작
 
-- DL-16437·DL-16466·DL-16830의 디자인시스템/패키지 통합, DL-17046 Studio 갤러리,
-  DL-16471 하네스 검토는 서로 다른 단계다. 최신 승인 범위와 재개 조건은 정본 최상단을 따른다.
+- 디자인시스템/패키지 통합과 DL-17046 Studio 갤러리 보완·main 반영은 완료했다.
+  사용자는 2026-11-05 DL-16471 하네스 카드 아카이브를 알렸으며, 현재 필수 다음 작업 없이 대기한다.
+  디자인시스템·Studio 관련 작업은 이후 명시적으로 요청한 추가 사항만 수행한다. 정본 최상단을 따른다.
 - 제품 운영 사용, npm 공개/소비 확인, Studio 갤러리 QA, 하네스 완성을 구분한다.
   과거 계획이나 준비된 작업 공간만으로 하네스 작업·자동 조회를 재개하지 않는다.
 - [현재 체크포인트와 상세 이력](projects/dentlink-fe-opportunities.md) · [2단계 초안](projects/dentlink-ai-dlds-draft.md) · [회의 자료](projects/dentlink-fe-meeting.md)
