@@ -89,6 +89,12 @@
 
 - The user prefers Codex to proceed proactively and request required approvals directly when tools need elevated permissions.
 - Still follow Codex/system permission prompts when they appear.
+- For local execution, follow **Local Development And User Preview** in
+  `SESSION_WORKFLOW.md`: distinguish Codex working alone from the user's
+  direct local inspection. The latter uses the exact IDE/worktree, bottom
+  integrated service terminals and external browser/devices; an IDE browser
+  is unnecessary. Preserve the user's layout and explicit service exceptions.
+  App runtime and crash verification requirements are the same in both modes.
 - For authorized local setup in every new session or worktree, follow
   **Local Env Inheritance** in `SESSION_WORKFLOW.md`: copy the needed
   service's existing env files from the verified main worktree without

@@ -411,6 +411,10 @@ identify a particular issue, excessive duration, or required reduction.
 This is a mandatory rule for all app work, confirmed by the user on
 2026-10-27. It applies independently to Office and Lab apps and is not
 conditional on whether the current crash investigation reproduces a failure.
+It applies equally in both modes of
+[Local Development And User Preview](SESSION_WORKFLOW.md#local-development-and-user-preview);
+the user's presence and the terminal/browser arrangement do not replace or
+reduce the agent's actual screen, role and crash verification.
 
 - Before handing an app change to the user for final QA, and before declaring
   it ready to merge, the agent must actually test **the final code on every

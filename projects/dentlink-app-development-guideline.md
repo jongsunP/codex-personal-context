@@ -8,8 +8,11 @@ description: Interpret the user's web-style requests and guide repeatable Dentli
 
 This is the user's master app-development workflow. It is personal memory, not
 product code. Use the team's package scripts as reliable environment/build
-primitives, then arrange them with the user's preferred visible Codex terminal,
-device, Metro and Reactotron workflow. The user manages the IDE separately.
+primitives, then arrange the terminal, device, Metro and Reactotron workflow
+according to [Local Development And User Preview](../SESSION_WORKFLOW.md#local-development-and-user-preview).
+Codex-only work may use internal execution; direct user inspection uses the
+IDE's bottom service terminals and visible devices, subject to explicit
+per-service exceptions. Preserve the user's existing arrangement.
 
 Read [App onboarding and delivery](dentlink-app-onboarding.md) for the
 2026-10-08 release/PR policy and product-specific Jira cards. This runtime
@@ -57,9 +60,9 @@ Office + requested platform + Development + Simulator/Emulator
 1. Refresh/read the Git-backed personal context when resuming prior work.
 2. Verify the exact app checkout, branch, upstream, HEAD and dirty files.
 3. Preserve existing local changes and confirm Office versus Lab.
-4. Run commands from a visible Codex-managed terminal rooted at that exact
-   checkout. Open it only while command work is active and close it afterward;
-   do not operate or depend on an IDE terminal.
+4. Run commands at that exact checkout using the current local execution mode:
+   Codex-managed terminals for solo work, or the IDE's bottom integrated
+   service terminals for direct user inspection unless explicitly overridden.
 5. State the expanded execution combination before starting.
 
 ### 2. Primary Development Loop: iOS

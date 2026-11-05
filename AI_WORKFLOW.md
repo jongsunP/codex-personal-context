@@ -142,10 +142,11 @@ scratch details.
 - Be proactive once context is clear.
 - Ask questions only when assumptions would be risky.
 - Explain important tradeoffs.
-- Run shell commands in a Codex-managed terminal that the user can see while
-  commands are executing. Do not depend on or control an IDE terminal; the user
-  manages the IDE separately. Open the Codex terminal only when it is needed
-  and close it after the command work is complete.
+- Follow [Local Development And User Preview](SESSION_WORKFLOW.md#local-development-and-user-preview):
+  Codex may use its internal terminal/browser when working alone. For direct
+  user inspection, use the exact IDE checkout, bottom integrated service
+  terminals, external browser and visible devices, unless the user specifies
+  a per-service exception. Preserve the user's existing layout and sessions.
 - Treat an implementation request as a goal to solve, not as an instruction to
   follow blindly or a reason to retreat behind risk. First inspect the closest
   existing behavior, comparable cases, and project constraints. If the

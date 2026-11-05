@@ -125,7 +125,8 @@ Member 본인/타의사 담당과 전환·로딩·거절 상태, 영향 있는 �
 - 현재 실행 절차는 [개발 가이드](dentlink-app-development-guideline.md),
   정확한 도구·명령·경로는 [로컬 실행 가이드](dentlink-app-local-development.md)를 따른다.
   일반 JS/TS 공통 작업의 빠른 반복은 iOS, 플랫폼 전용 문제는 해당 플랫폼부터 진행한다.
-  IDE는 사용자가 관리하며 명령은 정확한 checkout의 필요할 때 여는 Codex 터미널에서 실행한다.
+  실행 방식은 [Local Development And User Preview](../SESSION_WORKFLOW.md#local-development-and-user-preview)를 따른다.
+  Codex 단독 개발은 내부 실행을 허용하고, 사용자 직접 확인은 정확한 IDE checkout의 하단 서비스 터미널과 외부 화면을 사용한다. 명시적 앱 내부 실행 예외와 사용자 배치를 보존하며, 두 방식의 앱 런타임·크래시 검증 기준은 동일하다.
 - 10/27에는 Xcode27.1의 DeviceHub와 기존 DEV 설치 앱+Metro를 사용했다.
   의존성은 `yarn install --immutable`로 lock에 맞췄다. 설치 바이너리 재사용 가능성은 새 작업의
   native/package 차이를 확인해 판단한다. 과거 MLImage Simulator 아키텍처 제약을 해결 완료로

@@ -331,6 +331,46 @@ routine Sheet-sync request. This applies to web Lab and the separate Lab app.
 This is a Codex work requirement. The presence of scripts does not imply that
 every code edit, app launch, or CI run automatically writes the spreadsheet.
 
+## Local Development And User Preview
+
+The user confirmed these two local execution modes on 2026-11-05. Apply them
+across projects; they replace the earlier blanket prohibition on IDE terminals.
+The difference is where services run and how the user observes the work, not
+the required implementation or verification quality.
+
+- **Codex 단독 개발:** When the user is not directly watching local work,
+  Codex may run development services and web checks through its own terminal
+  and browser tools. The IDE does not need to be arranged for the user.
+- **사용자 로컬 확인:** When the user wants to inspect local work directly,
+  open the exact project/worktree in the IDE and run the required services in
+  its bottom integrated terminal so the commands and logs are accessible.
+  Show the service in an external browser and show the relevant simulator or
+  emulator windows. An IDE-embedded browser is unnecessary. Respect explicit
+  per-service exceptions, such as allowing Codex to run app Metro internally.
+
+Use the user's stated intent to select the mode without repeatedly asking.
+If the user requests manual IDE startup, supply the exact checkout and commands
+and reuse that setup. If IDE control is unavailable in user-preview mode,
+report that limitation rather than silently substituting an internal server.
+
+In both modes:
+
+- Verify the exact checkout/branch, service working directory and port. Reuse
+  matching servers, browser/device sessions and terminals; avoid duplicate
+  services or interference with another task's processes.
+- Preserve the user's window placement, sizes and chosen tab/window grouping.
+  Do not rearrange or rebuild the workspace merely to match a fixed layout.
+  In user-preview mode, inspect the actual displayed service/device; a live
+  process or a different headless browser alone does not prove that window works.
+- App simulator/emulator checks, including crashes and affected screens,
+  roles and platforms on the final code, remain mandatory under
+  [App Screen Runtime Verification Before Merge](DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge).
+  User observation does not replace agent verification, and a setup-only check
+  is not a full runtime QA result.
+- Keep services and windows needed for the active development/preview loop
+  available until they are no longer needed or the user requests shutdown.
+  This mode choice does not authorize additional product, PR or delivery work.
+
 ## Local Env Inheritance
 
 The user explicitly approved this workflow on 2026-10-29 and requested its
