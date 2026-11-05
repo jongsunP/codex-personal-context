@@ -1,12 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-최종 상황 점검: **2026-11-05** — 사용자에게서 BE의 어제 Jira 설계 변경 없음·Swagger 미배포를 전달받고, 세 제품 코드/Git·Jira·DEV Swagger·정책서 반환 범위를 읽기 전용으로 재대조했다. FE 화면·공통 이동 선행 구현과 새 서버 계약 연결은 별개다. **Lab 알림센터의 실제 소속 조회·전환은 기존 API로 더 진행할 수 있는 제한적인 FE 잔여 작업**으로 확인했으며, 관련 전부를 BE 대기로 묶던 표현을 정정한다. 제품 코드·외부 문서는 변경하지 않았다. 점검 후 사용자 추가 요청으로 화면 확인용 실행 환경을 다시 준비하며 아래 후속 실행 상태를 따른다.
+최종 구현: **2026-11-05 — Figma399:23417의 Unread 숫자 표시를 Web·Office·Lab에 반영**했다. Web `eb609ddd7`, Office `09a777a`, Lab `91534d2`. All 숫자 없음·Unread 양수만 빨간 배지·0미노출이며, 실제 서버 저장/미읽음 집계는 여전히 명세 대기다. 사용자 확인용 화면 실행은 이후 보류됐고 Cursor 전환을 더 요청하지 않는다. 변경 검증·마감은 아래 Figma 후속 절을 따른다.
 
-최종 구현 마감: 2026-11-04 — **확정된 알림센터 범위에 맞춰 이메일 작업에서 남은 Android 브라우저 모듈 의존을 양 앱에서 정리**했다. Office `cefac786`, Lab `b92207c`이며 모듈 없는 Android 빌드·양 OS 영향 경로 검증을 완료했다. 누적 네이티브/라이브러리 변경은 없다. Web `873fb2556`과 앞선 Credits Email·Lab 밀링 결제 제외는 유지한다. 새 BE 계약·USER 정책/와이어프레임은 계속 대기이며 PR·merge·배포·최종 QA 완료가 아니다.
+상황 점검: **2026-11-05** — BE 설계 변경 없음·Swagger 미배포를 전달받고, 세 제품 코드/Git·Jira·DEV Swagger·정책서 반환 범위를 읽기 전용으로 재대조했다. **Lab 알림센터의 실제 소속 조회·전환은 기존 API로 더 진행할 수 있는 제한적인 FE 잔여 작업**으로 확인했으며, 관련 전부를 BE 대기로 묶던 표현을 정정한다. 이 브레이크포인트 조사와 이후 사용자가 요청한 Figma 구현은 구분한다.
+
+직전 구현 마감: 2026-11-04 — **확정된 알림센터 범위에 맞춰 이메일 작업에서 남은 Android 브라우저 모듈 의존을 양 앱에서 정리**했다. Office `cefac786`, Lab `b92207c`이며 모듈 없는 Android 빌드·양 OS 영향 경로 검증을 완료했다. 누적 네이티브/라이브러리 변경은 없다. 앞선 Credits Email·Lab 밀링 결제 제외도 유지한다. 새 BE 계약·USER 정책/와이어프레임은 계속 대기이며 PR·merge·배포·최종 QA 완료가 아니다.
 
 이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리** 보완·검증·양 앱 commit/push 완료. 이후11/4 범위 정리에서도 배너·인증·OS 권한·실제 서버 수신 설정은 변경하지 않았다.
 
-- **현재 지시:** 11/5는 완료·현재 상태·남은 구현·API/기획/디자인/심사 요건을 정리하는 브레이크포인트 검토다. 심사 일정이 기능 범위의 기준이 아니다. 새 계약을 추측하거나 제품 구현·폴링을 시작하지 않고, 실제 가능한 FE 작업과 외부 계약 대기를 구분해 보고한다. 이후 명시적으로 요청한 현재 화면 확인용 실행은 아래 후속 요청을 따른다.
+- **현재 지시:** 11/5 브레이크포인트 검토 후 사용자 추가 요청의 Figma Unread 배지 구현·검증·commit/push를 완료한다. 사용자 확인용 화면 실행은 이후 보류됐다. 새 BE 계약·USER 정책을 추측하거나 자동 폴링/별도 미승인 구현으로 확장하지 않는다. Lab 실제 소속 연결 등 다른 잔여는 별도 다음 작업으로 남긴다. 심사 일정이 기능 범위의 기준이 아니다.
 - **직전 사용자 확인:** 11/4 사용자가 “요구사항 변경으로 불필요하게 남은 코드를 정상 개발 범위대로 정리한 결과, 추가 심사가 필요한 변경이 없는 것”으로 이해·확인했다. 사용자가 직접 이 결론을 전달할 예정이며 게시 완료로 기록하지 않는다. 제품 커밋·푸시/검증과 로컬 종료는 완료 상태로 유지한다. 당시 ‘즉시 추가할 FE 구현 없음’은 아래11/5 Lab 소속 연결 조사로 보완하며, 조사한 것을 구현 완료로 바꾸지 않는다.
 - **추가 자료 확인 — 2026-11-04:** Jira 댓글44798의 설정 템플릿 초안을 현재 세 제품 코드와 대조했고, 후속44802에서 Lab 밀링 결제 제외를 확인했다. 템플릿 초안 자체는 공개 API·BE 배포 완료 근거가 아니다. 후속 구현은 아래 제외 항목 반영에 한정한다.
 - **상태 읽는 순서:** 이 문서의 최신 상태 → [앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md) → 필요할 때 [11/3 단계별 구현·검증 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/입력 대기/서버 유지 문구를 현재로 재사용하지 않는다.
@@ -58,10 +60,32 @@
 
 ### 후속 사용자 요청 — 현재 구현 화면 확인 환경
 
+- **후속 정정:** 사용자가 화면을 보기 위한 웹·앱 실행은 바로 하지 않아도 된다며 보류하고, 아래 Figma `399:23417` 확인·반영을 요청했다. Cursor IDE 전환을 더 요구하거나 사용자 확인용 웹 서버를 대신 켜지 않는다. 앱의 변경 검증에 필요한 실행과 사용자 확인용 창 준비를 구분한다.
 - 사용자가 보고서를 읽고 현재까지의 화면을 직접 보기 위해 Web Clinic/Lab·시뮬레이터·에뮬레이터 실행을 요청했다. **이번 웹은 명시적 지시에 따라 Cursor 내부 터미널에서 실행하며 Codex 별도 웹서버로 대체하지 않는다.** 앱은 Codex 자체 실행을 허용했다. 이는 이 요청의 실행 방식이며 공통 기본 지침을 무단 수정하지 않는다.
 - **앱 화면 준비 완료:** 기존 로그인/빌드/디바이스를 보존하고 Office8081(PID3396, cwd `dentlink-app`)·Lab8082(PID3397, cwd `dentlink-lab-app`)를 재기동했다. DeviceHub의 iPhone17Pro/iOS26.5에 Office 영문 알림함, Android Dentlink_API_36:5554에 Lab 한글 알림함이 실제 표시된다. 각 Home→벨로 진입했으며 현재 crash/RedBox 없음. 양 기기에 두 제품이 설치돼 필요 시 전환 가능하다. 신규 설치·권한 변경·제품 코드 변경 없이 창/서버를 켜두었다. 알림은 mock이며 전체 QA 재실행이나 실제 BE 연동 검증이 아니다. 화면 근거 `/tmp/office-inbox-preview-final-1105.png`, `/tmp/lab-preview-now-1105.png`; 세션 Office43643/Lab41797/Android74859. PID/세션은 다음 재개 때 재확인한다.
 - 웹은 기존 env/의존성이 있고3000/3005는 비어 있으나 Cursor가 Agents 화면으로 열리며 IDE/새 터미널 전환이 반응하지 않았다. 사용자에게 웹 워크트리를 IDE 화면으로 열어달라고 요청했고, 이 단계에서는 웹서버를 별도 실행하지 않았다. 초기화나 사용자 Cursor 종료는 하지 않았다.
 - 이 요청은 코드 추가 구현·PR·배포가 아니라 현재 코드의 화면 확인 환경 준비다. 11/4 로컬 종료 기록은 당시 마감 근거로 보존하되 현재 실행 상태로 재사용하지 않는다.
+
+## 2026-11-05 Figma 후속 — Unread 탭 숫자 표시
+
+- 사용자 제공 [Figma399:23417](https://www.figma.com/design/QLIzKYWzFFlptCYzN36Iq4?node-id=399-23417)은 화면 전체가 아니라 TOBE 주석이다. **Unread 버튼에만 숫자,0이면 숫자 미노출,1이상만 표시,모바일·PC 공통**을 명시한다. `All` 숫자나 전체 알림 개수·읽음 처리 정책을 추가하는 요구가 아니다.
+- 원본 context/screenshot 및 상위 구조를 읽기 전용으로 확인했다. `[치과] 알림센터*알림 인박스`에 `APP & Mobile Web`과 PC 모달이 있으며, 인접399:23403/23346/23360이0/1/22 세 상태다. 양수는 Unread 텍스트 오른쪽 빨간 pill, 높이16/최소폭20/좌우4/간격4,흰 숫자10/line15/700이다. Figma·댓글은 수정하지 않았다.
+- 기존 Web·Office·Lab은 All/Unread 텍스트만 있었으므로 미읽음 숫자가 미구현이었다. 공유 웹 Inbox 및 양 앱 Inbox에 `unreadCount` 입력을 추가하고 Unread에만 양수일 때 표시한다. 숫자 모름/0이면 숨긴다. 현재 mock controller가 **필터 적용 전 현재 소속 전체 목록**에서 계산하며, 표시 중인 페이지/안읽음 탭 길이를 총수로 추정하지 않는다. 읽음/전체읽음·소속 변경은 기존 상태 처리를 따른다.
+- 새 BE endpoint·payload·숫자 상한 규칙을 만들지 않는다. 실제 연결 때 **현재 소속 전체 미읽음 집계값**이 필요하며, 기존 Swagger boolean만으로 숫자를 알 수 없다는 계약 확인 항목을 추가한다. 개발용 mock 계산을 실제 서버 집계 완료로 보고하지 않는다.
+- 기존 토큰/컴포넌트를 재사용한다. 앱의 숫자는 이미 포함된 LatoLatin-Bold를 사용한다. 웹에는 Lato 자산/토큰이 없어 기존 Typography의 Pretendard를 유지하며 새 폰트/라이브러리를 도입하지 않는다. 따라서 숫자 글꼴까지 Figma와 동일하다고 주장하지 않는다. Lab 공용 Chip의 괄호 숫자/0표시 동작은 다른 사용처까지 바꾸지 않고 해당 화면만 보완한다.
+- 코드 변경은 제품별 Inbox/현재 mock 연결의2파일씩이며 Storybook·영구 테스트·별도 상품 화면을 추가하지 않았다. 독립 소스 검토에서 미읽음 전달/선택 탭/기존 번역·접근성 상태에 추가 결함을 찾지 못했다. 최종 실행·검사·커밋은 아래 마감 결과를 따른다.
+
+| 제품 | 최종 코드·검증 | 범위와 한계 |
+| --- | --- | --- |
+| Web Clinic/Lab | `eb609ddd72b4e9f618ae0585aabcee979136c9d4`. 실제 공유 컴포넌트를 서버 없이 Chromium에 마운트해 PC1280/모바일390, 미제공·0·1·22, All/Unread 전환, 목록1개와 외부총수22 분리, Clinic/Lab mock3→개별읽음2→같은행재클릭2→전체읽음0 확인 | 초기 스타일에서 gap 값만 있고 flex가 없어 실제간격0인 문제를 root 육안 검토로 찾아 수정했다. 최종실측 텍스트→배지4px/세로중심차0,높이16/최소폭20,숫자10/line15/700,red600/white. 폰트는 Pretendard 유지. 브라우저오류0이며 통합제품 로그인 화면 검증은 실행 보류로 하지 않음 |
+| Office | `09a777ad92b8c356e71db0877aef1678f45fdb55`. Inbox·controller2파일만 변경. 기존 LatoLatin-Bold/body4/red600 재사용, 소속별mock전체수 입력 | iOS/Android 영향 화면 실행·숫자/읽음/필터 검증. 기존 전체typecheck6진단 유지, 변경파일 신규진단 없음 |
+| Lab | `91534d29e703de3edabee563f08f8c7671143f80`. Inbox·controller2파일만 변경. 공용Chip의다른소비자는유지하고 이 화면 Unread 배지만 보완 | iOS/Android 영향 화면 실행·숫자/읽음/필터 검증. 기존 전체typecheck5진단 유지, 변경파일 신규진단 없음 |
+
+- 웹 필수 pre-commit의 Clinic/Lab/Admin 타입검사, pre-push3제품lint(error0/기존warnings), Admin guard9·shared21+32 및coverage변화없음 통과. UI ESLint의 기본 실행에서 기존 Storybook plugin 중복 로드가 있어 UI config를 독립 지정해 변경 파일을 검사했으며 Git hook은 우회하지 않았다.
+- 양 앱 변경 파일 ESLint/Prettier/diff 검사 통과. 네이티브·공용Chip·번역문구·BE요청은 변경하지 않았다. 지금 확인한 mock 읽음/숫자 동작을 실제 REST 읽음/FCM/최종 QA 완료로 확대하지 않는다.
+- **양 앱 최종 실행:** Office/Lab 각각 iOS·Android에서0/1/22·All/Unread 전환 중 배지 유지·개별읽음 감소·전체읽음0숨김을 확인했다. 22건은 메모리 mock에만 주입하고 복원했다. 상세는 `/tmp/apps-unread-badge-runtime-1105.md`; 이번 변경 화면의 최종 코드 검증이며 실발송/실서버 읽음은 아니다.
+- **마감:** 세 제품 기존 feature 브랜치에 위 HEAD로 commit/push하고 각각 ls-remote 일치·clean·ahead/behind0/0 확인. PR·외부 문서/댓글 변경 없음. 사용자 확인용 실행 보류를 반영해 웹서버는 시작하지 않았고, 변경 검증용으로 재기동했던 iOS/Android·Metro8081/8082도 종료했다. 로그인·기기 데이터·권한은 유지한다. Cursor IDE 전환 요청은 더 이상 대기 조건이 아니다.
+- 원본 세 상태 이미지는 `/tmp/notification-figma-399-{23403,23346,23360}-1105.png`, 웹 최종렌더 `/tmp/dentlink-unread-{1280,390}-22-1105.png`, 결과 `/tmp/dentlink-web-unread-render-results-1105.json`. 대표앱은 `/tmp/office-ios-count22-all-1105.png`, `/tmp/lab-android-count22-all-1105.png`. 임시산출물을 제품 저장소에 추가하지 않았다.
 
 ## 2026-11-04 확정 범위에 맞춘 잔존 코드 정리·검증
 
@@ -151,13 +175,13 @@
 
 ## 제품 작업 위치와 Git
 
-2026-11-04 최종 후속 마감: 기존 checkout/branch/worktree를 유지했다. Web은 앞선 Lab 밀링 결제 제외·Clinic Credits Email 상태이며, Office/Lab은 이메일 분리 후 불필요해진 native 의존까지 정리했다. 원격 확인·로컬 실행 종료 결과는 아래 마감 기록을 따른다.
+2026-11-05 후속 구현: 기존 checkout/branch/worktree에서 Unread 숫자 표시를 추가했다. 앞선 Lab 밀링 결제 제외·Clinic Credits Email·이메일 잔존 native 정리는 유지한다. 검증·원격·로컬 실행 상태는 각 날짜의 최신 마감 기록을 따른다.
 
 | 제품 | checkout | branch / upstream | 원격 반영 HEAD |
 | --- | --- | --- | --- |
-| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` / `origin/feature/DL-17058` | `873fb2556bee54bcc2bfe836478048cb78ee91c9` |
-| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` / `origin/feature/DL-17059` | `cefac78668b77a1fd3781cfa01b7da0860808a03` |
-| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` / `origin/feature/DL-17060` | `b92207c5e36747e811a23001868cde9b46c860bc` |
+| Web | `/Users/parkjongsun/Repository/dentlink-client-notification-center` | `feature/DL-17058` / `origin/feature/DL-17058` | `eb609ddd72b4e9f618ae0585aabcee979136c9d4` |
+| Office | `/Users/parkjongsun/Repository/dentlink-app` | `feature/DL-17059` / `origin/feature/DL-17059` | `09a777ad92b8c356e71db0877aef1678f45fdb55` |
+| Lab | `/Users/parkjongsun/Repository/dentlink-lab-app` | `feature/DL-17060` / `origin/feature/DL-17060` | `91534d29e703de3edabee563f08f8c7671143f80` |
 
 - Web 오늘 주요 단위: `5cde12f8f` 이메일 설정 분리 → `eceb6bbe1` 실제 소속 연결 → `056056c92` 전환 취소/모바일 토스트 → `d11fb8759` 권한/Shipping.
 - Office: `b78947f` native 분리 → `35425f2` 공통 연결/OS 복귀 → `c85865d` Credits 표시 → `358b400` 중복/소속 경합 → `18033bc` raw 링크 타이머 → `8f09cb1` 채팅 ID → `6bf1c58` 설정 권한 → `b57bfbe` 설정 배너 1회.
@@ -175,6 +199,7 @@
 
 ## 로컬 환경·개발 계정 마감
 
+- **11/5 최신:** 사용자 확인용 화면 실행은 보류했다. 후속 Unread 배지 검증을 위해 재기동한 기존 시뮬레이터·에뮬레이터와 Metro8081/8082는 종료했다. 웹은 서버 없이 실제 컴포넌트 렌더로 검사했으며3000/3005는 이 세션에서 시작하지 않았다. 기존 로그인·키체인·권한 유지. 아래11/4 이전 종료 기록은 당시 근거다.
 - **11/4 확정 범위 정리 후 최종 마감:** Office/Lab 양 OS 영향 검증을 위해 재실행한 Metro8081/8082·Android AVD·iPhone17Pro·해당 DeviceHub 창을 모두 종료했다. 3000/3005/8081/8082 listener 없음, adb 기기0·booted simulator0 확인. 양 앱 원래 Home/소속·로그인·OS 권한과 Keychain은 보존했다. Office Android OWNER/iOS MEMBER, Lab 양 OS 기존 소속에서 확인한 범위와 미검증은 최신 범위 정리 절을 따른다.
 - **11/4 Credits Email 후속 마감:** Clinic Web3000/Office Metro8081·전용 브라우저·양 OS 기기/DeviceHub 창을 실행해 영향 검증한 뒤 종료했다. 기존 로그인·권한·앱 데이터는 보존했다. 앞선 Lab 검증 서버/기기도 계속 종료 상태다.
 - **11/4 후속 검증 마감:** 위 밀링 결제 제외 검증에 필요한 Lab Web3005/Metro8082·iOS/Android만 잠시 실행 후 종료. 3000/3005/8081/8082/9233 listener 없음, adb 기기 없음, booted simulator 없음을 재확인했다. 아래11/3 보관 로그인·Keychain·기기 데이터는 그대로다.
