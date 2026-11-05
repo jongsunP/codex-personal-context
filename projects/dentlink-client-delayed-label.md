@@ -1,6 +1,16 @@
 # 치과 웹 완료·취소 주문 지연 라벨 — DL-17141
 
-## 현재 체크포인트 — 웹 필요 구현 완료·앱 인계·대기, 2026-11-05
+## 현재 체크포인트 — 기공소 누락값 라벨 숨김·PR 갱신·대기, 2026-11-05
+
+- **추가 사용자 요구:** 기공소의 isDelayed 키/값이 없으면 라벨을 아예 표시하지 않는다. 실제 배포 때 코드 주석의 서버 확인 사항을 처리하고, 확정된 계약에 맞춰 로직을 더 일반적으로 정리한다. 이 요구가 아래의 이전 'LAB 웹 추가 변경/배포 불필요' 판단을 대체한다.
+- **완료:** 상세의 배지 표시 조건에 `(serviceType !== "LAB" || typeof isDelayed === "boolean")`을 추가했다. LAB 키 누락/undefined/null은 Delayed·On Time 모두 숨기고 true/false는 기존 서버 판정 표시를 유지한다. OFFICE의 완료·취소 지연 숨김, false/undefined On Time 및 날짜/목록 동작은 그대로다. commit `0b01b1427ca92f64515e86fc3d09b81063eead71`, local/upstream 일치·clean.
+- **PR:** [#4837](https://github.com/Innvoaid/dentlink-client/pull/4837)을 `[DL-17141] 치과 지연 라벨 숨김 통일 및 기공소 누락값 처리`로 갱신했다. release/v1.92.0 대상 일반 OPEN, 최종 HEAD 확인. merge·배포는 하지 않았다.
+- **배포 TODO:** shared 상세133–137행에 GET `/lab/orders/{orderId}`의 deliverySchedule.isDelayed와 POST `/lab/orders/search`의 isDelayed 제공·판정 일치를 실제 배포 시 확인하고, 확정된 boolean 계약에 맞춰 선택 타입/서비스별 임시 분기를 공통 표시 조건으로 단순화하도록 남겼다. 날짜 재계산·누락값을 정상으로 간주하는 fallback은 없다. 아직 실제 서버 계약/배포 확인이나 후속 일반화는 수행하지 않았다.
+- **배포 범위 정정:** 이제는 누락값 숨김 때문에 **Clinic·Lab 웹 모두** PR 전달 범위다. Lab 앱 상세 WebView는 Lab 웹 배포를 소비한다. shared-only diff이므로 실제 배포 준비에서 두 웹 workflow trigger를 최종 release→reset-stage diff로 확인해야 한다. LAB 앱 네이티브 처리는 별도 앱 세션 담당이다.
+- **검증:** 최종 실제 ReactDOM 컴포넌트 렌더100/100 통과. LAB 누락키/undefined/null 15조합만 On Time→미표시로 바뀌고 나머지 boolean·OFFICE·날짜·PC/모바일 목록은 보존된다. Clinic/Lab/Admin 타입, 변경 파일 lint/Prettier, 정상 push hooks, 최종 E2E NO_IMPACT mark/check 통과. 브라우저·실계정 API·기기·실제 E2E 검증은 아니며 증거는 `/tmp/dl-17141-followup/render-results.json`, `missing-delay-push.log`다.
+- **공유·마감:** 기존 사용자 공유 승인에 따라 앱 채팅 01a1aa21-103b-7e82-b530-9b203c18cfe9에 최신 누락값 기준, 배포 TODO, LAB 웹 추가 배포 범위와 PR 상태만 전달했다. 전송 성공 확인 후 별도 진행 조회/회신/기기 검증/새 배포 요청은 하지 않았다. 개인 체크포인트를 commit/push하고 대기한다. 다음 실제 배포 요청에서 TODO·계약·트리거를 검토한다.
+
+## 이전 웹 구현 마감·앱 인계 기록 — 2026-11-05
 
 - **마감 확인:** 사용자의 최종 정리(치과 모든 노출부 숨김, 기공소 수동 판정을 서버값으로 통일)를 기준으로 웹에 필요한 구현은 모두 끝났다. 기공소 웹은 이미 서버 판정을 사용하므로 추가 변경이 없다. PR4837의 머지·배포는 별도 남은 전달 단계이며 구현 미완료와 구분한다. 마감 시 단건 조회로 PR OPEN/일반/release v1.92.0 대상·HEAD3d3344fef·제품 clean을 재확인했다.
 - **공유 완료:** 사용자의 명시 승인으로 앱 채팅 `치과앱 완료·취소 주문 지연 라벨`(01a1aa21-103b-7e82-b530-9b203c18cfe9)에 웹 PR 상태, 웹뷰 배포 경계, LAB 목록/상세 서버 판정 정합성 및 필드 선행조건, 치과 목록 실노출 근거의 한계만 전달했다. 전송 성공 확인 후 앱 진행을 추가 조회하지 않는다. 새 구현·검증·배포·회신 요청은 하지 않았다. 앱 담당의 최신 DL-17262 체크포인트는 로컬 구현/관련 검증 완료, commit/push/PR/배포 미수행으로 구분돼 있다.
