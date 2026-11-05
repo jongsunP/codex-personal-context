@@ -2,7 +2,8 @@
 
 ## 현재 체크포인트 — v1.92.0 스테이징 PR 준비, 2026-11-05
 
-- **사용자 요청:** #4835를 직접 머지했다고 알린 뒤 정해진 스테이징 프로세스로 v1.92.0 전달을 요청했다. 기존 사용자 배포 지침에 따라 stage reset/recreate → 배포 PR까지 준비하고 새 PR의 별도 병합 승인을 기다린다. 아래 구현 PR 미병합 기록은 당시 이력이다.
+- **최신 사용자 지시:** “머지배포는 내가할께 PR 까지했으면 대기”. PR4836 준비로 이번 요청을 마치며, 머지·배포는 사용자가 직접 진행한다. 추가 승인 질문·PR/Actions/서빙 상태 조회·자동 감시·후속 구현 없이 대기한다. 아래 PR 상태는 준비 당시 확인값이다.
+- **요청 이력:** #4835를 직접 머지했다고 알린 뒤 정해진 스테이징 프로세스로 v1.92.0 전달을 요청하여 stage reset/recreate → 배포 PR까지 완료했다. 아래 구현 PR 미병합 기록은 당시 이력이다.
 - **병합 확인:** #4835는 14:37:03 KST `fb9d64ed0c04ab41be4e9da3de62788783bc60df`로 release/v1.92.0에 병합됐다. 그 뒤 #4834 청구서 다운로드/API 후속 수정도 14:37:30 KST 병합되어 최신 release는 `6a953cb1a6cf524e248865e4868b839ed24cdf55`다. 두 수정 모두 이번 전달 범위에 포함된다.
 - **완료:** [일반 스테이징 PR #4836](https://github.com/Innvoaid/dentlink-client/pull/4836)을 `release/v1.92.0 → stage`로 생성·첨부했다. GitHub 실제 OPEN/merged:false/draft:false/mergeable:true, base `c5a4b5e372fb7734c72a5faec6807e7b554c1dd6`, head `6a953cb1a6cf524e248865e4868b839ed24cdf55`, 13커밋/108파일(+6844/-1174)을 확인했다. 전체 GitHub 파일 목록이 로컬 diff와 동일하다.
 - **stage 재생성:** 기존 stage `aa01dd4d6bb354b8d8bab28daf62cb2f80a67b3d`, 관련 열린 PR 없음, protection:false·effective rules:[] 확인. 복구 참조 `refs/recovery/stage-before-v1.92.0-dl17141-20261105` 보존 → 예상SHA lease로 remote stage 삭제 → 부재·최신master 재확인 → 비존재 lease로 위 master에서 stage 재생성. 원격 stage=master 확인. 과거 stage→main rename 안내가 push에 출력됐지만 실제 stage는 의도SHA이고 main ref는 없다.
@@ -11,7 +12,7 @@
 - **검증:** 삭제/생성 push 모두 정상 hooks 통과(기존 lint warning·error0, Admin guard·shared53/coverage). 현재 feat/DL-17141 checkout의 검사이며 최신 전체 release 런타임 QA와 구분한다. 최종 가드 `NEEDS_RUN` mark/check 완료. 미대응 locator 파손은 없으며 Change→Upload는 E2E에도 반영돼 있지만, 릴리즈의 배송 상태전환·CAD 승인/완료/피드백 STG 실증은 남는다. 이번 Delayed 단독은 NO_IMPACT이며 전체 릴리즈 가드와 구분한다. 실제 데이터 변경 E2E는 실행하지 않았다.
 - **배포 상태 한계:** 재생성 직후 시작 메타데이터를 한 번 조회했을 때 새 stage push run은 없고 이전 13:53:23 KST/aa01dd4d6의 세 run만 보였다. 이후 감시·결과 조회는 하지 않았다. PR4836을 병합하거나 수동 dispatch하지 않았다. 실제 최신 릴리즈 배포·서빙리비전·Staging 웹뷰/사용자 QA는 아직 확인하지 않았다.
 - **보존:** product checkout `feat/DL-17141@488575e8f`, upstream 동일·clean. 원본 feature/release 및 다른 worktree/IDE/서버는 변경하지 않았다. 상세 임시 증거는 `/tmp/dl-17141-qa/stage-delete.log`, `stage-create.log`, `stage-pr-files-{local,github}.txt`다.
-- **다음:** 사용자의 #4836 병합/배포 시작 승인 또는 직접 병합 보고를 기다린다. 승인되어 시작하면 최초 결과 조회는 시작 후15분 이후, 이후 최소3분 간격을 지킨다. 배포 성공과 독립 STG 전체 E2E 결과·실제 화면 QA는 각각 구분한다.
+- **다음:** 사용자의 새 요청을 기다린다. 이후 배포 결과 확인을 요청받으면 시작 후15분 및 후속 최소3분 간격 규칙을 적용하고, 배포 성공·독립 STG 전체 E2E 결과·실제 화면 QA를 각각 구분한다. 사용자의 직접 수행 예정 발언은 실제 병합·배포 완료 증거가 아니다.
 
 ## 구현 PR 전달 당시 체크포인트 — 2026-11-05
 
