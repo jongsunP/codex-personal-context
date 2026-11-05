@@ -1,6 +1,17 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 브레이크포인트 — 2026-11-05 · DLDS 갤러리 예제 누락 추가 확인, 구현 전 보고
+## 현재 브레이크포인트 — 2026-11-05 · DLDS 갤러리 누락 보완 PR62 제출, 오너 반영 대기
+
+- **최신 사용자 승인·범위:** 통합된 Studio 구조에 맞춰 원래 의도한 DLDS 갤러리 누락/미작업 예제를 보완하고 브리핑·PR까지 진행하도록 승인했습니다. 하네스·원천 UI·npm 변경은 제외하며 병합하지 않습니다. 이전의 구현 전 보고/전체 대기보다 이 한정 후속 요청이 우선합니다.
+- **작업 위치·저장:** `/Users/parkjongsun/Repository/dentlink-studio`, clean main을 pull한 `d5d83af17fcffba339d2e499c8c0aca0c5353c34`에서 새 `feat/DL-17046-gallery-examples` 생성. 커밋 `383bfadff43a95591bbd023c965598ed75d54d81`, origin push 완료, worktree clean. [PR #62](https://github.com/Innvoaid/dentlink-studio/pull/62)는 main 대상 OPEN·일반 PR이며 이 채팅에 연결했습니다. 이전 feat/dlds-gallery 원본/PR60은 그대로 보존합니다.
+- **변경 5개 파일:** packages/dlds-preview README, App.tsx, DateExamples.tsx, GalleryNavigation.tsx 수정 및 ButtonExamples.tsx 추가(256+/22-). Badge/EllipsisTypography/LoadingSpinner 직접 실행·검색·hash 링크, Button 로딩+문구/로딩만/아이콘/95×48 붙은 화살표, TextInput 왼쪽 아이콘·단위·로딩, Stepper 32/40px·readOnly/disabled, SegmentControl S/M/L·아이콘, regular Tabs54px, Tooltip HELP/disabled/NONE, Popup 아이콘·단일 버튼, 단일/기간 달력40↔46px을 보완했습니다. 메뉴34→38개(독립컴포넌트 수와 다름). 모든 공개 export를 독립 메뉴로 세지 않으며 내부 부품/배치 helper는 README에 구분했습니다.
+- **검증:** frozen install, pnpm verify(203개 중202 pass/0fail/기존1skip), DLDS typecheck, pnpm build, studio-trace, diff-check 성공. 최종 Chromium1440/390px에서 검색·hash 재진입, 말줄임 hover/짧은 문구, Button 로딩·클릭·화살표 경계/95×48, Stepper32/40/readonly/disabled, 장식 입력창, SegmentControl 선택, Tooltip HELP280px·비활성 트리거 키보드/Escape, 영역 로딩, 단일 Popup, Calendar/Range 크기 변경 및 값 보존, Tabs52/54/46px, 메뉴ID, 모바일 페이지 넘침 없음, 기존 DLOS 로딩까지13개 묶음 통과. browser error0; 기존 npm styled-components DOM prop 경고는 유지. 새 테스트 파일/개발 의존성은 추가하지 않았습니다. 전체 서비스 QA·Figma 전체 재대조·모든 props 조합 검증은 아닙니다.
+- **원격 상태/남은 일:** PR62 `Project scope` 실패(run41984545424)는 작성자jongsunP가 공통 코드 오너가 아닌 기존 정책 때문입니다. Vercel 실패는 `Git author jongsunP must have access to the project on Vercel to create deployments.`로 확인했습니다. 코드 오류와 구분하며 이메일·훅·정책·권한을 변경/우회하지 않았습니다. Verify monorepo run41984545476은 마지막 조회 시 진행 중이며 원격 성공으로 보고하지 않습니다. 이전 PR56→60처럼 Tom이 공식 오너 반영 경로로 처리할 부분을 PR 본문에 기록했습니다. 사용자에게 새 필수 권한 요청을 반복하거나 대신 메시지를 보내지 않습니다.
+- **Jira:** 사용자 담당 DL-17046에 이번 보완/PR/검증/오너 후속 댓글44838을 추가하고 반환 본문을 확인했습니다. 사용자가 정한 담당 작업 완료 기준에 따라 기존 Done 유지. 상위 DL-16437과 아카이브 DL-16471은 변경/재개하지 않았습니다.
+- **범위·재개점:** Client·원천 패키지·lockfile·DLOS·하네스·환경/인증·권한 설정 변경0, 병합/배포0. 이번에 띄운 dev서버4100 및 검증 브라우저를 종료했습니다. 로컬에서 보려면 Studio 이 브랜치에서 `pnpm dev` → `http://127.0.0.1:4100/design-system/dlds`. 다음은 사용자/Tom의 리뷰·오너 반영 안내를 기다리는 것입니다. 자동 모니터링·새 구현 없이 대기합니다.
+- **로컬 증거:** `~/.codex/backups/2026-11-05-dlds-gallery-examples/`에 결과JSON·런타임스크립트/로그·스크린샷·verify/build로그·PR본문 보관(개인Git에 산출물 미포함). 검증 중 셀렉터 오류는 실제 DOM의 Segment aria-pressed, Popup 기본trapFocus=false에 맞게 수정했고 제품 오류로 기록하지 않습니다. Tooltip은 viewport진입 후 포인터를 치우고 키보드 포커스를 검사했습니다. 아이콘 정렬은 원천 변경 없이 조합 예제 스타일로만 지정합니다.
+
+## 이전 브레이크포인트 — 2026-11-05 · DLDS 갤러리 예제 누락 추가 확인, 구현 전 보고
 
 - **사용자 후속 질문·조사 범위:** 동료의 추가 보완 여부와 별개로 DLDS 컴포넌트 등록이 아직 빠져 있지 않은지 물었습니다. Client master `c5a4b5e372fb7734c72a5faec6807e7b554c1dd6`의 shared/dlds 공개 index/실제 소스, Studio main `d5d83af17fcffba339d2e499c8c0aca0c5353c34`의 전체 갤러리 TSX·메뉴·README, 이전56bc1be5의 DESIGN_COVERAGE.md를 읽기 전용 대조했습니다. 새 Figma 원본을 전수 조사하거나 런타임을 실행한 것은 아닙니다.
 - **앞선 결론 정정:** '동료 추가 변경 때문에 다시 맞출 부분이 없다'는 판단은 유지되지만, 이를 'DLDS 갤러리에 더 보완할 것이 전혀 없다'로 확대한 답변은 부정확했습니다. 원래 주요 항목 복원과 실제 API/변형 전체 예제 제공은 별개입니다. 기존 PR60 반영·검증 사실은 유지하며 이번 발견으로 제품 컴포넌트가 미구현됐다고 단정하지 않습니다.
