@@ -9,6 +9,15 @@
 - 변경 파일 lint/Prettier/diff 검사 통과. 전체 TypeScript 진단은 수정 전후 모두 5개로 내용까지 동일하며 변경 파일 오류는 없다. 관련 기존 Jest 없음; 요청 없는 테스트 파일은 추가하지 않았다. 별도 코드 검토에서 조치할 결함을 발견하지 못했다.
 - iOS/Android Development의 최종 소스 홈 4조건씩 검증과 원래 기기 연결 복구를 완료했다. 실서버가 새 목록 필드를 제공한다는 증거는 아직 없으며 사용자 확인 계약에 따른 query-cache fixture 검증과 구분한다.
 
+## 인계 후 누락 확인 — 2026-11-05
+
+- 사용자가 다른 세션의 완료 인계 중 미처리 사항을 확인·처리하도록 요청했다. 개인 context와 작업 branch를 pull하여 최신 상태를 확인했고, 웹·통합알림센터의 마지막 turn 및 현재 Lab diff를 대조했다.
+- 추가 앱 구현 누락 없음. 웹의 치과 전용 `shouldHideOfficeDelayedBadge`와 웹 목록의 `officeEstimatedArrivalAt` 조건은 Lab 앱에 이식할 대상이 아니다. Lab 앱은 기존 `estimatedArrivalAt` 존재 조건과 서버 `item.isDelayed` 판정을 유지한다. 독립 코드 검토도 같은 결론이며 제품 파일 변경은 없었다.
+- 현재 파일 해시는 기존 양OS 검증의 `f64e9b1396d1c0341e12bf085df74465fae3be8f`와 동일하다. 기기 점유 때문에 남은 검증은 없다. 통합알림센터는 검증 종료·두 기기 Office `feature/DL-17059@933d054`/8081/Home 복원을 인계했다. 이번 확인에서는 기기·Metro를 조작하지 않았다.
+- 웹 후속 [PR4837](https://github.com/Innvoaid/dentlink-client/pull/4837)은 GitHub 단건 조회로 OPEN·미병합·일반 PR, `feat/DL-17141-delay-label@3d3344fef → release/v1.92.0`를 확인했다. 선행 PR4835·4836의 완료와 후속 PR4837의 미전달을 구분한다. 이 서버 판정 통일을 위한 별도 LAB 웹 변경/재배포는 필요 없다.
+- 저장소에 설정된 Swagger URL을 실제 조회했다. DEV `/v3/api-docs`는 HTTP200이며 `OrderListLabDto`에 `isDelayed`가 아직 없고 `OrderDeliveryScheduleDto.isDelayed`는 boolean이다. STG의 같은 설정 URL은 HTTP404이므로 STG 명세/배포 상태를 확인하지 못했다. Swagger는 실제 인증 주문 응답의 필드 제공이나 목록·상세 판정 일치를 증명하지 않는다.
+- 새 목록 필드가 명세에 없어 생성 모델 갱신·보완 interface 제거는 아직 진행할 수 없다. 배포 전 실제 목록/상세 응답 정합성 확인, 제품 commit/push/PR/배포 단계가 남는다. 이번 일반적인 후속 처리 요청을 명시하지 않은 제품 commit/push/PR/merge/배포 승인으로 확대하지 않았다.
+
 ## 최종 홈 화면 검증
 
 - 동일 worktree/Development/Metro 8094의 최종 파일 해시 `f64e9b1396d1c0341e12bf085df74465fae3be8f`(API 선행 조건 주석 포함)로 두 플랫폼을 확인했다.
@@ -21,13 +30,14 @@
 
 | 제품·기기 | 기존 라벨 위치 | 기존 판정 및 변경 |
 | --- | --- | --- |
-| 치과 웹 PC·모바일 | 주문목록 | 서버 `row.isDelayed`; 기존 완료 날짜 전용·취소 미표시 분기로 지연 라벨이 이미 숨겨져 있어 추가 수정 없음 |
-| 치과 웹 PC·모바일·앱 WebView | 주문상세 배송 일정 | 서버 `deliverySchedule.isDelayed`; Office이면서 true·COMPLETED/CANCELED인 경우 숨김을 추가한 웹 PR4835로 처리 |
+| 치과 웹 PC·모바일 | 주문목록 | 서버 `row.isDelayed`와 `officeEstimatedArrivalAt` 존재 조건; 기존 완료 날짜 전용·취소 미표시는 유지하며 후속 PR4837에서 치과 숨김 helper를 명시적으로 공통 적용 |
+| 치과 웹 PC·모바일·앱 WebView | 주문상세 배송 일정 | 서버 `deliverySchedule.isDelayed`; Office이면서 true·COMPLETED/CANCELED 숨김을 PR4835로 처리했고 후속 PR4837에서 목록과 helper 공통화 |
 | 치과앱 iOS·Android | 홈 Track Your Order·주문목록 | 서버 `item.isDelayed`; 위 Office 숨김 조건을 PR340으로 추가, Staging CodePush v343은 완료 |
 | 기공소 웹 PC·모바일·앱 WebView | 주문상세 배송 일정 | 기존부터 서버 `deliverySchedule.isDelayed`; Office 숨김 조건 적용 안 함, 이번 추가 수정 없음 |
 | 기공소앱 iOS·Android | 홈 Track Your Order | 일반은 `officeDeliveryRequestAt`, remake는 `officeRemakeDeliveryRequestAt`와 `estimatedArrivalAt`를 앱에서 비교하던 것을 서버 `item.isDelayed`로 변경 |
 
 - 기공소앱 Orders 목록에는 이 라벨이 없고, 기공소 웹 홈·목록·보드에도 없다. 치과 웹 홈·보드에도 이 라벨은 없다. 보드의 빨간 달력/날짜나 통계는 이 라벨로 집계하지 않는다.
+- 위 위치는 코드상 라벨 경로다. 치과 웹 목록의 실제 응답에 필요한 날짜가 항상 존재한다는 의미가 아니다. 웹 세션은 합성 검증에서 날짜 필드를 보충한 사실과 실제 노출 단정 오류를 사용자에게 정정했다. 실제 서버 응답을 확인한 결과로 확대하지 않는다.
 - 기존 Lab 날짜 계산은 요청일이 도착 예정일보다 늦거나 같은 날이면 On Time, 그 외 Delayed였다. 변경 후에는 날짜 관계와 무관하게 서버 true/false를 따른다.
 - Lab의 배송 가능 여부·NEW 제외·필수 날짜 존재 조건과 호출부의 CANCELED 제외는 기존 그대로다. COMPLETED+true는 기존처럼 Delayed 표시 대상이다. Office의 추가 terminal 숨김과 혼동하지 않는다.
 - `isOfficeOrder`의 `"isDelayed" in item` 분기도 제거했다. 새 필드를 받은 Lab이 Office로 오인되어 잘못된 날짜를 읽고 숨겨지는 문제를 방지한다. 생성 모델은 직접 수정하지 않고 컴포넌트 내부 확장 interface만 사용한다.
