@@ -4,15 +4,19 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
-## DL-17138 치과 지연 라벨 구현·전달 진행 — 2026-11-05
+## DL-17138 치과 지연 라벨 담당 세션에 위임 — 2026-11-05
 
+- **메인 마감/운영 수정:** 사용자가 “세션을 넘겼으면 각 세션에 맡기고 더 확인하거나 계속 폴링하지 말라”고 명시했고 앞으로의 공통 지침으로 지정했다. 메인은 진행 조회·대기 루프를 중단했다. 아래 상태는 마지막 확인 시점의 기록이며 후속 작업·QA·PR·사용자 보고는 각 담당 세션이 소유한다. 이곳에서 자동 종합·재검증하지 않으며 사용자 요청 시에만 다시 확인한다. 이 원칙을 공통 AGENTS/SESSION_WORKFLOW에 반영했다.
+- **웹 전달 완료:** [PR #4835](https://github.com/Innvoaid/dentlink-client/pull/4835), `feat/DL-17141 → release/v1.92.0`, HEAD `488575e8f`. 메인에서 일반 PR·미병합·대상 release·변경 한 파일을 재조회했다. PC/모바일 로컬 화면 및 관련 검사 통과, 실제 Staging/운영 반영은 아직 없다. 웹 세션은 개인 기록 저장 후 사용자 검토 대기다.
+- **앱 PR 준비/검증 진행:** [PR #340](https://github.com/Innvoaid/dentlink-app/pull/340), `feat/DL-17248 → release/v2.2.4`, HEAD `7f32589`. 일반 PR·미병합·배지 한 파일 8줄 변경을 메인에서 확인했다. 코드 검토용이며 모든 영향 화면·역할 검증 완료나 merge-ready 상태를 뜻하지 않는다. CodePush 보류는 아래 최신 사용자 지시를 따른다.
 - **사용자 승인/최신 변경:** 아래 범위 구현을 승인했고 웹은 release/v1.92.0 대상 PR까지, 치과앱은 PR 및 iOS·Android **Staging CodePush**까지 요청했다. 이후 앱 세션에서 **“우선 PR을 검토할테니 코드푸쉬는 다시 승인하면 그때”**라고 직접 지시한 것을 메인에서 확인했다. 현재 앱 배포는 보류하며 재승인이 필요하다. PR merge·Production·스토어 출시는 포함하지 않는다. 다른 IDE/로컬 실행 환경은 이번 작업에서 제외한다.
+- **추가 공통 지침:** 앱 세션에서 사용자가 첫 화면 제어 도구 실패 시 다른 조작법으로 계속하고 가능한 대안까지 실패한 경우에만 보류하라고 앞으로의 방향을 명시했다. 지정 Android 에뮬레이터 ADB 조작을 포함한 동일 승인 범위의 대안 사용을 `SESSION_WORKFLOW.md`의 Existing Windows And Layout과 앱 런타임 검증 규칙에 반영했다. 도구 변경만으로 반복 승인 질문을 하지 않으며 상위 도구 제한·대상 경계는 유지한다.
 - **제품별 카드/세션:** 기존 [웹 DL-17141](https://innovaid.atlassian.net/browse/DL-17141)의 제목·본문을 정리하고 [치과앱 DL-17248](https://innovaid.atlassian.net/browse/DL-17248)을 같은 부모 아래 Frankie 담당 하위 카드로 생성했다. 부모 댓글은 작성하지 않았다. 같은 메인 프로젝트/local Mac에 웹 `01a1aa21-0ebc-75c0-9791-e5b21e524224`, 앱 `01a1aa21-103b-7e82-b530-9b203c18cfe9` 세션을 생성했으며 등록·초기 실행·실제 gpt-6-astra/ultra 설정을 확인했다. 웹은 기존 checkout의 feat/DL-17141, 앱은 main 기반 임시 worktree의 feat/DL-17248로 준비하도록 맡겼다. 실제 생성 결과·검증·PR·CodePush는 각 세션에서 확인 후 종합한다.
 
 - [상위 DL-17138](https://innovaid.atlassian.net/browse/DL-17138), Frankie 담당 [하위 DL-17141](https://innovaid.atlassian.net/browse/DL-17141)의 본문 및 모든 댓글을 현재 Atlassian 연결로 읽었다. 확정 기준은 부모의 Frankie 댓글 **44831**: **치과 웹·앱에서 지연 true + 완료/취소 주문의 라벨을 숨긴다.** 실제 코드 필드/enum은 `isDelayed`, `COMPLETED`, `CANCELED`다. 기공소는 대상이 아니며 기존 정상/진행 중 표시나 날짜·상태값 자체를 바꾸지 않는다. 초기 접수 기록의 댓글44828 표기는 재조회하여 바로잡았다.
 - 코드 대조: 웹 최신 master c5a4b5e37 및 release/v1.92.0 05243d50c의 PC/모바일 주문목록은 이미 완료·취소에서 badge를 표시하지 않는다. 공통 주문상세 `OrderDetailBoxDeliverySchedule`는 날짜 조건만으로 표시하므로 OFFICE에 한정해 요구 조건을 추가할 대상이다. Office 앱 main7f586790e/release/v2.2.4 ed1d03fa의 `OrderStatusBadge`는 완료 제외가 없어 홈 Track Your Order·주문목록이 영향 대상이다. 취소는 두 호출부에서 이미 제외된다. 앱 주문상세는 웹 `/orders/{id}` WebView로 웹 수정을 소비한다.
 - 실제 배치: 웹 기존 checkout에 `feat/DL-17141`, 앱 도구 생성 `/Users/parkjongsun/.codex/worktrees/office-delayed-label/dentlink-app`에 `feat/DL-17248`를 준비했다. 앱 기본 checkout의 통합알림센터 `feature/DL-17059@09a777ad9`와 기존 Metro8081은 보존하며 전용8093을 사용한다. 세부 구현·QA·PR·배포 증거는 [웹 정본](dentlink-client-delayed-label.md)·[앱 정본](dentlink-app-delayed-label.md)에 둔다.
-- 다음: 최종 코드로 완료/취소/진행 중 × 지연/정상, 웹 PC/모바일 상세·기존 목록, 앱 홈/목록·상세 WebView 진입/복귀 및 영향 권한을 검증한다. 앱은 에이전트 시뮬레이터/에뮬레이터 선검증 후 사용자 QA 목록을 전달한다. 웹·앱 PR과 실제 검증 범위를 메인에서 종합하며, 검증·merge·환경 반영을 구분한다. CodePush는 사용자 재승인까지 보류한다. 재개 시 기존 Staging v342 소스 입증이 필요하며 Git의 main/release src 동일성만으로 v342 소스를 단정하지 않는다.
+- 담당 세션의 다음 일: 최종 코드로 완료/취소/진행 중 × 지연/정상, 앱 홈/목록·상세 WebView 진입/복귀 및 영향 권한 검증을 마무리하고 해당 세션에서 보고한다. 앱은 에이전트 시뮬레이터/에뮬레이터 선검증 후 사용자 QA 목록을 전달한다. CodePush는 사용자 재승인까지 보류한다. 재개 시 기존 Staging v342 소스 입증이 필요하며 Git의 main/release src 동일성만으로 v342 소스를 단정하지 않는다. 메인은 후속 폴링 없이 대기한다.
 
 ## v1.92.0 스테이징 병합·사용자 배포 보고 후 마감 — 2026-11-05
 

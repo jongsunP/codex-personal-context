@@ -118,6 +118,11 @@
   verified model and reasoning level, or the highest available combination
   when that is unavailable. Do not silently use lower app defaults; verify
   the actual applied settings after creation.
+- For the Dentlink FE main session, follow **Dentlink Frontend Top-Level
+  Session Model** in `SESSION_WORKFLOW.md`: either do the authorized work here
+  or hand it off. Once session registration and prompt delivery are confirmed,
+  stop automatic progress reads, polling and duplicate supervision. Let the
+  assigned session execute and report; check again only when the user asks.
 - Shared project code, commits, pushes, and PR mutations require the user's
   explicit authorization. Personal memory maintenance in
   `codex-personal-context` is different: at meaningful session closeout, commit

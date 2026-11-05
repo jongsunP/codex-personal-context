@@ -214,6 +214,16 @@ responsibilities rather than forcing the whole product into one checkout.
   small tasks. The user strongly prefers the main session to remain the
   intake and coordination center. Direct implementation in the main session
   is an exception when the user chooses it, not the default for small changes.
+- **Handoff ends automatic monitoring (user instruction, 2026-11-05):**
+  Either perform the authorized work in the main session or hand it over and
+  let the assigned session own implementation, verification and reporting.
+  After confirming session registration and successful prompt delivery, stop
+  automatic progress reads, wait/poll loops, duplicate checks and continuing
+  supervisory messages. Record the handoff and wait; do not keep this main
+  turn running until the delegated task finishes. If the user later explicitly
+  requests status or aggregation here, perform only the requested check.
+  A new request to monitor until completion must be explicit; delegation itself
+  does not authorize ongoing monitoring.
 - Organize implementation sessions by feature, not by device or
   repository. One feature session may coordinate and implement both web and app
   portions across their separate repositories. It must confirm the exact path,
@@ -344,6 +354,15 @@ interaction, not only local development or this notification-center session.
   screen remain allowed within the task. Avoid disrupting unrelated windows.
   If a temporary layout change is necessary, keep it minimal and restore the
   prior arrangement when practical. Explicit user layout instructions prevail.
+- For authorized screen verification, failure of the first control tool is
+  not by itself a blocker. Try suitable available alternatives before pausing,
+  including ADB interaction with the assigned Android emulator. The user gave
+  this standing direction on 2026-11-05; do not ask again solely because the
+  input method changes. Keep the same task/device boundary and comply with
+  higher-priority tool restrictions. If feasible permitted alternatives also
+  fail, report the attempted methods, exact blocker and unverified cases.
+  Do not claim success from a running process or replace agent verification
+  with a request for the user to test instead.
 
 ## Local Development And User Preview
 
@@ -531,6 +550,8 @@ unless their move or cleanup is authorized.
    Deliver the startup prompt directly when the user has requested the
    handoff; do not require them to paste the same information again. If manual
    delivery is needed, provide the prompt in a copyable code block.
+   Confirm successful delivery once, record the handoff, then leave execution
+   and reporting to that session. Apply the no-automatic-monitoring rule above.
 8. At authorized cleanup, verify saved commits, dirty/untracked/ignored files,
    owned processes, and session ownership before removing a local worktree or
    branch. An open PR alone does not require keeping a disposable local

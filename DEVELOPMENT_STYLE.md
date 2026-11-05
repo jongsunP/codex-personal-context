@@ -433,6 +433,10 @@ reduce the agent's actual screen, role and crash verification.
   blocked, report the precise blocker and unfinished checks instead of handing
   off unfinished agent verification as final human QA. Keep agent verification,
   final human QA, and merge readiness distinct.
+- If a screen-control tool fails, apply the alternative-control guidance in
+  [Existing Windows And Layout](SESSION_WORKFLOW.md#existing-windows-and-layout)
+  before declaring device verification blocked. Keep the original screen,
+  role and platform scope when changing the interaction method.
 - Confirm that the running app/Metro uses the intended final checkout/revision
   and a compatible native binary, including the final implementation and review
   fixes. Do not use a mock/demo, an older branch, or a stale bundle as proof of
