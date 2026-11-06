@@ -1,6 +1,18 @@
 # 기공소 지연 판정 API 통일 — DL-17262
 
-## 현재 체크포인트 — 2026-11-06 병합 확인·Staging 배포 후보 확인
+## 현재 체크포인트 — 2026-11-06 Staging 양OS CodePush 완료
+
+- 사용자 최신 명시 승인: **기공소앱은 CodePush 진행**, 클리닉앱은 이 세션에서 적용한 isDelayed 변경만 설명. 아래 11/05의 PR까지만 지시는 이 승인으로 갱신됐다. 웹·merge·tag·스토어 제출·Slack 발송은 이번 범위가 아니다.
+- **Lab iOS·Android Staging v61 / target1.0.5** 업로드 완료. iOS 2026-11-06 14:55:38 KST, Android 14:56:06 KST. 독립 history read-back으로 양OS enabled·mandatory·rollout100 및 description의 정확한 source SHA를 확인했다. 실제 사용자 기기의 OTA 수신·적용은 이번에 확인하지 않았다.
+- 전달 소스는 **`release/v1.0.5@c60968a09b19d03f7220c30cd4a013efe351da0a`**. 기존 밀링 PR35 최종 코드 대비 배지 한 파일만 변경되며 native/lock/package/설정은 동일하다. 배지 blob `997784ff07360e58df162466048b32745760cd8d`도 기존 양OS 최종 검증 코드와 같다. 이전에 우려했던 밀링 변경 누락은 해소됐다.
+- packageHash: iOS `e12c0a0ccc566a7aa4c05807360886f7c2a989f24413e565f572f3fa3a88090b`, Android `5aa250795c5012070f229dcf431b2bea887fbb10194f59097e1ca8bda562aa9a`. read-back 사본은 `/tmp/dl-17262-staging-result.json`이며 임시 파일이다.
+- 전용 managed worktree `/Users/parkjongsun/.codex/worktrees/lab-delayed-api/dentlink-lab-app`를 복원하고 기존 원격 release를 추적하는 `release/v1.0.5`로 전환했다. `yarn install --immutable`, opaque `.env` 상속·ignored 확인, package/Android/Xcode 1.0.5 일치 확인 후 `ENVFILE=env/.env.staging yarn codepush-force:staging-mute` 실행. 양OS Metro production bundle·Hermes·업로드 성공, 배포 후 HEAD/blob 동일·제품 checkout clean. 알림센터의 기본 checkout·기기·Metro는 건드리지 않았다.
+- **앱 구현 요구사항 충족:** Office는 기존 서버 판정에 완료·취소된 지연 라벨 숨김만 추가했고 홈 Track Your Order·Orders 목록에 적용된다. Lab은 자체 날짜 비교를 제거하고 서버 boolean을 사용한다. 키 누락/null/비boolean은 두 라벨 숨김, false는 On Time, true는 Delayed다. Lab에 Office의 추가 완료·취소 숨김을 이식하지 않았으며 기존 날짜·호출 조건은 유지했다.
+- **Clinic 이번 신규 CodePush 없음.** 기존 양OS Staging v343/target2.2.4에 PR340 변경이 반영돼 있다. 해당 배포 source `7f325896e3ed0a862a7f8a2099d50c809e576ba1`와 최신 `release/v2.2.4@4892f1c1849833054453f01145b2f012782bb9da`의 전체 tree가 동일함을 확인했다. Office main에는 아직 숨김 변경이 없으므로 main으로 재배포하지 않는다.
+- 위험 판단은 변경 구조·기존 양OS 표시/키 누락 실행 증거·배포 번들 성공에 근거한다. 해당 검사 범위에서 새 크래시/회귀는 발견하지 못했으며 전체 앱 무결함이나 실제 배포 기기 적용까지 보장한 것은 아니다. 사용자 확인은 **Lab 홈 Track Your Order의 날짜 유지와 서버 값에 따른 라벨**이면 충분하다. 키가 없을 때 라벨이 없는 것은 합의한 정상 방어 동작이다.
+- 남은 일은 정식 배포 전 TODO다: 실제 목록 `data[].isDelayed`와 상세 `data.deliverySchedule.isDelayed`의 boolean·판정 일치 확인, Swagger 생성 타입 갱신, 임시 보완 interface와 분기 정리. 코드 주석은 유지했다. 상세 WebView는 별도 웹 배포 범위이며 이번 OTA로 웹 코드가 전달되지는 않는다. 추가 자동 모니터링 없이 다음 요청을 기다린다.
+
+## 선행 체크포인트 — 2026-11-06 병합 확인·Staging 배포 후보 확인
 
 - 사용자 요청: 클리닉·기공소 앱의 현재 병합 상태를 확인하고 각각 Staging CodePush가 목적이라고 명시했다. 이번 turn은 상태/후보 확인만 수행했으며 CodePush·merge·코드 수정·기기 조작은 하지 않았다. 웹은 계속 별도 세션 범위다.
 - PR34가 2026-11-06 14:29 KST `release/v1.0.5`에 squash 병합됐다. 최신 배포 후보는 **`c60968a09b19d03f7220c30cd4a013efe351da0a`**, target1.0.5다. 배지 blob은 검증한 `997784ff07360e58df162466048b32745760cd8d`와 같아 키 누락 숨김/false On Time/true Delayed 및 날짜 계산 제거가 유지된다.
