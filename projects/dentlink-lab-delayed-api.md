@@ -1,6 +1,18 @@
 # 기공소 지연 판정 API 통일 — DL-17262
 
-## 현재 체크포인트 — 2026-11-06 Staging 양OS CodePush 완료
+## 현재 체크포인트 — 2026-11-06 백엔드 계약 반영 정리·PR36 완료
+
+- 사용자 후속 요청: 백엔드도 이미 Staging 배포됐다고 확인했고, 임시 코드 정리를 **다시 PR까지만** 요청했다. 이번 정리의 merge·CodePush·배포는 미승인이며 미수행이다. 이미 전달한 Lab Staging v61은 그대로 유지한다. Clinic·웹 제품은 수정하지 않았다.
+- [PR36](https://github.com/Innvoaid/dentlink-lab-app/pull/36): `feat/DL-17262-api-cleanup → release/v1.0.5`, HEAD `3bdf3862d3e96c98c1d2708f5835d56c73d44bd9`, 일반 OPEN·CLEAN, **4파일 +16/-27**. 배포된 `release/v1.0.5@c60968a` 후속 정리이므로 해당 release에서 분기했다. PR 자동 title/body 작업 성공 후 실제 base/head·diff·일반 상태를 재확인하고 채팅에 첨부했다. GitHub connector의 Lab 저장소404 후 기존 gh를 사용했다.
+- **Staging 명세 확인:** `https://stg-api.dentlink.io/v3/api-docs/Lab%20API` HTTP200·OpenAPI3.0.1. 기존 기본 `/v3/api-docs`는404지만 `/v3/api-docs/swagger-config`가 올바른 그룹 주소를 안내한다. `OrderListLabDto.isDelayed`와 `OrderDeliveryScheduleDto.isDelayed` 모두 optional boolean이다. 목록 POST `/lab/orders/search`의 `data[]`와 상세 GET `/lab/orders/{orderId}`의 `data.deliverySchedule` 연결까지 명세에서 확인했다. DEV 전체 명세는 아직 목록 필드가 없으므로 이번 정본으로 사용하지 않았다.
+- `swagger-typescript-api@13.13.0`과 저장소 generate 옵션으로 Staging Lab 그룹 명세를 임시 디렉터리에 재생성했다. 그룹 명세로 전체 `Api.ts`를 교체하면 다른 API 타입이 삭제되므로 **생성된 `OrderListLabDto` 블록만 그대로 반영**하고 일치 검증했다. 모델 diff는 `isDelayed?: boolean`과 명세 주석 5줄뿐이다. 생성 결과 `/tmp/dl-17262-generated-staging/Api.ts`, 입력 `/tmp/dl-17262-contract-staging.json`은 임시 자료다.
+- 제품 변경: `src/models/Api.ts`; `OrderStatusBadge.tsx`의 임시 interface·Office union·`isOfficeOrder` 제거; `HomeTrackYourOrderSection.tsx`와 `OrderProgressStatus.tsx`의 잘못 남은 Office 타입을 Lab DTO로 정리했다. 후자 두 TSX는 TypeScript 변환 후 실행 JS가 수정 전후 동일함을 확인했다. 배송 가능 여부·NEW·일반/remake 날짜 존재·키 누락 boolean 가드는 유지한다. 서버 판정만 사용하고 날짜 비교/Office 완료·취소 숨김은 추가하지 않는다.
+- 독립 코드 검토 문제 없음, 변경 TSX ESLint와 diff 검사 통과. 전체 TypeScript 기존 진단 **5개가 수정 전후 바이트 단위로 동일**하다. Prettier는 배지·진행 상태 통과, 홈 섹션은 수정 전후 동일한 기존 포맷 경고가 있어 무관한 재포맷은 하지 않았다. 새 테스트 파일·네이티브 변경/빌드 없음.
+- **최종 양OS 홈 실행 확인:** commit `3bdf386`, Badge blob `f4896536e66adc62c6eb45ac747d8509e6639c80`, Development·전용 Metro8094. true→Delayed, false→On Time, 키 삭제→두 라벨 숨김, remake→Delayed·Remake를 실제 화면에서 확인했고 모든 조건에서 날짜2026/11/10 유지·화면 오류/크래시 미관찰. DEV 응답에는 키가 없어 메모리 fixture로 검증했다. `/tmp/dl-17262-cleanup-runtime/report.json` 및 양OS general/remake PNG가 증거이며 실제 Staging 주문 응답 비교와는 구분한다.
+- 검증 도중 기존 Android·Office Metro·Reactotron이 외부에서 종료됐고 원인은 확정하지 않았다. 같은 AVD의 최초 재실행 종료 후 낮은 메모리 설정으로 성공했다. 검증 후 원본 캐시9건·로그인과 Android prefs(8082)를 복원하고 iOS launch override가 지속되지 않음을 확인했다. 이번 Lab8094와 재시작 AVD만 종료했으며 외부에서 종료된 Office/Reactotron은 재시작하지 않았다. 제품 checkout은 clean/pushed다.
+- 이전 임시 타입·분기 정리 TODO는 이 PR로 완료했다. **실제 인증된 Staging 주문에서 목록·상세 `isDelayed` 판정이 일치하는지는 이번에 검증하지 않았다.** 서버 계약과 실제 데이터 정합성은 구분한다. 다음 시작점은 사용자 PR36 리뷰이며 별도 요청 없이 merge·배포·추가 모니터링하지 않는다.
+
+## 선행 체크포인트 — 2026-11-06 Staging 양OS CodePush 완료
 
 - 사용자 최신 명시 승인: **기공소앱은 CodePush 진행**, 클리닉앱은 이 세션에서 적용한 isDelayed 변경만 설명. 아래 11/05의 PR까지만 지시는 이 승인으로 갱신됐다. 웹·merge·tag·스토어 제출·Slack 발송은 이번 범위가 아니다.
 - **Lab iOS·Android Staging v61 / target1.0.5** 업로드 완료. iOS 2026-11-06 14:55:38 KST, Android 14:56:06 KST. 독립 history read-back으로 양OS enabled·mandatory·rollout100 및 description의 정확한 source SHA를 확인했다. 실제 사용자 기기의 OTA 수신·적용은 이번에 확인하지 않았다.
