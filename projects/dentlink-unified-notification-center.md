@@ -1,8 +1,10 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**최신 후속 — 2026-11-06 OS 알림·앱 복귀 점검:** 사용자에게 보이는 Office/Lab 양 OS에서 알림 설정을 점검하고 FE 누락2건을 로컬 수정했다. Office `feature/DL-17059@933d054b`+5파일, Lab `feature/DL-17060@a6432e2`+3파일이며 **이번 수정은 아직 제품 commit/push하지 않았다.** Android 실제 OS OFF/ON·복귀, iOS 실제 미허용 상태와 제어된 권한 응답 보완 검증을 구분한다. 신규 수신 설정은 아직 DEV mock이며 실제 BE 저장 완료가 아니다. 검증 후 두 기기를 같은 Office DEV/Metro8081로 복원했고 서버·화면은 켜 둔다. 상세는 아래11/6후속 절을 따른다.
+
 **사용자 로컬 확인 재개 — 2026-11-06:** 개인 정본과 세 제품의 clean 상태를 확인하고 `git pull --ff-only` 후 기존 원격 HEAD를 유지했다. Web `/Users/parkjongsun/Repository/dentlink-client-notification-center`·`feature/DL-17058`·`dea89193f`, Office `/Users/parkjongsun/Repository/dentlink-app`·`feature/DL-17059`·`933d054b`, Lab `/Users/parkjongsun/Repository/dentlink-lab-app`·`feature/DL-17060`·`a6432e2`. 사용자가 앱 실행만 요청했으므로 웹/IDE는 실행·조작하지 않았다. 웹은 루트에서 `pnpm dev:clinic`(3000), 별도 터미널에서 `pnpm dev:lab`(3005)로 직접 실행한다. iPhone17Pro(5C0E7639-2345-4B3F-9979-56AFDDA1C708)·Android Dentlink_API_36(emulator-5554)을 둘 다 같은 Office DEV/Metro8081로 실행했고 정상 로그인 화면(Home/Profile)·같은 Metro의 양 제품 식별자를 확인했다. Lab Metro8082도 준비했지만 기기는 Office를 표시한다. Android 시작 중 ANR/번들 로드 실패 화면이 있었고 데이터 삭제 없이 Office만 재시작했다. 재확인 시 ADB reverse 목록이 비어 있어8081/8082/9090 연결을 다시 등록한 뒤 Office가 정상 로드됐다. ANR의 정확한 원인은 단정하지 않는다. 홈 공지는 Close로 닫았고 설치·로그인·권한은 유지했다. 제품 코드 변경/추가 QA/PR/배포는 없으며 앱 미리보기는 켜 둔다. 과거 다른 채팅은 조회·조율하지 않았다.
 
-현재 후속: **2026-11-05 — 웹·병원앱·기공소앱 기본 흐름 재현·수정·최종 검증·commit/push 완료.** Web `dea89193f`, Office `933d054b`, Lab `a6432e2` 원격 반영·clean·upstream0/0을 확인했다. 조회 실패/재시도·미읽음 표시·늦은 소속 전환 응답·OS 권한 미확인 조작·기공소 iOS 오류 안내 가림을 기존 UI/동작 기준으로 보완했다. [이번 실행 근거와 한계](dentlink-unified-notification-center-runtime-2026-11-05.md)를 정본으로 삼는다. PR·merge·배포·신규 BE 연결·최종 제품 QA 완료는 아니다.
+직전 원격 반영: **2026-11-05 — 웹·병원앱·기공소앱 기본 흐름 재현·수정·최종 검증·commit/push 완료.** Web `dea89193f`, Office `933d054b`, Lab `a6432e2` 원격 반영·clean·upstream0/0을 확인했다. 조회 실패/재시도·미읽음 표시·늦은 소속 전환 응답·OS 권한 미확인 조작·기공소 iOS 오류 안내 가림을 기존 UI/동작 기준으로 보완했다. [이번 실행 근거와 한계](dentlink-unified-notification-center-runtime-2026-11-05.md)를 정본으로 삼는다. PR·merge·배포·신규 BE 연결·최종 제품 QA 완료는 아니다.
 
 **진행 기준 — 2026-11-05:** 이번 재현된 FE 기본 흐름 결함은 보완했고, 현재 승인 범위의 미완 수정은 없다. 신규 BE API·미읽음 집계, USER 설정/집계(#20–22) 및 Lab Home 최근 메시지(#19)는 계속 확정 대기다. 기존 Clinic3000/Lab3005·앱 Metro/로그인/창 배치는 유지했고 두 기기는 같은 Office8081/Home으로 복원했다. 다른 채팅과 기기 사용 충돌은 사용자 승인으로 조율·종료 인계했다. 새 요청 전 자동 폴링·추가 구현·PR·배포는 하지 않는다.
 
@@ -20,11 +22,25 @@
 
 이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리**를 당시 합의대로 구현했다. **11/5 14:49 Slack 후속으로 배너는 OS OFF 동안 상시 노출로 변경됐으며 아래 최신 정책이 우선한다.** 자동 안내 팝업의 기기별 1회는 별개로 유지한다.
 
-- **현재 지시:** 웹의 병원 선택 무반응 신고를 계기로 사용자가 세 제품 기본 흐름을 실제 재현·수정·검증하고 commit/push·메모리 정리하도록 승인했다. 이번 범위는 완료했고 아래 기록에 결과/한계를 구분했다. 미정 BE/정책을 임의 구현하지 않았으며 기존 UI와 호출 경로를 유지했다. 사용자 미리보기 서버·브라우저·기기는 켜 두고 PR은 만들지 않는다.
+- **현재 지시:** 켜진 시뮬레이터·에뮬레이터에서 OS 알림 변경·앱 복귀·배너·팝업·Push 동작을 실제 확인하고 FE 누락을 수정한다. 이번 검증/로컬 수정은 완료했으며 BE 계약·서버 저장·iOS 실제 OS 토글 검증의 한계를 아래에 구분한다. 웹/IDE는 건드리지 않았고 앱 미리보기와 창 배치는 유지한다. 제품 commit/push·PR·배포는 이번에 수행하지 않았다.
 - **직전 사용자 확인:** 11/4 사용자가 “요구사항 변경으로 불필요하게 남은 코드를 정상 개발 범위대로 정리한 결과, 추가 심사가 필요한 변경이 없는 것”으로 이해·확인했다. 사용자가 직접 이 결론을 전달할 예정이며 게시 완료로 기록하지 않는다. 제품 커밋·푸시/검증과 로컬 종료는 완료 상태로 유지한다. 당시 ‘즉시 추가할 FE 구현 없음’은 아래11/5 Lab 소속 연결 조사로 보완하며, 조사한 것을 구현 완료로 바꾸지 않는다.
 - **추가 자료 확인 — 2026-11-04:** Jira 댓글44798의 설정 템플릿 초안을 현재 세 제품 코드와 대조했고, 후속44802에서 Lab 밀링 결제 제외를 확인했다. 템플릿 초안 자체는 공개 API·BE 배포 완료 근거가 아니다. 후속 구현은 아래 제외 항목 반영에 한정한다.
 - **상태 읽는 순서:** 이 문서 최신 상태 → [11/5 기본 흐름 재검증](dentlink-unified-notification-center-runtime-2026-11-05.md) → 필요한 경우 [11/3 앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md)·[이전 상세 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/진행 중/입력 대기 문구를 현재로 재사용하지 않는다.
 - **기획 근거:** Notion 정책서와 확인한 Figma/Slack을 대조하되 최신 명시적 사용자 정정을 우선한다. 오늘 필요한 PRD 5-2~5-5/#14는 재대조했고 일부 조회 누락 블록이 있어 전체 본문·댓글을 완전 최신 조회했다고 주장하지 않는다. 이번 마감은 외부 자료 전수 재조사가 아니다.
+
+## 2026-11-06 후속 — OS 알림 변경·복귀와 FE 분리 보완
+
+- **기준:** 11/5 최신 요구대로 설정의 파란 배너는 OS OFF 동안 계속 표시하고 자동 안내 팝업만 기기별1회다. 이전 ‘배너1회’ 요구로 되돌리지 않는다. Push선택→OS설정→정상복귀/허용 시 선택 항목만 ON, 허용하지 않음·취소·흐름 이탈 시 기존값 유지다. 현재 새 알림센터 화면과 설정은 DEV mock으로 실제 서버 저장과 분리한다.
+- **발견/수정1:** Office Android 실제 OFF→ON에서 기존 PermissionProvider가 legacy upsert를 호출하는 것을 재현했다. 호출1건은 임시 런타임 interceptor로 전송 전에 차단해 실제 서버전송0이다. 양 앱 `PermissionProvider`에서 DEV 신규 미리보기의 기존 자동초기화를 차단했다. 실제 권한 조회/상태·스토리지 갱신과 비DEV 기존 제품 동작은 유지한다. 수정 후 양 앱 실제 Android 복귀에서 legacy 호출0을 확인했다. 기존 API가 모든 설정을 ON으로 만든다는 의미로 확대하지 않는다.
+- **발견/수정2:** Office 실제 화면 컴포넌트 테스트에서 화면 blur 후 지연된 권한 완료가 이전 선택을 켜는 결함을 먼저 재현했다. 양 앱 `useNotificationPermissionRequest.cancelPending`으로 대기 선택과 진행 중 조회 결과를 무효화하고, 화면 blur에 연결하며 적용 직전에 focus도 확인한다. OS 설정의 AppState 왕복은 정상 유지한다. 앱/계정/소속 전환이나 재시작을 넘어 선택을 복구하지 않는다.
+- **Office Android 실제:** 네이티브 설정 OFF→앱 재진입 시 배너·Push 안내, 취소/허용하지 않고 복귀 시 미변경, ON복귀 시 선택한 Design Push만 ON·비선택 Updates Push는 OFF 유지·배너숨김을 확인했다. 두 항목 OFF 초기값은 기존 mock store의 제어된 fixture이며 서버 저장값이 아니다. 자동 팝업은 해당 확인키만 초기화해 최초 노출/실제 layout 후 저장을 확인하고, 앱 완전 재실행 시 재노출하지 않으며 설정 배너는 계속 보이는 것을 확인했다.
+- **Lab Android 실제:** 동일 기기 쌍을 Lab DEV/Metro8082로 함께 전환했다. 실제 OS OFF·재시작 후 배너/안내, 허용하지 않은 복귀 시 두 Push OFF 유지, OS ON복귀 시 Design만ON/UpdatesOFF·배너숨김·legacy 호출0을 확인했다. 기존 확인키true에서 자동팝업은 재노출하지 않았다. 초기 OS는 ON이었고 최종 ON으로 복원했다.
+- **iOS 범위:** Office 네이티브 권한은 granted였으나 이 iOS26.5 시뮬레이터의 Settings/앱설정에 Notifications 토글이 없어 실제 OFF→ON 조작은 검증하지 못했다. 네이티브 권한 조회 함수의 일시적인 blocked 응답으로 배너·자동팝업·취소·미허용복귀를 확인하고 원래 granted 응답으로 복원하여 선택항목만ON·배너숨김·legacy 호출0을 확인했다. Lab은 실제 denied 상태에서 배너·안내·OS설정왕복/미변경을 확인했으며, ON 경로만 일시적인 granted 응답으로 보완했다. 실제 iOS OS 토글 성공으로 기록하지 않는다. 모든 주입은 원복하고 앱 재시작으로 제거했다.
+- **최종 코드 검사:** Office 관련 Jest26/26, Lab 기존 affiliation-switch24/24, 양 앱 기존 pushPreference 각3, Provider 실제컴포넌트 임시 하네스8(DEV 호출0·비DEV 기존 호출 유지)과 변경파일 lint/diff-check가 통과했다. Lab 테스트 파일은 저장소 지침에 따라 추가/수정하지 않았다. 독립 diff검토에서 추가 명확한 결함은 없었다. 화면이탈 race의 근거는 컴포넌트/훅 회귀이며, 별도 기기 race 주입 시도는 pending조회가 시작되지 않아 유효 증거에서 제외했다.
+- **검증 중 주의:** 새 hook 편집 중 Office iOS FastRefresh의 `Rendered more hooks than during previous render`가 나타났으나 완전 종료/재실행한 최종 코드에서는 영향 경로에서 재현되지 않았다. Android 알림허용 취소 때 프로세스 재시작/번들 재로딩을 관찰했으며 앱 크래시로 단정하지 않는다. Lab 첫 Maestro `launchApp` 경로는 도구 기본 권한허용이 OS OFF를 되돌려 유효 검증에서 제외하고, ADB실행/실제설정/권한을 변경하지 않는 화면조작으로 다시 통과했다. 초기 테스트의 없는 selector 실패·전환 중 캡처도 제품 결함으로 기록하지 않는다.
+- **기기/원복:** iPhone17Pro/iOS26.5 `5C0E7639-2345-4B3F-9979-56AFDDA1C708`, Android `Dentlink_API_36/emulator-5554`. Office 두 기기 OS허용ON, Lab Android ON/iOS denied 원상 유지. mock설정·기존함수·확인키를 원복했다(OfficeAndroid true/iOS null, Lab두기기true). 로그인·소속·설치 데이터는 보존했다. Lab을 종료하고 양 기기를 Office DEV/8081의 정상 Home으로 복원했다. 사용자 창 위치/크기·웹/IDE는 변경하지 않고 Metro8081/8082와 미리보기를 유지한다.
+- **근거:** `/tmp/notification-android-final-on-1106.{json,png}`, `/tmp/notification-android-first-notice-1106.png`, `/tmp/notification-android-notice-restart-1106.png`, `/tmp/notification-android-banner-reenter-1106.png`, `/tmp/notification-ios-final-{off-return,on}-1106.json`, `/tmp/notification-lab-{android-final-on,ios-on-state}-1106.json`, `/tmp/notification-lab-ios-off-return-1106.json`, `/tmp/notification-lab-ios-controlled-on-1106.png`, `/tmp/notification-office-restored-{ios,android}-1106.png`; 회귀 `/tmp/notification-focus-{before,after}-1106.log`, Provider `/tmp/notification-permission-provider-1106.cjs`. 임시 증거는 로컬파일이며 장기 재실행을 보장하지 않는다.
+- **남음/다음 시작점:** 실제 수신 설정 저장·재조회·다른 기기 최신 설정·저장실패 처리는 신규BE 계약 연결 후 확인한다. 새 알림센터를 비DEV에서 활성화할 때 legacy Provider 경계를 함께 최종 전환해야 한다. 실제 iOS OS OFF→ON은 Notifications 설정을 제공하는 환경/실기기에서 추가 확인이 필요하다. 제품로컬 변경 Office5/Lab3이 남았으므로 차후 commit/push 상태를 혼동하지 않는다. 이번에 새 API·네이티브/의존성·이메일·PR·배포는 변경하지 않았다.
 
 ## 2026-11-05 마감 — 세 제품 기본 흐름 재현·보완
 
