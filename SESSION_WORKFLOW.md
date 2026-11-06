@@ -1405,6 +1405,32 @@ records:
   development-session prompts, terminal commands, exact values, or text the
   user needs to paste elsewhere.
 
+### Stakeholder Sharing
+
+When drafting Slack messages or other material for the user to share with
+PMs, designers, and teammates, prioritize understandable concerns and evidence.
+This is the user's 2026-11-06 direction, not a required visual template.
+
+- Lead with the relevant concern or finding. Explain the user-visible effect
+  using a small concrete scenario or number example when helpful. Distinguish
+  implementation feasibility from possible confusion or policy decisions.
+- Use short paragraphs, emphasis, and separate bullets so the main point,
+  examples, and considerations can be scanned. Separate supporting examples
+  from the main concern when that improves readability; do not add length just
+  to appear thorough or force every message into the same form.
+- Include only what the recipients need. Omit agent acknowledgments of intent,
+  private developer chores, unnecessary implementation detail, and unsolicited
+  recommendations when the user only wants concerns conveyed.
+- Use verified comparable products or official references when requested or
+  helpful. State the relevant similarity and limits; an analogous behavior is
+  not proof of an industry standard or a requirement for Dentlink.
+- Keep the concern distinct from the final decision. Do not imply a preferred
+  policy is settled or technically mandatory merely to make the argument
+  stronger. Identify only genuinely necessary policy clarification.
+- When the user asks for copyable wording, provide one complete paste-ready
+  message without mixing agent commentary into it. Preserve useful readability
+  when moving the wording to Slack or another destination.
+
 ### Concise Status Briefings
 
 Across all projects and sessions, when the user asks for work status, a report,

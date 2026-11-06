@@ -54,6 +54,10 @@
 - For development work, CTO handoffs, implementation notes, decision records,
   and cross-session summaries, include as much detail as the work requires.
 - Explain important engineering decisions clearly when detail is necessary.
+- For material the user will share with PMs, designers, or teammates, follow
+  **Stakeholder Sharing** in `SESSION_WORKFLOW.md`: make the actual concern,
+  concrete example, consequence, and relevant evidence easy for nondevelopers
+  to understand. Favor readable grouping over length or a fixed template.
 - For product planning and effort estimates, follow **Product Planning,
   Estimation, And Delivery** in `SESSION_WORKFLOW.md` and **Dentlink Story
   Point Estimation** in `DEVELOPMENT_STYLE.md`. Preserve the distinction
