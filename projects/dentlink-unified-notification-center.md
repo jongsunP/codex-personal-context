@@ -1,10 +1,10 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-**사용자용 실시간 Metro 로그 — 2026-11-06:** 앱은 켜둔 채 Office Metro만 동일8081에서 로그 미러링 파이프로 재기동했다. 현재 명령은 정확한 `dentlink-app` checkout의 `yarn react-native start --port 8081 --no-interactive 2>&1 | tee -a /Users/parkjongsun/Library/Logs/Codex/Dentlink/office-metro-8081.log`이며 PID30872/session83819다. 기존 PID29832는 이 실행으로 대체됐다. `/status=packager-status:running`·양 OS Office DEV inspector 재연결·실제 연결 로그의 파일 추가를 확인했다. 시뮬/에뮬·앱·로그인·화면을 종료/재시작하거나 웹을 조작하지 않았다.
+**최신 실행 상태 — 2026-11-06 외부 Terminal 전환:** 사용자가 앱 실행 로그를 Codex 밖에서 직접 보도록 요청하여, 앱·기기는 유지하고 Office Metro만 macOS Terminal 창으로 옮겼다. 기존 적합한 idle Terminal 창4581을 재사용했고 제목은 `Dentlink Clinic DEV · Metro 8081`, TTY는 `/dev/ttys006`이다. 정확한 `/Users/parkjongsun/Repository/dentlink-app`·`feature/DL-17059@1b1e449d`에서 `yarn react-native start --port 8081 --no-interactive 2>&1 | tee -a /Users/parkjongsun/Library/Logs/Codex/Dentlink/office-metro-8081.log`를 실행한다. 현재 PID31402는 실제 외부 Terminal TTY 소속이며 이전 Codex 내부 PID30872/session83819를 대체했다. 단일8081 리스너·Metro cwd·status running·양 OS Office DEV inspector 재연결·Terminal 창 visible/busy와 연결 로그를 확인했다. iOS 앱PID29923/AndroidPID14629는 유지했고 시뮬/에뮬·앱·로그인·화면을 종료/재시작하거나 웹을 조작하지 않았다. 창 크기/배치는 임의 변경하지 않았다.
 
 - 별도 터미널에서 `tail -n 100 -F /Users/parkjongsun/Library/Logs/Codex/Dentlink/office-metro-8081.log`로 확인한다. 해당 tail만 Ctrl+C로 끝내도 Metro/앱은 유지된다.
 - 로그는 로컬 전용(디렉터리0700·파일0600), Git 밖이다. 기록 시작 전 과거 출력은 소급하지 않는다. 현재 Metro의 실행/번들/연결/경고 출력이며 JS console 전체나 네이티브 전체 로그를 추가 수집하는 설정은 아니다. `--client-logs`는 켜지 않았다.
-- 같은 로컬 미리보기를 다시 실행할 때 사용자 로그 확인이 필요하면 위 방식과 경로를 재사용하되 실제 PID·checkout·포트를 확인한다. 이번 변경은 실행 환경만이며 제품 코드/PR/배포 변경은 없다. 앱을 계속 켜둔 채 다음 사용자 요청을 기다린다.
+- 앱을 직접 보며 확인할 때는 이번처럼 외부 Terminal에서 실행 명령과 로그를 볼 수 있게 한다. 같은 로컬 미리보기를 다시 실행할 때 위 방식과 경로를 재사용하되 실제 PID·checkout·포트를 확인한다. 외부 Metro 실행 창의 Ctrl+C는 Metro를 종료한다. 별도 `tail` 창의 Ctrl+C와 구분한다. 이번 변경은 실행 환경만이며 제품 코드/PR/배포 변경은 없다. 앱을 계속 켜둔 채 다음 사용자 요청을 기다린다.
 
 **미리보기 재개 — 2026-11-06:** 최종 검증/정리 후 사용자가 병원앱만 시뮬·에뮬에 켜두도록 요청했다. 개인 정본·Office를 ff-only 최신화했고 제품 변경 없이 `/Users/parkjongsun/Repository/dentlink-app`·`feature/DL-17059@1b1e449d`의 같은 DEV/Metro8081로 양 기기를 실행했다. iPhone17Pro/iOS26.5(`5C0E7639-2345-4B3F-9979-56AFDDA1C708`)의 `com.innovaid.dentlink.development`, Android `Dentlink_API_36`/emulator-5554의 `com.innovaid.android.dentlink.development`가 동일 Metro inspector에 연결되고 로그인된 Home을 표시하는 것을 확인했다. 기존 공지는 Close로 닫고 로그인·권한·소속·창 배치는 변경하지 않았다. iOS 기존 소속86/213과 Android1409/1889는 각 저장 상태대로 유지하며, 제품/작업본/서버는 동일하다.
 
