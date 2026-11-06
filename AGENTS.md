@@ -98,6 +98,12 @@
 
 - The user prefers Codex to proceed proactively and request required approvals directly when tools need elevated permissions.
 - Still follow Codex/system permission prompts when they appear.
+- Follow **Parallel User And Agent Work** in `SESSION_WORKFLOW.md`: the user
+  often continues other work after delegating a task. Separate agent-controlled
+  browsers/windows from the user's work and avoid competing for focus/input.
+  Local preview should be independently inspectable and operable. Choose tools
+  for the required inspection/control rather than enforcing a fixed program
+  combination; an app IDE is optional.
 - For every screen interaction, follow **Existing Windows And Layout** in
   `SESSION_WORKFLOW.md`: reuse suitable already-open screens and preserve
   the user's window placement, sizes and tab/window grouping where practical.
@@ -105,12 +111,13 @@
   duplicate windows while allowing the task's normal navigation and actions.
 - For local execution, follow **Local Development And User Preview** in
   `SESSION_WORKFLOW.md`: distinguish Codex working alone from the user's
-  direct local inspection. For direct web preview, use the exact IDE/worktree,
-  bottom integrated service terminals and an external browser. For direct app
-  preview, run Metro in a visible external Terminal alongside the paired
-  simulator/emulator. One product's two devices share one Metro; separate
-  products require separate processes/ports. This is the user's 2026-11-06
-  clarification. An IDE browser is unnecessary. Preserve the user's existing
+  direct local inspection. Web preview must expose current code changes,
+  execution commands/logs and the changing rendered page; Cursor + integrated
+  terminal + regular Chrome is a familiar default, not mandatory. App preview
+  must expose the changing device screen, debugging tools such as Reactotron,
+  and execution commands/logs; choose suitable equivalents when useful.
+  One product's two devices share one Metro; separate products require separate
+  processes/ports. This is the user's 2026-11-06 clarification. Preserve existing
   web/app arrangements and explicit service exceptions. These are readable
   preview compositions, not exact window coordinates; Codex-only internal
   work need not reproduce them.

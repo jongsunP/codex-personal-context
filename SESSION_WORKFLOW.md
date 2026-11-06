@@ -392,6 +392,29 @@ interaction, not only local development or this notification-center session.
   Do not claim success from a running process or replace agent verification
   with a request for the user to test instead.
 
+## Parallel User And Agent Work
+
+The user's 2026-11-06 clarification is about working concurrently: after
+delegating a task, the user often continues unrelated work. Separate agent
+and user interaction surfaces so the agent can work without taking over the
+user's tabs, typing, navigation or window focus. This applies whether or not
+the user also observes part of the agent's work.
+
+- Reuse suitable agent-owned windows/profiles for automation. For web work,
+  the separate Testing Chrome preference below protects the user's regular
+  Chrome workflow; it is not merely a choice of browser branding. Avoid
+  competing for the same foreground window when an independent control route
+  can perform the task. If shared mouse/keyboard use is necessary, coordinate
+  that interaction rather than assuming the user has stopped other work.
+- A request to prepare local preview means the user should be able to inspect
+  and operate the result independently, including while Codex is closed.
+  Actual execution ownership matters, not only where logs are displayed.
+  Keep this distinct from agent-only internal execution.
+- Separation concerns usable roles/windows and process lifetimes, not a
+  required number of windows, exact coordinates, or automatic creation of
+  extra chats/worktrees. Separate browser profiles still share server-side
+  effects when using the same account; verify the scope of mutations.
+
 ## Local Development And User Preview
 
 The user confirmed these two local execution modes on 2026-11-05. Apply them
@@ -402,27 +425,35 @@ the required implementation or verification quality.
 - **Codex 단독 개발:** When the user is not directly watching local work,
   Codex may run development services and web checks through its own terminal
   and browser tools. The IDE does not need to be arranged for the user.
-- **사용자 로컬 확인:** Follow the user's 2026-11-06 distinction between web
-  and app preview. For web, open the exact project/worktree in the IDE, run
-  services in its bottom integrated terminals, and use an external browser;
-  an IDE-embedded browser is unnecessary. For apps, run Metro in a visible
-  external Terminal window so the user can directly see the command and live
-  output, and keep the iOS simulator and Android emulator visible together.
-  An internal Codex process with a separate log viewer is not the default
-  substitute for the app's visible execution terminal. Respect any explicit
-  per-task exception without changing the other service's setup.
+- **사용자 로컬 확인:** Choose a setup that provides the inspection and
+  control the user needs, rather than reproducing a fixed list of programs.
+  Web is the user's primary area: expose **current code changes, service
+  commands/logs, and the changing rendered page**. Cursor + its integrated
+  terminal + regular external Chrome is the familiar current default, not a
+  mandatory combination; another editor, terminal or browser arrangement is
+  acceptable when it serves those purposes better. For apps, expose **the
+  changing device screen, debugging information/control, and execution
+  commands/logs**. Reactotron is the user's familiar app-debugging surface;
+  appropriate project-supported alternatives or complements may serve that
+  role. Do not reduce app preview to a device screenshot and Metro alone.
+  An app IDE is optional unless code inspection is requested. Keep the paired
+  iOS/Android runtime aligned, and keep actual execution independent of Codex.
+  An external log viewer alone does not make a Codex-owned process independent.
+  Respect explicit per-task preferences without changing unrelated setups.
 
 Use the user's stated intent to select the mode without repeatedly asking.
 If the user requests manual IDE startup, supply the exact checkout and commands
-and reuse that setup. If IDE control is unavailable in user-preview mode,
-report that limitation rather than silently substituting an internal server.
+and reuse that setup. If the familiar tool is unavailable, use a suitable
+alternative that preserves the required inspection/control, and explain any
+material gap rather than silently substituting a Codex-owned internal server.
 
 For direct app preview:
 
 - The user's 2026-11-06 clarification requires actual execution independent
   of Codex, not merely an external window that reads Codex-owned logs. Start
-  Metro and the emulator/device-launch commands from an external Terminal or
-  the native macOS application. Do not leave a long-lived emulator attached
+  Metro and the emulator/device-launch commands from a user-accessible terminal
+  outside Codex (the current default is macOS Terminal) or the native macOS
+  application. Do not leave a long-lived emulator attached
   to a Codex exec session when handing local preview to the user. Codex exit
   must not be the intended lifetime boundary for this preview.
 - Verify both the live screens/connections and execution ownership. Metro
@@ -445,13 +476,11 @@ For direct app preview:
   additional Terminal windows for independent emulator or iOS launch commands
   are explicitly allowed when useful. Avoid duplicate servers or unnecessary
   permanent build terminals merely to reach a window count.
-- Treat the user's established app-preview setup (external Terminal plus
-  simulator/emulator) and web-preview setup (IDE integrated service terminals
-  plus external browser) as a readable composition, not exact window
-  coordinates or a mandatory desktop/Space number. When preparing local
-  preview, make the commands, logs and service screens easy for the user to
-  see. Preserve suitable existing placement/grouping without unnecessarily
-  rearranging it; recreating an earlier position pixel-for-pixel is not needed.
+- Treat the familiar app/web setups as examples of a readable composition,
+  not fixed tool combinations, exact coordinates or a required desktop/Space.
+  Make the relevant code, debugging, terminal and live-screen surfaces easy
+  to inspect. Preserve suitable existing placement/grouping without unnecessary
+  rearrangement; recreating an earlier position pixel-for-pixel is not needed.
   This visual composition is not required when Codex is working internally
   without a request to prepare the user's local preview.
 
