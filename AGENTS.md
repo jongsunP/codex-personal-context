@@ -129,6 +129,8 @@
   work need not reproduce them.
   Direct app preview must verify both iOS and Android debugger/Reactotron
   connections, not merely a running debugger window or one connected device.
+  Leave Reactotron's device connection selector expanded for direct user
+  preview so both devices and the selected timeline are visible.
   Execution, including emulator launch, must be independent of Codex rather
   than only displaying Codex-owned logs externally. Extra
   external terminals for device startup are allowed. Verify process ownership

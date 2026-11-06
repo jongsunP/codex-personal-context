@@ -462,6 +462,11 @@ For direct app preview:
   and verify both iOS and Android are connected. A running debugger window or
   one connected device is insufficient. Reconnect a disconnected client without
   restarting the app when possible; report any remaining device-specific gap.
+  For direct user preview, leave the Reactotron device connection selector
+  expanded so both devices and the selected timeline are easy to identify.
+  Timeline shows the selected device's logs, not an aggregate of both. If the
+  tool does not persist the expanded state, reopen it during setup rather than
+  modifying the installed debugger. The user confirmed this on 2026-11-06.
   The user explicitly confirmed this requirement on 2026-11-06. Metro
   and an Android emulator launched from Terminal should have the appropriate
   Terminal shell/TTY ancestry. CoreSimulator/ADB services may normally be
