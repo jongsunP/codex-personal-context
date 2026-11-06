@@ -1,6 +1,8 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-**최신 후속 — 2026-11-06 OS 알림·앱 복귀 점검:** 사용자에게 보이는 Office/Lab 양 OS에서 알림 설정을 점검하고 FE 누락2건을 로컬 수정했다. Office `feature/DL-17059@933d054b`+5파일, Lab `feature/DL-17060@a6432e2`+3파일이며 **이번 수정은 아직 제품 commit/push하지 않았다.** Android 실제 OS OFF/ON·복귀, iOS 실제 미허용 상태와 제어된 권한 응답 보완 검증을 구분한다. 신규 수신 설정은 아직 DEV mock이며 실제 BE 저장 완료가 아니다. 검증 후 두 기기를 같은 Office DEV/Metro8081로 복원했고 서버·화면은 켜 둔다. 상세는 아래11/6후속 절을 따른다.
+**최신 후속 — 2026-11-06 앱 4개 축 테스트:** 사용자 기준(OS/소속 전환/권한/기본 알림)으로 Office·Lab 양OS를 검증했다. Office는 실제 활성화 API 전환/원복·다른 병원 크레딧 랜딩, Lab은 실제 단일소속 조회·실패/복구를 확인했다. 새로 발견한 **딥링크 전환 실패 무안내(양 앱)**와 **Lab 실패 deferred 링크 자동 반복**을 보완했다. 앞선 OS2건 포함 로컬 변경은 Office6/Lab4파일이며 **제품 commit/push는 아직 하지 않았다.** 실제/제어 응답·권한/BE/기기 한계를 구분한 [11/6 앱 테스트 보고서](dentlink-unified-notification-center-runtime-2026-11-06.md)가 최신 검증 정본이다. 두 기기는 Office DEV8081로 맞추고 미리보기/로그인/창 배치를 유지한다.
+
+**앞선 후속 — 2026-11-06 OS 알림·앱 복귀 점검:** 사용자에게 보이는 Office/Lab 양 OS에서 알림 설정을 점검하고 FE 누락2건을 로컬 수정했다. Office `feature/DL-17059@933d054b`+5파일, Lab `feature/DL-17060@a6432e2`+3파일이며 **이번 수정은 아직 제품 commit/push하지 않았다.** Android 실제 OS OFF/ON·복귀, iOS 실제 미허용 상태와 제어된 권한 응답 보완 검증을 구분한다. 신규 수신 설정은 아직 DEV mock이며 실제 BE 저장 완료가 아니다. 검증 후 두 기기를 같은 Office DEV/Metro8081로 복원했고 서버·화면은 켜 둔다. 상세는 아래11/6후속 절을 따른다.
 
 **사용자 로컬 확인 재개 — 2026-11-06:** 개인 정본과 세 제품의 clean 상태를 확인하고 `git pull --ff-only` 후 기존 원격 HEAD를 유지했다. Web `/Users/parkjongsun/Repository/dentlink-client-notification-center`·`feature/DL-17058`·`dea89193f`, Office `/Users/parkjongsun/Repository/dentlink-app`·`feature/DL-17059`·`933d054b`, Lab `/Users/parkjongsun/Repository/dentlink-lab-app`·`feature/DL-17060`·`a6432e2`. 사용자가 앱 실행만 요청했으므로 웹/IDE는 실행·조작하지 않았다. 웹은 루트에서 `pnpm dev:clinic`(3000), 별도 터미널에서 `pnpm dev:lab`(3005)로 직접 실행한다. iPhone17Pro(5C0E7639-2345-4B3F-9979-56AFDDA1C708)·Android Dentlink_API_36(emulator-5554)을 둘 다 같은 Office DEV/Metro8081로 실행했고 정상 로그인 화면(Home/Profile)·같은 Metro의 양 제품 식별자를 확인했다. Lab Metro8082도 준비했지만 기기는 Office를 표시한다. Android 시작 중 ANR/번들 로드 실패 화면이 있었고 데이터 삭제 없이 Office만 재시작했다. 재확인 시 ADB reverse 목록이 비어 있어8081/8082/9090 연결을 다시 등록한 뒤 Office가 정상 로드됐다. ANR의 정확한 원인은 단정하지 않는다. 홈 공지는 Close로 닫았고 설치·로그인·권한은 유지했다. 제품 코드 변경/추가 QA/PR/배포는 없으며 앱 미리보기는 켜 둔다. 과거 다른 채팅은 조회·조율하지 않았다.
 
@@ -22,10 +24,10 @@
 
 이전 구현 마감: 2026-11-03 19:19 KST — **Office/Lab 설정 파란 OS 배너의 기기별 1회 영속 처리**를 당시 합의대로 구현했다. **11/5 14:49 Slack 후속으로 배너는 OS OFF 동안 상시 노출로 변경됐으며 아래 최신 정책이 우선한다.** 자동 안내 팝업의 기기별 1회는 별개로 유지한다.
 
-- **현재 지시:** 켜진 시뮬레이터·에뮬레이터에서 OS 알림 변경·앱 복귀·배너·팝업·Push 동작을 실제 확인하고 FE 누락을 수정한다. 이번 검증/로컬 수정은 완료했으며 BE 계약·서버 저장·iOS 실제 OS 토글 검증의 한계를 아래에 구분한다. 웹/IDE는 건드리지 않았고 앱 미리보기와 창 배치는 유지한다. 제품 commit/push·PR·배포는 이번에 수행하지 않았다.
+- **현재 지시/완료 범위:** 사용자 4개 축의 앱 테스트와 재현된 FE 결함 보완·보고서 정리. OS 검증에 이어 실제 Office 소속 전환·권한별 FE 메뉴·양 앱 기본 흐름·딥링크 실패 처리를 확인했다. 실제 Lab 다중소속/비OWNER 서버권한/iOS 실제 OS 토글/신규 알림·설정 BE 통합은 남는다. 로컬 코드 Office6/Lab4이며 제품 commit/push·PR·배포는 수행하지 않았다. 다음은 사용자 검토 또는 새 BE/정책 전달 후 재개다.
 - **직전 사용자 확인:** 11/4 사용자가 “요구사항 변경으로 불필요하게 남은 코드를 정상 개발 범위대로 정리한 결과, 추가 심사가 필요한 변경이 없는 것”으로 이해·확인했다. 사용자가 직접 이 결론을 전달할 예정이며 게시 완료로 기록하지 않는다. 제품 커밋·푸시/검증과 로컬 종료는 완료 상태로 유지한다. 당시 ‘즉시 추가할 FE 구현 없음’은 아래11/5 Lab 소속 연결 조사로 보완하며, 조사한 것을 구현 완료로 바꾸지 않는다.
 - **추가 자료 확인 — 2026-11-04:** Jira 댓글44798의 설정 템플릿 초안을 현재 세 제품 코드와 대조했고, 후속44802에서 Lab 밀링 결제 제외를 확인했다. 템플릿 초안 자체는 공개 API·BE 배포 완료 근거가 아니다. 후속 구현은 아래 제외 항목 반영에 한정한다.
-- **상태 읽는 순서:** 이 문서 최신 상태 → [11/5 기본 흐름 재검증](dentlink-unified-notification-center-runtime-2026-11-05.md) → 필요한 경우 [11/3 앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md)·[이전 상세 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/진행 중/입력 대기 문구를 현재로 재사용하지 않는다.
+- **상태 읽는 순서:** 이 문서 최신 상태 → [11/6 앱 테스트](dentlink-unified-notification-center-runtime-2026-11-06.md) → [11/5 기본 흐름 재검증](dentlink-unified-notification-center-runtime-2026-11-05.md) → 필요한 경우 [11/3 앱 화면별 실행 근거](dentlink-unified-notification-center-runtime-2026-11-03.md)·[이전 상세 이력](archive/dentlink-unified-notification-center-2026-11-03-worklog.md). 과거 HEAD/진행 중/입력 대기 문구를 현재로 재사용하지 않는다.
 - **기획 근거:** Notion 정책서와 확인한 Figma/Slack을 대조하되 최신 명시적 사용자 정정을 우선한다. 오늘 필요한 PRD 5-2~5-5/#14는 재대조했고 일부 조회 누락 블록이 있어 전체 본문·댓글을 완전 최신 조회했다고 주장하지 않는다. 이번 마감은 외부 자료 전수 재조사가 아니다.
 
 ## 2026-11-06 후속 — OS 알림 변경·복귀와 FE 분리 보완
