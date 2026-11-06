@@ -1,5 +1,11 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**사용자 앱 로컬 확인 환경 재개 — 2026-11-06 18:49 KST:** 사용자가 앱 미리보기를 요청했다. 개인 정본 및 Office 체크아웃을 `pull --ff-only`하고 clean·`feature/DL-17059@1f956ae`를 확인했다. 기존 Codex 내부 Metro8081/8082는 이 세션 소유/cwd를 확인한 뒤 종료하고, macOS Terminal에서 Office Metro8081과 Android AVD를 실제 실행했다. 지속 Terminal은 Metro11419·Devices11422 두 창이며 Metro4615→yarn4583→zsh4570→login4569→Terminal4552, emulator4799→zsh4585→login4584→Terminal4552의 소유 관계를 확인했다. Codex 종료 생존 실험 자체는 하지 않았다.
+
+- iPhone17Pro/iOS26.5와 Android Dentlink_API_36/API36 모두 같은 Office DEV/Metro8081·현재 JS로 연결했고, Reactotron 클라이언트 양쪽 readyState1 및 하단 기기 선택 목록 펼침을 확인했다. Android ADB8081/9090 reverse를 복원했다. 기존 로그인·기기 데이터는 유지했다.
+- iPhone 뷰어가 Connecting display에 머물러 DeviceHub/시뮬레이터를 정상 재시작했다. 외부 Terminal의1회 iOS startup이 끝난 후 유휴창11515는 닫았다. DeviceHub의 View→Hide Sidebar→Zoom to Fit으로 실제 화면을 복구했다. Maestro/XCTest는 사용하지 않았다. 마지막 실제 화면에서 iPhone Home·Android Statements(사용자가 이동 중)·Reactotron 양 기기와 외부 실행 터미널을 확인했다.
+- 사용자 기존 선호대로 상단 두 터미널·하단 Android/iPhone/Reactotron 배치를 가깝게 준비했다. 증거 `/tmp/notification-user-preview-ready.png`. 단순 준비를 기능 전수 QA로 확대하지 않는다. 제품 코드·웹·정책·PR·배포 변경 없음. 앱 환경을 켜 둔 채 사용자의 직접 확인/후속 요청을 기다린다.
+
 **개인 알림·병원별 미읽음 표시 후속 논의 — 2026-11-06:** 사용자가 [Slack 공유 스레드](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1793956736165019) 확인만 요청했다. 읽기 전용으로 부모 글과 답글2개를 확인했으며 최신은 사용자 Frankie의18:20:55 KST 댓글(`1793956855.366729`)이다. 조회 시 PM/BE의 최종 결정 답변은 없었다. 제품 코드·외부 문서/댓글/읽음 상태는 변경하지 않는다.
 
 - **사용자가 설명한 기준:** A 인박스는 A병원 알림+개인 알림, B 인박스는 B병원 알림+동일한 개인 알림이다. 개인 알림 한 건의 읽음은 사용자 단위로 공유되어 어느 소속에서 조회해도 동일해야 한다. 모든 개인 알림/다른 병원 그룹 알림을 일괄 읽는다는 뜻이 아니며 기기 간 실시간 동기화를 추가하는 근거도 아니다. BE 실제 저장/조회 계약은 별도로 확인한다.
