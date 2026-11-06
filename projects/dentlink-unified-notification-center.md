@@ -1,5 +1,11 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**미리보기 재개 — 2026-11-06:** 최종 검증/정리 후 사용자가 병원앱만 시뮬·에뮬에 켜두도록 요청했다. 개인 정본·Office를 ff-only 최신화했고 제품 변경 없이 `/Users/parkjongsun/Repository/dentlink-app`·`feature/DL-17059@1b1e449d`의 같은 DEV/Metro8081로 양 기기를 실행했다. iPhone17Pro/iOS26.5(`5C0E7639-2345-4B3F-9979-56AFDDA1C708`)의 `com.innovaid.dentlink.development`, Android `Dentlink_API_36`/emulator-5554의 `com.innovaid.android.dentlink.development`가 동일 Metro inspector에 연결되고 로그인된 Home을 표시하는 것을 확인했다. 기존 공지는 Close로 닫고 로그인·권한·소속·창 배치는 변경하지 않았다. iOS 기존 소속86/213과 Android1409/1889는 각 저장 상태대로 유지하며, 제품/작업본/서버는 동일하다.
+
+- **지금 유지:** Office Metro8081(PID29832/session89130), Android AVD(PID29559/session91915), iOS DeviceHub 창. Lab8082는 실행하지 않았다. 사용자가 켠 웹·일반 Chrome·IDE는 조작하지 않았다. PID/session은 재개 시 다시 확인한다.
+- **실행 메모:** 기존 `yarn start`는 package script의 구식 `--experimental-debugger` 인수 때문에 종료돼 제품 코드 수정 없이 `yarn react-native start --port 8081`로 실행했다. Metro cwd와 양 제품 식별자를 확인했고 새 빌드·재설치·전체 QA를 하지 않았다.
+- **다음:** 아래 검증·push 완료 및 BE/정책 대기 범위는 유지한다. 이번 앱 미리보기는 켜둔 채 사용자 직접 확인/새 요청을 기다리며 추가 폴링·구현하지 않는다. 아래 ‘앱 종료’는 직전 마감 당시 상태다.
+
 **최신 마감 — 2026-11-06:** 사용자 요청한 Android 제한 재확인→앱 commit/push·종료→Clinic/Lab 웹 기본 흐름 검증을 완료했다. **현재 확인 범위의 추가 FE 수정 잔여는 없다.** Office `feature/DL-17059@1b1e449d`, Lab `feature/DL-17060@93c5e874`를 push했고 Web `feature/DL-17058@dea89193f`는 이번 재검증에서 추가 결함이 없어 기존 원격 상태를 유지했다. 세 제품 clean·upstream0/0·원격 SHA 일치를 확인했다. PR·merge·배포는 없다.
 
 - **검증:** Android Office/Lab 짧은 재실행·알림/설정 왕복에서 새 ANR/crash0. 최초 멈춤의 원인은 미확정이다. 웹 양 제품 PC/모바일 너비·실제 Clinic 소속 전환/원복·제어한 권한/실패 복구·기존 목적지 연결의 최종15건 통과, pageerror0. [앱 테스트 보고서](dentlink-unified-notification-center-runtime-2026-11-06.md)와 [웹 테스트·중간 요청 결과](dentlink-unified-notification-center-web-runtime-2026-11-06.md)에 실제 API/DEV mock/기기 한계를 구분했다.
