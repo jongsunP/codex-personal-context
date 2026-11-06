@@ -501,9 +501,9 @@ For direct app preview:
   rearrangement. When the user explicitly finalizes a layout, record its actual
   window positions/sizes and prefer that exact arrangement on the same display
   setup; approximate its relative placement if the display environment differs
-  or exact restoration is unavailable. The user finalized the app preview
-  layout on 2026-11-06; its measured reference is in the notification-center
-  checkpoint. Do not move windows merely to capture this reference.
+  or exact restoration is unavailable. The user finalized the app and web
+  preview layouts on 2026-11-06; their measured references are in the
+  notification-center checkpoint. Do not move windows merely to capture this reference.
   This visual composition is not required when Codex is working internally
   without a request to prepare the user's local preview.
 
