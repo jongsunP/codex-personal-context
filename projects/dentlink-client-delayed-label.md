@@ -1,17 +1,20 @@
 # 웹 주문 지연 라벨 — DL-17141
 
-## 현재 체크포인트 — 공통 표시 정책 정리 PR 완료, 2026-11-06
+## 현재 체크포인트 — PR 설명 정정·기록 마감·대기, 2026-11-06
 
 - **최신 요청·경계:** 사용자는 기존 웹·백엔드의 스테이징 반영을 전제로 추가 코드 정리를 요청했고, 이번에는 즉시 배포할 필요 없이 후속 PR까지만 지시했다. merge·배포·앱 세션 전송·자동 리뷰 감시는 하지 않는다.
+- **최종 마감:** 사용자의 “PR 정정할 것이 있으면 하고 정리메모리·대기” 요청에 따라 PR4843 본문의 API 계약 설명만 정정했다. Lab 목록 isDelayed의 STG 선반영·DEV 미반영을 사용자가 백엔드에 확인한 사실로 명시하고, 기공소 웹 라벨은 기존 상세 `deliverySchedule.isDelayed`를 사용하여 이번 PR에 Lab 목록 DTO 추가가 필요하지 않음을 적었다. 원래의 검증 범위와 자동 생성된 PR 부록은 보존했다. 변경 본문 재조회 일치·OPEN/일반/release v1.92.0·동일 HEAD·제품 clean을 확인했고 코드 변경이나 검사 재실행은 하지 않았다.
 - **완료:** [일반 PR #4843](https://github.com/Innvoaid/dentlink-client/pull/4843), `feat/DL-17141-delay-cleanup → release/v1.92.0`, OPEN/isDraft:false/4파일을 생성 후 재확인하고 채팅에 첨부했다. commit/local/upstream `a4f70d33c5d4fb61767512530c8783067132d7e7`. 기존 PR4837은 2026-11-06 10:51:41 KST `cdcd371ef2c6b5df4ac746a0c2b2f43502e1d5c8`로 release에 병합된 사실을 앞선 재개 조사에서 확인했다. 기존 PR을 다시 수정하지 않았다.
 - **작업 기반·보존:** 최신 확인된 `origin/release/v1.92.0@74454e95ea14f86cb351cc6c25d0c7ef9d70f85f` 기반 후속 branch이며 원래 feat/DL-17141·feat/DL-17141-delay-label은 보존했다. 현재 제품 checkout은 `/Users/parkjongsun/Repository/dentlink-client`, feat/DL-17141-delay-cleanup. 사용자 실험으로 동시에 생긴 `shared/models/src/Admin.ts`, `Lab.ts`, `data-contracts.ts` 변경 3개는 사용자의 명시적인 폐기 지시에 따라 원복했으며 최종 checkout은 clean이다.
 - **변경 4파일:** `shared/configs/utils/order.ts`에 `getOrderDelayBadgeStatus`를 두어 DELAYED/ON_TIME/undefined를 반환하고, 공통 주문상세·치과 PC 목록·모바일 목록에서 표시 여부/문구/색상을 같은 결과로 결정한다. 기존 Office 전용 helper와 배포 전 TODO를 제거하고 확정된 표시 정책을 공통 함수 주석으로 남겼다. 상태 타입의 중복 union만 단순화했고 API·DTO·generated 모델은 변경하지 않았다.
 - **유지한 정책:** 서버 isDelayed를 사용하고 날짜로 재계산하지 않는다. OFFICE는 true이며 COMPLETED/CANCELED일 때 Delayed만 숨기고 기존 false/undefined On Time은 유지한다. LAB은 true/false를 서버 그대로 표시하며, 누락/undefined/null/비boolean은 두 배지 모두 숨긴다. LAB에 OFFICE의 완료·취소 숨김을 적용하지 않는다. ADMIN/SYSTEM/서비스 미지정, 상세 날짜/제작 전 예외, 목록의 진행·완료·취소/officeEstimatedArrivalAt 조건도 보존한다.
 - **환경별 계약 최종 확인:** 사용자가 백엔드에 직접 재확인했다. 기공소 목록 isDelayed는 **실제 STG 응답에 있고 DEV에는 없으며, 이번 건만 STG에 먼저 반영한 예외**다. DEV Swagger에 필드가 없는 것은 이 환경 차이 때문이며 STG 백엔드 미제공·계약 미확정을 뜻하지 않는다. 직접 조회한 DEV 명세는 `OrderDeliveryScheduleDto.isDelayed`·`OrderOfficeListDto.isDelayed`를 optional boolean으로 정의하고 `OrderListLabDto.isDelayed`는 없다. STG `/v3/api-docs` 404는 해당 문서 경로의 접근 결과이며 STG 실제 응답의 필드 부재를 증명하지 않는다. 웹에서 사용하는 상세 타입은 이미 존재하여 이번 PR은 API·DTO 변경 없이 표시 정책만 공통화했다. 이후 목록 타입을 사용하는 작업에서 필요하면 대상 환경 Swagger/백엔드가 확인한 계약을 근거로 실제 소비 FE 타입을 맞추며 DEV 반영을 기다릴 필요는 없다. 필드 존재만으로 required/nullability를 확대하지 않는다.
 - **공통 지침 갱신:** 사용자 요청으로 AGENTS 진입점과 DEVELOPMENT_STYLE의 API Contracts Across Environments에 환경별 계약 판단·FE 복사/생성 타입 소비 기준을 추가했다. 이번 사례는 이 체크포인트에, 재사용할 원칙은 공통 지침에 둔다.
+- **지침 보존:** 공통 지침 commit `643d3bd`를 원격에 push하고 `setup-local-codex.sh`로 로컬 지침까지 동기화했다. AGENTS/DEVELOPMENT_STYLE/MEMORY_CHANGELOG의 정본·로컬 일치를 확인했다. 이번 최종 마감은 이 개인 체크포인트만 추가 commit/push하며 다른 프로젝트·앱 세션에 전송하지 않는다.
 - **검증:** 변경 실제 컴포넌트 ReactDOM SSR 100/100 통과, release74454e95 대비 표시·텍스트·전경 CSS·배경색·날짜 동일. 최종 커밋과 검사 소스 4개 SHA256 일치 확인. 번역/무관한 자식 일부를 격리한 검사이며 브라우저·실계정 API·실제 서버/배포 QA와 구분한다. Clinic/Lab/Admin 타입, 변경 UI ESLint·Prettier·diff 검사, 정상 push hook 3서비스 lint(기존 경고225/185/393, error0), Admin guard9, 공유53 tests/coverage 통과. 독립 코드리뷰 수정사항 없음.
 - **E2E 영향:** 독립 NO_IMPACT 판정. 승인·완료·피드백·LinkTalk의 버튼/문구/API 접점을 유지한다. mark/check를 최종 커밋 기준으로 기록하고 PR 생성 직전에 통과했다. E2E 파일 변경·실제 데이터 기반 실행은 하지 않았다. 임시 검증 증거 `/tmp/dl-17141-delay-cleanup/render-check.cjs`, `render-results.json`, `commit.log`, `push.log`; 실제 DEV 명세 조회 파일 `/tmp/dl-17141-cleanup/development-openapi.json`. 임시 경로는 이후 사라질 수 있다.
 - **현재 영향·남은 일:** 새 정리는 PR/feature에만 있고 현재 배포에는 추가 영향을 주지 않는다. 사용자 PR 검토 및 추후 별도 merge/배포 지시를 기다린다. 이전 배포 성공은 사용자 확인으로 기록하며 이번 작업에서 Actions 완료·실제 서빙·인증 화면을 새로 검증했다고 표현하지 않는다. 기공소 STG 목록 필드 제공은 사용자·백엔드 확인으로 확정했고 DEV Swagger 갱신은 이번 웹 작업의 완료 조건이 아니다. 이번 PR에 목록 DTO 추가는 없고 앱 세션에는 사용자가 직접 전달한다.
+- **다음 시작점:** 사용자 피드백 또는 명시적인 후속 요청이 있을 때 PR4843과 해당 feature부터 확인한다. 현재 요구에 남은 코드 수정은 없으며 자동 CodeRabbit 대응·merge·배포·모니터링·브랜치 정리는 시작하지 않고 대기한다.
 
 ## 이전 서버 판정 기준 최종 확정·마감 기록 — 2026-11-05
 
