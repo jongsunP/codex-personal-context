@@ -442,6 +442,11 @@ the required implementation or verification quality.
   Respect explicit per-task preferences without changing unrelated setups.
 
 Use the user's stated intent to select the mode without repeatedly asking.
+The default is **Codex 단독 개발**. Prepare the visible, independently operable
+user-preview composition only when the user asks to inspect locally; do not
+ask the user to choose the execution mode for each task. This is the user's
+2026-11-06 clarification. Existing suitable environments may be reused in
+either mode, and app crash/runtime verification remains mandatory in both.
 If the user requests manual IDE startup, supply the exact checkout and commands
 and reuse that setup. If the familiar tool is unavailable, use a suitable
 alternative that preserves the required inspection/control, and explain any

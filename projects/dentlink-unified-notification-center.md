@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**앱 내부 알림 랜딩의 뒤로가기 보완 완료 — 2026-11-06:** 앞선 조사 후 사용자가 앱 구현을 승인했다. Office `feature/DL-17059@1f956ae2971654159e01accfcb26350a4711da9b`, Lab `feature/DL-17060@a119ba8`에 각3파일을 commit/push했다. Web은 `feature/DL-17058@dea89193` 그대로이며 이번 코드 변경/재검증 대상이 아니다. 양 앱 원격 반영·clean을 확인했다. PR·merge·배포는 하지 않았다.
+
+- **동작:** 앱 내부 알림→목적지→뒤로는 기존 알림함을 보존한다. 같은 소속은 같은 알림함 route key/All 필터가 유지된다. 다른 소속으로 실제 전환한 링크는 새 소속 Home→알림함→목적지로 만들어 이전 소속 화면을 복원하지 않는다. 외부 push/deep-link·탭/action·채팅 등 특수 경로는 기존 복귀 동작을 유지한다.
+- **검증:** Office Android 실제 UI에서 Credits/Statements 왕복·반복·기기Back·외부 링크, 실제 소속 전환/원복과 지연 응답 후 이탈 조건을 확인했다. Lab Android는 기존 Help Center 및 Forbidden 안내 후 알림함 복귀, 외부 링크 Home 복귀를 확인했다. iOS 양 앱은 실제 실행한 최종 코드의 렌더된 handler/native stack·화면으로 확인했으며 전체 물리 탭 자동화 완료로 주장하지 않는다. 임시 런타임 데이터/함수는 복원했다. Jest Office36/Lab6 통과, lint 오류0, 전체 tsc는 기존 Office6/Lab5 진단으로 실패·변경 파일 신규0이다. [실행 근거·한계](dentlink-unified-notification-center-navigation-runtime-2026-11-06.md).
+- **SpringBoard:** 사용자 반복 종료 질문을 함께 조사했다. 11/5–6 로그4건이 동일 Apple XCTest 접근성 초기화 충돌이며 이번 iOS Maestro 시각과 일치했다. 앱 프로세스에도 같은 충돌 이력이 있어 단순 무시하지 않는다. iOS Maestro/XCTest를 중단하고 다른 실행 검증 방식으로 전환한 뒤 새 crash report는 관찰되지 않았다. 경고 전역 숨김/Apple 파일 삭제는 하지 않았으며 근본 해결로 기록하지 않는다.
+- **운영/다음:** 기본은 Codex 단독 작업, 사용자 요청 시만 독립 미리보기 구성이라는 최신 지시를 공통 SESSION_WORKFLOW에 명문화했다. 양 기기는 같은 Office DEV 코드로 되돌린다. 이번 복귀 보완에 신규 API는 필요 없으며 알림 목록·읽음·설정·집계/실제 FCM 계약·미정 정책은 기존 대기 범위 그대로다. 현재 승인 범위의 추가 수정은 없고 후속 요청 또는 명세를 기다린다.
+
+아래 랜딩 조사는 위 구현 전의 근거다. 당시 ‘구현 미승인’·Home 복귀 설명을 최신 앱 구현 상태로 재사용하지 않는다.
+
 **랜딩 후 뒤로가기 점검 — 2026-11-06:** 사용자가 Office의 알림→크레딧→헤더 뒤로가기에서 Home으로 가는 것을 보고 웹·양 앱의 라우트/복귀 의미를 확인하도록 요청했다. 이번은 조사이며 새 복귀 정책/제품 수정 승인이 아니다. Web `feature/DL-17058@dea89193`, Office `feature/DL-17059@420d415`, Lab `feature/DL-17060@93c5e87` clean 기준으로 확인했다.
 
 - **Web Clinic/Lab:** 각 `useNotificationLanding.ts`가 `router.push`하므로 브라우저 뒤로가기는 이전 방문 URL로 간다. 알림함은 URL이 아닌 팝업 상태이고 클릭 시 닫으므로 팝업을 자동 복원하지 않는다(`shared/ui/src/NotificationUI/NotificationCenterMock.tsx:191`). 화면 자체 뒤로/닫기 버튼은 개별 화면의 기존 규칙이다. 다른 병원 알림 확인 후 홈에서 팝업을 한 번 여는 entry 기록은 일반 랜딩의 back 복원과 별개이며, browser back이 활성 병원까지 되돌리는 계약도 아니다. 현재 웹 기본 DEV mock에는 landingUrl이 없어 이번 확인은 코드 호출 경로 근거이며 실제 알림 URL 왕복 QA가 아니다.
