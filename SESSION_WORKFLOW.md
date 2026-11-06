@@ -487,6 +487,13 @@ For direct app preview:
   additional Terminal windows for independent emulator or iOS launch commands
   are explicitly allowed when useful. Avoid duplicate servers or unnecessary
   permanent build terminals merely to reach a window count.
+  The user's further 2026-11-06 clarification is to keep extra windows only
+  for continuing execution or useful live logs. An iOS launch command normally
+  finishes while the simulator/app runs independently; its idle terminal need
+  not remain open. On a fresh setup, run the one-time iOS launch in a suitable
+  terminal before starting the long-lived Android emulator in that same window.
+  Keep Metro separate, and add native log/build terminals only when needed.
+  Do not restart already-running services merely to consolidate their windows.
 - Treat the familiar app/web setups as examples of a readable composition,
   not fixed tool combinations, exact coordinates or a required desktop/Space.
   Make the relevant code, debugging, terminal and live-screen surfaces easy

@@ -1,5 +1,10 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**로컬 확인용 목데이터 표시·터미널 정리 — 2026-11-06 16:24 KST:** 사용자가 목데이터 제약을 감안하고 직접 더 확인하겠으며, URL 없는 항목 제목에 임시 표시 후 마감하도록 요청했다. 현재 켜진 Office의 `src/store/useNotificationMockStore.ts`에서 URL 없는 4개 제목에 `[DEV · 랜딩 없음]`만 추가했다. `[DEV] User Credits`·`Office Credits`·`Statements`의 기존 실제 조회 진입은 유지했다. 이 표시는 운영 문구/정책이 아니며 실제 API 연결 시 mock store와 함께 제거한다. Web/Lab의 코드와 현재 화면은 확대 변경하지 않았다.
+
+- Office `feature/DL-17059@420d415`: 4개 title만 변경, lint·diff-check 통과. iOS17Pro/26.5·Android API36에서 실제 알림 All 화면의 표시·줄바꿈과 기존 DEV 진입 항목 보존을 확인했고 `/tmp/no-landing-label-{ios,android}.yaml` 통과 및 최종 화면 캡처를 남겼다. 제목만 변경했으므로 직전 양 OS 랜딩 검증은 재사용하며 새 전수 QA로 주장하지 않는다. 사용자가 직접 볼 수 있게 양 기기 All 화면·Metro·Reactotron을 유지한다. 간헐 클릭 누락의 미재현 상태는 앞 기록 그대로다.
+- 유휴 iOS Terminal6895(ttys008)를 `busy=false` 확인 후 닫았다. iOS 앱83189·Metro82384·Android emulator82988의 실행 유지 확인. 현재 계속 쓰는 외부 Terminal은 Metro6893·Android6894 두 창이다. 1회 실행 후 로그도 없는 iOS 전용 창은 상시 유지할 필요가 없다는 사용자 보완을 공통 지침에 반영했다. 다음 새 세팅은 유휴 창에서 iOS 실행을 마친 뒤 같은 창에서 Android를 실행할 수 있으며, 현재 실행 중인 기기를 창 통합만을 위해 재시작하지 않는다. PR·배포 없음. 사용자 추가 피드백/BE 명세까지 대기하며 켜둔 환경을 종료하지 않는다.
+
 **알림 클릭 랜딩 추가 확인 — 2026-11-06 16:19 KST:** 사용자가 항목을 여러 번 누른 뒤 크레딧이 열리는 듯했다고 보고했다. DEV 전용 행/기존 표시용 행과 기기는 구분하지 못했다고 확인했다. 현재 Office `feature/DL-17059@d728310`를 유지한 채 iOS17Pro/26.5·Android API36에서 홈→알림 All→`[DEV] User Credits` 3회 재진입, `[DEV] Office Credits`, `[DEV] Statements` 진입과 조회 목록 표시·뒤로 이동을 각각 통과했다(양 OS 각 5회). Android의 빠른 탭/뒤로 이동도 보완 관찰했으나 사용자 보고의 간헐적 클릭 누락은 재현되지 않았다. 현시점에서 보고 원인을 특정하거나 모든 조건에 문제가 없다고 단정하지 않는다.
 
 - `[DEV]` 세 행은 기존 공통 딥링크를 통해 실제 API 조회 화면으로 간다. 아래 기존 `Credit received`·`Payment completed` 등에는 `landingUrl`이 없고 현재 읽음 표시만 변경한다. 이를 운영 랜딩 정책/미구현 화면으로 오해하지 않도록 사용자가 눌렀을 수 있는 두 종류를 구분했다. 임의 목적지/안내 문구를 추가하지 않았다.

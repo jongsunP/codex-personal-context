@@ -133,9 +133,11 @@
   preview so both devices and the selected timeline are visible.
   Execution, including emulator launch, must be independent of Codex rather
   than only displaying Codex-owned logs externally. Extra
-  external terminals for device startup are allowed. Verify process ownership
-  as well as the app connections; do not claim a Codex restart survival test
-  without actually performing it.
+  external terminals for device startup are allowed.
+  Keep extra terminal windows only for ongoing execution or useful live logs;
+  reuse or close a terminal whose one-time iOS launch has finished.
+  Verify process ownership as well as the app connections; do not claim a Codex
+  restart survival test without actually performing it.
   App runtime and crash verification requirements are the same in both modes.
   In solo and parallel work, keep each product's iOS simulator and Android
   emulator on the same task/source and environment and switch them together.
