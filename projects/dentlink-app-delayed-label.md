@@ -1,6 +1,14 @@
 # Office 완료·취소 주문 지연 라벨 — DL-17248
 
-## 현재 체크포인트 — 2026-11-05 Staging 배포·사용자 PR 병합 완료·대기
+## 현재 체크포인트 — 2026-11-06 Staging 전달 상태 재확인
+
+- 사용자 요청: 두 앱의 병합·현재 상태를 다시 확인하고 각각 Staging CodePush를 준비할 수 있는지 판단한다. 이번 turn은 상태 확인이며 새 업로드·merge·기기 조작을 하지 않았다.
+- PR340은 `release/v2.2.4@4892f1c1849833054453f01145b2f012782bb9da`에 병합돼 있다. 현재 Staging은 iOS·Android 모두 v343/target2.2.4/enabled/mandatory/rollout100이며 description에 정확한 source `7f325896e3ed0a862a7f8a2099d50c809e576ba1`가 있다.
+- Staging source와 최신 release의 **전체 Git tree가 동일**(`6bec6cd3b4dca41f56fc9c608cee251d29a4971b`)하므로 새 CodePush가 필요 없다. 코드·native·lock·스크립트 차이 0이고 기존 관련 검증을 반복하지 않았다. 실제 기기 OTA 수신 여부는 이번 조회로 재검증하지 않았다.
+- `origin/main@7f586790`에는 지연 라벨 숨김이 아직 없다. main을 배포 소스로 사용하면 되돌아가므로 이후 작업도 실제 release/source를 비교해야 한다. release→main 통합은 별도 승인 단계다.
+- 이전 전용 worktree 두 개는 archive 상태이며 새로 복원하지 않았다. 현재 기본 Office checkout `feature/DL-17059@1b1e449`(알림센터)은 clean 상태로 보존했다. 웹과 알림센터 코드·서버·기기는 변경하지 않았다.
+
+## 선행 체크포인트 — 2026-11-05 Staging 배포·사용자 PR 병합 완료·대기
 
 - 세션: `01a1aa21-103b-7e82-b530-9b203c18cfe9`, `치과앱 완료·취소 주문 지연 라벨`, local Mac / 메인 프로젝트 등록 확인.
 - 부모 [DL-17138](https://innovaid.atlassian.net/browse/DL-17138), Office 하위 [DL-17248](https://innovaid.atlassian.net/browse/DL-17248). 웹은 별도 세션, Lab 제외.
