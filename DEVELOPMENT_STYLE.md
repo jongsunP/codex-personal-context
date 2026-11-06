@@ -211,8 +211,10 @@ appear nowhere else in the app.
   where redirects and side effects live, how callbacks are exposed, who owns
   loading/error state, and how query keys and invalidation are organized.
 - Use the syntax of the library major version on the current base branch.
-- Treat generated DTOs and EnumTypes as the contract. Prefer project-style
-  domain aliases over repeating string unions.
+- Use generated DTOs and EnumTypes through the project's existing type
+  boundaries, reconciling their source environment with **API Contracts Across
+  Environments** below. Prefer project-style domain aliases over repeating
+  string unions.
 - Keep child props semantic and generic, such as `isLoading`; do not leak the
   parent's internal `isValidating` or `isSubmitting` implementation into the
   child API.
@@ -229,6 +231,38 @@ appear nowhere else in the app.
   change.
 - Add refs/effects only when they solve a concrete stale-closure, race, or
   synchronous duplicate-request problem that state alone cannot solve.
+
+### API Contracts Across Environments
+
+The user clarified this workflow on 2026-11-06. Apply it across projects when
+backend environments or their published schemas are at different revisions.
+
+- Where DEV normally precedes STG, as in Dentlink, that rollout order is not
+  guaranteed. A change can be delivered to STG first. A field missing from DEV
+  Swagger proves only its absence from that schema, not its absence from STG
+  or an undecided contract.
+- Identify the backend environment relevant to the task. If its confirmed
+  contract is ahead of DEV, use that environment's available Swagger. If its
+  schema is unavailable or outdated, use the backend-confirmed request/response
+  contract supported by actual responses. Do not block authorized FE integration
+  solely because DEV Swagger lags behind.
+  Record which environment and source support the field; distinguish direct
+  inspection from the user's confirmation with backend. Reuse sufficient
+  current evidence; this does not require querying every environment or real
+  API again for every task.
+- In the established Swagger workflow, FE consumes checked-in generated or
+  copied types and app/domain models; it does not read Swagger at runtime.
+  Trace the type the actual API wrapper and feature consume, and update the
+  necessary FE declarations from the confirmed target-environment contract
+  through the repository's existing type/export boundaries.
+- Keep field presence, boolean value, requiredness, and nullability distinct.
+  One response containing a field does not establish that it is required in
+  every response or already deployed in other environments. Preserve confirmed
+  missing-value behavior and infer no new policy from the rollout difference.
+- Keep generation and manual model updates scoped to the task. Do not import
+  unrelated generated changes or change the default generator/runtime backend
+  environment merely to consume one confirmed contract. Contract reconciliation
+  does not itself authorize deployment or work in another product repository.
 
 ## Dentlink Client Implementation Defaults
 
@@ -248,10 +282,11 @@ applying them.
   Keep inaccessible, undecided, and backend-pending items explicit rather than
   completing them by assumption.
 - Work in replaceable stages when requirements arrive asynchronously: preserve
-  a clean UI/data boundary while an API is pending, regenerate and inspect the
-  deployed contract when it arrives, then connect it through the app's existing
-  service, domain type, and query layer. Do not leave fixtures mixed into the
-  server-backed result after migration.
+  a clean UI/data boundary while an API is pending. When the contract arrives,
+  inspect its target environment and update the needed generated/domain types
+  through the established workflow, excluding unrelated generation changes.
+  Connect it through the app's existing service, domain type, and query layer.
+  Do not leave fixtures mixed into the server-backed result after migration.
 - Treat Figma as the source for product intent, information hierarchy, states,
   interactions, and intentional visual details rather than an instruction to
   duplicate every pixel with new CSS. Read sibling variants and comments, then
@@ -283,9 +318,11 @@ applying them.
   an Admin feature should follow the nearest Admin CRUD, form, query, and table
   pattern. Do not transfer a sibling app's style merely because it is in the
   same monorepo.
-- Treat Swagger generation output as the transport contract. Handwritten model
-  and feature code should consume the repository's app-facing exports, domain
-  types, and API wrappers; do not import generated `data-contracts` directly
+- Treat Swagger generation output as a snapshot of its source environment's
+  transport contract; reconcile environment differences using **API Contracts
+  Across Environments**. Handwritten model and feature code should consume the
+  repository's app-facing exports, domain types, and API wrappers; do not import
+  generated `data-contracts` directly
   from a handwritten feature type merely to save a small type definition.
 - Keep query and mutation ownership at the same hook or service boundary used
   by neighboring code. Components should receive semantic data, loading state,

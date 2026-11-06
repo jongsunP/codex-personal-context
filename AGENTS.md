@@ -80,6 +80,12 @@
   project vocabulary; ask for review before introducing an ambiguous new name.
 - Follow the truthfulness and uncertainty-calibration rules in
   `AI_WORKFLOW.md` for all Codex work.
+- Follow **API Contracts Across Environments** in `DEVELOPMENT_STYLE.md`:
+  DEV-to-STG rollout order has exceptions. If the task's target backend already
+  provides a confirmed contract, use its Swagger or backend-confirmed response
+  contract to update the FE types actually consumed; DEV Swagger absence alone
+  is not proof of missing backend support. Preserve the established type/export
+  workflow and distinguish observed fields from requiredness and nullability.
 - Follow **Requirement And Design Scope** in `DEVELOPMENT_STYLE.md`: do not
   silently add user-visible UI, copy, or behavior outside confirmed requirements.
   Present the evidence and proposed change for user approval first; an existing
