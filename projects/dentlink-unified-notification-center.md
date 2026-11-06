@@ -1,5 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**추가 앱 화면의 모바일웹 대체 목적 재확인 — 2026-11-06:** 사용자가 현재 User Credits·Statements와 모바일웹을 직접 비교하며 누락을 확인했다. 목적은 조회만 보여주는 것이 아니라 **기존 모바일웹의 API·정책·디자인을 활용해 앱에서도 가능한 기능을 제공**하는 것이다. 앱 특성에 맞추되 자동사용 설정·정책 링크 등을 ‘READ 범위’라는 이유만으로 생략하지 않는다. PDF처럼 큰 별도 작업과 새 BE/디자인/기획이 필요한 항목은 구분한다. **조사·기록만 승인됐으며 실제 보완은 사용자 다음 승인 대기다.**
+
+- **판단 정정:** 앞선 ‘FE에서 더 할 것 없음/추가 목록 기능 충분’은 이 두 화면의 기능 대조가 부족한 결론이었다. 알림센터 본체의 BE 대기는 유지하되, Office 크레딧 자동사용 GET/PATCH·설명 펼침, Learn More, User/Office 아이콘·청구서 배지 등 FE 보완 후보가 남아 있다. 웹의 기존 API가 있어 모두 신규 BE 대기로 묶지 않는다.
+- **View 경계:** 청구서 상세가 아니라 청구서 번호로 검색된 결제내역 목록으로 이동한다. 기존 화면 재사용 가능성을 확인할 수 있으나 결제내역·Pay Now·PDF를 자동 확장하지 않는다. PDF 제외는 유지한다.
+- **현재 코드/검증:** Office `feature/DL-17059@1f956ae`, Web `feature/DL-17058@dea89193` 유지, 제품 변경 없음. 실제 앱의 크레딧/청구서 조회 success와 웹 표시값, 코드의 빈목록/오류/권한 처리를 확인했다. 전체 예외 조건 QA를 새로 수행한 것은 아니다. 현재 앱·외부 터미널·Reactotron과 사용자 창 배치는 유지한다.
+- **다음 시작점:** [상세 대조·사용자 목적·보완 제안](dentlink-unified-notification-center-finance-parity-2026-11-06.md)을 기준으로 사용자 승인을 받은 뒤 진행한다. 아래 과거 대기/완료 기록이 이 신규 확인사항을 덮어쓰지 않는다. Jira/Notion/제품 commit·PR·배포는 이번 정리에서 변경하지 않는다.
+
 **사용자 앱 로컬 확인 환경 재개 — 2026-11-06 18:49 KST:** 사용자가 앱 미리보기를 요청했다. 개인 정본 및 Office 체크아웃을 `pull --ff-only`하고 clean·`feature/DL-17059@1f956ae`를 확인했다. 기존 Codex 내부 Metro8081/8082는 이 세션 소유/cwd를 확인한 뒤 종료하고, macOS Terminal에서 Office Metro8081과 Android AVD를 실제 실행했다. 지속 Terminal은 Metro11419·Devices11422 두 창이며 Metro4615→yarn4583→zsh4570→login4569→Terminal4552, emulator4799→zsh4585→login4584→Terminal4552의 소유 관계를 확인했다. Codex 종료 생존 실험 자체는 하지 않았다.
 
 - iPhone17Pro/iOS26.5와 Android Dentlink_API_36/API36 모두 같은 Office DEV/Metro8081·현재 JS로 연결했고, Reactotron 클라이언트 양쪽 readyState1 및 하단 기기 선택 목록 펼침을 확인했다. Android ADB8081/9090 reverse를 복원했다. 기존 로그인·기기 데이터는 유지했다.
