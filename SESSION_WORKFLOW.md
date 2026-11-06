@@ -402,17 +402,43 @@ the required implementation or verification quality.
 - **Codex 단독 개발:** When the user is not directly watching local work,
   Codex may run development services and web checks through its own terminal
   and browser tools. The IDE does not need to be arranged for the user.
-- **사용자 로컬 확인:** When the user wants to inspect local work directly,
-  open the exact project/worktree in the IDE and run the required services in
-  its bottom integrated terminal so the commands and logs are accessible.
-  Show the service in an external browser and show the relevant simulator or
-  emulator windows. An IDE-embedded browser is unnecessary. Respect explicit
-  per-service exceptions, such as allowing Codex to run app Metro internally.
+- **사용자 로컬 확인:** Follow the user's 2026-11-06 distinction between web
+  and app preview. For web, open the exact project/worktree in the IDE, run
+  services in its bottom integrated terminals, and use an external browser;
+  an IDE-embedded browser is unnecessary. For apps, run Metro in a visible
+  external Terminal window so the user can directly see the command and live
+  output, and keep the iOS simulator and Android emulator visible together.
+  An internal Codex process with a separate log viewer is not the default
+  substitute for the app's visible execution terminal. Respect any explicit
+  per-task exception without changing the other service's setup.
 
 Use the user's stated intent to select the mode without repeatedly asking.
 If the user requests manual IDE startup, supply the exact checkout and commands
 and reuse that setup. If IDE control is unavailable in user-preview mode,
 report that limitation rather than silently substituting an internal server.
+
+For direct app preview:
+
+- Reuse a suitable idle external terminal; do not interrupt unrelated work.
+  Run from the verified checkout and label the terminal with the product,
+  environment and Metro port. Keep it running when the user asks to leave
+  the apps open. Optional local log mirroring may be retained; distinguish
+  stopping a `tail` viewer from stopping the actual Metro command.
+- One product's iOS simulator and Android emulator normally share one Metro
+  process/port and therefore need only one Metro terminal. Terminal count
+  follows independently running products/sources, not the number of devices.
+  Clinic/Office and Lab need separate Metro processes/ports when both products
+  run concurrently. Do not add permanent native-build terminals or duplicate
+  servers merely to make two or three terminal windows.
+- Treat the user's established app-preview setup (external Terminal plus
+  simulator/emulator) and web-preview setup (IDE integrated service terminals
+  plus external browser) as a readable composition, not exact window
+  coordinates or a mandatory desktop/Space number. When preparing local
+  preview, make the commands, logs and service screens easy for the user to
+  see. Preserve suitable existing placement/grouping without unnecessarily
+  rearranging it; recreating an earlier position pixel-for-pixel is not needed.
+  This visual composition is not required when Codex is working internally
+  without a request to prepare the user's local preview.
 
 In both modes:
 

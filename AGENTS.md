@@ -105,9 +105,15 @@
   duplicate windows while allowing the task's normal navigation and actions.
 - For local execution, follow **Local Development And User Preview** in
   `SESSION_WORKFLOW.md`: distinguish Codex working alone from the user's
-  direct local inspection. The latter uses the exact IDE/worktree, bottom
-  integrated service terminals and external browser/devices; an IDE browser
-  is unnecessary. Preserve the user's layout and explicit service exceptions.
+  direct local inspection. For direct web preview, use the exact IDE/worktree,
+  bottom integrated service terminals and an external browser. For direct app
+  preview, run Metro in a visible external Terminal alongside the paired
+  simulator/emulator. One product's two devices share one Metro; separate
+  products require separate processes/ports. This is the user's 2026-11-06
+  clarification. An IDE browser is unnecessary. Preserve the user's existing
+  web/app arrangements and explicit service exceptions. These are readable
+  preview compositions, not exact window coordinates; Codex-only internal
+  work need not reproduce them.
   App runtime and crash verification requirements are the same in both modes.
   In solo and parallel work, keep each product's iOS simulator and Android
   emulator on the same task/source and environment and switch them together.

@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**로컬 확인 기본 구성 확정 — 2026-11-06:** 사용자는 현재의 앱 확인 화면(외부 Terminal+시뮬+에뮬)과 웹 확인 화면(IDE 하단 서비스 터미널+외부 브라우저)을 각각 기본 세팅으로 확인했다. 정확한 창 좌표나 특정 Space까지 재현하라는 뜻이 아니라 사람이 명령·로그·서비스 화면을 보기 편한 구성이다. Codex가 내부에서 단독 작업할 때는 이 구성이 필수가 아니며, 사용자가 로컬 확인용 세팅을 요청할 때 적용한다. 병원앱 한 제품의 양 OS가 같은8081을 쓰므로 외부 Metro 터미널1개가 맞다. 기공소앱도 함께 실행할 때만 별도 Metro/포트가 필요하며 기기 수대로 터미널을 추가하지 않는다. 이 기준을 공통 `AGENTS.md`·`SESSION_WORKFLOW.md`에 반영하고 로컬 지침에도 동기화한다. 현재 Office8081·웹3000/3005는 유지하고 Lab8082는 꺼진 상태 그대로 둔다. 기존 배치를 불필요하게 변경하거나 앱·서버를 재시작하지 않는다. 기능 구현·검증의 완료/BE 대기 범위는 유지하며 새 요청까지 대기한다.
+
 **최신 실행 상태 — 2026-11-06 외부 Terminal 전환:** 사용자가 앱 실행 로그를 Codex 밖에서 직접 보도록 요청하여, 앱·기기는 유지하고 Office Metro만 macOS Terminal 창으로 옮겼다. 기존 적합한 idle Terminal 창4581을 재사용했고 제목은 `Dentlink Clinic DEV · Metro 8081`, TTY는 `/dev/ttys006`이다. 정확한 `/Users/parkjongsun/Repository/dentlink-app`·`feature/DL-17059@1b1e449d`에서 `yarn react-native start --port 8081 --no-interactive 2>&1 | tee -a /Users/parkjongsun/Library/Logs/Codex/Dentlink/office-metro-8081.log`를 실행한다. 현재 PID31402는 실제 외부 Terminal TTY 소속이며 이전 Codex 내부 PID30872/session83819를 대체했다. 단일8081 리스너·Metro cwd·status running·양 OS Office DEV inspector 재연결·Terminal 창 visible/busy와 연결 로그를 확인했다. iOS 앱PID29923/AndroidPID14629는 유지했고 시뮬/에뮬·앱·로그인·화면을 종료/재시작하거나 웹을 조작하지 않았다. 창 크기/배치는 임의 변경하지 않았다.
 
 - 별도 터미널에서 `tail -n 100 -F /Users/parkjongsun/Library/Logs/Codex/Dentlink/office-metro-8081.log`로 확인한다. 해당 tail만 Ctrl+C로 끝내도 Metro/앱은 유지된다.
