@@ -803,13 +803,17 @@ need a human check.
   that is the evidence; do not promise zero risk or infer safety from line count.
   Reuse the proportional final-code verification under
   [App Screen Runtime Verification Before Merge](DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge).
-- If human inspection is useful or necessary, name only the relevant screens,
-  entry paths, actions and expected results in a short checklist. Include roles,
-  platforms or device-only conditions only when the change actually depends on
-  them. For a simple label-visibility fix, identify the affected home/list area
-  and hidden/retained labels and dates, without adding unrelated permission,
-  detail-navigation or full-flow QA. If no additional manual check is needed,
-  say so instead of inventing one.
+- Complete the relevant Codex simulator/emulator checks before handing a crash
+  or runtime concern to the user, including concerns found in a later code
+  review. Reuse adequate final-code evidence under the rule above. Request user
+  inspection only when a concrete verification gap still requires their device
+  or direct observation. State what Codex already checked, why user inspection
+  remains necessary, and only the relevant screens, entry paths, actions and
+  expected results in a short checklist. Include roles, platforms or device-only
+  conditions only when the change actually depends on them. For a simple
+  label-visibility fix, keep any remaining check to the affected home/list labels
+  and dates, without adding unrelated permission, detail-navigation or full-flow
+  QA. If no additional manual check is needed, say so instead of inventing one.
 - Record the user's deployment confirmation as user-confirmed evidence with its
   stated scope. Do not turn a general confirmation into proof of both platforms,
   every screen or agent-observed OTA receipt, and do not re-request confirmation
