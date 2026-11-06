@@ -1,5 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**랜딩 후 뒤로가기 점검 — 2026-11-06:** 사용자가 Office의 알림→크레딧→헤더 뒤로가기에서 Home으로 가는 것을 보고 웹·양 앱의 라우트/복귀 의미를 확인하도록 요청했다. 이번은 조사이며 새 복귀 정책/제품 수정 승인이 아니다. Web `feature/DL-17058@dea89193`, Office `feature/DL-17059@420d415`, Lab `feature/DL-17060@93c5e87` clean 기준으로 확인했다.
+
+- **Web Clinic/Lab:** 각 `useNotificationLanding.ts`가 `router.push`하므로 브라우저 뒤로가기는 이전 방문 URL로 간다. 알림함은 URL이 아닌 팝업 상태이고 클릭 시 닫으므로 팝업을 자동 복원하지 않는다(`shared/ui/src/NotificationUI/NotificationCenterMock.tsx:191`). 화면 자체 뒤로/닫기 버튼은 개별 화면의 기존 규칙이다. 다른 병원 알림 확인 후 홈에서 팝업을 한 번 여는 entry 기록은 일반 랜딩의 back 복원과 별개이며, browser back이 활성 병원까지 되돌리는 계약도 아니다. 현재 웹 기본 DEV mock에는 landingUrl이 없어 이번 확인은 코드 호출 경로 근거이며 실제 알림 URL 왕복 QA가 아니다.
+- **Office/Lab 앱:** 알림 클릭이 출발 화면 없이 `landingUrl`만 deferred로 전달하고, `RootNavigator`에서 공통 `navigateToDeepLinkState`를 호출한다. 일반 목적지는 `navigationRef.reset([BottomTabNavigator, 목적지])`가 되어 알림함이 이력에 남지 않는다(Office `useNavigationConfig.ts:566,883–892`, Lab `:482,723–732`). Header 기본은 `navigation.goBack()`이며 홈 하드코딩이 아니다. `BottomTabNavigator` 초기 탭이 Home이므로 크레딧/청구서 등 일반 랜딩의 뒤로는 Home이다. 외부 push도 같은 reset 흐름이다. 채팅 push의 LinkTalk 복귀·동일 채팅 유지, WebView 내부 history 등의 기존 특수 동작은 별도로 유지해야 한다.
+- **구분/다음 시작점:** 랜딩 URL은 목적지이며 복귀 화면을 결정하지 않는다. 앱의 내부 알림 클릭은 알림함 이력을 보존하고, 외부 push는 실제 진입 이력/기존 목적지별 복귀 규칙을 따르도록 구분하는 것이 보완 후보다. 아직 이를 확정 요구나 구현 완료로 기록하지 않는다. 병원 전환이 포함되면 이전 소속의 화면을 잘못 복원하지 않도록 추가 고려한다. 이 보완 자체에는 신규 BE API가 필요하지 않으나 실제 읽음/푸시 식별 계약 대기는 별개다. 사용자 방향 확인 후 구현한다.
+- **검증 범위:** 제품 코드·브랜치·서버·창 배치·화면 이동은 변경하지 않았다. 켜진 Office 기기의 navigation state를 읽기 전용으로 보조 조회했으나 사용자 화면이 이동해 Android 알림함 스택만 관찰했고, 새 양OS 크레딧 back 실증으로 주장하지 않는다. 이번 결론은 최종 코드 호출 경로와 사용자의 관찰을 대조한 것이다.
+
 **앱·웹 로컬 확인 배치 최종 승인·대기 — 2026-11-06:** 사용자가 현재 앱·웹 화면 배치 모두 원하는 스타일이라고 확인하고 마지막 확인·메모리·대기를 요청했다. 앱은 바로 아래 좌표표와 동일한 상단 Android/Metro 두 실행 터미널·하단 Android/iPhone/Reactotron이며 실제 화면으로 재확인했다. 웹은 별도 데스크톱의 Cursor IDE(`dentlink-client-notification-center`, `feature/DL-17058`)와 하단 내장 터미널2개, 별도 일반 Chrome 한 창 안의 `[DEV-Office] localhost:3000`·`[DEV-Lab] localhost:3005` 두 탭 구성이다. Cursor와 로컬 Chrome은 각각 AX x0/y30/1920×1050이며 해당 데스크톱에서 필요할 때 전환해 보는 구성이다. 탭을 분리하거나 창 크기를 임의 변경하지 않는다.
 
 - 앱 배치 실제 캡처 `/tmp/preview-layout-app-final-1106.png`, 웹 Chrome/Cursor 각각 `/tmp/preview-layout-web-{chrome,cursor}-final-1106.png`로 확인했다. Chrome은 Lab 알림 설정을 열어둔 사용자 상태였고 Cursor의 하단 실행 터미널 두 개를 확인했다. 단순 창 확인을 새 기능 QA나 모든 로그 무오류 확인으로 확대하지 않는다.
