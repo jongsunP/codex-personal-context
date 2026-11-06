@@ -126,6 +126,12 @@
   when needed, an authorized test password from a local secure store. Keep
   credentials outside Git and logs; do not repeatedly request login when a
   valid saved session exists. This is the user's standing 2026-11-03 direction.
+- For agent-operated web work, follow **Web Browser Automation Preference** in
+  `SESSION_WORKFLOW.md`: prefer a separate Chrome for Testing/compatible test
+  Chromium, fall back to existing regular Chrome, then computer-use interaction.
+  Reuse suitable windows/profiles, preserve the user's browser, and distinguish
+  isolated browser state from shared account/server data. This is the user's
+  2026-11-06 direction.
 - When creating a delegated work session, follow **New Session Model And
   Reasoning Default** in `AI_WORKFLOW.md`: explicitly select the main session's
   verified model and reasoning level, or the highest available combination

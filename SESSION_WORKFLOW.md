@@ -434,6 +434,35 @@ In both modes:
   available until they are no longer needed or the user requests shutdown.
   This mode choice does not authorize additional product, PR or delivery work.
 
+### Web Browser Automation Preference
+
+The user confirmed this fallback order on 2026-11-06 for agent-operated web
+work: **Chrome for Testing (or the tool's compatible test Chromium) → the
+existing regular Chrome → computer-use interaction**.
+
+- Prefer a separate automation browser/profile so the user can continue in
+  regular Chrome without competing for tabs, clicks, input or navigation.
+  Reuse a suitable existing test browser before opening another. Preserve the
+  user's regular windows, layout and login; a separate browser does not require
+  another local server.
+- If test-browser automation cannot perform the required check, use the
+  regular Chrome through an available permitted automation method, then use
+  computer-use/mouse-and-keyboard interaction if needed. Verify the actual
+  task environment and page rather than assuming every method has equivalent
+  evidence. Do not change browser security/automation settings without user
+  authorization. The user explicitly authorized enabling regular Chrome's
+  Apple Events JavaScript option on 2026-11-06; verify it by executing a harmless
+  read, not only by clicking its menu item.
+- Separate profiles isolate browser state, not server data. Shared test
+  accounts, affiliation activation and server writes can still affect each
+  other; coordinate those operations and restore test state where appropriate.
+- Use the approved dedicated test login/session storage. Do not copy the
+  user's general profile or extract its credentials to populate the test
+  browser. A control banner's presence or absence is not proof of the control
+  mechanism or test coverage.
+- Report which browser was exercised. A passing test-browser check must not
+  be described as interaction in the user's regular Chrome window.
+
 ### Paired iOS And Android Environments
 
 The user's 2026-11-05 instruction applies across projects, in both solo and

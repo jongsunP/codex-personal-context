@@ -75,7 +75,16 @@
 
 ## 마감
 
-- 오늘 로컬 수정은 Office6파일·Lab4파일이다. 앞선 OS2건에 딥링크 실패 안내 및 Lab 반복 처리 방지를 추가했다. 제품 HEAD/브랜치는 유지하며 제품 commit/push·PR·배포는 하지 않았다.
+- 오늘 수정은 Office6파일·Lab4파일이다. 앞선 OS2건에 딥링크 실패 안내 및 Lab 반복 처리 방지를 추가했다. 최초 보고 시 로컬 변경이었으며, 후속 사용자 승인으로 아래 commit/push를 완료했다. PR·배포는 없다.
 - 테스트 중 바꾼 서비스 함수·권한 응답·권한 캐시·목록 URL·mock 상태를 원복했다. Lab 실패 검증의 임시 소속은 `getState` 읽기 응답만 제어했고 실제 auth 저장/서버 전송은 없었다. 마지막 양OS 각각 실패1회·사용자 재클릭 시 총2회, 임시 함수 복원·실제 단일소속85/212 유지까지 확인했다.
 - Office 실제 서버 전환은 원래1409/1889로 복귀했고, 기기 페어를 같은 Office DEV/Metro8081의 Home으로 복원했고 마지막 양OS LogBox0을 확인했다. OS 설정·설치·로그인은 보존하며 서버/창 배치는 유지한다.
-- 새 BE 계약을 받으면 남은 실데이터 검증을 이어간다. 최종 제품 QA·배포 가능 판정으로 확대하지 않는다. 개인 체크포인트와 이 보고서만 commit/push한다.
+- 새 BE 계약을 받으면 남은 실데이터 검증을 이어간다. 최종 제품 QA·배포 가능 판정으로 확대하지 않는다. 후속 사용자 승인에 따른 제품 commit/push와 실행 종료는 아래 최신 마감을 따른다.
+
+## 후속 마감 — Android 제한 재확인·제품 push·종료
+
+- 사용자는 조작 겹침/Reactotron shake를 앞선 멈춤의 가능성으로 제시했고, 원인으로 단정하지 않은 채 Android만 짧게 확인한 뒤 웹으로 넘어가도록 승인했다. 전체 기능·iOS 검증을 반복하지 않았다.
+- Android Office/Lab 각각 앱 완전 종료·재실행 → 홈 벨 → 알림함 → 설정 → 뒤로 → 홈을 실제 Maestro 조작으로 통과했다. 시작 시 지연은 있었지만 이번 구간의 새 Dentlink `am_anr`/`am_crash` 이벤트0, 최종 두 JS LogBox0이다. 최초 멈춤 원인을 해결한 것으로 표현하지 않는다.
+- 최종 diff 독립 읽기 리뷰·diff-check 통과. 코드 변경 없이 오늘의 관련 Jest/lint/양 OS 실패 재현 검증을 재사용했다. commit-changes 스킬을 설치 경로에서 찾지 못해 저장소의 한글 커밋 규칙과 목적별 분리를 적용했다.
+- Office `13bc0b5`(권한 복귀)·`1b1e449d66a96ef261c80b6603ade52721a3f6d7`(딥링크 실패 안내), Lab `b981863`(권한 복귀)·`93c5e8742906e08a38a6000d02e517beb5a94cc2`(딥링크 실패 반복 방지)를 각각 기존 feature 브랜치에 commit/push했다. 원격 SHA 일치·clean·upstream 일치를 확인했다.
+- 사용자 요청으로 앱 종료 후 emulator-5554와 iPhone17Pro 시뮬레이터를 종료하고 본 세션의 Metro8081/8082(PID5435/5477)를 종료했다. 로그인·설치·권한 데이터는 삭제하지 않았다. 웹 IDE 서버3000/3005와 사용자 Chrome은 유지했다.
+- 근거: `/tmp/app-closeout-{office,lab}-1106.log`, `/tmp/app-closeout-{office,lab}-home-1106.png`, `/tmp/app-closeout-office-state-1106.json`, `/tmp/app-closeout-lab-final-state-1106.json`, `/tmp/app-closeout-android-events-1106.json`.
