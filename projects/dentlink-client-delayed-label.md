@@ -1,6 +1,18 @@
 # 웹 주문 지연 라벨 — DL-17141
 
-## 현재 체크포인트 — PR 설명 정정·기록 마감·대기, 2026-11-06
+## 현재 체크포인트 — v1.92.0 stage 초기화·배포 PR 준비 완료, 2026-11-06
+
+- **최신 요청:** 사용자가 “스테이징 배포 프로세스도 지우고 배포하는 것”을 요청한 뒤, 방금 머지한 PR을 포함한 **릴리즈 브랜치 전체를 스테이징에 반영**하려는 것이라고 명확히 했다. 공통 배포 준비 지침에 따라 기존 stage 삭제·master 기반 재생성·release→stage PR까지 수행한다. 새 PR의 merge/배포 시작은 별도 지시 대상이다.
+- **병합 확인:** PR4843은 2026-11-06 15:28:03 KST에 release/v1.92.0에 병합됐다. 최신 릴리즈 `cfe42ad6a5d15ae237088cac32bc3ff9a8d023c9`, 원본 feature `feat/DL-17141-delay-cleanup@a4f70d33c5d4fb61767512530c8783067132d7e7`는 보존했다. local release는 기존 cdcd371ef에서 원격 최신으로 fast-forward하여 가드가 오래된 local ref를 사용하지 않도록 했다.
+- **완료 PR:** [#4844](https://github.com/Innvoaid/dentlink-client/pull/4844), `[DL-17141] v1.92.0 스테이징 배포 준비`, `release/v1.92.0 → stage`. 생성·첨부 후 OPEN/일반/mergeable:true/merged:false, 실제 base `c5a4b5e372fb7734c72a5faec6807e7b554c1dd6`, head `cfe42ad6a5d15ae237088cac32bc3ff9a8d023c9`, 17커밋·121파일을 확인했다. REST pagination으로 GitHub 전체 파일 목록이 로컬과 동일함을 확인했다(gh pr view files는 첫 100개만 반환하여 그대로 전체 확인으로 간주하지 않았다).
+- **stage 초기화:** 기존 stage `3ada04a14704ffbc082323a0e1290526d05c353a`, 열린 stage 대상 PR 0개, protected:false·유효 rules:[] 확인. `refs/recovery/stage-before-v1.92.0-dl17141-cleanup-20261106` 및 검증된 `/tmp/dl-17141-stage-20261106/stage-before-reset.bundle`에 복구점을 보존했다. 예상 SHA lease로 원격 stage 삭제 → 원격 부재·master 최신 재확인 → 비존재 lease로 exact master `c5a4b5e372fb7734c72a5faec6807e7b554c1dd6`에서 재생성 → 원격 stage=master 확인. 과거 stage→main rename 안내가 push에 출력됐지만 실제 ref는 의도한 stage/master 값이다.
+- **트리거 검증:** 기존 stage→release 차이는 shared 4파일이라 세 서비스 경로 필터를 만족하지 않았다. reset 후 최종 PR 3dot 121경로·실제 master→merge 결과114경로이며, 양쪽 모두 Clinic39/Lab17/Admin13 경로가 포함되어 각 `push: stage` + `clinic/**`/`lab/**`/`admin/**` 조건을 충족한다. Clinic은 build→Seoul/Ohio→셋 성공 시 verify이며 Lab/Admin은 별도 job-level if/needs가 없다. PR에만 보이는 workflow/E2E 7경로는 master에 이미 같은 내용이 있는 별도 통합 이력이다.
+- **병합·검사:** merge-tree 충돌 없음(exit0), 결과 tree `fdb82d40bded7f68dfcea1c18a091075550f6f33`가 릴리즈 및 현재 feature 전체 tree와 동일하다. stage 삭제·재생성의 정상 push hook 모두 통과: Clinic/Lab/Admin lint 기존225/185/393 warnings·error0, Admin guard9·공유53 tests/coverage. hook을 실행한 feature와 전달할 릴리즈의 추적 파일 내용이 동일하므로 검사 대상을 구분해 기록했다. 제품 코드 추가 수정·hook 생략 없음.
+- **전체 릴리즈 E2E:** 독립 최종 NEEDS_RUN 판정. 미처리 locator 파손은 없고 CAD Change→Upload는 기존 E2E에 반영됐다. 배송 예상일 조회 실패 시 선택한 제작 상태 전환·빈 예상도착일 서버 수용·후속 배송 가능 여부는 정적 확인 불가다. 04_labShipment serial 전체와 실패 분기 관측, 05_labStatus·08_orderFeedback이 권장 범위이며 실제 데이터 변경 E2E는 이번 준비에서 실행하지 않았다. mark/check를 최종 stage/release refs로 통과시켰고 한계를 PR에 기록했다. 이번 배지 정리 단독 NO_IMPACT와 전체 릴리즈 가드를 혼동하지 않는다.
+- **배포 상태 경계:** 재생성 뒤 시작 메타데이터를 한 번 조회했을 때 최신 stage push run은 기존 14:56:36 KST/3ada04a의 Office·Lab·Admin 세 run이었다. 재생성 master 또는 새 release의 실행은 그 관측에 없었다. 결과 상태를 조회·감시하거나 PR을 병합·workflow dispatch하지 않았다. 실제 최신 릴리즈 배포 성공·서빙 리비전·전체 E2E·실사용 화면 확인을 완료로 보고하지 않는다.
+- **보존·다음 시작점:** product checkout은 원래 feature a4f70d33c/upstream 일치·clean, 다른 worktree/서버/창·앱 세션은 변경하지 않았다. 개인 체크포인트만 commit/push 후 대기한다. 다음 사용자 요청은 PR4844 검토/merge 또는 명시적 배포 작업을 시작점으로 삼는다. 서버 결과 확인 요청 시 시작 후15분·후속 최소3분 간격 규칙을 적용한다. 자동 merge·배포·추가 E2E·리뷰 대응·모니터링·브랜치 정리는 하지 않는다.
+
+## 이전 PR 설명 정정·기록 마감 — 2026-11-06
 
 - **최신 요청·경계:** 사용자는 기존 웹·백엔드의 스테이징 반영을 전제로 추가 코드 정리를 요청했고, 이번에는 즉시 배포할 필요 없이 후속 PR까지만 지시했다. merge·배포·앱 세션 전송·자동 리뷰 감시는 하지 않는다.
 - **최종 마감:** 사용자의 “PR 정정할 것이 있으면 하고 정리메모리·대기” 요청에 따라 PR4843 본문의 API 계약 설명만 정정했다. Lab 목록 isDelayed의 STG 선반영·DEV 미반영을 사용자가 백엔드에 확인한 사실로 명시하고, 기공소 웹 라벨은 기존 상세 `deliverySchedule.isDelayed`를 사용하여 이번 PR에 Lab 목록 DTO 추가가 필요하지 않음을 적었다. 원래의 검증 범위와 자동 생성된 PR 부록은 보존했다. 변경 본문 재조회 일치·OPEN/일반/release v1.92.0·동일 HEAD·제품 clean을 확인했고 코드 변경이나 검사 재실행은 하지 않았다.
