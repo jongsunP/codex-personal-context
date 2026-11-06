@@ -1,6 +1,20 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## 현재 브레이크포인트 — 2026-11-05 · DL-17251 누락 재대조·추가 보완 완료, PR62 오너 반영 대기
+## 현재 브레이크포인트 — 2026-11-06 · Studio 작업 영역별 PR 처리 구분 확인, 추가 요청 대기
+
+- **확인한 결론:** 사용자 PR의 오너 재등록은 계정 이상이나 개발자·비개발자 구분 때문이 아니라 **수정한 작업 영역에 적용되는 정책** 때문입니다. 사용자는 이 구분을 이해했고, 앞으로 본인이 공통 코드 또는 기획·시안 작업을 할 때 참고하도록 기록을 요청했습니다.
+
+| 작업 영역 | 현재 Studio의 PR 처리 기준 |
+| --- | --- |
+| 프로젝트별 기획·시안 | 비오너는 `workspaces/DL-<숫자>/` 한 곳 안에서 작업하고 본인 PR로 제출합니다. 다른 팀원들의 원 PR이 그대로 병합된 사례가 있습니다. |
+| 공통 갤러리·패키지·Studio 공통 코드 | 현재 정책상 등록된 코드 오너가 별도 PR을 작성합니다. 오너가 기존 PR에 승인하거나 검사를 다시 실행하는 것만으로 작성자 제한이 해제되지는 않습니다. |
+
+- **코드 근거:** 확인한 main은 `ac024a6fa561bcab4ccd913634d4ecae04890361`입니다. [docs/project-access.md](https://github.com/Innvoaid/dentlink-studio/blob/ac024a6fa561bcab4ccd913634d4ecae04890361/docs/project-access.md#L105)에 공통 변경은 코드 오너가 별도 PR로 작성한다고 명시돼 있습니다. [scripts/project-access-ci.mjs](https://github.com/Innvoaid/dentlink-studio/blob/ac024a6fa561bcab4ccd913634d4ecae04890361/scripts/project-access-ci.mjs#L21)는 재실행자 대신 PR 작성자의 `user.login`을 검사합니다. `.github/project-access.json`의 등록 maintainer는 현재 `inkyookoh`이며, 비오너의 단일 workspace 제한은 `scripts/project-access.mjs`에 있습니다. 정책은 변경될 수 있으므로 다음 실제 작업 시작 시 당시 코드를 다시 확인합니다.
+- **실제 PR 구분:** 이전 갤러리 [#56](https://github.com/Innvoaid/dentlink-studio/pull/56)은 미병합 종료됐고, Tom이 원 커밋 작성자를 보존해 옮긴 [#60](https://github.com/Innvoaid/dentlink-studio/pull/60)으로 11/04 병합됐습니다. 별도 후속 [#62](https://github.com/Innvoaid/dentlink-studio/pull/62)는 이번 11/06 조회 시 여전히 OPEN이며 오너 재등록·병합 완료로 기록하지 않습니다. 다른 팀원의 [#64](https://github.com/Innvoaid/dentlink-studio/pull/64), [#59](https://github.com/Innvoaid/dentlink-studio/pull/59), [#58](https://github.com/Innvoaid/dentlink-studio/pull/58)은 각각 단일 workspace 변경이고 원 작성자의 PR 그대로 병합된 사례입니다.
+- **권한과 정책의 구분:** GitHub push·승인·병합 권한, 저장소의 작성자/변경 경로 검사, Vercel 미리보기 권한은 별개입니다. 이번에는 모든 계정의 GitHub 역할·보호 규칙을 조회한 것이 아니므로, 기획·시안 작업이면 사용자도 모든 승인·병합·미리보기 권한이 자동 보장된다고 단정하지 않습니다. 현재 공통 코드 PR 처리 방식 자체는 정상이며 추가 권한 요청·우회는 하지 않습니다.
+- **현재 상태·재개점:** DL-17251 구현·검증·PR 제출 완료와 #62 오너 처리 대기를 유지합니다. 제품 코드·PR·Jira·권한 설정은 변경하지 않고 이번 사실만 개인 메모리에 저장합니다. 사용자나 동료의 후속 안내 전 추가 조회·구현·하네스 재개 없이 대기하며, 새 작업 요청 시 먼저 공통 수정인지 프로젝트별 기획·시안인지 구분합니다. DL-16471 아카이브도 유지합니다.
+
+## 이전 브레이크포인트 — 2026-11-05 · DL-17251 누락 재대조·추가 보완 완료, PR62 오너 반영 대기
 
 - **사용자 최종 확인·대기:** 사용자가 이번 보완 내용의 간단한 설명을 요청하고, 현재 상태로 대기하며 동료의 리뷰·병합 소식을 직접 알려주겠다고 했습니다. 구현·검증·PR·Jira 정리는 위 완료 상태를 유지합니다. 이후 별도 요청 전 제품 코드 변경, PR/Jira 추가 수정, 자동 조회·모니터링, 하네스 재개는 하지 않습니다. 새 안내를 받으면 해당 리뷰나 병합 결과만 먼저 확인해 필요한 범위를 이어갑니다.
 - **용도 재확인·최종 정리:** 사용자와 dentlink-client는 실제 서비스·디자인시스템 원천 관리, dentlink-studio는 배포된 디자인시스템을 소비해 PM·디자이너 등 비개발자의 기획·시안 작업을 지원하는 환경이라는 구분을 재확인했습니다. 이번 변경은 Studio에서 실제 DLDS의 모양·상태·사용 예제를 확인하는 갤러리 보완이며, Client 원천·하네스 수정은 없습니다. 제출 자료는 기존 PR62 하나로 충분하고 추가 PR·코드 작업은 필요하지 않습니다. 사용자가 동료의 리뷰·병합 소식을 알려주기 전까지 대기합니다. 이번 마감은 개인 메모리만 저장하며 원격 PR/Jira 상태를 다시 조회하거나 변경하지 않습니다.
