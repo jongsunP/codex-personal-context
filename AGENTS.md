@@ -114,6 +114,11 @@
   web/app arrangements and explicit service exceptions. These are readable
   preview compositions, not exact window coordinates; Codex-only internal
   work need not reproduce them.
+  Direct app preview must execute independently of Codex, including emulator
+  launch, rather than only displaying Codex-owned logs externally. Extra
+  external terminals for device startup are allowed. Verify process ownership
+  as well as the app connections; do not claim a Codex restart survival test
+  without actually performing it.
   App runtime and crash verification requirements are the same in both modes.
   In solo and parallel work, keep each product's iOS simulator and Android
   emulator on the same task/source and environment and switch them together.

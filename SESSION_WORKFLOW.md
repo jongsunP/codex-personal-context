@@ -419,6 +419,19 @@ report that limitation rather than silently substituting an internal server.
 
 For direct app preview:
 
+- The user's 2026-11-06 clarification requires actual execution independent
+  of Codex, not merely an external window that reads Codex-owned logs. Start
+  Metro and the emulator/device-launch commands from an external Terminal or
+  the native macOS application. Do not leave a long-lived emulator attached
+  to a Codex exec session when handing local preview to the user. Codex exit
+  must not be the intended lifetime boundary for this preview.
+- Verify both the live screens/connections and execution ownership. Metro
+  and an Android emulator launched from Terminal should have the appropriate
+  Terminal shell/TTY ancestry. CoreSimulator/ADB services may normally be
+  launchd-owned; they need not be forced under the terminal. Distinguish this
+  ownership check from an actual Codex quit/reopen survival test, and do not
+  claim the latter unless performed. Do not quit Codex to test without the
+  user's instruction.
 - Reuse a suitable idle external terminal; do not interrupt unrelated work.
   Run from the verified checkout and label the terminal with the product,
   environment and Metro port. Keep it running when the user asks to leave
@@ -428,8 +441,10 @@ For direct app preview:
   process/port and therefore need only one Metro terminal. Terminal count
   follows independently running products/sources, not the number of devices.
   Clinic/Office and Lab need separate Metro processes/ports when both products
-  run concurrently. Do not add permanent native-build terminals or duplicate
-  servers merely to make two or three terminal windows.
+  run concurrently. One Metro does not mean only one terminal may exist:
+  additional Terminal windows for independent emulator or iOS launch commands
+  are explicitly allowed when useful. Avoid duplicate servers or unnecessary
+  permanent build terminals merely to reach a window count.
 - Treat the user's established app-preview setup (external Terminal plus
   simulator/emulator) and web-preview setup (IDE integrated service terminals
   plus external browser) as a readable composition, not exact window
