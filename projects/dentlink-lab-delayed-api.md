@@ -1,6 +1,17 @@
 # 기공소 지연 판정 API 통일 — DL-17262
 
-## 현재 체크포인트 — 2026-11-06 백엔드 계약 반영 정리·PR36 완료
+## 현재 체크포인트 — 2026-11-06 PR36 스쿼시 병합·Staging v62 완료
+
+- 최신 사용자 승인: PR36에 정정할 사항을 확인하고, 없으면 **스쿼시 머지 후 릴리즈로 CodePush 재진행**. 앞선 PR까지만 범위는 이 요청으로 갱신됐으며 기존 대화의 Lab 양OS Staging 범위를 따른다. Clinic·웹·Production·스토어·release→main 병합은 이번 범위가 아니다.
+- 사용자가 백엔드에 직접 확인한 사실: 이번 필드는 예외적으로 **Staging 실응답·Swagger에 먼저 반영**, DEV 응답·명세에는 아직 없다. PR36은 이미 확인된 STG 생성 타입을 반영했으므로 코드 정정은 필요 없었다. PR 설명에 이 환경 차이와 백엔드 확인을 보완하고 오래된 PR까지만 문구를 정리했다. 공통 작업지침은 웹 세션 담당으로 이번에 수정하지 않았다.
+- [PR36](https://github.com/Innvoaid/dentlink-lab-app/pull/36)은 **2026-11-06 15:24:31 KST 스쿼시 병합 완료**, `release/v1.0.5@907832d990a59b8a26a4c06e8df6663166a6f7f6`. 병합 시 head `3bdf386` 고정 검사를 사용했다. 병합 전 unresolved review thread·리뷰·댓글은 없었고 관련 자동화는 성공/정상 skip이었다.
+- 병합된 release의 전체 tree **`ad69ba53e46110e389fb1f8bcf18f5781e307b43`**가 최종 검증 feature `3bdf386`과 동일하다. 기존 v61 source `c60968a` 대비 4파일 +16/-27만 변경됐고 native·package·lock·env·배포 설정은 동일하다. package/Android/Xcode 모두1.0.5 확인. 양OS 최종 홈 검증을 그대로 재사용했고 기기·로그인·Metro 조작이나 무관한 QA는 반복하지 않았다.
+- **Lab iOS·Android Staging v62 / target1.0.5** 업로드 완료. iOS **15:25:45 KST**, Android **15:26:24 KST**. `ENVFILE=env/.env.staging yarn codepush-force:staging-mute`를 위 release source에서 실행했고 양OS bundle·Hermes·업로드 성공. 독립 Revopush history read-back으로 source SHA·enabled·mandatory·rollout100을 확인했다. Slack 발송은 하지 않았다.
+- packageHash: iOS `846c2a8ad36024e964d2da8aeea1bbda282ed718c723edaafdba9b603a4b8c16`, Android `1c51d96a8738ff794294dd8ef99615c6aae5db9000792ed25782968dcc92ec7c`. 확인 사본은 `/tmp/dl-17262-cleanup-staging-result.json`. 업로드 후 source와 배지 blob `f4896536e66adc62c6eb45ac747d8509e6639c80` 일치·제품 checkout clean을 확인했다.
+- 기존 표시 동작은 유지한다. Lab 서버true→Delayed, false→On Time, 키 누락/비boolean→라벨 숨김, 날짜와 일반/remake 조건 유지. 명시적 가드가 있고 최종 양OS 홈 실행에서 관련 크래시/화면 오류를 관찰하지 못했다. 이번 배포가 실제 사용자 기기에 수신·적용됐는지는 별도이며 확인하지 않았다. 필요 시 사용자 확인은 업데이트 후 홈 Track Your Order의 기존 날짜·라벨 유지 정도면 충분하다.
+- 요청한 병합·재배포와 타입/분기 정리는 완료됐다. 실제 인증된 Staging 주문의 목록·상세 판정 일치까지 직접 비교한 것은 아니며, Swagger 직접 확인·사용자의 백엔드 확인·Development fixture 실행 증거를 구분한다. 기본 Lab 알림센터 checkout과 Office 작업은 유지했다. 별도 요청 없이 추가 모니터링·배포·main 통합·브랜치 삭제를 하지 않는다.
+
+## 선행 체크포인트 — 2026-11-06 백엔드 계약 반영 정리·PR36 완료
 
 - 사용자 후속 요청: 백엔드도 이미 Staging 배포됐다고 확인했고, 임시 코드 정리를 **다시 PR까지만** 요청했다. 이번 정리의 merge·CodePush·배포는 미승인이며 미수행이다. 이미 전달한 Lab Staging v61은 그대로 유지한다. Clinic·웹 제품은 수정하지 않았다.
 - [PR36](https://github.com/Innvoaid/dentlink-lab-app/pull/36): `feat/DL-17262-api-cleanup → release/v1.0.5`, HEAD `3bdf3862d3e96c98c1d2708f5835d56c73d44bd9`, 일반 OPEN·CLEAN, **4파일 +16/-27**. 배포된 `release/v1.0.5@c60968a` 후속 정리이므로 해당 release에서 분기했다. PR 자동 title/body 작업 성공 후 실제 base/head·diff·일반 상태를 재확인하고 채팅에 첨부했다. GitHub connector의 Lab 저장소404 후 기존 gh를 사용했다.
