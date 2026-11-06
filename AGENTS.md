@@ -115,6 +115,8 @@
   the user's window placement, sizes and tab/window grouping where practical.
   This applies beyond local development; avoid unnecessary rearrangement or
   duplicate windows while allowing the task's normal navigation and actions.
+  When the user explicitly finalizes a layout, record it and prefer the same
+  positions/sizes for the same display setup, or the closest practical layout.
 - For local execution, follow **Local Development And User Preview** in
   `SESSION_WORKFLOW.md`: distinguish Codex working alone from the user's
   direct local inspection. Web preview must expose current code changes,

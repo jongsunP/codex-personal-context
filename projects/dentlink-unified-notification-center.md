@@ -1,5 +1,20 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**사용자 최종 앱 창 배치·터미널 오류 확인 — 2026-11-06:** 사용자가 다시 조정한 최종 배치를 화면과 Accessibility 좌표로 확인했다. 상단 좌측 Android 실행 터미널, 상단 우측 Metro, 하단 좌측 Android·중앙 iPhone·우측 Reactotron이다. 주 모니터 U32J59x의 논리 해상도1920×1080(scale2.0), AX 좌상단 기준 위치/크기다. 현재 배치를 건드리지 않았으며 같은 모니터 환경의 다음 로컬 확인 세팅에서 우선 재사용/복구하고, 화면 환경이 다르면 상대 배치를 최대한 맞춘다. 다른 창이나 사용자의 새 배치를 과거 좌표로 덮어쓰지 않는다.
+
+| 창 | x | y | 너비 | 높이 |
+|---|---:|---:|---:|---:|
+| Android 실행 Terminal | 47 | 36 | 870 | 343 |
+| Metro8081 Terminal | 935 | 36 | 982 | 343 |
+| Android Emulator | 47 | 381 | 297 | 688 |
+| Android 도구 막대 | 344 | 409 | 54 | 506 |
+| iPhone17Pro DeviceHub | 412 | 380 | 313 | 698 |
+| Reactotron | 747 | 380 | 1173 | 700 |
+
+- 최종 화면 `/tmp/app-preview-layout-1106-final.png`에서 양 OS User Credits가 표시되고 Reactotron 기기 선택 목록도 펼쳐져 있음을 확인했다. 이미 사용자가 이동한 화면은 그대로 유지했다.
+- Android Terminal의 `Failed to make display surface context current: 12301/12299`, `Failed to bind to post worker context`, `Failed to create window surface for DisplaySurfaceGl`는 gfxstream/EGL의 호스트 에뮬레이터 화면 렌더링 오류다. [공식 소스](https://fuchsia.googlesource.com/third_party/android/device/generic/vulkan-cereal/+/ba29ba979efcfc2c2cd0f67d4060f451df459fcd/stream-servers/gl/DisplaySurfaceGl.cpp)의 메시지와 대조했다. 창 크기/배치 변경 관련 가능성은 있으나 발생 트리거는 확정하지 않았다. 현재 실제 화면·ADB device·앱PID14515·Hermes 응답(route CreditScreen/ready true)은 정상이다. crash buffer에는 14:46·15:40의 `com.google.android.bluetooth` 이력만 있었고 Dentlink 앱의 새 크래시 근거는 없었다. 무조건 무해하다고 단정하지 않으며, 화면 검어짐/멈춤이 재발하면 에뮬레이터 그래픽 설정·재시작을 검토한다. 현재 사용자의 확인을 방해할 재시작/설정 변경은 하지 않았다.
+- Metro의 DevTools 연결/종료(code1005) 반복은 이번 디버거 조회 시 연결 이력과 구분했다. 현재 Metro 오류 문구는 없고 앱 실행이 중단된 상태가 아니다. 공통 창 배치 선호를 지침에 기록하고 개인 컨텍스트만 commit/push한다. 제품 코드·Jira·PR·배포 변경 없음. 실행 환경 유지·사용자 추가 요청까지 대기.
+
 **로컬 확인용 목데이터 표시·터미널 정리 — 2026-11-06 16:24 KST:** 사용자가 목데이터 제약을 감안하고 직접 더 확인하겠으며, URL 없는 항목 제목에 임시 표시 후 마감하도록 요청했다. 현재 켜진 Office의 `src/store/useNotificationMockStore.ts`에서 URL 없는 4개 제목에 `[DEV · 랜딩 없음]`만 추가했다. `[DEV] User Credits`·`Office Credits`·`Statements`의 기존 실제 조회 진입은 유지했다. 이 표시는 운영 문구/정책이 아니며 실제 API 연결 시 mock store와 함께 제거한다. Web/Lab의 코드와 현재 화면은 확대 변경하지 않았다.
 
 - Office `feature/DL-17059@420d415`: 4개 title만 변경, lint·diff-check 통과. iOS17Pro/26.5·Android API36에서 실제 알림 All 화면의 표시·줄바꿈과 기존 DEV 진입 항목 보존을 확인했고 `/tmp/no-landing-label-{ios,android}.yaml` 통과 및 최종 화면 캡처를 남겼다. 제목만 변경했으므로 직전 양 OS 랜딩 검증은 재사용하며 새 전수 QA로 주장하지 않는다. 사용자가 직접 볼 수 있게 양 기기 All 화면·Metro·Reactotron을 유지한다. 간헐 클릭 누락의 미재현 상태는 앞 기록 그대로다.
