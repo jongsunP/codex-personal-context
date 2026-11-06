@@ -457,6 +457,12 @@ For direct app preview:
   to a Codex exec session when handing local preview to the user. Codex exit
   must not be the intended lifetime boundary for this preview.
 - Verify both the live screens/connections and execution ownership. Metro
+  and debugging-tool connections are separate: when preparing user preview,
+  start Reactotron (or the selected debugger) before the apps where practical
+  and verify both iOS and Android are connected. A running debugger window or
+  one connected device is insufficient. Reconnect a disconnected client without
+  restarting the app when possible; report any remaining device-specific gap.
+  The user explicitly confirmed this requirement on 2026-11-06. Metro
   and an Android emulator launched from Terminal should have the appropriate
   Terminal shell/TTY ancestry. CoreSimulator/ADB services may normally be
   launchd-owned; they need not be forced under the terminal. Distinguish this

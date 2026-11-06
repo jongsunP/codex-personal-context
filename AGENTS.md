@@ -127,8 +127,10 @@
   web/app arrangements and explicit service exceptions. These are readable
   preview compositions, not exact window coordinates; Codex-only internal
   work need not reproduce them.
-  Direct app preview must execute independently of Codex, including emulator
-  launch, rather than only displaying Codex-owned logs externally. Extra
+  Direct app preview must verify both iOS and Android debugger/Reactotron
+  connections, not merely a running debugger window or one connected device.
+  Execution, including emulator launch, must be independent of Codex rather
+  than only displaying Codex-owned logs externally. Extra
   external terminals for device startup are allowed. Verify process ownership
   as well as the app connections; do not claim a Codex restart survival test
   without actually performing it.
