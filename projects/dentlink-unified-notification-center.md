@@ -1,5 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**Jira 현재 작업 정합성·당일 마감 정리 — 2026-11-09:** 사용자 요청으로 DL-16140 하위 Frankie 담당13개를 실제 구현/검증·남은 정책과 대조했다. UX 완료1개는 유지, 나머지12개 제목·정의·진행 댓글/상태를 정리했다. **완료2 / 개발 완료(Ready for Deploy)8 / ON HOLD3**, 각 SP·담당자·부모 유지와 원격 본문/상태를 재조회 확인했다. 불필요한 카드 전체는 없어 보관/삭제하지 않았으며 Lab My Orders의 제외 확정만 범위에서 제거했다. [카드별 결과·오늘 요청/처리·다음 시작점](dentlink-unified-notification-center-jira-closeout-2026-11-09.md).
+
+- **보류 카드:** DL-17062는 이미 완료한 웹 전환/랜딩 외 Home LinkTalk 정책·미정 문구, DL-17065는 Office Home My Orders/최초 안내의 저장·초기화 기준, DL-17068은 Lab 최근 메시지·Support/시스템 메시지 적용 범위다. 초기 카드의 미정 범위를 숨기지 않고 남긴 것이며 알림 본체를 다시 미구현으로 되돌리지 않는다.
+- **완료와 한계:** 공개 REST·양 앱 푸시 읽음·최신 병원 선택 UI는 구현/검증/push 완료. 실제 BE 발송/서버 읽음 E2E, iOS 권한 실기기 및 실제 역할/집계 QA와 Android native patch 배포 포함은 별도다. Ready for Deploy는 Jira의 ‘요구사항에 대해 개발 완료’ 전이이며 PR/QA/배포 완료나 배포 허가는 아니다.
+- **경계:** 상위/다른 담당자 카드·별도DL-17202·Notion·Slack·Sheet·제품 코드/런타임은 이번 정리에서 변경하지 않았다. 3제품 HEAD/clean/upstream0·0은 직전 완료 기록과 일치한다. 현재 독립 FE 추가 구현은 없으며 정책/실발송 자료 또는 사용자 재요청 시 이어간다.
+
+
 **푸시 클릭 읽음 연결·Android 클릭 오류 수정 완료 — 2026-11-09:** 사용자의 ‘확정 기준으로 남은 FE 작업이 있으면 진행’ 요청에 따라 Office `feature/DL-17059@676e7fc6e87783dd6c8dbcef0fbe56600084c0b9`, Lab `feature/DL-17060@f9ca872b147a1c1ec1faf6320d40d2c9c39588fc`를 구현·검증·push했다. 원격 SHA 일치·clean. Web은 `ed88f083` 그대로다. **PR·merge·배포 없음.** [구현·검증·배포 경계 상세](dentlink-unified-notification-center-push-read-2026-11-09.md).
 
 - **완료:** 확정된 `data.deliveryId`를 FCM/Notifee 클릭에서 보관해 로그인·앱 준비 후 기존 `/office|lab/notifications/inbox/read/push`에 보낸다. URL 이동과 읽음 식별을 분리하고 중복/같은URL 다른ID·로그인 전 클릭·계정 변경·실패 후 재클릭을 처리했다. 배지 새 푸시 수·PATCH0·LinkTalk 포함은 유지했다. 이미 확정된 PM·BE 계약을 다시 질문하지 않는다.
