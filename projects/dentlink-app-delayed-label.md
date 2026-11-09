@@ -1,6 +1,10 @@
 # Office 완료·취소 주문 지연 라벨 — DL-17248
 
-## 현재 체크포인트 — 2026-11-09 Office 배지 미사용 분기 정리·PR342
+## 현재 체크포인트 — 2026-11-09 PR342 정리 완료·CodePush 없이 대기
+
+- **최종 사용자 결정:** "코드푸쉬는 하지 말고 작업 내용 정리하고 메모리해놓고 대기". 이번 PR342는 기존 isDelayed 요구를 충족시키기 위한 필수 수정이 아니라 동작을 보존하는 리팩토링이다. 미병합·미배포여도 기존 요구 충족 상태는 바뀌지 않으며, 향후 승인된 앱 배포에 함께 포함하면 된다. 지금 CodePush·merge·추가 감시는 하지 않는다.
+- **미사용 여부 재검토:** `isOfficeOrder()` 자체는 이전 코드에서 호출됐다. 정확한 제거 대상은 실제 사용처가 없는 Lab 날짜 계산 분기와 불필요한 Office 판별이다. 홈·주문목록의 실제 데이터 경로는 모두 `useOfficeFindOrdersInfiniteQuery → OfficeService.findOrders → GET /office/orders`이고, `OrderLabListItem`은 자기 파일 외 참조가 없으며 내부 type=orders도 배지를 렌더하지 않는다. 상위 Lab|Office 타입 선언만으로 실제 Lab 응답 공급 경로가 생기지 않는다. 따라서 "삭제한 모든 코드가 호출되지 않았다"고 설명하지 않는다.
+- 마감 시 PR342는 open/일반 PR/미병합, base `release/v2.2.4`, head `feat/DL-17248-delay-cleanup@6a19b3fe110e21af2962470d67e2f54a614e50cf`를 단건 재확인했다. 전용 Office worktree는 clean·원격 추적 브랜치와 동일하며 제품 코드를 추가 변경하지 않았다. 다음 작업은 사용자의 별도 리뷰·병합·배포 요청이 있을 때만 재개한다.
 
 - 사용자 승인: 치과앱의 코드 정리 후보가 맞으면 구현하고 PR까지만 진행. 별도 merge/CodePush 승인은 없으며 실제 병합·배포하지 않았다.
 - 기존 Office 전용 worktree `/Users/parkjongsun/.codex/worktrees/office-delayed-label/dentlink-app`를 도구로 복원하고 `feat/DL-17248-delay-cleanup`을 `origin/release/v2.2.4@4892f1c1849833054453f01145b2f012782bb9da`에서 분기했다. main에는 선행 숨김 변경이 없으므로 기존 release 후속 작업으로 진행했다. 다른 세션의 기본 Office checkout·Lab·웹은 변경하지 않았다.
