@@ -9,10 +9,25 @@
 
 | 항목 | 마지막으로 확인·기록한 상태 | 다음 시작점 |
 | --- | --- | --- |
+| Production 2.2.4.87 | 11/09 iOS·Android v87 활성화 완료, release/v2.2.4@caa7ed6. main 통합 PR344 생성·미병합 | 아래 상용 배포 기록. 병합 전 자동 Git 태그 번호 정합화 필요 |
 | LinkTalk 운영 iOS SIGSEGV | 10/27 확보 가능한 범위 조사 마감. dSYM 누락으로 정확 원인 미확정 | 일치하는 archive/dSYM 또는 새 재현 증거와 별도 재개 요청이 있을 때 [조사 정본](dentlink-app-linktalk-sigsegv-investigation.md)부터 확인 |
 | DL-17038 디자인 컨펌 Render Error | 수정 전 재현, PR338 수정 포함 main의 제한된 실화면 확인 완료. 테스트용 branch·실행 환경 정리 완료 | 새 결함/요청 없으면 대기. 아래 검증 범위를 전체 앱 QA로 확대하지 않음 |
 | 권한관리 및 후속 QA | 10/25 Office PR329/331/332/333의 운영 Git 반영 확인. 10/26 전용 worktree 제거 | 새 요청 시 [권한관리 정본](dentlink-permission-management.md)과 기본 checkout 확인 |
 | 피드백 DL-15828 / DL-16061 | PR286의 9/11 develop squash 병합·동일 tree 확인은 완료된 이력 | [피드백 정본](dentlink-client-order-feedback.md) 및 아래 이력. 과거 PR286 리뷰·BE 대기 문구를 현재 미완료로 재사용하지 않음 |
+
+## Production 2.2.4.87 전달·main PR — 2026-11-09
+
+- 사용자가 Staging 확인 완료 후 상용 CodePush와 main 대상 PR 생성을 승인했다. 범위를 질문해 **치과 앱만 배포, 기공소 앱은 다른 담당자가 배포**한다고 확인했다. PR 병합·Git 태그 변경·스토어 출시는 승인 범위에 포함하지 않는다.
+- 배포 소스는 `release/v2.2.4@caa7ed685743665f596e175afbadbf98d5e47bd9`다. 사용자 확인 Staging iOSv345/Androidv344와 동일 소스이며 PR340/342/343의 지연 라벨·주 상태 표시 변경을 포함한다. package/Android/Xcode 버전은 모두2.2.4로 일치하고 `yarn validate:versions`가 통과했다. 이전 상용 main 대비 native/lock/entry/config 변경은 없다.
+- **상용 배포 완료:** Office iOS·Android 모두 Production **v87**, target **2.2.4**, **enabled·mandatory·rollout100%**를 활성화 후 각각 재조회했다(18:29:56~57 KST). 이는 전체 대상 배포 설정이며 모든 기기의 설치 완료나 앱스토어 새 버전 출시를 뜻하지 않는다.
+- 패키지 해시: iOS `4c5c301de3e2212250f94c2806ec3f4c283ce1c33f5dfe6396deea754b460bad`, Android `1a3059e7710e3c320c66ef952b7f8c0025e25fcf61d65565074a1976e88e7d2a`. 제품·OS별 임시 경로를 격리하고 Production 환경으로 새 번들 생성 → disabled 업로드 → 소스 검증 → 활성화 순서로 처리했다. 양쪽 source map의 App.tsx/OrderProgressStatus/OrderStatusBadge가 배포 SHA 파일과 일치했다.
+- 첫 활성화 patch는 실패했고 iOS 신규v87이 여전히 disabled임을 확인했다. 이후 특정v87의 disabled만 false로 바꾸는 patch가 양OS에서 성공했고 기존 mandatory/rollout100이 유지됐다. 추가 업로드나 라벨 증가 없이 완료했으며 최초 실패 원인은 확정하지 않는다.
+- **검증 범위:** 기존 양OS 홈·Orders 최종 코드 검증과 사용자가 이번 배포 전에 확인한 Staging QA를 재사용했다. 상태 blob `66ab1b92b22059db00d8f34cd258bd55c571828e`, 배지 blob `3b812a65c517ff3b6e463fa8477e35dafe09898b`가 검증 코드와 일치한다. 확인 범위에서 새 크래시/회귀 문제는 발견하지 못했으나 운영 전 기기 무결함을 보장하지 않는다. 배포 후 기기 수신·오류 지표를 자동 추적하지 않았다. 사용자가 이미 확인한 화면을 다시 필수 QA로 요구하지 않는다.
+- **[PR344](https://github.com/Innvoaid/dentlink-app/pull/344)** 생성 후 실제 base `main`, head `release/v2.2.4@caa7ed6`, OPEN·일반 PR·미병합·mergeable을 확인했다. 기존 main `7f586790e0bbd7b288458e29f00654d38ba68da2`와의 예상 병합 tree는 release tree `421fab8080748f1baca8d7f06d984fa41a3db445`와 같다. 현재 main 대비 실제 화면 코드 차이는 상태/배지2파일이며 commit 이력의 ISV는 현재 main과 화면 코드 차이가 없다.
+- **남은 사항:** 기존 자동 태그 workflow는 `v2.2.4` 기본 태그가 없으면 해당 이름을 먼저 만든다. 원격 최신 suffix 태그는 `v2.2.4.86`이므로 현재 설정대로 PR을 병합하면 이번 Jira/CodePush `2.2.4.87`과 Git 태그가 어긋난다. PR 본문에 명시했으며 태그/워크플로는 수정하지 않았다. 병합 전 번호 정합화와 사용자 PR 검토·병합이 남아 있다. 상용 CodePush 활성화 완료 여부와 이 Git 후속을 구분한다.
+- Jira Office DL-17248·DL-17303은 이미 `app office-v2.2.4.87`(15333)에 포함돼 있어 유지했다. 다른 제품의 누락4건 수정은 [FE 조율 기록](dentlink-fe.md)을 따른다. Jira 상태·댓글·버전 released 표시는 변경하지 않았다.
+- 배포에 재사용한 `/Users/parkjongsun/.codex/worktrees/order-status-office/dentlink-app`은 detached 배포 SHA에서 원래 `feat/DL-17303@5d3daf702d49417767856fff23803ab8b57455ce`로 복귀했고 clean·upstream 동일을 확인했다. 기본 checkout과 다른 세션의 작업, 기존 branch/worktree는 보존했다. 제품 코드/환경 값 변경·새 제품 커밋·Slack 전송은 없다.
+- 로컬 실행 증거: `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dentlink-office-production-20261109-_prz2h64/report.json` 및 각OS release/activate 로그·source map. 임시 파일은 다른 디바이스에 복구되는 정본이 아니며, 핵심 배포 사실은 이 기록에 보존한다.
 
 ## 저장소·업무 경계
 
