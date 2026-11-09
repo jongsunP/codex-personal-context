@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**랜딩 안건 1·시트 반영 대기 — 2026-11-09:** 인박스/푸시/향후 이메일의 최종 앱 목적지 URL은 재사용 가능하되 이메일 HTTPS 진입·앱 열기는 별도임을 정리했다. Airbridge 발급은 커스텀 스킴 딥링크의 필수 조건이 아니다. 사용자 승인으로 현재 Office Credits/Statements 주소와 인박스 URL 연결 예정 표시를 시트에 기록하려 했으나 연결 계정의 댓글 전용 권한으로 Google API403이 반환되어 **시트 변경은 적용되지 않았다**. 주소/대상13셀/기입 대기안과 기존 목적지 변경 확인 경계는 [REST·랜딩 후속 기록](dentlink-unified-notification-center-api-integration-2026-11-09.md)에 보관한다. 제품 코드·이메일·푸시 읽음·배지는 이번 후속에서 변경하지 않았다.
+
 **신규 알림 REST 연결·검증·제품 push 완료 — 2026-11-09:** 사용자 승인으로 확정 명세를 Web/Office/Lab에 연결했다. 아래 같은 날짜의 ‘API 조사·미연결’ 기록은 이 구현 전 시점이다.
 
 - **완료:** Web `feature/DL-17058@8b9cd986c`, Office `feature/DL-17059@c18673e`, Lab `feature/DL-17060@c516f3c` commit/push·원격 HEAD 일치·clean 확인. 설정 GET/PUT, 목록·현재/다른 소속 미읽음, 개별/전체 읽음 연결과 mock 제거, OS/서버 수신 설정 분리를 완료했다. PR·merge·배포 없음.

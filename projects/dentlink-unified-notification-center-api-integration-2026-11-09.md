@@ -87,6 +87,28 @@
 - 기존 신규 삭제 명세가 없으므로 구 messages 삭제에 신규 inbox ID를 보내지 않는다.
 - 다음은 세 안건 설명·BE 계약 정리 → 실제 발송 payload 수신 → 푸시 read/push 연결 및 실 알림/소속/권한 QA다. 이번 API 연결 commit/push를 실제 발송 검증·최종 QA·release 완료와 구분한다.
 
+## 랜딩 안건 1 후속 — 시트 반영 승인·권한 제한
+
+2026-11-09 사용자는 App URL 재사용/딥링크 설명을 BE 전달용으로 정리하고, 현재 지원 주소는 시트에 기입하며 아직 준비되지 않은 것은 후속 기입 표시를 하도록 승인했다. 이번에는 제품 코드·푸시 읽음·배지·이메일 구현을 시작하지 않는다.
+
+- 같은 최종 앱 목적지 URL을 인박스·푸시에서 재사용하고 향후 이메일의 최종 앱 목적지로도 재사용할 수 있다. 단 이메일 버튼의 HTTPS 진입 주소·OS 앱 열기·미설치 웹 연결과는 구분한다. 인박스/푸시/이메일별 App URL 컬럼을 단지 진입 방식 때문에 추가할 필요는 없다. 실제 목적지가 다르면 채널별 행의 주소는 다르게 유지한다.
+- `dentlink://...` 자체가 커스텀 스킴 딥링크이며 Airbridge 주소 생성은 필수 절차가 아니다. 현재 앱에 등록된 경로는 주소를 명시할 수 있다. Office DEV/STG scheme은 `dentlink-dev://`/`dentlink-staging://`다.
+- live Sheet `전체 알림(PM)`(gid614410508)의 A127:P150 및 셀 메타데이터를 재확인했다. 아래 P열 대상은 일반 텍스트이며 validation/formula/chip/기존 note가 없었다. 같은 목적지의 Web 주소를 근거로 Office 구현 주소를 대조했다.
+
+| 대상 셀 | 현재 값 | 확인된 주소 / 기입 대기안 |
+| --- | --- | --- |
+| P141, P145 — 개인 Credits NOTIFICATION | 알림센터 오픈 | `dentlink://credit`. 셀 메모에 지원 주소를 기록하고 본문은 `알림센터 오픈 · 크레딧 목록 연결 검토`로 표시할 안 |
+| P147, P149 — Office Credits NOTIFICATION | 알림센터 오픈 | `dentlink://office/credit?employerId=${employerId}`. 위와 같이 실제 목록 목적지 전환 여부를 구분 |
+| P128, P130, P135, P137, P139 — 웹 /billing/statement 대응 NOTIFICATION | 액션 없음 | `dentlink://billing/statement?employerId=${employerId}`. 셀 메모에 지원 주소를 기록하고 본문은 `액션 없음 · 청구서 목록 연결 검토`로 표시할 안. 기존 OWNER/PAYMENT_MANAGER 조회 권한 유지, 결제 실행/PDF 의미 아님 |
+| P142, P146, P148, P150 — Credits PUSH | 알림 인박스 오픈 | 목적지는 유지. `알림 인박스 오픈 · URL 연결 예정`으로 표시하고, 양 앱 인박스 외부 딥링크 경로 등록·검증 후 실제 URI 기입. Airbridge 발급 대기가 아님 |
+
+**중요:** 화면/경로 구현 가능 여부와 `알림센터 오픈→Credits`, `액션 없음→Statements`의 실제 목적지 변경은 다르다. 기존 목적지와 연결안을 구분해 기록하며 시트 기입 권한을 목적지 정책 확정으로 확대하지 않는다. Office에만 있는 추가 목록을 Lab에 그대로 반영하지 않는다.
+
+**시트 쓰기 결과:** 위 13개 셀과 P1 안내 note를 하나의 batchUpdate로 요청했으나 Google API가 `403 PERMISSION_DENIED: Write access is required, comment-only access is not sufficient`를 반환했다. 요청은 적용되지 않았고 원본을 다시 읽어 변경 없음 확인했다. 별도 계정·브라우저로 권한을 우회하거나 댓글을 대신 게시하지 않았다. **시트 반영 완료로 보고하지 않으며**, 편집 권한 확보 후 대상 셀 최신값을 다시 확인하고 반영한다. 범위 밖 Web 랜딩/MAIL/기타 목적지는 변경하지 않는다.
+
+- 현재 구현 근거: Office `src/configs/constants/deepLink.ts:151`의 credit/office-credit/billing-statement, 공통 useNavigationConfig의 소속 전환. 양 앱 NotificationCenterScreen은 내부 진입만 있으며 외부 URL route 등록은 아직 없다.
+- BE 답변은 이 채팅에 복사용으로만 제공한다. Slack/Jira 메시지를 직접 보내지 않는다. 별도 API `landingUrl`의 Web/App 반환 구분은 계속 미확정이다.
+
 ## 로컬 마감
 
 - 이번 검증용 Clinic3000/Lab3005, Office8081/Lab8082 및 격리 headless Chromium9233을 종료했다. 사용자 일반 Chrome·IDE·외부 터미널 배치는 변경하지 않았다.
