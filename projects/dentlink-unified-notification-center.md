@@ -1,5 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**PM 시트 반영·편집 권한 실확인 — 2026-11-09 15:36 KST:** 사용자 요청으로 DL-16140 댓글44940과 실제 Google Drive/Sheets를 읽기 전용 대조했다. 연결 계정 `jongsun@dentlink.app`과 동일 계정의 파일 권한 `writer`를 확인했다. ‘전체 알림(PM)’(gid614410508) P열에서 댓글44939 요청 대상 **62셀 전부 기대값 일치**, 누락/오반영0. Lab scheme34셀 및 개별 주소 보완·Credits/Statements·인박스 주소·P175 `밀링센터는 일단 보류`까지 반영됐다. 이전 댓글 전용/403 상태는 해소됐으며 쓰기 시험이나 시트 수정은 하지 않았다.
+
+- 안건1은 BE 전달 댓글44935 및 PM 실제 시트 반영까지 완료. 인박스 URL FE 구현은 직전 제품 commit 유지.
+- 안건2는 deliveryId 전달 요청 댓글44941을 실제 확인했으며 BE의 payload 필드/예시 답변 대기. 푸시 클릭 읽음 연결은 아직 미구현.
+- 안건3 OS 배지는 현 PATCH0 구조·iOS/Android 차이·서버 unread GET 방향을 설명한 논의 단계다. 채팅 포함 등 집계 범위와 발송 배지 일치 기준은 미확정이며 코드 변경 없음.
+
+
 **인박스 딥링크 연결·검증·push 완료 — 2026-11-09 14:58 KST:** 사용자가 PM 문안의 ‘인박스 URL 추후 기입’ 대신 FE 연결을 먼저 처리하도록 승인했다. Office `feature/DL-17059@bc2f5a9e3676461c93be90094abf2e834e353c77`, Lab `feature/DL-17060@8d2f71bef4e03c66e58727b2bb6338d3bd2806ad` commit/push·원격 HEAD 일치·clean 확인. `dentlink://notifications`, `dentlink-lab://notifications` 및 선택적 `?employerId=...`를 기존 로그인 준비·소속 전환·화면 이동 흐름에 연결했다. 같은 인박스 자기 랜딩은 화면을 중복 생성하지 않으며 다른 소속이면 새 소속 인박스 한 개를 유지한다. 동일 경로 중복 방지에서도 대상 소속을 구분한다.
 
 - **검증:** 양 앱×iOS/Android 실제 OS URL 진입·종료 후 재진입·Home 복귀·소속 없는 링크의 현재 문맥 유지·자기 랜딩 중복 없음. Office는 실제 소속86→145→86, Lab은 소속85 유지/미소속 ID 거절까지 확인. Office 관련 Jest42, Lab 기존 관련56 통과; lint/diff-check 통과, 전체 tsc는 기존 Office6/Lab5 오류 유지. 새 Dentlink 앱 crash report 없음. 실제 FCM 발송/로그아웃 후 재로그인 E2E 완료로 확대하지 않는다.

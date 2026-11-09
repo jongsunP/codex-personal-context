@@ -152,3 +152,13 @@
 - PM용 인박스 변경: P142/P146 `알림 인박스 오픈 → dentlink://notifications`, P148/P150 `알림 인박스 오픈 → dentlink://notifications?employerId=${employerId}`. 앞의 ‘연결 예정’은 구현 전 기록이다. P65/P66의 기존 `dentlink://order/${orderId}`와 P101의 `/orders/${orderId}`를 나눠 모두 기존→변경 형식으로 제공한다.
 - 다음: PM 시트 반영 확인, 실제 알림/FCM 데이터가 나오면 실값 치환·발송 랜딩 QA. 미정 읽음 deliveryId/payload·OS badge는 별도 논의하며 새 구현을 임의 진행하지 않는다. PR/배포 없음.
 - 마감: 이번 검증용 Office8081/Lab8082 Metro와 앱 실행을 종료했다. 시뮬/에뮬 장치·로그인 데이터는 유지했으며 사용자 브라우저/IDE 배치는 건드리지 않았다.
+
+
+## PM 실제 시트 반영·권한 재확인 — 2026-11-09 15:36 KST
+
+- Jira44940의 Yoonie 답변(15:27:02 KST 수정): 편집 권한 부여·시트 수정 반영. 이를 답변만으로 완료 처리하지 않고 Drive metadata/profile과 Sheets 원문을 대조했다.
+- 동일 파일 `1w1xwwEWRE0KgiJsOvldxIFbtNgWguohurf5kemIrW_g`, 연결 계정 `jongsun@dentlink.app`에 writer. 파일 수정 시각15:25:42 KST. 파일 편집 권한 확인이며 임의 셀 쓰기 시험은 하지 않음.
+- 메타데이터상 ‘전체 알림(PM)’ gid614410508,189행×16열 그대로. P1:P186 및 헤더를 조회해 댓글44939 대상62셀 전부 기대값과 일치했다. Lab scheme34셀 포함, P175는 사용자 공유 최종안 `밀링센터는 일단 보류`로 반영. 변경 전 감사 대상 중 그 밖의 APP 랜딩 값 변화도0.
+- 검증 증거 `/tmp/notification-sheet-44940-verification.json`(현재 permissions/profile,62개 expected/actual, mismatch0). 외부 문서·제품·기기·PR·배포 변경 없음. 개인 체크포인트만 갱신한다.
+- 안건1 완료: 댓글44935 BE 전달 + 댓글44939 PM 요청 +44940 실반영 대조. 앞으로 승인된 시트 수정이 필요하면 현재 편집권한을 사용 가능하지만 이번 확인 자체는 추가 쓰기 권한으로 해석하지 않는다.
+- 안건2 사용자 deliveryId 전달 요청44941 확인. 새 BE 답변 없이 payload 계약 확정/실제 푸시 읽음 연결 완료로 바꾸지 않는다. 안건3 배지 논의는 진행 중이며 기존 구현은 유지한다.
