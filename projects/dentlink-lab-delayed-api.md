@@ -1,6 +1,16 @@
 # 기공소 지연 판정 API 통일 — DL-17262
 
-## 현재 체크포인트 — 2026-11-06 PR36·Staging v62 완료·정리 후 대기
+## 현재 체크포인트 — 2026-11-09 인계 재검토·추가 수정 불필요
+
+- 통합알림센터 채팅에서 사용자의 직접 지시로 기존 isDelayed 요구 충족 여부 재검토를 인계받았다. 원래 담당인 이 채팅에서 두 앱의 코드·확정 요구·Staging 명세를 대조했다. 인계 채팅에는 회신하거나 결과 추적을 요청하지 않았다. 인계 자체를 새 배포 승인으로 해석하지 않았다.
+- Lab 전용 worktree를 pull하여 `release/v1.0.5@907832d990a59b8a26a4c06e8df6663166a6f7f6`/원격 동일·clean을 확인했다. Office release도 fetch 후 `4892f1c` 그대로이며 이전 검증 소스와 같다. 기본 알림센터 checkout Office `feature/DL-17059@1f956ae`, Lab `feature/DL-17060@a119ba8`의 파일·브랜치·기기·서비스는 변경하지 않았다.
+- **Lab 추가 조치 없음:** `POST /lab/orders/search → SearchOrderData/OrderListLabDto → 홈 카드 → OrderProgressStatus(type=home) → OrderStatusBadge`가 서버 값을 변환 없이 전달한다. 배지는 boolean true=Delayed, false=On Time, 누락/null/비boolean=숨김이며 자체 날짜 계산은 없다. 요청일/예상일 존재·배송 가능·NEW와 호출부 CANCELED 제외는 기존 조건이다. COMPLETED+true는 Office처럼 추가로 숨기지 않는다. Lab Orders는 type=orders여서 이 배지가 없고, 저장소에 남은 OrderOfficeListItem은 소비 경로가 없다.
+- Staging Lab 그룹 Swagger HTTP200을 다시 확인했다. `OrderListLabDto.isDelayed`와 상세 `OrderDeliveryScheduleDto.isDelayed`는 optional boolean이며 FE 생성 타입과 일치한다. 명세 필드 존재/필수 여부와 실주문 응답은 구분한다. 새 DEV 조회나 인증 주문 데이터 호출, 기기 QA, OTA history 조회는 하지 않았다.
+- Office의 누락/null→On Time과 두 키 부재 시 옛 Lab 분기는 기존 동작이며, Office 명세에 Lab 날짜 필드가 없어 해당 분기는 날짜 가드에서 숨김으로 끝난다. 기존 Office 계약은 완료·취소+true 숨김만 추가하는 것이고 키 누락 숨김을 신규 적용하는 요구는 Lab에만 확정돼 있다. 이 차이를 새 정책/결함으로 간주하지 않았다. 자세한 Office 판정은 `dentlink-app-delayed-label.md`에 기록했다.
+- **별도 문제 경계:** DL-17138 댓글44920/주문7000012592의 Home·Orders In Fabrication 대 상세 Completed 제보는 status/detailStatus 상태 문구·아이콘 우선순위 건으로 메인세션 담당이다. 실제 앱 목록 응답은 이번에 확인하지 않았으며 isDelayed 제보나 원인 확정으로 바꾸지 않았다. OrderProgressStatus의 문구·아이콘 조건은 수정하지 않았다.
+- 기존 요구 기준 추가 제품 코드 수정·PR·배포는 필요하지 않아 수행하지 않았다. 코드가 이전 최종 검증본 그대로이고 새 위험도 발견되지 않아 관련 실행 증거를 재사용했다. 현재 배포 라벨/실기기 수신/해당 주문 판정의 신규 확인을 주장하지 않는다. 이 채팅에서 결과 보고 후 별도 요청을 기다린다.
+
+## 선행 체크포인트 — 2026-11-06 PR36·Staging v62 완료·정리 후 대기
 
 - **후속 코드상 크래시 검토:** 사용자 요청으로 Office 배포 source `7f325896`의 +8줄 숨김 조건과 Lab release `907832d`의 이번 서버 판정·타입 정리 diff/호출부를 읽기 전용으로 재검토했다. 두 앱 모두 이번 변경이 추가하는 크래시 경로를 발견하지 못했다. Office는 null/undefined 주문을 기존 첫 가드에서 반환하고 누락 status/isDelayed는 안전한 비교만 수행한다. Lab은 주문 null/undefined·키 누락/null/비boolean을 반환하고 날짜는 존재 여부만 검사한다. 새 훅·이펙트·상태/네이티브 변경이 없으며 타입 정리는 런타임 JS를 바꾸지 않는다. 관련 최종 양OS 검증을 재사용할 수 있어 새 기기 조작·재배포·무관한 테스트는 하지 않았다. 이번 변경 때문에 사용자 실기기 크래시 재현 확인이 필요한 항목은 발견하지 못했다. 실제 OTA 수신 여부 확인과는 별개다.
 - 사용자 재확인에 따라 공통 `App Deployment Handoff`의 기존 안내만 보완했다: Codex 선행 검증 → 그래도 사용자 기기/직접 관찰이 필요한 구체적 공백이 남을 때만 이유·화면·행동·예상 결과 안내. 선행 검증 지침 자체는 이미 `DEVELOPMENT_STYLE.md`에 있어 중복 추가하지 않았다.

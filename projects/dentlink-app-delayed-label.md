@@ -1,6 +1,14 @@
 # Office 완료·취소 주문 지연 라벨 — DL-17248
 
-## 현재 체크포인트 — 2026-11-06 전달 상태·코드 검토 완료·대기
+## 현재 체크포인트 — 2026-11-09 인계 재검토·추가 수정 불필요
+
+- 사용자 직접 지시의 인계에 따라 기존 isDelayed 요구를 재검토했다. Office 기본 checkout `feature/DL-17059@1f956ae`는 보존하고 원격 release를 fetch한 뒤 `release/v2.2.4@4892f1c1849833054453f01145b2f012782bb9da`를 git show로 읽었다. 이전 Staging source `7f325896`와 동일한 검증 코드이며 새 배포 상태/기기 수신을 조회한 것은 아니다.
+- **요구 충족·추가 조치 없음:** HomeTrackOrderCard→OrderProgressStatus와 Orders의 OrderOfficeListItem이 같은 OrderStatusBadge를 호출한다. `GET /office/orders → OrderOfficeListDto`의 서버 판정을 변환하지 않고, true+COMPLETED/CANCELED를 숨긴다. true라면 isDelayed 키가 존재하므로 Office 판별에서 빠지지 않는다. On Time·진행 중 Delayed·기존 날짜 조건은 유지한다. Office 배지는 홈에만 있다는 설명은 틀리며 주문목록에도 있다.
+- Staging Office 그룹 Swagger `https://stg-api.dentlink.io/v3/api-docs/Office%20API`에서 `isDelayed?: boolean`, `deliveryRequestAt?` 및 required/nullable 미선언을 확인했다. isDelayed 누락/null은 필요한 날짜가 있고 Office로 판별되면 기존 On Time이다. isDelayed·deliveryRequestAt 두 키가 모두 없으면 옛 Lab 분기로 가지만 Office 계약에는 Lab 요청일 필드가 없어 날짜 가드에서 라벨 없이 반환한다. 새 회귀/요구 누락 근거가 없으며 기공소의 키 누락 숨김을 Office에 새로 이식하지 않는다.
+- DL-17138 댓글44920/주문7000012592의 In Fabrication 대 Completed 상태 문구·아이콘 문제는 메인세션 별도 범위다. 실제 앱 목록 응답을 확인한 것은 아니며 status/detailStatus 우선순위를 이 세션에서 수정하지 않는다. 통합알림센터 채팅에는 회신/진행 조회 요청을 하지 않았다.
+- 제품 코드·PR·배포·기기를 변경하지 않았고 기존 최종 실행 증거를 재사용했다. 결과는 이 담당 채팅에서 보고하고 다음 구체적인 요청까지 대기한다.
+
+## 선행 체크포인트 — 2026-11-06 전달 상태·코드 검토 완료·대기
 
 - 사용자 최종 확인 후 작업 정리·메모리 저장·대기로 마감했다. Office는 기존 PR340/Staging v343을 유지하며 이번 Lab PR36/v62 후속 작업에 따른 추가 변경·재배포는 없다. 아래 코드 검토에서 새 크래시 경로를 발견하지 못해 추가 사용자 실기기 확인 항목은 없고, 별도 요청 없이 기기/서버 조회·배포·main 통합을 진행하지 않는다.
 - 후속 사용자 요청으로 배포 source `7f325896`의 이번 +8줄 숨김 조건과 홈/목록 호출부를 코드상 크래시 관점에서 재검토했다. null/undefined 주문은 기존 첫 가드에서 반환하고, 누락 `isDelayed`·`status`는 단순 비교라 예외를 만들지 않는다. 추가 훅·이펙트·상태 변경이 없고 `null` 렌더 반환도 안전하여 이번 변경의 새 크래시 경로를 발견하지 못했다. 기존 최종 양OS 증거를 재사용했고 새 기기 조작·테스트·배포는 하지 않았다. 이 변경 때문에 사용자가 직접 실기기에서 크래시를 추가 확인할 항목은 발견하지 못했다. Lab v62 후속 정리·배포는 별도 체크포인트 범위다.
