@@ -1,5 +1,7 @@
 # 통합알림센터 신규 API·앱 배지 검토 — 2026-11-09
 
+> **후속 구현 완료:** 이 문서의 조사 당시 미연결 상태는 [11/9 REST 연결 결과](dentlink-unified-notification-center-api-integration-2026-11-09.md)로 갱신됐다. 설정/목록/미읽음/선택·전체 읽음은 세 제품에 연결·push했고, FCM deliveryId 전달 및 OS 배지 결정은 남았다. 사용자가 현재 BE 배지는 ‘푸시 알림 수’라고 전달했다. BE 질문은 아직 전송하지 않았으며 세 안건을 사용자와 먼저 정리한다.
+
 ## 상태와 범위
 
 - [DL-16140 댓글44913](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44913)의 BE 공지와 실제 DEV Swagger를 대조했다. Office/Lab 알림 수신 설정·인박스 API가 공개되어 있다. BE 공지상 **발송 처리는 개발 중이며 신규 알림 데이터가 아직 쌓이지 않는다**.

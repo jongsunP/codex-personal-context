@@ -1,5 +1,16 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**신규 알림 REST 연결·검증·제품 push 완료 — 2026-11-09:** 사용자 승인으로 확정 명세를 Web/Office/Lab에 연결했다. 아래 같은 날짜의 ‘API 조사·미연결’ 기록은 이 구현 전 시점이다.
+
+- **완료:** Web `feature/DL-17058@8b9cd986c`, Office `feature/DL-17059@c18673e`, Lab `feature/DL-17060@c516f3c` commit/push·원격 HEAD 일치·clean 확인. 설정 GET/PUT, 목록·현재/다른 소속 미읽음, 개별/전체 읽음 연결과 mock 제거, OS/서버 수신 설정 분리를 완료했다. PR·merge·배포 없음.
+- **실제 보완:** 저장/읽음의 정상 `0001 No Content` 응답을 반영했다. 설정 PUT 직후 GET 이전값 반환을 양 서비스에서 재현하여 저장 항목만 최대4회 제한 확인하고, 미확인 결과를 성공으로 표시하지 않도록 했다. 계정/소속 수명·A→B→A·웹 token refresh의 이전 소속 요청을 보호한다.
+- **검증:** 양 웹 실제 저장/복구/503 유지, 양 앱×양OS 실제 저장/복구, 제어 목록 페이지·선택/전체 읽음·실패·중복·랜딩을 확인했다. Android 양 앱 실제 OS 설정→허용→복귀 때 선택 PUSH만1회 저장. iOS는 Lab 차단 팝업/취소 및 Office 허용 상태 저장까지이며 실제 허용 변경·복귀는 미검증이다. 실제 서버 발송 데이터0이라 실제 FCM·실알림 ID E2E는 남는다. 최종 구간 새 앱 crash 증거 없음, 이전 Office native crash 원인 미확정은 유지한다.
+- **미정 유지:** 실제 push `deliveryId` payload와 공용 inbox `landingUrl`의 Web/App 구분, OS 배지는 미변경. 개인 USER 설정 위치와 employee CREDITS의 MAIL 부재 등 미확정 catalog는 임의 UI/API로 만들지 않았다.
+- **사용자 다음 논의:** BE 질문은 아직 전달하지 않았다. (1) 시트 App 랜딩 하나/기존 pushType의 역할 (2) deliveryId를 실은 구체적인 푸시 읽음 예시 (3) 현재 푸시 수/앱 진입0 배지와 서버 unread GET 방식의 차이를 먼저 사용자에게 설명한다. 사용자에 따르면 현재 BE 숫자는 푸시 알림 수다. 추가 결정 전 배지/푸시 payload를 임의 구현하지 않는다.
+- **로컬:** 이번 검증용 웹/Metro/격리 브라우저와 앱 실행은 종료했다. 로그인·기기 데이터·권한 및 사용자 창 배치를 보존했고, 시뮬/에뮬 장치 자체는 유지했다.
+- **상세:** [REST 구현·검증·세 안건](dentlink-unified-notification-center-api-integration-2026-11-09.md). API 조사 원문은 [계약·배지 검토](dentlink-unified-notification-center-api-badge-review-2026-11-09.md), 기존 크레딧/청구서 보완은 별도 기록을 유지한다.
+
+
 **재개·기존 API 보완 및 신규 알림 계약 조사 — 2026-11-09:** 사용자의 재개 요청에 따라 11/6 예약한 Office 크레딧·청구서 모바일웹 보완을 진행했고, DL-16140 댓글44913·44922·44926/DEV Swagger/알림 현황 시트 앱 랜딩을 읽기 전용 대조했다. 후속 배지 질문도 양 앱 현재 코드·실제 Swagger·OS 공식 문서로 조사했다. 아래 11/6의 ‘재개 대기’는 당시 기록이며 이번 완료 범위는 이 절을 따른다.
 
 - **제품 완료·원격:** Office `/Users/parkjongsun/Repository/dentlink-app`·`feature/DL-17059`에서 `60bfad3`(크레딧 자동 적용 GET/PATCH·설명 펼침·웹과 같은 Learn More·아이콘/청구서 표시 보완), `893c4323e194ef9385845a63556c71c34bb273ce`(기존 딥링크 매칭 오류)를 commit/push했다. Lab `/Users/parkjongsun/Repository/dentlink-lab-app`·`feature/DL-17060@f36f181ac80befe7faf04bd09a4ca30aac8434d5`에 같은 파서 교정을 commit/push했다. 양 앱 ls-remote 일치·clean 확인. Web `feature/DL-17058@dea89193`는 변경하지 않았다. PR·merge·배포 없음.
