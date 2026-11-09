@@ -9,7 +9,7 @@
 
 | 항목 | 마지막으로 확인·기록한 상태 | 다음 시작점 |
 | --- | --- | --- |
-| Production 2.2.4.87 | 11/09 iOS·Android v87 활성화 완료, release/v2.2.4@caa7ed6. main 통합 PR344 생성·미병합 | 아래 상용 배포 기록. 병합 전 자동 Git 태그 번호 정합화 필요 |
+| Production 2.2.4.87 | 11/09 iOS·Android v87 활성화 완료. PR344 main 병합, 기본 Git 태그 v2.2.4 생성 | 자동화 수정 PR345 미병합. 이번 v2.2.4.87 Git 태그 추가는 별도 미실행 |
 | LinkTalk 운영 iOS SIGSEGV | 10/27 확보 가능한 범위 조사 마감. dSYM 누락으로 정확 원인 미확정 | 일치하는 archive/dSYM 또는 새 재현 증거와 별도 재개 요청이 있을 때 [조사 정본](dentlink-app-linktalk-sigsegv-investigation.md)부터 확인 |
 | DL-17038 디자인 컨펌 Render Error | 수정 전 재현, PR338 수정 포함 main의 제한된 실화면 확인 완료. 테스트용 branch·실행 환경 정리 완료 | 새 결함/요청 없으면 대기. 아래 검증 범위를 전체 앱 QA로 확대하지 않음 |
 | 권한관리 및 후속 QA | 10/25 Office PR329/331/332/333의 운영 Git 반영 확인. 10/26 전용 worktree 제거 | 새 요청 시 [권한관리 정본](dentlink-permission-management.md)과 기본 checkout 확인 |
@@ -24,10 +24,20 @@
 - 첫 활성화 patch는 실패했고 iOS 신규v87이 여전히 disabled임을 확인했다. 이후 특정v87의 disabled만 false로 바꾸는 patch가 양OS에서 성공했고 기존 mandatory/rollout100이 유지됐다. 추가 업로드나 라벨 증가 없이 완료했으며 최초 실패 원인은 확정하지 않는다.
 - **검증 범위:** 기존 양OS 홈·Orders 최종 코드 검증과 사용자가 이번 배포 전에 확인한 Staging QA를 재사용했다. 상태 blob `66ab1b92b22059db00d8f34cd258bd55c571828e`, 배지 blob `3b812a65c517ff3b6e463fa8477e35dafe09898b`가 검증 코드와 일치한다. 확인 범위에서 새 크래시/회귀 문제는 발견하지 못했으나 운영 전 기기 무결함을 보장하지 않는다. 배포 후 기기 수신·오류 지표를 자동 추적하지 않았다. 사용자가 이미 확인한 화면을 다시 필수 QA로 요구하지 않는다.
 - **[PR344](https://github.com/Innvoaid/dentlink-app/pull/344)** 생성 후 실제 base `main`, head `release/v2.2.4@caa7ed6`, OPEN·일반 PR·미병합·mergeable을 확인했다. 기존 main `7f586790e0bbd7b288458e29f00654d38ba68da2`와의 예상 병합 tree는 release tree `421fab8080748f1baca8d7f06d984fa41a3db445`와 같다. 현재 main 대비 실제 화면 코드 차이는 상태/배지2파일이며 commit 이력의 ISV는 현재 main과 화면 코드 차이가 없다.
-- **남은 사항:** 기존 자동 태그 workflow는 `v2.2.4` 기본 태그가 없으면 해당 이름을 먼저 만든다. 원격 최신 suffix 태그는 `v2.2.4.86`이므로 현재 설정대로 PR을 병합하면 이번 Jira/CodePush `2.2.4.87`과 Git 태그가 어긋난다. PR 본문에 명시했으며 태그/워크플로는 수정하지 않았다. 병합 전 번호 정합화와 사용자 PR 검토·병합이 남아 있다. 상용 CodePush 활성화 완료 여부와 이 Git 후속을 구분한다.
+- **배포 직후 남았던 사항:** 기본 태그 부재 때문에 PR344 병합 시 v2.2.4.87 대신 v2.2.4가 만들어지는 조건을 발견했다. 이후 사용자 승인으로 자동화 수정 PR345까지 준비했으나, 작업 중 PR344가 먼저 병합됐다. 현재 병합·태그 상태와 다음 행동은 아래 후속 기록을 따른다. 상용 CodePush 활성화 완료 여부와 Git 후속을 구분한다.
 - Jira Office DL-17248·DL-17303은 이미 `app office-v2.2.4.87`(15333)에 포함돼 있어 유지했다. 다른 제품의 누락4건 수정은 [FE 조율 기록](dentlink-fe.md)을 따른다. Jira 상태·댓글·버전 released 표시는 변경하지 않았다.
 - 배포에 재사용한 `/Users/parkjongsun/.codex/worktrees/order-status-office/dentlink-app`은 detached 배포 SHA에서 원래 `feat/DL-17303@5d3daf702d49417767856fff23803ab8b57455ce`로 복귀했고 clean·upstream 동일을 확인했다. 기본 checkout과 다른 세션의 작업, 기존 branch/worktree는 보존했다. 제품 코드/환경 값 변경·새 제품 커밋·Slack 전송은 없다.
 - 로컬 실행 증거: `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dentlink-office-production-20261109-_prz2h64/report.json` 및 각OS release/activate 로그·source map. 임시 파일은 다른 디바이스에 복구되는 정본이 아니며, 핵심 배포 사실은 이 기록에 보존한다.
+
+## 자동 Git 태그 후속 수정 PR345 — 2026-11-09
+
+- 사용자는 자동 태그 설정의 코드 수정·검증·커밋·푸시·PR까지만 승인했고 직접 머지하겠다고 했다. 최신 origin/main `7f586790`에서 `feat/v2.2.4-codepush-tag`를 만들고 **57b8eabb713ec019f49fc7614a960b35302ef29f**를 푸시했다. 변경은 `.github/workflows/tag-production-codepush.yml` 한 파일이다.
+- 유효한 숫자 suffix를 기본 태그 검사 전에 계산한다. suffix가 있으면 최대+1, 없고 base가 있으면 .1, 둘 다 없으면 base를 생성한다. suffix .0과 없음도 구분한다. trigger·checkout·태그 push·GitHub Release 생성·배포 라벨 조건은 변경하지 않았다. Revopush 실제 라벨을 조회해 동기화하는 기능은 아니다.
+- **검증:** 실제 YAML의 next_tag shell을 추출해 임시 Git 저장소에서8조건 통과. 기본 태그 없음+.86에서 수정 전 v2.2.4를 재현했고 수정 후 v2.2.4.87 확인. 태그 없음/base만/base+.86/.0/숫자 정렬/다른 버전 및 부적합 suffix 제외도 확인했다. YAML 파싱·Bash 문법·Prettier·diff check 통과, 독립 diff 검토에서 새 결함 없음. 앱 runtime 변경이 없어 앱 재실행은 하지 않았다. 임시 증거 `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dentlink-office-tag-check-Tt4dH9/results.json`.
+- **[PR345](https://github.com/Innvoaid/dentlink-app/pull/345)** 생성 후 실제 base main, head feat/v2.2.4-codepush-tag@57b8eab, 일반 PR·OPEN·미병합, 변경1파일, 라벨없음을 확인했다. 이번 feat/ branch는 태그 job 대상이 아니고 Deploy:CodePush 라벨도 없어 수정 PR 자체가 태그나 재배포를 시작하지 않는다.
+- **동시 변경 확인:** 최종 PR 메타데이터 확인 중 PR344가 **18:45:30 KST**에 main으로 병합된 사실을 확인했다. merge SHA **fd775498f20e38a642b317f9d7713f66c005423a**, 원격 main도 동일하다. 원격 기본 태그 **v2.2.4**가 이 커밋을 가리키며, 확인 시점 **v2.2.4.87은 없다**. 사용자가 직접 머지하겠다고 했고 이 세션은 merge 명령을 실행하지 않았다.
+- 처음 계획했던 PR345→PR344 순서는 현재 적용할 수 없어 PR345 본문을 실제 상황으로 갱신했다. **PR345를 머지해도 이번 v2.2.4.87 태그는 소급 생성되지 않는다.** 현재 CodePush와 Git 릴리즈 기록을 맞추려면 배포 코드의 PR344 병합 커밋에 별도 태그 정리가 필요하다. PR까지만 승인된 범위이므로 태그 추가/삭제·GitHub Release 변경·workflow 재실행·CodePush 재배포는 하지 않았다. PR345 검토/머지는 사용자에게 남긴다.
+- 기존 order-status-office worktree는 원래 feat/DL-17303@5d3daf7로 복귀·clean·upstream 동일 확인. 신규 branch는 원격과 로컬에 보존했다. 기본 checkout/다른 작업·Lab·Jira는 변경하지 않았다. PR 전달 후 자동 리뷰·Actions·배포 결과 폴링 없이 마감한다.
 
 ## 저장소·업무 경계
 

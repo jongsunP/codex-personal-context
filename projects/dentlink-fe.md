@@ -7,10 +7,11 @@
 ## Office 상용 배포·본인 작업 수정버전 정리 — 2026-11-09
 
 - 사용자 Staging 확인 및 명시 승인에 따라 **Office iOS·Android Production 2.2.4.87(v87)** 발행·활성화와 mandatory/100% 설정을 확인했다. 배포 소스는 `release/v2.2.4@caa7ed6`; 상세 검증·한계는 [Office 정본](dentlink-app.md)을 따른다. 기공소 앱 상용 배포는 다른 담당자 범위이며 이번 작업에서 실행하지 않았다.
-- [Office PR344](https://github.com/Innvoaid/dentlink-app/pull/344) `release/v2.2.4 → main` 생성·실제 대상 확인 완료, 미병합이다. 병합 전 자동 Git 태그가 `v2.2.4.87`과 맞도록 정합화할 필요를 PR에 명시했다. 배포 완료와 main 병합/태그 후속을 구분한다.
+- [Office PR344](https://github.com/Innvoaid/dentlink-app/pull/344)는 후속 자동화 작업 중 main에 병합됐다(18:45:30 KST, fd775498). 기존 자동화가 v2.2.4 태그를 만들었으며 이번 v2.2.4.87 Git 태그는 확인 시점 없다. 상용 CodePush는 이미 완료된 별도 상태다.
 - 사용자 작업 누락 **4건의 fixVersions만 추가·재확인**했다: Web **DL-17141·DL-17309 → v1.92.0(15296)**, Lab **DL-17262·DL-17163 → app lab-v1.0.5.19(15299)**. Office **DL-17248·DL-17303 → app office-v2.2.4.87(15333)**, Lab **DL-17162·DL-17310 → app lab-v1.0.5.19**는 이미 올바르게 포함되어 유지했다. DL-17163은 DL-17162의 본인 앱 하위 카드이며 추가 기능을 의미하지 않는다.
 - 타인 담당 DL-17033은 제외했고, E2E 분리 PR4832는 대응 Jira 카드가 확인되지 않아 새 카드를 만들지 않았다. 기존 다른 수정버전은 유지했으며 카드 제목/본문/댓글/상태/담당자·상위 카드·버전 released 표시는 변경하지 않았다.
-- Office 배포용 기존 worktree는 원래 feature로 복귀·clean 확인했다. 사용자 확인을 다시 요구하거나 기기 수신/지표·다른 세션을 자동 폴링하지 않는다. 남은 것은 Office main 통합 PR 검토·병합 전 태그 번호 정합화다.
+- 사용자 추가 승인으로 자동 태그 번호 계산을 보완한 [PR345](https://github.com/Innvoaid/dentlink-app/pull/345) `feat/v2.2.4-codepush-tag → main`을 생성했다. workflow1파일, 실제 shell8조건·YAML/Bash/Prettier 검사 통과. PR은 미병합이며 앱 재배포 없음. 상세는 [Office 정본](dentlink-app.md)을 따른다.
+- Office 배포용 기존 worktree는 원래 feature로 복귀·clean 확인했다. 남은 것은 사용자 PR345 검토/머지 및 이번 배포의 v2.2.4.87 Git 태그 정리다. PR344가 먼저 병합돼 PR345 머지만으로 .87 태그가 소급 생성되지 않음을 본문에 명시했다. PR까지만 승인되어 실제 태그 추가/삭제·workflow 재실행은 하지 않았으며 기기/Actions/다른 세션을 자동 폴링하지 않는다.
 
 ## 주문 상태 표시 정합성 전달 완료·마감 대기 — 2026-11-09
 

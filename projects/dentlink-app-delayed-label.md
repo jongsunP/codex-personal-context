@@ -2,7 +2,7 @@
 
 ## 상용 전달 후속 — 2026-11-09
 
-- 사용자 Staging 확인 후 메인 세션에서 PR340/342/343 포함 release/v2.2.4@caa7ed6을 **Office Production 양OSv87(2.2.4.87), enabled·mandatory·100%**로 배포했다. main 통합 PR344는 생성·미병합이며 자동 Git 태그 번호 정합화가 남아 있다. 배포 증거·검증 범위·임시 checkout 복귀는 [Office 정본](dentlink-app.md), 본인 작업의 Jira 수정버전 보완은 [FE 조율 기록](dentlink-fe.md)을 따른다. DL-17248은 이미15333에 포함돼 유지했다. 아래는 선행 시점의 이력이다.
+- 사용자 Staging 확인 후 메인 세션에서 PR340/342/343 포함 release/v2.2.4@caa7ed6을 **Office Production 양OSv87(2.2.4.87), enabled·mandatory·100%**로 배포했다. 이후 main 통합 PR344 병합·기본 태그v2.2.4 생성을 확인했다. 자동 태그 수정 PR345는 미병합이며 이번 .87 Git 태그는 별도 미실행이다. 배포 증거·검증 범위·임시 checkout 복귀는 [Office 정본](dentlink-app.md), 본인 작업의 Jira 수정버전 보완은 [FE 조율 기록](dentlink-fe.md)을 따른다. DL-17248은 이미15333에 포함돼 유지했다. 아래는 선행 시점의 이력이다.
 
 ## 현재 체크포인트 — 2026-11-09 PR342 병합·CodePush 사용자 완료 보고·대기
 
