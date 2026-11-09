@@ -2,7 +2,7 @@
 
 ## 현재 체크포인트 — 2026-11-09 인계 재검토·추가 수정 불필요
 
-- **최종 후속 정리:** Office의 미사용 Lab 계산 분기 정리는 [PR342](https://github.com/Innvoaid/dentlink-app/pull/342)로 완료했고 아직 미병합이다. 이는 기존 요구 동작을 바꾸지 않는 Office 리팩토링이며 Lab 앱 변경은 없다. 사용자는 즉시 CodePush하지 않고 정리·메모리 후 대기를 지시했다. 두 앱의 기존 isDelayed 요구는 충족된 상태로 유지하며, 별도 merge·배포·감시는 하지 않는다. Office 상세 이력은 [Office 체크포인트](dentlink-app-delayed-label.md)를 따른다.
+- **최종 후속 정리:** 사용자가 Office 리팩토링 [PR342](https://github.com/Innvoaid/dentlink-app/pull/342)의 머지·CodePush 완료를 보고했다. 사용자 완료 보고로 기록하며 새 배포 라벨·실기기 수신을 agent가 추가 검증한 것은 아니다. 이는 기존 요구 동작을 바꾸지 않는 Office 리팩토링이며 Lab 앱 추가 변경은 없다. 사용자는 메모리만 갱신하고 대기를 지시했으므로 별도 조회·merge·배포·감시는 하지 않는다. Office 상세 이력은 [Office 체크포인트](dentlink-app-delayed-label.md)를 따른다.
 - **후속 웹 대조·정리 관점:** 실제 웹 공통 helper는 Lab에서도 boolean이 아니면 숨기고 true=Delayed/false=On Time, COMPLETED+true 유지로 앱과 같다. Lab 앱의 임시 타입·치과 판별·자체 날짜 계산 제거는 PR36에 완료돼 추가 정리 대상이 없다. 반면 Office 앱에는 미사용 Lab 분기가 남아 있어 기능 버그 수정과 별개인 정리 후보로 보고했다. 웹 목록/상세와 앱의 기존 날짜·배송 가능·상태 노출 조건 차이는 신규 정책 확정 없이 일괄 통일하지 않는다. 이번 질문은 읽기 전용 확인이며 코드·PR·배포 변경은 없다.
 - 통합알림센터 채팅에서 사용자의 직접 지시로 기존 isDelayed 요구 충족 여부 재검토를 인계받았다. 원래 담당인 이 채팅에서 두 앱의 코드·확정 요구·Staging 명세를 대조했다. 인계 채팅에는 회신하거나 결과 추적을 요청하지 않았다. 인계 자체를 새 배포 승인으로 해석하지 않았다.
 - Lab 전용 worktree를 pull하여 `release/v1.0.5@907832d990a59b8a26a4c06e8df6663166a6f7f6`/원격 동일·clean을 확인했다. Office release도 fetch 후 `4892f1c` 그대로이며 이전 검증 소스와 같다. 기본 알림센터 checkout Office `feature/DL-17059@1f956ae`, Lab `feature/DL-17060@a119ba8`의 파일·브랜치·기기·서비스는 변경하지 않았다.
