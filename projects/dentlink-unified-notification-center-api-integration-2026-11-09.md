@@ -1,5 +1,7 @@
 # 통합알림센터 신규 REST 연결 — 2026-11-09
 
+> **후속 갱신:** 회의 확정 후 두 앱의 `data.deliveryId`→기존 `read/push` 연결을 완료했다. 실제 Android 탭에서 발견한 기존 RN/Notifee 호환 오류도 수정했고 별도 native 재빌드가 필요하다. [푸시 읽음 구현·검증 상세](dentlink-unified-notification-center-push-read-2026-11-09.md)를 우선하며 아래 미연결 기록은 REST 연결 당시 이력이다.
+
 ## 완료 위치와 범위
 
 사용자는 명세가 공개된 API를 Web·Office·Lab에 연결하고 검증·commit/push·개인 기록을 완료하도록 승인했다. PR·merge·배포는 하지 않는다. 외부 문서와 댓글은 읽기 전용이다.

@@ -1,5 +1,7 @@
 # 통합알림센터 신규 API·앱 배지 검토 — 2026-11-09
 
+> **후속 구현 완료:** 확정 payload의 푸시 읽음 연결과 Android 실제 클릭 중 발견한 ReactHost 호환 오류를 두 앱에 수정·push했다. 배지 현행 유지는 그대로이며 Android 호환 패치는 native 재빌드가 필요하다. [최신 구현·검증 기록](dentlink-unified-notification-center-push-read-2026-11-09.md)을 우선한다. 아래 미연결/결정 대기 설명은 당시 이력이다.
+
 > **최신 결정:** 18:30 KST 이후 사용자 회의 공유·[Jira44950](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44950) 기준, 11.23 배포는 푸시 수·0 초기화·LinkTalk 포함을 유지하고 다른 소속도 포함한다. 신규 미읽음 숫자 payload는 추가하지 않는다. 이번 FE 후속은 푸시 클릭 읽음 연결이다. 아래 회의 전 미정·추천은 이 결정을 대체하지 않는다.
 
 ## 회의 결과와 남은 구현

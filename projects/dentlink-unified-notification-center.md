@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**푸시 클릭 읽음 연결·Android 클릭 오류 수정 완료 — 2026-11-09:** 사용자의 ‘확정 기준으로 남은 FE 작업이 있으면 진행’ 요청에 따라 Office `feature/DL-17059@676e7fc6e87783dd6c8dbcef0fbe56600084c0b9`, Lab `feature/DL-17060@f9ca872b147a1c1ec1faf6320d40d2c9c39588fc`를 구현·검증·push했다. 원격 SHA 일치·clean. Web은 `ed88f083` 그대로다. **PR·merge·배포 없음.** [구현·검증·배포 경계 상세](dentlink-unified-notification-center-push-read-2026-11-09.md).
+
+- **완료:** 확정된 `data.deliveryId`를 FCM/Notifee 클릭에서 보관해 로그인·앱 준비 후 기존 `/office|lab/notifications/inbox/read/push`에 보낸다. URL 이동과 읽음 식별을 분리하고 중복/같은URL 다른ID·로그인 전 클릭·계정 변경·실패 후 재클릭을 처리했다. 배지 새 푸시 수·PATCH0·LinkTalk 포함은 유지했다. 이미 확정된 PM·BE 계약을 다시 질문하지 않는다.
+- **검증:** 두 앱×iOS/Android callback/제어 응답 검증, 기존 Office54/Lab22 tests, lint 오류0 통과. Android는 시스템 알림창 직접 탭→요청1회→인박스 및 프로세스 종료 후 클릭 재진입까지 확인했다. 새 iOS crash report0/Android crash buffer 전후 동일. 실제 BE 발송과 서버 읽음 저장 E2E는 별도다.
+- **추가 수정/중요:** 실제 Android 클릭 검사에서 RN0.82.1/Notifee7.8.2의 legacy ReactInstanceManager 오류가 두 앱에 재현돼 `patches/native`에 최소 ReactHost 호환 패치를 적용했다. 두 앱 Android native 개발 빌드·직접 클릭 재검증 PASS. **이 패치의 적용에는 Android 네이티브 재빌드가 필요하며 CodePush만으로 반영되지 않는다.** iOS native 변경은 없고 운영 바이너리 동일 오류 재현까지 확인한 것은 아니다. 과거 ‘네이티브 변경/심사 불필요’ 결론을 새 패치에 그대로 적용하지 않는다.
+- **남음/다음:** 확정 범위의 독립 FE 구현 잔여는 더 찾지 못했다. 실제 BE 발송 데이터로 서버 읽음/다른 소속 집계를 검증하고 배포 시 Android 패치 포함 방식을 확인한다. 미정 문구/설정, iOS 권한 실기기 QA, 별도 View/PDF·이메일·배지 개선은 기존 경계를 유지한다. Notion 공유용 결정표는 보존하면서 과거 추천/대기 문구와 FE 구현 결과를 정리했다.
+
+
 **11.23 배포 배지 정책 확정·푸시 payload 공유 — 2026-11-09:** 사용자가 회의 결과를 전달하고 [DL-16140 댓글44950](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44950)에 게시했다. 댓글(18:30:46 KST)과 사용자가 직접 갱신한 [PM·BE 공유용 표](https://app.notion.com/p/413ce072e82f81968f43c0563590b495)를 읽기 전용으로 확인했다. 아래 과거의 ‘배지 정책 결정 대기’ 및 FE 미읽음 추천안보다 이 결정을 우선한다.
 
 - **이번 배포:** OS 배지는 새 푸시 수, 로그인/앱 복귀 시0 초기화 유지, LinkTalk 포함, 다른 소속 포함, 신규 미읽음 숫자 payload 추가 없음. `PATCH /app/users/own/devices/badge-count {badgeCount:0}`를 unread GET으로 바꾸거나 읽음마다 -1 하지 않는다. 현행 유지 지시를 기존 네이티브/APNs·SDK 필드 삭제나 변경 허가로 해석하지 않는다.
