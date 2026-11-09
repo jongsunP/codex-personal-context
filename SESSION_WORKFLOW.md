@@ -1486,6 +1486,12 @@ working instruction on 2026-10-16, not a rule limited to one feature session.
   or cumulative project history. Map each request to its result and any
   remaining work. Do not add earlier requests just because they were committed
   or documented on the same day. This is the user's 2026-11-09 clarification.
+- For a final report covering multiple requests, prefer a compact two-column
+  table: **요청·작업 / 결과**. Check the requested prompts, including intervening
+  additions, so no requested item is omitted and no unrelated historical work
+  is added. State each outcome plainly; distinguish unfinished verification,
+  review, PR and deployment afterward. The user approved this presentation on
+  2026-11-09. Preserve its readability rather than expanding the report.
 - State whether current operation is affected and the concrete reason. For
   example, newly registered GitHub settings are not used by the current
   deployment code. Avoid an unqualified claim that everything is safe.
