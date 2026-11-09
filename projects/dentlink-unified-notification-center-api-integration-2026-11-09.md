@@ -109,6 +109,28 @@
 - 현재 구현 근거: Office `src/configs/constants/deepLink.ts:151`의 credit/office-credit/billing-statement, 공통 useNavigationConfig의 소속 전환. 양 앱 NotificationCenterScreen은 내부 진입만 있으며 외부 URL route 등록은 아직 없다.
 - BE 답변은 이 채팅에 복사용으로만 제공한다. Slack/Jira 메시지를 직접 보내지 않는다. 별도 API `landingUrl`의 Web/App 반환 구분은 계속 미확정이다.
 
+## 기존 APP 랜딩 전체 대조·PM 수정 문안 — 후속
+
+사용자가 BE 답변을 [DL-16140 댓글44930](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44930)에 직접 공유했다(11/9 14:21 KST, live read 확인). 같은 최종 목적지 App URL 재사용·딥링크 명칭·이메일 버튼 주소는 별도 이메일 작업 때 정리한다는 내용이다. 시트 수정 담당은 PM이며, 사용자는 기존 주소도 지금 대조한 뒤 쉬운 PM 수정 요청문을 받도록 요청했다.
+
+- 최신 `전체 알림(PM)` A1:P189의 NOTIFICATION/PUSH 115행(Office67/Lab48)을 대조했다. 제품 SHA는 Office c18673e, Lab c516f3c 그대로이며 clean. URL 변환·순수 파서 실행·화면/웹뷰 소비 코드를 확인했다. 시트/제품 코드/기기/서버를 변경하지 않았다. 실제 발송 payload로 전 행 E2E를 한 것은 아니다.
+- 아래는 기존 목적지의 주소 형식/소속 정보 보완이다. 앞선 Credits/Statements 목적지 변경 제안 및 인박스 신규 URI 연결 대기는 별도로 유지한다.
+
+| 셀 | 확인 결과 / PM 수정안 |
+| --- | --- |
+| P65, P66, P101 | 주문은 매칭되지만 대상 병원 ID 없이 현재 소속으로 조회. `dentlink://order/${employerId}/${orderId}`로 통일. P101의 상대주소 자체가 파싱 오류는 아님 |
+| P120, P121 | 현 `order/${employerId}/${orderId}/shipment/...`는 경로 매칭 실패. `dentlink://order/${orderId}/shipment/${shipmentId}/tracking-details?employerId=${employerId}`로 변경. 파서에서 4개 인자 보존, OrderDetailScreen 소속 활성화, DentlinkWebView→Clinic openTrackingDetails bridge까지 기존 코드 확인. 배송 추적 기능이 없는 것은 아님 |
+| LAB의 dentlink:// 시작 34셀 | P13,P30,P32,P36:P37,P42,P44,P48:P49,P55:P60,P63:P64,P69:P70,P73:P76,P79:P82,P87:P90,P104:P105,P170. prefix만 `dentlink-lab://`로 변경. 내부 URL 해석은 현재도 scheme 제거 후 처리하므로 전부 실패한다고 하지 않음. 외부 OS에서 올바른 앱을 열 공통 주소 정리임 |
+| P13 | prefix 외 `${officeId}`도 수신 기공소 `${employerId}`로 변경: `dentlink-lab://confirm/${employerId}/${orderId}/${approvalId}`. Lab confirm은 실제 등록/조회/상태 표시가 있으므로 주문상세로 임의 교체하지 않음 |
+| P172 | `/dentlinksupport`는 브라우저로 처리됨. native 목적지 `dentlink-lab://contact/${employerId}`로 변경, 수신 기공소 ID |
+| P176:P183 | `milling/orders/${orderId}`도 현재 내부 파서에서 매칭됨. 공용 완전 주소 `dentlink-lab://milling/orders/${orderId}`로 정리. 실제 치환값은 웹·앱이 사용하는 회차 주문번호 orderNo여야 하며 변수 이름 자체를 PM 신규 질문으로 다시 올리지 않음 |
+| P175 | 밀링 주문 접수 APP만 공란, WEB은 밀링 상세. 해당 앱 알림도 같은 상세를 열 의도라면 위 밀링 주소 사용 가능. 임의로 목적지를 확정하지 않고 PM에 이 한 항목만 확인 |
+
+- 유지: Office confirm(승인/거절/만료 조회 포함), employerId 포함 order, P91/P92 scanner-draft-received 특수 분기, chat, feedback, casePreference; Lab confirm/order/chat/선호도 팝업은 위 prefix/소속 교정 외 목적지 유지. `isCasePreferenceModalOpen` literal은 공통 WebView가 실제 지원하므로 true로 강제 치환할 필요 없음.
+- 의도적으로 유지할 공란: Office P132 공지, P159/P161 미지원 직원 기능; Lab P67/P68 이전 기공소 이관 알림, P185/P186 밀링 월 인보이스. 빈값마다 새 정책 질문을 만들지 않는다.
+- 증거: `/tmp/notification-landing-sheet-audit-1109.json`, `/tmp/notification-office-app-landing-parser-audit-1109.json`; Lab 순수 파서 실행 결과와 consumer는 위 결과로 요약 보존. 향후 구현/실알림 QA 때 이 주소 표와 실제 payload를 대조한다.
+- 다음: PM 시트 반영 확인, 인박스 외부 딥링크 경로 등록은 별도 구현 재개 때 처리. BE push deliveryId·OS badge 안건은 아직 논의/계약 확정 전이다.
+
 ## 로컬 마감
 
 - 이번 검증용 Clinic3000/Lab3005, Office8081/Lab8082 및 격리 headless Chromium9233을 종료했다. 사용자 일반 Chrome·IDE·외부 터미널 배치는 변경하지 않았다.
