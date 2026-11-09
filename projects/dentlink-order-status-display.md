@@ -2,6 +2,7 @@
 
 ## 현재 상태 — 2026-11-09 스테이징 전달
 
+- **사용자 스테이징 실행 확인:** 배포 후 사용자가 iOS 치과·iOS 기공소·Android 치과·Android 기공소 네 앱에서 홈, 주문 리스트, 환자 리스트, 프로필, 링크톡 리스트에 진입했고 크래시가 없었다고 직접 확인했다. 사용자 확인 범위 그대로 기록하며 각 기기의 실제 OTA 라벨이나 모든 상태별 표시·주문 상세 기능 QA까지 확인했다고 확대하지 않는다. 앱 변경 영향 화면인 홈·주문 목록의 크래시 확인으로는 충분하며 무관한 화면 검증을 추가하지 않는다. 이번 웹 변경의 영향 화면은 주문 상세(WebView)이므로 추가 기능 확인은 그 화면의 목록/상세 상태 일치와 치과 예상 배송일·기공소 날짜 편집 표시로 한정한다. 별도 실행·배포 결과 조회는 하지 않았다.
 - **승인과 계약 확인:** 사용자가 세 제품 PR을 병합했다고 알리고, Office·Lab Staging CodePush와 웹 stage 삭제·재생성·배포 PR 생성 및 머지까지 명시 승인했다. 배포 후 하위 DL-17303·17309·17310만 Ready for QA로 바꾸고 필요한 하위 진행 기록을 추가하도록 요청했다. 부모 DL-17302는 변경하지 않는다.
 - 사용자가 백엔드를 직접 확인해 `IN_FABRICATION`은 `IN_PROGRESS`일 때 반환되고, `IN_PROGRESS`의 제작 세부 상태는 `DESIGN`, `READY_FOR_FABRICATION`, `IN_FABRICATION`이라고 확정했다. 모바일 웹 상태 출처 변경은 기존 데스크톱의 `order.status + order.detailStatus` 기준과 일치한다. 세 PR은 원복하거나 추가 코드 수정하지 않고 유지했다. 이 계약 확인을 최초 제보 주문의 실제 앱 응답·캐시 원인 입증으로 확대하지 않는다.
 - **Office 완료:** PR343 병합 release/v2.2.4 `caa7ed685743665f596e175afbadbf98d5e47bd9`로 Staging iOS **v345**, Android **v344**, target **2.2.4**, enabled·mandatory·rollout100%를 서버 재조회했다. 업로드는 iOS14:08:32, Android14:09:40 KST이며 검증 후 활성화했다. 이전 Staging source7f325896 대비 상태 파일과 기존 PR342 배지 정리뿐이고 native/package/lock/env/entry 변경0이다. 상태 파일은 최종 검증 blob66ab1b92와 같다.
