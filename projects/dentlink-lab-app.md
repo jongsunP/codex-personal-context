@@ -2,6 +2,7 @@
 
 ## 자동 Git 태그 번호 보완 PR41 — 2026-11-09
 
+- **사용자 최종 지시:** 머지는 나중에 직접 하겠다고 하고 정리·메모리·대기를 요청했다. PR41과 task branch는 보존하며 마감에서 추가 외부 조회·리뷰·병합·태그 변경·배포를 하지 않았다. 새 요청이 오면 해당 PR의 최신 상태를 필요한 범위만 확인한다.
 - 사용자 승인: 치과앱 PR345와 같은 보완을 기공소에도 적용해 **커밋·푸시·PR까지만, 머지 금지**. 실제 Git 태그 추가/삭제·CodePush·스토어 배포는 하지 않는다.
 - 최신 `origin/main@a3f5a06366b7ea86b461a5ef05355abdd5660017`에서 `feat/v1.0.5-codepush-tag`를 만들고 **e910945ca8b51010df741f97f877ea2118805575**를 커밋·푸시했다. 커밋은 `fix: 기본 태그 없는 CodePush 후속 번호 계산 보완`, 변경은 `.github/workflows/tag-production-codepush.yml` 한 파일이다.
 - 숫자 suffix가 있으면 base 태그 유무와 관계없이 최대+1, suffix 없이 base만 있으면 .1, 둘 다 없으면 base를 선택한다. .0과 없음도 구분한다. 치과앱 PR345 계산 블록과 동일하며 Lab의 hotfix/ 처리·trigger·checkout·태그 push·GitHub Release 생성은 모두 유지했다.

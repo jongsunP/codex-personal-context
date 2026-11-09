@@ -9,7 +9,7 @@
 
 | 항목 | 마지막으로 확인·기록한 상태 | 다음 시작점 |
 | --- | --- | --- |
-| Production 2.2.4.87 | 11/09 iOS·Android v87 활성화 완료. PR344 main 병합, 기본 Git 태그 v2.2.4 생성 | 자동화 수정 PR345 미병합. 이번 v2.2.4.87 Git 태그 추가는 별도 미실행 |
+| Production 2.2.4.87 | 11/09 iOS·Android v87 활성화 완료. PR344 main 병합, 기본 Git 태그 v2.2.4 생성 | PR345 사용자 추후 머지 대기. .87 Git 태그 복구는 별도 요청 시 이력 정리이며 배포 필수 조치 아님 |
 | LinkTalk 운영 iOS SIGSEGV | 10/27 확보 가능한 범위 조사 마감. dSYM 누락으로 정확 원인 미확정 | 일치하는 archive/dSYM 또는 새 재현 증거와 별도 재개 요청이 있을 때 [조사 정본](dentlink-app-linktalk-sigsegv-investigation.md)부터 확인 |
 | DL-17038 디자인 컨펌 Render Error | 수정 전 재현, PR338 수정 포함 main의 제한된 실화면 확인 완료. 테스트용 branch·실행 환경 정리 완료 | 새 결함/요청 없으면 대기. 아래 검증 범위를 전체 앱 QA로 확대하지 않음 |
 | 권한관리 및 후속 QA | 10/25 Office PR329/331/332/333의 운영 Git 반영 확인. 10/26 전용 worktree 제거 | 새 요청 시 [권한관리 정본](dentlink-permission-management.md)과 기본 checkout 확인 |
@@ -31,6 +31,7 @@
 
 ## 자동 Git 태그 후속 수정 PR345 — 2026-11-09
 
+- **사용자 최종 지시:** 두 앱의 수정 PR은 나중에 직접 머지할 예정이므로 정리·기록 후 대기한다. 이 마감에서 PR 상태나 배포를 다시 조회하지 않았다. 새 지시 전 리뷰 처리·병합·태그 복구·재배포·자동 감시를 하지 않는다. 태그 하나의 누락은 이미 배포된 앱의 동작에 영향을 주지 않는 이력상의 문제이며 긴급 필수 후속으로 다루지 않는다.
 - 사용자는 자동 태그 설정의 코드 수정·검증·커밋·푸시·PR까지만 승인했고 직접 머지하겠다고 했다. 최신 origin/main `7f586790`에서 `feat/v2.2.4-codepush-tag`를 만들고 **57b8eabb713ec019f49fc7614a960b35302ef29f**를 푸시했다. 변경은 `.github/workflows/tag-production-codepush.yml` 한 파일이다.
 - 유효한 숫자 suffix를 기본 태그 검사 전에 계산한다. suffix가 있으면 최대+1, 없고 base가 있으면 .1, 둘 다 없으면 base를 생성한다. suffix .0과 없음도 구분한다. trigger·checkout·태그 push·GitHub Release 생성·배포 라벨 조건은 변경하지 않았다. Revopush 실제 라벨을 조회해 동기화하는 기능은 아니다.
 - **검증:** 실제 YAML의 next_tag shell을 추출해 임시 Git 저장소에서8조건 통과. 기본 태그 없음+.86에서 수정 전 v2.2.4를 재현했고 수정 후 v2.2.4.87 확인. 태그 없음/base만/base+.86/.0/숫자 정렬/다른 버전 및 부적합 suffix 제외도 확인했다. YAML 파싱·Bash 문법·Prettier·diff check 통과, 독립 diff 검토에서 새 결함 없음. 앱 runtime 변경이 없어 앱 재실행은 하지 않았다. 임시 증거 `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dentlink-office-tag-check-Tt4dH9/results.json`.
