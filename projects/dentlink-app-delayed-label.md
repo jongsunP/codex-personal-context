@@ -1,6 +1,10 @@
 # Office 완료·취소 주문 지연 라벨 — DL-17248
 
-## 현재 체크포인트 — 2026-11-09 인계 재검토·추가 수정 불필요
+## 현재 체크포인트 — 2026-11-09 웹 정책 일치·미사용 분기 정리 후보 확인
+
+- 사용자가 후속으로 “앱 한정 로직 정리할 부분, 웹과 맞춰야 할 부분”을 재질문했다. 앞선 추가 수정 불필요는 기능 요구 누락/회귀 기준이며, **코드 정리 후보까지 없다는 의미는 아님**을 정정했다. Office 배지에는 실제 소비자가 없는 Lab DTO·isOfficeOrder 판별·Lab 날짜 선택과 date-fns 비교가 남아 있다. 실제 Home·Orders는 Office 데이터만 사용하므로 Office DTO·deliveryRequestAt·서버 isDelayed만 사용하는 구조로 간소화할 근거가 있다. Office 저장소의 OrderLabListItem은 import 소비자가 없고 내부 type=orders여서 배지도 표시하지 않는다.
+- 정리 시 기존 true+COMPLETED/CANCELED 숨김, 배송 가능/NEW/필수 날짜 가드, false·누락·null의 On Time을 유지해야 한다. 양 키 누락은 deliveryRequestAt 날짜 가드로 계속 숨김이어야 한다. Lab의 boolean 필수 가드를 치과에 이식하면 새 동작이므로 포함하지 않는다. 이번 질문은 확인 범위여서 제품 코드·PR·배포는 수정하지 않았다.
+- Web의 실제 getOrderDelayBadgeStatus와 대조하여 서버값 판정 정책이 동일함을 확인했다. 차이는 기존 화면별 노출 조건이다. 웹 치과 목록은 진행 중 3상태+officeEstimatedArrivalAt에서만 배지 표시하고 완료는 날짜만 남지만, 앱은 완료+false On Time을 유지한다. 공통 웹 상세는 estimatedArrivalDate·제작 전 조건을 쓰고 앱은 isShippable·요청일·NEW/CANCELED 가드를 쓴다. 이를 일괄 통일하면 기존 UI/정책이 바뀌므로 확정된 이번 요구의 필수 수정으로 분류하지 않는다.
 
 - 사용자 직접 지시의 인계에 따라 기존 isDelayed 요구를 재검토했다. Office 기본 checkout `feature/DL-17059@1f956ae`는 보존하고 원격 release를 fetch한 뒤 `release/v2.2.4@4892f1c1849833054453f01145b2f012782bb9da`를 git show로 읽었다. 이전 Staging source `7f325896`와 동일한 검증 코드이며 새 배포 상태/기기 수신을 조회한 것은 아니다.
 - **요구 충족·추가 조치 없음:** HomeTrackOrderCard→OrderProgressStatus와 Orders의 OrderOfficeListItem이 같은 OrderStatusBadge를 호출한다. `GET /office/orders → OrderOfficeListDto`의 서버 판정을 변환하지 않고, true+COMPLETED/CANCELED를 숨긴다. true라면 isDelayed 키가 존재하므로 Office 판별에서 빠지지 않는다. On Time·진행 중 Delayed·기존 날짜 조건은 유지한다. Office 배지는 홈에만 있다는 설명은 틀리며 주문목록에도 있다.

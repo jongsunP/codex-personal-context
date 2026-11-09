@@ -2,6 +2,7 @@
 
 ## 현재 체크포인트 — 2026-11-09 인계 재검토·추가 수정 불필요
 
+- **후속 웹 대조·정리 관점:** 실제 웹 공통 helper는 Lab에서도 boolean이 아니면 숨기고 true=Delayed/false=On Time, COMPLETED+true 유지로 앱과 같다. Lab 앱의 임시 타입·치과 판별·자체 날짜 계산 제거는 PR36에 완료돼 추가 정리 대상이 없다. 반면 Office 앱에는 미사용 Lab 분기가 남아 있어 기능 버그 수정과 별개인 정리 후보로 보고했다. 웹 목록/상세와 앱의 기존 날짜·배송 가능·상태 노출 조건 차이는 신규 정책 확정 없이 일괄 통일하지 않는다. 이번 질문은 읽기 전용 확인이며 코드·PR·배포 변경은 없다.
 - 통합알림센터 채팅에서 사용자의 직접 지시로 기존 isDelayed 요구 충족 여부 재검토를 인계받았다. 원래 담당인 이 채팅에서 두 앱의 코드·확정 요구·Staging 명세를 대조했다. 인계 채팅에는 회신하거나 결과 추적을 요청하지 않았다. 인계 자체를 새 배포 승인으로 해석하지 않았다.
 - Lab 전용 worktree를 pull하여 `release/v1.0.5@907832d990a59b8a26a4c06e8df6663166a6f7f6`/원격 동일·clean을 확인했다. Office release도 fetch 후 `4892f1c` 그대로이며 이전 검증 소스와 같다. 기본 알림센터 checkout Office `feature/DL-17059@1f956ae`, Lab `feature/DL-17060@a119ba8`의 파일·브랜치·기기·서비스는 변경하지 않았다.
 - **Lab 추가 조치 없음:** `POST /lab/orders/search → SearchOrderData/OrderListLabDto → 홈 카드 → OrderProgressStatus(type=home) → OrderStatusBadge`가 서버 값을 변환 없이 전달한다. 배지는 boolean true=Delayed, false=On Time, 누락/null/비boolean=숨김이며 자체 날짜 계산은 없다. 요청일/예상일 존재·배송 가능·NEW와 호출부 CANCELED 제외는 기존 조건이다. COMPLETED+true는 Office처럼 추가로 숨기지 않는다. Lab Orders는 type=orders여서 이 배지가 없고, 저장소에 남은 OrderOfficeListItem은 소비 경로가 없다.
