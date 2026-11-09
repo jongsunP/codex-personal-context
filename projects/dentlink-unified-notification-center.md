@@ -1,5 +1,15 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**11.23 배포 배지 정책 확정·푸시 payload 공유 — 2026-11-09:** 사용자가 회의 결과를 전달하고 [DL-16140 댓글44950](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44950)에 게시했다. 댓글(18:30:46 KST)과 사용자가 직접 갱신한 [PM·BE 공유용 표](https://app.notion.com/p/413ce072e82f81968f43c0563590b495)를 읽기 전용으로 확인했다. 아래 과거의 ‘배지 정책 결정 대기’ 및 FE 미읽음 추천안보다 이 결정을 우선한다.
+
+- **이번 배포:** OS 배지는 새 푸시 수, 로그인/앱 복귀 시0 초기화 유지, LinkTalk 포함, 다른 소속 포함, 신규 미읽음 숫자 payload 추가 없음. `PATCH /app/users/own/devices/badge-count {badgeCount:0}`를 unread GET으로 바꾸거나 읽음마다 -1 하지 않는다. 현행 유지 지시를 기존 네이티브/APNs·SDK 필드 삭제나 변경 허가로 해석하지 않는다.
+- **신규 범위 구분:** Jira는 다른 소속 포함을 **‘신규(다른 소속 포함)’**으로 적었다. 서버의 기존 집계가 이미 이를 충족한다고 단정하지 않는다. LinkTalk·다른 소속 집계의 서버 적용은 별도이며 FE에서 인박스/채팅 수를 임의 합산하지 않는다.
+- **푸시 전달 기준:** 사용자가 `data: {deeplink:"dentlink://order/1409/7000012592",deliveryId:"5521"}`를 공유했다. `deeplink`는 이동, `deliveryId`는 기존 `PATCH /office/notifications/inbox/read/push` 또는 `/lab/notifications/inbox/read/push`의 `{deliveryId:5521}` 요청에 사용한다. Lab의 앱 scheme은 `dentlink-lab://`를 유지한다. 이 전달 형식을 구현 기준으로 삼되 실제 BE 발송·수신 검증 완료와 구분한다. 새 클릭 이력 API나 분석 이벤트는 추가하지 않는다.
+- **현재 코드 대조:** Office `feature/DL-17059@8887a90`, Lab `feature/DL-17060@8d2f71b`, 모두 clean·로컬 upstream0/0. 두 앱 모두 배지 PATCH0 유지. 푸시 읽음 서비스/DTO는 있으나 FCM/Notifee 클릭·로그인 전 보관은 URL 중심이어서 실제 `deliveryId` 읽음 호출은 **아직 미연결**이다. 이번 턴에는 제품 코드·기기·서버를 변경하지 않았다.
+- **다음 작업:** 위 payload의 ID를 클릭→로그인 준비→읽음 호출까지 보존하고 URL 이동 중복 방지와 발송ID별 읽음 중복 방지를 구분한다. 기존 랜딩·소속 확인, 실패 시 정상 랜딩 유지, 성공 후 인박스 갱신을 검증한다. OS 배지 정책 변경과 섞지 않으며 실발송 E2E는 별도 확인한다.
+- **후속 개선으로 보관:** 실제 미읽음 수 / LinkTalk 포함 우선(불가 시 현재 푸시 발송 건 범위 검토) / 현재 소속 / 푸시 숫자 포함. 이번 배포 구현 범위가 아니며 기존 FE 추천의 ‘전체 소속·LinkTalk 제외’를 확정안으로 재사용하지 않는다. 실시간 동기화·이메일 작업 제외는 유지한다.
+- **기록 경계:** 사용자의 Jira 댓글·Notion 표는 변경하지 않았다. 개인 체크포인트와 [상세 배지 기록](dentlink-unified-notification-center-api-badge-review-2026-11-09.md)만 최신화한다. 공유용/FE용의 회의 전 설명은 최신 결정으로 보지 않는다. PR·배포 없음.
+
 **치과 선택 디자인 통일 구현·검증·푸시 완료 — 2026-11-09:** 아래 사전 확인 뒤 사용자가 웹·치과앱의 일반 병원 선택과 알림 병원 선택을 함께 구현하고 검증·commit/push·메모리까지 완료하도록 승인했다. Web `feature/DL-17058@ed88f08384f624f0171de9fd38cd9dffcc9ec7b2`, Office `feature/DL-17059@8887a90bd163f85498f1d7afca592c92126a8f64`를 원격 SHA 일치·clean으로 확인했다. **PR·merge·배포는 하지 않았다.** [변경 범위와 최종 실행 검증](dentlink-unified-notification-center-office-selection-2026-11-09.md).
 
 - **반영:** 현재 소속 회색 카드, 병원 아이콘·이름/주소·다른 소속 행·화살표·미읽음 표시를 정렬했다. 웹은 현재 카드+목록 본문이 함께 스크롤되고 제목/닫기/일반 Add New Office는 고정된다. 치과앱은 현재 카드→권한별 Payment Method→다른 소속 순서이며 상단은 고정하고 목록만 일반 최대450/알림 최대500 내에서 스크롤한다. 작은 화면의 가용 높이도 함께 제한한다. 긴 이름/주소는 줄바꿈, 단일 소속은 빈 목록 제목/영역 제거. 공통 행 표시를 재사용하며 새 API·기기 배지 정책은 추가하지 않았다.
