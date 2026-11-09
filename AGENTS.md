@@ -209,10 +209,16 @@
   then prepare the intended PR with the target service's deployment-triggering
   diff. Do not substitute manual dispatch for the requested reset/PR process.
   This is mandatory common guidance, not an LBX-session-only note.
-- For server-deployment result checks, follow **Deployment Result Checks** in
-  `SESSION_WORKFLOW.md`: first check no earlier than 15 minutes after the
-  deployment starts, then leave at least 3 minutes between any later polls.
-  Respect a user-specified delay, one-time check, or instruction to wait.
+- For deployment completion and result checks, follow **Deployment Result
+  Checks** in `SESSION_WORKFLOW.md`: by default, finish app delivery after
+  successful CodePush publication/activation. For web development/staging,
+  finish after the authorized branch merge and one confirmation that the
+  intended GitHub Actions deployment has started for the expected revision.
+  Report that deployment started normally and stop; the user checks the result.
+  Do not wait for completion, poll Actions/servers, or track device uptake unless
+  the user separately requests it. This is the standing 2026-11-09 default,
+  replacing automatic follow-up after 15 minutes. Timing rules apply only to
+  explicitly requested result checks or monitoring.
 - For every branch creation or rename, follow **Branch Naming And Draft PR
   Metadata** in `DEVELOPMENT_STYLE.md`. Use only the user's exact name or the
   repository's documented naming patterns. From 2026-11-04, new Dentlink task

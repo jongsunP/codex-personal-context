@@ -848,6 +848,12 @@ need a human check.
   Identify the app/environment/platform and delivered version or OTA label;
   include branch/revision when it helps identify what was shipped. Distinguish
   upload/activation from actual device receipt and store release.
+- By the user's standing 2026-11-09 rule, successful authorized CodePush
+  publication/activation completes the app delivery task. Confirm the command
+  result and intended deployment metadata, then report and stop. Do not wait
+  for device uptake or start post-deployment monitoring unless separately asked.
+  This does not replace the required final-code runtime checks before delivery
+  or turn unobserved device receipt into a verified fact.
 - State the crash/regression assessment with its code-based reason and completed
   agent verification. Say no new issue was found within the checked scope when
   that is the evidence; do not promise zero risk or infer safety from line count.
@@ -1329,15 +1335,27 @@ not as permission to reset every environment unconditionally.
 
 ## Deployment Result Checks
 
-This is a common rule across projects, confirmed by the user on 2026-10-19.
+This is a standing rule across projects, clarified by the user on 2026-11-09.
+The default is delivery/start confirmation, not deployment-result monitoring.
+This replaces the earlier assumption that an ordinary deployment request
+includes a result check after 15 minutes.
 
-- Expect server deployment to take at least 15 minutes. Confirm the start and
-  target revision once when initiating an authorized deployment, then do not
-  repeatedly query its result until at least 15 minutes after that start.
-  Measure from the deployment/workflow start, not each individual job or step.
-- If it is still running, leave **at least 3 minutes between subsequent polls**.
-  Three minutes is a minimum, not a requirement to poll indefinitely. Batch
-  related app/job checks at each observation and use a longer wait when useful.
+- **Apps:** finish after successful authorized CodePush publication/activation
+  and confirmation of the intended app, platform, deployment and target version.
+  Report the delivered labels. Do not wait for device uptake, restart evidence,
+  or post-deployment metrics unless the user separately requests those checks.
+- **Web development/staging:** after the authorized merge into the relevant
+  environment branch, confirm once that the intended GitHub Actions deployment
+  has started for the expected revision. Report **배포 시작 정상** and stop.
+  The user checks the final result. Do not wait for workflow completion, query
+  Actions/API/HTTP again, follow serving revisions or E2E, or create a monitoring
+  automation merely because deployment takes time.
+- A separate explicit request to check results or follow through to completion
+  authorizes only that requested scope. For explicitly requested ongoing
+  monitoring with no other timing instruction, retain the earlier cadence:
+  first result check no earlier than 15 minutes after the deployment/workflow
+  start, and at least 3 minutes between later polls. Do not restart the clock
+  for each job or step. A one-time request remains one check, not monitoring.
 - Avoid frequent GitHub/API/HTTP polling and unchanged progress messages.
   Report a meaningful result, failure, or required user action. When the user
   asks for a one-time check or says they will report the result, obey that limit
