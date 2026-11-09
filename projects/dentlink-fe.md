@@ -4,12 +4,13 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
-## 주문 상태 표시 정합성 세 제품 PR 전달 — 2026-11-09
+## 주문 상태 표시 정합성 스테이징 전달 — 2026-11-09
 
 - 담당은 `주문 상태 표시 정합성 · DL-17303` 세션(`01a1be36-dd23-7390-b373-27275f777d4b`)이다. 사용자가 세 제품 새 worktree 구현에 이어 commit/push/이번 release PR 생성을 승인했다. 기존 기본 checkout의 다른 작업은 보존했다.
 - Web [PR4854](https://github.com/Innvoaid/dentlink-client/pull/4854) `feat/DL-17309 → release/v1.92.0`, Office [PR343](https://github.com/Innvoaid/dentlink-app/pull/343) `feat/DL-17303 → release/v2.2.4`, Lab [PR37](https://github.com/Innvoaid/dentlink-lab-app/pull/37) `feat/DL-17310 → release/v1.0.5`로 전달했다. 모두 일반 PR이며 Web2파일·Office1파일·Lab1파일의 상태 표시 변경만 포함한다.
 - 웹 타입/린트·합성48조건 및 commit/push 필수 검사·E2E 영향없음 판정, 앱 각각 양OS 홈·Orders 관련13조건을 확인했다. 앱 전체 타입은 기준 코드와 동일한 기존 진단이다. 실제 STG 원주문 응답·서비스 통합·PR 병합·릴리즈 반영·배포는 별도다.
-- 현 상태는 **PR 전달 완료, 검토·병합 지시 대기**다. 상세는 [주문 상태 표시 정합성 정본](dentlink-order-status-display.md)을 따른다. 메인은 자동 조회/폴링 없이 담당 세션에 맡긴다. 이번 갱신은 Git-backed 기록이며 메인 채팅에 메시지는 보내지 않았다.
+- 이후 사용자 병합 보고와 명시 배포 승인으로 **Office Staging iOSv345/Androidv344(target2.2.4), Lab 양OSv63(target1.0.5)** 전달·활성화를 확인했다. 앱 기기 OTA수신은 별도다. 초기 공용temp 문제 후 Office iOSv344만 disabled 처리하고 제품·OS별 격리 재번들로 교체한 경위를 정본에 기록했다.
+- 웹은 승인된 stage삭제·master기준재생성 후 [PR4855](https://github.com/Innvoaid/dentlink-client/pull/4855) 생성·머지 완료, stage`b4e51cd6`로 Clinic/Lab/Admin 배포가14:08:36 KST 시작됐다. 15분 후1회 확인은 Lab/Admin success·Clinic deploy 진행 중이며, 이후 사용자가 **앱CodePush·웹PR머지/Actions시작확인까지만 전달 완료, 배포결과는 직접 확인하니 대기/폴링 중지**를 상시 기본 지침으로 명시해 AGENTS/SESSION_WORKFLOW에 반영했다. DL-17303 제목 수정 및 세 하위 Jira **READY FOR QA** 전이·하위댓글 정리까지 완료했다. 상세는 [주문 상태 표시 정합성 정본](dentlink-order-status-display.md)을 따른다. 부모카드·메인채팅 메시지·Production은 변경하지 않았다. 추가조회 없이 마감한다.
 
 ## 배포·E2E 결과 분리 사용자 확인 — 2026-11-05
 

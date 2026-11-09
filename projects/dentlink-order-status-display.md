@@ -1,6 +1,20 @@
 # Dentlink 주문 상태 표시 정합성 — DL-17303
 
-## 현재 상태 — 2026-11-09 재개
+## 현재 상태 — 2026-11-09 스테이징 전달
+
+- **승인과 계약 확인:** 사용자가 세 제품 PR을 병합했다고 알리고, Office·Lab Staging CodePush와 웹 stage 삭제·재생성·배포 PR 생성 및 머지까지 명시 승인했다. 배포 후 하위 DL-17303·17309·17310만 Ready for QA로 바꾸고 필요한 하위 진행 기록을 추가하도록 요청했다. 부모 DL-17302는 변경하지 않는다.
+- 사용자가 백엔드를 직접 확인해 `IN_FABRICATION`은 `IN_PROGRESS`일 때 반환되고, `IN_PROGRESS`의 제작 세부 상태는 `DESIGN`, `READY_FOR_FABRICATION`, `IN_FABRICATION`이라고 확정했다. 모바일 웹 상태 출처 변경은 기존 데스크톱의 `order.status + order.detailStatus` 기준과 일치한다. 세 PR은 원복하거나 추가 코드 수정하지 않고 유지했다. 이 계약 확인을 최초 제보 주문의 실제 앱 응답·캐시 원인 입증으로 확대하지 않는다.
+- **Office 완료:** PR343 병합 release/v2.2.4 `caa7ed685743665f596e175afbadbf98d5e47bd9`로 Staging iOS **v345**, Android **v344**, target **2.2.4**, enabled·mandatory·rollout100%를 서버 재조회했다. 업로드는 iOS14:08:32, Android14:09:40 KST이며 검증 후 활성화했다. 이전 Staging source7f325896 대비 상태 파일과 기존 PR342 배지 정리뿐이고 native/package/lock/env/entry 변경0이다. 상태 파일은 최종 검증 blob66ab1b92와 같다.
+- **Lab 완료:** PR37 병합 release/v1.0.5 `14ec0f5570ee915ddbeaf5bdc7aa537473464a81`로 Staging 양OS **v63**, target **1.0.5**, enabled·mandatory·rollout100%를 서버 재조회했다. iOS14:08:15, Android14:08:58 KST. 이전 양OS v62/source907832d 대비 상태 파일만 변경됐고 배포 source의 전체 tree는 검증한 feature49b997d와 같다. package/Android/Xcode1.0.5 일치 확인.
+- **CodePush 실행 중 복구:** 최초 양 제품 CLI가 공용 `CodePush`, `CodePushSourceMap`, `CodePushBaseRelease` 임시 경로를 동시에 사용했다. Lab iOS는 번들 이후 `invalid literal/length/distance code`로 종료했으며 서버는 기존v62 유지였다. Office 최초 iOS v344는 업로드됐지만 출처를 보장할 수 없어 해당 신규 Staging라벨만 disabled로 전환했다. 이전 Officev343은 변경하지 않았다. 이후 제품·OS별 `TMPDIR`, basename이 CodePush인 outputDir, sourcemapOutput을 분리해 새 번들을 생성했다. 최종 Office App.tsx/상태/배지, Lab App.tsx/상태의 source map 내용이 각 release 파일과 정확히 일치함을 확인했다. Office 초기v344는 계속 disabled이고 실제 기기 수신 여부는 관찰하지 않았다. 제품 스크립트·환경 값은 수정하지 않았으며 Slack 알림을 전송하지 않았다.
+- **웹 배포 시작:** PR4854 병합 release/v1.92.0 `c7e7c130d`를 전달했다. old stage264c091c를 로컬 `refs/recovery/stage/20261109-DL-17309`와 `/tmp/dl17309-stage-reset-20261109.json`에 보존하고, 열린 stage PR·보호/ruleset 없음을 확인했다. expected-SHA lease로 stage 삭제 후 최신 masterc5a4b5e3에서 nonexistence lease로 재생성했다. [배포 PR4855](https://github.com/Innvoaid/dentlink-client/pull/4855)를 생성·채팅 첨부·머지했고 최종 stage는 `b4e51cd6adc01d7ff47c1cd245b497c1ab1c45b1`이며 release와 tree가 같다. 실제203경로 중 Clinic39/Lab83/Admin13이 각 서비스 `stage` push·자체경로 조건을 충족했다. 수동dispatch·빈커밋·인위적trigger 변경은 없다.
+- **웹 전달 완료·조회 중단:** 최종 stage SHA로14:08:36 KST에 Clinic42565577777 / Lab42565577835 / Admin42565577783이 시작했다. 15분 이후1회 확인에서 Lab/Admin 배포 success, Clinic build success·서울/오하이오 deploy 진행 중이었다. 이후 사용자가 **앱은 CodePush 성공, 웹은 PR 머지까지만 하면 완료이고 배포 결과는 직접 볼 테니 기다리거나 폴링하지 말라**고 명시했다. 대기·추가조회 즉시 중단했으며 Clinic 최종결과·실제서빙revision·E2E는 미확인이다. 새 지시 없이 재조회/자동화하지 않는다.
+- **검증과 위험 범위:** 기존 앱 양OS 홈·Orders13조건 최종코드 실행 결과와 웹48조건 렌더 검증을 재사용했다. 새 hook/state/native/API 변경 없이 표시 분기에 한정되어 확인 범위에서 새 코드 크래시 위험은 발견하지 못했다. 이번 번들 생성·서버 활성화와 실제 Staging 기기 OTA수신/재실행·실서비스 기능 QA는 구분한다. 새 native build나 스토어/Production 배포는 하지 않았다.
+- **Jira 완료:** DL-17303 제목을 `[치과 앱] 주문 홈·목록 상태 표시 정합성 수정`으로 변경했다. 세 하위 DL-17303·17309·17310 모두 워크플로 전이2→12→16을 거쳐 **READY FOR QA** 응답을 확인했다. 하위 댓글 각각44931/44932/44933에 앱CodePush 또는 웹배포PR머지 결과와 영향 화면을 남겼다. 웹은 최종결과를 사용자 확인으로 명시했고 앱 실제기기수신·원제보응답은 검증범위와 구분했다. 부모 DL-17302 수정 없음.
+- **마감:** 요청한 앱CodePush·웹stage재생성/PR머지·하위Jira정리 완료. 사용자가 확정한 배포 종료 기준을 공통 AGENTS/SESSION_WORKFLOW에도 반영했다. 별도 지시 없이 결과 대기·폴링·자동감시를 재개하지 않는다.
+- **보존/증거:** 원본 세 `feat/<Jira>`와 기본 checkout의 다른 작업을 보존했다. Office·Lab 전용 worktree는 원래 feature로 복귀·clean·upstream 동일이다. `/tmp/dl-17303-office-staging/report.json`, `/tmp/dl17310-staging-delivery/verified-delivery.json`과 각OS source map/history를 로컬 실행 증거로 보존했다. `/tmp` 자료는 지속 Git 기록과 구분한다.
+
+## 이전 기록 — 2026-11-09 구현·PR 전달
 
 - **세 제품 커밋·푸시·이번 릴리즈 대상 PR 생성 완료.** 사용자가 다른 작업 완료를 알리고 시작을 요청했으며, 기본 Office/Lab checkout의 통합알림센터 미커밋 변경을 확인한 뒤 앱 두 개, 이어 웹까지 **새 worktree** 사용을 명시했다. 기존 기본 checkout은 편집/정리하지 않는다.
 - 이번 QA 후속은 기존 지연 라벨/서버 isDelayed 변경을 포함한 최신 대상 release에서 각각 새 `feat/<Jira>`를 만들었다. 후속 사용자 지시로 세 제품 commit/push/각 release 대상 PR 생성을 승인받았다. merge·CodePush·배포는 승인 범위에 포함하지 않는다.
