@@ -14,14 +14,16 @@ Use multiple Codex sessions when separation improves ownership and context:
   sessions by default, including small tasks. Follow the size/continuation
   routing rule in `SESSION_WORKFLOW.md`; direct main-session implementation
   is an exception when the user chooses it.
-- Create additional sessions primarily by feature or responsibility, not by
-  device or repository. One feature session may own coordinated web and app
-  work across multiple repositories.
+- Default to one session per logical feature or bug, including coordinated web
+  and app work across repositories. Separate sessions only when product-specific
+  purposes, requirements, timing, or ownership justify independent work under
+  **New Work Intake And Session Routing** in `SESSION_WORKFLOW.md`. Different
+  devices, repositories, or product Jira cards alone do not justify separation.
 - Inside any session, every mutation still belongs to an explicitly confirmed
   repository, branch, or worktree. Do not blur Git histories merely because
   the same feature session owns both surfaces.
-- One session should be the active writer for one worktree unless the user
-  explicitly coordinates otherwise.
+- Each worktree has one active writing session unless the user explicitly
+  coordinates otherwise. A feature session may own several product worktrees.
 - Durable continuity remains Git-backed in `codex-personal-context`; chat and
   device-local session history are supplementary.
 - Keep the primary Mac as the execution host when a phone or another computer

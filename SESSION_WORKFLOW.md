@@ -252,11 +252,11 @@ responsibilities rather than forcing the whole product into one checkout.
   requests status or aggregation here, perform only the requested check.
   A new request to monitor until completion must be explicit; delegation itself
   does not authorize ongoing monitoring.
-- Organize implementation sessions by feature, not by device or
-  repository. One feature session may coordinate and implement both web and app
-  portions across their separate repositories. It must confirm the exact path,
-  branch, and worktree before every repository mutation and keep their Git
-  histories independent.
+- Default to one implementation session per logical feature or bug, including
+  coordinated web and app work. Follow **New Work Intake And Session Routing**
+  for justified separation; different devices or repositories alone are not
+  a reason to split. Confirm the exact path, branch, and worktree before every
+  repository mutation and keep each repository's Git history independent.
 - A main-checkout session may still act as a repository administrator when
   branch, worktree, release, or cleanup work needs a concrete checkout. This is
   a repository-level helper role beneath the Dentlink FE top-level session, not
@@ -297,8 +297,29 @@ Its identity is recorded in `projects/dentlink-fe.md`.
 ### New Work Intake And Session Routing
 
 This is the user's standing Dentlink routing preference, clarified on
-2026-10-06. It replaces the older default of handling small changes in the
-main session or asking about checkout separation for every small task.
+2026-10-06 and 2026-11-09. It replaces the older default of handling small
+changes in the main session or asking about checkout separation for every
+small task.
+
+**Session scope follows the feature or bug (2026-11-09):**
+
+- Default to one feature session when the same purpose or bug spans Web,
+  Office app, and/or Lab app. That session owns the shared requirements,
+  investigation, coordinated implementation, verification, and user reporting
+  within the authorized scope. Do not split merely by device, OS, repository,
+  or product-specific Jira card.
+- Separate sessions when product-specific purposes or requirements, independent
+  schedules, or separate ownership make the work genuinely independent. Explain
+  the concrete reason; if the choice materially affects scope or coordination
+  and remains unclear, ask the user. Do not create another user-visible session
+  merely for internal parallel investigation.
+- A shared session does not merge repositories. Keep each product's checkout,
+  branch/worktree, active writer, Jira card, checks, PR, release, and deployment
+  evidence separate. Product cards remain split under **Jira Work Updates**;
+  their count does not determine the number of sessions. A single session may
+  own several product worktrees, but a worktree has only one active writer.
+- Apply this default to new intake. Preserve existing sessions and their
+  histories unless the user requests reorganization.
 
 1. When the user submits a new work link to the main session, inspect the
    linked requirements, relevant comments, and necessary current code/Git
@@ -711,9 +732,10 @@ unless their move or cleanup is authorized.
    default base. Push and set upstream only when the user requests remote
    setup.
 5. Create or open one Codex session for the logical feature and explicitly
-   assign every affected repository/worktree to it. The same feature session
-   may own both web and app work; do not create separate sessions solely because
-   the repositories or execution devices differ.
+   assign every affected repository/worktree to it. Keep coordinated web and
+   app work in that session by default; use **New Work Intake And Session
+   Routing** for justified exceptions instead of splitting by repository or
+   execution device alone.
    For a new session, explicitly select and verify its model and reasoning
    under the canonical default in `AI_WORKFLOW.md`.
 6. From the main session, give the feature session a copyable startup prompt

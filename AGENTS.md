@@ -168,6 +168,13 @@
   Reuse suitable windows/profiles, preserve the user's browser, and distinguish
   isolated browser state from shared account/server data. This is the user's
   2026-11-06 direction.
+- For new Dentlink work, follow **New Work Intake And Session Routing** in
+  `SESSION_WORKFLOW.md`: use one session per logical feature or bug by default,
+  including coordinated Web, Office app, and Lab app work. Split only when
+  product-specific purpose, requirements, timing, or independent ownership
+  justifies it, not merely because devices, repositories, or Jira cards differ.
+  Keep each repository's Git, validation, PR, and delivery boundaries separate.
+  This 2026-11-09 clarification does not reorganize existing sessions.
 - When creating a delegated work session, follow **New Session Model And
   Reasoning Default** in `AI_WORKFLOW.md`: explicitly select the main session's
   verified model and reasoning level, or the highest available combination

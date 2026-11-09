@@ -217,9 +217,8 @@
 - 메인세션의 폴더는 `/Users/parkjongsun/Documents/ChatGPT/메인 프로젝트`다.
   개인 조율·자료용 폴더이며 전용 제품 저장소나 worktree를 연결하지 않는다.
   위 상시 역할은 2026-09-28 사용자가 재확인한 운영 원칙이다.
-- Sessions are created primarily for a feature or responsibility, not for a
-  device or repository. One feature session may inspect and implement both its
-  web and app portions across the relevant separate product repositories.
+- **2026-11-09 세션 배정 재확인:** 동일 기능·버그는 웹·Office·Lab을 한 기능 세션에서 관리하는 것이 기본이다. 제품별 목적·요구사항·일정·독립 책임 때문에 분리할 실익이 있을 때만 나눈다. 저장소·검증·PR·배포와 제품별 Jira 카드의 경계는 그대로 유지하며 카드 수가 세션 수를 결정하지 않는다. 상세 정본은 [업무 접수·세션 배정 지침](../SESSION_WORKFLOW.md#new-work-intake-and-session-routing)이다.
+- 기존 치과 웹·앱 완료/취소 주문 지연 라벨 두 세션은 사용자 지시대로 유지한다. 이번 지침 보완으로 기존 세션을 병합·재생성·보관하거나 완료 상태를 재조회하지 않는다.
 - Every code or Git mutation must still name and confirm the exact product
   repository, branch, and worktree. A shared feature scope does not combine Git
   histories or permit writing from an ambiguous directory.
