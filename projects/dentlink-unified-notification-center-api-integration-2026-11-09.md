@@ -129,10 +129,26 @@
 - 유지: Office confirm(승인/거절/만료 조회 포함), employerId 포함 order, P91/P92 scanner-draft-received 특수 분기, chat, feedback, casePreference; Lab confirm/order/chat/선호도 팝업은 위 prefix/소속 교정 외 목적지 유지. `isCasePreferenceModalOpen` literal은 공통 WebView가 실제 지원하므로 true로 강제 치환할 필요 없음.
 - 의도적으로 유지할 공란: Office P132 공지, P159/P161 미지원 직원 기능; Lab P67/P68 이전 기공소 이관 알림, P185/P186 밀링 월 인보이스. 빈값마다 새 정책 질문을 만들지 않는다.
 - 증거: `/tmp/notification-landing-sheet-audit-1109.json`, `/tmp/notification-office-app-landing-parser-audit-1109.json`; Lab 순수 파서 실행 결과와 consumer는 위 결과로 요약 보존. 향후 구현/실알림 QA 때 이 주소 표와 실제 payload를 대조한다.
-- 다음: PM 시트 반영 확인, 인박스 외부 딥링크 경로 등록은 별도 구현 재개 때 처리. BE push deliveryId·OS badge 안건은 아직 논의/계약 확정 전이다.
+- 후속: 아래 인박스 딥링크 연결 절에서 경로 등록·검증을 완료했다. PM 시트 반영 확인과 BE push deliveryId·OS badge 안건은 아직 남는다.
 
 ## 로컬 마감
 
 - 이번 검증용 Clinic3000/Lab3005, Office8081/Lab8082 및 격리 headless Chromium9233을 종료했다. 사용자 일반 Chrome·IDE·외부 터미널 배치는 변경하지 않았다.
 - 양 앱 실행을 닫았으며 기기 데이터/로그인/OS 권한은 보존했다. 공유 시뮬레이터·에뮬레이터 장치 자체는 부팅 상태를 유지했다.
 - 기기 사용 충돌은 다른 채팅의 검증 완료·대기 상태를 확인한 뒤 해결했고 메시지는 보내지 않았다. 별도 주문 상태 작업의 코드/기록/후속 진행은 이 기능에 합치지 않는다.
+
+
+## 인박스 직접 딥링크 후속 구현 — 2026-11-09 14:58 KST
+
+- 사용자 승인: ‘URL 추후 기입’으로 넘기기 전에 앱 연결을 먼저 구현하고 실제 주소를 PM에게 전달한다. PM 편집권한과 외부 게시 금지는 유지한다.
+- Office commit `bc2f5a9e3676461c93be90094abf2e834e353c77` / Lab `8d2f71bef4e03c66e58727b2bb6338d3bd2806ad`, 각각 기존 `feature/DL-17059`/`feature/DL-17060` 원격 일치·clean. Web 변경 없음.
+- 정본 주소: Office `dentlink://notifications`, Lab `dentlink-lab://notifications`; 필요시 `?employerId=${employerId}`로 목표 소속 전달. 생략하면 현재 소속 유지. native scheme/도메인/HTTPS whitelist/이메일 기능은 변경하지 않았다.
+- 기존 로그인 준비·소속 확인/서버 활성화 흐름을 재사용한다. 외부 URL은 Home→인박스. 인박스에서 같은 소속의 인박스를 열면 기존 route key 유지, 다른 소속으로 전환하면 Home→새 소속 인박스 한 개만 남긴다. path 중복 방지의 notifications에 한해 employerId도 비교한다.
+- Office 파일: constants/deepLink.ts, libs/useNavigationConfig.ts, 기존 __tests__/utils/deepLink.test.ts. Lab 파일: constants/deepLink.ts, libs/useNavigationConfig.ts. Lab 테스트 작성/수정 금지 준수.
+- 정적검사: Office 기존 관련 Jest2 suites/42 tests; Lab 기존 관련3 suites/56 tests; 변경 파일 ESLint 및 diff-check 통과. 전체 tsc는 기존 Office6/Lab5 오류로 실패·변경 파일 새 오류 없음. 독립 diff 리뷰에서 추가 결함 없음.
+- 런타임: iPhone17Pro iOS26.5와 Android Dentlink_API_36에서 각 제품의 같은 최종 코드로 실행. OS custom URL warm 진입, 앱 종료→URL 재진입, Home 복귀, employerId 생략 문맥 유지, 자기 랜딩 시 중복 스택 없음 확인. Office 실제86→145→86 소속 전환 후 인박스 한 개 유지. Lab 미소속999999999는 현 소속85/현 화면 유지. 실제 UI와 native stack/렌더 handler를 병용했으며 전체 물리 터치/실제 FCM/로그아웃 재로그인 E2E 완료로 과장하지 않는다.
+- 증거: `/tmp/notification-inbox-link-{office,lab}-warm-proof-1109.json`, `...-cold-proof-1109.json`, `/tmp/notification-inbox-link-office-affiliation-proof-1109.json`, `/tmp/notification-inbox-link-{office,lab}-{ios,android}-1109.png`. Office Android OS 실행 결과 COLD, Lab 종료 후 실행 결과는 WARM으로 반환했으나 새 런타임에서 목표 인박스 진입을 확인했다.
+- crash:14:46 이후 새 iOS Dentlink/SpringBoard report 없음; Android crash buffer에서 새 Dentlink fatal 없음. Android14:50:24 com.google.android.bluetooth 시스템 프로세스 crash는 앱과 구분하며 이번 앱 결함 해결로 기록하지 않는다.
+- PM용 인박스 변경: P142/P146 `알림 인박스 오픈 → dentlink://notifications`, P148/P150 `알림 인박스 오픈 → dentlink://notifications?employerId=${employerId}`. 앞의 ‘연결 예정’은 구현 전 기록이다. P65/P66의 기존 `dentlink://order/${orderId}`와 P101의 `/orders/${orderId}`를 나눠 모두 기존→변경 형식으로 제공한다.
+- 다음: PM 시트 반영 확인, 실제 알림/FCM 데이터가 나오면 실값 치환·발송 랜딩 QA. 미정 읽음 deliveryId/payload·OS badge는 별도 논의하며 새 구현을 임의 진행하지 않는다. PR/배포 없음.
+- 마감: 이번 검증용 Office8081/Lab8082 Metro와 앱 실행을 종료했다. 시뮬/에뮬 장치·로그인 데이터는 유지했으며 사용자 브라우저/IDE 배치는 건드리지 않았다.

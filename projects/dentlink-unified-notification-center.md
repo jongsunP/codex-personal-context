@@ -1,5 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**인박스 딥링크 연결·검증·push 완료 — 2026-11-09 14:58 KST:** 사용자가 PM 문안의 ‘인박스 URL 추후 기입’ 대신 FE 연결을 먼저 처리하도록 승인했다. Office `feature/DL-17059@bc2f5a9e3676461c93be90094abf2e834e353c77`, Lab `feature/DL-17060@8d2f71bef4e03c66e58727b2bb6338d3bd2806ad` commit/push·원격 HEAD 일치·clean 확인. `dentlink://notifications`, `dentlink-lab://notifications` 및 선택적 `?employerId=...`를 기존 로그인 준비·소속 전환·화면 이동 흐름에 연결했다. 같은 인박스 자기 랜딩은 화면을 중복 생성하지 않으며 다른 소속이면 새 소속 인박스 한 개를 유지한다. 동일 경로 중복 방지에서도 대상 소속을 구분한다.
+
+- **검증:** 양 앱×iOS/Android 실제 OS URL 진입·종료 후 재진입·Home 복귀·소속 없는 링크의 현재 문맥 유지·자기 랜딩 중복 없음. Office는 실제 소속86→145→86, Lab은 소속85 유지/미소속 ID 거절까지 확인. Office 관련 Jest42, Lab 기존 관련56 통과; lint/diff-check 통과, 전체 tsc는 기존 Office6/Lab5 오류 유지. 새 Dentlink 앱 crash report 없음. 실제 FCM 발송/로그아웃 후 재로그인 E2E 완료로 확대하지 않는다.
+- **PM 문안:** 모든 수정 요청을 `셀: 기존 값 → 변경 값`으로 통일하고 기존 값이 다른 P65/P66와 P101은 분리한다. P142/P146은 `알림 인박스 오픈 → dentlink://notifications`, P148/P150은 `알림 인박스 오픈 → dentlink://notifications?employerId=${employerId}`로 실제 URI 제공. P175는 `공란 → 확인 필요` 유지. 시트는 PM 소유이며 직접 수정/외부 게시하지 않는다.
+- **경계/다음:** Web·이메일·native 등록·푸시 읽음 payload·OS badge 계약은 변경하지 않았다. PR/merge/배포 없음. PM 전달문 제공 후 기존 안건2(푸시 읽음 값 예시)·3(OS badge) 논의를 사용자와 이어간다. 세부 실행 근거는 [API·랜딩 후속 기록](dentlink-unified-notification-center-api-integration-2026-11-09.md) 참조.
+
+
 **기존 App 랜딩 대조 완료·PM 수정 요청 준비 — 2026-11-09:** 사용자의 BE 공유 댓글44930을 확인하고 최신 PM 시트 NOTIFICATION/PUSH115행(Office67/Lab48)을 현재 코드·순수 URL 파서·화면 소비와 대조했다. 신규 Credits/Statements 외에도 Office 주문 소속 ID(P65/P66/P101), 배송 경로(P120/P121), Lab scheme34셀·P13 수신 소속·P172 서포트·P176:P183 밀링 완전 주소를 보완해야 한다. 밀링 접수 P175 앱 공란은 목적지 확인 대상으로만 남겼다. 기존 주소 전체가 수정 불필요하다는 뜻이 아님을 바로잡았으며 [행별 결과](dentlink-unified-notification-center-api-integration-2026-11-09.md)에 보존했다. 시트 수정은 PM에게 요청할 문안만 제공하고 제품 코드/기기/서버는 변경하지 않았다. 실제 발송 E2E 검증으로 확대하지 않는다.
 
 **랜딩 안건 1·시트 반영 대기 — 2026-11-09:** 인박스/푸시/향후 이메일의 최종 앱 목적지 URL은 재사용 가능하되 이메일 HTTPS 진입·앱 열기는 별도임을 정리했다. Airbridge 발급은 커스텀 스킴 딥링크의 필수 조건이 아니다. 사용자 승인으로 현재 Office Credits/Statements 주소와 인박스 URL 연결 예정 표시를 시트에 기록하려 했으나 연결 계정의 댓글 전용 권한으로 Google API403이 반환되어 **시트 변경은 적용되지 않았다**. 주소/대상13셀/기입 대기안과 기존 목적지 변경 확인 경계는 [REST·랜딩 후속 기록](dentlink-unified-notification-center-api-integration-2026-11-09.md)에 보관한다. 제품 코드·이메일·푸시 읽음·배지는 이번 후속에서 변경하지 않았다.
