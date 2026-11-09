@@ -1,4 +1,12 @@
-# Dentlink E2E Reliability Checkpoint - 2026-11-05
+# Dentlink E2E Reliability Checkpoint
+
+## PR 전 영향 가드와 전체 E2E 실행 구분 — 2026-11-09
+
+- Tom의 [PR 전 전체 E2E 실행 여부 질문](https://innovaidhq.slack.com/archives/C09613TBE5A/p1794213745130509)과 [로컬 여부 후속 질문](https://innovaidhq.slack.com/archives/C09613TBE5A/p1794213746655179)에 대해 GitHub의 현재 master 파일을 직접 확인했다. **로컬 전체 E2E 실행·통과는 PR 생성의 일괄 필수 조건이 아니다.** 사용자가 이 설명을 확인하고 참고용 기록만 요청했다.
+- 에이전트는 제품 코드 변경의 PR 생성 전 및 열린 PR 브랜치 push 전에 **E2E 영향 가드**를 수행한다. 이는 diff·시나리오 의존성 분석과 기록 검사이며 전체 브라우저 테스트 통과 확인과 다르다. `NO_IMPACT`는 실행 없이 기록 단계로 진행하고, `NEEDS_RUN`도 실제 실행 여부와 별개로 기록한다. 실제 focused 실행은 사용자 승인 범위에서 하며 미실행을 통과로 표현하지 않는다. [master 가드 지침](https://github.com/Innvoaid/dentlink-client/blob/master/.codex/skills/e2e-guard/SKILL.md)
+- 일반 Git [pre-push 훅](https://github.com/Innvoaid/dentlink-client/blob/master/.husky/pre-push)은 lint-staged·제품별 lint·Admin DLOS guard·coverage를 실행하며 전체 Playwright E2E를 실행하지 않는다. 에이전트의 PR/push 전 영향 가드와 일반 Git hook의 검사는 구분한다.
+- 스테이징 전체 E2E는 배포 workflow 성공 후 별도 GitHub Actions에서 실행하도록 구성돼 있다. 수동 실행 진입점도 있다. PR 생성 전 로컬 전체 실행과 배포 후 CI 검증은 별도 단계다. [master Stage E2E workflow](https://github.com/Innvoaid/dentlink-client/blob/master/.github/workflows/clinic_stg_e2e.yml)
+- 이번 확인은 구성·지침의 사실 확인과 개인 기록 저장뿐이다. Slack 답글 발송, 제품 코드·가드 정책 변경, 테스트 실행, Actions 결과 재조회·폴링은 하지 않았다. 추후 설정이 바뀌면 live 파일을 우선한다.
 
 ## 배포·E2E 분리 결과 사용자 확인·1회 실조회 및 현행 유지 — 2026-11-05
 
