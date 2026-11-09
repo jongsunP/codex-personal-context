@@ -1481,6 +1481,11 @@ working instruction on 2026-10-16, not a rule limited to one feature session.
 
 - Say what is complete and where it exists: separate branch, master, external
   settings, or the deployed service. Do not collapse these into "done."
+- For “today's work,” “what I asked for,” and similar request/result summaries,
+  use the user's prompts in the requested scope as the unit, not commit dates
+  or cumulative project history. Map each request to its result and any
+  remaining work. Do not add earlier requests just because they were committed
+  or documented on the same day. This is the user's 2026-11-09 clarification.
 - State whether current operation is affected and the concrete reason. For
   example, newly registered GitHub settings are not used by the current
   deployment code. Avoid an unqualified claim that everything is safe.
