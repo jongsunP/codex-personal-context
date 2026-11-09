@@ -1,5 +1,15 @@
 # Dentlink Lab App
 
+## 자동 Git 태그 번호 보완 PR41 — 2026-11-09
+
+- 사용자 승인: 치과앱 PR345와 같은 보완을 기공소에도 적용해 **커밋·푸시·PR까지만, 머지 금지**. 실제 Git 태그 추가/삭제·CodePush·스토어 배포는 하지 않는다.
+- 최신 `origin/main@a3f5a06366b7ea86b461a5ef05355abdd5660017`에서 `feat/v1.0.5-codepush-tag`를 만들고 **e910945ca8b51010df741f97f877ea2118805575**를 커밋·푸시했다. 커밋은 `fix: 기본 태그 없는 CodePush 후속 번호 계산 보완`, 변경은 `.github/workflows/tag-production-codepush.yml` 한 파일이다.
+- 숫자 suffix가 있으면 base 태그 유무와 관계없이 최대+1, suffix 없이 base만 있으면 .1, 둘 다 없으면 base를 선택한다. .0과 없음도 구분한다. 치과앱 PR345 계산 블록과 동일하며 Lab의 hotfix/ 처리·trigger·checkout·태그 push·GitHub Release 생성은 모두 유지했다.
+- 현재 원격에는 base `v1.0.5`와 후속 `v1.0.5.19`가 모두 있어 기존 정상 경로는 유지된다. 기본 태그 누락에 대비한 자동화 보완이며, 기존 태그 하나의 누락을 앱 배포/실행 문제나 필수 재배포 사유로 해석하지 않는다.
+- **검증:** 실제 YAML next_tag shell을 임시 Git 저장소에서8조건 실행·통과했다. base 없음+.19의 기존 결과 v1.0.5를 재현하고 보완 후 v1.0.5.20 확인. 태그 없음/base만/base+.19/.0/숫자 정렬/다른 버전 및 부적합 suffix 제외 검증. YAML 파싱·Bash 문법·Prettier·diff check 통과, 계산 외 workflow 전체 동일성 확인. 별도 자동화 검토에서 feat/ PR의 자동 retarget·태그생성·배포 trigger 없음 확인. 앱 runtime 변경이 없어 앱 재실행/네이티브 빌드는 하지 않았고 새 테스트 파일도 추가하지 않았다. 임시 증거 `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dentlink-lab-tag-check-fRrsQp/results.json`.
+- **[PR41](https://github.com/Innvoaid/dentlink-lab-app/pull/41)** 생성·채팅 첨부 후 실제 base main, head feat/v1.0.5-codepush-tag@e910945, OPEN·일반 PR·변경1파일·라벨없음을1회 재확인했다. 머지/태그/배포는 수행하지 않았다. 사용자 PR 검토·병합을 기다리며 자동 CodeRabbit/Actions/기기 폴링은 하지 않는다.
+- 재사용한 `/Users/parkjongsun/.codex/worktrees/order-status-lab/dentlink-lab-app`은 원래 `feat/DL-17310@49b997d5e2fb746707a2a1977fd828931c07c2e3`로 복귀했고 clean·upstream 동일이다. 새 task branch는 로컬/원격 보존. 기본 checkout의 통합알림센터 작업과 기존 worktree는 유지했다. Jira·Slack·앱 배포 상태는 변경하지 않았다.
+
 ## 운영 반영 확인·원본 작업 보존 — 2026-10-25
 
 - 권한관리 담당 세션의 배포 후 정리에서 **읽기 전용으로** 확인했다. PR19/21/23은 release/v1.0.5에 병합 완료, PR27로 release→main이 반영됐다. 원격 **main/develop/release/v1.0.5 모두51441039751b63a08c82a1be9695c805c8af1539**이며 우리 수정5파일은 이전통합b175d5f3와 blob이 같아 누락/되돌림이 없다. 현재 열린 PR은 없다. 기본checkout의 로컬/remote-tracking refs가 오래됐어도 실제원격은 ls-remote/GitHub API로 확인했으며 이번에는 pull/fetch/checkout하지 않았다.
