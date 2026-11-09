@@ -1,5 +1,19 @@
 # 추가 앱 크레딧·청구서의 모바일웹 기능 대조 — 2026-11-06
 
+## 2026-11-09 재개 후 구현·검증
+
+- **완료:** 기존 GET/PATCH `/office/users/own/auto-credit-usage`로 User Credits 자동 적용 설정, 설명 펼침/닫힘, 계정별 캐시·요청 guard·실패 원복·중복 탭 방지. 실제 저장 뒤 서버 재조회 및 원래 false로 복구했다. Office Credits에는 이 토글을 표시/조회하지 않는다.
+- **디자인 보완:** 웹 User/Office 크레딧 아이콘·잔액 카드·이력/만료일·청구서 상태 배지/통화 표시를 기존 앱 컴포넌트로 맞췄다. 웹 body2 실제 토큰은14이며 앱에 없는 Regular native font를 추가하지 않았다.
+- **Learn More:** 기존 `HelpCenterScreen(articleId:31,shouldReturnOnBack:true)`를 사용한다. 공개 배포 JS의 `/credit`·`/office/credit` 실제 window.open URL과 동일한 환경별 `/help/articles/31`임을 확인했다(.env 값 조회 없음). iOS/Android에서 WebView 진입/헤더 복귀는 동작하지만 DEV API `GET /office/contents/boards/posts/31`이404/code0002 Not Found를 반환하여 정상 콘텐츠 표시는 미검증이다. 운영 URL/다른 문서로 임의 변경하지 않는다.
+- **View:** 웹은 청구서 번호 검색된 결제내역 `/billing/payment-history?keyword={invoiceNo}`로 이동하며 Pay Now·영수증/PDF도 노출한다. 기존 앱의 동일 화면은 없다. 재사용만으로 이번 범위 안에 안전하게 옮길 수 있다고 확인되지 않아 보류한다. 새로운 결제/상세/PDF 기능을 만들지 않았다.
+- **정적 검증:** 신규 hook4테스트(Office 미조회, 실패/다른 사용자 캐시 보존, 저장 후 서버 재조회, 계정 변경 중 원래 요청 문맥), lint/diff-check 통과. 전체 tsc 기존6진단·변경파일 신규0. 파서 회귀30테스트는 별도 변경에서 통과.
+- **최종 실행:** Office iOS26.5/Android API36 같은 DEV/8081 소스. 실제 계정의 User/Office Credits·Statements 조회200, User 토글 false→true→false 저장/재조회, 설명, 배지/통화/empty 표시, Help 진입/복귀, 알림함에서 Credit 진입/복귀 확인. iOS 실제 렌더 handler로 주입한 PATCH 실패에서 연속2번 입력은 요청1번·이전값 복구 후 서버 재조회, 원 함수 복원. 실제 서버 실패/타계정 런타임 QA로 확대하지 않는다. 임시 서비스 교체는 복원했고 실제 사용자 설정도 원값 false를 확인했다.
+- **별도 발견:** Android Office 첫 cold start의 Fabric SIGSEGV1회는 원인 미확정이다. 뒤의 warm/cold 재시작과 화면 검증에서 재발하지 않았으나 해결이라고 기록하지 않는다. 개발자가 변경한 최종 코드의 흐름 검증과 전체 앱 crash-free 보장은 다르다.
+- **Git:** Office `60bfad3`에 이 보완9파일 commit, 후속 파서 포함 HEAD `893c4323e194ef9385845a63556c71c34bb273ce` 원격 반영·clean. PR·배포 없음.
+- **임시 증거:** `/tmp/notification-finance-{jest,typecheck}-1109.log`, `/tmp/notification-{finance,office-credit,statements,help}-{ios,android}*-1109.png`, `/tmp/notification-office-crash-final-1109.log`. 파일 장기 보존은 보장하지 않으므로 본문 결과/한계를 정본으로 삼는다.
+
+아래 내용은 11/6의 조사와 당시 승인 대기 기록이다. 현재 진행 상태는 위 11/9 기록을 따른다.
+
 상태: **조사·사용자 목적 재정리 완료, 보완 구현은 사용자 재개 요청 대기.** 다음 재개 시 기존 모바일웹 기능·디자인을 활용해 병원앱 크레딧·청구서를 보완하고, View는 기존 화면 재사용 가능성부터 확인한다. PDF·큰 범위 확장은 제외한다. 최종 시뮬/에뮬 검증·제품 commit/push·메모리 정리까지 수행하며 PR은 만들지 않는다. 사용자가 실행 시점을 명시적으로 유예했으므로 지금은 시작하지 않는다. 제품 코드·Jira·Notion은 변경하지 않았다. 알림센터 본체의 BE/정책 대기와 이 추가 화면의 FE 보완을 구분한다.
 
 ## 사용자가 다시 명확히 한 목적
