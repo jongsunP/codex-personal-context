@@ -63,7 +63,7 @@ Office는 아래 `/office`, Lab은 `/lab` 경로다. **7개 경로·8개 HTTP �
 | 현재 FE가 보내는 값 | 항상0 |
 | 호출 시점 | 로그인/FCM 토큰 준비 후 최초1회, 앱 foreground 복귀 |
 | 성공 후 | `notifee.setBadgeCount(0)` |
-| 실패 시 | 로컬 배지 초기화도 하지 않음. mutation 자동 재시도 설정 없음. 최초 처리 플래그는 이미 true라 다음 복귀 등의 호출까지 남을 수 있음 |
+| 실패 시 | 네트워크·HTTP 오류 등 요청이 reject되면 성공 콜백의 로컬0 처리도 하지 않음. 현재 서비스는 응답 본문의 업무 오류 code를 별도 검사하지 않으므로 모든 BE 업무 실패에 대한 보장으로 확대하지 않음. mutation 자동 재시도 설정 없음. 최초 처리 플래그는 이미 true라 다음 복귀 등의 호출까지 남을 수 있음 |
 | 의미 | 기기별 푸시 배지 초기화. **인박스 읽음 API나 인박스 미읽음 수와 연동되지 않음** |
 
 - Office `RootNavigator.tsx:114,349,490,502`, Lab `RootNavigator.tsx:158,409,652,664`에서 같은 흐름을 확인했다. 양 앱 `AppService.updateBadgeCount`는 숫자와 Device-Token을 서버에 전달한다.
@@ -119,3 +119,47 @@ Office는 아래 `/office`, Lab은 `/lab` 경로다. **7개 경로·8개 HTTP �
 2. 설정 PUT 전체교체에서 숨긴 PUSH/다른 영역의 값을 잃지 않게 하고, 구 production 자동 push-preferences 저장 경로를 함께 정리한다.
 3. Web/App landingUrl 선택 계약, deliveryId payload 위치/형식과 deferred 보존을 확인하고 실제 푸시 데이터로 검증한다.
 4. OS 배지를 기존 ‘열면0’로 유지할지 또는 미읽음 기준으로 바꿀지는 정책/서버계약 확인 뒤 적용한다. 이번 조사에서는 배지 코드를 변경하지 않았다.
+
+## OS 배지 안건3 최종 논의와 Notion 공유 — 2026-11-09
+
+### 공유 위치와 상태
+
+- [대문 · 통합알림센터 OS 앱 아이콘 숫자 검토](https://app.notion.com/p/413ce072e82f814eaf0ed235193ffe5f)
+- [01 · PM·BE 공유용](https://app.notion.com/p/413ce072e82f81968f43c0563590b495): 어려운 구현 용어를 줄이고 비교·예시·선택의 결과·필요한 결정을 표로 정리했다.
+- [02 · 개발 참고용](https://app.notion.com/p/413ce072e82f814b917ec5868f047420): 실제 코드/API·작동 원리·payload 예시·정합성·네이티브 한계·역할·후속 검증·공식 출처를 보관했다.
+- 기존 `Development Documents`에 대문, 그 아래 두 페이지 구조다. 다른 문서를 이동하거나 수정하지 않았다. 저장된 3페이지의 본문·계층·누락 여부를 확인했고 도구의 표현 치환 경고는 정확한 본문 재조회 후 수정해 해소했다.
+- 사용자 요청은 공유 자료 작성이다. **배지 개선 정책 확정이나 구현 지시가 아니다.** 제품 코드·서버·디바이스·Slack/Jira/Sheet·PR/배포 변경 없음.
+
+### 논의의 결론과 미정 사항
+
+1. **기존 방식의 이유:** 현재 PATCH0는 ‘새 푸시가 왔음을 표시하고 앱 방문 시 지움’ 목적에 타당하다. 틀리거나 시대에 뒤진 구현으로 단정하지 않는다. 실제 미읽음이 남아 있어도 지울 수 있다는 제품 의미 차이가 핵심이다.
+2. **제안:** 통합알림센터의 실제 미읽음 수를 표시하려면 BE 읽음 상태를 정본으로 삼고 앱 실행/복귀·읽음 성공 등의 GET 재조회로 지원 OS 배지를 갱신하는 편이 맞는다. HTTP 메서드 이름을 PUT/PATCH→GET으로 단순 교체하는 것이 아니다. 읽음 변경 요청은 계속 필요하다.
+3. **서버 오류와 표시 지연 분리:** 웹→인박스→푸시가 같은 알림을 여러 번 읽어도 서버 unread→read는 한 번만 반영해야 한다. 원자적·반복 안전 처리로 해결할 문제이지 감수할 오차가 아니다. 이미 읽은 알림의 푸시 클릭 이력은 별도로 남길 수 있다. 앱의 -1 명령으로 합계를 관리하지 않는다.
+4. **푸시 숫자 포함 선택:** 발송 시점의 절대 unread를 iOS `aps.badge`에 넣으면 앱이 닫혀 있어도 갱신 가능하다. FCM 순서1→3→2 또는 GET 뒤 오래된 푸시가 도착하면 다시 오래된 표시가 될 수 있고 다음 조회에서 보정한다. ‘앱 한번 열면 이후 항상 정확’이라고 약속하지 않는다.
+5. **푸시 숫자 제외 선택:** 해당 새 푸시의 badge 덮어쓰기를 막는 대신 새 알림의 숫자 증가도 표시하지 못한다. 이전값/0이 다음 앱 조회까지 남는다. 푸시 자체는 계속 보낼 수 있다. 이미 발송된 큐나 다른 SDK의 배지 writer까지 없어진다는 뜻은 아니다.
+6. **동기화 한계:** 웹에서 읽은 뒤 앱을 닫아두면 다음 앱 조회 또는 최신 숫자를 담은 일반 푸시까지 차이가 남는다. 새 푸시가 없다면 앱 조회까지 기다린다. 열려 있는 앱도 조회 계기가 없으면 즉시 동기화되지 않는다. 신규 realtime/silent/data sync/polling은 여전히 제외한다.
+7. **OS 차이:** iOS 숫자는 앱 setter/aps.badge로 제어한다. Android Notifee setBadgeCount는 no-op이며 활성 알림·제조사/런처 정책을 따른다. 모든 Android에서 정확한 인박스 숫자 표시를 약속하지 않는다. 앱 내부 unread는 공통 서버 기준으로 제공 가능하다.
+8. **OS 알림과 읽음:** 발송 회수와 기기 내 표시 알림 제거는 다르다. 앱이 실행될 때 OS 알림 ID를 식별해 해당 표시 알림을 제거하는 기능은 가능하다. 서버 읽음·아이콘 배지·알림 목록은 독립 상태이며, 알림을 닫았다고 읽음으로 추정하지 않는다. 배지는 수신/클릭의 증거도 아니다.
+9. **timestamp·version:** 필드를 보내는 것만으로 OS가 최신값을 비교하지 않는다. 비교 코드가 실행되는 경로에서는 도움이 되며 고도화 시 발송 시각보다 서버 상태 버전이 적절하다. GET/푸시의 동일 범위·계정·버전 및 shared state가 필요하다. 오래된 배지값 무시와 알림 내용 폐기는 다르다.
+10. **네이티브/실시간 고도화:** iOS NSE는 조건·시간 제한·원본 fallback·동시 처리 문제가 있다. 원본 badge 생략 후 extension에서만 설정하면 오래된 fallback 대신 갱신 누락 가능성이 남는다. Android도 직접 처리/자동 표시 경로·실행 제한·런처 문제를 구분한다. WebSocket만으로 종료 앱을 해결하지 못한다. 추가 설계/빌드/검증 범위이며 현 최소안에 자동 포함하지 않는다.
+11. **남은 결정:** 푸시 수 유지/실제 unread 전환, 현재/전체소속·개인·채팅 포함 범위, 푸시 숫자 포함/제외, Android 표시 한계 수용. 개인 알림은 소속별로 반복 합산하지 않는다. 사용자는 비교를 이해한 상태이고 아직 최종 정책을 선택하지 않았다.
+
+### 최소 개발 고려와 현재 확인
+
+- 현재 Office `feature/DL-17059@bc2f5a9e3676461c93be90094abf2e834e353c77`, Lab `feature/DL-17060@8d2f71bef4e03c66e58727b2bb6338d3bd2806ad`를 읽기 전용 재확인했고 clean이다. 기존 `readPush/markPushRead`는 선언뿐 실제 호출이 없다. 새 GET→OS 배지 연결도 없다. 기능 브랜치 코드 확인이며 운영 검증이 아니다.
+- `PATCH badge-count` 서비스는 HTTP 성공과 응답 본문 업무 성공을 별도 검사하지 않는다. 네트워크/HTTP reject 시0 setter 미실행이라고 좁혀 기록하며, 이번 문서 작업에서 새로 코드 수정하지 않는다.
+- 기존 현재 unread+다른 소속 group 합계를 쓰는 후보가 있으므로 신규 GET API를 먼저 요구하지 않는다. 두 요청의 snapshot 차이·소속/권한·누락·실패 처리와 목표 집계 범위를 확인하고 부족할 때만 응답 확장/집계 API를 검토한다.
+- 기존 PATCH0·BE의 다음 푸시 카운터·구버전 앱이 충돌하지 않게 전환해야 한다. ChannelTalk 제어 푸시/배지 경로도 확인한다. SDK/APNs 내부가 OS 숫자를 어떻게 쓰는지까지 검증한 것은 아니다.
+- 계정/소속/Device-Token 전환·늦은 응답·foreground/background 전환·GET 실패/역순을 보호한다. 실패를0으로 처리하지 않는다. 읽음 성공과 랜딩 성공을 혼동하지 않는다.
+- 정책 선택 후 기존 API 재사용 가능 여부→FE/BE 전환→실제 푸시 검증 순서다. 검증 계획은 새 문서에 있으며 이번 턴에 runtime 테스트를 수행한 것이 아니다.
+
+### 공식 근거와 주장 한계
+
+- [FCM 전달 순서](https://firebase.google.com/docs/cloud-messaging/customize-messages/collapsible-message-types): 순서 미보장. collapse는 대기 메시지 대체이며 모든 순서를 해결하지 않는다.
+- [Apple payload](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html): aps.badge 절대값·0 제거·생략 유지. 사용자 timestamp는 OS 비교 표준키가 아니다.
+- [Notifee iOS badges](https://notifee.app/react-native/docs/ios/badges/), [Android badges](https://developer.android.com/develop/ui/views/notifications/badges): 기기 표시의 주체·플랫폼 한계.
+- [OneSignal](https://documentation.onesignal.com/docs/en/badges): iOS SDK 기본 앱 진입 배지·알림 제거. 현재 ‘방문하면 지움’ 정책의 사례이지 Dentlink 알림 목록 제거를 입증하지 않는다.
+- [Sendbird](https://docs.sendbird.com/docs/chat/sdk/v4/ios/push-notifications/configuring-preferences/register-push-notification-credentials), [Stream](https://getstream.io/chat/docs/php/push-template/): 전체 unread를 push badge에 사용. 내부 역순 보정 방법이나 역순을 허용한다는 정책은 미확인이다.
+- [Slack realtime](https://slack.engineering/real-time-messaging/)은 2023 WebSocket 자료. [네이티브 알림](https://slack.engineering/into-the-clouds/)은 2017/2020 자료로 현재 알고리즘 전체가 아니다. [모바일 지연](https://slack.com/resources/using-slack/customize-your-notifications-in-slack)과 [badge 불일치 문제 안내](https://slack.com/help/articles/360001559367-Troubleshoot-Slack-notifications/)를 함께 확인했다.
+- [Apple NSE](https://developer.apple.com/documentation/UserNotifications/UNNotificationServiceExtension), [수신 알림 수정](https://developer.apple.com/documentation/usernotifications/modifying-content-in-newly-delivered-notifications), [background update](https://developer.apple.com/documentation/usernotifications/pushing-background-updates-to-your-app): 실행 조건·시간/전달 제한이 있어100% 보장으로 제시하지 않는다.
+- 카카오톡의 정확한 배지 내부 구현은 미확인이다. ‘업계에서 가장 많이 쓴다’, ‘유명 서비스는 완전히 해결’, ‘Sendbird/Stream도 모두 역순을 그냥 감수’라고 단정하지 않는다.
