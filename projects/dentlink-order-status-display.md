@@ -2,8 +2,8 @@
 
 ## 현재 상태 — 2026-11-09 재개
 
-- **세 제품 최소 수정·로컬 검증 완료, 제품 미커밋.** 사용자가 다른 작업 완료를 알리고 시작을 요청했으며, 기본 Office/Lab checkout의 통합알림센터 미커밋 변경을 확인한 뒤 앱 두 개, 이어 웹까지 **새 worktree** 사용을 명시했다. 기존 기본 checkout은 편집/정리하지 않는다.
-- 이번 QA 후속은 기존 지연 라벨/서버 isDelayed 변경을 포함한 최신 대상 release에서 각각 새 `feat/<Jira>`를 만들었다. 제품 변경은 미커밋이며 commit/push/PR·merge·CodePush·배포 권한과 구분한다.
+- **세 제품 커밋·푸시·이번 릴리즈 대상 PR 생성 완료.** 사용자가 다른 작업 완료를 알리고 시작을 요청했으며, 기본 Office/Lab checkout의 통합알림센터 미커밋 변경을 확인한 뒤 앱 두 개, 이어 웹까지 **새 worktree** 사용을 명시했다. 기존 기본 checkout은 편집/정리하지 않는다.
+- 이번 QA 후속은 기존 지연 라벨/서버 isDelayed 변경을 포함한 최신 대상 release에서 각각 새 `feat/<Jira>`를 만들었다. 후속 사용자 지시로 세 제품 commit/push/각 release 대상 PR 생성을 승인받았다. merge·CodePush·배포는 승인 범위에 포함하지 않는다.
 - Office [DL-17303](https://innovaid.atlassian.net/browse/DL-17303)을 유지하고, 중복 검색 후 Web [DL-17309](https://innovaid.atlassian.net/browse/DL-17309)·Lab [DL-17310](https://innovaid.atlassian.net/browse/DL-17310)을 DL-17302의 별도 하위 작업으로 생성했다. 모두 Frankie 담당. 작업 정의를 설명에 보존했고 부모 댓글/본문·상태·포인트·fixVersion은 변경하지 않았다.
 - 제보 주문 `7000012592`의 실제 STG 앱 목록 응답·캐시는 아직 확보하지 못했다. 코드 결함 수정 및 합성 데이터 표시 검증과 해당 주문의 직접 원인 확정은 구분한다.
 - 다른 기존 세션을 조회/폴링하지 않는다. 이 기능 채팅 안에서 제품별 subagent를 사용해 구현·정적 리뷰·검증을 분담하며, 같은 기기 쌍은 Office 다음 Lab 순서로 함께 전환한다.
@@ -15,6 +15,20 @@
 | Web | `/Users/parkjongsun/.codex/worktrees/order-status-web/dentlink-client` | `feat/DL-17309` | `release/v1.92.0` / `ae80d3218498a6d98e39dca5e93505cb70ab2684` |
 | Office | `/Users/parkjongsun/.codex/worktrees/order-status-office/dentlink-app` | `feat/DL-17303` | `release/v2.2.4` / `4892f1c1849833054453f01145b2f012782bb9da` |
 | Lab | `/Users/parkjongsun/.codex/worktrees/order-status-lab/dentlink-lab-app` | `feat/DL-17310` | `release/v1.0.5` / `907832d990a59b8a26a4c06e8df6663166a6f7f6` |
+
+### PR 전달 — 2026-11-09
+
+| 제품 | PR / 실제 대상 | 전달 커밋 | 확인된 변경 |
+| --- | --- | --- | --- |
+| Web | [#4854](https://github.com/Innvoaid/dentlink-client/pull/4854) / `release/v1.92.0` | `9c6b411bcf9c226e66e13ce1da32ef7ada0114a0` | 공용 상세2파일 +5/-2 |
+| Office | [#343](https://github.com/Innvoaid/dentlink-app/pull/343) / `release/v2.2.4` | `5d3daf702d49417767856fff23803ab8b57455ce` | `OrderProgressStatus.tsx` 1파일 +11/-6 |
+| Lab | [#37](https://github.com/Innvoaid/dentlink-lab-app/pull/37) / `release/v1.0.5` | `49b997d5e2fb746707a2a1977fd828931c07c2e3` | `OrderProgressStatus.tsx` 1파일 +11/-6 |
+
+- 세 제품 모두 OPEN·일반 PR·실제 base/head·변경 파일을 생성 후 재조회했다. 웹은 reviewer `inkyookoh`/`chajju`, assignee `jongsunP`의 자동 설정도 확인했다. 로컬 clean/upstream 동일. Office release가 `8df7c7e`로 전진했지만 기존 검증 head를 그대로 전달했으며 PR에는 상태파일만 포함된다. 서로 다른 배지 정리 파일과 충돌은 없다.
+- 앱 default main의 title/body/label 자동화는 `feature/` 패턴만 인식해 이번 `feat/`에 retarget하지 않는다. 배포 워크플로는 main대상·배포라벨 조건이며 이번 release PR에서 배포를 시작하지 않았다. CodeRabbit/CI 진행 조회나 리뷰 처리도 하지 않는다.
+- 웹 커밋 메시지: `fix: 주문 주 상태 기준으로 상세 표시 정합성 수정`. Office 커밋 메시지: `fix: 주문 상태 표시에서 주 상태 우선 적용`. Lab: `fix: 주문 주 상태 기준으로 제작 단계 표시 제한`. 로컬 최종 검증 blob은 이전과 같아 양OS 검증을 반복하지 않았다.
+- 웹 E2E guard는 관련 배송준비/상태변경/피드백 시나리오의 실제 helper·selector 검토 후 `NO_IMPACT`를 기록했다. 사용자에게 새로운 영구 E2E 테스트나 제품 파일을 추가하지 않았다. commit hook의 Clinic/Lab/Admin 타입과 pre-push lint·공용 테스트·coverage 비교를 우회 없이 통과했다.
+- 첫 웹 push는 새 worktree의 ignored coverage baseline 부재로 중단됐다. 원본 baseline의 출처/구조를 확인해 수정 없이 상속한 뒤 통과했다. 기준 수치·threshold 변경이나 hook bypass는 하지 않았다. 이 로컬 준비 파일은 PR에 포함되지 않는다.
 
 ### 구현과 확보한 검증
 
@@ -28,14 +42,14 @@
 - **앱 최종 런타임 통과:** Office/Lab 각각 양OS의 홈·Orders에서 관련13조건(제작3종, 완료·취소·배송·승인대기·NEW·DRAFT·Scanner Draft·Planning/Design·Pending Order)을 실제 앱 조회캐시 fixture로 렌더 검증했다. 라벨·아이콘·색·막대 및 주변 날짜/Remake/기존 지연 정책을 확인했다. Lab Ready for Fabrication의 warning/red200 및 완료+잔여IN_FABRICATION에서 기존 Lab Delayed 표시도 양OS에서 확인했다. 상태 fixture는 서버 응답을 대체하는 로컬 검증 데이터이며 실제 STG 원 제보 재현은 아니다.
 - 양 앱 각 기기 조회캐시2개 데이터/옵션을 원복하고 fixture0·저장 로그인 유지·최종 Metro 연결을 확인했다. Office 검증을 끝낸 후 기기쌍을 Lab으로 함께 전환했으며 최종 화면은 양OS Lab 홈이다. Lab 구간에서 새 Dentlink/SpringBoard iOS 진단보고서0·Android crash buffer 변화 없음. 사용자 실제 계정/운영 crash-free 보장은 아니다.
 - Office 최종 파일 blob `66ab1b92b22059db00d8f34cd258bd55c571828e`, 증거 `/tmp/dl-17303-office-runtime/report.json` 및 PNG/렌더 JSON. Lab blob `220a5c258fd45e2ebe2746068cd5dbff74fd07ba`, 증거 `/tmp/dl17310-runtime/report.json`, `*-results.json`, `*-home-completed.png`, `*-orders-completed.png`, `*-home-ready.png`. 이 `/tmp` 증거는 현재 Mac의 임시 파일이며 Git 저장된 지속 기록과 구분한다.
-- 화면은 실제 최종 코드·설치된 호환 DEV Debug 앱으로 확인했다. 새 native build, 실제 STG 앱 수신·서비스 통합 QA·원 주문 응답·PR·릴리즈 반영·CodePush·배포는 수행하지 않았다. 웹 synthetic48조건 및 앱 캐시 fixture 검증을 각 서비스 실데이터/배포 검증으로 확대 해석하지 않는다.
+- 화면은 실제 최종 코드·설치된 호환 DEV Debug 앱으로 확인했다. 새 native build, 실제 STG 앱 수신·서비스 통합 QA·원 주문 응답·릴리즈 반영·CodePush·배포는 수행하지 않았다. PR 전달은 위 별도 기록을 따른다. 웹 synthetic48조건 및 앱 캐시 fixture 검증을 각 서비스 실데이터/배포 검증으로 확대 해석하지 않는다.
 
 ### 남은 일과 다음 시작점
 
-1. 제품 커밋·푸시·각 release 대상 PR 생성은 사용자 지시를 기다린다. 현재 이 요청은 구현·필요한 검증·작업 카드 준비까지 수행했으며 제품 전달 단계의 권한을 확대하지 않았다.
-2. 전달 승인 시 최신 release와 실제 diff를 재확인한다. Web 대상 `release/v1.92.0`, Office `release/v2.2.4`, Lab `release/v1.0.5`; 각 저장소 commit/PR skill·웹 e2e-guard 등 해당 단계 지침을 따른다. 새 코드 수정이 없다면 이번 최종코드 런타임 증거를 재사용하고 무관한 검증을 늘리지 않는다.
+1. 요청한 세 제품 커밋·푸시·각 release 대상 일반 PR 생성까지 완료했다. PR 검토/병합과 이후 릴리즈 QA·배포 지시를 기다린다. 자동 CodeRabbit 리뷰 처리·CI 모니터링은 하지 않는다.
+2. 대상은 Web `release/v1.92.0`, Office `release/v2.2.4`, Lab `release/v1.0.5`다. 병합·CodePush·배포는 아직 수행하지 않았으므로 실제 릴리즈 포함이나 서비스 반영 완료로 해석하지 않는다.
 3. 실제 STG 원 주문의 목록 응답·캐시와 서비스 통합 결과는 배포/QA 승인 범위에서 확인한다. 현재 코드 결함 해결이 그 주문의 직접 원인까지 입증한 것은 아니다.
-4. merge·CodePush·배포·모니터링은 별도 명시 지시 없이 시작하지 않는다. 메인/통합알림센터에 자동 회신하지 않았다.
+4. 메인/통합알림센터에 자동 회신하지 않았다. 후속 수정이 없으면 기존 최종코드 런타임 증거를 재사용하며 무관한 검증을 늘리지 않는다.
 
 ## 작업 정의와 근거
 

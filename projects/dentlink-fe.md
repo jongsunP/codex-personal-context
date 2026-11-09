@@ -4,11 +4,12 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
-## 주문 상태 표시 정합성 별도 세션 구현·로컬 검증 — 2026-11-09
+## 주문 상태 표시 정합성 세 제품 PR 전달 — 2026-11-09
 
-- 담당은 `주문 상태 표시 정합성 · DL-17303` 세션(`01a1be36-dd23-7390-b373-27275f777d4b`)이다. 사용자 재개 및 세 제품 새 worktree 승인 후 Web `feat/DL-17309`, Office `feat/DL-17303`, Lab `feat/DL-17310`에 최소 수정을 완료했다. 기존 기본 checkout의 다른 작업은 보존했다.
-- 웹 타입/린트·실제 컴포넌트 합성48조건, 앱 각각 양OS 홈·Orders의 관련 상태13조건을 통과했고 테스트 조회캐시를 원복했다. 앱 전체 타입은 기준 코드와 동일한 기존 진단이다. 실제 STG 제보 주문 응답·서비스 통합·제품 commit/push/PR·릴리즈 반영·배포는 별도다.
-- 현 상태는 **제품 미커밋, 전달 지시 대기**다. 위치·기준release·검증근거·한계·다음 단계는 [주문 상태 표시 정합성 정본](dentlink-order-status-display.md)을 따른다. 메인은 자동 조회/폴링 없이 담당 세션에 맡긴다. 이번 갱신은 Git-backed 기록이며 메인 채팅에 메시지는 보내지 않았다.
+- 담당은 `주문 상태 표시 정합성 · DL-17303` 세션(`01a1be36-dd23-7390-b373-27275f777d4b`)이다. 사용자가 세 제품 새 worktree 구현에 이어 commit/push/이번 release PR 생성을 승인했다. 기존 기본 checkout의 다른 작업은 보존했다.
+- Web [PR4854](https://github.com/Innvoaid/dentlink-client/pull/4854) `feat/DL-17309 → release/v1.92.0`, Office [PR343](https://github.com/Innvoaid/dentlink-app/pull/343) `feat/DL-17303 → release/v2.2.4`, Lab [PR37](https://github.com/Innvoaid/dentlink-lab-app/pull/37) `feat/DL-17310 → release/v1.0.5`로 전달했다. 모두 일반 PR이며 Web2파일·Office1파일·Lab1파일의 상태 표시 변경만 포함한다.
+- 웹 타입/린트·합성48조건 및 commit/push 필수 검사·E2E 영향없음 판정, 앱 각각 양OS 홈·Orders 관련13조건을 확인했다. 앱 전체 타입은 기준 코드와 동일한 기존 진단이다. 실제 STG 원주문 응답·서비스 통합·PR 병합·릴리즈 반영·배포는 별도다.
+- 현 상태는 **PR 전달 완료, 검토·병합 지시 대기**다. 상세는 [주문 상태 표시 정합성 정본](dentlink-order-status-display.md)을 따른다. 메인은 자동 조회/폴링 없이 담당 세션에 맡긴다. 이번 갱신은 Git-backed 기록이며 메인 채팅에 메시지는 보내지 않았다.
 
 ## 배포·E2E 결과 분리 사용자 확인 — 2026-11-05
 

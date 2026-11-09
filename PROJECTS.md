@@ -24,7 +24,7 @@ Check this folder first when finding or continuing local projects.
 ### Dentlink 주문 상태 표시 정합성 — DL-17303
 
 - 주 상태 `status`와 제작 하위 상태 `detailStatus`의 우선순위 및 목록·상세 표시를 웹·Office·Lab에서 대조한다. 기존 지연 라벨 작업과 구분한다.
-- 별도 기능 세션의 Web·Office·Lab 새 worktree에서 수정·로컬 검증을 마쳤다. 제품 전달 승인·이번 QA 릴리즈 포함·검증 한계와 다음 단계는 [전용 체크포인트](projects/dentlink-order-status-display.md)를 따른다.
+- 별도 기능 세션의 Web·Office·Lab 새 worktree에서 수정·로컬 검증 후 각 이번 릴리즈 대상 PR을 생성했다. PR·릴리즈 포함 여부·검증 한계와 다음 단계는 [전용 체크포인트](projects/dentlink-order-status-display.md)를 따른다.
 
 ### Dentlink 치과 완료·취소 주문 지연 라벨 — DL-17138
 
