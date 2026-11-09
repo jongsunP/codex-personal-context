@@ -259,6 +259,17 @@ The description, comment, and document-link rules below apply to Jira and
 similar work-tracking cards across all projects and future tasks. The
 Dentlink-specific intake rules remain limited to Dentlink.
 
+- Apply the user's 2026-11-09 Jira status meanings when organizing their work:
+  **remaining or not-started work = To Do (해야 할 일)**;
+  **work actually being performed = In Progress (진행 중)**;
+  **work no longer needed = Done (완료)**, with the exclusion reason;
+  **finished requested work = Development Complete** (Dentlink currently
+  uses `Ready for Deploy` for this state). Confirm the available transitions.
+  Do not put ordinary policy/API waiting work on ON HOLD instead of To Do.
+  A partly completed card with remaining work is To Do when not actively being
+  worked on; preserve its completed portion in the record. No In Progress cards
+  does not mean all work is finished. Keep QA, review, merge and deployment
+  separate, and preserve story points unless explicitly authorized to change.
 - For authorized Dentlink work intake, classify Web/Admin, Office native app,
   and Lab native app separately. This is the user's standing preference,
   confirmed on 2026-10-08: reuse an existing suitable product issue, or create
