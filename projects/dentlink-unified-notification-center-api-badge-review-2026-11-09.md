@@ -163,3 +163,13 @@ Office는 아래 `/office`, Lab은 `/lab` 경로다. **7개 경로·8개 HTTP �
 - [Slack realtime](https://slack.engineering/real-time-messaging/)은 2023 WebSocket 자료. [네이티브 알림](https://slack.engineering/into-the-clouds/)은 2017/2020 자료로 현재 알고리즘 전체가 아니다. [모바일 지연](https://slack.com/resources/using-slack/customize-your-notifications-in-slack)과 [badge 불일치 문제 안내](https://slack.com/help/articles/360001559367-Troubleshoot-Slack-notifications/)를 함께 확인했다.
 - [Apple NSE](https://developer.apple.com/documentation/UserNotifications/UNNotificationServiceExtension), [수신 알림 수정](https://developer.apple.com/documentation/usernotifications/modifying-content-in-newly-delivered-notifications), [background update](https://developer.apple.com/documentation/usernotifications/pushing-background-updates-to-your-app): 실행 조건·시간/전달 제한이 있어100% 보장으로 제시하지 않는다.
 - 카카오톡의 정확한 배지 내부 구현은 미확인이다. ‘업계에서 가장 많이 쓴다’, ‘유명 서비스는 완전히 해결’, ‘Sendbird/Stream도 모두 역순을 그냥 감수’라고 단정하지 않는다.
+
+### 후속 — 공유용 간결화와 인박스 없는 LinkTalk 푸시
+
+- 사용자 피드백: 공유용이 너무 길고 FE 설명서 같으므로 긴 질문형 제목·OS 원리·timestamp 구현 설명을 줄인다. 같은 공유용 페이지를4절(방식 비교/선택과 고려사항/참고 사례/결정할 것)·약2,278자로 축약했다. 개발용은 상세를 유지하고 새 우려만 추가했다. 이 편집은 정책 변경이 아니다.
+- [시트 전체 알림(PM) A167:P172](https://docs.google.com/spreadsheets/d/1w1xwwEWRE0KgiJsOvldxIFbtNgWguohurf5kemIrW_g/edit?gid=614410508&range=A167:P172) 읽기 전용 확인:169·170행 `LINKTALK_NEW_MESSAGE_BY_ORDER_OFFICE/LAB` 채널 PUSH,172행 `LINKTALK_NEW_MESSAGE_BY_DENTLINK` PUSH이며 발송 조건에 ‘링크톡 기존 정책과 동일하게 Notification 미발송’ 명시. 시트 수정 없음.
+- 인박스 미읽음과 푸시 건수는 일치하지 않는다. 인박스만 집계하면 LinkTalk 새 메시지 푸시가 도착해도 인박스0이면 iOS 배지0/없음일 수 있다. OS 알림창에 실제 푸시가 없다는 뜻은 아니다. Android는 활성 알림·런처에 따라 점/숫자가 보일 수 있어 양 OS 모두0으로 단정하지 않는다.
+- LinkTalk라는 이유로 항상 badge0을 보내면 기존 다른 인박스 미읽음5까지 지워지는 오류다. 배지 필드를 생략해 기기 기존값을 유지하거나, 선택한 집계의 실제 최신 합계5를 보낸다. 생략은 최신값 보정이 아니므로 웹 읽음 후5가 남을 수도 있다. 실제 합계0이 확인된 경우와 푸시 종류만으로0을 결정하는 경우를 구분한다.
+- 코드 read-only 확인: Office `src/services/linktalk.service.ts:232–264`, Lab 같은 파일189–214. 별도 `GET /office|lab/chats/unread-count`, `POST /office|lab/chats/read/{chatId}?lastReadMessageId=…` 사용. 하단 LinkTalk 미읽음과 OS 배지는 별도이고 ChannelTalk 고객지원 SDK와도 다르다.
+- 채팅까지 배지에 포함한다면 메시지/채팅방 단위, 담당 주문 필터·`chatType`/`myOrdersOnly`, 현재/전체 소속 범위를 맞춰야 한다. 기존 탭 숫자를 단순 합산하지 않는다. 채팅 포함 정책·새 API 필요성을 이번 문서 작성으로 확정하지 않는다.
+- 인박스 기록 없는 PUSH의 `/inbox/read/push`가 클릭 기록만 처리하는지 등은 BE 계약 확인 대상이다. 채팅 읽음·인박스 읽음을 자동 동일시하지 않는다. 개발용에 인박스0/5에서 LinkTalk 푸시 및 인박스 없는 푸시 클릭의 후속 검증 계획을 추가했다. 실제 구현/런타임 QA를 한 것은 아니다.
