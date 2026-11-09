@@ -26,6 +26,14 @@
 
 > **REST 구현 이력:** 이 문서의 조사 당시 미연결 상태는 [11/9 REST 연결 결과](dentlink-unified-notification-center-api-integration-2026-11-09.md)로 갱신됐다. 설정/목록/미읽음/선택·전체 읽음은 세 제품에 연결·push했다. 푸시 클릭 읽음 연결과 실발송 검증은 위 최신 기록을 따른다.
 
+### 회의 결정과 기존 노션 비교 재검토
+
+- 공유용·FE용 Notion을 다시 읽고 현재 선택에 구조적 모순은 발견하지 못했다. OS 숫자와 현재 인박스 숫자가 다름, 웹/인박스 읽음마다 차감하지 않음, 미읽음이 남아도 앱 실행/복귀 때0이 됨은 이번 선택에서 수용하는 동작이다. LinkTalk는 푸시 수 기준에 포함하므로 이번에 채팅 미읽음 GET을 합산할 필요가 없다.
+- 현행 유지가 푸시 도착 순서·0 초기화와 신규 푸시 도착 경합 같은 기존 비동기 오차를 해결한 것은 아니다. 실제 미읽음과 즉시 일치한다는 보장은 하지 않는다. 읽음 요청 실패와 기존 배지0 초기화 역시 별개로 유지한다.
+- `data.unreadCount` 미추가와 기존 네이티브 배지 전달 제거를 구분한다. [Apple 명세](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html)를 재확인: `aps.badge` 생략 시 기존값 유지,0은 제거다. 따라서 새 JSON은 앱이 소비할 data의 예시이며 기존 발송 전체 payload를 이 예시만으로 교체해서는 안 된다. 실제 BE payload는 아직 관찰하지 않았다.
+- 실제 남은 검증: 발송ID를 유지하는 푸시 읽음 연결, 동일 URL의 서로 다른 발송 건/중복 콜백 구분, 로그인 전 진입·계정 변경·실패, 다른 소속 포함의 서버 적용. LinkTalk처럼 인박스 기록이 없는 푸시의 deliveryId 제공 및 read/push 응답은 확인 전이며 채팅 읽음을 임의 대체하지 않는다. 새 정책 질문을 만들기보다 기존 계약·실제 payload/응답으로 먼저 확인한다.
+- 공유용의 결정표는 최신이나 서두의 검토 단계·FE 추천과 FE용의 정책 대기 설명은 회의 전 상태로 남아 있다. 이번 요청은 비교 확인이므로 외부 문서는 변경하지 않았고, 확정 결정과 기존 비교자료를 구분해 보고한다. 코드/런타임 검증을 새로 수행한 것은 아니다.
+
 ## 상태와 범위
 
 - [DL-16140 댓글44913](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=44913)의 BE 공지와 실제 DEV Swagger를 대조했다. Office/Lab 알림 수신 설정·인박스 API가 공개되어 있다. BE 공지상 **발송 처리는 개발 중이며 신규 알림 데이터가 아직 쌓이지 않는다**.
