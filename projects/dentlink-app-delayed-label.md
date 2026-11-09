@@ -1,6 +1,18 @@
 # Office 완료·취소 주문 지연 라벨 — DL-17248
 
-## 현재 체크포인트 — 2026-11-09 웹 정책 일치·미사용 분기 정리 후보 확인
+## 현재 체크포인트 — 2026-11-09 Office 배지 미사용 분기 정리·PR342
+
+- 사용자 승인: 치과앱의 코드 정리 후보가 맞으면 구현하고 PR까지만 진행. 별도 merge/CodePush 승인은 없으며 실제 병합·배포하지 않았다.
+- 기존 Office 전용 worktree `/Users/parkjongsun/.codex/worktrees/office-delayed-label/dentlink-app`를 도구로 복원하고 `feat/DL-17248-delay-cleanup`을 `origin/release/v2.2.4@4892f1c1849833054453f01145b2f012782bb9da`에서 분기했다. main에는 선행 숨김 변경이 없으므로 기존 release 후속 작업으로 진행했다. 다른 세션의 기본 Office checkout·Lab·웹은 변경하지 않았다.
+- 최종 커밋 `6a19b3fe110e21af2962470d67e2f54a614e50cf`를 push하고 [PR #342](https://github.com/Innvoaid/dentlink-app/pull/342)를 일반 PR로 생성했다. 실제 base `release/v2.2.4`, head `feat/DL-17248-delay-cleanup`, 1commit·1file +5/-20, open/미병합/충돌 없음과 본문 보존을 생성 후 재확인했다. 작업 채팅에 PR artifact도 연결했다.
+- 변경 파일 `src/features/orderList/components/OrderStatusBadge.tsx`: 미사용 `OrderListLabDto`, `isOfficeOrder`, Lab 요청일 분기와 date-fns 자체 계산을 제거했다. Office DTO·deliveryRequestAt·서버 isDelayed만 직접 사용한다. 기존 배송 가능/NEW/날짜 가드, true+COMPLETED/CANCELED 숨김, false·누락·null On Time을 유지한다. 상태 문구/status-detailStatus 문제와 기존 웹 화면별 노출 정책 차이는 이번 정리 범위가 아니다.
+- 검증: 변경 파일 ESLint·Prettier·git diff --check 통과, 독립 코드 리뷰 이슈 없음. 전체 typecheck는 가상 compiler host로 원본 badge를 읽은 결과와 진단 위치/코드까지 동일한 기존 6개 오류이며 신규 0개다. 전체 lint는 기존 50 errors/157 warnings로 실패한다. 배지 관련 기존 Jest는 없고 새 테스트 코드를 추가하지 않았다. native/모델/lock/env 값 변경·네이티브 빌드는 없다.
+- 최종 코드 `6a19b3f`, badge blob `3b812a65c517ff3b6e463fa8477e35dafe09898b`를 전용 Metro8094와 기존 iOS/Android Development 앱에서 실행했다. 저장된 대표 로그인·홈 실제9건 조회 후 조회 캐시 fixture로 양OS 홈의 진행true Delayed, 완료/취소true 숨김, false/누락/null On Time, ETA/취소날짜 유지 확인. 양OS Orders에서 진행true Delayed·ETA 대표 표시도 확인했다. Android 목록 완료숨김/false On Time은 같은 확인 중 관찰했다. 권한·상세·다른 경로·전 조합을 반복하지 않았다. 실서버 주문 변경이나 Staging 배포 검증은 아니다.
+- 로컬 의존성은 yarn install --immutable, 무출력 .env 상속(기존 main→전용 worktree, ignored 확인)으로 준비했다. iOS 텍스트 selector 실패는 좌표탭으로 해결했으며 앱 오류로 분류하지 않는다.
+- runtime 보고서 `/tmp/dl-17248-cleanup-runtime/report.json`에 양OS source·화면·fixture 한계를 기록했다. 관찰 범위에서 화면 오류/크래시는 없었고 원본 query 각2개·fixture·로그인·Android debugprefs/iOS host 설정을 복원 확인했다. 전용 Metro8094 종료 및 양기기 시작 전 Shutdown 상태 복구, 제품 checkout clean까지 완료했다. 임시 /tmp 증거는 영구 보관을 보장하지 않는다.
+- 다음 시작점: PR342 사용자 리뷰/별도 merge·배포 지시를 기다린다. 현재 배포된 Office v343과 Lab v62를 자동 변경하지 않으며 GitHub 자동 리뷰 대응·다른 세션 통보·추가 감시는 수행하지 않는다.
+
+## 선행 체크포인트 — 2026-11-09 웹 정책 일치·미사용 분기 정리 후보 확인
 
 - 사용자가 후속으로 “앱 한정 로직 정리할 부분, 웹과 맞춰야 할 부분”을 재질문했다. 앞선 추가 수정 불필요는 기능 요구 누락/회귀 기준이며, **코드 정리 후보까지 없다는 의미는 아님**을 정정했다. Office 배지에는 실제 소비자가 없는 Lab DTO·isOfficeOrder 판별·Lab 날짜 선택과 date-fns 비교가 남아 있다. 실제 Home·Orders는 Office 데이터만 사용하므로 Office DTO·deliveryRequestAt·서버 isDelayed만 사용하는 구조로 간소화할 근거가 있다. Office 저장소의 OrderLabListItem은 import 소비자가 없고 내부 type=orders여서 배지도 표시하지 않는다.
 - 정리 시 기존 true+COMPLETED/CANCELED 숨김, 배송 가능/NEW/필수 날짜 가드, false·누락·null의 On Time을 유지해야 한다. 양 키 누락은 deliveryRequestAt 날짜 가드로 계속 숨김이어야 한다. Lab의 boolean 필수 가드를 치과에 이식하면 새 동작이므로 포함하지 않는다. 이번 질문은 확인 범위여서 제품 코드·PR·배포는 수정하지 않았다.
