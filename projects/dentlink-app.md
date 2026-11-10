@@ -1,5 +1,7 @@
 # Dentlink Office App — 현재 체크포인트와 작업 기준
 
+> **팀 PR 규칙(2026-11-10, 다니엘 요청):** PR 제목은 `[DL-xxxxx] 제목`, 티켓 없는 release 수정은 `[QA] 제목`; 스쿼시 머지는 PR 제목으로; release 대상 네이티브 PR은 머지 전 PR 브랜치 `yarn install` 재설치→Android 빌드→실기기 확인. 정본 [DEVELOPMENT_STYLE.md](../DEVELOPMENT_STYLE.md).
+
 이 문서는 **치과 앱 `Innvoaid/dentlink-app`**의 개인 체크포인트다.
 기공소 앱은 [별도 정본](dentlink-lab-app.md)을 따른다. 문서 정리는
 2026-10-27에 수행했으며, 아래 날짜별 관찰을 제품·배포의 현재 상태로 재검증한 것은 아니다.

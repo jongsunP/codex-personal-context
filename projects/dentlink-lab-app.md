@@ -1,5 +1,7 @@
 # Dentlink Lab App
 
+> **팀 PR 규칙(2026-11-10, 다니엘 요청):** PR 제목은 `[DL-xxxxx] 제목`, 티켓 없는 release 수정은 `[QA] 제목`; 스쿼시 머지는 PR 제목으로; release 대상 네이티브 PR은 머지 전 PR 브랜치 `yarn install` 재설치→Android 빌드→실기기 확인. 정본 [DEVELOPMENT_STYLE.md](../DEVELOPMENT_STYLE.md).
+
 ## iOS 푸시 탭 직후 상단 배너 재표시 — 2026-11-10
 
 > **현재 상태(2026-11-10 16:40 KST):** 원인 조사·JS 수정 완료, **iOS 실기기 확인 대기.** iOS 알림 탭을 Notifee가 최상위 delegate로 먼저 받아, Firebase 탭 경로만 처리한 1차 수정(v141/v39)이 효과가 없었다. 2차로 Notifee PRESS·`notifee.getInitialNotification` 경로에서도 `remote.messageId`를 기록해 같은 푸시의 재표시를 막았다(`feature/DL-17060@e9108b8`, Development 1.0.5 v40). Draft PR 본문·상태 불변. Android는 이 경로가 아니라 미확인이며 수정 대상이 아니다. 상세는 [통합알림센터 정본](dentlink-unified-notification-center.md) 상단.

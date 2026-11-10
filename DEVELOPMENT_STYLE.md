@@ -658,6 +658,20 @@ the user's presence or terminal arrangement does not replace agent verification.
   the stale `DRAFT` label and leading `[WIP] ` prefix, preserving the remaining
   title and labels. This consistency rule does not itself authorize changing
   an existing PR's readiness or editing reference PRs.
+- **Dentlink app PR title and squash merge (app developer request,
+  2026-11-10):** app PR titles follow the team format. With a Jira ticket use
+  `[DL-xxxxx] 제목`; a fix PR into a `release/*` branch without a ticket uses
+  `[QA] 제목` (precedent: dentlink-app #317/#320). Do not leave a
+  conventional-commit title such as `fix: ...` on a team-review PR. When
+  squash-merging, merge with the **PR title**, not the commit message: the repo
+  setting `COMMIT_OR_PR_TITLE` defaults a single-commit PR to its commit title,
+  so change the squash title on the merge screen.
+- **Native change PR into a release (app developer request, 2026-11-10):**
+  before merge, check out the PR branch, reinstall with `yarn install` so
+  `patches/native` is applied, build Android, and confirm on a real device
+  that there is no build error and the issue is fixed. Report the result in
+  the team thread and the PR verification section. The app developer merges
+  and submits for review.
 - User references verified on 2026-10-19: web PR
   [#4713](https://github.com/Innvoaid/dentlink-client/pull/4713) demonstrates the
   `DRAFT` label, and [#4712](https://github.com/Innvoaid/dentlink-client/pull/4712)

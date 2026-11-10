@@ -5,6 +5,8 @@
 
 ## 2026-11-10
 
+- 다니엘 요청 지침화(DEVELOPMENT_STYLE + 앱 프로젝트 상단): 앱 PR 제목 `[DL-xxxxx]`/티켓 없는 release 수정 `[QA]`, 스쿼시 머지는 PR 제목, release 네이티브 PR은 머지 전 재설치·빌드·실기기 확인. Android 패치 PR 제목 `[QA]`로 변경. Slack 스레드 결과는 Android 후속 문서. Jira(Atlassian Rovo) 커넥터는 연결됐으나 접근 가능한 사이트 목록이 비어 있음(innovaid 권한 미부여 추정).
+
 - 지침 추가(AGENTS.md): 외부 도구 접근이 막히면 커넥터(MCP) 직접 연결을 먼저 제안. Slack 커넥터 연결 완료.
 
 - Android Notifee 패치 PR 브랜치로 재설치·빌드 후 실기기(Galaxy S23) 테스트: 치과·기공소 모두 백그라운드/완전 종료 상태 Notifee 알림 탭 → 주문 상세 이동 성공, logcat 오류 없음. PR 검증 표 갱신.
