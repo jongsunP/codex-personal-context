@@ -1,5 +1,7 @@
 # Android 알림 라이브러리 호환 오류 — 별도 후속
 
+> **후속 준비 — 2026-11-10:** 사용자의 별도 승인으로 최신 main을 통합하고 Office Draft PR[#346](https://github.com/Innvoaid/dentlink-app/pull/346)·Lab Draft PR[#42](https://github.com/Innvoaid/dentlink-lab-app/pull/42)를 main 대상으로 만들었다. 현재 HEAD는 Office `5ad23a1`, Lab `3632931`이며 Android 호환 패치는 계속 제외한다. 양OS JS bundle 생성과 기본 화면 확인은 실제 대상 바이너리의 OS 푸시 클릭 성공 증거와 구분한다. CodePush/merge는 미실행. [배포 준비와 남은 확인](dentlink-unified-notification-center-delivery-2026-11-10.md).
+
 ## 범위 결정 — 2026-11-10
 
 - 사용자는 이번 통합알림센터의 푸시 변경을 **기존 클릭 흐름에 deliveryId를 보존하고 읽음 REST를 호출하는 JS 작업**으로 구분했다. 검증 중 발견한 기존 Android 네이티브 호환 문제는 이번 요구사항과 분리해 기록하고 코드에서 제외할 수 있는지 **조사**를 요청했다.

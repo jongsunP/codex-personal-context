@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**개발 배포 준비·PR4개·후속 분리 완료 — 2026-11-10 13:46 KST:** 사용자 승인으로 최신 기준 브랜치를 통합·검증·push하고 PR을 준비했다. 실제 배포/PR 병합은 하지 않았다. [정확한 위치·검증·배포 순서·잔여 전체](dentlink-unified-notification-center-delivery-2026-11-10.md)가 현재 준비 정본이다.
+
+- **Web:** `feature/DL-17058@2635a55b0`에 최신 `master@bafb0b1b6` 통합. 사용자 명시 승인대로 원격 develop 삭제 후 같은 master SHA로 재생성하고 복구 bundle 보존. [PR4862→release/v1.94.0](https://github.com/Innvoaid/dentlink-client/pull/4862), [PR4863→develop](https://github.com/Innvoaid/dentlink-client/pull/4863). 두 서비스의 develop push/path 배포 조건이 최종 diff와 일치한다. 웹 배포는 사용자 진행이다.
+- **Apps:** Office `feature/DL-17059@5ad23a1`, Lab `feature/DL-17060@3632931`에 최신 main 통합. [Office Draft346](https://github.com/Innvoaid/dentlink-app/pull/346)·[Lab Draft42](https://github.com/Innvoaid/dentlink-lab-app/pull/42)는 이번 사용자 예외 지시로 **main 대상**이다. Draft/DRAFT/[WIP] 조건 확인. 실제 대상 바이너리 푸시 검증은 미완이며 기본 화면 검증과 구분한다. **CodePush는 feature→Development를 별도 실행 승인 후** 진행한다.
+- **검증:** Web 알림 테스트26·양서비스 전체tsc·lint 오류0, Office 관련167·Lab59 tests와 양OS JS bundle 생성 통과. 양 앱 최종 코드의 양OS 홈/알림함/설정/뒤로가기, Lab 홈 프로필 시트 정상. 이번 기본 확인에서 새 오류/종료는 관찰하지 않았으나 기존 Android 클릭 전달 오류·Lab reload 종료 원인의 해결은 아니다. 앱 기존 전체tsc 진단은 Office6/Lab5 그대로다. 사용자 지시로 **이번 E2E 실행 제외**; 기존 E2E 코드/CI를 삭제하지 않았다.
+- **정리:** Jira Home3건 `[본체 외]`·ToDo, 본체 카드 실제 개발/QA·PR 상태 정렬, DL-17202 개발완료, 이메일 DL-17187 별도 진행중 유지. SP·담당자·부모 불변. Notion FE 참고의 패치 포함 등 오래된 표현을 정정하고 PM/BE 현행 배지 결정은 유지했다. 당일 프롬프트와 과거 구현을 혼동하지 않는다.
+- **환경/다음:** 검증용 Lab8082는 종료하고 기존 외부 Terminal Office8081·양OS 병원앱·Reactotron 구성으로 복귀한다. 웹/IDE 창은 그대로다. 다음은 사용자의 웹 PR 병합·개발배포 및 별도 승인된 앱 Development CodePush, 이후 실제 데이터/푸시 QA다. 배포 직전 정책·Sheet·Swagger·Figma·필요한 FigJam/Jira 변경분 재대조 계획과 이메일/Android/Home3건 등 후속을 문서에 보존했다. 자동 배포·리뷰·추가 기능·감시는 시작하지 않는다.
+
 **본체/연관 기능 경계 확정·Android 기존 호환 패치 분리 — 2026-11-10:** 사용자는 알림센터 본체와 같은 상위 Jira에 묶인 홈 연관 기능을 구분하도록 정정했다. **본체는 웹·앱 알림함/알림 설정/읽음/푸시 클릭·랜딩**이며 현재 확정된 계약 기준 독립 FE 개발은 완료, 실제 BE 발송과 서버 저장·집계의 통합 검증/QA는 별도다. **DL-17062 웹 홈 시스템 메시지, DL-17065 Office 홈 필터·최초 안내, DL-17068 Lab 홈 서포트 최근 메시지**는 카드/부모를 유지하되 별도 연관 기능으로 보고한다. 이 세 기능의 잔여를 이유로 알림센터 본체 전체가 미개발이라고 표현하지 않는다. 아래 과거 ‘Home3건 때문에 전체 미완료’ 문구는 이 기준으로 해석한다.
 
 - **Android 분리 결정:** 이번 푸시 요구는 기존 클릭 흐름의 `deliveryId`를 읽음 REST로 보내는 JS 변경이다. 검증 중 발견한 RN/Notifee 기존 네이티브 호환 결함을 이번 기능의 필수 신규 개발/심사 조건으로 묶지 않는다. 사용자의 제외 가능성 조사 질문을 Codex가 실행 승인으로 잘못 해석해 양 앱의 `patches/native/@notifee+react-native+7.8.2.patch`를 삭제·커밋·푸시했다. 사용자가 조사만 요청했다고 정정했고, Codex는 이를 인정했다. 사용자는 이미 진행했다면 계속 정리하라고 했으며, 이후 추가 구현/배포 없이 기록·환경 정리만 마무리했다. 기존 iOS 패치, JS 읽음/랜딩, 라이브러리 버전은 유지한다.

@@ -1,5 +1,7 @@
 # 통합알림센터 신규 REST 연결 — 2026-11-09
 
+> **2026-11-10 최신 준비:** deliveryId 읽음과 양 앱 appLandingUrl 연결은 완료했고, 최신 master/main 통합 및 웹2·앱2 PR을 준비했다. Android 네이티브 호환 패치는 본체에서 분리했다. 아래 패치 적용 성공/재빌드 문장은 당시 기록이며 현재 패치 없는 바이너리의 성공 증거가 아니다. [현재 배포 준비·후속](dentlink-unified-notification-center-delivery-2026-11-10.md)을 우선한다.
+
 > **후속 갱신:** 회의 확정 후 두 앱의 `data.deliveryId`→기존 `read/push` 연결을 완료했다. 실제 Android 탭에서 발견한 기존 RN/Notifee 호환 오류도 수정했고 별도 native 재빌드가 필요하다. [푸시 읽음 구현·검증 상세](dentlink-unified-notification-center-push-read-2026-11-09.md)를 우선하며 아래 미연결 기록은 REST 연결 당시 이력이다.
 
 ## 완료 위치와 범위
