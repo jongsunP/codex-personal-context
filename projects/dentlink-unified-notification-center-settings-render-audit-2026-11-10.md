@@ -50,3 +50,22 @@
 2. BE: 카테고리/도메인/채널 `displayName`(및 필요 시 그룹 키) 제공 가능 여부.
 3. 기획: 웹 PUSH 제외 유지 여부, 3제품 공통 묶음 규칙, user 영역 노출 위치(DL-17235).
 4. 코드 수정은 사용자 승인 후. 수정 범위는 앱 각 `notificationSettings.ts` 1개, 웹 공용 `NotificationCenter.tsx` 1개 + 각 테스트로 작다(JS만, 네이티브 영향 없음).
+
+## 6. 사용자 확정 기준과 매핑 누락 점검 (2026-11-10 후속)
+
+**확정 기준(사용자):** `view` 아래 `employee`→`user`를 디자인 순서대로, 각 `categories` 배열을 서버 순서대로 **그대로** 그린다. 서버의 displayName은 **제거될 예정**이다. FE는 서버의 공통 대문자 코드(병원·기공소 공통)로 매핑된 글자를 보여주고, 매핑이 없으면 대문자 값을 그대로 노출한다. 기공소는 기존 다국어 설정을 따라 영어면 디자인 영어, 한글이면 한글로 보인다. 매핑이 없는 값은 바로 보고한다. (수정 착수는 별도 승인 대기)
+
+**매핑 누락(Swagger enum 전체 기준: domain 6·category 9·channel 5·orderScope 2):**
+
+| 제품 | 누락 | 영향 |
+| --- | --- | --- |
+| 치과앱 | **orderScope `ALL_ORDERS`/`MY_ORDERS_ONLY` 매핑 없음** — 지금은 서버 `displayName`만 사용(`NotificationCenterScreen.tsx:125-131`, displayName 없으면 옵션 제외) | displayName 제거 시 **주문 범위 선택 UI가 사라짐**(옵션 0개 → `canSelectOrderScope` false) |
+| 치과앱 | domain 이름 사전 없음(`ORDERS`→"Order"만 하드코딩, `notificationSettings.ts:57`) — PAYMENTS/BENEFITS/USERS/CHAT/MANUFACTURING 없음 | 디자인이 도메인 제목을 보여주면 대문자 노출 |
+| 치과앱·기공소앱·웹 | `employee`/`user` 영역 제목 매핑 없음(현재 user 영역을 그리지 않음) | user 영역을 그리면 제목 문구 필요(디자인 확인) |
+| 치과웹 | **orderScope 매핑 없음** — `NotificationCenter.tsx:174-178` displayName 없으면 옵션 제외 | 치과앱과 동일하게 주문 범위 선택이 사라짐 |
+| 기공소앱 | channel `SMS`·`SLACK`은 registry 없음(문자 그대로 "SMS"/"Slack", 한·영 동일) | 실질 영향 없음 |
+| 기공소앱 | 나머지 domain 6·category 9·channel 3은 한글 사전→registry→en/ko 모두 존재 | — |
+| 기공소웹 | `sharedUi.json` en/ko `notifications.catalog`에 domain 6·category 9·channel 전부 존재(`SLACK`은 코드 상수 "Slack") | — |
+| 치과웹 | clinic에는 `sharedUi.json` 없음 → i18n `defaultValue`(영어)로 표시. clinic `public/locales/ko`가 존재하므로 한글 모드가 실제 쓰이면 영어로 보임(사용 여부 미확인) | 다국어 대상이 기공소뿐이면 영향 없음 |
+
+**누락은 아니지만 제품 간 문구 차이(기획 대조 필요):** LINKTALK 앱 "LinkTalk App Push/링크톡 앱 푸시" vs 웹 "LinkTalk"(ko도 LinkTalk) · DENTLINK_SUPPORT 앱 "덴트링크 서포트 앱 푸시" vs 웹 ko "덴트링크 고객지원" · BENEFITS 앱 "크레딧/Credits" vs 웹 "혜택/Benefits" · PAYMENTS 치과앱 "Payment" vs 기타 "Payments" · CREDITS 치과앱 "Office Credits" vs 웹 "Credit" vs 기공소앱 "Credits" · PUSH 앱 "App Push" vs 웹 "Push" · ORDERS 기공소앱 en "Orders" vs 기타 "Order".
