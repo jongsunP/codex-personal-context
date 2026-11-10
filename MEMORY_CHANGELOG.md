@@ -5,6 +5,8 @@
 
 ## 2026-11-10
 
+- 지침 추가(AGENTS.md): 외부 도구 접근이 막히면 커넥터(MCP) 직접 연결을 먼저 제안. Slack 커넥터 연결 완료.
+
 - Android Notifee 패치 PR 브랜치로 재설치·빌드 후 실기기(Galaxy S23) 테스트: 치과·기공소 모두 백그라운드/완전 종료 상태 Notifee 알림 탭 → 주문 상세 이동 성공, logcat 오류 없음. PR 검증 표 갱신.
 
 - Android Notifee 패치 PR(#348/#44) 내용을 사용자가 앱 개발자에게 Slack으로 공유했다(스레드 링크는 Android 후속 문서).

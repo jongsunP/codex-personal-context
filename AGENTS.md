@@ -22,6 +22,11 @@
   record (checkpoints, decisions, findings, preferences) must be written to
   **both** Claude's own memory and this `codex-personal-context` repository;
   never only one of them (user instruction, 2026-11-10).
+- When access to an external tool (Slack, Jira, Notion, etc.) is blocked by
+  sign-in or permission limits, propose connecting it directly as a connector
+  (MCP) first instead of workarounds, so later sessions can always read it.
+  Writes (sending messages, creating tickets) still need the user's
+  confirmation (user instruction, 2026-11-10). Slack was connected that day.
 - When this user says `메모리`, treat the Git-backed
   `codex-personal-context` repository as the default meaning. Local Codex
   runtime memory under `~/.codex` is secondary and is not sufficient for
