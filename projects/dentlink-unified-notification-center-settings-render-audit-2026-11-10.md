@@ -109,3 +109,29 @@
 | MY_ORDERS_ONLY (주문 범위) | 없음 | 없음 |
 
 채널·도메인은 실제 GET의 `channels`/`domain` 재확인 전 추정이 섞여 있다(카테고리 목록은 11/9 실조회).
+
+## 8. 최종 매핑표 제안과 주문 범위 매핑 반영 (2026-11-10, 미커밋)
+
+- 주문 범위 매핑을 기존 디자인 리소스로 채움: 치과앱 예전 알림 범위 선택(`ProfileNotificationScopeBottomSheet`)과 i18n(`texts.allOrders`, `profile:titles.myOrdersOnly`)의 **All Orders/전체 주문, My Orders Only/내 주문만 보기**. 치과앱 `notificationSettings.ts` `orderScopeLabels`, 웹 `useNotificationCopy.ts` `orderScopes`(i18n `catalog.allOrders/myOrdersOnly`, 기본값 영어). 기공소는 주문 범위 미사용이라 변경 없음. Figma API는 토큰 만료(403)로 이번에 재확인하지 못함.
+- 검증: 치과앱 관련 Jest 17 통과·eslint 0, 웹 hooks vitest 16·clinic jest 5 통과·clinic tsc 0·shared/ui eslint 0. commit 미실시.
+
+| 서버값 | 영어 | 한글 |
+| --- | --- | --- |
+| LINKTALK | LinkTalk App Push | 링크톡 앱 푸시 |
+| DENTLINK_SUPPORT | Dentlink Support App Push | 덴트링크 서포트 앱 푸시 |
+| DESIGN_CONFIRMATION | Design Confirmation | 디자인 컨펌 |
+| ORDER_UPDATES | Order Updates | 주문 업데이트 |
+| FEEDBACK | Feedback | 피드백 |
+| SHIPPING | Shipping | 배송 |
+| MILLING_ORDER_UPDATES | Order Updates | 주문 업데이트 |
+| PAYMENTS | Payments | 결제 |
+| CREDITS | Credits | 크레딧 |
+| PUSH | App Push | 앱 푸시 |
+| MAIL | Email | 이메일 |
+| ORDERS | Order | 주문 |
+| MANUFACTURING | Milling Center Order | 밀링센터 주문 |
+| CHAT | Chat | 채팅 |
+| ALL_ORDERS | All Orders | 전체 주문 |
+| MY_ORDERS_ONLY | My Orders Only | 내 주문만 보기 |
+
+이 표는 한 코드에 한 문구로 정리한 **제안**이며, 현재 코드에는 제품별 문구 차이(예: 웹 LinkTalk/Push/Credit, 치과앱 Office Credits/Payment)가 남아 있다. 사용자 확정 후 네 제품을 이 표로 맞춘다.
