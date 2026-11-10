@@ -206,6 +206,7 @@ For detailed current state, read:
 - 이 기능 세션에서 제품별 작업 위치·작성자를 분리하며, 미확정 BE 계약과 제품 commit/push/PR/배포 권한은 구분한다.
 - 2026-11-03: Web/Office/Lab 선행 변경과 양 앱 설정 파란 OS 배너의 기기별1회 보완까지 commit/push·영향 화면 검증·로컬 종료. 신규 알림 BE 연결·일부 실제 역할/데이터/OS 조건 검증은 남으며, BE 명세 또는 재개 지시를 기다린다.
 - [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
+- [웹 서비스별 알림센터 노출 페이지 현황(2026-11-10, 기획자 공유·결정 대기)](projects/dentlink-unified-notification-center-web-visibility-2026-11-10.md)
 
 ### Dentlink 이메일 CTA 웹·앱 연결·추적 — DL-17183 / DL-17187
 

@@ -18,6 +18,10 @@
 - Codex is the user's active development and repository-management agent.
   `claude-personal-context` is a remote archive, not an active context source;
   do not read or restore it unless the user explicitly asks.
+- Claude Code also continues this user's work from this repository. Every
+  record (checkpoints, decisions, findings, preferences) must be written to
+  **both** Claude's own memory and this `codex-personal-context` repository;
+  never only one of them (user instruction, 2026-11-10).
 - When this user says `메모리`, treat the Git-backed
   `codex-personal-context` repository as the default meaning. Local Codex
   runtime memory under `~/.codex` is secondary and is not sufficient for
