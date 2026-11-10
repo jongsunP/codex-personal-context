@@ -5,6 +5,8 @@
 
 ## 2026-11-10
 
+- iOS 배너 재표시 2차 JS 수정(Notifee 탭 경로 messageId 기록)을 Office `d4de608`/Lab `e9108b8`로 push하고 Development v142/v40 게시. Android 패치 PR #348/#44 본문에 요약(필요 이유·위험도 판단) 추가. 웹 알림센터 페이지별 노출 현황(별도 세션 조사)은 사용자가 기획자에게 공유했다.
+
 - Android Notifee ReactHost 패치를 알림센터와 분리해 release PR(dentlink-app#348→release/v2.2.5, dentlink-lab-app#44→release/v1.0.6)로 올렸다. 또 v141에서 iOS 배너 재표시가 계속돼 원인을 재조사: Notifee가 최상위 delegate이고 RNFB로 넘기는 루트 iOS 패치가 새 설치에서 빠져 Firebase 탭 핸들러가 안 불릴 수 있음 → 기존 수정이 Notifee PRESS 경로를 놓침. 코드 수정은 승인 대기. 웹 알림센터 페이지별 노출 현황은 별도 세션으로 분리.
 
 - 통합알림센터 iOS 푸시 탭 후 배너 재표시를 조사했다. 원인은 탭 시 iOS 재전달→RNFirebase가 Inactive를 foreground로 보고 `onMessage`→Notifee 로컬 배너 재생성으로 확인(소스 근거, 실기기 미재현). 사용자 승인으로 양 앱 `fcmHandler.ts`에 JS만 수정(탭한 messageId의 로컬 표시 생략)·테스트5건 추가, 이후 사용자 승인으로 Office `fab7708`/Lab `f0e2bc7` commit/push(PR 본문·상태 불변) 및 Development CodePush Office v141·Lab v39를 게시했다. iOS 실기기 확인은 사용자 몫으로 대기.
