@@ -5,6 +5,8 @@
 
 ## 2026-11-10
 
+- iOS 푸시 탭 후 배너 재표시: 사용자 실기기(CodePush v142/v40)에서 치과·기공소 해결 확인, 완료.
+
 - Slack 읽기 전용 지침(AGENTS.md). Android Notifee 패치 건 최종 마무리(PR 위험도 문장 정정, 로컬 브랜치·임시 파일 정리).
 
 - 알림 설정 확정 기준(사용자): 서버 view를 employee→user, categories 순서 그대로 그리고 displayName은 서버에서 제거 예정, FE가 대문자 코드로 매핑(없으면 코드 그대로), 기공소는 다국어 따라 영/한. 누락: 치과앱·치과웹 orderScope(ALL_ORDERS/MY_ORDERS_ONLY) 매핑 없음 → displayName 제거 시 주문 범위 선택 사라짐, 치과앱 도메인 사전(ORDERS 외) 없음, employee/user 영역 제목 없음. 수정 승인 대기.

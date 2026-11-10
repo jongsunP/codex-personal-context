@@ -19,7 +19,7 @@
 
 ## iOS 푸시 탭 직후 상단 배너 재표시 관찰 — 2026-11-10
 
-> **현재 상태(2026-11-10 16:40 KST):** 원인 조사·JS 수정 완료, **iOS 실기기 확인 대기.** iOS 알림 탭을 Notifee가 최상위 delegate로 먼저 받아, Firebase 탭 경로만 처리한 1차 수정(v141/v39)이 효과가 없었다. 2차로 Notifee PRESS·`notifee.getInitialNotification` 경로에서도 `remote.messageId`를 기록해 같은 푸시의 재표시를 막았다(`feature/DL-17059@d4de608`, Development 2.2.4 v142). Draft PR 본문·상태 불변. Android는 이 경로가 아니라 미확인이며 수정 대상이 아니다. 상세는 [통합알림센터 정본](dentlink-unified-notification-center.md) 상단.
+> **현재 상태(2026-11-10 19:00 KST):** 원인 조사·JS 수정 완료, **사용자 iOS 실기기(CodePush v142/v40) 확인 완료 — 해결.** iOS 알림 탭을 Notifee가 최상위 delegate로 먼저 받아, Firebase 탭 경로만 처리한 1차 수정(v141/v39)이 효과가 없었다. 2차로 Notifee PRESS·`notifee.getInitialNotification` 경로에서도 `remote.messageId`를 기록해 같은 푸시의 재표시를 막았다(`feature/DL-17059@d4de608`, Development 2.2.4 v142). Draft PR 본문·상태 불변. Android는 이 경로가 아니라 미확인이며 수정 대상이 아니다. 상세는 [통합알림센터 정본](dentlink-unified-notification-center.md) 상단.
 
 - 사용자 확인 범위: **iOS 치과 앱과 기공소 앱 모두** 홈 화면에서 기존 푸시를 누르면 앱이 열리고 상단에 배너가 한 번 더 나타난 뒤 랜딩 URL의 목적지로 정상 이동했다. **Android는 두 앱 모두 미확인**이다. 배너가 동일 푸시인지, 앱 버전·환경 및 재현 조건은 미확인이다.
 - 당시 Office main `fd77549` 코드에서 알림 탭은 딥링크 이동으로, 포그라운드 푸시 수신은 Notifee의 로컬 배너 표시로 이어지는 별도 경로였다. 이미 받은 푸시를 눌렀다는 이유로 같은 알림을 새 배너로 표시하는 것은 iOS 기본 동작이 아니다. [Apple 알림 이벤트 문서](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate)
