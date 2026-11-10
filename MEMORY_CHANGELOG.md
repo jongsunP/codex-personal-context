@@ -5,6 +5,8 @@
 
 ## 2026-11-10
 
+- Android Notifee 패치 PR(#348/#44) 내용을 사용자가 앱 개발자에게 Slack으로 공유했다(스레드 링크는 Android 후속 문서).
+
 - 기록 규칙 추가(AGENTS.md): 모든 기록은 Claude 메모리와 codex-personal-context 양쪽에 남긴다. 오늘 마감: Android 패치 PR(#348/#44) 완료 처리(반영·심사는 앱 개발자), 웹 알림센터 노출 페이지 현황 별도 문서화(기획자 공유·결정 대기), 루트 `patches/` 미적용 건은 고려하지 않기로 함.
 
 - iOS 배너 재표시 2차 JS 수정(Notifee 탭 경로 messageId 기록)을 Office `d4de608`/Lab `e9108b8`로 push하고 Development v142/v40 게시. Android 패치 PR #348/#44 본문에 요약(필요 이유·위험도 판단) 추가. 웹 알림센터 페이지별 노출 현황(별도 세션 조사)은 사용자가 기획자에게 공유했다.
