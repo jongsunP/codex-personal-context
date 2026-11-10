@@ -5,6 +5,8 @@
 
 ## 2026-11-10
 
+- 커넥터 현황: Slack·Figma·Notion 연결·동작 확인, Jira(Atlassian Rovo)는 관리자 승인 대기(AGENTS.md 반영).
+
 - 다니엘 요청 지침화(DEVELOPMENT_STYLE + 앱 프로젝트 상단): 앱 PR 제목 `[DL-xxxxx]`/티켓 없는 release 수정 `[QA]`, 스쿼시 머지는 PR 제목, release 네이티브 PR은 머지 전 재설치·빌드·실기기 확인. Android 패치 PR 제목 `[QA]`로 변경. Slack 스레드 결과는 Android 후속 문서. Jira(Atlassian Rovo) 커넥터는 연결됐으나 접근 가능한 사이트 목록이 비어 있음(innovaid 권한 미부여 추정).
 
 - 지침 추가(AGENTS.md): 외부 도구 접근이 막히면 커넥터(MCP) 직접 연결을 먼저 제안. Slack 커넥터 연결 완료.
