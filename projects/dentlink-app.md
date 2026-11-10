@@ -15,6 +15,12 @@
 | 권한관리 및 후속 QA | 10/25 Office PR329/331/332/333의 운영 Git 반영 확인. 10/26 전용 worktree 제거 | 새 요청 시 [권한관리 정본](dentlink-permission-management.md)과 기본 checkout 확인 |
 | 피드백 DL-15828 / DL-16061 | PR286의 9/11 develop squash 병합·동일 tree 확인은 완료된 이력 | [피드백 정본](dentlink-client-order-feedback.md) 및 아래 이력. 과거 PR286 리뷰·BE 대기 문구를 현재 미완료로 재사용하지 않음 |
 
+## iOS 푸시 탭 직후 상단 배너 재표시 관찰 — 2026-11-10
+
+- 사용자 관찰: iOS 홈 화면에서 기존 푸시를 누르면 앱이 열리고 상단에 배너가 한 번 더 나타난 뒤 랜딩 URL의 목적지로 정상 이동했다. 배너가 동일 푸시인지, 앱 버전·환경 및 재현 조건은 미확인이다.
+- 당시 Office main `fd77549` 코드에서 알림 탭은 딥링크 이동으로, 포그라운드 푸시 수신은 Notifee의 로컬 배너 표시로 이어지는 별도 경로였다. 이미 받은 푸시를 눌렀다는 이유로 같은 알림을 새 배너로 표시하는 것은 iOS 기본 동작이 아니다. [Apple 알림 이벤트 문서](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate)
+- 재개 요청 시 앱 버전·환경과 당시 푸시를 먼저 확인한다. 백그라운드와 완전 종료 상태에서 단일 푸시를 눌러 재현하고, 알림 ID·수신 시각을 기준으로 탭 콜백, FCM `onMessage`, Notifee `displayNotification`을 대조해 같은 메시지 재표시와 별도 푸시 수신을 구분한다. 현재는 기록만 했으며 원인 조사와 수정은 대기한다.
+
 ## Production 2.2.4.87 전달·main PR — 2026-11-09
 
 - 사용자가 Staging 확인 완료 후 상용 CodePush와 main 대상 PR 생성을 승인했다. 범위를 질문해 **치과 앱만 배포, 기공소 앱은 다른 담당자가 배포**한다고 확인했다. PR 병합·Git 태그 변경·스토어 출시는 승인 범위에 포함하지 않는다.
