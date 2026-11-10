@@ -1,6 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
 
+**기공소 Home 대기 기준 정정·사용자 로컬 확인 준비 — 2026-11-10:** 사용자가 BE와 협의 중인 방향을 추가 설명하고 저장·push 후 대기를 요청했다. **Lab Home 최근 메시지는 신규 API 대기가 아니라 디자인·세부 기획 대기**로 구분한다. 기존 Dentlink Support API를 재사용해 최근 메시지1건을 조회·표시하는 방안을 우선 검토하며, 현재 별도 신규 endpoint를 요청하지 않는다. 디자인/기획 확정 후 실제 기존 응답과 대조하고 부족한 부분이 확인될 때만 보완 요청한다. 재사용 방안은 아직 확정 구현/검증 완료가 아니며, 아래 과거 잔여 설명을 이 최신 기준으로 해석한다.
+
+- **앱 미리보기:** Office `/Users/parkjongsun/Repository/dentlink-app`·`feature/DL-17059@b939fce7f567c40639185da2d2509c35130fc7cb` clean/pull ff-only 확인 후, 같은 Office DEV/Metro8081로 iPhone17Pro iOS26.5와 Android Dentlink_API_36을 실행했다. 양 기기 Home 표시·최신 알림 service 모듈 있음/구 mock store 없음·LogBox 빈 상태를 확인했다. Android 최초 캐시 JS는 reload로 최신화했다. Lab앱을 한쪽 기기에 섞지 않았다.
+- **독립 실행/디버거:** macOS Terminal의 Metro 창789(`/dev/ttys001`)과 Devices 창790(`/dev/ttys002`)을 사용한다. Metro5746→yarn5731→zsh5696→login5695→Terminal5655, emulator5933→zsh5703→login5701→Terminal5655의 소유 관계를 확인했다. 현재 PID는 재사용 보장 값이 아니며 다음 재개 시 재확인한다. Codex 종료 생존 실험은 수행하지 않았다. ADB8081/9090 reverse와 양 기기 Reactotron localhost socket readyState1, 하단 두 기기 선택 목록 펼침/Timeline을 확인했다. Terminal/시뮬/에뮬/Reactotron은 **사용자가 확인하도록 유지**한다. 기존 IDE/브라우저/계정 데이터는 변경하지 않았고 새 제품 코드·설정 파일 변경은 없다.
+- **웹은 사용자 실행:** `/Users/parkjongsun/Repository/dentlink-client-notification-center`·`feature/DL-17058@ed88f08384f624f0171de9fd38cd9dffcc9ec7b2` clean. 루트의 별도 터미널에서 `pnpm dev:clinic`(localhost3000), `pnpm dev:lab`(localhost3005). 명령/포트는 실제 package script로 확인했으며 이번 요청에서 웹 서버·브라우저·IDE를 대신 실행하지 않았다.
+- **다음:** 앱 환경은 켜둔 채 사용자 직접 확인과 후속 요청을 기다린다. Home 디자인·기획 또는 실제 발송 데이터가 준비되면 해당 범위부터 재개한다. 임의 추가 구현·주기 조회·PR·배포는 하지 않는다.
+
+
 **양 앱 appLandingUrl 연결·검증·push — 2026-11-10:** 사용자는 API/기획 잔여를 먼저 답변하고, 확정된 `appLandingUrl` 연결 및 추가 기획·디자인 없이 가능한 FE 작업을 진행하도록 승인했다. 최신 DEV Swagger와 현재 소비 코드를 기준으로 양 앱만 수정했다. 아래 같은 날 ‘미착수’는 이 구현 이전 조사 기록이다.
 
 - **API 개수 정정:** Jira DL-16140 댓글44913의 ‘4개’는 Office 설정·Lab 설정·Office 인박스·Lab 인박스의 **Swagger API 묶음4개**다. 실제 HTTP 작업은 각 서비스8개/총16개, 경로는 각7개다. 기본 알림센터에 필수 신규 endpoint를 더 요구할 근거는 현재 없다. 실제 발송·기존 catalog 보완과 신규 endpoint를 구분한다.
