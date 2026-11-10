@@ -2,6 +2,8 @@
 
 ## iOS 푸시 탭 직후 상단 배너 재표시 — 2026-11-10
 
+> **현재 상태(2026-11-10 16:40 KST):** 원인 조사·JS 수정 완료, **iOS 실기기 확인 대기.** iOS 알림 탭을 Notifee가 최상위 delegate로 먼저 받아, Firebase 탭 경로만 처리한 1차 수정(v141/v39)이 효과가 없었다. 2차로 Notifee PRESS·`notifee.getInitialNotification` 경로에서도 `remote.messageId`를 기록해 같은 푸시의 재표시를 막았다(`feature/DL-17060@e9108b8`, Development 1.0.5 v40). Draft PR 본문·상태 불변. Android는 이 경로가 아니라 미확인이며 수정 대상이 아니다. 상세는 [통합알림센터 정본](dentlink-unified-notification-center.md) 상단.
+
 - 사용자 확인: iOS 기공소 앱에서도 푸시 탭 직후 상단 배너가 한 번 더 나타나며 랜딩은 정상이다. Android는 미확인이다. 원인 조사 대기 상태이며 재개 시 [치과·기공소 공통 관찰 및 재개점](dentlink-app.md#ios-푸시-탭-직후-상단-배너-재표시-관찰--2026-11-10)을 참고해 기공소 앱의 수신·표시 경로를 확인한다.
 
 ## 자동 Git 태그 번호 보완 PR41 — 2026-11-09
