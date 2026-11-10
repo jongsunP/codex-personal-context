@@ -27,7 +27,10 @@
   (MCP) first instead of workarounds, so later sessions can always read it.
   Writes (sending messages, creating tickets) still need the user's
   confirmation (user instruction, 2026-11-10). Connector status on 2026-11-10:
-  Slack, Figma, and Notion work for Claude Code; Jira/Confluence (Atlassian
+  Slack, Figma, and Notion work for Claude Code. **Slack is read-only: never
+  send messages, reactions, canvases, or any other write** (user instruction,
+  2026-11-10); give a draft and let the user post it.
+  Jira/Confluence (Atlassian
   Rovo) is connected but has no accessible site until an innovaid admin
   approves it.
 - When this user says `메모리`, treat the Git-backed
