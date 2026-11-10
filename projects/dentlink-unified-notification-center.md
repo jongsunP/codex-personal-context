@@ -1,10 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-**iOS 푸시 탭 후 배너 재표시 · JS 수정 로컬 완료(미커밋) — 2026-11-10:** 사용자 관찰(iOS 양 앱, 기존 푸시 탭→앱 진입·랜딩 정상 후 상단 배너1회 더)을 조사 후 사용자 승인으로 **JS만** 수정했다. 승인 조건: 네이티브/심사·사이드이펙트가 애매하면 묻는다, 웹 제외.
+**iOS 푸시 탭 후 배너 재표시 · JS 수정 commit/push·Development CodePush 완료 — 2026-11-10 15:40 KST:** 사용자 관찰(iOS 양 앱, 기존 푸시 탭→앱 진입·랜딩 정상 후 상단 배너1회 더)을 조사 후 사용자 승인으로 **JS만** 수정했다. 승인 조건: 네이티브/심사·사이드이펙트가 애매하면 묻는다, 웹 제외.
 - **원인(소스 근거):** 알림 탭으로 앱이 열릴 때 iOS는 `didReceiveRemoteNotification`을 다시 호출할 수 있다(Apple 문서, content-available 푸시). RNFirebase24는 `applicationState != Background`(Inactive 포함)이면 `onMessage`로 보내고, JS `setupForegroundMessage`가 Notifee `displayNotification`(iOS banner)을 다시 만든다. `AppDelegate.willPresent`는 일반 푸시에 `[]`라 OS 원격 배너가 아니다. 실제 payload의 content-available 여부·실기기 재현 로그는 미확인.
 - **수정:** 양 앱 `src/configs/utils/fcmHandler.ts` 동일 +46줄. 탭 핸들러(`onNotificationOpenedApp`, firebase `getInitialNotification`)에서 messageId 기록(TTL10분), `onMessage` 진입 시 AppState 기록 → iOS에서 messageId가 탭한 푸시면 로컬 표시만 생략. 비활성 수신은 1초 대기 후 판단(탭 이벤트 순서 대비), 탭 안 된 푸시는 기존처럼 표시. 데이터 갱신/읽음/랜딩·Android·채널톡 경로·네이티브 불변.
 - **검증:** 신규 `__tests__/utils/fcmHandler.test.ts` 5건(수정 전3실패/후5통과) 양 앱. 전체 Jest 수정 전후 동일 실패21(기존 E2E Detox·App.test·Office officeListQueryScope), tsc 기존 Office6/Lab5 유지, 변경파일 eslint 오류0·prettier 통과. 실기기/실제 FCM 미검증.
-- **상태:** Office `feature/DL-17059@ef90180`, Lab `feature/DL-17060@3632931` 위 **로컬 수정만**. commit·push·PR 본문·CodePush는 사용자 지시 대기. 반영 시 PR 본문에 원래 범위 외 개선으로 구분, Development CodePush 후 iOS 실기기 탭 재확인 필요.
+- **전달(사용자 승인):** Office `feature/DL-17059@fab7708`, Lab `feature/DL-17060@f0e2bc7` commit/push(원격 SHA 일치·clean). Draft PR346/42는 상태·base(main)·제목·본문 **변경 없이** 커밋만 포함. `scripts/codepush.js dev all --mute`(TTY 입력은 `script`+지연 입력, 첫 시도는 입력 EOF로 업로드 전 스크립트 자체 취소)로 **Office 2.2.4 iOS/Android v141(이전 v140), Lab 1.0.5 iOS/Android v39(이전 v38)** 게시. history 1회: disabled=false·mandatory·rollout100·설명 SHA·새 packageHash 확인(Office iOS `7632909f…`, Android `fcd00cd9…`, Lab iOS `ea44cf17…`, Android `93ff2811…`). 기존 isv.mp4 asset 크기 경고는 `--force`로 통과(기존 파일). Slack 미게시. 증거 `/tmp/notification-development-codepush-1110-r2/`.
+- **main 차이:** 배포 시 origin/main에 Office #345·Lab #41(Production 태그 workflow 1파일)만 추가돼 있었고 번들/Development와 무관해 feature에 통합하지 않았다. PR 병합 전 main 통합 여부는 별도.
+- **다음:** 사용자가 iOS 실기기(Development v141/v39 적용 후)에서 백그라운드 상태 푸시 탭→랜딩 후 상단 배너 미재표시, 앱 사용 중 새 푸시 배너 정상 표시를 확인. 실기기/실제 FCM 미검증 상태이며 감시·추가 배포 없이 대기.
 
 **개발 배포 브레이크포인트 이후 · 웹 CodeRabbit 후속 — 2026-11-10:** 직전 배포/개인 컨텍스트 `0bcd18b` 정리 완료 뒤 사용자가 웹 CodeRabbit 확인을 요청했다. 릴리즈 [PR4862](https://github.com/Innvoaid/dentlink-client/pull/4862)의 미해결 지적1건을 현재 코드로 검증·수정하고 `feature/DL-17058@38ca4edae374c5e130e15f85b512129438be60eb`로 commit/push했다. 같은 feature의 개발서버 PR4863은 이미 병합된 상태이며 이번 변경은 아직 develop에 포함되지 않았다.
 

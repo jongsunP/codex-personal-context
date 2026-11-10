@@ -5,7 +5,7 @@
 
 ## 2026-11-10
 
-- 통합알림센터 iOS 푸시 탭 후 배너 재표시를 조사했다. 원인은 탭 시 iOS 재전달→RNFirebase가 Inactive를 foreground로 보고 `onMessage`→Notifee 로컬 배너 재생성으로 확인(소스 근거, 실기기 미재현). 사용자 승인으로 양 앱 `fcmHandler.ts`에 JS만 수정(탭한 messageId의 로컬 표시 생략)·테스트5건 추가, 로컬 미커밋 상태로 정본 체크포인트에 기록했다.
+- 통합알림센터 iOS 푸시 탭 후 배너 재표시를 조사했다. 원인은 탭 시 iOS 재전달→RNFirebase가 Inactive를 foreground로 보고 `onMessage`→Notifee 로컬 배너 재생성으로 확인(소스 근거, 실기기 미재현). 사용자 승인으로 양 앱 `fcmHandler.ts`에 JS만 수정(탭한 messageId의 로컬 표시 생략)·테스트5건 추가, 이후 사용자 승인으로 Office `fab7708`/Lab `f0e2bc7` commit/push(PR 본문·상태 불변) 및 Development CodePush Office v141·Lab v39를 게시했다. iOS 실기기 확인은 사용자 몫으로 대기.
 
 ## 2026-11-09
 
