@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**iOS 푸시 탭 후 배너 관찰 · 추후 확인 — 2026-11-10:** 사용자 관찰에 따르면 iOS 치과앱·기공소앱 모두 홈 화면에서 기존 푸시를 탭하면 앱이 열리고 상단에 푸시처럼 보이는 배너가 한 번 더 표시된 뒤 딥링크 목적지로 정상 이동한다. Android 양 앱, 재현 버전·환경, 두 번째 배너가 같은 메시지인지 별도 수신인지 미확인이다. 재개 요청이 오면 알림 ID와 수신 시각을 기준으로 탭·포그라운드 수신·로컬 표시 로그를 대조한다. 현재는 관찰만 기록하고 대기한다.
+
 **개발 배포 브레이크포인트 이후 · 웹 CodeRabbit 후속 — 2026-11-10:** 직전 배포/개인 컨텍스트 `0bcd18b` 정리 완료 뒤 사용자가 웹 CodeRabbit 확인을 요청했다. 릴리즈 [PR4862](https://github.com/Innvoaid/dentlink-client/pull/4862)의 미해결 지적1건을 현재 코드로 검증·수정하고 `feature/DL-17058@38ca4edae374c5e130e15f85b512129438be60eb`로 commit/push했다. 같은 feature의 개발서버 PR4863은 이미 병합된 상태이며 이번 변경은 아직 develop에 포함되지 않았다.
 
 - **수정:** All 탭에서 알림 개별/전체 읽음 후 모든 inbox 쿼리를 reset하여 불러온 페이지/목록이 사라지는 문제. 공유 `useNotificationCenter`에서 Unread만 exact reset하고 All은 exact invalidate한다. 기존 다른 소속·미읽음 집계 갱신과 실패 처리는 유지한다. Web Clinic/Lab 공통이며 앱은 변경하지 않았다.
