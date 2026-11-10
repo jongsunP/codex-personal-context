@@ -135,3 +135,11 @@
 | MY_ORDERS_ONLY | My Orders Only | 내 주문만 보기 |
 
 이 표는 한 코드에 한 문구로 정리한 **제안**이며, 현재 코드에는 제품별 문구 차이(예: 웹 LinkTalk/Push/Credit, 치과앱 Office Credits/Payment)가 남아 있다. 사용자 확정 후 네 제품을 이 표로 맞춘다.
+
+## 9. 실제 DEV 응답 대조 (2026-11-10, 사용자 제공)
+
+- `view`가 화면 구성, `setting`이 사용자 선택값(사용자 설명).
+- **Office:** orderScopes `ALL_ORDERS`("All Orders")·`MY_ORDERS_ONLY`("Assigned Orders"); employee 순서 LINKTALK(CHAT, PUSH, [])→DESIGN_CONFIRMATION(ORDERS,[PUSH,MAIL])→ORDER_UPDATES(ORDERS,[PUSH,MAIL])→FEEDBACK(ORDERS,[PUSH])→SHIPPING(ORDERS,[PUSH])→PAYMENTS(PAYMENTS,[MAIL])→CREDITS(BENEFITS,[PUSH]); user CREDITS(BENEFITS,[PUSH]).
+- **Lab:** orderScopes [], orderScope null; employee LINKTALK(CHAT,PUSH,[])→DENTLINK_SUPPORT(CHAT,PUSH,[])→DESIGN_CONFIRMATION(ORDERS,[PUSH])→ORDER_UPDATES(ORDERS,[PUSH])→MILLING_ORDER_UPDATES(MANUFACTURING,[PUSH]); user [].
+- 사용자 결정: MY_ORDERS_ONLY는 **"My Orders Only"**(서버 표시명 "Assigned Orders" 대신, 현재 코드와 일치). 매핑 키는 `영역(employee/user).카테고리` → `카테고리` → 코드 순으로 찾는 방식 제안(CREDITS employee/user 구분용, 미구현).
+- 같은 응답이라도 앱/웹 묶음 규칙 차이로 모양이 다름: Lab 앱은 LINKTALK·DENTLINK_SUPPORT를 제목 없는 단독 카드로, 웹은 "채팅" 그룹으로 묶음. Office도 앱은 LINKTALK 단독, 웹은 "Chat" 그룹.
