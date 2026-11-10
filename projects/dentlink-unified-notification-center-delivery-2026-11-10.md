@@ -14,7 +14,7 @@
 | 제품 | 작업 위치 / feature HEAD | 통합한 기준 | PR |
 | --- | --- | --- | --- |
 | Web Clinic/Lab | `/Users/parkjongsun/Repository/dentlink-client-notification-center` · `feature/DL-17058` · `2635a55b06e4e01e01c042230d1316e10ac7e090` | `master@bafb0b1b6430a4e2d65ffd15d2316f83829ba84d` | [#4862 → release/v1.94.0](https://github.com/Innvoaid/dentlink-client/pull/4862), [#4863 → develop](https://github.com/Innvoaid/dentlink-client/pull/4863) |
-| Office app | `/Users/parkjongsun/Repository/dentlink-app` · `feature/DL-17059` · `5ad23a1e311003a3c5b4a06a009fe4a882c051f0` | `main@fd775498f20e38a642b317f9d7713f66c005423a` | [Draft #346 → main](https://github.com/Innvoaid/dentlink-app/pull/346) |
+| Office app | `/Users/parkjongsun/Repository/dentlink-app` · `feature/DL-17059` · `ef901809fffeba92b78297fe198e8a700f62f572` | `main@fd775498f20e38a642b317f9d7713f66c005423a` | [Draft #346 → main](https://github.com/Innvoaid/dentlink-app/pull/346) |
 | Lab app | `/Users/parkjongsun/Repository/dentlink-lab-app` · `feature/DL-17060` · `36329315202e5ba1495fb107de072e2ee510449b` | `main@a3f5a06366b7ea86b461a5ef05355abdd5660017` | [Draft #42 → main](https://github.com/Innvoaid/dentlink-lab-app/pull/42) |
 
 - 세 제품은 기존 checkout/feature를 유지했다. 신규 worktree/feature를 만들지 않았다. Office는 충돌 없이 통합했고 Lab 번역 registry의 독립 추가 항목은 양쪽 모두 보존했다.
@@ -38,6 +38,18 @@
 - 최종 통합 코드의 제한된 양OS 기본 화면 검증을 완료했다. 아래 범위만 확인했으며 광범위한 최종 QA나 실제 FCM/APNs 발송 검증으로 확대하지 않는다.
 
 ## 이후 순서
+
+### PR 코드 질문 후 보완
+
+- 사용자가 공통 유틸/권한/날짜의 사이드이펙트를 질문한 뒤 필요한 수정을 승인했다. Office 소속 검증 실패 시 앱 경로를 그대로 웹 주소로 만들던 예외1건을 `ef90180`에서 고쳤다. 현재 화면과 소속을 유지하고 기존 실패 안내를 쓰며, 기존 피드백의 명시적 웹 연결과 정상 이동은 유지한다. 기존 PR346에 push 및 본문 반영을 확인했다.
+- 최종 변경은 `src/libs/useNavigationConfig.ts`와 `__tests__/libs/useNavigationConfig.test.tsx`뿐이다. 관련5 suites/102 tests, 변경 lint/Prettier/diff-check, 독립 diff review 통과. 전체tsc 기존6진단은 변화 없다.
+- 최종 코드 iOS/Android에서 DEV native scheme의 비소속 링크, 정상 알림함 링크, 실제 렌더된 알림함의 랜딩 handler, 뒤로가기를 확인했다. 비소속 링크에서 기존 토스트 발생·외부 URL 호출0·현재 employer/employee 및 화면 유지, 정상 링크의 알림함 진입과 Home 복귀를 확인했다. 양OS 최종 LogBox 없음/Reactotron readyState1, Android crash buffer 변화 없음. 임시 관찰 wrapper는 복구했으며 API 읽음/설정 쓰기나 가짜 알림 데이터 주입은 하지 않았다.
+- 초기 검사에서 production scheme을 DEV 설치본에 호출한 실패, 검사 스크립트의 Toast export/비지원 async 문법 오류는 검사 도구 설정을 수정한 뒤 재확인했다. 제품 결함 또는 실제 푸시 검증 결과로 취급하지 않는다. 증거는 `/tmp/notification-review-fixes-1110/`의 상태 JSON·스크린샷이며 임시 파일의 영구 보존은 보장하지 않는다.
+- Web/Lab은 수정 없음. Web의 `shared/hooks/package.json`은 실제 사용 중인 models/React Query 의존성 선언, `axiosInstance`는 알림 요청 소속 고정·전환 중 취소·활성화 성공 전 소속 확정 방지, `activateEmployee(employeeId?)`는 대상 소속 헤더를 선택적으로 제공하며 기존 무인자 호출을 보존한다. scoped 인증 테스트3개 통과.
+- 날짜는 기존 기준과 일치한다. Web은 Clinic/Lab 국가 포맷 + 브라우저 시간대(UTC/서울/뉴욕/시드니 날짜경계·offset·DST 등56개 확인 통과), Office는 소속 국가 포맷 + 기기 시간대, Lab은 사용자 국가 포맷 + 기기 시간대다. 새 병원 timezone 정책이나 Admin 표시 변경은 추가하지 않았다.
+- 이전 기본 화면 검증과 이번 좁은 회귀 검증을 합쳐도 실제 BE 푸시/기존 배포 바이너리 검증 완료는 아니다. Android Notifee 기존 오류·Lab 이전 reload 종료 원인과 배포 승인 경계는 위와 동일하다. Office 외부 Metro8081·양OS Home은 유지하고 웹/IDE는 조작하지 않았다.
+
+### 개발 환경 전달 이후
 
 1. **개발 환경 전달:** 웹은 사용자 develop PR 병합·개발서버 확인. 앱은 별도 승인 후 feature의 동일 검증 SHA를 Development에 CodePush한다. 앱 PR의 main 대상과 CodePush 소스 브랜치를 혼동하지 않는다.
 2. **본체 실데이터 QA:** 목록/빈목록/오류/페이지 추가, All·Unread·홈 레드닷, 개별/전체 읽음, 개인 알림과 소속별 집계, 설정 저장 후 재조회, 서비스·역할별 노출, 일반/알림 소속 전환, 랜딩과 뒤로가기를 확인한다.

@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**PR 질문 재검토·치과앱 딥링크 예외 보완 — 2026-11-10:** 사용자가 웹 공통 인증/의존성/날짜 처리와 양 앱 FCM·딥링크·권한 Provider의 영향을 질문했고, 조사 뒤 남은 수정을 반영하도록 승인했다. Office `feature/DL-17059@ef901809fffeba92b78297fe198e8a700f62f572`를 commit/push하고 [기존 Draft PR346](https://github.com/Innvoaid/dentlink-app/pull/346)에 수정·검증을 반영했다. 원격 SHA 일치·clean. Web `2635a55b0`, Lab `3632931`은 추가 결함이 확인되지 않아 코드 변경 없이 유지했다.
+
+- **수정:** Office가 소속 목록에 없는 병원의 주문/알림함/크레딧 앱 경로를 그대로 웹 주소 뒤에 붙이던 분기를 제거했다. 기존 전환 실패 토스트와 현재 화면/소속을 유지하고 처리한 보관 링크를 정리한다. 기존 피드백의 명시적 웹 매핑과 정상 소속 이동은 보존한다. 제품 수정1파일·회귀 테스트1파일이며 native/package 변경은 없다.
+- **재검토:** `PermissionProvider`의 OS 권한→서버 수신설정 자동동기화 제거는 확정 정책이며 권한 요청/FCM 토큰 등록은 유지된다. `pushReadRevision`은 읽음 대기 목록 처리 신호이고 OS 배지/미읽음 수가 아니다. 기존 채팅/밀링/일반 소속 전환도 공통 경로의 영향 범위임을 확인했으며 신규 확정 결함은 위1건이었다.
+- **날짜/웹:** Clinic/Lab 웹은 기존 국가별 dateFormat과 브라우저 시간대, Office는 소속 국가 dateFormat과 기기 시간대, Lab은 user.countryCode 기반 기존 formatDate와 기기 시간대를 사용한다. 병원 timezone을 임의로 새 적용하지 않았다. Web4개 시간대 날짜경계/offset/DST/국가별 형식 등56개 확인 및 scoped 인증 테스트3개 통과. Lab 관련 lint 오류0. Admin에 이번 날짜 formatter 신규 사용처 없음.
+- **최종 Office 검증:** 관련 Jest5 suites/102 tests, 변경파일 lint/format/diff-check 통과. 전체tsc는 기존6진단만 유지. 최종 코드 양OS에서 native OS URL 진입→비소속 오류 안내/웹 이동 없음, 정상 소속 알림함 진입, 렌더된 인박스 랜딩 핸들러→비소속 화면/소속 유지, Home 복귀를 확인했다. 양OS LogBox 빈 상태·Reactotron 연결, Android crash buffer 전후 동일. 임시 관찰 wrapper는 제거했고 실제 읽음/설정 저장은 실행하지 않았다. 실제 FCM/APNs 발송 검증을 대신하지 않는다.
+- **현재/다음:** 기존 외부 Terminal Office Metro8081·양OS Home·Reactotron을 유지했다. 웹/IDE는 조작하지 않았다. PR 병합·CodePush·서버 배포는 아직 하지 않았으며 별도 실행 승인 경계와 기존 Android Notifee/대상 바이너리 검증 잔여는 유지한다. 상세와 이후 순서는 [배포 준비 기록](dentlink-unified-notification-center-delivery-2026-11-10.md)을 따른다.
+
 **개발 배포 준비·PR4개·후속 분리 완료 — 2026-11-10 13:46 KST:** 사용자 승인으로 최신 기준 브랜치를 통합·검증·push하고 PR을 준비했다. 실제 배포/PR 병합은 하지 않았다. [정확한 위치·검증·배포 순서·잔여 전체](dentlink-unified-notification-center-delivery-2026-11-10.md)가 현재 준비 정본이다.
 
 - **Web:** `feature/DL-17058@2635a55b0`에 최신 `master@bafb0b1b6` 통합. 사용자 명시 승인대로 원격 develop 삭제 후 같은 master SHA로 재생성하고 복구 bundle 보존. [PR4862→release/v1.94.0](https://github.com/Innvoaid/dentlink-client/pull/4862), [PR4863→develop](https://github.com/Innvoaid/dentlink-client/pull/4863). 두 서비스의 develop push/path 배포 조건이 최종 diff와 일치한다. 웹 배포는 사용자 진행이다.
