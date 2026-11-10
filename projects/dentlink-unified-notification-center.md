@@ -1,5 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**개발 배포 브레이크포인트 이후 · 웹 CodeRabbit 후속 — 2026-11-10:** 직전 배포/개인 컨텍스트 `0bcd18b` 정리 완료 뒤 사용자가 웹 CodeRabbit 확인을 요청했다. 릴리즈 [PR4862](https://github.com/Innvoaid/dentlink-client/pull/4862)의 미해결 지적1건을 현재 코드로 검증·수정하고 `feature/DL-17058@38ca4edae374c5e130e15f85b512129438be60eb`로 commit/push했다. 같은 feature의 개발서버 PR4863은 이미 병합된 상태이며 이번 변경은 아직 develop에 포함되지 않았다.
+
+- **수정:** All 탭에서 알림 개별/전체 읽음 후 모든 inbox 쿼리를 reset하여 불러온 페이지/목록이 사라지는 문제. 공유 `useNotificationCenter`에서 Unread만 exact reset하고 All은 exact invalidate한다. 기존 다른 소속·미읽음 집계 갱신과 실패 처리는 유지한다. Web Clinic/Lab 공통이며 앱은 변경하지 않았다.
+- **검증:** 기존 코드의 실제 QueryClient/renderHook에서3페이지45행이 읽음 후0행으로 비는 실패2건을 재현했다. 수정 후 요청 응답 대기 중/완료 후 페이지 유지·읽음 상태/카운트 갱신·Unread 복귀 첫페이지를 확인했다. 공통19+Clinic5+Lab4=28 tests, Clinic/Lab/Admin 전체tsc, 변경 lint/format/diff, 저장소 pre-push lint/커버리지·guard 통과. E2E는 사용자 기존 제외 지시를 유지했다. 제품1파일·기존 테스트1파일만 수정했다.
+- **리뷰 완료:** [원 지적](https://github.com/Innvoaid/dentlink-client/pull/4862#discussion_r4521266513)에 수정/검증 근거를 답변하고 해결 처리했다. CodeRabbit이 `38ca4ed`에서 해결됐다고 표시했고, 14:36 KST 후속 재검토가 해당 HEAD에서 **success·미해결 스레드0**으로 완료됐다. 독립 코드 리뷰 추가 지적도 없었다. 별도의 Docstring Coverage57.14%/기준80% 경고는 남으며 기능 결함이나 미해결 스레드와 구분한다.
+- **전달 경계:** 릴리즈 PR의 검증 내역을 현재 커밋으로 정렬했다. PR 병합·새 develop PR·개발서버 재배포는 하지 않았다. 사용자가 지금 보고 있는 개발서버에는 이번 후속 수정이 아직 없으며, 앱 Office v140/Lab v38과 양 앱 PR은 직전 브레이크포인트 그대로다. 개인 기록을 commit/push하고 사용자 QA/리뷰 결과 또는 별도 배포 요청까지 대기한다.
+
 **개발 환경 전달·사용자 실기기 QA 전 브레이크포인트 — 2026-11-10 14:24 KST:** 사용자는 웹을 직접 병합하고 배포를 시작했다고 전달했으며 **기록만** 요청했다. 양 앱은 기존 검증된 feature에서 Development CodePush를 명시 승인했다. Office `feature/DL-17059@ef901809`와 Lab `feature/DL-17060@3632931`의 코드·PR을 그대로 두고 배포만 실행했다.
 
 - **배포 완료:** Office `2.2.4` iOS/Android 각각 **v140**, Lab `1.0.5` iOS/Android 각각 **v38**. 네 대상 모두 업로드 성공 후 history를1회 조회하여 버전·소스 설명·라벨·활성(`isDisabled=false`)·mandatory·rollout100을 확인했다. 기존 앱별 `scripts/codepush.js dev all --mute`를 순차 실행했고 Slack은 게시하지 않았다. [배포 상세·증거·다음 순서](dentlink-unified-notification-center-delivery-2026-11-10.md#개발-환경-전달-완료--2026-11-10-1424-kst).

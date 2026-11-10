@@ -1,5 +1,15 @@
 # 통합알림센터 본체 — 개발 배포 준비와 후속
 
+## 배포 후 웹 CodeRabbit 후속 — 2026-11-10
+
+- 직전 배포/메모리 브레이크포인트를 완료한 다음 별도 사용자 요청으로 웹 리뷰를 처리했다. 최신 release PR4862는 open→`release/v1.94.0`, 개발서버 PR4863은 `2026-11-10 14:15:37 KST`에 `57a904b6aaf507b5ba042d644ec97d42260e779d`로 develop에 병합된 것을 이번 리뷰 조회에서 확인했다. 웹 배포 결과/실서버는 추가 조회하지 않았다.
+- 미해결 CodeRabbit inline1건은 All 목록의 읽음 성공 시 inbox prefix 전체 reset으로 이미 불러온 페이지가 비는 문제였다. `shared/hooks/src/useNotificationCenter.ts`는 Unread만 exact reset, All은 exact invalidate로 변경했다. 다른 소속/카운트 갱신·읽음 실패/중복 방지는 그대로 유지한다.
+- `shared/hooks/src/useNotificationCenter.test.tsx`에 개별/전체 읽음2건을 추가했다. 실제 QueryClient의3페이지45행과 지연 응답을 사용해 기존 코드의0행 초기화를 재현했고, 수정 후 조회 대기 중/후 전체 페이지 유지·읽음/카운트 갱신·Unread 복귀 첫페이지를 검증했다. 공통19/Clinic5/Lab4=28 tests, 변경 lint/format/diff, Clinic/Lab/Admin tsc 및 필수 pre-push 검사 통과. pre-push는 configs21/hooks51 tests, Admin DLDS guard9와 커버리지 검사를 포함했다. E2E 제외 지시를 유지하며 새 Storybook/E2E/런타임 mock은 추가하지 않았다.
+- 커밋 **`38ca4edae374c5e130e15f85b512129438be60eb`**, 기존 `feature/DL-17058`에 push, checkout clean. [리뷰 원문](https://github.com/Innvoaid/dentlink-client/pull/4862#discussion_r4521266513)/[근거 답변](https://github.com/Innvoaid/dentlink-client/pull/4862#discussion_r4521465713)에 반영하고 스레드를 해결했다. CodeRabbit 자체 addressed 표시 확인, 14:36 KST [후속 리뷰](https://github.com/Innvoaid/dentlink-client/pull/4862#pullrequestreview-5837275944)가 해당 HEAD를 검토하고 CodeRabbit **success**, 최종 threads조회에서 전체1/미해결0을 확인했다. 독립 diff review 추가 지적 없음. GitHub guard도 해당 HEAD에서 success다.
+- CodeRabbit의 별도 Docstring Coverage57.14%/기준80% 경고는 남는다. 특정 기능 결함/inline 지적이 아니며 CodeRabbit status는 성공이다. 이 수치를 맞추기 위해 이번 동작 수정과 무관한 파일 전체에 주석을 추가하거나 설정을 낮추지는 않았다. 로컬 제품 lint는 오류0이며 기존 경고가 남는 점과 CodeRabbit 쪽 ESLint 도구 실행 환경 경고를 구분한다. ‘모든 경고0’으로 보고하지 않는다.
+- 릴리즈 PR 본문의 최신 SHA·검증·개발서버 미반영 경계만 업데이트했다. **이번 수정은 이미 병합된 develop PR4863에 자동 포함되지 않는다.** 개발서버 반영이 필요하면 별도 PR/병합·배포 승인을 받아 이어간다. release PR 병합/배포도 하지 않았다.
+- 앱 코드/PR/Development Office v140·Lab v38에는 이번 웹 수정의 영향이 없다. 직전 앱 배포 증거와 후속 QA/본체 외 업무 경계는 아래 기록을 유지한다.
+
 ## 개발 환경 전달 완료 — 2026-11-10 14:24 KST
 
 - 사용자는 **웹 병합·배포 시작을 직접 완료했다고 알렸고 기록만 요청**했다. 웹의 merge SHA/완료 상태를 새로 조회하지 않았으며, 웹 개발서버 동작은 이후 사용자 확인이다.
