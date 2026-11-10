@@ -1,6 +1,10 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-**iOS 푸시 탭 후 배너 관찰 · 추후 확인 — 2026-11-10:** 사용자 관찰에 따르면 iOS 치과앱·기공소앱 모두 홈 화면에서 기존 푸시를 탭하면 앱이 열리고 상단에 푸시처럼 보이는 배너가 한 번 더 표시된 뒤 딥링크 목적지로 정상 이동한다. Android 양 앱, 재현 버전·환경, 두 번째 배너가 같은 메시지인지 별도 수신인지 미확인이다. 재개 요청이 오면 알림 ID와 수신 시각을 기준으로 탭·포그라운드 수신·로컬 표시 로그를 대조한다. 현재는 관찰만 기록하고 대기한다.
+**iOS 푸시 탭 후 배너 재표시 · JS 수정 로컬 완료(미커밋) — 2026-11-10:** 사용자 관찰(iOS 양 앱, 기존 푸시 탭→앱 진입·랜딩 정상 후 상단 배너1회 더)을 조사 후 사용자 승인으로 **JS만** 수정했다. 승인 조건: 네이티브/심사·사이드이펙트가 애매하면 묻는다, 웹 제외.
+- **원인(소스 근거):** 알림 탭으로 앱이 열릴 때 iOS는 `didReceiveRemoteNotification`을 다시 호출할 수 있다(Apple 문서, content-available 푸시). RNFirebase24는 `applicationState != Background`(Inactive 포함)이면 `onMessage`로 보내고, JS `setupForegroundMessage`가 Notifee `displayNotification`(iOS banner)을 다시 만든다. `AppDelegate.willPresent`는 일반 푸시에 `[]`라 OS 원격 배너가 아니다. 실제 payload의 content-available 여부·실기기 재현 로그는 미확인.
+- **수정:** 양 앱 `src/configs/utils/fcmHandler.ts` 동일 +46줄. 탭 핸들러(`onNotificationOpenedApp`, firebase `getInitialNotification`)에서 messageId 기록(TTL10분), `onMessage` 진입 시 AppState 기록 → iOS에서 messageId가 탭한 푸시면 로컬 표시만 생략. 비활성 수신은 1초 대기 후 판단(탭 이벤트 순서 대비), 탭 안 된 푸시는 기존처럼 표시. 데이터 갱신/읽음/랜딩·Android·채널톡 경로·네이티브 불변.
+- **검증:** 신규 `__tests__/utils/fcmHandler.test.ts` 5건(수정 전3실패/후5통과) 양 앱. 전체 Jest 수정 전후 동일 실패21(기존 E2E Detox·App.test·Office officeListQueryScope), tsc 기존 Office6/Lab5 유지, 변경파일 eslint 오류0·prettier 통과. 실기기/실제 FCM 미검증.
+- **상태:** Office `feature/DL-17059@ef90180`, Lab `feature/DL-17060@3632931` 위 **로컬 수정만**. commit·push·PR 본문·CodePush는 사용자 지시 대기. 반영 시 PR 본문에 원래 범위 외 개선으로 구분, Development CodePush 후 iOS 실기기 탭 재확인 필요.
 
 **개발 배포 브레이크포인트 이후 · 웹 CodeRabbit 후속 — 2026-11-10:** 직전 배포/개인 컨텍스트 `0bcd18b` 정리 완료 뒤 사용자가 웹 CodeRabbit 확인을 요청했다. 릴리즈 [PR4862](https://github.com/Innvoaid/dentlink-client/pull/4862)의 미해결 지적1건을 현재 코드로 검증·수정하고 `feature/DL-17058@38ca4edae374c5e130e15f85b512129438be60eb`로 commit/push했다. 같은 feature의 개발서버 PR4863은 이미 병합된 상태이며 이번 변경은 아직 develop에 포함되지 않았다.
 
