@@ -5,6 +5,8 @@
 
 ## 2026-11-10
 
+- Android Notifee 패치 PR 브랜치로 재설치·빌드 후 실기기(Galaxy S23) 테스트: 치과·기공소 모두 백그라운드/완전 종료 상태 Notifee 알림 탭 → 주문 상세 이동 성공, logcat 오류 없음. PR 검증 표 갱신.
+
 - Android Notifee 패치 PR(#348/#44) 내용을 사용자가 앱 개발자에게 Slack으로 공유했다(스레드 링크는 Android 후속 문서).
 
 - 기록 규칙 추가(AGENTS.md): 모든 기록은 Claude 메모리와 codex-personal-context 양쪽에 남긴다. 오늘 마감: Android 패치 PR(#348/#44) 완료 처리(반영·심사는 앱 개발자), 웹 알림센터 노출 페이지 현황 별도 문서화(기획자 공유·결정 대기), 루트 `patches/` 미적용 건은 고려하지 않기로 함.
