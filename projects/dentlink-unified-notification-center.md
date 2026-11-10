@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**알림 설정 서버 순서 렌더 · commit/push — 2026-11-10:** 사용자 지시로 GET 배열 순서대로 employee→user 전부 표시(웹 PUSH 포함), displayName FE 사용 제거(주문 범위는 코드 매핑, 없으면 코드)를 Office `feature/DL-17059@b50a8d5`, Lab `feature/DL-17060@0a8245d`, Web `feature/DL-17058@bad9e697c`로 push. PR·배포 변경 없음. 매핑 목록은 사용자 공유 대기, 화면 실행 확인 미실시. [상세 7절](dentlink-unified-notification-center-settings-render-audit-2026-11-10.md)
+
 **세션 마감·대기 — 2026-11-10 19:05 KST (Claude 메인 세션):** 오늘 이 세션 요청 모두 완료(딥링크 사용처, iOS 배너 재표시 해결, Android Notifee 패치 PR #348/#44 및 실기기 대조, 웹 노출 현황 조사·공유, 커넥터 연결, 지침 반영). 남은 작업은 별도 세션 “알림 설정 목록 서버 데이터 의존 여부 조사”(displayName 제거·매핑 정리 범위 승인 대기)에서 진행. 대기 항목: 다니엘 머지·심사, 기획 결정, 사용자 폰 정리. 이 세션은 대기.
 
 **iOS 배너 재표시 해결 확인 — 2026-11-10 19:00 KST:** 사용자가 iOS 치과·기공소 앱 Development CodePush(v142/v40, debug 아님) 실기기에서 푸시 탭 후 배너 미재표시를 확인 → 이 건 완료. 수정이 iOS 전용 조건이고 Android 흐름은 불변이라 Android·debug 추가 확인 불필요(사용자 합의).

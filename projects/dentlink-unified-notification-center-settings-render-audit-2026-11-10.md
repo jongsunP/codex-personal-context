@@ -70,7 +70,9 @@
 
 **누락은 아니지만 제품 간 문구 차이(기획 대조 필요):** LINKTALK 앱 "LinkTalk App Push/링크톡 앱 푸시" vs 웹 "LinkTalk"(ko도 LinkTalk) · DENTLINK_SUPPORT 앱 "덴트링크 서포트 앱 푸시" vs 웹 ko "덴트링크 고객지원" · BENEFITS 앱 "크레딧/Credits" vs 웹 "혜택/Benefits" · PAYMENTS 치과앱 "Payment" vs 기타 "Payments" · CREDITS 치과앱 "Office Credits" vs 웹 "Credit" vs 기공소앱 "Credits" · PUSH 앱 "App Push" vs 웹 "Push" · ORDERS 기공소앱 en "Orders" vs 기타 "Order".
 
-## 7. 구현 — 서버 GET 배열 그대로 렌더 (2026-11-10, 미커밋)
+## 7. 구현 — 서버 GET 배열 그대로 렌더 (2026-11-10, commit·push 완료)
+
+**commit·push(사용자 지시):** Office `feature/DL-17059@b50a8d5`, Lab `feature/DL-17060@0a8245d`, Web `feature/DL-17058@bad9e697c`(worktree, pre-commit 타입검사 통과). 모두 원격 일치·clean. PR 본문·상태·배포 변경 없음.
 
 **사용자 지시:** Swagger 자동 생성 파일은 건드리지 않고 FE 사용 코드에서만 displayName을 제거한다. GET 응답의 `view.employee.categories` → `view.user.categories` 배열 순서대로, 서버가 준 것은 하나도 빠짐없이 그린다. employee/user는 서버 묶음 객체일 뿐 화면 구분·제목이 없다. 글자는 코드 매핑, 없으면 대문자 코드 그대로. 매핑 목록은 사용자가 따로 공유한다(치과·기공소 공통 한 세트, 다국어 설정에 따라 영/한).
 
@@ -83,7 +85,7 @@
 - 화면 실행 확인(웹 브라우저·앱 기기)은 아직 안 했다. 웹 공용 UI 렌더 자체의 자동 테스트는 기존에도 없다.
 - **현재 서버가 displayName을 줘도 FE는 쓰지 않으므로, 매핑을 채우기 전까지 주문 범위가 `ALL_ORDERS`/`MY_ORDERS_ONLY`로 보인다.**
 - 치과앱 `CREDITS`→"Office Credits" 특례는 그대로라 user 영역 `CREDITS`도 "Office Credits"로 보인다. 공통 매핑 반영 때 정리 대상.
-- 제품 repo commit·push·배포 없음(지시 대기).
+- 배포(CodePush·웹) 없음.
 
 **실제 사용되는 값만 추린 매핑 검토표(11/9 실조회 카탈로그 기준, 현재 FE 문구):**
 
