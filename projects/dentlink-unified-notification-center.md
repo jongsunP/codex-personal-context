@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**Android 패치 Slack 답변 대조 · 기록만 — 2026-11-10:** [앱 개발자 스레드](https://innovaidhq.slack.com/archives/C09613TBE5A/p1794289794684319)의 재빌드 질문에 사용자가 남긴 “에뮬레이터에서 패치 포함 빌드는 정상, 패치 제외 빌드는 같은 테스트에서 오류” 답변을 기존 검증 기록과 대조해 일치함을 확인했다. 이는 양 앱의 Notifee 알림 탭→랜딩 검증 범위이며 모든 기능 QA 완료를 뜻하지 않는다. 이번 확인에서 테스트를 새로 실행하지 않았고, release 기준 최종 빌드의 탭 재검증 완료로 확대하지 않는다. [별도 Android 후속 기록](dentlink-android-notification-compatibility-followup.md)을 유지하며, 사용자 요청대로 이 확인만 저장하고 대기한다.
+
 **오늘 마감 상태 — 2026-11-10 16:40 KST:** (1) iOS 배너 재표시 2차 JS 수정·Development v142/v40 배포 완료, iOS 실기기 확인은 사용자 몫. (2) Android Notifee 호환 패치는 알림센터와 분리해 release PR(#348/#44)까지 **완료**, 반영·심사는 앱 개발자. (3) [웹 서비스별 알림센터 노출 페이지 현황](dentlink-unified-notification-center-web-visibility-2026-11-10.md) **완료**(기획자 공유, 이후 결정 대기). 진행 중 발견한 루트 `patches/` 미적용 건은 사용자 결정으로 고려하지 않는다.
 
 **iOS 배너 재표시 2차 JS 수정 · Development v142/v40 — 2026-11-10 16:25 KST:** 사용자 승인(“PR 유지, 개발 CodePush까지, commit/push”)으로 아래 원인 재조사 결과를 반영했다.

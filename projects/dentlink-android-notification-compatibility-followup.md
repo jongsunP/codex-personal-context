@@ -5,6 +5,8 @@
 
 > **앱 개발자 공유 — 2026-11-10:** 앱 개발자의 “Android 이슈가 있어서 올린 건지” 질문에 사용자가 짧은 답변(재현 현상·원인·분리 이유, 상세는 PR 참고)과 함께 [Slack 스레드](https://innovaidhq.slack.com/archives/C09613TBE5A/p1794289794684319)로 공유했다. 이후 리뷰·반영·심사는 앱 개발자 몫.
 >
+> **후속 답변 대조 — 2026-11-10:** 앱 개발자의 16:41:37 KST 질문(해당 PR 브랜치로 Android 재빌드하면 수정이 반영되는지)에 사용자는 “패치 포함 빌드는 정상, 패치를 뺀 빌드는 같은 테스트에서 오류(에뮬레이터)”라고 답했다. 양 앱의 기존 Notifee 알림 탭→랜딩 검증 기록과 일치함을 확인했다. 이번 확인은 기록 대조만 했으며 신규 테스트를 실행하지 않았다. release 기준 최종 빌드의 런타임 재검증이나 운영 바이너리 확인까지 완료했다는 의미는 아니다. 사용자 요청대로 이 사실만 기록하고 대기한다.
+>
 > **완료(사용자 기준: PR까지) — 2026-11-10:** 반영·심사는 앱 개발자가 한다. PR 브랜치 파일은 검증 커밋(`676e7fc`/`f9ca872`)과 byte 동일, release 대비 변경은 이 1파일뿐임을 재확인했다. PR 본문 맨 위에 요약(필요 이유: Notifee 7.8.2의 구버전 `ReactInstanceManager` 방식 / 위험도 낮음~보통: 이미 동작하지 않는 경로만 변경 / 리뷰 포인트 / 심사 필요)을 추가했다. 부수 발견(루트 `patches/` 새 설치 미적용)은 사용자 결정으로 고려하지 않는다.
 >
 > **release 분리 PR — 2026-11-10 16:05 KST:** 사용자 지시로 알림센터와 분리해 release 기준 PR을 만들었다. Office `fix/android-notifee-reacthost@67bc49e` → `release/v2.2.5` [dentlink-app#348](https://github.com/Innvoaid/dentlink-app/pull/348), Lab `fix/android-notifee-reacthost@c0f3dcc` → `release/v1.0.6` [dentlink-lab-app#44](https://github.com/Innvoaid/dentlink-lab-app/pull/44). 각 `patches/native/@notifee+react-native+7.8.2.patch` 1파일(원본 `676e7fc`/`f9ca872`와 byte 동일). 두 release 모두 Notifee 7.8.2·RN 0.82.1·newArch. 별도 worktree에서 `yarn install --immutable` 시 postinstall 적용 확인, `assembleDevelopmentDebug` 성공(Office 5m31s/Lab 10m18s, notifee Java 컴파일 포함). release 기준 에뮬레이터 탭 재검증은 미실행(11-09 패치 빌드 background/cold start PASS, 11-10 패치 제외 대조군 실패를 PR에 인용). PR 본문에 이유·변경·심사 필요·위험·QA 요청 기재, 라벨 없음(CodePush 미트리거). 병합·스토어 빌드 없음. worktree는 제거(브랜치는 원격 유지). 부수 발견: 루트 `patches/`(iOS Notifee 등)는 새 설치 시 미적용.
