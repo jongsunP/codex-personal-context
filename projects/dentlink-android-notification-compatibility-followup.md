@@ -2,6 +2,8 @@
 
 > **후속 준비 — 2026-11-10:** 사용자의 별도 승인으로 최신 main을 통합하고 Office Draft PR[#346](https://github.com/Innvoaid/dentlink-app/pull/346)·Lab Draft PR[#42](https://github.com/Innvoaid/dentlink-lab-app/pull/42)를 main 대상으로 만들었다. 현재 HEAD는 Office `5ad23a1`, Lab `3632931`이며 Android 호환 패치는 계속 제외한다. 양OS JS bundle 생성과 기본 화면 확인은 실제 대상 바이너리의 OS 푸시 클릭 성공 증거와 구분한다. CodePush/merge는 미실행. [배포 준비와 남은 확인](dentlink-unified-notification-center-delivery-2026-11-10.md).
 
+
+> **release 분리 PR — 2026-11-10 16:05 KST:** 사용자 지시로 알림센터와 분리해 release 기준 PR을 만들었다. Office `fix/android-notifee-reacthost@67bc49e` → `release/v2.2.5` [dentlink-app#348](https://github.com/Innvoaid/dentlink-app/pull/348), Lab `fix/android-notifee-reacthost@c0f3dcc` → `release/v1.0.6` [dentlink-lab-app#44](https://github.com/Innvoaid/dentlink-lab-app/pull/44). 각 `patches/native/@notifee+react-native+7.8.2.patch` 1파일(원본 `676e7fc`/`f9ca872`와 byte 동일). 두 release 모두 Notifee 7.8.2·RN 0.82.1·newArch. 별도 worktree에서 `yarn install --immutable` 시 postinstall 적용 확인, `assembleDevelopmentDebug` 성공(Office 5m31s/Lab 10m18s, notifee Java 컴파일 포함). release 기준 에뮬레이터 탭 재검증은 미실행(11-09 패치 빌드 background/cold start PASS, 11-10 패치 제외 대조군 실패를 PR에 인용). PR 본문에 이유·변경·심사 필요·위험·QA 요청 기재, 라벨 없음(CodePush 미트리거). 병합·스토어 빌드 없음. worktree는 제거(브랜치는 원격 유지). 부수 발견: 루트 `patches/`(iOS Notifee 등)는 새 설치 시 미적용.
 ## 범위 결정 — 2026-11-10
 
 - 사용자는 이번 통합알림센터의 푸시 변경을 **기존 클릭 흐름에 deliveryId를 보존하고 읽음 REST를 호출하는 JS 작업**으로 구분했다. 검증 중 발견한 기존 Android 네이티브 호환 문제는 이번 요구사항과 분리해 기록하고 코드에서 제외할 수 있는지 **조사**를 요청했다.
