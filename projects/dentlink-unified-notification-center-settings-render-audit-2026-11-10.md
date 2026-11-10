@@ -69,3 +69,41 @@
 | 치과웹 | clinic에는 `sharedUi.json` 없음 → i18n `defaultValue`(영어)로 표시. clinic `public/locales/ko`가 존재하므로 한글 모드가 실제 쓰이면 영어로 보임(사용 여부 미확인) | 다국어 대상이 기공소뿐이면 영향 없음 |
 
 **누락은 아니지만 제품 간 문구 차이(기획 대조 필요):** LINKTALK 앱 "LinkTalk App Push/링크톡 앱 푸시" vs 웹 "LinkTalk"(ko도 LinkTalk) · DENTLINK_SUPPORT 앱 "덴트링크 서포트 앱 푸시" vs 웹 ko "덴트링크 고객지원" · BENEFITS 앱 "크레딧/Credits" vs 웹 "혜택/Benefits" · PAYMENTS 치과앱 "Payment" vs 기타 "Payments" · CREDITS 치과앱 "Office Credits" vs 웹 "Credit" vs 기공소앱 "Credits" · PUSH 앱 "App Push" vs 웹 "Push" · ORDERS 기공소앱 en "Orders" vs 기타 "Order".
+
+## 7. 구현 — 서버 GET 배열 그대로 렌더 (2026-11-10, 미커밋)
+
+**사용자 지시:** Swagger 자동 생성 파일은 건드리지 않고 FE 사용 코드에서만 displayName을 제거한다. GET 응답의 `view.employee.categories` → `view.user.categories` 배열 순서대로, 서버가 준 것은 하나도 빠짐없이 그린다. employee/user는 서버 묶음 객체일 뿐 화면 구분·제목이 없다. 글자는 코드 매핑, 없으면 대문자 코드 그대로. 매핑 목록은 사용자가 따로 공유한다(치과·기공소 공통 한 세트, 다국어 설정에 따라 영/한).
+
+| 제품 | 변경 | 검증 |
+| --- | --- | --- |
+| 치과앱 `feature/DL-17059@d4de608` + 미커밋 | `notificationSettings.ts`: employee→user 순서, 연속된 같은 묶음만 합침(순서 불변, 섹션 key 중복 방지), `getNotificationOrderScopeLabel`(매핑 비어 있음→코드 노출). `NotificationCenterScreen.tsx`: displayName 사용 제거, user 영역 저장 경로 허용. 테스트 fixture displayName 제거, 새 테스트 1건 | 관련 Jest 3 suites/29 tests 통과, 변경 파일 eslint 0·prettier 통과, tsc 기존 6건 동일 |
+| 기공소앱 `feature/DL-17060@e9108b8` + 미커밋 | `notificationSettings.ts`: employee+user, 연속 묶음만 합침. 새 테스트 `__tests__/utils/notificationSettings.test.ts` 2건 | 2 tests 통과, tsc 기존 5건 동일 |
+| 웹 `feature/DL-17058@38ca4edae` + 미커밋(worktree `~/Repository/dentlink-client-notification-center`) | 공용 `NotificationCenter.tsx`: employee+user, **PUSH 항목·PUSH 채널 제외 제거**, domain 없는 항목도 단독 표시, 연속 묶음만 합침, 주문 범위는 `copy.orderScopes[code] ?? code`. `useNotificationCopy.ts` `orderScopes` 빈 매핑 추가. `notifications.types.ts` displayName 제거. `notifications.settings.ts` PUSH 저장 차단 제거. 훅 테스트 1건 새 기준으로 수정 | shared/hooks vitest 19, clinic jest 5, lab jest 4 통과, clinic/lab tsc 0, shared/ui eslint(패키지 설정) 통과 |
+
+- 화면 실행 확인(웹 브라우저·앱 기기)은 아직 안 했다. 웹 공용 UI 렌더 자체의 자동 테스트는 기존에도 없다.
+- **현재 서버가 displayName을 줘도 FE는 쓰지 않으므로, 매핑을 채우기 전까지 주문 범위가 `ALL_ORDERS`/`MY_ORDERS_ONLY`로 보인다.**
+- 치과앱 `CREDITS`→"Office Credits" 특례는 그대로라 user 영역 `CREDITS`도 "Office Credits"로 보인다. 공통 매핑 반영 때 정리 대상.
+- 제품 repo commit·push·배포 없음(지시 대기).
+
+**실제 사용되는 값만 추린 매핑 검토표(11/9 실조회 카탈로그 기준, 현재 FE 문구):**
+
+| 서버값 | 영어(현재) | 한글(현재, 기공소) |
+| --- | --- | --- |
+| LINKTALK | LinkTalk App Push (웹 LinkTalk) | 링크톡 앱 푸시 (웹 LinkTalk) |
+| DENTLINK_SUPPORT | Dentlink Support App Push (웹 Dentlink Support) | 덴트링크 서포트 앱 푸시 (웹 덴트링크 고객지원) |
+| DESIGN_CONFIRMATION | Design Confirmation | 디자인 컨펌 |
+| ORDER_UPDATES | Order Updates | 주문 업데이트 |
+| FEEDBACK | Feedback | 피드백 |
+| SHIPPING | Shipping | 배송 |
+| MILLING_ORDER_UPDATES | Order Updates (치과앱 Milling Order Updates) | 주문 업데이트 |
+| PAYMENTS | Payments (치과앱 Payment) | 결제 |
+| CREDITS | Credits (치과앱 Office Credits, 웹 Credit) | 크레딧 |
+| PUSH (채널) | App Push (웹 Push) | 앱 푸시 (웹 푸시) |
+| MAIL (채널) | Email | 이메일 |
+| ORDERS (그룹 제목) | Order (기공소앱 Orders) | 주문 |
+| MANUFACTURING (그룹 제목) | Milling Center Order (기공소앱 …Orders) | 밀링센터 주문 |
+| CHAT (그룹 제목, 웹에서 LinkTalk 표시 시) | Chat | 채팅 |
+| ALL_ORDERS (주문 범위) | 없음 | 없음 |
+| MY_ORDERS_ONLY (주문 범위) | 없음 | 없음 |
+
+채널·도메인은 실제 GET의 `channels`/`domain` 재확인 전 추정이 섞여 있다(카테고리 목록은 11/9 실조회).
