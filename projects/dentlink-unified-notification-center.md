@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**세션 마감·대기 — 2026-11-10 19:05 KST (Claude 메인 세션):** 오늘 이 세션 요청 모두 완료(딥링크 사용처, iOS 배너 재표시 해결, Android Notifee 패치 PR #348/#44 및 실기기 대조, 웹 노출 현황 조사·공유, 커넥터 연결, 지침 반영). 남은 작업은 별도 세션 “알림 설정 목록 서버 데이터 의존 여부 조사”(displayName 제거·매핑 정리 범위 승인 대기)에서 진행. 대기 항목: 다니엘 머지·심사, 기획 결정, 사용자 폰 정리. 이 세션은 대기.
+
 **iOS 배너 재표시 해결 확인 — 2026-11-10 19:00 KST:** 사용자가 iOS 치과·기공소 앱 Development CodePush(v142/v40, debug 아님) 실기기에서 푸시 탭 후 배너 미재표시를 확인 → 이 건 완료. 수정이 iOS 전용 조건이고 Android 흐름은 불변이라 Android·debug 추가 확인 불필요(사용자 합의).
 
 **알림 수신 설정 렌더 방식 조사 · 조사만 — 2026-11-10:** 사용자 관찰(“설정 화면이 서버 응답대로 안 그려지는 것 같다”)을 별도 세션에서 코드·Swagger로 조사했다. 4개 제품 모두 서버 `view.employee.categories` 순서로 항목·채널·값을 그리고 FE 하드코딩 목록은 없지만, **이름은 FE 사전**(서버 view에 displayName 없음), **도메인 묶음 규칙이 제품마다 다름**(Office앱 ORDERS만/Lab앱 channels 유무/웹 CREDITS·PAYMENTS만 단독), **`view.user` 전 제품 미표시**, **웹은 PUSH 담당 항목·PUSH 채널 제외**, 상위 OFF 시 채널 숨김이 서버와 1:1이 아닌 지점이다. 실서버 재조회는 토큰 필요로 하지 않았다(채널 구성은 11/9 카탈로그 기준 추정). 코드 수정·commit·PR 없음, 수정은 사용자 승인 대기. [조사 문서](dentlink-unified-notification-center-settings-render-audit-2026-11-10.md)
