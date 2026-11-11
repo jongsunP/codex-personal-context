@@ -190,6 +190,7 @@ Metro, Reactotron/network evidence and unresolved errors separately.
 - **iOS 시뮬레이터 새 빌드 성공(2026-11-11, Xcode 27.2):** 현재 두 앱의 Podfile은 시뮬레이터 `EXCLUDED_ARCHS`를 비워 arm64를 제외하지 않는다. `xcodebuild -workspace <앱>.xcworkspace -scheme DentlinkDevelopment|DentlinkLabDevelopment -configuration Debug -sdk iphonesimulator -destination id=<UDID> -derivedDataPath build build`로 Office·Lab 모두 BUILD SUCCEEDED, iPhone 17 Pro(iOS 26.5)에 설치했고 Office는 Metro 번들로 첫 화면까지 확인했다. 위 iOS Office 절의 "Apple Silicon에서 깨끗한 재빌드 경로가 불확실" 경고는 이 기기·현재 Podfile 기준으로는 해소됐다(사무실 Mac은 별도 확인). `ios/build`는 Git 무시 대상이라 작업트리 변경이 없다.
 - **iOS 기기 창(집 Mac, Xcode 27.2):** Simulator.app은 없고 `/Applications/Xcode.app/Contents/Applications/DeviceHub.app`만 있다. `open 'devices://device/open?id=<UDID>'`로 부팅된 iPhone 창이 열린다. 창 소유 앱 이름은 `Device Hub`(띄어쓰기 포함)라 CGWindowList로 확인할 때 이 이름으로 찾는다. 이 Mac의 에이전트 셸에는 화면 녹화·손쉬운 사용 권한이 없어 screencapture/System Events 확인은 실패한다.
 - **16GB Mac 부하 주의:** iOS 빌드 직후 load가 100을 넘으면 Android 에뮬레이터 런처가 ANR을 낸다. 빌드가 끝나고 부하가 내려간 뒤 런처 "Close app"→앱 재실행으로 회복했다. 빌드와 에뮬레이터 확인을 겹치지 않는다.
+- **배포 도구(집 Mac):** 팀 스크립트가 부르는 `revopush` CLI는 전역 설치가 필요하다(`npm install -g @revopush/code-push-cli`). 설치 후 `revopush login`은 사용자 계정으로 한다. 알림용 `scripts/.env.codepush.local`(Slack Webhook)은 Git 제외 파일이라 기기마다 사용자가 준비한다.
 - 셸 설정(`~/.zshrc`): ruby@3.4 PATH, `JAVA_HOME`과 `$JAVA_HOME/bin` PATH(brew openjdk@17은 keg-only라 없으면 `java`가 macOS 껍데기 `/usr/bin/java`로 실패), `ANDROID_HOME`, platform-tools/emulator PATH. (`SDKROOT`는 위 사유로 제거)
 
 ## Working Rules
