@@ -5,6 +5,8 @@
 
 ## 2026-11-11
 
+- 남은 인증 정리: CodePush 알림 설정은 이미 커밋돼 있어 준비 불필요(팀 저장소 Webhook 노출은 미변경), Revopush 로그인은 보류, 웹 Lab 시트 인증은 사용자가 '이제 시트에 추가 안 해도 된다'고 해 미준비. dentlink-client CLAUDE.md의 env 팀 규칙(에이전트 env 조작 금지)과 오전 env 작업의 충돌을 기록하고 이후 팀 규칙 준수.
+
 - 마감: 집 Mac 세팅·Claude 메인세션 지정을 `projects/dentlink-fe.md` 최상단 체크포인트로 정리(목적·완료·결정·배운 점·다음 시작점). 실행 환경은 사용자가 종료.
 
 - Claude Code 메인세션 지정·세팅: 핵심 지침 전부 정독 후 Claude Code 대응표를 `AI_WORKFLOW.md`에 정본으로 추가, AGENTS·PROFILE의 "Claude 미사용" 문장에 갱신 표기, `projects/dentlink-fe.md` Session Ownership에 메인세션 기록. 집 Mac env를 Git에서 채운 일은 사용자 1회 예외로 `SESSION_WORKFLOW.md` Local Env Inheritance에 명시.

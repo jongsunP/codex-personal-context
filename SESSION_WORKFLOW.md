@@ -387,6 +387,10 @@ routine Sheet-sync request. This applies to web Lab and the separate Lab app.
 - Include this requirement when preparing Lab feature-session prompts. Existing
   product commit, push, PR, merge, and deployment authorization remains separate.
 
+**2026-11-11 user statement:** the user said new Lab copy no longer needs to be added to that
+translation Sheet. Team documents may still describe Sheet sync; at the next Lab copy task,
+reconcile this statement with the current team guide before writing to any Sheet.
+
 This is a Codex work requirement. The presence of scripts does not imply that
 every code edit, app launch, or CI run automatically writes the spreadsheet.
 
