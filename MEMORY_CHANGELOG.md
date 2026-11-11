@@ -5,6 +5,8 @@
 
 ## 2026-11-11
 
+- 집 Mac 웹 정리: 진행 작업은 통합알림센터뿐. 완료 worktree5개·로컬 브랜치10개(원격 포함 확인) 정리, 기본 checkout을 master로. 남은 웹 = master + 알림센터 worktree + LBX 보류 브랜치2. studio·컨텍스트 저장소와 사무실 Mac은 무변경.
+
 - 집 Mac 2차 맞춤(사용자 지시: env는 example 키·Git 값으로 채우고, 그 외는 기록의 현재 상태대로): 웹 서비스·e2e env를 Git 직전본 값(GitHub DEV Variables와 일치)으로 생성·기동 확인, 앱 env는 원래 Git 추적이라 정정. 웹·Office·Lab·studio 기본 checkout과 worktree 9개·보존 브랜치를 기록 SHA로 복원(미커밋 변경은 재현 불가), Colima/Docker 격리 프로필·Chrome for Testing 추가, Office·Lab Android 개발 앱 설치. 상세는 `projects/dentlink-fe.md`.
 
 - 집 Mac(보조) 작업환경을 사무실 Mac과 맞춤(Claude Code, 업무 재개 아님): 웹 master v1.92.0 동기화·의존성, Office·Lab·Studio clone·의존성·pods, Ruby3.4/JDK17/Android SDK·AVD `Dentlink_API_36`/Reactotron. 웹은 구형 추적 env 백업 후 `.env.development`3개만 복원(키 차이 있음), 앱 env와 `lab/.env.local`·e2e env는 사무실에서 복사 필요. 상세는 `projects/dentlink-fe.md` 다른 기기에서 이어가기, 설치 함정은 `dentlink-app-local-development.md`.
