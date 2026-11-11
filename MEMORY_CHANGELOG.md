@@ -5,6 +5,8 @@
 
 ## 2026-11-11
 
+- GitHub 실조회: Office PR345·Lab PR41은 11/10 main 머지 완료(11/09 "머지 대기" 기록은 지난 상태). 알림센터는 웹 PR4862→release/v1.94.0 OPEN, Office PR346·Lab PR42 →main Draft OPEN. 집 Mac 앱 완료 worktree4개·로컬 브랜치 정리, 앱은 main+알림센터 브랜치만 남음.
+
 - 집 Mac 웹 정리: 진행 작업은 통합알림센터뿐. 완료 worktree5개·로컬 브랜치10개(원격 포함 확인) 정리, 기본 checkout을 master로. 남은 웹 = master + 알림센터 worktree + LBX 보류 브랜치2. studio·컨텍스트 저장소와 사무실 Mac은 무변경.
 
 - 집 Mac 2차 맞춤(사용자 지시: env는 example 키·Git 값으로 채우고, 그 외는 기록의 현재 상태대로): 웹 서비스·e2e env를 Git 직전본 값(GitHub DEV Variables와 일치)으로 생성·기동 확인, 앱 env는 원래 Git 추적이라 정정. 웹·Office·Lab·studio 기본 checkout과 worktree 9개·보존 브랜치를 기록 SHA로 복원(미커밋 변경은 재현 불가), Colima/Docker 격리 프로필·Chrome for Testing 추가, Office·Lab Android 개발 앱 설치. 상세는 `projects/dentlink-fe.md`.
