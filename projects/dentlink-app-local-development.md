@@ -183,10 +183,13 @@ Metro, Reactotron/network evidence and unresolved errors separately.
 다른 Mac에 처음 세팅할 때 실제로 막혔던 지점과 해결책이다. 값·비밀은 기록하지 않는다.
 
 - **Ruby:** `.tool-versions`는 3.2.2지만 두 앱의 `Gemfile.lock`은 Ruby 3.4.5에서 생성됐다. brew `ruby@3.4`를 PATH 앞에 두고 bundler를 설치했다. 시스템 Ruby 2.6으로는 진행하지 않는다.
-- **네이티브 gem 빌드 실패:** Command Line Tools의 macOS SDK(27.2)가 Xcode 26.6 링커가 모르는 tbd 포맷이라 json 등 C 확장 빌드가 `unknown architecture arm64e.x1`로 실패했다. `SDKROOT=$(xcrun --sdk macosx --show-sdk-path)`(Xcode SDK)로 해결했다.
+- **네이티브 gem 빌드 실패:** Command Line Tools의 macOS SDK(27.2)가 Xcode 26.6 링커가 모르는 tbd 포맷이라 json 등 C 확장 빌드가 `unknown architecture arm64e.x1`로 실패했다. `SDKROOT=$(xcrun --sdk macosx --show-sdk-path)`(Xcode SDK)로 해결했다. **같은 날 오후 Xcode가 27.2로 올라가 CLT와 버전이 맞은 뒤에는 우회 없이 컴파일·링크가 정상이라, 전역 `SDKROOT` export를 `.zshrc`에서 제거했다**(전역 SDKROOT는 iOS 빌드를 방해할 수 있음). 다시 불일치가 생길 때만 해당 명령에 한정해 붙인다.
+- **Xcode 라이선스:** 새 Mac에서는 `sudo xcodebuild -license accept`가 필요하다(관리자 비밀번호라 사용자가 직접). 미동의 상태에서는 `/usr/bin/python3` 등 Xcode 도구가 exit 69로 막힌다.
 - **pod install:** 비대화형 셸에서는 `LANG=en_US.UTF-8`이 없으면 `RNFastImage.podspec`의 UTF-8 파싱이 실패한다. 실패가 `| tail`에 가려지지 않게 `pipefail`로 확인한다. Lab은 pod install 후 `project.pbxproj` 주석 정규화 diff가 생길 수 있어 의미 없는 변경이면 되돌린다.
 - **Android:** JDK는 brew `openjdk@17`. SDK는 `~/Library/Android/sdk`에 platform-tools, platforms;android-36, build-tools;36.0.0, ndk;27.1.12297006, emulator, system-images;android-36;google_apis;arm64-v8a, cmdline-tools;latest. brew의 `avdmanager`는 자기 설치 폴더를 SDK로 착각하므로 `$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager`를 쓴다. AVD 이름은 이 문서 기준 `Dentlink_API_36`.
-- 셸 설정(`~/.zshrc`): ruby@3.4 PATH, `JAVA_HOME`, `ANDROID_HOME`, platform-tools/emulator PATH, `SDKROOT`.
+- **iOS 시뮬레이터 새 빌드 성공(2026-11-11, Xcode 27.2):** 현재 두 앱의 Podfile은 시뮬레이터 `EXCLUDED_ARCHS`를 비워 arm64를 제외하지 않는다. `xcodebuild -workspace <앱>.xcworkspace -scheme DentlinkDevelopment|DentlinkLabDevelopment -configuration Debug -sdk iphonesimulator -destination id=<UDID> -derivedDataPath build build`로 Office·Lab 모두 BUILD SUCCEEDED, iPhone 17 Pro(iOS 26.5)에 설치했고 Office는 Metro 번들로 첫 화면까지 확인했다. 위 iOS Office 절의 "Apple Silicon에서 깨끗한 재빌드 경로가 불확실" 경고는 이 기기·현재 Podfile 기준으로는 해소됐다(사무실 Mac은 별도 확인). `ios/build`는 Git 무시 대상이라 작업트리 변경이 없다.
+- **16GB Mac 부하 주의:** iOS 빌드 직후 load가 100을 넘으면 Android 에뮬레이터 런처가 ANR을 낸다. 빌드가 끝나고 부하가 내려간 뒤 런처 "Close app"→앱 재실행으로 회복했다. 빌드와 에뮬레이터 확인을 겹치지 않는다.
+- 셸 설정(`~/.zshrc`): ruby@3.4 PATH, `JAVA_HOME`, `ANDROID_HOME`, platform-tools/emulator PATH. (`SDKROOT`는 위 사유로 제거)
 
 ## Working Rules
 
