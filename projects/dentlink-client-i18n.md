@@ -1,5 +1,7 @@
 # Dentlink i18n and typography delivery checkpoint — 2026-08-25
 
+> **2026-11-11 지침 변경:** 번역 시트는 더 이상 동기화하지 않고 그대로 둔다. 문구 작업은 코드의 ko/en 리소스만 반영·검증한다(모든 에이전트 공통). 아래 시트 동기화 절차는 이력이며, 기존 스크립트·코드는 지우지 않는다. 정본: [SESSION_WORKFLOW의 Lab 번역 절](../SESSION_WORKFLOW.md#dentlink-lab-translation-work).
+
 This is the durable delivery checkpoint for the Dentlink Lab i18n, operational
 Sheet, and cross-service Pretendard work. Live Git and Google Sheet state still
 take precedence if later work changes them.

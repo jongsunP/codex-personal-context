@@ -1,5 +1,7 @@
 # Dentlink Lab App
 
+> **2026-11-11 지침 변경:** 번역 시트는 더 이상 동기화하지 않고 그대로 둔다. 문구 작업은 코드의 ko/en 리소스만 반영·검증한다(모든 에이전트 공통). 아래 시트 동기화 절차는 이력이며, 기존 스크립트·코드는 지우지 않는다. 정본: [SESSION_WORKFLOW의 Lab 번역 절](../SESSION_WORKFLOW.md#dentlink-lab-translation-work).
+
 > **팀 PR 규칙(2026-11-10, 다니엘 요청):** PR 제목은 `[DL-xxxxx] 제목`, 티켓 없는 release 수정은 `[QA] 제목`; 스쿼시 머지는 PR 제목으로; release 대상 네이티브 PR은 머지 전 PR 브랜치 `yarn install` 재설치→Android 빌드→실기기 확인. 정본 [DEVELOPMENT_STYLE.md](../DEVELOPMENT_STYLE.md).
 
 ## iOS 푸시 탭 직후 상단 배너 재표시 — 2026-11-10

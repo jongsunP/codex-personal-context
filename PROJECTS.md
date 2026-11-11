@@ -229,7 +229,7 @@ For detailed current state, read:
 ### Dentlink Lab i18n
 
 - 기공소 다국어 구현과 운영 절차를 관리한다.
-- 기공소 기능의 문구 변경은 번역 리소스·시트 반영·검증까지 기본 범위다.
+- 기공소 기능의 문구 변경은 코드의 ko/en 번역 리소스(JSON) 반영·검증까지 기본 범위다. **2026-11-11부터 번역 시트는 동기화하지 않고 그대로 둔다**(모든 에이전트 공통, 기존 시트 스크립트·코드는 유지). 정본은 [SESSION_WORKFLOW의 Lab 번역 절](SESSION_WORKFLOW.md#dentlink-lab-translation-work).
   웹은 아래 i18n 문서, 별도 Lab 앱은 [앱 정본](projects/dentlink-lab-app.md)의 절차를 따른다.
 - Lab 앱의 팀 에이전트 지침 반영은 [앱 i18n 전달 기록](projects/dentlink-lab-app-i18n.md)을 따른다.
   웹과 Lab 앱은 저장소·시트·전달 이력이 별개다.

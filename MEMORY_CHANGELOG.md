@@ -5,6 +5,8 @@
 
 ## 2026-11-11
 
+- 번역 지침 변경 확정(모든 에이전트 공통): 시트는 동기화하지 않고 그대로 두며 추가되는 ko/en JSON만 잘 관리한다. 기존 시트 스크립트·코드는 지우지 않고 작업 지침만 정리. SESSION_WORKFLOW·PROJECTS·앱 온보딩·FE 조율·i18n 관련 프로젝트 문서에 반영.
+
 - 사용자 결정: (1) Lab i18n은 코드의 ko/en 리소스만 넣고 번역 시트 동기화는 더 이상 필수 아님 → SESSION_WORKFLOW Lab 번역 절 정본 개정. (2) CodePush Webhook 커밋은 팀 방식 그대로 둠. (3) env는 dentlink-client 팀 규칙이 기준, 오늘 env 작업은 1회성 사용자 지시.
 
 - 남은 인증 정리: CodePush 알림 설정은 이미 커밋돼 있어 준비 불필요(팀 저장소 Webhook 노출은 미변경), Revopush 로그인은 보류, 웹 Lab 시트 인증은 사용자가 '이제 시트에 추가 안 해도 된다'고 해 미준비. dentlink-client CLAUDE.md의 env 팀 규칙(에이전트 env 조작 금지)과 오전 env 작업의 충돌을 기록하고 이후 팀 규칙 준수.

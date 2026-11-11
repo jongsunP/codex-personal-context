@@ -367,11 +367,15 @@ frontend static UI copy, automatically include the ko/en i18n resources in the
 code and their verification in the same task. Do not wait for a separate
 translation request. This applies to web Lab and the separate Lab app.
 
-- **2026-11-11 change (user instruction):** Translation Sheet synchronization
-  is no longer required. Write the ko and en values directly into the code
-  resources (web Lab locale JSON; the Lab app's locale files) and verify them.
-  Do not add rows to the translation Sheet unless the user asks. The earlier
-  rule that a task was incomplete without Sheet sync no longer applies.
+- **2026-11-11 change (user instruction, applies to every agent — Codex and
+  Claude alike):** The translation Sheet is no longer synchronized. Leave the
+  Sheet as it is and manage the added ko/en values well in the code resources
+  (web Lab locale JSON; the Lab app's locale files) and verify them. Do not add
+  or edit Sheet rows unless the user asks. The earlier rule that a task was
+  incomplete without Sheet sync no longer applies.
+- Keep the existing Sheet-related scripts, code, and documents as they are.
+  This change is to the working guidance only; do not delete or rewrite the
+  Sheet tooling unless the user separately asks for that.
 - Read [web Lab i18n](projects/dentlink-client-i18n.md) for `dentlink-client`
   and [Lab app](projects/dentlink-lab-app.md) for `dentlink-lab-app`, and the
   repository's live guide (`lab/i18n/catalog/README.md`, team `CLAUDE.md`).

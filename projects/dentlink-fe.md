@@ -307,7 +307,7 @@
 - 앱의 최종 코드·영향 화면·권한별 에이전트 실행 검증 → 결과/확인표 전달 → 사람의 최종 QA: [앱 검증 지침](../DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge).
 - 앱 PR·release·CodePush·스토어 경계와 개발자 참고 흐름: [앱 온보딩](dentlink-app-onboarding.md), [공통 앱 전달 정책](../SESSION_WORKFLOW.md#dentlink-app-release-and-delivery-policy). 참고 흐름으로 확정 정책을 조용히 바꾸지 않습니다.
 - 제품별 Jira 카드·상위 댓글 제한: [AI_WORKFLOW](../AI_WORKFLOW.md#jira-work-updates).
-- 기공소 정적 문구 변경 시 i18n·시트·검증: [공통 기준](../SESSION_WORKFLOW.md#dentlink-lab-translation-work), [웹](dentlink-client-i18n.md), [Lab 앱](dentlink-lab-app-i18n.md).
+- 기공소 정적 문구 변경 시 i18n(코드 ko/en)·검증, 시트는 2026-11-11부터 동기화하지 않음: [공통 기준](../SESSION_WORKFLOW.md#dentlink-lab-translation-work), [웹](dentlink-client-i18n.md), [Lab 앱](dentlink-lab-app-i18n.md).
 - 완료 브랜치 정리 시 현재 진행 중 release 원본 보존: [브랜치 정리 이력과 기준](dentlink-branch-cleanup-20261016.md). 제품 Git 정리는 별도 승인과 live 근거가 필요합니다.
 
 ## 다른 기기에서 이어가기

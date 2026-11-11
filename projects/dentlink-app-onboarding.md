@@ -152,8 +152,7 @@ Office/Lab 앱은 이번에 확인한 tag workflow와 별도 CodePush 실행을 
   앱/환경별 실제 스킴과 route·필수 인자를 확인하며 `openurl` 전달 성공과 목표 화면 진입을 구분한다.
 - OS 알림 권한과 서버 사용자 알림 설정은 별개다. 토큰 갱신 콜백뿐 아니라 store 변경을 감지하는 등록 경로까지 추적한다.
   Firebase/APNs 설정 존재나 Console 발송 성공으로 표시·클릭·조회·배지까지 성공했다고 보고하지 않는다.
-- Lab 승인 문구 변경은 [번역 지침](dentlink-lab-app.md)의 리소스·앱 운영 Sheet·PM 확인·생성·검증까지 포함한다.
-  문구를 커밋하기 전 실제 key/Sheet 대조를 진행하고 PM 상태·다른 작업을 보존한다. Office 영문 UI와 웹 Sheet는 별개다.
+- Lab 승인 문구 변경은 앱의 ko/en locale 리소스 반영·검증까지 포함한다. **2026-11-11부터 번역 Sheet는 동기화하지 않고 그대로 둔다**(정본: [Lab 번역 절](../SESSION_WORKFLOW.md#dentlink-lab-translation-work)). 기존 Sheet 관련 스크립트·코드는 지우지 않는다. 실행·빌드 시 자동 i18n 생성이 직접 넣은 키를 덮어쓰지 않는지 확인한다. Office 영문 UI는 별개다.
 - 카메라·사진·파일·알림 등 권한과 Safe Area·키보드·뒤로가기·작은 화면을 관련 변경에서 확인한다.
   문서의 QA 항목이나 스마트 배너 제안을 새 UI 요구사항으로 자동 채택하지 않는다.
 - Reactotron은 개발 연결·네트워크 관찰 도구다. SDK·패치 파일·설정 존재는 실제 연결·설치 적용을 증명하지 않는다.
