@@ -4,6 +4,15 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
+## 집 Mac 작업환경 세팅·Claude Code 메인세션 지정 마감 — 2026-11-11
+
+- **목적:** 특정 업무 재개가 아니라 집 Mac을 사무실 Mac과 같은 방식으로 일할 수 있게 만드는 세팅. 제품 코드·PR·Jira·배포는 변경하지 않았다.
+- **완료:** 웹·Office·Lab·studio 저장소와 도구(Ruby3.4·JDK17·Android SDK/AVD·CocoaPods·Xcode 27.2·Colima·Reactotron·Chrome for Testing)를 갖췄다. 웹 env는 사용자 지시로 Git 직전본 값으로 채웠고 개인 토큰은 지침대로 비웠다. 작업 공간은 진행 중인 통합알림센터(웹 worktree `feature/DL-17058`, Office `feature/DL-17059`, Lab `feature/DL-17060`)와 LBX 보류 브랜치만 남겼다. Office·Lab 개발 앱을 Android·iOS에 설치했고, 웹·앱 테스트 로그인과 키체인 테스트 계정 4개(실제 로그인 검증 포함)를 준비했다. 핵심 지침을 정독하고 [Claude Code Mapping](../AI_WORKFLOW.md#claude-code-mapping)을 추가했다.
+- **결정:** 집 Mac의 Claude Code 세션 "Dentlink FE 메인세션"이 웹·앱 총괄 메인. 사무실 Codex 메인과는 따로 운영하고 이 저장소만 공유한다. env에 개인 토큰 금지, 개발 계정은 키체인 재사용. 사무실 Mac 미커밋 변경은 보고에서 언급하지 않는다. 실행 환경 안내 시 계속 켜 둘 탭과 닫아도 될 탭을 구분한다.
+- **배운 점:** 기록상 "대기"는 GitHub로 재확인(태그 PR 2개는 이미 머지됨). 숨김 파일까지 확인(앱 env 오판). 16GB Mac은 iOS 빌드 직후 에뮬레이터가 멈출 수 있음. Xcode 27.2 이후 SDKROOT 우회 불필요. 사용자 "완료" 보고는 화면·쿠키 이름으로 확인 후 진행.
+- **현재 상태:** 마감 시 사용자가 실행 중인 서버·기기·Metro를 직접 종료한다. 로그인 정보는 기기·전용 Chrome 프로필·키체인에 남는다. 저장소 4개와 개인 컨텍스트는 원격과 동일·변경 0으로 마감했다.
+- **다음 시작점:** 새 요청이 오면 메인세션에서 접수·분류 후 기능 세션으로 넘긴다. 실행 환경이 필요하면 [앱 로컬 개발 플레이북](dentlink-app-local-development.md)과 아래 Session Ownership의 복구 순서를 따른다. 통합알림센터를 재개할 때는 [정본](dentlink-unified-notification-center.md) 최신 항목부터 읽는다. 상세 경위는 아래 "다른 기기에서 이어가기"와 Session Ownership 항목에 있다.
+
 ## 앱 자동 태그 보완 PR 전달·사용자 머지 대기 — 2026-11-09
 
 - **최종 마감 지시:** 사용자가 머지는 나중에 직접 하겠다고 하고 정리·메모리·대기를 요청했다. Office PR345·Lab PR41은 마지막 확인의 미병합 상태로 보존한다. 이후 GitHub/Actions/CodeRabbit/배포 상태를 다시 조회하지 않고, 새 요청 때 해당 PR의 최신 상태부터 필요한 범위만 확인한다. 메인 세션은 보관하지 않고 유지한다.
