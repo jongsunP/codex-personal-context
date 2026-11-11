@@ -295,6 +295,11 @@
 - 기존 대화 전체·앱의 프로젝트 등록·인증·env·의존성·서버·임시 증거는 개인 컨텍스트 pull만으로 복원되지 않습니다. 절대 경로는 당시 기기 기록이며 실제 대상 경로를 확인합니다.
 - 문서 복구만으로 구현·QA·서버 실행·배포·보류 해제가 승인되지 않습니다. 실제 재개 시 제품 Git과 작업 소유권을 다시 확인합니다.
 - 여러 세션이 개인 컨텍스트 checkout을 공유하면 수정 파일을 나누고 stage/commit/push는 조율합니다. 다른 세션 변경을 임의로 포함하지 않습니다.
+- **집 Mac(보조) 작업환경 맞춤 — 2026-11-11, Claude Code:** 사용자 목적은 특정 업무 재개 전에 사무실 Mac과 작업환경을 최대한 같게 만드는 것이다. 실행 호스트는 계속 사무실 Mac이며 업무 상태·세션·worktree는 옮기지 않았다. 경로는 `/Users/parkjongsun/repository/`(소문자). 
+  - 저장소: `dentlink-client` master를 `bafb0b1b6`(Release/v1.92.0)로 fast-forward, `pnpm install --frozen-lockfile`·`pnpm build:packages` 성공. `dentlink-app`·`dentlink-lab-app`·`dentlink-studio`는 새로 clone(main), 앱은 `yarn install`·`bundle install`·`pod install`, studio는 `pnpm install`·`pnpm access:setup`(project 모드) 완료. 네 저장소 모두 clean.
+  - 도구: Cursor·Chrome·Android Studio·Reactotron 설치 확인, Xcode 26.6 + iOS 26.5 iPhone 17 Pro 시뮬레이터, AVD `Dentlink_API_36`(API 36, arm64) 생성. 자동화 브라우저는 Playwright Chromium 캐시가 있으며 Chrome for Testing 앱은 없다. 상세 설치 함정은 [앱 로컬 개발 플레이북](dentlink-app-local-development.md#집-mac보조-준비--2026-11-11).
+  - **웹 env:** pull 전 이 기기의 구형 Git 추적 env9개(서비스 dev/stg/prd)를 값 열람 없이 `~/.local/share/dentlink-closeout/20261111-web-env-before-pull/`(0700)에 백업했고, 사무실 구성에 맞춰 서비스 `.env.development`3개만 복원(ignore 확인)했다. 키 이름만 비교하면 DL-16821 전 버전이라 최신 example 대비 Admin8·Clinic10·Lab8개 키가 없고 Clinic에 정리 전 E2E 중복 키47개가 남아 있다. `lab/.env.local`·`e2e/.env.development`·`e2e/.env.staging`은 없다. 값은 사람이 관리하므로 사무실 Mac의 활성 env를 그대로 복사하는 것이 남은 일이다.
+  - **앱 env:** Office·Lab의 `env/.env.{development,staging,production}`과 루트 `.env`가 없다. 이것 없이는 앱 실행 불가이며 사무실 Mac에서 복사가 필요하다. 앱 실제 실행·Reactotron 연결은 아직 검증하지 않았다.
 
 ## 과거 조율 이력
 

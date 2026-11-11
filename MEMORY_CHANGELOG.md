@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-11
+
+- 집 Mac(보조) 작업환경을 사무실 Mac과 맞춤(Claude Code, 업무 재개 아님): 웹 master v1.92.0 동기화·의존성, Office·Lab·Studio clone·의존성·pods, Ruby3.4/JDK17/Android SDK·AVD `Dentlink_API_36`/Reactotron. 웹은 구형 추적 env 백업 후 `.env.development`3개만 복원(키 차이 있음), 앱 env와 `lab/.env.local`·e2e env는 사무실에서 복사 필요. 상세는 `projects/dentlink-fe.md` 다른 기기에서 이어가기, 설치 함정은 `dentlink-app-local-development.md`.
+
 ## 2026-11-10
 
 - 알림 설정 주문 범위 매핑을 기존 리소스(All Orders/전체 주문, My Orders Only/내 주문만 보기)로 치과앱·웹에 반영(미커밋). 코드당 한 문구 최종 매핑표 제안을 조사 문서 8절에 둠(확정 후 4제품 정렬). Figma API 토큰 만료.

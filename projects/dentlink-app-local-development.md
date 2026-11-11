@@ -178,6 +178,16 @@ Metro, Reactotron/network evidence and unresolved errors separately.
    proof.
 6. Repeat the 9090 reverse command after an emulator reboot or reconnect.
 
+## 집 Mac(보조) 준비 — 2026-11-11
+
+다른 Mac에 처음 세팅할 때 실제로 막혔던 지점과 해결책이다. 값·비밀은 기록하지 않는다.
+
+- **Ruby:** `.tool-versions`는 3.2.2지만 두 앱의 `Gemfile.lock`은 Ruby 3.4.5에서 생성됐다. brew `ruby@3.4`를 PATH 앞에 두고 bundler를 설치했다. 시스템 Ruby 2.6으로는 진행하지 않는다.
+- **네이티브 gem 빌드 실패:** Command Line Tools의 macOS SDK(27.2)가 Xcode 26.6 링커가 모르는 tbd 포맷이라 json 등 C 확장 빌드가 `unknown architecture arm64e.x1`로 실패했다. `SDKROOT=$(xcrun --sdk macosx --show-sdk-path)`(Xcode SDK)로 해결했다.
+- **pod install:** 비대화형 셸에서는 `LANG=en_US.UTF-8`이 없으면 `RNFastImage.podspec`의 UTF-8 파싱이 실패한다. 실패가 `| tail`에 가려지지 않게 `pipefail`로 확인한다. Lab은 pod install 후 `project.pbxproj` 주석 정규화 diff가 생길 수 있어 의미 없는 변경이면 되돌린다.
+- **Android:** JDK는 brew `openjdk@17`. SDK는 `~/Library/Android/sdk`에 platform-tools, platforms;android-36, build-tools;36.0.0, ndk;27.1.12297006, emulator, system-images;android-36;google_apis;arm64-v8a, cmdline-tools;latest. brew의 `avdmanager`는 자기 설치 폴더를 SDK로 착각하므로 `$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager`를 쓴다. AVD 이름은 이 문서 기준 `Dentlink_API_36`.
+- 셸 설정(`~/.zshrc`): ruby@3.4 PATH, `JAVA_HOME`, `ANDROID_HOME`, platform-tools/emulator PATH, `SDKROOT`.
+
 ## Working Rules
 
 - Local Debug renders the currently checked-out Git branch through Metro.
