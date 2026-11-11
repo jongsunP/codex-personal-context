@@ -361,38 +361,33 @@ such as "same folder, session only" takes priority over this default.
 
 ## Dentlink Lab Translation Work
 
-This is the user's standing preference, confirmed on 2026-10-06. For authorized
-Lab implementation that adds, changes, or removes frontend static UI copy,
-automatically include the relevant i18n resources, translation spreadsheet,
-and verification in the same task. Do not wait for a separate translation or
-routine Sheet-sync request. This applies to web Lab and the separate Lab app.
+The user's standing preference, confirmed on 2026-10-06 and **changed on
+2026-11-11**. For authorized Lab implementation that adds, changes, or removes
+frontend static UI copy, automatically include the ko/en i18n resources in the
+code and their verification in the same task. Do not wait for a separate
+translation request. This applies to web Lab and the separate Lab app.
 
+- **2026-11-11 change (user instruction):** Translation Sheet synchronization
+  is no longer required. Write the ko and en values directly into the code
+  resources (web Lab locale JSON; the Lab app's locale files) and verify them.
+  Do not add rows to the translation Sheet unless the user asks. The earlier
+  rule that a task was incomplete without Sheet sync no longer applies.
 - Read [web Lab i18n](projects/dentlink-client-i18n.md) for `dentlink-client`
-  and [Lab app](projects/dentlink-lab-app.md) for `dentlink-lab-app`.
-  Follow each product's live operating guide, scripts, and Sheet configuration;
-  they use different spreadsheets and generation workflows.
-- Compare the actual changed copy with existing keys and Sheet rows. A scanner
-  finding no new strings, or a successful build, does not prove that all
-  translation work or Sheet synchronization is complete.
-- Preview the intended Sheet changes, preserve PM edits and review requests,
-  and synchronize only the approved task's changes. Do not remove another
-  active feature's rows just because the current checkout lacks its keys.
-- Routine synchronization is included in the authorized implementation scope.
-  Keep PM wording review and product decisions under their existing ownership;
-  do not mark unreviewed text approved or force-reset existing translations.
-- Verify the Sheet result, generated resources, and the affected UI. If editor
-  authentication, a conflicting translation, or required PM review is missing,
-  record that step as pending and continue independent work. Do not call the
-  translation work complete based only on local resources or a passing check.
+  and [Lab app](projects/dentlink-lab-app.md) for `dentlink-lab-app`, and the
+  repository's live guide (`lab/i18n/catalog/README.md`, team `CLAUDE.md`).
+  Team documents may still describe Sheet sync; the user's 2026-11-11 decision
+  takes priority for this user's work.
+- Check before running any Sheet-to-resource generation (web `generate:i18n`,
+  the Lab app's automatic `i18n` step on run/build): when the Sheet lacks the
+  new keys, generation can overwrite or drop keys added directly in code.
+  Confirm the current script behavior and keep the task's ko/en values intact.
+- Compare the actual changed copy with existing keys. A scanner finding no new
+  strings, or a successful build, does not prove the resources are complete.
+  Verify both ko and en values and the affected UI.
+- Keep PM wording review and product decisions under their existing ownership;
+  do not invent final copy where the requirement is unclear.
 - Include this requirement when preparing Lab feature-session prompts. Existing
   product commit, push, PR, merge, and deployment authorization remains separate.
-
-**2026-11-11 user statement:** the user said new Lab copy no longer needs to be added to that
-translation Sheet. Team documents may still describe Sheet sync; at the next Lab copy task,
-reconcile this statement with the current team guide before writing to any Sheet.
-
-This is a Codex work requirement. The presence of scripts does not imply that
-every code edit, app launch, or CI run automatically writes the spreadsheet.
 
 ## Existing Windows And Layout
 
@@ -644,7 +639,9 @@ agent to fill local web env from each `.env.example` key list with values from
 Git history. The agent rebuilt service and e2e env from the last tracked
 version (`2fb2fdc50^`) without printing values, and compared them only for
 equality with the GitHub `*-dev` Variables. This was a one-time instruction for
-that device, not a change to the default rule above. Details are in
+that device, not a change to the default rule above. The user later confirmed that the
+team rule in `dentlink-client/CLAUDE.md` (agents do not read, create, edit, or
+restore actual env values) is the standard; this was a one-off instruction only. Details are in
 `projects/dentlink-fe.md` under the home Mac entry.
 
 This is a narrow, explicitly authorized exception to older guidance that

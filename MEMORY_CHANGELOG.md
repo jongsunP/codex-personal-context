@@ -5,6 +5,8 @@
 
 ## 2026-11-11
 
+- 사용자 결정: (1) Lab i18n은 코드의 ko/en 리소스만 넣고 번역 시트 동기화는 더 이상 필수 아님 → SESSION_WORKFLOW Lab 번역 절 정본 개정. (2) CodePush Webhook 커밋은 팀 방식 그대로 둠. (3) env는 dentlink-client 팀 규칙이 기준, 오늘 env 작업은 1회성 사용자 지시.
+
 - 남은 인증 정리: CodePush 알림 설정은 이미 커밋돼 있어 준비 불필요(팀 저장소 Webhook 노출은 미변경), Revopush 로그인은 보류, 웹 Lab 시트 인증은 사용자가 '이제 시트에 추가 안 해도 된다'고 해 미준비. dentlink-client CLAUDE.md의 env 팀 규칙(에이전트 env 조작 금지)과 오전 env 작업의 충돌을 기록하고 이후 팀 규칙 준수.
 
 - 마감: 집 Mac 세팅·Claude 메인세션 지정을 `projects/dentlink-fe.md` 최상단 체크포인트로 정리(목적·완료·결정·배운 점·다음 시작점). 실행 환경은 사용자가 종료.
