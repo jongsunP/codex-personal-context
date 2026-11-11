@@ -5,6 +5,8 @@
 
 ## 2026-11-11
 
+- Claude Code 메인세션 지정·세팅: 핵심 지침 전부 정독 후 Claude Code 대응표를 `AI_WORKFLOW.md`에 정본으로 추가, AGENTS·PROFILE의 "Claude 미사용" 문장에 갱신 표기, `projects/dentlink-fe.md` Session Ownership에 메인세션 기록. 집 Mac env를 Git에서 채운 일은 사용자 1회 예외로 `SESSION_WORKFLOW.md` Local Env Inheritance에 명시.
+
 - GitHub 실조회: Office PR345·Lab PR41은 11/10 main 머지 완료(11/09 "머지 대기" 기록은 지난 상태). 알림센터는 웹 PR4862→release/v1.94.0 OPEN, Office PR346·Lab PR42 →main Draft OPEN. 집 Mac 앱 완료 worktree4개·로컬 브랜치 정리, 앱은 main+알림센터 브랜치만 남음.
 
 - 집 Mac 웹 정리: 진행 작업은 통합알림센터뿐. 완료 worktree5개·로컬 브랜치10개(원격 포함 확인) 정리, 기본 checkout을 master로. 남은 웹 = master + 알림센터 worktree + LBX 보류 브랜치2. studio·컨텍스트 저장소와 사무실 Mac은 무변경.

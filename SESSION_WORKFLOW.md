@@ -634,6 +634,15 @@ local copy merely because the session or worktree is new.
    readiness separately from login, API behavior, and feature QA. Preserve
    servers and worktrees the user is currently using for local verification.
 
+**User exception, 2026-11-11 (home Mac setup only):** with no verified main
+worktree env on the newly prepared home Mac, the user explicitly instructed the
+agent to fill local web env from each `.env.example` key list with values from
+Git history. The agent rebuilt service and e2e env from the last tracked
+version (`2fb2fdc50^`) without printing values, and compared them only for
+equality with the GitHub `*-dev` Variables. This was a one-time instruction for
+that device, not a change to the default rule above. Details are in
+`projects/dentlink-fe.md` under the home Mac entry.
+
 This is a narrow, explicitly authorized exception to older guidance that
 delegated all local env preparation to a human. Actual values remain
 human-managed: no GitHub Variables/Secrets access, value editing, secret

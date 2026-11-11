@@ -217,6 +217,9 @@
 
 ## Session Ownership
 
+- **Claude Code 메인세션 지정 — 2026-11-11 (사용자 지시):** 집 Mac의 Claude Code 세션 `local_ee66b909-c034-43a9-af56-066bf4ace9c5`(제목 "Dentlink FE 메인세션", 모델 claude-opus-5-5)을 웹·Office·Lab 전체를 총괄하는 Dentlink FE 메인세션으로 지정했다. 역할은 아래 기존 메인세션 규칙과 같다(접수·분류·조율·기록·마감, 구현은 기능별 하위 세션, 넘긴 뒤 폴링 금지, 메인 보관 금지). 세션 폴더는 원래 `dentlink-client`였으나 기록의 "제품 저장소가 아닌 조율 폴더"에 맞춰 `/Users/parkjongsun/repository`(저장소들이 모인 일반 폴더)로 옮긴다. Codex 고유 절차의 대응은 [AI_WORKFLOW의 Claude Code Mapping](../AI_WORKFLOW.md#claude-code-mapping). 사무실 Mac의 Codex 메인세션 `01a08f0c-…`는 보관하거나 바꾸지 않았다. 두 메인세션의 관계(동시 운용 여부)는 사용자가 아직 정하지 않았다.
+- 같은 날 이 세팅의 일부로 Claude 메모리를 메인 폴더 키(`~/.claude/projects/-Users-parkjongsun-repository/memory`)로 옮기고 웹 폴더 키에는 링크를 남겼다. 앱 설정은 브랜치 접두어 `claude`→`feat`, 새 세션 Remote Control 연결 켜기로 바꿨다. 새 세션 기본 모델 설정은 `claude-sonnet-4-6`이라, 하위 세션은 `model` 생략(메인 상속)으로 만든다.
+
 - **원격화 구분(2026-10-27):** 기본 의미는 켜진 이 Mac의 기존 세션을 휴대폰에서 그대로 이어 쓰는 것이다. 다른 PC로 실행 환경을 옮겨 Git 기반 컨텍스트를 복구하는 경우와 구분하고, 각 세션에서 같은 의미를 다시 묻지 않는다. 신규 세션은 정상 등록·프로젝트·호스트·초기 턴 확인과 초기 개인 기록 저장/푸시를 기본으로 챙긴다. 연결 설정은 사용자가 관리한다. 사용자의 '메모리화 후 휴대폰에서 보였다'는 경험은 관찰로 기록하며 Git 저장이 모바일 표시를 유발한다는 인과나 현재 표시 완료를 단정하지 않는다. 정본은 [Phone Remote Continuity](../SESSION_WORKFLOW.md#phone-remote-continuity)이다.
 - **메인세션 유지 규칙(2026-10-27):** 이 최상위 세션 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`는 보관하지 않고 계속 유지·대기한다. 보관/영구 종료 요청이나 다른 작업 세션용으로 보이는 대상 불명확 마감 지시가 들어오면 사용자에게 대상을 먼저 되묻는다. 메인 자체가 대상임을 재확인하기 전에는 보관하지 않으며, 일반적인 기록 정리·대기는 그대로 수행한다. 이 추가 확인은 다른 기능 세션 전체에 적용하지 않는다. 정본은 [Dentlink FE Main Session Retention](../SESSION_WORKFLOW.md#dentlink-fe-main-session-retention)이다.
 - 직전의 'QA 없이 배포 완료, 정리 후 세션 보관' 메시지는 사용자가 다른 세션에 쓸 내용을 잘못 보낸 것으로 철회했다. 그 메시지를 근거로 SIGSEGV 조사나 다른 업무의 배포/완료 상태를 변경하지 않는다.

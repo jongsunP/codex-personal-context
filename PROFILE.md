@@ -13,6 +13,9 @@ management, and project coordination. Claude is no longer part of the active
 workflow; its former remote context repository is kept only as a recoverable
 archive.
 
+- Update 2026-11-11: Claude Code is active again. Records go to both Claude
+  memory and this repository (11-10), and a Claude Code session is the Dentlink
+  FE main session (11-11). See **Claude Code Mapping** in `AI_WORKFLOW.md`.
 - Development and repository work: Codex
 - Parallel work: organize Codex sessions primarily by purpose and feature,
   regardless of device; preserve exact repository/worktree ownership inside

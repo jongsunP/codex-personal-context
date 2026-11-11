@@ -7,6 +7,35 @@ work, and project coordination. Claude is no longer used in the active
 workflow, and its former context repository is an archive rather than a source
 to load at session start.
 
+**Update 2026-11-11 (user instruction):** Claude Code is active again alongside
+Codex. On 2026-11-10 the user required every record to go to both Claude memory
+and this repository. On 2026-11-11 the user designated a Claude Code session as
+the Dentlink FE main session covering Web, Office and Lab (see
+`projects/dentlink-fe.md` Session Ownership). The rules in this repository apply
+to Claude Code as written; apply Codex-specific mechanics through **Claude Code
+Mapping** below. The older sentence above is retained as history.
+
+### Claude Code Mapping
+
+Canonical translation of Codex-specific mechanics, recorded 2026-11-11. The
+working rules themselves (permissions, branch/PR policy, scope, verification,
+Jira, reporting, both-sides recording) are unchanged.
+
+| Codex mechanic | Claude Code equivalent |
+| --- | --- |
+| `~/.codex` local guidance via `setup-local-codex.sh` | `~/.claude/CLAUDE.md` (global, Git-synced via `claude-personal-context`) points to this repository's read order; it does not copy rules |
+| Codex runtime memory | Claude memory under `~/.claude/projects/<folder-key>/memory`, kept in sync with this repository |
+| Main session folder `Documents/ChatGPT/메인 프로젝트` | `/Users/parkjongsun/repository` on the home Mac: the folder that holds the product repositories, itself not a Git repository |
+| New session `model` + `thinking` passed explicitly | `start_session` inherits the main session's model and effort when `model`/`effort` are omitted (the tool only allows equal or lower). Omit them, then verify with `get_session`. Do not rely on the app's default model setting, which can differ |
+| Session ID / registration check | `start_session` result + `get_session` / `list_sessions {"linked": true}` |
+| Delegate then stop polling | Same. The app notifies the main session when a started session ends its turn; do not poll |
+| Feature worktree + `feat/<Jira>` branch | Create the branch and worktree with Git yourself, then `start_session` with `cwd` = that worktree and `use_worktree: false`. Do not let the tool create a branch (its prefix setting adds a suffix). The app `branch_prefix` was set to `feat` as a safety net |
+| Phone Remote Continuity / pairing PIN | Claude Remote Control (claude.ai/code, Claude mobile app). New sessions connect by default since 2026-11-11; an existing session uses `set_remote_control` on request. No PIN procedure |
+| Archive/keep main session | Same rule; archive tools exist (`archive_session`) and the main session stays unarchived |
+| Atlassian current plugin `mcp__codex_apps__atlassian_*` | Claude's Atlassian connector. Same site rule: `innovaid.atlassian.net`. Authorization is the user's (`/mcp`) |
+| Figma `figma_http` direct MCP | Claude's Figma connector. Authorization is the user's |
+| Codex internal browser / Chrome for Testing | Claude built-in browser pane for agent-only work, Chrome for Testing for separate automation, user's Chrome only when asked |
+
 Use multiple Codex sessions when separation improves ownership and context:
 
 - A top-level management session coordinates a product area across separate

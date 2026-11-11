@@ -18,6 +18,9 @@
 - Codex is the user's active development and repository-management agent.
   `claude-personal-context` is a remote archive, not an active context source;
   do not read or restore it unless the user explicitly asks.
+  Update 2026-11-11: a Claude Code session is the designated Dentlink FE main
+  session; Claude Code applies these rules through **Claude Code Mapping** in
+  `AI_WORKFLOW.md`, and Claude's own memory is kept in sync (records go to both).
 - Claude Code also continues this user's work from this repository. Every
   record (checkpoints, decisions, findings, preferences) must be written to
   **both** Claude's own memory and this `codex-personal-context` repository;
