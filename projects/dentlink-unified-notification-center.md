@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**알림 설정 라벨 매핑 반영 · commit/push — 2026-11-12 (사무실 Claude 하위 세션):** 확정 매핑(`영역.카테고리`→`카테고리`→코드, `employee.CREDITS`=Office Credits/오피스 크레딧, `user.CREDITS`=User Credits/유저 크레딧, ALL_ORDERS=All Orders/전체 주문, MY_ORDERS_ONLY=My Orders Only/내 주문만 보기, Lab 다국어)을 반영해 Office `feature/DL-17059@8d9dfd5`, Lab `feature/DL-17060@2f6cb2d`, Web `feature/DL-17058@0b4cbab4f`로 push(원격 일치, Draft #346·#42·release #4862에 포함). Lab은 교차 검토에서 찾은 textRegistry 충돌(일반 단어 "Order" 등록 시 채팅 문구까지 번역)을 `i18next.t()` 직접 호출로 수정. 테스트 Office 7·Lab 3 통과. **개발 배포 보류(사용자 결정):** 추가 개발 후 배포하므로 앱 개발 CodePush와 웹 develop 반영(`0b4cbab4f`는 develop 미포함)은 아직 하지 않는다. 웹 develop은 11-10에 master로 재생성 후 PR #4865(`bad9e697c`까지)로 머지돼 있다. Android Notifee 패치 PR #348/#44는 11-11 앱 개발자가 release에 머지했다.
+
 **알림 설정 서버 순서 렌더 · commit/push — 2026-11-10:** 사용자 지시로 GET 배열 순서대로 employee→user 전부 표시(웹 PUSH 포함), displayName FE 사용 제거(주문 범위는 코드 매핑, 없으면 코드)를 Office `feature/DL-17059@b50a8d5`, Lab `feature/DL-17060@0a8245d`, Web `feature/DL-17058@bad9e697c`로 push. PR·배포 변경 없음. 매핑 목록은 사용자 공유 대기, 화면 실행 확인 미실시. [상세 7절](dentlink-unified-notification-center-settings-render-audit-2026-11-10.md)
 
 **세션 마감·대기 — 2026-11-10 19:05 KST (Claude 메인 세션):** 오늘 이 세션 요청 모두 완료(딥링크 사용처, iOS 배너 재표시 해결, Android Notifee 패치 PR #348/#44 및 실기기 대조, 웹 노출 현황 조사·공유, 커넥터 연결, 지침 반영). 남은 작업은 별도 세션 “알림 설정 목록 서버 데이터 의존 여부 조사”(displayName 제거·매핑 정리 범위 승인 대기)에서 진행. 대기 항목: 다니엘 머지·심사, 기획 결정, 사용자 폰 정리. 이 세션은 대기.

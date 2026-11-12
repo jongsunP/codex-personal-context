@@ -275,7 +275,10 @@ workspace, or new worktree. Its portable source of truth is
 
 The user's standing instruction, confirmed on 2026-10-27, protects the
 designated Dentlink FE main session as the continuing top-level control center.
-Its identity is recorded in `projects/dentlink-fe.md`.
+Its identity is recorded in `projects/dentlink-fe.md`. Since 2026-11-12 each
+agent (office/home × Codex/Claude Code, and any added later) has exactly one
+such main session, run independently and sharing only this repository; this
+section applies to each of them.
 
 - Keep this main session unarchived and idle between requests. Completing a
   feature, deployment, investigation, or cleanup does not complete the main

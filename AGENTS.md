@@ -307,6 +307,14 @@
 - At the start of a new or resumed session, refresh this repository and the
   relevant project repository with `git pull` before relying on local context
   when the user asks to resume work or continue from a prior checkpoint.
+- 2026-11-12 user clarification (all agents): sync automatically when a session
+  starts or resumes, choosing what is actually needed (this repository, the
+  agent's own memory store, the live Git of the repositories in scope) rather
+  than following a fixed daily ritual. Record when a requested piece of work
+  (a prompt) is finished: an explicit "save/memory" request is the usual
+  trigger, but without one still record what is worth keeping (decisions,
+  status changes, guideline changes) in both this repository and the agent's
+  own memory. Skip trivial intermediate steps.
 - When the user says to wrap up, finish, close out, end, pause, hand off, or
   summarize a session checkpoint, proactively organize the current state
   instead of only saying goodbye.

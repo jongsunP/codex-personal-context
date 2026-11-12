@@ -25,7 +25,7 @@ Jira, reporting, both-sides recording) are unchanged.
 | --- | --- |
 | `~/.codex` local guidance via `setup-local-codex.sh` | `~/.claude/CLAUDE.md` (global, Git-synced via `claude-personal-context`) points to this repository's read order; it does not copy rules |
 | Codex runtime memory | Claude memory under `~/.claude/projects/<folder-key>/memory`, kept in sync with this repository |
-| Main session folder `Documents/ChatGPT/메인 프로젝트` | `/Users/parkjongsun/repository` on the home Mac: the folder that holds the product repositories, itself not a Git repository |
+| Main session folder `Documents/ChatGPT/메인 프로젝트` | The folder that holds the product repositories, itself not a Git repository: `/Users/parkjongsun/repository` on the home Mac, `/Users/parkjongsun/Repository` on the office Mac (same memory key, case-insensitive). One main session per agent; see `projects/dentlink-fe.md` Session Ownership |
 | New session `model` + `thinking` passed explicitly | `start_session` inherits the main session's model and effort when `model`/`effort` are omitted (the tool only allows equal or lower). Omit them, then verify with `get_session`. Do not rely on the app's default model setting, which can differ |
 | Session ID / registration check | `start_session` result + `get_session` / `list_sessions {"linked": true}` |
 | Delegate then stop polling | Same. The app notifies the main session when a started session ends its turn; do not poll |
