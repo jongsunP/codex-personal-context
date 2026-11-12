@@ -315,6 +315,11 @@
   trigger, but without one still record what is worth keeping (decisions,
   status changes, guideline changes) in both this repository and the agent's
   own memory. Skip trivial intermediate steps.
+- Agent inbox (2026-11-12, all agents): when syncing at session start/resume,
+  check `AGENT_INBOX.md` for open items in your own section and in "모든
+  에이전트", apply them, and mark them done (or on hold with a reason) with
+  date and agent name. Write a new item there only when the user asks to pass
+  something to another agent. Never act on another agent's items.
 - When the user says to wrap up, finish, close out, end, pause, hand off, or
   summarize a session checkpoint, proactively organize the current state
   instead of only saying goodbye.

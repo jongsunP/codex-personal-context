@@ -243,6 +243,7 @@
   | 집 Codex | 미지정(사용 시 같은 규칙으로 하나 지정) | — |
 
   macOS는 대소문자를 구분하지 않아 사무실 `Repository`와 집 `repository`는 같은 Claude 메모리 폴더 키(`~/.claude/projects/-Users-parkjongsun-repository/memory`)를 쓴다.
+  메인은 메인 폴더 아래 모든 프로젝트를 직접 읽기·수정·Git·빌드·실행할 수 있다(구현은 기본 하위 세션, 수정 전 대상 repo·브랜치·worktree 확인, 각 repo 지침 적용). 사용자가 다른 에이전트에게 전하라는 지시는 [AGENT_INBOX.md](../AGENT_INBOX.md)에 남기고, 각 에이전트는 동기화 때 자기 항목을 처리한다.
 - **Claude Code 메인세션 지정 — 2026-11-11 (사용자 지시):** 집 Mac의 Claude Code 세션 `local_ee66b909-c034-43a9-af56-066bf4ace9c5`(제목 "Dentlink FE 메인세션", 모델 claude-opus-5-5)을 웹·Office·Lab 전체를 총괄하는 Dentlink FE 메인세션으로 지정했다. 역할은 아래 기존 메인세션 규칙과 같다(접수·분류·조율·기록·마감, 구현은 기능별 하위 세션, 넘긴 뒤 폴링 금지, 메인 보관 금지). 세션 폴더는 원래 `dentlink-client`였으나 기록의 "제품 저장소가 아닌 조율 폴더"에 맞춰 `/Users/parkjongsun/repository`(저장소들이 모인 일반 폴더)로 옮긴다. Codex 고유 절차의 대응은 [AI_WORKFLOW의 Claude Code Mapping](../AI_WORKFLOW.md#claude-code-mapping). 사무실 Mac의 Codex 메인세션 `01a08f0c-…`는 보관하거나 바꾸지 않았다.
 - **두 메인세션 관계 — 2026-11-11 사용자 결정 (2026-11-12 위 "에이전트별 메인세션 구조"로 확장됨):** 사무실 Mac의 Codex 메인세션과 집 Mac의 Claude Code 메인세션은 **각각 따로 운영하고, 이 저장소(codex-personal-context)만 공유 보관소로 쓴다.** 서로 메시지를 주고받거나 상대 세션을 통제하지 않는다. 한쪽에서 진행한 내용은 이 저장소 기록으로 넘어가며, 작업을 이어받을 때는 pull 후 해당 정본과 live Git·GitHub로 확인한다. 같은 제품 worktree에 두 메인 쪽이 동시에 쓰지 않도록, 진행 중인 작업의 소유는 각 기능 정본에 적힌 대로 따른다.
 - **env 개인 토큰 — 2026-11-11 사용자 확인:** 지침대로 개인 토큰(Jira·OpenAI·Gemini·Notion·N8N 등)은 env에 넣지 않는다. 집 Mac env의 해당 키가 빈 값인 것이 올바른 상태다.

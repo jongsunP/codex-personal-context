@@ -4,6 +4,7 @@
 *
 
 !.gitignore
+!AGENT_INBOX.md
 !AGENTS.md
 !AI_WORKFLOW.md
 !BOOTSTRAP.md

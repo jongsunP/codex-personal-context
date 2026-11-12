@@ -78,6 +78,8 @@ Load additional documents by purpose:
 - `DECISION_FRAMEWORK.md`: decisions, comparisons, or recommendations.
 - `FITNESS.md` / `VEHICLE.md`: the corresponding personal topic.
 - `HANDOFF.md`: cross-project orientation or finding the right resume document.
+- `AGENT_INBOX.md`: check your own and "모든 에이전트" open items at every
+  session start/resume sync (user instructions relayed between agents).
 - `MEMORY_CHANGELOG.md`: tracing when a rule or checkpoint changed; search the
   relevant date/topic rather than reading the entire log at every start.
 - Linked history/archive documents: a prior decision, regression, migration,

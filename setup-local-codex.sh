@@ -4,6 +4,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 SYNC_PATHS=(
+  "AGENT_INBOX.md"
   "AGENTS.md"
   "AI_WORKFLOW.md"
   "BOOTSTRAP.md"
