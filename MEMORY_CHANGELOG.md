@@ -5,6 +5,7 @@
 
 ## 2026-11-12
 
+- 알림 설정 새 API 이전·세 제품 공통 렌더 규칙 로컬 커밋(Office 0947399·Lab 901cfa1·Web 75ac63b90, push 전). 다국어 실태·기기 OFF 대조 기록. 정본은 `projects/dentlink-unified-notification-center.md` 상단.
 - 알림센터 세 작업 브랜치 최신화(앱 origin/main merge, 웹 차이 없음)·dev 스웨거 생성 결과 커밋·FE 타입 정리 로컬 커밋 완료(Office cfa55ec·Lab 7cb252d·Web 27c549f79, tsc 기준선, push 안 함). 다음은 알림 설정 API 추가 작업.
 
 - 스웨거 생성 파일 원칙(사용자, DEVELOPMENT_STYLE): 생성 결과는 계속 갱신되므로 그대로 쓰고(손수정 금지), FE가 그 위에 가공한 타입·매퍼·기능 코드에만 필요한 변경을 넣는다.
