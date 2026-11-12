@@ -266,6 +266,9 @@ responsibilities rather than forcing the whole product into one checkout.
   feature is active. After handing work over, the main does not track, poll
   or re-verify. When the session reports back, relay only what the user must
   decide and what remains. Re-verify only when the user asks.
+  Agents whose setup is already established (e.g. office Codex) do not have
+  to copy another agent's exact arrangement; keep the existing sessions and
+  apply the concept.
 - Default to one implementation session per logical feature or bug, including
   coordinated web and app work. Follow **New Work Intake And Session Routing**
   for justified separation; different devices or repositories alone are not
