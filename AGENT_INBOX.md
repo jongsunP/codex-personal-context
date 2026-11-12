@@ -58,7 +58,7 @@
   문서 변경은 사용자 확인 후). 이어서 알림센터 앱 코드에 같은 유형이 남았는지 점검한다(예: `NotificationOfficeSelectSheet`·
   `NotificationLabSelectSheet`·`NotificationPermissionBanner` 등의 `StyleSheet` 사용). 이번에 한 수정은 Office `4ed34bf`·Lab `0f03901`
   (인박스 StyleSheet 정리, 응답 null 검증)뿐이다. 상세: `projects/dentlink-unified-notification-center.md` 최상단.
-  - 상태: 지침 대조·보완 및 잔존 코드 조사 완료. 생성 모델·styled-components 규칙은 이미 팀 문서에 있었고 구현/최종 diff 적용에서 놓친 것으로 확인했다. 개인 DEVELOPMENT_STYLE에 서비스 경계 검증·팀 규칙 대조를 보완하고 앱 플레이북의 오래된 실행 안내를 갱신했다. 남은 StyleSheet Office 5곳/Lab 2곳과 최종 화면 검증은 기능 체크포인트의 후속으로 분리한다. 이번 동기화에서 제품 코드는 수정하지 않았다.
+  - 상태: 지침 대조·보완 완료 후 사용자 승인으로 제품 후속도 완료(2026-11-12 20시대, 사무실 Codex). 생성 모델·styled-components 규칙은 이미 팀 문서에 있었고 구현/최종 diff 적용 누락이었다. 개인 DEVELOPMENT_STYLE·앱 플레이북 보완, 남은 StyleSheet Office5/Lab2곳 정리, 양OS 최종 코드·관련 기존 화면 검증, Lab 리뷰3건 resolve 완료. Office `a624b598`·Lab `d018b85` push. 상세는 `projects/dentlink-unified-notification-center-review-2026-11-12.md`. 실제 FCM·서버 쓰기·전체 역할 QA와 배포는 별도다.
 
 ## 집 Claude Code
 

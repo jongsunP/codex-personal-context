@@ -1,5 +1,21 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**전체 변경 규약·요구사항 재검토 및 수정 push 완료 — 2026-11-12 20시대 KST:** 사용자 추가 승인에 따라 원래 Codex 구현과 다른 에이전트의 새 설정 API 이전을 팀 AGENTS/CLAUDE·개인 공통/프로젝트 지침·확정 정책과 함께 대조했다. [이번 검토·수정·검증·미정 상세](dentlink-unified-notification-center-review-2026-11-12.md)가 최신 정본이며 아래 19시대 동기화만 완료한 상태를 대체한다.
+
+| 제품 | 현재 위치 / 원격 반영 | 기존 PR |
+| --- | --- | --- |
+| 웹 | `dentlink-client-notification-center` · `feature/DL-17058@7e23e709b` | #4862 → release/v1.94.0 |
+| Office | `dentlink-app` · `feature/DL-17059@a624b598` | #346 → main |
+| Lab | `dentlink-lab-app` · `feature/DL-17060@d018b85` | #42 → main |
+
+- **이번 수정:** 남은 앱 StyleSheet 규약 정리, 웹 표시 그룹을 UI로 이동하고 도메인/PUT 변환은 models에 유지, 임의 오류 문구를 기존 공통 UI/문구로 통일, 확정 Clinic 병원 선택 문구 반영. Lab 웹 별도/밀링 헤더 진입 누락을 보완하되 기존 모바일 하단 알림은 유지. Office의 시트 P120:P121 배송 딥링크 employerId 포함 경로 누락을 추가했다.
+- **새 API/타 에이전트 검토:** DL-17114 BE44978의 user/employee·서버 순서·전체 PUT·메타 제외·Lab null scope·MEMBER 옵션을 현재 세 제품 코드와 대조했다. null 응답 검증과 생성 모델 이전은 선행 작업을 검증한 것이며 이번에 새로 API를 만든 것이 아니다. 사용자44994의 플랫폼 노출 키 요청은 아직 답변 없음.
+- **검증:** 웹 관련36 tests·3서비스 tsc 및 훅의 공통59 tests 통과. Office190/Lab50 tests와 변경범위 lint/diff 통과. 웹 로그인 화면·양 앱 동일소스 양OS 최종 런타임 확인. 앱 tsc 기존6/5진단은 남는다. 제한적 오류/카운트 주입은 복구했으며 실제 서버 쓰기/다중소속·FCM QA와 구분한다. Office Maestro 종료 때 XCTest/SpringBoard 크래시가 있었고 재실행 후 대체검사에서는 재발하지 않음(앱 크래시가 전혀 없었다고 표현 금지).
+- **리뷰:** Lab 앱 개발자3건 답변·resolve 완료, Office 열린 inline0. 웹 설정·wire 지적 처리 후 밀링 FILE1건은 별도 PR4866/release1.93 코드가 현 target에 없는 통합 의존으로 열어 둔다. 최신 웹 단회 CodeRabbit 재검토 최종상태는 상세에 기록한다.
+- **범위/전달:** 세 제품 clean·원격 일치, 기존 Draft/[WIP]/DRAFT와 base 유지, PR 본문을 현재 구현/검증으로 갱신했다. 새 PR·branch·merge·배포 없음. 개발서버/실기기에 이번 수정이 반영됐다고 하지 않는다.
+- **다음:** BE 노출 키/추가 사용자 설정·배지 협력 대기, Office 구 push-preferences GET/PATCH 실제 사용으로 일괄 삭제 금지. 웹 밀링 FILE 릴리즈 통합과 실제 푸시/최종 바이너리 QA는 별도. 이메일/Home3/Android 패치·선택적 주석 커버리지 정리는 기존 경계 유지. 승인 없는 재배포는 하지 않는다.
+
+
 **Codex 재개 동기화 완료 — 2026-11-12 19시대 KST:** 다른 에이전트의 지침·세팅·구현 이력을 현재 Git/PR·DEV 응답·Jira·정책·Figma 본문과 대조했다. [동기화 상세와 다음 시작점](dentlink-unified-notification-center-sync-2026-11-12.md)이 현재 정본이다. 세 제품은 원격과 동일한 clean 상태(Web `7968ad66b`, Office `4ed34bf`, Lab `0f03901`). 새 설정 API 이전/리뷰 수정은 push됐지만 최신 코드의 최종 런타임·리뷰 해결·개발 재배포는 남았다. 아래 과거 미커밋/push 미완료 기록은 현재 상태가 아니다.
 
 - **지침:** 양 앱 팀 규칙 대조와 잔존 코드 조사를 마쳤고 개인 앱 구현·로컬 실행 지침을 보완했다. AGENT_INBOX의 본인 적용 항목을 완료로 갱신하고 로컬 Codex에 동기화했다. StyleSheet 잔존 Office5/Lab2곳은 후속 구현으로 남긴다.

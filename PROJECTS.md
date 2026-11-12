@@ -199,16 +199,16 @@ For detailed current state, read:
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
-### Dentlink 통합알림센터 — 알림 설정 API 이전·리뷰 대응 push 완료
+### Dentlink 통합알림센터 — 전체 변경 규약 검토·수정 push 완료
 
-- **현재(2026-11-12 저녁):** 세 제품 알림 설정 새 API 이전·공통 렌더(user 영역 먼저)는 push 완료(Office `23966fc`, Lab `e64b61d`, Web `7891e21c2`). 리뷰 대응도 push 완료(Office `4ed34bf`, Lab `0f03901`, Web `7968ad66b`, 웹 E2E 가드는 사용자 지시로 SKIPPED). Codex 재개 동기화·앱 지침 대조/보완도 완료. 실제 남은 일은 앱 스타일 잔존7곳·최종 코드 화면 검증·리뷰 상태 정리·BE 노출 키·승인 후 개발 재배포이며, [11/12 동기화 기록](projects/dentlink-unified-notification-center-sync-2026-11-12.md)을 따른다.
+- **현재(2026-11-12 20시대):** 팀/개인 지침과 타 에이전트의 새 설정 API 이전 대조 후 Web `7e23e709b`·Office `a624b598`·Lab `d018b85` push, 최종 웹·양앱 양OS 검증 완료. Lab 앱 개발자3건 resolve, 웹 밀링 FILE 별도 릴리즈 통합 리뷰1건 남김. 노출 플랫폼 키·사용자 설정/배지 협력·실제 푸시 QA·승인 후 배포는 별도. [11/12 전체 검토 기록](projects/dentlink-unified-notification-center-review-2026-11-12.md)을 따른다.
 
 - 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.
 - 이 기능 세션에서 제품별 작업 위치·작성자를 분리하며, 미확정 BE 계약과 제품 commit/push/PR/배포 권한은 구분한다.
 - 2026-11-03 기록은 선행 UI 단계의 과거 이력이다. 이후 BE 연결과 정책 변경을 반영했으며 현재 설정 화면 OS 배너는 OFF 동안 상시, 앱 진입 안내 팝업은 기기당1회다. 현재 개발/배포 상태는 위11/12 기록을 따른다.
 - [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
-- [웹 서비스별 알림센터 노출 페이지 현황(2026-11-10, 기획자 공유·결정 대기)](projects/dentlink-unified-notification-center-web-visibility-2026-11-10.md)
+- [웹 노출 페이지 과거 조사(11/12 확정 범위 보완 완료)](projects/dentlink-unified-notification-center-web-visibility-2026-11-10.md)
 
 ### Dentlink 이메일 CTA 웹·앱 연결·추적 — DL-17183 / DL-17187
 

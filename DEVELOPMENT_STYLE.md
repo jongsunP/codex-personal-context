@@ -361,6 +361,12 @@ applying them.
   by neighboring code. Components should receive semantic data, loading state,
   and callbacks rather than mutation objects or duplicated invalidation and
   navigation logic.
+- Respect each repository's actual model boundary. Dentlink web's
+  `shared/models` already owns handwritten domain types, API wrappers and
+  request-value transformations; the apps' generator-only `src/models` rule
+  does not make those web files invalid. Keep presentation grouping, labels,
+  visibility and layout transformations with the UI/feature that owns them,
+  rather than coupling them to transport models.
 - Match selection cardinality end to end. If the UI allows multiple values and
   the API accepts an array, preserve every selected value in state and the
   request. Define sentinel options such as `all` explicitly so selecting it
