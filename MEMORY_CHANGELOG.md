@@ -5,6 +5,7 @@
 
 ## 2026-11-12
 
+- 알림 설정 user 영역 먼저(사용자 결정)·세 브랜치 push 완료, 시뮬·에뮬은 클로드 앱 밖 실행 지침 추가.
 - 모든 에이전트 공통 작업 방식(사용자): 메인은 일반 메인(작업·PR에 묶지 않음), 큰 기능은 상시 하위 세션이 전체 담당, 넘긴 뒤 추적·폴링·재검증 금지. SESSION_WORKFLOW·AGENTS 반영, AGENT_INBOX 모든 에이전트 항목 추가. 사무실 Claude는 알림센터 상시 하위 세션 local_62b33d4f… 지정.
 
 - 알림 설정 새 API 이전·세 제품 공통 렌더 규칙 로컬 커밋(Office 0947399·Lab 901cfa1·Web 75ac63b90, push 전). 다국어 실태·기기 OFF 대조 기록. 정본은 `projects/dentlink-unified-notification-center.md` 상단.

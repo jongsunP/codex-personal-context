@@ -1,5 +1,8 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**알림 설정 user 영역 먼저·push 완료 — 2026-11-12 (사무실 Claude 하위 세션, 사용자 지시):** 영역 순서는 **user → employee**(사용자 결정, 이후 바뀔 수 있음, 영역 안은 서버 순서). 커밋 Office `feature/DL-17059@23966fc`, Lab `feature/DL-17060@e64b61d`, Web `feature/DL-17058@7891e21c2` — 세 브랜치 모두 **push 완료**(Draft #346·#42·release PR #4862에 포함, PR 본문 불변). 웹 push 전 E2E 가드 NO_IMPACT 기록(정적 확인 불가 1건: Change Office 모달의 현재 오피스 행이 클릭 불가로 바뀌어 `prepareOrderSession` 폴백에서 최대 10초 지연 가능, 실패 아님). 개발 배포(웹 develop PR·앱 CodePush)는 아직.
+- **기기 실행 지침(사용자, 모든 앱 작업):** 시뮬레이터·에뮬레이터는 둘 다 클로드 앱 밖에서 띄운다(인앱 시뮬 패널 사용 안 함). 사무실 Mac Xcode 27.2엔 Simulator.app이 없고 `Xcode.app/Contents/Applications/DeviceHub.app`을 연다. 에뮬·Metro는 `~/.local/share/dentlink-local-runtime/{android-emulator,office-metro-8081}.command`를 macOS 터미널 창으로 연다. 현재 치과앱(Office dev)이 iPhone 17 Pro 시뮬·Dentlink_API_36 에뮬에서 이 브랜치 Metro 8081로 실행 중.
+
 **담당 세션 — 2026-11-12:** 알림센터 작업은 사무실 Claude 하위 세션 `local_62b33d4f-d04d-4faa-8d55-5db9ceefc994`("Dentlink 알림센터 (하위 세션)")이 상시 담당한다. 알림 설정 새 API 이전·공통 렌더 규칙 로컬 커밋(Office `0947399`, Lab `901cfa1`, Web `75ac63b90`, push 전)을 이 세션이 했다.
 
 **알림 설정 새 API 이전·세 제품 공통 렌더 · 로컬 커밋, push 전 — 2026-11-12 (사무실 Claude 하위 세션):** 위 최종 기준대로 세 제품 설정 화면을 `NotificationSettingDto`로 옮겼다. 커밋: Office `feature/DL-17059@0947399`, Lab `feature/DL-17060@901cfa1`, Web `feature/DL-17058@75ac63b90`(원격 대비 5/5/3 앞섬, **push·PR 변경·배포 없음**).
