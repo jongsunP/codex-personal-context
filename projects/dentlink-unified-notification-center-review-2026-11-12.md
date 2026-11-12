@@ -34,7 +34,7 @@
 
 | BE가 물은 API | 현재 feature 코드의 실제 사용 |
 | --- | --- |
-| GET `/app/users/own/push-preferences` | **Office 사용 중.** `usePersonalOrdersPreference` → query → AppService. Home/탭, 주문 검색, LinkTalk/채팅의 담당 주문 필터와 연결. |
+| GET `/app/users/own/push-preferences` | **Office 사용 중.** `usePersonalOrdersPreference` → query → AppService. 주문목록·검색, LinkTalk 목록/미읽음·하단 탭 배지/채팅 복귀 캐시의 담당 주문 조회 필터와 연결. Home 주문 목록 자체는 `myOrderOnly:false` 고정이며 이 설정으로 필터링되지 않는다. |
 | PATCH `/app/users/own/push-preferences/{preferenceId}` | **Office 사용 중.** 위 필터 변경 및 rollback 경로. 신규 알림 설정 API로 임의 치환하지 않았다. |
 | POST `/app/users/own/push-preferences` | 현재 live 호출 없음. 앱의 구 ProfileNotificationSection→useProfileNotification 연결은 화면에서 import되지 않는 고아 경로이며 선언은 남아 있음. |
 | PATCH `/app/users/own/push-settings/{pushSettingId}` | 위와 동일. 현재 live 호출을 찾지 못했으며 생성 메서드가 있다는 이유로 사용 중이라 하지 않음. |

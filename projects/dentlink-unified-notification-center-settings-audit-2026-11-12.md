@@ -80,3 +80,13 @@
 - 공통 지침 `DEVELOPMENT_STYLE.md` Feedback And Completion에 기본 규약·크래시 방어 누락 리뷰를 계기로 같은 위험 유형을 기능 전체/다른 제품/공용 소비자로 넓혀 확인하고, resolved 표시 대신 실제 근거를 남기는 원칙을 보완했다. 기존 관련 최종 증거는 재사용하며 무관한 전제품 QA까지 확대하지 않는다.
 
 - 실행 정리: 이번 Clinic/Lab 웹 서버·테스트 브라우저, Office/Lab Metro8081/8082 및 해당 검증 앱 프로세스를 종료했다. 사용자 기존 창·기기 배치를 변경하거나 디바이스 자체를 임의 종료하지 않았다. 자동 감시/새 예약 없음.
+
+## 이후 Slack 질문 확인 — 구 조회 필터 API 교체
+
+[Leo 댓글1794488063.213869](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1794488063213869)(11/12 21:54): 구 GET/PATCH push-preferences 데이터는 이제 사용하지 않으므로 새 API로 교체 가능한지와 화면 정책을 질문. 사용자는21:55 확인하겠다고 답했다. 이 메시지는 구현 승인으로 취급하지 않고 답변 초안만 제공한다.
+
+- 현재 새 알림 설정 화면은 이미 GET/PUT `/office/notifications/settings`를 사용한다. 남은 구 API 소비는 **주문목록·LinkTalk 조회 필터**, LinkTalk 미읽음 집계/하단 탭 배지/채팅 복귀 캐시다.
+- **앞선 조사 표현 정정:** Home 주문 목록 자체는 `useHomeOrdersData.ts`의 `myOrderOnly:false` 고정이다. '홈 필터가 구 API 사용 중'이라고 하지 않는다. 하단 LinkTalk 배지의 간접 소비와 구분한다.
+- MEMBER는 주문목록 토글 숨김·조회 파라미터 생략, LinkTalk는 내 주문 고정. 새 알림 orderScope는 서버가 MY_ORDERS_ONLY 고정한다. 비 MEMBER는 목록 필터 선택 가능.
+- 단순히 새 employee.orderScope로 치환하면 조회 필터를 전체로 바꿀 때 알림 수신 범위도 전체가 되고, 반대 변경도 조회/LinkTalk 숫자에 영향을 준다. 기술적 연결은 가능하나 **조회 필터와 수신 범위를 같은 설정으로 연동할지** 확인이 필요하다. 로컬로 분리한다면 기존 서버 저장 특성을 잃을 수 있으므로 이번 답변 요청만으로 바꾸지 않는다.
+- 기존 API 제거는 FE 이관/배포 전 일괄 승인하지 않는다. 제품 코드·Slack 작성·배포 변경 없음.
