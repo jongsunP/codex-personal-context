@@ -15,6 +15,7 @@
 | --- | --- | --- |
 | 노출 기준 | `toggleChannel`은 부모 토글이 제어할 채널이다. 웹/앱 노출 플랫폼 정보가 아니다. 현재 Swagger와 실제 응답에는 별도 플랫폼 키가 없다. | 웹 PUSH 부모 숨김은 기존 임시 호환 처리로 유지. 실제 현재 PUSH 부모는 LinkTalk/Support 단독 토글이라 MAIL 동반 손실은 없었다. 미래 PUSH+MAIL 행까지 안전하다는 뜻은 아니다. 이미 문의한44994 답변 후 명시적 노출 키로 교체한다. |
 | 단독 토글 | `channels: []`는 자식 체크 없이 부모 `enabled`만 저장하는 행이다. | 임의 PUSH 자식을 만들지 않고 받은 빈 배열을 유지. 키 생략도 허용하되 PUT에서 그대로 생략; `null`은 불완전 응답으로 거절. |
+| 상위 OFF와 실제 발송 | PRD의 정책은 상위 OFF 시 해당 항목의 모든 채널 수신 중단이다. 최신 DTO는 상위 `enabled:false`와 하위 선택값 보존을 허용하며 BE 예시도 OFF 부모 아래 PUSH=true다. | FE는 상위 OFF를 실제 PUT한다. 다만 BE가 상위 OFF를 하위 발송에도 적용하는지는 화면/GET/PUT 검증으로 알 수 없다. 하위 값 보존이 전체 발송 차단까지 검증됐다는 뜻은 아니다. 아래 후속 확인을 따른다. |
 | 표시 순서·글자 | user 영역 먼저, 영역 내 categories/channels는 서버 순서. FE는 확정된 표시명만 매핑한다. | 사용자/병원 Credits를 각각 표시하고 미래 정책을 가정해 숨기지 않았다. 기존 generic settingCategories fallback도 유지. |
 | 전체 PUT | 생략된 카테고리는 기본 ON으로 초기화될 수 있는 전체 교체 계약이다. | 최신 전체 GET에서 선택한 값만 바꾸고 숨긴 항목·OFF 부모의 채널 값·다른 영역을 보존. domain/toggleChannel/orderScopeOptions는 전송하지 않는다. |
 | 불완전 응답 | categories 목록·행·중첩 채널의 null/잘못된 값은 화면 크래시 또는 불완전 PUT의 원인이 된다. | 기존 서비스 방어와 실패/Retry 경로 확인. 빈 배열과 누락/손상은 구분. |
@@ -90,3 +91,26 @@
 - MEMBER는 주문목록 토글 숨김·조회 파라미터 생략, LinkTalk는 내 주문 고정. 새 알림 orderScope는 서버가 MY_ORDERS_ONLY 고정한다. 비 MEMBER는 목록 필터 선택 가능.
 - 단순히 새 employee.orderScope로 치환하면 조회 필터를 전체로 바꿀 때 알림 수신 범위도 전체가 되고, 반대 변경도 조회/LinkTalk 숫자에 영향을 준다. 기술적 연결은 가능하나 **조회 필터와 수신 범위를 같은 설정으로 연동할지** 확인이 필요하다. 로컬로 분리한다면 기존 서버 저장 특성을 잃을 수 있으므로 이번 답변 요청만으로 바꾸지 않는다.
 - 기존 API 제거는 FE 이관/배포 전 일괄 승인하지 않는다. 제품 코드·Slack 작성·배포 변경 없음.
+
+## 후속 사용자 결정과 상위 OFF 의미 확인
+
+- 위 Slack 질문 당시의 '조회 필터와 알림 수신 범위 연동 여부 미정'은 이후 사용자 결정으로 해소됐다. **알림 수신 설정은 새 서버 API, 주문목록·LinkTalk 조회 필터는 기존 기기 내부 저장소로 분리**한다. 기기 간 값 차이와 기존 값 초기화는 허용하며 이관·동기화를 만들지 않는다. 권한 제한은 유지한다. 사용자에게 코드 수정·검증·commit/push 권한을 받았으며 **배포는 금지**다. 완료 코드와 검증은 체크포인트의 최신 기록을 따른다.
+- `channels: []`는 BE44978에 명시된 정상적인 단독 토글이다. 예: `LinkTalk App Push [ON/OFF]` 한 줄. UI 깨짐을 허용하거나 FE가 하위 PUSH를 만들어 보정하는 것이 아니다. 이 사유로 BE 추가 작업을 요청하지 않는다.
+- 웹·앱 노출 구분 키는 사용자44994로 이미 요청했으며 여전히 답변 대기다. 중복 질문하지 않는다.
+- '숨긴 값 보존'을 두 경우로 구분한다: **다른 카테고리·영역/웹에 미노출된 설정 보존**, **상위 OFF 항목의 하위 선택값 보존**. 앞의 범위를 임의로 바꾸지 않는 것은 유지한다. 뒤의 저장값 보존은 실제 수신 중단과 별개다.
+- PRD(최종 수정11/11)의 화면별 변경·8-3·8-5에는 상위 OFF 시 전 채널 미발송·인박스 미적재가 남아 있다. 생성 DTO의 '꺼도 channels 값은 보존'과 함께 성립하려면 BE가 상위 OFF를 전체 발송 차단에 적용해야 한다. **현재 서버 발송 로직은 확인하지 않았다.**
+- BE에 필요한 확인은 한 가지다: **`enabled:false`이고 하위 PUSH·MAIL 값이 true여도 해당 항목의 모든 채널 발송이 중단되는가?** 그렇다면 하위 선택값 보존과 정책이 양립한다. 아니라면 실제 수신 정책과 충돌하므로 BE 답변 후 맞춘다. 이번 조회 필터 분리 작업에 섞어 임의로 하위 값을 일괄 false/true로 바꾸지 않는다.
+- 과거 체크포인트의 'OFF면 하위 OFF, 다시 ON이면 하위 기본 ON'을 현재 저장값 변경 규칙으로 재사용하지 않는다. PRD의 재활성화 복원 방식은 미정이며 최신 API는 하위 값 보존을 명시한다. 전체 발송 중단 정책까지 폐기된 것으로 해석하지 않는다.
+
+## 승인된 로컬 조회 필터 분리 완료 — 23시대
+
+- **Office:** 기존 `feature/DL-17059`에서 `94334d2a` → **`9d3b54ecf5a49e2339def991e9d46f9f280c0895`**, 원격 일치·clean. 기존 PR346 OPEN/Draft→main 유지, merge/CodePush 없음. 구 API의 생성 선언은 손대지 않았다.
+- `usePersonalOrdersPreference`는 기존 `useOrderStore`의 local bool/setter만 사용한다. 실제 사용되지 않는 옛 Profile 설정 화면·hook·helper와 해당4 API/query wrapper를 정리했다. 디바이스 토큰/배지/login API는 유지한다. Web 및 Lab 현행 소스에서 구 GET/PATCH 활성 호출은 없어 이번 코드 변경은 Office뿐이다. Lab의 미사용 구 선언/체인이나 과거 배포본까지 제거됐다는 뜻은 아니다.
+- 계정/소속 경계는 해당 bool만 초기화한다. 공용 logout(빠른 계정 전환 포함), 토큰 만료, 성공·유효한 소속 활성화가 대상이며 실패/오래된 활성화는 값을 바꾸지 않는다. 기존 일반 로그아웃/소속 전환의 전체 필터 초기화는 그대로다. AsyncStorage의 늦은 복원이 사용자의 새 선택/초기화를 덮지 않도록 방어했다.
+- **독립 diff 검토:** 정리 중 구 API와 무관한 `ApiResponseVoid` generic이 제거된 부분은 발견 즉시 복구 후 최종 검증했다. 빠른 계정 전환의 공용 logout이 일반 signout을 우회하는 점도 보완했다. 새 알림 설정 orderScope에 목록 필터를 연결하지 않았다.
+- **정적:** 6 suites/29 tests 통과(로컬 저장/늦은 복원/직접 logout, 목록·LinkTalk query scope, 소속 성공/실패, OrderSearchForm, 토큰 만료, error handler). 변경 lint 오류0·기존warning9, diff-check 통과. tsc는 기준94334d2a와 같은6진단(Icon2·Tooltip1·MessageText1·useOrderAddProduct2)으로 통과라고 표현하지 않는다.
+- **최종 런타임:** Office DEV iOS2.2.4(151)/Android2.2.4(134), 동일 feature/Metro8081. 실제 OWNER에서 Orders false→true, Orders/LinkTalk/미읽음 요청의 true 반영·양OS 강제종료 후 재실행 시 true 보존 확인. 서버 알림 orderScope는 MY_ORDERS_ONLY이면서 local은 처음false였고, 필터 조작 전후 실제 알림 설정 GET 전체가 동일했다.
+- **권한 검증 경계:** MEMBER는 서비스 응답을 일시적으로 제한한 제어 검증이며 서버 권한 변경/실제 MEMBER 계정 검증이 아니다. 양OS Orders/LinkTalk 토글 숨김·LinkTalk 내 주문 강제·Orders 파라미터 생략 확인. 최종 실제 OWNER/로컬false/원래 service 함수로 원복하고 알림 설정 정상 화면을 확인했다. Home은 기존false 유지.
+- **요청/오류:** 모니터한 흐름에서 구 API0·알림 설정 PUT/PATCH0, 서버 설정 변경 없음. Android crash buffer 비어 있음, Metro 오류 없음, 최근 Office iOS crash report 없음. LogBox accessor는 사용할 수 없어 'LogBox 전체 비어 있음'이라고 하지 않는다. 렌더된 React handler/CDP와 실제 기기 캡처로 확인했으며 물리 탭 전수 QA는 아니다.
+- 이번 검증용 Office 프로세스와 Metro8081만 종료했다. 기기 자체·기존 사용자 창·Reactotron은 유지했다. 상세 임시 근거 `/tmp/office-local-order-filter-1112.md`의 핵심은 본 문서에 보존했다.
+- **미배포:** 앞선 Office DEV v143에는 이번 로컬 분리와94334d2a 금융 보완이 없다. 구 앱의 호출 가능성이 남으므로 서버 API 삭제 시점은 배포 범위와 별개로 확인한다. 사용자는 이번 코드 수정·commit/push까지만 승인했다.

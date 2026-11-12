@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**조회 필터 로컬 분리 완료·설정 질문 구분 — 2026-11-12 23시대 KST:** 사용자 승인으로 Office의 구 조회 필터 API 의존을 제거했다. **코드 commit/push만, 배포 없음.** 아래22시대의 '구 API 교체 미구현/연동 정책 확인 필요' 상태를 대체한다.
+
+- **확정/구현:** 알림 수신 설정은 기존 새 GET/PUT `/office/notifications/settings`에 계속 서버 저장한다. 주문목록·LinkTalk의 `My Orders Only` 조회 필터는 기존 useOrderStore/AsyncStorage만 사용한다. 두 값을 연결하지 않는다. 기존 값 초기화·기기 간 차이는 허용, 이관/동기화/새 API는 추가하지 않았다.
+- **현재 코드:** Office `feature/DL-17059@9d3b54ecf5a49e2339def991e9d46f9f280c0895` push·원격 동일·clean. 구 GET/PATCH 호출과 사용하지 않는 옛 Profile 설정 체인을 제거했다. MEMBER 주문목록 제한·LinkTalk 본인 주문 고정, Home `myOrderOnly:false`는 유지한다. 로그아웃(빠른 계정 전환 포함)·토큰 만료·성공한 소속 전환에서 해당 로컬 bool만 초기화하고, 늦은 저장값 복원이 새 선택을 덮지 않도록 했다. Web `2a65e8eec`/Lab `d018b85`는 활성 구 GET/PATCH 호출이 없어 이번 변경 없음.
+- **검증:** 관련6 suites/29 tests·lint 오류0·diff-check 통과, tsc는 기존6진단 그대로. 최종 Office 동일소스 양OS에서 실제 OWNER 주문/LinkTalk/미읽음 요청과 재실행 보존 확인. MEMBER는 서버 계정을 바꾸지 않은 제어 응답으로 토글 숨김·강제범위를 검증했다. 구 API0건·알림 설정 쓰기0건·실제 설정 GET 전체 동일, 제어 wrapper/역할/로컬값 원복. Android crash buffer·Metro 오류 없음, 최근 iOS Office crash 보고 없음. 물리 탭 전수/실제 MEMBER 계정 QA는 아니다.
+- **설정 설명 정정:** `channels: []`는 정상 단독 토글이며 BE 추가 요청·임의 자식 생성이 필요 없다. 웹·앱 노출 키는 DL17114 댓글44994 답변 대기. **상위 OFF 저장과 실제 전 채널 발송 중단은 구분:** 현재 API는 상위 `enabled:false`와 자식 선택값 보존을 명시한다. PRD는 상위 OFF 때 해당 항목 전 채널 수신 중단이다. BE가 `enabled:false`일 때 PUSH/MAIL 값이 true여도 전 채널 발송을 차단하는지만 확인해야 한다. 화면/저장 검증을 발송 차단 검증으로 확대하지 않으며, 답변 전 하위 값을 임의 일괄 false/true로 바꾸지 않는다.
+- **전달/다음:** PR346 유지, 이번 수정과 이전 금융 보완은 현재 Office DEV v143에 미포함이다. 구 배포 앱은 여전히 구 API를 호출할 수 있으므로 코드 제거를 서버 즉시 삭제 승인으로 해석하지 않는다. 이번 검증용 Office 앱/Metro만 종료하고 기존 기기·사용자 창 배치는 유지했다. 다음 재개 시 이 결과·상위 OFF 발송조건·플랫폼 키 답변·FILE 통합 DL17420 등 기존 잔여를 먼저 보고한다. 상세 근거는 [설정 감사/후속 기록](dentlink-unified-notification-center-settings-audit-2026-11-12.md).
+
 **실 설정 저장·기존 리뷰 확장 감사 마감 — 2026-11-12 22시대 KST:** [이번 설정/유사 누락 감사 정본](dentlink-unified-notification-center-settings-audit-2026-11-12.md)을 먼저 읽는다. 앞선 DEV 전달 이후의 추가 요청이며 **이번 후속 수정은 배포하지 않았다.**
 
 - **실제 확인:** Clinic/Lab 웹과 Office/Lab 양OS에서 DEV GET 응답·FE 표시명/서버 순서·전체 PUT·재조회 확인. 실제 토글 변경 뒤 모든 계정을 시작 전체 응답과 정확히 같게 원복했다. `channels: []` 단독 토글·숨긴 값/자식값 보존 정상. 대표 OWNER·기존 로그인 기준이며 모든 권한/실제 푸시 QA를 뜻하지 않는다.
