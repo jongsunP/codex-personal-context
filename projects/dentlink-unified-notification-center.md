@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**기기 알림 OFF 안내 유지 결정 — 2026-11-12 (사용자):** 디자인과 같으면 유지. Office 앱 권한 팝업 제목 "Get Lab Updates Instantly"는 Figma 173:28434 목업과 같아 그대로 둔다. 앱 진입 팝업은 `NotificationPermissionNotice`(RootNavigator)가 권한 거부 상태에서 기기당 1회만 띄우고 AsyncStorage `NOTIFICATION_PERMISSION_NOTICE_SHOWN`으로 기록한다(다른 팝업·배너가 떠 있으면 뒤로 미룸) → 디자인의 "앱 진입 시 팝업 1회"와 같고, 이번 에뮬레이터에서 안 보인 것은 이전 테스트에서 이미 1회 노출된 기록 때문으로 판단. 코드 변경 없음.
+
 **알림 설정 user 영역 먼저·push 완료 — 2026-11-12 (사무실 Claude 하위 세션, 사용자 지시):** 영역 순서는 **user → employee**(사용자 결정, 이후 바뀔 수 있음, 영역 안은 서버 순서). 커밋 Office `feature/DL-17059@23966fc`, Lab `feature/DL-17060@e64b61d`, Web `feature/DL-17058@7891e21c2` — 세 브랜치 모두 **push 완료**(Draft #346·#42·release PR #4862에 포함, PR 본문 불변). 웹 push 전 E2E 가드 NO_IMPACT 기록(정적 확인 불가 1건: Change Office 모달의 현재 오피스 행이 클릭 불가로 바뀌어 `prepareOrderSession` 폴백에서 최대 10초 지연 가능, 실패 아님). 개발 배포(웹 develop PR·앱 CodePush)는 아직.
 - **기기 실행 지침(사용자, 모든 앱 작업):** 시뮬레이터·에뮬레이터는 둘 다 클로드 앱 밖에서 띄운다(인앱 시뮬 패널 사용 안 함). 사무실 Mac Xcode 27.2엔 Simulator.app이 없고 `Xcode.app/Contents/Applications/DeviceHub.app`을 연다. 에뮬·Metro는 `~/.local/share/dentlink-local-runtime/{android-emulator,office-metro-8081}.command`를 macOS 터미널 창으로 연다. 현재 치과앱(Office dev)이 iPhone 17 Pro 시뮬·Dentlink_API_36 에뮬에서 이 브랜치 Metro 8081로 실행 중.
 
