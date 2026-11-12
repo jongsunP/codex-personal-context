@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**담당 세션 — 2026-11-12:** 알림센터 작업은 사무실 Claude 하위 세션 `local_62b33d4f-d04d-4faa-8d55-5db9ceefc994`("Dentlink 알림센터 (하위 세션)")이 상시 담당한다. 알림 설정 새 API 이전·공통 렌더 규칙 로컬 커밋(Office `0947399`, Lab `901cfa1`, Web `75ac63b90`, push 전)을 이 세션이 했다.
+
 **알림 설정 새 API 이전·세 제품 공통 렌더 · 로컬 커밋, push 전 — 2026-11-12 (사무실 Claude 하위 세션):** 위 최종 기준대로 세 제품 설정 화면을 `NotificationSettingDto`로 옮겼다. 커밋: Office `feature/DL-17059@0947399`, Lab `feature/DL-17060@901cfa1`, Web `feature/DL-17058@75ac63b90`(원격 대비 5/5/3 앞섬, **push·PR 변경·배포 없음**).
 - 공통 규칙: employee→user 서버 순서 그대로, 그룹 제목 매핑 도메인(앱 ORDERS·MANUFACTURING, 웹은 CHAT 포함)의 연속 항목만 묶고 나머지 단독 카드(영역 경계는 넘지 않음), 채널 배열 순서, 토글 OFF면 체크 숨김(값 유지), 주문 범위는 `orderScopeOptions` 2개 이상일 때만(FE MEMBER/제품 판정 제거), 저장은 최신 GET 전체 일괄 교체에서 읽기 전용(domain·toggleChannel·orderScopeOptions) 제거·null orderScope 생략, 채널은 토글 OFF 상태에서 변경 거부. 웹은 PUSH 체크·PUSH 토글 항목 숨김(11-10 복원 되돌림)하되 PUT에 그 값을 그대로 보낸다. 매핑 없는 코드는 서버 코드 그대로.
 - 타입: 앱 `src/models/NotificationApi.ts` 삭제→생성 `models/Api` + FE `NotificationSettings`(orderScope null 허용). 웹 `notifications.types.ts`는 data-contracts 파생, `groupNotificationSettings` 추가. 웹 인박스 손타입은 유지.
