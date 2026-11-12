@@ -269,7 +269,8 @@ responsibilities rather than forcing the whole product into one checkout.
   Agents whose setup is already established (e.g. office Codex) do not have
   to copy another agent's exact arrangement; keep the existing sessions and
   apply the concept.
-  **Terminology (user, 2026-11-12):** distinguish a *sub-session* from a
+  **Claude Code only** (user, 2026-11-12; other agents keep their own setup):
+  Terminology (user, 2026-11-12):** distinguish a *sub-session* from a
   *separated work session*. A sub-session sits under the main and is linked to
   it, because the main needs its result in the same flow (Claude Code
   `start_session` children, subagents). A **separated work session** is what
@@ -283,7 +284,7 @@ responsibilities rather than forcing the whole product into one checkout.
   not to the main.
   Feature sessions do not report to or message the main session unless the
   user asks. They report to the user in their own session and keep records.
-  In Claude Code, sessions started from the main are linked, and the app
+  (Claude Code only from here on.) In Claude Code, sessions started from the main are linked, and the app
   auto-forwards their turn-end notes to the main. Once a feature session is
   standing, detach it to top level (`detach_session`) so those notes stop.
 - Default to one implementation session per logical feature or bug, including

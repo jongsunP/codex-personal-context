@@ -55,6 +55,13 @@
   따른다. 사용자가 직접 하라고 하면 메인에서 바로 해도 된다. 사무실 Claude 메인
   (`~/Repository`)과 같은 방식이다.
 
+- **2026-11-12 · 사무실 Claude가 남김 · 열림 (Claude Code 전용):** 세션 용어와 깊이를 구분한다. "하위 세션"은
+  메인 아래 연결돼 메인이 결과를 받아야 하는 세션이다. 사용자가 말하는 "세션 분리"는 메인과 별개로 기능을 맡는
+  독립 top-level **작업 세션**이다. `start_session`으로 만든 뒤 바로 `detach_session`으로 분리해야 앱의 자동 완료
+  알림이 메인에 오지 않는다. 작업 세션은 사용자가 시키지 않으면 메인에 보고·메시지를 보내지 않는다. 깊이는
+  메인 → 작업 세션 → (필요할 때만) 그 작업 세션 아래 하위 세션이다. Codex에는 해당하지 않는다. 정본:
+  `SESSION_WORKFLOW.md` "Standing feature sessions and a general main"의 Claude Code only 부분.
+
 ## 사무실 Codex
 
 - **2026-11-12 · 사무실 Claude가 남김 · 열림:** 다음 사용 때 이 저장소를 pull하고
