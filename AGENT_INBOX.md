@@ -45,6 +45,21 @@
   - 사무실 Codex: 열림
   - 집 Codex: 열림(사용 시작 때)
 
+- **2026-11-12 · 사무실 Claude가 남김 · 열림(다음에 앱 작업을 맡는 에이전트가 먼저 처리, 처리한 에이전트가 완료 표시):**
+  **앱 작업 지침 재점검 — 기공소앱·병원앱 공통, 기능 코드 수정보다 먼저.** 사용자 지시: Lab PR #42(알림센터)에
+  앱 개발자(myungjael)가 남긴 리뷰는 원래 기본으로 지켰어야 할 내용이다. 코드만이 아니라 앱 개발 작업 지침 자체에
+  빈틈이 있을 수 있으니, 다음에 앱 작업을 하는 에이전트는 이것부터 다시 점검한다(이번 기능 수정만으로 끝내지 않는다).
+  리뷰 내용: (1) `src/models/`에는 생성 파일(`Api.ts`, `http-client.ts`)만 둔다 — 손으로 만든 `NotificationApi.ts`를
+  넣은 것이 컨벤션 위반. (2) 스타일은 styled-components로 — `StyleSheet.create` 사용 금지. (3) API 응답은 배열 원소·하위 목록의
+  null까지 서비스에서 검증해, 렌더 중 TypeError(릴리스에서 크래시)가 아니라 쿼리 실패·재시도 UI로 처리한다. (4) 공용 로직을
+  건드리면 QA 때 기존 기능까지 앱에서 함께 테스트한다.
+  할 일: Office(`dentlink-app`)·Lab(`dentlink-lab-app`)의 `CLAUDE.md`·`AGENTS.md`, 이 저장소 `DEVELOPMENT_STYLE.md`·앱 플레이북
+  (`projects/dentlink-app-local-development.md` 등)을 위 4가지 기준으로 대조해 왜 놓쳤는지 확인하고, 빠진 지침을 보완한다(팀 저장소
+  문서 변경은 사용자 확인 후). 이어서 알림센터 앱 코드에 같은 유형이 남았는지 점검한다(예: `NotificationOfficeSelectSheet`·
+  `NotificationLabSelectSheet`·`NotificationPermissionBanner` 등의 `StyleSheet` 사용). 이번에 한 수정은 Office `4ed34bf`·Lab `0f03901`
+  (인박스 StyleSheet 정리, 응답 null 검증)뿐이다. 상세: `projects/dentlink-unified-notification-center.md` 최상단.
+  - 상태: 열림
+
 ## 집 Claude Code
 
 - **2026-11-12 · 사무실 Claude가 남김 · 열림:** 메인세션은 메인 폴더 `~/repository` 아래의

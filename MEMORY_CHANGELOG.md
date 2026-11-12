@@ -5,6 +5,7 @@
 
 ## 2026-11-12
 
+- 다음 앱 작업 에이전트가 먼저 할 일: 앱 개발자 리뷰 기준으로 기공소앱·병원앱 작업 지침 재점검(AGENT_INBOX "모든 에이전트", 정본 최상단).
 - 알림센터 리뷰 대응 세 브랜치 push 완료(웹 E2E 가드 SKIPPED, 사용자 지시).
 - 알림센터 저녁 마감: 웹 리뷰 대응 로컬 커밋 7968ad66b(push 전), 앱 리뷰 대응 미커밋(검증 완료·패치 백업), 남은 일 6개를 정본 최상단에 기록.
 - 사용자 지적: 앱 미리보기를 띄울 때 Reactotron 실행·Android `adb reverse tcp:9090`·iOS/Android 두 연결 확인이 빠졌다(알림센터 작업 세션). 기존 지침(`projects/dentlink-app-local-development.md`, AGENTS.md)대로 Metro·기기와 한 세트로 처리한다. 사무실 Mac에서 메인이 바로 켜고 두 연결을 확인했다.
