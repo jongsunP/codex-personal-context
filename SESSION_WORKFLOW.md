@@ -269,6 +269,15 @@ responsibilities rather than forcing the whole product into one checkout.
   Agents whose setup is already established (e.g. office Codex) do not have
   to copy another agent's exact arrangement; keep the existing sessions and
   apply the concept.
+  **Terminology (user, 2026-11-12):** distinguish a *sub-session* from a
+  *separated work session*. A sub-session sits under the main and is linked to
+  it, because the main needs its result in the same flow (Claude Code
+  `start_session` children, subagents). A **separated work session** is what
+  the user means by "세션 분리": an independent top-level session that works
+  alongside the main and owns a feature (e.g. the notification center). In
+  Claude Code, create it with `start_session` and then detach it to top level
+  right away. Records call it a "작업 세션" (work session), not a "하위 세션"
+  (sub-session).
   Feature sessions do not report to or message the main session unless the
   user asks. They report to the user in their own session and keep records.
   In Claude Code, sessions started from the main are linked, and the app
