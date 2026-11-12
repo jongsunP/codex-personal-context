@@ -266,6 +266,11 @@ responsibilities rather than forcing the whole product into one checkout.
   feature is active. After handing work over, the main does not track, poll
   or re-verify. When the session reports back, relay only what the user must
   decide and what remains. Re-verify only when the user asks.
+  If feature work (a question about a feature's behavior, code research, a
+  fix) arrives in the main while that feature has a work session, do not do
+  it in the main. First ask the user whether to send it to that work session.
+  The main itself does only intake, classification, routing, guideline
+  updates and records (user correction, 2026-11-12).
   Agents whose setup is already established (e.g. office Codex) do not have
   to copy another agent's exact arrangement; keep the existing sessions and
   apply the concept.
