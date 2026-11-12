@@ -278,6 +278,9 @@ responsibilities rather than forcing the whole product into one checkout.
   Claude Code, create it with `start_session` and then detach it to top level
   right away. Records call it a "작업 세션" (work session), not a "하위 세션"
   (sub-session).
+  Depth: main → work session → (only if needed) sub-sessions under that work
+  session. Sub-sessions belong to the work session that needs their results,
+  not to the main.
   Feature sessions do not report to or message the main session unless the
   user asks. They report to the user in their own session and keep records.
   In Claude Code, sessions started from the main are linked, and the app
