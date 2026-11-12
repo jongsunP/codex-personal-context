@@ -5,6 +5,8 @@
 
 ## 2026-11-12
 
+- 사용자 지적: 앱 미리보기를 띄울 때 Reactotron 실행·Android `adb reverse tcp:9090`·iOS/Android 두 연결 확인이 빠졌다(알림센터 작업 세션). 기존 지침(`projects/dentlink-app-local-development.md`, AGENTS.md)대로 Metro·기기와 한 세트로 처리한다. 사무실 Mac에서 메인이 바로 켜고 두 연결을 확인했다.
+
 - 알림 설정 user 영역 먼저(사용자 결정)·세 브랜치 push 완료, 시뮬·에뮬은 클로드 앱 밖 실행 지침 추가.
 - 모든 에이전트 공통 작업 방식(사용자): 메인은 일반 메인(작업·PR에 묶지 않음), 큰 기능은 상시 하위 세션이 전체 담당, 넘긴 뒤 추적·폴링·재검증 금지. SESSION_WORKFLOW·AGENTS 반영, AGENT_INBOX 모든 에이전트 항목 추가. 사무실 Claude는 알림센터 상시 하위 세션 local_62b33d4f… 지정.
 
