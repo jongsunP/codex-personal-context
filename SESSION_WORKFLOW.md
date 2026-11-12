@@ -1018,6 +1018,16 @@ update in **Branch Naming And Draft PR Metadata**; the base policy is unchanged.
   actual CodePush label, and deployment target separately. A tag suffix is
   not necessarily a Revopush label or native build number. Never infer the
   next tag from its largest suffix without checking the current workflow.
+- Serialize CodePush/Revopush builds by default, including builds from
+  different repositories. The CLI can share `os.tmpdir()/CodePush` and
+  `CodePushSourceMap`, so separate worktrees do not isolate bundle/assets.
+  Before any concurrent build, use a distinct product/platform `TMPDIR`
+  and verify the CLI's actual bundle, asset, and source-map output paths.
+  If shared-output contention occurs, do not treat upload success as proof
+  of package integrity: isolate, rebuild, and verify the intended package
+  before replacing the affected authorized deployment. Record any unsafe
+  label and never use it as a rollback target. This follows the verified
+  2026-11-12 Office/Lab Development deployment incident.
 - Keep PR merge, Git tag/GitHub Release, CodePush upload, disabled/enabled,
   rollout, installed-device uptake, store upload, review submission, approval,
   and public release distinct. Current tag workflows only create tags and

@@ -199,9 +199,9 @@ For detailed current state, read:
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
-### Dentlink 통합알림센터 — 전체 변경 규약 검토·수정 push 완료
+### Dentlink 통합알림센터 — 재개 감사·개발 전달 완료
 
-- **현재(2026-11-12 20시대):** 팀/개인 지침과 타 에이전트의 새 설정 API 이전 대조 후 Web `7e23e709b`·Office `a624b598`·Lab `d018b85` push, 최종 웹·양앱 양OS 검증 완료. Lab 앱 개발자3건 resolve, 웹 밀링 FILE 별도 릴리즈 통합 리뷰1건 남김. 노출 플랫폼 키·사용자 설정/배지 협력·실제 푸시 QA·승인 후 배포는 별도. [11/12 전체 검토 기록](projects/dentlink-unified-notification-center-review-2026-11-12.md)을 따른다.
+- **현재(2026-11-12 20시대):** 타 에이전트/운영 지침 동기화, 규약·요구사항 전체 변경 감사와 수정·최종 런타임 후 개발 전달. 웹 PR4884→develop e72bbafbee, Clinic/Lab 배포 시작 확인. Office Development v143/v143(2.2.4), Lab v42/v41(1.0.5) 활성화. 원 PR4862/346/42 유지. 임시폴더 충돌은 격리 재게시로 복구, Lab iOS v41 롤백 금지. Jira 후속 DL-17415~17420 To Do, 기존 개발 완료와 Home3/이메일 경계 유지. [11/12 배포·마감 정본](projects/dentlink-unified-notification-center-delivery-2026-11-12.md) 및 [감사 증거](projects/dentlink-unified-notification-center-review-2026-11-12.md) 참조. 실기기/웹 결과 확인은 사용자에게 맡기고 대기한다.
 
 - 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.

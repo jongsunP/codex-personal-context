@@ -1,5 +1,15 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**개발 전달·Jira·기억 마감 — 2026-11-12 20시대 KST:** 사용자 승인으로 아래 감사 결과를 개발 환경에 전달했다. [이번 배포·Jira·남은 일 정본](dentlink-unified-notification-center-delivery-2026-11-12.md)을 먼저 읽는다. 아래 감사 단계의 “배포 없음”은 이후 승인 전의 기록이다.
+
+- **웹:** DEV 전용 PR4884 병합 → develop `e72bbafbee`. Clinic/Lab workflow43211888815/43211888799가 해당 SHA로 시작했음을 확인하고 추적 종료했다. 배포 완료까지 확인한 뜻은 아니다. 기존 FILE/밀링 QA를 보존한 전달 branch `feat/DL-17058-develop@b248516dc`, 원 feature `7e23e709b`/검토 PR4862→release1.94는 유지.
+- **앱:** Office `a624b598` → Development iOS/Android **v143**, target **2.2.4**. Lab `d018b85` → Development iOS **v42**/Android **v41**, target **1.0.5**. 네 건 enabled/mandatory/100%, 기존 PR346/42 유지. 실기기 수신은 미확인·자동 추적 없음.
+- **배포 중 복구:** 공용 Revopush 임시 폴더 병렬 충돌. Office는 업로드 전 실패 후 격리 재배포 성공. Lab 초기 iOS v41 asset 혼입을 전용 경로 재생성 v42로 56초 안에 교체. **Lab iOS v41 롤백 금지**, 해당 기간 기기 수신 미확인. 공통 지침에 기본 순차 실행/검증된 TMPDIR 격리를 추가했다.
+- **Jira:** 설정3카드 본문 최신화, 본인 제품/설정/계약 하위에 검증·DEV 전달 기록. 기존 개발 완료는 Ready for Deploy, Home3/이메일은 To Do 유지. 실제 후속 구현 **DL-17415~17417**(웹/Office/Lab 노출 플랫폼·개인 설정), **DL-17418~17419**(본체 외 양앱 배지 개선), **DL-17420**(웹1.94 기존 FILE 통합)을 To Do로 생성. SP·상위·타인 카드 무변경, 단순 API 질문 카드 없음.
+- **BE 단순 전달:** 기존 Office GET `/app/users/own/push-preferences` 및 PATCH `/app/users/own/push-preferences/{preferenceId}`는 담당 주문 필터에서 사용 중이므로 삭제 금지. 노출 플랫폼 키는 이미 사용자44994 질문이 있어 중복 문의 없이 답변 대기.
+- **후속:** 실제 기기/개발서버 설정 저장·재진입, 실제 푸시 랜딩/읽음 QA. 미정 설정/배지·Home3·이메일·별도 Android native/스토어·선택적 주석 커버리지 경고는 각각 경계 유지. 새2.2.5/1.0.6 바이너리에 이번 OTA가 전달됐다고 하지 않는다.
+- **로컬:** 세팅/실행 지침 정리 완료. 검증용 서버·기기는 종료했고 다음 재개 시 정확한 소스/환경과 양OS/Reactotron 연결만 확인한다. 이번 마감 후 자동 감시 없이 사용자 요청까지 대기한다.
+
 **전체 변경 규약·요구사항 재검토 및 수정 push 완료 — 2026-11-12 20시대 KST:** 사용자 추가 승인에 따라 원래 Codex 구현과 다른 에이전트의 새 설정 API 이전을 팀 AGENTS/CLAUDE·개인 공통/프로젝트 지침·확정 정책과 함께 대조했다. [이번 검토·수정·검증·미정 상세](dentlink-unified-notification-center-review-2026-11-12.md)가 최신 정본이며 아래 19시대 동기화만 완료한 상태를 대체한다.
 
 | 제품 | 현재 위치 / 원격 반영 | 기존 PR |
