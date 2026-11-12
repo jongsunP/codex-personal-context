@@ -252,6 +252,20 @@ responsibilities rather than forcing the whole product into one checkout.
   requests status or aggregation here, perform only the requested check.
   A new request to monitor until completion must be explicit; delegation itself
   does not authorize ongoing monitoring.
+- **Standing feature sessions and a general main (user instruction,
+  2026-11-12, all agents):** This applies to every agent's main session
+  (office/home × Codex/Claude Code and any agent added later), not just one.
+  The main session stays general and is never tied to one task, branch or PR.
+  It does intake, routing, records and closeout. A large ongoing feature gets
+  one **standing feature session** that owns the whole feature, not a single
+  task: implementation, follow-up fixes, verification, and push/deploy
+  preparation when the user orders them. Example: the notification center's
+  standing session in the office Claude main. The role is real, not just a
+  title. Send that feature's new requests to its standing session, and let
+  the user instruct that session directly. Do not archive it while the
+  feature is active. After handing work over, the main does not track, poll
+  or re-verify. When the session reports back, relay only what the user must
+  decide and what remains. Re-verify only when the user asks.
 - Default to one implementation session per logical feature or bug, including
   coordinated web and app work. Follow **New Work Intake And Session Routing**
   for justified separation; different devices or repositories alone are not

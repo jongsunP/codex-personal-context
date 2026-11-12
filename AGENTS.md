@@ -198,6 +198,10 @@
   verified model and reasoning level, or the highest available combination
   when that is unavailable. Do not silently use lower app defaults; verify
   the actual applied settings after creation.
+- All agents (2026-11-12): every agent's main session stays general and routes
+  each large feature to one standing feature session that owns the whole
+  feature; after handoff the main does not track, poll or re-verify (see
+  **Standing feature sessions and a general main** in `SESSION_WORKFLOW.md`).
 - For the Dentlink FE main session, follow **Dentlink Frontend Top-Level
   Session Model** in `SESSION_WORKFLOW.md`: either do the authorized work here
   or hand it off. Once session registration and prompt delivery are confirmed,
