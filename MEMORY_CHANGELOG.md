@@ -5,6 +5,8 @@
 
 ## 2026-11-12
 
+- 알림센터 dev 스웨거 재생성(commit 없음): 알림 설정 GET 응답이 `{view, setting}`→`NotificationSettingDto`(카테고리에 domain·toggleChannel·channels[{channel,enabled}], employee에 orderScopeOptions)로 바뀌어 세 제품 설정 코드가 옛 구조라 추가 작업 대상. appLandingUrl은 이미 사용 중. 로컬 Android 에뮬 설치본은 Notifee 호환 패치 미포함(11-10 설치, 패치는 release/v2.2.5·v1.0.6에만). 상세는 통합알림센터 정본 최상단.
+
 - 에이전트 전달함 `AGENT_INBOX.md` 신설(사용자 지시, 방향 무관: Codex↔Claude·기기 간·모든 에이전트, `.gitignore` 허용·`setup-local-codex.sh` 동기화 목록 추가): 사용자가 "다른 에이전트도 이렇게 하래"라고 한 것을 에이전트별 섹션에 남기고, 각 에이전트는 동기화 때 자기 항목을 적용·완료 표시(AGENTS.md·BOOTSTRAP 반영). 첫 항목: 집 Claude 메인 폴더 아래 전체 제어 방식, 사무실 Codex 지침 반영, 집 Codex 메인 지정, 모든 에이전트 11-12 구조 확인.
 - 에이전트별 메인세션 구조 확정(사용자): 사무실 Codex·사무실 Claude·집 Codex·집 Claude(이후 추가 포함)마다 메인 1개, 각자 운영, 공통 기록은 이 저장소, 회사 저장소(~/.codex·~/.claude)는 에이전트 실행용만. 사무실 Claude 메인 `local_322c0b9d…`를 `~/Repository`로 옮겨 지정. `projects/dentlink-fe.md` Session Ownership·세션 표, `AI_WORKFLOW.md` 대응표, `SESSION_WORKFLOW.md` 메인 유지 절 반영.
 - 동기화·기록 시점 명확화(AGENTS.md, 모든 에이전트): 새 세션·재개 시 필요한 범위를 자동 동기화(고정 일과 아님), 기록은 요청 작업이 끝날 때 요청이 없어도 남길 가치가 있는 것만 양쪽에.
