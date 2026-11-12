@@ -358,6 +358,8 @@ Dentlink-specific intake rules remain limited to Dentlink.
 - Apply the nondeveloper-facing QA/comment style above. Change titles,
   descriptions, or comments only within the user's authorized scope.
 
+- Finding backend handoffs (user, 2026-11-12): backend API/spec notes for FE usually sit in the parent card's comments, but a backend developer may post them on their own sub-card instead (e.g. the notification settings change on DL-17114, not parent DL-16140). If the parent has nothing, check sibling backend cards for the newest comment that mentions the user (what the user sees in Jira notifications). The user may also give a linked Notion page.
+
 ## Figma Comments And Personal Review Notes
 
 The user confirmed on 2026-10-27 that self-addressed Figma comments are
