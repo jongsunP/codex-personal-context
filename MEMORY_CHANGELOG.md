@@ -5,6 +5,8 @@
 
 ## 2026-11-12
 
+- 알림센터 실제 설정 GET/PUT/화면 대조 및 이전 resolved 리뷰의 유사 누락 확장 감사. 웹2종/양앱 양OS 실제 저장·전체 값 원복 확인. Office 금융 null 행 통과를 발견·수정해 Retry복구 양OS 확인 후94334d2a push, Web테스트500줄규약 분리2a65e8eec push, Labd018b85 추가수정없음. 빈 알림 helper Figma원문 확인, 플랫폼키44994·FILE통합17420 대기. 배포없음. 공통 Feedback And Completion에 같은 실패유형 확장검토 원칙 추가; 개인/Claude/Codex 기록 후 대기.
+
 - 통합알림센터 감사 후 사용자 승인 DEV 전달 마감: 웹 #4884→develop e72bbafbee, Clinic/Lab Actions 시작1회 확인. Office2.2.4 양OS v143, Lab1.0.5 iOSv42/Androidv41 활성화. 기존 검토 PR 유지. CodePush 공용tmp 충돌은 격리 재발행으로 복구, Lab iOSv41 롤백 금지·기기 수신 미확인. SESSION_WORKFLOW에 기본순차/TMPDIR 격리 규칙. Jira 설정 본문·하위 진행 기록, 실제 후속6건 DL17415~17420 To Do, SP/타인/부모 무변경. 개인/Claude/Codex 기억 갱신 후 대기.
 
 - 통합알림센터 사용자 승인 전체 규약/요구사항 감사 후 Web7e23e709b·Officea624b598·Labd018b85 push. 임의 문구/구조·앱 StyleSheet·헤더/배송 랜딩 누락 보완 및 최종 웹/양OS 확인. 최신 Jira 설정 계약 대조, Lab 리뷰 resolve, 밀링 FILE 별도 통합1건/BE 노출키 보류. 기존 PR 유지·배포 없음. 웹 models와 UI 경계 지침 보완, 개인/Claude/Codex 기록 갱신. 상세는 프로젝트11/12 review 문서.

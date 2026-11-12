@@ -623,6 +623,15 @@ the user's presence or terminal arrangement does not replace agent verification.
 
 - Treat one concrete user example as a request to search all equivalent
   occurrences. Fix the underlying pattern, not only the quoted line.
+- When a review exposes a missed fundamental convention, requirement boundary,
+  or crash guard, treat it as evidence that the same omission may exist outside
+  the reviewed lines. Inspect the affected feature's complete change inventory,
+  including related products and shared consumers, for the same failure class.
+  Include earlier resolved reviews: a resolved thread is not proof that the
+  surrounding implementation is safe. Record the risk, inspected locations,
+  findings and relevant final-code evidence; reuse adequate unchanged evidence
+  rather than expanding into unrelated full-product QA. This is the user's
+  2026-11-12 clarification after the notification-center review.
 - Treat user-verified and QA-corrected behavior as a protected baseline. Before
   a later cleanup, responsive pass, refactor, or adjacent feature edit changes
   the same area, inspect the prior fix and preserve it unless the new

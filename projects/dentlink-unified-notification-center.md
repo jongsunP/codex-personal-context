@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**실 설정 저장·기존 리뷰 확장 감사 마감 — 2026-11-12 22시대 KST:** [이번 설정/유사 누락 감사 정본](dentlink-unified-notification-center-settings-audit-2026-11-12.md)을 먼저 읽는다. 앞선 DEV 전달 이후의 추가 요청이며 **이번 후속 수정은 배포하지 않았다.**
+
+- **실제 확인:** Clinic/Lab 웹과 Office/Lab 양OS에서 DEV GET 응답·FE 표시명/서버 순서·전체 PUT·재조회 확인. 실제 토글 변경 뒤 모든 계정을 시작 전체 응답과 정확히 같게 원복했다. `channels: []` 단독 토글·숨긴 값/자식값 보존 정상. 대표 OWNER·기존 로그인 기준이며 모든 권한/실제 푸시 QA를 뜻하지 않는다.
+- **리뷰 의도 반영:** resolved 포함 이전 앱 개발자/CodeRabbit 지적을 현재 코드와 대조하고, 전체 feature diff의 규약·임의UI·응답/크래시·공용 동작에 같은 누락이 있는지 확장 점검했다. Office 추가 Credit/Statements의 null 행 통과를 실제로 찾아 서비스 방어·기존 Retry로 수정했고 양OS 손상 응답→Retry→실제 데이터 복구를 검증했다. 금융 전용 임의 오류 설명은 제거; 인박스 empty 문구는 Figma 원문 확인 후 유지.
+- **현재 Git:** Web `feature/DL-17058@2a65e8eec`(테스트 파일 규약 분리만), Office `feature/DL-17059@94334d2a`(금융 목록 방어/문구), Lab `feature/DL-17060@d018b85`(추가 수정 불필요). 기존 PR4862/346/42 유지, 새 merge/배포 없음. **Office DEV v143에는 이번 금융 보완이 아직 없다.**
+- **미정:** `toggleChannel`은 플랫폼 키가 아니므로 현재 웹 PUSH 추론은 임시다. 지금 실제 응답에는 PUSH+MAIL 부모가 없어 해당 숨김 손실은 없지만 미래 계약까지 보장하지 않는다. BE에 이미 보낸 DL17114 댓글44994 답변 대기이며 중복 질문은 필요 없다. 웹 FILE 통합 DL17420·실제 FCM/최종 바이너리 QA·본체 밖 후속은 기존 경계 유지.
+- **기록/다음:** 개인 공통 지침에 기본 규약·크래시 누락 리뷰를 같은 위험 유형으로 확장 검토하는 기준을 추가했다. Claude/Codex 기억에도 동기화. 이번 검증용 실행만 종료하고 대기한다. 다음 재개 때 이 감사 결과와 남은 일부터 보고한다.
+
 **개발 전달·Jira·기억 마감 — 2026-11-12 20시대 KST:** 사용자 승인으로 아래 감사 결과를 개발 환경에 전달했다. [이번 배포·Jira·남은 일 정본](dentlink-unified-notification-center-delivery-2026-11-12.md)을 먼저 읽는다. 아래 감사 단계의 “배포 없음”은 이후 승인 전의 기록이다.
 
 - **웹:** DEV 전용 PR4884 병합 → develop `e72bbafbee`. Clinic/Lab workflow43211888815/43211888799가 해당 SHA로 시작했음을 확인하고 추적 종료했다. 배포 완료까지 확인한 뜻은 아니다. 기존 FILE/밀링 QA를 보존한 전달 branch `feat/DL-17058-develop@b248516dc`, 원 feature `7e23e709b`/검토 PR4862→release1.94는 유지.
