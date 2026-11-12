@@ -5,6 +5,8 @@
 
 ## 2026-11-12
 
+- 알림센터 세 작업 브랜치 최신화(앱 origin/main merge, 웹 차이 없음)·dev 스웨거 생성 결과 커밋·FE 타입 정리 로컬 커밋 완료(Office cfa55ec·Lab 7cb252d·Web 27c549f79, tsc 기준선, push 안 함). 다음은 알림 설정 API 추가 작업.
+
 - 스웨거 생성 파일 원칙(사용자, DEVELOPMENT_STYLE): 생성 결과는 계속 갱신되므로 그대로 쓰고(손수정 금지), FE가 그 위에 가공한 타입·매퍼·기능 코드에만 필요한 변경을 넣는다.
 
 - 알림센터 dev 스웨거 재생성(commit 없음): 알림 설정 GET 응답이 `{view, setting}`→`NotificationSettingDto`(카테고리에 domain·toggleChannel·channels[{channel,enabled}], employee에 orderScopeOptions)로 바뀌어 세 제품 설정 코드가 옛 구조라 추가 작업 대상. appLandingUrl은 이미 사용 중. 로컬 Android 에뮬 설치본은 Notifee 호환 패치 미포함(11-10 설치, 패치는 release/v2.2.5·v1.0.6에만). 상세는 통합알림센터 정본 최상단.

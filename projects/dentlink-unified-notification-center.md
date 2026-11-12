@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**작업 브랜치 최신화·dev 스웨거 반영 · 로컬 커밋, push 전 — 2026-11-12 (하위 세션 `local_d6b08f7e…` noti-sync-swagger, 메인 검증):** 사용자 원칙(스웨거 생성 결과는 그대로 커밋, 변경은 FE 가공 계층에만, 충돌은 양쪽 의도 확인 후 합침)으로 진행.
+- Office `feature/DL-17059`: origin/main merge `7015233`(충돌 없음, CodePush 태그 workflow 1개 유입) → 스웨거 `60be685` → FE `cfa55ec`. 원인: dev 스웨거 스키마 이름 충돌로 주문서 카탈로그 `ProductDto`·`OptionDto`·`OptionValueDto`가 제조 스키마로 덮이고 `OptionGroupDto`가 빠짐(`/catalogs/option` 응답이 덮인 타입을 가리키는 스펙 문제). 웹 `product.types.ts`처럼 이전 생성본 5개 타입을 `src/services/catalog.types.ts`에 두고 14개 파일 import만 변경, 런타임 불변.
+- Lab `feature/DL-17060`: merge `549f548` → 스웨거 `1c26f0d` → FE `7cb252d`(밀링 `parameterValues` 요청 타입 FE 정의, 문자열만 읽는 헬퍼. FILE 값은 공정 카드에 "-").
+- Web `feature/DL-17058`: master와 차이 0(merge 없음) → 스웨거 `907ce47cf` → FE `27c549f79`(밀링 요청 값 `string | {fileIds} | null`, FILE 표시 문구 ko/en 추가). pre-commit 훅이 작업 폴더 기준 tsc라 스웨거 커밋 단독 체크아웃 시 lab tsc 11건.
+- 메인 재검증: tsc Office 6·Lab 5·웹 clinic/lab/admin 0(기준선 동일), 작업 트리 clean, 원격 대비 앱 4·웹 2커밋 앞섬(**push 안 함**, PR 불변). 테스트는 변경 관련 통과, 실행 불가 묶음은 네이티브 모듈 부재 환경 문제.
+- **나중 충돌 주의:** 웹 `release/v1.93.0`·develop의 DL-17195(#4866, 밀링 FILE 입력 전체, data-contracts 손수정)가 master에 들어온 뒤 merge하면 data-contracts·`manufacturing-production.types.ts`·lab `gnb.json` 충돌 가능 → release 구현을 받고 data-contracts는 재생성.
+- 알림 설정 응답(`NotificationSettingDto`) 이전과 앱 `NotificationApi.ts`는 손대지 않음(다음 추가 작업).
+
 **dev 스웨거 갱신 · 생성만, commit 없음 — 2026-11-12 (사무실 Claude 메인):** 사용자 요청으로 Office `feature/DL-17059`·Lab `feature/DL-17060`의 `src/models/Api.ts`, Web `feature/DL-17058` worktree의 `shared/models/src`를 dev 스웨거로 재생성(작업 트리 수정 상태로 둠).
 - **알림 설정 API 구조 변경(추가 작업 대상):** GET/PUT `/office|lab/notifications/settings` 경로는 같고, GET 응답이 `{view, setting}`에서 `NotificationSettingDto` 하나로 바뀌었다. `CategorySettingDto`에 `domain`·`toggleChannel`·`enabled`·`channels: ChannelSettingDto[]`(`{channel, enabled}`, 배열 순서=화면 순서, 빈 배열=단독 토글)가 들어가고, `EmployeeSettingDto.orderScopeOptions`(코드 배열, displayName 없음)가 생겼다. `view`·`ConfigurableCategoryDto`·`OrderScopeDto`·`*ViewDto`는 삭제됐다. 세 제품 설정 코드는 모두 옛 `view`/`setting` 구조를 읽는다(앱은 별도 `src/models/NotificationApi.ts` 사용이라 타입 오류로 안 드러남). 그래서 dev 서버 기준으로 현재 설정 화면은 런타임에서 맞지 않는다. USER 설정도 같은 구조의 `user.categories`로 온다.
 - **인박스:** `InboxNotificationDto.appLandingUrl`(string|null)이 정식 반영됐다. 앱은 11-10 `b939fce7`/`2374041f`부터 `NotificationApi.ts`에 같은 필드를 두고 사용 중이라 변경 필요 없음.
