@@ -704,6 +704,8 @@ test session can be reused.
   every role has been tested. Report saved login state and saved password as
   distinct facts.
 
+- Live DEV API checks (user, 2026-11-12): when a task needs the real DEV response, log in yourself with the stored keychain test accounts (references in `~/.local/share/codex-test-sessions/dentlink/development/secure-login-entry/keychain-references.json`; app login `POST https://dev-api.dentlink.io/app/auth/login` with `Service-Type`, then `Authorization`/`Employee-Id`/`Employer-Id` headers) instead of asking the user for responses or stopping at "a token is needed". Never print passwords or tokens. Example script: `dev-notification-settings-get.py` in the same folder.
+
 ## Main Worktree And Feature Session Model
 
 For Dentlink, apply New Work Intake And Session Routing above: prefer a

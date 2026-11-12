@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**dev 알림 설정 실제 응답 확인 — 2026-11-12:** 키체인 테스트 계정(app-office, app-lab)으로 직접 로그인해 `GET /office|lab/notifications/settings` 200·0000을 받았고, 사용자가 준 응답과 완전히 같다. 치과: orderScope MY_ORDERS_ONLY, 선택지 2개, employee 7개(LINKTALK·DESIGN_CONFIRMATION·ORDER_UPDATES·FEEDBACK·SHIPPING·PAYMENTS·CREDITS) + user CREDITS. 기공소: orderScope null·선택지 없음, employee 5개(LINKTALK·DENTLINK_SUPPORT·DESIGN_CONFIRMATION·ORDER_UPDATES·MILLING_ORDER_UPDATES), user 없음. API는 스웨거·DL-17114 안내대로 동작한다.
+
 **PUSH·토글 용어 확인 — 2026-11-12:** 사용자 확정: PUSH는 앱 푸시 알림이라 **앱에만** 있다(웹은 PUSH 채널 체크와 toggleChannel=PUSH 항목(예: LinkTalk)을 그리지 않음, 11-10 웹 PUSH 복원은 이번 작업에서 되돌림). [Figma 앱 설정 화면 62:19720](https://www.figma.com/design/QLIzKYWzFFlptCYzN36Iq4/?node-id=62-19720) 대조: "Order"는 토글 없는 도메인 제목, "Design Confimation" 등 카테고리마다 토글, 그 아래 App Push·Email 체크, 토글 OFF면 체크 숨김, 단일 항목 도메인(Credit, LinkTalk App Push)은 단독 카드. 따라서 기획서의 "도메인 단위 전체 수신 토글"·TC "Orders 도메인 전체 OFF"는 실제로는 **카테고리 토글**(BE `category.enabled`, 그 자체 채널은 `toggleChannel`=NOTIFICATION)을 가리키며 의도는 같고 용어만 다르다(도메인 단위 토글은 디자인·API 모두 없음). 디자인의 Case Preference는 현재 API enum에 없어 응답대로면 안 나온다. 디자인 오타(Confimation, Emai)는 FE 매핑 표기를 따른다.
 
 **계속 참조할 자료(사용자, 2026-11-12):** 노션 [알림센터 기획](https://app.notion.com/p/innovaid/3c7ce072e82f811184a8e647444f01fd), Jira 상위 DL-16140과 하위 카드(FE DL-17057~17061·17063·17064·17066·17067, BE DL-16906·17029·17113~17116·17140·17379·17380, 디자인 DL-17035), BE 안내 DL-17114 댓글 44978, PM Slack 스레드. 개발 협의로 바뀐 내용은 기획서에 없을 수 있어 Jira 댓글·사용자 지시를 우선한다.
