@@ -1,5 +1,18 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**상위·하위 토글의 기존 UX 복구 완료 — 2026-11-12 요청 / 11-13 자정 이후 마감:** 사용자 재확정에 따라 Web·Office·Lab에서 상위 OFF/ON 시 해당 항목의 하위 채널 값도 모두 OFF/ON으로 저장하도록 수정했다. 이전 '부모만 변경·자식값 보존' 해석은 폐기한다. **세 제품 commit/push 완료, 기존 PR 유지, 재배포 없음.**
+
+| 제품 | 최종 branch / 원격 동일·clean | 검증 |
+| --- | --- | --- |
+| Clinic/Lab 웹 | `feature/DL-17058@17699c5e64034a74a2a0ac1e3cb4bd6e6fbfcd0a` | 실제 두서비스 화면·PUT/GET·전체원복, 관련29 tests·3서비스type·정상Git훅 통과 |
+| Office 앱 | `feature/DL-17059@f152f6cd44cc152f659f94ec888f7c94abd995d7` | 최종양OS 실제PUT5회/GET·전체원복, 관련57 tests/lint통과, tsc기존6진단 |
+| Lab 앱 | `feature/DL-17060@dd1368c104922413e89c85bbb0e15cd6bf2a2454` | 최종양OS 실제PUT8회/GET·전체원복, 관련14 tests/lint통과, tsc기존5진단 |
+
+- **값과 범위:** 상위 ON이면 이전에 개별OFF했던 하위도 모두ON이 되는 것이 확정 의도다. 이후 하위개별변경가능. 같은category의웹미노출PUSH도부모의하위이므로함께변경하되, 다른category/employee-user영역/숨긴다른항목은보존한다. 실제PUT의각하위가재조회에존재하고같은값인지검사해부모만반영·자식누락을성공으로보지않는다. 생성API/새UI/OS권한안내/플랫폼노출정책은변경없음.
+- **이전 리뷰 원문 결론:** 정상 `channels: []`가 문제라는 지적은 없었다. Web CodeRabbit은 선택적channels키생략을조회오류로거절한문제, 필수categories누락을빈배열로저장한문제였다. Lab앱개발자는`channels:[null]`등손상원소크래시를지적했다. 모두기존수정/resolve상태를원문으로재확인. 정상빈배열은단독토글로표시·저장하며새BE요구없음.
+- **사용자 공유/남은 확인:** [DL16140 댓글45009](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=45009) 원문 확인. 이번실API검증으로상위·하위동시저장가능은확인했다. 실제알림발송차단/재개적용은그댓글의BE답변범위이며새중복질문은하지않는다. 별도웹·앱노출키44994답변대기유지. 기존FILE통합/실기기FCM·본체밖후속경계도유지.
+- **정리/다음:** 이번검증용서버·브라우저·앱실행만종료했고사용자기기·창배치유지. 실제렌더와handler/CDP확인이며물리탭전수·실발송QA는아니다. 웹PR4862/Office346/Lab42유지, developmerge·CodePush없음. 따라서현재개발배포와최신feature는같지않다. 개인/Claude/Codex기록후대기하며다음재개시이결과와BE답변/배포전잔여부터대조한다. 상세는 [이번 설정 감사 후속](dentlink-unified-notification-center-settings-audit-2026-11-12.md)의 마지막 절.
+
 **조회 필터 로컬 분리 완료·설정 질문 구분 — 2026-11-12 23시대 KST:** 사용자 승인으로 Office의 구 조회 필터 API 의존을 제거했다. **코드 commit/push만, 배포 없음.** 아래22시대의 '구 API 교체 미구현/연동 정책 확인 필요' 상태를 대체한다.
 
 - **확정/구현:** 알림 수신 설정은 기존 새 GET/PUT `/office/notifications/settings`에 계속 서버 저장한다. 주문목록·LinkTalk의 `My Orders Only` 조회 필터는 기존 useOrderStore/AsyncStorage만 사용한다. 두 값을 연결하지 않는다. 기존 값 초기화·기기 간 차이는 허용, 이관/동기화/새 API는 추가하지 않았다.

@@ -1,5 +1,7 @@
 # 통합알림센터 — 실제 설정 저장 및 기존 리뷰 확장 감사 (2026-11-12)
 
+> **최신 사용자 정정:** 기존 Figma의 확정 동작은 상위 OFF/ON에 해당 항목의 하위 값도 모두 OFF/ON하는 것이다. 이 문서 앞부분의 '부모만 바꾸고 자식값 보존' 감사 결과는 당시 구현을 확인한 역사이며, 올바른 최종 UX라는 뜻이 아니다. 아래 '상위·하위 값 동시 변경' 후속을 적용한다. 다른 카테고리·영역 보존 및 정상 `channels: []` 계약은 유지한다.
+
 ## 요청과 범위
 
 - 사용자는 웹·Office·Lab의 실제 설정 API 응답과 화면을 대조하고, FE에서 가능한 보완은 검증·commit/push한 뒤 메모리하고 대기하도록 요청했다. **이번 후속 작업은 배포하지 않는다.** 기존 PR과 앞선 DEV 전달은 유지한다.
@@ -94,6 +96,8 @@
 
 ## 후속 사용자 결정과 상위 OFF 의미 확인
 
+이 절의 부모 OFF 해석/미정 판단은 이후 사용자가 기존 Figma 약속을 재확정하여 아래 후속으로 대체했다. API가 자식값 보존을 허용한다는 것을 FE가 반드시 보존해야 하는 UX 정책으로 확대해석한 오류였다.
+
 - 위 Slack 질문 당시의 '조회 필터와 알림 수신 범위 연동 여부 미정'은 이후 사용자 결정으로 해소됐다. **알림 수신 설정은 새 서버 API, 주문목록·LinkTalk 조회 필터는 기존 기기 내부 저장소로 분리**한다. 기기 간 값 차이와 기존 값 초기화는 허용하며 이관·동기화를 만들지 않는다. 권한 제한은 유지한다. 사용자에게 코드 수정·검증·commit/push 권한을 받았으며 **배포는 금지**다. 완료 코드와 검증은 체크포인트의 최신 기록을 따른다.
 - `channels: []`는 BE44978에 명시된 정상적인 단독 토글이다. 예: `LinkTalk App Push [ON/OFF]` 한 줄. UI 깨짐을 허용하거나 FE가 하위 PUSH를 만들어 보정하는 것이 아니다. 이 사유로 BE 추가 작업을 요청하지 않는다.
 - 웹·앱 노출 구분 키는 사용자44994로 이미 요청했으며 여전히 답변 대기다. 중복 질문하지 않는다.
@@ -114,3 +118,25 @@
 - **요청/오류:** 모니터한 흐름에서 구 API0·알림 설정 PUT/PATCH0, 서버 설정 변경 없음. Android crash buffer 비어 있음, Metro 오류 없음, 최근 Office iOS crash report 없음. LogBox accessor는 사용할 수 없어 'LogBox 전체 비어 있음'이라고 하지 않는다. 렌더된 React handler/CDP와 실제 기기 캡처로 확인했으며 물리 탭 전수 QA는 아니다.
 - 이번 검증용 Office 프로세스와 Metro8081만 종료했다. 기기 자체·기존 사용자 창·Reactotron은 유지했다. 상세 임시 근거 `/tmp/office-local-order-filter-1112.md`의 핵심은 본 문서에 보존했다.
 - **미배포:** 앞선 Office DEV v143에는 이번 로컬 분리와94334d2a 금융 보완이 없다. 구 앱의 호출 가능성이 남으므로 서버 API 삭제 시점은 배포 범위와 별개로 확인한다. 사용자는 이번 코드 수정·commit/push까지만 승인했다.
+
+## 상위·하위 값 동시 변경 — 기존 확정 UX 복구
+
+- **사용자 재확정:** 상위 OFF는 해당 카테고리의 `enabled:false`와 모든 하위 `channels[].enabled:false`, ON은 모두true로 함께 저장한다. 다시 ON할 때 예전에 개별 OFF한 하위도 모두ON이 되는 것이 의도다. ON 뒤에는 각 하위를 따로 변경할 수 있다. 부모만 OFF하고 하위값을 보관했다가 되살리는 방식이 아니다.
+- **범위:** 같은 항목에 속한 웹 미노출 PUSH도 부모의 하위이므로 함께 변경한다. 다른 카테고리, 반대 employee/user 영역, 화면에서 숨긴 다른 항목은 원본 GET의 값을 유지한다. 전체 교체 PUT·readonly 메타 제외·OS 권한 안내·별도 플랫폼키 대기는 유지한다.
+- **API 설명과의 관계:** BE44978의 부모false/자식true 예시와 생성 DTO의 '꺼도 channels 값은 보존'은 FE가 하위를 함께 변경하면 안 된다는 지시가 아니다. 저장값을 함께 보내는 구현과 실제 PUT/GET 확인을 진행한다. 실제 발송 로직 반영은 별도 확인이다.
+- **사용자 공유 확인:** [DL-16140 댓글45009](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=45009), 2026-11-12 23:50 KST. 상위/하위 함께 저장, 다른 범위 보존, 전달값의 실제 저장·발송 적용 확인을 Leo/Yoonie에게 공유했다. 읽기 전용으로 원문 확인, 직접 댓글 추가/수정하지 않았다. 같은 질문을 다시 사용자에게 보내라고 하지 않는다.
+- **`channels: []` 과거 리뷰 원문:** CodeRabbit [4547672179](https://github.com/Innvoaid/dentlink-client/pull/4862#discussion_r4547672179)는 빈 배열을 문제 삼은 것이 아니라 생성 DTO에서 선택 속성인 `channels` **키가 생략되면 조회 전체를 실패**시키던 검증을 지적했다. 현재 생략은 허용·PUT에서도 생략하고, 명시된 빈 배열은 정상 단독 토글로 유지한다. 수정/resolve 완료된 건이다.
+- **혼동하기 쉬운 다른 지적:** CodeRabbit [4547672172](https://github.com/Innvoaid/dentlink-client/pull/4862#discussion_r4547672172)는 필수 `categories` **누락을 `[]`로 바꿔 전체 PUT**해 설정이 초기화될 위험이다. Lab 앱 개발자 [4547596560](https://github.com/Innvoaid/dentlink-lab-app/pull/42#discussion_r4547596560)는 `channels:[null]` 등 **배열 안 손상 원소**가 렌더 크래시를 만드는 문제다. 둘 다 이미 방어/검증/resolve된 건이며 정상 `channels: []`를 오류로 보거나 숨겨야 한다는 요구가 아니다.
+- **저장 확인:** 부모 값만 맞았다는 이유로 성공 처리하지 않는다. 실제 PUT에 보낸 하위 채널이 GET에 모두 존재하고 각 기대값과 같아야 저장 확인을 마친다. 누락/일부 반영을 성공으로 기록하지 않으며 무관한 서버 정규화까지 비교하지 않는다.
+
+### 최종 검증 — 11/12 요청, 자정 이후 마감 포함
+
+| 제품 | 최종 코드/검증 | 실제 화면·API 확인 |
+| --- | --- | --- |
+| Clinic/Lab 웹 | mapper·저장 확인·기존 테스트 및 옛 주석 정정5파일. 관련4 suites/29 tests, Clinic/Lab/Admin type·lint·정상Git훅 통과. E2E는 사용자 제외 정식 SKIPPED | Clinic 부모 OFF→PUSH/MAIL 모두false, ON→모두true, Email만OFF→부모/PUSH유지. Lab 부모OFF/ON→웹에서 숨긴PUSH도같이false/true. 두계정 전체GET 원본과정확원복, pageerror0 |
+| Office 앱 | mapper·실PUT기준확인2제품파일 및 기존테스트3파일. 4 suites/57 tests·lint/diff통과. tsc기존6진단 | 동일최종소스 양OS. iOS 부모OFF→ON→Email개별OFF, Android freshGET→부모OFF→ON. 실제PUT5회, 다른category/user/orderScope불변·양쪽최종전체GET 원본동일. Androidcrash/Metro오류없음 |
+| Lab 앱 | mapper·실PUT기준확인2제품파일 및 기존테스트1파일. 2 suites/14 tests·lint/diff통과. tsc기존5진단 | 동일최종소스 양OS. Android6회/iOS2회 실제PUT 및GET으로부모/자식/단독토글·대상외보존확인, 전체정확원복. iOS OS차단에서기존PUSH안내·저장안함유지. 임시wrapper제거, 양OS관찰query/LogBox오류없음·Androidcrash비어있음 |
+
+- **이번에 직접 확인한 결론:** 기존 API에 상위·하위 값을 함께 보내면 전달한 값대로 저장·재조회된다. API 추가나 서버 수정을 기다려야만 FE 작업이 가능한 상황은 아니었다. 실제 발송 차단/재개까지 테스트한 것은 아니며 해당 부분은45009의 BE 답변 범위다.
+- **검증 한계:** 앱은 최종 소스의 기존 DEV native 설치본, 실제 렌더 및 React handler/CDP와 화면 캡처를 활용했다. 물리 탭 전수·모든 권한·실기기 FCM 발송 검증은 아니다. OS 권한 안내/UI색상 자체는 이번 변경이 아니며 기존 흐름을 유지했다.
+- Web→Office→Lab 순서로 실제 설정을 저장·원복해 같은 계정/기기 충돌을 피했다. 검증용 서버/앱/브라우저만 종료하고 사용자 기존 기기·창 배치는 유지한다. 기존 PR을 유지하며 commit/push까지만 한다. **개발서버/CodePush 재배포는 하지 않는다.** 최종 SHA는 프로젝트 체크포인트에 기록한다.
