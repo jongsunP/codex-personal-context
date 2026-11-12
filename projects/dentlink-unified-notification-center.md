@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**다음 시작점 — 2026-11-12 기준:** 추가 작업 기반 준비 완료. (1) 알림 설정 API 이전: dev 스웨거 `NotificationSettingDto`(카테고리에 domain·toggleChannel·enabled·channels[{channel,enabled}], employee `orderScopeOptions`)로 세 제품 설정 화면을 옮기고, 앱 `src/models/NotificationApi.ts`는 생성 타입 기준으로 정리, 그룹 규칙(앱·웹 차이)·USER 표시도 이 작업에서 정한다. 아래 11-10 렌더 조사·11-12 매핑은 옛 `{view, setting}` 응답 기준이라 참고만 한다. (2) 추가 작업 뒤 push·개발 배포(웹 develop 재생성 후 PR 머지, 앱 개발 CodePush)·실기기 확인. 원칙: 스웨거 생성 파일은 생성 그대로, 변경은 FE 가공 계층에만. 충돌은 양쪽 의도 확인 후 합침. 웹 release/v1.93.0이 master에 들어오면 알림 브랜치에 master 재합류(밀링은 master 구현 기준, 생성 파일 재생성).
+
 **작업 브랜치 최신화·dev 스웨거 반영 · 로컬 커밋, push 전 — 2026-11-12 (하위 세션 `local_d6b08f7e…` noti-sync-swagger, 메인 검증):** 사용자 원칙(스웨거 생성 결과는 그대로 커밋, 변경은 FE 가공 계층에만, 충돌은 양쪽 의도 확인 후 합침)으로 진행.
 - Office `feature/DL-17059`: origin/main merge `7015233`(충돌 없음, CodePush 태그 workflow 1개 유입) → 스웨거 `60be685` → FE `cfa55ec`. 원인: dev 스웨거 스키마 이름 충돌로 주문서 카탈로그 `ProductDto`·`OptionDto`·`OptionValueDto`가 제조 스키마로 덮이고 `OptionGroupDto`가 빠짐(`/catalogs/option` 응답이 덮인 타입을 가리키는 스펙 문제). 웹 `product.types.ts`처럼 이전 생성본 5개 타입을 `src/services/catalog.types.ts`에 두고 14개 파일 import만 변경, 런타임 불변.
 - Lab `feature/DL-17060`: merge `549f548` → 스웨거 `1c26f0d` → FE `7cb252d`(밀링 `parameterValues` 요청 타입 FE 정의, 문자열만 읽는 헬퍼. FILE 값은 공정 카드에 "-").

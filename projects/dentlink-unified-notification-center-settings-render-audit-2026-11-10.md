@@ -1,5 +1,7 @@
 # 통합알림센터 — 알림 수신 설정 화면 렌더 방식 조사 (2026-11-10)
 
+> **2026-11-12 주의:** dev 스웨거에서 알림 설정 GET 응답이 `{view, setting}`에서 `NotificationSettingDto` 하나로 바뀌었다. 이 문서의 `view.employee` 기반 분석은 옛 응답 기준이며, 알림 설정 추가 작업에서 새 구조로 다시 판단한다.
+
 > **범위:** 조사만 했다. 코드 수정·커밋·PR·배포 없음. 별도 세션에서 진행했고 제품 checkout의 브랜치를 바꾸지 않았다(웹은 `git show feature/DL-17058:<path>`로 읽음).
 > **기준 ref:** Office 앱 `feature/DL-17059@d4de608`, Lab 앱 `feature/DL-17060@e9108b8`, 웹 `feature/DL-17058@38ca4edae`(로컬 checkout은 `feat/DL-17141-delay-cleanup`이라 ref로 읽음).
 > **실서버 응답:** 로그인 토큰이 필요해 이번에는 호출하지 않았다. 대신 11/9 실조회 기록([API 검토 문서](dentlink-unified-notification-center-api-badge-review-2026-11-09.md) “실제 로그인 GET 확인”)의 카테고리 목록을 사용했다. 채널 구성(`toggleChannel`/`channels`)의 실제 값은 당시 증거 파일(`/tmp/notification-*-actual-get-1109.json`)이 지워져 이번에 재확인하지 못했다.

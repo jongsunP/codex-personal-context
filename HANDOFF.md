@@ -51,7 +51,9 @@ Older dated sections explain history; they do not reopen completed work.
 - [Admin LBX](projects/dentlink-client-lbx.md): preserve the original work;
   test-environment delivery does not lift the production hold.
 - [통합알림센터](projects/dentlink-unified-notification-center.md): planning
-  and estimation are separate from authorization to implement.
+  and estimation are separate from authorization to implement. 2026-11-12:
+  branches synced to latest base with local commits (not pushed); next is the
+  notification-settings API migration when the user gives the details.
 - [Office app](projects/dentlink-app.md) / [Lab app](projects/dentlink-lab-app.md):
   separate repositories, runtime evidence, and delivery boundaries.
 - [Office LinkTalk SIGSEGV investigation](projects/dentlink-app-linktalk-sigsegv-investigation.md):

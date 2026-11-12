@@ -199,7 +199,9 @@ For detailed current state, read:
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
-### Dentlink 통합알림센터 — FE 선행 구현·브레이크포인트
+### Dentlink 통합알림센터 — 추가 작업 대기(알림 설정 API)
+
+- **현재(2026-11-12):** 원래 범위 개발은 끝났다(인박스·읽음·푸시 탭·appLandingUrl·iOS 배너). 세 작업 브랜치(Office `feature/DL-17059@cfa55ec`, Lab `feature/DL-17060@7cb252d`, Web `feature/DL-17058@27c549f79`)를 최신 main/master에 맞추고 dev 스웨거 생성 결과·FE 타입 정리를 **로컬 커밋**했다(push 안 함, PR #346·#42·#4862 불변). 다음 추가 작업은 dev 스웨거의 새 알림 설정 응답(`NotificationSettingDto`)으로 세 제품 설정 화면 이전, 그 안에서 그룹 규칙(앱·웹 차이)·USER 표시 정리. 개발 배포는 추가 작업 뒤. 웹 release/v1.93.0이 master에 들어오면 알림 브랜치에 master를 다시 합친다.
 
 - 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.
