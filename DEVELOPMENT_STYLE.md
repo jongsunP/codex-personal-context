@@ -255,6 +255,10 @@ backend environments or their published schemas are at different revisions.
   Trace the type the actual API wrapper and feature consume, and update the
   necessary FE declarations from the confirmed target-environment contract
   through the repository's existing type/export boundaries.
+- Generated Swagger files (user, 2026-11-12): they are regenerated over time,
+  so commit the generator output as it is and never hand-edit it. Put the
+  needed changes only in the FE-derived layer built on top of it (app-facing
+  exports, domain types, mappers, feature code).
 - Keep field presence, boolean value, requiredness, and nullability distinct.
   One response containing a field does not establish that it is required in
   every response or already deployed in other environments. Preserve confirmed
