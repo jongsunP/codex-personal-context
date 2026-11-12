@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**웹 PUSH 숨김 근거 — 임시 처리, 재수정 대상 (2026-11-12):** 웹은 `toggleChannel === "PUSH"`인 카테고리(현재 LINKTALK·DENTLINK_SUPPORT)를 숨기고 다른 항목의 PUSH 채널 체크를 뺀다(`shared/models/src/notifications/notifications.settings.ts` `groupNotificationSettings`의 `hiddenChannel`, `NotificationCenter.tsx`에서 `"PUSH"` 전달). 저장 시 숨긴 값은 그대로 다시 보낸다. 그러나 `toggleChannel`은 BE 정의상 "카테고리 토글이 담당하는 채널"(어떤 UI 형태로 그릴지 알려 주는 화면 구성 메타)일 뿐 노출 대상이 아니다. "푸시 전용" 정보는 알림 스프레드시트에만 있다. 이 판단은 FE 추론이라 어긋날 수 있다(토글 PUSH+MAIL 채널이면 웹에서 MAIL까지 사라짐, 토글이 PUSH가 아닌 앱 전용 카테고리는 못 거름). 사용자가 BE(Leo, DL-17114 스레드)에 노출 대상 키 추가(예 `platforms: ["APP"]`/`["APP","WEB"]`)를 직접 요청하기로 했다. **지금은 이대로 두고**, BE가 키를 주면 어느 에이전트든 웹 숨김 조건을 그 키 기준으로 바꾼다(앱도 같은 키를 따르게 맞출 것).
+
 **기기 알림 OFF 안내 유지 결정 — 2026-11-12 (사용자):** 디자인과 같으면 유지. Office 앱 권한 팝업 제목 "Get Lab Updates Instantly"는 Figma 173:28434 목업과 같아 그대로 둔다. 앱 진입 팝업은 `NotificationPermissionNotice`(RootNavigator)가 권한 거부 상태에서 기기당 1회만 띄우고 AsyncStorage `NOTIFICATION_PERMISSION_NOTICE_SHOWN`으로 기록한다(다른 팝업·배너가 떠 있으면 뒤로 미룸) → 디자인의 "앱 진입 시 팝업 1회"와 같고, 이번 에뮬레이터에서 안 보인 것은 이전 테스트에서 이미 1회 노출된 기록 때문으로 판단. 코드 변경 없음.
 
 **알림 설정 user 영역 먼저·push 완료 — 2026-11-12 (사무실 Claude 하위 세션, 사용자 지시):** 영역 순서는 **user → employee**(사용자 결정, 이후 바뀔 수 있음, 영역 안은 서버 순서). 커밋 Office `feature/DL-17059@23966fc`, Lab `feature/DL-17060@e64b61d`, Web `feature/DL-17058@7891e21c2` — 세 브랜치 모두 **push 완료**(Draft #346·#42·release PR #4862에 포함, PR 본문 불변). 웹 push 전 E2E 가드 NO_IMPACT 기록(정적 확인 불가 1건: Change Office 모달의 현재 오피스 행이 클릭 불가로 바뀌어 `prepareOrderSession` 폴백에서 최대 10초 지연 가능, 실패 아님). 개발 배포(웹 develop PR·앱 CodePush)는 아직.
