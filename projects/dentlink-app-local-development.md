@@ -80,20 +80,26 @@ Metro, Reactotron/network evidence and unresolved errors separately.
 
 ## Shared Preflight
 
-1. Work only in `/Users/parkjongsun/Repository/dentlink-app` or the explicitly
-   selected Dentlink app worktree.
+1. Select the exact Office (`/Users/parkjongsun/Repository/dentlink-app`) or Lab
+   (`/Users/parkjongsun/Repository/dentlink-lab-app`) repository/worktree and
+   verify its live branch, revision and active writer before running commands.
 2. Verify the exact Git branch, upstream, HEAD and dirty files. Preserve all
    existing local changes.
 3. Confirm Office versus Lab. Use Development and Debug unless the user
    explicitly requests another environment or Release.
 4. Follow [Local Development And User Preview](../SESSION_WORKFLOW.md#local-development-and-user-preview).
-   Use the selected repository/worktree in a Codex-managed terminal for solo
-   work, or the IDE's bottom integrated service terminals for direct user
-   inspection unless the user explicitly allows internal app execution.
-   In the commands below, "selected terminal" means the terminal for this mode.
-5. Check whether Metro is already listening on 8081. Reuse it when it belongs
-   to this checkout; do not start a duplicate server.
-6. Open Reactotron as part of the normal local workspace.
+   Solo agent work may use internal terminals. Direct user preview must keep
+   execution and device launch independent of the agent, expose useful live
+   logs and both device/debugger connections, and preserve suitable windows.
+   An app IDE is optional. In the commands below, "selected terminal" means
+   the terminal for this mode.
+5. Inspect existing Metro processes before starting one. One product's paired
+   iOS/Android devices share the same checkout, environment and Metro port;
+   separate products use separate processes/ports (normally Office 8081,
+   Lab 8082). Verify actual process ownership; do not assume it from the port.
+6. Open Reactotron and verify both device connections for direct user preview.
+   Leave its device selector expanded. A running debugger window alone does
+   not establish two connected devices.
 7. Treat `ReactotronConfig.js` host edits as temporary per-developer local
    setup. Set the current developer's Mac address only while needed, never
    stage/commit/push it, and ensure it is excluded from product commits. Do not

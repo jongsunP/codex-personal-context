@@ -1,6 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-**다음 에이전트 먼저: 앱 작업 지침 재점검 — 2026-11-12 (사용자 지시, 처리는 아직 안 함):** Lab PR #42 앱 개발자(myungjael) 리뷰는 기본으로 지켰어야 할 것이다 — `src/models/`엔 생성 파일만(손으로 만든 `NotificationApi.ts` 위반), StyleSheet 대신 styled-components, API 응답 배열 원소·하위 목록 null 검증(렌더 크래시 대신 쿼리 실패·재시도), 공용 로직 변경 시 기존 기능까지 앱 QA. 코드만이 아니라 **기공소앱·병원앱 작업 지침 자체**에 빈틈이 있을 수 있으니, 다음에 앱 작업을 맡는 에이전트는 기능 코드보다 먼저 각 앱의 `CLAUDE.md`·`AGENTS.md`, `DEVELOPMENT_STYLE.md`, 앱 플레이북을 이 기준으로 재점검·보완(팀 저장소 문서는 사용자 확인 후)하고, 알림센터 앱 코드에 같은 유형(다른 컴포넌트의 StyleSheet 등)이 남았는지 확인한다. 전달 항목: `AGENT_INBOX.md` "모든 에이전트".
+**Codex 재개 동기화 완료 — 2026-11-12 19시대 KST:** 다른 에이전트의 지침·세팅·구현 이력을 현재 Git/PR·DEV 응답·Jira·정책·Figma 본문과 대조했다. [동기화 상세와 다음 시작점](dentlink-unified-notification-center-sync-2026-11-12.md)이 현재 정본이다. 세 제품은 원격과 동일한 clean 상태(Web `7968ad66b`, Office `4ed34bf`, Lab `0f03901`). 새 설정 API 이전/리뷰 수정은 push됐지만 최신 코드의 최종 런타임·리뷰 해결·개발 재배포는 남았다. 아래 과거 미커밋/push 미완료 기록은 현재 상태가 아니다.
+
+- **지침:** 양 앱 팀 규칙 대조와 잔존 코드 조사를 마쳤고 개인 앱 구현·로컬 실행 지침을 보완했다. AGENT_INBOX의 본인 적용 항목을 완료로 갱신하고 로컬 Codex에 동기화했다. StyleSheet 잔존 Office5/Lab2곳은 후속 구현으로 남긴다.
+- **현재 계약:** user→employee, 영역 내 서버 순서, 새 employee/user DTO 및 전체 교체 PUT. Office/Lab DEV GET 성공. 웹/앱 노출 키는 아직 없고 DL-17114 댓글44994 답변 대기다. 기존 웹 PUSH 추론은 그때 교체한다. User Credits는 지금 서버에 있고 당장 임의로 숨기지 않는다.
+- **배포 구분:** 웹 develop에는 11/10 보완이 있지만 11/12 API 이전은 없다. 앱 최신 코드도 이번 동기화에서 CodePush하지 않았다. 별도 Android 패치 PR348/44는 release에 이미 병합됐으며 알림센터 feature에 자동 포함된 것이 아니다.
+- **범위:** 이번 작업은 재개 준비/기록 보완이다. 제품 코드·PR·배포·로컬 실행은 변경하지 않았다. 다음은 잔존 앱 규칙 정리와 최종 코드 화면 검증부터이며, 이메일/Home3/네이티브 배포를 본체에 다시 합치지 않는다.
+
+**앱 작업 지침 재점검 요청 원문 — 2026-11-12 (아래 지침 점검은 같은 날 Codex가 완료; 제품 후속은 별도):** Lab PR #42 앱 개발자(myungjael) 리뷰는 기본으로 지켰어야 할 것이다 — `src/models/`엔 생성 파일만(손으로 만든 `NotificationApi.ts` 위반), StyleSheet 대신 styled-components, API 응답 배열 원소·하위 목록 null 검증(렌더 크래시 대신 쿼리 실패·재시도), 공용 로직 변경 시 기존 기능까지 앱 QA. 코드만이 아니라 **기공소앱·병원앱 작업 지침 자체**에 빈틈이 있을 수 있으니, 다음에 앱 작업을 맡는 에이전트는 기능 코드보다 먼저 각 앱의 `CLAUDE.md`·`AGENTS.md`, `DEVELOPMENT_STYLE.md`, 앱 플레이북을 이 기준으로 재점검·보완(팀 저장소 문서는 사용자 확인 후)하고, 알림센터 앱 코드에 같은 유형(다른 컴포넌트의 StyleSheet 등)이 남았는지 확인한다. 전달 항목: `AGENT_INBOX.md` "모든 에이전트".
 
 **리뷰 대응 push 완료 — 2026-11-12 저녁 (사용자 지시, 아래 "오늘 마감 상태"의 Git 상태를 대체):** Office `feature/DL-17059@4ed34bf`, Lab `feature/DL-17060@0f03901`, Web `feature/DL-17058@7968ad66b` 모두 push(원격 일치). 웹은 사용자가 E2E 가드를 건너뛰라고 명시해 `SKIPPED`로 기록 후 push. 남은 일: Lab PR #42 리뷰 resolve, 인박스 화면 재확인(미실행), BE 노출 키 반영, 밀링 FILE 계약(범위 밖), QA 요청, 개발 배포(지시 없음). 패치 백업 폴더는 이제 참고용.
 

@@ -268,6 +268,35 @@ backend environments or their published schemas are at different revisions.
   environment merely to consume one confirmed contract. Contract reconciliation
   does not itself authorize deployment or work in another product repository.
 
+### Dentlink App Implementation Boundaries
+
+Confirmed during the 2026-11-12 Office/Lab review reconciliation. These enforce
+the apps' existing team conventions; they do not authorize unrelated refactors.
+
+- Read the target app's current `CLAUDE.md` and `AGENTS.md` before implementing.
+  Check the final diff against the same conventions. An existing inconsistent
+  file does not authorize extending that pattern.
+- Keep `src/models/` generator-owned. Do not add handwritten API declarations
+  there or hand-edit generated files. Put FE-derived types, compatibility
+  adjustments and display models in the app's existing type/service layer.
+- Use styled-components for component styling, including follow-up fixes.
+  Do not introduce or retain `StyleSheet.create` in the changed feature without
+  an explicit documented exception. For third-party style props, follow the
+  surrounding styled-components/attrs pattern while preserving refs,
+  measurement, safe areas and interactions. Do not change shared defaults
+  merely to replace a local declaration.
+- Validate response shapes needed by the feature at the service boundary:
+  collection containers, nullable elements and nested collections used by
+  rendering or saving. Reject malformed required data through the existing
+  query error/retry UI; do not silently drop records or turn missing required
+  collections into empty arrays. Honor documented optional fields, and prevent
+  full-replacement saves from incomplete responses. This does not require a
+  new validation library.
+- Apply **App Screen Runtime Verification Before Merge** to the final revision,
+  including review fixes and relevant existing consumers of changed shared
+  code. Keep verification proportional to the impact and distinguish static
+  checks, final-code device verification and user QA.
+
 ## Dentlink Client Implementation Defaults
 
 These defaults were consolidated from the full `feature/DL-15223` lifecycle:

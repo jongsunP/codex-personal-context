@@ -29,7 +29,7 @@
   `projects/dentlink-fe.md` Session Ownership, `AGENTS.md` Wrap-Up(2026-11-12 항목).
   - 사무실 Claude: 완료 (2026-11-12, 사무실 Claude)
   - 집 Claude: 열림
-  - 사무실 Codex: 열림
+  - 사무실 Codex: 완료 (2026-11-12, 사무실 Codex) — 공통 정본·현재 세션/설정 대조 및 로컬 동기화
   - 집 Codex: 열림(사용 시작 때)
 
 - **2026-11-12 · 사무실 Claude가 남김 · 열림(각 에이전트가 자기 이름으로 완료 표시):**
@@ -42,10 +42,10 @@
   똑같이 바꿀 필요는 없다. 기존 세션 구성을 유지하면서 이 개념(일반 메인, 기능별 상시 하위 세션, 넘긴 뒤 추적 금지)만 적용한다.
   - 사무실 Claude: 완료 (2026-11-12, 사무실 Claude) — 알림센터 분리된 작업 세션 `local_62b33d4f…`(top-level)
   - 집 Claude: 열림
-  - 사무실 Codex: 열림
+  - 사무실 Codex: 완료 (2026-11-12, 사무실 Codex) — 기존 세션 구성 유지, 기능 세션 책임·요청 없는 추적 금지 적용
   - 집 Codex: 열림(사용 시작 때)
 
-- **2026-11-12 · 사무실 Claude가 남김 · 열림(다음에 앱 작업을 맡는 에이전트가 먼저 처리, 처리한 에이전트가 완료 표시):**
+- **2026-11-12 · 사무실 Claude가 남김 · 완료 (2026-11-12, 사무실 Codex):**
   **앱 작업 지침 재점검 — 기공소앱·병원앱 공통, 기능 코드 수정보다 먼저.** 사용자 지시: Lab PR #42(알림센터)에
   앱 개발자(myungjael)가 남긴 리뷰는 원래 기본으로 지켰어야 할 내용이다. 코드만이 아니라 앱 개발 작업 지침 자체에
   빈틈이 있을 수 있으니, 다음에 앱 작업을 하는 에이전트는 이것부터 다시 점검한다(이번 기능 수정만으로 끝내지 않는다).
@@ -58,7 +58,7 @@
   문서 변경은 사용자 확인 후). 이어서 알림센터 앱 코드에 같은 유형이 남았는지 점검한다(예: `NotificationOfficeSelectSheet`·
   `NotificationLabSelectSheet`·`NotificationPermissionBanner` 등의 `StyleSheet` 사용). 이번에 한 수정은 Office `4ed34bf`·Lab `0f03901`
   (인박스 StyleSheet 정리, 응답 null 검증)뿐이다. 상세: `projects/dentlink-unified-notification-center.md` 최상단.
-  - 상태: 열림
+  - 상태: 지침 대조·보완 및 잔존 코드 조사 완료. 생성 모델·styled-components 규칙은 이미 팀 문서에 있었고 구현/최종 diff 적용에서 놓친 것으로 확인했다. 개인 DEVELOPMENT_STYLE에 서비스 경계 검증·팀 규칙 대조를 보완하고 앱 플레이북의 오래된 실행 안내를 갱신했다. 남은 StyleSheet Office 5곳/Lab 2곳과 최종 화면 검증은 기능 체크포인트의 후속으로 분리한다. 이번 동기화에서 제품 코드는 수정하지 않았다.
 
 ## 집 Claude Code
 
@@ -79,9 +79,10 @@
 
 ## 사무실 Codex
 
-- **2026-11-12 · 사무실 Claude가 남김 · 열림:** 다음 사용 때 이 저장소를 pull하고
+- **2026-11-12 · 사무실 Claude가 남김 · 완료 (2026-11-12, 사무실 Codex):** 다음 사용 때 이 저장소를 pull하고
   `./setup-local-codex.sh`로 2026-11-11~12 지침(Claude Code 대응표, 에이전트별 메인 구조,
   동기화·기록 시점, Lab 번역 시트 중단, env 팀 규칙)을 로컬 Codex에 반영한다.
+  - pull 후 setup-local-codex.sh 실행 완료. 이 세션의 지침 보완 후에도 로컬 복사본을 다시 맞춘다.
 
 ## 집 Codex
 
