@@ -81,8 +81,15 @@ Treat recorded rules like a single source-of-truth state flow.
 - Record durable preferences as curated operating rules, not as a raw chat log.
 - If a rule needs to change, update the canonical location instead of layering
   a conflicting rule elsewhere.
-- If two recorded rules conflict, stop and resolve the source-of-truth location
-  instead of choosing one ad hoc.
+- If two recorded rules conflict, resolve the source-of-truth location before
+  relying on either rule instead of choosing one ad hoc. During ongoing work,
+  when the user reports a guidance update or a relevant conflict appears,
+  automatically refresh and reread the affected canonical guidance and update
+  stale local guidance/memory where needed; a successful earlier pull alone
+  does not mean the current decision used the latest rule. Apply an explicit
+  newer user decision over older repository examples. This supplements the
+  automatic start/resume sync, not a fixed daily schedule, per-prompt full
+  audit, or background polling (user reaffirmation, 2026-11-13).
 - If a rule was never recorded, handle it by best judgment and consider whether
   it should be written to the appropriate canonical file.
 
