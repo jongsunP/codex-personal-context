@@ -1,6 +1,31 @@
 # 치과 마케팅 수신 동의 — DL-17208
 
-## 현재: 선행 준비 완료·디자인/API 공유 대기 — 2026-11-13
+## 현재: 확정 범위 선행 구현·본인 Jira 정리 완료 — 2026-11-13
+
+- **최신 승인:** 사용자가 지금 가능한 작업은 진행하고 별도 worktree를 사용해도 되며, 본인 Jira 하위카드를 정리하도록 승인했다. 기존 제품별 전용 worktree를 재사용했다. 제품 commit/push/PR/merge/배포는 아직 승인받지 않았다.
+- **웹 DL-17231:** `clinic/src/components/My/UserSetting.tsx`의 PC·모바일에서 `Promotional SMS`를 부모 Jira에 명시된 `Text messages`로 바꾸고 툴팁/미사용 import를 제거했다. 1파일 +2/-33줄. 기존 SMS 상태·저장·실패 처리·공용 번역은 변경하지 않았다. 미확정 Marketing 카드 배치·Email UI·가입 필드·API·추상화는 추가하지 않았다.
+- **Office DL-17423:** 기존 생성 `UpdateSmsPreferenceDto`와 PATCH `/office/users/own/sms/marketing` 계약을 사용하는 `UserService.updateSmsMarketingEnabled` 및 `useUpdateSmsMarketingEnabledMutation`을 기존 2파일에 추가했다(+39줄). 기존 Axios·`ApiResponseVoid`·mutation options 패턴을 따르고 오류를 그대로 전달한다. **화면 소비처가 없는 준비 코드**이므로 신규 요청이나 UI 동작은 발생하지 않는다. Email·기본값·캐시·toast·생성 모델은 변경하지 않았다.
+- **Jira:** 기존 [DL-17231](https://innovaid.atlassian.net/browse/DL-17231)의 빈 `[FE]` 제목/본문을 `[FE][웹] 치과 회원가입·프로필 마케팅 수신 동의`와 목적·범위·의존사항·완료 기준으로 정리했다. 같은 부모 DL-17208 아래 [DL-17423](https://innovaid.atlassian.net/browse/DL-17423) `[FE][치과앱] 프로필 마케팅 수신 동의`를 Frankie(`642a7f9580f8c2b1220fba09`) 담당으로 생성했다. 제품별 상호 참조·알림센터 통합 접점도 명시했다. 두 카드 모두 담당자/부모/본문/해야 할 일 상태와 상속된 기존 sprint를 확인했다. SP·일정·수정버전은 별도로 변경하지 않았으며 부모·타인 카드·Slack은 수정하지 않았다. 진행 댓글은 웹 `45016`, 앱 `45015`에 완료 범위와 대기 조건만 남겼다.
+
+### 현재 코드 위치와 검증
+
+| 제품 | worktree / branch | 로컬 변경 |
+| --- | --- | --- |
+| 웹 | `/Users/parkjongsun/.codex/worktrees/dl17208-web/dentlink-client`, `feat/DL-17231` | HEAD `9c4418a8fb4b18cbadb5afb25fa32503b59febae`, UserSetting 1파일 미커밋 |
+| Office | `/Users/parkjongsun/.codex/worktrees/dl17208-office/dentlink-app`, `feat/DL-17423` | HEAD `bf0567d7232ee88a46c1d693de507989c5957719`, user.service/useUserQueries 2파일 미커밋 |
+
+- Office의 기존 local-only `feat/DL-17231`을 새 제품 카드에 맞춰 `feat/DL-17423`으로 rename 후 실제 branch를 확인했다. 두 저장소 모두 upstream/push 없음. 현재 HEAD는 이 재개 시 fetch한 각 `origin/master`/`origin/main`과 같다.
+- 웹: 변경 파일 ESLint·Prettier·`git diff --check` 및 Clinic 전체 TypeScript 검사 통과. 최초 PNG import 오류는 새 worktree의 `next-env.d.ts` 미생성이 원인이었고, 공식 `pnpm exec next typegen`으로 ignored 파일만 생성한 후 타입 검사를 통과했다. Next의 TS5.1 권장 대비 기존 TS5.0.4 경고는 그대로이며 의존성을 바꾸지 않았다.
+- Office: 변경 2파일 ESLint·`git diff --check` 통과. 전체 `yarn typecheck`는 Icon2/Tooltip1/MessageText1/useOrderAddProduct2의 기존 오류 6건으로 실패. 동일 compiler에서 변경 2파일을 HEAD 내용으로 읽는 메모리 overlay 기준과 최종 진단을 비교해 동일한 6건·신규 오류0건을 확인했다. 실제 파일을 되돌리거나 기존 오류를 범위 밖에서 수정하지 않았다.
+- 독립 코드 검토에서도 변경 범위·기존 계약/패턴·오류 전파에 수정할 문제를 찾지 못했다. 웹 브라우저/E2E·실제 API 저장·앱 양OS 실행·통합 QA는 미수행이다. 이번 결과는 **선행 코드 준비 완료**이며 기능 완료·최종 QA·merge 준비 완료가 아니다.
+
+### 남은 일과 재개
+
+- 최종 디자인·Email 조회/저장/가입 계약·기존 사용자 값 없음 처리는 아래 조사 기록과 동일하게 미확보다. 완료된 디자인 카드만으로 폐기 요청된 Figma를 최종본으로 사용하지 않는다. 사용자에게 별도 공유도 없다는 확인을 존중하여 자동 조사/폴링하지 않는다.
+- 후속 자료가 공유되면 기존 worktree의 미커밋 변경을 먼저 확인·보존하고 나머지 UI/API를 연결한다. 웹 PC/모바일과 앱 iOS/Android의 최종 화면·저장 성공/실패·재조회 유지 검증을 한다. 알림센터와는 독립 개발을 유지하고, 릴리즈 통합 때 실제 diff에 따른 Profile 배치·진입·저장 상태를 합쳐진 코드로 검증한다.
+- 제품 commit/push/PR/배포는 별도 승인 전까지 하지 않는다. 본인 Jira 정리 승인은 이번 요청에서 사용했으므로 이미 마친 작업에 재승인을 묻지 않는다. 상세 진행은 개인 Git 정본과 Claude 로컬 메모리 양쪽에 기록했다.
+
+## 이전: 선행 준비 완료·디자인/API 공유 대기 — 2026-11-13
 
 - **사용자 결정:** 별도로 받은 최종 Figma·API 공유는 없으며, Jira에 내용이 없으면 아직 전달되지 않은 것으로 보고 준비만 마친 뒤 작업 대기한다. 새 자료를 추정해 구현하거나 자동 재조회/폴링하지 않는다. 사용자가 이 기능 세션에서 재개한다.
 - **완료 범위:** Jira 상위/기획/FE/BE/디자인 카드와 연결·댓글, 부모 첨부, 관련 Figma Profile·댓글, 배경 문서 전체, DEV/STG Swagger, 양 저장소 최신 기본 브랜치·소비 타입·서비스를 확인했다. 제품별 전용 branch/worktree와 의존성 설치까지 준비했다. **제품 코드 수정·제품 commit/push/PR·Jira/Slack 변경·배포 없음.** 실제 웹/앱 실행과 QA는 수행하지 않았다.
