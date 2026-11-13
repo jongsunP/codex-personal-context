@@ -1,0 +1,40 @@
+# 알림센터 웹 문구·스타일 구성 정리 — 2026-11-13
+
+## 요청과 결과
+
+- 사용자 승인: 웹 코드의 Copy 이름을 명확히 하고 기존 코드의 주된 스타일 배치에 맞춘 뒤 커밋·푸시한다. 개발서버 배포는 하지 않는다.
+- `useNotificationCopy`를 `useNotificationMessages`로 변경했다. 기존 Copy는 복사 동작이 아닌 화면 문구를 의미했으며, 문구값·번역 키·언어별 표시는 그대로다.
+- `NotificationInbox.styles.ts`, `NotificationSettings.styles.ts`를 제거하고 스타일 선언을 해당 컴포넌트 하단으로 옮겼다. 별도 스타일 파일의 사례가 있다는 것과 그것이 팀의 주된 규약이라는 것은 다르다. 11/12 기록의 스타일 분리를 팀 규약으로 단정한 표현도 바로잡았다.
+- 거대한 TSX 하나로 합치지 않고 기존 UI 단위 5개(Header/Toolbar/ListItem/SettingsGroup/SettingsOrderScope)로 나눴다. 변경 컴포넌트는 각각 200줄 이하이며 새 화면·문구·동작·API·권한·경로·스토리북은 추가하지 않았다.
+
+## 코드와 전달 경계
+
+- 위치: `/Users/parkjongsun/Repository/dentlink-client-notification-center`
+- 브랜치: `feature/DL-17058`
+- 시작 시 원격의 릴리즈 통합/버전 변경 3개 커밋만 확인해 fast-forward했다. 기준 `b75ed0a531c92d27b3fcdf111d9155b187284851`.
+- 완료 커밋: **`a67e1e215c49f21c3139df6edd5df8d901771294`** — `refactor: 알림 문구 훅과 컴포넌트 스타일 구성 정리`
+- 정상 commit/push hook을 통과하고 원격 SHA 일치·작업트리 clean을 확인했다.
+- 기존 [PR4862](https://github.com/Innvoaid/dentlink-client/pull/4862) head에 자동 반영됨. OPEN/Draft·`release/v1.94.0` 대상 유지. PR 병합·develop 변경·개발 배포 없음.
+- Office/Lab 앱 코드·CodePush 변경 없음. 기존 개발 전달 기준은 웹 develop `7c8eef28c`, Office v147/v147, Lab iOS v46/Android v45다. 웹의 이전 배포 결과를 이번에 다시 추적하지 않았다.
+
+## 검증
+
+| 범위 | 확인 결과 |
+| --- | --- |
+| 독립 코드 비교 | 기존 스타일 39개 정의의 누락/값 변경 0. 지역 소유를 위해 같은 StyledText 정의가 반복되어 총44개. 문구 훅은 이름 외 내용 동일. 불필요한 DOM 래퍼 없음, 타입 참조는 import type. |
+| 정적·기존 테스트 | Clinic/Lab 기존 host tests 5+4 통과. 변경 파일 포맷·diff 확인. 정상 pre-commit의 Clinic/Lab/Admin tsc 전부 통과. 정상 pre-push의 저장소 필수 검증 통과. 새 테스트/스토리 추가 없음. |
+| 최종 브라우저 | 현재 최종 코드로 Clinic 5개/Lab 4개 확인 묶음 통과. 인박스·All/Unread·단일/전체 읽음·빈 상태·설정 토글/상하위·뒤로가기/재진입·Clinic 범위 선택·영문/한글을 확인. 두 제품 새 pageerror 0, 화면 캡처 검토. |
+| 검증 한계 | 저장된 로그인 세션을 사용했지만 알림 조회/쓰기 응답은 fixture다. 실제 설정/읽음 쓰기 0·분석 전송 0. 실제 BE/푸시/전체 QA 완료 근거로 확대하지 않는다. |
+| E2E | 이번 리팩터링 delta는 독립 영향 검토 NO_IMPACT. 전체 기능 브랜치 E2E 실행은 기존 사용자 지시에 따라 SKIPPED이며 새 실행하지 않음. 두 결론을 혼동하지 않는다. |
+| 환경 | 자체 headless 브라우저와 3030/3035 서버만 종료. 사용자 창·앱·Metro·Reactotron 배치/실행은 유지했다. 최종 runtime 소스 23개 해시가 커밋 후 파일과 동일. |
+
+Shared 기본 lint 실행의 기존 Storybook config 중복은 shared의 기존 config를 명시하여 검증했다. 변경 영역 0 errors, 기존 NotificationCenter dependency warning 1개다. 이 리팩터링에서 config를 바꾸지 않았다.
+
+임시 실행 근거: `/tmp/notification-web-convention-1113.md`, `...-runtime-1113.md/json`, `...-runtime-source-1113.json`, `...-e2e-1113.json`, `...-static-1113.json`, `/tmp/notification-web-convention-push-1113.log`.
+
+## 번역 운영 메타데이터와 다음 시작점
+
+- i18n 전후 비교: keys3600/unresolved211/unknownLiteral1/reachable3364/dynamic209/usageRows4706 유지. 기존 unknown literal은 SigninForm의 `account.auth.actions.logIn`이며 이번 변경과 무관하다. 전체 i18n 감사가 오류 0이라고 표현하지 않는다.
+- 파일 이동으로 sourceLocation 52행, component metadata 47행이 달라졌다. 문구·키·도달 페이지는 같지만 sourceLocation이 사용처 ID 계산에 포함되어 **43개 키의 자동 사용처 메타데이터**는 다음 안전한 번역 시트 동기화 때 반영 대상이다. 시트의 번역/검토 입력을 건드리지 않는 기존 운영 절차로 처리하며 이번에 무단 전체 동기화하지 않았다.
+- 재개 시: 현재 웹 리팩터링은 커밋·푸시 완료 / 미배포임을 먼저 구분한다. 배포는 별도 지시 후 진행한다. 기존 BE 답변·실기기 QA 대기는 별도 기록을 유지하며 자동 확인하지 않는다.
+- [Office 주문 상세 후속](dentlink-unified-notification-center-office-native-detail-followup.md): DL-17436, 1.93.0 배포 후 치과앱 자체 주문 상세와 알림 랜딩을 대조. **기공소앱은 제외**. 이 기록은 지금 앱 구현을 시작하라는 지시가 아니다.
