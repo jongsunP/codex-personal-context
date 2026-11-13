@@ -32,9 +32,10 @@ Shared 기본 lint 실행의 기존 Storybook config 중복은 shared의 기존 
 
 임시 실행 근거: `/tmp/notification-web-convention-1113.md`, `...-runtime-1113.md/json`, `...-runtime-source-1113.json`, `...-e2e-1113.json`, `...-static-1113.json`, `/tmp/notification-web-convention-push-1113.log`.
 
-## 번역 운영 메타데이터와 다음 시작점
+## 번역 지침 정정과 다음 시작점
 
 - i18n 전후 비교: keys3600/unresolved211/unknownLiteral1/reachable3364/dynamic209/usageRows4706 유지. 기존 unknown literal은 SigninForm의 `account.auth.actions.logIn`이며 이번 변경과 무관하다. 전체 i18n 감사가 오류 0이라고 표현하지 않는다.
-- 파일 이동으로 sourceLocation 52행, component metadata 47행이 달라졌다. 문구·키·도달 페이지는 같지만 sourceLocation이 사용처 ID 계산에 포함되어 **43개 키의 자동 사용처 메타데이터**는 다음 안전한 번역 시트 동기화 때 반영 대상이다. 시트의 번역/검토 입력을 건드리지 않는 기존 운영 절차로 처리하며 이번에 무단 전체 동기화하지 않았다.
+- 파일 이동에 따른 sourceLocation/사용처 ID 변경은 코드 감사 메타데이터 차이일 뿐, **번역 시트 후속 업무가 아니다**. SESSION_WORKFLOW.md의 2026-11-11 변경은 코드 ko/en만 관리·검증하고 시트는 그대로 두도록 정한다. 이번에 시트 갱신이 필요하다고 안내한 것은 옛 팀 지침을 우선한 오류였으며 사용자의 11/13 지적으로 바로잡았다. 실제 시트 수정·동기화는 없었다.
+- 최신 공통 지침과 웹·Lab 앱 번역 체크포인트에는 이미 올바른 정책이 명시되어 있어 규칙을 새로 추가하지 않았다. 기존 시트 스크립트·팀 문서도 그대로 둔다. 향후 작업에서도 시트 행/사용처 갱신을 미완료나 후속으로 만들지 않으며, 시트 기반 생성이 코드 ko/en 값을 덮지 않도록 확인한다.
 - 재개 시: 현재 웹 리팩터링은 커밋·푸시 완료 / 미배포임을 먼저 구분한다. 배포는 별도 지시 후 진행한다. 기존 BE 답변·실기기 QA 대기는 별도 기록을 유지하며 자동 확인하지 않는다.
 - [Office 주문 상세 후속](dentlink-unified-notification-center-office-native-detail-followup.md): DL-17436, 1.93.0 배포 후 치과앱 자체 주문 상세와 알림 랜딩을 대조. **기공소앱은 제외**. 이 기록은 지금 앱 구현을 시작하라는 지시가 아니다.

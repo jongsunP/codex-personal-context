@@ -1,6 +1,6 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-**웹 문구·스타일 구성 정리 완료 — 2026-11-13, 미배포:** `useNotificationMessages`로 명칭을 명확히 하고 별도 styles.ts 2개를 제거해 컴포넌트 하단 스타일로 정리했다. 의미 있는 기존 UI 단위 5개로 나눴으며 화면/문구/API/권한/동작은 유지했다. Web `feature/DL-17058@a67e1e215` 커밋·푸시 및 원격 일치·clean, 기존 PR4862 head 반영·base/Draft 유지. 기존 테스트9개·3제품 타입 검사·정상 Git hooks·Clinic/Lab 최종 브라우저 fixture 검증 통과. **개발 배포·앱 변경 없음.** 번역값은 그대로이며 파일 이동에 따른 43개 키의 자동 사용처 메타데이터는 다음 안전한 시트 동기화 대상으로 기록했다. [범위·검증·남은 운영 기록](dentlink-unified-notification-center-web-convention-2026-11-13.md).
+**웹 문구·스타일 구성 정리 완료 — 2026-11-13, 미배포:** `useNotificationMessages`로 명칭을 명확히 하고 별도 styles.ts 2개를 제거해 컴포넌트 하단 스타일로 정리했다. 의미 있는 기존 UI 단위 5개로 나눴으며 화면/문구/API/권한/동작은 유지했다. Web `feature/DL-17058@a67e1e215` 커밋·푸시 및 원격 일치·clean, 기존 PR4862 head 반영·base/Draft 유지. 기존 테스트9개·3제품 타입 검사·정상 Git hooks·Clinic/Lab 최종 브라우저 fixture 검증 통과. **개발 배포·앱 변경 없음.** 번역값은 그대로다. **11/11 최신 지침에 따라 번역 시트·사용처 메타데이터는 동기화하지 않으며 관련 후속 작업도 없다.** 앞서 다음 시트 동기화가 필요하다고 안내·기록한 것은 옛 절차를 적용한 오류여서 정정했다. [범위·검증·남은 운영 기록](dentlink-unified-notification-center-web-convention-2026-11-13.md).
 
 **치과앱 주문 상세 전환 후속 기록 — 2026-11-13:** 사용자 안내로 1.93.0에서 치과앱 자체 주문 상세가 추가될 예정임을 인지했다. 1.94.0 알림센터 준비 시 **1.93.0 배포 후** 실제 스크린/라우팅과 appLandingUrl·푸시 deeplink를 대조한다. URL 유지+앱 내부 연결로 가능한지 우선 확인하며 주소 변경이 필요할 때만 PM 시트·BE 저장값을 함께 공유한다. **기공소앱은 대상 아님.** [DL-17436](https://innovaid.atlassian.net/browse/DL-17436)을 본인 하위 To Do로 생성·재조회했고 현재 앱 코드/시트/배포는 바꾸지 않았다. [재개 순서 및 범위](dentlink-unified-notification-center-office-native-detail-followup.md). 기존 완료 랜딩을 미완료로 되돌리지 않고 후속 호환 작업으로 구분한다.
 
