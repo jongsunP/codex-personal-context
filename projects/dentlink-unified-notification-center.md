@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**추가 실API 확인 — 2026-11-13 마감 후 사용자 요청:** 로컬 양웹·Office대표iOS·Lab대표Android에서 실제 DEV 설정1개변경/원복을 직접 관찰했다. PUT은모두200/code0001/data:null이며 변경/원복중 **첫GET이구값→약200ms뒤두번째GET이변경값**을 네구현에서확인했다. 첫GET이반영값이면1회로종료, focus중복이아닌제한된저장확인이어서추가수정없이유지한다. 정상검사전체설정원복·관측기제거·Office양기기/외부Metro/Reactotron복구완료,제품코드/배포불변. Office최초계측오류(400거절·증거제외/초기사전hash부재)는[세부실API기록](dentlink-unified-notification-center-settings-response-2026-11-13.md#마감-후-요청--실제-dev-api의-putget-직접-확인)에별도구분했다. 추가작업/폴링없이실기기결과대기.
+
 **최종 마감 — 2026-11-13 16:59 이후, 사용자 로컬 확인 후 개발 전달 완료:** [최신 수정·검증·배포·마감 정본](dentlink-unified-notification-center-settings-response-2026-11-13.md#최종-개발-전달마감).
 
 - **웹:** DEV PR4891→develop `7c8eef28c`(검증source542b0c4e8과 tree동일), Clinic43389706697·Lab43389706714의 정확SHA 배포 시작을16:59:23KST 1회 확인했다. 완료/서버반영은 추적하지 않는다.

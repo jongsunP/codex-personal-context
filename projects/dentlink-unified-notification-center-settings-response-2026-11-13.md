@@ -104,3 +104,24 @@
 | 로컬 환경·공통 지침·최종 전달/기록 | Office 양OS/외부실행터미널/Reactotron 준비, 웹 위치 안내. 반응성·실패복구·동등 제품 점검 지침 보완. 사용자 로컬 확인 후 웹 양서비스 배포 시작·양앱 DEV 게시/활성, Jira/메모리 마감 |
 
 상세 당일 근거: [기본 체크포인트](dentlink-unified-notification-center.md), [DEV 검증/디자인·깜박임](dentlink-unified-notification-center-dev-test-2026-11-13.md), [DL-17425](dentlink-unified-notification-center-analytics-2026-11-13.md), [제품 간 누락·API·정책](dentlink-unified-notification-center-parity-2026-11-13.md). 로컬 Codex 지침 복사본도 변경된 DEVELOPMENT_STYLE/PROJECTS에 맞춰 보존 백업 후 동기화 완료했다.
+
+## 마감 후 요청 · 실제 DEV API의 PUT→GET 직접 확인
+
+사용자가 코드/fixture 검증과 별개로 지금 로컬에서 실제 API까지 확인해 달라고 요청했다. 웹과 앱 설정 쓰기를 직렬로 진행하고, 각 제품의 한 항목을 한 번 변경한 뒤 원복했다. 서버 응답/지연/payload를 대체하지 않았다. 웹은 실제 UI 클릭과 CDP network initiator, 앱은 기존 화면의 handler/실제 touch 및 Axios pass-through 관찰을 사용했다. 분석 송신만 테스트용 capture로 차단했고 종료 때 원복했다.
+
+| 최종 코드·검증 환경 | PUT 뒤 확인 GET: 변경 / 원복 | 관측 |
+| --- | --- | --- |
+| Clinic 웹542b0c4e8 / localhost3030 + DEV | **2회 / 1회** | 변경: 첫GET MAIL=ON(구값), 약202ms 후 OFF. 원복: 첫GET ON으로 완료 |
+| Lab 웹542b0c4e8 / localhost3035 + DEV | **1회 / 2회** | 원복: 첫GET 상위=OFF(구값), 약204ms 후 ON |
+| Office 앱a6ee48c7 / 대표iOS + DEV | **2회 / 1회** | 변경: 첫GET MAIL=ON(구값), 약204ms 후 OFF. 원복: 첫GET ON |
+| Lab 앱2c638fa / 대표Android + DEV | **1회 / 2회** | 원복: 첫GET 채널=OFF(구값), 약210ms 후 ON |
+
+- 네 경우 모두 PUT은 **HTTP200, code0001, data:null**로 최종 설정 객체를 반환하지 않았다. GET은 code0000과 설정값을 반환했다. 모든 성공 저장에는 PUT 전 최신값GET1회가 별도로 있고, 최초화면조회·최종원복확인GET은 표의 저장후GET 집계에서 제외했다.
+- 이번에 GET2회인 사례는 첫 응답이 구값이어서 기존 `[0,200,500,1000]` 확인루프가 재시도한 것이다. 최초 GET이 변경값을 주면 추가GET은 없었다. 웹은 두 GET의 CDP initiator가 동일 saveMutation 저장확인 지점임을 확인, 앱은 화면focus변경 없이 mutation경로의 query signal 없는 요청과 200ms 재시도·값 변화를 확인했다.
+- 결론: 현재 실응답에 맞는 제한된 확인이므로 **추가 수정 없이 유지**한다. 서버 내부 replica/cache 등 구값이 반환된 구체 원인은 이번 범위에서 조사하지 않았다. 사용자가 처음 본 네트워크 요청 자체를 소급 식별한 것은 아니지만 동일한 두 번의 GET 현상을 실제 응답으로 재현했다.
+- 정상 검사의 실제 PUT은 제품별 변경1+원복1이다. 웹은 최종 새로고침GET으로 전체 employee/user 값의 원본 hash일치를 확인했고, Office/Lab 앱도 사전GET과 최종별도GET의 전체 정규화 JSON exact equality=true를 확인했다. 의도한 항목/종속채널 외 값 보존, 최종 idle·입력복구·앱LogBox0 확인.
+- 검사 범위는 네 구현의 대표 실제 요청이다. 앱의 모든OS에서 실API쓰기를 반복한 전수검사로 확대하지 않는다. 기존 최종양OS UI/fixture 검증과 구분한다.
+- 계측 도구 오류 구분: Office 첫 임시 service wrapper가 get/save를 잘못 묶어 HTTP400 요청이 나갔다. 즉시 원서비스를 복원했고 해당 실행은 정상제품/API 근거에서 제외했다. 당시 대상값 유지/400거절은 확인했으나 초기 전체hash가 없어 그 실패실행 전후 전체동일을 소급 증명하지 않는다. 이후 service를 건드리지 않는 Axios-only 관찰은 사전기준부터 확보해 정상변경·전체원복을 확인했다. 제품코드 결함이나 서버 응답 fixture가 아니다.
+- 원관측기/SDK capture 모두 제거. 자체 웹3030/3035/브라우저와 Lab8082만 종료, 사용자 Office 외부Metro8081·두기기DEV소스·Reactotron 두연결/선택기를 복원·유지했다. Reactotronconnected=true/socketState1, fixture없음/LogBox0.
+- 세 제품 HEAD/clean은 root가 다시 확인했고 코드·커밋·PR·배포 변경 없음. 기존 웹DEV7c8eef28c, Officev147both/LabiOSv46·Androidv45 전달상태 유지. 관련 개인/Claude 기록만 보완하고 사용자 실기기 결과를 기다린다.
+- 실제 근거: `/tmp/notification-web-live-put-get-1113.md`/동명json, `/tmp/notification-office-real-api-1113.md` 및 `/tmp/office-real-settings-api-1113.json`, `/tmp/notification-lab-live-put-get-1113.md`. 인증정보·전체서버응답·개인정보는 Git에 기록하지 않았다.
