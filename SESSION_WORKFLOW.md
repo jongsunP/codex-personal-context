@@ -467,9 +467,10 @@ and user interaction surfaces so the agent can work without taking over the
 user's tabs, typing, navigation or window focus. This applies whether or not
 the user also observes part of the agent's work.
 
-- Reuse suitable agent-owned windows/profiles for automation. For web work,
-  the separate Testing Chrome preference below protects the user's regular
-  Chrome workflow; it is not merely a choice of browser branding. Avoid
+- Reuse suitable agent-owned browser sessions/profiles for automation. For
+  routine agent-only research and checks, first use the in-app or non-visible
+  mode described below. Testing Chrome is an isolation preference, not an
+  instruction to display an external window. Avoid
   competing for the same foreground window when an independent control route
   can perform the task. If shared mouse/keyboard use is necessary, coordinate
   that interaction rather than assuming the user has stopped other work.
@@ -491,7 +492,10 @@ the required implementation or verification quality.
 
 - **Codex 단독 개발:** When the user is not directly watching local work,
   Codex may run development services and web checks through its own terminal
-  and browser tools. The IDE does not need to be arranged for the user.
+  and browser tools. This default also covers research, document browsing and
+  automation, not only development. Prefer available in-app or non-visible
+  browser execution; do not repeatedly open external windows for routine
+  checks. The IDE does not need to be arranged for the user.
 - **사용자 로컬 확인:** Choose a setup that provides the inspection and
   control the user needs, rather than reproducing a fixed list of programs.
   Web is the user's primary area: expose **current code changes, service
@@ -601,18 +605,44 @@ In both modes:
 
 ### Web Browser Automation Preference
 
-The user confirmed this fallback order on 2026-11-06 for agent-operated web
-work: **Chrome for Testing (or the tool's compatible test Chromium) → the
-existing regular Chrome → computer-use interaction**.
+The user's 2026-11-13 clarification separates **visibility** from **browser
+isolation**. It updates the 2026-11-06 Testing Chrome preference; choosing a
+test browser does not require a headed external window.
 
+- For ordinary agent-only research, link inspection and automated checks,
+  use suitable connected read tools first, then an available in-app browser or
+  non-visible/headless browser mode as needed. Choose a method that can provide
+  the required evidence; an in-app browser is not guaranteed to be available
+  or sufficient. Respect the selected tool's supported APIs and restrictions.
+- Use a visible external browser when the user requests an external screen,
+  direct local inspection or live observation, or when the specific check
+  genuinely requires visible/native browser interaction. Routine investigation
+  is not itself a request for user-preview setup. If visibility is technically
+  necessary, state the reason briefly; ask only when the need or interaction
+  with the user's work is unclear. Do not repeatedly ask for the normal mode.
+- For isolated browser automation, prefer Chrome for Testing or a compatible
+  test Chromium in the selected visibility mode. If it cannot perform the
+  check, use an available permitted regular-Chrome or computer-use route when
+  appropriate. Browser/profile selection and display mode are separate choices.
+- Reuse a suitable agent-owned browser/context/tab through the related task.
+  Avoid repeated launch/close cycles, activating the app, taking focus or
+  opening duplicate windows between lookup steps. Do not stop another task's
+  browser or the user's preview to apply this preference. Release only your
+  own unneeded temporary resources at a sensible task boundary.
+- A tab option such as `visible: false` or a requested headless mode alone is
+  not proof that the tool's browser startup causes no external window/focus
+  change. If it still flashes or activates an external app, avoid repeating
+  that startup path and use a supported less disruptive route or explain the
+  limitation. Do not promise invisibility that has not been established.
 - Prefer a separate automation browser/profile so the user can continue in
   regular Chrome without competing for tabs, clicks, input or navigation.
   Reuse a suitable existing test browser before opening another. Preserve the
   user's regular windows, layout and login; a separate browser does not require
   another local server.
-- If test-browser automation cannot perform the required check, use the
-  regular Chrome through an available permitted automation method, then use
-  computer-use/mouse-and-keyboard interaction if needed. Verify the actual
+- When the visibility decision above requires external interaction and the
+  test browser cannot perform the check, use regular Chrome through an
+  available permitted automation method, then computer-use/mouse-and-keyboard
+  interaction if needed. Verify the actual
   task environment and page rather than assuming every method has equivalent
   evidence. Do not change browser security/automation settings without user
   authorization. The user explicitly authorized enabling regular Chrome's
@@ -626,7 +656,10 @@ existing regular Chrome → computer-use interaction**.
   browser. A control banner's presence or absence is not proof of the control
   mechanism or test coverage.
 - Report which browser was exercised. A passing test-browser check must not
-  be described as interaction in the user's regular Chrome window.
+  be described as interaction in the user's regular Chrome window. A direct
+  user-preview request still requires checking the actual displayed window;
+  in-app/headless checks do not replace that evidence. Mandatory app runtime
+  verification and explicit headed E2E/UI requests remain unchanged.
 
 ### Paired iOS And Android Environments
 

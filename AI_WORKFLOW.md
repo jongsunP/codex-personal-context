@@ -34,7 +34,7 @@ Jira, reporting, both-sides recording) are unchanged.
 | Archive/keep main session | Same rule; archive tools exist (`archive_session`) and the main session stays unarchived |
 | Atlassian current plugin `mcp__codex_apps__atlassian_*` | Claude's Atlassian connector. Same site rule: `innovaid.atlassian.net`. Authorization is the user's (`/mcp`) |
 | Figma `figma_http` direct MCP | Claude's Figma connector. Authorization is the user's |
-| Codex internal browser / Chrome for Testing | Claude built-in browser pane for agent-only work, Chrome for Testing for separate automation, user's Chrome only when asked |
+| Codex in-app/non-visible browser; isolated test browser when needed | Same visibility rule: available in-app or headless first for agent-only work; external visible browser for requested preview or a genuine technical need. Testing Chrome is isolation, not a headed-launch requirement. Reuse sessions and avoid flashing/focus changes |
 
 Use multiple Codex sessions when separation improves ownership and context:
 
@@ -174,10 +174,13 @@ scratch details.
 - Ask questions only when assumptions would be risky.
 - Explain important tradeoffs.
 - Follow [Local Development And User Preview](SESSION_WORKFLOW.md#local-development-and-user-preview):
-  Codex may use its internal terminal/browser when working alone. For direct
-  user inspection, use the exact IDE checkout, bottom integrated service
-  terminals, external browser and visible devices, unless the user specifies
-  a per-service exception. Preserve the user's existing layout and sessions.
+  agent-only development, research and automation default to internal/in-app
+  or non-visible tools when available and sufficient. External visible browser
+  use is for requested preview or a genuine technical need, not routine lookup
+  steps. For direct user inspection, expose the exact code, execution/logs and
+  actual rendered browser/device with the appropriate independent setup.
+  Follow the canonical browser visibility/isolation distinction and preserve
+  suitable existing windows, layout and sessions.
 - Treat an implementation request as a goal to solve, not as an instruction to
   follow blindly or a reason to retreat behind risk. First inspect the closest
   existing behavior, comparable cases, and project constraints. If the

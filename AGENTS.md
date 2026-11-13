@@ -187,11 +187,14 @@
   credentials outside Git and logs; do not repeatedly request login when a
   valid saved session exists. This is the user's standing 2026-11-03 direction.
 - For agent-operated web work, follow **Web Browser Automation Preference** in
-  `SESSION_WORKFLOW.md`: prefer a separate Chrome for Testing/compatible test
-  Chromium, fall back to existing regular Chrome, then computer-use interaction.
-  Reuse suitable windows/profiles, preserve the user's browser, and distinguish
-  isolated browser state from shared account/server data. This is the user's
-  2026-11-06 direction.
+  `SESSION_WORKFLOW.md`: ordinary agent-only research and automation default to
+  available in-app or non-visible/headless tools. Use an external visible
+  browser for requested direct/live preview or a check that genuinely needs it.
+  Chrome for Testing/compatible Chromium is an isolation preference, not a
+  requirement to open a window. Reuse suitable browser sessions and avoid
+  repeated launch/close cycles, flashing or focus changes; preserve the user's
+  browser and other tasks. Keep real displayed-window/app verification when
+  required. This is the user's 2026-11-13 clarification of the 2026-11-06 rule.
 - For new Dentlink work, follow **New Work Intake And Session Routing** in
   `SESSION_WORKFLOW.md`: use one session per logical feature or bug by default,
   including coordinated Web, Office app, and Lab app work. Split only when
