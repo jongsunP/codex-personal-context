@@ -199,14 +199,14 @@ For detailed current state, read:
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
-### Dentlink 통합알림센터 — 재개 감사·개발 전달 완료
+### Dentlink 통합알림센터 — 공통 동작 보완·앱 개발 전달
 
-- **현재(2026-11-12 20시대):** 타 에이전트/운영 지침 동기화, 규약·요구사항 전체 변경 감사와 수정·최종 런타임 후 개발 전달. 웹 PR4884→develop e72bbafbee, Clinic/Lab 배포 시작 확인. Office Development v143/v143(2.2.4), Lab v42/v41(1.0.5) 활성화. 원 PR4862/346/42 유지. 임시폴더 충돌은 격리 재게시로 복구, Lab iOS v41 롤백 금지. Jira 후속 DL-17415~17420 To Do, 기존 개발 완료와 Home3/이메일 경계 유지. [11/12 배포·마감 정본](projects/dentlink-unified-notification-center-delivery-2026-11-12.md) 및 [감사 증거](projects/dentlink-unified-notification-center-review-2026-11-12.md) 참조. 실기기/웹 결과 확인은 사용자에게 맡기고 대기한다.
+- **현재(2026-11-13 오후):** Lab 저장 깜박임과 웹·양앱 동등 흐름 누락·진입 조회 중복 보완 완료. Web b6cffe2f8은 추가 변경 미배포, 기존 DEV f9d5fde66 유지. Office Development v146/v146(2.2.4,1eaa023), Lab v45/v44(1.0.5,3a6624e) 게시·활성. 기존 PR4862/346/42 유지. 최신 Amplitude 요청/누락 없음. 새 iOS 앱 아이콘 실행 후 배너는 원인 미확정·별도 기록이며 이번 배포로 해결됐다고 하지 않는다. [최신 수정·검증 정본](projects/dentlink-unified-notification-center-parity-2026-11-13.md), [전체 체크포인트](projects/dentlink-unified-notification-center.md) 참조. 사용자 QA/추가 지시까지 자동 추적 없이 대기한다.
 
 - 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.
 - 이 기능 세션에서 제품별 작업 위치·작성자를 분리하며, 미확정 BE 계약과 제품 commit/push/PR/배포 권한은 구분한다.
-- 2026-11-03 기록은 선행 UI 단계의 과거 이력이다. 이후 BE 연결과 정책 변경을 반영했으며 현재 설정 화면 OS 배너는 OFF 동안 상시, 앱 진입 안내 팝업은 기기당1회다. 현재 개발/배포 상태는 위11/12 기록을 따른다.
+- 2026-11-03 기록은 선행 UI 단계의 과거 이력이다. 이후 BE 연결과 정책 변경을 반영했으며 현재 설정 화면 OS 배너는 OFF 동안 상시, 앱 진입 안내 팝업은 기기당1회다. 현재 개발/배포 상태는 위 최신 체크포인트를 따른다.
 - [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
 - [웹 노출 페이지 과거 조사(11/12 확정 범위 보완 완료)](projects/dentlink-unified-notification-center-web-visibility-2026-11-10.md)
 

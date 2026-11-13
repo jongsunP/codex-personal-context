@@ -143,6 +143,23 @@ appear nowhere else in the app.
   or app flow if it shares the same behavior or credible failure mode. Keep the
   review limited to that related scope, even when the user named only the web.
   This is the user's 2026-11-05 clarification.
+- For the same confirmed behavior, align the equivalent implementations unless
+  a product-specific policy or technical reason requires a difference. Finding
+  and fixing a problem in Office does not complete the equivalent Lab flow.
+  Trace each implementation through its rendered result; different code paths
+  or absence of the first product's exact symptom are not evidence of parity.
+  Reuse an appropriate implementation pattern without forcing unrelated code
+  into a shared abstraction. This is the user's 2026-11-13 clarification.
+- For inline setting saves, distinguish temporary input blocking from actual
+  permission/error-disabled styling. Check the complete before/pending/after
+  experience: text and control colors, opacity, loading indicators, layout and
+  scroll position, duplicate prevention, and failure recovery. A missing
+  spinner alone does not prove that the screen does not flicker. Preserve any
+  explicitly designed progress/disabled feedback rather than overriding policy.
+- Verify equivalent affected products on the relevant platforms before marking
+  the fix complete. If a required check cannot be performed, name the precise
+  product/platform/condition and, only when needed, request the user's device
+  check. Never describe an unverified counterpart as unaffected or completed.
 - Use existing Button `size`, `variant`, `color`, `width`, and state props
   before creating styled action-button variants.
 - Use Typography variants and theme colors instead of restating font metrics
