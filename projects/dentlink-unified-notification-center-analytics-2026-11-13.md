@@ -1,4 +1,6 @@
-# 2026-11-13 DL-17425 분석 이벤트·Figma 확정 문구 — 미배포
+# 2026-11-13 DL-17425 분석 이벤트·Figma 확정 문구
+
+> 후속 전달: 사용자 승인으로 11/13 개발 재배포했다. Web DEV PR4888 병합 후 Clinic/Lab 배포 시작 확인, Office v145/v145·Lab v44/v43 게시·활성. 아래 미배포 표현은 구현 마감 당시 이력이다. [현재 배포·QA 기준](dentlink-unified-notification-center-redeploy-2026-11-13.md).
 
 ## 요청과 결정
 
