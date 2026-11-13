@@ -1540,13 +1540,16 @@ This is the user's 2026-11-06 direction, not a required visual template.
   message without mixing agent commentary into it. Preserve useful readability
   when moving the wording to Slack or another destination.
 
-### Dentlink Notion Document Destination
+### Notion Shared Document Destination
 
-User clarification on 2026-11-13: when asked to write Dentlink development
-investigations, response proposals, or stakeholder-sharing documents in Notion,
-save them as entries alongside the existing documents in **DEV Team →
-Development Documents**. This is the standing destination unless the user
-explicitly chooses another location or a private draft.
+User clarification and reconfirmation on 2026-11-13: shared work documents of
+this kind, including investigations, response proposals, technical summaries,
+and material for nondeveloper stakeholders, belong in **DEV Team → Development
+Documents** when requested in Notion. This is the standing default, not a
+one-page exception or a rule limited to the current home investigation. Unless
+the user explicitly specifies another location or a private draft, save the
+document as an entry alongside the existing documents there. Do not ask for
+the location again or silently create a private draft.
 
 - Database: https://app.notion.com/p/c7d0f110577a430dbf545038cee73b11
 - Data source: `26366594-1ec5-423c-b7c3-35abe1e047f2`.
