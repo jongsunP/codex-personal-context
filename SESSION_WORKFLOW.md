@@ -89,7 +89,9 @@ Treat recorded rules like a single source-of-truth state flow.
   does not mean the current decision used the latest rule. Apply an explicit
   newer user decision over older repository examples. This supplements the
   automatic start/resume sync, not a fixed daily schedule, per-prompt full
-  audit, or background polling (user reaffirmation, 2026-11-13).
+  audit, or background polling (user reaffirmation, 2026-11-13). This applies
+  to all working guidance, not only translation guidance; check what is needed
+  for the current work rather than unconditionally rereading every document.
 - If a rule was never recorded, handle it by best judgment and consider whether
   it should be written to the appropriate canonical file.
 
