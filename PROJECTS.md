@@ -199,9 +199,9 @@ For detailed current state, read:
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
-### Dentlink 통합알림센터 — 공통 동작 보완·앱 개발 전달
+### Dentlink 통합알림센터 — 설정 즉시 표시 보완·로컬 확인 대기
 
-- **현재(2026-11-13 16시):** Lab 저장 깜박임과 웹·양앱 동등 흐름 누락·진입 조회 중복 보완 완료. Web b6cffe2f8을 DEV PR4890→develop b8ce6c6ae로 반영, Clinic/Lab 자동 배포 시작 확인(최종 성공/QA 별도). Office Development v146/v146(2.2.4,1eaa023), Lab v45/v44(1.0.5,3a6624e)는 현재 소스와 같아 추가 CodePush 없음. 기존 PR4862/346/42 유지. 개인 알림 카운트 정책 대기는 해소, 설정 노출 계약 후속과 구분한다. iOS 아이콘 실행 배너는 이번 회귀 근거 없어 기존 경로 제보로 기록만 유지. [최신 수정·검증 정본](projects/dentlink-unified-notification-center-parity-2026-11-13.md), [전체 체크포인트](projects/dentlink-unified-notification-center.md) 참조. 현재 남음은 배포 결과·사용자 QA·별도 실푸시 E2E이며 자동 추적하지 않는다.
+- **현재(2026-11-13):** 설정값을 클릭 즉시 표시하고 성공 유지/실패 복구하도록 웹·양앱 수정·검증·커밋푸시 완료. Web542b0c4e8/Officea6ee48c7/Lab2c638fa, 기존 PR4862/346/42 유지, **새 변경은 미배포**. 관련 tests24/65/16·양웹 렌더15조건·양앱 최종 양OS 검증, 사용자 로컬 확인 후 별도 배포 승인 대기. 공통 저장 UX 지침 보완. 직전 DEV는 Webb8ce6c6ae(featureb6cffe2f8), Officev146/v146·Labv45/v44 그대로. [최신 구현·검증 정본](projects/dentlink-unified-notification-center-settings-response-2026-11-13.md), [직전 공통 동작/배포 이력](projects/dentlink-unified-notification-center-parity-2026-11-13.md), [전체 체크포인트](projects/dentlink-unified-notification-center.md).
 
 - 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.

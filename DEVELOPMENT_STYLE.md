@@ -156,6 +156,20 @@ appear nowhere else in the app.
   scroll position, duplicate prevention, and failure recovery. A missing
   spinner alone does not prove that the screen does not flicker. Preserve any
   explicitly designed progress/disabled feedback rather than overriding policy.
+- Evaluate responsiveness as well as flicker. For authorized ordinary reversible
+  setting controls, prefer immediate display of the user's selection when it can
+  be safely reconciled: retain it on confirmed success; on failure, reconcile
+  with the server or restore the confirmed value, use existing error feedback,
+  and allow retry. Do not leave a false saved state until the next visit. Follow
+  a confirmed product requirement when it calls for different behavior.
+- Separate a pending displayed choice from confirmed server/cache state; do not
+  report a successful save or analytics event before confirmation. Preserve
+  dependent controls and exclude stale requests after account/affiliation changes.
+  Sequential clicks can still overlap asynchronous requests. Keep proportionate
+  duplicate/write guards, especially for whole-object PUTs, without adding
+  queues, debounce or new APIs for hypothetical volume concerns. Use the existing
+  mutation pattern and explain any necessary wait. This is the user's 2026-11-13
+  clarification after the notification settings flicker/response fixes.
 - Verify equivalent affected products on the relevant platforms before marking
   the fix complete. If a required check cannot be performed, name the precise
   product/platform/condition and, only when needed, request the user's device
