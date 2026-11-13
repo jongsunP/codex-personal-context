@@ -1542,9 +1542,10 @@ This is the user's 2026-11-06 direction, not a required visual template.
 
 ### Notion Shared Document Destination
 
-User clarification and reconfirmation on 2026-11-13: shared work documents of
-this kind, including investigations, response proposals, technical summaries,
-and material for nondeveloper stakeholders, belong in **DEV Team → Development
+User's final clarification on 2026-11-13: **development-related materials and
+shared documents** ("개발과 관련있는 자료나 공유용 문서들"), including
+investigations, response proposals, technical summaries, and material for
+nondeveloper stakeholders, belong in **DEV Team → Development
 Documents** when requested in Notion. This is the standing default, not a
 one-page exception or a rule limited to the current home investigation. Unless
 the user explicitly specifies another location or a private draft, save the
@@ -1553,8 +1554,9 @@ the location again or silently create a private draft.
 
 - Database: https://app.notion.com/p/c7d0f110577a430dbf545038cee73b11
 - Data source: `26366594-1ec5-423c-b7c3-35abe1e047f2`.
-- Read the current database schema and representative existing entries; reuse
-  existing categories appropriate to the document, such as `FE` and `Issue`.
+- Read the current database schema and representative existing entries; apply
+  existing tags appropriate to the document's content. `FE` and `Issue` fit the
+  current home response proposal, but are not fixed tags for every document.
 - A request to write in Notion means saving through the connected tools and
   returning the page link. A chat-only draft is sufficient only when the user
   asks for copyable wording rather than an actual Notion document.
