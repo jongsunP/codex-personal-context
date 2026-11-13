@@ -199,9 +199,9 @@ For detailed current state, read:
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
-### Dentlink 통합알림센터 — 설정 즉시 표시 보완·로컬 확인 대기
+### Dentlink 통합알림센터 — 설정 UX 개발 전달·사용자 실기기 QA 대기
 
-- **현재(2026-11-13):** 설정값을 클릭 즉시 표시하고 성공 유지/실패 복구하도록 웹·양앱 수정·검증·커밋푸시 완료. Web542b0c4e8/Officea6ee48c7/Lab2c638fa, 기존 PR4862/346/42 유지, **새 변경은 미배포**. 관련 tests24/65/16·양웹 렌더15조건·양앱 최종 양OS 검증, 사용자 로컬 확인 후 별도 배포 승인 대기. 공통 저장 UX 지침 보완. 직전 DEV는 Webb8ce6c6ae(featureb6cffe2f8), Officev146/v146·Labv45/v44 그대로. [최신 구현·검증 정본](projects/dentlink-unified-notification-center-settings-response-2026-11-13.md), [직전 공통 동작/배포 이력](projects/dentlink-unified-notification-center-parity-2026-11-13.md), [전체 체크포인트](projects/dentlink-unified-notification-center.md).
+- **현재(2026-11-13 최종):** 사용자 로컬 확인 후 설정즉시표시 수정까지 개발전달. 웹 DEVPR4891→develop7c8eef28c(source542b0c4e8), Clinic/Lab 자동배포 시작1회확인. Office Developmentv147/v147(2.2.4, a6ee48c7), Labv46/v45(1.0.5, 2c638fa) 게시·활성. 기존PR4862/346/42유지·본인Jira진행댓글정리·ReadyforDeploy유지. 관련tests24/65/16·양웹렌더15조건·양앱양OS검증, 저장확인GET 추가수정불필요판단. 공통저장UX지침·메모리완료. 사용자실기기QA결과대기, 자동배포결과/수신추적없음. 로컬Office미리보기환경유지. [최신 정본](projects/dentlink-unified-notification-center-settings-response-2026-11-13.md), [직전 동작·정책 이력](projects/dentlink-unified-notification-center-parity-2026-11-13.md), [전체 체크포인트](projects/dentlink-unified-notification-center.md).
 
 - 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.

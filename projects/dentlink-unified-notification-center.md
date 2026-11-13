@@ -1,6 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-**최신 — 2026-11-13, 알림 설정 즉시 표시 수정·검증·푸시 완료 / 미배포:** [요청·원인·최종 코드·검증 정본](dentlink-unified-notification-center-settings-response-2026-11-13.md).
+**최종 마감 — 2026-11-13 16:59 이후, 사용자 로컬 확인 후 개발 전달 완료:** [최신 수정·검증·배포·마감 정본](dentlink-unified-notification-center-settings-response-2026-11-13.md#최종-개발-전달마감).
+
+- **웹:** DEV PR4891→develop `7c8eef28c`(검증source542b0c4e8과 tree동일), Clinic43389706697·Lab43389706714의 정확SHA 배포 시작을16:59:23KST 1회 확인했다. 완료/서버반영은 추적하지 않는다.
+- **앱:** Office Development iOS·Android **v147**(2.2.4/sourcea6ee48c7), Lab iOS **v46**·Android **v45**(1.0.5/source2c638fa) 게시·활성 완료. native/asset변경0, 네번직렬·TMPDIR격리. 기존 검토PR4862/346/42는 유지했다.
+- **추가 GET 질문:** PUT뒤 저장확인GET은 필요하며 정상1회, 구값일때만 기존한도재확인. 웹focus자동조회OFF, 양앱/웹 성공후현재설정중복invalidate없음을 코드대조했다. 사용자관찰두요청의 원인은응답증거없어단정하지않지만 현재코드에서추가수정필요는발견못해현행유지한다.
+- **기록/대기:** 본인Jira17058/59/60 댓글45032/33/34에 결과추가·개발완료상태유지. Notion은관련정책변경없어무수정. 개인/Claude/Codex 메모리최신화, 공통설정UX지침보완완료. 사용자로컬확인은사용자확인으로기록, 이후실기기테스트는사용자가수행한다. 로컬Office양OS/외부Terminal/Reactotron유지. 더개발/배포/QA/결과폴링하지않고대기한다.
+
+**직전 구현 이력 — 2026-11-13, 배포 승인 전 즉시 표시 수정·검증·푸시 완료:** [요청·원인·최종 코드·검증 정본](dentlink-unified-notification-center-settings-response-2026-11-13.md).
 
 - **이번 요청:** 깜박임 제거 후에도 저장 결과를 기다려야 값이 바뀌는 답답함을 개선한다. 클릭 즉시 표시하고 성공 시 유지, 실패 시 확인값 복구·기존 안내·재시도로 맞췄다. 기존 전체 PUT·최신 GET/readback·저장 중 입력 차단은 유지하며 새 요청 큐/API는 추가하지 않았다.
 - **최종 코드:** Web `feature/DL-17058@542b0c4e8`, Office `feature/DL-17059@a6ee48c7`, Lab `feature/DL-17060@2c638fa`. 세 제품 원격 동일·clean, 기존 PR4862/346/42 head 반영. **배포는 하지 않았다.** 아래 16시 배포와 앱 DEV 라벨에는 이번 수정이 없다.
