@@ -216,6 +216,11 @@ For detailed current state, read:
 - 기존 조사/선행 코드·미확정 계약을 보존하고 별도 재개 지시를 기다린다. 문서 분리와 실제 코드·배포 범위 분리는 구분한다.
 - [projects/dentlink-email-cta-tracking.md](projects/dentlink-email-cta-tracking.md)
 
+### Dentlink 해외 사용자 포털 접속·API 통신 실패 조사
+
+- 2026-11-13 조사 전용 세션 `01a1d352-b346-7872-b537-6fe5ffaf4f87`에 인계. Slack·코드·관련 자료로 원인 후보, FE/인프라 대응과 정상 사용자 영향, 관측 대안을 분석한다. 개발/실제 조치는 별도이며 현재 승인되지 않았다.
+- [projects/dentlink-overseas-api-access-investigation.md](projects/dentlink-overseas-api-access-investigation.md)
+
 ### Dentlink 치과 마케팅 수신 동의 — DL-17208
 
 - 2026-11-13 웹·Office 공통 기능 세션 `01a1d2b2-0d2f-7441-a68b-fa68affceafc`에서 확정된 웹 SMS 문구·툴팁 변경과 앱 SMS API 연결 준비를 로컬 구현했다. 본인 Jira를 웹 DL-17231·앱 DL-17423으로 정리했으며 제품 commit/PR/배포 전이다. **사용자 요청으로 기록 후 최종 디자인·Email API 공유 대기**하며 자동 재조회하지 않는다. 실제 화면·저장 QA는 남았다. 알림센터와 앱 Profile 접점은 보존·향후 합친 최종 코드 검증 대상으로 관리한다.
