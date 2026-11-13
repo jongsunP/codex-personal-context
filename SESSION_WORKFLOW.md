@@ -1553,6 +1553,18 @@ When drafting Slack messages or other material for the user to share with
 PMs, designers, and teammates, prioritize understandable concerns and evidence.
 This is the user's 2026-11-06 direction, not a required visual template.
 
+- **Default length (explicit user instruction, 2026-11-13; all projects):**
+  Notion and other shared documents must be short and easy to understand unless
+  the user explicitly requests detail. The finalized
+  [home-response document](https://app.notion.com/p/417ce072e82f811a974ec11daca8dec5)
+  is the reference for density: a plain explanation and, when needed, a compact
+  situation/action or work-location table. Do not make every document use that
+  exact structure. Keep essential uncertainty and scope, including whether a
+  follow-up is conditional; do not expand into an investigation history or long
+  technical appendix. Keep detailed evidence in the personal checkpoint.
+- When the user identifies an omission, add only the missing information in
+  the same concise format. Preserve their edits instead of repeatedly growing
+  or rebuilding the shared document.
 - Lead with the relevant concern or finding. Explain the user-visible effect
   using a small concrete scenario or number example when helpful. Distinguish
   implementation feasibility from possible confusion or policy decisions.
@@ -1569,9 +1581,16 @@ This is the user's 2026-11-06 direction, not a required visual template.
 - Keep the concern distinct from the final decision. Do not imply a preferred
   policy is settled or technically mandatory merely to make the argument
   stronger. Identify only genuinely necessary policy clarification.
-- When the user asks for copyable wording, provide one complete paste-ready
-  message without mixing agent commentary into it. Preserve useful readability
-  when moving the wording to Slack or another destination.
+- **User-posted text (explicit user instruction, 2026-11-13):** whenever the
+  user will paste a comment, Slack thread reply, or other shared message
+  themselves, provide the entire finished message in **one copyable code block**,
+  even without a separate request to make it copyable. Use the destination's
+  formatting; do not split the message into fragments, alternative drafts, or
+  partial replacements. Keep assistant commentary outside the block. This does
+  not authorize posting or sending on the user's behalf.
+- For a requested Notion document, write it in Notion through the connected
+  tool. Use a copyable block instead only when the user asks for text they will
+  paste themselves. Both forms follow the concise default above.
 
 ### Notion Shared Document Destination
 

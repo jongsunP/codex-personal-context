@@ -76,6 +76,12 @@
   **Stakeholder Sharing** in `SESSION_WORKFLOW.md`: make the actual concern,
   concrete example, consequence, and relevant evidence easy for nondevelopers
   to understand. Favor readable grouping over length or a fixed template.
+- User instruction, 2026-11-13: keep Notion and all shared documents **short and
+  easy to understand unless the user explicitly asks for detail**, like the
+  finalized home-response Notion document. Add omissions briefly in the existing
+  format. Save requested Notion documents in Notion; give anything the user will
+  post themselves (comments, Slack threads, etc.) as **one complete copyable
+  block**, without requiring a separate request for copyable formatting.
 - For development-related materials and shared documents requested in Notion,
   including investigations and stakeholder summaries, follow **Notion Shared Document
   Destination** in `SESSION_WORKFLOW.md`: use DEV Team's Development Documents
