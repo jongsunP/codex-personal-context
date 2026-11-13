@@ -125,3 +125,13 @@
 - 원관측기/SDK capture 모두 제거. 자체 웹3030/3035/브라우저와 Lab8082만 종료, 사용자 Office 외부Metro8081·두기기DEV소스·Reactotron 두연결/선택기를 복원·유지했다. Reactotronconnected=true/socketState1, fixture없음/LogBox0.
 - 세 제품 HEAD/clean은 root가 다시 확인했고 코드·커밋·PR·배포 변경 없음. 기존 웹DEV7c8eef28c, Officev147both/LabiOSv46·Androidv45 전달상태 유지. 관련 개인/Claude 기록만 보완하고 사용자 실기기 결과를 기다린다.
 - 실제 근거: `/tmp/notification-web-live-put-get-1113.md`/동명json, `/tmp/notification-office-real-api-1113.md` 및 `/tmp/office-real-settings-api-1113.json`, `/tmp/notification-lab-live-put-get-1113.md`. 인증정보·전체서버응답·개인정보는 Git에 기록하지 않았다.
+
+## 조회 필터 저장 방식과 기존 Jira 확인
+
+- 사용자 확인: 현재 저장 방식은 그대로 유지하고 메모리만 남긴다. 기존에 [Slack 스레드](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1794363519212339)에 공유했다고 다시 알려주었다. 이번에는 Slack 내용을 재조회하거나 쓰지 않았다.
+- 치과 웹은 주문목록 `myOrderOnly`, 환자목록 `myPatientOnly`를 URL 쿼리로 관리한다. 쿼리가 없는 메뉴로 재진입하면 기본값이다. 근거: `clinic/src/lib/OrderList/useOrderList.tsx`, `clinic/src/lib/PatientList/usePatientList.tsx`의 현재 코드.
+- 치과앱 주문목록·링크톡은 이전 서버 push-preferences 연동을 제거하고 기존 useOrderStore/AsyncStorage만 사용한다. 환자목록은 이전부터 AsyncStorage였다. 저장 방식이 같아진 것이며 주문 필터와 환자 필터가 동일한 하나의 값이라는 뜻은 아니다. 알림 수신 설정은 새 API의 별도 서버 값이다.
+- 앱에도 navigation/route params가 있다. 로컬 저장을 택한 이유는 라우터 부재가 아니라 조회 필터와 알림 수신 설정의 분리 및 재실행 때 선택 유지다. AsyncStorage는 웹 localStorage에 대응하는 영속 저장이며 로그아웃으로 자동 삭제되는 저장소가 아니다. 앱의 로그아웃·토큰 만료·소속 전환 등 기존 명시적 초기화가 해당 값을 지운다. 재설치 전까지 무조건 유지한다고 설명하지 않는다.
+- 기존 Jira 대조: `parent = DL-16140 AND assignee = currentUser()`로 본인 하위 **21건 전부**의 제목·본문·상태를 조회, 다음 페이지 없음 확인. 기존 주문목록·링크톡 조회 필터의 로컬 저장 전환을 미완료로 둔 독립 카드는 없다.
+- 이름이 비슷한 **DL-17065(해야 할 일)**는 `[본체 외] Office 앱 홈 ‘나의 주문만 보기’ 필터·최초 안내 추가`다. 홈 신규 적용/최초 안내와 그 범위의 저장 정책을 정하는 별도 작업으로, 이번 기존 목록 필터 전환 완료와 합치거나 완료 처리하지 않는다. DL-17415/16/17은 수신 설정의 플랫폼 노출·개인 설정 계약이므로 이 필터 저장 방식과 별개다.
+- 제품 코드·PR·배포·Jira 생성/수정/상태 변경 없음. 개인 컨텍스트와 Claude/Codex 보조 기억만 정리한 뒤 대기한다.

@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**조회 필터 저장 방식 유지 확인 — 2026-11-13 마감 후:** 사용자가 웹 URL 쿼리와 앱 AsyncStorage의 유지 범위 차이를 이해하고 현재 방식을 유지하기로 했다. 치과 웹 주문/환자 목록은 각각 `myOrderOnly`/`myPatientOnly` 쿼리로 관리하여 쿼리 없는 메뉴 재진입 시 기본값이다. 치과앱 주문목록·링크톡은 기존 서버 preference 연동을 제거하고 앱 내부 저장만 사용하며, 환자목록은 이전부터 내부 저장이었다. 앱 재실행에는 유지되지만 로그아웃 등 기존 명시적 초기화에서 지워진다. 이는 AsyncStorage 자체의 자동 삭제가 아니다. 기존 Slack 공유 링크와 코드 근거·Jira 대조는 [당일 상세 기록](dentlink-unified-notification-center-settings-response-2026-11-13.md#조회-필터-저장-방식과-기존-jira-확인)에 보관한다. 본인 하위21건을 live 조회했으며 이 저장소 전환만을 미완료로 둔 카드는 없다. **DL-17065는 홈 필터·최초 안내의 별도 신규 작업**이므로 완료 처리하지 않는다. 이번 요청은 메모리만이며 Jira/제품 코드/배포 변경 없음.
+
 **추가 실API 확인 — 2026-11-13 마감 후 사용자 요청:** 로컬 양웹·Office대표iOS·Lab대표Android에서 실제 DEV 설정1개변경/원복을 직접 관찰했다. PUT은모두200/code0001/data:null이며 변경/원복중 **첫GET이구값→약200ms뒤두번째GET이변경값**을 네구현에서확인했다. 첫GET이반영값이면1회로종료, focus중복이아닌제한된저장확인이어서추가수정없이유지한다. 정상검사전체설정원복·관측기제거·Office양기기/외부Metro/Reactotron복구완료,제품코드/배포불변. Office최초계측오류(400거절·증거제외/초기사전hash부재)는[세부실API기록](dentlink-unified-notification-center-settings-response-2026-11-13.md#마감-후-요청--실제-dev-api의-putget-직접-확인)에별도구분했다. 추가작업/폴링없이실기기결과대기.
 
 **최종 마감 — 2026-11-13 16:59 이후, 사용자 로컬 확인 후 개발 전달 완료:** [최신 수정·검증·배포·마감 정본](dentlink-unified-notification-center-settings-response-2026-11-13.md#최종-개발-전달마감).
