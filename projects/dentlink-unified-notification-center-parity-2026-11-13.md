@@ -1,5 +1,7 @@
 # 2026-11-13 알림센터 제품 간 동작 누락 보완
 
+**최신 전달 상태:** 16:05:57 KST에 아래 최종 웹 코드도 DEV PR4890으로 develop `b8ce6c6ae`에 반영하고 Clinic/Lab 자동 배포 시작을 확인했다. 앞선 미배포 표현은 이 전달 이전의 이력이다. 앱은 기존 Development 소스와 동일함을 재확인하여 재배포하지 않았다. 아래 마지막 절 참조.
+
 ## 요청과 원인
 
 - 사용자가 실기기에서 기공소앱 설정 저장 중 깜박임을 제보하고 수정·양OS 검증·커밋푸시·Development CodePush를 승인했다. 이후 ‘알림 설정뿐 아니라 이번 개발자체’에서 같은 누락이 있으면 함께 조치하도록 범위를 넓혔다. 알림함·읽음·소속 전환·헤더·랜딩·OS 처리의 관련 구현을 비교하며, 이메일·별도 홈3건·밀링 전담 기능으로 확대하지 않는다. 기존 PR을 유지한다.
@@ -103,4 +105,15 @@
 
 - 사용자의 제품 간 같은 동작 정합성 원칙을 공통 DEVELOPMENT_STYLE/Claude 메모리에 기록. 한 제품만 확인하고 다른 제품도 완료로 간주하지 않는다. 기능 차이가 없는 동작을 맞추되 기존 제품별 정책·권한과 확인된 디자인 차이는 보존한다.
 - 메인에서 전달된 11/13 브라우저 지침 aa3f90f/065061d와 교체 AGENTS를 확인했다. 일반 조사/자동화는 연결 도구·인앱/비표시 우선, CfT는 격리 기준, 반복 visible launch/close 금지. 관련 하위 에이전트에도 전달했고 별도 브라우저 시험·메인 회신·감시는 하지 않았다.
-- 다음 요청에서 웹 미배포 `b6cffe2f8`와 앱 위 Development 상태를 구분한다. iOS 제보는 위 사용자 범위에 따라 기록만 유지하고 자동 재조사하지 않는다. 개인 알림 카운트는 위 확정 정책으로 이어 검토한다. BE 노출키44994·발송 적용45009, 실기기/실푸시 체크리스트와 본체외 경계는 종전 그대로이며 반복 문의/폴링하지 않는다.
+- 다음 요청에서 아래 최신 웹 DEV 전달과 앱 Development 기준으로 사용자 QA 결과를 이어 받는다. iOS 제보는 위 사용자 범위에 따라 기록만 유지하고 자동 재조사하지 않는다. 개인 알림 카운트는 위 확정 정책으로 이어 검토한다. BE 노출키44994·발송 적용45009, 실기기/실푸시 체크리스트와 본체외 경계는 종전 그대로이며 반복 문의/폴링하지 않는다.
+
+## 웹 추가 수정 DEV 전달·앱 동일 소스 확인
+
+- 사용자 승인: 웹 추가분을 개발 배포하고 앱도 새 코드가 있을 때만 CodePush. 완료 항목·의도된 후속·BE 대기는 최종 보고에서 반복하지 않고 실제 남은 것만 설명한다.
+- 원격 master `9c4418a8f`, 원 develop `f9d5fde66`, feature `b6cffe2f8`을 fetch했다. 열린 develop PR0·브랜치 보호 없음·다른 소스 유입 없음 확인. 원 develop은 `/tmp/notification-develop-before-20261113-1608.bundle`로 보존·검증했다.
+- 예상 SHA lease로 develop을 삭제하고 정확한 최신 master에서 재생성했다. 원본 feature나 사용자 worktree는 변경하지 않았다. 기존 E2E 제외 지시를 SKIPPED로 기록하고 PR 가드 통과. Git 정상 push 훅도 통과했다.
+- [DEV PR4890](https://github.com/Innvoaid/dentlink-client/pull/4890)의 실제77파일에서 clinic7·lab31·admin0으로 두 workflow의 경로 조건 충족 확인. 이전 DEV와의 실코드 차이는 shared/hooks/useNotificationCenter 및 shared/ui/NotificationUI/NotificationCenter 두 파일뿐이다. 기존 밀링 이력을 새 구현이나 필수 범위로 바꾸지 않는다.
+- 예상 head 고정 merge 후 **develop b8ce6c6ae48ff152259cae2a379707674055cee7**. feature와 트리 차이0. [Clinic43383288547](https://github.com/Innvoaid/dentlink-client/actions/runs/43383288547)·[Lab43383288546](https://github.com/Innvoaid/dentlink-client/actions/runs/43383288546)이 같은 SHA의 push로 **16:05:57 KST**에 생성되어 in_progress임을 1회 확인했다. 배포 완료/실서비스/QA는 확인하지 않고 자동 추적을 종료했다. manual dispatch·빈 커밋·새 코드 없음.
+- 기존 PR4862→release/v1.94.0, Draft/DRAFT/[WIP] 유지. 본문의 전달 상태만 최신화했다. 앱 PR346/42는 변경하지 않았다.
+- 앱은 각 원격 Git1회/Development history1회로 현재 HEAD·origin·직전 source 동일, clean, enabled/mandatory/100%와 packageHash 동일 확인. Office iOS/Android v146(2.2.4,1eaa023), Lab iOSv45/Androidv44(1.0.5,3a6624e). 추가 CodePush하지 않았다.
+- **남은 것:** 웹 최종 배포 결과 및 사용자 개발서버/실기기 QA, 별도 예정된 실푸시 E2E. 지금 확인된 FE 결함/추가 코드 잔여는 없다. 필요한 최신화는 유지하고 진행 중 동일 요청의 불필요 취소/재요청만 줄였다고 사용자에게 재설명했다. 후속/BE 대기는 삭제하지 않되 이번 남은 FE 실행 목록에서 제외한다.

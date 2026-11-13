@@ -201,7 +201,7 @@ For detailed current state, read:
 
 ### Dentlink 통합알림센터 — 공통 동작 보완·앱 개발 전달
 
-- **현재(2026-11-13 오후):** Lab 저장 깜박임과 웹·양앱 동등 흐름 누락·진입 조회 중복 보완 완료. Web b6cffe2f8은 추가 변경 미배포, 기존 DEV f9d5fde66 유지. Office Development v146/v146(2.2.4,1eaa023), Lab v45/v44(1.0.5,3a6624e) 게시·활성. 기존 PR4862/346/42 유지. 최신 Amplitude 요청/누락 없음. 새 iOS 앱 아이콘 실행 후 배너는 원인 미확정·별도 기록이며 이번 배포로 해결됐다고 하지 않는다. [최신 수정·검증 정본](projects/dentlink-unified-notification-center-parity-2026-11-13.md), [전체 체크포인트](projects/dentlink-unified-notification-center.md) 참조. 사용자 QA/추가 지시까지 자동 추적 없이 대기한다.
+- **현재(2026-11-13 16시):** Lab 저장 깜박임과 웹·양앱 동등 흐름 누락·진입 조회 중복 보완 완료. Web b6cffe2f8을 DEV PR4890→develop b8ce6c6ae로 반영, Clinic/Lab 자동 배포 시작 확인(최종 성공/QA 별도). Office Development v146/v146(2.2.4,1eaa023), Lab v45/v44(1.0.5,3a6624e)는 현재 소스와 같아 추가 CodePush 없음. 기존 PR4862/346/42 유지. 개인 알림 카운트 정책 대기는 해소, 설정 노출 계약 후속과 구분한다. iOS 아이콘 실행 배너는 이번 회귀 근거 없어 기존 경로 제보로 기록만 유지. [최신 수정·검증 정본](projects/dentlink-unified-notification-center-parity-2026-11-13.md), [전체 체크포인트](projects/dentlink-unified-notification-center.md) 참조. 현재 남음은 배포 결과·사용자 QA·별도 실푸시 E2E이며 자동 추적하지 않는다.
 
 - 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.
