@@ -218,7 +218,7 @@ For detailed current state, read:
 
 ### Dentlink 치과 마케팅 수신 동의 — DL-17208
 
-- 2026-11-13 조사 완료·구현 전. 치과 웹 가입2단계와 웹/Office Profile의 Marketing SMS·Email 동의 변경이다. 알림센터와 별도 기능 세션이 적절하며, 앱 Profile 조립 파일의 겹침만 조율한다. 신규 세션·코드·Jira 변경 없음.
+- 2026-11-13 웹·Office 공통 기능 세션 `01a1d2b2-0d2f-7441-a68b-fa68affceafc`에 인계. 치과 웹 가입2단계와 웹/Office Profile의 Marketing SMS·Email 동의 변경이다. 실제 디자인/API 확인 후 가능한 구현을 진행하고 미확정 범위는 보류한다. 앱 Profile의 알림센터 변경 보존·향후 통합 검증은 별도 접점으로 관리한다.
 - [projects/dentlink-email-marketing-consent.md](projects/dentlink-email-marketing-consent.md)
 
 ### Dentlink E2E Stabilization
