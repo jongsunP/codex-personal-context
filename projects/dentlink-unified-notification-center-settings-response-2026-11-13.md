@@ -135,3 +135,24 @@
 - 기존 Jira 대조: `parent = DL-16140 AND assignee = currentUser()`로 본인 하위 **21건 전부**의 제목·본문·상태를 조회, 다음 페이지 없음 확인. 기존 주문목록·링크톡 조회 필터의 로컬 저장 전환을 미완료로 둔 독립 카드는 없다.
 - 이름이 비슷한 **DL-17065(해야 할 일)**는 `[본체 외] Office 앱 홈 ‘나의 주문만 보기’ 필터·최초 안내 추가`다. 홈 신규 적용/최초 안내와 그 범위의 저장 정책을 정하는 별도 작업으로, 이번 기존 목록 필터 전환 완료와 합치거나 완료 처리하지 않는다. DL-17415/16/17은 수신 설정의 플랫폼 노출·개인 설정 계약이므로 이 필터 저장 방식과 별개다.
 - 제품 코드·PR·배포·Jira 생성/수정/상태 변경 없음. 개인 컨텍스트와 Claude/Codex 보조 기억만 정리한 뒤 대기한다.
+
+## 미착수 후속 작업의 디자인 대기와 Jira 정리
+
+2026-11-13 18:08 KST. 사용자 질문에 따라 DL-17065를 기존 조회 필터 저장 전환과 분리해 조사한 뒤, 사용자가 디자인 전 착수하지 않고 다른 미착수 카드에도 대기 사유·재개 조건을 남기도록 승인했다.
+
+- **DL-17065 근거:** live Jira와 Notion PRD(최종 편집 2026-11-13 15:21 KST), 제공된 Figma 페이지2:6의 metadata/홈2:2920 실제 화면/댓글143개, Office 최종 소스a6ee48c7를 대조했다. PRD에는 홈 필터와 앱 최초1회 안내가 있지만 확인한 Figma에는 해당 홈 토글의 배치·안내 화면/문구가 없다. Orders/LinkTalk의 기존 필터와 홈 OS 알림 배너를 이 신규 디자인으로 혼동하지 않는다. [PRD](https://app.notion.com/p/innovaid/3c7ce072e82f811184a8e647444f01fd), [Figma 홈](https://www.figma.com/design/QLIzKYWzFFlptCYzN36Iq4?node-id=2-2920).
+- **이미 정해진 기준:** 웹·앱 독립 저장·재로그인 후 유지·MEMBER 고정 ON/토글 미노출·앱 최초1회 안내. 이를 전부 미정이라고 하지 않는다. 홈 적용 영역(Track your orders만인지 Action Required도인지)과 안내 디자인은 확인이 필요하다. 홈 저장 구현은 기존 목록 필터의 로그아웃 초기화와 구분하여 PRD에 맞춰야 하며 기존 목록 정책을 임의 변경하지 않는다.
+- **기존 코드 재사용:** `useHomeOrdersData.ts`의 `myOrderOnly:false`는 현재 홈 고정값이다. `/office/orders`는 필터를 지원하므로 Track your orders는 기존 API를 활용할 수 있다. `/office/orders/pending-summary`의 현재 호출/계약에는 해당 인자가 없어 Action Required까지 포함할 때만 지원 여부를 대조한다. 일부 목록을 로컬 필터링해 전체 집계처럼 표시하지 않는다. 기존 `usePersonalOrdersPreference` 서버결합은 이미 제거됐으므로 과거 11/9 기록을 현재 미완료로 되살리지 않는다.
+
+| 본인 미착수 카드 | 기록한 대기 사유·재개 조건 |
+| --- | --- |
+| [DL-17065](https://innovaid.atlassian.net/browse/DL-17065) | 홈 필터·최초 안내 디자인 확인 후 적용 영역·기존 저장 로직과 대조하여 착수. 기획 자체는 존재하며 신규 API 필수 대기는 아님 |
+| [DL-17068](https://innovaid.atlassian.net/browse/DL-17068) | Lab 홈 서포트 최근 메시지 위치·내용·진입 디자인/세부 기획 대기. 기존 Support API로 최근1건 조회 재사용 우선 |
+| [DL-17062](https://innovaid.atlassian.net/browse/DL-17062) | 별도 웹 홈 후속 작업. 재개 시 제외할 시스템 메시지와 기존 목록·미읽음 서버 처리 기준을 대조. 디자인/신규 API가 반드시 없어서 막힌 것으로 단정하지 않음 |
+| DL-17415 / DL-17416 / DL-17417 | 웹·Office·Lab 설정의 플랫폼 노출·개인 설정 항목/채널 계약 대기. 이미 해결된 개인 알림 카운트 정책과 별개. 변경 대상 상하위는 UI대로 저장, 다른 범위/플랫폼 미노출 값 보존 |
+| DL-17418 / DL-17419 | OS 배지 향후 개선 정책·BE 계약 대기. 현재 푸시 수+0 초기화 유지, deliveryId 읽음 연결 완료와 별개 |
+| [DL-17426](https://innovaid.atlassian.net/browse/DL-17426) | 별도 E2E 착수 요청과 테스트 환경·계정·데이터 준비 대기. 실제 푸시 발송은 이번에 실행하지 않음 |
+
+- live JQL `parent = DL-16140 AND assignee = currentUser() AND statusCategory = new` 결과9건/다음페이지없음. 본문9건만 수정 후 같은 쿼리로 description exact equality와 제목·상태·담당자·부모 불변을 확인했다. **모두 해야 할 일 유지**, SP는 쓰기 payload에 포함하지 않았다. 신규 카드/상태전환/부모댓글/타인카드 변경 없음. 완료/개발완료 카드도 변경하지 않았다.
+- 사용자 기준: 디자인이 필요한 신규 화면은 디자인 확인 전 대기한다. 이미 승인된 모바일웹 디자인 재사용이나 기존 동작 보완까지 일괄 중단한다는 뜻이 아니다. 공통 DEVELOPMENT_STYLE의 기존 Requirement And Design Scope 규칙과 일치하여 중복 규칙은 추가하지 않고 기능 체크포인트에 기록했다.
+- 제품 코드·브랜치·PR·배포·로컬 앱/창·Notion 변경 없음. Jira 정리와 개인/Claude/Codex 기록만 완료하고 사용자의 디자인/기획/BE 전달 또는 재개 요청을 기다린다.
