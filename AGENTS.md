@@ -76,6 +76,9 @@
   **Stakeholder Sharing** in `SESSION_WORKFLOW.md`: make the actual concern,
   concrete example, consequence, and relevant evidence easy for nondevelopers
   to understand. Favor readable grouping over length or a fixed template.
+- For Dentlink development investigations, response proposals, and stakeholder
+  documents requested in Notion, follow **Dentlink Notion Document Destination**
+  in `SESSION_WORKFLOW.md`: use DEV Team's Development Documents by default.
 - For product planning and effort estimates, follow **Product Planning,
   Estimation, And Delivery** in `SESSION_WORKFLOW.md` and **Dentlink Story
   Point Estimation** in `DEVELOPMENT_STYLE.md`. Preserve the distinction

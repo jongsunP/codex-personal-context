@@ -1540,6 +1540,27 @@ This is the user's 2026-11-06 direction, not a required visual template.
   message without mixing agent commentary into it. Preserve useful readability
   when moving the wording to Slack or another destination.
 
+### Dentlink Notion Document Destination
+
+User clarification on 2026-11-13: when asked to write Dentlink development
+investigations, response proposals, or stakeholder-sharing documents in Notion,
+save them as entries alongside the existing documents in **DEV Team →
+Development Documents**. This is the standing destination unless the user
+explicitly chooses another location or a private draft.
+
+- Database: https://app.notion.com/p/c7d0f110577a430dbf545038cee73b11
+- Data source: `26366594-1ec5-423c-b7c3-35abe1e047f2`.
+- Read the current database schema and representative existing entries; reuse
+  existing categories appropriate to the document, such as `FE` and `Issue`.
+- A request to write in Notion means saving through the connected tools and
+  returning the page link. A chat-only draft is sufficient only when the user
+  asks for copyable wording rather than an actual Notion document.
+- Reuse the same document for follow-up changes. If it was created elsewhere,
+  move the existing page when authorized instead of creating a duplicate.
+- This destination does not authorize unsolicited documents, changes to
+  unrelated pages, or messages to teammates. Preserve the distinction between
+  a proposed response and implemented or verified product behavior.
+
 ### Concise Status Briefings
 
 Across all projects and sessions, when the user asks for work status, a report,
