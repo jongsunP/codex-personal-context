@@ -25,7 +25,7 @@
 
 - 네 건 모두 **Development 게시·활성**, mandatory/rollout100. 각 history를 한 번 읽어 대상·label·소스·활성을 확인했다. 실제 단말 수신/설치 완료와 구분한다.
 - 직전 Office ca8a6f0 / Lab f5de5f4는 각 최종 HEAD의 조상이다. package/lock/native/patch/Metro/Babel/entry/배포 script 변경 없음. package·iOS·Android version은 위 target과 일치한다.
-- Lab 신규 SVG는 기존 transformer가 JS로 변환한다. 네 플랫폼 모두 직전 package와 assetHash가 동일하다. source SVG 추가를 native 변경으로 해석하지 않는다.
+- Lab 신규 SVG는 기존 transformer가 JS로 변환한다. 네 플랫폼 모두 직전 배포와 assetHash가 동일하며, packageHash는 이번 새 패키지 값으로 변경됐다. source SVG 추가를 native 변경으로 해석하지 않는다.
 - Office iOS→Android→Lab iOS→Android 직렬 게시, 제품·플랫폼별 TMPDIR 분리. 기존 배포 script의 Slack 전송을 피하려고 같은 release-react 옵션으로 직접 게시했으며 Slack 쓰기는 하지 않았다.
 - 제품 소스·기존 PR state/base·Git tag·native build·스토어는 변경하지 않았다. 기존 PR346/42 본문에 최신 전달 버전을 기록했다. 최종 코드 양OS 검증은 앞선 증거를 재사용했고 이번에는 재실행하지 않았다.
 
@@ -52,3 +52,10 @@
 - 새 코드 변경 없음. 개인 정본·Claude memory와 기존 PR에 최신 전달 기준을 기록했다. 자동감시 없이 대기.
 
 증거: `/tmp/notification-redeploy-web-workflow-start-1113.json`, `/tmp/notification-redeploy-develop-create-1113.log`, `/tmp/apps-dev-redeploy-1113-dl17425.md`.
+
+## 사용자 QA 인계·최종 대기 — 2026-11-13
+
+- 사용자가 웹 개발서버와 앱 실기기를 직접 확인하고 QA 중 문제가 생기면 이 세션에 전달하기로 했다. 이 시점부터 추가 구현·배포·서버/워크플로/기기 수신 추적·외부 댓글 폴링 없이 대기한다. 웹 배포 최종 성공을 확인한 것으로 바꾸지 않는다.
+- 본인 Jira 카드 DL-17058/17059/17060/17425의 현재 상태가 모두 Ready for Deploy(개발완료)임을 확인하고 유지했다. 운영 완료/QA 완료 전환은 하지 않았다. 최신 재배포와 사용자 QA 기준을 각 댓글45023/45024/45025/45026에 기록했다. 상위 카드·타인 카드·스토리포인트 변경 없음.
+- PR 본문과 개인 정본의 최신 전달 상태가 일치함을 확인했다. 팀 기획/정책 문서에 새 결정이 없어 Notion/Figma/Sheet를 중복 수정하거나 다시 조사할 필요는 없다. 기존 미확인 체크리스트·BE 답변은 다음 관련 요청 때 이어 참고한다.
+- 다음 시작점: 사용자 제보의 제품·OS·실제 적용 버전·화면/재현 경로를 위 배포 기준과 대조하여 필요한 부분만 확인한다. 지금 자동으로 새 작업을 시작하지 않는다.
