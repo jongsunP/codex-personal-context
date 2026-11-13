@@ -216,6 +216,11 @@ For detailed current state, read:
 - 기존 조사/선행 코드·미확정 계약을 보존하고 별도 재개 지시를 기다린다. 문서 분리와 실제 코드·배포 범위 분리는 구분한다.
 - [projects/dentlink-email-cta-tracking.md](projects/dentlink-email-cta-tracking.md)
 
+### Dentlink 치과 마케팅 수신 동의 — DL-17208
+
+- 2026-11-13 조사 완료·구현 전. 치과 웹 가입2단계와 웹/Office Profile의 Marketing SMS·Email 동의 변경이다. 알림센터와 별도 기능 세션이 적절하며, 앱 Profile 조립 파일의 겹침만 조율한다. 신규 세션·코드·Jira 변경 없음.
+- [projects/dentlink-email-marketing-consent.md](projects/dentlink-email-marketing-consent.md)
+
 ### Dentlink E2E Stabilization
 
 - 웹 E2E 실행 신뢰성·CI 판정 개선, 고정 그룹과 검증 이력이다.
