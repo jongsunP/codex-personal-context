@@ -1,5 +1,28 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**최신 Figma·확정 FE 보완 완료 / 웹 리뷰 1건 계약 확인 대기 — 2026-11-13:** 사용자 요청은 "배포를 제외하고 현재 FE가 처리할 수 있는 알려진 작업을 완료"하는 것이다. 최신 Figma/Jira 조사 이후 확정된 미반영 디자인, 기존 PR의 FILE 통합, PR 설명·리뷰·기록을 반영했다. 미정 노출 계약·새 기획은 가정하지 않았다. **기존 PR 유지·commit/push 완료, develop/release merge·웹 배포·CodePush 없음.**
+
+| 제품 | 최종 branch / HEAD | 검증 및 PR |
+| --- | --- | --- |
+| Clinic/Lab 웹 | `feature/DL-17058@9c873941f2cda9252473605b4cabca3d2fe8cc37` | 알림29+FILE52 tests·3서비스type·정상훅 통과, 최종 guard SUCCESS · PR4862 → release/v1.94.0 Draft |
+| Office 앱 | `feature/DL-17059@ca8a6f0809fde4f0e58663c093c9a8d7700c859e` | Jest12·lint 통과, tsc 기존6진단/신규0, 양OS 실제렌더 · PR346 → main Draft |
+| Lab 앱 | `feature/DL-17060@f5de5f425c2cf236d39ccb43ece07cab18bd93f7` | lint 통과, tsc 기존5진단/신규0, 양OS 실제렌더 · PR42 → main Draft |
+
+- **이번 신규 반영:** 일반 병원 선택의 하위 제목만 `Your Other Offices`로 변경(Clinic 웹·Office 앱). 큰 제목 `Change Office`, 알림용 제목/소제목, 기존 권한·Payment Method·Add New Office와 스크롤/높이 구성은 유지. Figma1995951639·2002979261의 실제 프레임/댓글 근거이며 일반과 알림이 배지만 다른 것으로 기록하지 않는다.
+- **추가 Figma 요청:** 사용자 추가 링크2006849946(11/13 11:36~37), 실제36:10068/36:10184 대조. 치과앱 주문알림범위 하단 선택창의 중복 `Orders to notify me about` 제목만 제거한다. 설정화면 위 scope행 제목/선택값·권한·API·옵션 간격은 유지. 웹은 요청대상 아님, Lab은 해당scope선택창 자체가 없음. ca8a6f0으로 별도 commit/push 완료. 양OS에서 제목만 제거·옵션/구분선/안전영역·열기닫기·설정화면행 유지 확인, 서버쓰기/fixture0. 앞선 문구·숫자 커밋은 f78f7a0이다.
+- **이번 숫자 표시:** Figma1995457432/399:23417의 최대3자리 요청대로 웹·양앱의 알림 Unread/다른소속 배지를 최대999로 표시. 999+는 만들지 않음. 0배지 숨김·All 무숫자 유지. 서버 집계·읽음·OS배지는 변경하지 않으며 앱 접근성에는 원 숫자를 유지한다. 앱 신규 helper/test/storybook 파일 없음.
+- **API 답변:** 일반 선택은 기존 소속조회(Clinic GET /office/users/own/employee type=activate, Office 프로필 GET /office/users/own의 employee목록), 알림 선택은 별도 GET /office|lab/notifications/inbox/employers/unread. 후자는 재직중인 다른소속의 그룹 미읽음 반환(개인알림 제외), DEV Swagger에 이미 존재. 공통 UI를 쓰더라도 데이터범위/API가 같다는 뜻이 아니며 이번 디자인용 신규API는 필요 없다.
+- **기존 완료 재확인:** Office 구 push-preferences GET/PATCH 활성호출0(생성Api 제외), 주문목록·LinkTalk 조회필터는 기존 AsyncStorage에 로컬저장. 새 알림 orderScope·MEMBER 권한·Home조건 독립. 상위/하위 동시ON/OFF·정상channels[]단독토글·생략/손상응답구분은 직전 완료분이며 이번 신규개발로 중복 집계하지 않는다.
+- **FILE/리뷰:** 최신 master 9c4418a8f를 f14cd24ad로 정상 통합(기존 Admin hotfix2파일). 기존 PR4866의 FILE 완료 코드 cfb4347456/897e2311b9만 필요한 범위로 통합(18e64650c), 생성DTO 수작업변경 없음. 원본 리뷰의 저장중 파일추가/삭제 경합을 실제 지연응답으로 재현해 기존pending으로 파일조작/늦은선택콜백만 차단(9c873941f). 시작·완료·정정의 pending잠금,500실패후파일보존/재활성/재시도를 실제제품화면에서 요청인터셉트로검증, 실생산쓰기0. 기존 CodeRabbit7스레드resolved. 11:43 새리뷰의 START조회계약1건(PRRT_kwDOJnA7-8627lWn)은미해결/BE확인대기. 문서상완료전parameterValues={}와시작값병합설명이혼재하고테스트계정은생산GET400/26012(밀링센터LAB만허용)이어서실응답불가. 모든START를임의제외/재입력정책으로확정하지않음. 사용자에게async질문전달, 봇도4559100162에서실제BE오류단정을정정하고확인대기동의. 기존선택적docstring경고는11/10에만있고최신리뷰에는없어점수용주석추가안함.
+- **검증 경계:** Office/Lab 각각 두OS를 같은 checkout/DEV Metro(8081/8082)로 순차 사용. 최종 컴포넌트에 메모리 캐시로0/1/999/1000만 주입해 표시/접근성/열기닫기·해당스크롤 확인, 원 캐시 정확복구 및 실제GET 재조회. 실제서버쓰기0. 렌더 핸들러/CDP+simctl/adb 캡처이며 물리탭 전수·실FCM·사용자실기기QA 아님. 해당검사에서 새LogBox/Androidcrash없음. iOS runtime26.5/iPhone17Pro, Android Dentlink_API_36. 본인검증프로세스와 이번에부팅한기기 종료, 다른작업창 보존.
+- **PR/Jira:** Office346·Lab42의 구필터API사용중/PUT미검증 등 오래된 설명을 실제 현재코드·검증으로 수정, Draft/DRAFT/[WIP]/main 유지. Officeinline0, Lab기존앱개발자3스레드resolved 유지·새미해결0. 본인하위17058/59/60(댓글45018/45013/45014)에 진행기록,추가선택창제목은17063#45017에기록. 17420 제목/작업정의정리 및45019에통합·경합수정·BE확인1건기록, 상태는진행중유지(Ready for Deploy로오표시하지않음). 상위댓글·스토리포인트·타인카드·Slack/Figma 쓰기없음.
+- **추가 BE 확인:** 공정 시작 때 저장한 값(파일 포함)이 완료 전 GET parameterValues에도 반환되는지, INTERNAL/SUBCONTRACT 모두 같은지. 기존 문자열START도같은부족값보충조건이있어이번FILE만의신규결함으로단정하지않는다. 기존계정권한없음만으로BE미지원이라고단정하지않으며,사용자답변/권한있는실GET근거로재검토후리뷰해결. 이1건이남아PR전체리뷰완료·merge준비완료라고하지않는다.
+- **확정 대기:** DL17114#44994의 웹·앱 노출키, DL16140#45009의 실제발송 차단/재개 적용 답변. 현재응답·저장연결은완료이고이답변없이임의필드/정책추가없음. Promotion후보Figma2001066057는11/10후속"디자인무시·확정후공유"로여전히대기. Home3(17062/17065/17068)·이메일17187/SES17183·후속OS배지17418/19·별도native는본체와분리,이번완료조건에혼합하지않음.
+- **로컬 실행 참고:** Office package.start의 기존 --experimental-debugger는 현CLI에서거절되어 검증은지원명령 npx/yarn react-native start --port8081 사용. 기존외부실행command는이미정상명령이어서수정불필요. 제품script정비는알림본체밖기존기술부채로기록하며이번화면결함으로확대하지않는다.
+- **다음 시작점:** 사용자 재개 시 이완료분·새FILE조회계약질문과기존BE답변·최신Git 먼저대조. 배포승인전까지 현재feature/PR에서대기. 승인되면최종배포차이·native호환대상·실제FCM/설정발송QA를구분해진행한다. 자동댓글감시/배포추적없음.
+
+- **증거/마감:** 세 제품 최종HEAD·origin일치, ahead/behind0/0·clean을root재확인. 웹 PR4862 guard최종SUCCESS,앱PR346/42 Draft·DRAFT·[WIP]/main유지 및배포라벨없음. /tmp/web-1113-completion.md, /tmp/office-notification-display-1113.md, /tmp/office-scope-title-1113.md, /tmp/lab-notification-count-1113.md는이번로컬상세증거이며임시경로이므로Git정본의위검증요약을함께보존. 웹desktop모달반투명캡처는전환중촬영이었고재촬영opacity1/흰배경/runningAnimations0확인. 일반소속/알림소속시트반영·구조회필터검토·Figma추가댓글·Jira알림대조·PR기존리뷰/설명최신화까지이번요청범위로기록한다.
+
 **재개 후 추가 요청 검토 — 2026-11-13 오전:** 사용자 요청으로 구 필터 API 제거, 병원 선택 Figma 최신 댓글/실제 디자인, 알림센터 Jira 최신 댓글을 읽기 전용 대조했다. 제품 코드·PR·배포·런타임은 변경하지 않았다. 아래 자정 마감의 Git 상태(Web17699c5e6/Officef152f6c/Labdd1368c)는 그대로 원격 일치·clean이다.
 
 - **구 API 제거 확인:** Office의 생성 Api.ts를 제외한 활성 src에서 GET/PATCH `push-preferences` 호출은 0건이다. 주문목록·LinkTalk의 `My Orders Only`는 `usePersonalOrdersPreference`→기존 `useOrderStore`/AsyncStorage에 저장되고 새 알림 수신 `orderScope`와 독립이다. UI 조작/기존 권한, MEMBER 제한, Home `myOrderOnly:false` 유지. 로그아웃·토큰 만료·성공한 소속 전환에서 해당 bool만 초기화한다. 이미 commit/push됐지만 최신 변경은 아직 미배포이며 구 배포 앱의 구 API 호출 가능성은 별도다.
