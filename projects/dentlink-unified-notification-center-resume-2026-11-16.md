@@ -1,6 +1,6 @@
 # 통합알림센터 재개 현황 — 2026-11-16
 
-**최신 상태:** 양앱 main 통합·PR 릴리즈 대상 변경·양OS 검증·커밋푸시 완료, 미배포. Office987dbdd3/PR346→release2.2.5, Lab27032b4/PR42→release1.0.6. 아래 오전 표는 당시 조회 이력이며 현재값은 문서 마지막 「양앱 최신 main 통합·릴리즈 PR 준비」를 따른다.
+**최신 상태:** 웹·양앱 정식 PR 전환·최신 기준 통합·필요한 검증·커밋푸시 완료, 미배포. Web558a36df0/PR4862→release1.94.0, Office987dbdd3/PR346→release2.2.5, Labdbcd1ad9/PR42→release1.0.6. 아래 오전 표와 Draft 유지는 당시 이력이며 현재값은 문서 마지막 「정식 리뷰 PR 전환·후속 기준 브랜치 동기화」를 따른다.
 
 현재 상황 파악 요청에 따라 읽기 전용으로 확인했다. 제품 코드·PR·Jira·배포·기기/서버는 변경하지 않았다. 개인 정본은 pull 결과 최신이고 기존 전체 지침 필요 시 동기화·번역시트 중단 규칙을 적용했다.
 
@@ -240,3 +240,21 @@
 - 이번 앱 branch는 main의 네이티브 버전 Office2.2.5/Lab1.0.6 기준이다. 이후 OTA 요청 시 실제 대상 바이너리·전체 native diff·SHA를 다시 확인하며 구2.2.4/1.0.5 대상으로 무조건 내보내지 않는다.
 - DL17436의 주문상세 랜딩 확인 범위는 코드/로컬 검증까지 완료했지만 이번 요청에서 Jira 상태는 변경하지 않았다. 위 오전의 main 미포함/미착수 기록은 과거 상태다.
 - 새 알림 설정 디자인, 사용자 안내 후 configurableAuthorities 후속, Swagger 상하위 설명 정합성 확인은 기존대로 분리. configurableAuthorities는 현 범위 제외이며 완료 필수 대기로 되돌리지 않는다. 배포/실기기 QA는 별도 승인 후 진행한다. 추가 폴링·자동배포 없음.
+
+## 정식 리뷰 PR 전환·후속 기준 브랜치 동기화 — 2026-11-16
+
+사용자는 웹·치과앱·기공소앱 모두 실제 정식 PR로 준비하도록 승인했다. 이후 새 기준 브랜치 변경이 있으면 맞추되 필요한 영향 검증만 하고 전체 검수는 반복하지 말라고 명시했다. PR ready 전환은 리뷰 승인·릴리즈 병합·배포 완료가 아니다.
+
+| 제품 | 최종 head | PR 대상 | 상태 |
+| --- | --- | --- | --- |
+| Web Clinic/Lab | 558a36df0 | #4862 → release/v1.94.0 | OPEN, Draft=false, DRAFT/[WIP] 제거 |
+| Office | 987dbdd3 | #346 → release/v2.2.5 | OPEN, Draft=false, DRAFT/[WIP] 제거 |
+| Lab | dbcd1ad9 | #42 → release/v1.0.6 | OPEN, Draft=false, DRAFT/[WIP] 제거 |
+
+- 각 PR의 기존 나머지 제목·라벨·리뷰어를 유지했다. 본문의 ‘Draft 유지’ 문구는 정식 리뷰 요청 상태로 고쳤고 검증 한계·미배포 이력은 보존했다. 새 리뷰어 지정·댓글·강제 봇 리뷰 요청은 하지 않았다.
+- **Office:** main/release851c7889가 그대로여서 코드 재수정 없음. 미해결 리뷰0·충돌없음, 전환 전 add-labels 성공/codepush_job skipped 확인. skipped는 배포한 것이 아니다.
+- **Lab:** 앞선 준비 후 main/release가691c012→a6e18282로 이동했다(밀링 주문목록 isRemake 서버필터 #47/#48). PR이 CONFLICTING으로 재계산되어 최신main을 추가 통합했다. 생성 Api.ts의 구 설정 enabled/toggleChannel 블록과 새 channels 계약 충돌만 있었으며, 오늘 Swagger 생성물의 기검증 Category/Channel DTO를 그대로 보존하고 main의 새 isRemake 계약·3실소스 파일은 그대로 받았다. 새로운 API 구조를 추정하거나 밀링 기능을 자체 수정하지 않았다.
+- Lab8suite76tests·실소스lint·diff검사 통과, tsc기존5진단만. 설정/FCM/PermissionProvider/deepLink소스·의존성/native는 앞선 검증코드와 동일하므로 재빌드·저장/푸시 전체시험을 반복하지 않았다. 현재 통합JS를 기존 검증빌드에 연결해 iOS/Android 실제 홈→인박스→설정 GET/렌더, 신규채널 구조, OS차단/허용 표시, LogBox0 확인. 이번에는 설정/읽음 서버쓰기0. 임시근거 `/tmp/notification-lab-ready-{ios,android}-settings-1116.json/png`. 자체 실행 기기/Metro8082 종료.
+- **Web:** master9c4418a8f는 그대로이나 release1.94.0이32853e794→3852aca7f로 이동했다(주문서 필수값·단계 이동 검증 #4873). 알림 변경과 파일 교집합0, merge-tree 충돌없음. 최신 release를 작업 branch에 통합했고 알림이 사용하는 DropdownPrimitive·자체Button과 새필수표시/Stepper 변경은 직접 겹치지 않음을 확인했다. RedDot 기본값도 유지. 자체 기능 재작성 없음. 관련 공유43+Clinic12+Lab4 tests 통과, 정상Git훅의 Clinic/Lab/Admin 타입·lint(기존경고) 및 config49/hooks75 tests도 통과했다. E2E 제외 기록은 최종 merge-base 기준 SKIPPED로 재기록해 guard를 통과했고 실행한 것으로 표시하지 않는다. 전체E2E·전수검수는 하지 않았다.
+- 웹의 기존 밀링 FILE START 검토1스레드는 사용자 명시 범위 밖이므로 강제로 resolve하지 않았다. 알림센터 리뷰는 처리된 기존 상태이며 이번 정식PR전환을 새 코드 전체에 대한 봇/인간 승인으로 표현하지 않는다. GitHub 리뷰 승인 요건(REVIEW_REQUIRED)은 정상적인 다음 단계다.
+- 세 제품 최종 clean·원격일치·PR base/head/draft/라벨을 확인했다. PR준비를 끝내고 병합·배포·CodePush는 하지 않았다. 기존 개발서버와 기기OTA 상태는 그대로다. 새로운 변경/리뷰가 생길 때만 해당 영향 범위를 처리하며 자동 감시·반복전수조사하지 않는다.
