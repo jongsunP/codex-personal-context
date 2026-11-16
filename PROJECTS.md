@@ -223,7 +223,7 @@ For detailed current state, read:
 
 ### Dentlink 치과 마케팅 수신 동의 — DL-17208
 
-- 2026-11-16 사용자 Swagger 반영 공유로 재개. DEV 최신 Email PATCH `{marketingEnabled}`를 확인하고 웹 가입/Profile·Office Profile 연동 구현. 웹 가입3경로payload·PC/mobile·실Email저장/새로고침/복구·hook8건·타입3종, 앱hook24건·최종양OS실저장/재실행/복구를 검증했다. 기존 pushed WIP 위 Email 변경은 미커밋. 알림센터 별도 branch 및 릴리즈 통합 QA 유지. 상세 정본 참고.
+- 2026-11-16 웹·Office Email 구현/로컬검증 후 commit·push·Draft PR 완료. 웹 `feat/DL-17231@6a3d327d0` [#4896](https://github.com/Innvoaid/dentlink-client/pull/4896)→`release/v1.94.0`, Office `feat/DL-17423@44038e33` [#350](https://github.com/Innvoaid/dentlink-app/pull/350)→사용자지정`main`. 양쪽template/Draft/DRAFT/[WIP]/base·head·scope확인, clean. 웹정상hooks·base출처coverage·E2E가드IMPACT_FIXED통과, 실데이터E2E/실가입은미실행. PR생성까지만, 리뷰/merge/배포자동진행없음.
 - [projects/dentlink-email-marketing-consent.md](projects/dentlink-email-marketing-consent.md)
 
 ### Dentlink E2E Stabilization
