@@ -1,6 +1,6 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-**2026-11-16 재개 현황:** 코드3제품은11/13마감과같고원격일치·clean. Web DEV7c8eef28c 양배포success확인, a67e1e215 구조정리만미배포. 앱DEV Officev147/v147·Labv46/v45는최신feature와일치. Jira본인22건(10ToDo/11개발완료/1완료)·BE답변대기변동없음. PM11/17STGQA·11/23v1.94.0예정. Office자체주문상세는release/v2.2.5에있지만main/알림feature미포함으로DL17436유지. PR본문3건의전달설명은최신화대상. [근거·남은일](dentlink-unified-notification-center-resume-2026-11-16.md). 이번제품개발/배포/기기조작없음.
+**2026-11-16 재개 현황:** 코드3제품은11/13마감과같고원격일치·clean. Web DEV7c8eef28c 양배포success확인, a67e1e215 구조정리만미배포. 앱DEV Officev147/v147·Labv46/v45는최신feature와일치. Jira본인22건(10ToDo/11개발완료/1완료)·BE답변대기변동없음. PM11/17STGQA·11/23v1.94.0예정. Office자체주문상세는release/v2.2.5에있지만main/알림feature미포함으로DL17436유지. PR본문3건은후속승인으로최신화·재조회완료(head/base/Draft유지). 현개발본으로기능QA를이어가며추가배포는하지않았다. [근거·남은일](dentlink-unified-notification-center-resume-2026-11-16.md). 이번제품개발/배포/기기조작없음.
 
 **2026-11-13 최종 마감·대기:** 전체 작업지침의 필요한 변경을 자동 확인·반영하는 원칙을 기록했다(매번 무조건 전체 조회 아님). **다음 재개 시 배포 상태와 남은 일을 먼저 브리핑**한다. Web `a67e1e215` 푸시/기존 PR 반영 완료·미배포, 이번 정리의 앱 변경 없음. 번역시트 후속은 없고, Office 자체 주문 상세 후속 DL-17436은 1.93.0 이후 치과앱만 대상이다. 기존 BE/디자인·QA 대기는 당시 답변과 실제 상태로 대조한다. 추가 구현·배포·감시 없이 대기.
 
