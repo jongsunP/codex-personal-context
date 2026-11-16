@@ -225,7 +225,7 @@ For detailed current state, read:
 
 ### Dentlink 치과 마케팅 수신 동의 — DL-17208
 
-- 2026-11-16 최초 CodeRabbit 웹2건·Office3건 수정/검증/commit/push·답변/resolve 완료. 웹 `feat/DL-17231@7ba6bbe93` [#4896](https://github.com/Innvoaid/dentlink-client/pull/4896)→`release/v1.94.0`, Office `feat/DL-17423@290d6fd5` [#350](https://github.com/Innvoaid/dentlink-app/pull/350)→`release/v2.2.5`. 정상 PR 유지, 웹 hook10·정상 Git gates/앱 hook10+service13·최종 양OS 오류회귀 통과. 본인 Jira Ready for Deploy 유지·PR/댓글 정리. 후속 리뷰 진행중 확인 후 사용자 지시로 추가 폴링 중단, 완료/추가지적 없음은 미확인. 새 사용자 요청까지 대기하며 병합·배포 없음. 앱 릴리즈 준비는 통합알림센터 담당, 합친 코드 QA·실가입 저장·실데이터E2E는 별도.
+- 2026-11-16 후속 CodeRabbit 완료: 웹 `feat/DL-17231@7ba6bbe93` [#4896](https://github.com/Innvoaid/dentlink-client/pull/4896)→`release/v1.94.0` 추가0·SUCCESS, 코드/검증 기준 병합진행가능하나 GitHub REVIEW_REQUIRED로 팀원승인 대기. Office `feat/DL-17423@290d6fd5` [#350](https://github.com/Innvoaid/dentlink-app/pull/350)→`release/v2.2.5` 추가1은 기존 프로필재진입 재조회 코드·최종양OS복구 근거로 답변/resolve, 새UI·코드변경 없음. 최초 지적5건 수정/commit/push·웹hook10/Git gates·앱23테스트/양OS검증 유지. PR·본인Jira댓글 정리. 사용자 폴링금지 지시에 따라 새 요청까지 대기, merge/deploy 없음. 앱릴리즈준비는 통합알림센터 담당, 합친코드QA·실가입저장·실데이터E2E는 별도.
 - [projects/dentlink-email-marketing-consent.md](projects/dentlink-email-marketing-consent.md)
 
 ### Dentlink E2E Stabilization
