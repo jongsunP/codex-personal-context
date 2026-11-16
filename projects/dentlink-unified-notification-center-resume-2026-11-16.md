@@ -94,3 +94,30 @@
 - 기존미배포분: Web8374225c1/Officee8ee7018/Lab27a521f. 로컬clean·추적원격0/0, 기존PR/DEV그대로. 새코드/배포/QA/기기조작없음. 본체외기록과BE기타확인은이번제안완료로일괄닫지않는다.
 
 공유: https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=45070
+
+## 지정 Slack 4개 동기화
+
+2026-11-16 15:20 KST 조사 마감. 사용자 목적은 다른 담당자들의 작업/논의 상태를 현재 FE 구현과 맞추는 것이며 구현·외부쓰기·배포 승인이 아니다. 지정4개 부모+답글53개, pagination 모두 끝 확인. 반복폴링하지 않음. 코드대조는 Web8374225c1·Officee8ee7018·Lab27a521f이며 개발서버/새API/실기기 QA를 새로 수행하지 않았다.
+
+| 스레드 | 이번 확인 마지막 댓글 | 내용/상태 |
+|---|---|---|
+| [표시명 매핑](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1794306299283819) | 11/16 11:40:55 ·1794796855.986009 | Yoonie가 User Credit을 우선 포함하는 방향으로 설명. 11/12 제외발언보다최신. 매핑유지, UI영역은오전와이어참고요청. BE완료확인으로단정하지않음. |
+| [디자인 변경·카운트](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1794533798159559) | 11/16 13:26:49 ·1794803209.181669 | Leo의질문에PM이개인알림도인박스미확인카운트포함확인. 다른치과카운트는제외. 11/13 CasePreference제거·OfficeCredit표기·LabFeedback제거·MillingOrderUpdates한개·문구·Amplitude는기존작업이력. CP/SCRP 별도디자인은알림센터범위로편입하지않음. |
+| [유저 알림 와이어·정책](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1794793695731349) | 11/16 14:44:50 ·1794807890.507579 | 11/23포함방향(개발완료아님),Oli디자인정리중. 치과user영역→office영역,웹앱순서통일. Lab유저단위없음. LabPC/모바일설정순서이미지공유완료. Feedback은BE가NOTIFICATION/PUSH만발송,MAIL없다고정정. |
+| [조회필터·수신범위 분리](https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1794796366327219) | 11/16 15:12:05 ·1794809525.232639 | Yoonie/Leo/Mina논의후Mina최종정리:치과조회/수신독립,Member양쪽내주문한정. Lab조회/수신독립,Member알림은담당or책임주문한정,홈/목록은본인필터기본진입이나해제해서전체조회가능. Mina시트커버추가예고,Kyle-Leo싱크요청있음. 시트실제수정완료/담당기능코드완료로확대하지않음. |
+
+### FE 대조와 다음 영향
+
+- Web/Office는이미user.CREDITS와employee.CREDITS매핑을구분하고user→employee순서로그린다. 다만개인/소속영역제목·설명을넣은새UI는없다. 설정데이터지원과새디자인반영을구분한다. Lab도user배열을읽는기반은있으나새정책상BE빈배열이면표시없음. 실제현재GET응답을이번다시조회한것은아니다.
+- Oli14:24목록:치과 UserCredit / LinkTalk / Order(DesignConfirmation,OrderUpdates,Shipping,Feedback) / OfficeCredit / Payments;Lab LinkTalk / DentlinkSupport / Order(DesignConfirmation,OrderUpdates) / MillingOrderUpdates. PM14:32웹앱순서통일·user설명간소화·office설명삭제. 기존각scope내순서는서버배열그대로이므로새서버순서를수용할기반. 최종문구/항목은PM재전달예정이었고Oli14:03라이팅은제안상태;그문구그대로확정/임의구현하지않는다.
+- 개인알림 count는 FE재계산이아니라/inbox/unread와/inbox/employers/unread각서버응답사용. 개인읽음뒤관련쿼리재조회기반도있다. 이번확정은집계정책확인이지새실데이터정확성검증아님. 과거계정단위단일읽음정책도유지.
+- Office주문/링크톡필터AsyncStorage,웹URL조회필터는알림orderScope와독립되어있다. OfficeMember주문목록은필터UI숨김·myOrderOnly생략으로BE권한필터따름(링크톡은true강제);서버가true강제한다는Leo설명과구분. 동일권한이름이라고Lab에치과제한복사금지.
+- Lab현재알림범위선택UI없음(앱). 웹공통UI는authorityType+selectedScope+options>1조건이지만Labhost가authorityType을전달하지않음. 따라서다른권한의선택기능까지제공하기로확정/명세반영되면FE추가연결대상. Member발송대상담당or책임판정은BE범위이며FE가임의집계하지않는다. 현Lab앱목록요청에담당/책임필터없으나타담당자브랜치/배포상태는이번조사안함.
+- 새로운channels첫항목상위·platforms/configurableAuthorities계약과UI후속을함께대조할시점은사용자Swagger안내후. 이번댓글만으로공유한새구조의BE구현완료를추정하지않는다.
+
+### 자료 충돌과 확인 한계
+
+- PM14:20:Studio공유PRD는QA자동화용임의문서라혼란있어Notion으로정리예고,유저단위는Artifact참고하며문구/항목재전달예정. 따라서원문표현중user_push_setting유지·LinkTalk을채널로분류·CasePreference설정가능·idempotency_key발송보장등은BE의정정대상이며FE코드를그문구대로추가/삭제하지않는다. LinkTalk은카테고리이며문서의SMS언급만으로SMS설정UI추가금지.
+- 첨부F0CJT9AARSL(10:55정책표),F0CJUGG87KJ(14:44LabPC/모바일설정),F0CHXNQF41L(개인카운트정책)을읽고이미지직접확인. 첫표에는11/23이후추가/user_push_setting등오래된표현이남아있어최신댓글의포함방향과BE정정이우선. 카운트첨부의'미정'표기도동일스레드PM답변으로해소됨.
+- Claude Artifact최신웹본문은도구접근불가. 따라서최신와이어실화면/최종Figma전체까지확인했다고하지않는다. 이번Notion/Sheet/다른담당브랜치의실제수정완료는확인하지않았으며필요시새작업에서범위정해대조. Studio서비스/CP/밀링상세작업은재개하지않음.
+- 기존PR와미배포보완/사용자Swagger대기유지. 새일은개인설정영역UI·정렬/노출계약·조건부Lab범위선택반영이며이미완료된필터분리/이벤트/카운트연결을다시미구현으로되돌리지않는다.
