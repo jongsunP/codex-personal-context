@@ -223,6 +223,7 @@ For detailed current state, read:
 
 ### Dentlink 치과 마케팅 수신 동의 — DL-17208
 
+- 다음 앱 릴리즈 준비는 통합알림센터 쪽에서 담당한다(11/16 사용자 확정). 이 feature는 대기 유지하고 해당 릴리즈 통합 시 최신 main 기반과 합친 코드의 검증을 진행한다. 최신 main의 기능 파일 직접 중복은 없었으며 즉시 feature 병합은 하지 않았다.
 - 2026-11-16 구현·검증·commit/push·Draft PR 및 본인 문서 정리 완료, **사용자의 통합알림센터와 릴리즈 통합 요청 대기**. 웹 `feat/DL-17231@6a3d327d0` [#4896](https://github.com/Innvoaid/dentlink-client/pull/4896)→`release/v1.94.0`, Office `feat/DL-17423@44038e33` [#350](https://github.com/Innvoaid/dentlink-app/pull/350)→사용자 지정 `main`. 직접 화면은 웹 가입2단계·프로필, 앱 프로필. Jira는 개발 완료(Ready for Deploy), CodeRabbit은 Draft로 미실행. 실가입 저장·실데이터 E2E·합친 코드의 QA/리뷰/병합/배포는 별도다. 재개 요청 전 추가 작업·조회·폴링 없이 대기한다.
 - [projects/dentlink-email-marketing-consent.md](projects/dentlink-email-marketing-consent.md)
 
