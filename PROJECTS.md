@@ -223,7 +223,7 @@ For detailed current state, read:
 
 ### Dentlink 치과 마케팅 수신 동의 — DL-17208
 
-- 2026-11-13 웹·Office 공통 기능 세션 `01a1d2b2-0d2f-7441-a68b-fa68affceafc`에서 확정된 웹 SMS 문구·툴팁 변경과 앱 SMS API 연결 준비를 로컬 구현했다. 본인 Jira를 웹 DL-17231·앱 DL-17423으로 정리했으며 제품 commit/PR/배포 전이다. **사용자 요청으로 기록 후 최종 디자인·Email API 공유 대기**하며 자동 재조회하지 않는다. 실제 화면·저장 QA는 남았다. 알림센터와 앱 Profile 접점은 보존·향후 합친 최종 코드 검증 대상으로 관리한다.
+- 2026-11-16 사용자 요청으로 상태 재확인: 부모 Jira의 새 전용 Figma에서 가입·웹/앱 Profile 디자인을 확보해 화면 작업 재개 근거가 생겼다. **Email API 계약은 여전히 대기**(DEV 명세에 미등재·STG404), 이번에는 구현/외부 변경 없이 확인만 했다. 기능 세션 `01a1d2b2-0d2f-7441-a68b-fa68affceafc`의 웹 DL-17231 문구·툴팁 변경과 앱 DL-17423 SMS API 준비 미커밋3파일은 보존됐다. 제품 PR/배포·실제 화면/저장 QA 전이며 자동 폴링하지 않는다.
 - [projects/dentlink-email-marketing-consent.md](projects/dentlink-email-marketing-consent.md)
 
 ### Dentlink E2E Stabilization
