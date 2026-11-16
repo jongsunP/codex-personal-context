@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**2026-11-16 toggleChannel 실제 사용 조사·새 platforms 명세 발견:** 사용자 요청은 조사만이며 제품 코드/PR/배포/기기 실행은 변경하지 않았다. Web8374225c1·Officee8ee7018·Lab27a521f에서 실제 호출 경로를 확인했다.
+
+- `toggleChannel`은 GET의 읽기 전용 상위 토글 채널 식별자다. 실제 값은 `enabled`, 하위 체크는 `channels[].channel/enabled`이며 PUT에서는 메타데이터를 제외한다. 부모 ON/OFF의 하위 전체 cascade도 이 키에 의존하지 않는다.
+- 양앱은 상위 `PUSH`의 OS 권한 미확인/차단·안내·복귀 흐름과 분석 이벤트에 사용한다. 하위 PUSH는 자체 channel로 판단하므로 `channels: []` 단독 Push 토글의 의미를 대신할 수 없다. 키가 없으면 크래시하도록 되어 있지는 않지만 상위 Push 권한 처리가 누락되고 분석은 Notification으로 기본 처리된다.
+- 웹은 Clinic/Lab 공통으로 `toggleChannel === PUSH` 카테고리 전체 숨김과 상위 변경 분석에 사용한다. 전체 행 숨김은 플랫폼을 채널로 추론한 임시 처리이며, PUSH 상위+MAIL 하위 응답이면 MAIL까지 숨긴다. Admin의 해당 설정 실제 사용 경로는 발견하지 못했다.
+- **현재 DEV Swagger `https://dev-api.dentlink.io/v3/api-docs`의 CategorySettingDto에 `platforms: (WEB | APP)[]` readOnly가 존재한다.** toggleChannel도 그대로 공존한다. 웹·양앱 generated DTO 및 설정 코드는 아직 platforms 미반영이다. DL-17114 댓글44994의 플랫폼 구분 요청에 새 댓글 답변은 없지만 명세에는 반영된 상태다. 실제 인증 GET에서 값이 채워지는지는 이번 조사에서 새로 검증하지 않았으며 required/생략 의미도 추정하지 않는다.
+- **새 후속:** 기존 API의 실제 platforms 응답/누락 의미를 확인하고, 사용자 구현 승인 시 웹·앱 노출을 platforms로 분리한다. toggleChannel은 OS Push 권한·상위 채널 분석을 위해 유지한다. 새 API 요구나 지금 구현 승인으로 확대하지 않는다. 아래 ‘배포 전 FE 완료’는 이 새 명세 발견 전 체크포인트다. BE44978/사용자44994 근거: https://innovaid.atlassian.net/browse/DL-17114 . 현재 저장소 세 곳 모두 clean, 배포 상태 불변.
+
 **2026-11-16 사용자 마감·배포 요청 대기:** 현재 확인·승인된 알림센터 본체 범위에서 웹·양앱이 배포 전에 독립적으로 처리할 FE 보완은 완료했다. Web `8374225c1`, Office `e8ee7018`, Lab `27a521f` 모두 커밋푸시·원격 일치0/0·clean을 다시 확인했다. 기존 PR·검증 기록 유지. 최근 보완은 미배포이며 현재 개발서버/CodePush는 그대로다. 남은 것은 사용자의 별도 배포 요청 후 전달·QA, 기존 BE 확인 및 별도 디자인/후속 범위다. 전체 기능 무결함·실기기 QA 완료라는 의미는 아니다. 사용자가 다시 요청하기 전 배포·추가 개발·자동 조회/감시 없이 대기한다.
 
 **2026-11-16 양앱 소속 ID 누락 보완 완료·미배포:** 사용자 승인으로 웹 리뷰에서 발견한 같은 경계를 양앱에 반영했다. employeeId 우선, 생략 때만 employerId가 일치하는 유일한 기존 전환 가능 소속으로 연결하며 모순·중복·미소속은 제외한다. Office `e8ee7018` / Lab `27a521f` 커밋·푸시·원격 일치·clean, 기존 PR346/42 유지 및 설명 최신화. 관련 Jest Office26/Lab27, Lab 소스 경계13조건, 최종 양OS 실제 화면에서 fixture로 표시·대상 ID 전달·전환 실패 복구 확인. 새 앱 crash/LogBox 없음. 실제 누락 응답 관측이나 실소속 서버 전환 성공 검증으로 확대하지 않는다. 네이티브·권한·전환 API 변경 없음. **웹/양앱 추가 배포·CodePush 없음.** 자체 테스트 기기·Metro 종료, 개인/Claude/Codex 기록 정리. 다음은 승인된 배포 후 QA이며 기존 BE/디자인 별도 대기는 유지한다. [상세](dentlink-unified-notification-center-resume-2026-11-16.md#후속-승인-양앱-소속-id-누락-보완).
