@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**2026-11-16 15:12 KST 설정 구조 역제안 공유·Swagger 대기(미구현):** 사용자가 DL-16140 댓글45070에 새 구조를 공유했다고 알렸고 `configurableAuthorities` 권한별 노출 정보도 추가될 예정이라고 설명했다. 이번 요청은 메모리 정리만이다. **사용자가 새 Swagger를 알려주기 전 구현·배포·명세 자동 조회를 하지 않는다.** 이 합의는 아래의 기존 구조 기준 `toggleChannel 유지` 권고보다 최신이며, BE 최종 명세/구현 확정이나 FE 구현 완료로 취급하지 않는다.
+
+- 제안: 카테고리 `enabled`/`toggleChannel`을 제거하고 모든 채널 제어값을 `channels[].channel/enabled`로 통합한다. 원본 배열 첫 번째가 상위 토글, 이후가 하위 체크이며 플랫폼 필터 후 자식을 상위로 승격하지 않는다. 최소1채널·단독PUSH는 첫채널로 식별·상위가 노출되는 플랫폼에 하위도 정합되도록 구성하는 계약을 제안했다. 예시 키는 기존 enum `NOTIFICATION`(NOTI 아님).
+- `platforms`는 채널별 웹/앱 노출 정보. `configurableAuthorities: [ADMIN, MEMBER]`는 사용자 설명상 권한별 노출 정보이며 비활성화만 한다는 뜻으로 바꾸지 않는다. 적용 위치(카테고리/채널), 생략/빈 배열 의미, 실제 권한값 대응은 새 Swagger에서 확인한다. 현 권한/서버 인가를 우회하지 않는다.
+- GET 전체 원본을 유지하며 화면만 필터. 기존 `employee`/`user` 및 `orderScope` 구분 유지. PUT 전체 저장에서 숨겨진 항목을 누락하지 않고 `category`, `channels[].channel/enabled`만 보낸다(읽기전용 domain/platforms/권한노출메타 제외). 상위 ON/OFF는 같은 카테고리의 숨겨진 하위까지 전체 적용하고 다른 카테고리/범위는 보존한다. 배열순서가 상위 의미를 정하므로 BE의 순서 계약이 필요하다.
+- 치과·기공소 웹/양앱 코드에서 기존 전체 PUT·원본 보존·상하위 연동 경로를 대조했다. 새 API가 반드시 필요한 제안은 아니며 타입/매핑/노출/저장 검증을 함께 바꿔야 한다. 현재 category.enabled 필수 검사·기존 toggleChannel 소비가 있어 서버 응답만 교체하면 호환되지 않는다. 실제 Swagger/실응답과 반영 순서를 맞춘 뒤 승인 범위대로 구현·최종 검증한다.
+- **현재 FE:** 새 구조 구현은 Swagger 안내 대기. 기존 Web8374225c1·Officee8ee7018·Lab27a521f는 clean/추적원격0:0 확인·기존 PR 유지·최근 보완 미배포. 별도 배포 요청 전 개발서버/CodePush 유지. 본체외 디자인/Home·배지·E2E·치과 자체주문상세 후속은 기존 기록 유지. 이번 제품/PR/Jira/Notion 변경 없음.
+- 공유 근거(사용자 전달, 이번 원문 재조회 없음): https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=45070 . 상세: [11/16 재개 기록](dentlink-unified-notification-center-resume-2026-11-16.md#설정-새-구조-역제안과-swagger-대기).
+
 **2026-11-16 toggleChannel 실제 사용 조사·새 platforms 명세 발견:** 사용자 요청은 조사만이며 제품 코드/PR/배포/기기 실행은 변경하지 않았다. Web8374225c1·Officee8ee7018·Lab27a521f에서 실제 호출 경로를 확인했다.
 
 - `toggleChannel`은 GET의 읽기 전용 상위 토글 채널 식별자다. 실제 값은 `enabled`, 하위 체크는 `channels[].channel/enabled`이며 PUT에서는 메타데이터를 제외한다. 부모 ON/OFF의 하위 전체 cascade도 이 키에 의존하지 않는다.
