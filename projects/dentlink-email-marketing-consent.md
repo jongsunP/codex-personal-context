@@ -1,15 +1,30 @@
 # 치과 마케팅 수신 동의 — DL-17208
 
-## 현재: Email 계약 문서 검토 완료, 임시가입 계약·BE 적용 환경 확인 필요 — 2026-11-16
+## 현재: BE 문서 기준 진행 가능, 사용자 요청으로 Swagger 반영 공유 대기 — 2026-11-16
 
-- 사용자가 [프론트 계약 문서](https://files.slack.com/files-pri/T02PJUYSDT8-F0CHX8NF57G/2026-11-16-office-email-marketing-consent-frontend.md)를 전달하고 **검토만** 요청했다. Slack read_file `F0CHX8NF57G`로 전문을 읽었다(작성 11/16 11:53:49 KST). 문서는 스스로 **BE 구현 전 계약**이라고 명시한다. 이번 턴에는 제품 구현/테스트·실API 조회·Slack/Jira 쓰기·제품 commit/push/PR/배포를 하지 않았다. 기존 웹 `15343ab88`·Office `5c3bc4cf`의 pushed clean 상태를 기준으로 읽기 검토했다.
-- **해소된 계약:** 일반·초대 `POST /office/users`에 optional boolean `emailMarketingEnabled`(생략false, UI기본미선택)와 `smsMarketingEnabled`를 사용한다. 구 `marketingEnabled`는 호환 유지·deprecated이며 새 필드로 전환하면 보내지 않는다. 신구 SMS 필드를 함께 보내 값이 다르면400/code1000. `smsEnabled`는 유지. Profile Email은 `PATCH /office/users/own/email/marketing` `{enabled:boolean필수}`, SMS PATCH와 같은 응답이며 미설정 기존 사용자도 첫 호출에 설정 생성.
-- **조회·표시:** `userPreference.email.marketingEnabled`가 마케팅 스위치 값이다. 미설정 기존 사용자는 `emailEnabled`·`marketingEnabled` 모두false로 응답하므로 기존 사용자 OFF 표시 대기는 해소됐다. `email.emailEnabled`는 서비스메일용 읽기전용이며 입력/변경API가 없다. 신규가입 또는 설정 변경 후 이 값은true다. 새 객체는 내프로필 GET·profile/image/language 수정응답·관리자조회에도 포함된다고 명시한다. 저장행이 없다는 과거 정책과 false 응답 projection을 혼동하지 않는다. Admin 조회 언급을 이번 기능의 새 Admin UI 작업 승인으로 확장하지 않는다.
-- **추가확인1 — 코드의 임시사용자 가입 분기:** 여기서 “임시가입”은 FE 내부명 `isTempUserMode`를 설명한 표현이다. 치과초대(`type=INVITATION`+employerId+email)와 별도로 email+code로 사전 사용자정보를 불러와 이메일 인증을 생략하는 코드 경로가 있다. 앞선 “실제 사용”은 운영 사용/유입을 확인했다는 뜻으로 과했으며, 확인한 것은 UI 제출까지 연결된 코드의 존재다. 현재 운영 사용 여부·링크 생성/발송 주체는 미확인이다. `/auth/signup?email&code` → `GET /users/temps` 성공(email/firstName/lastName/code 있음) 시 isTempUserMode로 같은 Office 가입 DTO를 `POST /office/users/register`에 전송하도록 연결돼 있다. 문서는 이 경로를 다루지 않는다. **이 분기를 현재 사용하는지, 사용한다면 /register에도 새 Email/SMS 필드와 구 SMS 호환·충돌 규칙을 동일 적용하는지** 확인할 필요가 있다. 현재 실사용 중인 별도 상품 기능이나 전체 FE 작업을 막는 확정 차단점으로 단정하지 않는다. 근거 `clinic/src/lib/AuthSignupForm/useSignupForm.tsx:226,508`, `shared/models/src/user/user.apis.clinic.ts:365`. 일반·초대는 `/office/users`이며 초대는 Step2 Confirm에서 같은 submit을 호출한다.
-- **필수 추가확인2 — 적용 환경/시점:** BE 구현 전 계약이므로 대상환경에 실제 반영되는 시점과 Swagger 반영 상태를 확인해야 실제 API 연결검증/배포가 가능하다. 새 SMS 필드만 먼저 보내도 구 서버가 지원한다고 가정하지 않는다. 이번에 Swagger를 재조회하지 않았으며 문서공유를 BE 배포 완료로 취급하지 않는다. FE 일반·초대가입/Profile 연결 로직 준비는 가능하지만 최종 기능완료/실서버QA/배포 준비완료는 아니다.
-- **웹 최소변경 방향:** 이름 변경은 가입 요청 최상위 필드에만 해당한다. Profile의 `userPreference.sms.marketingEnabled`와 SMS PATCH `{enabled}`는 그대로다. 폼 내부 `marketingEnabled`는 유지하고 Office 전송 경계에서 `smsMarketingEnabled`로 매핑하며 구키를 제외하는 방식이 기존 sessionStorage draft·Lab에 영향이 작다. 폼 이름을 바꾼다면 모든 저장키를 setValue로 복원하는 draft migration이 필요하고, 구키+신규기본값을 함께 보내면400이 날 수 있다. Email은 현재 Stepper 로컬 상태를 Office RHF/payload에 연결한다. 실제 소비 타입은 `shared/models/src/user/user.types.ts`/index export이고 generated 동명 DTO만 바꿔서는 반영되지 않는다. Lab DTO/defaults/전체FormData 직렬화에는 Office 새필드를 섞지 않는다.
-- **Office 최소변경 방향:** 마케팅 스위치는 `email.marketingEnabled`에만 연결하고 읽기전용 `emailEnabled`를 조작하지 않는다. 기존 SMS scope·실패복구·확인GET 경로를 재사용하되, SMS/Email 독립 병렬 PATCH→전체profileGET→동일USER cache 반영은 늦은 응답이 다른 채널 최신값을 덮을 수 있다. 같은 useProfileMarketing 안에서 채널간 저장/확인응답 조정이 필요하다. 현재 생성 UserPreferenceDto에는 Email이 없으므로 실제 소비 UserProfileDto/preference 모델은 기존 생성 절차로 갱신한다. 미반영 환경의 필드 누락을 계약상 미설정 사용자 false 응답과 혼동하지 않는다. 알림센터와 목적·API는 여전히 분리돼 있으므로 별도 branch 개발/릴리즈 통합 QA 방향은 유지한다.
-- 이전의 “Email 계약 전체 미공유” 대기는 위 문서 확보로 갱신한다. 다음 시작점은 임시가입 계약과 BE 적용환경 확인, 사용자 요청 범위에 따른 후속 구현이다. 기존 테스트 증거/앱 타입6오류/웹 coverage 비교 한계는 아래 기록을 유지한다. 이번 요청은 검토로 마치고 자동 조회/폴링이나 제품 수정은 하지 않는다. 개인 정본과 Claude 기록만 동기화한다.
+- **최종 결정:** 사용자가 “스웨거 됐다고 하면 말할게. 우선 정리 메모리하고 대기”라고 요청했다. 지금까지의 구현·commit/push·검증과 아래 문서 검토 결론을 정리하고 대기한다. 사용자가 반영 소식을 가져오기 전 자동 Swagger/API·Jira·Slack·Figma 조회, 폴링, 추가 구현·테스트·배포·메인 보고를 하지 않는다. 이번 마감은 기록만이며 제품 변경/외부 메시지 전송은 없다.
+- **검토 결론 정정:** 공유된 BE 문서는 **FE 구현 기준으로 충분**하다. 일반 가입·치과 초대·`isTempUserMode` 분기 모두 동일한 **회원가입 2단계**의 마케팅 선택 UI를 사용하고, temp 전용으로 2단계를 건너뛰는 흐름은 없다. temp의 차이는 1단계 이메일 인증 생략이며, 단계 이동은 공통이다. 별도 가입 화면/2단계 우회 우려는 불필요했고 `/register` 사전 확인을 전체 FE 작업의 선행조건처럼 제시한 것은 과했다. 이 판단은 철회하며 다시 차단점으로 올리지 않는다. 근거 `shared/ui/src/AuthUI/SignupStepper/SignupStepperForm.tsx:148`, `SignupStepperStep1.tsx:189`, `clinic/src/pages/auth/signup.tsx:322`.
+- **남기는 사실의 경계:** 일반·초대 최종 제출은 `/office/users`, temp 분기는 `/office/users/register`로 연결돼 있다. 화면 흐름과 최종 저장 API를 혼동하지 않는다. temp는 내부 코드명이며 운영 실사용/링크 생성·발송 주체는 확인하지 않았다. “모든 경로 확인”은 코드상 공통 가입 단계 확인이며 실제 운영 가입 테스트 완료가 아니다. 최종 API별 동의값 저장은 Swagger 반영 후 정상 연동 검증에서 확인하면 되고, 이를 이유로 별도 상품 정책 질문이나 선행 조사를 추가하지 않는다.
+- **확보된 문서:** [2026-11-16-office-email-marketing-consent-frontend.md](https://files.slack.com/files-pri/T02PJUYSDT8-F0CHX8NF57G/2026-11-16-office-email-marketing-consent-frontend.md), Slack file `F0CHX8NF57G` 전문 확인(11/16 11:53작성). 문서 자체는 BE 구현 전 계약이라고 명시하며 문서공유=실배포 완료로 취급하지 않는다. 현재 대기는 계약 전체 미공유가 아니라 **사용자가 알려줄 API/Swagger 반영 소식**을 기다리는 상태다.
+- **가입 계약:** 일반·초대 `POST /office/users`의 optional boolean `emailMarketingEnabled`(생략false·UI 기본미선택), `smsMarketingEnabled` 사용. 구 `marketingEnabled`는 호환 유지·deprecated이며 새 필드로 전환하면 전송하지 않는다. 신구 SMS 필드를 함께 보내 값이 다르면400/code1000. `smsEnabled` 유지. 가입 요청의 이름만 바뀌며 Profile의 `sms.marketingEnabled`와 SMS PATCH `{enabled}`는 유지한다.
+- **Profile 계약:** `PATCH /office/users/own/email/marketing` `{enabled:boolean필수}`, SMS와 같은 응답, 기존 미설정 사용자도 최초호출 시 설정 생성. `userPreference.email.marketingEnabled`가 마케팅 스위치 초기값이며, 미설정 기존사용자 두 email값은false로 응답. `email.emailEnabled`는 서비스메일용 읽기전용으로 보내거나 바꾸지 않는다. 가입/설정변경 후 이 값은true. 내프로필 GET·profile/image/language 수정응답·관리자조회에 새객체 포함. 기존 사용자 OFF 표시 기준은 해소됐고, Admin조회 언급으로 새 Admin UI 작업을 확대하지 않는다.
+
+### 보존한 코드·검증
+
+- **웹:** `/Users/parkjongsun/.codex/worktrees/dl17208-web/dentlink-client`, `feat/DL-17231@15343ab88a275c159442173609d978a593e70803`, `wip: 웹 마케팅 수신 동의 화면과 SMS 연결`. 가입2단계/PC·모바일 Profile 5파일(+239/-113), origin push 완료. 이번 마감에서 로컬 HEAD=upstream tracking ref 및 clean 상태 재확인.
+- **Office:** `/Users/parkjongsun/.codex/worktrees/dl17208-office/dentlink-app`, `feat/DL-17423@5c3bc4cf6bd460531b109850124aa19afe4e780a`, `wip: 앱 마케팅 수신 동의 화면과 SMS 연결`. ProfileSettingsSection/useProfileMarketing/useUserQueries/user.service 4파일(+289/-3), origin push 완료. 이번 마감에서 로컬 HEAD=upstream tracking ref 및 clean 재확인. 원격 tip 실제 일치는 앞선 push 때 검증했고 이번에 원격을 재조회하지 않았다.
+- **현재 효과:** 새 디자인 UI와 기존 SMS 연동은 구현돼 있다. Email은 아직 로컬 선택만 존재하며 서버 저장/가입 payload에 연결되지 않은 WIP다. 제품 PR/merge/배포 없음. 기존 서버/기기는 앞선 검증 종료 때 꺼 둔 상태를 유지한다.
+- **기존 검증 유지:** 웹 PC/mobile 렌더·Email 선택 유지/미전송·SMS mock 성공/실패, Clinic/Lab/Admin 타입·lint 및 관련 테스트 통과. 앱 lint·hook10건·최종 iOS/Android 화면 및 테스트계정 실제 SMS 저장/재조회·원복 확인, LogBox0/Android crash0. 앱 전체 타입 기존6오류, 웹 coverage 비교 baseline 부재 한계는 아래 기록 유지. 커밋/푸시 때 코드 변경 없이 증거를 보존했고 이번 마감에 테스트/런타임을 재실행하지 않았다.
+
+### Swagger 공유 후 시작점
+
+1. 사용자가 반영 소식을 주면 개인 정본/각 제품 Git을 필요한 범위에서 동기화하고 대상 환경 Swagger와 실제 FE 소비 타입을 확인한다. 문서 기준으로 공통 가입2단계·Profile의 Email 연결을 이어간다. 생성모델은 기존 생성 절차로 갱신하고 직접 편집하지 않는다.
+2. 웹: Email 로컬 state를 Office RHF/가입 payload에 연결. 내부 `marketingEnabled`를 유지하고 Office 전송 경계에서 `smsMarketingEnabled`로 매핑·구키 제외하면 기존 sessionStorage draft/Lab 영향이 작다. 실제 소비 타입은 `shared/models/src/user/user.types.ts`/index export다. Lab DTO/defaults/FormData 범위에 Office 필드를 섞지 않는다.
+3. Office: `email.marketingEnabled` 조회·저장을 연결하고 로컬 변수와 읽기전용 서비스메일 `emailEnabled`를 구분한다. 기존 scope/실패복구/확인GET을 유지하며 SMS·Email 병렬 전체profile 응답이 서로 최신값을 덮지 않도록 같은 hook에서 저장·확인응답 반영을 조정한다. 미반영 서버의 필드 누락을 미설정사용자의 명세상false로 취급하지 않는다.
+4. BE 반영 후 실제 동의값 저장·재조회, 기존사용자 OFF, 신규가입 기본미선택, 실패복구 및 각 최종 제출API를 검증한다. 최종 웹 PC/mobile·앱 양OS 증거를 확보하며 commit/push/PR/배포 승인은 요청된 단계별 경계를 유지한다.
+5. 알림센터와 별도 branch 개발 방향은 유지한다. 릴리즈에서 최신diff로 종 버튼/ProfileOfficeSection 기존알림 정리·공유 service/query 변경을 보존하고 합쳐진 최종 Profile 배치·알림 진입·각 설정 저장/상태를 양OS 검증한다. 단독 QA를 통합 QA로 보고하지 않는다.
+
+- 사용자가 보낼 답장 내용은 타당하다고 확인했으며 “주문 단계”는 **“회원가입 2단계”**로 정정했다. 사용자의 요청은 먼저 원문 내용의 타당성을 판단하는 것이었으므로, 향후 같은 질문에 곧바로 재작성본만 주지 않는다. Slack 실제 발송 여부는 확인하지 않았고 에이전트가 전송하지 않았다.
 
 ## 이전: 웹·앱 commit/push 완료, 사용자 요청으로 Email API 공유 대기 — 2026-11-16
 
