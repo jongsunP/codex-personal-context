@@ -114,6 +114,10 @@
   project vocabulary; ask for review before introducing an ambiguous new name.
 - Follow the truthfulness and uncertainty-calibration rules in
   `AI_WORKFLOW.md` for all Codex work.
+- Follow **Collaborative Decisions And Guideline Exceptions** in
+  `AI_WORKFLOW.md`: explain the recommendation, brief reason, and specific
+  choice when confirmation is needed; retain explicit approval rules and avoid
+  repeating approval for already-authorized routine work.
 - Follow **API Contracts Across Environments** in `DEVELOPMENT_STYLE.md`:
   DEV-to-STG rollout order has exceptions. If the task's target backend already
   provides a confirmed contract, use its Swagger or backend-confirmed response

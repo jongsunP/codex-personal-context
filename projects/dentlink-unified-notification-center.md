@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**2026-11-16 새 알림 설정 API 연결 완료·미배포:** 사용자 승인으로 Web Clinic/Lab `3878e774f`, Office 앱 `91b8531b`, Lab 앱 `cfa1022`에 새 channels 계약을 연결했다. 원본 첫 채널 상위·platforms 노출·값만 전체PUT·같은category 전체ON/OFF·타영역 보존·즉시표시/실패복구/확인GET·OS안내/이벤트를 대응했다. 기존 PR4862/346/42 유지, 배포 없음. 웹 실제양서비스와 양앱 양OS의 실제 GET/PUT·원복 확인, Android양앱 OS권한거부/복귀 확인, 새 앱크래시 없음. 관련tests43/73/22통과; 앱전체tsc는기존6/5진단. `configurableAuthorities`는 명세/실응답에 없어 기존권한 유지하며 제공시연결; 새디자인 후속. Lab현계약은 user빈목록·scope없음으로UI임의추가없음. Swagger의하위값보존설명과사용자확정전체ON/OFF는문구정합성확인만남김. Jira17415/16/17은완료기능댓글+남은디자인/권한정보때문에해야할일. 이번일반작업스타일(권장안/이유/필요한선택협의,승인된실행반복질문안함)을공통지침·Claude메모리에반영. [상세와검증한계](dentlink-unified-notification-center-resume-2026-11-16.md#새-알림-설정-api-연결--2026-11-16).
+
 **2026-11-16 16:00 KST Jira 후속 3건 최신화 완료:** 사용자 승인으로 DL-17415(Web Clinic/Lab)·DL-17416(Office 앱)·DL-17417(Lab 앱)의 제목/본문만 새 알림 설정 계약 반영 범위로 수정했다. 모두 해야 할 일 유지, 스토리포인트 필드 전송 없음, 재조회에서 전체 customFields·담당자·상위 카드 동일 확인. Swagger 먼저 기존 UI의 GET/PUT·channels 상하위·platforms/configurableAuthorities 연결, 새 디자인 뒤 영역/문구/배치 반영 순서를 명시했다. Office 개인/병원 영역과 Lab 개인 영역 없음·수신 범위 계약 확인을 구분했다. 새 계약은 아직 미구현이며 사용자 Swagger 안내까지 대기. 이번 제품 코드·PR·배포 변경 없음.
 
 **2026-11-16 15:49 KST Swagger 안내 대기 최종 확인:** 새 계약 연결·검증 후에는 user/employee 모두 서버 항목·순서대로 기존 카드 UI에 표시하고 저장할 수 있다. 노출은 platforms/configurableAuthorities, 문구는 기존 FE 매핑을 사용하며 옛 toggleChannel 기반 숨김 조건은 새 계약에 맞게 교체한다. 이는 현재 코드가 이미 새 계약을 지원한다는 뜻이 아니며, API 배포만으로 자동 완료되지 않는다. 새 디자인은 개인/병원 구역 제목·설명·배치 마무리이며 기능 연결의 공동 선행조건이 아니다. 사용자가 Swagger 완료를 알려주기로 했으므로 추가 구현·배포·외부 자동조회 없이 대기한다. 기존 미배포 보완·PR 유지, 이번 마감은 메모리만.

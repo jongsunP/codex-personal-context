@@ -154,3 +154,39 @@
 - API 구조는 사용자 공유 방향이며 최종 필드/필수값/권한 정보 적용 위치는 Swagger를 따른다. 새 계약이 이미 구현됐다는 의미가 아니다.
 - 쓰기 필드는 summary/description 두 개뿐. 15:59:41~43 KST 갱신 후 세 카드 재조회: 제목·본문 일치, status10015 유지, 전체 customFields·assignee·parent 동일. SP 변경 없음. 상위 댓글/새 카드/Notion/Slack/제품 코드/PR/배포 변경 없음.
 - 다음 시작점: 사용자 Swagger 안내를 받은 뒤 새 타입·조회·노출·저장·권한/OS 흐름을 제품별 연결하고 검증. 새 디자인은 나오는 대로 반영. 지금은 구현·배포·자동 조회 없이 대기.
+
+## 새 알림 설정 API 연결 — 2026-11-16
+
+사용자가 새 Swagger 연결을 승인했다. 새 디자인 없이 가능한 기능을 Web Clinic/Lab·Office 앱·Lab 앱에 연결하고, 검증 후 커밋푸시하되 배포는 하지 않는 범위다. 아래는 같은 날 앞선 Swagger 대기 기록보다 최신이다.
+
+### 구현과 현재 영향
+
+- DEV `/v3/api-docs`와 양제품 실제 인증 GET을 대조했다. category `enabled`·`toggleChannel` 제거, 원본 `channels[0]` 상위/나머지 하위, 채널별 `enabled/platforms` 구조로 소비 타입·GET 표시·PUT·저장 확인·OS 안내·분석 이벤트를 변경했다. 기존 generator 출력에서 관련 DTO만 동기화했다.
+- WEB/APP은 채널별 platforms로 표시한다. 원본 상위가 해당 플랫폼에서 숨김이면 카테고리 전체를 숨기며 자식을 상위로 승격하지 않는다. platforms 생략은 현재 Swagger상 선택 속성이므로 UI 미노출·원본 보존; 손상/null/잘못된 enum은 저장 가능한 응답으로 취급하지 않는다. 첫 채널이 필요한 새 계약이므로 channels 누락/빈 배열은 정상 단독 토글이 아니다. 단독 토글은 1채널 배열이다. 과거 구계약 `channels:[]` 설명과 구분한다.
+- 기존 전체 PUT 틀은 유지하되 category + channels의 channel/enabled만 보내며 readonly 메타는 제외한다. 상위 ON/OFF는 같은 category의 숨겨진 자식까지 전체 적용; 다른 category와 user/employee 범위는 보존한다. 단일 자식 변경은 그 채널만 바꾼다.
+- UI 즉시 반영·중복 저장 차단·실패 복구·확인 GET은 유지했다. 즉시 표시용 원본을 갱신할 때 channel.platforms를 잃어 항목이 사라지지 않도록 보완했다. 새로운 mock/Storybook/화면/네이티브 변경 없음.
+- 실제 Office 응답에는 개인 CREDITS와 소속 항목이 있어 기존 UI에 표시/저장된다. Lab은 user.categories=[]·orderScope=null·orderScopeOptions=[]로 개인 영역/범위 선택을 임의 추가하지 않았다. 신 디자인의 구역 제목/설명/배치는 후속이다.
+
+### 검증
+
+- Web: 관련43테스트, Clinic/Lab/Admin 타입검사 통과. 양웹 실제 인증 GET과 화면 대조, 지연/실패 UI Office4·Lab3조건 통과. 실제 상위 OFF→PUT→GET에서 숨겨진 PUSH 포함 하위 전체OFF, 다른 범위 보존, ON후 전체 원본복구 확인. 브라우저 JS오류0. 사용자 제외한 실데이터 E2E는 실행하지 않는다.
+- Office: 기존4suite73tests·변경 lint 통과. Lab: 기존3suite22tests·변경 lint·실제응답 기반18조건 통과. 앱 전체 타입검사는 기존 Office6/Lab5 오류가 남아 통과로 보고하지 않는다. 변경 설정 파일의 타입 진단은 없다.
+- 최종 코드 런타임: iPhone17Pro/iOS26.5와 Dentlink_API_36/Android16을 제품별 함께 전환. Office 양OS 각각 자식OFF/ON·상위OFF/ON, Lab Android 같은4조건. Lab iOS는 실제 OS권한 거부 상태에서 PUSH 안내/취소0PUT과 상위OFF/ON을 확인했다. 각 저장 직후 UI반응·행 유지·1PUT·실GET확인·전체 설정 원복, LogBox0을 확인했다. 렌더된 실제 화면 핸들러를 CDP로 실행하고 네이티브 스크린샷을 직접 대조했으며 실기기 터치 QA로 확대하지 않는다.
+- Android 양앱 추가: 실제 POST_NOTIFICATIONS 권한을 adb로 revoke한 후 앱 실행→PUSH 안내0PUT→네이티브 팝업 확인 탭→권한 grant 및 앱 복귀→선택한 LinkTalk만1PUT/ON을 확인. 권한/서버 값 원복. iOS 실기기의 OS설정 왕복은 이번 검증 아님. 실제 푸시 발송/수신·모든 권한 계정의 실응답 검증도 하지 않았다.
+- Android 앱 crash/ANR 기록 없음. 시작 시 꺼져 있던 자체 기기/Metro는 검증 후 종료했고 사용자 창 배치는 변경하지 않았다. 계정/토큰/비밀번호는 기록하지 않는다.
+- 근거: `/tmp/notification-web-new-settings-{read,runtime,office-live-put,lab-live-put}-1116.json`, `/tmp/notification-new-contract-{office,lab}-{ios,android}-1116.json`, 각 native png, `/tmp/notification-{office,lab}-os-return-1116.json`, `/tmp/notification-new-contract-crash-1116.log`. 임시 근거가 사라져도 본 기록으로 결과/한계를 복구한다.
+
+### 남은 확인과 다음 시작점
+
+1. `configurableAuthorities`는 새 Swagger 전체와 실제 GET 모두에 없다. 적용 위치/권한값/생략 의미를 임의 구현하지 않았다. 기존 BE항목 제한과 FE권한 처리는 유지하며 키가 제공되면 노출 조건만 연결한다.
+2. CategorySettingDto.channels 설명의 “꺼도 나머지 채널 값은 보존”은 사용자 확정 상하위 전체ON/OFF와 다르다. FE는 최신 사용자 합의대로 전체값을 함께 저장했고 실제 PUT/GET도 정상 반영된다. BE에는 이 설명 정합성만 확인하면 되며, 이 확인 때문에 임의로 숨김보존 UX로 바꾸지 않는다. 실제 발송 엔진까지 검증한 것은 아니다.
+3. 새 디자인 후 최종 구역/문구/배치를 적용한다. 현재 기능 연결은 완료, 권한키/디자인까지 완료로 합치지 않는다. 해당 Jira3건은 완료 부분을 댓글에 보존하고 남은 작업 때문에 해야 할 일로 둔다. 스토리포인트/상위카드/타인 작업은 변경하지 않는다.
+4. 기존 PR 유지, 이번 개발서버/CodePush 배포 없음. 서버만 새 계약이 되어도 구 FE가 자동 호환되지는 않는다. 사용자의 다음 배포 승인 시 최신 3제품을 함께 반영하고 배포본 QA를 구분한다. 기존 본체외Home·OS배지·이메일·Office자체주문상세 후속은 별도 유지한다.
+
+### 작업 방식 지침
+
+사용자는 이번 테스트 갱신을 승인했고, 앞으로도 지침 예외·의미 있는 선택은 권장안과 짧은 이유를 듣고 판단하는 일반 작업스타일이라고 명시했다. AI_WORKFLOW의 Collaborative Decisions And Guideline Exceptions와 AGENTS 참조, 로컬 Codex 사본·Claude feedback 메모리에 반영했다. 이미 승인된 일반실행은 반복 질문하지 않는다. 이번 승인을 테스트수정 상시허용으로 확대하지 않고 기존 명시 승인 규칙은 유지한다.
+
+최종 코드: Web `feature/DL-17058@3878e774f35e5a97d34482c04c732bc5358ccb70`, Office `feature/DL-17059@91b8531bdbaf7f7f3f74575e68937a541da13328`, Lab `feature/DL-17060@cfa102240640a1998d2d593c3c442ac55817bc90`. 기존 PR4862/346/42 본문 최신화, base/Draft 유지. 웹 정상 Git 훅(type3제품·hooks75·lint/coverage) 통과, E2E guard는 사용자 제외 지시로 SKIPPED. 기존 리뷰 상태와 새 계약 리뷰 실행 여부를 구분하며 새 승인/전체리뷰 완료로 표현하지 않는다.
+
+마감 확인: 세 제품 clean·원격일치. Office/Lab 기존 미해결 리뷰0(Office실제리뷰0, Lab과거리뷰만 있으므로 신규승인완료아님); 웹 미해결1은 사용자가 제외한 기존 밀링FILE로 알림센터관련0이며 새전체리뷰를 강제로 실행하지 않았다. 앱 PR workflow CodePush skipped, 배포0. Jira17415댓글45083·17416댓글45085·17417댓글45084에 기능완료/검증/남은범위를 기록하고 세카드 모두해야할일로정리. 본문은현재명세와남은기능정의만수정, SP/parent불변. `configurableAuthorities`와상하위설명확인은 사용자에게알릴내용이며BE에게대신전송하지않았다. 개인정본+Claude/Codex메모리동기화완료후배포승인/새자료대기.

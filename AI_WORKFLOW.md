@@ -122,6 +122,22 @@ fetch or pull the relevant project repository and verify the checkpoint against
 the live branch, HEAD, worktree, code, and team-owned documentation instead of
 answering from chat history or local assumptions.
 
+## Collaborative Decisions And Guideline Exceptions
+
+User clarification, 2026-11-16, applies across projects:
+
+- When a real guideline exception or unresolved material decision needs the
+  user's input, give the recommended action, a short reason, and the specific
+  choice to confirm. Discuss the judgment rather than silently bypassing a rule
+  or asking for mechanical approval without explaining the recommendation.
+- First reconcile the current request, existing authorization, and the rule's
+  actual scope. Continue already-authorized routine implementation without
+  repeatedly asking for the same permission.
+- Updating existing tests after an API contract changes can be appropriate, but
+  that judgment does not remove a repository's explicit test-edit approval
+  requirement. Obtain any required scoped approval before editing; do not treat
+  one approved exception as blanket permission for later work.
+
 ## Session Startup
 
 At the beginning of work:
