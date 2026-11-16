@@ -1,5 +1,7 @@
 # 통합알림센터 재개 현황 — 2026-11-16
 
+**최신 상태:** 양앱 main 통합·PR 릴리즈 대상 변경·양OS 검증·커밋푸시 완료, 미배포. Office987dbdd3/PR346→release2.2.5, Lab27032b4/PR42→release1.0.6. 아래 오전 표는 당시 조회 이력이며 현재값은 문서 마지막 「양앱 최신 main 통합·릴리즈 PR 준비」를 따른다.
+
 현재 상황 파악 요청에 따라 읽기 전용으로 확인했다. 제품 코드·PR·Jira·배포·기기/서버는 변경하지 않았다. 개인 정본은 pull 결과 최신이고 기존 전체 지침 필요 시 동기화·번역시트 중단 규칙을 적용했다.
 
 ## 코드와 Development
@@ -194,3 +196,47 @@
 ## 권한 노출 키 현재 범위 제외
 
 **2026-11-16 사용자 후속 결정 — configurableAuthorities 제외:** BE가 실수로 누락했다고 사용자에게 전달했고, 사용자는 이 키를 우선 현재 작업 범위에서 제외하라고 했다. 현 Web/Office/Lab 코드는 해당 키를 사용하지 않으므로 코드 추가 수정은 없다. 기존 권한 제한은 유지하며 기능 완료·배포의 필수 대기 조건으로 분류하지 않는다. 사용자가 수정된 명세를 알려주면 그때 후속 반영한다. 자동 Swagger 조회·BE 재질문 없음. 새 디자인 후속 및 별도 상하위 설명 정합성 확인은 그대로이고 배포 금지도 유지한다. Jira17415/16/17의 작업 정의와 기존 PR 설명에서 현재 미완료 사유처럼 보이는 부분만 정리한다.
+
+
+## 양앱 최신 main 통합·릴리즈 PR 준비 — 2026-11-16
+
+사용자 승인: 양앱 최신 main 반영, 충돌 해결, 시뮬·에뮬 검증, 커밋푸시, 기존 PR 대상 변경까지. 배포·CodePush·PR 병합은 금지. 웹은 이번 요청에서 수정하지 않았다.
+
+| 제품 | 작업 경로 / 브랜치 | 통합 main | 최종 HEAD | 기존 PR 대상 |
+| --- | --- | --- | --- | --- |
+| Office | dentlink-app / feature/DL-17059 | 851c7889 | 987dbdd3 | [346](https://github.com/Innvoaid/dentlink-app/pull/346) → release/v2.2.5 |
+| Lab | dentlink-lab-app / feature/DL-17060 | 691c012 | 27032b4 | [42](https://github.com/Innvoaid/dentlink-lab-app/pull/42) → release/v1.0.6 |
+
+경로 루트는 /Users/parkjongsun/Repository. 양앱 원격 일치·clean, 최신 main 포함을 확인했다. 기존 PR의 OPEN Draft·DRAFT 라벨·[WIP] 제목을 유지하며 본문만 통합 코드·검증·미배포 기준으로 최신화했다. 새 릴리즈 브랜치나 버전은 만들지 않았다.
+
+### 통합과 범위
+
+- Office: SVG export 충돌 정리. feature의 새 Swagger와 main 주문상세의 TimelineDto 이름 충돌은 main의 기존 Office 타입 구조를 그대로 보존한 OfficeTimelineDto와 소비부 타입 import로 해결했다. 생성 API 파일은 이 이유로 다시 생성하지 않았다.
+- Lab: PermissionProvider 충돌은 폐기한 구 알림 수신 설정 API 초기화를 복원하지 않고 현재 OS 권한·갱신 흐름을 유지했다. 밀링 공정 유틸은 main의 검증 및 기존 새 Swagger 타입 보완을 함께 유지하는 최소 병합이다. 밀링 신규 작업을 알림센터에 추가한 것이 아니다.
+- 최신 main의 iOS 알림 권한 검사·Android Notifee ReactHost 패치·Amplitude 의존성/네이티브 버전은 그대로 수용했다. 양앱의 main 대비 ios/android/patches/native/package.json/yarn.lock 추가 차이는 없다. 이번 알림센터가 별도 네이티브 동작을 신설한 것으로 보고하지 않는다.
+- **주문상세 자체는 별도 업무라는 사용자 정정 준수.** OrderDetailScreen과 기존 주문상세 테스트는 main 그대로 두었다. 누락된 native mock 추가 요청은 승인받지 않았으므로 수정하지 않았다. 최소 타입 충돌 해결과 알림 연결 검증만 이 범위다.
+
+### 치과앱 주문상세 랜딩
+
+- **새 주소 필요 없음:** 기존 `dentlink://order/{employerId}/{orderId}` 유지, DEV는 dentlink-dev scheme. native 주문상세 스크린으로 내부 연결하므로 이 전환만으로 Sheet/BE appLandingUrl 변경은 없다. Lab은 기존 WebView 상세 유지.
+- 실제 발견·수정: 다른 병원 URL 진입 시 이전 병원의 native 상세가 마운트된 상태로 auth가 변경되어 이전 주문을 새 병원으로 조회하고 403/로그아웃되는 문제를 재현했다. 알림 연결부 `useNavigationConfig`와 기존 전환 hook의 선택 callback만 보완했다. 전환 API 성공 후 이전 소속 화면을 해제하고 auth를 반영한다. API 실패 시 기존 화면을 유지한다.
+- 추가 재현·수정: auth 변경에 따른 NotificationInbox 내부 key 재생성을 사용자 이탈로 오판하여 소속만 바뀌고 상세로 이동하지 않는 경우. auth 전에는 leaf key를 확인하고 반영 후에는 안정적인 root route key·화면명으로 정상 재마운트를 허용한다. 요청/계정/실제 사용자 이동 취소 방어는 유지한다.
+- 상세 화면 내부의 기존 활성화·조회 로직은 수정하지 않았다. 구독 해제와 라우트 재생성 문제를 확인한 것이며 모든 상세 기능을 다시 QA한 것은 아니다.
+
+### 최종 검증
+
+- Office: 관련 기존 테스트 159개 통과, 최종 연결 경계는 저장소 밖 임시 회귀검증 21개 통과(수정 전 실패 재현 포함). 신규 테스트 파일/기존 주문상세 테스트 수정 없음. 관련 lint 오류 없음. 전체 tsc는 기존 6개 진단만 남음. main 주문상세 테스트 1suite는 기존 RNGestureHandler native mock 누락으로 실행 실패했으며 해당 범위는 사용자 지시대로 그대로 둠.
+- Lab: 관련 8suite/76 tests 통과, lint 오류 없음. 전체 tsc 기존 5개 진단만 남음. 병합 신규 타입 오류는 해결. main에서 받은 native patch의 기존 공백 경고는 구분했다.
+- 양앱 iOS·Android 신규 로컬 빌드 성공(Office2.2.5, Lab1.0.6). iPhone17Pro/iOS26.5와 Android16/API36을 제품별 같은 소스·환경으로 함께 전환해 확인했다.
+- 양앱 실제 DEV 인박스 → 읽음 PATCH → 주문상세(Office native, Lab WebView) → 헤더 뒤로가기 → 인박스 복귀 확인. Office 최종 양OS에서 같은 병원 실제 row와 다른 병원 실제 URL을 사용한 callback 진입, OS URL 다른 병원 진입, 로그인 유지·정확한 병원/주문·복귀를 확인했다. 다른 병원 인박스 검증 일부는 실제 URL을 넘긴 런타임 fixture이며 실제 발송한 푸시 증명은 아니다.
+- 설정: Office 양OS·Lab Android에서 하위/상위 OFF→ON 4개 변경, 각1PUT·즉시 반영·전체 서버값 원복 확인. Lab iOS는 OS 차단 상태의 PUSH 안내·취소(0PUT), 상위 OFF/ON·원복 확인. Lab Android OS 차단→재시작→안내취소→허용·복귀를 확인했고 취소한 설정의 자동저장0. 마지막 연결부 수정은 설정 저장 코드를 바꾸지 않아 같은 최종 구현의 앞선 증거를 재사용했다.
+- 최종 확인 경로의 양OS LogBox0, Dentlink 앱 crash/ANR 없음. Android crash buffer의 Bluetooth OS 프로세스 오류는 별개이며 버퍼 전체가 비었다고 하지 않는다. 실제 FCM/APNs 발송·실기기 OTA·전체 주문상세 기능 QA는 미실행이다.
+- 설정은 원래 값으로 복원했고 테스트 알림 일부는 읽음 처리했다. Office 최종 소속은 두 기기 모두86. 시작 시 꺼져 있던 자체 실행 기기·Metro8081/8082를 종료했다. 다른 작업의 headless emulator5556 등은 건드리지 않았다.
+- 임시 증거: `/tmp/notification-main-office-{ios,android}-final-*.json/png`, `/tmp/notification-main-lab-{ios,android}-{settings,landing,back}-1116.json`, native build logs. 재개에 필요한 결론은 본 문서에 보존한다.
+
+### 현재 영향·다음 시작점
+
+- **미배포.** 기존 DEV Office v147/v147(target2.2.4, sourcea6ee48c7), Lab v46/v45(target1.0.5, source2c638fa)는 이번 작업으로 바뀌지 않았다. 웹 새 API 연결3878e774f도 이번 요청에서는 변경/배포하지 않았다.
+- 이번 앱 branch는 main의 네이티브 버전 Office2.2.5/Lab1.0.6 기준이다. 이후 OTA 요청 시 실제 대상 바이너리·전체 native diff·SHA를 다시 확인하며 구2.2.4/1.0.5 대상으로 무조건 내보내지 않는다.
+- DL17436의 주문상세 랜딩 확인 범위는 코드/로컬 검증까지 완료했지만 이번 요청에서 Jira 상태는 변경하지 않았다. 위 오전의 main 미포함/미착수 기록은 과거 상태다.
+- 새 알림 설정 디자인, 사용자 안내 후 configurableAuthorities 후속, Swagger 상하위 설명 정합성 확인은 기존대로 분리. configurableAuthorities는 현 범위 제외이며 완료 필수 대기로 되돌리지 않는다. 배포/실기기 QA는 별도 승인 후 진행한다. 추가 폴링·자동배포 없음.
