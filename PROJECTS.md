@@ -223,7 +223,7 @@ For detailed current state, read:
 
 ### Dentlink 치과 마케팅 수신 동의 — DL-17208
 
-- 2026-11-16 웹 `feat/DL-17231@15343ab8`(5파일)·Office `feat/DL-17423@5c3bc4cf`(4파일) 각각 WIP commit/push 완료, 원격 SHA 동일·upstream 설정·두 tree clean 확인. UI·기존 SMS 단독 검증 증거 유지. 웹 push lint/테스트 통과, coverage 비교는 기준파일 부재로 미완료 기록. **Email API 공유 대기**이며 공유 시 위 commit부터 재개. 알림센터 독립 개발·릴리즈 통합 최종 검증 경계 유지. PR/배포·자동 조사/폴링 없음.
+- 2026-11-16 공유된 Email FE 계약 전문·현재 코드 검토 완료. 일반/초대 가입 새필드, Profile PATCH/조회·기존사용자OFF·서비스메일읽기전용은 확인됐다. **실제 임시가입 POST /office/users/register 적용 여부와 BE 대상환경/배포·Swagger 반영시점**은 추가확인 필요. 웹 `feat/DL-17231@15343ab8`·Office `feat/DL-17423@5c3bc4cf` pushed clean 상태 유지, 이번은 검토만 수행. 독립 개발·알림센터 릴리즈 통합검증 경계 유지, 자동 폴링 없음.
 - [projects/dentlink-email-marketing-consent.md](projects/dentlink-email-marketing-consent.md)
 
 ### Dentlink E2E Stabilization
