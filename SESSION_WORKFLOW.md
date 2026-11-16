@@ -526,7 +526,8 @@ The default is **Codex 단독 개발**. Prepare the visible, independently opera
 user-preview composition only when the user asks to inspect locally; do not
 ask the user to choose the execution mode for each task. This is the user's
 2026-11-06 clarification. Existing suitable environments may be reused in
-either mode, and app crash/runtime verification remains mandatory in both.
+either mode. Both follow the risk-based app verification policy in
+DEVELOPMENT_STYLE.md; neither requires device testing after every edit.
 If the user requests manual IDE startup, supply the exact checkout and commands
 and reuse that setup. If the familiar tool is unavailable, use a suitable
 alternative that preserves the required inspection/control, and explain any
@@ -601,13 +602,12 @@ In both modes:
   rearrange or rebuild the workspace merely to match a fixed layout.
   In user-preview mode, inspect the actual displayed service/device; a live
   process or a different headless browser alone does not prove that window works.
-- App simulator/emulator checks on the final code remain mandatory under
-  [App Screen Runtime Verification Before Merge](DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge).
-  Select screens, states, roles, routes and regression depth by actual code
-  impact and plausible failures. Simple UI visibility changes need their display
-  conditions checked, not unrelated permission or navigation combinations.
-  User observation does not replace agent verification, and a setup-only check
-  is not a full runtime QA result.
+- Select app simulator/emulator checks under the risk-based
+  [App Screen Runtime Verification Before Merge](DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge)
+  policy (2026-11-16). Initial feature development, an explicit request, or a
+  concrete runtime risk justifies device verification; routine low-risk changes
+  normally use tests/static checks and unchanged runtime evidence. When needed,
+  check only affected conditions/platforms. A setup-only check is not full QA.
 - Keep services and windows needed for the active development/preview loop
   available until they are no longer needed or the user requests shutdown.
   This mode choice does not authorize additional product, PR or delivery work.
@@ -953,7 +953,7 @@ need a human check.
   publication/activation completes the app delivery task. Confirm the command
   result and intended deployment metadata, then report and stop. Do not wait
   for device uptake or start post-deployment monitoring unless separately asked.
-  This does not replace the required final-code runtime checks before delivery
+  This does not replace runtime checks justified by the current change risk
   or turn unobserved device receipt into a verified fact.
 - State the crash/regression assessment with its code-based reason and completed
   agent verification. Say no new issue was found within the checked scope when
@@ -985,16 +985,13 @@ independently to `dentlink-app` (Office) and `dentlink-lab-app` (Lab); the web
 release-train policy below is unchanged. Details and source coverage belong
 in [App onboarding and delivery](projects/dentlink-app-onboarding.md).
 
-Before final human QA handoff and merge readiness, apply the mandatory
+Before final human QA handoff and merge readiness, apply the risk-based
 [App Screen Runtime Verification Before Merge](DEVELOPMENT_STYLE.md#app-screen-runtime-verification-before-merge)
-gate: the agent runs the final code on affected screens in the relevant
-platforms' simulator/emulator and selects checks by actual code impact and
-credible failure modes. Check roles only when permission/role-dependent behavior
-is affected; do not multiply unrelated roles or routes for a simple display
-change. Provide concise results and a proportional final QA checklist. Missing
-relevant evidence blocks handoff/merge readiness; unrelated combinations do not.
-Later changes require only affected-case rechecks. The user's 2026-11-05 scope
-clarification applies to features, QA fixes, and shared app changes alike.
+policy. The user's 2026-11-16 update replaces the blanket device-run requirement:
+initial features, explicit requests, and concrete runtime risks warrant device
+checks; low-risk changes can rely on focused tests/static checks and reusable
+prior evidence. Do not turn a new commit, review fix, or base sync into automatic
+full QA. Report any necessary but unverified case without claiming completion.
 
 The user's 2026-10-29 instruction replaces the earlier develop-based policy
 for **both Office and Lab**: `main -> feat/<Jira> -> release -> main`, the same

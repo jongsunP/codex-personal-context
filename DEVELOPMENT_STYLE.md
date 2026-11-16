@@ -548,91 +548,41 @@ identify a particular issue, excessive duration, or required reduction.
 
 ## App Screen Runtime Verification Before Merge
 
-App runtime verification remains mandatory for all app work, as confirmed on
-2026-10-27. The user's 2026-11-05 clarification makes its scope proportional to
-the actual code impact and credible failure modes, rather than an exhaustive
-role/route checklist for every change. It applies independently to Office and
-Lab apps and equally in both modes of
-[Local Development And User Preview](SESSION_WORKFLOW.md#local-development-and-user-preview);
-the user's presence or terminal arrangement does not replace agent verification.
+**2026-11-16 user update:** device testing is risk-based, not mandatory after
+every app edit, review fix, commit, or base-branch integration. This supersedes
+the earlier blanket requirement while preserving truthful verification and
+crash prevention. Apply the same decision in solo work and user-preview mode.
 
-- Before handing an app change to the user for final QA, and before declaring
-  it ready to merge, the agent must actually test **the final code on every
-  affected screen in the simulator/emulator**. Include indirect consumers of
-  changed shared components, hooks, stores, navigation, and permission rules;
-  do not limit coverage to edited screen files or the reported example.
-- First inspect the final diff and direct/shared consumers to decide what can
-  actually break. A small diff is not automatically safe, and being app code
-  does not automatically require broad regression testing. Scale the written
-  plan to the change: a sentence or short checklist is enough for a simple fix.
-- For a pure UI visibility/style change with no hook, state, API, permission,
-  navigation or native changes, verify the affected display conditions and
-  preserved nearby behavior using a representative account on affected screens.
-  Do not repeat Owner/Member or other roles, unrelated entry/back-navigation
-  paths or full order flows merely because those areas exist. An authorized
-  deployment still needs its source, target and binary compatibility confirmed.
-  For example, hiding a completed/canceled order's Delayed
-  badge requires hidden/retained labels and dates to be checked; it does not
-  require a permission matrix when no role-dependent code is involved.
-- Expand checks when the code can cause crashes or functional failures, such
-  as null/undefined access, hook call order, effect dependencies/render loops,
-  state/cache/persistence changes, asynchronous data flow, navigation, platform
-  differences or native integration. Exercise the relevant failure conditions
-  and transitions, even when the change is only a few lines. Each extra role,
-  route or scenario should have a concrete code-related reason.
-- Complete the relevant simulator/emulator checks as the agent before final
-  human QA handoff or declaring merge readiness. Testing an intermediate version
-  or only opening an unrelated screen is insufficient. If required execution is
-  blocked, state the precise blocker and relevant unfinished checks; missing
-  unrelated role/route combinations do not block readiness.
-- If a screen-control tool fails, apply the alternative-control guidance in
-  [Existing Windows And Layout](SESSION_WORKFLOW.md#existing-windows-and-layout)
-  before declaring device verification blocked. Keep the justified scope when
-  changing methods; tool difficulties are not a reason to broaden the task.
-- Confirm that the running app/Metro uses the intended final checkout/revision
-  and a compatible native binary, including the final implementation and review
-  fixes. Do not use a mock/demo, an older branch, or a stale bundle as proof of
-  the final code. After any later code change, reassess the affected screens and
-  recheck those cases on the resulting final code before QA handoff or merge.
-- Only when permission or role-dependent behavior is affected, cover each
-  affected role/permission state with valid
-  accounts and server data: allowed access/actions, restricted access/actions,
-  and relevant navigation. A mocked or hardcoded role is supplementary evidence,
-  not a substitute for checking the actual permission-dependent screen.
-- Open each affected screen and exercise the changed behavior. Check loading,
-  data arrival, transitions, back navigation, actions and detailed runtime logs
-  when the changed code can affect them. Observe runtime errors without turning
-  a simple display fix into unrelated crash investigations or full-flow QA.
-- Check each affected platform before final QA handoff and merge. Shared
-  iOS/Android changes need evidence for both; platform-specific work can stay
-  on the affected platform.
-  Simulator/emulator screen testing is required. Add physical-device verification
-  for hardware or behavior the simulator cannot reproduce, and identify those
-  device-only checks explicitly rather than claiming simulator proof. This
-  does not require a fresh native build or retesting after every small edit.
-- Record the final revision, relevant environment/screens/conditions, actions
-  and results concisely; include role details when they affect the behavior.
-  User testing is additional final QA and does not replace the agent's required
-  runtime verification. Reuse adequate unchanged evidence. Once the relevant
-  checks pass, stop: do not repeat tests for a pass count or expand coverage
-  without new changes, failures or concrete unresolved concerns.
-- Type/lint/build checks, unit tests, screenshots, and a green review cannot
-  replace this runtime verification. If accounts, data, devices, or execution
-  access needed for relevant cases are missing, report those cases and keep
-  the work
-  **not ready for final human QA handoff or merge**. Preparing a Draft PR is
-  still possible within the user's authorization, using the required Draft
-  label/title metadata.
-- For a regression caused by a hook/store/effect interaction, verify the real
-  interaction and loading-to-data transition. Mocking both the producer and
-  stateful consumer can hide a render loop; isolated green tests are not
-  evidence that their integration is safe.
-- Passing this gate does not authorize merge or deployment and does not prove
-  OTA receipt, store release, or production QA. Preserve those separate stages.
-- After an authorized deployment, proactively provide the risk assessment and
-  proportional human screen-check guide under
-  [App Deployment Handoff](SESSION_WORKFLOW.md#app-deployment-handoff), without
-  waiting for the user to request either. Reuse the completed agent evidence.
+- Run simulator/emulator checks for initial feature implementation, an explicit
+  user request, or a concrete runtime risk that warrants them: crashes, navigation,
+  authentication/permissions, native integration, or consequential asynchronous
+  state/persistence changes. Identify the actual failure mode before launching.
+- Small, low-risk copy/style/type changes and review cleanups normally use the
+  relevant existing tests, lint/type checks, and diff review. They do not
+  automatically require devices, a rebuild, or a full regression run. Conversely,
+  a small line count does not make a real runtime risk harmless.
+- Reuse adequate evidence when the behavior and relevant dependencies are
+  unchanged. A new commit SHA, PR base, or resolved review alone is not a reason
+  to repeat device verification. After integration, check overlap and changed
+  shared behavior first; exercise only cases whose prior evidence is invalidated.
+- When device verification is justified, use the final relevant code and a
+  compatible installed binary. Reuse an existing build when suitable. Verify
+  affected platforms; cover both iOS/Android when the risky shared behavior
+  affects both. Add roles and entry routes only when they affect the change.
+- Exercise the relevant changed interaction and failure condition. For a hook,
+  store, or effect regression, test the real stateful interaction rather than
+  treating a mock of both sides as sufficient integration proof. Do not expand
+  a focused check into unrelated screens, roles, or full-service QA.
+- Record checks performed, relevant existing evidence reused, and any concrete
+  unverified risk briefly. If a necessary runtime check cannot be completed,
+  state that specific gap and do not claim the affected behavior is verified.
+  Skipping an unnecessary device run is not itself a merge-readiness blocker.
+- Stop when the relevant evidence is sufficient. Do not repeat runs for a pass
+  count or keep devices/testing alive while a review or backend answer is pending.
+  User QA, real push delivery, OTA receipt, and store release remain distinct.
+- This verification policy does not authorize merge or deployment. After an
+  authorized delivery, follow the proportional App Deployment Handoff in
+  SESSION_WORKFLOW.md using the evidence already gathered.
 
 ## Figma And QA
 
