@@ -37,3 +37,24 @@
 - 세 PR 본문을 재조회해 반영 및 title/base/Draft/head 불변을 확인했다. Office에는 Jira 연동의 DL17436 링크 정의만 자동 추가됐다. Lab 커넥터 접근 제한은 gh로 보완했다. 리뷰/상태/머지/댓글 추가는 하지 않았다.
 - 제품3저장소 clean, 새 코드·제품 커밋·배포 없음. 새 정책이나 작업 상태 변경이 없어 Jira/Notion은 수정하지 않았다. 문서 수정이므로 기존 최종 코드 검증 근거를 사용하고 테스트를 재실행하지 않았다.
 - 현재 DEV로 QA 계속 가능. Web a67e1e215 미배포 유지, 앱 추가 CodePush 불필요. PR 설명 최신화는 남은 일에서 제외한다. 별도 요청 전 STG/추가 배포·구현·감시 없음.
+
+## 후속: 웹 CodeRabbit 리뷰 확인
+
+- 사용자 질문으로 PR4862의 리뷰 본문·스레드·최신 HEAD를 조회했다. 기존 스레드8건 중7건 해결, 알림센터 관련 미해결0건이다. 해결된7건에는 밀링 관련 과거 지적도 포함되므로 '알림센터7건'으로 표현하지 않는다.
+- 유일한 기존 미해결은 11/13의 [밀링 START 값/FILE 재요구 지적](https://github.com/Innvoaid/dentlink-client/pull/4862#discussion_r4559061326)이다. 사용자 범위 제외를 유지하며 이번 세션에서 수정·resolve·추가 BE 질문을 하지 않는다.
+- 자동 리뷰가 paused여서 마지막 검토18e64650c 이후 최신a67e1e215는 미검토로 표시됐다. 11/16 10:59 KST [일회성 review 요청](https://github.com/Innvoaid/dentlink-client/pull/4862#issuecomment-6905220555)을 게시했고 **11:14 KST 검토 결과 새 알림센터 지적4건**이 나왔다. 자동 리뷰 설정이나 Draft 상태는 바꾸지 않았다.
+- 최초 별도 대조는 리팩터 전후 스타일39개·문구·콜백·DOM 동등 및 옛 import 잔존0을 확인한 것이며, 전체 변경에 결함이 없다는 증명이 아니었다. 이후 봇 지적을 아래와 같이 실제 재현/계약 확인 후 보완했다. 봇 처리 오류로 제외된 Clinic/Lab host와 test4파일은 별도 코드 대조·host 테스트로 보완했다.
+
+| 새 지적 | 수정과 검증 |
+| --- | --- |
+| 저장 중 시작한 조회가 늦게 완료되어 저장 확인값을 덮음 | 성공 캐시 반영 전 같은 설정 조회를 취소하고 계정·소속·화면 생명주기 재확인. 수정 전 테스트 실패/수정 후 통과. 정상 GET/PUT/readback 횟수 정책은 그대로 |
+| 저장 후 키보드 포커스 유실 | inert 직전 요소를 기억하고 해제 후 같은 화면의 연결·표시·활성 요소에만 복원. 헤더로 옮긴 포커스를 빼앗지 않고 삭제·비활성·문맥 변경은 복원하지 않음 |
+| 비활성 주문 범위 메뉴에 옵션 잔존 | 기존 Dropdown에 disabled 전달. 실제 Chromium에서 수정 전 옵션2개 잔존, 수정 후 즉시 닫힘·재활성화 후 자동 재열림 없음 |
+| employeeId 생략 시 다른 소속 행 누락 | 최신 DEV Swagger의 선택 속성 확인. employeeId 우선, 생략 때만 employerId가 일치하는 유일한 기존 전환 가능 소속 사용. ID 모순·중복·미소속은 임의 선택 금지. 양host 전달/누락/불일치/중복 회귀 검증 |
+
+- **최종 Web:** `feature/DL-17058@8374225c168010058eacbd28cac957d26e00cdbf`, 커밋·푸시·clean. 기존 PR4862의 head만 따라 갱신, base release/v1.94.0·Draft 유지. 새4스레드에 근거 답변 후 resolve했다. 기존 밀링 FILE은 별도 범위라 그대로 둔다. 코드·리뷰 설명은 최신화했고 **추가 배포 없음**.
+- **검증:** 알림 hook33 + Clinic12/Lab4 host = 관련49테스트 통과. UI2건은 실제 NotificationSettings/DLDS를 번들한 임시 headless Chromium에서 Clinic/Lab 각5포커스조건 + Clinic 메뉴1조건 통과, pageerror0. 실제 API·전체 서비스·실기기 QA가 아니다. 새 테스트 파일/스토리북/서버 쓰기 없음. Clinic/Lab/Admin tsc와 정상 pre-push lint·Admin DLDS guard·공유 coverage 검사 통과(기존 warning 유지). 실데이터 E2E는 기존 사용자 제외 지시에 따라 SKIPPED.
+- **남은 영향:** WebDEV7c8eef28c에는 이번4건 보완과 앞선 구조정리가 없다. 일반 기능 QA는 기존 개발본으로 계속할 수 있으나 이 수정 효과 확인은 추후 승인된 배포가 필요하다. 앱 코드·CodePush는 그대로다.
+- **앱 관련 읽기전용 발견:** Office NotificationCenterScreen의 employeeId/employerId 필수 검사, Lab의 employeeId 매칭도 해당 ID가 생략되면 항목 제외 가능성이 있다. 실제 누락 응답을 관측한 것은 아니다. 이번 웹 PR 범위를 넘어 앱 코드를 수정하지 않았으며, 다음 앱 작업 시 기존 소속 정보로 같은 안전한 매칭을 적용할지 확인한다. 이 항목을 이미 수정/검증된 것으로 보고하지 않는다.
+- 임시 UI 근거 `/tmp/notification-settings-ui-review-1116.cjs`/`.json`; 재개에 필요한 결론은 이 정본에 보존했다. 사용자 창·로컬 실행 환경을 바꾸지 않았고 자체 headless만 종료했다.
+- 최종 재조회: 봇의 일회성 검토는 `Review finished`, 전체12스레드 중11개 resolved·남은1개는 위 밀링 FILE. 새 알림센터 미해결0. PR head8374225c1/base/Draft/제목 유지·본문 exact match 확인. 수정 커밋에 대한 별도 전체 리뷰를 다시 강제 호출한 것은 아니며 이번 검토 지적의 수정·검증·답변·해결 후 추가 미해결 유무를 확인한 결과다.
