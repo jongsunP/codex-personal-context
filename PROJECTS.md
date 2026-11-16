@@ -201,9 +201,9 @@ For detailed current state, read:
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
-### Dentlink 통합알림센터 — Swagger 권한 노출 후속 완료·미배포
+### Dentlink 통합알림센터 — 현재 리뷰 대응 완료·미배포
 
-- **현재(2026-11-16 저녁):** 새 `displayAuthorities` 권한 노출/저장 가드를 Web f6e1a86dc·Office39b8629b·Lab2f4c4f0에 반영·검증·푸시. 기존 정식 PR4862/346/42·본인 Jira3건 본문 최신화, 릴리즈병합/배포없음. 관련단위/정적검사 및 Office실제GET 대조, 불필요한전체QA·기기재실행없음. 새설정디자인은별도대조/반영, 내일재개시리뷰(Office coldstart추가의견포함)대응. 자동폴링없이마감대기. [정본](projects/dentlink-unified-notification-center.md), [11/16 상세](projects/dentlink-unified-notification-center-resume-2026-11-16.md).
+- **현재(2026-11-16 밤):** Web f6e1a86dc·Office d6856f3e·Lab2f4c4f0, 기존 정식 PR4862/346/42 유지. 최신 Swagger 권한 노출 반영에 이어 Office 초기 링크 소속별 중복판정 보완·44tests·푸시 완료. 현재 달린 알림센터 리뷰 처리 완료(Web 별도밀링1건 제외). Office 최종 봇리뷰 진행/Lab 새봇응답없음은 완료로 과장하지 않되, 사용자가 없으면 넘어가도록 하여 추가 대기/폴링을 중단했다. 병합·배포없음. [정본](projects/dentlink-unified-notification-center.md), [11/16 상세](projects/dentlink-unified-notification-center-resume-2026-11-16.md).
 
 - 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.
