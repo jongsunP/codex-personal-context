@@ -1531,6 +1531,25 @@ summarize, "정리하자", or "마무리하자":
 10. Commit and push `codex-personal-context` so the history is remote-backed.
     Commit or push the shared project only when explicitly authorized.
 
+### User-Owned Work Records At Completion
+
+User instruction, 2026-11-16: when authorized work is finished, proactively
+review and tidy the user's PR descriptions/review records, assigned Jira cards,
+and related documents they own. This is part of completing the work, not an
+extra cleanup the user must request each time.
+
+- Reconcile scope, links, completed work, verification limits, remaining work,
+  and actual status; correct stale waiting reasons and obsolete terminology.
+- Preserve PR templates, user edits and useful history. Keep shared updates
+  concise; do not add duplicate comments or documents merely to log cleanup.
+- Apply Jira status meanings in `AI_WORKFLOW.md`. Development completion does
+  not imply review approval, integration QA, merge, or deployment.
+- Check review state and handle existing review follow-ups within the authorized
+  scope. No unresolved comments is not evidence that a review ran; explicitly
+  distinguish a Draft-skipped review from a completed review.
+- Limit edits to this work and the user's records. Preserve existing boundaries
+  for parent cards, others' documents, Slack, merging, and deployment.
+
 For lightweight question or learning sessions, keep the wrap-up shorter, but
 still preserve durable preferences or project decisions that should survive
 the session.
