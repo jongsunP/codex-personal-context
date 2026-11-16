@@ -1,6 +1,30 @@
 # 치과 마케팅 수신 동의 — DL-17208
 
-## 현재: 상태 재확인·새 디자인 링크 확보, Email API 대기 — 2026-11-16
+## 현재: 디자인 UI·기존 SMS 연결 및 단독 검증 완료, Email API 대기 — 2026-11-16
+
+- **승인·판단:** 사용자가 알림센터와의 릴리즈 접점을 개발 중에도 고려하면서 각각의 branch에서 진행하라고 확인한 뒤 “의도 이해했으면 그럼 작업진행해줘”라고 구현을 승인했다. 현재 확보된 새 디자인 UI와 기존 SMS API를 구현했다. Email은 로컬 선택만 준비하며 추정 계약·저장 성공 상태를 만들지 않는다. 제품 commit/push/PR/merge/배포는 수행하지 않았다.
+- **작업 위치:** 웹 `/Users/parkjongsun/.codex/worktrees/dl17208-web/dentlink-client` `feat/DL-17231@9c4418a8`에 5파일(+239/-113), Office `/Users/parkjongsun/.codex/worktrees/dl17208-office/dentlink-app` `feat/DL-17423@bf0567d7`에 4파일(새 hook 포함)이 미커밋 상태다. 두 branch upstream 없음. 기존 선행 변경을 보존해 확장했으며 다른 기능 checkout은 수정하지 않았다.
+- **웹 구현:** UserSetting의 PC/mobile Profile에 Promotions & News 접기/펼치기, Texts·Email 스위치. SignupStepperForm/Step2에 신규 시안의 가입2단계 Texts·Email 개별 체크와 안내 문구를 반영했다. 이전 Jira 명칭보다 부모에 새로 연결된 최종 디자인의 `Texts`를 사용하며 Lab 공용 번역은 건드리지 않았다. 기존 SMS 기본값(false)·가입 payload·API를 유지하고 Profile pending 중 입력 차단/실패 복구를 보완했다. 변경 파일은 `clinic/src/components/My/UserSetting.tsx`, `clinic/src/lib/Profile/useUpdateProfileSms.tsx`, `clinic/src/pages/my/index.tsx`, `shared/ui/src/AuthUI/SignupStepper/SignupStepperForm.tsx`, `SignupStepperStep2.tsx`다.
+- **Office 구현:** ProfileSettingsSection 안에 마케팅 UI를 추가하고 새 `src/libs/useProfileMarketing.ts`로 SMS 조회/저장/후속 GET을 연결했다. `src/services/user.service.ts`, `src/queries/useUserQueries.ts`에 기존 DTO·선택적 ScopedRequestConfig를 사용했다. 중복 저장 차단, 실패 시 마지막 확인값 복구, GET 실패 후 재시도, 사용자/로그아웃 후 늦은 응답 차단을 포함한다. PATCH 후 실제 GET 1회, 사용자 ID·SMS boolean 검증, USER query 취소 후 확인 응답만 cache에 반영한다. 전역 store/생성 모델/shared Switch는 변경하지 않았다.
+- **Email 경계:** 웹 가입 단계 이동과 Profile 접기/펼치기 동안 로컬 선택이 유지되며 새 mount/reload 시 초기화된다. API payload·서버/로컬 저장·query cache·새 저장 성공 안내·명시적 analytics에 연결하지 않았다. 가입 최종 요청에도 Email 동의 필드가 없다. 기존 웹 Amplitude 자동 interaction/session replay는 별도이며 모든 분석 네트워크가 없다고 주장하지 않는다. **현재 branch는 Email 미연결 WIP로, 그대로 배포할 수 있는 기능 완료 상태가 아니다.** 기존 사용자 null/default 표시 정책은 여전히 미확정이다.
+
+### 11/16 최종 코드 검증
+
+- 웹 Clinic 전체 typecheck, Clinic/shared 변경파일별 ESLint, diff check 통과. headless 실제 PC/mobile Profile·가입2단계 렌더와 스크린샷 확인, 가로 overflow/pageerror 없음. Email 접기/펼치기·단계2↔3 유지, 자체 API 호출0·form payload 제외 확인. SMS는 성공/실패/중복차단 mock 및 실제 GET 재조회 복원 확인. Texts+Email 선택 후 최종 가입 POST를 전송 직전에 차단해 기존 SMS payload만 있는 것을 검증했으며 실제 계정 생성/웹 SMS 서버 변경은 하지 않았다. 증거 `/tmp/dl17208-web-qa`.
+- Office 변경4파일 ESLint/diff check 통과. 실제 React Query+fake service hook 통합테스트10건 통과(unknownSMS·Email 무통신, optimistic/중복차단, PATCH/GET 실패·재시도, 이전값 응답, 사용자변경·logout 후 늦은응답, id불일치/null, 겹친 GET cache 덮기 방지). 테스트 `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dl17423-hook-check-g1js340b`. 전체 typecheck는 이전과 동일한 기존6오류(Icon2/Tooltip1/MessageText1/useOrderAddProduct2), 신규 오류0이다.
+- Office 최종 코드에서 iOS26.5 iPhone17Pro(`5C0E7639-2345-4B3F-9979-56AFDDA1C708`)·Android API36(`Dentlink_API_36`) 모두 같은 worktree/DEV/Metro8081로 실행했다. 기존 debug binary를 재사용했고 네이티브 빌드는 하지 않았다. native Maestro 탭·화면 assertion으로 펼침/접힘, Texts/Email, Email 유지/무요청을 확인했다. 별도 runtime service fixture로 PATCH 대기·중복 차단·확인 GET 대기/성공, PATCH 실패, GET 실패 후 rollback/재시도 성공을 양 OS에서 확인했다. 실패 케이스 일부는 실제 렌더 컴포넌트 callback을 CDP로 호출했으며 모든 과정을 물리 탭으로 했다고 주장하지 않는다.
+- 테스트 계정(DEV user504)에서 **실제 SMS 변경 false→재조회→true 복구**를 iOS/Android 각각 순서대로 native tap으로 검증했다. OS별 PATCH2회와 후속 GET2회, 확인 cache/store/UI 일치를 확인했다. 원래 true 값 복구 완료. Email 추가 API 요청 없음. 최종 양 OS LogBox0, Android crash buffer0, 스크린샷 `/tmp/dl17208-final-ios.png`, `/tmp/dl17208-final-android.png`, 요청/실패 결과 `/tmp/dl17208-{ios,android}-{real,failure}-result.json`.
+- 중간 훅 변경 시 Fast Refresh hook queue 오류가 발생해 최종 고정 코드로 다시 시작했다. Android JS reload 후 검은 화면은 앱 process 재실행 후 해소됐고 최종 동작에서 재발하지 않았다. 이 개발 중 오류를 최종 실행 결과와 구분한다. `yarn start`의 기존 unsupported experimental-debugger 문제 때문에 `yarn react-native start --port 8081`을 사용했고 package script는 수정하지 않았다.
+- 독립 정적 검토에서 발견한 USER refetch 경쟁 조건을 수정하고 재검증했다. 마감 시 서비스 fixture/요청 trace를 원복하고 이번에 띄운 웹3110·Metro8081·두 기기를 종료했다. 사용자 직접 preview/Reactotron 양 기기 연결 검증은 요청되지 않았고 수행하지 않았다.
+
+### 알림센터 접점·대기·다음 작업
+
+- Office 알림센터 `feature/DL-17059@a6ee48c7`와 필요한 접점만 읽기 비교했다. Marketing은 ProfileSettingsSection, 알림센터는 ProfileScreen의 종 버튼·ProfileOfficeSection의 기존 push 영역 제거이므로 현재 구현 파일을 분리했다. 동일 user.service/useUserQueries를 병합할 때 알림센터의 scoped activateEmployee/EMPLOYEE_ACTIVATE 변경과 이번 SMS wrapper를 모두 보존해야 한다. 요청 경로와 마케팅 USER/알림 설정 cache는 별도다. web 알림센터 접점의 관련 파일도 대조했다. 실제 병합은 하지 않았다.
+- 릴리즈 준비 시 **그때의 실제 diff**로 다시 충돌을 해결하고 합쳐진 최종 코드의 Profile 배치, 종 버튼/알림센터 진입, 마케팅·알림 설정 저장과 상태 유지를 양 OS에서 검증한다. 단독 runtime 통과를 통합 QA·merge readiness로 보고하지 않는다.
+- Email 대상 환경·조회 response/required/null·저장 API·일반/초대/임시가입 payload·기존 사용자 미설정 정책이 공유되면 기존 미커밋 작업을 보존하고 연결한다. 이후 최종 웹/앱 검증과 승인된 제품 commit/PR 절차를 진행한다. API는 앞선 11/16 확인 이후 자동 폴링하지 않았다.
+- 본인 Jira 진행 댓글 웹 DL-17231 `45062`, Office DL-17423 `45063`에 구현/검증·Email 대기를 기록했다. 부모/타인 카드/Slack·SP/일정/상태는 변경하지 않았다. Git 정본과 Claude 로컬 메모리를 함께 갱신한다.
+
+## 이전: 상태 재확인·새 디자인 링크 확보, Email API 대기 — 2026-11-16
 
 - 사용자의 **현재 상황 확인** 요청으로 개인 컨텍스트 동기화·인박스·로컬 Git·Jira·새 Figma·공개 Swagger를 한 번 확인했다. 제품 구현이나 Jira 수정, 런타임/테스트 재실행은 하지 않았다. 자동 폴링은 하지 않는다.
 - **디자인 링크 부재는 해소:** 부모 [DL-17208](https://innovaid.atlassian.net/browse/DL-17208)에 새 [전용 Figma](https://www.figma.com/design/rOT2gStX9uKmGabkkxLH6W?node-id=1-4217)가 추가돼 있다(부모 updated 11/13 11:53 KST). 과거 `QLIzKYWzFFlptCYzN36Iq4`의 무시 요청 시안과 별도 파일이며 새 파일 댓글은 0개다. 디자인 페이지 `1:6`에서 가입 PC/모바일·Profile PC/모바일/앱 프레임을 확인했다. 대표 가입2단계 `10:2990`, 앱 Profile 접힘 `1:4217`·펼침 `5:1921`은 design context/스크린샷도 확인했다. 새 화면은 Preferences 안 `Promotions & News`를 펼쳐 `Texts`·`Email`을 변경하며, 가입은 별도 두 체크박스다. 화면 구현을 이어갈 근거가 확보됐으나 전체 프레임의 픽셀/동작 검토와 구현은 아직이다. 기존 Jira 문구 `Text messages`와 새 디자인 `Texts` 등의 차이는 후속 구현에서 요구사항과 대조한다. 시안의 ON 예시를 신규 기본동의 정책으로 쓰지 않는다.
