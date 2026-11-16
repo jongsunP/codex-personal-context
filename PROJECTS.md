@@ -223,7 +223,7 @@ For detailed current state, read:
 
 ### Dentlink 치과 마케팅 수신 동의 — DL-17208
 
-- 2026-11-16 웹·Office Email 구현/로컬검증 후 commit·push·Draft PR 완료. 웹 `feat/DL-17231@6a3d327d0` [#4896](https://github.com/Innvoaid/dentlink-client/pull/4896)→`release/v1.94.0`, Office `feat/DL-17423@44038e33` [#350](https://github.com/Innvoaid/dentlink-app/pull/350)→사용자지정`main`. 양쪽template/Draft/DRAFT/[WIP]/base·head·scope확인, clean. 웹정상hooks·base출처coverage·E2E가드IMPACT_FIXED통과, 실데이터E2E/실가입은미실행. 본인 PR/Jira/문서 정리 완료: 두 Jira 개발 완료(Ready for Deploy), 리뷰 스레드 0건이나 CodeRabbit은 Draft로 미실행. 실가입 저장·통합 QA·리뷰·merge/배포는 별도.
+- 2026-11-16 구현·검증·commit/push·Draft PR 및 본인 문서 정리 완료, **사용자의 통합알림센터와 릴리즈 통합 요청 대기**. 웹 `feat/DL-17231@6a3d327d0` [#4896](https://github.com/Innvoaid/dentlink-client/pull/4896)→`release/v1.94.0`, Office `feat/DL-17423@44038e33` [#350](https://github.com/Innvoaid/dentlink-app/pull/350)→사용자 지정 `main`. 직접 화면은 웹 가입2단계·프로필, 앱 프로필. Jira는 개발 완료(Ready for Deploy), CodeRabbit은 Draft로 미실행. 실가입 저장·실데이터 E2E·합친 코드의 QA/리뷰/병합/배포는 별도다. 재개 요청 전 추가 작업·조회·폴링 없이 대기한다.
 - [projects/dentlink-email-marketing-consent.md](projects/dentlink-email-marketing-consent.md)
 
 ### Dentlink E2E Stabilization

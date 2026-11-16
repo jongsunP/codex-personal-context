@@ -1,6 +1,17 @@
 # 치과 마케팅 수신 동의 — DL-17208
 
-## 현재: 웹·Office 커밋/푸시 및 Draft PR 생성 완료 — 2026-11-16
+## 현재: 메모리 정리 완료, 통합알림센터와 릴리즈 통합 요청 대기 — 2026-11-16
+
+- **사용자 지시:** “지금까지 내용 메모리 정리하고 대기”, “통합알림센터랑 릴리즈에 합칠 때 다시 말할테니 정리만”. 이번에는 기록만 갱신한다. 사용자가 재개를 요청하기 전까지 추가 구현·PR 리뷰 실행/대응·Jira/GitHub/Swagger/Figma/Slack 재조회·폴링·테스트·서비스/기기 실행·병합·배포를 하지 않는다.
+- **완료 위치:** 웹 `feat/DL-17231@6a3d327d0fa9b74adabbb95416701de591bb0853`, Office `feat/DL-17423@44038e3368278ea21c05bdea4ee3578470fd5e2b`. 이번 마감에서 두 worktree clean 및 로컬 HEAD=기존 origin 추적 ref를 확인했다. 새 제품 fetch/pull/commit/push는 하지 않았다. 앞서 확인한 원격 PR은 웹 [#4896](https://github.com/Innvoaid/dentlink-client/pull/4896)→`release/v1.94.0`, Office [#350](https://github.com/Innvoaid/dentlink-app/pull/350)→사용자 지정 `main`, 양쪽 Draft·DRAFT·`[WIP] `. Office 대상은 이번 작업 예외이며 일반 앱 릴리즈 정책을 바꾸지 않는다. Lab 변경은 없다.
+- **화면 범위 확인:** 직접 변경되는 화면은 웹 회원가입 2단계·프로필(PC/모바일), Office 앱 프로필이다. 일반·초대·임시가입 모두 공통 2단계의 선택값을 최종 가입 요청에 반영한다. 화면 범위가 작다는 이유로 공용 사용자 API·캐시·소비자 영향까지 없다고 단정하지 않는다.
+- **사이드이펙트·크래시 설명:** 최종 코드의 기존 SMS·사용자 정보·공용 USER query 소비자(주문 포함)를 코드 검토했고, 실패 복구·연속 입력·값 누락·계정 변경 뒤 늦은 응답을 hook/fixture로 확인했다. iOS 시뮬레이터·Android 에뮬레이터에서 실제 DEV Email 저장·재조회·앱 재실행 유지·마케팅 원복을 확인했다. 해당 검증 중 Dentlink 크래시는 관찰하지 않았고 최종 양 OS LogBox는 0이었다. Android Bluetooth 에뮬레이터 오류는 앱 크래시와 구분한다. 사용자 질문에는 보존된 런타임 로그와 최종 SHA를 대조해 답했으며 새 실행·모든 기기/환경의 무결함 보장은 아니다.
+- **남은 검증:** 실제 가입 후 서버 저장은 미검증(가입 POST 전 차단하여 동의값 전달만 확인). 정식 실데이터 focused E2E·스테이징 전체 실행과 통합알림센터를 합친 코드의 최종 QA는 미실행이다. 앱 전체 타입 검사의 기존 6개 진단은 유지되며 신규 진단은 없었다. 앞선 웹/앱 검사·최종 실행 증거는 아래 기록에 유지한다.
+- **PR·Jira·문서 정리 상태:** 앞선 요청에서 PR 본문과 본인 Jira 설명을 최신 구현·검증 범위에 맞췄다. DL-17231·DL-17423은 개발 완료 의미의 `Ready for Deploy`, 댓글45079·45080에 리뷰/통합 QA/배포 잔여를 남겼다. 두 PR의 마지막 확인 당시 미해결 리뷰 스레드는 0이지만 CodeRabbit은 Draft 정책으로 미실행이며 리뷰 승인과 다르다. 이번 메모리 마감에서는 외부 상태를 다시 조회하거나 수정하지 않는다.
+- **정확한 재개점:** 사용자가 릴리즈 통합을 요청하면 개인 정본과 해당 feature·통합알림센터·실제 release의 최신 Git/PR 상태 및 필요한 API 계약부터 확인한다. 실제 diff로 충돌을 조율하고 종 버튼·기존 알림 영역·마케팅 영역 배치, 공용 service/query의 소속/계정 범위를 함께 보존한다. 합쳐진 최종 코드로 웹 PC/모바일과 앱 양 OS의 해당 화면·알림 진입·SMS/Email 및 알림 설정 저장·상태 유지를 확인한다. 이번 단독 검증을 통합 QA로 대신하지 않는다. 병합·배포는 그때 사용자가 요청한 범위에 한한다.
+- **기록:** Git 정본·Claude 메모리·요청된 Codex 보조 메모리를 함께 갱신하고 개인 컨텍스트만 commit/push한다. 앱/웹 실행은 앞선 검증 종료 시 정리한 상태이며 다른 세션의 프로세스·작업 공간은 건드리지 않는다.
+
+## 이전: 웹·Office 커밋/푸시 및 Draft PR 생성 완료 — 2026-11-16
 
 - **승인/대상 확정:** 사용자가 각 작업 commit·push·PR 생성까지만 요청하고 저장소 양식/컨벤션을 재확인했다. 실제 통합알림센터 PR은 웹#4862→release/v1.94.0, Office#346→main이었다. “각 릴리즈”와 “알림센터 같은 경로”의 차이를 확인했고, 사용자는 Office를 우선 main 대상으로 알림센터처럼 Draft로 두라고 확정했다. 이번 기능은 웹·Office 범위이며 Lab 제품 변경/신규 빈PR/기존 알림센터PR 변경은 없다. 이 feature의 명시 예외를 일반 app main→feature→release 정책의 전면 변경으로 확대하지 않는다.
 - **웹:** `/Users/parkjongsun/.codex/worktrees/dl17208-web/dentlink-client`, `feat/DL-17231@6a3d327d0fa9b74adabbb95416701de591bb0853`, origin 일치/clean. [Draft PR #4896](https://github.com/Innvoaid/dentlink-client/pull/4896) → **release/v1.94.0**. 최종 remote PR diff는 기능9파일+E2E1파일(10파일,+738/-148)이다. 이전 WIP 이후 `56591229b` Email연동10파일, `dbfe89c71` 릴리즈이력병합, `3f9764824` 가입E2E보완, `6a3d327d0` 미사용 구SMS훅 WIP pending 반환값 원복을 커밋했다. 한글 type:subject/명시path stage, amend·rebase·forcepush 없음.
