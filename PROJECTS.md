@@ -225,7 +225,7 @@ For detailed current state, read:
 
 ### Dentlink 치과 마케팅 수신 동의 — DL-17208
 
-- 2026-11-16 후속 CodeRabbit 완료: 웹 `feat/DL-17231@7ba6bbe93` [#4896](https://github.com/Innvoaid/dentlink-client/pull/4896)→`release/v1.94.0` 추가0·SUCCESS, 코드/검증 기준 병합진행가능하나 GitHub REVIEW_REQUIRED로 팀원승인 대기. Office `feat/DL-17423@290d6fd5` [#350](https://github.com/Innvoaid/dentlink-app/pull/350)→`release/v2.2.5` 추가1은 기존 프로필재진입 재조회 코드·최종양OS복구 근거로 답변/resolve, 새UI·코드변경 없음. 최초 지적5건 수정/commit/push·웹hook10/Git gates·앱23테스트/양OS검증 유지. PR·본인Jira댓글 정리. 사용자 폴링금지 지시에 따라 새 요청까지 대기, merge/deploy 없음. 앱릴리즈준비는 통합알림센터 담당, 합친코드QA·실가입저장·실데이터E2E는 별도.
+- 2026-11-16 **사용자 확인으로 웹·Office 병합 완료**: 웹 [#4896](https://github.com/Innvoaid/dentlink-client/pull/4896)→`release/v1.94.0`, Office [#350](https://github.com/Innvoaid/dentlink-app/pull/350)→`release/v2.2.5`. 마지막 검증 feature head 웹7ba6bbe93·Office290d6fd5 및 리뷰처리/단독검증 근거 유지. 알림센터 세션이 각 최신 릴리즈를 반영해 충돌을 해결하고 웹 PC/모바일·앱 양OS 통합 QA 담당. 필요하면 그 세션에서 이 세션으로 질문해 구현 의도·계약·검증 근거를 받을 수 있음. 이곳은 기록 후 대기하며 선제 연락·추적/폴링·추가 구현/QA/배포 없음. 이번 병합 기록은 사용자 확인이며 원격 merge SHA를 다시 조회하지 않음. 통합 QA·실제 배포 완료와는 구분.
 - [projects/dentlink-email-marketing-consent.md](projects/dentlink-email-marketing-consent.md)
 
 ### Dentlink E2E Stabilization
