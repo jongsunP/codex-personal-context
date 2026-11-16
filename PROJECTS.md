@@ -223,7 +223,7 @@ For detailed current state, read:
 
 ### Dentlink 치과 마케팅 수신 동의 — DL-17208
 
-- 2026-11-16 **BE 문서는 FE 구현 기준으로 충분**, 일반·치과초대·temp 모두 공통 회원가입2단계를 사용함을 확인. 별도2단계우회 우려와 /register 사전확인을 전체작업선행조건으로 삼은 판단은 철회했다. 사용자 요청으로 **API/Swagger 반영 소식을 직접 알려줄 때까지 대기**. 웹 `feat/DL-17231@15343ab8`·Office `feat/DL-17423@5c3bc4cf` pushed clean, Email은 아직 로컬UI만. 공유 후 타입/Email연동·실제저장/재조회검증 재개, 알림센터독립개발·릴리즈통합QA 유지. 자동조회/폴링/구현/배포 없음.
+- 2026-11-16 사용자 Swagger 반영 공유로 재개. DEV 최신 Email PATCH `{marketingEnabled}`를 확인하고 웹 가입/Profile·Office Profile 연동 구현. 웹 가입3경로payload·PC/mobile·실Email저장/새로고침/복구·hook8건·타입3종, 앱hook24건·최종양OS실저장/재실행/복구를 검증했다. 기존 pushed WIP 위 Email 변경은 미커밋. 알림센터 별도 branch 및 릴리즈 통합 QA 유지. 상세 정본 참고.
 - [projects/dentlink-email-marketing-consent.md](projects/dentlink-email-marketing-consent.md)
 
 ### Dentlink E2E Stabilization

@@ -1,6 +1,39 @@
 # 치과 마케팅 수신 동의 — DL-17208
 
-## 현재: BE 문서 기준 진행 가능, 사용자 요청으로 Swagger 반영 공유 대기 — 2026-11-16
+## 현재: 웹·Office Email 연동 및 로컬 최종 검증 완료 — 2026-11-16
+
+- **재개 승인:** 사용자가 “스웨거 반영됐대. 확인하고 웹이랑 앱 Email API 연동 작업 이어서 진행해줘”라고 요청해 개인 정본과 두 feature worktree를 pull --ff-only로 동기화하고 구현을 재개했다. 제품의 추가 commit/push/PR/merge/배포는 하지 않는다. 이전 commit/push는 UI·SMS WIP에 대한 요청이며 이번 Email 변경과 구분한다.
+- **확정 계약:** DEV `/v3/api-docs` 200, SHA256 `70d3edab1ed7f1db47c843555f3009fbb072e850d4ed70592069694e684551da`(`/tmp/dl17208-email-dev-swagger-20261116.json`). `PATCH /office/users/own/email/marketing`의 UpdateEmailPreferenceDto는 **`{ marketingEnabled: boolean }` 필수**다. 앞선 Slack 문서의 `{ enabled }`와 다르므로 최신 Swagger와 실제 성공 응답을 기준으로 구현했다. SMS PATCH `{enabled}`는 유지한다. `UserPreferenceDto.email`과 하위 응답 필드는 optional, 실제 누락/null은 확인된 false와 구분해 입력을 막는다. 읽기전용 `emailEnabled`는 전송하지 않는다. STG Swagger404는 관측 사실이며 STG 지원 여부를 단정하지 않는다.
+- **가입 경로 결정 유지:** 일반·초대·temp 모두 공통 회원가입2단계를 사용한다. Office 최종 요청에서 내부 RHF/draft의 `marketingEnabled`를 `smsMarketingEnabled`로 매핑하고 구키를 제외하며, `emailMarketingEnabled`는 기본false/선택값을 함께 보낸다. `/office/users/register`의 Swagger 부재를 전체 FE 선행 blocker로 되살리지 않는다. 실제 계정 생성 없이 최종 요청 payload를 차단 검증한 범위와 서버 가입 후 저장 검증은 구분한다.
+- **웹 구현:** `feat/DL-17231@15343ab88a275c159442173609d978a593e70803` 위 미커밋 10파일(기존8+신규hook/test2). `/Users/parkjongsun/.codex/worktrees/dl17208-web/dentlink-client`. 가입 Email을 RHF/default/schema/draft restore에 연결하고 Office 전송 경계에서 새 SMS 키를 매핑했다. 실제 소비 모델인 `shared/models/src/user/user.types.ts`와 Clinic API에 Email을 추가했다. Profile은 새 `useUpdateProfileMarketing`으로 두 채널 저장·확인GET을 직렬화하고 사용자/token 범위·rollback·채널별 atom/query cache merge를 처리한다. Lab 가입 defaults/FormData는 변경하지 않는다. 독립 리뷰에서 optional 누락값 처리 1건을 발견해 channel boolean guard와 입력비활성화로 수정했다.
+- **Office 구현:** `feat/DL-17423@5c3bc4cf6bd460531b109850124aa19afe4e780a` 위 미커밋 6파일. `/Users/parkjongsun/.codex/worktrees/dl17208-office/dentlink-app`. `ProfileSettingsSection`, `useProfileMarketing`, `useUserQueries`, `user.service`, `user.types` 및 생성 `src/models/UserMarketing.ts`. Email service/mutation을 연결하고 두 채널 공유 pending/request epoch/확인GET으로 전체 profile 응답 경합을 막았다. id·두 marketing boolean을 확인한 응답만 USER cache에 적용한다. PATCH/GET 실패 rollback·재시도와 계정전환 뒤 늦은 응답 무시를 유지한다. `emailMarketingEnabled`와 서비스메일 `emailEnabled`를 구분한다.
+- **생성 모델 경계:** 기존 대형 `Api.ts`를 직접 수정하거나 전체 갱신하지 않았다. 원시 Swagger의 EmailPreferenceDto/UpdateEmailPreferenceDto 두 schema를 값 변경 없이 `/tmp/dl17423-email-types/schema.json`에 추출하고 캐시된 swagger-typescript-api13.14.0의 기존 생성 옵션+`--no-client -n UserMarketing.ts`로 생성한 24줄 전체 출력을 추가했다. FE 확장은 기존 `services/user.types.ts`의 OfficeUserProfile/UserPreference 파생 interface이며 `getProfile`/실제 USER query가 소비한다. generated 출력과 추가 파일 바이트 일치 확인.
+- **Office 정적 검증:** 변경파일 ESLint·diff-check·실제 ReactQuery hook24개 통과. 전체 typecheck는 기존6오류(Icon2/Tooltip1/MessageText1/useOrderAddProduct2)만 동일, 신규0. 테스트 `/tmp/dl17423-email-hook-check/useProfileMarketing.test.tsx`. 독립 side-effect 검토에서 USER query 소비(useUser·주문4단계 DesignApproval), 기존 SMS·store·navigation·공통Switch에 추가 actionable 문제 없음.
+- **Office 최종 런타임:** 최종 동결코드를 양OS 완전 재실행한 뒤 iOS26.5 iPhone17Pro(`5C0E7639-2345-4B3F-9979-56AFDDA1C708`)·AndroidAPI36(`Dentlink_API_36`)를 같은 worktree/DEV/Metro8081로 검증했다. 기존 debugbinary 재사용/네이티브빌드 없음. native Maestro tap/assertion으로 각각 Email ON→실제PATCH `{marketingEnabled:true}`→확인GET→앱종료/재실행 뒤ON유지→OFF저장/GET복구 확인. 각OS PATCH2회+확인GET2회, UI/cache/store일치, SMStrue유지. 재실행·Profile진입은 별도이며 전체 과정을 native tap으로만 수행했다고 주장하지 않는다.
+- **테스트 계정 영향:** DEV user504의 최초 조회는 SMStrue, email false/false였다. 첫 저장으로 문서대로 읽기전용 emailEnabled=true가 생성됐고 마케팅값은 검증 후false로 복구했다. 서비스메일true는 읽기전용이므로 이전 row부재 상태로 복구했다고 주장하지 않는다. 실데이터 변경은 이 테스트 계정의 마케팅 선호 QA에 한정했다.
+- **실패/경합 런타임:** 양OS의 격리 service fixture에서 Email PATCH·확인GET 대기 동안 양채널 중복차단, GET실패/ PATCH실패 rollback, 재시도, 이후SMS저장시 Email보존, 누락Email입력차단을 확인했다. 실제 렌더 컴포넌트 handler를 CDP로 호출한 검증이며 fixture 서버쓰기0. Android 검증 harness의 readMode hold 초기화 누락을 고쳐 다시 통과했으며 제품 변경은 없었다. fixture/trace 원복, 최종 LogBox양OS0. Android crashbuffer에는 emulator Bluetooth crash만 있고 Dentlink항목0. 당시앱실행크래시가없음을 확인했으며 모든OS오류가0이라고 표현하지 않는다.
+- **런타임 증거:** `/tmp/dl17208-email-{ios,android}-{on,off}.png`, `*-real-{on,off}.json`, `*-final-health.json`, Android `/tmp/dl17208-email-android-failure-result.json` 및 `-crash-log.txt`. iOS 실패 단계결과는 이 chat toollog와 `...ios-failure-final.json`. 앱 이번Metro8081·두기기 종료. 다른 세션의 notification web3000/3005 유지.
+- **알림센터 접점:** 독립 branch 유지. 현재 비교한 notification `feature/DL-17059@e8ee7018`은 ProfileSettingsSection 미수정이며 ProfileScreen 종버튼/ProfileOfficeSection push정리와 공유 user.service/query/fetcher/store가 접점이다. 미래 릴리즈 통합 때 activateEmployee scoped config·EMPLOYEE_ACTIVATE mutationKey·account context/logout 변경을 보존하고 합쳐진 최종 Profile 배치·알림진입·각설정 저장을 양OS에서 확인한다. 이번 단독 QA를 통합 QA로 보고하지 않는다.
+
+- **진행 기록:** 본인 Jira Office DL-17423 댓글45073·웹 DL-17231 댓글45074에 Email 대기 해소·로컬 연동/검증과 릴리즈 잔여를 기록했다. 부모/타인 카드/Slack·상태/SP/일정은 변경하지 않았다.
+- **가입 최종 검증:** 일반/초대/temp 모두 실제 UI에서 Email기본OFF·1↔2단계선택유지·최종payload 새SMS/Email키·구marketingEnabled제외를 확인했다. 일반 `/office/users` true/true, 초대 `/office/users` false/true, temp `/office/users/register` true/false. 각 POST를 전송 전에 차단해 실제 계정/메일생성0·pageerror0. `/tmp/dl17208-web-signup-qa/final-results.json`과 3종스크린샷/검증스크립트 보존. temp첫시도 fixtureenvelope/rawDTO 불일치를 fixture만수정한 후 해당경로재검증했다. 실제가입완료후서버저장은이번검증범위가아니다.
+- **웹 최종 검증:** Clinic/Lab/Admin 타입·변경파일lint·diff-check·hook8개테스트 통과. 기존signup hook경고2건만 유지. PC/mobile mock에서 PATCH→확인GET·중복0/두채널직렬화·실패rollback/retry·reload유지·missing/null 입력차단·overflow0/pageerror0 확인. 저장중/완료후SMS track/thumb/opacity 동일 확인. 마지막 리뷰에서 발견한 오래된USERcache→최신atom의다른설정역전 문제는 cache에도같은user의최신병합atom을넣어해소하고 기존test에회귀검증추가. 이최종코드로DEV실EmailON→확인GET→reloadON→OFF→GET/reloadfalse복구까지재확인, SMStrue유지. 최종수정후hook8/lint/Clinic타입재통과; 미변경Lab/Admin증거재사용. 마지막cache수정도독립재검토에서추가문제없음. 증거 `/tmp/dl17208-web-api-qa/result.json`, `profile-desktop.png`, `profile-mobile.png`, `profile-dev-restored.png`.
+- **최종 상태·다음 시작점:** 제품은 기존 pushed WIP SHA 위에 웹10/Office6파일 미커밋으로 남겼다. 개인기록만 commit/push한다. 이번 브라우저/웹3110·Metro8081·두기기를 정리했고 기존 notification3000/3005는 유지했다. 요청한 FE 연동과 로컬 최종검증은 완료; 실제 가입 후 서버저장과 릴리즈 통합QA/배포는 별도 단계이며 이번에 수행했다고 주장하지 않는다. 다음 요청에 따라 제품 commit/push/PR을 진행하고 대상환경·알림센터를 합친 최종코드로 QA한다. 자동 모니터링/추가배포/메인보고는 하지 않는다.
+
+### 생성 모델 재현 참고
+
+DEV Swagger의 위 두 schema를 변경 없이 `components.schemas`에 넣고 `paths:{}`인 OpenAPI 입력으로 추출한 뒤 아래 명령을 실행했다. 기존 generator 옵션을 유지하며 생성된 전체 파일만 추가한다. 추출 입력/출력은 `/tmp/dl17423-email-types`에 있다.
+
+```bash
+npm exec --offline --package swagger-typescript-api -- \
+  swagger-typescript-api generate \
+  -p /tmp/dl17423-email-types/schema.json \
+  -r -o /tmp/dl17423-email-types -n UserMarketing.ts -d \
+  --extract-request-body --extract-response-body \
+  --extract-response-error --axios --no-client
+```
+
+## 이전: BE 문서 기준 진행 가능, 사용자 요청으로 Swagger 반영 공유 대기 — 2026-11-16
 
 - **최종 결정:** 사용자가 “스웨거 됐다고 하면 말할게. 우선 정리 메모리하고 대기”라고 요청했다. 지금까지의 구현·commit/push·검증과 아래 문서 검토 결론을 정리하고 대기한다. 사용자가 반영 소식을 가져오기 전 자동 Swagger/API·Jira·Slack·Figma 조회, 폴링, 추가 구현·테스트·배포·메인 보고를 하지 않는다. 이번 마감은 기록만이며 제품 변경/외부 메시지 전송은 없다.
 - **검토 결론 정정:** 공유된 BE 문서는 **FE 구현 기준으로 충분**하다. 일반 가입·치과 초대·`isTempUserMode` 분기 모두 동일한 **회원가입 2단계**의 마케팅 선택 UI를 사용하고, temp 전용으로 2단계를 건너뛰는 흐름은 없다. temp의 차이는 1단계 이메일 인증 생략이며, 단계 이동은 공통이다. 별도 가입 화면/2단계 우회 우려는 불필요했고 `/register` 사전 확인을 전체 FE 작업의 선행조건처럼 제시한 것은 과했다. 이 판단은 철회하며 다시 차단점으로 올리지 않는다. 근거 `shared/ui/src/AuthUI/SignupStepper/SignupStepperForm.tsx:148`, `SignupStepperStep1.tsx:189`, `clinic/src/pages/auth/signup.tsx:322`.
