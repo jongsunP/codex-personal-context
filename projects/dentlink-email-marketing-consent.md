@@ -1,6 +1,16 @@
 # 치과 마케팅 수신 동의 — DL-17208
 
-## 현재: 웹·Office 릴리즈 대상 일반 리뷰 PR 전환 완료 — 2026-11-16
+## 현재: CodeRabbit 최초 지적 수정·푸시 완료, 후속 리뷰 추가 조회 중단 — 2026-11-16
+
+- **승인·최신 중단 조건:** 사용자가 웹·앱 CodeRabbit 리뷰 완료 후 필요한 수정·검증·커밋·푸시·리뷰 정리를 승인했고 머지는 금지했다. 최초 리뷰 완료를 확인해 웹2건·Office3건을 수정하고 각 댓글에 커밋/검증 근거로 답변·해결 처리했다. 후속 자동 리뷰가 진행 중인 것을 확인한 뒤 사용자가 “만약 다시 리뷰중이면 계속 폴링하지말고 지침에 따라해”라고 지시했다. 즉시 추가 리뷰 폴링을 중단했다. **후속 리뷰 완료/추가 지적 없음은 미확인**이며, 다음 사용자 요청 전 자동 조회·재리뷰 요청·추가 수정·병합·배포를 하지 않는다.
+- **웹 완료 위치:** `feat/DL-17231@7ba6bbe93a363adfdc40c46551276f0d98680190`, [PR #4896](https://github.com/Innvoaid/dentlink-client/pull/4896) → `release/v1.94.0`. 저장 중 두 Switch의 실제 disabled를 적용하고, atom과 USER cache 각각의 현재 프로필에 해당 채널만 병합해 캐시가 먼저 갱신된 경우의 최신 필드를 보존했다. Office와 같은 PATCH 성공/확인 GET 실패 결함도 해당 채널을 undefined로 차단하고 기존 query 재조회로 복구하도록 보완했다. 변경3파일만 커밋·정상 push, 원격일치·clean 확인.
+- **Office 완료 위치:** `feat/DL-17423@290d6fd5078cefe625c0afbbfd1e796fe37fbc97`, [PR #350](https://github.com/Innvoaid/dentlink-app/pull/350) → `release/v2.2.5`. 확인 GET은 현재 저장한 채널만 검증하며 반대 채널 누락/null을 허용한다. PATCH 성공 후 확인 실패 시 해당 채널을 cache에서 undefined로 만들어 이전 값 재조작을 막고 기존 ProfileScreen 재진입 refetch로 복구한다. PATCH 자체 실패에만 이전 확정값을 유지한다. 기존 서비스 테스트의 선택적 config 인자를 갱신하고 hook 회귀10개를 저장소에 추가했다. 변경3파일 커밋·push, clean 확인.
+- **검증:** 웹 hook10, 변경 lint/format, 정상 precommit Clinic/Lab/Admin 타입, 정상 prepush 전체 lint(기존 경고), Admin DLOS9·shared53·coverage 변화0 통과. E2E 추가 영향 NO_IMPACT이며 전체 PR의 기존 가입 시나리오 변경 포함 IMPACT_FIXED와 push 가드를 유지했다. Office hook10+service13=23개·변경 lint/format/diff 통과, 전체 typecheck는 기존6건·신규0 유지. 독립 side-effect-checker에서 공용 USER/useUser/영속 상태/주문 소비자/계정 변경·언마운트 영향에 추가 결함을 찾지 못했다.
+- **앱 런타임:** 최종290d6fd5를 별도 DEV Metro8093·임시 iOS26.5/AndroidAPI36에서 검증했다. 기존 DEV 네이티브2.2.5를 재사용하고 feature JS를 실행했으며 새 네이티브 빌드·전체 릴리즈 통합은 하지 않았다. 첫 Email 입력은 Maestro 네이티브 탭, 오류·재진입은 CDP 실제 handler/fiber로 확인했다. 양OS에서 PATCH/GET 중복 차단, 확인실패 unknown/disabled, 실패 재진입 잠금 유지, 성공 재진입 서버true 복구, 반대채널 null 양방향 허용, PATCH실패 rollback을 통과했다. LogBox 양쪽0·Android crash buffer0·마케팅 서버쓰기0. `/tmp/dl17423-review-runtime-summary.json`, `/tmp/dl17423-review-ios-runtime.json`, `/tmp/dl17423-review-android-runtime.json` 근거. fixture 원복·own Metro PID61673 정지·임시iOS C4B68D22-E4B8-4438-8475-CC57BE759B85/AVD DL17423_Review 삭제·opaque 세션 전송파일 삭제 완료. 기존 main Office/Lab 8081/8082·원래기기에 변경/종료 명령을 보내지 않았다. 종료 관측에는 기존기기도 비활성이었으므로 다른 세션의 병행 정리와 구분한다.
+- **리뷰·문서:** 최초 지적 웹2/Office3 전부 해결. 마지막 리뷰 조회(09:03:33 UTC)는 양쪽 새 커밋 처리 중 및 unresolved0을 확인했지만, 이는 후속 리뷰 완료 증거가 아니다. PR 본문은 최종 동작/검증·후속 자동리뷰 별도 확인으로 갱신했고 Jira 본인 카드의 개발 완료 Ready for Deploy 상태는 유지했다. 웹 댓글45091·Office45092에 결과와 후속 리뷰 확인 대기를 기록했다. 부모/타인 카드·Slack·Lab 변경 없음. 앱 릴리즈 준비 담당은 통합알림센터로 유지한다.
+- **기존 기록 정정·남은 일:** 이전의 “확인 GET 실패 후 이전 값으로 복구·재조작 가능” 검증은 수정 전 동작이며 이번 회귀에서는 미확인 차단/재조회 복구로 변경했다. 이전 웹 cache/atom 보완에 추가로 발견된 cache 선행 갱신 경합을 수정했다. 실가입 서버 저장·실데이터 E2E·알림센터와 합쳐진 코드 QA는 기존대로 별도이며, 미병합·미배포다. 후속 리뷰 완료 소식 또는 사용자 확인 요청 시 현재 PR head와 unresolved thread를 한 번 읽고 다음 작업 범위를 판단한다.
+
+## 이전: 웹·Office 릴리즈 대상 일반 리뷰 PR 전환 완료 — 2026-11-16
 
 - **후속 승인:** 사용자가 “pr 티켓도 정상적으로 되도록 상태나 제목등 변경해줘. 이제 실제 배포를 위해 PR”, 이어서 “웹 PR도 마찬가지야”라고 명시했다. 웹·Office 두 PR의 실제 Draft 상태를 해제하고 제목의 선행 `[WIP] `와 `DRAFT` 라벨만 제거했다. PR 양식과 검증 한계를 유지하면서 Draft 대기·과거 CodeRabbit 건너뜀 문구를 정리했다. 알림센터 후속 통합 QA는 리뷰어 참고사항으로 남겼다.
 - **웹:** [PR #4896](https://github.com/Innvoaid/dentlink-client/pull/4896), `[DL-17231] 치과 회원가입·프로필 마케팅 수신 동의`, `feat/DL-17231@6a3d327d0` → `release/v1.94.0@32853e794`. 실제 Draft=false, DRAFT 라벨 없음, 기존10파일 및 head SHA 동일, 미병합을 재조회 확인했다.
