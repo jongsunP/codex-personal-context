@@ -1,10 +1,10 @@
 # Dentlink FE 아이데이션 · Notion 회의 자료
 
-## Client 준비용 worktree 보관 필요성 확인 — 2026-11-16
+## Client 준비용 worktree 정리 완료 — 2026-11-16
 
 - 사용자의 삭제 전 확인 요청으로 디자인시스템정비세션 `01a0a2eb-da08-7131-aaaf-6c14f0cfc204`에 문의했고, **`/Users/parkjongsun/Repository/dentlink-client-dlds`는 현재 필수가 아닌 삭제 가능한 준비용 사본**이라는 답변을 받았다.
 - 10/26 최신 master에서 만든 detached `c597f1fb3` 사본이며, 변경/미추적/ignored 파일과 현재 master에 없는 고유 커밋이 없다. 이 세션의 남은 작업은 특정 사본에 의존하지 않고 Studio는 npm 패키지를 사용한다. 필요하면 최신 master에서 새로 준비하면 된다.
-- `dentlink-studio`, 미병합 PR62 작업, 과거 미반영 작업의 별도 복구 백업은 보존 대상이다. 하네스 보류·아카이브도 유지한다. **이번에는 조사와 개인 기록만 했고 worktree/branch 삭제나 제품 작업은 하지 않았다.** 다음 시작점은 사용자 정리 승인 시 실제 삭제 직전 상태를 확인하는 것이다.
+- `dentlink-studio`, 미병합 PR62 작업, 과거 미반영 작업의 별도 복구 백업은 보존 대상이다. 하네스 보류·아카이브도 유지한다. **이후 사용자가 정리를 승인하여 이 준비용 worktree를 삭제했다.** Studio의 이미 반영된 로컬 `feat/dlds-gallery`도 정리했으며 현재 PR62 브랜치는 유지했다. [삭제 목록·검증·복구 자료](dentlink-local-cleanup-20261116.md). 제품 개발은 재개하지 않았으며 필요 시 최신 master에서 새로 준비한다.
 
 ## 현재 브레이크포인트 — 2026-11-06 · Studio 작업 영역별 PR 처리 구분 확인, 추가 요청 대기
 

@@ -1,5 +1,7 @@
 # Dentlink Office App — 현재 체크포인트와 작업 기준
 
+> **로컬 정리(2026-11-16):** Office 로컬 완료 브랜치 8개를 정리했습니다. 현재 알림센터·마케팅 동의 worktree와 `main`, `release/v2.2.5`는 보존했습니다. 코드·원격·배포 변경은 없습니다. [목록·근거·복구](dentlink-local-cleanup-20261116.md).
+
 > **팀 PR 규칙(2026-11-10, 다니엘 요청):** PR 제목은 `[DL-xxxxx] 제목`, 티켓 없는 release 수정은 `[QA] 제목`; 스쿼시 머지는 PR 제목으로; release 대상 네이티브 PR은 머지 전 PR 브랜치 `yarn install` 재설치→Android 빌드→실기기 확인. 정본 [DEVELOPMENT_STYLE.md](../DEVELOPMENT_STYLE.md).
 
 이 문서는 **치과 앱 `Innvoaid/dentlink-app`**의 개인 체크포인트다.
