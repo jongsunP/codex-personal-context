@@ -58,3 +58,19 @@
 - **앱 관련 읽기전용 발견:** Office NotificationCenterScreen의 employeeId/employerId 필수 검사, Lab의 employeeId 매칭도 해당 ID가 생략되면 항목 제외 가능성이 있다. 실제 누락 응답을 관측한 것은 아니다. 이번 웹 PR 범위를 넘어 앱 코드를 수정하지 않았으며, 다음 앱 작업 시 기존 소속 정보로 같은 안전한 매칭을 적용할지 확인한다. 이 항목을 이미 수정/검증된 것으로 보고하지 않는다.
 - 임시 UI 근거 `/tmp/notification-settings-ui-review-1116.cjs`/`.json`; 재개에 필요한 결론은 이 정본에 보존했다. 사용자 창·로컬 실행 환경을 바꾸지 않았고 자체 headless만 종료했다.
 - 최종 재조회: 봇의 일회성 검토는 `Review finished`, 전체12스레드 중11개 resolved·남은1개는 위 밀링 FILE. 새 알림센터 미해결0. PR head8374225c1/base/Draft/제목 유지·본문 exact match 확인. 수정 커밋에 대한 별도 전체 리뷰를 다시 강제 호출한 것은 아니며 이번 검토 지적의 수정·검증·답변·해결 후 추가 미해결 유무를 확인한 결과다.
+
+## 후속 승인: 양앱 소속 ID 누락 보완
+
+사용자: “배포 제외하고 그전까지만 할꺼면 양앱 보완이지? 맞으면 진행해줘”. 개인 정본·양앱 pull은 최신, 시작 시 clean. 웹은 앞선8374225c1 그대로 두고 앱의 같은 경계만 구현·검증·커밋푸시했다.
+
+- Office `feature/DL-17059@e8ee70188ac0861b07617b46e8f6ba560faaba01`, Lab `feature/DL-17060@27a521f2eef3eccb7fda1789fc4e3806b098af3d`; 두 저장소 원격 일치0/0·clean.
+- **매칭:** employeeId가 있으면 우선 사용한다. 없을 때만 employerId가 유일한 기존 소속과 일치하는 경우 연결한다. 제공된 직원 ID 불일치에서 fallback하지 않고, 직원/소속 ID 모순·중복 후보·미소속·현재 소속·0 미읽음은 제외한다. 이름이나 배열 순서로 ID를 추측하지 않는다.
+- **Office:** 화면에서 일반 병원 선택과 같은 `user.employee` 원본으로 ID·이름·주소를 확인하고, 표시와 선택에 동일한 확인 결과를 사용한다. 생성 DTO는 이미 optional이므로 모델 변경 없음. 화면1개와 기존 테스트1개 수정.
+- **Lab:** 기존 활성 소속 hook이 FE 표시 타입에 employerId를 함께 전달하고 화면에서 매칭한다. 선택 후 기존 소속 재조회·activation 문맥 검증 유지. 제품3파일과 기존 테스트 기대객체1줄 수정. 새 테스트 파일/스토리북/새 API/네이티브/권한 정책 변경 없음.
+- **정적 검증:** Office 기존 화면 Jest26, Lab 기존 hook/service Jest27 통과. Lab 실제 소스 매칭 경계13조건은 임시 스크립트로 확인(수정 전 누락 재현). 변경 lint·diff check 통과. 전체 typecheck는 Office6/Lab5 기존 진단으로 실패하며 HEAD 소스를 가상 치환한 컴파일과 동일함을 확인했다. 전체 타입 검사 성공으로 표현하지 않는다. 별도 에이전트의 양앱 diff 검토에서 추가 결함 없음.
+- **최종 런타임:** iPhone17Pro/iOS26.5와 Dentlink_API_36/Android16을 제품별로 함께 전환하며 실제 최종 앱 실행. Office Metro8081, Lab8082. Office 양OS 각8조건·Lab 양OS 각10조건: 정상 ID, ID 생략, 모순·미소속·현재 소속·0 제외, 선택에 올바른 ID 전달, 전환 실패 후 기존 소속/입력 복구. Lab은 중복 employer 후보 제외·명시 employee 우선도 실제 화면에서 확인했다. 렌더된 실제 화면 callback을 CDP로 호출하고 네이티브 스크린샷을 직접 대조한 결과이며, 실기기 터치 QA나 실제 서버 전환 성공으로 확대하지 않는다.
+- **테스트 데이터 경계:** 실제 서버에서 ID 누락은 관측하지 않았다. Office는 실제 가입 소속과 런타임 count fixture를 대조했다. Lab 계정의 실제 소속은1개로, 추가 소속·count 응답은 메모리 fixture로 확인했다. 서버 activation은 캡처 후 의도된 실패로 끝내 서버 전환 쓰기0; 실제 알림 읽음/설정 저장·푸시 발송도 하지 않았다. 기공소 실제 다중 소속 계정을 새 필수 과제로 만들지 않는다. 전환 성공 경로/권한 자체는 이번에 수정하지 않았다.
+- 원본 service·쿼리 복원 완료, 양앱 양OS LogBox0. Android crash buffer의 Bluetooth OS 프로세스 오류는 앱과 별개였고 Dentlink crash/ANR 없음. 시작 때 기기/Metro가 모두 꺼져 있었으므로 검증 종료 후 자체 앱·Metro·시뮬·에뮬을 종료했다. 사용자 창배치는 변경하지 않았다.
+- 임시 근거 `/tmp/notification-{office,lab}-affiliation-{ios,android}-1116.json`, `*-restored-1116.json`, native png와 `/tmp/notification-affiliation-crash-1116.log`. 장기 결론은 본 문서로 보존한다.
+- PR346/42의 기존 main·Draft·[WIP] 유지, 최신 수정·검증·미배포 범위를 본문에 반영했다. Lab connector404는 기존 gh로 보완했다. 새 PR/merge/배포/CodePush 없음. 기존 카드 개발완료 상태/BE 대기 자체에 변화가 없어 Jira/Notion 추가 수정 없음.
+- **다음:** 이번 보완은 OfficeDEVv147/v147·LabDEVv46/v45에 없으며, WebDEV7c8eef28c도 앞선 웹 보완 전 상태다. 사용자가 배포를 승인하면 최신 작업브랜치 전달 후 해당 효과 QA. 그 전에는 추가 구현·배포·폴링하지 않는다. 기존 BE 노출/발송 확인과 본체외 후속은 그대로 분리한다.

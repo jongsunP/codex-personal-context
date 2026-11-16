@@ -1,5 +1,7 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+**2026-11-16 양앱 소속 ID 누락 보완 완료·미배포:** 사용자 승인으로 웹 리뷰에서 발견한 같은 경계를 양앱에 반영했다. employeeId 우선, 생략 때만 employerId가 일치하는 유일한 기존 전환 가능 소속으로 연결하며 모순·중복·미소속은 제외한다. Office `e8ee7018` / Lab `27a521f` 커밋·푸시·원격 일치·clean, 기존 PR346/42 유지 및 설명 최신화. 관련 Jest Office26/Lab27, Lab 소스 경계13조건, 최종 양OS 실제 화면에서 fixture로 표시·대상 ID 전달·전환 실패 복구 확인. 새 앱 crash/LogBox 없음. 실제 누락 응답 관측이나 실소속 서버 전환 성공 검증으로 확대하지 않는다. 네이티브·권한·전환 API 변경 없음. **웹/양앱 추가 배포·CodePush 없음.** 자체 테스트 기기·Metro 종료, 개인/Claude/Codex 기록 정리. 다음은 승인된 배포 후 QA이며 기존 BE/디자인 별도 대기는 유지한다. [상세](dentlink-unified-notification-center-resume-2026-11-16.md#후속-승인-양앱-소속-id-누락-보완).
+
 **2026-11-16 웹 리뷰 후속 완료·미배포:** PR4862 자동리뷰 중지를 확인해 일회성 검토를 요청했고, 새 알림센터 지적4건을 검증·수정했다. 저장 후 늦은 조회의 값 덮어쓰기, 저장 후 포커스, 비활성 주문 범위 메뉴, employeeId 생략 소속 매칭을 보완하여 Web `8374225c1` 커밋·푸시·리뷰 답변/resolve·PR본문 최신화 완료. 관련49테스트·실제컴포넌트 Chromium11조건·3서비스 type/정상push훅 통과. 기존 밀링 FILE1건은 범위 밖으로 유지. **이번 보완은 미배포**이며 WebDEV7c8eef28c/앱DEV는 그대로다. 앱의 선택 employeeId 누락 경계는 읽기전용 확인 후 후속 기록만 남겼다. [근거·한계·남은일](dentlink-unified-notification-center-resume-2026-11-16.md#후속-웹-coderabbit-리뷰-확인).
 
 **2026-11-16 재개 현황:** 코드3제품은11/13마감과같고원격일치·clean. Web DEV7c8eef28c 양배포success확인, a67e1e215 구조정리만미배포. 앱DEV Officev147/v147·Labv46/v45는최신feature와일치. Jira본인22건(10ToDo/11개발완료/1완료)·BE답변대기변동없음. PM11/17STGQA·11/23v1.94.0예정. Office자체주문상세는release/v2.2.5에있지만main/알림feature미포함으로DL17436유지. PR본문3건은후속승인으로최신화·재조회완료(head/base/Draft유지). 현개발본으로기능QA를이어가며추가배포는하지않았다. [근거·남은일](dentlink-unified-notification-center-resume-2026-11-16.md). 이번제품개발/배포/기기조작없음.
