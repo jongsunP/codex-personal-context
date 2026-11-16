@@ -74,3 +74,7 @@
 - 임시 근거 `/tmp/notification-{office,lab}-affiliation-{ios,android}-1116.json`, `*-restored-1116.json`, native png와 `/tmp/notification-affiliation-crash-1116.log`. 장기 결론은 본 문서로 보존한다.
 - PR346/42의 기존 main·Draft·[WIP] 유지, 최신 수정·검증·미배포 범위를 본문에 반영했다. Lab connector404는 기존 gh로 보완했다. 새 PR/merge/배포/CodePush 없음. 기존 카드 개발완료 상태/BE 대기 자체에 변화가 없어 Jira/Notion 추가 수정 없음.
 - **다음:** 이번 보완은 OfficeDEVv147/v147·LabDEVv46/v45에 없으며, WebDEV7c8eef28c도 앞선 웹 보완 전 상태다. 사용자가 배포를 승인하면 최신 작업브랜치 전달 후 해당 효과 QA. 그 전에는 추가 구현·배포·폴링하지 않는다. 기존 BE 노출/발송 확인과 본체외 후속은 그대로 분리한다.
+
+## 사용자 마감: 배포는 재요청 후
+
+사용자는 웹·양앱 모두 배포를 제외한 현재 FE 가능 범위를 마감하고 기록 후 대기하도록 요청했다. 세 제품 HEAD는 위 최종값과 같고 원격 일치0/0·clean을 재확인했다. 새로운 검토나 코드 변경은 하지 않았다. 현재 확인된 본체 범위의 FE 보완은 완료이며, 배포·배포 후 QA와 기존 BE/디자인·본체외 후속은 별도로 남긴다. 최신 보완은 개발환경에 전달되지 않았다. 개인 정본·Claude/Codex 메모리 정리 후 대기하고, 배포는 사용자가 다시 요청할 때만 진행한다. 자동 모니터링·추가 조사 없음.
