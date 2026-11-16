@@ -309,16 +309,19 @@
   The 2026-10-12 app-developer flow in the onboarding document is historical
   reference where it differs. Apply the latest confirmed main-based policy;
   do not infer permission for PR changes, merges, deployment, or branch cleanup.
-- When the user asks to `CodeRabbit 리뷰 확인` or equivalent, treat that
-  wording as explicit authorization for the complete review cycle on the
-  current PR: inspect every unresolved CodeRabbit thread, verify each finding
-  against the current code, apply valid findings or reply with a concise
-  technical rationale when not applying one, resolve the handled threads, run
-  proportionate checks, commit and push resulting code, and check once more for
-  newly created unresolved threads. Continue until the CodeRabbit check has
-  completed and no unresolved CodeRabbit thread remains, unless genuinely
-  blocked. This authorization does not include merging the PR or mutating an
-  unrelated branch or PR.
+- When the user asks to `CodeRabbit 리뷰 확인` or equivalent, handle the
+  current PR's review cycle under **CodeRabbit Review Safety And Closeout** in
+  `DEVELOPMENT_STYLE.md`: verify findings, preserve existing requirements and
+  working behavior, make minimal justified fixes, validate actual callers and
+  affected normal/error flows, commit/push authorized changes, and resolve
+  handled threads with evidence or a concise non-application rationale.
+  Inspect already-pushed review fixes within the requested scope when their
+  safety is questioned. Do not chase speculative improvements or expand the
+  feature to clear comments. Recheck once at closeout; do not wait indefinitely
+  for a new bot review or poll without the user's explicit cadence. No new
+  review means move on, not force a new review. Report genuine blockers rather
+  than disguising unresolved defects as fixed. Merge/deploy and unrelated
+  branches or PRs remain outside this authorization.
 
 ## Wrap-Up Workflow
 

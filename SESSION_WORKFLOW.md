@@ -1173,7 +1173,11 @@ deployment still requires this separate instruction.
    verify each finding, fix valid findings, keep the code unchanged with a
    concise technical rationale for findings that should not be applied, resolve
    every handled thread, run proportionate checks, push the authorized fixes,
-   and recheck for newly created unresolved threads.
+   and check once for new feedback at closeout. Follow **CodeRabbit Review
+   Safety And Closeout** in `DEVELOPMENT_STYLE.md`: preserve existing behavior,
+   verify actual consumers, and keep the cycle bounded. No new review is a
+   reason to move on, not to force another review; only poll at the user's
+   explicitly requested cadence and stop at their checkpoint.
 2. If there is no CodeRabbit review, or that cycle is complete, the PR waits for
    a teammate's approval. Do not describe this waiting state as merge-ready
    approval, and do not merge on the user's behalf without an explicit merge

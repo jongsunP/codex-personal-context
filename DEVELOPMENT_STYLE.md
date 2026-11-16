@@ -707,6 +707,42 @@ crash prevention. Apply the same decision in solo work and user-preview mode.
   demonstrates the leading `[WIP]` title. Neither example alone establishes
   that all three fields were already present on both PRs.
 
+## CodeRabbit Review Safety And Closeout
+
+User clarification, 2026-11-16, across projects: review response must preserve
+working functionality and finish within a reasonable scope. Clearing comments
+is not more important than preventing regressions.
+
+- Verify a finding against current code, confirmed requirements, and the API
+  contract. Reproduce concrete bugs where practical. Do not adopt speculative
+  changes, new UX/policy, broad refactors, or out-of-scope work merely because
+  the bot suggests them. Fix a real in-scope defect minimally; otherwise leave
+  a concise reasoned reply and resolve the handled thread.
+- Follow the changed value through actual callers and downstream consumers,
+  not just the helper named in the comment. Before pushing, check the relevant
+  existing normal behavior as well as the reported failure. Repeated follow-up
+  findings require a focused review of that flow, not another isolated patch.
+- When the user questions already-pushed review fixes, compare the requested
+  review-response range (for example, changes after leaving Draft), including
+  related consumers. Do not restart a whole-feature audit by default. Keep
+  unrelated base/release changes and other owners' work outside the task.
+- Use proportionate regression tests/static checks; use devices for concrete
+  runtime risks under the app verification policy. Passing tests or resolving
+  a thread does not prove all device behavior is safe. If a fix's impact cannot
+  be established, explain and defer or revise it instead of forcing closure.
+- Complete authorized fixes, checks, commits/pushes and PR notes together.
+  Resolve handled findings, including reasoned non-application decisions.
+  A scope-based resolution is not proof that the reported defect was fixed;
+  retain its evidence and separate ownership. Report a genuine remaining
+  blocker explicitly; never conceal it just to reach zero unresolved threads.
+- At closeout, check once for new actionable feedback and report the verified
+  scope/status. Do not repeatedly force new reviews or poll until a bot approves
+  every new commit. If no review arrives, move on. Poll only when the user asks,
+  only for the specified PRs/cadence, and stop at the requested checkpoint.
+- Preserve distinctions between FE preparation, resolved comments, reviewer
+  approval, merge, deployment and QA. Review authorization does not authorize
+  merge/deploy. Save the checkpoint and wait after the requested work is done.
+
 ## User-Directed Scope Discipline
 
 - For every pull request, read and follow the repository's PR skill before
@@ -714,10 +750,9 @@ crash prevention. Apply the same decision in solo work and user-preview mode.
   PR stops after PR creation; do not wait for, monitor, or respond to
   CodeRabbit automatically. Run the full CodeRabbit closeout flow only when the
   user explicitly asks to handle the review, such as `리뷰까지 처리해줘`:
-  validate each finding, implement or leave a reasoned reply, resolve every
-  addressed thread, push any follow-up commit, and recheck until no unresolved
-  CodeRabbit thread remains or a concrete blocker is reported. PR merge remains
-  separate unless explicitly requested.
+  follow **CodeRabbit Review Safety And Closeout** above, including minimal
+  justified fixes, preservation of existing behavior, evidence-based resolution,
+  and a bounded final check. PR merge remains separate unless explicitly requested.
 - In every Dentlink repository, a generic request to commit, upload, or push
   does not authorize using an admin or ruleset bypass to push directly to a
   protected `master`, `develop`, or `release/*` branch. If a direct protected
