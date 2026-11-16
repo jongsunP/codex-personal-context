@@ -280,3 +280,23 @@
 - Web review요청 https://github.com/Innvoaid/dentlink-client/pull/4862#issuecomment-6912944494 / 접수6912954174. Office 재요청6913173027 / skip응답6913175079. Lab 요청 https://github.com/Innvoaid/dentlink-lab-app/pull/42#issuecomment-6912838512 . 이후 지속 polling 없음.
 - 임시검증근거: /tmp/office-release-review-{ios,android}-final-1116.json, profile/credit/date fixture이미지; /tmp/lab-review-final-{ios,android}-read-1116.json 및 settings이미지. 실제기기/푸시발송·OTA검증으로 확대하지 않는다.
 - 기존개발배포 Web7c8eef28c, Officev147(target2.2.4), Labv46iOS/v45Android(target1.0.5)는 그대로다. 신규준비코드를 자동배포하지 않았고 다음전달시 실제바이너리/버전조건을 다시 확인한다.
+
+## 2026-11-16 Swagger 권한 노출 후속 — 배포 없이 마감
+
+- 사용자 승인: Swagger 후속만 우선 완료하고 기존 PR에 반영, 문서/메모리 정리 후 오늘 종료. 리뷰 폴링·깊은 재검수·불필요한 기기 실행 없음. CodeRabbit는 내일 재개 요청 시 대응.
+- 실제 DEV /v3/api-docs 계약은 CategorySettingDto.displayAuthorities?: (OWNER|PAYMENT_MANAGER|EDITOR|MEMBER)[]이며, 이전 협의명 configurableAuthorities와 다르다. 현재 소속의 기존 직원 프로필 authorityType 재사용; 새 API/토큰 파서 없음.
+- 권한 목록에 현재 권한이 없거나 누락/[]이면 카테고리 미노출. 손상/null/잘못된 enum은 기존 응답 실패 경로. UI와 변경 대상에 같은 기준을 적용하고 최신 GET에서 권한 제외된 항목은 PUT하지 않는다.
+- 숨긴 카테고리/채널은 전체 PUT에 기존 값 보존, readonly displayAuthorities/platforms는 값 payload에서 제외한다. 낙관 표시에는 메타 보존. 첫 채널 상위·같은 카테고리 전체ON/OFF·다른 영역 보존·OS안내/실패복구·확인GET은 유지.
+- 신규 네이티브/라이브러리/배포/CodePush 변경 없음. 기존 개발 배포는 그대로이며 새 계약 코드와 구분.
+- 다음: 새 설정 디자인은 사용자가 자료 제공을 알렸으나 이번 Swagger 우선 범위에서 열람·반영하지 않음. 다음 재개 시 필요한 디자인 대조/반영과 새 리뷰만 처리. Swagger의 하위값보존 설명과 사용자 확정 전체ON/OFF 문구 차이는 기존 확인사항으로 유지.
+- 앞선 1회 리뷰조회: Web 최신리뷰 완료·알림센터 신규지적0(밀링은별개). Office resolved thread 안에 cold-start 다른 병원 credit 링크 중복 판정 추가 의견1건(discussion_r4584229470), 실제 코드 확인은 이번 Swagger에 섞지 않고 내일 재개. Office 증분 review skipped, Lab bot실행기록 미확인. 자동 재요청·폴링하지 않음.
+
+### 전달·검증 결과
+
+| 대상 | 커밋/PR | 이번 검증 |
+| --- | --- | --- |
+| Web Clinic/Lab | f6e1a86dcdf834fcb4f0e63eb367342457b84beb · PR4862 | 관련57, 정상훅 config49/hooks89·3서비스 타입·lint 통과 |
+| Office 앱 | 39b8629b13a5956666bd8307a2eebf0ab9f26f98 · PR346 | 관련61·lint, 실제GET OWNER8항목 대조, 다른권한 fixture. 기존 TS6 |
+| Lab 앱 | 2f4c4f040edd78fe1fb1a6c75c0522c1964e39ad · PR42 | 관련50·영향23 재통과·lint. 기존 TS5 |
+
+세제품 clean/원격동일. 기존PR본문·Jira17415/16/17실제계약명/범위 업데이트, Jira상태/SP불변. Office실제GET은200/0000; 다른권한은같은응답fixture이며 실제역할별계정/기기검증아님. 새기기·서버·광범위QA·리뷰재요청/폴링·배포없음. 화면설계/범위대기와코드반영완료를구분. 생성DTO는각레포generator출력의해당블록만반영. 기존상위전체on/off정책은유지.
