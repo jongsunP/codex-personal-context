@@ -1,6 +1,6 @@
 # 통합알림센터 재개 현황 — 2026-11-16
 
-**최신 상태:** 웹·양앱 정식 PR 전환·최신 기준 통합·필요한 검증·커밋푸시 완료, 미배포. Web558a36df0/PR4862→release1.94.0, Office987dbdd3/PR346→release2.2.5, Labdbcd1ad9/PR42→release1.0.6. 아래 오전 표와 Draft 유지는 당시 이력이며 현재값은 문서 마지막 「정식 리뷰 PR 전환·후속 기준 브랜치 동기화」를 따른다.
+**최신 상태:** 릴리즈 추가분 통합·리뷰 보완·최종 검증·커밋푸시·기존 정식 PR 갱신 완료, 미배포. Web fed97af3f / Office ef29e3e6 / Lab 916610e. 추가 리뷰 결과·BE 후속 대기. 아래 과거 최신화/리뷰 상태는 당시 이력이며 마지막 마감 절을 따른다.
 
 현재 상황 파악 요청에 따라 읽기 전용으로 확인했다. 제품 코드·PR·Jira·배포·기기/서버는 변경하지 않았다. 개인 정본은 pull 결과 최신이고 기존 전체 지침 필요 시 동기화·번역시트 중단 규칙을 적용했다.
 
@@ -258,3 +258,23 @@
 - **Web:** master9c4418a8f는 그대로이나 release1.94.0이32853e794→3852aca7f로 이동했다(주문서 필수값·단계 이동 검증 #4873). 알림 변경과 파일 교집합0, merge-tree 충돌없음. 최신 release를 작업 branch에 통합했고 알림이 사용하는 DropdownPrimitive·자체Button과 새필수표시/Stepper 변경은 직접 겹치지 않음을 확인했다. RedDot 기본값도 유지. 자체 기능 재작성 없음. 관련 공유43+Clinic12+Lab4 tests 통과, 정상Git훅의 Clinic/Lab/Admin 타입·lint(기존경고) 및 config49/hooks75 tests도 통과했다. E2E 제외 기록은 최종 merge-base 기준 SKIPPED로 재기록해 guard를 통과했고 실행한 것으로 표시하지 않는다. 전체E2E·전수검수는 하지 않았다.
 - 웹의 기존 밀링 FILE START 검토1스레드는 사용자 명시 범위 밖이므로 강제로 resolve하지 않았다. 알림센터 리뷰는 처리된 기존 상태이며 이번 정식PR전환을 새 코드 전체에 대한 봇/인간 승인으로 표현하지 않는다. GitHub 리뷰 승인 요건(REVIEW_REQUIRED)은 정상적인 다음 단계다.
 - 세 제품 최종 clean·원격일치·PR base/head/draft/라벨을 확인했다. PR준비를 끝내고 병합·배포·CodePush는 하지 않았다. 기존 개발서버와 기기OTA 상태는 그대로다. 새로운 변경/리뷰가 생길 때만 해당 영향 범위를 처리하며 자동 감시·반복전수조사하지 않는다.
+
+## 최신: 릴리즈 추가분 통합·리뷰 보완 완료, 추가 리뷰/BE 대기 — 2026-11-16
+
+- **완료:** Web `fed97af3f`(release/v1.94.0의 f0e180fe0 포함), Office `ef29e3e6`(main851c7889·release/v2.2.5 b1121e72 포함), Lab `916610e`(main/release/v1.0.6 a6e18282 포함) 커밋·푸시. 기존 정식 PR4862/346/42 대상 유지·본문 최신화. 사용자 추가 웹/Office 마케팅 수신 동의 통합, 기공소 최신 기준 포함. 릴리즈 PR 병합·배포·CodePush 없음.
+- **리뷰 보완:** Office 새 inline6건 수정·답변·resolve. 실패 푸시 읽음 큐 보존, 읽음 후 settings 재조회 제외, 소속 전환 중 직원 조회 보존, 지연 주문조회 탐색 가드, 소속별 금융 랜딩 중복 구분, 크레딧 날짜 시간대 일치. Lab은 공통2건(읽음 실패 큐·설정 재조회)만 맞췄다. 주문상세 본체/기존 상세 테스트·밀링은 별개 소유로 유지.
+- **검증:** 웹 알림59+정상훅(type/lint/config49/hooks75), Clinic PC/모바일 실제 프로필·알림 설정 공존 확인. Office 영향 기존60+외부35, Lab14 tests. Office2.2.5/Lab1.0.6 양OS 최종JS에서 관련 화면·랜딩·재시도 검증, LogBox0. 기존 타입오류 Office6/Lab5는 그대로이며 전체타입통과로 표현하지 않는다. 실제 FCM/APNs·OTA·전체 QA는 별도.
+- **현재 리뷰 상태:** Web은 수동1회 요청 후 Review triggered, 결과 재조회하지 않음. Office 기존6건 해결 후 수동1회 요청은 Incremental review skipped(봇: 이미 검토한 커밋은 재검토하지 않으며 review 명령은 자동 리뷰 일시중지 때 적용); 최신 head의 별도 새 리뷰 완료로 단정하지 않음. Lab은 요청1회 후 봇응답 미확인. 요청/진행과 완료 구분, 무한 폴링 없음. Web 기존 밀링FILE 미해결1건은 범위 밖 유지.
+- **다음:** 사용자는 추가 CodeRabbit 결과와 BE 후속이 남음을 알고 이번 준비를 마감하도록 했다. 재개 시 현재 head/리뷰를 한 번 확인해 유효한 새 지적만 처리하고, 사용자 전달 BE 명세·새 설정 디자인을 해당 범위에 반영한다. 현재 알려진 이유만으로 양앱 대규모 재수정/전수검수를 반복하지 않는다. configurableAuthorities는 사용자가 현 범위에서 제외했고 새명세 안내 후 대응. 본체외 Home·이메일·OS배지 개선은 별개. 자동 조회·병합·배포 없이 대기.
+
+### 이번 검증과 기록 경계
+
+- Web PR4862는 마케팅 release f0e180fe0를 충돌 없이 통합했다. 알림 소스와 직접 교집합0. 최종 Clinic PC1440/mobile390의 마이페이지 마케팅 표시·펼침·알림벨→설정을 실제 DEV GET으로 확인(JS 오류0, 서버쓰기0). Lab 마케팅 기능을 새로 추가하지 않았다.
+- Office release 통합 커밋543d3c88, 리뷰 보완ef29e3e6590c578bc685591db4f3190d28dfe480. 공통 useUserQueries의 ScopedRequestConfig 중복 import 정리. 관련 기존6suite60+외부회귀35 통과, lint오류0/기존경고8. 최종 양OS 2.2.5에서 Profile마케팅/알림설정·교차소속native주문랜딩/인박스복귀·크레딧실조회 및 NY/Seoul 날짜경계 확인. 로그인유지·403없음. Android 처음 설치는 실제2.2.4였으므로 오전 생성된2.2.5(135) APK를 재설치하고 최종 확인했다. 신규native수정/새빌드 없음.
+- Office reviewer nitpick의 최신 GET fixture도 현재 동작을 검증하도록 보강했다. outside-diff의 주문생성 extractOptions·밀링생성DTO 계약은 이 기능 밖이므로 임의 수정하지 않고 PR에 경계를 기록했다. 주문상세본체/테스트는 main 그대로다.
+- Lab 최종916610e8e1f4c2ca9f67d0f558444059ad1d1acf, source2files+기존test2files. 14tests/lint오류0·기존경고10. 실제1.0.6양OS설정렌더·OS차단/허용 차이 유지. 읽음 응답을 제어해 실패큐보존→다음flush성공→제거/중복없음, push/inbox읽음 후 실제 DEV목록·미읽음·다른소속GET은 유지하고 settings GET0/값불변 확인. 읽음서버쓰기0·실제푸시발송0. 임시서비스/저장소원복. Office/Lab 앱과 자체Metro8081/8082종료, 기기는부팅유지.
+- Lab 테스트보강은 사용자에게 AGENTS360의 명시승인 규칙을 설명했고 사용자가 허용했다. 대상 __tests__/queries/useNotificationQueries.test.tsx와 __tests__/utils/fcmHandler.test.ts는 모두 이번알림센터브랜치에서 추가한 파일(release대비A; 원커밋2c638fa/f0e2bc7)임을 확인해 사용자에게 설명했다. 다른 업무 기존테스트를 확장한 것이 아니다.
+- 웹은 동일 읽음 성공 경로가 이미 inbox/unread/otherEmployers만 갱신해 settings를 제외하므로 추가 수정 불필요. Lab은 Office와 query-key형태가 달라 배열마지막 settings를 검사했다. 제품별 차이를 무시하고 그대로 복사하지 않았다.
+- Web review요청 https://github.com/Innvoaid/dentlink-client/pull/4862#issuecomment-6912944494 / 접수6912954174. Office 재요청6913173027 / skip응답6913175079. Lab 요청 https://github.com/Innvoaid/dentlink-lab-app/pull/42#issuecomment-6912838512 . 이후 지속 polling 없음.
+- 임시검증근거: /tmp/office-release-review-{ios,android}-final-1116.json, profile/credit/date fixture이미지; /tmp/lab-review-final-{ios,android}-read-1116.json 및 settings이미지. 실제기기/푸시발송·OTA검증으로 확대하지 않는다.
+- 기존개발배포 Web7c8eef28c, Officev147(target2.2.4), Labv46iOS/v45Android(target1.0.5)는 그대로다. 신규준비코드를 자동배포하지 않았고 다음전달시 실제바이너리/버전조건을 다시 확인한다.

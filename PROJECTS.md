@@ -201,9 +201,9 @@ For detailed current state, read:
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
-### Dentlink 통합알림센터 — 설정 UX 개발 전달·사용자 실기기 QA 대기
+### Dentlink 통합알림센터 — 릴리즈 통합·리뷰 보완 완료, 추가 리뷰/BE 대기
 
-- **현재(2026-11-13 최종):** 사용자 로컬 확인 후 설정즉시표시 수정까지 개발전달. 웹 DEVPR4891→develop7c8eef28c(source542b0c4e8), Clinic/Lab 자동배포 시작1회확인. Office Developmentv147/v147(2.2.4, a6ee48c7), Labv46/v45(1.0.5, 2c638fa) 게시·활성. 기존PR4862/346/42유지·본인Jira진행댓글정리·ReadyforDeploy유지. 관련tests24/65/16·양웹렌더15조건·양앱양OS검증, 저장확인GET 추가수정불필요판단. 공통저장UX지침·메모리완료. 마감후실제DEV저장/원복에서도4구현의구값응답→제한된GET재확인필요성을직접확인,코드/배포추가변경없음. 사용자실기기QA결과대기, 자동배포결과/수신추적없음. 로컬Office미리보기환경유지. [최신 정본](projects/dentlink-unified-notification-center-settings-response-2026-11-13.md), [직전 동작·정책 이력](projects/dentlink-unified-notification-center-parity-2026-11-13.md), [전체 체크포인트](projects/dentlink-unified-notification-center.md).
+- **현재(2026-11-16 마감):** 최신 웹·Office 릴리즈의 마케팅수신동의 포함, Web fed97af3f·Office ef29e3e6·Lab916610e 커밋푸시/정식PR4862·346·42본문 최신화. Office 리뷰6건과 Lab공통2건 보완, 영향검증·양OS최종런타임 완료. 릴리즈병합·배포 없음. CodeRabbit는 Web요청접수 후결과대기, Office기존6건해결/추가수동요청skip, Lab요청후응답미확인으로 구분하며 반복폴링하지 않는다. 사용자 BE후속·새설정디자인/추가리뷰 안내까지 대기. 기존개발배포는11/13상태 유지. [현재 체크포인트](projects/dentlink-unified-notification-center.md), [11/16 상세](projects/dentlink-unified-notification-center-resume-2026-11-16.md).
 
 - 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.
