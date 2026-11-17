@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 QA 누적 작업 브랜치 → 양앱 Staging CodePush 완료
+
+- 사용자 명시 승인으로 **릴리즈가 아닌 미머지 `feat/DL-16140`** 에서 Staging 배포. Office `5239f3beb0d1d6e8d58ed44671acc405b1bcadf6`, Lab `85e56f5023a6be8fe5ef0f9ecc208d165725c977`. PR354/50은 OPEN·미머지 유지, base release/v2.2.5·release/v1.0.6 그대로. 코드·PR·릴리즈 브랜치 변경 없음.
+- 완료 라벨: **Office 2.2.5 iOS v348 / Android v347**, **Lab 1.0.6 iOS·Android v66**. 각 게시 성공 및 history 1회로 isDisabled=false, isMandatory=true, rollout=100, target version, 설명의 QA branch/SHA 확인. 이전 STG Office v347/v346·Lab v65를 대체했다. 웹·Development·Production 변경 없음.
+- 양앱 버전 검증 통과(package/Android/Xcode), QA branch local/remote 동일·clean. 기존 STG release source 대비 각 3파일의 DL-17470 JS/TS 변경뿐이며 native/package/lock/patch 차이 없음. 기존 검증된 동일 커밋이므로 기기 전수검사 반복하지 않음. 제품·플랫폼 순차 `node scripts/codepush.js staging all --mute` 실행, Slack 쓰기 없음.
+- 영향: 홈↔알림함↔알림설정의 Safe Area/노치 배경색 전환 보완, 자동 재조회와 사용자가 당겨서 하는 새로고침 표시 분리. 직전 양OS 검증 범위에서 새 크래시/동작 문제를 찾지 못함. 이번에는 게시·활성화까지만 확인했고 실기기 수신/OTA 적용/사용자 최종 QA는 아직 확인하지 않음.
+- 사용자 확인: 업데이트 적용 후 양앱 홈→알림함→설정→뒤로 이동의 상단색 전환 및 당겨서 새로고침 표시. 자동 재조회 때 불필요한 뺑글이가 생기지 않는지. Office 기존 isv.mp4 1.48MiB 자산 경고는 기존 force 배포 옵션으로 게시 성공; 이번 추가 자산 아님.
+- Jira DL-17470은 기존 건별 QA 카드 유지(이번 상태/댓글 변경 없음). 향후 알림센터 QA도 제품별 같은 누적 branch/PR에 쌓고 명시적 승인 때만 배포/머지. 이번 배포는 PR 머지 승인이 아니다. 다음: 사용자 실기기 QA 결과나 다음 요청까지 대기, 자동 모니터링/리뷰 폴링 없음.
+
 ## 2026-11-17 통합알림센터 QA 누적 운영 — 현재 적용 기준
 
 - **이 프로젝트 한정 사용자 결정:** Jira는 QA 건별 카드로 유지하되, 수정 코드는 제품별 QA 누적 브랜치/PR 하나에 계속 쌓는다. 에이전트/세션이 바뀌어도 이 기준을 유지한다. 건마다 브랜치·PR을 새로 만들거나, 개별 카드 완료를 누적 PR 머지/배포 승인으로 해석하지 않는다.
