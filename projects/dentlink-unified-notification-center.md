@@ -1,5 +1,17 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 QA 브랜치 양앱 Development·Staging CodePush 완료
+
+- 사용자 명시 승인: 릴리즈가 아닌 **QA feat/DL-16140**로 양앱 DEV/STG 모두 배포. 웹은 사용자가 배포할 예정이며 이번 실행에서 웹/PR/리뷰/머지는 변경하지 않았다.
+- 소스: Office `75dd7fd69899e6bb9318352c196feceb0b7e03e5`, Lab `667dce2223fdae300dc7e4c0ad2028f93a92fd1b`. QA 수정6건 포함, clean·origin 일치. 릴리즈 이력 포함 확인(Office release/v2.2.5 대비0뒤/5앞, Lab release/v1.0.6 대비0뒤/5앞, Web release/v1.94.0 대비0뒤/2앞). 이 확인 이후 별도 최신 fetch/병합은 하지 않음.
+- **게시·활성화:** Office2.2.5 Development iOS/Android **v149/v149**, Staging **v349/v348**. Lab1.0.6 Development **v48/v47**, Staging **v67/v67**. 8건 모두 mandatory=true/disabled=false/rollout100%, 해당 환경 history1회 조회로 branch+SHA+targetVersion 검증.
+- 기존 scripts/codepush.js dev|staging all --mute를 OfficeDEV→OfficeSTG→LabDEV→LabSTG 순서로 직렬 실행. Slack 발송 없음. 제품/OS 공통 tmp 경합 방지. Office 기존 isv.mp4 용량경고는 기존 --force 옵션으로 게시 성공; 새 자산 변경 아님.
+- 호환성: package/Android/Xcode 버전검증 통과. 직전QA 대비 native/package/lock/patch 변경0. 앞서 최종 코드로 완료한 양OS 설정·OS권한 검증과 관련 테스트 근거 재사용, 불필요한 반복 기기검증 없음. 게시 성공은 단말 OTA수신·실제푸시·최종QA 통과와 구분.
+- 사용자 재확인: 새 OTA 적용 후 알림설정/프로필/MyOnly 스위치 떨림·색상, 최초OS권한 요청 및 설정복귀, 실제 foreground푸시 표시. 양앱 로컬검증에서 새앱크래시 미발견. 간헐푸시 원래증상 실제발송 재현은 아직 없음.
+- PR4903/354/50 및 Jira 개발완료 상태 유지. 리뷰는 사용자가 나중에 처리할 예정이므로 이번조회/처리/폴링 없음. 네이티브 Fastlane·AppTester 업로드/스토어심사/운영배포 없음. 다음 사용자QA/리뷰/배포요청까지 대기.
+- 별도 확인 질문: DL17208 가입체크박스는 폼값 즉시변경·가입제출시전송이므로 이번 switch애니메이션/저장중disabled색상과 별개. 앱프로필은 즉시draft·입력차단·실패복구이며 기존 관련테스트통과, 이번공통Switch수정 적용. 이 질문에서 추가 제품코드변경 없음.
+
+
 ## 2026-11-17 QA 6건 구현·PR 준비 완료 — 미배포
 
 - 사용자 승인: 알림센터 QA(디자인 포함) 처리, 관련 범위 교차검토, 검증·커밋푸시·PR 완성. 배포/머지 금지. DL-17474는 코드 위험만 최소 보완, 실제 재현 없는 무한 조사 금지. DL-17482 및 Android STG 치과앱 설정 스위치 떨림 제보를 중간 추가. OS 권한 관련 테스트 보강 명시 허용.
