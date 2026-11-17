@@ -1333,3 +1333,11 @@
 - 사용자가 IDE task `yarn fastlane-android:dev` 실행 시 `command not found: fastlane`(127) 보고. Fastlane2.228.0은 mise Ruby3.2.2에 이미 설치되어 있었으나, `.zshrc`의 mise activate가 non-interactive login shell `zsh -l -c`에 적용되지 않아 system Ruby2.6으로 실행되는 것이 원인.
 - 로컬 `~/.zprofile`에 mise shims PATH를 추가하고 정확히 같은 `zsh -l -c`로 Ruby3.2.2/Fastlane2.228.0 인식·version 실행 성공, Lab checkout에서도 경로 확인. 기존 파일은 존재 시 타임스탬프 백업 보존. 제품 소스/브랜치 변경 없음. 빌드·Firebase 업로드·CodePush는 실행하지 않음.
 - 사용자 설명: Android `fastlane-android:dev`는 Development APK, `fastlane-android:staging`은 Staging APK를 Firebase App Distribution에 빌드/업로드하므로 App Tester 새 설치 파일 제공 용도. CodePush는 기존 설치 앱 JS 업데이트라 App Tester 새 바이너리를 생성하지 않음. 사용자가 실행 시 실제 branch 확인 필요: 이 확인 시 Office checkout은 사용자가 변경한 release/v2.2.5(원격보다7커밋뒤), Lab은 feat/DL-16140였음. 원격동기화/branch 변경은 이번 PATH 수정에서 하지 않음.
+
+## 2026-11-17 Android Fastlane 로컬 실패 조사·실행 준비 보완
+
+- 사용자 첨부 STG 로그: Office validateSigningStagingRelease 실패는 android/app/release.keystore 누락. Lab react-native-vision-camera:clean 실패는 삭제 중 새 Kotlin build 파일 생성. 동시 쓰기/빌드 경합 가능성은 있으나 정확한 실행 주체는 미확정. 단독 `./gradlew :react-native-vision-camera:clean --no-parallel --console=plain`은 10초 성공. 동일 앱의 DEV/STG Fastlane은 순차 실행 권고.
+- 사용자 실행준비 조치 승인으로 Office 충돌 태그 office-v2.2.3.74를 /tmp/dentlink-office-tag-before-sync-20261117.bundle에 보존 후 원격 정본으로 로컬만 교체(e0f4d5dd→74037211 peeled commit). 원격 태그 변경 없음. 현재 사용자가 체크아웃한 release/v2.2.5를 origin과 fast-forward(4519d81b→0a131041), 7개 누락 커밋 포함. QA branch/PR 미머지 유지; branch 전환 없음. Lab feat/DL-16140은 원격 동일.
+- 양앱 `zsh -l -c` Fastlane 경로 정상, Android bundle check 및 fastlane lanes 정상(개발/STG lanes 로딩). 환경파일·Firebase 서비스계정 파일 존재 여부만 확인, 내용 변경 없음. 양앱 및 알려진 Office worktree에 release.keystore 없음; Repository/Downloads/Documents/Codex worktrees 파일명 검색에서도 기존 keystore/jks 발견 안 됨.
+- 사용자에게 설명: release.keystore는 프로젝트 android/app에 놓되 Git ignore된 기존 앱 서명 비밀키. Git clone/pull로 내려오지 않음. 앱개발자에게 기존 배포 키와 두 앱 공용 여부를 확인해 받아야 함. 임의 새 키 생성·debug 키 대체 안 함. 파일을 받으면 양앱 서명 task로 먼저 확인 후 사용자가 IDE Fastlane 실행; APK 빌드/Firebase 업로드 완주까지 검증한 상태는 아님.
+- 이번 제품 소스 수정/커밋/푸시/PR머지/Firebase 업로드/CodePush 없음. 이전 QA STG CodePush는 유지. 사용자가 Android DEV/STG 새 바이너리 업로드 뒤 명시 요청하면 STG만 QA 작업 브랜치에서 CodePush 예정; 자동으로 실행하지 않음.
