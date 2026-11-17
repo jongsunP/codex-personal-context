@@ -1,5 +1,17 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 통합알림센터 QA 누적 운영 — 현재 적용 기준
+
+- **이 프로젝트 한정 사용자 결정:** Jira는 QA 건별 카드로 유지하되, 수정 코드는 제품별 QA 누적 브랜치/PR 하나에 계속 쌓는다. 에이전트/세션이 바뀌어도 이 기준을 유지한다. 건마다 브랜치·PR을 새로 만들거나, 개별 카드 완료를 누적 PR 머지/배포 승인으로 해석하지 않는다.
+- 브랜치 명명은 기존 feat/<Jira> 규칙에 맞춰 상위 알림센터 키를 사용한 `feat/DL-16140`. Office·Lab은 별도 저장소에서 각각 같은 이름 사용. 이후 알림센터 웹 QA도 처음 발생할 때 제품 저장소의 누적 QA 브랜치/PR을 준비하고 같은 방식으로 쌓는다. 지금 웹은 수정 사항이 없으므로 빈 브랜치/PR은 만들지 않음. 일반적인 다른 기능/프로젝트 전체의 QA 규칙을 변경한 것은 아니다.
+- 앞으로 승인된 QA 수정은 해당 누적 브랜치에 커밋·푸시하고 PR의 포함 Jira/검증 내역을 갱신한다. 사용자가 QA 브랜치를 올리라고 명시하기 전에는 자동 머지·배포/CodePush하지 않는다. 이번 사용자는 다음에 **PR 미머지 상태의 작업 브랜치로 앱 CodePush**할 예정이며, 현재는 준비만 하고 대기하라고 명시했다. 배포 환경·대상 바이너리·정확한 SHA는 실제 배포 지시 때 확인한다.
+- 현재 Office: `/Users/parkjongsun/Repository/dentlink-app`, `feat/DL-16140` → origin/feat/DL-16140, HEAD5239f3be, QA 누적 PR354 → release/v2.2.5. https://github.com/Innvoaid/dentlink-app/pull/354
+- 현재 Lab: `/Users/parkjongsun/Repository/dentlink-lab-app`, `feat/DL-16140` → origin/feat/DL-16140, HEAD85e56f5, QA 누적 PR50 → release/v1.0.6. https://github.com/Innvoaid/dentlink-lab-app/pull/50
+- 기존 `feat/DL-17470`을 로컬에서 이름 변경하고 새 원격으로 동일 커밋을 푸시했다. 새/구 원격 diff0 및 새 PR head/base/non-draft 확인 후 기존 Office PR353·Lab PR49를 대체 링크/이유와 함께 close(merge 아님), 구 원격 feat/DL-17470 삭제. 기존 리뷰 이력은 닫은 PR에 남고 새 PR References로 연결. 원래 알림센터 feature/DL-17059/17060은 보존. PR353/49가 현재라는 이전 기록은 이 단락으로 대체한다.
+- 포함 QA: DL-17470 상단 배경색 전환·새로고침 표시 보완. Jira 상태/본문은 건별로 유지하고 결과 댓글45109의 링크를 누적 PR354/50으로 갱신. 본체/백로그 상위 카드 변경 없음.
+- 이번 변경은 Git/PR 운영 정리뿐이며 제품 소스/커밋·검증 결과는 직전과 동일. 재빌드·기기 전수 테스트·리뷰 폴링 없음. 배포하지 않았고 기존 STG Office iOSv347/Androidv346, Labv65 및 웹은 유지.
+- 다음: 새 QA 요청은 누적 PR에 추가하거나, 사용자 배포 요청 시 아직 머지하지 않은 해당 QA 브랜치의 확정 SHA로 지정 환경 CodePush. 현재 대기.
+
 ## 2026-11-17 DL-17470 알림 화면 전환 QA 보완 — PR까지 완료·미배포
 
 - 사용자 승인: 새 Jira 카드를 사용해 지적한 Safe Area/노치 배경색 지연과 점검된 새로고침 표시를 수정·검증·커밋푸시·PR까지. 제목/본문 정리 허용, 배포 금지.
