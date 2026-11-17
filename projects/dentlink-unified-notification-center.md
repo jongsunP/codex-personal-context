@@ -1327,3 +1327,9 @@
 - 제품마다 정확한 저장소·활성 작성자를 확인한다. Web 신규 일반 작업은 최신 origin/master, 두 앱은 origin/main 기반 feat/<Jira>→해당 release→main이다. 11/4 이후 신규 브랜치에는 feat/를 쓰고 기존 feature/ 원본은 별도 지시 없이 바꾸지 않는다. 남은 develop을 신규 기준으로 쓰지 않는다.
 - 11/3 사용자가 이번 FE 선행 범위의 구현·검증·세 제품 commit/push를 승인했다. PR 생성·merge·배포는 승인 범위가 아니다. 다음 미정 정책/새 기능을 자동 확장하지 않는다.
 - Slack은 읽기 전용이며 자동 폴링은 중단 상태를 유지한다. 팀 공유 문서와 개인 작업 메모를 구분하고 의미 있는 마감에 개인 컨텍스트를 commit/push한다. 제품 commit/push는 해당 작업의 명시적 승인을 따른다.
+
+## 2026-11-17 IDE Fastlane 실행 경로 보완
+
+- 사용자가 IDE task `yarn fastlane-android:dev` 실행 시 `command not found: fastlane`(127) 보고. Fastlane2.228.0은 mise Ruby3.2.2에 이미 설치되어 있었으나, `.zshrc`의 mise activate가 non-interactive login shell `zsh -l -c`에 적용되지 않아 system Ruby2.6으로 실행되는 것이 원인.
+- 로컬 `~/.zprofile`에 mise shims PATH를 추가하고 정확히 같은 `zsh -l -c`로 Ruby3.2.2/Fastlane2.228.0 인식·version 실행 성공, Lab checkout에서도 경로 확인. 기존 파일은 존재 시 타임스탬프 백업 보존. 제품 소스/브랜치 변경 없음. 빌드·Firebase 업로드·CodePush는 실행하지 않음.
+- 사용자 설명: Android `fastlane-android:dev`는 Development APK, `fastlane-android:staging`은 Staging APK를 Firebase App Distribution에 빌드/업로드하므로 App Tester 새 설치 파일 제공 용도. CodePush는 기존 설치 앱 JS 업데이트라 App Tester 새 바이너리를 생성하지 않음. 사용자가 실행 시 실제 branch 확인 필요: 이 확인 시 Office checkout은 사용자가 변경한 release/v2.2.5(원격보다7커밋뒤), Lab은 feat/DL-16140였음. 원격동기화/branch 변경은 이번 PATH 수정에서 하지 않음.
