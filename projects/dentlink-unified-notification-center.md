@@ -1362,3 +1362,9 @@
 - iOS Linking.openSettings는 일반 앱 설정 경로. Apple 별도 notification settings URL 지원 존재하나 현재 react-native-permissions4.1.5 openSettings는 일반 앱 설정만 지원하며 Notifee openNotificationSettings는 iOS no-op. Android용 함수를 iOS에 그대로 대체하거나 최신 라이브러리 signature를 현재 설치본에 적용하면 안 됨. 최초 요청 누락은 기존 설치된 request 기능을 JS에서 활용해 수정 가능; 직접 알림설정 딥링크는 별도 호환 확인사항.
 - 카메라/사진은 request 후 blocked에서 일반 앱 설정을 여는 점은 적절하나, 공통 requestForPermissionAlert가 설정 이동 직후 onPressAllow를 호출하고 실제 소비자는 카메라/사진 picker를 여는 기존 코드상 위험 발견. 설정복귀/실제 허용 전 기능 실행 가능. 이번 알림 신규 코드가 아닌 별도 범위, 기기 재현 전 확정 크래시로 말하지 않음. Lab 밀링 카메라 request/설정 분기는 별도 구현, 이번 변경으로 묶지 않음. Lab 구 ProfileNotificationSection/useProfileNotification과 양앱 NotificationBanner는 검색상 현재 화면 caller 없어 활성 경로 수정 범위에서 제외.
 - 권고 수정 범위: 알림센터 권한 진입 공통 처리(양앱) + 최초요청/차단설정/취소/복귀/선택토글 적용 회귀검증. 네이티브 SDK/앱 모든 OS권한 전면개편은 불필요. 새 사용자 승인 전 QA branch 소스 변경 없음.
+
+## 2026-11-17 Firebase 실제 Android 릴리즈 조회
+
+- 사용자 승인: 양앱 Development/Staging 실제 버전·업로드시각 읽기전용 조회만. Fastlane 기존 서비스계정으로 App Distribution releases.list GET(각 최신3개) 4건 HTTP200. 키/토큰 출력·배포/테스터변경 없음.
+- 최신 Firebase 등록(createTime, KST): Office Development2.2.5(135) 2026-11-17 15:30:35 / Office Staging2.2.5(135) **2026-11-12 10:32:20** / Lab Development1.0.6(10) 2026-11-17 15:01:47 / Lab Staging1.0.6(10) 2026-11-17 15:45:35. updateTime도 각각 같은 시각대. 따라서 오늘 신규 릴리즈 등록 확인은 Office DEV·Lab DEV/STG이며 Office STG는 오늘 신규 등록 확인 안 됨. 사용자 'Office STG만 실행' 인식과 실제 결과가 다름을 보고. 누가 실행했는지나 바이너리의 Git SHA는 API 버전·시각만으로 단정하지 않음.
+- 실제 등록 확인과 테스터 초대/배포대상/단말 설치/OTA 적용은 별도. Firebase 바이너리 등록 기록이며 CodePush 라벨 아님. 이후 명시 요청 전 추가 업로드/CodePush 없이 대기.
