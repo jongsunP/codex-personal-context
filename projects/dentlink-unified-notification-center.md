@@ -2,6 +2,7 @@
 
 ## 2026-11-17 Staging 배포·지라 정리 브레이크포인트
 
+- 추가 정리(2026-11-17): DL-17202 치과앱 크레딧·청구서 목록은 이 세션 구현·검증 및 PR346 병합/STG 배포에 포함된 작업. 사용자 지시에 따라 본문 범위·구 Draft 링크를 정리하고 댓글45107 후 Done(완료) 전환. SP/담당자/부모 유지. 실제 푸시 통합 QA/운영배포, 메뉴·PDF·결제·상세 View 확장은 별도이며 이 카드의 FE 미완으로 두지 않음.
 - 사용자 확인: 웹 Staging은 사용자가 직접 배포 완료. 에이전트는 웹 재배포/PR병합/운영 배포를 하지 않음.
 - 앱 Staging CodePush 완료: Office 2.2.5 iOS **v347**, Android **v346** / Lab 1.0.6 iOS·Android **v65**. 네 건 모두 게시 성공 후 history 한 번으로 enabled·mandatory·rollout100·target 확인. source는 앞선 Development와 동일(Office8748a66d / Lab9455c27), 각 merged release와 tree diff 없음. 양앱 버전 검증 통과 및 main 대비 네이티브/패키지/패치 diff 없음. 직렬 빌드, Slack 쓰기 없음.
 - 현재 효과: 새 설정 API·displayAuthorities·서버 순서·새 설정 디자인·OS 안내, 치과 WebView 상세 정본에 맞춘 알림 랜딩까지 릴리즈 병합 및 DEV/STG 반영. 확정 알림센터 본체의 알려진 독립 FE 미완 없음. 기존 검증을 재사용했으며 이번은 배포/활성화 확인으로 실기기 OTA 수신·실제 FCM·최종 QA 완료를 뜻하지 않음. 구 Office2.2.4/Lab1.0.5에는 이번 OTA 미적용.
