@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 재개 동기화·PR 리뷰 일회 확인
+
+- 사용자 범위: 동기화 후 웹·양앱 새 리뷰를 한 번만 조회하고 머지 전 남은 것 보고. 코드수정·머지·배포·폴링 없음.
+- 개인 정본 및 세 feature pull --ff-only 완료. 모두 clean/추적원격0:0, head는 Web f6e1a86dc / Office f71ad0b0 / Lab 2f4c4f0 그대로.
+- 세 PR 모두 정식/open/충돌 없음. 웹·치과앱 연결 도구, 기공소앱은 연결 도구404로 로컬 gh 인증을 사용하여 확인. 새 리뷰 없음, 미해결 스레드 Web0/Office0/Lab0. Web/Office CodeRabbit status success; Lab status rollup success이나 새 CodeRabbit 실행 증거로 해석하지 않음.
+- 양앱 main 및 각 release 모두 포함. Web release/v1.94.0도 포함하지만 origin/master가 e03a72700(1.93.0 release merge)로 갱신되어 feature에 없는 커밋14개 존재. 다음 코드 작업은 웹 최신master 통합 및 영향범위 검증이며 이번에는 병합하지 않음. 밀링 기능 자체는 다른 소유자 범위.
+- 기존 별도 잔여: 알림설정 새 디자인 대조·반영, 승인/병합 및 배포/QA. 최근 수정 미배포 상태 유지. 이번 새 리뷰 처리 작업은 없음.
+
+
 ## 2026-11-16 최종 마감·사용자 재개 대기
 
 현재 구현분의 머지 전 FE 준비(기준브랜치통합/리뷰검토·수정·근거답변/resolve/검증/커밋푸시/기존PR본문정리)를 마쳤다. Webf6e1a86dc·Officef71ad0b0·Lab2f4c4f0 세 작업트리 clean, 원격추적대비0/0 확인. PR4862→release/v1.94.0, PR346→release/v2.2.5, PR42→release/v1.0.6 유지. 마지막 확인 기준 세PR미해결thread0(Web별도밀링은범위사유로닫은것이며코드해결주장아님). 최근 치과 리뷰영향10suite190tests통과, 실제기기전체QA/모든봇최종head승인으로확대하지않음.
