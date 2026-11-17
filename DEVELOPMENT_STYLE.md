@@ -172,10 +172,18 @@ appear nowhere else in the app.
   clarification after the notification settings flicker/response fixes.
 - User clarification, 2026-11-17: a reported pause during repeated profile
   toggles is a concrete interaction defect, not a hypothetical volume concern.
-  For an authorized fix, keep displayed choices responsive while serializing
-  writes and retaining the latest pending choice per field; verify failure,
-  stale response and account-change behavior. Do not apply this automatically
-  to unrelated settings with different save contracts.
+  For an authorized fix, keep displayed choices responsive and retain the
+  latest pending choice per field. Serialize writes to the same field; when
+  the confirmed API contract updates independent fields through separate
+  PATCH endpoints, do not make unrelated switches wait for each other or for
+  a full-profile confirmation GET. Whole-object PUTs or coupled settings need
+  their own ordering/conflict guard; never assume they are independent.
+  Preserve confirmed cache values, failure recovery, stale-response and
+  account-change guards, and a final server reconciliation that does not block
+  new choices. Check the first click and alternating rapid clicks as well as a
+  single save. Do not apply this automatically to unrelated settings with
+  different save contracts. This was confirmed by profile real-device feedback
+  on 2026-11-17; a smooth optimistic UI is not proof of server persistence.
 - For timing defects (switch flicker or Safe Area color lag), final screenshots
   alone are insufficient. Inspect the transition itself and compare with an
   existing working invocation path. Distinguish a confirmed local improvement
@@ -555,6 +563,35 @@ identify a particular issue, excessive duration, or required reduction.
 - Record each Jira product card's own effort; put the parallel elapsed schedule
   and its assumptions in the shared planning explanation. Do not make a sum of
   product estimates appear to be the promised delivery duration.
+
+## App Screen Safe Areas And Background Transitions
+
+**Mandatory for every added app screen** (user instruction, 2026-11-17),
+including auxiliary credit/billing/list screens. Also apply when changing a
+screen's navigation, background, header or safe-area handling. This is part of
+implementation completeness, not optional polish left for QA to discover.
+
+- Match the established screen's notch/status-bar area, safe area, header and
+  body backgrounds, including intentional differences. Apply the screen's
+  correct inset exactly once; avoid double padding or missing top space.
+- Compare with a working screen in the same navigation structure. A bottom-tab
+  transition and a nested native-stack push/pop are different; copying a global
+  background setter or a focus/effect timing patch is not sufficient evidence.
+- Keep a screen's background with the screen through entry, back/swipe-back and
+  return to home/profile. Where screens own their safe-area backgrounds, use
+  the actual screen/tab's explicit color, not an unreliable parent inference of
+  a nested route. Outgoing and incoming screens must not overwrite each other's
+  colors during transition. Preserve dynamic/special screen colors.
+- Include the newly added screen and its entry/return screens in the focused
+  review. If changing shared/root layout, check affected existing home/profile
+  tabs for static color mismatch as well as transition lag. Check equivalent
+  Office/Lab behavior while preserving each product's intentional colors.
+- A final still image cannot establish correct timing. Follow the risk-based
+  runtime rule below for how to verify, and honor explicit instructions to skip
+  execution. Record unverified behavior rather than declaring it resolved;
+  distinguish user-reported device success from agent-run verification. This
+  mandatory implementation checklist does not require a full app sweep or a
+  simulator/emulator run after every edit.
 
 ## App Screen Runtime Verification Before Merge
 

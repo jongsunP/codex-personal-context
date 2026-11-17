@@ -280,6 +280,12 @@
   Release-based follow-up/QA is an exception only to the base revision, never
   to branch naming. This does not widen read-only requests or
   commit/push/PR/deployment authorization.
+- For every added app screen, follow **App Screen Safe Areas And Background
+  Transitions** in `DEVELOPMENT_STYLE.md` as a mandatory implementation check:
+  notch/safe-area/header/body colors and insets, entry/back transitions, and
+  existing home/profile return screens. Apply it to auxiliary screens too.
+  Preserve product-specific colors and follow the existing risk-based testing
+  and explicit test-skip instructions; do not leave this work for QA discovery.
 - For all app work, follow **App Screen Runtime Verification Before Merge**
   in `DEVELOPMENT_STYLE.md`. User update, 2026-11-16: simulator/emulator runs
   are not mandatory after every change. Use them for initial feature development,
