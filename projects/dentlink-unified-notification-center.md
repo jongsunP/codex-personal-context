@@ -1,5 +1,19 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 최신 웹 릴리즈 통합·새 설정 디자인 반영 완료, 미배포
+
+- **사용자 승인 범위:** 웹 최신 release/v1.94.0 통합/충돌 해결, 확인한 새 Figma를 웹·양앱 반영, 검증·커밋푸시·기존 PR 최신화·메모리. 배포/PR병합/CodePush 금지. 밀링은 릴리즈 정본, 알림센터 기능 유지.
+- **최종 코드:** Web `127b9b4f7`(병합 `b9ab8ae4c`, 디자인 `5e6177e4f`, 기존 번역키 보완 `127b9b4f7`), Office `b2bb0946`, Lab `9455c27`. 각 기존 feature/DL-17058·17059·17060과 PR4862→release/v1.94.0 / PR346→release/v2.2.5 / PR42→release/v1.0.6 유지. PR 설명은 현재 범위·검증·미배포 중심으로 정리.
+- **웹 통합:** release/v1.94.0 `4248a9e469`(master e03a72700/1.93.0 포함)을 실제 fetch·merge. 밀링 Production/Operation/관련 타입은 릴리즈 정본 그대로, 공통 상세 헤더는 정본 레이아웃에 알림 진입만 유지. data-contracts의 과거 MfgParameterInputDto 중복 정의를 제거하고 릴리즈 union 정의 및 알림 설정 DTO 유지. 해당 밀링 전용 경로의 릴리즈 대비 diff 없음. 밀링 자체 재개발/별도 QA 소유는 아님.
+- **새 디자인:** 치과 웹·앱 Office/User 탭(기본 Office), User 안내, 병원명 PC 숨김/모바일·앱 표시, 범위 선택 위치·회색 설명·Assigned Orders, User Credit/Payment 문구. 기공소는 기존 단일 설정 목록 유지. 양앱 OS 안내 배너를 26px 아이콘·한 본문·기존 CTA로 압축. Lab 한/영 로컬 리소스만 갱신, 번역 Sheet 작업 없음.
+- **계약 유지:** 탭은 표시만 분리. categories/channels의 서버 배열 순서 유지(디자인 예시의 Payment/Office Credit 순서나 PM 예시를 하드코딩하지 않음). channels[0] 상위·platforms/displayAuthorities·전체 PUT·다른 범위 값 보존·상위 전체 ON/OFF·즉시 표시/저장 차단/실패복구/확인GET·OS복귀 동작 불변. Assigned Orders 설명으로 기존 서버 선택값을 초기화하지 않음.
+- **Figma 근거:** web637:28890(User),637:29261(Office), app626:28455/626:28483, OS안내642:28528/606:39212. 댓글2010620506/2010622582/2010624441과 제목 유지 후속2010625389 반영. 구 node167:24944는 현시점 찾을 수 없어 실제 새 프레임으로 대조.
+- **검증:** 웹 관련41tests, Clinic/Lab/Admin 타입 및 정상 커밋/푸시 훅 통과(config49/hooks89/Admin guard9, lint 오류0·기존경고). 임시 외부 Chromium 하네스로 Office/User 분리·정확한 변경 대상·PC/모바일 병원명·Lab 탭 없음 확인. 제품 Storybook/임시페이지 추가 없음. 실데이터 E2E는 기존 사용자 지시로 SKIPPED.
+- **앱 검증:** Office 설정/화면 2suite66tests, Lab 설정18tests·변경 lint 통과. iOS/Android를 제품별 같은 소스로 순서대로 실행, Office 실제 DEV GET 화면에서 양탭·병원명·범위 표시 확인. Lab 양OS 실제 설정 진입, OS OFF 새 배너 및 기존 Push 차단 표시 확인. Android Lab OS권한은 테스트 후 원래 허용으로 복구. 실제 설정 PUT/FCM/OTA/전체 기능 QA는 이번에 하지 않음. 전체 앱 타입은 기존 Office6/Lab5만 남음; 잘못된 Jest 인자로 실행된 전체 suite의 기존 native mock 실패는 별도이며 전체검사 통과라고 주장하지 않음.
+- **실행 정리:** 이번 검증용 Metro8081/8082·headless Android·iOS simulator·임시 하네스 서버 종료. 사용자 직접 preview 요청 아님. Windows/사용자 브라우저 변경 없음.
+- **배포/다음:** 이번 작업은 PR에만 반영, DEV/실기기 배포는 이전 상태 그대로. 확인한 새 디자인 대기 항목은 해소. 현재 요청 범위의 추가 FE 미완 없음. 이후 사용자 승인 시 배포/QA, 실제 새 리뷰가 오면 최소 범위 대응. 별도 홈·이메일·OS배지 개선 및 실제 발송/실기기 검증은 별개. Swagger 상위OFF 설명 정합성은 기존 문서 확인사항이며 신규 구현/API 대기로 확대하지 않음. 자동 리뷰 폴링/강제 리뷰 요청 없음.
+
+
 ## 2026-11-17 Figma 새 설정 디자인·멘션 3건 확인(조사만)
 
 - 본체 구현을 막는 BE/기획 대기는 현재 없음. channels/platforms/displayAuthorities 연결과 기존 PR 리뷰는 완료. Swagger 상위 OFF 설명 정합성은 기존 확정 전체ON/OFF 동작을 막는 신규 API 대기가 아님. 본체외 홈/이메일/배지 후속은 구분.
