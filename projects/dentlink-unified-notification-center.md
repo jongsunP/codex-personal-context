@@ -1,5 +1,15 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 추가 QA 스테이징 CodePush 완료·웹 배포 포함 여부 정정
+
+- 사용자 승인: 이제 Development는 그대로 두고 Staging만, PR 미머지 QA `feat/DL-16140` 기준 양앱 CodePush. Office a099f6c695ce149f4b1b134d67d605a8af28d8bf, Lab c153db1aaa201207209bec6a42732e2b18d954e1. 각각 원격 일치·clean, package/Android/Xcode 2.2.5/1.0.6 검증 및 이전 배포 대비 JS/TS만 확인.
+- 게시·활성화 완료: Office 2.2.5 Staging iOS **v350**, Android **v349**; Lab 1.0.6 Staging iOS/Android **v68/v68**. 4건 mandatory=true, disabled=false, rollout100%, history 각 1회로 target/branch/SHA 확인. 기존 scripts/codepush.js staging all --mute 직렬 실행, Slack 쓰기 없음. Development·웹·PR·릴리즈·native 바이너리 변경 없음.
+- DL-17470/17482 추가 수정 이제 Staging 포함. 직전 최종 코드 양OS 로컬 검증/테스트 재사용, 새 기기 실행 없음. 검증 범위 새 앱 크래시 미발견; 실기기 OTA 수신과 배경색/스위치/Office 프로필 연속입력 최종 체감은 사용자 확인. Office 기존 isv.mp4 크기 경고는 기존 force 옵션으로 게시 성공.
+- 사용자 Jira 상태 확인 요청: DL17472는 사용자 승인에 따라 Ready for QA로 이동, 17475/17477은 조회 당시 이미 Ready for QA. 17470/17482는 작업·푸시 완료이며 미작업이 아니었음. 그 이후 사용자가 지라를 그대로 두고 의견만 요청해 추가 상태/댓글 변경 없음. 새로운 QA는 조회/작업하지 않음.
+- **웹 정정:** 사용자가 웹 STG를 이미 배포했다고 하여 처음에 17471도 포함됐다고 답했으나 실제 대조 결과 미포함. origin/stage 56d96f97cb64cf46d858bea8ad40f1cd384914b2 (release/v1.94.0 -> stage PR4905)의 Clinic run44054600919·Lab run44054600971 성공. 그러나 해당 소스 USERS는 filters.user/User이며 QA의 catalog.general/General 변경 없음; 17475 otherEmployersLabel 수정도 없음. PR4903 OPEN·미머지. 웹 QA cdf311cfc는 별도 feat/DL-16140에 있음. 배포 성공과 QA 수정 포함 여부를 구분해야 함.
+- 사용자에게 17471/17475는 앱 배포 완료·웹 배포 대기이므로 Ready for Deploy 의견 전달, 상태는 그대로 둠. 사용자가 웹 STG를 **QA 작업 브랜치 기준으로 다시 직접 배포**하겠다고 함. 이번 세션에서는 그 후 배포 완료를 확인하지 않았음.
+- 다음: 사용자가 웹 QA 배포 확인 및 양앱 실기기 QA. PR354/50/4903 유지, 추가 리뷰/신규QA/배포 자동 진행 없음.
+
 ## 2026-11-17 추가 QA — 앱 스위치·프로필 응답·배경색 재보완 (미배포)
 
 - 사용자 추가 제보: 웹 스위치는 해결된 것으로 보고 코드 흐름만 1회 확인 후 변경하지 않음. 앱 스위치 잔여 깜박임, 치과앱 프로필의 첫 클릭/연속 클릭 지연, DL-17470 알림함→설정 및 다른 화면 복귀의 상단색 지연을 다시 처리. 기존 QA 누적 PR 유지, 이번 추가 배포/머지 없음.
