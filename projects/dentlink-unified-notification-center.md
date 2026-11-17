@@ -1341,3 +1341,5 @@
 - 양앱 `zsh -l -c` Fastlane 경로 정상, Android bundle check 및 fastlane lanes 정상(개발/STG lanes 로딩). 환경파일·Firebase 서비스계정 파일 존재 여부만 확인, 내용 변경 없음. 양앱 및 알려진 Office worktree에 release.keystore 없음; Repository/Downloads/Documents/Codex worktrees 파일명 검색에서도 기존 keystore/jks 발견 안 됨.
 - 사용자에게 설명: release.keystore는 프로젝트 android/app에 놓되 Git ignore된 기존 앱 서명 비밀키. Git clone/pull로 내려오지 않음. 앱개발자에게 기존 배포 키와 두 앱 공용 여부를 확인해 받아야 함. 임의 새 키 생성·debug 키 대체 안 함. 파일을 받으면 양앱 서명 task로 먼저 확인 후 사용자가 IDE Fastlane 실행; APK 빌드/Firebase 업로드 완주까지 검증한 상태는 아님.
 - 이번 제품 소스 수정/커밋/푸시/PR머지/Firebase 업로드/CodePush 없음. 이전 QA STG CodePush는 유지. 사용자가 Android DEV/STG 새 바이너리 업로드 뒤 명시 요청하면 STG만 QA 작업 브랜치에서 CodePush 예정; 자동으로 실행하지 않음.
+
+- 후속 확인(2026-11-17): 사용자가 release.keystore를 앱 개발자에게 요청함. 양앱 git fetch --dry-run --tags 오류 없음, 작업트리 clean·upstream 0/0, IDE login shell Fastlane/Ruby3.2.2 인식 재확인. 서명 파일 외 현재 확인된 추가 수정 없음. Office는 최신 release/v2.2.5, Lab은 QA feat/DL-16140 유지. 사용자 파일 수령 후 서명검증이 재개점이며 실제 Firebase 업로드 성공은 아직 미검증.
