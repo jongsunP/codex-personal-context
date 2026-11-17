@@ -1345,3 +1345,13 @@
 - 후속 확인(2026-11-17): 사용자가 release.keystore를 앱 개발자에게 요청함. 양앱 git fetch --dry-run --tags 오류 없음, 작업트리 clean·upstream 0/0, IDE login shell Fastlane/Ruby3.2.2 인식 재확인. 서명 파일 외 현재 확인된 추가 수정 없음. Office는 최신 release/v2.2.5, Lab은 QA feat/DL-16140 유지. 사용자 파일 수령 후 서명검증이 재개점이며 실제 Firebase 업로드 성공은 아직 미검증.
 
 - 서명 파일 수령·검증 완료(2026-11-17): 사용자가 양앱 android/app/release.keystore 배치. 두 파일 존재·nonempty·Git ignore 확인. keytool로 기존 Gradle storePassword를 메모리/하위프로세스 환경에서만 사용해 열기 및 설정된 alias 존재 확인(키/비밀번호 출력 없음). 양앱 각각 validateSigningDevelopmentRelease + validateSigningStagingRelease 성공(Office7초/Lab12초). 누락 blocker 해소. 실제 APK 전체 빌드/개인키 서명/기존 설치 인증서 일치/Firebase 업로드는 아직 미검증. 사용자 IDE Fastlane DEV/STG 순차 실행 재개 가능, 배포/CodePush는 실행하지 않음.
+
+## 2026-11-17 OS 알림 권한 QA 범위 검토 — 수정 전
+
+- 사용자: iOS 신규 설치 후 최초 알림 요청을 건너뛴 상태에서 Go to Settings가 알림 항목 없는 일반 앱 설정(백그라운드 새로고침/셀룰러)으로 이동. 양앱/iOS·Android 및 연관 OS 경로 검토 요청. 이번은 코드·설치 라이브러리와 Apple/Android 공식 계약 검토이며 기기 재현/코드수정/배포 없음.
+- 양앱 NotificationPermissionNotice 및 useNotificationPermissionRequest는 OS 미요청/거절을 구분하지 않고 iOS Linking.openSettings, Android notifee.openNotificationSettings 호출. iOS RNPermissions4.1.5 native mapping: NotDetermined→denied, Denied→blocked. 신규 알림센터는 둘을 한 그룹으로 취급해 최초 권한 요청 경로 누락. 팝업뿐 아니라 알림설정 배너·Push 토글 안내가 같은 영향. Office 현재 release/v2.2.5와 QA feat/DL-16140 사이 이 파일 차이 없음.
+- 기존 가입 NotificationSettingScreen의 Allow notification은 공통 requestForNotificationPermission을 호출하며 iOS messaging.requestPermission/Android13+ POST_NOTIFICATIONS request/12이하 Notifee 상태 확인 분기가 있음. 신규 알림센터 경로는 이 요청 절차를 타지 않음. Android 설정 직접 열기는 유효하며 iOS와 동일한 막힘을 확정하지 않음; Android13+ 미요청/재요청 가능/차단을 고려한 요청 우선 권고. checkNotifications만으로 Android13+ blocked를 구분할 수 없다는 공식 라이브러리 계약 유의.
+- 양앱 AppState 복귀 권한 재조회·선택한 Push 항목에 한정해 허용 후 저장·소속/context 변경 방어는 존재. 권한 요청 팝업을 새로 연결하면 외부 설정 복귀뿐 아니라 request 반환 후 refresh/선택항목 적용 및 중복 방지 검증 필요. 서버 전체 알림 설정 자동ON/변경 금지.
+- iOS Linking.openSettings는 일반 앱 설정 경로. Apple 별도 notification settings URL 지원 존재하나 현재 react-native-permissions4.1.5 openSettings는 일반 앱 설정만 지원하며 Notifee openNotificationSettings는 iOS no-op. Android용 함수를 iOS에 그대로 대체하거나 최신 라이브러리 signature를 현재 설치본에 적용하면 안 됨. 최초 요청 누락은 기존 설치된 request 기능을 JS에서 활용해 수정 가능; 직접 알림설정 딥링크는 별도 호환 확인사항.
+- 카메라/사진은 request 후 blocked에서 일반 앱 설정을 여는 점은 적절하나, 공통 requestForPermissionAlert가 설정 이동 직후 onPressAllow를 호출하고 실제 소비자는 카메라/사진 picker를 여는 기존 코드상 위험 발견. 설정복귀/실제 허용 전 기능 실행 가능. 이번 알림 신규 코드가 아닌 별도 범위, 기기 재현 전 확정 크래시로 말하지 않음. Lab 밀링 카메라 request/설정 분기는 별도 구현, 이번 변경으로 묶지 않음. Lab 구 ProfileNotificationSection/useProfileNotification과 양앱 NotificationBanner는 검색상 현재 화면 caller 없어 활성 경로 수정 범위에서 제외.
+- 권고 수정 범위: 알림센터 권한 진입 공통 처리(양앱) + 최초요청/차단설정/취소/복귀/선택토글 적용 회귀검증. 네이티브 SDK/앱 모든 OS권한 전면개편은 불필요. 새 사용자 승인 전 QA branch 소스 변경 없음.
