@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 알림센터 공통 UI 연결부 한정 점검 — 수정 전
+
+- 사용자 요청: Safe Area/노치 배경 전환 지연을 계기로 기존 UI 방식과 어긋난 연결부를 웹·Office·Lab에서 점검. 이번은 조사만이며 제품 코드·PR·Jira·배포는 변경하지 않았다.
+- 우선 수정 대상: 양앱 App.tsx의 navigator 바깥 top SafeAreaView 색상을 RootNavigator.onStateChange에서 바꾸므로 native 화면 전환과 별도 타이밍이다. Office 기존 하단 탭은 tabPress에서 선반영한다. 사용자 관찰 증상과 맞는 코드 구조이며, 기존 전역 구조 자체는 알림센터 이전부터 존재하지만 새 알림 화면과의 전환 연결 검증이 부족했다. 해당 전환부터 기존 UX에 맞춰 보완하고 전역/네이티브를 광범위하게 바꾸지 않는 방향을 추천한다. 이번 턴 기기 재현은 하지 않았다.
+- 추가 보완 후보: 양앱 NotificationCenterScreen의 inbox refreshing이 isRefetching 전체(다음 페이지 제외)에 연결되어 있다(Office443/Lab409). 따라서 focus/read 등 자동 재조회도 수동 pull-to-refresh 표시를 켤 수 있다. 기존 Home/LinkTalk는 수동 새로고침용 local isRefreshing을 사용한다. 자동 갱신은 유지하고 수동 표시 상태만 분리하는 것을 추천. 시각적 발생 정도는 런타임 미확인이며 실제 발견 크래시로 취급하지 않는다.
+- 나머지 확인 범위: 공통 토스트 경로/위치, 웹 병원선택 공통모달·중첩 Escape/포커스, 앱 공통 bottom sheet/뒤로가기, 소속 전환 중 중복입력·blur 취소, 설정 저장 중 화면 유지. 확인한 범위에서 추가로 명확한 기존 UI 이탈/결함은 발견하지 않았다. 디자인에 근거한 스크롤 높이 차이는 임의 통일 대상이 아니다.
+- 기존 집중 테스트: Office NotificationCenterScreen 26개, Lab useNotificationLabSwitch 24개, Web Clinic NotificationCenter 12개 = 62개 통과. 화면 전환 애니메이션/네이티브 시각적 품질을 증명하는 테스트는 아니다. 제품 Git은 기존 SHA 유지·clean.
+- 다음: 사용자 구현 요청 시 두 앱의 전환/새로고침 표시를 좁게 보완하고 해당 동작만 시뮬·에뮬 확인. 현재 스테이징은 이전 배포 그대로다. 전체 재검수/폴링/재배포 없음.
+
 ## 2026-11-17 사용자 Jira 본체·백로그 분리 확인 및 QA 대기
 
 - 실제 Jira 읽기 확인: DL-16140 `[치과/기공소] 알림센터`는 진행 중(PM 담당), 하위 Frankie 소유 FE 카드는 전부 완료. 전체 QA/운영 완료 선언과 구분한다.
