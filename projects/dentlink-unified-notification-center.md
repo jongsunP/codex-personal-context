@@ -1,5 +1,18 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 DL-17470 알림 화면 전환 QA 보완 — PR까지 완료·미배포
+
+- 사용자 승인: 새 Jira 카드를 사용해 지적한 Safe Area/노치 배경색 지연과 점검된 새로고침 표시를 수정·검증·커밋푸시·PR까지. 제목/본문 정리 허용, 배포 금지.
+- Jira DL-17470 `[QA][치과·기공소앱] 알림 화면 전환 배경색·새로고침 표시 보완`으로 제목/본문 정리. 진행 중 → Ready for Deploy(개발완료), 결과 댓글45109. 부모 DL-16140/담당자/SP 유지. 이번은 QA 수정 카드이며 실제 사용자 재확인 완료·운영 완료로 Done 처리하지 않음.
+- 브랜치: 두 기존 checkout 재사용, 각 배포된 릴리즈에서 `feat/DL-17470` 생성. Office origin/release/v2.2.5(0a131041), Lab origin/release/v1.0.6(dfb3051). 최신 main에는 다른 변경이 있으므로 이번 STG QA 범위로 가져오지 않음. 이전 feature/DL-17059·17060 보존.
+- Office `/Users/parkjongsun/Repository/dentlink-app` 5239f3be push, PR353 → release/v2.2.5. Lab `/Users/parkjongsun/Repository/dentlink-lab-app` 85e56f5 push, PR49 → release/v1.0.6. 두 PR non-draft/open·실제 base/head 확인, 제품 checkout clean. Office는 GitHub connector, Lab은 connector404로 기존 gh 인증 사용.
+- 수정: 각 3파일(NotificationSafeAreaBackground 신규, NotificationCenterScreen, RootNavigator). RootStack layout에서 실제 중첩 탭까지 포함한 root state를 읽고 알림 진입·설정·복귀 시 layout effect로 기존 안전 영역 색상을 선반영한다. 다른 화면의 전역 색상 기준/기존 onStateChange는 유지. Native 코어·FCM·API 계약·웹 변경 없음. API 자동 갱신과 별도로 수동 isRefreshing을 추적하며 소속 변경/해제 뒤 오래된 완료가 새 표시를 끄지 않도록 request ID 사용. 진행 중 동일 조회는 재시작하지 않는다.
+- 검증: 양앱 Development Debug + iOS26.5 iPhone17Pro / Android16 API36에서 홈→알림함→설정→알림함→홈·수동 새로고침 성공. Office Android 및 Lab Android 시스템 뒤로가기, Lab iOS 가장자리 스와이프 취소/완료 성공. Office iOS 전환 녹화/스크린샷 및 두 앱 store의 색상 선반영 순서 확인. Lab 실행 중 자동 재조회4건 동안 목록 spinner false, 수동 refresh true→false 직접 관찰; Office도 수동 true→false 확인. 설정 저장/실제 FCM·새 전체 QA는 하지 않음.
+- 기존 집중 테스트 Office26/Lab24=50개 통과. 변경파일 lint 오류0(기존 Root console 경고3개씩). 전체 tsc는 기존 오류로 통과하지 않는다. 원본 HEAD의 변경 전 소스를 compiler host에서 읽은 baseline과 현재 진단을 비교해 동일함 확인(Office8/Lab7 diagnostics, compiler API 전역 진단 포함). 기존 Icon/Tooltip/MessageText/OrderAddProduct 또는 order types 범위이며 이번 변경 오류 없음. 테스트 파일을 새로 만들거나 수정하지 않음.
+- runtime 참고: Android crash buffer에는 기존/이번 부팅의 시스템 Bluetooth 프로세스 기록만 보였고 Dentlink 앱 크래시는 발견하지 않음. 실제 실기기·모든 전환의 무결함을 뜻하지 않는다. 사용한 기기·Metro는 작업 전 종료 상태로 정리. 영상/스크린샷/실행로그는 /tmp/dl17470-* 로컬 검증 자료(개인정보 업로드 없음).
+- 배포: 이번 수정 머지·CodePush·웹배포 없음. 기존 STG Office iOSv347/Androidv346, Labv65와 웹은 그대로. 웹은 점검 결과 수정 필요 없어 PR 없음.
+- 다음: PR353/49 리뷰·머지 및 배포는 사용자 지시 후. 배포 전에는 사용자의 기존 STG 화면에서 이번 수정이 보이지 않는다. 불필요한 새 리뷰 폴링/전수 QA 없이 대기.
+
 ## 2026-11-17 알림센터 공통 UI 연결부 한정 점검 — 수정 전
 
 - 사용자 요청: Safe Area/노치 배경 전환 지연을 계기로 기존 UI 방식과 어긋난 연결부를 웹·Office·Lab에서 점검. 이번은 조사만이며 제품 코드·PR·Jira·배포는 변경하지 않았다.
