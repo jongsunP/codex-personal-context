@@ -318,6 +318,11 @@ Dentlink-specific intake rules remain limited to Dentlink.
   worked on; preserve its completed portion in the record. No In Progress cards
   does not mean all work is finished. Keep QA, review, merge and deployment
   separate, and preserve story points unless explicitly authorized to change.
+- User clarification, 2026-11-17, for notification-center FE development cards:
+  close completed development cards as **Done** instead of keeping them in
+  Ready for Deploy solely for later QA. Track subsequently discovered QA issues
+  in separate QA cards. This closes the implementation scope, not overall QA
+  or production delivery; keep genuine unfinished follow-ups open.
 - For authorized Dentlink work intake, classify Web/Admin, Office native app,
   and Lab native app separately. This is the user's standing preference,
   confirmed on 2026-10-08: reuse an existing suitable product issue, or create

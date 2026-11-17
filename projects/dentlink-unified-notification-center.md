@@ -2,6 +2,7 @@
 
 ## 2026-11-17 Staging 배포·지라 정리 브레이크포인트
 
+- 사용자 상태 정리(2026-11-17): 알림센터 FE 개발 카드 중 Ready for Deploy에 있던 카드들을 사용자가 직접 Done으로 전환했다고 알림. 이 카드들은 FE 구현 업무를 추적하므로 개발 완료 후 닫고, 이후 발견되는 QA 이슈는 별도 QA 카드로 관리한다. 사용자 확인 기록이며 이번 턴 Jira 재조회/변경은 하지 않음. Done은 전체 QA·운영 배포 완료를 의미하지 않는다. 본체 외 미착수 후속은 그대로 별도 To Do이며 실제 QA 발견 전 빈 QA 카드를 만들지 않는다.
 - 추가 정리(2026-11-17): DL-17202 치과앱 크레딧·청구서 목록은 이 세션 구현·검증 및 PR346 병합/STG 배포에 포함된 작업. 사용자 지시에 따라 본문 범위·구 Draft 링크를 정리하고 댓글45107 후 Done(완료) 전환. SP/담당자/부모 유지. 실제 푸시 통합 QA/운영배포, 메뉴·PDF·결제·상세 View 확장은 별도이며 이 카드의 FE 미완으로 두지 않음.
 - 사용자 확인: 웹 Staging은 사용자가 직접 배포 완료. 에이전트는 웹 재배포/PR병합/운영 배포를 하지 않음.
 - 앱 Staging CodePush 완료: Office 2.2.5 iOS **v347**, Android **v346** / Lab 1.0.6 iOS·Android **v65**. 네 건 모두 게시 성공 후 history 한 번으로 enabled·mandatory·rollout100·target 확인. source는 앞선 Development와 동일(Office8748a66d / Lab9455c27), 각 merged release와 tree diff 없음. 양앱 버전 검증 통과 및 main 대비 네이티브/패키지/패치 diff 없음. 직렬 빌드, Slack 쓰기 없음.
