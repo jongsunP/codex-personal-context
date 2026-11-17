@@ -1,5 +1,22 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 QA 6건 구현·PR 준비 완료 — 미배포
+
+- 사용자 승인: 알림센터 QA(디자인 포함) 처리, 관련 범위 교차검토, 검증·커밋푸시·PR 완성. 배포/머지 금지. DL-17474는 코드 위험만 최소 보완, 실제 재현 없는 무한 조사 금지. DL-17482 및 Android STG 치과앱 설정 스위치 떨림 제보를 중간 추가. OS 권한 관련 테스트 보강 명시 허용.
+- 코드/PR 모두 푸시·clean·remote 일치: Web `cdf311cfc` (92ade37da 포함) `feat/DL-16140` → release/v1.94.0 [PR4903](https://github.com/Innvoaid/dentlink-client/pull/4903) 신규. Office `75dd7fd6`(fa326d5,c57af4b,d77d8e5) 같은 QA브랜치 [PR354](https://github.com/Innvoaid/dentlink-app/pull/354) → release/v2.2.5. Lab `667dce2`(692355a,3e500b0,db332cc) [PR50](https://github.com/Innvoaid/dentlink-lab-app/pull/50) → release/v1.0.6. 세 PR OPEN/non-draft/MERGEABLE 확인; 리뷰 승인 또는 새 리뷰완료를 뜻하지 않음. 자동 리뷰 폴링 없음.
+- DL-17471: 인박스 카드 USERS 분류 General/일반으로 웹·양앱 정정. 설정 User 탭과 별개. 크레딧/결제 특수분류 유지.
+- DL-17472: 양앱 서포트 헤더 아이콘 mono600. Office 실제 홈 ChannelTalkButton까지 확인·수정(DentlinkSupportButton만 고치면 홈에 반영 안 됨). Lab 실제 홈 회색 확인.
+- DL-17475: 치과 웹 배너가 모달 title을 쓰던 오류 수정, 웹·Office 배너 `Unread notifications at other offices.`; 모달 제목 유지.
+- DL-17477: 양앱 공통 사용자 동작 시 최초 requestNotifications, 이미 거절/차단되면 기존 OS 설정 이동. Android12/13+ 구분, 최초 거절 뒤 불필요한 즉시 설정 이동 없음, native prompt AppState 변화 중복처리 방지. 권한만 허용한 banner/popup은 서버 수신값 자동변경 안 함, 선택 target이 있는 경우 그 항목만 반영. context/unmount stale callback 방지 유지. JS만 수정, native/dependency/build 변경 없음.
+- DL-17474: fcmHandler foreground에서 pending/linkTalk summary invalidate 응답을 await하던 연결을 분리하고 실패 처리. 조회 지연/거절이 배너를 막지 않도록 테스트 확인. 현재 채팅 알림 억제, 이미 연 messageId 중복방지 유지. **실제 원격 푸시를 발송·간헐증상 재현한 것은 아님**; 실기기 FCM 재확인 필요.
+- DL-17482: 양앱 공통 mid Switch는 OFF left3 / ON left0 변경과 native translate0→20이 겹쳐 켜질 때 3px 반대방향 점프. left3 고정·translate17로 최종 위치 유지, animateOnMount=false 초기값도 실제값 반영. Office 신규 회귀테스트가 기존 소스에서 실패·수정 후 통과. 해당 컴포넌트를 사용하는 My Only/프로필/알림설정 공통 적용. 웹 프로필 SMS/Email 저장 중 disabled 색상 변경을 제거하고 capture+기존 hook guard로 입력차단 유지. 웹 목록 URL필터 흐름은 유지; 모든 신고화면의 주관적 체감지연까지 실제 재현·완치 주장 금지.
+- 검증: Office Jest8suite115tests, Lab6suite94tests, 웹Clinic22/Lab4tests 통과. 앱 변경lint 오류0(기존warning). 전체 앱타입은 baselineOffice6/Lab5 유지·추가0. 웹Clinic/Lab/Admin 타입 통과, 정상 push hook lint/단위검사 통과. shared UI 단독 root eslint는 기존 storybook plugin중복 한계. 실데이터 E2E 사용자 지시 제외 및 guardSKIPPED. 새 Storybook 없음, 번역Sheet/사용처메타 작업 없음.
+- Runtime: 같은 QA source/Development로 제품별 iOS17Pro(iOS26.5)·AndroidAPI36 순차 검증. Office 양OS 설정 OFF→ON 복구, Android 최초허용창·배너제거 확인. Lab iOS 최초허용창→허용→배너제거, Android OS알림설정→권한허용복귀→배너제거 및 양OS 설정OFF→ON 복구. 저장계정/서버값 복구. 실제 STG 바이너리·OTA·원격FCM 검증으로 확대하지 않음. 테스트 도구 selector/한국어 버튼 선택 실패는 수정해 최종 flow통과; 앱 크래시로 보고하지 않음. Android crash버퍼는 Bluetooth시스템프로세스 기록뿐, 이번앱 crash확인 없음. 종료 시 이번 작업에서 시작한 Metro8081/8082·에뮬·시뮬만 종료.
+- Jira 17471/17472/17475/17477/17474/17482 **Ready for Deploy(개발완료)**. 각 댓글45114~45119에 사용자 관점 결과·PR·미배포/검증한계 기록. 기존 원문/첨부/부모/SP 유지. Done/최종QA완료 아님. 기존17470은 앞선 배포 상태 유지.
+- 현재 영향: 이번 추가6건은 모두 미배포. 기존 STG Office iOSv348/Androidv347, Labv66 및 Fastlane 바이너리 상태는 변경 안 함. 실기기에 아직 떨림이 보이는 것은 이번 수정 OTA 전 상태일 수 있음. 배포 요청 전까지 누적QA branch/PR만 유지.
+- 다음: 사용자 검토/신규QA/명시 배포 요청 기다림. 배포하면 최초OS권한·설정복귀, 신고된 스위치화면의 체감과 실제foreground푸시를 재확인. 모든 제보화면 전수검수나 무한reviewpolling 없음. 밀링/기존카메라·사진 권한/본체외Home·email은 이번 QA 제외.
+
+
 ## 2026-11-17 DL-17477 OS 알림 설정 QA 등록 확인 — 구현 대기
 
 - 사용자가 https://innovaid.atlassian.net/browse/DL-17477 을 이번 알림 권한 건의 카드로 지정. 이번 요청은 확인·검토·메모리만이며 카드/코드 수정 금지.
