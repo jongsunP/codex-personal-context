@@ -1635,6 +1635,10 @@ This is the user's 2026-11-06 direction, not a required visual template.
   formatting; do not split the message into fragments, alternative drafts, or
   partial replacements. Keep assistant commentary outside the block. This does
   not authorize posting or sending on the user's behalf.
+- User clarification, 2026-11-17: for QA sharing, state the observed result and
+  the necessary reason in plain language (for example, an OS-provided permission
+  prompt and when it leads to settings). Do not repeat the result in an extra
+  conclusion or add implementation detail merely to make the answer longer.
 - For a requested Notion document, write it in Notion through the connected
   tool. Use a copyable block instead only when the user asks for text they will
   paste themselves. Both forms follow the concise default above.

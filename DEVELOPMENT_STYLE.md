@@ -170,6 +170,16 @@ appear nowhere else in the app.
   queues, debounce or new APIs for hypothetical volume concerns. Use the existing
   mutation pattern and explain any necessary wait. This is the user's 2026-11-13
   clarification after the notification settings flicker/response fixes.
+- User clarification, 2026-11-17: a reported pause during repeated profile
+  toggles is a concrete interaction defect, not a hypothetical volume concern.
+  For an authorized fix, keep displayed choices responsive while serializing
+  writes and retaining the latest pending choice per field; verify failure,
+  stale response and account-change behavior. Do not apply this automatically
+  to unrelated settings with different save contracts.
+- For timing defects (switch flicker or Safe Area color lag), final screenshots
+  alone are insufficient. Inspect the transition itself and compare with an
+  existing working invocation path. Distinguish a confirmed local improvement
+  from the user's final real-device QA; do not repeat a full service sweep.
 - Verify equivalent affected products on the relevant platforms before marking
   the fix complete. If a required check cannot be performed, name the precise
   product/platform/condition and, only when needed, request the user's device

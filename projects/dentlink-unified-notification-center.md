@@ -1,5 +1,21 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 추가 QA — 앱 스위치·프로필 응답·배경색 재보완 (미배포)
+
+- 사용자 추가 제보: 웹 스위치는 해결된 것으로 보고 코드 흐름만 1회 확인 후 변경하지 않음. 앱 스위치 잔여 깜박임, 치과앱 프로필의 첫 클릭/연속 클릭 지연, DL-17470 알림함→설정 및 다른 화면 복귀의 상단색 지연을 다시 처리. 기존 QA 누적 PR 유지, 이번 추가 배포/머지 없음.
+- Office `feat/DL-16140` **a099f6c6** (스위치·프로필 `5e76b3c`, 배경색 `a099f6c`), Lab **c153db1** (스위치 `e52efbb`, 배경색 `c153db1`). 모두 push·clean·origin 일치. PR354→release/v2.2.5, PR50→release/v1.0.6 본문 최신화, OPEN·미머지 유지. 웹 cdf311cfc 그대로.
+- DL-17482: 양앱 Switch 기존 RN Animated를 유지하면서 위치/색상의 분리된 400/500ms 애니메이션을 단일 native progress 200ms로 통합. memoized interpolation, 기존 위치·크기·색상·초기 애니메이션 옵션 유지. 설치 RN의 NativeAnimatedAllowlist에서 color 지원 확인; 네이티브 파일·의존성 변경 없음.
+- 치과앱 프로필: 기존 첫 클릭 draft는 즉시였으나 PATCH+확인GET/일반 isFetching 동안 다음 클릭을 버림. 사용자 추가 설명에 따라 입력은 즉시 받고 요청은 직렬화, 채널별 최신 대기 선택만 유지. 이전 완료/실패가 더 최근 선택을 지우지 않도록 보호. 확인GET, 실패복구, 사용자/서비스 변경 stale 보호 유지. Lab에 동일 marketing profile 화면은 없어 기능을 새로 만들지 않음. 알림설정 자체의 저장 중 입력차단은 유지.
+- DL-17470: 기존 root navigationRef가 늦게 갱신될 수 있어 렌더 state 우선 및 내부 Notification navigator layout 연동. 이것만으로 Android 영상에서 약 1초 이상 지연이 남아, 기존 피드백 이력 c205fe07의 tabPress 선갱신 방식을 확인해 벨/설정 이동 및 beforeRemove 복귀에서 먼저 색상 갱신. 루트 색상 매핑·기존 전환 애니메이션 유지, App.tsx·전역 native/UI 구조 변경 없음.
+- 사용자가 추가로 요청한 치과앱 크레딧/청구서 화면: 본문·헤더 흰색 유지, 홈/프로필 등으로 돌아가는 beforeRemove 경로 포함. 양OS `dentlink-dev://credit?employerId=86`, `dentlink-dev://billing/statement?employerId=86` 실제 진입·복귀 확인. 처음 production scheme으로 실행한 로컬 점검은 dev 앱에 연결되지 않아 수정한 테스트 경로로 재확인; 제품 랜딩 계약 변경 아님.
+- 검증: Office 관련 Jest 2 suites/15 tests(지연·실패·연속 선택·계정 변경 포함) 통과, lint 오류0 기존 root 경고3씩. 타입 baseline/current Office6/6, Lab5/5 신규0. Office iOS/Android 프로필 두채널 변경·원상복구·화면복귀 후 값 유지, 양앱 알림함/설정/복귀 및 Lab LinkTalk off/on 복구 확인. Android 영상 /tmp/notification-color-final2.mp4·color-frames2.log에서 상단색이 늦게 따라오지 않고 이동 시작에 갱신됨 확인. 완벽한 실기기 체감 또는 실제 FCM QA로 확대하지 않음.
+- 개발중 hook 구조 변경 Fast Refresh에서 render error가 있었고 앱 완전 재시작 후 최종 경로에 재발 없음. Android Lab은 스냅샷의 이전 실행이 남아 최초 화면 selector 실패, 해당 앱 종료·새 소스 연결 확인 후 양OS 검증 완료. 마지막 crash buffer에는 emulator Bluetooth 시스템 오류만 있으며 앱 native crash 미발견. 이 과정을 제품 크래시 해결 또는 실기기 무결함 보장으로 기록하지 않음.
+- FCM 테스트 사용자 질문: 양앱 __tests__/utils/fcmHandler.test.ts는 알림센터 본체 Office0a131041/Labdfb3051에서 최초 추가, QA d77d8e5/db332cc에서 배너 대기분리 검증 보강. 사용자 기준에 따라 기존 변경 유지, 이번 추가 보완에서는 수정하지 않음.
+- Jira 결과 댓글 DL-17470 **45124**, DL-17482 **45125** 추가. 상태/원본문 변경 없음. 이번 미배포 명시. 새 CodeRabbit 리뷰 조회/폴링 없음.
+- 지침: 공유용은 결과+필요한 근거만 쉬운 말로 한 번에 복사; 불필요한 결론 반복 금지. 실제 연속입력 지연은 가상 트래픽 대비와 구분해 범위 내 대기 선택 처리 가능. 타이밍 QA는 최종 스크린샷만으로 완료 단정 금지. SESSION_WORKFLOW·DEVELOPMENT_STYLE 갱신 및 Claude 메모리 동기화.
+- 다음: 이번 QA 커밋 배포는 사용자 승인 후에만. 새 버전 실기기에서 프로필 연속 선택·스위치 체감·알림함↔설정↔홈/프로필 배경색 전환 재확인. 현재 배포본은 Office75dd7fd6/Lab667dce2의 DEV/STG OTA 그대로. 이번에 연 검증용 Metro·기기는 종료하고 사용자 작업창/웹은 건드리지 않음.
+
+
 ## 2026-11-17 배포 후 사용자 QA 확인·결과 댓글 정리
 
 - DL-17477: 사용자가 iOS·Android에서 팝업의 설정으로 가기→OS 허용 요청→허용 후 알림 설정 항목 생성/활성화를 확인했다고 보고. 해당 최초권한 경로 정상 처리로 판단. 사용자 직접 댓글용 문구만 제공, 이 카드에는 대신 게시/상태변경하지 않음. 어느 제품·OS버전까지 확인했는지는 추가 추정하지 않음.
