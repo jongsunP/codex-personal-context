@@ -2,6 +2,7 @@
 
 ## 2026-11-17 릴리즈 병합 확인·양앱 Development CodePush 완료
 
+- 사용자 최종 대기 지시(2026-11-17): Development 배포 상태 유지. 웹 Staging은 사용자가 직접 배포하고, 치과·기공소앱 Staging CodePush는 사용자가 다음에 명시적으로 요청할 때 진행한다. 지금은 추가 배포·코드작업·리뷰 폴링 없이 대기한다.
 - 사용자 요청: 각 PR 릴리즈 병합 후 양앱 Development만 CodePush. 웹 DEV는 사용자가 추가 배포했다고 알려줌(사용자 확인 기록); 웹 스테이징 PR과 양앱 Staging은 대기. 이번 턴 웹 배포/PR변경/병합/Slack 쓰기 없음.
 - 실제 GitHub 확인: Web PR4862→release/v1.94.0 병합 cac11aa9, Office PR346→release/v2.2.5 병합 0a131041, Lab PR42→release/v1.0.6 병합 dfb3051c. 양앱 fetch 후 feature HEAD와 해당 병합 release의 tree diff 없음.
 - Office source 8748a66d / target binary 2.2.5: Development iOS v148, Android v148 게시·활성화 완료.
