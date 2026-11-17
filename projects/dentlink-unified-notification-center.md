@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 STG v351 이후 피드백 · 하단 탭 배경색 추가 수정 (미배포)
+
+- 사용자 실기기 보고: 알림 화면 전환 개선, Office 프로필 반응·애니메이션 자연스러움. 그러나 홈/프로필 노치가 흰색이고 본문 회색으로 남는 회귀. 새 크레딧·청구서 목록도 같은 처리가 필요한지, 프로필 독립 저장 API 영향 질문.
+- 양앱 RootNavigator에서 일반 BottomTabNavigator의 안전영역 감싸기를 제외하고 BottomTabNavigator screenLayout에서 탭별 확정 색상을 직접 사용. 상위에서 중첩 leaf 상태를 추정하던 경로 제거. Office Home/Profile mono200, 다른 탭 white; Lab Home mono200·Profile 기존 본문 white 유지. Lab 밀링 탭은 기존 루트 처리 유지(별도범위).
+- Office **22c3349**, Lab **77881a6**, QA feat/DL-16140 commit/push. 기존 PR354/50 유지. **추가 CodePush는 하지 않음**; 현재 배포는 Office iOSv351/Androidv350, Lab 양OSv69 그대로. 웹·DEV·Jira 변경 없음.
+- CreditScreen/StatementListScreen은 RootStack의 ScreenSafeArea가 이미 감싸며 Layout 기본 배경 white와 동일. 중첩 탭 예외와 무관하므로 별도 중복 inset/래퍼를 추가하지 않음. 이번에는 해당 화면 코드 변경 없음.
+- 프로필 API 확인: SMS /office/users/own/sms/marketing, Email /office/users/own/email/marketing 각각 PATCH; 전체 프로필 PUT이 아님. UI 선반영, 같은 채널 순차 처리, 실패 복구, 모든 저장 후 확인 GET·새 입력/계정 변경 응답 보호 유지. 서버 확인을 없앤 구조가 아니며 사용자 체감 개선 확인에 따라 코드 유지. BE 내부 동시성 구현까지 검증한 것은 아님.
+- 사용자 직전 실행검증 생략 요청을 이번 연속 보완에도 유지: 코드 확인/포맷/diff만, 테스트·기기 실행 없음. 회귀 해결 실기기 확인은 미완료. 다음 사용자 승인 시 추가 QA 커밋 Staging CodePush 후 홈/프로필 상단색 및 크레딧/청구서 진입복귀 확인. 신규17488 보류 유지.
+
 ## 2026-11-17 실기기 재제보 후 재보완 · 실행검증 생략 · Staging 게시 완료
 
 - 사용자: Office iOS STG 2.2.5.350에서도 알림함→홈·설정→알림함 상단 노치색 지연 및 프로필 Texts/Email 첫 클릭·연속 클릭 지연 재현. 이전 테스트 통과를 해결 증거로 확대하지 않는다. 이번에는 사용자가 코드수정·QA브랜치 STG CodePush를 승인하면서 테스트/기기검증을 명시적으로 생략하도록 지시했다. 이 생략은 이번 작업에만 적용한다.
