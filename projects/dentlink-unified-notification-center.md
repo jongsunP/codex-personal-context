@@ -1,5 +1,16 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-17 릴리즈 병합 확인·양앱 Development CodePush 완료
+
+- 사용자 요청: 각 PR 릴리즈 병합 후 양앱 Development만 CodePush. 웹 DEV는 사용자가 추가 배포했다고 알려줌(사용자 확인 기록); 웹 스테이징 PR과 양앱 Staging은 대기. 이번 턴 웹 배포/PR변경/병합/Slack 쓰기 없음.
+- 실제 GitHub 확인: Web PR4862→release/v1.94.0 병합 cac11aa9, Office PR346→release/v2.2.5 병합 0a131041, Lab PR42→release/v1.0.6 병합 dfb3051c. 양앱 fetch 후 feature HEAD와 해당 병합 release의 tree diff 없음.
+- Office source 8748a66d / target binary 2.2.5: Development iOS v148, Android v148 게시·활성화 완료.
+- Lab source 9455c27 / target binary 1.0.6: Development iOS v47, Android v46 게시·활성화 완료.
+- 4건 모두 mandatory=true, disabled=false, rollout=100을 배포 후 history 한 번으로 확인. Revopush release-react를 제품/OS별 직렬 실행하여 공통 임시 번들 경합 방지. 기존 릴리즈 스크립트와 같은 옵션 사용, Slack 발송 없음.
+- 호환성: 양앱 package/Android/Xcode 버전 검증 통과. 최신 origin/main 대비 ios/android/package.json/patches 변경 없음. 이전 Office2.2.4/Lab1.0.5에는 이번 OTA가 적용되지 않음. 기존 Office 영상 isv.mp4 크기 경고는 기존 배포 옵션 --force로 완료됐으며 기능 실패 아님.
+- 이번은 번들 생성·게시·활성화 검증. 앞선 설정 디자인/권한/내비게이션 테스트 근거 재사용; 실기기 OTA 수신·FCM·전체 QA를 이번에 했다고 주장하지 않음. 제품 코드 추가 수정 없음, 양앱 작업트리 clean.
+- 다음: 사용자가 해당 버전 Development 앱에서 치과 Office/User 설정 탭·설정 변경, 알림→주문 WebView 상세→뒤로가기, 기공소 설정/OS 안내 배너를 확인. 새 문제/리뷰 발생 시 필요한 범위 대응. 스테이징·운영은 별도 승인까지 대기, 자동 폴링 없음.
+
 ## 2026-11-17 치과앱 주문 상세 WebView 롤백 통합 완료
 
 - 사용자 추가 지시: release/v2.2.5의 주문 상세 롤백부터 반영하고 기록된 알림센터 본체 미완 개발만 확인. 검증된 롤백 자체의 전수검사/긴 기기검증은 반복하지 않음. 네이티브 상세에 대응하려고 추가한 보완은 WebView 기준으로 정리.
