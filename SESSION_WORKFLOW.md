@@ -1456,6 +1456,24 @@ includes a result check after 15 minutes.
   and confirmation of the intended app, platform, deployment and target version.
   Report the delivered labels. Do not wait for device uptake, restart evidence,
   or post-deployment metrics unless the user separately requests those checks.
+- **Requested Fastlane delivery (user instruction, 2026-11-17):** on explicit
+  request, operate native test-app delivery as well as CodePush. Verify the app,
+  platform, Development/Staging environment, intended source branch/revision,
+  version/build and existing signing setup before execution. Do not replace an
+  existing signing key or silently switch source branches. Serialize builds
+  sharing a checkout; Development and Staging must not race through `clean`.
+  For Android Firebase App Distribution delivery, after Fastlane succeeds,
+  confirm the actual latest release/version/build and timestamp once through
+  the read-only Firebase API, using the authorized existing deployment identity
+  without exposing keys/tokens. Report timestamps in Asia/Seoul. Keep local
+  success, server registration, tester availability and installed-device uptake
+  distinct; do not poll devices automatically. If the user ran Fastlane, a
+  requested check is read-only and does not authorize another upload.
+  Native binary version/build and CodePush labels are separate: matching
+  binary versions do not prove matching JS revisions. Compatible QA JS may be
+  delivered later by CodePush on a separately explicit request. Fastlane does
+  not implicitly authorize CodePush, PR merge, store submission or production
+  delivery. Keep existing Slack read-only constraints when invoking scripts.
 - **Web development/staging:** after the authorized merge into the relevant
   environment branch, confirm once that the intended GitHub Actions deployment
   has started for the expected revision. Report **배포 시작 정상** and stop.

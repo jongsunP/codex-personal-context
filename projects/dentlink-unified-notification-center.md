@@ -1368,3 +1368,8 @@
 - 사용자 승인: 양앱 Development/Staging 실제 버전·업로드시각 읽기전용 조회만. Fastlane 기존 서비스계정으로 App Distribution releases.list GET(각 최신3개) 4건 HTTP200. 키/토큰 출력·배포/테스터변경 없음.
 - 최신 Firebase 등록(createTime, KST): Office Development2.2.5(135) 2026-11-17 15:30:35 / Office Staging2.2.5(135) **2026-11-12 10:32:20** / Lab Development1.0.6(10) 2026-11-17 15:01:47 / Lab Staging1.0.6(10) 2026-11-17 15:45:35. updateTime도 각각 같은 시각대. 따라서 오늘 신규 릴리즈 등록 확인은 Office DEV·Lab DEV/STG이며 Office STG는 오늘 신규 등록 확인 안 됨. 사용자 'Office STG만 실행' 인식과 실제 결과가 다름을 보고. 누가 실행했는지나 바이너리의 Git SHA는 API 버전·시각만으로 단정하지 않음.
 - 실제 등록 확인과 테스터 초대/배포대상/단말 설치/OTA 적용은 별도. Firebase 바이너리 등록 기록이며 CodePush 라벨 아님. 이후 명시 요청 전 추가 업로드/CodePush 없이 대기.
+
+## 2026-11-17 사용자 운영 지침 — 요청 시 Fastlane도 대행
+
+- 앞으로 사용자가 요청하면 CodePush 외에 Fastlane도 앱/환경/소스/기존 서명 확인 후 실행하며 Android Firebase 실제 등록을 API 1회로 확인한다. 사용자가 직접 실행한 건은 요청에 따라 조회만. 개발/STG 같은 checkout 동시 빌드는 피하고, 키/토큰 출력 금지.
+- 기본 앱 버전(네이티브 바이너리)과 CodePush 버전을 구분한다. 현재 치과2.2.5·기공소1.0.6 기반 앱은 DEV/STG에 존재하며 호환 QA JS는 별도 승인 시 CodePush. Fastlane 요청을 CodePush/PR머지/운영배포 승인으로 확대하지 않는다. 공통 정본 SESSION_WORKFLOW.md Deployment Result Checks에 반영. 이번은 지침/메모리만 변경, 실행 없음.
