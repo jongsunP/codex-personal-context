@@ -1343,3 +1343,5 @@
 - 이번 제품 소스 수정/커밋/푸시/PR머지/Firebase 업로드/CodePush 없음. 이전 QA STG CodePush는 유지. 사용자가 Android DEV/STG 새 바이너리 업로드 뒤 명시 요청하면 STG만 QA 작업 브랜치에서 CodePush 예정; 자동으로 실행하지 않음.
 
 - 후속 확인(2026-11-17): 사용자가 release.keystore를 앱 개발자에게 요청함. 양앱 git fetch --dry-run --tags 오류 없음, 작업트리 clean·upstream 0/0, IDE login shell Fastlane/Ruby3.2.2 인식 재확인. 서명 파일 외 현재 확인된 추가 수정 없음. Office는 최신 release/v2.2.5, Lab은 QA feat/DL-16140 유지. 사용자 파일 수령 후 서명검증이 재개점이며 실제 Firebase 업로드 성공은 아직 미검증.
+
+- 서명 파일 수령·검증 완료(2026-11-17): 사용자가 양앱 android/app/release.keystore 배치. 두 파일 존재·nonempty·Git ignore 확인. keytool로 기존 Gradle storePassword를 메모리/하위프로세스 환경에서만 사용해 열기 및 설정된 alias 존재 확인(키/비밀번호 출력 없음). 양앱 각각 validateSigningDevelopmentRelease + validateSigningStagingRelease 성공(Office7초/Lab12초). 누락 blocker 해소. 실제 APK 전체 빌드/개인키 서명/기존 설치 인증서 일치/Firebase 업로드는 아직 미검증. 사용자 IDE Fastlane DEV/STG 순차 실행 재개 가능, 배포/CodePush는 실행하지 않음.
