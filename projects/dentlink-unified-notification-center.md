@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-19 저녁 — DL-17501 3차: 유저 크레딧 Auto-apply 토글 프로필 방식 적용 (미커밋, 현재 상태)
+
+- 사용자 제보: 탭 전환 튐은 해결, 토글 자체가 답답하고 값이 풀렸다 되는 것처럼 보임, Android가 더 답답. 지침 대조 결과 11-17 프로필 토글 지침(즉시 표시·같은 필드 최신 선택 보존·저장 중 입력 허용·양OS 첫/연속 클릭 확인)이 이 토글에 미적용이었고, 2차(dcfe7aa3)에서 연속 선택을 미룬 것이 원인 중 하나.
+- 원인 확인: DEV 서버는 PATCH 직후 0ms부터 새 값(구값 반환 없음). Android 디버그 앱 로그로 탭 직후 화면 전체 재렌더로 JS가 ~170ms 막히고, 그 사이 들어온 탭은 갱신 전 값으로 `!value`를 계산해 같은 값이 두 번 나가는 것 확인.
+- 수정(Office feat/DL-16140, 미커밋): `libs/useAutoCreditUsageToggle`(누르는 즉시 draft 표시, 저장 중 입력 허용, 같은 필드 마지막 선택 순차 저장, 실패 시 확인값 복귀, 계정 변경 시 옛 결과 무시, 확인 GET은 입력 비차단, 다음 값은 마지막 선택 기준 계산). `features/credit/components/AutoCreditUsageSection`으로 토글 영역 분리(탭 시 이 영역만 재렌더). `useUpdateAutoCreditUsageMutation`은 저장 요청만, `useOfficeFinanceScope` export. CreditScreen 당겨서 새로고침은 refetchQueries로.
+- 검증: 신규 토글 테스트 5 + 조회 테스트 2 통과, 전체 56/58(기존 실패 App·useProfileMarketing 동일), 변경 파일 ESLint·Prettier, tsc 기존 7 외 0. 기기 전환 확인은 사용자가 "개발 데이터 없음, 실기기 CodePush 후 직접 확인"으로 중단 요청.
+- 참고(범위 밖): 프로필 마케팅 토글도 Switch의 `!value` 계산이라 JS가 막힌 상태의 연속 탭에서 같은 문제가 잠재.
+
 ## 2026-11-19 오후 — DL-17521·DL-17501 2차 치과앱 STG·DEV CodePush (현재 상태)
 
 - 기존 PR 브랜치 feat/DL-16140(PR354 미머지)에 이어서 작업, Office `dcfe7aa3`(ab89cdee DL-17521 청구서 목록 헤더 Billing Statements, dcfe7aa3 DL-17501 Auto-apply 스위치 animateOnMount=false·저장 중 disabled 제거). 직전 배포(8209ebec) 대비 JS 2파일만.
