@@ -350,6 +350,33 @@ the apps' existing team conventions; they do not authorize unrelated refactors.
   including review fixes and relevant existing consumers of changed shared
   code. Keep verification proportional to the impact and distinguish static
   checks, final-code device verification and user QA.
+- Server-saved toggles in the apps (learned from DL-17501/DL-17524, 2026-11-19).
+  The shared design-system `Switch` is not defective; problems came from the
+  screen and save flow around it. When a switch saves to the server:
+  - Show the tapped value immediately, keep the switch enabled during save and
+    confirmation, serialize writes per field, and save the latest pending choice.
+    Use `disabled` only for unusable states (no permission, load error, no
+    confirmed value), not for pending/fetching.
+  - Compute the next value from the latest chosen value (a ref), not only from
+    the `!value` the switch passes, so taps that arrive before a slow re-render
+    still alternate correctly.
+  - After saving, a confirmation GET can briefly return the previous value
+    (observed on DEV right after PATCH). Do not overwrite the just-saved value
+    with a differing result; re-check with the existing bounded delays
+    (0/200/500/1000ms, as in notification settings), adopt the server value only
+    if it still differs, and stop when a newer tap arrives.
+  - Keep toggle state in a small component so a tap does not re-render a whole
+    list or screen (Android JS cost was ~170ms on a FlatList screen).
+  - Do not drive `RefreshControl refreshing` from background refetches; show it
+    only for user pull-to-refresh.
+  - Inside lists that can remount (e.g. FlatList `key` changes), pass
+    `animateOnMount={false}`; give small switches `hitSlop={10}` like Profile.
+  - Fix at the usage site; do not change shared `Switch` defaults without an
+    explicit scope decision.
+  - Verify first tap, rapid alternating taps and revert-after-save on both OS.
+    For timing, temporary `[tag]` logs read from `adb logcat -s ReactNativeJS`
+    and the iOS `com.facebook.react.log` stream work; remove them afterwards and
+    ask before launching simulators/emulators.
 - Release-path reporting (2026-11-19 user rule, always): when discussing app
   work, flag only what needs a store-reviewed native build (new native
   dependency, permission, native config or binary change). Do not raise

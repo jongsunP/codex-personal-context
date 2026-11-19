@@ -478,3 +478,7 @@ DL-17501 3차(Office 7f43cd45, 유저 크레딧 Auto-apply 프로필 방식 토�
 ## 2026-11-19 밤 브레이크포인트
 
 양앱 CodePush(치과 348b7fe0 STG v356/v355·DEV v153, 기공소 116f77f STG v72·DEV v50/v49), PR #354·#50 본문에 오늘 카드 추가. 다음: DL-17535 → DL-17533(사용자 재개 지시 대기).
+
+## 2026-11-19 앱 서버 저장 토글 지침 추가
+
+DL-17501/DL-17524 결과를 DEVELOPMENT_STYLE "Dentlink App Implementation Boundaries"에 정리: Switch 컴포넌트 자체는 정상, 화면·저장 흐름에서 원인. 즉시 표시·저장 중 입력 허용·필드별 마지막 선택 순차 저장, 다음 값은 마지막 선택 기준, 저장 직후 확인 GET이 이전 값이면 0/200/500/1000ms 재확인, 토글 상태는 작은 컴포넌트로 분리, RefreshControl은 사용자 당김만, 재마운트 목록은 animateOnMount false·hitSlop 10, 공용 Switch 기본값은 범위 결정 없이 변경 금지, 양OS 첫/연속/되돌아감 확인(임시 로그 방법 포함, 시뮬·에뮬 실행 전 확인).
