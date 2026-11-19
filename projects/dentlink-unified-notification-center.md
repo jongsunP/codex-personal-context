@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-19 DL-17488 보완 — QA 누적 브랜치 push, 미배포
+
+- 사용자 승인: 같은 QA 누적 브랜치에서 작업만, 배포 없음. 구현 전 사용자 요청으로 "화면이 빨리 열리는 등 동작별 타이밍"을 한 번 더 검토: 탭 직후 랜딩이 먼저 일어나도 읽음 기록은 대기열에 남고, 처리 조건(로그인·CodePush 종료·화면 준비·앱 활성)이 갖춰지면 실행됨. 동작별로 기록이 사라지는 경로는 없고, 문제는 실패 후 재시도 시점과 알림함을 바로 열 때의 순서로 모임. 웹은 앱 푸시를 받지 않고 `deliveryId`/`read/push`/서비스워커 사용이 없어 관련 없음(작업 안 함).
+- 구현(양앱 동일): `fcmHandler.ts`에 실패 시 3초·10초·30초 뒤 최대 3회 `pushReadRevision`을 올려 재처리 요청(RootNavigator 기존 조건으로 flush), 성공 시 재시도 기록 삭제, 계정 변경 시 예약 정리, `requestPushNotificationReadFlush` 공개. `NotificationCenterScreen` 포커스 때 남은 읽음 요청 먼저 처리 요청. 테스트: 재시도 횟수·간격·정리, 기존 실패 테스트는 fake timer로 예약 정리.
+- 커밋·push: Office `feat/DL-16140@f72285e5`, Lab `feat/DL-16140@bbf1d96`. PR354/50 본문(Changes·Issue·Validation)에 DL-17488 추가. **배포·CodePush·머지 없음**, Jira 상태·댓글 변경 없음.
+- 검증: Office 관련 27 suites/394 tests, Lab 17 suites/171 tests 통과, prettier·eslint 오류 0. **tsc 기준선 변경**: Office 7·Lab 6 — 직전 QA 커밋(22c3349/77881a6, 사용자 지시로 테스트 생략)의 RootNavigator `screenLayout` `navigation` possibly undefined 타입 경고 1건씩. 런타임은 항상 전달되고 STG에서 사용자 확인 완료라 이번 범위에서 수정 안 함(필요 시 별도). 실기기·실제 푸시 확인은 QA 몫.
+- 남은 FE 범위 밖 확인: 푸시 payload의 deliveryId 유무, 빠른 탭 시 BE 발송 기록 커밋 타이밍, 서버 조회 지연(사용자 실기기 푸시 테스트 때 Reactotron으로 구분 가능).
+
 ## 2026-11-19 DL-17488 푸시 탭 후 읽음 간헐 미처리 — FE 코드 검토(조사만, 코드 변경 없음)
 
 - 목적(사용자 카드 댓글 45126): 항상 안 되는 문제가 아니라 "간헐적"이라 로직상 FE가 손볼 곳이 있는지 점검. 기준 QA 브랜치 Office `22c3349`, Lab `77881a6` (`src/configs/utils/fcmHandler.ts` 읽음 대기열·flush, `RootNavigator` flush 조건, 서비스, 기존 테스트).
