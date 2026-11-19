@@ -466,3 +466,7 @@ DL-17521(청구서 목록 헤더 Billing Statements)·DL-17501 2차(Auto-apply �
 ## 2026-11-19 시뮬·에뮬 실행 전 확인 지침
 
 사용자 지침: 시뮬레이터·에뮬레이터·Metro를 띄워 확인하려면 먼저 묻고, 그 환경에 확인할 데이터가 있는지부터 확인한다. 데이터가 없거나 실기기 CodePush 후 사용자가 보는 편이 나으면 그렇게 제안한다. 계기: DL-17501 3차에서 묻지 않고 기기를 띄움. 같은 날 Office 7f43cd45(프로필 방식 토글) push, CodePush 미실행.
+
+## 2026-11-19 저녁 치과앱 3차 CodePush
+
+DL-17501 3차(Office 7f43cd45, 유저 크레딧 Auto-apply 프로필 방식 토글) → Staging iOS v355/Android v354, Development v152/v152 활성·필수·100%. Lab·웹 조치 없음. 사용자 실기기 확인 대기.
