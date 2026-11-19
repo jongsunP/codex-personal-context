@@ -5,7 +5,7 @@
 - DL-17488·DL-17507은 사용자 판단으로 더 챙기지 않음(Ready for Deploy). 남은 담당 카드: 디자인 QA 4건. Jira 첨부(이미지·영상)는 도구로 내용 확인 불가.
 - **DL-17496 Payment→Payments(간단):** "Payment" 표기 3곳 — Office 앱 알림함 도메인 `src/configs/utils/notification.ts:15`, Office 앱 설정 `notificationSettings.ts:32`, 웹 치과 설정 `shared/ui/src/NotificationUI/useNotificationMessages.ts:74`(lab은 이미 Payments). 원래 본체 PR에서 의도적으로 치과만 Payment였던 것으로 보이며 카드 본문엔 위치 없음 → 3곳 모두 Payments 권장.
 - **DL-17506 Learn More 밑줄(간단):** Office 앱 `src/features/credit/screens/CreditScreen.tsx:393` 중첩 Typography에 `textDecorationLine: underline`만 있고 밑줄색 미지정 → `textDecorationColor`(information 파랑) 지정. 유저/오피스 크레딧 화면 공용.
-- **DL-17501 User credit 토글 시 화면 튐(검토 필요):** 치과앱 설정은 즉시 표시(pendingChange)·저장 중 입력 비활성·확인 GET 구조. 레이아웃 변동 후보: ① 토글 OFF 시 채널 체크 줄이 사라지는 기본 동작(카드 높이 변화), ② 권한 재확인(`useNotificationPermission.refresh`)이 isChecking=true로 바뀌면 notice 자리에 48px 스피너가 끼어듦(앱 복귀·권한 변경 때), ③ 탭 전환 시 `StyledScrollView key={activeScope}`로 목록 재마운트. 영상 확인 후 원인 확정 필요. 웹은 같은 API지만 별개 구현.
+- **DL-17501 User credit 토글 시 화면 튐(11-19 영상 확인·원인 확정, 미작업):** 대상은 알림설정이 아니라 Office `CreditScreen` User Credits의 Auto-apply 토글. 토글 직후 목록 전체가 약 1초 아래로 밀렸다 복귀. 원인: mutation `onSettled` invalidate → `autoCreditQuery.isRefetching=true` → FlatList `RefreshControl refreshing`에 포함돼 iOS 당겨서 새로고침 공간이 열림. 수정안: refreshing은 사용자 당김 새로고침(로컬 상태)만 반영. 난이도 낮음, 화면 1개. 웹은 RefreshControl이 없어 무관.
 - **DL-17505 앱 주문상세 띠배너 가림(검토 필요, 웹 코드):** 치과앱 주문상세는 WebView(`OrderDetailScreen`, UA `DentlinkAppWebView`)이고 웹은 앱에서 헤더 숨김(`headerShown: !isDentlinkApp`). `_app`의 GlobalBanner(웰컴 크레딧·결제수단 교체, `position: fixed`)는 앱 WebView에서도 그대로 떠서 페이지 상단을 덮는 구조로 보임. "헤더 위로 위치 배정"의 헤더가 앱 네이티브 헤더인지 웹 내부 고정 영역인지 스크린샷 확인 필요. 수정 위치는 웹(clinic GlobalBanner/Layout 오프셋) 가능성 높음.
 
 ## 2026-11-19 알림 스프레드시트 랜딩 URL 정리 후속
