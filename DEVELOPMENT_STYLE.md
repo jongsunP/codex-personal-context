@@ -345,6 +345,12 @@ the apps' existing team conventions; they do not authorize unrelated refactors.
   including review fixes and relevant existing consumers of changed shared
   code. Keep verification proportional to the impact and distinguish static
   checks, final-code device verification and user QA.
+- Release-path reporting (2026-11-19 user rule, always): when discussing app
+  work, flag only what needs a store-reviewed native build (new native
+  dependency, permission, native config or binary change). Do not raise
+  CodePush propagation gaps, users on a not-yet-updated bundle, or "old app
+  version" transitional behavior; those are normal development states and need
+  no mention or fallback unless the user asks.
 
 ## Dentlink Client Implementation Defaults
 
