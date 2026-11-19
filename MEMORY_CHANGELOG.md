@@ -454,3 +454,7 @@
 ## 2026-11-19 방향 결정 근거 넘겨짚기 금지
 
 사용자 지침: 방향을 정하는 근거(기존 선례·팀 약속)는 코드·자료로 확인한 적용 범위만 말하고, 일부 사례를 전체 규칙으로 일반화하거나 추정을 사실처럼 말하지 않는다. 계기: DL-17505에서 결제수단 5곳 전용 `useAppAwareToast`를 웹뷰 전체 약속으로 설명했으나 상용 주문상세는 웹 토스트(`useToast`). DEVELOPMENT_STYLE Requirement And Design Scope에 반영.
+
+## 2026-11-19 QA 브랜치 양앱 STG·DEV CodePush
+
+사용자 지시로 PR 유지, QA feat/DL-16140 양앱 Staging→Development CodePush. Office 8209ebec: STG iOS v353/Android v352, DEV v150/v150. Lab bbf1d96: STG v71/v71, DEV iOS v49/Android v48. 전부 활성·필수·100%. 웹은 사용자가 배포. 디자인 QA 4건(DL-17496/17501/17505/17506) 코드 완료, 사용자 QA 대기.
