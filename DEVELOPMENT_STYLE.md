@@ -55,6 +55,11 @@ appear nowhere else in the app.
 
 ## Requirement And Design Scope
 
+- When citing an existing precedent or team convention as the basis for a
+  direction decision, state only the scope verified in code or records (usage
+  count, target screens, production presence). Do not generalize a few usages
+  into a product-wide rule or present inference as fact (2026-11-19 user rule).
+
 - Across all projects, confirmed product policy is the first source of truth.
   Follow the design for presentation, but give confirmed policy and backend
   requirements/contracts higher priority when they conflict with a design
