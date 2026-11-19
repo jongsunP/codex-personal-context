@@ -1,5 +1,10 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-19 밤 — 기공소 주문상세 탭 랜딩(EXTRA_FEE) 결정·검토(앱 미작업)
+
+- 사용자 결정: 기공소만 해당. 랜딩 URL 웹 `/orders/${orderId}?tab=EXTRA_FEE`, 앱 `dentlink-lab://order/${employerId}/${orderId}?tab=EXTRA_FEE`(BE가 이렇게 내려줌).
+- 검토: 웹은 `useOrderDetail`이 `router.query.tab`으로 첫 진입 탭 결정 → 바로 동작. `EXTRA_FEE`는 OrderDetailTabType 값과 정확히 일치(대소문자 포함). 앱 딥링크 `order/:employerId/:orderId` 패턴 존재, `matchDeepLinkRoute`가 쿼리를 params에 합쳐 OrderDetailScreen이 `tab`을 받음. 그러나 Lab `OrderDetailScreen`이 웹뷰 주소를 `/auth/redirect?next=/orders/${orderId}`로만 만들어 tab 누락 → 기본 탭으로 열림. 수정 필요(Lab OrderDetailScreen에서 tab을 next에 인코딩해 전달). 앱 스킴은 환경별(dentlink-lab://, -dev://, -staging://)이므로 BE가 환경 스킴 사용.
+
 ## 2026-11-19 밤 — 남은 작업 순서(사용자 확정)
 
 - 내 담당 남은 것: DL-17524·DL-17529 코드 완료·푸시(미배포, 실기기 확인·상태 이동 남음), DL-17488·17477 READY FOR QA 대기.
