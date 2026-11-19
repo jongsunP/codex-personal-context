@@ -1,5 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-19 알림 스프레드시트 랜딩 URL 검토(카드 없음, 조회만)
+
+- 대상: 알림 정의 시트 `1w1xwwEWRE0KgiJsOvldxIFbtNgWguohurf5kemIrW_g` 탭 "전체 알림(PM)" O(WEB 랜딩)·P(APP 랜딩). 앱 실제 딥링크 패턴(`src/configs/constants/deepLink.ts`, Office `f72285e5`·Lab `bbf1d96`)과 대조. 시트·코드 변경 없음.
+- **크레딧 PUSH 행 불일치(사용자 지적 맞음):** 142(USER_CREDIT_EXPIRE PUSH)·146(USER_CREDIT_ISSUED PUSH)이 `dentlink://notifications`, 148(OFFICE_CREDIT_EXPIRE PUSH)·150(OFFICE_CREDIT_ISSUED PUSH)이 `dentlink://notifications?employerId=`로 되어 있어 같은 이벤트의 NOTIFICATION 행(141·145 `dentlink://credit`, 147·149 `dentlink://office/credit?employerId=`)과 다름. 앱은 `credit`(CreditScreen USER)·`office/credit`(CreditScreen OFFICE) 두 경로를 구분하고 웹도 `/credit`·`/office/credit`로 구분 → 유저 크레딧은 `dentlink://credit`, 오피스 크레딧은 `dentlink://office/credit?employerId=`가 맞음(전부 office/credit 아님).
+- 그 외 APP 랜딩은 앱 패턴과 모두 일치: confirm, order/:employerId/:orderId(+scanner-draft-received, +isCasePreferenceModalOpen는 Lab), shipment tracking(Office), feedback/:employerId(Office 전용 행), chat, contact, billing/statement, milling/orders/:orderNo(Lab), notifications.
+- 표기만 다른 곳: 디자인 컨펌 일부 행 `${officeId}` vs 나머지 `${employerId}`(값이 소속 ID면 문제 없음), 주문 업데이트 행 `${scheme}` 자리표시자, 165행 MFG_ORDER_SUBMITTED NOTIFICATION의 APP 칸이 "밀링센터는 일단 보류" 문구(다음 행들은 `dentlink-lab://milling/orders/${orderNo}`). 실제 BE 발송값은 미확인(시트 기준).
+
 ## 2026-11-19 DL-17488 추가 점검 — 알림센터 안 클릭(웹·앱) 읽음·랜딩, 수정 불필요
 
 - 사용자 의도 정정: 웹은 푸시가 아니라 "알림센터에서 알림 클릭 시 랜딩 URL·읽음 처리", 앱은 푸시 랜딩은 가볍게·읽음 처리 중심. 앞선 검토는 앱 푸시 경로만이라 클릭 경로를 추가 점검.
