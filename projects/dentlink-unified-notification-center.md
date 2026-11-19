@@ -4,6 +4,7 @@
 
 - 사용자 결정안: 웹 주문 상세(웹뷰)의 Pending(PENDING_ORDER) 주문 Review Order 버튼을 Edit처럼 앱 주문 수정(OrderScreen)으로 연동. 근거: 웹·앱이 같은 주문 데이터.
 - 코드 확인: Review Order는 shared/ui `OrderDetailBoxRequest`(OFFICE+PENDING_ORDER), 일반 주문은 `/orders/{id}/option`, 리메이크는 `/remakes/{id}/info`로 이동 — 앱 연동 없음. Edit은 `OrderDetailBoxTitleMobile`에서 앱이면 NAVIGATION OrderScreen{orderId}, 앱 OrderDetailScreen이 처리. Edit 버튼은 OFFICE에서 PENDING_ORDER에 안 보임(Review만 경로). 저장 API는 웹·앱 모두 PUT /office/orders/{id}/additional(같음 → 결정 근거 일부 확인).
+- **가능 여부 검토(작업 대기, 사용자 지시로 보류):** 가능. 웹 Review 흐름=옵션(PUT /option)→추가정보(PUT /additional, Save Changes)로 보류 해제. 앱도 같은 API(product/option/additional) 보유, 3단계 `OrderOptionSection`은 DRAFT 제한 없이 PUT /option, 4단계는 비DRAFT 수정 처리 있음. 필요한 앱 변경: `OrderScreen` 수정 가능 상태에 PENDING_ORDER 추가, 보류 주문은 3단계(옵션)부터 시작(상태로 판단 → 웹 메시지는 Edit과 동일 NAVIGATION OrderScreen{orderId}), 수정 모드 뒤로가기(4→3, 3→나가기). 웹 변경: `OrderDetailBoxRequest` Review Order를 앱이면 OrderScreen 메시지로. 위험: 리메이크 보류 주문(웹은 /remakes/{id}/info, 앱에 리메이크 수정 화면 없음 → 이번 제외 권장), 3단계 기존 값 불러오기 실사용 미검증, DEV 보류 주문 데이터 필요(기공소/어드민이 보류 설정). 규모: 웹 1파일, 앱 1~2파일+테스트, CodePush 가능(심사 불필요). 정할 것: 리메이크 제외 여부, 브랜치(웹 release에서 새로, 앱 PR354 이어서?), 테스트 데이터.
 - 주의: 앱 OrderScreen은 수정 가능 상태를 DRAFT/NEW/IN_PROGRESS/OFFICE_APPROVAL_PENDING으로 제한 → PENDING_ORDER는 지금 열리지 않음(앱 수정 필요). 웹 Review는 옵션 단계부터, 앱 수정은 ADDITIONAL(4단계)부터 진입. 리메이크 보류 주문의 앱 처리 미확인. 사용자 결정 타당성 추가 검토 요청 받음.
 
 ## 2026-11-19 밤 — DL-17524 원인 확정·수정(Office 93b36b6a·6967366d 푸시, CodePush 안 함, 현재 상태)
