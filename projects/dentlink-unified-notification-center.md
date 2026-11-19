@@ -1,6 +1,6 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-## 2026-11-19 밤 — DL-17537(DL-17530 하위 FE) 주문상세 탭 랜딩 앱 전달(미커밋)
+## 2026-11-19 밤 — DL-17537(DL-17530 하위 FE) 주문상세 탭 랜딩 앱 전달(Lab 116f77f·Office 348b7fe0 푸시, 미배포)
 
 - 카드: DL-17530 "[앱, 기공소] 추가금 승인 거절 시 랜딩" 하위 FE DL-17537. 랜딩 웹 `/orders/${orderId}?tab=EXTRA_FEE`, 앱 `dentlink-lab://order/${employerId}/${orderId}?tab=EXTRA_FEE`.
 - 수정(Lab·Office feat/DL-16140, 미커밋, 치과는 사용자 요청으로 같은 개념 선적용): `OrderDetailScreen`이 route `tab`을 받아 웹뷰 주소 `next`를 `/orders/{id}?tab=...`로 만들고 next 전체를 encodeURIComponent. `navigation.ts` OrderDetailScreen params에 `tab?: string`. `DentlinkWebView.getOrderIdFromPath`가 next의 쿼리를 잘라 주문 번호 인식(안 하면 `1?tab=..`가 NaN → 같은 주문 재조회). 웹 수정 불필요(redirect가 decode된 next로 replace).
