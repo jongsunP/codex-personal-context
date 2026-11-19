@@ -6,6 +6,7 @@
 - 소스: Office `8209ebec`(DL-17488 읽음 재시도 f72285e5, DL-17496 Payments 6a0d1c2c, DL-17501·17506 크레딧 8209ebec), Lab `bbf1d96`(DL-17488). 원격 일치·clean, 직전 배포 대비 src/__tests__만 변경(네이티브 0).
 - **게시·활성:** Office2.2.5 Staging iOS **v353** / Android **v352**, Development **v150/v150**. Lab1.0.6 Staging **v71/v71**, Development iOS **v49** / Android **v48**. 8건 mandatory=true, disabled=false, rollout100%, history로 branch·변경사항 확인.
 - 방법: `scripts/codepush.js <env> all --mute`(Slack 생략). 스크립트가 변경사항 입력에 TTY를 요구해 `expect`로 입력 전달. Office isv.mp4 용량 경고는 기존 --force로 성공.
+- Jira 정리(11-19 마감): 사용자 본인 카드 DL-17488/17496/17501/17506/17507은 사용자가 READY FOR QA로 이동, DL-17505는 웹 배포 후 이동(DL-17507은 BE 반영 사용자 확인). DL-17470/17477 기존 READY FOR QA. 미작업 카드 없음, QA 결과 대기만 남음. 백엔드·QA 담당 카드 제외.
 - Web DL-17505(346741924)·DL-17496(0c22f659d) 등은 사용자가 배포. PR4903/354/50 유지, 머지·Jira 변경 없음. 다음: 사용자 QA. 디자인 QA 4건 코드 완료.
 
 ## 2026-11-19 디자인 QA 4건 사전 검토(작업 전, 조사만)
