@@ -1,5 +1,11 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-19 밤 — DL-17529 Lab 링크톡 플로팅 버튼 폭 가변(미커밋)
+
+- 요청: Lab 앱 주문상세(웹뷰 위) 링크톡 플로팅 버튼이 `$width={120}` 고정이라 Android에서 글자 뒤 오른쪽 여백. 번역으로 문구가 바뀔 수 있으니 폭은 글자에 맞추고 디자인·패딩 유지.
+- 수정(Lab feat/DL-16140, 미커밋): `src/components/app-ui/FloatingActionButton.tsx`에 버튼 안 보이지 않는 측정용 글자(폭 1000 컨테이너, opacity 0, 접근성 숨김)로 실제 글자 폭을 재서 펼친 폭=44(왼쪽 패딩16+아이콘22+간격6)+ceil(글자폭)+16. 측정 전에는 기존 `$width` 사용, 스크롤 접힘 애니메이션은 이 폭 기준. 사용처는 OrderDetailScreen 1곳. 
+- 검증: 신규 `__tests__/components/FloatingActionButton.test.tsx` 3건(측정 전 120, 57.3→118, 긴 번역 150→210), OrderDetailScreen 테스트 포함 21건 통과, 전체 23/24(App.test 기존 실패), tsc 기존 6, ESLint·Prettier. 기기 화면 확인 안 함. Office 앱도 같은 컴포넌트를 `$width={120}`으로 사용(이번 범위 밖).
+
 ## 2026-11-19 밤 — Review Order 앱 연동 사전 검토(작업 전)
 
 - 사용자 결정안: 웹 주문 상세(웹뷰)의 Pending(PENDING_ORDER) 주문 Review Order 버튼을 Edit처럼 앱 주문 수정(OrderScreen)으로 연동. 근거: 웹·앱이 같은 주문 데이터.
