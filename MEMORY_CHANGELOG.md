@@ -462,3 +462,7 @@
 ## 2026-11-19 오후 치과앱 2차 CodePush
 
 DL-17521(청구서 목록 헤더 Billing Statements)·DL-17501 2차(Auto-apply 스위치) Office dcfe7aa3 → Staging iOS v354/Android v353, Development v151/v151 활성. Lab·웹 조치 없음. 사용자 QA 대기.
+
+## 2026-11-19 시뮬·에뮬 실행 전 확인 지침
+
+사용자 지침: 시뮬레이터·에뮬레이터·Metro를 띄워 확인하려면 먼저 묻고, 그 환경에 확인할 데이터가 있는지부터 확인한다. 데이터가 없거나 실기기 CodePush 후 사용자가 보는 편이 나으면 그렇게 제안한다. 계기: DL-17501 3차에서 묻지 않고 기기를 띄움. 같은 날 Office 7f43cd45(프로필 방식 토글) push, CodePush 미실행.
