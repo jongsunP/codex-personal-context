@@ -1,5 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-19 오후 — DL-17521·DL-17501 2차 치과앱 STG·DEV CodePush (현재 상태)
+
+- 기존 PR 브랜치 feat/DL-16140(PR354 미머지)에 이어서 작업, Office `dcfe7aa3`(ab89cdee DL-17521 청구서 목록 헤더 Billing Statements, dcfe7aa3 DL-17501 Auto-apply 스위치 animateOnMount=false·저장 중 disabled 제거). 직전 배포(8209ebec) 대비 JS 2파일만.
+- **게시·활성:** Office2.2.5 Staging iOS **v354** / Android **v353**, Development iOS/Android **v151/v151**. 4건 mandatory=true, disabled=false, rollout100%, history 확인. `scripts/codepush.js <env> all --mute`를 expect로 실행(Slack 생략).
+- Lab·웹 조치 없음: Lab은 직전 배포(bbf1d96) 이후 변경 0, 웹은 이번 두 카드와 무관(해당 화면 없음). 
+- 남은 것: 사용자 QA. DL-17521은 사용자가 Jira 상태 이동. 연속 탭 최신값 저장(프로필식)은 미적용·필요 시 별도.
+
 ## 2026-11-19 QA 브랜치 양앱 Staging·Development CodePush 완료 (현재 상태)
 
 - 사용자 지시: PR은 그대로 두고 QA `feat/DL-16140`로 배포. 웹은 사용자가 직접, 앱은 에이전트가 Staging 먼저 → Development.

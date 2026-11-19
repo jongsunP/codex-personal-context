@@ -458,3 +458,7 @@
 ## 2026-11-19 QA 브랜치 양앱 STG·DEV CodePush
 
 사용자 지시로 PR 유지, QA feat/DL-16140 양앱 Staging→Development CodePush. Office 8209ebec: STG iOS v353/Android v352, DEV v150/v150. Lab bbf1d96: STG v71/v71, DEV iOS v49/Android v48. 전부 활성·필수·100%. 웹은 사용자가 배포. 디자인 QA 4건(DL-17496/17501/17505/17506) 코드 완료, 사용자 QA 대기.
+
+## 2026-11-19 오후 치과앱 2차 CodePush
+
+DL-17521(청구서 목록 헤더 Billing Statements)·DL-17501 2차(Auto-apply 스위치) Office dcfe7aa3 → Staging iOS v354/Android v353, Development v151/v151 활성. Lab·웹 조치 없음. 사용자 QA 대기.
