@@ -1,5 +1,11 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-19 알림 스프레드시트 랜딩 URL 정리 후속
+
+- 사용자가 크레딧 PUSH 4건(142·146·148·150)을 NOTIFICATION 행과 같게, 159행 MFG_ORDER_SUBMITTED APP 랜딩을 `dentlink-lab://milling/orders/${orderNo}`로 직접 수정(확인함). `${scheme}`은 BE가 서비스 타입별로 `dentlink`/`dentlink-lab`을 넣는 것으로 정리(앱은 푸시 딥링크를 JS에서 경로만 읽어 이동하므로 환경별 스킴 불필요).
+- 사용자 요청으로 에이전트가 시트 직접 수정: P3·P4·P8·P9·P14·P15·P21·P22의 `dentlink://confirm/${officeId}/...` → `${employerId}`(앱 `confirm/:employerId/...`가 이 값으로 소속을 맞추고 사용자 소속 목록의 `employer.id`와 대조). 재조회로 `${officeId}` 잔존 0 확인. BE가 실제로 employerId와 같은 값을 넣는지는 미확인.
+- 추가 발견(미수정): 치과 NOTIFICATION 행 중 WEB 랜딩이 빈 칸 3건 — 39(ORDER_DESIGN_REJECTED), 43(ORDER_PLANNING_APPROVED), 50(ORDER_PLANNING_REJECTED). 같은 이벤트 기공소 행은 `/orders/${orderId}`.
+
 ## 2026-11-19 알림 스프레드시트 랜딩 URL 검토(카드 없음, 조회만)
 
 - 대상: 알림 정의 시트 `1w1xwwEWRE0KgiJsOvldxIFbtNgWguohurf5kemIrW_g` 탭 "전체 알림(PM)" O(WEB 랜딩)·P(APP 랜딩). 앱 실제 딥링크 패턴(`src/configs/constants/deepLink.ts`, Office `f72285e5`·Lab `bbf1d96`)과 대조. 시트·코드 변경 없음.
