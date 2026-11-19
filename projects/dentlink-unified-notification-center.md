@@ -1,5 +1,11 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-19 밤 — Review Order 앱 연동 사전 검토(작업 전)
+
+- 사용자 결정안: 웹 주문 상세(웹뷰)의 Pending(PENDING_ORDER) 주문 Review Order 버튼을 Edit처럼 앱 주문 수정(OrderScreen)으로 연동. 근거: 웹·앱이 같은 주문 데이터.
+- 코드 확인: Review Order는 shared/ui `OrderDetailBoxRequest`(OFFICE+PENDING_ORDER), 일반 주문은 `/orders/{id}/option`, 리메이크는 `/remakes/{id}/info`로 이동 — 앱 연동 없음. Edit은 `OrderDetailBoxTitleMobile`에서 앱이면 NAVIGATION OrderScreen{orderId}, 앱 OrderDetailScreen이 처리. Edit 버튼은 OFFICE에서 PENDING_ORDER에 안 보임(Review만 경로). 저장 API는 웹·앱 모두 PUT /office/orders/{id}/additional(같음 → 결정 근거 일부 확인).
+- 주의: 앱 OrderScreen은 수정 가능 상태를 DRAFT/NEW/IN_PROGRESS/OFFICE_APPROVAL_PENDING으로 제한 → PENDING_ORDER는 지금 열리지 않음(앱 수정 필요). 웹 Review는 옵션 단계부터, 앱 수정은 ADDITIONAL(4단계)부터 진입. 리메이크 보류 주문의 앱 처리 미확인. 사용자 결정 타당성 추가 검토 요청 받음.
+
 ## 2026-11-19 밤 — DL-17524 원인 확정·수정(Office 93b36b6a·6967366d 푸시, CodePush 안 함, 현재 상태)
 
 - **원인 1 (되돌아감, '가끔 튐'):** 저장(PATCH) 성공 직후 확인 GET이 가끔 이전 값을 돌려주고(DEV 에뮬 6탭 중 1회 재현, 로그로 확인), 그 값이 캐시를 덮어 토글이 되돌아감. 서버 저장 직후 읽기 지연은 알림 설정 때와 같은 특성(STG가 더 심하다는 사용자 체감과 부합, STG는 직접 측정 안 함). 2차 이전 invalidate 방식에도 같은 위험이 있었음.
