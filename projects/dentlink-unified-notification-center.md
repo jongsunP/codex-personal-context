@@ -3,6 +3,7 @@
 ## 2026-11-19 밤 — 브레이크포인트: 양앱 CodePush·PR 본문 정리 (현재 상태)
 
 - CodePush(사용자 지시): 치과 `348b7fe0`(DL-17524·17529·17537) STG iOS v356/Android v355, DEV v153/v153. 기공소 `116f77f`(DL-17529·17537) STG v72/v72, DEV iOS v50/Android v49. 8건 활성·필수·100%. 웹은 PR4903 머지 후 15시 DEV·STG 배포에 최종 수정 포함, 이후 변경 없음 → 웹 배포 불필요.
+- 이후 주석만 추가(동작 변경 없음, 미배포): FloatingActionButton 측정 영역 width 1000px 이유 주석 — 기공소 dca6220, 치과 e7bc78e1. 코드상 문제 경로 없음(절대 위치·overflow hidden·opacity 0·pointerEvents none, 1000은 결과에 미포함), 실기기 폭 확인은 미실시.
 - PR 본문 정리: 치과 #354에 DL-17496·17501·17506·17521·17524·17529·17537, 기공소 #50에 DL-17529·17537 Changes·Issue·Validation 추가, 배포 상태 문구 갱신. PR 미머지 유지.
 - Jira(사용자 이동): DL-17524·17529·17537 Ready for Deploy(이번 배포로 반영됨), DL-17488·17477 READY FOR QA. 다음 작업(사용자가 재개 지시 시): DL-17535(DL-17527 하위, Review Order 앱 연동, 검토 기반 착수, 웹은 release에서 새 브랜치) → DL-17533(/billing/payment-history 앱 화면, 범위 정의부터).
 
