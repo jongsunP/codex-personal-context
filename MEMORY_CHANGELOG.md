@@ -470,3 +470,7 @@ DL-17521(청구서 목록 헤더 Billing Statements)·DL-17501 2차(Auto-apply �
 ## 2026-11-19 저녁 치과앱 3차 CodePush
 
 DL-17501 3차(Office 7f43cd45, 유저 크레딧 Auto-apply 프로필 방식 토글) → Staging iOS v355/Android v354, Development v152/v152 활성·필수·100%. Lab·웹 조치 없음. 사용자 실기기 확인 대기.
+
+## 2026-11-19 마감 — DL-17524만 대기
+
+본인 카드는 DL-17524 외 완료(17488·17477 QA 대기). 웹 PR4903 머지, Office PR354(7f43cd45)·Lab PR50(bbf1d96) 미머지, CodePush 소스=PR head. STG 최신 Office iOS v355/Android v354, Lab v71/v71. DL-17524는 사용자 DEV 데이터 세팅 알림 후 시뮬·에뮬 측정부터 진행.
