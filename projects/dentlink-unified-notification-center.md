@@ -4,6 +4,7 @@
 
 - 사용자 실기기: Android 2.2.5.354(STG 최신)에서 유저 크레딧 Auto-apply 토글이 여전히 답답, iOS 정상, Android 프로필 토글은 괜찮음. 저장 로직은 프로필과 동일 방식(즉시 표시·마지막 선택 순차 저장·실패 복귀·확인 GET 비차단·계정 변경 무시). 코드상 차이는 화면 구성: ① `BalanceCard`(react-native-fast-shadow `ShadowedView`) 안·FlatList 머리 영역, ② 토글마다 감싼 영역 배경/테두리색 변경, ③ hitSlop 없음(체감 무관). 원인 미확정, Android 측정 필요(사용자가 DEV 데이터 세팅 후 에뮬레이터 측정 예정). 사용자가 이 건 Jira 카드 생성.
 - DL-17524 사용자 실기기 재확인(STG): iOS v355는 프로필·오피스/유저 크레딧 탭·Auto-apply 모두 정상. Android v354는 Auto-apply만 이상 — 첫 터치부터 씹힘, 연속 터치 시 돌아갔다 오는 느낌. 나머지(프로필·탭)는 정상. 측정 시 '터치가 스위치에 도달하는지'(입력 누락)와 'JS 처리 지연'을 분리해 확인할 것.
+- DL-17524 추가 제보: Android에서 주문목록 My ~ Only(`OrderSearchForm`)·환자목록 My Patients Only(`OrderPatientListSection`, FlatList 머리) 토글도 약간 답답(이번 작업에서 로컬 저장으로 바뀜). Auto-apply가 가장 심함, 프로필은 정상. 측정 대상에 두 My Only를 비교군, 프로필을 정상 기준으로 포함. 공통 후보(미확인): 목록(FlatList) 안/옆의 Switch, 토글 후 목록 재조회·재렌더.
 - DL-17524 진행 방침(사용자 합의): ① 실제 발생 중인 유저 크레딧 Auto-apply를 Android에서 먼저 측정해 원인 확정(사용자 DEV 데이터 세팅 알림 후 시작, 사용자 요청으로 iOS 시뮬레이터·Android 에뮬레이터 둘 다 확인) ② 확정된 원인이 프로필 토글에도 해당하는지 검토만, 프로필은 현재 정상이므로 해당 없으면 손대지 않음.
 - 프로필 마케팅 토글 "마지막 선택 기준 계산" 수정은 사용자 지시로 폐기(커밋 전 원복). Office HEAD 7f43cd45 clean.
 - 참고: `__tests__/libs/useProfileMarketing.test.tsx` 14개 중 11개는 11-17 `77a4c639`(채널 독립 저장) 이후 갱신 안 돼 원래부터 실패(기능 문제 아님, 정리 여부 미정).
