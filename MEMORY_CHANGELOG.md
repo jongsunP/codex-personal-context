@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-20 디자인 Reject 캡처 exocad 제보 조사
+
+- Slack 제보(New York DMD) 조사: Amplitude상 Windows Firefox160에서 HTML 복제 캡처(captureHtmlIframePreview)가 바로 성공해 exocad WebGL 모델이 빠진 이미지가 됨을 로컬 승인1834로 재현. Chrome158은 blob foreignObject 오염으로 복제 실패→화면공유 허용 시 모델 정상 캡처(단순 data URL 전환 금지). 수정·커밋·배포 없음, 해결 방향 사용자 승인 대기. Claude 메모리 project_design_reject_capture_exocad_20261120.
+
 ## 2026-11-16 알림센터 Swagger 후속 마감
 
 - displayAuthorities 실제계약 연결을 Web/Office/Lab에 검증·커밋푸시. 기존PR/Jira 작업정의 정리, 배포없음. 사용자 최신 요청대로 필요한검증만 수행하고 리뷰폴링/기기전체QA 반복없이 오늘종료. 새디자인과 내일리뷰 재개점은 통합알림센터 정본에 기록.
