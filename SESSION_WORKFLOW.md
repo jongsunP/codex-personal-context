@@ -425,18 +425,24 @@ translation request. This applies to web Lab and the separate Lab app.
   (web Lab locale JSON; the Lab app's locale files) and verify them. Do not add
   or edit Sheet rows unless the user asks. The earlier rule that a task was
   incomplete without Sheet sync no longer applies.
-- Keep the existing Sheet-related scripts, code, and documents as they are.
-  This change is to the working guidance only; do not delete or rewrite the
-  Sheet tooling unless the user separately asks for that.
+- **2026-11-20 confirmed (user instruction, every agent):** The Sheet is no
+  longer operated at all. The existing ko/en JSON files are the data source of
+  truth and only the JSON is maintained from now on. The verification scripts
+  (`check:i18n`, `generate:i18n`, `audit:i18n`) are not used either; do not
+  offer them as options. Never run web `generate:i18n` / `lab generate:locales`:
+  it regenerates JSON from the stale Sheet and would delete 2,086 of 3,682 keys
+  (measured 2026-11-20). Removing the Sheet tooling from `dentlink-client` was
+  reviewed and is approved in direction, but implementation waits for the
+  user's explicit instruction; until then leave the code as is. Removal plan:
+  [web Lab i18n](projects/dentlink-client-i18n.md) top section.
 - Read [web Lab i18n](projects/dentlink-client-i18n.md) for `dentlink-client`
   and [Lab app](projects/dentlink-lab-app.md) for `dentlink-lab-app`, and the
   repository's live guide (`lab/i18n/catalog/README.md`, team `CLAUDE.md`).
   Team documents may still describe Sheet sync; the user's 2026-11-11 decision
   takes priority for this user's work.
-- Check before running any Sheet-to-resource generation (web `generate:i18n`,
-  the Lab app's automatic `i18n` step on run/build): when the Sheet lacks the
-  new keys, generation can overwrite or drop keys added directly in code.
-  Confirm the current script behavior and keep the task's ko/en values intact.
+- The Lab app (`dentlink-lab-app`) already uses its local locale files only;
+  as of 2026-11-20 `origin/main` has no translation Sheet step (its
+  `googleSheets.ts` is a test-account sheet, unrelated to translation).
 - Compare the actual changed copy with existing keys. A scanner finding no new
   strings, or a successful build, does not prove the resources are complete.
   Verify both ko and en values and the affected UI.

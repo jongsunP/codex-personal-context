@@ -1,6 +1,18 @@
 # Dentlink i18n and typography delivery checkpoint — 2026-08-25
 
-> **2026-11-11 지침 변경:** 번역 시트는 더 이상 동기화하지 않고 그대로 둔다. 문구 작업은 코드의 ko/en 리소스만 반영·검증한다(모든 에이전트 공통). 아래 시트 동기화 절차는 이력이며, 기존 스크립트·코드는 지우지 않는다. 정본: [SESSION_WORKFLOW의 Lab 번역 절](../SESSION_WORKFLOW.md#dentlink-lab-translation-work).
+## 현재 상태 — 2026-11-20 시트 운영 중단 확정·제거안 검토(구현 대기)
+
+- 사용자 확정(모든 에이전트): 번역 시트는 아예 운영하지 않는다. 이미 만들어진 ko/en JSON이 정본 데이터이고 앞으로도 JSON만 유지한다. `check:i18n`·`generate:i18n`·`audit:i18n`도 쓰지 않는다. 11-11의 "시트 스크립트 유지"는 대체됨.
+- 위험: `pnpm generate:i18n`(및 `lab`의 `generate:locales`)은 시트→JSON 재생성이라 11-20 기준 3,682 key 중 2,086개(gnb 1,940 등)를 삭제한다. 실행 금지.
+- 제거안(origin/master `bd12e8d06` 기준 검토, release/v1.94.0·develop 동일 경로 동일). 구현은 사용자 지시 후, 제품 repo 변경 없음.
+  - 지움: `lab/scripts/i18n/` 전체(sheets-client·export·generate·audit), 루트 package.json `generate/check/export/audit:i18n`, `lab/package.json` `generate:locales`, 의존성 `googleapis`(lab)·`csv-parse`(root), `lab/.env.example` `GOOGLE_SERVICE_ACCOUNT_KEY`·`SHEETS_SHEET_NAME`·`SHEETS_SPREADSHEET_ID`, manifest `sheet` 블록·`sheetHeader`, `.gitignore` service-account, 지침 7곳(AGENTS.md:19·claude.md:14·.cursorrules:13·lab/README.md:5·.claude/.codex `skills/i18n/SKILL.md`)의 "번역 시트 반영" 문구 → "ko/en JSON 함께 수정", `lab/i18n/catalog/README.md`의 시트·생성 절차.
+  - 남김: `lab/src/i18n/locales/{en,ko}/*.json`, manifest의 languages·namespaces·기본값(런타임 `i18n.resources.ts`가 import), `i18n.resources.generated.ts`(생성 주석만 수정해 일반 파일로), `LocaleProvider`. `dotenv`는 `scripts/e2e-env.js`가 써서 유지.
+  - 영향: 빌드·CI 워크플로·husky·jest 어디서도 i18n 스크립트를 부르지 않음 → 제거해도 깨지는 곳 없음.
+- Lab 앱: 이미 로컬 locale 정본·시트 미사용(AGENTS/CLAUDE.md:13, README:57·202). `src/configs/utils/googleSheets.ts`는 테스트 계정용으로 번역 무관. 할 일 없음.
+- 다음 시작점: 사용자가 구현 지시하면 최신 release 기준 새 `feat/<Jira>` 브랜치에서 위 제거안대로 진행.
+
+
+> **2026-11-11 지침 변경:** 번역 시트는 더 이상 동기화하지 않고 그대로 둔다. 문구 작업은 코드의 ko/en 리소스만 반영·검증한다(모든 에이전트 공통). 아래 시트 동기화 절차는 이력이다. **2026-11-20 시트 운영 완전 중단·JSON 정본 확정, 위 '현재 상태' 참고.** 정본: [SESSION_WORKFLOW의 Lab 번역 절](../SESSION_WORKFLOW.md#dentlink-lab-translation-work).
 
 This is the durable delivery checkpoint for the Dentlink Lab i18n, operational
 Sheet, and cross-service Pretendard work. Live Git and Google Sheet state still
