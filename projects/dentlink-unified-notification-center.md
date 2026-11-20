@@ -6,6 +6,7 @@
 - DL-17541(iOS 치과, 다른 병원 푸시 진입 시 이동 정상 + "Failed to change office" 토스트): 문구·조건 모두 FE 고정(`useNavigationConfig.ts` 332 소속 못 찾음, 481 activate 실패·취소 제외). 토스트는 실패 시 아직 원래 병원일 때만 뜸 → 첫 시도 실패(토스트) 후 두 번째 시도 성공(이동) 순서로 추정. 푸시 수신 경로 여러 개(FCM opened·Linking·Airbridge·notifee foreground·initial notification), 중복 방지는 경로+1.5초 창. 구체 경로는 코드로 미특정.
 - 17541 재개 계획(사용자 선택: 원인 수정): ①재현(iOS 시뮬, DEV 두 병원 계정, 다른 병원 푸시. 실행 전 데이터 유무 질문) 로그로 첫 시도 실패 이유 확인 ②같은 병원 변경 진행 중이면 합류(single-flight)로 좁게 수정, 치과앱만(기공소앱은 이 흐름·토스트 없음) ③푸시 ID 기준 중복 방지는 구조 개선이라 별도 작업. 토스트만 막는 임시안 비권장. QA에 탭 시 앱 상태(종료/백그라운드/포그라운드) 확인하면 범위 축소.
 - 17541 추가 확인(11/20): `PATCH /office/employee/activates`=소속 병원 전환 시 activatedAt 갱신(대상은 employer-id/employee-id 헤더). 홈·알림함 선택, 푸시(실행/백그라운드/종료)·포그라운드 배너·채널톡·Airbridge/Linking·지연 처리 링크·알림함 항목·주문상세 딥링크 모두 PATCH 거침(공통 prepareEmployeeContext 후 setEmployerId 실행). 예외: 로그인 초기값(정상), 미사용 추정 `casePreference/:employerId`. 같은 병원 PATCH 2회 자체는 무해 추정(서버 코드 미확인), 주문상세 자체 PATCH는 순차·토스트 없음이라 우선순위 낮음. 핵심은 앱 안 시도 겹침으로 실패 판단이 엇갈리는지. 최종 추천: 재현으로 원인 확인 후 `prepareEmployeeContext`만 좁게 수정(`handleChangeEmployee`는 수동 변경 공용이라 유지), 중복방지 구조·안드로이드 예외·기공소·BE 요청 없음, 테스트 추가.
+- 17541 사용자 실기기 테스트(11/20 Jira 댓글): Android·iOS, DEV·STG, 링크톡·추가금·디자인컨펌, 포그라운드·백그라운드·완전종료, 1→2병원·2→1병원 모두 재현 안 됨. 재현 전 코드 수정 보류, 제보자 재현 조건(계정·병원 조합·푸시 종류·앱 상태·재현 빈도) 확인 우선.
 - 지금 작업 안 함. 사용자 재개 지시 때 착수.
 
 ## 2026-11-20 — DL-17545 앱개발자 방향 승인, 구현 대기(미수정, 현재 상태)
