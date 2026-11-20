@@ -1,10 +1,11 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-## 2026-11-20 — DL-17545·17541·17556 구현 커밋·푸시, DL-17542 정리 (현재 상태, 미배포)
+## 2026-11-20 — DL-17545·17541·17556 구현·CodePush·PR 본문 갱신, DL-17542 정리 (현재 상태)
 
 - 치과 feat/DL-16140(PR #354): a390a0e0 DL-17545 홈 헤더 스크롤 밖 고정(stickyHeaderIndices 제거, 섹션 노출 분석 viewportBottom에서 헤더 높이 빼 기존 기준 유지), 0deb3d87 DL-17541 딥링크 병원 변경 실패 토스트를 1.5초 뒤 여전히 실패·요청 최신일 때만 표시(`configs/utils/officeChangeNotice.ts`, 테스트 2건, 예방 조치·원인 미재현), cf078f94 DL-17556 `BOTTOM_SHEET_MAX_HEIGHT_RATIO=0.85`(CustomBottomSheetModal) → EmployeeSelectBottomSheet·NotificationOfficeSelectSheet·DesignConfirmVersionDropdown(80%→85%). head cf078f94.
 - 기공소 feat/DL-16140(PR #50): e9b4655 DL-17545 홈 헤더 동일, f7cf609 DL-17556 공용 상수 + NotificationLabSelectSheet·HomeProfileBottomSheet·DesignConfirmVersionDropdown. head f7cf609.
 - 검증: 변경 파일 lint 0, tsc 기존 진단만(치과 7·기공소 6), 치과 관련 4 suites/78 tests 통과, 기공소 unit 23 suites/234 tests 통과. 전체 실행 시 기존 실패만(치과 useProfileMarketing 8건·App.test, 기공소 App.test 네이티브 모듈) — 이번 변경 무관. 기기 실행 확인 안 함(홈 헤더 위치·새로고침·안전영역, 시트 높이). CodePush·PR 본문 갱신 안 함(사용자: 커밋·푸시까지만).
+- CodePush(사용자 지시, STG·DEV): 치과 STG iOS v357·Android v356, DEV iOS v154·Android v154 / 기공소 STG iOS v73·Android v73, DEV iOS v51·Android v50. PR #354·#50 본문에 Changes·Issue·To Reviewers(배포 버전)·Validation 추가, 미머지. 실기기 확인은 사용자가 직접(홈 헤더 위치·벨 터치·새로고침, 시트 85% 배경 닫기).
 - DL-17542: Jira 댓글(45211)로 앱 코드 문제 없음·서버 숫자 지연 후보 정리, 코드 수정 없음.
 
 ## 2026-11-20 — DL-17556 병원 선택 시트 배경 터치 안 됨: 검토 완료, 구현 대기
