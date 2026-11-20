@@ -9,6 +9,10 @@
 - 이어서 사용자 지시로 웹 시트 연동 제거 PR #4928(→release/v1.94.0, c0cb9b998) 생성. 빌드·타입 통과, E2E 가드 NO_IMPACT. 리뷰·머지 대기.
 - 사용자가 PR #4928 머지(16:41, squash 471e4032b → release/v1.94.0). worktree·로컬 브랜치 정리, 원격 브랜치는 유지. Jira 없음.
 
+## 2026-11-20 알림센터 이후 STG만
+
+- 사용자 지시: 웹·앱 DEV는 신경 쓰지 않고 이제 STG만. 웹 PR #4927 머지, 웹 STG(release/v1.94.0)는 사용자 직접.
+
 ## 2026-11-20 양앱 PR 머지·release STG 배포
 
 - PR #354→release/v2.2.5, #50→release/v1.0.6 머지(사용자). release에서 STG만 CodePush: 치과 v358/v357, 기공소 v74/v74. 웹 PR #4927 대기.
