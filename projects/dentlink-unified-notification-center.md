@@ -1,5 +1,10 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-20 — DL-17556 병원 선택 시트 배경 터치 안 됨: 검토 완료, 구현 대기
+
+- 원인: DL-17059(0a131041)에서 병원/기공소 선택 시트 최대 높이를 `height - topInset`(목록 max 450)로 키워 작은 화면·병원 많음(사용자 iPhone 12 mini)에서 시트가 거의 전체를 덮고 content pan도 꺼져 닫기 어려움. 배경 터치를 막는 코드는 없음(CustomBottomSheetModal backdrop pressBehavior close, FullWindowOverlay).
+- 정책 문서 없음. 기존 목록 시트 관례 78~85%, DesignConfirmVersionDropdown에 "최대 높이 80%로 제한" 주석 → 사용자 결정: 최대 높이 지정 시트만 80%로 통일(치과 EmployeeSelectBottomSheet·NotificationOfficeSelectSheet, 기공소 NotificationLabSelectSheet, 목록 availableContentHeight도 맞춤). 고정 snap point 시트(쉐이드 가이드 80/100% 확장 포함)·밀링 시트는 유지. 기공소 HomeProfileBottomSheet 85% 포함 여부는 사용자 확인 대기.
+
 ## 2026-11-20 — DL-17541·17542 검토 완료, 재개 지시 대기(현재 상태)
 
 - DL-17542(앱, Read All 후 Unread 탭 숫자 늦게 갱신): 치과(`useReadNotificationMutation` onSettled)·기공소(readMutation onSuccess)·웹(`useNotificationCenter` markAllRead) 모두 readAll 성공 후 목록·unread count를 서버에서 함께 재조회, count 별도 보관·덮어쓰기 없음 → 앱 코드 동기화 문제 없음. 후보: BE count 반영 지연(DEV API 미확인). 사용자 방향: 코드 문제 없으면 정리만.
