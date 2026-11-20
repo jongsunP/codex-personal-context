@@ -11,6 +11,10 @@
 
 - 안드로이드 홈 벨 클릭 취소 원인을 RN sticky 헤더·Pressability 코드로 확인, 사용자가 Slack으로 앱개발자에게 공유. 수정(홈 헤더 스크롤 분리)은 응답 후 사용자 지시 시 재개.
 
+## 2026-11-20 Claude 세션 기본 폴더
+
+- 사용자 지시(Claude Code): 따로 지정하지 않으면 조사·구현 포함 모든 새 세션 cwd는 `~/Repository`(집 `~/repository`). 구현 세션 예외 권고에도 전체 적용 선택. 구현은 Git으로 만든 `feat/<Jira>` worktree 절대경로를 브리프에 적고, repo CLAUDE.md·PR 전 E2E 가드는 세션이 직접 수행. AI_WORKFLOW Claude Code Mapping·Claude 개인 CLAUDE.md/메모리 반영.
+
 ## 2026-11-20 디자인 Reject 캡처 exocad 제보 조사
 
 - Slack 제보(New York DMD) 조사: Amplitude상 Windows Firefox160에서 HTML 복제 캡처(captureHtmlIframePreview)가 바로 성공해 exocad WebGL 모델이 빠진 이미지가 됨을 로컬 승인1834로 재현. Chrome158은 blob foreignObject 오염으로 복제 실패→화면공유 허용 시 모델 정상 캡처(단순 data URL 전환 금지). 사용자 실제 Mac Firefox159 재현 확인 후 DEV Team/Development Documents에 팀 공유 노션(https://app.notion.com/p/41ece072e82f816c8172eb1abe39a91f, 재현 사진·Amplitude 근거·후보) 작성. 수정·커밋·배포 없음, 방향은 사용자가 팀 회의 후 결정. Claude 메모리 project_design_reject_capture_exocad_20261120.
