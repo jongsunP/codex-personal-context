@@ -1,5 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-20 — DL-17541·17542 검토 완료, 재개 지시 대기(현재 상태)
+
+- DL-17542(앱, Read All 후 Unread 탭 숫자 늦게 갱신): 치과(`useReadNotificationMutation` onSettled)·기공소(readMutation onSuccess)·웹(`useNotificationCenter` markAllRead) 모두 readAll 성공 후 목록·unread count를 서버에서 함께 재조회, count 별도 보관·덮어쓰기 없음 → 앱 코드 동기화 문제 없음. 후보: BE count 반영 지연(DEV API 미확인). 사용자 방향: 코드 문제 없으면 정리만.
+- DL-17541(iOS 치과, 다른 병원 푸시 진입 시 이동 정상 + "Failed to change office" 토스트): 문구·조건 모두 FE 고정(`useNavigationConfig.ts` 332 소속 못 찾음, 481 activate 실패·취소 제외). 토스트는 실패 시 아직 원래 병원일 때만 뜸 → 첫 시도 실패(토스트) 후 두 번째 시도 성공(이동) 순서로 추정. 푸시 수신 경로 여러 개(FCM opened·Linking·Airbridge·notifee foreground·initial notification), 중복 방지는 경로+1.5초 창. 구체 경로는 코드로 미특정.
+- 17541 재개 계획(사용자 선택: 원인 수정): ①재현(iOS 시뮬, DEV 두 병원 계정, 다른 병원 푸시. 실행 전 데이터 유무 질문) 로그로 첫 시도 실패 이유 확인 ②같은 병원 변경 진행 중이면 합류(single-flight)로 좁게 수정, 치과앱만(기공소앱은 이 흐름·토스트 없음) ③푸시 ID 기준 중복 방지는 구조 개선이라 별도 작업. 토스트만 막는 임시안 비권장. QA에 탭 시 앱 상태(종료/백그라운드/포그라운드) 확인하면 범위 축소.
+- 지금 작업 안 함. 사용자 재개 지시 때 착수.
+
 ## 2026-11-20 — DL-17545 앱개발자 공유 후 응답 대기(미수정, 현재 상태)
 
 - 원인 코드 확인(RN 0.82.1): sticky 헤더 이동은 네이티브에서 바로 적용(`ScrollView` attachNativeEvent)되지만, 버튼 누름 확인(`Pressability`)은 누를 때 잰 위치(Fabric shadow tree)로 손가락 이동 중 영역 안인지 다시 확인한다. 이 위치는 `ScrollViewStickyHeader`가 JS 리스너+지연(Android 15ms/iOS 64ms)으로 늦게 반영 → Android에서 영역 밖으로 보고 클릭 취소. iOS가 괜찮은 이유는 RN 주석 근거(누르는 중 움직임 처리 차이)이며 iOS 네이티브 코드는 미확인.
