@@ -5,7 +5,7 @@
 
 ## 2026-11-20 디자인 Reject 캡처 exocad 제보 조사
 
-- Slack 제보(New York DMD) 조사: Amplitude상 Windows Firefox160에서 HTML 복제 캡처(captureHtmlIframePreview)가 바로 성공해 exocad WebGL 모델이 빠진 이미지가 됨을 로컬 승인1834로 재현. Chrome158은 blob foreignObject 오염으로 복제 실패→화면공유 허용 시 모델 정상 캡처(단순 data URL 전환 금지). 수정·커밋·배포 없음, 해결 방향 사용자 승인 대기. Claude 메모리 project_design_reject_capture_exocad_20261120.
+- Slack 제보(New York DMD) 조사: Amplitude상 Windows Firefox160에서 HTML 복제 캡처(captureHtmlIframePreview)가 바로 성공해 exocad WebGL 모델이 빠진 이미지가 됨을 로컬 승인1834로 재현. Chrome158은 blob foreignObject 오염으로 복제 실패→화면공유 허용 시 모델 정상 캡처(단순 data URL 전환 금지). 사용자 실제 Mac Firefox159 재현 확인 후 DEV Team/Development Documents에 팀 공유 노션(https://app.notion.com/p/41ece072e82f816c8172eb1abe39a91f, 재현 사진·Amplitude 근거·후보) 작성. 수정·커밋·배포 없음, 방향은 사용자가 팀 회의 후 결정. Claude 메모리 project_design_reject_capture_exocad_20261120.
 
 ## 2026-11-16 알림센터 Swagger 후속 마감
 
