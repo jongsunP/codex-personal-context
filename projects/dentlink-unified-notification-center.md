@@ -4,6 +4,7 @@
 
 - 사용자: 웹 PR #4927(DL-17542) 머지 완료, 웹 STG는 release/v1.94.0로 사용자가 직접 배포 중.
 - 사용자 지시(11/20): 이제 웹·앱 모두 개발서버(DEV)는 신경 쓰지 않음. 지금부터 배포·확인은 스테이징(STG)만.
+- 이후 사용자 지시로 앱만 release 브랜치에서 DEV CodePush: 치과 DEV iOS v155·Android v155(release/v2.2.5), 기공소 DEV iOS v52·Android v51(release/v1.0.6). 웹 제외. 로컬은 feat/DL-16140 복귀.
 - 카드: DL-17545 완료, DL-17541·17542·17556 READY FOR QA.
 - DL-17535(Review Order 앱 연동)·DL-17533(결제 내역 앱 화면)·DL-17469는 사용자가 의도적으로 하지 않은 것. 남은 일로 올리지 않고 지시가 있을 때만 착수.
 
