@@ -1,5 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-20 — 디자인 reject capture & annotate 오류 제보 코드 조사(조치 전)
+
+- 제보(Slack C063KNZEDBN, Thomas): NY DMD Sandra Low 원장, 디자인 reject의 capture & annotate에서 캡처 순간 exocad 화면이 날아가는 것으로 추정(Amplitude 리플레이). Tom이 Frankie에게 확인 요청.
+- 코드(web origin/master `shared/ui/src/OrderApprovalUI`): `useOrderApprovalCapture.handleCaptureAnnotate`가 미리보기 종류별로 분기. 이미지=원본 다시 그림, 3D(stl/ply/obj/glb)=three canvas toDataURL(preserveDrawingBuffer true), **파일 html(iframe)=iframe DOM을 복제해 SVG foreignObject로 그림(`captureHtmlIframePreview`)**, URL 미리보기 등 나머지=getDisplayMedia 화면 공유 캡처(`captureViaScreenAPI`).
+- 유력 원인(미확정): exocad HTML 내보내기를 파일로 올린 경우 html iframe 경로를 타는데, DOM 복제·SVG 방식은 `<canvas>`(WebGL 3D 모델) 내용을 담지 못해 캡처 이미지에서 모델이 빈 화면이 됨. 결과가 빈 문자열이 아니라 화면 공유 캡처로 넘어가지도 않음. URL 미리보기면 화면 공유 경로라 이 문제는 아님.
+- 확인 필요: 해당 주문의 디자인이 html 파일인지 URL인지, 실제 캡처/첨부 이미지가 비었는지. Amplitude 리플레이는 canvas·교차출처 iframe을 녹화하지 못해 리플레이상 '날아감'이 녹화 한계일 수도 있음.
+
 ## 2026-11-19 작업 마감 (브레이크포인트 1, 11/20 오전 정리)
 
 - 사용자 지시: 여기까지를 11/19 작업으로 본다. 다음은 11/20 작업 준비.
