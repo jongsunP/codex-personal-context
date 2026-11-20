@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-20 — DL-17541 후속(소속 목록 재확인) PR·CodePush, 대기 (현재 상태)
+
+- 원인 후보 확정 근거(BE 답변): PATCH /office/employee/activates는 시간만 갱신, 연속 호출로 400 없음. GET /office/users/own·/lab/users/own employee는 캐시 없이 활성 소속만(APPROVED·deactivatedAt/deletedAt null·employer 활성), 읽기 복제 지연 <1s. → 앱 저장 목록(persist)이 옛 값일 때 PATCH 없이 토스트(치과) / 무반응(기공소).
+- 조치: 링크 병원·기공소가 저장 목록에 없을 때만 프로필 1회 재조회(fetchQuery [USER, serviceType], 5초 제한, 같은 사용자 로그인 시에만 setUser) 후 재판단. 정상 흐름 불변, 비활성 소속은 기존 안내 유지. 치과 `configs/utils/deepLinkAffiliation.ts` + useNavigationConfig 두 진입점, 기공소 같은 보조 함수 + prepareDeepLinkEmployee·알림함 복귀 비교 최신 목록.
+- 브랜치·PR: feat/DL-17541(release 기준) 치과 73f4cde9 → PR #355(release/v2.2.5), 기공소 d9762cf → PR #51(release/v1.0.6). 미머지.
+- 검증: 보조 함수 테스트 6건씩, 치과 딥링크 테스트 30건 통과(mock 추가), 전체 기존 실패만(치과 App·useProfileMarketing, 기공소 App), tsc 기존(7/6), lint 0. 기기 확인 없음.
+- CodePush(작업 브랜치, STG→DEV): 치과 STG iOS v359·Android v358, DEV v156/v156 / 기공소 STG v75/v75, DEV iOS v53·Android v52. Jira DL-17541 댓글, 상태 READY FOR QA 유지.
+
 ## 2026-11-20 마감 — 브레이크포인트 2 (사용자 지정), FE 할 일 없음, 대기 (현재 상태)
 
 - 머지: 치과 PR #354→release/v2.2.5, 기공소 PR #50→release/v1.0.6, 웹 PR #4927→release/v1.94.0(이전 #4903도 머지).
