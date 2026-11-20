@@ -50,7 +50,7 @@ Older dated sections explain history; they do not reopen completed work.
   automatically start the older harness plan.
 - [Admin LBX](projects/dentlink-client-lbx.md): preserve the original work;
   test-environment delivery does not lift the production hold.
-- [통합알림센터](projects/dentlink-unified-notification-center.md): planning
+- [통합알림센터](projects/dentlink-unified-notification-center.md): 11/20 마감, FE 할 일 없음(QA 대기 2건·의도적 보류 3건)
   and estimation are separate from authorization to implement. 2026-11-12:
   branches synced to latest base with local commits (not pushed); next is the
   notification-settings API migration when the user gives the details.

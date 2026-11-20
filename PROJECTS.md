@@ -201,9 +201,10 @@ For detailed current state, read:
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
-### Dentlink 통합알림센터 — 리뷰 대응·제한된 회귀 재검토 완료, 미배포
+### Dentlink 통합알림센터 — 11/20 마감: 머지·STG 배포 완료, FE 할 일 없음
 
-- **현재(2026-11-16 20:43):** Webf6e1a86dc·Officef71ad0b0·Lab2f4c4f0, 기존 정식PR4862/346/42 유지. 치과앱 새리뷰6건+후속2건 검증/최소수정·근거답변 처리, 마지막조회 미해결0. Draft해제후 리뷰영향 정상/예외흐름10suite190tests통과, 구화면fixture권한메타도최신화. 사용자요청으로추가폴링종료·대기. 병합/배포/CodePush없음. 새설정디자인은별도잔여. [정본](projects/dentlink-unified-notification-center.md), [11/16 상세](projects/dentlink-unified-notification-center-resume-2026-11-16.md).
+- **현재(2026-11-20 마감):** 치과 #354·기공소 #50·웹 #4927 release 머지, 앱 STG 치과 v358/v357·기공소 v74/v74(DEV 치과 v155·기공소 v52/v51), 웹 STG는 사용자. DL-17541·17542 READY FOR QA(재발 시만), DL-17535·17533·17469 의도적 보류. 이후 STG만. [정본](projects/dentlink-unified-notification-center.md).
+- 이전(2026-11-16 20:43): Webf6e1a86dc·Officef71ad0b0·Lab2f4c4f0, 기존 정식PR4862/346/42 유지. 치과앱 새리뷰6건+후속2건 검증/최소수정·근거답변 처리, 마지막조회 미해결0. Draft해제후 리뷰영향 정상/예외흐름10suite190tests통과, 구화면fixture권한메타도최신화. 사용자요청으로추가폴링종료·대기. 병합/배포/CodePush없음. 새설정디자인은별도잔여. [정본](projects/dentlink-unified-notification-center.md), [11/16 상세](projects/dentlink-unified-notification-center-resume-2026-11-16.md).
 
 - 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
   제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.
