@@ -1,5 +1,11 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-20 — 양앱 PR 머지 후 release 브랜치 STG CodePush (현재 상태)
+
+- 사용자가 치과 PR #354 → release/v2.2.5(c3cea104), 기공소 PR #50 → release/v1.0.6(62b6d9f) 스쿼시 머지. release 트리 = feat/DL-16140 최종(치과 30631824, 기공소 b54cd7e)과 동일 확인.
+- 사용자 지시 "양앱 릴리즈 브랜치로 스테이징만 배포": release 브랜치에서 STG만 CodePush — 치과 STG iOS v358·Android v357, 기공소 STG iOS v74·Android v74 (description 브랜치 release/*). DEV는 하지 않음(DEV 최신은 오후 치과 v154·기공소 iOS v51/Android v50, DL-17542·리뷰 반영분 미포함).
+- 배포 후 로컬 작업 폴더는 feat/DL-16140로 되돌림(내용 동일). 웹 PR #4927(DL-17542)은 미머지·미배포.
+
 ## 2026-11-20 — DL-17542 보완·CodeRabbit 반영·웹 PR #4927 (현재 상태, 이번 분 미배포)
 
 - DL-17542: 사용자 지시로 보완. 기존 재조회 흐름 유지 + React Query 낙관적 업데이트(모두 읽음 onMutate에서 Unread 0, onError 복원). 치과 fbead3ea(PR #354), 기공소 d485f19(PR #50), 웹 feat/DL-17542(release/v1.94.0 기준 새 브랜치) → PR #4927(기존 웹 PR #4903은 머지됨). 테스트 추가(치과2·기공소2·웹1). 서버 숫자 지연이면 재조회 때 잠깐 옛 숫자 가능(서버 미확인). Jira Ready for Deploy·댓글 45217.
