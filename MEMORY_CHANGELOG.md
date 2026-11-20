@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-20 DL-17545 원인 확인·앱개발자 공유
+
+- 안드로이드 홈 벨 클릭 취소 원인을 RN sticky 헤더·Pressability 코드로 확인, 사용자가 Slack으로 앱개발자에게 공유. 수정(홈 헤더 스크롤 분리)은 응답 후 사용자 지시 시 재개.
+
 ## 2026-11-20 디자인 Reject 캡처 exocad 제보 조사
 
 - Slack 제보(New York DMD) 조사: Amplitude상 Windows Firefox160에서 HTML 복제 캡처(captureHtmlIframePreview)가 바로 성공해 exocad WebGL 모델이 빠진 이미지가 됨을 로컬 승인1834로 재현. Chrome158은 blob foreignObject 오염으로 복제 실패→화면공유 허용 시 모델 정상 캡처(단순 data URL 전환 금지). 사용자 실제 Mac Firefox159 재현 확인 후 DEV Team/Development Documents에 팀 공유 노션(https://app.notion.com/p/41ece072e82f816c8172eb1abe39a91f, 재현 사진·Amplitude 근거·후보) 작성. 수정·커밋·배포 없음, 방향은 사용자가 팀 회의 후 결정. Claude 메모리 project_design_reject_capture_exocad_20261120.
