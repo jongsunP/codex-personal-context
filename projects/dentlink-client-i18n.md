@@ -1,6 +1,13 @@
 # Dentlink i18n and typography delivery checkpoint — 2026-08-25
 
-## 현재 상태 — 2026-11-20 시트 연동 제거 PR 생성(리뷰 대기)
+## 현재 상태 — 2026-11-20 시트 연동 제거 머지·정리 완료
+
+- 사용자가 [PR #4928](https://github.com/Innvoaid/dentlink-client/pull/4928)을 직접 머지: MERGED 2026-11-20 16:41 KST, mergedBy `jongsunP`, squash `471e4032b` → `release/v1.94.0`. 머지 결과가 feature HEAD `c0cb9b998`과 변경 경로 기준 동일함을 확인.
+- 정리: worktree `~/Repository/dentlink-client-lab-i18n-remove-sheet`와 로컬 `feat/lab-i18n-remove-sheet` 삭제. 원격 branch는 남아 있음(사용자 지시 없어 미삭제). Jira 카드 없음.
+- 이제 release/v1.94.0 이후 웹 Lab i18n은 locale JSON 직접 관리만 존재(시트 스크립트·명령 없음). master 반영·배포는 release 일정에 따름.
+- 다음 시작점: 추가 작업 없음. Lab 문구 작업은 en/ko JSON을 함께 수정.
+
+## 이전 상태 — 2026-11-20 시트 연동 제거 PR 생성
 
 - 사용자 지시로 구현: [PR #4928](https://github.com/Innvoaid/dentlink-client/pull/4928) `feat/lab-i18n-remove-sheet` → `release/v1.94.0`, commit `c0cb9b998`(Jira 없음, 사용자가 브랜치명 임의 지정 허용). worktree `~/Repository/dentlink-client-lab-i18n-remove-sheet`.
 - 아래 제거안 그대로 반영 + manifest에서 런타임 미사용 `sourceLanguage`·`allowedComponentTags`·`allowedEmptyTranslations`도 제거(런타임은 languages·namespaces·default/fallback·defaultNamespace만 사용). 운영 가이드는 JSON 직접 관리 기준으로 재작성.

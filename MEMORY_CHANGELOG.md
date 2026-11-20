@@ -7,6 +7,7 @@
 
 - 사용자 확정(모든 에이전트): 시트 미운영, 기존 ko/en JSON이 정본 데이터, generate/check/audit 미사용. `generate:i18n`은 JSON 2,086 key를 지우므로 실행 금지. dentlink-client 시트 코드 제거안 검토 완료(구현은 지시 대기), Lab 앱은 해당 없음. SESSION_WORKFLOW·PROJECTS·dentlink-client-i18n 갱신.
 - 이어서 사용자 지시로 웹 시트 연동 제거 PR #4928(→release/v1.94.0, c0cb9b998) 생성. 빌드·타입 통과, E2E 가드 NO_IMPACT. 리뷰·머지 대기.
+- 사용자가 PR #4928 머지(16:41, squash 471e4032b → release/v1.94.0). worktree·로컬 브랜치 정리, 원격 브랜치는 유지. Jira 없음.
 
 ## 2026-11-20 DL-17542 보완·리뷰 반영
 
