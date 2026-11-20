@@ -6,6 +6,7 @@
 - 기공소 feat/DL-16140(PR #50): e9b4655 DL-17545 홈 헤더 동일, f7cf609 DL-17556 공용 상수 + NotificationLabSelectSheet·HomeProfileBottomSheet·DesignConfirmVersionDropdown. head f7cf609.
 - 검증: 변경 파일 lint 0, tsc 기존 진단만(치과 7·기공소 6), 치과 관련 4 suites/78 tests 통과, 기공소 unit 23 suites/234 tests 통과. 전체 실행 시 기존 실패만(치과 useProfileMarketing 8건·App.test, 기공소 App.test 네이티브 모듈) — 이번 변경 무관. 기기 실행 확인 안 함(홈 헤더 위치·새로고침·안전영역, 시트 높이). CodePush·PR 본문 갱신 안 함(사용자: 커밋·푸시까지만).
 - CodePush(사용자 지시, STG·DEV): 치과 STG iOS v357·Android v356, DEV iOS v154·Android v154 / 기공소 STG iOS v73·Android v73, DEV iOS v51·Android v50. PR #354·#50 본문에 Changes·Issue·To Reviewers(배포 버전)·Validation 추가, 미머지. 실기기 확인은 사용자가 직접(홈 헤더 위치·벨 터치·새로고침, 시트 85% 배경 닫기).
+- Jira(11/20 사용자 지시로 정리): DL-17545·17541·17556 → 진행 중/할 일 → Ready for Deploy → READY FOR QA("Staging 배포" 전환), 각 카드에 수정 내용·커밋·CodePush 버전 댓글(45212·45213·45214). DL-17542는 코드 변경·배포 없음이라 진행 중 유지(상태는 사용자 결정 대기). 실기기 확인 후 완료 처리는 사용자.
 - DL-17542: Jira 댓글(45211)로 앱 코드 문제 없음·서버 숫자 지연 후보 정리, 코드 수정 없음.
 
 ## 2026-11-20 — DL-17556 병원 선택 시트 배경 터치 안 됨: 검토 완료, 구현 대기
