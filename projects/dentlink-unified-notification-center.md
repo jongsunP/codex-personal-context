@@ -1,5 +1,15 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-20 — DL-17541 CodeRabbit 대응 완료 (Codex, 미배포)
+
+- 범위: Office PR #355 현재 리뷰 2건 + Lab PR #51 동일 경로만. 사용자가 다른 에이전트의 미커밋 변경을 이어받도록 승인. 양앱 feat/DL-17541 원격 동기화 확인, base/release 병합 불필요. E2E·기기·전체 검수·배포 제외.
+- 양앱: 소속 목록 재조회가 공유 USER query cache에 이전 로그인 응답을 기록하지 않도록 직접 조회로 분리. 동일 로그인 세션 동시 요청 합침, logout/계정·서비스 변경 시 응답·오류 처리 무효화, 같은 계정 재로그인 보호, 5초 초과 후 새 요청 허용. 기존 로그인/useUser는 유지. Lab getProfile에 기존 ScopedRequestConfig 선택 인자 전달 추가.
+- Office: 명령형/Linking 진입 모두 소속 재조회 전 공유 순서 토큰 발급. 오래된 진입의 전환·실패 안내·후속 이동 차단. Lab은 기존 navigationRequestRef가 재조회 전부터 동일 보호하므로 navigation 수정 없음.
+- 커밋/푸시: Office 7c7a259ff15ca60d9cd4900c2c986e439ad654c7, Lab f972c366d16a2691bc1234e3d97158027849af9c. 양앱 checkout clean, origin 일치. PR #355→release/v2.2.5, #51→release/v1.0.6 유지, 설명 최신화. 머지/CodePush 하지 않음.
+- 검증: Office 관련 2 suites/34 tests, Lab helper 8 tests, 변경 파일 ESLint·diff check 통과. Jest는 두 설정 공존 때문에 --config jest.config.js 명시. 기기 실행/전수테스트/신규 타입 전체검사 없음.
+- 리뷰: Office 4640337169/4640337182에 수정근거 답변하고 두 스레드 resolve. 종료 시 1회 확인으로 미해결 0; Lab 스레드 0. 새 봇 재리뷰 완료/승인까지 주장하지 않음, 추가 폴링 없음.
+- 다음: 사용자 요청 시 새 리뷰/머지/배포 진행. 이번 수정은 미배포이며 기존 배포 라벨 유지. DL-17557 정책 답변 대기와 의도적으로 보류한 다른 QA는 이번 범위에 포함하지 않음.
+
 ## 2026-11-20 — DL-17557 검토, 기획자 답변 대기 (현재 상태)
 
 - 제보(AOS): 알림 허용 시스템 팝업에서 허용하면 선택 항목만이 아니라 꺼져 있던 푸시가 모두 ON.
