@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-20 — DL-17557 검토, 기획자 답변 대기 (현재 상태)
+
+- 제보(AOS): 알림 허용 시스템 팝업에서 허용하면 선택 항목만이 아니라 꺼져 있던 푸시가 모두 ON.
+- 코드 확인: 허용 후 앱은 누른 항목 하나만 저장(치과 NotificationCenterScreen onGranted, 기공소 동일). 앱 시작/배너 권한 요청은 기기 토큰 등록(POST /app/users/own/devices)만. OS 권한 꺼짐 동안 PUSH 체크·스위치가 서버 값과 무관하게 회색(꺼진 것처럼) 표시(치과 NotificationSettingSection, 기공소 NotificationSettingsGroup). DEV 테스트 계정 서버 PUSH 전부 enabled:true. → 원래 ON이던 값이 권한 허용 후 실제대로 보이는 것. iOS·Android(12 이하는 설정 복귀 흐름)·양앱 동일 구조.
+- 노션 기획서(11/17 수정, 권한·푸시 부분만 검색 확인): 앱 푸시 설정은 기기 권한과 독립 저장, 둘 다 ON일 때만 수신, 기기 권한 ON 시 앱 설정 ON 항목 즉시 수신, 권한 OFF 중 조작 불가(비활성)·값 유지·안내, 기기 권한 변경 시 서버값 변경 금지. TC: 가입 시 권한 거부 → 앱 설정 모두 ON 저장, 이후 권한 ON → ON 항목 모두 수신.
+- 판단: 제보 동작은 기획된 동작이고 혼란은 표시 문제. 권장 1번 = 권한 OFF 중에도 실제 값 표시+비활성(양앱 화면 컴포넌트·테스트, 낮은 난이도, 디자인 색 확인). 2번(허용 시 나머지 서버에서 끄기)은 정책 위반·데이터 변경이라 비권장.
+- 사용자가 기획자에게 1번/2번 질문 공유. 답변 오면 사용자가 알려줌. 수정은 아직 하지 않음(사용자 지시).
+
 ## 2026-11-20 — DL-17541 후속(소속 목록 재확인) PR·CodePush, 대기 (현재 상태)
 
 - 원인 후보 확정 근거(BE 답변): PATCH /office/employee/activates는 시간만 갱신, 연속 호출로 400 없음. GET /office/users/own·/lab/users/own employee는 캐시 없이 활성 소속만(APPROVED·deactivatedAt/deletedAt null·employer 활성), 읽기 복제 지연 <1s. → 앱 저장 목록(persist)이 옛 값일 때 PATCH 없이 토스트(치과) / 무반응(기공소).
