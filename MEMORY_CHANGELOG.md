@@ -7,6 +7,10 @@
 
 - 사용자 확정(모든 에이전트): 시트 미운영, 기존 ko/en JSON이 정본 데이터, generate/check/audit 미사용. `generate:i18n`은 JSON 2,086 key를 지우므로 실행 금지. dentlink-client 시트 코드 제거안 검토 완료(구현은 지시 대기), Lab 앱은 해당 없음. SESSION_WORKFLOW·PROJECTS·dentlink-client-i18n 갱신.
 
+## 2026-11-20 DL-17545·17541·17556 구현
+
+- 양앱 feat/DL-16140 커밋·푸시(치과 cf078f94, 기공소 f7cf609), 미배포·PR 본문 미갱신. DL-17542는 Jira 정리 댓글. 바텀시트 최대 높이 공통 85% 상수 도입.
+
 ## 2026-11-20 DL-17541·17542 검토
 
 - 17542는 앱 코드 동기화 문제 없음(BE count 지연 후보, 정리만), 17541은 첫 시도 실패 후 재시도 성공 추정 → 재현 후 single-flight 수정 예정. 둘 다 재개 지시 대기.
