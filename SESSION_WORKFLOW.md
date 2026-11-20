@@ -431,9 +431,9 @@ translation request. This applies to web Lab and the separate Lab app.
   (`check:i18n`, `generate:i18n`, `audit:i18n`) are not used either; do not
   offer them as options. Never run web `generate:i18n` / `lab generate:locales`:
   it regenerates JSON from the stale Sheet and would delete 2,086 of 3,682 keys
-  (measured 2026-11-20). Removing the Sheet tooling from `dentlink-client` was
-  reviewed and is approved in direction, but implementation waits for the
-  user's explicit instruction; until then leave the code as is. Removal plan:
+  (measured 2026-11-20). Removal of the Sheet tooling from `dentlink-client` is in
+  PR #4928 (`feat/lab-i18n-remove-sheet` → `release/v1.94.0`, opened
+  2026-11-20, awaiting review); after it merges the scripts no longer exist. Removal plan:
   [web Lab i18n](projects/dentlink-client-i18n.md) top section.
 - Read [web Lab i18n](projects/dentlink-client-i18n.md) for `dentlink-client`
   and [Lab app](projects/dentlink-lab-app.md) for `dentlink-lab-app`, and the

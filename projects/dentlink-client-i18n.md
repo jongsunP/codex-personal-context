@@ -1,6 +1,13 @@
 # Dentlink i18n and typography delivery checkpoint — 2026-08-25
 
-## 현재 상태 — 2026-11-20 시트 운영 중단 확정·제거안 검토(구현 대기)
+## 현재 상태 — 2026-11-20 시트 연동 제거 PR 생성(리뷰 대기)
+
+- 사용자 지시로 구현: [PR #4928](https://github.com/Innvoaid/dentlink-client/pull/4928) `feat/lab-i18n-remove-sheet` → `release/v1.94.0`, commit `c0cb9b998`(Jira 없음, 사용자가 브랜치명 임의 지정 허용). worktree `~/Repository/dentlink-client-lab-i18n-remove-sheet`.
+- 아래 제거안 그대로 반영 + manifest에서 런타임 미사용 `sourceLanguage`·`allowedComponentTags`·`allowedEmptyTranslations`도 제거(런타임은 languages·namespaces·default/fallback·defaultNamespace만 사용). 운영 가이드는 JSON 직접 관리 기준으로 재작성.
+- 검증: lab type·lint(경고만)·`build:lab` 통과, pre-commit clinic/lab/admin type 통과. lab jest `LocationDetail.test.tsx` 4건은 `window.matchMedia` 미구현으로 실패(무관). E2E 가드 NO_IMPACT 기록, E2E 실행 안 함(사용자 지시). 새 worktree는 `next-env.d.ts`·`coverage-baseline.json`(무시 파일)이 없어 훅이 실패하므로 복사/생성 후 진행.
+- 다음: 리뷰·머지는 사용자 판단. 머지 후 worktree·로컬 브랜치 정리.
+
+## 이전 상태 — 2026-11-20 시트 운영 중단 확정·제거안 검토
 
 - 사용자 확정(모든 에이전트): 번역 시트는 아예 운영하지 않는다. 이미 만들어진 ko/en JSON이 정본 데이터이고 앞으로도 JSON만 유지한다. `check:i18n`·`generate:i18n`·`audit:i18n`도 쓰지 않는다. 11-11의 "시트 스크립트 유지"는 대체됨.
 - 위험: `pnpm generate:i18n`(및 `lab`의 `generate:locales`)은 시트→JSON 재생성이라 11-20 기준 3,682 key 중 2,086개(gnb 1,940 등)를 삭제한다. 실행 금지.
