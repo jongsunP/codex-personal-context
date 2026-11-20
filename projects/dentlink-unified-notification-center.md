@@ -1,5 +1,12 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-20 — DL-17542 보완·CodeRabbit 반영·웹 PR #4927 (현재 상태, 이번 분 미배포)
+
+- DL-17542: 사용자 지시로 보완. 기존 재조회 흐름 유지 + React Query 낙관적 업데이트(모두 읽음 onMutate에서 Unread 0, onError 복원). 치과 fbead3ea(PR #354), 기공소 d485f19(PR #50), 웹 feat/DL-17542(release/v1.94.0 기준 새 브랜치) → PR #4927(기존 웹 PR #4903은 머지됨). 테스트 추가(치과2·기공소2·웹1). 서버 숫자 지연이면 재조회 때 잠깐 옛 숫자 가능(서버 미확인). Jira Ready for Deploy·댓글 45217.
+- CodeRabbit(PR #354 미해결 4건, 11/20 기준·폴링 없음): 치과 4a821c24로 반영·답변·resolve — 수동 새로고침 cancelRefetch 기본값(자동 조회는 false 유지), ScreenSafeArea 마지막 배경 useEffect 기록, getActiveRouteName index 없으면 마지막 라우트, useProfileMarketing no-void. 기공소 동일 코드 fc18c7d로 맞춤(PR #50 리뷰 없음).
+- 검증: 양앱 전체 단위 기존 실패만(치과 App.test·useProfileMarketing, 기공소 App.test), tsc 기존(7/6), lint 0. 웹 shared/hooks 17 tests·tsc 0·push 훅 타입검사 통과, E2E 가드 NO_IMPACT 기록.
+- 현재 head: 치과 4a821c24, 기공소 fc18c7d, 웹 feat/DL-17542. 앱 PR 본문 갱신(이번 분 미배포 명시). 남은 일: 이번 분 CodePush·웹 배포는 사용자 지시 시, 웹 PR 리뷰.
+
 ## 2026-11-20 — DL-17545·17541·17556 구현·CodePush·PR 본문 갱신, DL-17542 정리 (현재 상태)
 
 - 치과 feat/DL-16140(PR #354): a390a0e0 DL-17545 홈 헤더 스크롤 밖 고정(stickyHeaderIndices 제거, 섹션 노출 분석 viewportBottom에서 헤더 높이 빼 기존 기준 유지), 0deb3d87 DL-17541 딥링크 병원 변경 실패 토스트를 1.5초 뒤 여전히 실패·요청 최신일 때만 표시(`configs/utils/officeChangeNotice.ts`, 테스트 2건, 예방 조치·원인 미재현), cf078f94 DL-17556 `BOTTOM_SHEET_MAX_HEIGHT_RATIO=0.85`(CustomBottomSheetModal) → EmployeeSelectBottomSheet·NotificationOfficeSelectSheet·DesignConfirmVersionDropdown(80%→85%). head cf078f94.
