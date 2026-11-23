@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-23 DL-17548 QA 확인
+
+- 앱 주문 상세에서 Retention 새 값이 BE 원값으로 보인 제보는 앱 주문 상세가 치과 웹 `/orders/{id}` WebView라 웹 STG 배포 완료 전이었던 것. 배포 후 정상(사용자 확인), 코드 수정 없음. 앱 쪽 표시 변경은 웹 배포 시점에 따름.
+
 ## 2026-11-23 알림센터 이번 release FE 작업 마감
 
 - DL-17557·DL-17548 READY FOR QA(사용자 변경). 이번 release FE 작업 완료, DL-17548 worktree·로컬 브랜치 정리. 정본 [통합알림센터](projects/dentlink-unified-notification-center.md).
