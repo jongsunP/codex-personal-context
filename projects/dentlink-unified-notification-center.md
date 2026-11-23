@@ -1,5 +1,11 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-23 — BE 관리자 웹알림 발신자 3필드 제거 문의 확인
+
+- Slack https://innovaidhq.slack.com/archives/C04T5SU6A2U/p1795409904774179 (Leo 13:58 KST): GET /admin/messages/notifications data[]의 senderServiceType/senderEmployerId/senderEmployerName 제거 예정, 어드민 사용 여부 요청. 기존 pushEnable 제거 건과 별도. 신규 발송은 이미 null/“-”, 과거만 값 존재한다는 BE 설명.
+- 읽기 전용 코드 대조: API-cleanup HEAD 057cb30ef와 원격 release/v1.94.0 dfc69f5780. 3필드는 생성 data-contracts.ts 선언 외 사용 없음. 실제 API caller(관리자 웹알림 목록·CRM 알림 타임라인) 및 컬럼/렌더링 대조, 수신자·내용·읽음 등만 사용. 두 브랜치의 해당 소비자 파일 diff 없음.
+- 결론: 확인한 릴리즈/작업 코드 기준 3필드 제거 대응용 FE 화면 수정 불필요. API 자체는 계속 사용, 필드만 미사용. 생성 타입은 BE Swagger 정리 시 재생성 대상으로 구분. 이번 코드 수정·외부 답변 게시·배포 없음.
+
 ## 2026-11-23 — 삭제 예정 구 API 잔여 코드 정리 PR (현재 상태, 미머지)
 
 - 근거: Slack C04T5SU6A2U p1794363519212339 (BE Leo가 10개 API 삭제 예정: push-preferences GET/POST/PATCH, push-settings PATCH, /messages/notifications 6개). 확인 결과 양앱·웹 모두 실제 호출 없음(치과 '내 주문만 보기'는 기기 저장 전환 완료) → 서버 삭제해도 동작 영향 없음.
