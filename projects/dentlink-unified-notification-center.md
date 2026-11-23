@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-23 — DL-17557 구현·PR, 미배포 (현재 상태)
+
+- 근거: PM 답변(댓글 45229) "기기 푸시 꺼져 있어도 회색이 아닌 기존 색 유지".
+- 변경: 권한 OFF 중 PUSH 스위치 회색(mono300)·채널 체크 꺼진색(mono500) 강제를 제거하고 실제 설정값의 기존 색으로 표시. 권한 없을 때 누르면 권한 요청, 안내 배너, 서버 저장 로직, 기기 권한/서버값 독립 정책은 유지. 치과 NotificationSettingSection, 기공소 NotificationSettingsGroup.
+- 브랜치·PR(사용자 지정 타깃, 이미 머지한 릴리즈 기준): 치과 feat/DL-17557 9504a050 → PR #356(release/v2.2.5), 기공소 feat/DL-17557 80f17ec → PR #52(release/v1.0.6). 미머지, CodePush 안 함(사용자: 작업·PR까지만).
+- 검증: 컴포넌트 테스트 3건씩, 치과 62 suites 중 60(기존 실패), 기공소 26 중 24(App.test, appServiceIsolation), tsc 기존(7/6), lint 0. E2E·기기 확인 제외(사용자).
+- 발견: 기공소 `__tests__/services/appServiceIsolation.test.ts`가 release/v1.0.6에서 실패 — DL-17541 Codex 리뷰 반영으로 Lab getProfile이 config 인자를 넘기게 바뀌었는데 테스트 기대값이 옛 호출 모양. DL-17557 PR에는 미포함, 사용자 판단 대기.
+- Jira DL-17557: 댓글 45240, 해야 할 일 → 진행 중 → Ready for Deploy. 주말 사이 Codex가 DL-17541 리뷰 처리 후 #355/#51 머지(release 기준 STG 재배포는 아직 아님).
+
 ## 2026-11-20 — DL-17557 PM 답변 확인, 구현은 미착수
 
 - 요청 범위: 방금 추가된 댓글만 확인·기록. 코드/배포/Jira 수정 없음.

@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-23 DL-17557 구현
+
+- 권한 OFF에도 푸시 실제 값 기존 색 표시, 양앱 PR #356·#52(release/v2.2.5·v1.0.6), 미배포. 기공소 appServiceIsolation 테스트 기존 실패(DL-17541 여파) 발견·보고.
+
 ## 2026-11-20 Lab 번역 시트 운영 중단 확정
 
 - 사용자 확정(모든 에이전트): 시트 미운영, 기존 ko/en JSON이 정본 데이터, generate/check/audit 미사용. `generate:i18n`은 JSON 2,086 key를 지우므로 실행 금지. dentlink-client 시트 코드 제거안 검토 완료(구현은 지시 대기), Lab 앱은 해당 없음. SESSION_WORKFLOW·PROJECTS·dentlink-client-i18n 갱신.
