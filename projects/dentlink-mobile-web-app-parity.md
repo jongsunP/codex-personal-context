@@ -1,6 +1,16 @@
 # Dentlink 모바일웹 대비 앱 기능 차이 조사
 
-## 현재 역할과 후속 업무 분리 — 2026-11-03
+## 최신 Jira 내용 갱신 — 2026-11-23
+
+- 사용자 요청은 해당 카드 재조회와 이 세션의 내용 갱신만이며 실제 작업은 없다. 원 조사·Notion 정리 완료와 세션 유지·대기 상태를 유지한다.
+- [DL-17202](https://innovaid.atlassian.net/browse/DL-17202)의 현재 제목은 **[치과앱] 알림센터 연계 크레딧·청구서·결제 내역 목록 추가**, Jira 상태는 **완료**다(11/23 직접 조회, 본문과 댓글 3개 확인). 상위 카드는 DL-17174 `앱 기능 지원 확대`다.
+- **추가 범위:** 기존 Credits·Statements에 **Payment History(결제 내역) 조회**가 추가됐다(DL-17533). 모바일웹 `/billing/payment-history` 기준 검색·상태 필터/건수·주문번호 선택 시 주문 상세 이동을 포함한다.
+- **연결 동작:** Statements의 View에서 해당 청구서 번호로 검색한 Payment History를 열며 `No Charge`는 비활성화한다. 딥링크 `billing/payment-history?employerId=`와 웹 URL `/billing/payment-history`도 앱 화면으로 연결한다.
+- 별도 메뉴 없이 알림/푸시와 Statements View로 진입하는 기존 기준은 유지한다. **결제 실행(선택·Pay Now), Invoice/Receipt/Statement WebView·PDF 확장은 계속 제외**다. 아래 11/2 후보·11/3 Credits/Statements만의 범위는 당시 이력이며, Payment History는 이제 이 카드의 포함 범위다.
+- 구현·QA·배포의 최신 이력은 [통합알림센터 정본](dentlink-unified-notification-center.md)에서 관리한다. 댓글 45258의 `PR 머지·배포 전`은 작성 당시 상태로만 보존하며 현재 배포 상태로 전재하지 않는다. 이번 조회는 제품 코드·기기·배포 검증을 수행한 것이 아니다.
+- 이번 변경은 개인 Git 체크포인트와 Claude 메모리의 내용 갱신만이다. Jira·Notion·제품은 수정하지 않았으며 추가 구현·조사·자동 점검 없이 다음 요청까지 대기한다.
+
+## 이전 역할과 후속 업무 분리 — 2026-11-03
 
 - 원 조사·담당별1차·통합2차 표는 완료 상태로 보존하며 이번 정리로 재조사하지 않는다. 원 조사 세션의 유지·대기 경계도 그대로다.
 - Notion 원 조사 대문은 [모바일 웹 대비 앱 미지원 기능 현황](https://app.notion.com/p/innovaid/3fece072e82f80d5a02fda9a76cd51b7)이며 원래1차2개·2차회의록만 하위에 유지했다.

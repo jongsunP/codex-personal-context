@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-23 앱 미지원 조사 세션의 DL-17202 내용 갱신
+
+- Jira 본문·댓글을 다시 읽고 기존 Credits·Statements에 추가된 Payment History 조회와 Statements View 연결을 [앱 기능 차이 조사 기록](projects/dentlink-mobile-web-app-parity.md)에 반영했다. Jira 상태 완료를 확인했으며 Claude 메모리에도 같은 범위를 기록했다. 실제 구현·외부 문서 변경 없이 대기한다.
+
 ## 2026-11-23 이번 릴리즈 로컬 정리(상용 배포 전환)
 
 - 머지 완료된 worktree 4개(내 웹 알림센터 1, Codex 3)·로컬 브랜치 14개 삭제, 시뮬레이터 종료. 세 저장소 메인 checkout만 남음. 정본 [dentlink-fe](projects/dentlink-fe.md).
