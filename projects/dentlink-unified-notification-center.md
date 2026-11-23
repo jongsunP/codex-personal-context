@@ -1,5 +1,15 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-23 — 삭제 예정 구 API 잔여 코드 정리 PR (현재 상태, 미머지)
+
+- 근거: Slack C04T5SU6A2U p1794363519212339 (BE Leo가 10개 API 삭제 예정: push-preferences GET/POST/PATCH, push-settings PATCH, /messages/notifications 6개). 확인 결과 양앱·웹 모두 실제 호출 없음(치과 '내 주문만 보기'는 기기 저장 전환 완료) → 서버 삭제해도 동작 영향 없음.
+- 정리(카드 없음 → 상위 DL-16140, 브랜치 feat/DL-16140-api-cleanup, 사용자 지정 release 타깃, 커밋·푸시·PR까지):
+  - 치과 2c31d6be → PR #357(release/v2.2.5): PushType·REQUIRED_PUSH_TYPES, 번역 키 failedToUpdatePushPreferences, 화면에 없던 Push Settings Detox 시나리오 2건 제거.
+  - 기공소 74f8a61 → PR #53(release/v1.0.6): 렌더링 안 되던 ProfileNotificationSection·ProfileNotificationSwitch·useProfileNotification, app.service 4함수·useAppQueries 5훅·QUERY_KEYS.PUSH_PREFERENCE·errorHandlers URL 예외, pushPreference 유틸·테스트, 타입·번역 키, Detox 2건 제거. 로그아웃 시 ASYNC_STORAGE_KEYS.PUSH_PREFERENCE 삭제는 기존 설치 정리용으로 유지.
+  - 웹 43763ee99 → PR #4935(release/v1.94.0): clinic·lab useNotificationsPagination·NotificationsType·messages.query, shared messages.apis.clinic/lab 및 index export 제거. MessagesTypes는 shared/ui NotificationUI 사용 중이라 유지. E2E 가드 NO_IMPACT 기록.
+- 검증: 사용처 코드 검색, 타입 검사만(치과 7·기공소 6 기존, 웹 clinic·lab 0). 실행 검증 생략(사용자: 사용처 없으면 검증 불필요).
+- 남음: Swagger 생성 파일(앱 models/Api.ts, 웹 shared/models App.ts·Messages.ts)은 BE 삭제 후 재생성 시 정리.
+
 ## 2026-11-23 — DL-17557 구현·PR, 미배포 (현재 상태)
 
 - 근거: PM 답변(댓글 45229) "기기 푸시 꺼져 있어도 회색이 아닌 기존 색 유지".
