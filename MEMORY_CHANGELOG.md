@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-23 DL-17533·DL-17590 배포 마감
+
+- 웹·치과앱 release 머지, 치과앱 CodePush STG v361/v360·DEV v158/v158. Jira 댓글·DL-17202 제목/설명 갱신, 로컬 worktree·브랜치 정리. 정본 [통합알림센터](projects/dentlink-unified-notification-center.md).
+
 ## 2026-11-23 앱 기기 테스트 기본 환경 = 로컬 DEV
 
 - 사용자 지시: 따로 지시가 없으면 앱 시뮬·에뮬 확인은 항상 로컬 DEV 빌드·DEV API·DEV 테스트 계정. STG는 배포·QA 대상 기준으로 유지. 정본 SESSION_WORKFLOW Local Development And User Preview.
