@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-23 알림센터 FE 관리 타입 pushEnable 정리
+
+- 웹 PR #4938(→ release/v1.94.0, 미머지): user/employer/api.types.ts의 pushEnable 8곳·pushEnable 전용 미사용 DTO 제거. 앱은 대상 없음. 정본 [통합알림센터](projects/dentlink-unified-notification-center.md).
+
 ## 2026-11-23 새 worktree 로컬 env 자동 복사
 
 - 사용자 재확인: worktree를 새로 만들면 묻지 않고 메인 worktree의 로컬 `.env*`(Git 무시·미추적, example·산출물 폴더 제외)를 내용 비공개로 같은 경로에 복사. SESSION_WORKFLOW Local Env Inheritance 보강, Claude는 `~/.claude/scripts/copy-worktree-env.sh` 사용. DL-17548 웹·치과앱 worktree에 적용(웹 6개·앱 1개). 팀 env 규칙의 나머지는 그대로.
