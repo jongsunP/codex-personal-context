@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-23 DL-17533·DL-17590 PR
+
+- 치과 앱 결제 내역 조회 화면·Statements View·딥링크(PR dentlink-app#359 → release/v2.2.5), 마침표 통일(앱 동일 PR, 웹 dentlink-client#4940 → release/v1.94.0). 미머지·미배포. 정본 [통합알림센터](projects/dentlink-unified-notification-center.md).
+
 ## 2026-11-23 DL-17548 QA 확인
 
 - 앱 주문 상세 표시는 웹 배포 후 정상(사용자 확인), 코드 수정 없음.
