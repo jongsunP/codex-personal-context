@@ -8,6 +8,7 @@
   - 기공소 74f8a61 → PR #53(release/v1.0.6): 렌더링 안 되던 ProfileNotificationSection·ProfileNotificationSwitch·useProfileNotification, app.service 4함수·useAppQueries 5훅·QUERY_KEYS.PUSH_PREFERENCE·errorHandlers URL 예외, pushPreference 유틸·테스트, 타입·번역 키, Detox 2건 제거. 로그아웃 시 ASYNC_STORAGE_KEYS.PUSH_PREFERENCE 삭제는 기존 설치 정리용으로 유지.
   - 웹 43763ee99 → PR #4935(release/v1.94.0): clinic·lab useNotificationsPagination·NotificationsType·messages.query, shared messages.apis.clinic/lab 및 index export 제거. MessagesTypes는 shared/ui NotificationUI 사용 중이라 유지. E2E 가드 NO_IMPACT 기록.
 - 검증: 사용처 코드 검색, 타입 검사만(치과 7·기공소 6 기존, 웹 clinic·lab 0). 실행 검증 생략(사용자: 사용처 없으면 검증 불필요).
+- 추가(같은 브랜치·PR): BE가 프로필 응답 `pushEnable`·`userPreference.pushEnable` 삭제 예정(Slack p1795173568865849). PATCH 엔드포인트들은 계속 사용하지만 body에 pushEnable 없음. FE 읽기 4곳 제거 — 양앱 amplitude `user_push`(치과 cc7d9f8f, 기공소 0d67eda), 웹 shared utils `user_push`·관리자 CRM "푸시 상태"·회원 CSV 열(057cb30ef). 사용자: Amplitude 차트·CSV는 없어진 대로 대응. 타입 검사만(7/6/admin 0), PR 본문 갱신.
 - 남음: Swagger 생성 파일(앱 models/Api.ts, 웹 shared/models App.ts·Messages.ts)은 BE 삭제 후 재생성 시 정리.
 
 ## 2026-11-23 — DL-17557 구현·PR, 미배포 (현재 상태)
