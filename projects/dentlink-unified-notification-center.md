@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-23 최종 마감 — release 병합 확인·로컬 릴리즈 브랜치 삭제·세션 보관
+
+- 사용자 요청: 완료된 릴리즈의 로컬 브랜치/worktree까지 정리한 뒤 이 알림센터 세션 보관. 원격 브랜치와 기본 저장소는 유지.
+- 실제 GitHub 확인: 웹 #4942 release/v1.94.0→master `96bdacda626443fcdede93e0b6c82dcd8c8fe1cd`, Office #361 release/v2.2.5→main `8d620786c984dab473b81bdb4a0701153a4616c4`, Lab #54 release/v1.0.6→main `12cd290e4344065ac030f6a64696df4426a8b59c` 모두 MERGED. 사용자 머지이며 에이전트 머지 실행 없음.
+- 각 로컬 release tree와 origin/master·main tree 동일(차이0) 확인 후 기본 checkout을 master/main으로 switch·fast-forward하고 로컬 release/v1.94.0·release/v2.2.5·release/v1.0.6 삭제. 현재 세 저장소 각 기본 checkout1개, 로컬 브랜치 웹 master·양앱 main만. 추가 작업 worktree 없음. 웹 기존 미추적 lab/scripts/i18n/ 개인 인증 파일 내용 미열람·미삭제 보존. 양앱 clean.
+- 원격 branch·tag·PR 삭제 안 함. 추가 코드·배포·테스트 없음. 상용 CodePush Office v89/Lab v22 활성 완료 및 사용자 iOS 적용 확인은 위 기록 유지; 치과 기존 설치 미적용 원인 미확정.
+- 개인 정본·FE 요약·Claude 메모리·로컬 Codex 메모리 갱신/정본 push 후 현재 알림센터 기능 세션을 보관하는 순서. FE 메인이나 무관한 세션은 보관하지 않음.
+- 이후 재개 시 정리 전 worktree 경로는 사용하지 말고 기본 checkout 및 최신 원격 상태 확인. 보류 항목/새 QA는 새 사용자 지시 있을 때만. 자동 polling·배포·추가 정리 없음.
+
 ## 2026-11-23 마감 — 상용 적용 사용자 확인·정리 완료
 
 - Production 게시·활성화 완료 유지: Office iOS/Android v89(target 2.2.5), Lab iOS/Android v22(target 1.0.6). 이번 배포 실행은 완료했으며 추가 배포 필요 없음.
