@@ -4,6 +4,13 @@
 상세 구현·SHA·PR·QA·배포 증거는 각 담당 문서를 정본으로 사용합니다.
 업무 색인은 **2026-10-27 개인 문서 대조 결과**이며, 별도로 명시한 배포 기준 실조회 기록과 구분합니다.
 
+## 이번 릴리즈 로컬 정리·상용 배포 전환 — 2026-11-23
+
+- 사용자: 이번 릴리즈(웹 release/v1.94.0, 치과앱 release/v2.2.5, 기공소앱 release/v1.0.6)는 상용 배포 단계, 로컬 작업 종료. 실행 중 서비스·기기 종료(Metro·에뮬레이터·Reactotron은 이미 종료, iOS 시뮬레이터 shutdown).
+- 삭제(모두 PR 머지·로컬 head=원격/PR head 확인): 웹 worktree `~/Repository/dentlink-client-notification-center`, Codex worktree 3개(`~/.codex/worktrees/dl17208-office`·`dl17208-web`(DL-17423/17231 마케팅 수신 동의, 이번 릴리즈)·`dentlink-notification-dev`(DL-17058-develop)) — 사용자 지시로 정리. 로컬 브랜치: 웹 feat/DL-17542·feature/DL-16387·feature/DL-17058·feat/DL-17058-develop·feat/DL-17231, 앱 feature/DL-17059·feat/DL-17423, 기공소 feat/DL-17262·feat/DL-17262-api-cleanup·feat/DL-17310·feature/DL-17060·release/v1.0.5. 원격 브랜치는 유지.
+- 현재 로컬: 세 저장소 모두 메인 checkout 하나(각 release 최신, clean) + main/master. `~/.codex/worktrees/*`에는 빈 표시 파일만 남음(0B, Codex 앱 메타라 유지). `dentlink-studio`는 별도 작업이라 유지. 웹 메인 checkout의 미추적 `lab/scripts/i18n/service-account.json`은 시트 연동 제거 후 미사용 개인 인증 파일 — 내용 미열람·미삭제(사용자 판단).
+- 세션: 이번 릴리즈 작업 세션(DL-17548, 기공소 번역 시트 제거)은 이미 보관. 메인세션·디자인 캡처 조사 세션은 유지.
+
 ## 로컬 브랜치·worktree 정리 완료 — 2026-11-16
 
 - 사용자 승인 후 네 저장소에서 로컬 브랜치 **28개**(웹15·Office8·Lab4·Studio1), 웹 worktree **4개**를 정리했다. 삭제 전 반영/소유/clean 확인과 검증된 Git bundle·manifest를 보존했다. [정리 목록과 복구 근거](dentlink-local-cleanup-20261116.md).

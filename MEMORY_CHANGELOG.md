@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-23 이번 릴리즈 로컬 정리(상용 배포 전환)
+
+- 머지 완료된 worktree 4개(내 웹 알림센터 1, Codex 3)·로컬 브랜치 14개 삭제, 시뮬레이터 종료. 세 저장소 메인 checkout만 남음. 정본 [dentlink-fe](projects/dentlink-fe.md).
+
 ## 2026-11-23 DL-17533 QA 보완 배포
 
 - 밑줄색·탑 버튼(결제 내역·Statements)·검색/필터 함께 스크롤. 앱 #360 머지, CodePush STG v362/v361·DEV v160/v160. 정본 [통합알림센터](projects/dentlink-unified-notification-center.md).
