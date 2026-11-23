@@ -1,5 +1,15 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-23 — 양앱 Production CodePush 활성화 완료·release→main PR
+
+- 사용자 승인: 앱만 상용 CodePush 및 필요한 PR·문서/메모리/로컬 정리 점검. 최초 비활성 유지 지시 후 사용자가 **이번 비활성 패키지 모두 활성화**를 추가 승인. 치과 iOS v89는 당시 이미 활성(실행자 단정 안 함), 나머지 치과Android v89·Lab iOS/Android v22는 에이전트가 활성화. PR 머지·웹 배포·스토어 업로드/출시는 하지 않음.
+- 소스: 치과 release/v2.2.5 `b0f72945c4b98aef44799d730eeb153ade1aa9c3`, 기공소 release/v1.0.6 `6e00a8ddeb704c56f455a2a6ae144bda17763b32`. 로컬/원격 일치·clean. main 및 기존 Production 태그(치과 v2.2.5.88, 기공소 v1.0.6.21) 대비 ios/android/package.json/yarn.lock/native patches 변화 없음. STG 검증·사용자 QA 이력 재사용, 기기/E2E 전수검사 반복 안 함. 스토어 공개 상태·상용 BE 반영까지 확인한 것은 아님.
+- Production: 치과 iOS **v89**, Android **v89** (target 2.2.5); 기공소 iOS **v22**, Android **v22** (target 1.0.6). 네 건 모두 **mandatory·rollout100·isDisabled=false**로 대상 버전에 공개. 게시 후 label/target/hash 대조, 활성화 후 각 라벨 재조회 확인. 스토어 새 바이너리 배포와 구분. Office iOS 업로드 후 검토 요청으로 일시 중단, 재개 시 이미 게시된 v89는 건너뛰고 나머지 3건 완료. 앱/플랫폼별 TMPDIR 격리·순차 빌드, index.js 명시.
+- PR 생성: [치과 #361](https://github.com/Innvoaid/dentlink-app/pull/361) release/v2.2.5→main, [기공소 #54](https://github.com/Innvoaid/dentlink-lab-app/pull/54) release/v1.0.6→main. 둘 다 Ready/Open·미머지, 배포 결과 본문 반영. Deploy 라벨 미부여: 해당 CI 실제 명령은 Development라 이번 Production CLI와 구분. PR 머지 시 태그/GitHubRelease 워크플로는 별도.
+- 로컬 정리 재점검: 웹/양앱 checkout 각1개, 로컬 main(master)+현재 release만. 양앱 clean. 웹은 기존 보존 대상 lab/scripts/i18n/ 인증 파일만 미추적; 비밀 파일 내용 미열람·미삭제. Metro·Android emulator·Simulator 앱·Reactotron·웹 dev server 없음, 부팅 iOS기기/3000·3005·8081·8082 listener 없음. 추가 삭제할 작업 없음, 기존 세션 정리 상태 유지.
+- 제품 소스 변경·DEV/STG 재배포 없음. 기존 QA Jira 상태를 비활성 업로드만으로 완료/공개 처리하지 않음. 개인 체크포인트·FE 요약·Claude 메모리 동시 갱신.
+- 다음: 사용자가 Production 실기기 확인. release→main PR 머지는 별도 대기. 사용자 요청 전 추가 배포/머지/리뷰 폴링 없음. 앱 적용: useCodePush가 앱 시작 때 checkForUpdate, 필수 업데이트는 다운로드 후 IMMEDIATE 적용. 비활성→활성 전환 자체의 별도 대기 기간은 없고 단말의 확인/다운로드 시점은 다름. 완전 종료 후 실행 안내. 필요한 확인 화면: 알림 진입/설정·권한 안내·푸시 랜딩, 치과 결제 내역/청구서 View. 실제 Production 단말 적용·크래시 무발생을 에이전트가 검증한 것으로 쓰지 않음.
+
 ## 2026-11-23 저녁 — 이번 릴리즈 상용 배포 전환·로컬 정리 (현재 상태)
 
 - 사용자: 이번 릴리즈 웹·앱은 상용 배포 단계, 로컬 작업 종료. 알림센터 포함 이번 릴리즈 worktree·로컬 브랜치 정리 완료(상세 dentlink-fe.md 2026-11-23). 이후 요청 대기.
