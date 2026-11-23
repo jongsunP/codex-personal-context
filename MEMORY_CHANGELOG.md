@@ -5,7 +5,7 @@
 
 ## 2026-11-23 알림센터 FE 관리 타입 pushEnable 정리
 
-- 웹 PR #4938(→ release/v1.94.0, 미머지): user/employer/api.types.ts의 pushEnable 8곳·pushEnable 전용 미사용 DTO 제거. 앱은 대상 없음. 정본 [통합알림센터](projects/dentlink-unified-notification-center.md).
+- 웹 PR #4938(→ release/v1.94.0, 머지 620d0187e): user/employer/api.types.ts의 pushEnable 8곳·pushEnable 전용 미사용 DTO 제거. 앱은 대상 없음. 정본 [통합알림센터](projects/dentlink-unified-notification-center.md).
 
 ## 2026-11-23 새 worktree 로컬 env 자동 복사
 
