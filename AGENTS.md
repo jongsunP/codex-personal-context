@@ -350,6 +350,11 @@
 - When the user says to wrap up, finish, close out, end, pause, hand off, or
   summarize a session checkpoint, proactively organize the current state
   instead of only saying goodbye.
+- For a requested post-release cleanup or "대청소", follow **Post-Release
+  Housekeeping** in `SESSION_WORKFLOW.md`: reconcile current summaries/indexes,
+  retained history, local work remnants, release-related configuration/env
+  changes, and session state within the existing authorization and secret-access
+  boundaries. Leave the next task a clear starting point.
 - For the designated Dentlink FE main session only, follow **Dentlink FE Main
   Session Retention** in `SESSION_WORKFLOW.md`: retain it unarchived as the
   ongoing control center. Confirm the intended target before acting on a

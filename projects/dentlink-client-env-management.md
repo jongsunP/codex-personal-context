@@ -1,5 +1,13 @@
 # Dentlink 웹 환경변수 관리
 
+## 릴리즈 후 env 점검 — 2026-11-23
+
+- 사용자가 대청소에 이번 릴리즈의 env 변경도 포함되는지 확인을 요청했다. 최초 정리는 실제 env를 보존했으며 변경/준비 상태 대조는 누락됐으므로 후속으로 점검했다.
+- 비교 범위는 각 release→기본 브랜치 병합의 첫 부모 대비 최종 HEAD: 웹 `96bdacda6`, Office `8d620786`, Lab `12cd290`. 웹 `lab/.env.example`과 코드/빌드 연결에서 번역 시트용 `GOOGLE_SERVICE_ACCOUNT_KEY`, `SHEETS_SHEET_NAME`, `SHEETS_SPREADSHEET_ID` 3개 제거를 확인했다. 새 env 키는 없고 양앱의 env 파일 변경 및 process.env/Config 참조 추가·제거도 없다.
+- 로컬은 웹 clinic/lab/admin `.env.development`, Lab `.env.local`, E2E development/staging 파일의 존재·ignore 정상 확인. 양앱의 환경별 env 파일도 존재하며 Android 실행 스크립트는 환경별 ENVFILE을 지정한다. 기본 실행 파일은 유지했다.
+- 실제 env 값·GitHub Variables/Secrets 값은 팀 지침에 따라 읽거나 수정하지 않았다. 따라서 파일 존재는 값의 정확성/최신성 검증이 아니다. 로컬 env에 과거 시트 키가 남아 있는지는 미확인이지만 현재 소비 코드가 없어 이번 릴리즈에 새 값을 채울 코드상 요구는 확인되지 않았다.
+- 별도로 용도를 확인한 미사용 시트 인증 JSON은 사용자 위임 후 삭제 완료([i18n 정본](dentlink-client-i18n.md)). env 파일이나 원격 키를 자동 삭제·재설정한 것은 아니다. 앞으로 요청된 대청소에는 [Post-Release Housekeeping](../SESSION_WORKFLOW.md#post-release-housekeeping)에 따라 릴리즈에 포함된 설정 변경도 확인한다.
+
 ## 현재 지침 — 2026-10-29 새 세션·워크트리 로컬 env 상속
 
 - 사용자가 새 세션이나 워크트리에서 로컬 실행을 준비할 때, 같은 저장소의 확인된 메인 워크트리에서 필요한 서비스 env를 값 열람 없이 그대로 가져오도록 상시 승인했다. [SESSION_WORKFLOW.md의 Local Env Inheritance](../SESSION_WORKFLOW.md#local-env-inheritance)를 정본으로 따른다.

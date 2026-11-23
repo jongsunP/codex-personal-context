@@ -8,6 +8,7 @@
 - 이번 메인 점검에서 세 저장소는 각각 기본 checkout 하나·웹 `master@96bdacda6`/Office `main@8d620786`/Lab `main@12cd290`만 남아 있고 실제 원격 기본 브랜치와 일치함을 확인했다. 추가 feature/QA/release 로컬 브랜치나 작업 worktree는 없다.
 - `통합알림센터세션`(01a065e6-afb2-75a0-b465-61c3e488a894)과 `치과 마케팅 수신 동의 · DL-17208`(01a1d2b2-0d2f-7441-a68b-fa68affceafc)은 **보관 목록에서 확인**했다. FE 메인 및 이번 릴리즈와 무관한 세션은 유지한다.
 - 남아 있던 웹 로컬 `lab/scripts/i18n/service-account.json`은 제거된 번역 시트 연동용이다. 사용자가 용도 판단 후 처리를 위임하여, 옛 `sheets-client.js`의 사용 경로·#4928 제거·현재 tracked 코드 참조 없음 확인 후 파일과 같은 폴더의 Finder 메타데이터·빈 폴더를 삭제했다. 비밀 내용 열람·백업·원격 인증 철회는 하지 않았다. **세 저장소 모두 clean**이다.
+- 후속 env 대조: 이번 릴리즈는 웹 시트용 3개 키 제거이며 새 env 키/양앱 env 변경은 없다. 필요한 로컬 파일의 존재·ignore를 확인했고 실제 값은 미열람·미변경했다. [env 점검 기록](dentlink-client-env-management.md). 요청된 대청소의 문서/로컬/설정/세션 점검을 [공통 지침](../SESSION_WORKFLOW.md#post-release-housekeeping)에 보완했다.
 - `dentlink-studio`, 원격 branch/tag/PR, 기본 실행 env/의존성, 기존 복구 자료와 Codex의 0B worktree 이름 메타데이터는 유지했다. 이번 메인 정리는 제품 추적 파일·배포·Jira/Notion을 변경하지 않았다.
 - 다음 작업은 요청 시 웹 최신 `origin/master`, 앱 최신 `origin/main`부터 범위를 정한다. 알림센터의 기존 보류 DL-17535·DL-17469 및 치과 기존 설치의 OTA 미적용 원인 미확정은 [기능 정본](dentlink-unified-notification-center.md)에 남긴다. LBX 운영 홀드·별도 조사는 완료로 바꾸거나 자동 재개하지 않는다.
 

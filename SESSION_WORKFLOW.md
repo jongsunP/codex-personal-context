@@ -1576,6 +1576,35 @@ summarize, "정리하자", or "마무리하자":
 10. Commit and push `codex-personal-context` so the history is remote-backed.
     Commit or push the shared project only when explicitly authorized.
 
+### Post-Release Housekeeping
+
+User clarification, 2026-11-23: a requested post-release "대청소" prepares a
+clean starting point for the next task by reconciling completed-work remnants,
+personal context, and local setup within the authorized scope.
+
+- Reconcile current project summaries, routing indexes, and agent memory with
+  the final delivery, merge, and session state. Keep useful dated evidence and
+  unresolved/deferred work; mark earlier checkpoints as history instead of
+  leaving several competing "current" states. Prefer concise updates and links
+  to the detailed project record over copying the same log into many files.
+- Apply the existing branch/worktree cleanup and ownership rules. Separate
+  items actually removed from items already clean, and preserve unrelated or
+  active work, needed development setup, and recovery evidence. Do not restore
+  completed work from an old cross-device setup list.
+- Inspect configuration changes included in the release as well as Git
+  remnants: env key additions/removals, examples, consumers and build wiring,
+  required local file presence/ignore state, and obsolete generated/auth
+  artifacts. Follow the repository's actual-env access rules; file presence
+  does not verify values, and cleanup does not authorize secret retrieval or
+  remote credential revocation. Establish an unfamiliar file's purpose and
+  remaining references before authorized disposal; ask if it remains unclear.
+- Reconcile archived/completed session descriptions with the observed state,
+  preserving the FE main and unrelated sessions. Finish with the current
+  checkout/base, retained items, and actual remaining work; save/push the
+  curated personal context and sync local guidance when it changed. Follow
+  Tool Scope And Polling rather than adding deployments, repeated QA or
+  monitoring to a cleanup request.
+
 ### User-Owned Work Records At Completion
 
 User instruction, 2026-11-16: when authorized work is finished, proactively
