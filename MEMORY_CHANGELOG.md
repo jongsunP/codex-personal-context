@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-23 알림센터 이번 release FE 작업 마감
+
+- DL-17557·DL-17548 READY FOR QA(사용자 변경). 이번 release FE 작업 완료, DL-17548 worktree·로컬 브랜치 정리. 정본 [통합알림센터](projects/dentlink-unified-notification-center.md).
+
 ## 2026-11-23 알림센터 앱 CodePush·로컬 정리
 
 - 치과 STG v360/v359·DEV v157/v157, 기공소 STG v76/v76·DEV v54/v53(release 기준, DL-17548 치과 포함). 웹 배포는 사용자. 머지된 로컬 브랜치 정리. 정본 [통합알림센터](projects/dentlink-unified-notification-center.md).
