@@ -7,6 +7,7 @@
 - 브랜치·PR(사용자 지정 타깃, 이미 머지한 릴리즈 기준): 치과 feat/DL-17557 9504a050 → PR #356(release/v2.2.5), 기공소 feat/DL-17557 80f17ec → PR #52(release/v1.0.6). 미머지, CodePush 안 함(사용자: 작업·PR까지만).
 - 검증: 컴포넌트 테스트 3건씩, 치과 62 suites 중 60(기존 실패), 기공소 26 중 24(App.test, appServiceIsolation), tsc 기존(7/6), lint 0. E2E·기기 확인 제외(사용자).
 - 기공소 `__tests__/services/appServiceIsolation.test.ts`(DL-17541 getProfile config 인자 여파로 release/v1.0.6에서 실패)는 사용자 지시로 기대값 한 줄 수정해 PR #52에 추가(bfde45a). 기공소 단위 26 suites 중 25 통과(App.test만 기존 실패). PR 본문 갱신.
+- CodeRabbit(11/23 1회 확인): 치과 #356 Minor 1건(테스트 fixture 섹션 key 누락) fedf3335로 반영·답변·resolve, 기공소 #52 리뷰 없음.
 - Jira DL-17557: 댓글 45240, 해야 할 일 → 진행 중 → Ready for Deploy. 주말 사이 Codex가 DL-17541 리뷰 처리 후 #355/#51 머지(release 기준 STG 재배포는 아직 아님).
 
 ## 2026-11-20 — DL-17557 PM 답변 확인, 구현은 미착수
