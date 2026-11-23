@@ -1,5 +1,15 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-23 마감 — 상용 적용 사용자 확인·정리 완료
+
+- Production 게시·활성화 완료 유지: Office iOS/Android v89(target 2.2.5), Lab iOS/Android v22(target 1.0.6). 이번 배포 실행은 완료했으며 추가 배포 필요 없음.
+- 사용자 실기기 확인: 기공소 iOS는 적용됨. 치과 iOS는 기존 설치에서 앱 버전이 `2.2.5`까지만 보였고, 앱 완전 삭제 후 재설치하니 적용됨. 사용자가 확인한 사실이며 에이전트 단말 재현/전체 QA 완료로 확대하지 않음.
+- 조사한 범위: Office Production v89 enabled·100%·target2.2.5 및 저장소 production plist 배포키 일치. 실제 SDK update_check 경로 조회에서 Office v89/Lab v22 둘 다 HTTP200·is_available=true·mandatory=true·update_app_version=false 확인. 앱은 시작 시 확인하고 필수 업데이트는 다운로드 후 IMMEDIATE 적용. 단순 활성화 대기로 단정할 근거 없음.
+- 기존 치과 설치에서 미적용 원인은 **미확정**. 단말 조회/다운로드/설치 실패·롤백 등을 특정하지 않음. 재설치가 해결됐다고 코드 수정 필요성이나 일반 사용자 재설치 필요를 단정하지 않음. 재발 시 단말 환경·설치 경로·적용 로그를 확보해 별도 조사. 이번 추가 코드 변경 없음.
+- 사용자가 release→main PR 치과 #361·Lab #54를 직접 머지하기로 함. 에이전트는 머지하지 않고 이후 머지 결과 자동 조회/폴링하지 않음. 이전 기록의 Open은 생성/마지막 확인 시점 상태이며 현재 머지 완료로 추정하지 않음.
+- 로컬 최종 재확인: 웹86d294600(release/v1.94.0)·Office b0f72945(release/v2.2.5)·Lab6e00a8d(release/v1.0.6), 각 checkout1개·main/master+release만. 양앱 clean. 웹의 기존 미추적 lab/scripts/i18n/ 인증 파일 보존·내용 미열람. 추가 삭제할 브랜치/worktree 없음. 새 서버/기기 실행하지 않음.
+- 정리: 개인 정본·FE 요약·Claude 메모리와 로컬 Codex 메모리 갱신. 팀 PR 설명은 이미 공개 상태 반영; 추가 Jira/Notion 변경을 임의로 만들지 않음. 다음 사용자 QA/새 요청까지 대기.
+
 ## 2026-11-23 — 양앱 Production CodePush 활성화 완료·release→main PR
 
 - 사용자 승인: 앱만 상용 CodePush 및 필요한 PR·문서/메모리/로컬 정리 점검. 최초 비활성 유지 지시 후 사용자가 **이번 비활성 패키지 모두 활성화**를 추가 승인. 치과 iOS v89는 당시 이미 활성(실행자 단정 안 함), 나머지 치과Android v89·Lab iOS/Android v22는 에이전트가 활성화. PR 머지·웹 배포·스토어 업로드/출시는 하지 않음.

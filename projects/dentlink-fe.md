@@ -6,6 +6,8 @@
 
 ## 양앱 상용 CodePush 활성화 완료 — 2026-11-23
 
+- 마감 사용자 확인: 기공소 iOS 적용, 치과 iOS는 기존 설치에서 2.2.5만 표기되다 삭제·재설치 후 적용. 원인은 미확정이며 재발 시 별도 조사, 추가 코드/배포 없음. release→main PR #361/#54 머지는 사용자가 직접 처리(에이전트 미실행·후속 자동 확인 없음). 로컬 checkout/브랜치 정리 재확인 완료.
+
 - 치과 release/v2.2.5(b0f72945) Production iOS/Android v89, 기공소 release/v1.0.6(6e00a8d) 양쪽 v22 게시. 사용자 후속 요청으로 모두 활성·rollout100 재조회 확인. 치과 iOS는 이미 활성, 나머지 3건 활성화. 웹은 이번 배포 제외.
 - release→main PR 치과 #361·기공소 #54 생성·Open·미머지. PR 설명에 배포 결과 기록. 소스 변경·DEV/STG 배포·스토어 출시 없음.
 - 로컬 정리 재점검 완료: 세 저장소 메인 checkout만, main/master+현재 release만. 서버/기기 실행 없음. 기존 웹 미추적 인증 파일 보존. 상세 정본은 [알림센터 체크포인트](dentlink-unified-notification-center.md).
