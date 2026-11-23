@@ -500,6 +500,13 @@ the user also observes part of the agent's work.
 
 ## Local Development And User Preview
 
+- **App device test environment (2026-11-23 user rule):** Unless the user says
+  otherwise, simulator/emulator checks always use a **local DEV build**
+  (`yarn ios:dev`, `yarn android:dev`) with the DEV API and the keychain DEV
+  test accounts. Do not build a STG debug app for local checks. STG remains the
+  deployment/QA target for CodePush and reporting; this rule only sets the
+  local test environment.
+
 The user confirmed these two local execution modes on 2026-11-05. Apply them
 across projects; they replace the earlier blanket prohibition on IDE terminals.
 The difference is where services run and how the user observes the work, not
