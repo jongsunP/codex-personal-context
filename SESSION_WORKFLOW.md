@@ -708,6 +708,19 @@ development setup, inherit the needed service's existing env files from the
 same repository's verified main worktree. Do not ask again for this same
 local copy merely because the session or worktree is new.
 
+**User reaffirmation, 2026-11-23:** apply this automatically
+whenever an agent creates a new worktree for local work, not only when local
+runtime setup is separately requested. Copy every Git-ignored, untracked local
+`.env*` file of the repository (except `.env.example`/`.env.sample` and files
+inside dependency or build output such as `node_modules/`, `.next/`, `dist/`,
+`build/`) from the main worktree to the same path in the new worktree, right
+after creating it. Claude Code uses `~/.claude/scripts/copy-worktree-env.sh
+<main worktree> <new worktree>`, which never prints contents, skips existing
+destination files, and verifies Git ignore and byte equality. The repository
+team rule (agents do not read, create from values, edit, or restore env
+values) is otherwise unchanged; this copy is the user's personal local-machine
+exception.
+
 1. Verify the repository's main worktree and the assigned target with Git.
    Select only files required by the intended service and execution mode.
    A new session using an already-prepared checkout does not require recopying.
