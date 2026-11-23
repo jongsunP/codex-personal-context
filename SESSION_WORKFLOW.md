@@ -709,11 +709,9 @@ parallel work and in both local execution modes.
 
 ## Local Env Inheritance
 
-The user explicitly approved this workflow on 2026-10-29 and requested its
-global application to future sessions and worktrees. During authorized local
-development setup, inherit the needed service's existing env files from the
-same repository's verified main worktree. Do not ask again for this same
-local copy merely because the session or worktree is new.
+The user approved opaque local env inheritance on 2026-10-29 and clarified
+automatic coverage for every new worktree on 2026-11-23. Apply the scope below
+across future sessions without asking again for the same local copy.
 
 **User reaffirmation, 2026-11-23:** apply this automatically
 whenever an agent creates a new worktree for local work, not only when local
@@ -728,24 +726,26 @@ team rule (agents do not read, create from values, edit, or restore env
 values) is otherwise unchanged; this copy is the user's personal local-machine
 exception.
 
-1. Verify the repository's main worktree and the assigned target with Git.
-   Select only files required by the intended service and execution mode.
+1. Verify the main worktree and assigned target belong to the same repository.
+   For a newly created worktree, include every eligible local env file defined
+   above, rather than limiting inheritance to the service being launched.
    A new session using an already-prepared checkout does not require recopying.
 2. Copy existing files as opaque files, preserving their contents. Do not
    open, print, parse, summarize, or change values; do not reconstruct missing
    files from Git history, process environments, logs, or `.env.example`.
    Use independent copies so target edits cannot change the main worktree.
-3. Confirm both runtime files and any necessary local preservation copies
-   are Git-ignored and untracked before writing. Preserve an existing different
-   destination configuration before replacement; do not overwrite unrelated
-   services or another active session's setup. Keep restrictive permissions.
+3. Confirm source and destination files are Git-ignored and untracked before
+   writing. Skip existing destination files; report differing files without
+   overwriting them or making value backups as part of routine inheritance.
+   Preserve other sessions' setup and keep restrictive permissions.
 4. Verify the copied files exist, match without exposing contents, and remain
    outside the staged/committed file set. If the verified main worktree lacks
    the required files, report that specific gap for human preparation without
    guessing values or requesting their contents in chat.
-5. Verify the development server's actual cwd and port. Restart only the
-   relevant server when env inheritance is applied, and report application
-   readiness separately from login, API behavior, and feature QA. Preserve
+5. When local execution is also in scope, verify the server's actual cwd and
+   port and restart only the relevant server if needed. Env inheritance alone
+   does not require starting servers or repeating QA. Report application
+   readiness separately from login, API behavior, and feature QA; preserve
    servers and worktrees the user is currently using for local verification.
 
 **User exception, 2026-11-11 (home Mac setup only):** with no verified main

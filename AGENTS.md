@@ -183,14 +183,15 @@
   emulator on the same task/source and environment and switch them together.
   Split work by device only when the user explicitly requests it; follow
   **Paired iOS And Android Environments** in `SESSION_WORKFLOW.md`.
-- For authorized local setup in every new session or worktree, follow
-  **Local Env Inheritance** in `SESSION_WORKFLOW.md`: copy the needed
-  service's existing env files from the verified main worktree without
-  inspecting or changing values, preserve destination settings, and verify
-  Git ignore and the actual server directory/port. This is the user's
-  standing 2026-10-29 authorization for opaque local file inheritance;
-  do not repeat the same approval question. The narrow exception does not
-  authorize value management, secret retrieval, or deployment changes.
+- Whenever creating a new worktree, follow **Local Env Inheritance** in
+  `SESSION_WORKFLOW.md`: automatically copy all eligible Git-ignored,
+  untracked local `.env*` files from the same repository's verified main
+  worktree, excluding examples and dependency/build outputs. Do not inspect
+  or change values; skip existing destination files and verify equality and
+  Git ignore. An already-prepared checkout needs no routine recopy. This is
+  the user's 2026-10-29 authorization clarified on 2026-11-23; do not ask
+  again. Value management, secret retrieval and deployment changes remain
+  outside this exception. Check server cwd/port when execution is in scope.
 - For local test accounts, follow **Reusable Local Test Login** in
   `SESSION_WORKFLOW.md`: reuse dedicated local browser/device sessions and,
   when needed, an authorized test password from a local secure store. Keep

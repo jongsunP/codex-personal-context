@@ -8,9 +8,10 @@
 - 실제 env 값·GitHub Variables/Secrets 값은 팀 지침에 따라 읽거나 수정하지 않았다. 따라서 파일 존재는 값의 정확성/최신성 검증이 아니다. 로컬 env에 과거 시트 키가 남아 있는지는 미확인이지만 현재 소비 코드가 없어 이번 릴리즈에 새 값을 채울 코드상 요구는 확인되지 않았다.
 - 별도로 용도를 확인한 미사용 시트 인증 JSON은 사용자 위임 후 삭제 완료([i18n 정본](dentlink-client-i18n.md)). env 파일이나 원격 키를 자동 삭제·재설정한 것은 아니다. 앞으로 요청된 대청소에는 [Post-Release Housekeeping](../SESSION_WORKFLOW.md#post-release-housekeeping)에 따라 릴리즈에 포함된 설정 변경도 확인한다.
 
-## 현재 지침 — 2026-10-29 새 세션·워크트리 로컬 env 상속
+## 현재 지침 — 2026-11-23 새 워크트리 로컬 env 자동 상속
 
-- 사용자가 새 세션이나 워크트리에서 로컬 실행을 준비할 때, 같은 저장소의 확인된 메인 워크트리에서 필요한 서비스 env를 값 열람 없이 그대로 가져오도록 상시 승인했다. [SESSION_WORKFLOW.md의 Local Env Inheritance](../SESSION_WORKFLOW.md#local-env-inheritance)를 정본으로 따른다.
+- 10/29 승인·11/23 재확인 기준: 새 워크트리 생성 직후 같은 저장소의 확인된 메인 워크트리에서 Git 무시·미추적 로컬 `.env*`를 모두 값 열람 없이 그대로 복사한다. example/sample과 의존성·빌드 산출물은 제외한다. 실행 요청을 별도로 기다리거나 같은 복사 승인을 다시 묻지 않는다. [SESSION_WORKFLOW.md의 Local Env Inheritance](../SESSION_WORKFLOW.md#local-env-inheritance)를 정본으로 따른다.
+- 기존 목적지 파일은 다르더라도 덮어쓰지 않으며, 이미 준비된 checkout을 쓰는 새 세션은 재복사하지 않는다. Git 제외·미추적·복사 일치 여부만 확인한다. 예전 '필요 서비스만 선택' 문구는 새 워크트리의 전체 상속 범위와 혼동되지 않도록 정리했다. 실행 cwd/port 검증은 실제 실행이 범위에 있을 때 적용한다.
 - 이는 아래 과거의 로컬 준비 일괄 위임 금지에 대한 한정된 사용자 예외다. 실제 값 작성·변경과 GitHub Variables/Secrets 관리는 계속 사람이 담당하며, 과거의 에이전트 env 관리·전달 시스템을 복원하는 지시가 아니다.
 - DL-17101 Lab 전용 워크트리에 이 방식으로 로컬 env를 준비한 뒤 로그인된 출력 화면을 확인했다. 해당 작업과 서버의 현재 상태는 [배송 출력 체크포인트](dentlink-lab-shipping-print.md)를 따른다. 기존 env 프로젝트 구현·배포를 재개한 것은 아니다.
 
