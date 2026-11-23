@@ -7,9 +7,9 @@
 
 - 사용자 재확인: worktree를 새로 만들면 묻지 않고 메인 worktree의 로컬 `.env*`(Git 무시·미추적, example·산출물 폴더 제외)를 내용 비공개로 같은 경로에 복사. SESSION_WORKFLOW Local Env Inheritance 보강, Claude는 `~/.claude/scripts/copy-worktree-env.sh` 사용. DL-17548 웹·치과앱 worktree에 적용(웹 6개·앱 1개). 팀 env 규칙의 나머지는 그대로.
 
-## 2026-11-23 DL-17548 CP Retention Type SCRP 분리 (PR 대기)
+## 2026-11-23 DL-17548 CP Retention Type SCRP 분리 (release 머지)
 
-- 웹 PR #4936(feat/DL-17548 → release/v1.94.0, 7d26fd299), 치과앱 PR #358(feat/DL-17548 → release/v2.2.5, bfd56b90, main 포함 확인한 release 기준). 미머지·미배포. 사용자 지시로 E2E 가드 SKIPPED 기록.
+- 웹 PR #4936(feat/DL-17548 → release/v1.94.0, 7d26fd299), 치과앱 PR #358(feat/DL-17548 → release/v2.2.5, bfd56b90, main 포함 확인한 release 기준). 사용자가 release에 머지(웹 dfc69f578 15:27, 앱 ebb4febfd 15:26 KST), 배포 전. 사용자 지시로 E2E 가드 SKIPPED 기록.
 - 두 SCRP 모두 주문 옵션 "SCRP (Screwmentable)" 연결(기본안), 기존 SCRP는 Crown Cemented로 표시. 생성 모델 미재생성(FE 타입 계층). 웹 카드 제목 480px 이상 nowrap(디자인 400px 카드에서 1px 초과).
 - API: DEV에서 새 값 저장·조회 확인, STG는 400(BE #2744 develop 대상 미머지). BE와 함께 배포 필요.
 ## 2026-11-23 구 알림 API 잔여 정리
