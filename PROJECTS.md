@@ -201,17 +201,11 @@ For detailed current state, read:
   조사·문서 정리와 제품 구현은 별개이며 과거 담당 범위를 최신 승인보다 우선하지 않는다.
 - [개인 체크포인트](projects/dentlink-mobile-web-app-parity.md)
 
-### Dentlink 통합알림센터 — 11/20 마감: 머지·STG 배포 완료, FE 할 일 없음
+### Dentlink 통합알림센터 — 11/23 상용 반영·정리 완료
 
-- **현재(2026-11-20 마감):** 치과 #354·기공소 #50·웹 #4927 release 머지, 앱 STG 치과 v358/v357·기공소 v74/v74(DEV 치과 v155·기공소 v52/v51), 웹 STG는 사용자. DL-17541·17542 READY FOR QA(재발 시만), DL-17535·17533·17469 의도적 보류. 이후 STG만. [정본](projects/dentlink-unified-notification-center.md).
-- 이전(2026-11-16 20:43): Webf6e1a86dc·Officef71ad0b0·Lab2f4c4f0, 기존 정식PR4862/346/42 유지. 치과앱 새리뷰6건+후속2건 검증/최소수정·근거답변 처리, 마지막조회 미해결0. Draft해제후 리뷰영향 정상/예외흐름10suite190tests통과, 구화면fixture권한메타도최신화. 사용자요청으로추가폴링종료·대기. 병합/배포/CodePush없음. 새설정디자인은별도잔여. [정본](projects/dentlink-unified-notification-center.md), [11/16 상세](projects/dentlink-unified-notification-center-resume-2026-11-16.md).
-
-- 웹·Office·Lab 알림함·설정, 노티/푸시 클릭의 딥링크·읽음 연결과 합의된 추가 앱 목록을 함께 다룬다. 추가 목록은 노티·푸시 진입만 있어도 수용하며 메뉴 개선은 후속이다. 이메일 CTA·SES·설치 여부 연결은 이번 범위와 완료 조건에서 제외한다.
-  제품별 정책·제외 범위·공수와 일정 가정은 아래 정본의 최신 확인을 따른다.
-- 이 기능 세션에서 제품별 작업 위치·작성자를 분리하며, 미확정 BE 계약과 제품 commit/push/PR/배포 권한은 구분한다.
-- 2026-11-03 기록은 선행 UI 단계의 과거 이력이다. 이후 BE 연결과 정책 변경을 반영했으며 현재 설정 화면 OS 배너는 OFF 동안 상시, 앱 진입 안내 팝업은 기기당1회다. 현재 개발/배포 상태는 위 최신 체크포인트를 따른다.
-- [projects/dentlink-unified-notification-center.md](projects/dentlink-unified-notification-center.md)
-- [웹 노출 페이지 과거 조사(11/12 확정 범위 보완 완료)](projects/dentlink-unified-notification-center-web-visibility-2026-11-10.md)
+- 웹 v1.94.0·Office v2.2.5·Lab v1.0.6의 master/main 통합 완료. 앱 Production Office 양OS v89·Lab 양OS v22 활성 완료, 기능 세션 보관·로컬 작업 정리 완료. [현재 상태와 검증·배포 이력](projects/dentlink-unified-notification-center.md).
+- DL-17533은 보류에서 구현·배포 완료로 변경됐다. DL-17535·DL-17469 등 의도적 보류와 치과 기존 설치 OTA 미적용 원인 미확정은 별도 요청 시에만 재개한다.
+- 웹·양앱 알림함/설정·푸시 랜딩·합의된 앱 조회 목록이 범위다. 이메일 CTA/SES는 별도 작업이다. 과거 STG·QA 대기 기록을 현재 미완료로 재사용하거나 자동 폴링하지 않는다.
 
 ### Dentlink 이메일 CTA 웹·앱 연결·추적 — DL-17183 / DL-17187
 
@@ -224,10 +218,10 @@ For detailed current state, read:
 - 2026-11-13 조사 전용 세션 `01a1d352-b346-7872-b537-6fe5ffaf4f87`에 인계. Slack·코드·관련 자료로 원인 후보, FE/인프라 대응과 정상 사용자 영향, 관측 대안을 분석한다. 개발/실제 조치는 별도이며 현재 승인되지 않았다.
 - [projects/dentlink-overseas-api-access-investigation.md](projects/dentlink-overseas-api-access-investigation.md)
 
-### Dentlink 치과 마케팅 수신 동의 — DL-17208
+### Dentlink 치과 마케팅 수신 동의 — DL-17208 — 완료
 
-- 2026-11-16 **사용자 확인으로 웹·Office 병합 완료**: 웹 [#4896](https://github.com/Innvoaid/dentlink-client/pull/4896)→`release/v1.94.0`, Office [#350](https://github.com/Innvoaid/dentlink-app/pull/350)→`release/v2.2.5`. 마지막 검증 feature head 웹7ba6bbe93·Office290d6fd5 및 리뷰처리/단독검증 근거 유지. 알림센터 세션이 각 최신 릴리즈를 반영해 충돌을 해결하고 웹 PC/모바일·앱 양OS 통합 QA 담당. 필요하면 그 세션에서 이 세션으로 질문해 구현 의도·계약·검증 근거를 받을 수 있음. 이곳은 기록 후 대기하며 선제 연락·추적/폴링·추가 구현/QA/배포 없음. 이번 병합 기록은 사용자 확인이며 원격 merge SHA를 다시 조회하지 않음. 통합 QA·실제 배포 완료와는 구분.
-- [projects/dentlink-email-marketing-consent.md](projects/dentlink-email-marketing-consent.md)
+- 웹 #4896·Office #350의 release 병합 후 이번 웹 v1.94.0/Office v2.2.5에 통합됐다. 작업 세션 보관·로컬 branch/worktree 정리 완료, 원격 이력 유지.
+- 구현·검증 범위는 [기능 정본](projects/dentlink-email-marketing-consent.md), 통합·배포는 [알림센터 정본](projects/dentlink-unified-notification-center.md)을 따른다. 추가 요청 없이 재개하지 않는다.
 
 ### Dentlink E2E Stabilization
 
@@ -244,7 +238,7 @@ For detailed current state, read:
 ### Dentlink Lab i18n
 
 - 기공소 다국어 구현과 운영 절차를 관리한다.
-- 기공소 기능의 문구 변경은 코드의 ko/en 번역 리소스(JSON) 반영·검증까지 기본 범위다. **2026-11-20부터 번역 시트는 운영하지 않고 기존 ko/en JSON이 정본**(모든 에이전트 공통, generate/check/audit 미사용·`generate:i18n` 실행 금지, 시트 코드는 PR #4928로 release/v1.94.0에서 제거·머지 완료). 정본은 [SESSION_WORKFLOW의 Lab 번역 절](SESSION_WORKFLOW.md#dentlink-lab-translation-work).
+- 기공소 기능의 문구 변경은 코드의 ko/en 번역 리소스(JSON) 반영·검증까지 기본 범위다. **2026-11-20부터 번역 시트는 운영하지 않고 기존 ko/en JSON이 정본**(모든 에이전트 공통, generate/check/audit 미사용·`generate:i18n` 실행 금지, 시트 코드는 PR #4928로 제거하고 11/23 master 반영 완료). 정본은 [SESSION_WORKFLOW의 Lab 번역 절](SESSION_WORKFLOW.md#dentlink-lab-translation-work).
   웹은 아래 i18n 문서, 별도 Lab 앱은 [앱 정본](projects/dentlink-lab-app.md)의 절차를 따른다.
 - Lab 앱의 팀 에이전트 지침 반영은 [앱 i18n 전달 기록](projects/dentlink-lab-app-i18n.md)을 따른다.
   웹과 Lab 앱은 저장소·시트·전달 이력이 별개다.

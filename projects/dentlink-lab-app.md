@@ -1,10 +1,17 @@
 # Dentlink Lab App
 
-> **로컬 정리(2026-11-16):** Lab 로컬 완료 브랜치 4개를 정리했습니다. 알림센터·현재 릴리즈와 배포 소스 대조가 부족한 DL-17262 계열·DL-17310·release/v1.0.5는 보존했습니다. 코드·원격·배포 변경은 없습니다. [목록·근거·복구](dentlink-local-cleanup-20261116.md).
+> **현재 로컬(2026-11-23):** 기본 checkout의 `main@12cd290`만 남아 있고 원격과 일치·clean입니다. 이번 릴리즈 작업 branch/worktree와 로컬 release는 정리했습니다. [메인 정리](dentlink-fe.md) · [11/16 과거 정리 이력](dentlink-local-cleanup-20261116.md).
 
 > **2026-11-11 지침 변경:** 번역 시트는 더 이상 동기화하지 않고 그대로 둔다. 문구 작업은 코드의 ko/en 리소스만 반영·검증한다(모든 에이전트 공통). 아래 시트 동기화 절차는 이력이며, 기존 스크립트·코드는 지우지 않는다. 정본: [SESSION_WORKFLOW의 Lab 번역 절](../SESSION_WORKFLOW.md#dentlink-lab-translation-work).
 
 > **팀 PR 규칙(2026-11-10, 다니엘 요청):** PR 제목은 `[DL-xxxxx] 제목`, 티켓 없는 release 수정은 `[QA] 제목`; 스쿼시 머지는 PR 제목으로; release 대상 네이티브 PR은 머지 전 PR 브랜치 `yarn install` 재설치→Android 빌드→실기기 확인. 정본 [DEVELOPMENT_STYLE.md](../DEVELOPMENT_STYLE.md).
+
+## 현재 상태와 재개점 — 2026-11-23
+
+- Production **1.0.6 / CodePush iOS·Android v22** 게시·활성·100% 완료 기록. PR54 release→main 병합, 사용자 iOS 적용 확인 완료. 스토어 새 바이너리 출시나 전체 단말 QA 완료를 뜻하지 않는다.
+- 이번 알림센터 기능 세션은 보관했고 로컬 작업 정리도 완료했다. 상세 검증·배포·기존 보류는 [알림센터 정본](dentlink-unified-notification-center.md)을 따른다. 새 요청 시 최신 origin/main에서 시작한다.
+
+> 이하 날짜별 내용은 진행 이력이다. 예전 PR41 머지 대기·작업 경로·배포 라벨을 현재 상태로 사용하지 않는다.
 
 ## iOS 푸시 탭 직후 상단 배너 재표시 — 2026-11-10
 

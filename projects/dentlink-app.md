@@ -1,23 +1,25 @@
 # Dentlink Office App — 현재 체크포인트와 작업 기준
 
-> **로컬 정리(2026-11-16):** Office 로컬 완료 브랜치 8개를 정리했습니다. 현재 알림센터·마케팅 동의 worktree와 `main`, `release/v2.2.5`는 보존했습니다. 코드·원격·배포 변경은 없습니다. [목록·근거·복구](dentlink-local-cleanup-20261116.md).
+> **현재 로컬(2026-11-23):** 기본 checkout의 `main@8d620786`만 남아 있고 원격과 일치·clean입니다. 이번 릴리즈 작업 branch/worktree와 로컬 release는 정리했습니다. [메인 정리](dentlink-fe.md) · [11/16 과거 정리 이력](dentlink-local-cleanup-20261116.md).
 
 > **팀 PR 규칙(2026-11-10, 다니엘 요청):** PR 제목은 `[DL-xxxxx] 제목`, 티켓 없는 release 수정은 `[QA] 제목`; 스쿼시 머지는 PR 제목으로; release 대상 네이티브 PR은 머지 전 PR 브랜치 `yarn install` 재설치→Android 빌드→실기기 확인. 정본 [DEVELOPMENT_STYLE.md](../DEVELOPMENT_STYLE.md).
 
 이 문서는 **치과 앱 `Innvoaid/dentlink-app`**의 개인 체크포인트다.
 기공소 앱은 [별도 정본](dentlink-lab-app.md)을 따른다. 문서 정리는
-2026-10-27에 수행했으며, 아래 날짜별 관찰을 제품·배포의 현재 상태로 재검증한 것은 아니다.
+최신 요약은 2026-11-23에 갱신했으며, 아래 날짜별 관찰은 당시 이력이다.
 재개 전 정확한 저장소·branch·HEAD·worktree와 최신 사용자 지시를 확인한다.
 
 ## 현재 상태와 재개점
 
 | 항목 | 마지막으로 확인·기록한 상태 | 다음 시작점 |
 | --- | --- | --- |
-| Production 2.2.4.87 | 11/09 iOS·Android v87 활성화 완료. PR344 main 병합, 기본 Git 태그 v2.2.4 생성 | PR345 사용자 추후 머지 대기. .87 Git 태그 복구는 별도 요청 시 이력 정리이며 배포 필수 조치 아님 |
+| Production 2.2.5 / CodePush v89 | 11/23 iOS·Android v89 게시·활성·100% 완료 기록. PR361 main 병합. 사용자는 iOS 재설치 후 적용 확인 | 이번 릴리즈 마감·세션 보관. [알림센터 정본](dentlink-unified-notification-center.md). 기존 설치 미적용 원인은 미확정이며 재발/새 요청 시에만 조사 |
 | LinkTalk 운영 iOS SIGSEGV | 10/27 확보 가능한 범위 조사 마감. dSYM 누락으로 정확 원인 미확정 | 일치하는 archive/dSYM 또는 새 재현 증거와 별도 재개 요청이 있을 때 [조사 정본](dentlink-app-linktalk-sigsegv-investigation.md)부터 확인 |
 | DL-17038 디자인 컨펌 Render Error | 수정 전 재현, PR338 수정 포함 main의 제한된 실화면 확인 완료. 테스트용 branch·실행 환경 정리 완료 | 새 결함/요청 없으면 대기. 아래 검증 범위를 전체 앱 QA로 확대하지 않음 |
 | 권한관리 및 후속 QA | 10/25 Office PR329/331/332/333의 운영 Git 반영 확인. 10/26 전용 worktree 제거 | 새 요청 시 [권한관리 정본](dentlink-permission-management.md)과 기본 checkout 확인 |
 | 피드백 DL-15828 / DL-16061 | PR286의 9/11 develop squash 병합·동일 tree 확인은 완료된 이력 | [피드백 정본](dentlink-client-order-feedback.md) 및 아래 이력. 과거 PR286 리뷰·BE 대기 문구를 현재 미완료로 재사용하지 않음 |
+
+> 이하 날짜별 내용은 진행 이력입니다. 예전 PR345 머지 대기·작업 경로·배포 라벨을 현재 상태로 사용하지 않습니다.
 
 ## iOS 푸시 탭 직후 상단 배너 재표시 관찰 — 2026-11-10
 

@@ -1,11 +1,13 @@
 # Dentlink i18n and typography delivery checkpoint — 2026-08-25
 
-## 현재 상태 — 2026-11-20 시트 연동 제거 머지·정리 완료
+## 현재 상태 — 2026-11-23 main 반영·로컬 인증 잔여 정리 완료
 
 - 사용자가 [PR #4928](https://github.com/Innvoaid/dentlink-client/pull/4928)을 직접 머지: MERGED 2026-11-20 16:41 KST, mergedBy `jongsunP`, squash `471e4032b` → `release/v1.94.0`. 머지 결과가 feature HEAD `c0cb9b998`과 변경 경로 기준 동일함을 확인.
 - 정리: worktree `~/Repository/dentlink-client-lab-i18n-remove-sheet`와 로컬 `feat/lab-i18n-remove-sheet` 삭제. 원격 branch는 남아 있음(사용자 지시 없어 미삭제). Jira 카드 없음.
-- 이제 release/v1.94.0 이후 웹 Lab i18n은 locale JSON 직접 관리만 존재(시트 스크립트·명령 없음). master 반영·배포는 release 일정에 따름.
+- 웹 Lab i18n은 locale JSON 직접 관리만 존재하며 시트 스크립트·명령은 제거됐다. 11/23 master 반영까지 완료했고 이후 문구 작업도 en/ko JSON을 함께 수정한다.
 - 다음 시작점: 추가 작업 없음. Lab 문구 작업은 en/ko JSON을 함께 수정.
+
+- 11/23 메인 정리: 제거 커밋 `471e4032b`가 현재 master `96bdacda6`에 포함됨을 확인했다. 예전 `sheets-client.js`가 참조하던 로컬 `lab/scripts/i18n/service-account.json`은 Git 비추적 파일이라 코드 삭제 후에도 남아 있었다(파일 메타데이터상 8/27 생성, 생성 주체는 미확정). 현재 tracked 코드 참조 없음과 용도를 확인한 뒤 사용자 위임에 따라 파일·Finder 메타데이터·빈 i18n 폴더를 삭제했다. 내용 열람·백업·원격 키 폐기는 하지 않았고 웹 checkout은 clean이다.
 
 ## 이전 상태 — 2026-11-20 시트 연동 제거 PR 생성
 

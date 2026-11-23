@@ -1,13 +1,15 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
-## 릴리즈 완료 세션·로컬 정리 재확인 — 2026-11-23
+## 현재 상태 — 2026-11-23 상용 반영·세션 보관 완료
 
-- 사용자 범위는 알림센터만이 아니라 이번 릴리즈에 포함되어 완료된 웹·양앱 작업 전체다. 이 알림센터 채팅 보관은 다른 정리가 끝난 뒤 마지막이며 현재는 보관하지 않았다.
-- 마케팅 수신 동의 DL-17208: 웹 PR4896·Office PR350의 MERGED 및 merge commit이 현재 master/main에 포함됨을 확인했다. DL-17231·DL-17423 로컬 브랜치와 두 worktree는 이미 삭제돼 있었다. 빠져 있던 Codex 채팅 `치과 마케팅 수신 동의 · DL-17208`(01a1d2b2-0d2f-7441-a68b-fa68affceafc)을 이번에 보관 완료했다.
-- 전체 로컬 재확인: 웹 master96bdacda6, Office main8d620786, Lab main12cd290. 각 저장소 기본 checkout 하나와 기본 로컬 브랜치 하나뿐이며 추가 feature/QA/release branch·worktree는 없다. 원격 branch/PR는 유지. 웹의 기존 미추적 lab/scripts/i18n 인증 파일은 열거나 삭제하지 않았다.
-- 활성 Codex 채팅 목록 전체 대조: FE 메인, Studio/디자인시스템, 해외 접속 조사, API 사용처 확인, 의자 조사, 앱 미지원 우선순위 조사는 이번 릴리즈의 완료 구현 채팅으로 일괄 처리하지 않고 유지했다. LBX는 마지막 기록이 운영 홀드·스테이징이고 현재 원격 원본 head도 master의 조상이 아니므로 이번 상용 완료로 단정해 보관하지 않았다. 이미 없어진 LBX 로컬 브랜치를 복원하지 않았으며 원격은 유지된다.
-- 제품 코드 수정·추가 배포·테스트·원격 브랜치 삭제 없음. 현재 알림센터 채팅은 사용자에게 정리 결과 전달을 위해 열어둔다.
+- 사용자 확인으로 이번 릴리즈 작업을 마감했다. 웹 **v1.94.0**→master PR #4942(`96bdacda6`), Office **v2.2.5**→main #361(`8d620786`), Lab **v1.0.6**→main #54(`12cd290`) 병합 확인 이력은 아래에 보존한다.
+- 앱 Production은 Office iOS/Android **v89**, Lab iOS/Android **v22** 게시·활성·100% 완료다. 사용자 iOS 적용 확인과 에이전트 검증 범위는 아래 상세와 구분한다. 치과 기존 설치에서 OTA가 바로 적용되지 않았던 원인은 미확정이며, 재설치 해결을 모든 사용자에게 필요한 조치로 일반화하지 않는다.
+- DL-17533 결제 내역과 관련 QA까지 구현·병합·배포된 범위다. DL-17535·DL-17469 등의 기존 의도적 보류는 별도 요청 시에만 재개한다. Jira 개별 workflow 상태를 이번 정리로 임의 변경하지 않았다.
+- 메인 점검에서 이 `통합알림센터세션`과 마케팅 동의 세션의 **보관 상태**를 실제 보관 목록으로 확인했다. 기록은 개인 컨텍스트에 유지하며 새 요청 시 메인 또는 새 작업 세션에서 읽는다. FE 메인은 보관하지 않는다.
+- 로컬은 웹 master/양앱 main의 기본 checkout 각1개만, 원격 기본 브랜치와 일치·모두 clean이다. 미사용 번역 시트 인증 파일은 용도 확인 후 메인에서 삭제했다. 상세 로컬 정리·보존 경계는 [FE 메인 정본](dentlink-fe.md) 최상단을 따른다.
+- 추가 구현·QA·배포·자동 폴링 없이 마감. 다음 작업은 웹 최신 origin/master, 앱 최신 origin/main에서 시작하며 삭제된 작업 경로를 그대로 재사용하지 않는다.
 
+> 아래 날짜별 내용은 진행 이력이다. '미머지/미배포/현재 상태/QA 대기/아직 보관하지 않음'은 해당 단계의 관찰이며, 위 최종 상태를 되돌리는 지시가 아니다. 정책·API·제외 범위·검증 증거와 미확정 원인은 보존한다.
 
 ## 2026-11-23 최종 마감 — release 병합 확인·로컬 릴리즈 브랜치 삭제·세션 보관
 
@@ -38,7 +40,7 @@
 - 제품 소스 변경·DEV/STG 재배포 없음. 기존 QA Jira 상태를 비활성 업로드만으로 완료/공개 처리하지 않음. 개인 체크포인트·FE 요약·Claude 메모리 동시 갱신.
 - 다음: 사용자가 Production 실기기 확인. release→main PR 머지는 별도 대기. 사용자 요청 전 추가 배포/머지/리뷰 폴링 없음. 앱 적용: useCodePush가 앱 시작 때 checkForUpdate, 필수 업데이트는 다운로드 후 IMMEDIATE 적용. 비활성→활성 전환 자체의 별도 대기 기간은 없고 단말의 확인/다운로드 시점은 다름. 완전 종료 후 실행 안내. 필요한 확인 화면: 알림 진입/설정·권한 안내·푸시 랜딩, 치과 결제 내역/청구서 View. 실제 Production 단말 적용·크래시 무발생을 에이전트가 검증한 것으로 쓰지 않음.
 
-## 2026-11-23 저녁 — 이번 릴리즈 상용 배포 전환·로컬 정리 (현재 상태)
+## 2026-11-23 저녁 — 이번 릴리즈 상용 배포 전환·로컬 정리 (당시 상태)
 
 - 사용자: 이번 릴리즈 웹·앱은 상용 배포 단계, 로컬 작업 종료. 알림센터 포함 이번 릴리즈 worktree·로컬 브랜치 정리 완료(상세 dentlink-fe.md 2026-11-23). 이후 요청 대기.
 
@@ -63,24 +65,24 @@
 - DL-17590 최종(사용자 재지시): 끝 마침표만 제거, 문장 사이 마침표("…with a screw. Ships as…")는 유지. 잠깐 쉼표로 바꿨던 커밋은 되돌림(웹 07b906cba #4940, 앱 487ce11b #359 push, PR 설명 복원). 웹·치과 앱 4개 문구 완전 동일.
 - 마감(11/23 17시대): 웹 #4940 사용자 머지(86d294600). 앱 #359 CodeRabbit 2건: 토글 접근성은 토글 제거로 해소, 건수 조회 실패 시 (0) 표시는 건수 없이 표시로 수정(f5c56bad, 필터 테스트 추가), 답글·resolve 완료. Jira: DL-17533·DL-17590 → Ready for Deploy(전환명 "요구사항에 대해 개발 완료") + 결과 댓글, DL-17202 설명에 추가 범위(결제 내역·Statements View) 반영 + 댓글. 앱 #359 머지·CodePush 전.
 
-## 2026-11-23 마감 — 이번 release 알림센터 FE 작업 종료 (현재 상태)
+## 2026-11-23 마감 — 이번 release 알림센터 FE 작업 종료 (당시 상태)
 
 - 사용자가 Jira DL-17557·DL-17548을 READY FOR QA로 변경(확인). DL-17541·17542·17545·17556 완료. 사용자 판단: 이번 release(웹 v1.94.0·치과 v2.2.5·기공소 v1.0.6)에 지금까지 나온 FE 작업은 모두 완료. 앱은 STG·DEV CodePush 완료, 웹 배포는 사용자.
 - 정리: DL-17548 세션(비실행, PR 머지)의 worktree `dentlink-client-dl17548`·`dentlink-app-dl17548`(clean, 머지 head와 동일)과 로컬 feat/DL-17548 삭제. ~/.codex 아래 Codex worktree는 손대지 않음.
 - 다음: 사용자 QA 결과·새 요청 대기. BE 필드 삭제 후 Swagger 재생성, 보류 DL-17535·17533·17469는 지시 시만.
 
-## 2026-11-23 저녁 — 앱 release CodePush 완료·로컬 정리 (현재 상태)
+## 2026-11-23 저녁 — 앱 release CodePush 완료·로컬 정리 (당시 상태)
 
 - 사용자 지시(웹은 사용자가 직접 배포, 앱만 STG·DEV, BE 상태 무관): 치과 release/v2.2.5(ebb4febf) STG iOS v360/Android v359·DEV v157/v157, 기공소 release/v1.0.6(6e00a8d) STG v76/v76·DEV iOS v54/Android v53 게시·활성. 포함: DL-17541 리뷰 후속·DL-17557·구 API/pushEnable 정리, 치과는 DL-17548(타 세션 머지분) 포함. 네이티브 변경 없음 확인. Jira DL-17557 배포 댓글(45249), 상태는 Ready for Deploy 유지.
 - 웹 PR #4935·#4938 포함 release/v1.94.0 배포는 사용자가 진행. 로컬 정리: 머지된 feat/DL-16140·api-cleanup·DL-17541·DL-17557(양앱), feat/DL-16140·api-cleanup·pushenable-type-cleanup(웹) 로컬 브랜치 삭제(모두 원격 PR head와 동일). 양앱 기본 checkout은 각 release, 웹 알림센터 worktree는 origin/release/v1.94.0 detached. 원격 브랜치는 유지.
 - 남음: BE 필드 삭제 후 Swagger 재생성, 의도적 보류 DL-17535·17533·17469(지시 시만).
 
-## 2026-11-23 저녁 — FE 관리 타입 pushEnable 선언 정리 PR (현재 상태, 머지 620d0187e)
+## 2026-11-23 저녁 — FE 관리 타입 pushEnable 선언 정리 PR (당시 상태, 머지 620d0187e)
 
 - 사용자 요청 "8곳 모두 정리": 웹 FE 관리 타입 user.types.ts(2)·employer.types.ts(1)·api.types.ts(5)의 pushEnable 선언 제거, pushEnable만 담던 미사용 DTO(UserPreferenceUpdateDto·UserPushPreferenceResponseDto·ApiResponseUserPushPreferenceResponseDto·UpdateUserPreferenceData)도 제거. 웹 PR #4938(feat/DL-16140-pushenable-type-cleanup 7cd525438 → release/v1.94.0), clinic·lab·admin tsc 통과, E2E 가드 NO_IMPACT. 실행 검증 생략(사용처 없음).
 - 양앱(release/v2.2.5·v1.0.6)은 생성 models 밖 pushEnable 없음 → 대상 없음. 남은 pushEnable은 Swagger 생성 파일뿐(BE 삭제 후 재생성). 배포 없음.
 
-## 2026-11-23 오후 — PR 머지 상태 확인 (현재 상태)
+## 2026-11-23 오후 — PR 머지 상태 확인 (당시 상태)
 
 - GitHub 확인: DL-17557 치과 #356·기공소 #52, 구 API·pushEnable 정리 치과 #357·기공소 #53·웹 #4935 모두 MERGED(release/v2.2.5·v1.0.6·v1.94.0). 아래 기록의 "미머지"는 이 확인으로 대체.
 - 배포는 별도: 이번 머지분(DL-17541 리뷰 반영·DL-17557·정리)의 앱 STG/DEV CodePush는 하지 않음. STG 앱은 여전히 feat/DL-17541 첫 커밋 기준(치과 v359/v358, 기공소 v75).
@@ -104,7 +106,7 @@
 - 읽기 전용 코드 대조: API-cleanup HEAD 057cb30ef와 원격 release/v1.94.0 dfc69f5780. 3필드는 생성 data-contracts.ts 선언 외 사용 없음. 실제 API caller(관리자 웹알림 목록·CRM 알림 타임라인) 및 컬럼/렌더링 대조, 수신자·내용·읽음 등만 사용. 두 브랜치의 해당 소비자 파일 diff 없음.
 - 결론: 확인한 릴리즈/작업 코드 기준 3필드 제거 대응용 FE 화면 수정 불필요. API 자체는 계속 사용, 필드만 미사용. 생성 타입은 BE Swagger 정리 시 재생성 대상으로 구분. 이번 코드 수정·외부 답변 게시·배포 없음.
 
-## 2026-11-23 — 삭제 예정 구 API 잔여 코드 정리 PR (현재 상태, 미머지)
+## 2026-11-23 — 삭제 예정 구 API 잔여 코드 정리 PR (당시 상태, 미머지)
 
 - 근거: Slack C04T5SU6A2U p1794363519212339 (BE Leo가 10개 API 삭제 예정: push-preferences GET/POST/PATCH, push-settings PATCH, /messages/notifications 6개). 확인 결과 양앱·웹 모두 실제 호출 없음(치과 '내 주문만 보기'는 기기 저장 전환 완료) → 서버 삭제해도 동작 영향 없음.
 - 정리(카드 없음 → 상위 DL-16140, 브랜치 feat/DL-16140-api-cleanup, 사용자 지정 release 타깃, 커밋·푸시·PR까지):
@@ -115,7 +117,7 @@
 - 추가(같은 브랜치·PR): BE가 프로필 응답 `pushEnable`·`userPreference.pushEnable` 삭제 예정(Slack p1795173568865849). PATCH 엔드포인트들은 계속 사용하지만 body에 pushEnable 없음. FE 읽기 4곳 제거 — 양앱 amplitude `user_push`(치과 cc7d9f8f, 기공소 0d67eda), 웹 shared utils `user_push`·관리자 CRM "푸시 상태"·회원 CSV 열(057cb30ef). 사용자: Amplitude 차트·CSV는 없어진 대로 대응. 타입 검사만(7/6/admin 0), PR 본문 갱신.
 - 남음: Swagger 생성 파일(앱 models/Api.ts, 웹 shared/models App.ts·Messages.ts)은 BE 삭제 후 재생성 시 정리.
 
-## 2026-11-23 — DL-17557 구현·PR, 미배포 (현재 상태)
+## 2026-11-23 — DL-17557 구현·PR, 미배포 (당시 상태)
 
 - 근거: PM 답변(댓글 45229) "기기 푸시 꺼져 있어도 회색이 아닌 기존 색 유지".
 - 변경: 권한 OFF 중 PUSH 스위치 회색(mono300)·채널 체크 꺼진색(mono500) 강제를 제거하고 실제 설정값의 기존 색으로 표시. 권한 없을 때 누르면 권한 요청, 안내 배너, 서버 저장 로직, 기기 권한/서버값 독립 정책은 유지. 치과 NotificationSettingSection, 기공소 NotificationSettingsGroup.
@@ -159,7 +161,7 @@
 - 리뷰: Office 4640337169/4640337182에 수정근거 답변하고 두 스레드 resolve. 종료 시 1회 확인으로 미해결 0; Lab 스레드 0. 새 봇 재리뷰 완료/승인까지 주장하지 않음, 추가 폴링 없음.
 - 다음: 사용자 요청 시 새 리뷰/머지/배포 진행. 이번 수정은 미배포이며 기존 배포 라벨 유지. DL-17557 정책 답변 대기와 의도적으로 보류한 다른 QA는 이번 범위에 포함하지 않음.
 
-## 2026-11-20 — DL-17557 검토, 기획자 답변 대기 (현재 상태)
+## 2026-11-20 — DL-17557 검토, 기획자 답변 대기 (당시 상태)
 
 - 제보(AOS): 알림 허용 시스템 팝업에서 허용하면 선택 항목만이 아니라 꺼져 있던 푸시가 모두 ON.
 - 코드 확인: 허용 후 앱은 누른 항목 하나만 저장(치과 NotificationCenterScreen onGranted, 기공소 동일). 앱 시작/배너 권한 요청은 기기 토큰 등록(POST /app/users/own/devices)만. OS 권한 꺼짐 동안 PUSH 체크·스위치가 서버 값과 무관하게 회색(꺼진 것처럼) 표시(치과 NotificationSettingSection, 기공소 NotificationSettingsGroup). DEV 테스트 계정 서버 PUSH 전부 enabled:true. → 원래 ON이던 값이 권한 허용 후 실제대로 보이는 것. iOS·Android(12 이하는 설정 복귀 흐름)·양앱 동일 구조.
@@ -167,7 +169,7 @@
 - 판단: 제보 동작은 기획된 동작이고 혼란은 표시 문제. 권장 1번 = 권한 OFF 중에도 실제 값 표시+비활성(양앱 화면 컴포넌트·테스트, 낮은 난이도, 디자인 색 확인). 2번(허용 시 나머지 서버에서 끄기)은 정책 위반·데이터 변경이라 비권장.
 - 사용자가 기획자에게 1번/2번 질문 공유. 답변 오면 사용자가 알려줌. 수정은 아직 하지 않음(사용자 지시).
 
-## 2026-11-20 — DL-17541 후속(소속 목록 재확인) PR·CodePush, 대기 (현재 상태)
+## 2026-11-20 — DL-17541 후속(소속 목록 재확인) PR·CodePush, 대기 (당시 상태)
 
 - 원인 후보 확정 근거(BE 답변): PATCH /office/employee/activates는 시간만 갱신, 연속 호출로 400 없음. GET /office/users/own·/lab/users/own employee는 캐시 없이 활성 소속만(APPROVED·deactivatedAt/deletedAt null·employer 활성), 읽기 복제 지연 <1s. → 앱 저장 목록(persist)이 옛 값일 때 PATCH 없이 토스트(치과) / 무반응(기공소).
 - 조치: 링크 병원·기공소가 저장 목록에 없을 때만 프로필 1회 재조회(fetchQuery [USER, serviceType], 5초 제한, 같은 사용자 로그인 시에만 setUser) 후 재판단. 정상 흐름 불변, 비활성 소속은 기존 안내 유지. 치과 `configs/utils/deepLinkAffiliation.ts` + useNavigationConfig 두 진입점, 기공소 같은 보조 함수 + prepareDeepLinkEmployee·알림함 복귀 비교 최신 목록.
@@ -175,7 +177,7 @@
 - 검증: 보조 함수 테스트 6건씩, 치과 딥링크 테스트 30건 통과(mock 추가), 전체 기존 실패만(치과 App·useProfileMarketing, 기공소 App), tsc 기존(7/6), lint 0. 기기 확인 없음.
 - CodePush(작업 브랜치, STG→DEV): 치과 STG iOS v359·Android v358, DEV v156/v156 / 기공소 STG v75/v75, DEV iOS v53·Android v52. Jira DL-17541 댓글, 상태 READY FOR QA 유지.
 
-## 2026-11-20 마감 — 브레이크포인트 2 (사용자 지정), FE 할 일 없음, 대기 (현재 상태)
+## 2026-11-20 마감 — 브레이크포인트 2 (사용자 지정), FE 할 일 없음, 대기 (당시 상태)
 
 - 머지: 치과 PR #354→release/v2.2.5, 기공소 PR #50→release/v1.0.6, 웹 PR #4927→release/v1.94.0(이전 #4903도 머지).
 - 배포: 앱 release에서 STG(치과 iOS v358·Android v357, 기공소 v74/v74)와 DEV(치과 v155/v155, 기공소 iOS v52·Android v51). 웹 STG는 사용자가 직접.
@@ -183,7 +185,7 @@
 - 리뷰: #354(4건)·#4927(2건) CodeRabbit 스레드 모두 해결 상태로 머지, #50 리뷰 없음. 마지막 리뷰 이후 추가 커밋은 재리뷰 없이 머지 — 사용자가 의도적으로 넘김(11/20).
 - 이후 지침: 웹·앱 DEV는 신경 쓰지 않고 STG만(DEV는 지시 시). 다음 작업 지시까지 대기.
 
-## 2026-11-20 — 웹 PR #4927 머지·STG는 사용자 직접, 이후 STG만 (현재 상태)
+## 2026-11-20 — 웹 PR #4927 머지·STG는 사용자 직접, 이후 STG만 (당시 상태)
 
 - 사용자: 웹 PR #4927(DL-17542) 머지 완료, 웹 STG는 release/v1.94.0로 사용자가 직접 배포 중.
 - 사용자 지시(11/20): 이제 웹·앱 모두 개발서버(DEV)는 신경 쓰지 않음. 지금부터 배포·확인은 스테이징(STG)만.
@@ -191,13 +193,13 @@
 - 카드(11/20 최종 Jira 확인): DL-17545·DL-17556 완료(둘 다 사용자 실기기 확인, 17545는 홈 상단 헤더 고정 확인), DL-17541·17542 READY FOR QA(사용자 댓글: 재현 안 됨/코드상 문제 없음, 방어 코드 추가, 재발 시 재검토).
 - DL-17535(Review Order 앱 연동)·DL-17533(결제 내역 앱 화면)·DL-17469는 사용자가 의도적으로 하지 않은 것. 남은 일로 올리지 않고 지시가 있을 때만 착수.
 
-## 2026-11-20 — 양앱 PR 머지 후 release 브랜치 STG CodePush (현재 상태)
+## 2026-11-20 — 양앱 PR 머지 후 release 브랜치 STG CodePush (당시 상태)
 
 - 사용자가 치과 PR #354 → release/v2.2.5(c3cea104), 기공소 PR #50 → release/v1.0.6(62b6d9f) 스쿼시 머지. release 트리 = feat/DL-16140 최종(치과 30631824, 기공소 b54cd7e)과 동일 확인.
 - 사용자 지시 "양앱 릴리즈 브랜치로 스테이징만 배포": release 브랜치에서 STG만 CodePush — 치과 STG iOS v358·Android v357, 기공소 STG iOS v74·Android v74 (description 브랜치 release/*). DEV는 하지 않음(DEV 최신은 오후 치과 v154·기공소 iOS v51/Android v50, DL-17542·리뷰 반영분 미포함).
 - 배포 후 로컬 작업 폴더는 feat/DL-16140로 되돌림(내용 동일). 웹 PR #4927(DL-17542)은 미머지·미배포.
 
-## 2026-11-20 — DL-17542 보완·CodeRabbit 반영·웹 PR #4927 (현재 상태, 이번 분 미배포)
+## 2026-11-20 — DL-17542 보완·CodeRabbit 반영·웹 PR #4927 (당시 상태, 이번 분 미배포)
 
 - DL-17542: 사용자 지시로 보완. 기존 재조회 흐름 유지 + React Query 낙관적 업데이트(모두 읽음 onMutate에서 Unread 0, onError 복원). 치과 fbead3ea(PR #354), 기공소 d485f19(PR #50), 웹 feat/DL-17542(release/v1.94.0 기준 새 브랜치) → PR #4927(기존 웹 PR #4903은 머지됨). 테스트 추가(치과2·기공소2·웹1). 서버 숫자 지연이면 재조회 때 잠깐 옛 숫자 가능(서버 미확인). Jira Ready for Deploy·댓글 45217.
 - CodeRabbit(PR #354 미해결 4건, 11/20 기준·폴링 없음): 치과 4a821c24로 반영·답변·resolve — 수동 새로고침 cancelRefetch 기본값(자동 조회는 false 유지), ScreenSafeArea 마지막 배경 useEffect 기록, getActiveRouteName index 없으면 마지막 라우트, useProfileMarketing no-void. 기공소 동일 코드 fc18c7d로 맞춤(PR #50 리뷰 없음).
@@ -205,7 +207,7 @@
 - 웹 PR #4927 CodeRabbit 2건(11/20, 1회 확인): 모두 읽음 진행 중 화면/열기 갱신에서 현재 소속 unread 조회만 제외(createNotificationRefreshPredicate / readingAll), 이전 count 없을 때 실패하면 unread 재조회 → 웹 21b4dc33c·치과 30631824·기공소 b54cd7e, 답변·resolve. 사용자 지시: E2E는 넘어가고 결과 폴링·대기 금지.
 - 현재 head: 치과 30631824, 기공소 b54cd7e, 웹 feat/DL-17542 21b4dc33c. 앱 PR 본문 갱신(이번 분 미배포 명시). 남은 일: 이번 분 CodePush·웹 배포는 사용자 지시 시, 웹 PR 리뷰.
 
-## 2026-11-20 — DL-17545·17541·17556 구현·CodePush·PR 본문 갱신, DL-17542 정리 (현재 상태)
+## 2026-11-20 — DL-17545·17541·17556 구현·CodePush·PR 본문 갱신, DL-17542 정리 (당시 상태)
 
 - 치과 feat/DL-16140(PR #354): a390a0e0 DL-17545 홈 헤더 스크롤 밖 고정(stickyHeaderIndices 제거, 섹션 노출 분석 viewportBottom에서 헤더 높이 빼 기존 기준 유지), 0deb3d87 DL-17541 딥링크 병원 변경 실패 토스트를 1.5초 뒤 여전히 실패·요청 최신일 때만 표시(`configs/utils/officeChangeNotice.ts`, 테스트 2건, 예방 조치·원인 미재현), cf078f94 DL-17556 `BOTTOM_SHEET_MAX_HEIGHT_RATIO=0.85`(CustomBottomSheetModal) → EmployeeSelectBottomSheet·NotificationOfficeSelectSheet·DesignConfirmVersionDropdown(80%→85%). head cf078f94.
 - 기공소 feat/DL-16140(PR #50): e9b4655 DL-17545 홈 헤더 동일, f7cf609 DL-17556 공용 상수 + NotificationLabSelectSheet·HomeProfileBottomSheet·DesignConfirmVersionDropdown. head f7cf609.
@@ -219,7 +221,7 @@
 - 원인: DL-17059(0a131041)에서 병원/기공소 선택 시트 최대 높이를 `height - topInset`(목록 max 450)로 키워 작은 화면·병원 많음(사용자 iPhone 12 mini)에서 시트가 거의 전체를 덮고 content pan도 꺼져 닫기 어려움. 배경 터치를 막는 코드는 없음(CustomBottomSheetModal backdrop pressBehavior close, FullWindowOverlay).
 - 사용자 최종 결정(11/20): 치과·기공소 양앱의 "최대 높이" 지정 시트를 85%로 통일. 대상: 치과 EmployeeSelectBottomSheet·NotificationOfficeSelectSheet(height-topInset→85%), 기공소 NotificationLabSelectSheet(→85%), 기공소 HomeProfileBottomSheet(이미 85%), 양앱 DesignConfirmVersionDropdown의 10개 이상 상한 "80%"와 "최대 높이 80%로 제한" 주석→85%. 목록 availableContentHeight도 85%에 맞춤. 공용 CustomBottomSheetModal에 최대 높이 85% 통일 기준 주석(필요 시 공용 상수). 고정 snap point 시트(78/80/82/84%, 쉐이드 가이드 80→100% 확장 등)·밀링 시트는 유지.
 
-## 2026-11-20 — DL-17541·17542 검토 완료, 재개 지시 대기(현재 상태)
+## 2026-11-20 — DL-17541·17542 검토 완료, 재개 지시 대기(당시 상태)
 
 - DL-17542(앱, Read All 후 Unread 탭 숫자 늦게 갱신): 치과(`useReadNotificationMutation` onSettled)·기공소(readMutation onSuccess)·웹(`useNotificationCenter` markAllRead) 모두 readAll 성공 후 목록·unread count를 서버에서 함께 재조회, count 별도 보관·덮어쓰기 없음 → 앱 코드 동기화 문제 없음. 후보: BE count 반영 지연(DEV API 미확인). 사용자 방향: 코드 문제 없으면 정리만.
 - DL-17541(iOS 치과, 다른 병원 푸시 진입 시 이동 정상 + "Failed to change office" 토스트): 문구·조건 모두 FE 고정(`useNavigationConfig.ts` 332 소속 못 찾음, 481 activate 실패·취소 제외). 토스트는 실패 시 아직 원래 병원일 때만 뜸 → 첫 시도 실패(토스트) 후 두 번째 시도 성공(이동) 순서로 추정. 푸시 수신 경로 여러 개(FCM opened·Linking·Airbridge·notifee foreground·initial notification), 중복 방지는 경로+1.5초 창. 구체 경로는 코드로 미특정.
@@ -228,7 +230,7 @@
 - 17541 사용자 실기기 테스트(11/20 Jira 댓글): Android·iOS, DEV·STG, 링크톡·추가금·디자인컨펌, 포그라운드·백그라운드·완전종료, 1→2병원·2→1병원 모두 재현 안 됨. 재현 전 코드 수정 보류, 제보자 재현 조건(계정·병원 조합·푸시 종류·앱 상태·재현 빈도) 확인 우선.
 - 지금 작업 안 함. 사용자 재개 지시 때 착수.
 
-## 2026-11-20 — DL-17545 앱개발자 방향 승인, 구현 대기(미수정, 현재 상태)
+## 2026-11-20 — DL-17545 앱개발자 방향 승인, 구현 대기(미수정, 당시 상태)
 
 - 원인 코드 확인(RN 0.82.1): sticky 헤더 이동은 네이티브에서 바로 적용(`ScrollView` attachNativeEvent)되지만, 버튼 누름 확인(`Pressability`)은 누를 때 잰 위치(Fabric shadow tree)로 손가락 이동 중 영역 안인지 다시 확인한다. 이 위치는 `ScrollViewStickyHeader`가 JS 리스너+지연(Android 15ms/iOS 64ms)으로 늦게 반영 → Android에서 영역 밖으로 보고 클릭 취소. iOS가 괜찮은 이유는 RN 주석 근거(누르는 중 움직임 처리 차이)이며 iOS 네이티브 코드는 미확인.
 - 사용자가 Slack C09613TBE5A 스레드 1795145849.142299(앱 홈화면 헤더 관련)에 원인 4줄·수정 방향(홈 헤더를 스크롤과 분리해 위에 고정) 공유, 의견 요청 댓글 추가.
@@ -256,7 +258,7 @@
 - Jira(내 담당): Ready for Deploy DL-17524·17529·17537(이번 배포 반영), READY FOR QA DL-17488·17477, 미착수 DL-17535(검토 완료)·DL-17533(범위 정의부터), 백로그 DL-17469.
 - 11/19 지침 추가: 방향 근거는 확인 범위만, 앱은 심사 필요 변경만 알림, 시뮬·에뮬 실행 전 확인, 앱 서버 저장 토글 체크리스트(DEVELOPMENT_STYLE). 기공소 스위치 4곳 확인 결과 지금 수정 필요 없음(알림설정은 재확인 이미 있음, 번역 툴팁은 증상 시 지침대로).
 
-## 2026-11-19 밤 — 브레이크포인트: 양앱 CodePush·PR 본문 정리 (현재 상태)
+## 2026-11-19 밤 — 브레이크포인트: 양앱 CodePush·PR 본문 정리 (당시 상태)
 
 - CodePush(사용자 지시): 치과 `348b7fe0`(DL-17524·17529·17537) STG iOS v356/Android v355, DEV v153/v153. 기공소 `116f77f`(DL-17529·17537) STG v72/v72, DEV iOS v50/Android v49. 8건 활성·필수·100%. 웹은 PR4903 머지 후 15시 DEV·STG 배포에 최종 수정 포함, 이후 변경 없음 → 웹 배포 불필요.
 - 이후 주석만 추가(동작 변경 없음, 미배포): FloatingActionButton 측정 영역 width 1000px 이유 주석 — 기공소 dca6220, 치과 e7bc78e1. 코드상 문제 경로 없음(절대 위치·overflow hidden·opacity 0·pointerEvents none, 1000은 결과에 미포함), 실기기 폭 확인은 미실시.
@@ -292,7 +294,7 @@
 - **가능 여부 검토(작업 대기, 사용자 지시로 보류):** 가능. 웹 Review 흐름=옵션(PUT /option)→추가정보(PUT /additional, Save Changes)로 보류 해제. 앱도 같은 API(product/option/additional) 보유, 3단계 `OrderOptionSection`은 DRAFT 제한 없이 PUT /option, 4단계는 비DRAFT 수정 처리 있음. 필요한 앱 변경: `OrderScreen` 수정 가능 상태에 PENDING_ORDER 추가, 보류 주문은 3단계(옵션)부터 시작(상태로 판단 → 웹 메시지는 Edit과 동일 NAVIGATION OrderScreen{orderId}), 수정 모드 뒤로가기(4→3, 3→나가기). 웹 변경: `OrderDetailBoxRequest` Review Order를 앱이면 OrderScreen 메시지로. 위험: 리메이크 보류 주문(웹은 /remakes/{id}/info, 앱에 리메이크 수정 화면 없음 → 이번 제외 권장), 3단계 기존 값 불러오기 실사용 미검증, DEV 보류 주문 데이터 필요(기공소/어드민이 보류 설정). 규모: 웹 1파일, 앱 1~2파일+테스트, CodePush 가능(심사 불필요). 정할 것: 리메이크 제외 여부, 브랜치(웹 release에서 새로, 앱 PR354 이어서?), 테스트 데이터.
 - 주의: 앱 OrderScreen은 수정 가능 상태를 DRAFT/NEW/IN_PROGRESS/OFFICE_APPROVAL_PENDING으로 제한 → PENDING_ORDER는 지금 열리지 않음(앱 수정 필요). 웹 Review는 옵션 단계부터, 앱 수정은 ADDITIONAL(4단계)부터 진입. 리메이크 보류 주문의 앱 처리 미확인. 사용자 결정 타당성 추가 검토 요청 받음.
 
-## 2026-11-19 밤 — DL-17524 원인 확정·수정(Office 93b36b6a·6967366d 푸시, CodePush 안 함, 현재 상태)
+## 2026-11-19 밤 — DL-17524 원인 확정·수정(Office 93b36b6a·6967366d 푸시, CodePush 안 함, 당시 상태)
 
 - **원인 1 (되돌아감, '가끔 튐'):** 저장(PATCH) 성공 직후 확인 GET이 가끔 이전 값을 돌려주고(DEV 에뮬 6탭 중 1회 재현, 로그로 확인), 그 값이 캐시를 덮어 토글이 되돌아감. 서버 저장 직후 읽기 지연은 알림 설정 때와 같은 특성(STG가 더 심하다는 사용자 체감과 부합, STG는 직접 측정 안 함). 2차 이전 invalidate 방식에도 같은 위험이 있었음.
 - **원인 2 (My Only 연속 탭):** 주문목록 My Orders Only가 Android 디버그에서 반영 187~245ms, 그 사이 들어온 탭이 갱신 전 값(`!value`)으로 계산돼 최종 값 어긋남(재현). 환자 목록도 같은 코드.
@@ -300,7 +302,7 @@
 - **수정(Office feat/DL-16140, 미커밋):** `useAutoCreditUsageToggle` 확인 GET이 방금 저장한 값과 다르면 바로 덮지 않고 0·200·500·1000ms 재확인, 끝까지 다를 때만 서버 값 반영, 새 입력 시 확인 중단(알림 설정 방식). Auto-apply·My Orders Only·My Patients Only 스위치 `hitSlop={10}`. `OrderSearchForm`·`OrderPatientListSection` 다음 값을 마지막 선택 기준으로 계산(화면 값이 따라오면 해제). 프로필은 손대지 않음(이미 hitSlop, 정상).
 - **검증:** 에뮬 Auto-apply 12탭 되돌아감 0회·서버 값 일치·연속 3탭 정확, 가장자리(hitSlop 안) 입력 확인. My Orders Only 연속 3탭 최종 값 정확·가장자리 입력. iOS 시뮬 8~12ms·가장자리 입력·서버 일치. 단위 테스트(확인 GET 이전 값 1회 후 유지, My Only 연속 탭) 추가, 전체 56/58(기존 실패 2 동일), tsc 기존 7, ESLint·Prettier 통과. 임시 로그 전부 제거. 목록 재그리기 지연(디버그 ~250ms)은 그대로.
 
-## 2026-11-19 밤 — Auto-apply 안드로이드 잔여·프로필 수정 폐기 (현재 상태)
+## 2026-11-19 밤 — Auto-apply 안드로이드 잔여·프로필 수정 폐기 (당시 상태)
 
 - 사용자 실기기: Android 2.2.5.354(STG 최신)에서 유저 크레딧 Auto-apply 토글이 여전히 답답, iOS 정상, Android 프로필 토글은 괜찮음. 저장 로직은 프로필과 동일 방식(즉시 표시·마지막 선택 순차 저장·실패 복귀·확인 GET 비차단·계정 변경 무시). 코드상 차이는 화면 구성: ① `BalanceCard`(react-native-fast-shadow `ShadowedView`) 안·FlatList 머리 영역, ② 토글마다 감싼 영역 배경/테두리색 변경, ③ hitSlop 없음(체감 무관). 원인 미확정, Android 측정 필요(사용자가 DEV 데이터 세팅 후 에뮬레이터 측정 예정). 사용자가 이 건 Jira 카드 생성.
 - **DL-17524 측정 결과(11-19, DEV·디버그 빌드, 임시 로그 후 원복):** iOS 시뮬 Auto-apply 누름→애니메이션 12ms. Android 에뮬 Auto-apply 35~60ms, 연속 탭도 마지막 선택 기준으로 정확히 번갈아 감, 살짝 미끄러지는 터치(최대 14px)도 모두 입력됨 → 실기기 '첫 터치 씹힘'은 에뮬에서 재현 안 됨. 스위치 실제 터치 영역 40×24dp(1080폭 105×63px), hitSlop 없음(정상인 프로필은 hitSlop 10 → 약 60×44dp). 주문목록 My Orders Only는 재현: 누름→반영 187~245ms, 연속 탭 시 2·3번째가 갱신 전 값(false)으로 계산돼 같은 값이 두 번 나감(최종 값 어긋남). 환자 목록 My Patients Only는 같은 `!value` 방식(코드 확인, 측정 미실시). 수정 제안·승인 대기.
@@ -310,7 +312,7 @@
 - 프로필 마케팅 토글 "마지막 선택 기준 계산" 수정은 사용자 지시로 폐기(커밋 전 원복). Office HEAD 7f43cd45 clean.
 - 참고: `__tests__/libs/useProfileMarketing.test.tsx` 14개 중 11개는 11-17 `77a4c639`(채널 독립 저장) 이후 갱신 안 돼 원래부터 실패(기능 문제 아님, 정리 여부 미정).
 
-## 2026-11-19 저녁 — DL-17501 3차: 유저 크레딧 Auto-apply 토글 프로필 방식 적용 (Office 7f43cd45 푸시, STG iOS v355/Android v354·DEV v152/v152 CodePush, 현재 상태)
+## 2026-11-19 저녁 — DL-17501 3차: 유저 크레딧 Auto-apply 토글 프로필 방식 적용 (Office 7f43cd45 푸시, STG iOS v355/Android v354·DEV v152/v152 CodePush, 당시 상태)
 
 - 사용자 제보: 탭 전환 튐은 해결, 토글 자체가 답답하고 값이 풀렸다 되는 것처럼 보임, Android가 더 답답. 지침 대조 결과 11-17 프로필 토글 지침(즉시 표시·같은 필드 최신 선택 보존·저장 중 입력 허용·양OS 첫/연속 클릭 확인)이 이 토글에 미적용이었고, 2차(dcfe7aa3)에서 연속 선택을 미룬 것이 원인 중 하나.
 - 원인 확인: DEV 서버는 PATCH 직후 0ms부터 새 값(구값 반환 없음). Android 디버그 앱 로그로 탭 직후 화면 전체 재렌더로 JS가 ~170ms 막히고, 그 사이 들어온 탭은 갱신 전 값으로 `!value`를 계산해 같은 값이 두 번 나가는 것 확인.
@@ -318,14 +320,14 @@
 - 검증: 신규 토글 테스트 5 + 조회 테스트 2 통과, 전체 56/58(기존 실패 App·useProfileMarketing 동일), 변경 파일 ESLint·Prettier, tsc 기존 7 외 0. 기기 전환 확인은 사용자가 "개발 데이터 없음, 실기기 CodePush 후 직접 확인"으로 중단 요청.
 - 참고(범위 밖): 프로필 마케팅 토글도 Switch의 `!value` 계산이라 JS가 막힌 상태의 연속 탭에서 같은 문제가 잠재.
 
-## 2026-11-19 오후 — DL-17521·DL-17501 2차 치과앱 STG·DEV CodePush (현재 상태)
+## 2026-11-19 오후 — DL-17521·DL-17501 2차 치과앱 STG·DEV CodePush (당시 상태)
 
 - 기존 PR 브랜치 feat/DL-16140(PR354 미머지)에 이어서 작업, Office `dcfe7aa3`(ab89cdee DL-17521 청구서 목록 헤더 Billing Statements, dcfe7aa3 DL-17501 Auto-apply 스위치 animateOnMount=false·저장 중 disabled 제거). 직전 배포(8209ebec) 대비 JS 2파일만.
 - **게시·활성:** Office2.2.5 Staging iOS **v354** / Android **v353**, Development iOS/Android **v151/v151**. 4건 mandatory=true, disabled=false, rollout100%, history 확인. `scripts/codepush.js <env> all --mute`를 expect로 실행(Slack 생략).
 - Lab·웹 조치 없음: Lab은 직전 배포(bbf1d96) 이후 변경 0, 웹은 이번 두 카드와 무관(해당 화면 없음). 
 - 남은 것: 사용자 QA. DL-17521은 사용자가 Jira 상태 이동. 연속 탭 최신값 저장(프로필식)은 미적용·필요 시 별도.
 
-## 2026-11-19 QA 브랜치 양앱 Staging·Development CodePush 완료 (현재 상태)
+## 2026-11-19 QA 브랜치 양앱 Staging·Development CodePush 완료 (당시 상태)
 
 - 사용자 지시: PR은 그대로 두고 QA `feat/DL-16140`로 배포. 웹은 사용자가 직접, 앱은 에이전트가 Staging 먼저 → Development.
 - 소스: Office `8209ebec`(DL-17488 읽음 재시도 f72285e5, DL-17496 Payments 6a0d1c2c, DL-17501·17506 크레딧 8209ebec), Lab `bbf1d96`(DL-17488). 원격 일치·clean, 직전 배포 대비 src/__tests__만 변경(네이티브 0).
