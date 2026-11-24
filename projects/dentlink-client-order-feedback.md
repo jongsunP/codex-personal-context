@@ -2,10 +2,21 @@
 
 치과 주문 피드백과 관리자 피드백 조회의 개인 체크포인트다. 2026-10-27 문서 정리에서
 원문을 [이력 문서](archive/dentlink-client-order-feedback-history-through-2026-10-27.md)로
-보존했다. 최신 기능 기록은 2026-09-28이며 이번 정리는 제품·배포의 새 확인이 아니다.
+보존했다. 2026-09-28 구현·배포 이력과 아래 후속 코드 검토는 구분한다.
 재개 시 live Git과 필요한 Jira·Figma·Swagger를 우선하고, 기획·구현·검증·병합·배포를 구분한다.
 
-## 마지막 체크포인트 — 2026-09-28
+## Sample Case 키워드 추가 영향 검토 — 2026-11-24
+
+- 요청: [DL-17612 댓글45277](https://innovaid.atlassian.net/browse/DL-17612?focusedCommentId=45277)의 Sample Case 상품 키워드 연결 추가 시 FE 수정 필요 여부를 읽기 전용으로 검토했다. 상위 DL-17290, 담당 BE Leo. Jira·시트·제품 코드 변경은 하지 않았다.
+- [키워드 표 상품 탭](https://docs.google.com/spreadsheets/d/1lpHDglPRv20gUy-mOZvYAdPDXi-IYEMF0Kv7bl7tHVo/edit#gid=188159333) 15행 Sample Case: `Seating / Fit`, `Proximal Contact`, `Occlusion`, `Shade`.
+- **결론:** 기존 `KEYWORD` 문항의 `feedbackCategories[].keywords[]`에 연결 항목을 추가하고 API 구조를 유지한다면 FE 코드 변경은 필요하지 않다. 서버가 주문 조건별 선택지·label을 결정하고 웹/치과앱은 전부 펼쳐 표시하며 선택한 `keywordCode`를 `answers[].optionCodes`로 저장한다. Sample Case 제외·PRODUCT/SERVICE 허용 목록·개별 키워드 enum 제한은 해당 경로에 없다.
+- 치과 웹 PC/모바일: `feedback.adapter.ts:29,158,169` → `FeedbackDetailDrawer.tsx:323,440`, 조회·저장은 `feedback.query.ts:108,133` 및 `order-feedback.apis.clinic.ts`. 상세 `GET /office/orders/{orderId}/feedback`, 신규 POST(서버 templateVersion), 기존 PUT(answers) 구조다.
+- Office native: `feedback.repository.ts:40,159,232,247` → `configs/utils/feedback.ts:128` → `FeedbackDetailsScreen.tsx:186,811`. 코드/label은 string이며 동일 서버 계약을 소비한다. 웹·앱 키워드 버튼은 개수 고정 없이 map 및 wrap 처리한다.
+- Admin 목록·상세: `adminFeedback.utils.ts:36,59`가 서버 키워드 코드/label로 표시하므로 함께 반영 가능하다. 기공소 웹/앱에서는 이번 치과 피드백 키워드 선택 폼을 찾지 못했으며 기존 알림 enum/asset/상수와 실제 폼 구현을 구분했다.
+- 근거 기준: Web 현재 `feat/DL-17604@220694014`, 관련 피드백 경로는 실제 원격 master `96bdacda6`와 diff 없음. Office main `8d620786`, Lab main `12cd290`는 각각 실조회 원격 main과 동일. 다른 세션의 branch를 전환하거나 제품을 pull하지 않았다.
+- 남은 확인: BE 반영 뒤 Sample Case의 신규 작성/기존 피드백 재열기에서 상품·서비스 키워드 노출, 선택·저장·재조회와 관리자 label을 확인한다. 기존 피드백 적용 범위는 서버 templateVersion/응답 정책에 달려 있다. 이번에는 BE 구현·실제 변경 응답·런타임·배포를 검증하지 않았으며 변경 요청 전 추가 작업 없이 대기한다.
+
+## 이전 구현 체크포인트 — 2026-09-28
 
 - FE 구현·PR 전달·로컬 작업 공간 정리는 완료됐다. 사용자가 PR #4637 병합 후
   재배포 실행을 알렸으나, 직접 조회한 배포 workflow는 당시 진행 중이었다.
