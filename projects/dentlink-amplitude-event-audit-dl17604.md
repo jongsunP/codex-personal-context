@@ -1,5 +1,11 @@
 # Dentlink Amplitude 이벤트 확인 — DL-17604
 
+## 2026-11-24 픽업 2행 미운영 반영과 홈 주문 속성 요청
+
+사용자 승인으로 `pickup_orderlist_click`·`viewdetails_orderlist_click`의 Notion 진행률을 미작업에서 미운영으로 변경하고 각각 재조회했습니다. 앞선 88행 집계에 반영하면 개발 완료 85, 미운영 3입니다.
+
+`order_main_click`은 11월 23일 Frankie에게 `orderStatus`를 연결해 달라는 미해결 댓글이 있습니다. Notion 속성 관계에는 이미 있고, 치과 웹 홈 주문 클릭의 데스크톱·모바일 핸들러는 현재 모두 `orderId`만 보냅니다. 이벤트 존재 기준 진행률은 개발 완료이며 추가 속성은 코드에 미반영입니다. [원문 댓글](https://app.notion.com/p/232ce072e82f803d92afc5bfe5354109?d=463ce072e82f837eafad03289d83a60e)
+
 ## 2026-11-24 주문 목록 픽업 2개 이력 확인
 
 치과 웹 기존 주문 목록은 오늘 픽업이 없으면 Pickup 버튼에서 `pickup_orderlist_click`을, 있으면 View Details에서 `viewdetails_orderlist_click`을 호출했습니다. 2026-01-09 [#3636](https://github.com/Innvoaid/dentlink-client/pull/3636)에서 두 이름이 추가됐습니다. 03-26 [#3836](https://github.com/Innvoaid/dentlink-client/pull/3836)에서 주문 목록을 교체하며 픽업 메뉴가 화면에서 빠졌고, 04-06 [#3925](https://github.com/Innvoaid/dentlink-client/pull/3925)에서 기존 메뉴 파일과 호출이 삭제됐습니다. 현재 기본 브랜치에는 두 클릭 경로가 없습니다. 과거 구현 누락이 아닌 화면 개편에 따른 중단입니다. 읽기 전용 확인으로 Notion 두 행은 미작업을 유지합니다.
