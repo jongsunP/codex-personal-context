@@ -21,6 +21,11 @@ Check this folder first when finding or continuing local projects.
 
 ## Projects
 
+### Dentlink Amplitude 이벤트 확인 — DL-17604
+
+- Frankie 담당 이벤트의 웹·치과앱·기공소앱 코드 선언 및 실제 호출 여부를 별도 조사 세션에서 확인한다. 현재는 제품 코드와 Jira/Notion 변경 없이 읽기 전용이다.
+- [조사 체크포인트](projects/dentlink-amplitude-event-audit-dl17604.md)
+
 ### Dentlink 주문 상태 표시 정합성 — DL-17303
 
 - 주 상태 `status`와 제작 하위 상태 `detailStatus`의 우선순위 및 목록·상세 표시를 웹·Office·Lab에서 대조한다. 기존 지연 라벨 작업과 구분한다.
