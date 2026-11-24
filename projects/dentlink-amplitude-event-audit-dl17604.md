@@ -1,5 +1,9 @@
 # Dentlink Amplitude 이벤트 확인 — DL-17604
 
+## 2026-11-24 PR #4945 CodeRabbit 리뷰 처리
+
+주문 상태가 선택값인 점에 대한 지적 1건을 확인했습니다. 치과 웹 데스크톱·모바일에서 상태가 있는 경우와 없는 경우를 각각 실제 클릭 핸들러와 Amplitude SDK 전송 직렬화로 검증했습니다(fetch 대체). 네 경우 모두 이벤트 1회 및 주문 상세 이동을 유지했고, status가 없으면 전송 JSON에서 orderStatus만 생략됐습니다. 코드 수정 없이 [검증 결과로 답변](https://github.com/Innvoaid/dentlink-client/pull/4945#discussion_r4675006727)하고 스레드를 해결했습니다. 종료 시 미해결 0건, PR OPEN·사람 리뷰 대기, head 220694014입니다.
+
 ## 2026-11-24 치과 웹 orderStatus 후속 구현
 
 치과 웹 홈 주문 목록의 기존 `order_main_click` 호출 두 곳에 클릭한 주문의 `status`를 `orderStatus`로 추가했습니다. 데스크톱 목록과 모바일 웹 카드가 대상입니다. 기존 주문 상세 이동 및 기공소 분기는 유지됩니다. 웹 기본 checkout에서 `origin/master@96bdacda6` 기반 `feat/DL-17604@220694014`로 커밋·푸시했습니다. [PR #4945](https://github.com/Innvoaid/dentlink-client/pull/4945)는 `release/v1.95.0` 대상 OPEN(일반 리뷰)으로 확인했고 제품 diff는 파일 하나에 두 줄입니다.
