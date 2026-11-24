@@ -1,5 +1,9 @@
 # Dentlink Amplitude 이벤트 확인 — DL-17604
 
+## 2026-11-24 주문 목록 픽업 2개 이력 확인
+
+치과 웹 기존 주문 목록은 오늘 픽업이 없으면 Pickup 버튼에서 `pickup_orderlist_click`을, 있으면 View Details에서 `viewdetails_orderlist_click`을 호출했습니다. 2026-01-09 [#3636](https://github.com/Innvoaid/dentlink-client/pull/3636)에서 두 이름이 추가됐습니다. 03-26 [#3836](https://github.com/Innvoaid/dentlink-client/pull/3836)에서 주문 목록을 교체하며 픽업 메뉴가 화면에서 빠졌고, 04-06 [#3925](https://github.com/Innvoaid/dentlink-client/pull/3925)에서 기존 메뉴 파일과 호출이 삭제됐습니다. 현재 기본 브랜치에는 두 클릭 경로가 없습니다. 과거 구현 누락이 아닌 화면 개편에 따른 중단입니다. 읽기 전용 확인으로 Notion 두 행은 미작업을 유지합니다.
+
 ## 2026-11-24 후속 반영 완료
 
 사용자 지시에 따라 진행률은 현재 코드에 해당 이벤트 호출이 있는지로 맞췄습니다. 확인 요청은 Frankie에게 점검을 맡긴 상태이고, 호출 미발견은 미작업입니다. 27개 확인 요청과 기존 미작업 2개를 개발 완료로, 치과 주문 목록의 `pickup_orderlist_click`·`viewdetails_orderlist_click`을 개발 완료에서 미작업으로 바꿨습니다. 기존 미운영 중복 행은 유지했습니다. 최종 88행은 **개발 완료 85 · 미작업 2 · 미운영 1 · 확인 요청 0**입니다.
