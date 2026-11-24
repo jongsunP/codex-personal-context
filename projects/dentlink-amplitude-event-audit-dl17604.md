@@ -1,5 +1,11 @@
 # Dentlink Amplitude 이벤트 확인 — DL-17604
 
+## 2026-11-24 후속 반영 완료
+
+사용자 지시에 따라 진행률은 현재 코드에 해당 이벤트 호출이 있는지로 맞췄습니다. 확인 요청은 Frankie에게 점검을 맡긴 상태이고, 호출 미발견은 미작업입니다. 27개 확인 요청과 기존 미작업 2개를 개발 완료로, 치과 주문 목록의 `pickup_orderlist_click`·`viewdetails_orderlist_click`을 개발 완료에서 미작업으로 바꿨습니다. 기존 미운영 중복 행은 유지했습니다. 최종 88행은 **개발 완료 85 · 미작업 2 · 미운영 1 · 확인 요청 0**입니다.
+
+Office 웹 포털의 내보내기·새로고침·기본 화면 변경은 웹 화면의 실제 트래킹과 앱의 화면/딥링크/WebView 경로를 다시 대조했습니다. `advanced_export_button_click`, `export_button_click`, `refresh_data_button_click`, `default_view_click`의 접속 환경을 APP에서 WEB으로 정정했습니다. 변경한 진행률 31행과 해당 플랫폼 4행을 Notion에서 개별 재조회했습니다. 속성·호출 시점·문서 불일치·주문 상세 중복 가능성은 이번에 다루지 않기로 했습니다. 제품 코드나 Jira 변경은 없습니다. 아래 표의 진행률과 플랫폼은 변경 전 조사 기록입니다.
+
 ## 2026-11-24 코드 조사 결과
 
 Frankie 담당 88행의 고유 이벤트명 87개 중 85개에서 웹 또는 앱의 실제 호출을 확인했습니다. 두 제품 행에 있는 `messagesend_click`은 같은 웹 전송 버튼을 가리킵니다. 선언만 확인된 이름은 없습니다. [Jira DL-17604](https://innovaid.atlassian.net/browse/DL-17604) · [Notion 이벤트 표](https://app.notion.com/p/innovaid/1aece072e82f8082b52ce49e409d3f6d?v=1b6ce072e82f80749708000cadc7e1a2)
@@ -130,7 +136,7 @@ Notion 작업자 속성에서 Frankie(박종선)가 지정된 행을 진행률 �
 | --- | --- | --- | --- | --- |
 | [messagesend_click](https://app.notion.com/1face072e82f8069931dce2d90860ccf) | Lab / WEB | 미운영 행 · 동명 호출 | 기공소 웹 전송 버튼의 공통 호출에 orderId(문자열)와 sendBy가 있습니다. 실제 sendBy는 LAB(표는 Lab)이며 Enter 전송에는 이 호출이 없습니다. Notion 미운영 행이며 다음 행과 같은 호출입니다. | [웹 LinkTalkInput L303](https://github.com/Innvoaid/dentlink-client/blob/96bdacda626443fcdede93e0b6c82dcd8c8fe1cd/shared/ui/src/LinkTalkUI/parts/LinkTalkInput/LinkTalkInput.tsx#L303) · [웹 LinkTalkInput L294](https://github.com/Innvoaid/dentlink-client/blob/96bdacda626443fcdede93e0b6c82dcd8c8fe1cd/shared/ui/src/LinkTalkUI/parts/LinkTalkInput/LinkTalkInput.tsx#L294) · [웹 LinkTalk L145](https://github.com/Innvoaid/dentlink-client/blob/96bdacda626443fcdede93e0b6c82dcd8c8fe1cd/lab/src/components/LinkTalk/LinkTalk.tsx#L145) |
 
-## 다음 시작점
+## 최초 조사 시점의 다음 시작점
 
 코드 대조는 완료했습니다. 제품 코드·팀 문서·Jira·Notion 상태는 변경하지 않았습니다. 이후 상태 갱신을 요청하면 위 표에서 지정 제품과 실제 호출이 일치하는 행을 기준으로 보고, 호출 미발견 2개와 APP 지정 4개는 구분합니다.
 
