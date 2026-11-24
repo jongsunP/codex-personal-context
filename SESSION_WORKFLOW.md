@@ -398,9 +398,11 @@ small task.
    active writing session per product worktree, and keep web/app Git histories
    independent. A folder decision never authorizes overwriting another task.
 6. Apply [New Session Model And Reasoning Default](AI_WORKFLOW.md#new-session-model-and-reasoning-default)
-   before creating the session: explicitly pass the selected `model` and
-   `thinking`, then verify the actual applied values. A small task or a new
-   project folder does not justify reducing the model or reasoning level.
+   before creating the session: check the main session's current selection,
+   explicitly pass matching `model` and `thinking`, then verify the actual
+   applied values. Do not use fixed maximums or old turn settings. If current
+   values cannot be verified or matched, ask before creation. Task size or a
+   new project folder does not justify independently changing either setting.
 7. Apply **Phone Remote Continuity** below: verify the new session's normal
    registration, project, host, and initial turn, then save its initial
    Git-backed checkpoint without waiting for a separate memory request.

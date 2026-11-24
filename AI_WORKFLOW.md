@@ -26,7 +26,7 @@ Jira, reporting, both-sides recording) are unchanged.
 | `~/.codex` local guidance via `setup-local-codex.sh` | `~/.claude/CLAUDE.md` (global, Git-synced via `claude-personal-context`) points to this repository's read order; it does not copy rules |
 | Codex runtime memory | Claude memory under `~/.claude/projects/<folder-key>/memory`, kept in sync with this repository |
 | Main session folder `Documents/ChatGPT/메인 프로젝트` | The folder that holds the product repositories, itself not a Git repository: `/Users/parkjongsun/repository` on the home Mac, `/Users/parkjongsun/Repository` on the office Mac (same memory key, case-insensitive). One main session per agent; see `projects/dentlink-fe.md` Session Ownership |
-| New session `model` + `thinking` passed explicitly | `start_session` inherits the main session's model and effort when `model`/`effort` are omitted (the tool only allows equal or lower). Omit them, then verify with `get_session`. Do not rely on the app's default model setting, which can differ |
+| New session uses the main session's currently selected `model` + `thinking` | Verify the main session's current selection first. `start_session` inherits its model and effort when `model`/`effort` are omitted (the tool only allows equal or lower); use that inheritance and then verify with `get_session`. Do not substitute an app default, fixed maximum, or stale session setting |
 | Session ID / registration check | `start_session` result + `get_session` / `list_sessions {"linked": true}` |
 | Delegate then stop polling | Same. The app notifies the main session when a started session ends its turn; do not poll |
 | Feature worktree + `feat/<Jira>` branch | Create the branch and worktree with Git yourself, then `start_session` with `cwd` = `~/Repository` (home Mac `~/repository`; user default since 2026-11-20 for every new session unless the user names another folder) and `use_worktree: false`, naming the worktree's absolute path in the brief. Repo CLAUDE.md, the PR E2E-guard hook and repo skills do not auto-load there, so the session reads the repo CLAUDE.md itself and runs the E2E guard steps before a PR. Do not let the tool create a branch (its prefix setting adds a suffix). The app `branch_prefix` was set to `feat` as a safety net |
@@ -65,30 +65,34 @@ Use multiple Codex sessions when separation improves ownership and context:
 ### New Session Model And Reasoning Default
 
 This is the user's standing preference for newly delegated work sessions,
-confirmed on 2026-10-06. It applies across projects unless the user explicitly
-selects a different model or reasoning level for the task.
+updated on 2026-11-24. It replaces the earlier highest-available fallback and
+applies across projects unless the user explicitly selects different settings
+for the task.
 
-- Prefer the main/coordinating session's verified current model **and**
-  reasoning level. Read the actual session settings; do not assume that a
-  new session inherits them or permanently hardcode today's model name.
-- When the same combination is unavailable or cannot be established, select
-  the highest-capability model available at the destination and its highest
-  supported reasoning level. Check current supported combinations rather
-  than inferring capability from a model name or list order.
+- Before each creation, verify the main/coordinating session's **currently
+  selected model and reasoning level**, including the user's latest changes,
+  and match both exactly. Do not use a fixed model, a fixed maximum effort,
+  an app-wide default, or a value remembered from a previous session creation.
+- Prefer live session settings. A prior turn's execution metadata may predate
+  a UI setting change and is not proof of the current selection. If the
+  current selection cannot be verified, or the destination cannot apply it,
+  explain the specific limitation and ask which settings to use before creating
+  the session. Do not automatically substitute the highest available model or
+  reasoning level.
 - Explicitly pass both `model` and `thinking` when creating a work session.
   Omitting them applies the user's app defaults, which may differ from the
   main session. The user's standing instruction authorizes this selection;
   do not ask again for each already-authorized new session.
-- Do not lower model capability or reasoning to save time or cost, or because
-  a task appears small, unless the user asks. For internal delegated agents,
-  preserve the main session's settings when inheritance is supported.
+- Do not independently raise or lower either setting for task size, cost, or
+  speed. For internal delegated agents, preserve the main session's settings
+  when inheritance is supported.
 - After creation, verify the actual applied model and reasoning using
   available session metadata. Distinguish the requested settings from the
   verified settings if verification is temporarily unavailable. If the tool
   cannot apply the required combination, report the limitation instead of
   silently using a lower/default setting.
-- This creation default does not change existing sessions or global app
-  settings without a separate user request.
+- This update applies to future creation only. Keep already-created sessions
+  and global app settings unchanged unless the user separately requests it.
 
 ## Context Hierarchy
 

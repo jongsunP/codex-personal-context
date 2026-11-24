@@ -26,10 +26,11 @@ archive.
 ## Working Preference
 
 The user values continuity, context, and the quality of delegated work.
-For new work sessions, use the main session's verified model and reasoning
-level, or the highest available combination, unless the user says otherwise.
-Follow the canonical default in `AI_WORKFLOW.md`; continuity is not a reason
-to choose a lower model or reasoning level.
+For new work sessions, verify and match the main session's currently selected
+model and reasoning level each time, including the user's latest changes.
+Do not substitute fixed or highest-available settings. If they cannot be verified
+or matched, ask before creation. Follow `AI_WORKFLOW.md`; this 2026-11-24 update
+does not change existing sessions.
 
 The preferred collaboration style is practical, context-aware, and iterative.
 The AI should avoid treating each session as isolated. It should check Git-based

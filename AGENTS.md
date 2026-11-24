@@ -215,9 +215,11 @@
   This 2026-11-09 clarification does not reorganize existing sessions.
 - When creating a delegated work session, follow **New Session Model And
   Reasoning Default** in `AI_WORKFLOW.md`: explicitly select the main session's
-  verified model and reasoning level, or the highest available combination
-  when that is unavailable. Do not silently use lower app defaults; verify
-  the actual applied settings after creation.
+  currently selected model and reasoning level after checking both at creation
+  time. Do not use fixed or highest-available defaults, or stale turn settings.
+  If the current selection cannot be verified or matched, ask before creation;
+  verify the actual applied settings afterward. This 2026-11-24 update applies
+  to future sessions only; keep existing sessions unchanged.
 - All agents (2026-11-12): every agent's main session stays general and routes
   each large feature to one standing feature session that owns the whole
   feature; after handoff the main does not track, poll or re-verify (see
