@@ -1,5 +1,11 @@
 # Dentlink Amplitude 이벤트 확인 — DL-17604
 
+## 2026-11-24 치과 웹 orderStatus 후속 구현
+
+치과 웹 홈 주문 목록의 기존 `order_main_click` 호출 두 곳에 클릭한 주문의 `status`를 `orderStatus`로 추가했습니다. 데스크톱 목록과 모바일 웹 카드가 대상입니다. 기존 주문 상세 이동 및 기공소 분기는 유지됩니다. 웹 기본 checkout에서 `origin/master@96bdacda6` 기반 `feat/DL-17604@220694014`로 커밋·푸시했습니다. [PR #4945](https://github.com/Innvoaid/dentlink-client/pull/4945)는 `release/v1.95.0` 대상 OPEN(일반 리뷰)으로 확인했고 제품 diff는 파일 하나에 두 줄입니다.
+
+두 주문 상태를 사용해 치과 데스크톱·모바일 웹과 기공소 분기의 실제 핸들러를 분리 실행한 6가지 사례에서 인자와 이동 ID를 확인했습니다. 누락된 로컬 패키지 링크와 타입 캐시 복구 후 Clinic·Lab·Admin 타입 검사를 포함한 커밋·푸시 훅을 통과했습니다. 별도 shared/ui 패키지 타입 검사에는 변경 전후 동일한 기존 진단 628개가 있습니다. E2E 가드 NO_IMPACT, 실서버·화면 E2E·실제 수집은 미검증입니다. 다음 단계는 PR 리뷰입니다.
+
 ## 2026-11-24 픽업 2행 미운영 반영과 홈 주문 속성 요청
 
 사용자 승인으로 `pickup_orderlist_click`·`viewdetails_orderlist_click`의 Notion 진행률을 미작업에서 미운영으로 변경하고 각각 재조회했습니다. 앞선 88행 집계에 반영하면 개발 완료 85, 미운영 3입니다.
