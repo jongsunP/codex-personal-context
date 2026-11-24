@@ -23,7 +23,7 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 기공소 목록 라벨·스티커 출력 — DL-17549·DL-17565
 
-- 주문목록 선택 출력과 배송목록 일괄 출력을 한 세션에서 다룬다. 메인 워크트리의 `feat/DL-17583` 하나에서 건별 커밋으로 진행한다. 1·2번 구현·푸시 완료·실기기 대기. 3번은 목록 체크 선택 방향 합의, 페이지 간 선택 확인·제외 UI 논의 중이며 구현 보류다.
+- 주문목록 선택 출력과 배송목록 일괄 출력을 한 세션에서 다룬다. 메인 워크트리 `feat/DL-17583` 하나에서 건별 커밋. 1·2번 푸시·실기기 대기. 3번은 기존 목록에 체크/출력 UI 추가, 페이지 이동 시 선택 유지·F5 초기화 방향. 세부 UI는 논의 중이며 사용자 요청으로 메모리만 저장 후 구현 보류·대기한다.
 - [작업 체크포인트](projects/dentlink-lab-batch-label-print.md)
 
 ### Dentlink Amplitude 이벤트 확인 — DL-17604
