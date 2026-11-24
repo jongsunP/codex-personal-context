@@ -21,6 +21,11 @@ Check this folder first when finding or continuing local projects.
 
 ## Projects
 
+### Dentlink 기공소 목록 라벨·스티커 출력 — DL-17549·DL-17565
+
+- 주문목록 선택 출력과 배송목록 일괄 출력을 한 세션에서 다룬다. 현재는 기본 사실 확인 후 사용자와 단계별로 계획하며 구현은 시작하지 않는다.
+- [작업 체크포인트](projects/dentlink-lab-batch-label-print.md)
+
 ### Dentlink Amplitude 이벤트 확인 — DL-17604
 
 - Frankie 담당 이벤트의 웹·치과앱·기공소앱 코드 선언 및 실제 호출 여부를 별도 조사 세션에서 확인한다. 현재는 제품 코드와 Jira/Notion 변경 없이 읽기 전용이다.
