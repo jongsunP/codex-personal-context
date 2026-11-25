@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-25 URL 전체 재검토 — 시트 수정 대상 6셀 확인, 외부 변경 없음
+
+- 사용자는 크레딧 일부 확인이 아니라 시트 전체 URL/employerId 일관성과 앱·웹 주소 호환성을 요구했다. 앞선 답변 범위가 부족했음을 밝히고 재검토했다. 현 시트 `전체 알림(PM)` A1:P175, `기본 알림(사용자 수신 설정X)` A1:P109의 모든 기입 URL을 대조했다. 다른 탭은 header/설명 확인상 URL 정본이 아니다.
+- 기입 APP 110셀(서로 다른 문자열20종), WEB 65셀(12종). 양앱의 실제 `getDeepLinkConfig`/`matchDeepLinkRoute`를 TypeScript transpile 후 메모리에서 실행하여 각 행의 수신 제품·대표 식별값으로 매칭하고, WEB은 해당 서비스의 Next pages 전체와 대조했다. 부가 동작은 Lab EXTRA_FEE 탭 WebView 전달, CasePreference literal flag, Office 배송추적/피드백 상세, 개인/병원 크레딧, Lab 밀링 orderNo 조회/전환 경로까지 확인했다. 서비스별 `${scheme}` 치환은 명세상 전제이며 BE 실제 치환/운영 발송 검증은 아니다.
+- **시트 수정 대상:** `전체 알림(PM)` P132/P137/P139/P141의 `${schme}` → `${scheme}` 표기 오타 **4곳**. 이전 P141 한 곳만 언급한 답변은 전체 집계가 아니었다. P127/P128은 LAB 수신·추가예정 `FEEDBACK_SUBMITTED_REMINDER`인데 `dentlink://order/...`(Office)로 기입돼 있어 `dentlink-lab://order/...`로 맞춰야 하는 **2곳**이다. 기존 상용 장애로 단정하지 않는다.
+- 위 6셀 외 기입 주소에서 추가 route/path·수신 제품 불일치는 찾지 못했다. 실제 발송 payload의 ID 제공 여부, 데이터/권한, 전체 화면 runtime 성공까지 검증한 것은 아니다. 비어 있는 MAIL/CHAT 경로, 공지성 NOTIFICATION, 밀링 월별청구 추가예정 행은 현재 유효 URL 오류와 구분한다. 기본 알림23/25의 APP 공란은 기존 미기입 범위이며 새 화면/랜딩 개발로 확대하지 않는다.
+- 이번 공지 푸시68행 APP URL은 여전히 공란이다. PM의 수신 소속 센터 정책에 맞게 `dentlink-lab://notifications?employerId=${employerId}` 계약을 정리해야 한다. NOTIFICATION67행의 null appLandingUrl까지 센터 자기 링크로 바꾸자는 요청은 아니다. 모든 URL에 employerId 일괄 추가는 불필요하나, 이번 센터는 ID 없으면 현재 소속이 열려 대상 소속을 보장하지 못한다.
+- 코드·시트·Jira 수정, 제품 commit/push/PR, 설치/서버/기기 실행 없음. 기존 로컬 구현 상태 보존. **시트 전체 이상 없음으로 회신하면 안 되며, 6셀 정리와 이번 푸시 URL 확정/반영이 남는다.** 사용자에게 요청한 3항 형식으로 사실대로 답변한다.
+
 ## 2026-11-25 최신 댓글·최종 기준 시트 재검토 — URL별 소속 의미 구분
 
 - 사용자 요청은 내용 파악부터다. 최신 댓글20개(전체49개 중 이번 논의 포함), 실제 Google Sheets의 `전체 알림(PM)` A1:P175·`기본 알림(사용자 수신 설정X)` A1:P109 및 양앱 현 코드를 읽었다. 제품 코드·Jira·시트는 수정하지 않았다. 자동 폴링하지 않는다.
