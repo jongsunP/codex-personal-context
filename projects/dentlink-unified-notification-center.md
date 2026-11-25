@@ -9,7 +9,34 @@
 - live 원격/fetch: `origin/master`=`9084878eaa93ea4fe39df0f376afa4456c5fec55`, `origin/release/v1.95.0`=`b0e04eafe00e86836f472bea114e5fce867b4cad`. 기본 규칙에 따라 최신 master에서 새 `feat/DL-16140-history-followup`를 준비한다. 기존 원격 feat/DL-16140 계열은 재사용/삭제하지 않는다. master와 release는 ancestry 3/3이며 해당 어드민·메시지 경로 diff는 없다. 향후 PR 시 전체 diff를 확인하고 관계없는 release 동기화는 임의 실행하지 않는다.
 - 선행 준비: 생성 도구로 웹 worktree 생성·브랜치 검증, 동일 저장소 main의 eligible ignored/untracked `.env*` 불투명 복사·동일성 확인, 확정된 API 계약과 실제 소비 타입/화면/CSV 연결 대조, null/과거 데이터 및 기존 필드 보존 검증계획 정리. 아직 UI 표시 열·문구·필터·앱 기본 랜딩을 임의 구현하지 않는다. 생성 모델 파일 수동 편집 금지, 필요 타입 변경은 생성 워크플로와 FE 파생 타입 경계를 따른다.
 - PM 질문은 개발 용어 없이 A기공소 주문→B기공소 변경→A에 안내 푸시가 도착하는 사례로 공유했다. 결정할 것은 (1) 앱 사용 중/종료 후 진입을 포함해 그대로 유지 또는 알림센터 등으로 이동, (2) 어드민 웹알림·앱푸시·이메일 이력에 필요한 표시 정보다. 이메일 읽음은 이번 계약에 없다. 치과/기공소 PC·모바일웹 알림함의 UI 변경은 현재 범위에 없다.
-- 다음 시작: 이 문서의 댓글45295/45301 검토 근거와 댓글45306/45307을 함께 읽고 작업 준비를 마친 뒤 해당 새 세션에서 사용자에게 보고·정책 대기한다. 메인은 등록과 전달만 확인하며 이후 추적·중복 검증하지 않는다.
+- 준비 완료: managed worktree `/Users/parkjongsun/.codex/worktrees/notification-history-followup/dentlink-client`, 실제 브랜치 `feat/DL-16140-history-followup`, HEAD `9084878eaa93ea4fe39df0f376afa4456c5fec55`. `create_worktree` 등록 성공 및 이 채팅의 cwd 연결을 확인했다. 주 checkout의 출력 작업은 그대로 두고 새 worktree만 사용한다. 제품 추적 파일 변경 0, 제품 commit/push/PR 없음.
+- env 상속: 같은 저장소 주 worktree에서 eligible ignored/untracked 6개(`admin/.env.development`, `clinic/.env.development`, `e2e/.env.development`, `e2e/.env.staging`, `lab/.env.development`, `lab/.env.local`)를 내용 열람 없이 독립 복사했다. 파일별 byte equality·ignore·untracked·독립 inode·제한된 접근 권한을 확인했다. 서버/브라우저/앱/의존성 설치/테스트는 실행하지 않았다.
+- 다음 시작: 사용자가 PM 답변을 전달하면 **어드민 표시/CSV 범위와 앱 사용 중·종료 후 푸시 진입 정책**을 확정하고, 필요한 BE 타입/대상 환경 계약을 확인한 뒤 구현 범위를 정한다. 준비는 완료했으며 이 채팅에서 대기한다. 자동 댓글 조회·메인 재보고·기존 보관 세션 재개 없음.
+
+### 준비 결과 — 소비 타입·최소 변경안 (미구현)
+
+- 타입 경로: `shared/models/index.ts`의 `MessageTypes`/`MessageApisAdmin` → `shared/models/src/message/message.types.ts`의 `NotificationListDto = NotificationListAdminDto`, `PushListDto = PushListAdminDto`; 이메일은 수기 `EmailListDto`. `message.apis.admin.ts`는 `ApiResponseDto<각 DTO[]>`를 그대로 반환하고 `admin/src/lib/Message/useMessageSmsQueries.ts`가 소비한다. 목록 API/query/cache 변경은 필드 표시만으로 필요하지 않다.
+- 생성 경로: 루트 `pnpm generate:api-type` → `@dentlink/models`의 `swagger-typescript-api generate`, 기본 입력 `https://dev-api.dentlink.io/v3/api-docs`, 출력 `shared/models/src`. 현재 체크인 `data-contracts.ts`의 해당 DTO에는 신규 필드가 없다. 이번에는 생성 명령·live Swagger/실제 업무 API 조회를 하지 않았으며, 실제 환경 반영·정확한 자료형/enum/requiredness는 미확인이다. 신규 필드의 이름과 아래 BE null 조건만 확정 계약으로 유지한다.
+- 최소 타입 변경 후보는 `shared/models/src/message/message.types.ts`다. 구현 승인 후 대상 환경의 Swagger 또는 BE 확정 계약에 맞춰 기존 생성 타입을 기반으로 FE 파생 타입을 확장한다. 재생성이 필요한 경우 생성 결과를 수동 보정하지 않고, nullable 차이는 기존 `notifications.types.ts`의 `Omit` 기반 파생 패턴처럼 FE 계층에서 처리한다. 다른 채널의 `MailTemplateType`을 푸시/웹알림 enum으로 임의 재사용하거나 `deliveryId`의 숫자/문자열 타입·날짜 형식을 추정하지 않는다. `shared/models/index.ts`의 기존 export 경계는 재사용한다.
+
+| 파일 | 정책 확정 후 가능한 최소 변경 |
+| --- | --- |
+| `admin/src/lib/Message/useMessageNotificationFields.tsx` | 승인된 신규 웹알림 컬럼만 추가. 기존 `isRead`, 수신자·제목/내용·서비스·웹 랜딩·발송일 보존 |
+| `admin/src/lib/Message/useMessagePushFields.tsx` | 승인된 읽음/추가 정보 컬럼만 추가. 발송 상태·OS·기존 deeplink 보존 |
+| `admin/src/lib/Message/useMessageEmailFields.tsx` | 승인된 `eventType`을 `csvColumns`/이를 펼치는 표에 반영. 이메일 읽음 기능 추가 안 함 |
+| `admin/src/pages/notifications/{web,app-push,email}/index.tsx` | 기존 query/페이지네이션/권한/미리보기 연결 유지. CSV용 표시값 변환이 별도 승인되는 경우에만 로컬 연결 변경 검토 |
+
+- CSV 확인점: 웹알림·앱푸시 목록은 표와 같은 `columns`, 이메일은 별도 `csvColumns`를 넘긴다. `DataGrid/DataFunctions.tsx`는 원본 data와 `field/csvKey`를 `CSVLink`에 넘기며 `render`/`isDate`를 실행하지 않는다. 따라서 화면의 읽음 문구·날짜 포맷과 CSV 원시값은 별개다. 신규 CSV 열/값 형식/빈값 정책을 확인하고, 전역 exporter 변경으로 확대하지 않는다. 기존 다운로드는 현재 조회한 페이지의 data 기준이며 전체 다운로드로 바꾸지 않는다.
+- 기존 화면의 일반 null/undefined/빈 셀은 `DataGrid/dataList.utils.ts`에서 `-`로 표시한다. 날짜는 공용 `formatDate`와 Admin 날짜 포맷을 사용한다. 현재 웹알림의 읽음 renderer는 `undefined`만 별도 처리하므로, 신규 푸시 읽음 값의 미존재/null을 false로 간주하지 않도록 계약 확인이 필요하다. 새로운 빈값 문구는 임의 확정하지 않는다.
+- 공용 DTO를 쓰는 `admin/src/components/CRM/CrmNotificationTimeline.tsx`와 `admin/src/components/Notification/EmailPreviewModal.tsx`는 회귀 확인 대상이다. 이번 표시 요구가 이 화면까지 확정된 것은 아니므로 UI 확장 대상에 자동 포함하지 않는다. 기존 검색 필터와 `Find*ListQuery`도 그대로 유지한다.
+
+### 후속 검증 계획·Jira 경계
+
+- 계약: 대상 BE 환경의 세 GET 응답/명세에서 자료형·requiredness·enum·시간대 표현을 확인한다. `appLandingUrl=null`, 미읽음 `readAt=null`, 구 발송분 `templateType/eventType/deliveryId=null`, 폐기/테스트 템플릿의 `eventType=null`을 구분하고 새 필터 지원은 별도 계약 없이는 추가하지 않는다.
+- 표시/CSV: 새 정상 데이터·미읽음 false·과거 null·필드 미존재·긴 값으로 표/CSV의 열·순서·원시값 또는 승인된 표시값을 확인한다. null 날짜를 epoch/현재 시각으로 만들거나 미확인을 안읽음으로 오인하지 않는지 확인한다. 기존 내용·랜딩 URL·사용자 링크·필터/페이지 이동·로딩/빈 목록·이메일 미리보기·MESSAGE READ 권한 및 공용 DTO 소비 화면의 기존 동작을 보존한다.
+- 구현 후 검증은 변경 파일 lint, `pnpm --filter dentlink-admin-web type`, `pnpm check:admin-dlos`와 영향 범위 화면/CSV 확인을 기본으로 한다. 공용 타입의 실제 영향이 있으면 해당 소비 제품까지 타입 확인한다. PR 승인 시에만 저장소 E2E 영향 가드와 release 전체 diff를 확인한다. 이번 준비에서 실행 검증을 했다고 기록하지 않는다.
+- 앱은 메인의 11/25 정적 조사 결과를 재사용했다. title/body 유지+data.deeplink 생략 호환성은 확인 범위이나 신규 payload 발송·양OS runtime·서버 읽음 성공은 미검증이다. PM이 이동 정책을 바꾸면 양앱 최신 main·별도 앱 release·현재 상태/종료/로그아웃 뒤 진입·기존 딥링크 회귀를 각각 확인한다. 지금 앱 worktree/빈 카드를 만들지 않는다.
+- 현재 Atlassian 커넥터의 Innovaid 접근을 확인하고 DL-16140의 하위/연결 목록 및 열린 자식·관련 제목 검색을 읽었다. 확인 범위에서 이번 후속에 맞는 열린 제품 카드는 없었다(검색의 다른 발송/딥링크 카드는 별개 작업). 확정 후 어드민 작업 카드부터 구체화하고 앱 카드는 실제 이동 변경이 필요할 때 제품별로 준비한다. 이번 Jira 생성/수정/상위 댓글 게시 없음.
 
 ## 2026-11-25 추가 계약 안내 검토 — 댓글45301
 
