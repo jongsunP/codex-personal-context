@@ -31,6 +31,7 @@
 
 ## 재발 방지
 
+- 사용자 최종 지적: 핵심 실패는 경고 현상이 아니라 에이전트의 불필요한 구조 확대·반복 시도·검증되지 않은 해결 약속이었다. 공통 Proportionate Troubleshooting을 따르며 같은 낭비를 재현하지 않는다.
 - 세션 묶음, 채팅 cwd, 개인 기록 저장소, 제품 worktree를 구분한다. 단순 경로 경고 해결을 새 메인/개인 컨텍스트 복제 구조로 확대하지 않는다.
 - 당시 archive_worktree는 primary checkout 보호로, handoff_thread는 source checkout 탐색 실패로 거절됐다. CLI에서 보인 /cd 결과는 원래 앱 세션 변경 증거가 아니었다. 도구 제한을 우회하지 않았고 해결했다고 반복 단정한 안내는 잘못이었다.
 - `.zshrc`의 오래된 CODEX_BIN은 설치된 번들 CLI 경로로 수정·실행 검증했다. 이 수정은 유지하며 추가 shell 변경은 없다.

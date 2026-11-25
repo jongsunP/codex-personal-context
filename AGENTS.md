@@ -261,6 +261,12 @@
   intended scope or need for extra calls is ambiguous, ask the user first and
   wait before starting that extra work. Do not ask again for clearly authorized
   necessary execution or verification.
+- Follow **Proportionate Troubleshooting** in `SESSION_WORKFLOW.md`: preserve
+  working structures, choose the smallest evidence-backed remedy, and stop a
+  failing route when no new evidence supports another attempt. Do not turn
+  simple configuration issues into replacement chats, duplicate repositories
+  or speculative chains of work. A user-approved proposal still requires sound
+  judgment; report capability limits and incomplete results accurately.
 - Shared project code, commits, pushes, and PR mutations require the user's
   explicit authorization. Personal memory maintenance in
   `codex-personal-context` is different: at meaningful session closeout, commit

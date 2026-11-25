@@ -213,6 +213,36 @@ project and session, not only main-session handoffs or deployment checks.
   The user confirmed this boundary on 2026-11-05: leave messages already sent
   as they are, and do not send a correction or follow-up unless asked.
 
+## Proportionate Troubleshooting
+
+User correction, 2026-11-25: the failed main-session recovery was a failure of
+the agent's approach, not merely an unusual warning. Apply these rules across
+all projects and administrative work:
+
+- Identify the requested outcome and the failing layer before changing state.
+  Keep UI grouping, persisted chat cwd, Git registration and record storage
+  distinct. Inspect only the evidence needed to choose a remedy.
+- Preserve the working structure and choose the smallest supported change.
+  Do not expand a path/configuration problem into session replacement,
+  repository duplication, migration or a new operating model merely because
+  the first tool is inconvenient.
+- A repeated failure with no new evidence, or a confirmed capability limit,
+  ends that route. Do not repeat equivalent calls, chain speculative fallbacks,
+  or create more helper chats/worktrees to keep the attempt going. A different
+  approach needs concrete evidence that it addresses the actual blocker.
+- Before creating temporary resources, establish why they are necessary and
+  how they can be removed without disrupting existing work. User agreement to
+  an agent-proposed workaround does not make that workaround well justified;
+  the agent remains responsible for a proportionate recommendation.
+- State confirmed limitations promptly and accurately. If proceeding requires
+  a materially different scope or user action, explain the exact blocker and
+  the smallest evidence-backed choice once. Do not repeatedly promise a fix
+  before confirming the required capability or ask the user to approve each
+  step of a speculative sequence.
+- Verify the requested result with a focused check, distinguish partial progress
+  from completion, clean up owned temporary resources, and stop. Further calls
+  require a remaining need or new evidence, not discomfort with stopping.
+
 ## Dentlink Frontend Top-Level Session Model
 
 Dentlink frontend work spans `dentlink-client` (Web/Admin), `dentlink-app`
