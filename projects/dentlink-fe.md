@@ -1,6 +1,14 @@
 # Dentlink Frontend Coordination
 
-## 신규 worktree 루트 설정 완료·메인 경로 경고 미해결 — 2026-11-25
+## 메인 관리용 worktree 연결·운영 방식 변경 — 2026-11-25
+
+- 사용자가 메인에도 개인 컨텍스트 관리용 worktree를 두고 기존 무-worktree 운영 지침을 함께 수정하도록 승인했다. 제품 기능 구현·각 작업 세션 소유권과 분리한다. 메인 채팅 ID와 이력·프로젝트 소속·보관 해제 상태는 유지한다.
+- `create_worktree`로 `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`를 생성했다. 이 생성은 설정한 Worktree root 아래에 처음부터 만들어졌으며 사후 폴더 이동이 없다. 실제 폴더·Git 등록·메인 `read_thread`의 persisted cwd 일치를 확인했다. detached HEAD이며 제품 branch/코드/기존 작업 세션 변경 없음. env 상속 대상은 0개였다.
+- 기존 `/Users/parkjongsun/Repository/codex-personal-context`의 `main`을 개인 기록 수정·commit/push 정본 checkout으로 유지한다. 관리용 worktree는 안정적인 채팅 cwd이며, 기록 동기화 후 clean일 때 정본의 확인된 HEAD로 detached 전진한다. detached에 장기 기록 커밋을 남기거나 예상 밖 변경을 강제 reset하지 않는다.
+- 현재 턴에 이미 만들어진 실행기에는 옛 cwd가 남아 기본 경로 명령이 한 번 실패했다. 이후 이 턴 명령은 새 경로를 명시하며, 다음 턴의 기본 cwd는 갱신된 채팅 설정을 따른다. 단순 명령 workdir와 persisted cwd를 혼동하지 않는다.
+- AGENTS·SESSION_WORKFLOW 및 이 문서의 상시 역할을 새 구조에 맞춰 수정한다. 아래는 복구 전 시도 이력이며 현재 경로로 재사용하지 않는다.
+
+## 복구 전 시도 이력 — 신규 루트 설정 후 메인 경로 경고 — 2026-11-25
 
 - 사용자 범위: 기존 작업 세션은 그대로 유지하고 신규 세션부터 Repository 경로를 사용한다. 이번 메인세션의 경고는 별도로 복구 요청했다.
 - 공식 **설정 > Worktree > Worktree 루트**에 `/Users/parkjongsun/Repository`를 입력하고 **“Worktree 루트가 저장되었습니다.”** 알림과 저장값을 실제 UI에서 확인했다. 기존 작업 세션/checkout을 이동하거나 자동 삭제 설정을 변경하지 않았다. 신규 worktree 실제 생성은 아직 수행하지 않았으며 다음 승인된 생성에서 반환 경로·채팅 cwd를 확인한다.
@@ -409,9 +417,11 @@
 - 필요한 경우 프로젝트 폴더와 세션의 설정·연결·이동·정리를 맡는다.
   실제 폴더, 앱의 표시 이름·연결 경로, 기존 세션 소속·실행 경로를 각각 확인하고
   기존 세션 이력과 진행 중인 제품 작업을 보존한다.
-- 메인세션의 폴더는 `/Users/parkjongsun/Documents/ChatGPT/메인 프로젝트`다.
-  개인 조율·자료용 폴더이며 전용 제품 저장소나 worktree를 연결하지 않는다.
-  위 상시 역할은 2026-09-28 사용자가 재확인한 운영 원칙이다.
+- 메인세션의 앱 프로젝트 소속은 기존 메인 프로젝트 폴더를 유지한다.
+  2026-11-25 사용자 승인으로 실제 cwd는 Repository 아래 개인 컨텍스트
+  관리용 worktree를 사용한다(현재 경로는 최상단 체크포인트). 기존의
+  '메인에는 별도 worktree 없음' 방식은 이 지침으로 대체했다. 제품 작업용
+  checkout은 계속 각 기능 세션에 두며 메인을 다른 기능의 임시 준비 장소로 쓰지 않는다.
 - **2026-11-09 세션 배정 재확인:** 동일 기능·버그는 웹·Office·Lab을 한 기능 세션에서 관리하는 것이 기본이다. 제품별 목적·요구사항·일정·독립 책임 때문에 분리할 실익이 있을 때만 나눈다. 저장소·검증·PR·배포와 제품별 Jira 카드의 경계는 그대로 유지하며 카드 수가 세션 수를 결정하지 않는다. 상세 정본은 [업무 접수·세션 배정 지침](../SESSION_WORKFLOW.md#new-work-intake-and-session-routing)이다.
 - 기존 치과 웹·앱 완료/취소 주문 지연 라벨 두 세션은 사용자 지시대로 유지한다. 이번 지침 보완으로 기존 세션을 병합·재생성·보관하거나 완료 상태를 재조회하지 않는다.
 - Every code or Git mutation must still name and confirm the exact product

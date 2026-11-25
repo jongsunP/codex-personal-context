@@ -233,11 +233,27 @@ responsibilities rather than forcing the whole product into one checkout.
   Dentlink App Release And Delivery Policy below. Deprecated monorepo
   documents and workflow defaults do not override the current user policy.
 
-- Keep one Dentlink FE top-level management session in a personal coordination
-  folder, with no dedicated product checkout or worktree. It continuously owns
+- Keep one Dentlink FE top-level management session with a dedicated
+  **personal-context management worktree** under the device's approved
+  repository root as its stable working directory. The user approved this
+  operating-model change on 2026-11-25 to replace the no-worktree main-session
+  arrangement and repair a missing-cwd warning. This is not a product feature
+  checkout; product implementation worktrees remain owned by feature sessions.
+  It continuously owns
   cross-feature oversight, work intake, web/app impact classification, shared
   product and API decisions, priority, release/deployment tracking,
   implementation-session prompts, and final closeout.
+- The office main chat's management checkout is
+  `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`.
+  The existing `/Users/parkjongsun/Repository/codex-personal-context` on `main`
+  remains the canonical record-maintenance/commit/push checkout shared by
+  sessions. The management worktree is detached and supplies a stable cwd;
+  do not leave durable records as detached commits there. On meaningful
+  resume/closeout, sync the canonical checkout first, then advance this
+  management worktree to its confirmed HEAD only if it is clean, using
+  `git switch --detach <confirmed-SHA>`. Preserve and reconcile unexpected
+  local changes instead of resetting them. App project membership and its
+  saved display folder remain separate from this execution directory.
 - The main session maintains the Git-backed personal context and, when needed,
   sets up or organizes project folders and sessions. Verify actual folders,
   registered project paths, session membership, and execution directories
@@ -740,8 +756,9 @@ recovery and cleanup, not only to where folders are displayed.
 - For Codex managed worktrees, configure **Settings > Worktrees > Worktree
   root** to the device's approved root before creating new work. On the office
   Mac this was saved through the supported UI as
-  `/Users/parkjongsun/Repository` on 2026-11-25. Verify the actual returned path
-  on the next creation; a saved setting alone is not a completed worktree test.
+  `/Users/parkjongsun/Repository` on 2026-11-25 and the management-worktree
+  creation subsequently verified the root and persisted cwd. Verify the
+  returned path on every new setup; a saved setting alone is insufficient.
   Create/attach the checkout in its owning work chat, not in the general main
   chat for later transfer: `create_worktree` changes the caller's persisted
   cwd, and moving/removing its attachment may leave that cwd invalid. Do not
@@ -752,8 +769,8 @@ recovery and cleanup, not only to where folders are displayed.
   the new path, or successful commands with an explicit `workdir` is not
   proof that the chat's default directory changed. Read back the chat metadata
   and verify its directory exists before declaring setup complete. For a
-  coordination-only chat, verify its intended existing project directory
-  instead of attaching an arbitrary product worktree.
+  coordination-only chat, verify its approved personal-context management
+  worktree instead of attaching an arbitrary product worktree.
 - User report, 2026-11-25: after relocation a chat may show "현재 작업
   디렉토리가 없습니다" when an old directory reference remains. Treat this
   as an incomplete chat connection to fix through supported attachment/project

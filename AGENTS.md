@@ -239,7 +239,11 @@
   feature; after handoff the main does not track, poll or re-verify (see
   **Standing feature sessions and a general main** in `SESSION_WORKFLOW.md`).
 - For the Dentlink FE main session, follow **Dentlink Frontend Top-Level
-  Session Model** in `SESSION_WORKFLOW.md`: either do the authorized work here
+  Session Model** in `SESSION_WORKFLOW.md`: use a dedicated personal-context
+  management worktree under the approved repository root as its stable cwd
+  (user approval, 2026-11-25), while product implementation worktrees remain
+  owned by feature sessions. Keep personal-record commits in the canonical
+  context checkout as documented there. Either do the authorized work here
   or hand it off. Once session registration and prompt delivery are confirmed,
   stop automatic progress reads, polling and duplicate supervision. Let the
   assigned session execute and report; check again only when the user asks.
