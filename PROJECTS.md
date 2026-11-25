@@ -246,6 +246,7 @@ For detailed current state, read:
 
 ### Dentlink 주문 피드백 수집 / 관리자 피드백 목록
 
+- 11/25 관리자 썸네일 QA DL-17615는 별도 세션/worktree에서 처리한다. Sample Case 키워드 영향 검토 DL-17612의 완료 상태와 별개이며 현재 상태는 아래 정본 최상단을 따른다.
 - DL-15828과 후속 DL-16443·DL-16534의 계약·구현·QA·release/stage 전달 이력을 관리한다.
 - 배포 완료와 실제 화면 QA는 별도로 확인한다.
 - [projects/dentlink-client-order-feedback.md](projects/dentlink-client-order-feedback.md)

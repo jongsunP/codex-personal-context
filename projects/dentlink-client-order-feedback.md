@@ -5,6 +5,15 @@
 보존했다. 2026-09-28 구현·배포 이력과 아래 후속 코드 검토는 구분한다.
 재개 시 live Git과 필요한 Jira·Figma·Swagger를 우선하고, 기획·구현·검증·병합·배포를 구분한다.
 
+## 관리자 피드백 썸네일 QA 접수 — DL-17615 / 2026-11-25
+
+- 사용자 요청: [DL-17615](https://innovaid.atlassian.net/browse/DL-17615)를 확인하고 별도 세션·별도 worktree에서 처리한다. 기존 출력·알림 후속·배송 패널 작업 공간은 보존한다. 구현·검증 및 branch/worktree 준비 범위이며 제품 commit/push/PR/merge/배포는 별도 지시 경계다.
+- 카드: `[QA] 피드백 썸네일 수정`, Frankie 담당·해야 할 일·댓글 없음. 설명은 ‘관리자에서만 잘못 반영된 피드백 썸네일 수정’, 재현 URL은 `https://stg-admin.dentlink.io/feedbacks`. 상위는 DL-17290이며 DL-17612 Sample Case 키워드 검토와 별도 QA다. 현재 이 카드/상위에서 수정버전은 확인되지 않았으므로 이전 별도 작업의 v1.95.0을 이번 건의 확정 PR 대상으로 단정하지 않는다.
+- 첨부: 이미지32046 `screenshot-1795507947115.png`, 이미지32048 `image-20261124-081236.png`, 콘솔 로그32047. 메인은 메타데이터·본문까지만 확인했고 실제 이미지는 아직 열람하지 않았다. 담당 세션이 두 이미지를 반드시 보고 기대 썸네일과 문제 화면을 먼저 대조한다. 첨부를 못 보면 추정으로 교체하지 않는다.
+- 코드 시작점: `admin/src/components/Feedback/AdminFeedbackOrderSummary.tsx`는 `feedback.order.categoryThumbnailUrl`을 58px 이미지로 렌더하고 값이 없으면 문서 아이콘을 사용한다. 실제 원인이 필드/매핑/서버값/표현 중 어디인지는 미확정. `/feedbacks` 목록·상세와 공용 소비처, 치과의 정상 표시/기존 제품 이미지를 대조하고 원인에 맞는 최소 수정·검증을 한다. 공통 API/기공소앱/치과앱까지 임의 확장하지 않는다.
+- 준비 계획: `dentlink-client` 최신 `origin/master`에서 새 `feat/DL-17615`, 전용 managed worktree `dl-17615-feedback-thumbnail`. 확인 당시 master `9084878eaa93ea4fe39df0f376afa4456c5fec55`, release/v1.95.0 `b0e04eafe00e86836f472bea114e5fce867b4cad`, 피드백 경로 diff 없음·새 작업 branch 원격 없음. 실제 QA가 특정 미병합 release 차이에 속한다는 근거가 나오면 담당 세션에서 base를 재판단한다.
+- 새 worktree는 동일 저장소 주 worktree의 eligible ignored/untracked `.env*`를 내용 열람 없이 상속·동일성/ignore 확인한다. 기존 사용자 작업 창/서버·미커밋 변경을 보존하며 기능 결과는 새 세션에서 사용자에게 직접 보고한다. 메인은 등록·전달 이후 폴링하지 않는다.
+
 ## Sample Case 키워드 추가 영향 검토 — 2026-11-24
 
 - **마감:** 사용자가 검토 내용을 담당자에게 전달했고 이번 건을 검토 완료로 확정했다. 현재 요청 범위에서 FE 추가 구현·배포·후속 작업은 없다. 새 요청이나 API 구조 변경이 있을 때만 재개하며 자동 QA·조회·폴링하지 않는다.
