@@ -2,7 +2,8 @@
 
 ## 현재 상태 — 2026-11-25
 
-- 사용자 요청: Jira 카드 없이 별도 세션·별도 worktree에서 피드백 Amplitude 이벤트 전체를 코드로만 조사한다. 메인은 준비·인계만 하고 결과는 담당 세션이 사용자에게 직접 보고한다.
+- 최초에는 Jira 카드 없이 별도 세션·별도 worktree에서 피드백 Amplitude 이벤트 전체를 코드로만 조사했다. 2026-11-25 후속 요청으로 **[DL-17635](https://innovaid.atlassian.net/browse/DL-17635)**를 이번 작업 카드로 확정하고 현황 정리를 승인받았다. 메인은 준비·인계만 하며 담당 세션이 사용자에게 직접 보고한다.
+- 사용자가 기존 기능은 **치과용**임을 확인했다. 이번 공유 범위는 치과 PC 웹·모바일웹·Office 앱·앱 주문 상세 WebView의 차이, 사용자 행동별 수집 범위, Notion 정의 대조다. 기공소 확대 구현을 시작하는 요청이 아니다.
 - 새 세션 **피드백 Amplitude 이벤트 코드 조사** (`01a211d5-91e6-7a70-bfd6-a25bd4ed22dc`, local) 생성·프롬프트 전달·조사 시작을 확인했다. 생성시 메인과 실제 새 세션 `gpt-6-astra` / `xhigh` 일치. 코드 조사를 완료했고 결과는 담당 세션에서 사용자에게 직접 보고한다. 메인은 이후 자동 폴링하지 않는다.
 - 채팅 persisted cwd는 기존 메인 프로젝트 폴더 `/Users/parkjongsun/Documents/ChatGPT/메인 프로젝트`이며 실제 존재를 확인했다. 제품 checkout과 같다는 뜻은 아니고 아래 한정 예외를 적용한다.
 - 사용자가 **이번 조사만** 기존 메인 프로젝트 폴더를 채팅 cwd로 유지하고 Repository 전용 worktree를 명시하는 예외를 승인했다. 채팅 cwd를 바꾸는 attach/create_worktree를 담당 세션에서 재호출하지 않는다. 과거 경로 경고를 재수리하지 않으며, 향후 기본 경로 설정 조사는 사용자가 이번 세션 시작을 먼저 요청하여 보류했다.
@@ -14,7 +15,19 @@
 - 사용자에게 필요한 핵심: (1) 치과 웹 PC/모바일의 주문 상세 배너·피드백 목록 및 Office native 목록의 Good/Bad는 호출한다. (2) **웹/Office native 상세 작성 화면 안의 Good/Bad는 이벤트 호출이 없다.** (3) Office 주문 상세 WebView→native 피드백 상세 전환에 **무관한 `confirmation_order_detail_click`이 추가 호출된다.** (4) `pendingreviews_click`은 Office native만 있으며 웹 Quick Links에는 없다.
 - `review_feeback_click`의 철자는 실제 코드 그대로다(`feedback`이 아닌 `feeback`). 기존 이름을 임의로 교정하거나 새 명세를 만들지 않았다.
 - 사용자 행동에 직접 연결된 피드백 수동 이벤트 8종(아래 7종 + `pendingreviews_click`), 공통 화면 전환에서 만들어지는 2종(`feedbacklist_view`, `feedbackdetails_view`), 관련 공통 알림/페이지뷰 이벤트를 구분했다. 모든 이벤트가 모든 제품에 존재한다는 뜻이 아니다.
-- 남은 일: 사용자 결과 검토 및 후속 수정 범위 선택. **수정·카드·PR·배포·실수집 검증은 승인되지 않았으며 자동 진행하지 않는다.**
+- DL-17635 설명에 조사 범위를, [결과 댓글 45341](https://innovaid.atlassian.net/browse/DL-17635?focusedCommentId=45341)에 환경별 표·사용자 행동별 8개 이벤트·공통 이벤트·Notion 대조 결과를 등록했다. 쓰기 응답의 설명·댓글 본문을 확인했다. 제목·상태·담당자·상위 DL-17290 및 Notion은 변경하지 않았다.
+- 남은 일: 사용자 결과 검토 및 후속 수정 범위 선택. **제품 수정·새 카드·PR·배포·실수집 검증은 승인되지 않았으며 자동 진행하지 않는다.**
+
+### Notion 원본 대조 및 Jira 반영 — 2026-11-25
+
+- [기획 이벤트 표](https://app.notion.com/p/3c6ce072e82f8001bc20ef404c74059b), Event 데이터소스 `collection://1aece072-e82f-8055-945c-000b58d06ed6`의 관련 8개 원본, feedbackType·pushType 속성, push_click 원본을 직접 읽었다. Event 이름/Trigger 조회도 끝까지 확인했다. 기존 DL-17604 판정만 재사용하지 않았다.
+- **상세 Good/Bad:** 기존 정의는 목록/주문 상세 배너의 평가 클릭이며 Feedback Details 정의는 사유·댓글·이미지·Submit 4개다. 상세 내부 Good/Bad 이벤트는 문서에도 없다. 미수집은 확정이지만 기존 요구사항 구현 누락으로 단정하지 않는다. 최종 평가/주문/진입 경로를 Submit에 넣는 요구도 원본에 명시되어 있지 않다.
+- **pendingreviews_click:** [원본](https://app.notion.com/p/3cece072e82f8083bb10c6893f4967c6)과 기획 모두 앱 전용이다. 웹에 같은 이벤트가 없는 것은 이 명세와 일치하며 웹 누락 결함으로 취급하지 않는다.
+- **review_edit_click 문서 간 차이:** [Event 원본](https://app.notion.com/p/3cdce072e82f8026a824d67989750237)은 APP·확인 요청, 기획은 앱웹 공통이며 실제 코드는 웹/앱 모두 호출한다. 기획의 review_detail_click / review_edit_click 표시 링크도 각각 다른 이벤트 행을 가리켜, Jira에는 실제 원본 URL을 사용했다.
+- **feedbackType 문서 간 차이:** [속성 원본](https://app.notion.com/p/3cdce072e82f80678386d0e03ec00da3)의 타입은 Boolean·상태 미작업이나 노출값은 Good/Bad이고 코드는 해당 문자열이다. 8개 관련 이벤트 중 review_edit_click 외 7개 Event 행은 개발 완료였다. 문서 상태가 실수집 검증을 뜻하지 않는다.
+- **분석 목적과 현재 한계:** 기획의 제출률·주요 진입점·상세 옵션 사용 분석 의도는 확인했다. 현재 클릭 이벤트는 저장 성공, 최종 평가, 구체적 선택 사유를 직접 담지 않는다. 사유/댓글/이미지 1회 제한, 웹 단일 이미지 성공과 앱 선택 배치 전체 성공 차이는 문서에 상세 정의가 없다. 이를 임의 정책으로 확정하지 않고 집계 기준 확인 대상으로 기록했다.
+- **push_click:** 원본의 APP 및 pushType String·`1st Feedback`/`Order Feedback` 값은 확인했다. 기획 표의 `puch_click` 표기는 오타이나 원본과 코드는 push_click이다. 현재 분류는 최초 작성 사실이 아니라 피드백 링크의 orderId query 존재 여부다.
+- Jira 쓰기는 DL-17635만 승인·실행했다. 제품 코드·Notion 수정, 상위 카드 댓글, 새 구현 카드 생성, 타 세션 조회/메시지는 하지 않았다. 이번 후속은 기존 고정 SHA 조사와 현재 Notion을 대조했으며 제품 기준을 최신 브랜치로 바꾸거나 실행 검증하지 않았다.
 
 ### 기준과 검증 한계
 
@@ -61,7 +74,7 @@
 | 치과 웹 PC/모바일 | 상세 Submit Feedback(신규·수정·변경 없는 재제출) | `reviewdetail_submit_click` | 속성 없음; 필수 입력/길이/업로드/pending 검사 후 **onSubmit·저장 전** | 조건부 정상 연결. 성공 이벤트 아님 | [웹 submit W15](https://github.com/Innvoaid/dentlink-client/blob/9084878eaa93ea4fe39df0f376afa4456c5fec55/clinic/src/components/Feedback/FeedbackDetailDrawer.tsx#L333) |
 | Office native 양OS(목록·WebView·딥링크 진입 공통) | 상세 Submit Feedback | 같은 이벤트 | 속성 없음; 현재 권한·item·rating·validation·동기 제출 ref 검사 후 mutation 전 | 조건부 정상 연결. 성공 이벤트 아님 | [native submit O11](https://github.com/Innvoaid/dentlink-app/blob/dd9fc9a2812b1eb98866b97a5f38451e1a546fd5/src/features/feedback/screens/FeedbackDetailsScreen.tsx#L543) |
 | Office native 양OS | Profile Pending Reviews 클릭 | `pendingreviews_click` | 속성 없음; 목록 navigate 전 | 정상 연결 | [Profile O01](https://github.com/Innvoaid/dentlink-app/blob/dd9fc9a2812b1eb98866b97a5f38451e1a546fd5/src/features/profile/screens/ProfileScreen.tsx#L91) |
-| 치과 웹 PC/모바일 | My Quick Links Pending Reviews 클릭 | **해당 이름 호출 없음** | router.push만 실행 | 웹·앱 차이 확인. WEB까지 같은 이벤트가 필요한지는 명세 확인 | [웹 Quick Links W02](https://github.com/Innvoaid/dentlink-client/blob/9084878eaa93ea4fe39df0f376afa4456c5fec55/clinic/src/components/My/MyQuickLinks.tsx#L34) |
+| 치과 웹 PC/모바일 | My Quick Links Pending Reviews 클릭 | **해당 이름 호출 없음** | router.push만 실행 | 웹·앱 차이 확인. 후속 Notion 대조로 앱 전용 명세와 일치 확인 | [웹 Quick Links W02](https://github.com/Innvoaid/dentlink-client/blob/9084878eaa93ea4fe39df0f376afa4456c5fec55/clinic/src/components/My/MyQuickLinks.tsx#L34) |
 | Office native 양OS | 피드백 목록/상세 navigation state 변경 | `feedbacklist_view` / `feedbackdetails_view` | `screen_params: currentRoute.params`; 공통 navigator가 화면명으로 생성 | 조건부·**중복 가능**. 실제 화면 조회 성공 확인과 별개, 같은 화면 params 변경도 호출 가능 | [navigator O12](https://github.com/Innvoaid/dentlink-app/blob/dd9fc9a2812b1eb98866b97a5f38451e1a546fd5/src/navigations/RootNavigator.tsx#L127), [목록 완료 params 초기화 O13](https://github.com/Innvoaid/dentlink-app/blob/dd9fc9a2812b1eb98866b97a5f38451e1a546fd5/src/features/feedback/screens/FeedbackListScreen.tsx#L521) |
 | 치과 웹 PC/모바일·WebView | 피드백 route 방문·URL query 변경 | `[Amplitude] Page Viewed` | page URL/path/title/referrer/캠페인 등; Next route/hash 완료, 같은 href는 생략 | 공통 조회 경로 정상 연결. 목록 drawer 열기/닫기의 `orderId` query 변경도 대상. 주문 상세 drawer는 URL을 바꾸지 않아 별도 페이지뷰 없음 | [웹 pageview W16](https://github.com/Innvoaid/dentlink-client/blob/9084878eaa93ea4fe39df0f376afa4456c5fec55/clinic/src/common/hooks/useAmplitudeInit.ts#L49), [목록 route W09](https://github.com/Innvoaid/dentlink-client/blob/9084878eaa93ea4fe39df0f376afa4456c5fec55/clinic/src/components/Feedback/FeedbackPageContent.tsx#L285), [주문 W03](https://github.com/Innvoaid/dentlink-client/blob/9084878eaa93ea4fe39df0f376afa4456c5fec55/clinic/src/pages/orders/%5Border_id%5D/index.tsx#L174) |
 | Office 주문 상세 WebView 양OS | 피드백 상세/편집 버튼 → native navigation | **`confirmation_order_detail_click` 추가 호출** | 속성 없음; 공통 NAVIGATION 처리에서 목적 화면 구분 없이 navigate 전 | **확정 계측 오분류**. 디자인 컨펌과 무관한 피드백 진입에도 실행 | [bridge O06](https://github.com/Innvoaid/dentlink-app/blob/dd9fc9a2812b1eb98866b97a5f38451e1a546fd5/src/features/common/components/DentlinkWebView.tsx#L629), [상위 interceptor O14](https://github.com/Innvoaid/dentlink-app/blob/dd9fc9a2812b1eb98866b97a5f38451e1a546fd5/src/features/orderList/screens/OrderDetailScreen.tsx#L163) |
@@ -99,7 +112,7 @@
 ### 수정 판단과 다음 시작점
 
 - **확정 수정 후보:** 피드백 NAVIGATION에도 `confirmation_order_detail_click`을 기록하는 공통 bridge의 화면별 조건. 동작 자체와 계측을 분리하고 다른 실제 디자인 컨펌 진입을 보존해야 한다.
-- **확정 차이, 추적 범위 확인 후 수정 후보:** 상세 Good/Bad 미추적, 웹 `pendingreviews_click` 없음, 최종 평가·주문·유입 경로 속성 부재. 현재 이벤트가 최초 평가 클릭만 의도했는지, 모든 선택/최종 결과까지 필요한지는 코드만으로 확정하지 않는다.
+- **추가 수집 범위 결정 대상:** 상세 Good/Bad 미추적, 최종 평가·주문·유입 경로 속성 부재. Notion 원본은 목록/주문 배너 클릭까지만 정의하며 상세 평가 변경/최종 결과는 명시하지 않는다. 웹 `pendingreviews_click` 부재는 앱 전용 명세와 일치한다. 확장 필요 여부를 사용자와 결정하기 전 구현 누락으로 단정하지 않는다.
 - **집계 기준 주의:** API 성공 이벤트가 아닌 클릭 이벤트, 이미지 단일 파일 성공(웹) 대 배치 전체 성공(native), params 변경을 포함한 native view. 관측된 구현 차이이며 일괄 “누락/중복 결함”으로 부풀리지 않는다.
 - 조사 결과와 기준 SHA·한계는 이 정본 및 `/Users/parkjongsun/.claude/projects/-Users-parkjongsun-repository/memory/project_feedback_amplitude_audit_20261125.md`에 동기화한다. 개인 컨텍스트의 본인 파일만 commit/push하고 대기한다. 새 요청 전 제품 수정·외부 문서 쓰기·다른 세션 조회/메시지·추가 수집 검증은 하지 않는다.
 
@@ -114,14 +127,14 @@
 
 ## 저장소와 조사 기준
 
-- 웹: `/Users/parkjongsun/Repository/dentlink-client`; 조사 worktree `/Users/parkjongsun/Repository/dentlink-client-feedback-amplitude-audit`. Jira가 없고 조사 전용이므로 detached HEAD, 신규 제품 branch 불필요.
+- 웹: `/Users/parkjongsun/Repository/dentlink-client`; 조사 worktree `/Users/parkjongsun/Repository/dentlink-client-feedback-amplitude-audit`. 조사 전용이므로 detached HEAD를 유지한다. 후속 DL-17635 연결은 제품 branch 생성/구현 승인이 아니다.
 - 2026-11-25 main ref fetch 확인: web `origin/master=9084878eaa93ea4fe39df0f376afa4456c5fec55`, Office `origin/main=dd9fc9a2812b1eb98866b97a5f38451e1a546fd5`, Lab `origin/main=12cd290e4344065ac030f6a64696df4426a8b59c`. 이후 변화가 있으면 기준 시각·SHA를 분명히 기록한다.
 - Office `/Users/parkjongsun/Repository/dentlink-app`, Lab `/Users/parkjongsun/Repository/dentlink-lab-app`은 다른 알림 후속 작업의 미커밋 변경이 있다. checkout/pull/reset/stash/install/수정 금지. 고정한 main SHA를 `git show`, `git grep <SHA>`로 읽어 다른 세션의 작업과 조사 기준을 섞지 않는다.
 - 새 worktree의 eligible ignored/untracked `.env*`는 공통 지침에 따라 불투명 복사·동일성/ignore 확인한다. 이 조사에서 값 열람·변경·서버 실행은 필요 없다.
 
 ## 권한과 결과물
 
-- 코드 읽기 전용. 브라우저·시뮬레이터·Metro·Reactotron·앱·API 호출·실제 이벤트 발송·의존성 설치·제품 코드/문서 변경·commit/push/PR/merge/배포·Jira 생성/수정·Notion 수정은 하지 않는다.
+- 제품 코드는 읽기 전용. 브라우저·시뮬레이터·Metro·Reactotron·앱·제품 API 호출·실제 이벤트 발송·의존성 설치·제품 코드/문서 변경·commit/push/PR/merge/배포·새 Jira 생성·Notion 수정은 하지 않는다. 2026-11-25 후속 요청으로 DL-17635의 현황 정리 쓰기와 Notion 명세 읽기만 추가 승인되어 완료했다.
 - 누락/중복을 발견해도 수정하지 말고 확인된 차이·영향·수정 필요 여부만 보고한다. 필요 시 사용자가 후속 구현을 승인한다.
 - 상세 결과는 이 문서, 사용자 요약은 플랫폼/진입경로별 간단한 표. 기록은 Claude `project_feedback_amplitude_audit_20261125.md`에도 동기화한다.
 - 참고: [피드백 기능 정본](dentlink-client-order-feedback.md), [기존 DL-17604 이벤트 조사](dentlink-amplitude-event-audit-dl17604.md). 기존 조사는 이벤트 존재 중심이며 이번 요청의 경로별 정확성 결론을 대신하지 않는다.
