@@ -2,10 +2,11 @@
 
 ## 메인세션 교체 인계 진행 — 2026-11-25
 
-- 사용자가 기존 메인을 새 메인으로 교체하고, 정상 인계 후 구 메인 보관과 불필요한 관리용 worktree 정리를 명시 승인했다. 이번 교체에 한정된 승인이다.
-- 새 `Dentlink FE 메인세션`은 `01a21230-85b5-75f2-aaeb-97c5700d0ee2`다. 공식 CLI로 원본 `/Users/parkjongsun/Repository/codex-personal-context`에서 생성했으며 실제 실행의 cwd와 `gpt-6-astra` / `xhigh`를 확인했다. 사용자의 마지막 모델 지시는 **Extra High**다. 지정 문서 확인과 인계 수신을 마치고 대기 중이다. [인계 정본](dentlink-fe-main-handoff-20261125.md).
-- **교체 완료는 아직 아니다.** 앱의 프로젝트 이동 도구는 새 채팅이 sidebar에 없다고 반환했고, 초기 턴 완료 후에도 최근 목록에는 나타나지 않았다. 공식 채팅 열기 기능으로 등록을 확인하기 위한 화면 전환 허락을 요청했으며 답변 대기 중이다. 허락 전에는 화면을 전환하지 않는다.
-- 따라서 구 메인 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`과 `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`는 보존했다. 다음 단계는 새 메인의 앱 표시·프로젝트 소속·cwd 확인 후 공식 managed worktree 보관과 구 메인 보관이다. 아래 CLI `/cd` 재시도 계획은 새 메인 교체 결정으로 대체됐다. 제품 코드·기존 기능 세션은 건드리지 않는다.
+- 사용자는 새 메인 교체·인계·불필요한 폴더 정리·이 구 메인 보관까지 완료하도록 재승인했고, 이번 정리에 필요한 화면 전환도 허용했다.
+- 최종 새 메인은 **Dentlink FE 메인세션** (`01a2123a-7636-7d21-a102-4a0aba0b0033`)이다. 원본 `/Users/parkjongsun/Repository/codex-personal-context`의 공식 same-directory fork로 등록했으며, 원본 cwd·idle 상태·사이드바 고정 목록 노출과 공식 화면 열기를 확인했다. 사용자가 지정한 설정은 `gpt-6-astra` / `xhigh`다. 인계 읽기를 완료한 초기 채팅의 이력을 보존했다. [인계 정본](dentlink-fe-main-handoff-20261125.md).
+- 새 메인은 프로젝트 미지정·고정 목록에 있다. 기존 프로젝트 이동은 출처 폴더를 안전하게 판별할 수 없다는 도구 제한으로 적용하지 않았다. 개인 컨텍스트 복사본이나 별도 물리 폴더는 더 만들지 않았다.
+- 남은 정리: 구 메인 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`의 임시 `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`는 clean이고 모든 커밋이 원본 main에 있다. 공식 archive_worktree는 현재 primary checkout 보호로 거절했다. 새 메인에서 공식 handoff_thread로 구 메인을 원본에 돌려놓은 뒤 구 메인이 자신의 첨부 worktree를 보관 정리하고, 비게 된 부모 폴더 삭제·기록 저장·자기 보관을 마치도록 이어간다. 보호 장치를 raw Git/rm으로 우회하지 않는다.
+- 기존 기능 세션·제품 코드·제품 worktree는 모두 보존한다. 아래 CLI `/cd` 재시도 계획은 새 메인 교체 결정으로 대체됐다.
 
 ## 최종 운영 지침 정정·개인 컨텍스트 단일화 준비 — 2026-11-25
 
@@ -397,7 +398,7 @@
 
   | 에이전트 | 메인세션 | 메인 폴더 |
   | --- | --- | --- |
-  | 사무실 Codex | 메인세션 `01a08f0c-2057-7852-ae8d-0cf950a91fd3` | `Documents/ChatGPT/메인 프로젝트` |
+  | 사무실 Codex | Dentlink FE 메인세션 `01a2123a-7636-7d21-a102-4a0aba0b0033` (2026-11-25 교체, 고정 목록) | 실제 cwd `Repository/codex-personal-context` · 프로젝트 미지정 |
   | 사무실 Claude Code | "Dentlink FE 메인세션 (사무실 Claude)" `local_322c0b9d-e807-4b1c-ad23-416fd7d5b025` (2026-11-12 지정, 원래 dentlink-app 폴더에서 옮김) | `/Users/parkjongsun/Repository` |
   | 집 Claude Code | "Dentlink FE 메인세션" `local_ee66b909-c034-43a9-af56-066bf4ace9c5` | `/Users/parkjongsun/repository` |
   | 집 Codex | 미지정(사용 시 같은 규칙으로 하나 지정) | — |
@@ -415,7 +416,7 @@
 - 같은 날 이 세팅의 일부로 Claude 메모리를 메인 폴더 키(`~/.claude/projects/-Users-parkjongsun-repository/memory`)로 옮기고 웹 폴더 키에는 링크를 남겼다. 앱 설정은 브랜치 접두어 `claude`→`feat`, 새 세션 Remote Control 연결 켜기로 바꿨다. 새 세션 기본 모델 설정은 `claude-sonnet-4-6`이라, 하위 세션은 `model` 생략(메인 상속)으로 만든다.
 
 - **원격화 구분(2026-10-27):** 기본 의미는 켜진 이 Mac의 기존 세션을 휴대폰에서 그대로 이어 쓰는 것이다. 다른 PC로 실행 환경을 옮겨 Git 기반 컨텍스트를 복구하는 경우와 구분하고, 각 세션에서 같은 의미를 다시 묻지 않는다. 신규 세션은 정상 등록·프로젝트·호스트·초기 턴 확인과 초기 개인 기록 저장/푸시를 기본으로 챙긴다. 연결 설정은 사용자가 관리한다. 사용자의 '메모리화 후 휴대폰에서 보였다'는 경험은 관찰로 기록하며 Git 저장이 모바일 표시를 유발한다는 인과나 현재 표시 완료를 단정하지 않는다. 정본은 [Phone Remote Continuity](../SESSION_WORKFLOW.md#phone-remote-continuity)이다.
-- **메인세션 유지 규칙(2026-10-27):** 이 최상위 세션 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`는 보관하지 않고 계속 유지·대기한다. 보관/영구 종료 요청이나 다른 작업 세션용으로 보이는 대상 불명확 마감 지시가 들어오면 사용자에게 대상을 먼저 되묻는다. 메인 자체가 대상임을 재확인하기 전에는 보관하지 않으며, 일반적인 기록 정리·대기는 그대로 수행한다. 이 추가 확인은 다른 기능 세션 전체에 적용하지 않는다. 정본은 [Dentlink FE Main Session Retention](../SESSION_WORKFLOW.md#dentlink-fe-main-session-retention)이다.
+- **메인세션 유지 규칙(2026-10-27, 2026-11-25 교체 반영):** 현재 지정된 최상위 메인세션은 보관하지 않고 계속 유지·대기한다. 구 메인 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`는 사용자의 명시적인 교체·보관 승인에 따라 이번 인계 후 보관한다. 보관/영구 종료 요청이나 다른 작업 세션용으로 보이는 대상 불명확 마감 지시가 들어오면 사용자에게 대상을 먼저 되묻는다. 메인 자체가 대상임을 재확인하기 전에는 보관하지 않으며, 일반적인 기록 정리·대기는 그대로 수행한다. 이 추가 확인은 다른 기능 세션 전체에 적용하지 않는다. 정본은 [Dentlink FE Main Session Retention](../SESSION_WORKFLOW.md#dentlink-fe-main-session-retention)이다.
 - 직전의 'QA 없이 배포 완료, 정리 후 세션 보관' 메시지는 사용자가 다른 세션에 쓸 내용을 잘못 보낸 것으로 철회했다. 그 메시지를 근거로 SIGSEGV 조사나 다른 업무의 배포/완료 상태를 변경하지 않는다.
 - 2026-10-27 **API 사용처 확인 세션** (`01a17b41-6ead-7fc1-9387-42f68aaa86e2`,
   local·생성 당시 메인 프로젝트, 2026-11-25 현재 `일반`)은 단순 API 사용처 확인용으로 계속 유지한다.
