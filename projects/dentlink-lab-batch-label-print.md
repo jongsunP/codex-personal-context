@@ -1,9 +1,16 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 갱신 — 2026-11-25 채팅 기본 경로 경고는 사용자 요청으로 보류
+
+- 실제 작업 폴더·Git worktree와 이 채팅의 attachment는 `/Users/parkjongsun/Repository/dentlink-client-dl-17583`에 정상적으로 있다. 그러나 `read_thread(includeTurns:false)`로 확인한 **저장된 채팅 cwd는 이전 `/Users/parkjongsun/.codex/worktrees/dl-17583/dentlink-client`**에 남아 있다. 직전 이관 기록의 cwd 확인은 명시한 명령 실행 경로 확인이었으며 채팅 기본 경로까지 바뀌었다는 뜻은 아니었다. 아래 이관 기록의 해당 문구를 정정했다.
+- `attach_worktree` 재호출은 attachment만 확인했으며 기본 cwd를 바꾸지 못했다. 공식 CLI의 `thread/settings/update`를 조사했으나 현재 앱 서버의 control socket은 없고, 별도 서버의 thread resume은 `already has an active writer`로 거절됐다. 실행 중인 채팅 강제 재개·앱 재시작·내부 DB 수정은 하지 않았다. 경로 설정 변경 성공으로 보고하지 않는다.
+- 사용자가 오래 걸리면 사용에 지장이 없는 범위에서 이번 건을 넘기라고 지시했다. **추가 복구 시도는 중단한다.** 이후 명령은 새 worktree를 `workdir`로 명시하면 실행 가능하다. 다만 기본 cwd에 의존하는 도구와 채팅 경고는 해결된 상태가 아니며, 기본 경로 수정은 별도 재요청 전까지 보류한다.
+- 조사 중 만든 이전 경로의 빈 임시 디렉터리는 제거했다. 그 상위 폴더는 비어 있지 않아 보존했다. 제품 코드·branch·미커밋 변경·Cursor·개발 서버는 변경하지 않았다. SplitView 포함 로컬 검토 대기 상태를 유지한다.
+
 ## 최신 갱신 — 2026-11-25 Repository 루트의 전용 worktree로 이관 완료
 
 - 사용자 최신 명시 요청에 따라 기존의 '메인 checkout에서만 작업' 지침을 변경했다. 이제 이 세션의 제품 작업 위치는 **`/Users/parkjongsun/Repository/dentlink-client-dl-17583`**, branch **`feat/DL-17583`**다. 모든 Git checkout은 기존 Repository 루트에 물리적으로 둔다는 공통 정본 commit `3af90f8`과 SESSION_WORKFLOW의 Git Repository And Worktree Location을 읽고 적용했다. 아래 메인 워크트리 기록은 이관 전 이력이다.
-- 기존 작업 커밋과 release 통합을 모두 보존하도록 HEAD **`182318cbabe8993ab20365664316aa8576bc2836`**에서 필수 create_worktree 도구로 detached checkout을 만들었다. 도구의 임시 숨김 경로를 즉시 `git worktree move`로 위 최종 경로로 옮기고 이 채팅에 attach했다. 이전 숨김 attachment와 빈 임시 상위 폴더를 제거했으며 현재 attachment는 새 경로1개다. 실제 git top-level/cwd·worktree registration·feature checkout 소유권을 확인했다.
+- 기존 작업 커밋과 release 통합을 모두 보존하도록 HEAD **`182318cbabe8993ab20365664316aa8576bc2836`**에서 필수 create_worktree 도구로 detached checkout을 만들었다. 도구의 임시 숨김 경로를 즉시 `git worktree move`로 위 최종 경로로 옮기고 이 채팅에 attach했다. 이전 숨김 attachment와 빈 임시 상위 폴더를 제거했으며 현재 attachment는 새 경로1개다. 명시한 명령 실행 경로의 git top-level·worktree registration·feature checkout 소유권을 확인했다. 채팅의 저장된 기본 cwd는 이때 확인하지 않았으며, 후속 조사에서 이전 경로에 남아 있음이 확인됐다(위 최신 정정 참조).
 - 이관 대상은 이 세션 소유의 **tracked 수정15개 + untracked 신규14개 =29파일**, staged0이었다. 원본 상태를 백업하고 새 위치에 복사한 뒤 모든 파일 SHA256/권한, HEAD, 전체 index(stage entries), staged/unstaged binary patch, porcelain status가 이관 전과 완전히 같음을 확인했다. 검증 후에만 원본의 명시한15개 파일을 HEAD로 restore하고14개 신규 파일을 제거했다. 강제 reset/clean/제품 커밋을 사용하지 않았다.
 - 원본 `/Users/parkjongsun/Repository/dentlink-client`은 **기존 로컬 master@96bdacda6, clean**으로 돌렸다. master를 최신 원격으로 별도 업데이트하지 않았다(조회 시 origin/master보다3커밋 뒤). feat/DL-17583은 새 worktree에서만 checkout되며 upstream 대비ahead4는 기존 상태 그대로다. 다른 세션 worktree/branch/file/process 및 기존 복구 stash는 변경하지 않았다.
 - 로컬 env6개(admin/clinic/e2e2/lab2)를 정본 opaque-copy 스크립트로 독립 복사했다. 값은 출력/파싱하지 않고 양쪽 Git ignored·untracked, byte equality, 서로 다른 inode를 확인했다. 기존 파일을 덮어쓰지 않았다. 새 위치에서 `pnpm install --offline --frozen-lockfile --ignore-scripts` 완료(다운로드0, lock/제품diff 변경0); workspace 의존성이 새 checkout의 shared 경로를 가리킴을 확인했다.
