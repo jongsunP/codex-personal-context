@@ -1,15 +1,25 @@
 # DL-17636 웹 E2E 실행·알림 정책 조사
 
-## 현재 상태 — 2026-11-25, 작업 방향 정리·구현 보류
+## 현재 상태 — 2026-11-25, 최소 구현·v1.95.0 PR 완료
 
-- 사용자 확인: “일단 당장 구현은 아니야. 내용 메모리하고 저장하고 우선 대기”. 조사 결과와 제안만 보존하며 정책 확정·구현 승인은 없다.
-- 이후 사용자는 영향 가드의 동작 시점·소요시간·유지 여부를 질문하고, **가드 개선까지 기존 추천안과 하나의 작업 방향 표로 정리**하도록 요청했다. 아래 표는 그 요청에 따른 권장 방향이며 구현 착수 승인은 아니다.
-- **최신 범위 보완:** 사용자는 애매하거나 오래 걸리는 가드 관련 개선은 원래 요구사항이 아니라 추가 고려였으므로 그대로 두거나 최소로 하자고 명확히 했다. 이번에는 **PR 영향 가드 현행 유지·개선 제외**로 방향을 좁힌다. 이전 통합 제안과 3.5~7시간 견적을 현재 필수 범위로 취급하지 않는다.
-- 조사 결과 `013b0dc`, 저장 후 대기 지시 `e9862fd`는 개인 Git에 commit/push했고 Claude 보조 메모리에도 반영했다. 이번 작업 방향도 개인 기록에 보존한다.
-- 워크트리는 보존한다. 설명과 문서 정리 외 추가 조사·Actions 조회/감시·테스트·코드/workflow 수정·Jira/PR/Slack 변경·배포를 진행하지 않는다.
-- 다음 시작점은 사용자의 명시적인 구현 재개 요청이다. 그때 아래 권장 방향과 실제 승인 범위를 확인하고 필요한 최신 소스를 갱신한다.
+- 최신 사용자 승인: “방금은 질문이지 실행하라는건 아니었어. 괜찮다는거맞으면 진행해. PR 까지만. 1.95.0릴리즈에”. 앞선 가능 여부 질문 당시에는 읽기 전용 확인만 했으며, 이 명시 승인 이후 구현·커밋·push·PR 생성을 진행했다. 이전 구현 보류 기록은 이 승인으로 갱신됐다.
+- [PR #4959 — 웹 E2E 실행 환경과 결과 알림 정리](https://github.com/Innvoaid/dentlink-client/pull/4959): `release/v1.95.0` 대상, OPEN·일반 PR·미병합·mergeable true, 1커밋/4파일(+167/-77) 확인. GitHub 파일 목록과 로컬 diff 일치.
+- 제품 worktree: `/Users/parkjongsun/Repository/dentlink-client-dl-17636/dentlink-client`. 현재 `feat/DL-17636-release-v1.95.0@c2bfd6d76076fc444f1778b18ae21d77cc479bfb`, origin 같은 SHA·tracked clean.
+- 최신 `origin/master@9084878eaa93ea4fe39df0f376afa4456c5fec55`에서 `feat/DL-17636`으로 시작했다. master/release의 squash 이력 차이로 무관한 Lab 4파일이 PR에 노출되어, 관련 4파일의 원본이 동일함을 확인한 뒤 `origin/release/v1.95.0@5ac812a430b12f775502a93a4a2b865f9d24785e` 기반 전달용 브랜치에 이번 변경만 담았다. 원래 `feat/DL-17636`은 로컬 master 시작점에 보존했고 push하지 않았다.
+- **현재 영향:** 코드와 PR만 준비됐다. 가드/제품 화면/BE/실제 env/GitHub·Slack 설정 변경 없음. 병합·배포·Actions 수동 실행·실계정/브라우저 E2E·Slack 시험 발송·Jira 변경 없음.
+- **남은 단계:** 사용자 PR 검토·병합 결정. 자동 E2E는 master의 workflow 정의를 읽으므로 릴리즈 PR 병합만으로 정책이 즉시 바뀌지 않으며 이후 master 반영이 필요하다. 실제 Ubuntu 브라우저 설치 및 전체 E2E 성공은 아직 미검증이다. 추가 PR/전파/실행/CodeRabbit 대응/자동 감시는 별도 요청 전 진행하지 않는다.
 
-## 통합 작업 방향 — 2026-11-25
+### 구현과 검증
+
+- `.github/workflows/clinic_dev_e2e.yml`, `clinic_stg_e2e.yml`: E2E 실행 job만 `ubuntu-24.04`로 고정하고 Playwright 캐시 key에 OS 버전을 포함했다. 준비 job·트리거·concurrency·artifact·실패 gate·retry/skip 계약은 유지했다.
+- DEV 결과 Slack step만 제거했다. E2E 실행과 Actions 결과/증거, 부모 배포의 기존 알림은 유지했다.
+- STG는 기존 runner 판정을 그대로 사용한다. 출력이 없고 runner가 skipped/미시작이면 `준비 실패 · 테스트 미실행`, 실행 결과는 있으나 판정 출력이 없으면 `결과 확인 불가`로 표시한다. 빈 숫자는 `미집계`, 버전은 `미수집`, checkout 전 중단은 깨진 commit 링크 대신 설명을 남긴다. 로그/리포트 링크와 기존 수동 시작 알림은 유지했다.
+- `scripts/e2e-deployment.test.js`: 실제 workflow payload를 성공·실패·flaky·미실행·불완전 보고·판정 부재·중단 10개 조합으로 평가하는 회귀 보완. 기존 인계/실패 gate 검증 유지. `e2e/README.md` 운영 정책 동기화.
+- 브라우저 없는 `pnpm e2e:check` **248/248 통과**(관련 deployment 검증 15개 포함), workflow YAML/JS Prettier 검사·git diff check 통과. 원본 관련 파일은 master/release가 동일하여 동일 변경을 전달했다. Playwright 1.60.0 설치 패키지에서도 Ubuntu24.04 의존성 정의를 확인했다.
+- 커밋 훅 Clinic/Lab/Admin 타입 검사 통과. push 훅 lint 오류0(기존 경고 Clinic226/Lab180/Admin396), Admin 가드9/9, 공통 테스트169/169(config77/hook92), 커버리지 변화0 통과. 기존 E2E 영향 가드 check 통과; 앱 코드 변경이 없어 영향 분석 대상 아님, 가드 코드/지침/마커 변경 없음.
+- 새 worktree 준비 이슈만 해결했다: Next 자동 타입 파일 부재로 첫 commit 훅 실패 → 설치된 Next 공식 타입 생성 함수로 Git-ignored `next-env.d.ts` 생성 후 통과. 첫 push는 coverage baseline 부재로 실패 → 이 worktree에서 변경 전 release SHA로 일시 이동해 공통 coverage 실행/ignored baseline 생성 후 feature로 복귀, 정상 훅 재실행·push 성공. 실제 env 값은 읽거나 바꾸지 않았다. 의존성·치아 아이콘 빌드 출력도 ignored 로컬 준비이며 PR에는 포함하지 않았다.
+
+## 구현 전 통합 작업 방향 — 2026-11-25 (현재 상태는 위 구현/PR 기록 우선)
 
 | 항목 | 확인한 상황 | 추천 작업 방향 |
 | --- | --- | --- |
