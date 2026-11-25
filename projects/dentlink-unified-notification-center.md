@@ -1,5 +1,16 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-25 웹 커밋·push·release/v1.95.0 PR 완료 — #4953
+
+- 사용자 요청: 작업 커밋·push 및 1.95.0 PR. 진행 중 원본과 작업 영역을 질문해, 웹/어드민은 master 기반 독립 worktree, Office/Lab은 각 main 기반 별도 저장소이며 이번 PR은 웹/어드민만 포함한다고 먼저 답했다. 앱 commit/push/PR/배포로 확대하지 않았다.
+- **PR [#4953](https://github.com/Innvoaid/dentlink-client/pull/4953)**: `[DL-16140] 어드민 알림 발송 이력에 읽음 정보와 이벤트 코드 추가`. 실제 base `release/v1.95.0@17f25d3de36d784b608e76d15008a9545e474413`, head `feat/DL-16140-history-followup-release-v1.95.0@89297df248210ea05ce58bd5e889906d88e471b5`. Open·Draft=false·merged=false·mergeable=true, 1커밋/5파일/+75/-6을 생성 뒤 API로 확인했다. GitHub 실제 변경파일도 요청한 어드민 4파일+소비 모델1파일과 일치한다.
+- 원본 웹은 `origin/master@9084878ea`에서 시작했으며, `feat/DL-16140-history-followup`에 기능 커밋 `8f9d5c751042d7f4343ede06907dd0e558abc3be`를 남겨 **로컬 보존**했다. 원본에서 바로 PR을 만들면 master 유래 Lab 밀링 접근/버전4파일도 포함돼, 지침의 clean delivery 절차에 따라 최신 release에서 위 PR용 브랜치를 만들고 기능 커밋만 cherry-pick했다. 원본 기능5파일 내용은 양 커밋에서 동일하다. release/master 자체를 merge·reset·push하지 않았다.
+- 실제 작업 폴더는 계속 `/Users/parkjongsun/Repository/dentlink-client-dl-16140-history-followup`, 현재 checkout은 PR용 브랜치다. 로컬/원격 HEAD 일치·clean, upstream은 같은 원격 feature다. 원본 기능 브랜치는 원격 push하지 않았으며 기존 완료 DL-16140 브랜치를 재사용하지 않았다. Office/Lab은 각 저장소 `feat/DL-16140-history-followup`의 이전 **미커밋** 변경 그대로다.
+- 검증: 원본 커밋 pre-commit Clinic/Lab/Admin tsc 통과, 최종 release 기반 Admin tsc 및 변경파일 ESLint·DLOS guard(60/60)·DLOS 회귀9개 통과. push hook 전체 Clinic/Lab/Admin lint는 오류0, 기존 warning226/180/396. shared/configs 9파일77테스트, shared/hooks 9파일92테스트 통과. release 원본17f25d3de에서 생성한 baseline 대비 공유 패키지 커버리지 변화0을 확인한 후 정상 push했다.
+- 로컬 준비 누락 복구: 첫 commit은 `.husky/_/husky.sh` 부재, 다음은 Next 이미지 타입 부재로 실패했다. 기존 설치 Husky의 install 및 Next의 `writeAppTypeDeclarations`로 이 worktree의 ignored `next-env.d.ts` 3개를 생성하고 정상 훅을 재실행했다. 첫 push는 ignored coverage baseline 부재로 실패해, **자기 clean worktree만 잠시 release 원본 detached로 전환하여 실제 공유 테스트를 실행하고 baseline을 생성**, PR 브랜치로 복귀 후 훅 전체 재실행·비교·push 완료했다. 훅 우회·새 제품 파일 추가·실제 env 값 조회/변경 없음. 로그 `/tmp/dl16140-web-pr-push-retry.log`, `/tmp/dl16140-release-coverage-baseline.log`.
+- 필수 `$e2e-guard`는 스킬 지시에 따른 읽기 전용 서브에이전트로 실제5파일 diff·DTO소비자·07_billing의 어드민 API 경계를 확인해 **NO_IMPACT**. 가드 mark를 남기고 PR 생성 직전 `scripts/e2e-guard/check.sh --base release/v1.95.0 --head feat/DL-16140-history-followup-release-v1.95.0` exit0 확인. E2E 변경·브라우저 실행 없음. PR은 저장소 템플릿/한글 제목·본문, 정상 Ready 상태로 생성했다.
+- 남음: 웹 실제 어드민 응답·표·CSV 연동 QA, 앱 실제 최종 푸시/서버읽음 QA 및 앱별 후속 commit/PR 범위·release 확정. 시트68행 기록 동기화는 여전히 외부 쓰기 미실행. 이번 요청은 PR 생성까지 완료했으므로 CodeRabbit/Actions를 자동 확인·대응하거나 merge/배포하지 않는다. 별도 요청을 기다린다.
+
 ## 2026-11-25 BE 최종 계약 확정 — 전체51댓글 재검토, 추가 정책 질문 해소
 
 - 사용자 요청으로 DL-16140 댓글 **51개 전체**를 0/20/40 페이지로 읽고 isLast/고유ID51개를 확인했다. 과거 완료 작업을 재개하거나 하위 완료 카드들을 수정하지 않았다. 현재 제품 diff와 확정 요구사항도 다시 대조했다.
