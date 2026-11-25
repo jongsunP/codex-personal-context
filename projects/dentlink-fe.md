@@ -1,6 +1,14 @@
 # Dentlink Frontend Coordination
 
-## 메인 관리용 worktree 연결·운영 방식 변경 — 2026-11-25
+## 최종 운영 지침 정정·개인 컨텍스트 단일화 준비 — 2026-11-25
+
+- 사용자의 최종 의도: 세션을 묶는 메인 프로젝트와 Git 경로는 별개다. 메인 프로젝트에 속한 기능 세션도 필요한 worktree를 둘 수 있으나, 모든 에이전트·디바이스의 실제 checkout은 기존 Repository/repository 한곳 아래에 둔다. 개인 지침·기록 저장소 `codex-personal-context`는 로컬 하나만 유지하며 사무실은 `/Users/parkjongsun/Repository/codex-personal-context`가 기준이다.
+- 앞서 추가한 관리용 worktree를 영구 운영 지침으로 삼은 것은 과도한 해석이므로 철회했다. 메인 이력·프로젝트 소속은 유지하고 원본 checkout에 직접 연결한 뒤 불필요한 관리용 worktree를 정리하는 것이 목표다.
+- 사용자가 현재 메인의 경고가 사라졌다고 확인했다. 기존 기능 세션은 완료 후 보관 예정이므로 경고가 남아도 그대로 둔다. 신규 작업은 폴더·Git 등록·persisted cwd를 생성 시 확인한다.
+- **현재 실제 단일화는 대기:** 메인은 아직 `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`에 연결돼 있다. 연결 도구는 linked worktree만 허용하며 `handoff_thread`는 호출 중인 자신을 옮기지 못한다. CUA는 Codex 앱 제어를 안전상 거부했으므로 다른 화면 제어 기술로 우회하지 않았다. 공식 UI의 `Hand off → Local` 대상이 원본 개인 컨텍스트인지 사용자가 확인해 전환한 후, 메인이 새 cwd를 읽어 확인하고 관리용 worktree를 보관 정리한다. 연결 전 폴더부터 지우지 않는다. attachment의 `sourceCwd`는 원본 개인 컨텍스트로 확인했다.
+- 모든 작업 공통: 화면·포커스·공유 마우스/키보드를 가져가야 하면 현재 사용 가능 여부를 먼저 질문하고 답변을 기다린다. 과거 허락을 계속된 허락으로 사용하지 않는다. 비가시적 도구 작업은 계속 가능하다. AGENTS·SESSION_WORKFLOW·PROFILE 및 양쪽 메모리에 반영한다.
+
+## 이전 복구 이력 — 메인 관리용 worktree 연결 — 2026-11-25
 
 - 사용자가 메인에도 개인 컨텍스트 관리용 worktree를 두고 기존 무-worktree 운영 지침을 함께 수정하도록 승인했다. 제품 기능 구현·각 작업 세션 소유권과 분리한다. 메인 채팅 ID와 이력·프로젝트 소속·보관 해제 상태는 유지한다.
 - `create_worktree`로 `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`를 생성했다. 이 생성은 설정한 Worktree root 아래에 처음부터 만들어졌으며 사후 폴더 이동이 없다. 실제 폴더·Git 등록·메인 `read_thread`의 persisted cwd 일치를 확인했다. detached HEAD이며 제품 branch/코드/기존 작업 세션 변경 없음. env 상속 대상은 0개였다.
@@ -418,10 +426,10 @@
   실제 폴더, 앱의 표시 이름·연결 경로, 기존 세션 소속·실행 경로를 각각 확인하고
   기존 세션 이력과 진행 중인 제품 작업을 보존한다.
 - 메인세션의 앱 프로젝트 소속은 기존 메인 프로젝트 폴더를 유지한다.
-  2026-11-25 사용자 승인으로 실제 cwd는 Repository 아래 개인 컨텍스트
-  관리용 worktree를 사용한다(현재 경로는 최상단 체크포인트). 기존의
-  '메인에는 별도 worktree 없음' 방식은 이 지침으로 대체했다. 제품 작업용
-  checkout은 계속 각 기능 세션에 두며 메인을 다른 기능의 임시 준비 장소로 쓰지 않는다.
+  2026-11-25 최종 지침은 개인 컨텍스트 checkout 하나만 유지하는 것이다.
+  메인 프로젝트에 속한 기능 세션은 필요한 제품 worktree를 Repository 아래
+  둘 수 있다. 앱 그룹과 실제 경로를 혼동하지 않으며, 복구용 임시 관리
+  worktree의 연결·정리 상태는 최상단 체크포인트를 따른다.
 - **2026-11-09 세션 배정 재확인:** 동일 기능·버그는 웹·Office·Lab을 한 기능 세션에서 관리하는 것이 기본이다. 제품별 목적·요구사항·일정·독립 책임 때문에 분리할 실익이 있을 때만 나눈다. 저장소·검증·PR·배포와 제품별 Jira 카드의 경계는 그대로 유지하며 카드 수가 세션 수를 결정하지 않는다. 상세 정본은 [업무 접수·세션 배정 지침](../SESSION_WORKFLOW.md#new-work-intake-and-session-routing)이다.
 - 기존 치과 웹·앱 완료/취소 주문 지연 라벨 두 세션은 사용자 지시대로 유지한다. 이번 지침 보완으로 기존 세션을 병합·재생성·보관하거나 완료 상태를 재조회하지 않는다.
 - Every code or Git mutation must still name and confirm the exact product

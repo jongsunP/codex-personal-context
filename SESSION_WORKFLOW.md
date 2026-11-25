@@ -233,27 +233,31 @@ responsibilities rather than forcing the whole product into one checkout.
   Dentlink App Release And Delivery Policy below. Deprecated monorepo
   documents and workflow defaults do not override the current user policy.
 
-- Keep one Dentlink FE top-level management session with a dedicated
-  **personal-context management worktree** under the device's approved
-  repository root as its stable working directory. The user approved this
-  operating-model change on 2026-11-25 to replace the no-worktree main-session
-  arrangement and repair a missing-cwd warning. This is not a product feature
-  checkout; product implementation worktrees remain owned by feature sessions.
-  It continuously owns
+- Keep one Dentlink FE top-level management session and one local personal
+  context checkout, preferably `<approved-repository-root>/codex-personal-context`.
+  The user's final 2026-11-25 clarification supersedes the earlier same-day
+  separate management-worktree arrangement: permitting worktrees for chats in
+  the main project does not authorize duplicating personal context. App project
+  grouping, chat working directory and product checkout ownership are separate.
+  The main continuously owns
   cross-feature oversight, work intake, web/app impact classification, shared
   product and API decisions, priority, release/deployment tracking,
   implementation-session prompts, and final closeout.
-- The office main chat's management checkout is
-  `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`.
-  The existing `/Users/parkjongsun/Repository/codex-personal-context` on `main`
-  remains the canonical record-maintenance/commit/push checkout shared by
-  sessions. The management worktree is detached and supplies a stable cwd;
-  do not leave durable records as detached commits there. On meaningful
-  resume/closeout, sync the canonical checkout first, then advance this
-  management worktree to its confirmed HEAD only if it is clean, using
-  `git switch --detach <confirmed-SHA>`. Preserve and reconcile unexpected
-  local changes instead of resetting them. App project membership and its
-  saved display folder remain separate from this execution directory.
+- On the office Mac, `/Users/parkjongsun/Repository/codex-personal-context`
+  on `main` is the single desired checkout for guidance, history and
+  record-maintenance/commit/push. Prefer connecting the main chat directly to
+  it through supported functionality. Do not add a permanent detached copy,
+  extra clone, symlink or bare-repository arrangement just to satisfy a tool.
+  If a redundant workaround checkout is still referenced by the main, preserve
+  it temporarily until the new persisted cwd is verified, then archive/remove
+  that redundant checkout. Record this as pending consolidation, not as the
+  desired two-checkout design. The main's continuous usability takes priority
+  over deleting its current directory prematurely.
+- Chats in the main project grouping may own independent worktrees when their
+  tasks need them. Every agent-created Git repository/worktree, regardless of
+  its sidebar project grouping, stays physically under the device's existing
+  Repository/repository root. Do not create additional project folders solely
+  to permit this setup. Preserve each feature's single-writer ownership.
 - The main session maintains the Git-backed personal context and, when needed,
   sets up or organizes project folders and sessions. Verify actual folders,
   registered project paths, session membership, and execution directories
@@ -480,8 +484,10 @@ interaction, not only local development or this notification-center session.
   Preserve its placement, size, monitor/desktop and tab/window grouping as
   far as practical; do not move, resize, maximize, regroup, close/reopen or
   create duplicates merely for agent convenience.
-- Necessary navigation, tab selection and interaction within the existing
-  screen remain allowed within the task. Avoid disrupting unrelated windows.
+- After the user confirms the current bounded screen-control period under
+  **Parallel User And Agent Work**, necessary navigation, tab selection and
+  interaction within that period remain allowed. Task authorization alone is
+  not permission to take foreground focus. Avoid disrupting unrelated windows.
   If a temporary layout change is necessary, keep it minimal and restore the
   prior arrangement when practical. Explicit user layout instructions prevail.
 - For authorized screen verification, failure of the first control tool is
@@ -502,13 +508,25 @@ and user interaction surfaces so the agent can work without taking over the
 user's tabs, typing, navigation or window focus. This applies whether or not
 the user also observes part of the agent's work.
 
+- **Ask before taking over the screen (2026-11-25, all tasks and sessions):**
+  assume the user may be working elsewhere. Before changing the foreground
+  app/window/tab, opening or arranging visible windows, or using shared mouse
+  and keyboard input, briefly state the required surface/action and ask if
+  screen control can start now. Wait for an explicit answer. General task
+  approval, availability earlier in the conversation, or apparent inactivity
+  is not permission for a new takeover period. If control was released or the
+  user resumes other work, ask again before taking it back. Once a specific
+  period is approved, perform its necessary interactions without repeatedly
+  asking for each click. Non-disruptive CLI, connectors and isolated hidden
+  browser work may continue without screen-control permission. Tool safety
+  restrictions still apply; user availability does not bypass a blocked tool.
 - Reuse suitable agent-owned browser sessions/profiles for automation. For
   routine agent-only research and checks, first use the in-app or non-visible
   mode described below. Testing Chrome is an isolation preference, not an
   instruction to display an external window. Avoid
   competing for the same foreground window when an independent control route
-  can perform the task. If shared mouse/keyboard use is necessary, coordinate
-  that interaction rather than assuming the user has stopped other work.
+  can perform the task. If shared mouse/keyboard use is necessary, obtain the
+  explicit current screen-control confirmation above first.
 - A request to prepare local preview means the user should be able to inspect
   and operate the result independently, including while Codex is closed.
   Actual execution ownership matters, not only where logs are displayed.
@@ -745,6 +763,9 @@ recovery and cleanup, not only to where folders are displayed.
   `~/.codex/worktrees`, another hidden directory, temporary paths, Documents
   or Downloads as an acceptable ongoing Git work location. An application
   project/session grouping is separate from the code checkout location.
+  Chats in the main project are not exempt or prohibited from owning needed
+  worktrees. Keep only one local `codex-personal-context` checkout; it is the
+  shared personal guidance/history repository, not a per-chat product copy.
 - A tool default does not change this rule. Prefer a creation method that
   supports the approved root while obeying required tool usage. If a required
   managed-worktree tool can only allocate a staging path elsewhere, relocate
@@ -769,8 +790,8 @@ recovery and cleanup, not only to where folders are displayed.
   the new path, or successful commands with an explicit `workdir` is not
   proof that the chat's default directory changed. Read back the chat metadata
   and verify its directory exists before declaring setup complete. For a
-  coordination-only chat, verify its approved personal-context management
-  worktree instead of attaching an arbitrary product worktree.
+  coordination-only chat, verify its approved stable directory and prefer the
+  single personal-context checkout instead of an arbitrary product worktree.
 - User report, 2026-11-25: after relocation a chat may show "현재 작업
   디렉토리가 없습니다" when an old directory reference remains. Treat this
   as an incomplete chat connection to fix through supported attachment/project
@@ -781,6 +802,10 @@ recovery and cleanup, not only to where folders are displayed.
   guaranteeing the warning is gone. When the user has already asked the
   owning sessions to fix it, the main does not duplicate those requests or
   start polling them.
+- User's final 2026-11-25 priority: the long-lived main must have a usable
+  directory without the warning. Existing feature chats may keep their warning
+  until completion/archive; do not repair them en masse. New task chats must
+  start with an existing correct persisted cwd, verified by the creating agent.
 - For an existing linked worktree, coordinate with its single writing owner,
   stop only its affected processes when necessary, preserve HEAD/branch/index,
   tracked/untracked/ignored files including opaque local env, then move and

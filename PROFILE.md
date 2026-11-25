@@ -21,10 +21,16 @@ archive.
   regardless of device; preserve exact repository/worktree ownership inside
   each session
 - Long-term context: `codex-personal-context`
+- Keep one local personal-context checkout, preferably directly under the
+  existing Repository/repository root; sidebar project grouping does not
+  require duplicate context folders (2026-11-25).
 - Project context: `projects/<project>.md` and stable team-owned project docs
 
 ## Working Preference
 
+- Assume the user is working in parallel. Always ask and wait before taking
+  foreground screen control or shared mouse/keyboard input; a prior task or
+  screen-control approval is not indefinite permission (2026-11-25).
 - All Git repositories and worktrees stay physically together under each
   device's existing `Repository` or `repository` root. This mandatory
   2026-11-25 preference covers creation, moves and cleanup; never scatter

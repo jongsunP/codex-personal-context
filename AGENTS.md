@@ -145,6 +145,10 @@
 - Follow **Parallel User And Agent Work** in `SESSION_WORKFLOW.md`: the user
   often continues other work after delegating a task. Separate agent-controlled
   browsers/windows from the user's work and avoid competing for focus/input.
+  Before taking over the visible screen, switching foreground focus, or using
+  shared mouse/keyboard input, always ask and wait for the user's confirmation
+  that the bounded interaction can start now (2026-11-25). Task authorization
+  or an earlier takeover window is not ongoing screen-control permission.
   Local preview should be independently inspectable and operable. Choose tools
   for the required inspection/control rather than enforcing a fixed program
   combination; an app IDE is optional.
@@ -239,11 +243,13 @@
   feature; after handoff the main does not track, poll or re-verify (see
   **Standing feature sessions and a general main** in `SESSION_WORKFLOW.md`).
 - For the Dentlink FE main session, follow **Dentlink Frontend Top-Level
-  Session Model** in `SESSION_WORKFLOW.md`: use a dedicated personal-context
-  management worktree under the approved repository root as its stable cwd
-  (user approval, 2026-11-25), while product implementation worktrees remain
-  owned by feature sessions. Keep personal-record commits in the canonical
-  context checkout as documented there. Either do the authorized work here
+  Session Model** in `SESSION_WORKFLOW.md`: keep one local
+  `codex-personal-context` checkout, preferably directly under the approved
+  repository root, and use it for personal records. Do not create a second
+  management clone/worktree merely to attach the main chat. Project/sidebar
+  grouping is independent: chats grouped under the main project may each own
+  a needed product worktree, always under the same approved repository root
+  (user clarification, 2026-11-25). Either do the authorized work here
   or hand it off. Once session registration and prompt delivery are confirmed,
   stop automatic progress reads, polling and duplicate supervision. Let the
   assigned session execute and report; check again only when the user asks.
