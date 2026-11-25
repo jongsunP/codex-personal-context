@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-25 최신 댓글·최종 기준 시트 재검토 — URL별 소속 의미 구분
+
+- 사용자 요청은 내용 파악부터다. 최신 댓글20개(전체49개 중 이번 논의 포함), 실제 Google Sheets의 `전체 알림(PM)` A1:P175·`기본 알림(사용자 수신 설정X)` A1:P109 및 양앱 현 코드를 읽었다. 제품 코드·Jira·시트는 수정하지 않았다. 자동 폴링하지 않는다.
+- [BE45331](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=45331)은 모든 URL에 employerId를 넣기로 통일한 적은 없으며 기존 시트가 최종본이라 그 기준으로 마이그레이션했다고 설명했다. 이번 랜딩 없는 푸시는 `${scheme}://notifications`로 하겠다고 제안했다. 최신 [BE45333](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=45333)은 FE에 시트 URL을 다시 정리해 달라고 요청하며 credit도 언급했다. 실제 서버 적용 완료나 PM의 대상 소속 정책 변경으로 단정하지 않는다.
+- 현재 시트 [알림 현황 정리 26.09](https://docs.google.com/spreadsheets/d/1w1xwwEWRE0KgiJsOvldxIFbtNgWguohurf5kemIrW_g/edit?gid=614410508#gid=614410508): 개인 크레딧 P143:P144/P147:P148은 `dentlink://credit`, 병원 크레딧 P149:P152는 `dentlink://office/credit?employerId=${employerId}`다. Office 라우터/화면도 각각 USER/OFFICE로 구분하며 시트와 일치한다. 개인 크레딧까지 소속 ID를 일괄 추가할 근거가 없다. 주문 등은 이미 path에 employerId가 들어가는 경우도 있으므로 query 통일 작업으로 확대하지 않는다.
+- 변경 전 기공소 안내 `ORDER_CHANGE_LAB_TO_BEFORE_LAB`의 현재67행 NOTIFICATION/68행 PUSH는 APP 랜딩(P열)이 모두 비어 있다. 67행 WEB(O열)은 `랜딩 없는 공지성 알림`이다. 새 알림센터 URL은 아직 이 시트에 반영되지 않았다. 다른 기공소/치과의 주문 상세 링크(69~72행)와 혼동하지 않는다. P141에는 `${schme}` 오타 후보도 관찰했으나 실제 서버 템플릿 오타나 장애로 단정하지 않는다.
+- **범위 정정:** employerId는 모든 딥링크의 공통 필수값이 아니라 특정 소속 화면을 열기 위한 식별값이다. 양앱 notifications는 ID가 없으면 현재 활성 소속을 유지한다. Lab도 `useNotificationLabSwitch`/딥링크 소속 전환에 복수 소속 경로가 있어 “기공소라서 무조건 ID 불필요”라고 결론내릴 수 없다. PM45314의 ‘받은 푸시의 employer 알림센터’ 정책을 그대로 지키려면 이번 대상 URL에는 수신 소속 ID가 필요하다. BE의 ID 없는 URL은 현재 소속이 다른 경우 그 정책을 보장하지 못한다.
+- 현재 ALL 탭 구현은 ID 포함 여부와 무관하게 센터 푸시 진입에 적용되므로 이번 재검토로 코드 수정은 하지 않았다. 다음 조치는 모든 URL 일괄 변경이 아니라 해당 공지 푸시의 소속 지정 계약과 시트 정리이며, 외부 쓰기는 사용자 승인 범위에서 진행한다. 기존 실제 발송/응답 연동 검증 한계는 유지한다.
+
 ## 2026-11-25 후속 구현·로컬 검증 — 센터 딥링크 계약 최종 답변 대기
 
 - 사용자가 구현 진행을 승인했고, 질문과 병행하되 최종 BE 답변이 오면 그 차이만 재확인·반영하도록 지시했다. 제품 커밋·push·PR·merge·배포, Jira 쓰기는 승인하지 않았다. 아래 이전 준비/미구현 기록은 당시 이력이다. 질문이나 의견 요청에는 먼저 짧게 답하고 작업으로 대신하지 않는다.
