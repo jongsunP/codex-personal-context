@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-25 추가 계약 안내 검토 — 댓글45301
+
+- [Leo 댓글45301](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=45301)은 어드민 발송 이력 조회 응답의 비파괴 필드 추가와 FCM `deeplink` 생략 계약을 안내한다. 구현 지시나 PM의 랜딩 정책 확정으로 해석하지 않는다.
+- `/admin/messages/notifications`: `appLandingUrl`, `readAt`, `templateType`, `eventType`, `deliveryId` 추가, `isRead`는 기존 필드다. `/admin/messages/pushes`: `isRead`, `readAt`, `templateType`, `eventType`, `deliveryId` 추가. `/admin/messages/emails`: `eventType` 추가.
+- BE 안내상 과거 발송분의 `templateType/eventType/deliveryId` 및 이벤트 미등록 템플릿의 `eventType`은 null 가능하다. 미읽음의 `readAt`, 랜딩 없는 `appLandingUrl`도 null이다. 실제 대상 환경 배포/응답은 이번에 확인하지 않았다.
+- 현재 어드민 API는 응답을 그대로 반환하고 명시된 표 columns만 표시한다. 관련 `admin/src/lib/Message/useMessage*Fields.tsx`, `shared/models/src/message/message.types.ts`와 참조 `data-contracts.ts`에는 신규 필드 표시/타입 반영이 없다. 기존 필드 유지 조건에서 새 필드 추가만으로 기존 화면 수정이 필수인 것은 아니지만, 신규 정보를 어드민에서 보려면 타입·표·해당 CSV 및 null 표시를 반영해야 한다. 필터 지원은 이번 응답 필드 추가 공지만으로 추정하지 않는다.
+- 웹 조사 위치는 타 세션 작업 중인 `feat/DL-17583@22379c5b9`이며 위 어드민/메시지 파일은 로컬 `origin/master`와 차이 없음. 제품 파일·브랜치를 변경하지 않았다. 양앱 main HEAD는 아래 검토와 동일하며 딥링크 없는 탭은 읽음 요청 후 이동을 생략한다.
+- 이전의 'FE 수정 불필요'는 **딥링크 생략 호환성**에 대한 결론이다. PM이 알림센터 등 대체 랜딩을 결정하면 양앱 후속 구현이 필요하다. 현재 정책은 미확정이며, 코드·Jira 변경이나 런타임 테스트 없이 검토만 완료했다.
+
 ## 2026-11-25 후속 문의 검토 — deeplink 없는 공지성 푸시
 
 - [DL-16140 댓글45295](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=45295): Leo가 `data`에 `deliveryId`만 있고 `deeplink` 필드를 생략할 때 앱 동작을 질문했다. 메인에서 읽기 전용으로 확인했으며 보관된 기능 세션은 재개하지 않았다.
