@@ -1,5 +1,17 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 갱신 — 2026-11-25 Repository 루트의 전용 worktree로 이관 완료
+
+- 사용자 최신 명시 요청에 따라 기존의 '메인 checkout에서만 작업' 지침을 변경했다. 이제 이 세션의 제품 작업 위치는 **`/Users/parkjongsun/Repository/dentlink-client-dl-17583`**, branch **`feat/DL-17583`**다. 모든 Git checkout은 기존 Repository 루트에 물리적으로 둔다는 공통 정본 commit `3af90f8`과 SESSION_WORKFLOW의 Git Repository And Worktree Location을 읽고 적용했다. 아래 메인 워크트리 기록은 이관 전 이력이다.
+- 기존 작업 커밋과 release 통합을 모두 보존하도록 HEAD **`182318cbabe8993ab20365664316aa8576bc2836`**에서 필수 create_worktree 도구로 detached checkout을 만들었다. 도구의 임시 숨김 경로를 즉시 `git worktree move`로 위 최종 경로로 옮기고 이 채팅에 attach했다. 이전 숨김 attachment와 빈 임시 상위 폴더를 제거했으며 현재 attachment는 새 경로1개다. 실제 git top-level/cwd·worktree registration·feature checkout 소유권을 확인했다.
+- 이관 대상은 이 세션 소유의 **tracked 수정15개 + untracked 신규14개 =29파일**, staged0이었다. 원본 상태를 백업하고 새 위치에 복사한 뒤 모든 파일 SHA256/권한, HEAD, 전체 index(stage entries), staged/unstaged binary patch, porcelain status가 이관 전과 완전히 같음을 확인했다. 검증 후에만 원본의 명시한15개 파일을 HEAD로 restore하고14개 신규 파일을 제거했다. 강제 reset/clean/제품 커밋을 사용하지 않았다.
+- 원본 `/Users/parkjongsun/Repository/dentlink-client`은 **기존 로컬 master@96bdacda6, clean**으로 돌렸다. master를 최신 원격으로 별도 업데이트하지 않았다(조회 시 origin/master보다3커밋 뒤). feat/DL-17583은 새 worktree에서만 checkout되며 upstream 대비ahead4는 기존 상태 그대로다. 다른 세션 worktree/branch/file/process 및 기존 복구 stash는 변경하지 않았다.
+- 로컬 env6개(admin/clinic/e2e2/lab2)를 정본 opaque-copy 스크립트로 독립 복사했다. 값은 출력/파싱하지 않고 양쪽 Git ignored·untracked, byte equality, 서로 다른 inode를 확인했다. 기존 파일을 덮어쓰지 않았다. 새 위치에서 `pnpm install --offline --frozen-lockfile --ignore-scripts` 완료(다운로드0, lock/제품diff 변경0); workspace 의존성이 새 checkout의 shared 경로를 가리킴을 확인했다.
+- 이관 복구 자료: `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dentlink-17583-worktree-transfer-wm870ecd`의 manifest/files/unstaged.patch/staged.patch/index/status. env 값 백업은 만들지 않았다. 직전 release 통합 복구 stash/백업도 보존했다.
+- **사용자 추가 교정:** Cursor는 사용자가 직접 끈 것이므로 이관에서 제외한다. Cursor·내장 터미널·브라우저/창 배치·서버 재실행을 더 진행하지 않았다. 확인 시 이전3005 Lab 서버는 종료 상태이며 새 서버를 시작하지 않았다. 추후 로컬 미리보기는 새 worktree에서 사용자가 실행한다. 최초 서버 관측/재연결 계획과 실제 완료 상태를 구분한다.
+- 작업 내용은 경로만 바뀌었고 SplitView 포함 기존 로컬 검토 대기 상태를 유지한다. 제품 commit/push/PR/deploy·코드 수정·추가 QA 없음. 동일한 파일과 index를 확인했으므로 이전175테스트/타입/샘플 화면 검증을 재사용한다. 실제 계정·Windows Edge·실물 출력 확인은 그대로 남는다.
+- **다음:** 새 경로의 `feat/DL-17583`에서 사용자 로컬 피드백을 기다린다. 추가 구현이나 커밋은 새 지시를 따른다. 개인 정본/Claude 메모리/프로젝트 인덱스의 현재 경로를 갱신하고 개인 컨텍스트만 commit/push한다. 메인에 완료 메시지나 별도 진행 폴링은 하지 않는다.
+
 ## 최신 갱신 — 2026-11-25 공용 SplitView 적용·로컬 검토 대기
 
 - 사용자 승인: 공용 SplitView부터 만들고 추천안으로 구현한 뒤 로컬에서 확인한다. 기존 왼쪽 메뉴를 덮거나 전역 레이아웃을 재구성하는 안 대신, **목록 본문 오른쪽의 고정 너비·닫기 가능한 분할 영역**을 채택했다. 드래그 크기 조절은 이번 범위에서 제외했다. 구현 방향을 먼저 설명한 후 작업했다.
