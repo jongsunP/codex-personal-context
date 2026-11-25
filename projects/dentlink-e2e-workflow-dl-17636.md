@@ -6,7 +6,8 @@
 - [PR #4959 — 웹 E2E 실행 환경과 결과 알림 정리](https://github.com/Innvoaid/dentlink-client/pull/4959): `release/v1.95.0` 대상, OPEN·일반 PR·미병합·mergeable true, 1커밋/4파일(+167/-77) 확인. GitHub 파일 목록과 로컬 diff 일치.
 - 제품 worktree: `/Users/parkjongsun/Repository/dentlink-client-dl-17636/dentlink-client`. 현재 `feat/DL-17636-release-v1.95.0@c2bfd6d76076fc444f1778b18ae21d77cc479bfb`, origin 같은 SHA·tracked clean.
 - 최신 `origin/master@9084878eaa93ea4fe39df0f376afa4456c5fec55`에서 `feat/DL-17636`으로 시작했다. master/release의 squash 이력 차이로 무관한 Lab 4파일이 PR에 노출되어, 관련 4파일의 원본이 동일함을 확인한 뒤 `origin/release/v1.95.0@5ac812a430b12f775502a93a4a2b865f9d24785e` 기반 전달용 브랜치에 이번 변경만 담았다. 원래 `feat/DL-17636`은 로컬 master 시작점에 보존했고 push하지 않았다.
-- **현재 영향:** 코드와 PR만 준비됐다. 가드/제품 화면/BE/실제 env/GitHub·Slack 설정 변경 없음. 병합·배포·Actions 수동 실행·실계정/브라우저 E2E·Slack 시험 발송·Jira 변경 없음.
+- **현재 영향:** 코드와 PR만 준비됐다. 가드/제품 화면/BE/실제 env/GitHub·Slack 설정 변경 없음. 병합·배포·Actions 수동 실행·실계정/브라우저 E2E·Slack 시험 발송 없음.
+- 사용자 후속 요청에 따라 [Jira 작업 댓글 45345](https://innovaid.atlassian.net/browse/DL-17636?focusedCommentId=45345)에 구현 결과·248개 회귀/타입/lint 검증·PR 링크·미병합/미배포·master 반영 필요를 기록했다. 쓰기 응답의 댓글 본문과 ID 확인. Jira 조회 당시 상태는 진행 중이며, 상태/본문은 변경하지 않았다. 앞으로 승인된 PR 생성 후 관련 Jira 댓글과 채팅 요약을 함께 남기는 요청도 AI_WORKFLOW에 기록했다.
 - **남은 단계:** 사용자 PR 검토·병합 결정. 자동 E2E는 master의 workflow 정의를 읽으므로 릴리즈 PR 병합만으로 정책이 즉시 바뀌지 않으며 이후 master 반영이 필요하다. 실제 Ubuntu 브라우저 설치 및 전체 E2E 성공은 아직 미검증이다. 추가 PR/전파/실행/CodeRabbit 대응/자동 감시는 별도 요청 전 진행하지 않는다.
 
 ### 구현과 검증

@@ -380,6 +380,11 @@ Dentlink-specific intake rules remain limited to Dentlink.
   Use the same card if there is no parent/child structure. Do not add a comment
   just to report cosmetic editing or repeat unchanged status. Keep the issue's
   status distinct from Codex's personal waiting state.
+- User instruction, 2026-11-25: after creating an authorized task PR, add a
+  concise work-update comment to the relevant Jira card with the implemented
+  behavior, verification, PR link, and remaining integration/delivery steps.
+  Also briefly explain the handling in the chat. Follow the child-card rule
+  above; this does not authorize status changes, merging, or deployment.
 - Keep shared document links and the document index on the parent card.
   Child cards do not need repeated document lists, a manual parent link, or
   a duplicate child list already available through the tracker hierarchy.
