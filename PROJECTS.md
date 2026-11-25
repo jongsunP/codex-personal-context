@@ -21,6 +21,10 @@ Check this folder first when finding or continuing local projects.
 
 ## Projects
 
+### Dentlink 피드백 Amplitude 코드 조사
+
+- 주문 상세·피드백 목록/상세의 전체 피드백 이벤트를 웹·모바일웹·앱 네이티브·WebView 경로별로 읽기 전용 조사한다. 별도 세션/worktree, Jira 카드 없음. [조사 체크포인트](projects/dentlink-feedback-amplitude-audit.md)
+
 ### Dentlink 기공소 배송 업데이트 패널 노출 — DL-17625
 
 - 배송·픽업 페이지에서만 업데이트 내역 패널을 표시하도록 제한한다. 출력 작업과 분리된 세션/worktree에서 진행하며 웹 release/v1.95.0 대상으로 준비한다. [작업 체크포인트](projects/dentlink-lab-shipment-panel-visibility.md)

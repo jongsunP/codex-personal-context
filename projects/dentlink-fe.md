@@ -1,5 +1,11 @@
 # Dentlink Frontend Coordination
 
+## 피드백 Amplitude 코드 조사 인계 — 2026-11-25
+
+- Jira 없는 읽기 전용 조사를 새 세션 **피드백 Amplitude 이벤트 코드 조사** (`01a211d5-91e6-7a70-bfd6-a25bd4ed22dc`)에 전달했다. 웹·모바일웹·양앱 네이티브/WebView의 피드백 전체 이벤트 호출·속성·조건·누락/중복을 코드로만 조사한다. [조사 정본](dentlink-feedback-amplitude-audit.md).
+- 전용 web worktree는 `Repository/dentlink-client-feedback-amplitude-audit`의 detached HEAD로 준비했다. 다른 세션이 작업 중인 앱들은 고정 main SHA를 읽는다. 화면/서버 실행·제품 수정·PR 없음. 실제 새 채팅 `gpt-6-astra`/`xhigh` 및 시작 확인 후 메인 폴링 종료.
+- 사용자가 **이번 조사 한정**으로 정상 존재하는 기존 프로젝트 폴더를 채팅 cwd로 유지하고 제품 workdir를 명시하는 방식을 승인했다. 실제 persisted cwd 존재를 확인했다. 향후 세션의 기본 경로 설정 문제는 해결됐다고 주장하지 않으며 사용자의 속행 지시로 설정 조사를 보류했다.
+
 ## Git 작업 위치 일원화 지침·현재 작업 이전 지시 — 2026-11-25
 
 - 사용자 후속 전달: 이동 후 일부 채팅의 ‘현재 작업 디렉토리가 없습니다’ 조치는 사용자가 각 소유 세션에 직접 요청했다. 메인은 재요청·상태 폴링하지 않는다. 신규/이동 세션은 실제 폴더·Git 등록·채팅 persisted cwd 일치까지 setup 완료 조건으로 공통 지침에 명시했다. 이번 턴에서 각 오류 해소를 검증한 것은 아니다.
