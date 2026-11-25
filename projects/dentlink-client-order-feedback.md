@@ -5,22 +5,19 @@
 보존했다. 2026-09-28 구현·배포 이력과 아래 후속 코드 검토는 구분한다.
 재개 시 live Git과 필요한 Jira·Figma·Swagger를 우선하고, 기획·구현·검증·병합·배포를 구분한다.
 
-## 관리자 피드백 썸네일 QA 접수 — DL-17615 / 2026-11-25
+## 관리자 피드백 썸네일 QA — DL-17615 / 2026-11-25
 
-- 등록·전달 완료: `관리자 피드백 썸네일 수정 · DL-17615`, ID `01a2115e-9fc6-7062-9a3f-3f7d626a20e0`, 메인 프로젝트 폴더/local. 생성 당시 사용자 요청과 일치하는 메인 turn의 `gpt-6-astra`/`xhigh`를 확인해 명시 적용했고 새 세션 실제 첫 turn 동일 설정을 확인했다. 첨부와 표시 기준 확인·전용 worktree 구현 준비 시작을 확인했으며 메인 추가 폴링은 없다.
-- 사용자 요청: [DL-17615](https://innovaid.atlassian.net/browse/DL-17615)를 확인하고 별도 세션·별도 worktree에서 처리한다. 기존 출력·알림 후속·배송 패널 작업 공간은 보존한다. 구현·검증 및 branch/worktree 준비 범위이며 제품 commit/push/PR/merge/배포는 별도 지시 경계다.
-- 카드: `[QA] 피드백 썸네일 수정`, Frankie 담당·해야 할 일·댓글 없음. 설명은 ‘관리자에서만 잘못 반영된 피드백 썸네일 수정’, 재현 URL은 `https://stg-admin.dentlink.io/feedbacks`. 상위는 DL-17290이며 DL-17612 Sample Case 키워드 검토와 별도 QA다. 현재 이 카드/상위에서 수정버전은 확인되지 않았으므로 이전 별도 작업의 v1.95.0을 이번 건의 확정 PR 대상으로 단정하지 않는다.
-- 첨부: 이미지32046 `screenshot-1795507947115.png`, 이미지32048 `image-20261124-081236.png`, 콘솔 로그32047. 메인은 메타데이터·본문까지만 확인했고 실제 이미지는 아직 열람하지 않았다. 담당 세션이 두 이미지를 반드시 보고 기대 썸네일과 문제 화면을 먼저 대조한다. 첨부를 못 보면 추정으로 교체하지 않는다.
-- 코드 시작점: `admin/src/components/Feedback/AdminFeedbackOrderSummary.tsx`는 `feedback.order.categoryThumbnailUrl`을 58px 이미지로 렌더하고 값이 없으면 문서 아이콘을 사용한다. 실제 원인이 필드/매핑/서버값/표현 중 어디인지는 미확정. `/feedbacks` 목록·상세와 공용 소비처, 치과의 정상 표시/기존 제품 이미지를 대조하고 원인에 맞는 최소 수정·검증을 한다. 공통 API/기공소앱/치과앱까지 임의 확장하지 않는다.
-- 준비 계획: `dentlink-client` 최신 `origin/master`에서 새 `feat/DL-17615`, 전용 managed worktree `dl-17615-feedback-thumbnail`. 확인 당시 master `9084878eaa93ea4fe39df0f376afa4456c5fec55`, release/v1.95.0 `b0e04eafe00e86836f472bea114e5fce867b4cad`, 피드백 경로 diff 없음·새 작업 branch 원격 없음. 실제 QA가 특정 미병합 release 차이에 속한다는 근거가 나오면 담당 세션에서 base를 재판단한다.
-- 새 worktree는 동일 저장소 주 worktree의 eligible ignored/untracked `.env*`를 내용 열람 없이 상속·동일성/ignore 확인한다. 기존 사용자 작업 창/서버·미커밋 변경을 보존하며 기능 결과는 새 세션에서 사용자에게 직접 보고한다. 메인은 등록·전달 이후 폴링하지 않는다.
-
-### 담당 세션 준비 확인 — 2026-11-25
-
-- managed worktree `/Users/parkjongsun/.codex/worktrees/dl-17615-feedback-thumbnail/dentlink-client` 생성·현재 채팅 연결 완료, branch `feat/DL-17615`, base `origin/master@9084878eaa93ea4fe39df0f376afa4456c5fec55`. 다른 worktree는 변경하지 않았다.
-- main의 eligible ignored/untracked env 6개를 불투명 복사하고 byte equality·ignore를 확인했다. 대상 권한 0600, 값 열람·변경 없음. 의존성 frozen/offline 설치 완료.
-- 첨부32046/32048 실제 열람: 파란색 category thumbnail 대신 카테고리 관리의 보라색 `이미지`가 기대값이다. Clinic 피드백도 catalog의 `categoryId → imageUrl`로 표시한다. Admin에 이미 있는 `useCatalogCategoryQuery`를 공용 summary에 재사용하는 최소 수정 진행 중이다.
-- 초기 체크포인트이며 아직 구현·브라우저 검증 완료를 뜻하지 않는다. 제품 commit/push/PR/merge/배포 없음.
+- **구현·focused 검증 완료, 제품 미커밋.** `feat/DL-17615`의 `admin/src/components/Feedback/AdminFeedbackOrderSummary.tsx` 한 파일을 수정했다. 제품 commit/push/PR/merge/배포는 하지 않았으며 서비스 반영은 없다. 다음 지시가 오면 확정 PR 대상을 확인하고 커밋·E2E 영향 가드·PR 준비를 진행한다. 이 카드와 상위의 fixVersion은 비어 있으므로 다른 작업의 `release/v1.95.0`을 확정 대상으로 취급하지 않는다.
+- 소유 세션: `관리자 피드백 썸네일 수정 · DL-17615`, `01a2115e-9fc6-7062-9a3f-3f7d626a20e0`, 메인 프로젝트 폴더/local. 메인이 등록·최초 turn의 `gpt-6-astra`/`xhigh` 일치를 확인했다. 담당 세션에서 사용자에게 직접 보고하며 메인은 추가 폴링하지 않는다.
+- 작업 공간: managed worktree `/Users/parkjongsun/.codex/worktrees/dl-17615-feedback-thumbnail/dentlink-client`, branch `feat/DL-17615`, base/HEAD `9084878eaa93ea4fe39df0f376afa4456c5fec55`(최신 fetch한 `origin/master`). `feat/DL-17583` main 및 알림 후속/배송 패널 worktree의 미커밋 변경·서버는 보존했다. 새 worktree에 eligible ignored/untracked env 6개를 불투명 복사하고 byte equality·ignore 및 대상 0600 권한을 확인했다. 값은 열람·변경하지 않았다. `pnpm install --frozen-lockfile --offline --ignore-scripts` 완료, lockfile 변경 없음.
+- 요구 근거: [DL-17615](https://innovaid.atlassian.net/browse/DL-17615), Frankie 담당 하위 QA, 상위 DL-17290. 첨부32046/32048 원본을 현재 Atlassian 커넥터로 내려받아 실제 열람했다. 파란색 카테고리 `섬네일 이미지` 대신 보라색 `이미지` 표시 요청이다. 콘솔 로그32047은 원인 판별에 불필요하여 열지 않았다. DL-17612 키워드 건은 재개하지 않았다.
+- 실제 STG 재현: Chrome 작업 전용 탭에서 로그인된 관리자 계정으로 `/feedbacks`의 보고 주문 `7000012905` 상세를 열어 파란 이미지 표시를 확인했다. `/categories/1203` Restorations의 `thumbnailFileId=38`, `imageFileId=225`를 첨부와 대조했다. 피드백 이미지 src와 카테고리 thumbnail src가 일치하고, 기대 이미지가 별도 `imageUrl`임을 확인했다. API 원문/고객 데이터/인증값은 저장하지 않았다.
+- 원인·수정: Admin 공용 summary가 `feedback.order.categoryThumbnailUrl`을 직접 사용한 것이 원인이다. Clinic은 이미 catalog `categoryId → imageUrl`을 사용하며 Admin에도 같은 `useCatalogCategoryQuery`가 기존 주문/상품 가격 화면에 있다. 이 hook을 summary에 재사용해 해당 카테고리 `imageUrl`을 표시한다. API/DTO/질문/상태/저장 정책·공용 디자인시스템·다른 제품은 변경하지 않았다. 이미지가 없으면 기존 문서 아이콘, 70px 배경/58px 이미지 크기와 메타 정보는 유지한다.
+- 영향 확인: `AdminUserFeedbackList`의 카드와 `AdminFeedbackDetailDrawer`가 summary를 공유한다. `/feedbacks`, 사용자/CRM 피드백, 주문 피드백에서 상세 drawer를 여는 경로도 같은 수정이 적용된다. `/feedbacks`의 표 자체는 이미지 열이 없으므로 수정하지 않았다.
+- 검증: Admin 전체 `pnpm --filter dentlink-admin-web type`, 변경 파일 ESLint/Prettier, `pnpm check:admin-dlos`(60/60), `git diff --check` 통과. 초기 implicit-any 오류는 `ProductTypes.CategoryListSimpleDto` 명시로 해결한 뒤 최종 전체 타입 검사를 통과했다. 불필요한 복제 단위 테스트는 추가하지 않았다.
+- 브라우저 검증: 임시 로컬 페이지에서 실제 summary·사용자별 목록·상세 drawer와 React Query 캐시의 합성 피드백을 사용했다. 올바른 카테고리가 배열 첫 항목이 아닌 경우에도 실제 STG 보라색 자산 선택/이미지 로드/58×58 표시를 확인했다. categoryId 누락, imageUrl 누락, 카테고리 미일치에서는 대체 아이콘을 표시했고 정상 데이터 복구·상세 열기/닫기·날짜/Rating 표시를 확인했다. 마지막 정상 상세 screenshot을 첨부 기대 이미지와 시각 대조했다.
+- 검증 한계: 수정 코드를 STG 실데이터 API와 연결한 통합 검증·권한별 계정 확인·전체 E2E/배포는 수행하지 않았다. 로컬 catalog/피드백 데이터는 합성이며 실제 API 응답 성공 검증과 구분한다. 해당 임시 페이지와 localhost:3035 서버는 제거/종료했다(cwd도 전용 worktree/admin 확인). 기존 QA widget의 로컬 Jira 설정 누락 500, Next/TypeScript 권장 버전 및 공용 styled-components prop 경고는 관찰했으며 이번 변경에서 수정하지 않았다.
+- Jira: [댓글45318](https://innovaid.atlassian.net/browse/DL-17615?focusedCommentId=45318)에 표시 기준과 로컬 확인 범위를 간단히 기록했다. 기존 본문·첨부·상태는 보존했고 상위 댓글/Slack 쓰기는 하지 않았다. Claude 메모리 `project_dl17615_admin_feedback_thumbnail.md`에도 동일 최종 상태를 기록했다.
 
 ## Sample Case 키워드 추가 영향 검토 — 2026-11-24
 
