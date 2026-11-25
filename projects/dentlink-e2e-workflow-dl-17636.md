@@ -1,6 +1,17 @@
 # DL-17636 웹 E2E 실행·알림 정책 조사
 
-## 현재 상태 — 2026-11-25, master PR 보완 완료·실제 실행 제외
+## 현재 상태 — 2026-11-25, master 병합·Jira 완료·상황 저장 후 마감
+
+- 사용자 최종 요청: 본인이 수행한 master 병합/환경 브랜치 재구성 방식이 맞는지 의견을 확인하고, 문제가 없으면 상황 메모리·Jira 정리/상태 변경·최종 브리핑 후 마무리. **배포/E2E 결과는 사용자가 직접 확인한다. 자동 추적 요청이 아니다.**
+- [PR #4960](https://github.com/Innvoaid/dentlink-client/pull/4960)은 사용자에 의해 2026-11-25 **21:43:24 KST** master에 병합됐다. API `merged:true`, merge SHA `023057ab6109e54d263079a6c64c139407f02a6b` 확인. 이전 release PR #4959는 대체 후 미병합 종료 상태로 보존.
+- 사용자는 기존 stage/develop을 각각 보존 브랜치로 만든 뒤 원본 환경 브랜치를 삭제하고, 최신 remote master에서 새 환경 브랜치를 만든 후 보존 작업을 병합했다. **이 방식은 적절하며 다시 작업할 필요 없다.** Git 이력에서 DEV `74f37befdcef0f8bee12d162c9dc87055d90e5c7`의 부모는 새 master023057ab61+이전develop b8eca5f31d, STG `ab079cc5da6154d261a9742eb2efd6da76238baf`의 부모는 새master023057ab61+이전stage7565eb0bab임을 확인했다. 해당 환경의 E2E workflow와 배포 인계 코드도 master와 동일하다. 이 판단은 브랜치 구성/이번 변경 반영 범위이며 전체 서비스 QA 완료를 뜻하지 않는다.
+- 사용자가 DEV/STG 배포를 실행했다. 처음 잘못 추적 요청으로 해석해 확인한 시점에는 DEV run45616982898(21:46:24 KST 시작), STG run45616957619(21:46:14 시작)가 진행 중이었다. 사용자 정정 후 추가 Actions/Slack/서빙 상태 조회를 중단했다. 폴링 계획은 폐기했으며 모니터링/자동화는 만들지 않았다. **최종 배포/E2E/Slack 결과는 미확인, 사용자 확인 담당**이다.
+- [DL-17636](https://innovaid.atlassian.net/browse/DL-17636) 상태를 **완료**로 변경했다. 이 카드의 실제 transition5는 “작업 완료 혹은 배포 준비가 완료” → 완료이며 별도 Ready for Deploy 전환은 없었다. 쓰기 응답에서 완료 확인. [최종 댓글45347](https://innovaid.atlassian.net/browse/DL-17636?focusedCommentId=45347)에 구현·master 병합·사용자 브랜치 구성 정상·사용자 배포/결과 확인·자동 추적 없이 마감을 명시했다. 설명·담당·포인트·fixVersion은 변경하지 않았다.
+- 완료 범위: workflow OS/알림 최소 변경, 관련 회귀 검증/README, master PR/병합, 정적 부작용 검토, 개발 검증(전체248 결과 재사용+후속15·3서비스타입·lint오류0·Admin9·shared169·coverage변화0), Jira/개인 기록. 제품 기능·가드·부모 배포·실패 gate/retry/skip 유지. 이번 변경만 위해 매번 환경 브랜치를 삭제/재생성할 필요는 없고, 자동 E2E 정책은 master 반영 후 평소 DEV/STG 배포에 연결된다.
+- Codex는 제품 merge/branch reset/배포/E2E/Slack 발송을 실행하지 않았다. 사용자 수행과 확인된 Git/API 사실을 구분해 저장했다. local worktree는 `feat/DL-17636@6f9e3e7ad7ebb1caea549d6ed3ca1d3a0b96a85b`로 보존, 소스 변경/cleanup/새 브랜치 없음.
+- **다음 시작점:** 사용자 후속 결과/추가 요청이 있을 때 그 범위만 확인한다. 이 세션은 기록 저장 후 대기하며, 자동 추적·재시도·추가 코드 수정·배포/브랜치 정리·Jira 추가 변경을 하지 않는다. 배포 상황 설명이나 “이후 결과를 보면 된다”는 발언을 추적 지시로 확대하지 않는 정정도 공통 SESSION_WORKFLOW에 기록했다.
+
+## 이전 상태 — 2026-11-25, master PR 보완 완료·실제 실행 제외
 
 - 사용자 요청: 검토 후 누락된 작업을 추가하고 완료/미완료/알아둘 점을 다시 브리핑. 코드·문서·PR 보완을 진행하되, 기존 Slack 읽기 전용 지시와 충돌하는 실제 STG E2E/자동 Slack 발송은 별도 확인했다. 사용자 답변은 **“실행 없이 코드·문서·PR 보완까지만”**이다. 실제 E2E·배포는 실행하지 않는다.
 - **현재 PR:** [#4960 — 웹 E2E 실행 환경과 결과 알림 정리](https://github.com/Innvoaid/dentlink-client/pull/4960), `master` 대상, OPEN·일반 PR·미병합·mergeable true. base `9084878eaa93ea4fe39df0f376afa4456c5fec55`, head `feat/DL-17636@6f9e3e7ad7ebb1caea549d6ed3ca1d3a0b96a85b`, 2커밋/4파일(+171/-79). GitHub 파일 목록=로컬 diff, origin 동일·tracked clean 확인.

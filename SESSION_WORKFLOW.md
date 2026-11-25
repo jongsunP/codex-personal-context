@@ -1663,6 +1663,12 @@ includes a result check after 15 minutes.
   The user checks the final result. Do not wait for workflow completion, query
   Actions/API/HTTP again, follow serving revisions or E2E, or create a monitoring
   automation merely because deployment takes time.
+- User clarification, 2026-11-25: when the user describes deployments they
+  performed and asks whether that sequence is appropriate, answer the opinion
+  request and save the situation when asked. Statements such as “we can look
+  at the E2E/notifications afterward” are not, by themselves, authorization
+  to start tracking. If the user says they will check deployment results,
+  leave that check to them and do not poll Actions, Slack, or serving state.
 - A separate explicit request to check results or follow through to completion
   authorizes only that requested scope. For explicitly requested ongoing
   monitoring with no other timing instruction, retain the earlier cadence:
