@@ -21,6 +21,10 @@ Check this folder first when finding or continuing local projects.
 
 ## Projects
 
+### Dentlink 기공소 배송 업데이트 패널 노출 — DL-17625
+
+- 배송·픽업 페이지에서만 업데이트 내역 패널을 표시하도록 제한한다. 출력 작업과 분리된 세션/worktree에서 진행하며 웹 release/v1.95.0 대상으로 준비한다. [작업 체크포인트](projects/dentlink-lab-shipment-panel-visibility.md)
+
 ### Dentlink 기공소 목록 라벨·스티커 출력 — DL-17549·DL-17565
 
 - 기공소 웹의 주문·배송 선택 출력, QR 배송 완료 후 출력 연결, 여러 용지/프린터 대응을 한 세션에서 다룬다. 기존 기공소 보존과 현장 편의를 우선하고 메인 워크트리 `feat/DL-17583` 하나를 사용한다. 승인 경계·현재 로컬 변경/검증·후속 통합은 체크포인트를 따른다.
