@@ -1,5 +1,12 @@
 # Dentlink Frontend Coordination
 
+## 메인세션 교체 인계 진행 — 2026-11-25
+
+- 사용자가 기존 메인을 새 메인으로 교체하고, 정상 인계 후 구 메인 보관과 불필요한 관리용 worktree 정리를 명시 승인했다. 이번 교체에 한정된 승인이다.
+- 새 `Dentlink FE 메인세션`은 `01a21230-85b5-75f2-aaeb-97c5700d0ee2`다. 공식 CLI로 원본 `/Users/parkjongsun/Repository/codex-personal-context`에서 생성했으며 실제 실행의 cwd와 `gpt-6-astra` / `xhigh`를 확인했다. 사용자의 마지막 모델 지시는 **Extra High**다. 지정 문서 확인과 인계 수신을 마치고 대기 중이다. [인계 정본](dentlink-fe-main-handoff-20261125.md).
+- **교체 완료는 아직 아니다.** 앱의 프로젝트 이동 도구는 새 채팅이 sidebar에 없다고 반환했고, 초기 턴 완료 후에도 최근 목록에는 나타나지 않았다. 공식 채팅 열기 기능으로 등록을 확인하기 위한 화면 전환 허락을 요청했으며 답변 대기 중이다. 허락 전에는 화면을 전환하지 않는다.
+- 따라서 구 메인 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`과 `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`는 보존했다. 다음 단계는 새 메인의 앱 표시·프로젝트 소속·cwd 확인 후 공식 managed worktree 보관과 구 메인 보관이다. 아래 CLI `/cd` 재시도 계획은 새 메인 교체 결정으로 대체됐다. 제품 코드·기존 기능 세션은 건드리지 않는다.
+
 ## 최종 운영 지침 정정·개인 컨텍스트 단일화 준비 — 2026-11-25
 
 - 사용자의 최종 의도: 세션을 묶는 메인 프로젝트와 Git 경로는 별개다. 메인 프로젝트에 속한 기능 세션도 필요한 worktree를 둘 수 있으나, 모든 에이전트·디바이스의 실제 checkout은 기존 Repository/repository 한곳 아래에 둔다. 개인 지침·기록 저장소 `codex-personal-context`는 로컬 하나만 유지하며 사무실은 `/Users/parkjongsun/Repository/codex-personal-context`가 기준이다.
