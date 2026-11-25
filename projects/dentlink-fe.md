@@ -1,5 +1,20 @@
 # Dentlink Frontend Coordination
 
+## Git 작업 위치 일원화 지침·현재 작업 이전 지시 — 2026-11-25
+
+- 사용자 확정: 모든 디바이스·프로젝트에서 Git 저장소/clone/worktree는 생성·이동·정리 모두 디바이스의 기존 Repository/repository 루트 한곳에 물리적으로 모은다. 도구 기본값의 숨김 경로를 허용하지 않는다. AGENTS·SESSION_WORKFLOW·AI_WORKFLOW·PROFILE, Claude 메모리와 Codex 보조 메모리 지침에 반영했다. 정본 commit `3af90f8`.
+- 숨김 경로 발생 이유: Codex managed worktree 도구의 기본 경로를 사용했으며 별도 숨김 속성을 설정한 것은 아니다. 이전 규칙의 sibling worktree/일반 Repository 선호는 있었지만 모든 Git 생성·정리에서 그 루트만 쓰도록 강제하는 명시 규칙이 없었고 메인이 도구 기본값을 허용 가능한 것으로 판단했다. 사용자가 중간에 숨김 경로 사용을 지시한 것은 아니다. 이번 지침으로 그 판단을 수정한다.
+- 사용자 승인으로 아래 4개 소유 세션에 실제 이전 지시 전달 성공. HEAD/branch/index/미커밋·미추적·ignored/env 보존, 필요 프로세스만 조정, 실제 Git 경로 및 attach_worktree/cwd 갱신 후 기록하도록 했다. 메인은 다른 소유 세션의 파일을 직접 이동하지 않고 전달 후 폴링하지 않는다. **아래는 지정 목적지이며, 현재 이동 완료 증거는 각 담당 정본에서 확인해야 한다.**
+
+  | 작업 | 지정된 실제 경로 |
+  | --- | --- |
+  | 알림 이력·푸시 후속 DL-16140 | `/Users/parkjongsun/Repository/dentlink-client-dl-16140-history-followup` |
+  | 배송 패널 노출 DL-17625 | `/Users/parkjongsun/Repository/dentlink-client-dl-17625` |
+  | 관리자 썸네일 DL-17615 | `/Users/parkjongsun/Repository/dentlink-client-dl-17615` |
+  | 라벨·스티커 출력 DL-17583 | `/Users/parkjongsun/Repository/dentlink-client-dl-17583` |
+
+- 출력 세션은 주 checkout 자체를 옮기는 것이 아니라 기존 작업 HEAD/변경을 새 linked worktree에 보존·검증한 다음 원본의 이관된 변경만 정리한다. 다른 변경은 보존한다. remote/PR/배포 변경 지시가 아니며 작업·검토/대기 상태를 유지한다. 기존 숨김 경로가 남은 이전 인계 기록은 생성 당시 이력이며 새 작업 위치 선택의 근거로 쓰지 않는다.
+
 ## 관리자 피드백 썸네일 QA 인계 — 2026-11-25
 
 - 사용자 요청 DL-17615를 새 세션 `관리자 피드백 썸네일 수정 · DL-17615` (`01a2115e-9fc6-7062-9a3f-3f7d626a20e0`)에 전달했다. 메인 프로젝트 폴더/local, 현 메인 선택과 새 세션 실제 `gpt-6-astra`/`xhigh` 일치. 전용 worktree/`feat/DL-17615`에서 관리자 썸네일 원인을 첨부와 대조한 뒤 구현·검증한다. 원인은 아직 미확정, 기존 제품 공간은 보존한다.
