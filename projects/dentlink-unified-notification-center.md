@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-25 작업 위치 이전 — Repository 실경로 사용
+
+- 사용자 승인 전달 및 개인 지침 `3af90f8`의 Git Repository And Worktree Location에 따라 본인 worktree만 `git worktree move`로 옮겼다. **현재 실경로는 `/Users/parkjongsun/Repository/dentlink-client-dl-16140-history-followup`**이며, 이후 모든 제품 명령에서 이 경로를 명시한다. 아래 날짜별 기록의 `~/.codex/worktrees/notification-history-followup/dentlink-client`는 이전 위치 이력이다.
+- 보존 확인: branch `feat/DL-16140-history-followup`, HEAD `9084878eaa93ea4fe39df0f376afa4456c5fec55`, upstream 없음. 이동 전후 Git index bytes/entries 동일, staged·unstaged·untracked 변경 0. ignored env 6개는 값 열람/변경 없이 hash·inode·권한·크기·mtime·ignore 동일성을 확인했다. 대상 경로 충돌/열린 파일·cwd 프로세스 없음. 다른 세션의 checkout/브랜치/프로세스는 변경하지 않았다.
+- Git 등록은 새 위치만 가리키고 옛 checkout은 없다. 옛 상위 디렉터리에는 도구 메타데이터 `.codex-worktree-name`만 남아 보존했으며 제품 작업본은 없다. 복제 작업본·symlink를 만들지 않았다. `attach_worktree`로 새 경로를 붙이고 `remove_attachment`로 옛 연결만 제거했으며, 이 채팅의 attachment는 새 경로 하나만 남았다(도구 payload `managed:false`). 새 위치에서 실제 명령 cwd/Git 상태를 확인했다.
+- **도구 한계:** `read_thread(includeTurns:false)`의 채팅 기본 cwd 메타데이터는 attach 후에도 옛 경로를 반환한다. 현재 도구에는 직접 cwd 변경 기능이 없고, 지원 UI 확인도 CUA helper의 `No such file or directory` 오류로 시작하지 못했다. 런타임 DB를 직접 고치거나 옛 경로를 재생성하지 않았다. 파일·Git·attachment 이전은 완료했지만 채팅 기본 cwd 갱신은 미완료이므로 명령은 반드시 위 새 경로를 명시한다.
+- 기존 업무 상태 유지: 제품 구현/커밋/push/PR/배포 지시 전 대기. PM 답변용 초안만 제공했으며 외부 게시하지 않았다. 남은 확인은 (1) 기공소 변경 안내 외 랜딩 없는 알림 종류의 사실 확인, (2) 해당 푸시→센터 진입 시 `ALL` 기본 탭 사용에 대한 PM 정책 확인이다. 소속 전달/API 세부 계약은 별도 개발 연동 확인이며 일정 답변 초안은 배포 실행 승인이 아니다. 위치 이전을 추가 구현/정책 확정으로 확대하지 않는다.
+
 ## 2026-11-25 개발 범위 조사 — 기존 소속별 알림센터 경로 재사용 가능, 미구현
 
 - 사용자 요청: 일정 검토보다 개발 내용을 먼저 파악한다. PM 댓글45314와 BE 댓글45301을 기준으로 어드민 소비 타입/표/CSV, 양앱 푸시 읽음·소속 전환·알림센터 진입, 공개 Swagger를 읽었다. 제품 코드·Jira·PR·배포 변경, 서버/기기 실행, 테스트 실행은 하지 않았다. 아래 PM 답변 기록의 “양앱 후속 수정 필요”는 **기존 경로 재사용과 BE payload 선택에 따라 실제 수정 범위가 달라진다**는 이번 조사로 구체화한다.
