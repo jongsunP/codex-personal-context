@@ -5,6 +5,7 @@
 ## 최종 상태
 
 - 기존 `메인세션` (`01a08f0c-2057-7852-ae8d-0cf950a91fd3`)를 유지한다. 기본 실행 pwd와 저장된 채팅 cwd는 `/Users/parkjongsun/Repository`로 일치한다.
+- 사용자 설명에 따르면 경고가 있던 세션들을 다른 폴더로 이동한 뒤 원래 프로젝트 폴더로 되돌리자 경고가 사라졌다. 사용자 관찰로 기록하며 정확한 내부 원인과 모든 세션에 대한 재현성은 미확정이다.
 - 사용자가 경로를 변경하고 불필요한 `/Users/parkjongsun/Repository/dentlink-fe-main-context` 폴더를 삭제했다. 에이전트가 실제 부재를 확인하고 남은 첨부 및 Git worktree 등록을 정리했다.
 - `/Users/parkjongsun/Repository/codex-personal-context`의 main이 유일한 개인 기록 checkout이다. 메인의 cwd와 기록 저장소는 달라도 된다. 별도 감싸는 폴더·복제본·관리용 worktree는 필요 없다.
 - 기존 제품 세션·제품 코드·제품 checkout은 그대로다. 상세 업무 연속성은 PROJECTS.md와 각 projects 문서에서 필요한 범위만 확인한다.
