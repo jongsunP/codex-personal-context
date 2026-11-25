@@ -1,6 +1,18 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
-## 현재 상태 — 2026-11-25 로컬 구현 완료·사용자 검토 대기
+## 최신 갱신 — 2026-11-25 develop 주문 목록 출처 확인·release 통합 완료
+
+- 사용자 요청: develop의 주문 목록 개편이 master/release에 있으면 작업 브랜치를 업데이트하고, 타인 작업 브랜치에만 있으면 확인만 한다. 비교 결과를 먼저 알려야 하며 단순 비교인지 통합/재연결 중인지 분명히 구분한다.
+- 최신 fetch에서 develop `c0e3bee4e`의 개편 원본은 `853681bfe`(tata), release/v1.95.0 `b0e04eafe`의 반영은 `7502b0bda`(DL-17502/#4919)다. 주문 목록 page/OrderList/구 OrderList hook 및 관련 주문·담당자 query/config 경로를 develop↔release 비교한 결과 차이0. master `9084878ea`에는 개편이 아직 없다. feat/DL-17502에도 원본이 있지만 작업 브랜치에만 있는 상태가 아니다. 실제 개발서버 배포 런타임은 확인하지 않고 사용자가 지정한 develop 코드 기준으로 확인했다.
+- 조건부 업데이트 승인에 따라 **같은 메인 worktree/feat/DL-17583**에 release를 병합했다. 동기화 전용 merge commit `182318cbabe8993ab20365664316aa8576bc2836` 생성, 원격 push 없음. origin/feat/DL-17583은22379c5b9 그대로이며 로컬 ahead4(기존release3+merge1). 기존 1·2번 출력 커밋의 제품 코드는 그대로 보존했다. release/master/develop 브랜치 자체는 변경하지 않았다.
+- 기존 미커밋23파일을 백업/stash 후 복원했다. 주문 page와 en/ko orders JSON 충돌을 해결하며 release의 새 page wrapper/필터/컬럼을 보존하고 batchPrint 번역을 합쳤다. 나머지20파일은 복원 전후 SHA256 일치. **출력 기능 전체 및 이번 연결 수정은 미커밋/unstaged**, Git 충돌/merge 진행 상태 없음.
+- 출력 선택 연결을 삭제된 구 pages/orders 구현에서 `components/Order/OrderList/OrderList.tsx`로 옮겼다. 기존 열/검색/필터/페이지네이션/상세 이동과 주문일·번호 고정 열은 유지한다. 새 useOrderList의 isPlaceholderData를 노출하여 새 페이지/필터 결과를 기다리는 동안 이전 행을 잘못 선택하지 않게 선택만 잠근다. 별도 데이터조회/출력 로직은 그대로 재사용한다.
+- release의 jszip 의존성1개를 offline/frozen-lockfile/ignore-scripts로 기존 캐시에서 연결했다(다운로드0, lock 수정 없음). 실제 env/제품 서버 실행 없음.
+- merge 훅 Clinic/Lab/Admin type 전부 통과, 복원/적응 후 Lab type 통과. 관련14 suites/170 tests 통과(새 테이블 선택·임시주문 제외·상세 클릭 분리·placeholder 잠금·페이지 간 유지/제외 포함). 이번 연결3파일 lint오류/경고0, diff check 통과. 실제 새 OrderList·컬럼·필터 UI를 샘플 harness로 렌더해 화면/런타임오류없음 확인. 실제 API/필터 요청·서비스 로그인·물리 프린터 검증은 별도다.
+- recovery: `/var/folders/42/51l4h0fx28d2_q1448z695dw0000gn/T/dentlink-17583-release-update-v1toagms`; 보존 stash `545ea5c861d2c5a65af58a4b278fd6f29c2c25df`(복원 완료, 안전 복구용으로 유지). 다른 stash는 변경하지 않았다.
+- **다음:** 이제 같은 작업 폴더/브랜치에서 새 주문 목록+출력 기능을 로컬 검토한다. 앞 기록의 ‘release 주문 목록 연결 필요’는 이번 작업으로 해결됐으며 새 작업기준은 위 merge HEAD다. 제품 기능 커밋/푸시·PR·배포 및 현장 출력 검증은 여전히 대기한다.
+
+## 직전 체크포인트 — 2026-11-25 release 통합 전 로컬 구현
 
 - **최신 승인/대기 지점:** 사용자는 3번에 한정하지 않고 이 세션의 6번까지 모든 목적을 대상으로 추천대로 가능한 구현을 진행하도록 승인했다. 미논의 세부사항도 기존 의도와 추천으로 처리하되, 1순위는 안전/기존·협력기공소 보존, 2순위는 현장 편의다. 과도한 난도·운영 위험·복잡성·당일 수행 곤란한 범위는 피한다. **제품 코드는 커밋·푸시하지 않고 로컬에서 사용자 검토를 기다린다.** 이전 3번 논의/구현 보류는 이 승인으로 대체됐다.
 - 제품 위치는 `/Users/parkjongsun/Repository/dentlink-client`, **메인 워크트리 `feat/DL-17583` 하나**다. HEAD와 origin/feat/DL-17583은 기존 `22379c5b9983273b6ab81389616905b67a4e5622` 그대로. 1·2번과 미리보기 후속은 이전 푸시 커밋이고, 이번 3·4·5 일부·6 웹 분리는 추적 파일 변경과 신규 파일로만 존재한다. staging/commit/push/PR/merge/deploy·새 branch/worktree·앱 저장소 변경 없음.
