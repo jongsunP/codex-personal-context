@@ -10,6 +10,13 @@
 - 사용자 후속 요청에 따라 [Jira 작업 댓글 45345](https://innovaid.atlassian.net/browse/DL-17636?focusedCommentId=45345)에 구현 결과·248개 회귀/타입/lint 검증·PR 링크·미병합/미배포·master 반영 필요를 기록했다. 쓰기 응답의 댓글 본문과 ID 확인. Jira 조회 당시 상태는 진행 중이며, 상태/본문은 변경하지 않았다. 앞으로 승인된 PR 생성 후 관련 Jira 댓글과 채팅 요약을 함께 남기는 요청도 AI_WORKFLOW에 기록했다.
 - **남은 단계:** 사용자 PR 검토·병합 결정. 자동 E2E는 master의 workflow 정의를 읽으므로 릴리즈 PR 병합만으로 정책이 즉시 바뀌지 않으며 이후 master 반영이 필요하다. 실제 Ubuntu 브라우저 설치 및 전체 E2E 성공은 아직 미검증이다. 추가 PR/전파/실행/CodeRabbit 대응/자동 감시는 별도 요청 전 진행하지 않는다.
 
+### PR 부작용·대상 재검토 — 2026-11-25
+
+- 사용자 질문에 따른 읽기 전용 검토. PR4959는 여전히 release/v1.95.0 대상 OPEN·미병합·4파일, head c2bfd6d76, 최신 master9084878/release5ac812a 변화 없음. 제품 코드/부모 배포/실패 gate/가드는 변경하지 않아 제품 회귀 위험은 낮다고 판단하나 실제 GitHub 환경 설치·전체 E2E 검증 전 무위험을 보장하지 않는다. DEV 실패도 Slack에서는 보이지 않는 것이 의도된 정책이며 Actions 확인 필요. OS별 새 캐시 첫 실행은 브라우저를 다시 설치하고, 설치가 해결되면 기존에 멈췄던 실제 시나리오/테스트 데이터 사용이 재개된다.
+- **추천:** 이 변경은 제품 릴리즈와 독립적인 자동 workflow 정책이므로 master 우선 PR이 더 적합하다. 새 자동 E2E는 master의 workflow 정의를 사용한다. 다만 현재 릴리즈 기반 head의 PR base만 master로 변경하면 릴리즈의 다른 작업까지 **166파일(+12514/-2216)** 포함된다. 최신 master 기반 기존 feat/DL-17636 등에 이번 c2bfd6d76 커밋의 4파일만 옮긴 별도 master PR로 준비해야 한다. 관련 4파일의 변경 전 내용은 master와 release에서 동일함을 재확인했다.
+- 질문은 변경 승인이 아니다. PR 대상/브랜치/제품 파일/원격/배포/테스트는 변경·실행하지 않았다. 별도 master PR 준비와 기존 릴리즈 PR 유지/교체는 사용자 결정 대기.
+- 사용자 소통 정정: Jira 기록 완료 알림이나 추상적인 항목명만으로 채팅 보고를 대신하지 않는다. 실제 무엇을 어떻게 바꿨는지, 검증 결과, 아직 적용되지 않은 부분을 채팅에도 바로 설명한다. 메시지 누락이 아니라 요청을 너무 짧은 상태 요약으로 처리한 응답 문제였다.
+
 ### 구현과 검증
 
 - `.github/workflows/clinic_dev_e2e.yml`, `clinic_stg_e2e.yml`: E2E 실행 job만 `ubuntu-24.04`로 고정하고 Playwright 캐시 key에 OS 버전을 포함했다. 준비 job·트리거·concurrency·artifact·실패 gate·retry/skip 계약은 유지했다.

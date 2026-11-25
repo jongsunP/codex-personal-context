@@ -383,8 +383,11 @@ Dentlink-specific intake rules remain limited to Dentlink.
 - User instruction, 2026-11-25: after creating an authorized task PR, add a
   concise work-update comment to the relevant Jira card with the implemented
   behavior, verification, PR link, and remaining integration/delivery steps.
-  Also briefly explain the handling in the chat. Follow the child-card rule
-  above; this does not authorize status changes, merging, or deployment.
+  Also explain the concrete before/after behavior, verification, and remaining
+  unapplied steps in the chat; a Jira-write confirmation or vague status labels
+  do not substitute for that report (2026-11-25 clarification). Follow the
+  child-card rule above; this does not authorize status changes, merging, or
+  deployment.
 - Keep shared document links and the document index on the parent card.
   Child cards do not need repeated document lists, a manual parent link, or
   a duplicate child list already available through the tracker hierarchy.
