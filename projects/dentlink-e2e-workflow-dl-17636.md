@@ -1,6 +1,20 @@
 # DL-17636 웹 E2E 실행·알림 정책 조사
 
-## 현재 상태 — 2026-11-25, 최소 구현·v1.95.0 PR 완료
+## 현재 상태 — 2026-11-25, master PR 보완 완료·실제 실행 제외
+
+- 사용자 요청: 검토 후 누락된 작업을 추가하고 완료/미완료/알아둘 점을 다시 브리핑. 코드·문서·PR 보완을 진행하되, 기존 Slack 읽기 전용 지시와 충돌하는 실제 STG E2E/자동 Slack 발송은 별도 확인했다. 사용자 답변은 **“실행 없이 코드·문서·PR 보완까지만”**이다. 실제 E2E·배포는 실행하지 않는다.
+- **현재 PR:** [#4960 — 웹 E2E 실행 환경과 결과 알림 정리](https://github.com/Innvoaid/dentlink-client/pull/4960), `master` 대상, OPEN·일반 PR·미병합·mergeable true. base `9084878eaa93ea4fe39df0f376afa4456c5fec55`, head `feat/DL-17636@6f9e3e7ad7ebb1caea549d6ed3ca1d3a0b96a85b`, 2커밋/4파일(+171/-79). GitHub 파일 목록=로컬 diff, origin 동일·tracked clean 확인.
+- 같은 worktree `/Users/parkjongsun/Repository/dentlink-client-dl-17636/dentlink-client`에서 보존된 최신 master 기반 `feat/DL-17636`을 사용했다. 기존 구현 c2bfd6d76을 `ec24251d3`으로 cherry-pick하고 README 보완 `6f9e3e7ad`를 추가했다. 다른 릴리즈 기능은 포함하지 않았다.
+- **이전 PR #4959:** 새 master PR 링크와 대체 사유를 본문에 추가하고 CLOSED·merged false 확인. 기존 release 전달 branch/커밋은 보존했으며 force push/브랜치 삭제 없음. 닫기 전 읽기 전용 조회에서 inline review thread는 0개였다(리뷰 승인 증거는 아님).
+- **실제 동작 변경:** DEV/STG E2E job Ubuntu24.04 고정+OS별 cache, DEV 실행 유지/결과 Slack만 제거, STG 기존 verdict 재사용+준비 실패·미실행/결과 부재/미집계/버전 미수집 표시. 기존 제품 코드·부모 배포·가드·retry/skip·실패 gate·수동 STG 시작 알림은 유지. 이번 후속에서 workflow/회귀 코드는 최초 검증 버전과 동일함을 확인했다.
+- **추가 보완:** `e2e/README.md`에서 자동 workflow_run(default master)과 수동 workflow_dispatch(선택 branch), 별도 checkout_ref를 구분했다. master 반영만으로 E2E가 시작되지는 않음, 다음 DEV/STG 배포 후 자동 적용, 기존 STG에 재배포 없이 PR branch로 수동 검사 가능, DEV 독립 수동 트리거 없음, 수동 STG가 자동 연결/DEV 알림 실증을 대신하지 않음을 명시했다. 과거 배포 인계 도입 설명과 이번 정책 적용을 구분했다.
+- **문서 정합성:** AGENTS/CLAUDE, Codex·Claude E2E/가드 스킬·agent 정의·hook, 관련 tracked Markdown을 확인했다. 실행/판정 정본은 README로 이미 연결돼 있으며 DEV 결과 Slack 유지 같은 상충 지침은 발견하지 못했다. CLAUDE의 Slack 단계는 유지되는 부모 배포 알림 설명이다. 에이전트 지침/가드 개선은 추가하지 않았다.
+- **검증:** 최초 `pnpm e2e:check`248/248·YAML/JS format 결과 재사용(동작 코드 동일); master 준비 후 관련 deployment 계약15/15 재검사. 커밋 훅 Clinic/Lab/Admin 타입 통과. push lint 오류0·기존 경고226/186/396, Admin가드9/9, 공통169/169(config77/hook92), master 원본에서 생성한 coverage baseline 대비 변화0 통과. E2E 영향 가드 사전 check 통과(앱 코드 변경 없음). 로컬 ignored baseline만 master 기준으로 갱신했으며 실제 env 접근/변경 없음.
+- **Jira:** [후속 댓글45346](https://innovaid.atlassian.net/browse/DL-17636?focusedCommentId=45346)에 master PR·기존 PR 종료·문서 보완·검증·실제 실행 제외·남은 확인을 기록하고 echoed body/ID 확인. 상태/설명 변경 없음. 이전 댓글45345는 최초 release PR 당시 이력으로 보존.
+- **현재 영향과 남은 것:** 코드·문서·PR 준비까지 완료, master/릴리즈 병합·제품 배포·Actions 수동 dispatch·실계정/브라우저 E2E·Slack 발송 없음. 실제 Ubuntu 설치·전체 시나리오·알림 표시·배포→E2E 자동 연결·DEV 알림 중단은 아직 실행 검증되지 않았다. 제품 기능 변경이 없어 정적 검토상 회귀 위험은 낮으나 실제 CI 성공을 보장한 것은 아니다. 현재 master PR 검토 대기이며 추가 실행/merge/deploy/CodeRabbit 대응/자동 감시를 시작하지 않는다.
+- **추후 검증 경로:** 승인 시 STG workflow를 변경 branch/master에서 수동 실행해 현재 STG를 검사할 수 있다. workflow ref와 현재 STG 배포 소스 SHA인 checkout_ref를 구분한다. 자동 정책 적용은 master 반영 후 새로운 자동 실행부터, DEV 실제 동작은 현재 구조상 다음 DEV 배포 후 확인한다. 운영 릴리즈 배포를 기다릴 필요는 없지만 사용자 이번 실행 제외 지시가 우선이다.
+
+## 이전 상태 — 2026-11-25, 최초 v1.95.0 PR 이력
 
 - 최신 사용자 승인: “방금은 질문이지 실행하라는건 아니었어. 괜찮다는거맞으면 진행해. PR 까지만. 1.95.0릴리즈에”. 앞선 가능 여부 질문 당시에는 읽기 전용 확인만 했으며, 이 명시 승인 이후 구현·커밋·push·PR 생성을 진행했다. 이전 구현 보류 기록은 이 승인으로 갱신됐다.
 - [PR #4959 — 웹 E2E 실행 환경과 결과 알림 정리](https://github.com/Innvoaid/dentlink-client/pull/4959): `release/v1.95.0` 대상, OPEN·일반 PR·미병합·mergeable true, 1커밋/4파일(+167/-77) 확인. GitHub 파일 목록과 로컬 diff 일치.
