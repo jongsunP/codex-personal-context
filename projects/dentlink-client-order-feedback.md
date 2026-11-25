@@ -15,6 +15,13 @@
 - 준비 계획: `dentlink-client` 최신 `origin/master`에서 새 `feat/DL-17615`, 전용 managed worktree `dl-17615-feedback-thumbnail`. 확인 당시 master `9084878eaa93ea4fe39df0f376afa4456c5fec55`, release/v1.95.0 `b0e04eafe00e86836f472bea114e5fce867b4cad`, 피드백 경로 diff 없음·새 작업 branch 원격 없음. 실제 QA가 특정 미병합 release 차이에 속한다는 근거가 나오면 담당 세션에서 base를 재판단한다.
 - 새 worktree는 동일 저장소 주 worktree의 eligible ignored/untracked `.env*`를 내용 열람 없이 상속·동일성/ignore 확인한다. 기존 사용자 작업 창/서버·미커밋 변경을 보존하며 기능 결과는 새 세션에서 사용자에게 직접 보고한다. 메인은 등록·전달 이후 폴링하지 않는다.
 
+### 담당 세션 준비 확인 — 2026-11-25
+
+- managed worktree `/Users/parkjongsun/.codex/worktrees/dl-17615-feedback-thumbnail/dentlink-client` 생성·현재 채팅 연결 완료, branch `feat/DL-17615`, base `origin/master@9084878eaa93ea4fe39df0f376afa4456c5fec55`. 다른 worktree는 변경하지 않았다.
+- main의 eligible ignored/untracked env 6개를 불투명 복사하고 byte equality·ignore를 확인했다. 대상 권한 0600, 값 열람·변경 없음. 의존성 frozen/offline 설치 완료.
+- 첨부32046/32048 실제 열람: 파란색 category thumbnail 대신 카테고리 관리의 보라색 `이미지`가 기대값이다. Clinic 피드백도 catalog의 `categoryId → imageUrl`로 표시한다. Admin에 이미 있는 `useCatalogCategoryQuery`를 공용 summary에 재사용하는 최소 수정 진행 중이다.
+- 초기 체크포인트이며 아직 구현·브라우저 검증 완료를 뜻하지 않는다. 제품 commit/push/PR/merge/배포 없음.
+
 ## Sample Case 키워드 추가 영향 검토 — 2026-11-24
 
 - **마감:** 사용자가 검토 내용을 담당자에게 전달했고 이번 건을 검토 완료로 확정했다. 현재 요청 범위에서 FE 추가 구현·배포·후속 작업은 없다. 새 요청이나 API 구조 변경이 있을 때만 재개하며 자동 QA·조회·폴링하지 않는다.
