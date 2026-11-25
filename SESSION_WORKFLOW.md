@@ -1896,6 +1896,22 @@ working instruction on 2026-10-16, not a rule limited to one feature session.
   or cumulative project history. Map each request to its result and any
   remaining work. Do not add earlier requests just because they were committed
   or documented on the same day. This is the user's 2026-11-09 clarification.
+- User confirmation, 2026-11-25: for a daily main-session report, use a short
+  table **구분 / 요청하신 일 / 결과·현재 상태**. Cover requests received that day
+  and that day's follow-up requests on existing work, whether complete,
+  ongoing, or waiting. Include product work, investigations, session/local
+  environment management, and guideline changes; group related follow-ups
+  rather than counting every prompt or commit. Read the Git-backed checkpoints
+  and state that basis; do not poll delegated chats or rerun external checks
+  merely to prepare this memory-based report. Preserve implementation,
+  verification, PR, merge, and deployment boundaries. Save a requested daily
+  report as dated personal history linked from the main project checkpoint,
+  with relevant detailed checkpoints and resume points discoverable. This
+  aggregation is a core role of the main session. Another device or agent can
+  recover the recorded context after syncing and reading the repository;
+  chat history, local execution state, and unrecorded details do not transfer
+  automatically. This three-column daily format specializes the general
+  multi-request format below.
 - For a final report covering multiple requests, prefer a compact two-column
   table: **요청·작업 / 결과**. Check the requested prompts, including intervening
   additions, so no requested item is omitted and no unrelated historical work

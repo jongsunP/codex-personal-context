@@ -23,7 +23,11 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 피드백 Amplitude 코드 조사
 
-- 주문 상세·피드백 목록/상세의 전체 피드백 이벤트를 웹·모바일웹·앱 네이티브·WebView 경로별로 읽기 전용 조사한다. 별도 세션/worktree, Jira 카드 없음. [조사 체크포인트](projects/dentlink-feedback-amplitude-audit.md)
+- 주문 상세·피드백 목록/상세의 전체 피드백 이벤트를 웹·모바일웹·앱 네이티브·WebView 경로별로 읽기 전용 조사한다. 별도 세션/worktree, 후속 Jira DL-17635. [조사 체크포인트](projects/dentlink-feedback-amplitude-audit.md)
+
+### Dentlink 웹 E2E 실행·알림 정책 — DL-17636
+
+- DEV/STG/PR 실행 조건, 배포와 테스트 결과 분리, Slack 알림 정책을 조사한다. 정책 제안과 구현 승인을 구분한다. [조사 체크포인트](projects/dentlink-e2e-workflow-dl-17636.md)
 
 ### Dentlink 기공소 배송 업데이트 패널 노출 — DL-17625
 

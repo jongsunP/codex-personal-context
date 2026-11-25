@@ -69,6 +69,10 @@
   `SESSION_WORKFLOW.md`: **완료한 것 → 현재 영향 → 남은 일**, in that order,
   briefly. State where completed work exists, its current effect and reason,
   and the remaining work or that none remains.
+- For “오늘 한 일” reports, use **구분 / 요청하신 일 / 결과·현재 상태** under
+  the same section: that day's new and follow-up requests, including product
+  work and administration, regardless of completion. Aggregate saved project
+  checkpoints without automatically polling delegated sessions.
 - For development work, CTO handoffs, implementation notes, decision records,
   and cross-session summaries, include as much detail as the work requires.
 - Explain important engineering decisions clearly when detail is necessary.

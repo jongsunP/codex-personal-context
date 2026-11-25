@@ -1,5 +1,12 @@
 # Dentlink Frontend Coordination
 
+## 2026-11-25 일일 보고 저장·대기
+
+- 사용자가 확인한 [오늘 요청·결과 표](dentlink-fe-daily-2026-11-25.md)를 보존했다. 완료 목록이 아니라 오늘 접수·후속 요청을 기준으로 업무·조사·환경 관리·지침을 짧게 정리한다. 앞으로도 같은 형식을 사용하며 상세 근거는 각 담당 체크포인트가 정본이다.
+- DL-17636은 담당 기록에서 조사·worktree 준비 완료 및 사용자 지시로 저장 후 대기를 확인했다. 아래 최초 인계 시점의 준비 대기 표현보다 해당 최신 체크포인트를 우선한다. 메인은 새 조사나 세션 진행 폴링을 하지 않는다.
+- 추가 확인: 실제 개인 컨텍스트는 `/Users/parkjongsun/Repository/codex-personal-context` 하나, 기존 remote는 `https://github.com/jongsunP/codex-personal-context.git`이다. Git worktree 등록도 원본 하나이고 `dentlink-fe-main-context`는 없다. 이번 기록 변경 전 로컬·원격 main은 `e9862fd`로 일치하고 clean이었다. 이후에도 이 원본 한 곳에 기록·commit/push한다.
+- 다른 디바이스·에이전트는 같은 원격을 동기화하고 공통 지침·이 문서·상세 체크포인트를 읽어 요청/결과/재개 지점을 인계받는다. 채팅 자체나 로컬 실행 환경의 자동 복제를 뜻하지 않는다. 이번 저장 이후 메인세션은 보관하지 않고 추가 변경 없이 대기한다.
+
 ## DL-17636 E2E 실행·알림 정책 조사 인계 — 2026-11-25
 
 - [DL-17636](https://innovaid.atlassian.net/browse/DL-17636) 본문 확인 후 같은 프로젝트 묶음에 **E2E 실행·알림 정책 조사 · DL-17636** (`01a2125e-41c6-7221-9255-7629c3a4b101`) 세션을 만들었다. 현재 메인과 같은 `gpt-6-astra` / `xhigh`를 지정했다.
