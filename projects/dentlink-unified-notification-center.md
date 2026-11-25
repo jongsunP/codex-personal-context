@@ -1,5 +1,16 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-25 양앱 최고 활성 릴리즈 대상 PR 완료 — Office #366 / Lab #56
+
+- 사용자 요청으로 각 앱의 현재 원격 release 브랜치를 다시 fetch/list하고 최고 버전 **Office `release/v2.2.7`, Lab `release/v1.1.0`**을 확인했다. 아래 웹 PR 시점의 앱 미커밋·PR 미승인 상태는 이번 요청으로 해소됐다. 앱에 웹 v1.95.0을 적용하지 않았다.
+- **Office [#366](https://github.com/Innvoaid/dentlink-app/pull/366)**: base `release/v2.2.7@dd9fc9a2812b1eb98866b97a5f38451e1a546fd5`, head `feat/DL-16140-history-followup@ede27477ad0ba396cf978e8f93b95ffbbe8b9702`. 화면 및 회귀 테스트 **1커밋·2파일/+53/-2**. 실제 checkout `/Users/parkjongsun/Repository/dentlink-app`.
+- **Lab [#56](https://github.com/Innvoaid/dentlink-lab-app/pull/56)**: base `release/v1.1.0@771f7b0b12d3d733ae6bb90ba8b785a56735e569`, head `feat/DL-16140-history-followup@5710b63caaef329c3e3dd9c34b7de41a574f0ca1`. 화면만 **1커밋·1파일/+11/-2**, 테스트 파일 변경 없음. 실제 checkout `/Users/parkjongsun/Repository/dentlink-lab-app`.
+- 양앱 커밋 제목은 `fix: 푸시로 알림센터 진입 시 전체 알림 표시`. 각 저장소 `commit-changes` skill에 따라 관련 파일만 stage/commit 후 정상 push했다. 현재 두 checkout 모두 clean·upstream/원격 HEAD 일치. 기능 원본은 각각 main의 dd9fc9a2/12cd290e에서 시작한 기존 브랜치를 유지했다.
+- Office 대상 release와 원본은 동일 revision. Lab 대상은 원본보다 주문 담당자 변경 #55 한 커밋 앞서 있으나 알림센터·푸시·딥링크 경로 변경이 없고 PR 3-dot diff에는 이번 한 파일만 포함된다. 양앱 `git merge-tree --write-tree`로 충돌 없는 통합을 확인했다. release/main 자체를 변경하거나 새 전달 브랜치를 만들 필요가 없었다.
+- 검증은 앞선 동일 소스의 Office 5 suites/119 tests, Lab 4 suites/31 tests, 변경 파일 lint 및 iOS·Android 실행 결과를 재사용했다. 전체 tsc는 기존 Office7/Lab6 오류가 남고 변경 파일의 새 진단은 없다. 이번 PR 준비는 diff/check 및 병합 시뮬레이션만 추가했고 기기·Metro·설치/빌드를 반복하지 않았다. Lab release 전체 통합본 runtime은 미검증임을 PR에 명시했다.
+- 생성 후 실제 GitHub base/head/SHA·파일목록을 확인: 둘 다 Open·Draft=false·mergeable=true이며 요청 파일 수와 일치. PR 제목/본문은 저장소 템플릿을 적용했다. Office는 GitHub connector, Lab은 connector에서 저장소가 조회되지 않아 정상 인증된 gh를 사용했다. PR 자동화의 feat 브랜치 비매칭도 소스로 확인했고 최종 base는 위 대상 그대로다.
+- **현재 웹 #4953·Office #366·Lab #56 모두 PR 준비 완료, merge/배포 없음.** 실제 최종 푸시 발송→대상 소속 전체 탭·서버 읽음 성공, Lab 다른 소속 전환, 어드민 실응답·표·CSV 연동 QA가 남는다. 시트68행 기록 동기화는 외부 쓰기 미실행. CodeRabbit/Actions 자동 추적이나 리뷰 대응으로 확대하지 않고 사용자 다음 지시를 기다린다.
+
 ## 2026-11-25 웹 커밋·push·release/v1.95.0 PR 완료 — #4953
 
 - 사용자 요청: 작업 커밋·push 및 1.95.0 PR. 진행 중 원본과 작업 영역을 질문해, 웹/어드민은 master 기반 독립 worktree, Office/Lab은 각 main 기반 별도 저장소이며 이번 PR은 웹/어드민만 포함한다고 먼저 답했다. 앱 commit/push/PR/배포로 확대하지 않았다.
