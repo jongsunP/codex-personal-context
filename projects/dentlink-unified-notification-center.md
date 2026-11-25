@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-25 후속 작업 정리·대기 — 개발/PR/요청 앱 리뷰 완료
+
+- 사용자 요청: “해당 세션관련 업무는 다 된거로 봐도 될지? 맞으면 메모리하고 정리하고 대기”. **이번에 요청받은 정책·계약 정리, 개발, 검증, commit/push, 세 제품 PR 생성과 Office CodeRabbit/Lab 동등 경로 검토까지 완료**로 정리한다. 실제 연동 QA·병합·배포 완료를 뜻하지 않는다. 더 질문하거나 개발을 확대하지 않고 다음 명시적 지시를 기다린다.
+- 범위 확정: 웹은 어드민 발송 이력의 읽음 정보/이벤트 표시·CSV만 변경했다. **치과·기공소 웹 알림센터 변경은 없다.** 앱은 센터 푸시 진입 시 전체 탭을 선택하며, BE의 `notifications?employerId=...` 계약과 기존 소속 전환을 사용한다. 모든 URL에 employerId 일괄 추가나 별도 data.employerId fallback은 없다.
+- 보존 PR/브랜치: 웹 [4953](https://github.com/Innvoaid/dentlink-client/pull/4953) → release/v1.95.0, `feat/DL-16140-history-followup-release-v1.95.0@89297df248210ea05ce58bd5e889906d88e471b5`; Office [366](https://github.com/Innvoaid/dentlink-app/pull/366) → release/v2.2.7, `feat/DL-16140-history-followup@69a803b2fed5115ba1d83c7007c5170efd87b71e`; Lab [56](https://github.com/Innvoaid/dentlink-lab-app/pull/56) → release/v1.1.0, `feat/DL-16140-history-followup@5710b63caaef329c3e3dd9c34b7de41a574f0ca1`. 직전 PR 확인 시 모두 미병합. 이번 마감은 외부 PR/댓글을 다시 폴링하지 않았다.
+- 실제 checkout은 각각 `/Users/parkjongsun/Repository/dentlink-client-dl-16140-history-followup`, `/Users/parkjongsun/Repository/dentlink-app`, `/Users/parkjongsun/Repository/dentlink-lab-app`. 마감 시 세 곳 모두 clean·로컬 HEAD와 추적 upstream 일치(0/0)를 확인했다. 미병합 PR 재개를 위해 작업 폴더/브랜치를 유지하고 삭제·archive·switch하지 않는다. 옛 채팅 cwd 경고는 사용자 중단 지시대로 재시도하지 않는다.
+- 검증/리뷰 상세는 아래 기록을 유지한다. Office 리뷰1건은 호출 경로 혼동으로 근거 회신·resolve, 동일 소속 반복 푸시 회귀 테스트 추가·관련61개 통과. 제품 동작 코드 추가 수정 없이 Lab도 해당 지적 비해당 확인. 웹 PR 리뷰는 이번 요청 범위에 없어 수행하지 않았다. 전체 타입검사 기존 오류 Office7/Lab6과 실제 검증의 한계는 그대로 남긴다.
+- 다음 실행 단계: 실제 최종 푸시 payload→대상 소속 전체 탭·서버 읽음 성공, Lab 다른 소속 전환, 어드민 실응답·표·CSV 연동 QA; 필요 시 팀 리뷰 후 사용자 승인에 따른 병합/배포. 시트68행 기록 동기화는 외부 쓰기 미실행이다. 서버/기기 재실행·자동 리뷰/Actions/Jira 추적·merge/배포 없이 **기록 저장 후 대기**한다.
+
 ## 2026-11-25 앱 CodeRabbit 1건 검토 완료 — 오탐 근거 회신·테스트 보강
 
 - 사용자가 웹 알림센터는 추가 수정 없음을 확인한 뒤 Office PR366 CodeRabbit 리뷰만 요청했고, Lab에 같은 결함이 있으면 함께 처리하도록 승인했다. 어드민/웹 PR4953 리뷰로 확대하지 않았다.
