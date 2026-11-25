@@ -1,5 +1,10 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-25 채팅 기본 경로 경고 — 사용자 요청으로 추가 수정 중단
+
+- 사용자가 “현재 작업 디렉토리가 없습니다” 경고 제거를 요청해 지원 도구/UI 및 설치된 Codex CLI의 app-server protocol을 확인했다. `thread/settings/update`에는 cwd 변경 기능이 있으나 별도 연결에서는 현재 채팅이 로드되지 않아 실패했고, `thread/resume`도 `already has an active writer`로 거절됐다. 보호를 우회하거나 writer를 종료하지 않았고 DB/세션 파일을 직접 수정하지 않았다. 실제 저장 cwd는 옛 경로로 남으며 경고 해소를 확인하지 못했다.
+- 사용자가 “오래 걸리면 사용에 지장 없으면 이번 건 넘어가 달라”고 하여 추가 복구를 중단한다. 실제 코드 작업은 정상인 `/Users/parkjongsun/Repository/dentlink-client-dl-16140-history-followup`를 명시해 수행할 수 있다. 앱의 기본 cwd에 의존하는 모든 기능까지 정상이라고 보장하지 않는다. 다음 사용자 요청 없이 UI 조작/복구 재시도/경고 폴링을 하지 않는다. 제품 작업의 미구현·대기 상태는 유지한다.
+
 ## 2026-11-25 작업 위치 이전 — Repository 실경로 사용
 
 - 사용자 승인 전달 및 개인 지침 `3af90f8`의 Git Repository And Worktree Location에 따라 본인 worktree만 `git worktree move`로 옮겼다. **현재 실경로는 `/Users/parkjongsun/Repository/dentlink-client-dl-16140-history-followup`**이며, 이후 모든 제품 명령에서 이 경로를 명시한다. 아래 날짜별 기록의 `~/.codex/worktrees/notification-history-followup/dentlink-client`는 이전 위치 이력이다.
