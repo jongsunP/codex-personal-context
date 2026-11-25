@@ -1,5 +1,24 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 갱신 — 2026-11-25 공용 SplitView 적용·로컬 검토 대기
+
+- 사용자 승인: 공용 SplitView부터 만들고 추천안으로 구현한 뒤 로컬에서 확인한다. 기존 왼쪽 메뉴를 덮거나 전역 레이아웃을 재구성하는 안 대신, **목록 본문 오른쪽의 고정 너비·닫기 가능한 분할 영역**을 채택했다. 드래그 크기 조절은 이번 범위에서 제외했다. 구현 방향을 먼저 설명한 후 작업했다.
+- 제품은 같은 메인 워크트리 `/Users/parkjongsun/Repository/dentlink-client`, `feat/DL-17583`, HEAD `182318cbabe8993ab20365664316aa8576bc2836` 그대로다. 기존 미커밋 출력 개선을 보존하며 새 UI만 추가/연결했다. **제품 staging·commit·push·PR·배포 없음**, 사용자 로컬 검토 대기다.
+- 공용 `shared/dlos/src/components/SplitView.tsx`와 public export/README를 추가했다. controlled `open/onClose`, `panel/panelTitle/panelLabel/panelId`, `closeAriaLabel`, `side(left/right)`, `panelWidth(기본320px)`, `panelTop`을 제공한다. 업무 데이터/API/선택 정책/번역은 공용 컴포넌트 밖에 둔다. 패널을 열고 닫아도 본문은 재마운트하지 않는다. portal·backdrop·body lock·focus trap 없음. 헤더/닫기는 고정하고 선택 목록만 내부 스크롤한다. 본문 표의 가로 스크롤은 기존 테이블이 소유한다.
+- 가용 컨테이너 800px 이하에서는 선택 영역을 본문 위에 배치하고 최대 높이360px로 제한한다. 전역 메뉴를 가리거나 표를 320px 패널 옆에 강제로 압축하지 않는다. Lab에서는 기존 헤더 높이 CSS 변수+16px를 panelTop으로 전달한다. 기존 Layout/Aside/피드백 Drawer는 변경하지 않았다.
+- `PrintSelectionPanel`이 공용 SplitView를 조합한다. 상단에는 현재 페이지 선택·선택 건수·목록 열기/접기·전체 해제·출력 버튼·오류를 유지하고, 도움말·선택 항목·개별 제외는 오른쪽에 배치했다. 닫기 버튼으로 닫으면 상단 다시 열기 버튼으로 포커스를 돌린다.
+- 주문 `OrderBatchPrintPanel`, 배송 `ShippingBatchPrintPanel`에 children을 받아 실제 표와 페이지네이션을 SplitView 본문에 둔다. `OrderList`의 기존 release 필터/표/페이지 구조와 배송 목록의 기존 조회/행별 출력은 유지한다. 주문 체크박스 열 제목은 시각적으로 비우고 접근성 이름을 유지하며 너비52px로 줄였다. 배송 체크박스 열의 보이는 제목도 비웠다.
+- QR 스캔 배송은 같은 ShippingBatchPrintPanel 안에 기존 스캔 그룹/픽업 입력을 두었다. 선택이 없어도 본문은 유지하고 상단 출력 도구만 숨긴다. 기존 생성 완료 알림으로 출력 목록에 추가하는 경로도 같은 패널을 연다. 기존 생성/조회/출력 로직·부착용 노출 조건은 바꾸지 않았다.
+- 선택 atom에 `panelOpen`을 추가하여 선택 목록과 같은 계정/기공소 범위에서 보관한다. **첫 선택(0→1 이상)에서 열림 → 사용자가 닫은 뒤 페이지/검색/추가 선택을 해도 닫힘 유지 → 직접 다시 열기 가능 → 전체 해제 후 새 선택에서는 다시 열림**이다. 패널 닫기는 선택 제거가 아니다. 재마운트에도 유지, F5/로그아웃/기공소 전환 시 초기화한다. session/localStorage/서버 저장 없음.
+- 주의: 기존 Jotai 구현은 상세 외 다른 메뉴 이동에서도 메모리가 유지된다. 이번 패널 변경에서 라우트 이탈 시 자동 초기화 정책은 새로 넣지 않았다. 이전 대화의 '메뉴 이동하면 자동 해제될 것'이라는 가정과 실제 구현을 구분한다. 이 정책을 바꾸려면 선택 범위 논의가 필요하다.
+- ko/en orders·shipping에 닫기 접근성 문구를 함께 추가했다. 번역 Sheet/usage metadata 수정 없음. 신규 의존성·Electron·앱 저장소 변경 없음.
+- 검증: DLOS 공용 테스트2 + Lab 관련14 suites/173 tests = **175 tests 통과**. 패널 좌우 배치 API·본문 재마운트 방지·배경 조작·페이지/검색/재마운트 상태 유지·닫기 포커스·제외/전체 해제·scope 격리를 포함한다. Lab/DLOS 타입 검사 통과. 영향 파일 ESLint 오류0(기존 비-null 단언 및 배송 효과 의존성 경고8), 새 SplitView/선택 UI 및 후속 수정 파일은 오류·경고0. diff check 통과. 최종 panelTop 보완 뒤 공용2 + Lab 영향10테스트 및 타입/브라우저 재확인했다.
+- 환경값을 읽지 않는 기존 plain Jest 설정과 독립 Chromium 샘플 harness를 사용했다. 실제 새 주문 OrderList UI, 공용 SplitView, 배송 선택/기존 DataGrid 조합에서 페이지 변경·닫기 상태·검색·제외·독립 스크롤·390/760/1440 너비·4장 QR/스티커 미리보기·부착용 팝업 연결·완료 알림 추가·협력기공소 부착용 비노출을 확인했다. 런타임 오류0, 390px 화면 가로 넘침0. 배송 harness는 실제 전체 페이지/API가 아닌 컴포넌트 조합이며, 실제 서비스 계정/실제 SSE/Windows Edge/물리 출력은 미검증이다. 임시 샘플 서버3105는 종료했다. 기존 사용자 제품 서버는 조작하지 않았다.
+- 화면 증거: `/Users/parkjongsun/.codex/visualizations/2026/11/24/01a20bee-0fb0-72b0-83df-9619645cb73a/2026-11-25-batch-print/`의 `split-orders.png`, `split-orders-mobile.png`, `split-shipping.png`. 샘플 데이터 표시가 있는 검증용 이미지다.
+- 마감 시 원격 ref 재조회: master `9084878eaa93ea4fe39df0f376afa4456c5fec55`, release/v1.95.0 `b0e04eafe00e86836f472bea114e5fce867b4cad`로 직전 통합 기준과 동일했다. 추가 merge/checkout 없음. 기존 복구 stash/백업도 유지한다. 추후 반영 전 최신 기준 변화는 다시 확인한다.
+- 담당 Jira DL-17582·DL-17583 설명의 선택 영역 정의를 SplitView로 갱신하고 재조회 일치 확인. 진행 댓글은 각각 **45316·45317**. 실제 상태는 두 카드 모두 `진행 중` 유지, 부모 카드 변경 없음.
+- **다음:** 사용자가 같은 로컬 폴더/브랜치에서 UI를 확인한다. 확인 포인트는 체크 후 오른쪽 영역, 닫기/다시 열기, 페이지/검색 변경 후 선택 유지, 개별 제외/전체 해제, 기존 출력 버튼이다. 제품 커밋·푸시는 새 지시까지 대기한다. 공용 패키지 소스 변경이므로 이후 PR 준비 시 `docs/packages.md`의 dlos/dlds/icons 동시 버전 정책을 적용해야 한다(이번 로컬 검토 단계에서는 버전 bump/publish 없음). 현장 실기기 출력 및 기존 사용자 계정 최종 QA는 별도다.
+
 ## 최신 갱신 — 2026-11-25 develop 주문 목록 출처 확인·release 통합 완료
 
 - 사용자 요청: develop의 주문 목록 개편이 master/release에 있으면 작업 브랜치를 업데이트하고, 타인 작업 브랜치에만 있으면 확인만 한다. 비교 결과를 먼저 알려야 하며 단순 비교인지 통합/재연결 중인지 분명히 구분한다.
