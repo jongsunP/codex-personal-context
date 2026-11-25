@@ -1,5 +1,13 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-25 앱 CodeRabbit 1건 검토 완료 — 오탐 근거 회신·테스트 보강
+
+- 사용자가 웹 알림센터는 추가 수정 없음을 확인한 뒤 Office PR366 CodeRabbit 리뷰만 요청했고, Lab에 같은 결함이 있으면 함께 처리하도록 승인했다. 어드민/웹 PR4953 리뷰로 확대하지 않았다.
+- Office 스레드 `PRRT_kwDOLCkD4867zPVH` / comment4692347628은 같은 소속 알림센터에서 반복 푸시 시 `openState` 조기 반환으로 route.key가 유지되어 UNREAD로 남는다는 지적이었다. 실제 호출자를 따라가 **알림함 항목 클릭의 notificationRouteKey 경로와 외부 푸시 경로를 혼동한 오탐**으로 판정했다. Office·Lab 모두 FCM/Notifee initial/opened/foreground는 subscribe의 `navigateFromUrl`을 사용하고, 키 없는 새 state로 `navigationRef.reset`한다. 대기 푸시는 navigateToDeepLinkState에 두 번째 인자 없이 전달돼 reset한다. 해당 조기 반환은 notificationRouteKey가 있는 항목 랜딩에만 적용된다.
+- Office 기존 hook 테스트에 현재 센터가 열린 동일 소속에서 등록된 푸시 콜백을 두 차례 호출해 각각 새 reset/landBy=push/route key 미재사용을 확인하는 테스트1건(32줄)을 보강했다. 기존 1.5초 중복 이벤트 구간 밖인 2초 간격을 사용했고, SDK 중복 이벤트 정책은 변경하지 않았다. 최초 시험의 단발성 root-state mock은 실제 변경 없는 root를 다르게 응답해 실패하여 withImplementation으로 안정적으로 고쳤다. 최종 관련2 suites/61 tests·변경 파일 ESLint·diff-check 통과. 설치된 실제 StackRouter를 두 번 실행해 새 key 생성도 확인했다. Lab의 동일 router 소스까지 대조했다.
+- **Office `69a803b2`** (`test: 같은 소속의 알림센터 반복 푸시 진입 검증`) commit/push 완료, 변경은 `__tests__/libs/useNavigationConfig.test.tsx`만이다. 기존 제품 동작 코드·Lab 코드/테스트는 수정하지 않았다. 리뷰에 경로/검증 근거를 회신(comment4692643051)하고 해당 스레드를 resolve했다. 이는 실제 FCM/APNs 발송 검증 또는 리뷰어 승인과 구분한다.
+- 앱 기기/Metro·전체QA 재실행, 웹 변경, merge/배포 없음. 실제 최종 payload·서버 읽음·어드민 연동 QA 범위는 이전 기록 그대로다. 종료 시 리뷰를 한 번 재확인해 전체1건 resolved·새 미해결0건, 실제 PR head `69a803b2fed5115ba1d83c7007c5170efd87b71e`·base release/v2.2.7·미병합·3파일 및 로컬/원격일치·clean을 확인했다. 자동 재리뷰 요청·폴링은 하지 않는다.
+
 ## 2026-11-25 양앱 최고 활성 릴리즈 대상 PR 완료 — Office #366 / Lab #56
 
 - 사용자 요청으로 각 앱의 현재 원격 release 브랜치를 다시 fetch/list하고 최고 버전 **Office `release/v2.2.7`, Lab `release/v1.1.0`**을 확인했다. 아래 웹 PR 시점의 앱 미커밋·PR 미승인 상태는 이번 요청으로 해소됐다. 앱에 웹 v1.95.0을 적용하지 않았다.
