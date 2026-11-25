@@ -1,5 +1,16 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 갱신 — 2026-11-25 목록·상세 출력 공통 타입 조건과 안내 강조
+
+- 사용자 후속 교정: 직전의 ‘새 목록 출력은 자체 기공소만’ 조건을 해제한다. 조건 자체는 유지하되 현재 모든 기공소 타입을 허용하고, 나중에 허용 목록에서 타입을 제외하는 방식으로 관리한다. **주문 상세 ‘라벨 출력’도 동일한 조건**으로 연결한다. 직전 INTERNAL-only 및 ‘상세 조건은 건드리지 않음’ 기록은 당시 이력이며 현재 기준은 이 항목이다.
+- `lib/PrintSelection/labelPrintAccess.ts`의 `LABEL_PRINT_LAB_TYPES`에 실제 모델의 네 타입 INTERNAL·PARTNER·SHARED·EXTERNAL을 모두 명시하고 `canUseLabelPrint`를 둔다. common의 canUseLabelPrintAtom은 기존 /lab/employee/own 기반 activeEmployeeLabTypeAtom을 사용한다. 타입 미확정(null/undefined)은 아직 표시하지 않는다. 나중에 이 목록에서 제외하면 새 주문/배송 선택 UI·패널·안내·선택 scope·완료 알림 추가·주문 상세 라벨 버튼에 함께 적용된다. 제외 타입의 배송은 기존 출력 메뉴로 돌아간다.
+- 기존 부착용 출력 및 배송 문서 형식의 INTERNAL 조건은 이번 새 기능 접근 조건과 별개로 보존한다. 기존 단독 스티커 버튼은 변경하지 않는다. 상세 라벨은 기존 조회 성공/로딩/현재 주문 일치/유효 ID 검사를 유지한다.
+- 주문 안내 ‘출력시 선택박스를 체크하세요.’는 선택 UI와 같은 공통 조건으로 보인다. 같은 줄에서 **안내 → 총 건수** 순서로 바꾸고 기존 DLOS purple Badge의 보라색 글자/연한 배경으로 강조했다. 긴 설명 추가나 문구 변경은 없다.
+- 검증: 관련 Lab 5 suites/41 tests 통과, Lab TypeScript 통과, 영향 파일 ESLint 오류0(기존 배송 경고2), diff check 통과. 네 타입 각각 목록 선택/안내와 상세 버튼 표시, 타입 미확정 비노출, 비-INTERNAL 배송 일괄 출력 가능 및 기존 부착용 제한 유지, 기존 클릭 분리·페이지 선택 유지·준비 취소 회귀를 포함한다. 공용 DLOS 코드는 이번 후속에서 변경하지 않았다.
+- 실제 OrderList+패널과 샘플 데이터/레이아웃을 비표시 Chromium에서 네 타입으로 확인했다. 안내가 총 건수 앞 같은 줄에 표시되고 체크 시 출력 패널이 열림, 390px 가로 넘침0, 런타임 오류0. 증거는 `/Users/parkjongsun/.codex/visualizations/2026/11/24/01a20bee-0fb0-72b0-83df-9619645cb73a/2026-11-25-all-types-hint/`의 internal/partner/shared/external/mobile.png. 실제 계정/API/실제 전체 Layout·Windows Edge·실물 출력은 별도다. 샘플 서버39175는 종료했고 Cursor/사용자 서버는 조작하지 않았다.
+- Jira 담당 하위 DL-17582·DL-17583 설명을 공통 타입 조건과 안내 위치로 갱신하고 재조회 일치·진행 중 유지 확인. 부모/댓글/상태 변경 없음. 개인 정본과 Claude 메모리에 함께 저장한다.
+- 현재 `/Users/parkjongsun/Repository/dentlink-client-dl-17583`, **feat/DL-17583@182318cba**, 누적 tracked23 + untracked17 =40파일, staged0. 제품 commit/push/PR/deploy 없음. **다음은 사용자 로컬 확인**. 최신 master/release 최종 비교·현장 출력 확인·타입 제외 정책 결정은 남는다. 채팅 기본 cwd 경고 보류는 그대로 유지한다.
+
 ## 최신 갱신 — 2026-11-25 선택 셀과 상세 이동 분리·자체 기공소 전용 목록 출력
 
 - 사용자 추가 확정: 목록 선택·일괄 출력은 **자체 기공소(INTERNAL)만** 제공한다. 체크박스 열 헤더는 현재 페이지의 출력 가능한 항목 전체 선택/해제, 일부 선택 표시를 제공한다. 다른 페이지의 선택은 보존하며 임시저장·삭제 주문과 유효하지 않은 ID는 제외한다. 주문 목록 총 건수 옆 표 밖에 자체 기공소만 **‘출력시 선택박스를 체크하세요.’**를 표시한다.
