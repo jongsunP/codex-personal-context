@@ -6,7 +6,7 @@
 - `create_worktree`로 `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`를 생성했다. 이 생성은 설정한 Worktree root 아래에 처음부터 만들어졌으며 사후 폴더 이동이 없다. 실제 폴더·Git 등록·메인 `read_thread`의 persisted cwd 일치를 확인했다. detached HEAD이며 제품 branch/코드/기존 작업 세션 변경 없음. env 상속 대상은 0개였다.
 - 기존 `/Users/parkjongsun/Repository/codex-personal-context`의 `main`을 개인 기록 수정·commit/push 정본 checkout으로 유지한다. 관리용 worktree는 안정적인 채팅 cwd이며, 기록 동기화 후 clean일 때 정본의 확인된 HEAD로 detached 전진한다. detached에 장기 기록 커밋을 남기거나 예상 밖 변경을 강제 reset하지 않는다.
 - 현재 턴에 이미 만들어진 실행기에는 옛 cwd가 남아 기본 경로 명령이 한 번 실패했다. 이후 이 턴 명령은 새 경로를 명시하며, 다음 턴의 기본 cwd는 갱신된 채팅 설정을 따른다. 단순 명령 workdir와 persisted cwd를 혼동하지 않는다.
-- AGENTS·SESSION_WORKFLOW 및 이 문서의 상시 역할을 새 구조에 맞춰 수정한다. 아래는 복구 전 시도 이력이며 현재 경로로 재사용하지 않는다.
+- AGENTS·SESSION_WORKFLOW 및 이 문서의 상시 역할을 새 구조에 맞춰 수정했고 Claude 메모리·Codex 보조 메모리에도 반영했다. 실제 경로 연결은 확인 완료했으며, 사용자가 다른 채팅에서 병행 작업 중이므로 추가 화면 전환·경고 표시 재검증은 중단했다. 아래는 복구 전 시도 이력이며 현재 경로로 재사용하지 않는다.
 
 ## 복구 전 시도 이력 — 신규 루트 설정 후 메인 경로 경고 — 2026-11-25
 
