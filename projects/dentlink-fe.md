@@ -1,5 +1,12 @@
 # Dentlink Frontend Coordination
 
+## DL-17636 E2E 실행·알림 정책 조사 인계 — 2026-11-25
+
+- [DL-17636](https://innovaid.atlassian.net/browse/DL-17636) 본문 확인 후 같은 프로젝트 묶음에 **E2E 실행·알림 정책 조사 · DL-17636** (`01a2125e-41c6-7221-9255-7629c3a4b101`) 세션을 만들었다. 현재 메인과 같은 `gpt-6-astra` / `xhigh`를 지정했다.
+- 범위는 웹 E2E의 DEV/STG/PR 실행 조건, 배포와 E2E 분리 상태, 실패 판정 및 Slack 알림 정책의 읽기 전용 조사다. STG만 발송 등의 본문 예시는 확정 정책이 아니며, 코드·workflow·Jira 변경이나 테스트 실행·PR·배포는 승인되지 않았다.
+- 새 세션이 최신 `origin/master` 기반 detached worktree를 Repository 아래에 직접 준비하고 실제 경로·Git 등록·persisted cwd·로컬 env 상속을 확인하도록 전달했다. 초기 생성 cwd는 정상 존재하는 Repository이며, worktree 준비 완료 여부는 담당 세션의 설정 결과로 구분한다. 메인의 cwd와 제품 주 checkout은 전환하지 않는다.
+- 조사 결과·권장안·필요한 결정은 담당 세션이 사용자에게 직접 보고한다. 상세 기록은 `projects/dentlink-e2e-workflow-dl-17636.md`에 맡기고 메인은 초기 전달 확인 후 조사 진행을 폴링하지 않는다.
+
 ## 문제 해결 접근 방식 정정 — 2026-11-25
 
 - 사용자의 핵심 지적은 경고 현상 자체가 아니라 에이전트가 작은 경로 문제를 관리용 worktree·새 메인 생성으로 확대하고, 실패한 도구 경로와 검증되지 않은 해결 약속을 반복하여 불필요한 작업을 만든 접근 방식이다. 단순 앱 이슈로 축소해 기록하지 않는다.
