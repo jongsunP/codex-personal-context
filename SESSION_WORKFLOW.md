@@ -737,6 +737,24 @@ recovery and cleanup, not only to where folders are displayed.
   remove the stale attachment before code editing or execution. Do not leave
   an active or duplicate checkout at the staging path. A symlink or Finder
   shortcut in Repository does not satisfy the location requirement.
+- Creation/relocation is complete only when the physical checkout exists,
+  Git registers the intended path, and the chat's persisted working directory
+  points to that same real checkout. An attachment being listed, a note with
+  the new path, or successful commands with an explicit `workdir` is not
+  proof that the chat's default directory changed. Read back the chat metadata
+  and verify its directory exists before declaring setup complete. For a
+  coordination-only chat, verify its intended existing project directory
+  instead of attaching an arbitrary product worktree.
+- User report, 2026-11-25: after relocation a chat may show "현재 작업
+  디렉토리가 없습니다" when an old directory reference remains. Treat this
+  as an incomplete chat connection to fix through supported attachment/project
+  tools or UI. Do not recreate an empty old directory, restore a hidden
+  checkout or add a symlink merely to hide the error; do not directly edit
+  runtime databases. If the supported mechanism cannot update persisted cwd,
+  report the specific limitation and necessary user action, rather than
+  guaranteeing the warning is gone. When the user has already asked the
+  owning sessions to fix it, the main does not duplicate those requests or
+  start polling them.
 - For an existing linked worktree, coordinate with its single writing owner,
   stop only its affected processes when necessary, preserve HEAD/branch/index,
   tracked/untracked/ignored files including opaque local env, then move and

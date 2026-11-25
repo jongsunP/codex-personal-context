@@ -194,6 +194,9 @@
   An unavoidable tool-created staging path must be relocated and the chat
   reattached before editing/running code. Preserve active work and have its
   owner move it safely; a symlink in Repository is not a physical relocation.
+  Before calling setup complete, verify the actual folder, Git registration,
+  and the chat's persisted cwd agree. A listed attachment or an explicit
+  command `workdir` alone does not fix a missing default chat directory.
 - Whenever creating a new worktree, follow **Local Env Inheritance** in
   `SESSION_WORKFLOW.md`: automatically copy all eligible Git-ignored,
   untracked local `.env*` files from the same repository's verified main
