@@ -1,6 +1,6 @@
 # 기공소 배송 업데이트 내역 패널 노출 제한 — DL-17625
 
-## 현재 상태 — 2026-11-25 구현·검증·PR 생성 완료
+## 현재 상태 — 2026-11-25 PR 생성 및 작업 폴더 이동 완료
 
 - 세션 `기공소 배송 업데이트 패널 노출 · DL-17625` (`01a21141-e9b6-7ab0-becc-65412540bce1`), 메인 프로젝트 폴더/local. 메인이 등록·최초 turn과 생성 시점 모델/추론 `gpt-6-astra`/`xhigh` 일치를 확인했다. 이 세션이 구현과 후속 작업을 소유하며 사용자에게 직접 보고한다. 메인은 추가 폴링하지 않는다.
 - 사용자 요청: [DL-17625](https://innovaid.atlassian.net/browse/DL-17625)를 별도 세션·worktree에서 구현·검증. 결과 브리핑 후 사용자가 커밋·push·`release/v1.95.0` 대상 PR 생성을 추가 승인했다. merge·배포·자동 리뷰 대응은 승인 범위가 아니다.
@@ -16,8 +16,8 @@
 ## 제품·작업 공간
 
 - 대상은 `dentlink-client`의 기공소 웹 전역 `FloatShipmentCreateController`다. 현행 mobile 제외 조건이 있고 `_app.tsx`에서 인증 후 전역으로 렌더한다. 치과/어드민/네이티브 앱 변경은 현재 확인된 범위가 아니다. 기존 모바일 미노출을 임의로 확장하지 않는다.
-- 원본 `/Users/parkjongsun/Repository/dentlink-client`의 `feat/DL-17583`는 출력 세션이 사용 중이며 미커밋 변경이 있다. `notification-history-followup` worktree의 `feat/DL-16140-history-followup`도 다른 세션 소유다. 어느 쪽도 재사용·수정하지 않는다.
-- 실제 managed worktree: `/Users/parkjongsun/.codex/worktrees/dl-17625-shipment-panel/dentlink-client`. 생성 시 `feat/DL-17625`를 검증했으며 이 경로에서만 제품 파일을 수정했다. 현재 checkout은 전달용 `feat/DL-17625-release-v1.95.0`, upstream도 같은 원격 브랜치이고 작업 트리는 clean이다.
+- 구현 시작 당시 주 checkout의 `feat/DL-17583`에는 출력 세션의 미커밋 작업이 있었다. 출력과 알림 후속 `feat/DL-16140-history-followup`은 다른 세션 소유이며 재사용·수정하지 않았다. 다른 세션의 현재 경로는 각 소유 세션에서 관리한다.
+- 현재 실제 worktree: `/Users/parkjongsun/Repository/dentlink-client-dl-17625`. 생성 시 `feat/DL-17625`에서 구현했고 현재 checkout은 전달용 `feat/DL-17625-release-v1.95.0`, upstream은 `origin/feat/DL-17625-release-v1.95.0`, HEAD는 `42b0e38be2c880404beeaca3ee35dfdab298d042`이며 clean이다.
 - 원본 작업은 최신 `origin/master`=`9084878eaa93ea4fe39df0f376afa4456c5fec55`에서 시작했고 로컬 `feat/DL-17625`의 커밋 `0e9041aa4b81ed244a30de98e2e4ac9ad7b14ccc`로 보존했다. 원본 브랜치 원격은 없다(초기 push가 로컬 커버리지 기준 파일 부재로 중단됨).
 - PR 전체 비교에서 release에 없는 master의 DL-17620 핫픽스·패키지 버전 등 4파일이 추가되는 것을 확인했다. 개인 SESSION_WORKFLOW의 clean delivery branch 규칙에 따라 `origin/release/v1.95.0`=`b0e04eafe00e86836f472bea114e5fce867b4cad`에서 `feat/DL-17625-release-v1.95.0`을 만들고 원본 작업 커밋만 cherry-pick했다. 충돌 없음, 원본과 전달용의 작업 2파일 내용 동일, PR에는 1커밋·2파일·+156/-28만 포함된다. 새 worktree를 추가하지 않았다.
 - 주 checkout은 타 세션의 dirty 작업이므로 pull/checkout/stash/reset 대신 원격 fetch만 했다. 개인 컨텍스트는 `git pull --ff-only`로 동기화했다.
@@ -38,8 +38,16 @@
 - 검증 한계: 컴포넌트 테스트는 조회/SSE hook·하위 UI를 mock한다. 실제 계정 브라우저, 서버 SSE 수신, 실배송·픽업 처리, 시각적 가림 여부 E2E는 실행하지 않았다. 코드 검토와 DOM 테스트 결과를 실제 운영/QA 검증으로 확대하지 않는다.
 - 통합 접점: 출력 세션은 인접 `FloatShipmentCreateControllerLabelItem.tsx`, `shipping/index.tsx`, `Shipping/Scan/ShippingScan.tsx` 등을 수정 중이다. 이 세션은 해당 내용을 가져오거나 수정하지 않았다. 통합 때 배송/스캔에서 출력 패널과 함께 쓰는 동작을 확인한다.
 
+## 2026-11-25 Repository 경로 이동
+
+- 사용자의 필수 위치 지침에 따라 본인 소유 worktree를 `/Users/parkjongsun/.codex/worktrees/dl-17625-shipment-panel/dentlink-client`에서 `/Users/parkjongsun/Repository/dentlink-client-dl-17625`로 `git worktree move`했다. 실제 폴더 이동이며 symlink나 복제 checkout을 남기지 않았다.
+- 이동 전후 HEAD·branch·upstream·index·staged/unstaged diff·untracked 상태가 동일하다. 전체 164,181개 항목의 inode/권한/크기/mtime/symlink metadata와 ignored 파일 133,393개의 목록도 동일하다. env 6개는 값 열람 없이 불투명 동일성 및 ignored 상태를 확인했다.
+- 해당 경로를 cwd로 사용하던 실행 프로세스는 없었다. 본인 경로의 watchman watch만 해제했다. 다른 세션의 프로세스·파일·브랜치는 변경하지 않았다. 이동을 위한 제품 커밋·push·PR 변경·테스트 재실행은 하지 않았다.
+- Git worktree 등록과 채팅 attachment는 새 경로만 가리키고 이전 checkout/attachment는 없다. `attach_worktree`는 성공했으나 `read_thread`의 기본 cwd 메타데이터는 옛 경로에 남아 있다. 재연결로도 갱신되지 않았고 UI 도구는 helper 시작 오류로 사용할 수 없었다. 런타임 DB를 직접 수정하지 않았으며 후속 명령은 새 경로를 명시한다. 앱 기본 cwd 갱신은 미확인/남은 한계다.
+- PR #4951의 리뷰·merge·배포 대기 상태는 유지한다. 기존 코드 검증 결과는 위 기록이며 경로 이동을 새 런타임 검증으로 간주하지 않는다.
+
 ## 다음 시작점
 
 - 요청한 커밋·푸시·PR 생성 완료. PR #4951에서 사용자/팀 리뷰와 후속 지시를 기다린다. CodeRabbit 대기·폴링·자동 수정, merge·배포는 하지 않는다.
-- 후속 수정은 현재 전달용 checkout/PR의 head를 확인한 뒤 수행한다. 원본 `feat/DL-17625`는 master 기반 구현 보존용이다. 활성 릴리즈 작업이므로 원본/전달용 branch·worktree를 임의 정리하지 않는다.
+- 후속 명령은 반드시 `/Users/parkjongsun/Repository/dentlink-client-dl-17625`를 명시한다. 채팅 기본 cwd가 새 경로로 갱신됐는지는 다음 작업 시작 시 확인한다. 후속 수정은 현재 전달용 checkout/PR의 head를 확인한 뒤 수행한다. 원본 `feat/DL-17625`는 master 기반 구현 보존용이다. 활성 릴리즈 작업이므로 원본/전달용 branch·worktree를 임의 정리하지 않는다.
 - 필요 사용자 QA: 내역이 있는 기공소 PC에서 배송/픽업의 목록·상세·배송 스캔 노출, 주문 이동 시 숨김, 배송/픽업 재진입 시 내역 유지. 실제 이벤트 갱신과 출력 작업 통합 확인은 수행 여부를 구분해 기록한다.
