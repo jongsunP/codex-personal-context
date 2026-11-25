@@ -1,5 +1,14 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-25 후속 문의 검토 — deeplink 없는 공지성 푸시
+
+- [DL-16140 댓글45295](https://innovaid.atlassian.net/browse/DL-16140?focusedCommentId=45295): Leo가 `data`에 `deliveryId`만 있고 `deeplink` 필드를 생략할 때 앱 동작을 질문했다. 메인에서 읽기 전용으로 확인했으며 보관된 기능 세션은 재개하지 않았다.
+- Office main `8d620786c984dab473b81bdb4a0701153a4616c4`, Lab main `12cd290e4344065ac030f6a64696df4426a8b59c` clean·실조회 원격 main 동일. 양앱 Firebase 초기/복귀 및 Notifee 초기/foreground/background 탭 경로가 딥링크 검사 전에 `queuePushNotificationRead`를 호출한다. 이후 deeplink가 없으면 navigate/openURL을 실행하지 않으며 알림센터/상세로 자동 대체하지 않는다.
+- 읽음은 유효한 deliveryId를 별도 대기열에 저장하고 로그인·앱 active·화면 준비 조건이 되면 Office `/office/notifications/inbox/read/push`, Lab `/lab/notifications/inbox/read/push`로 요청한다. 링크 부재로 읽음 요청이 생략되지는 않지만 네트워크/API 성공까지 보장하는 표현은 하지 않는다.
+- 표시 코드 `notifee.ts:53`는 title/body와 OS 권한을 확인하며 deeplink가 필수는 아니다. 따라서 **기존 제목·본문을 유지하고 data.deeplink만 생략하는 경우 FE 수정 불필요**다. 전체 메시지가 문구 없이 deliveryId만 있다면 foreground 로컬 알림은 생성하지 않는 별개 조건이다.
+- 코드 근거: Office `fcmHandler.ts:160,379,819,901,930`, Lab `fcmHandler.ts:124,402,842,927,957`; 이벤트 등록은 양앱 `useNavigationConfig.ts` 및 `index.js`, 읽음 대기열 실행은 `RootNavigator.tsx`에 연결되어 있다.
+- 이번 범위는 코드 검토다. 실제 신규 payload 발송·OS별 실행/화면 QA·서버 읽음 성공은 미검증이며 제품/Jira/배포 변경 없음. 현재 답변 이후 자동 후속 확인이나 폴링하지 않는다.
+
 ## 현재 상태 — 2026-11-23 상용 반영·세션 보관 완료
 
 - 사용자 확인으로 이번 릴리즈 작업을 마감했다. 웹 **v1.94.0**→master PR #4942(`96bdacda6`), Office **v2.2.5**→main #361(`8d620786`), Lab **v1.0.6**→main #54(`12cd290`) 병합 확인 이력은 아래에 보존한다.
