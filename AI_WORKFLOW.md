@@ -53,6 +53,10 @@ Use multiple Codex sessions when separation improves ownership and context:
   the same feature session owns both surfaces.
 - Each worktree has one active writing session unless the user explicitly
   coordinates otherwise. A feature session may own several product worktrees.
+- Every actual Git repository and worktree belongs under the device's one
+  existing `Repository`/`repository` root, during creation, relocation and
+  cleanup. Apply **Git Repository And Worktree Location** in
+  `SESSION_WORKFLOW.md`; a tool's hidden/default path is not an exception.
 - Durable continuity remains Git-backed in `codex-personal-context`; chat and
   device-local session history are supplementary.
 - Keep the primary Mac as the execution host when a phone or another computer

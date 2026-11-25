@@ -397,6 +397,8 @@ small task.
    worktree isolates code and Git state. They are separate concepts. Keep one
    active writing session per product worktree, and keep web/app Git histories
    independent. A folder decision never authorizes overwriting another task.
+   Every actual Git checkout must follow **Git Repository And Worktree
+   Location** below, including small tasks and tool-created worktrees.
 6. Apply [New Session Model And Reasoning Default](AI_WORKFLOW.md#new-session-model-and-reasoning-default)
    before creating the session: check the main session's current selection,
    explicitly pass matching `model` and `thinking`, then verify the actual
@@ -709,6 +711,56 @@ parallel work and in both local execution modes.
   is an execution rule, not a requirement to repeat unrelated QA: keep runtime
   verification proportional to actual code impact under DEVELOPMENT_STYLE.md.
 
+## Git Repository And Worktree Location
+
+User instruction, 2026-11-25, mandatory across every project, agent and
+device: keep all actual Git repositories and worktrees in the one existing
+local repository root. This applies to creation, cloning, relocation,
+recovery and cleanup, not only to where folders are displayed.
+
+- Resolve the device's existing root before any Git checkout setup: the
+  office Mac uses `/Users/parkjongsun/Repository`; another device may already
+  use `~/repository`. Preserve its actual path and casing rather than making
+  a second root. If there is no identifiable existing root, ask once instead
+  of choosing an arbitrary location.
+- Put product repositories and their linked worktrees under that root,
+  normally as clearly named sibling directories such as
+  `dentlink-client-dl-17615`. Keep personal context there too. Never treat
+  `~/.codex/worktrees`, another hidden directory, temporary paths, Documents
+  or Downloads as an acceptable ongoing Git work location. An application
+  project/session grouping is separate from the code checkout location.
+- A tool default does not change this rule. Prefer a creation method that
+  supports the approved root while obeying required tool usage. If a required
+  managed-worktree tool can only allocate a staging path elsewhere, relocate
+  it into the approved root immediately with Git-aware worktree movement,
+  attach the real destination to its owner chat, verify its actual cwd, and
+  remove the stale attachment before code editing or execution. Do not leave
+  an active or duplicate checkout at the staging path. A symlink or Finder
+  shortcut in Repository does not satisfy the location requirement.
+- For an existing linked worktree, coordinate with its single writing owner,
+  stop only its affected processes when necessary, preserve HEAD/branch/index,
+  tracked/untracked/ignored files including opaque local env, then move and
+  verify Git registration and chat attachment/cwd. Do not move another
+  session's live filesystem behind its back, lose staged changes, commit
+  work merely to move it, or use a destructive reset to bypass preservation.
+- A main checkout cannot be moved with `git worktree move`. When moving an
+  active feature out of it, the owner prepares a new linked worktree under
+  the approved root, transfers only its owned work with staged/unstaged and
+  untracked state preserved, verifies equality, and only then removes the
+  transferred copies from the source. Preserve unrelated changes and apply
+  Local Env Inheritance. Do not broaden migration into code changes, remote
+  branch/PR mutations, deployment, or deletion of unrelated backups.
+- Cleanup records and inventories must use the real location under this root.
+  Verify obsolete source registration/attachments are gone and retain needed
+  history. Git's required administration metadata in an agent runtime home is
+  not a separate product working copy and is not a reason to delete runtime
+  state. Only the user may explicitly change this location policy.
+
+The user's current migration order also moves the active label/sticker task
+out of the Dentlink web main checkout into its own worktree. The existing
+feature session keeps ownership; this does not authorize extra polling after
+the main sends its migration instructions.
+
 ## Local Env Inheritance
 
 The user approved opaque local env inheritance on 2026-10-29 and clarified
@@ -858,8 +910,9 @@ unless their move or cleanup is authorized.
    only the questions that materially affect implementation.
 4. In each affected repository, create the dedicated `feat/<Jira>` branch
    and sibling worktree needed for that repository from the requested or
-   default base. Push and set upstream only when the user requests remote
-   setup.
+   default base, physically under the device's existing Repository/repository
+   root under **Git Repository And Worktree Location**. Push and set upstream
+   only when the user requests remote setup.
 5. Create or open one Codex session for the logical feature and explicitly
    assign every affected repository/worktree to it. Keep coordinated web and
    app work in that session by default; use **New Work Intake And Session

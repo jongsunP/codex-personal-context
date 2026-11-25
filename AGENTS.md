@@ -183,6 +183,17 @@
   emulator on the same task/source and environment and switch them together.
   Split work by device only when the user explicitly requests it; follow
   **Paired iOS And Android Environments** in `SESSION_WORKFLOW.md`.
+- For every Git repository, clone, and worktree creation, relocation, and
+  cleanup on every device, follow **Git Repository And Worktree Location** in
+  `SESSION_WORKFLOW.md`: keep actual checkouts together under the device's
+  existing repository root (`~/Repository` on the office Mac, `~/repository`
+  where that is the existing home-PC root). Verify and reuse its actual path
+  and casing. Do not leave working copies in `~/.codex/worktrees`, hidden
+  folders, temporary folders, Documents, or another invented root; tool
+  defaults are not exceptions. This is the user's mandatory 2026-11-25 rule.
+  An unavoidable tool-created staging path must be relocated and the chat
+  reattached before editing/running code. Preserve active work and have its
+  owner move it safely; a symlink in Repository is not a physical relocation.
 - Whenever creating a new worktree, follow **Local Env Inheritance** in
   `SESSION_WORKFLOW.md`: automatically copy all eligible Git-ignored,
   untracked local `.env*` files from the same repository's verified main

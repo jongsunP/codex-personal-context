@@ -25,6 +25,11 @@ archive.
 
 ## Working Preference
 
+- All Git repositories and worktrees stay physically together under each
+  device's existing `Repository` or `repository` root. This mandatory
+  2026-11-25 preference covers creation, moves and cleanup; never scatter
+  working copies into hidden agent directories or arbitrary local folders.
+
 The user values continuity, context, and the quality of delegated work.
 For new work sessions, verify and match the main session's currently selected
 model and reasoning level each time, including the user's latest changes.
