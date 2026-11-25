@@ -737,6 +737,15 @@ recovery and cleanup, not only to where folders are displayed.
   remove the stale attachment before code editing or execution. Do not leave
   an active or duplicate checkout at the staging path. A symlink or Finder
   shortcut in Repository does not satisfy the location requirement.
+- For Codex managed worktrees, configure **Settings > Worktrees > Worktree
+  root** to the device's approved root before creating new work. On the office
+  Mac this was saved through the supported UI as
+  `/Users/parkjongsun/Repository` on 2026-11-25. Verify the actual returned path
+  on the next creation; a saved setting alone is not a completed worktree test.
+  Create/attach the checkout in its owning work chat, not in the general main
+  chat for later transfer: `create_worktree` changes the caller's persisted
+  cwd, and moving/removing its attachment may leave that cwd invalid. Do not
+  bind the main chat to another task's product checkout as setup scaffolding.
 - Creation/relocation is complete only when the physical checkout exists,
   Git registers the intended path, and the chat's persisted working directory
   points to that same real checkout. An attachment being listed, a note with

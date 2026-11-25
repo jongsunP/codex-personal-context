@@ -1,5 +1,13 @@
 # Dentlink Frontend Coordination
 
+## 신규 worktree 루트 설정 완료·메인 경로 경고 미해결 — 2026-11-25
+
+- 사용자 범위: 기존 작업 세션은 그대로 유지하고 신규 세션부터 Repository 경로를 사용한다. 이번 메인세션의 경고는 별도로 복구 요청했다.
+- 공식 **설정 > Worktree > Worktree 루트**에 `/Users/parkjongsun/Repository`를 입력하고 **“Worktree 루트가 저장되었습니다.”** 알림과 저장값을 실제 UI에서 확인했다. 기존 작업 세션/checkout을 이동하거나 자동 삭제 설정을 변경하지 않았다. 신규 worktree 실제 생성은 아직 수행하지 않았으며 다음 승인된 생성에서 반환 경로·채팅 cwd를 확인한다.
+- 메인 경고 원인 확인: 이전 턴에서 메인이 피드백 조사 worktree를 대신 생성하면서 이 채팅의 persisted cwd가 `/Users/parkjongsun/.codex/worktrees/feedback-amplitude-audit/dentlink-client`로 바뀌었다. 실제 checkout은 Repository로 이동했으나 첨부 제거 후에도 cwd는 남았다. 향후 담당 세션의 worktree를 메인에서 대신 생성하지 않도록 SESSION_WORKFLOW에 보완했다.
+- **메인 경고 복구는 미완료다.** 실제 채팅 UI와 metadata에서 경고/옛 cwd를 확인했다. 채팅 액션에는 cwd 변경 메뉴가 없고 원래 관리용 프로젝트 폴더에 대한 `attach_worktree`는 `Choose a registered linked Git worktree.`로 거절됐다. 다른 제품 worktree 연결·옛 빈 폴더/symlink 생성·runtime DB 수정·앱 재시작·실행 중 세션 중단은 하지 않았다. 원래 관리용 프로젝트 폴더는 정상 존재한다. 본 세션의 명령은 유효한 절대 workdir를 지정한다.
+- CUA helper 시작 실패를 우회한 이번 설정 변경은 macOS 접근성 API/화면에 표시된 설정 컨트롤로 수행했다. 숨겨진 앱 데이터베이스나 설정 파일을 직접 수정하지 않았다. 제품 조사 세션에는 추가 메시지/폴링하지 않았다.
+
 ## 피드백 Amplitude 코드 조사 인계 — 2026-11-25
 
 - Jira 없는 읽기 전용 조사를 새 세션 **피드백 Amplitude 이벤트 코드 조사** (`01a211d5-91e6-7a70-bfd6-a25bd4ed22dc`)에 전달했다. 웹·모바일웹·양앱 네이티브/WebView의 피드백 전체 이벤트 호출·속성·조건·누락/중복을 코드로만 조사한다. [조사 정본](dentlink-feedback-amplitude-audit.md).
