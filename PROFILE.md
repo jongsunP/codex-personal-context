@@ -23,7 +23,8 @@ archive.
 - Long-term context: `codex-personal-context`
 - Keep one local personal-context checkout, preferably directly under the
   existing Repository/repository root; sidebar project grouping does not
-  require duplicate context folders (2026-11-25).
+  require duplicate context folders. The main chat can use a separate stable
+  cwd, and the context repository needs no extra enclosing folder (2026-11-25).
 - Project context: `projects/<project>.md` and stable team-owned project docs
 
 ## Working Preference

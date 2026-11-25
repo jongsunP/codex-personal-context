@@ -245,8 +245,10 @@
 - For the Dentlink FE main session, follow **Dentlink Frontend Top-Level
   Session Model** in `SESSION_WORKFLOW.md`: keep one local
   `codex-personal-context` checkout, preferably directly under the approved
-  repository root, and use it for personal records. Do not create a second
-  management clone/worktree merely to attach the main chat. Project/sidebar
+  repository root, and use it for personal records. The main chat's cwd may
+  be a separate existing directory; no enclosing folder or replacement chat
+  is required. Do not create a second management clone/worktree merely to
+  attach the main chat. Project/sidebar
   grouping is independent: chats grouped under the main project may each own
   a needed product worktree, always under the same approved repository root
   (user clarification, 2026-11-25). Either do the authorized work here

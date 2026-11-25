@@ -245,9 +245,12 @@ responsibilities rather than forcing the whole product into one checkout.
   implementation-session prompts, and final closeout.
 - On the office Mac, `/Users/parkjongsun/Repository/codex-personal-context`
   on `main` is the single desired checkout for guidance, history and
-  record-maintenance/commit/push. Prefer connecting the main chat directly to
-  it through supported functionality. Do not add a permanent detached copy,
-  extra clone, symlink or bare-repository arrangement just to satisfy a tool.
+  record-maintenance/commit/push. The main chat's cwd need not equal this
+  repository: an existing stable directory such as the repository root is
+  sufficient, while record commands use the canonical repository explicitly.
+  No extra enclosing folder is required. Do not replace the main chat or add
+  a detached copy, extra clone, symlink or bare-repository arrangement merely
+  to satisfy an attachment tool (user clarification, 2026-11-25).
   If a redundant workaround checkout is still referenced by the main, preserve
   it temporarily until the new persisted cwd is verified, then archive/remove
   that redundant checkout. Record this as pending consolidation, not as the

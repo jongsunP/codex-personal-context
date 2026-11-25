@@ -1,37 +1,12 @@
 # Dentlink Frontend Coordination
 
-## 메인세션 교체 인계 진행 — 2026-11-25
+## 메인세션 유지·중복 폴더 정리 완료 — 2026-11-25
 
-- 사용자는 새 메인 교체·인계·불필요한 폴더 정리·이 구 메인 보관까지 완료하도록 재승인했고, 이번 정리에 필요한 화면 전환도 허용했다.
-- 최종 새 메인은 **Dentlink FE 메인세션** (`01a2123a-7636-7d21-a102-4a0aba0b0033`)이다. 원본 `/Users/parkjongsun/Repository/codex-personal-context`의 공식 same-directory fork로 등록했으며, 원본 cwd·idle 상태·사이드바 고정 목록 노출과 공식 화면 열기를 확인했다. 사용자가 지정한 설정은 `gpt-6-astra` / `xhigh`다. 인계 읽기를 완료한 초기 채팅의 이력을 보존했다. [인계 정본](dentlink-fe-main-handoff-20261125.md).
-- 새 메인은 프로젝트 미지정·고정 목록에 있다. 기존 프로젝트 이동은 출처 폴더를 안전하게 판별할 수 없다는 도구 제한으로 적용하지 않았다. 개인 컨텍스트 복사본이나 별도 물리 폴더는 더 만들지 않았다.
-- 남은 정리: 구 메인 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`의 임시 `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`는 clean이고 모든 커밋이 원본 main에 있다. 공식 archive_worktree는 현재 primary checkout 보호로 거절했다. 새 메인에서 공식 handoff_thread로 구 메인을 원본에 돌려놓은 뒤 구 메인이 자신의 첨부 worktree를 보관 정리하고, 비게 된 부모 폴더 삭제·기록 저장·자기 보관을 마치도록 이어간다. 보호 장치를 raw Git/rm으로 우회하지 않는다.
-- 기존 기능 세션·제품 코드·제품 worktree는 모두 보존한다. 아래 CLI `/cd` 재시도 계획은 새 메인 교체 결정으로 대체됐다.
-
-## 최종 운영 지침 정정·개인 컨텍스트 단일화 준비 — 2026-11-25
-
-- 사용자의 최종 의도: 세션을 묶는 메인 프로젝트와 Git 경로는 별개다. 메인 프로젝트에 속한 기능 세션도 필요한 worktree를 둘 수 있으나, 모든 에이전트·디바이스의 실제 checkout은 기존 Repository/repository 한곳 아래에 둔다. 개인 지침·기록 저장소 `codex-personal-context`는 로컬 하나만 유지하며 사무실은 `/Users/parkjongsun/Repository/codex-personal-context`가 기준이다.
-- 앞서 추가한 관리용 worktree를 영구 운영 지침으로 삼은 것은 과도한 해석이므로 철회했다. 메인 이력·프로젝트 소속은 유지하고 원본 checkout에 직접 연결한 뒤 불필요한 관리용 worktree를 정리하는 것이 목표다.
-- 사용자가 현재 메인의 경고가 사라졌다고 확인했다. 기존 기능 세션은 완료 후 보관 예정이므로 경고가 남아도 그대로 둔다. 신규 작업은 폴더·Git 등록·persisted cwd를 생성 시 확인한다.
-- **현재 실제 단일화는 대기:** 메인은 아직 `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`에 연결돼 있다. 연결 도구는 linked worktree만 허용하며 `handoff_thread`는 호출 중인 자신을 옮기지 못한다. CUA는 Codex 앱 제어를 안전상 거부했으므로 다른 화면 제어 기술로 우회하지 않았다. 사용자가 이 화면에 `Hand off` 메뉴가 없다고 확인했으므로 해당 메뉴를 다시 단정해 안내하지 않는다. attachment의 `sourceCwd`는 원본 개인 컨텍스트다. 새 persisted cwd 확인 전 현재 폴더를 지우지 않는다.
-- 사용자의 터미널 실행 요청으로 `.zshrc`의 오래된 `CODEX_BIN`을 실제 앱 내 `codex-cli/CodexCLI.app/Contents/MacOS/codex`로 수정하고 새 interactive zsh에서 0.171.0-alpha.13.2 실행 성공을 확인했다. 절대경로 CLI로 동일 세션을 `resume --cd /Users/parkjongsun/Repository/codex-personal-context` 했지만 `This conversation is open in another app` / `read-only or unavailable; no operation was sent`로 잠겼다. CLI 연결만 정상 종료했고 현재 작업 중단·fork·잠금 우회는 하지 않았다. 다음 단계는 데스크톱의 이 대화 소유권을 해제한 뒤 공식 CLI `/cd`를 적용하는 것이며, 아직 성공 근거가 없다. 적용 후 메인이 cwd를 읽어 확인하고 임시 worktree만 보관 정리한다.
-- 모든 작업 공통: 화면·포커스·공유 마우스/키보드를 가져가야 하면 현재 사용 가능 여부를 먼저 질문하고 답변을 기다린다. 과거 허락을 계속된 허락으로 사용하지 않는다. 비가시적 도구 작업은 계속 가능하다. AGENTS·SESSION_WORKFLOW·PROFILE 및 양쪽 메모리에 반영한다.
-
-## 이전 복구 이력 — 메인 관리용 worktree 연결 — 2026-11-25
-
-- 사용자가 메인에도 개인 컨텍스트 관리용 worktree를 두고 기존 무-worktree 운영 지침을 함께 수정하도록 승인했다. 제품 기능 구현·각 작업 세션 소유권과 분리한다. 메인 채팅 ID와 이력·프로젝트 소속·보관 해제 상태는 유지한다.
-- `create_worktree`로 `/Users/parkjongsun/Repository/dentlink-fe-main-context/codex-personal-context`를 생성했다. 이 생성은 설정한 Worktree root 아래에 처음부터 만들어졌으며 사후 폴더 이동이 없다. 실제 폴더·Git 등록·메인 `read_thread`의 persisted cwd 일치를 확인했다. detached HEAD이며 제품 branch/코드/기존 작업 세션 변경 없음. env 상속 대상은 0개였다.
-- 기존 `/Users/parkjongsun/Repository/codex-personal-context`의 `main`을 개인 기록 수정·commit/push 정본 checkout으로 유지한다. 관리용 worktree는 안정적인 채팅 cwd이며, 기록 동기화 후 clean일 때 정본의 확인된 HEAD로 detached 전진한다. detached에 장기 기록 커밋을 남기거나 예상 밖 변경을 강제 reset하지 않는다.
-- 현재 턴에 이미 만들어진 실행기에는 옛 cwd가 남아 기본 경로 명령이 한 번 실패했다. 이후 이 턴 명령은 새 경로를 명시하며, 다음 턴의 기본 cwd는 갱신된 채팅 설정을 따른다. 단순 명령 workdir와 persisted cwd를 혼동하지 않는다.
-- AGENTS·SESSION_WORKFLOW 및 이 문서의 상시 역할을 새 구조에 맞춰 수정했고 Claude 메모리·Codex 보조 메모리에도 반영했다. 실제 경로 연결은 확인 완료했으며, 사용자가 다른 채팅에서 병행 작업 중이므로 추가 화면 전환·경고 표시 재검증은 중단했다. 아래는 복구 전 시도 이력이며 현재 경로로 재사용하지 않는다.
-
-## 복구 전 시도 이력 — 신규 루트 설정 후 메인 경로 경고 — 2026-11-25
-
-- 사용자 범위: 기존 작업 세션은 그대로 유지하고 신규 세션부터 Repository 경로를 사용한다. 이번 메인세션의 경고는 별도로 복구 요청했다.
-- 공식 **설정 > Worktree > Worktree 루트**에 `/Users/parkjongsun/Repository`를 입력하고 **“Worktree 루트가 저장되었습니다.”** 알림과 저장값을 실제 UI에서 확인했다. 기존 작업 세션/checkout을 이동하거나 자동 삭제 설정을 변경하지 않았다. 신규 worktree 실제 생성은 아직 수행하지 않았으며 다음 승인된 생성에서 반환 경로·채팅 cwd를 확인한다.
-- 메인 경고 원인 확인: 이전 턴에서 메인이 피드백 조사 worktree를 대신 생성하면서 이 채팅의 persisted cwd가 `/Users/parkjongsun/.codex/worktrees/feedback-amplitude-audit/dentlink-client`로 바뀌었다. 실제 checkout은 Repository로 이동했으나 첨부 제거 후에도 cwd는 남았다. 향후 담당 세션의 worktree를 메인에서 대신 생성하지 않도록 SESSION_WORKFLOW에 보완했다.
-- **메인 경고 복구는 미완료다.** 실제 채팅 UI와 metadata에서 경고/옛 cwd를 확인했다. 채팅 액션에는 cwd 변경 메뉴가 없고 원래 관리용 프로젝트 폴더에 대한 `attach_worktree`는 `Choose a registered linked Git worktree.`로 거절됐다. 다른 제품 worktree 연결·옛 빈 폴더/symlink 생성·runtime DB 수정·앱 재시작·실행 중 세션 중단은 하지 않았다. 원래 관리용 프로젝트 폴더는 정상 존재한다. 본 세션의 명령은 유효한 절대 workdir를 지정한다.
-- CUA helper 시작 실패를 우회한 이번 설정 변경은 macOS 접근성 API/화면에 표시된 설정 컨트롤로 수행했다. 숨겨진 앱 데이터베이스나 설정 파일을 직접 수정하지 않았다. 제품 조사 세션에는 추가 메시지/폴링하지 않았다.
+- 기존 **메인세션** `01a08f0c-2057-7852-ae8d-0cf950a91fd3`를 계속 사용한다. 새 메인 교체 계획과 기존 메인 보관 승인은 후속 대화로 철회됐다. 기존 메인 프로젝트 소속·이력을 유지한다.
+- 사용자의 경로 변경·폴더 정리 후 실제 기본 `pwd`와 채팅의 저장된 cwd가 모두 `/Users/parkjongsun/Repository`임을 확인했다. `dentlink-fe-main-context` 및 그 안의 중복 checkout은 실제로 없어졌다. 에이전트는 남은 삭제된 worktree 첨부와 Git의 prunable 등록만 정리했다.
+- 개인 기록 정본은 `/Users/parkjongsun/Repository/codex-personal-context`의 `main` 하나다. Git worktree 등록도 이 원본 하나만 남았다. 메인세션 작업 경로와 개인 기록 저장소가 같을 필요는 없고, 기록 저장소를 추가 폴더로 감쌀 이유도 없다.
+- 교체/CLI 복구 과정에서 생긴 후보 채팅 5개는 보관했다. 제품 코드·제품 worktree·기존 기능 세션은 변경하지 않았다. 새 세션 교체나 경로 복구를 자동 재개하지 않는다. [종료된 시도와 최종 결과](dentlink-fe-main-handoff-20261125.md).
+- 기존 기능 세션 경고는 사용자의 이전 지시대로 각 작업 종료 때 정리한다. 신규 제품 worktree는 항상 기존 Repository/repository 아래에 두고 실제 폴더·Git 등록·채팅 cwd를 확인한다. 담당 기능 worktree를 메인에서 대신 생성하여 메인의 cwd를 바꾸지 않는다.
 
 ## 피드백 Amplitude 코드 조사 인계 — 2026-11-25
 
@@ -398,7 +373,7 @@
 
   | 에이전트 | 메인세션 | 메인 폴더 |
   | --- | --- | --- |
-  | 사무실 Codex | Dentlink FE 메인세션 `01a2123a-7636-7d21-a102-4a0aba0b0033` (2026-11-25 교체, 고정 목록) | 실제 cwd `Repository/codex-personal-context` · 프로젝트 미지정 |
+  | 사무실 Codex | 메인세션 `01a08f0c-2057-7852-ae8d-0cf950a91fd3` 유지 | 기존 메인 프로젝트 소속 · 실제 cwd `/Users/parkjongsun/Repository` |
   | 사무실 Claude Code | "Dentlink FE 메인세션 (사무실 Claude)" `local_322c0b9d-e807-4b1c-ad23-416fd7d5b025` (2026-11-12 지정, 원래 dentlink-app 폴더에서 옮김) | `/Users/parkjongsun/Repository` |
   | 집 Claude Code | "Dentlink FE 메인세션" `local_ee66b909-c034-43a9-af56-066bf4ace9c5` | `/Users/parkjongsun/repository` |
   | 집 Codex | 미지정(사용 시 같은 규칙으로 하나 지정) | — |
@@ -416,7 +391,7 @@
 - 같은 날 이 세팅의 일부로 Claude 메모리를 메인 폴더 키(`~/.claude/projects/-Users-parkjongsun-repository/memory`)로 옮기고 웹 폴더 키에는 링크를 남겼다. 앱 설정은 브랜치 접두어 `claude`→`feat`, 새 세션 Remote Control 연결 켜기로 바꿨다. 새 세션 기본 모델 설정은 `claude-sonnet-4-6`이라, 하위 세션은 `model` 생략(메인 상속)으로 만든다.
 
 - **원격화 구분(2026-10-27):** 기본 의미는 켜진 이 Mac의 기존 세션을 휴대폰에서 그대로 이어 쓰는 것이다. 다른 PC로 실행 환경을 옮겨 Git 기반 컨텍스트를 복구하는 경우와 구분하고, 각 세션에서 같은 의미를 다시 묻지 않는다. 신규 세션은 정상 등록·프로젝트·호스트·초기 턴 확인과 초기 개인 기록 저장/푸시를 기본으로 챙긴다. 연결 설정은 사용자가 관리한다. 사용자의 '메모리화 후 휴대폰에서 보였다'는 경험은 관찰로 기록하며 Git 저장이 모바일 표시를 유발한다는 인과나 현재 표시 완료를 단정하지 않는다. 정본은 [Phone Remote Continuity](../SESSION_WORKFLOW.md#phone-remote-continuity)이다.
-- **메인세션 유지 규칙(2026-10-27, 2026-11-25 교체 반영):** 현재 지정된 최상위 메인세션은 보관하지 않고 계속 유지·대기한다. 구 메인 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`는 사용자의 명시적인 교체·보관 승인에 따라 이번 인계 후 보관한다. 보관/영구 종료 요청이나 다른 작업 세션용으로 보이는 대상 불명확 마감 지시가 들어오면 사용자에게 대상을 먼저 되묻는다. 메인 자체가 대상임을 재확인하기 전에는 보관하지 않으며, 일반적인 기록 정리·대기는 그대로 수행한다. 이 추가 확인은 다른 기능 세션 전체에 적용하지 않는다. 정본은 [Dentlink FE Main Session Retention](../SESSION_WORKFLOW.md#dentlink-fe-main-session-retention)이다.
+- **메인세션 유지 규칙(2026-10-27, 2026-11-25 유지 재확인):** 이 최상위 메인세션 `01a08f0c-2057-7852-ae8d-0cf950a91fd3`는 보관하지 않고 계속 유지·대기한다. 같은 날의 교체·보관 계획은 철회됐다. 보관/영구 종료 요청이나 다른 작업 세션용으로 보이는 대상 불명확 마감 지시가 들어오면 사용자에게 대상을 먼저 되묻는다. 메인 자체가 대상임을 재확인하기 전에는 보관하지 않으며, 일반적인 기록 정리·대기는 그대로 수행한다. 이 추가 확인은 다른 기능 세션 전체에 적용하지 않는다. 정본은 [Dentlink FE Main Session Retention](../SESSION_WORKFLOW.md#dentlink-fe-main-session-retention)이다.
 - 직전의 'QA 없이 배포 완료, 정리 후 세션 보관' 메시지는 사용자가 다른 세션에 쓸 내용을 잘못 보낸 것으로 철회했다. 그 메시지를 근거로 SIGSEGV 조사나 다른 업무의 배포/완료 상태를 변경하지 않는다.
 - 2026-10-27 **API 사용처 확인 세션** (`01a17b41-6ead-7fc1-9387-42f68aaa86e2`,
   local·생성 당시 메인 프로젝트, 2026-11-25 현재 `일반`)은 단순 API 사용처 확인용으로 계속 유지한다.
