@@ -1,5 +1,16 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 마감 — 2026-11-26 master 동기화·E2E 보완·Draft PR #4977 생성 완료
+
+- **사용자 승인/결과:** 최신 master 확인·동기화와 현재 브랜치의 master 대상 Draft PR 생성을 요청했고, 필수 가드에서 발견한 배송 E2E 클릭 위치 한 곳 수정 + 정적 검사(실제 DEV 브라우저 E2E 제외)를 추가 승인했다. 아래 승인 대기는 해제됐다.
+- **제품 Git:** /Users/parkjongsun/Repository/dentlink-client-dl-17583, feat/DL-17583 유지. origin/master **023057ab6109e54d263079a6c64c139407f02a6b**를 **b3022dc20f3921625e6e2740c8755359aa0531df**로 충돌 없이 병합했고, E2E 보완 **814488bbf31943202d4f583dce83b469e9a54ad1** `test: 배송 상세 진입을 배송 ID 열 기준으로 변경`까지 origin에 push했다. 최종 local/remote HEAD 일치, clean, master 대비 뒤처진 커밋0. 새 branch/worktree·서버·env·사용자 화면 변경 없음.
+- **PR:** [#4977 — [WIP] [DL-17583] 기공소 주문·배송 목록 선택 출력 개선](https://github.com/Innvoaid/dentlink-client/pull/4977). GitHub 실조회로 OPEN, isDraft=true, DRAFT 라벨, 정확한 [WIP] 접두사, base=master, head=feat/DL-17583, headRefOid=814488bbf31943202d4f583dce83b469e9a54ad1 및 본문을 확인했다. merge/deploy와 CodeRabbit 추적은 하지 않았다.
+- **PR 포함 범위:** 예전 승인된 release 병합으로 master 대비217파일에 본 출력 작업 외 DL-17502(#4919 담당자/주문목록 개편), DL-17595(#4943 ZIP 다운로드), DL-17604(#4945 홈 주문 이벤트)가 포함된다. 원 커밋을 보존했으며 사용자·PR References·Jira에 이 범위를 명시했다. 최신 release 전체 통합 또는 선행 작업 전체 QA 완료를 뜻하지 않는다.
+- **E2E 변경/가드:** e2e/clinic/steps/lab/shipment-create.ts의 위치 기반 p.nth(1)을 Shipping ID/배송 ID .col-name을 가진 .table-cell 내 실제 p:not(.col-name) 클릭으로 변경했다. 선택 열 유무/순서와 분리됐고 기존 POST 응답 대기·주문번호 행 필터·배송 상세 제목 assertion을 유지했다. 소비자는04_labShipment.spec.ts이며 새 spec·테스트명·등록 범위·assertion 삭제나 완화 없음. 다른 정적 접점은 유지됨을 확인한 앞선 판정을 재사용했다. 앱 코드 자체 변경은 없고 IMPACT_FIXED marker 및 PR 생성 직전 check exit0을 확인했다.
+- **검증:** E2E 타입 검사 통과(루트에 tsc binary가 없어 동일 설정을 기존 lab/node_modules/.bin/tsc로 실행; 설치 없음), pnpm e2e:check **248/248 통과**, 변경 파일 Prettier·diff check 통과(기존 Prettier 옵션 경고2개). 커밋 훅 Clinic/Lab/Admin 타입, push 훅 앱 lint·Admin DLOS guard·공용 config77/hooks92 tests·커버리지 비교 통과(기존 lint 경고 포함). 직전 출력 관련101tests 및 후속21tests 증거 재사용. 실제 DEV/STG 브라우저 E2E와 Windows Edge/실물 프린터/용지 검증은 미실행이며 이를 PR에 구분했다.
+- **Jira/기록:** 담당 하위 DL-17582 댓글 **45370**, DL-17583 댓글 **45371**에 PR 링크·동기화·검증과 남은 경계를 기록하고 응답 확인. 기존 설명·카드 상태와 상위 카드는 변경하지 않았다. Git 정본/Claude 메모리와 Codex 보조 기록에 같은 완료 상태를 남긴다.
+- **현재 영향/다음 시작점:** FE1~4·6 구현은 Draft PR에서 검토 가능하며 병합·배포는 하지 않았다. 사용자 다음 지시가 있으면 이 PR/HEAD에서 재개한다.5번은 생성 응답 단일 shipmentId 보완 대기,7번은 복수 프린터/확장 인쇄 별도 검토, 현장 Edge/용지 QA는 남는다. 요청 없는 자동 리뷰 추적·설치·배포는 하지 않는다.
+
 ## 최신 진행 — 2026-11-26 master 동기화 완료, Draft PR 가드 수정 승인 대기
 
 - **사용자 요청:** 최신 master 대비 동기화를 최종 확인하고 현재 feat/DL-17583에서 master로 Draft PR을 생성한다. Draft 상태·DRAFT 라벨·[WIP] 제목을 적용하며 merge/deploy는 요청하지 않았다.
