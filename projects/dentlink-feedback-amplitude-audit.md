@@ -1,5 +1,16 @@
 # Dentlink 피드백 Amplitude 코드 조사
 
+## 현재 상태 — 2026-11-26 Office 컨펌 이벤트 수정 PR 완료
+
+- 사용자가 이후 명시적으로 `confirmation_order_detail_click`만 실제 컨펌 화면 이동 때 호출하도록 수정하고 최신 Office 릴리스에 PR을 올리도록 승인했다. 아래 이전의 코드 작업 보류는 이 좁은 범위에 한해 해제됐다. 다른 이벤트·웹 수정·merge·배포는 범위 밖이다.
+- **[Office PR #367](https://github.com/Innvoaid/dentlink-app/pull/367)**: `[DL-17635] 컨펌 화면 이동에만 클릭 이벤트 전송`, head `feat/DL-17635` @ `655ec74c62d937a441479693b51e6638f80945e1`, base `release/v2.2.7` @ `a5e24166041fa49052a1cf29189981c9bd86a76d`. 기존 Office PR366의 base와 최신 릴리스 원격 ref를 대조했다. 최신 origin/main `dd9fc9a2812b1eb98866b97a5f38451e1a546fd5`에서 분기했다.
+- **수정 내용:** `src/features/common/components/DentlinkWebView.tsx`의 NAVIGATION에서 `data.screen`이 `DesignConfirmation` 또는 `DesignConfirmationScreen`인 경우에만 기존 이벤트를 호출한다. 현재/legacy 이름 호환과 기존 navigate 대상·params·상위 interceptor 반환·catch·호출 시점은 유지했다. 성공 계측으로 바꾸지 않았으며 다른 이벤트는 건드리지 않았다. 제품 diff는 파일 1개 +6/-1이다.
+- **웹 수정 불필요:** 현재 웹 stage의 실제 컨펌 발신자는 DesignConfirmationScreen, 피드백은 FeedbackDetailsScreen을 이미 구분한다. 웹 develop/stage 전체 `confirmation_order_detail` 검색 결과도 없고 해당 호출은 Office 앱에 있다. 대화 중 '웹에도 같은 이름이 있다'고 사용자 전제를 받아 답한 문장은 즉시 정정했다. 이번 앱 호출 경로의 발신처는 확정하되 개별 과거 Amplitude 기록의 발신처는 이름만으로 판정하지 않는다.
+- **검증:** 수정된 실제 NAVIGATION 블록을 Babel AST로 찾아 실행하여 현재/legacy 컨펌 각 1회, 피드백/BillingPolicy/Order 각 0회, interceptor 처리 2종 조기 반환 등 7개 케이스 통과. 이동 대상·params 유지 확인. 변경 파일 ESLint 오류 0/기존 경고 4, git diff --check 통과. 새 영구 테스트 파일/의존성 설치/서버/시뮬레이터/실이벤트 전송은 없음. 이벤트 조건만 제한하는 저위험 수정이라 로컬 실행 철회 지시를 유지했다.
+- **작업공간:** managed create_worktree로 `/Users/parkjongsun/Repository/dentlink-app-dl17635/dentlink-app` 생성·채팅 등록 완료(Repository 실제 경로, registrationError 없음). `feat/DL-17635` 검증, eligible ignored/untracked env 1개 불투명 상속·동일성/ignore 확인. 기존 `/Users/parkjongsun/Repository/dentlink-app`의 다른 작업 브랜치 `feat/DL-16140-history-followup`/HEAD 69a803b2는 변경하지 않았다. 이번 구현 worktree가 활성 위치이며 이전 웹 조사 worktree는 그대로 보존한다.
+- **최종 PR 확인:** ready PR, MERGEABLE, 실제 base release/v2.2.7·제목·파일 1개 diff 유지. Auto PR Title/Body/Assign SUCCESS, 라벨 자동화 SKIPPED. CodeRabbit PENDING을 확인했으나 리뷰 확인 요청은 없어 기다리거나 추가 폴링하지 않았다. 작업트리 clean, commit/push 완료. 이번 turn Jira에는 추가 쓰기 없음.
+- **다음 시작점:** PR 리뷰/merge/배포는 사용자 후속 요청을 기다린다. DEV 최초 Good/Bad 실수집 정상 및 과거 누락 원인 미확정이라는 조사 결론은 유지한다. 이 수정이 과거 review_feeback_click 미표시를 해결했다고 주장하지 않는다.
+
 ## 현재 상태 — 2026-11-26 실수집 확인 후 대기
 
 - 사용자 최종 지시: **지금은 코드 수정 없이 현황만 정리하고 대기**. 로컬에서 직접 전송을 관찰하는 준비 요청은 철회했다. 앱/에뮬레이터/Metro 실행과 이벤트 로직 변경은 하지 않았다. 사전 확인 중 adb daemon만 시작됐고 Terminal UI 제어 제한으로 실행 준비는 중단됐다. 추가 조사·실행·구현·모니터링은 새 요청 전까지 하지 않는다.
