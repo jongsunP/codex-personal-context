@@ -2,6 +2,8 @@
 
 ## 현재 상태 — 2026-11-26 구현·PR 완료
 
+- **CodeRabbit 리뷰 처리 완료(11/26):** PR4969 HEAD `5b06dc1`의 actionable 1건(빈 값이 undefined/빈 셀로 표시된다는 지적)은 오탐이다. 실제 `/notifications/web` → DataGrid.DataList는 tooltip 컬럼이 없어 DLOS `toDataTableColumns` 경로를 사용한다. `dataList.utils.ts:30-43,64-70`에서 null/undefined/문자열 undefined/빈 문자열·공백을 이미 `-`로 처리하고 정상 URL은 그대로 표시한다. 레거시 `DataTableRow.tsx:150-156`에도 동일 후처리가 있어 그 경로 설명도 잘못됐다. [근거 회신](https://github.com/Innvoaid/dentlink-client/pull/4969#discussion_r4704932731) 후 스레드 `PRRT_kwDOJnA7-868QPE4` resolve. 제품 코드·커밋 변경 없이 유지했고 사용자 검증 생략 지시대로 테스트/브라우저는 실행하지 않았다. 팀 승인·병합·배포와 구분한다.
+
 - 사용자가 직접 만든 [DL-17650](https://innovaid.atlassian.net/browse/DL-17650)의 브랜치로 변경하고 1.95.0 대상 PR까지 승인했다. 현재 카드 제목은 `[FE] 관리자 알림로그에 appLandingUrl 컬럼추가`, 사용자 담당 하위 카드이며 상위는 DL-17643이다.
 - **[PR #4969](https://github.com/Innvoaid/dentlink-client/pull/4969)** 생성 완료: `feat/DL-17650` → `release/v1.95.0`, 일반 Open PR, commit **`5b06dc1624bfd3cede405b5963f3eca06f31cc8a`**, 1커밋·2파일·6줄 추가. merge/deploy는 하지 않았다.
 - 기존 미커밋/미푸시 준비 브랜치를 `feat/DL-17650`으로 이름 변경했다. master가 release보다 앞서 있던 무관한 4커밋/8파일을 제외하기 위해 변경 전 빈 브랜치를 `origin/release/v1.95.0@e5a880cb13153a491668cb10e5f404c8abe9564d`로 정렬했다. 사용자도 “릴리즈에서 따서 수정해서 릴리즈로 향하게” 하는 방식을 명시 확인했다. 기존 worktree 실경로·채팅 cwd는 유지, 다른 checkout/remote release 변경 없음.
