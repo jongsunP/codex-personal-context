@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-26 LBX 스테이징 병합·사용자 배포 완료 후 대기
+
+- [LBX 체크포인트](projects/dentlink-client-lbx.md)에 PR #4966 MERGED(`c2c9d5174`)와 사용자 보고 배포 완료를 반영했다. 원본 `feature/DL-16387@5237f2c6d` 로컬/원격 일치·clean 확인. 운영 홀드와 원본 보존을 유지하고, 앞으로 별도 환경 배포는 사용자 요청 시 준비한다. 배포 결과 추가 조회 없이 대기하며 Claude 메모리도 갱신했다.
+
 ## 2026-11-26 LBX 원본 최신화 및 별도 스테이징 PR 준비
 
 - [LBX 체크포인트](projects/dentlink-client-lbx.md)에 원본5237f2c6d, 별도 전달4ff9816c6, [PR #4966](https://github.com/Innvoaid/dentlink-client/pull/4966) OPEN/MERGEABLE과 검증을 기록했다. 최신 master를 원본에 병합하고 삭제된 LBX DTO10개만 복원했다. 실제 Admin11개 변경으로 자동 배포 조건을 확인했으며 현재 stage 삭제는 불필요했다. 원본 보존·운영 홀드·사용자 병합/배포 경계를 유지하고 Claude 메모리에도 기록했다.
