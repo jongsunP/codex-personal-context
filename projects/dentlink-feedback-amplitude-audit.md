@@ -1,5 +1,14 @@
 # Dentlink 피드백 Amplitude 코드 조사
 
+## 후속 확인 — 2026-11-26
+
+- 채팅 제목은 사용자 요청으로 `DL-17635 피드백 Amplitude 이벤트 조사`로 변경 완료했다(기존 세션 ID 유지).
+- 사용자 요청은 계속 코드 기준 설명·조사이며 제품 수정/실행 승인이 아니다. 최초 배너·목록 평가는 `review_feeback_click` 후 API 저장, 상세 Good/Bad 변경은 로컬 상태만, Submit은 `reviewdetail_submit_click` 후 API 저장이다. Office native 목록·상세도 이 시점은 같다. 이벤트 시점을 저장 API와 반드시 같게 만들 구조적 제약은 없으며 선택 행동/제출 시도/저장 성공 중 의도한 지표와 이벤트명·속성 결정이 선행한다.
+- [Yoonie 댓글 45349](https://innovaid.atlassian.net/browse/DL-17635?focusedCommentId=45349)는 웹 정상, 앱 주문 상세에서 review_feeback_click 대신 컨펌 이벤트가 보인다는 실제 확인 결과를 보고했다. 본문과 첨부 `32062`를 읽었다. 캡처에는 2:00:38 AM에 `confirmation_order_detail_…`(이름 끝 생략)와 `feedbackdetails_view`가 함께 보이고, 전후 `orderdetail_view`가 있다. 사용자 동작 전체나 필터/전체 이벤트 로그가 담긴 자료는 아니다.
+- 고정 조사 SHA의 앱 `DentlinkWebView.tsx:629–650`와 웹 주문 상세 `index.tsx:226–269`를 다시 대조했다. Good/Bad는 웹 `review_feeback_click` 및 저장만 실행한다. Share your feedback/Edit는 웹 `review_detail_click`/`review_edit_click` 후 NAVIGATION으로 native 상세를 열며, bridge가 이때 무조건 `confirmation_order_detail_click`을 추가한다. 따라서 캡처 순서는 기존에 확인한 앱 전환의 잘못된 추가 호출과 일치한다. Good/Bad 이벤트 이름 자체를 컨펌 이벤트로 치환하는 코드는 없다.
+- 최초 Good/Bad 이벤트가 실제로 왜 안 보였는지는 미확정이다. 캡처만으로 최초 클릭 수행/웹 이벤트 전송 실패/조회 필터를 판별할 수 없다. 웹 SDK와 native SDK는 구분하되 필터 원인으로 확정하지 않는다. 앞서 “동일한 흐름”이라고 간략화한 설명은 Good/Bad·Submit 시점에 한정하며, 앱 상세 전환의 잘못된 추가 이벤트까지 동일하다는 뜻이 아니다.
+- 이번 후속에서 Jira·Notion·제품 코드 수정이나 실제 이벤트 발송은 하지 않았다. 조사 근거를 양쪽 개인 기록에 보존하고, 코드 작업 없이 다음 사용자 요청을 기다린다.
+
 ## 현재 상태 — 2026-11-25
 
 - **정리 완료 후 대기.** 사용자가 5행짜리 `사용자 행동 / 수집 여부` 표를 직접 전달했다고 확인했고, Jira를 간단히 정리한 뒤 메모리 저장·대기를 요청했다. **당분간 코드 작업은 하지 않는다.** 추가 조사·구현·실수집 확인·모니터링·타 세션 연락은 다음 사용자 요청 전까지 시작하지 않는다.
