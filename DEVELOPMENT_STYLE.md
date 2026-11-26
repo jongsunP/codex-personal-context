@@ -55,6 +55,15 @@ appear nowhere else in the app.
 
 ## Requirement And Design Scope
 
+- User instruction, 2026-11-26: do not put temporary feature drafts or
+  unfinished experiments into the product's working branch or live UI flow.
+  Keep unapproved directions in planning records until the behavior is agreed.
+  Calling code a draft, or leaving it for later cleanup, does not prevent it
+  from shipping. When work is deferred, inspect and remove its provisional
+  entry points and dependent code under the authorized scope while preserving
+  accepted functionality. This does not prohibit ordinary local work in progress
+  on an approved implementation; do not treat it as ready for delivery.
+
 - When citing an existing precedent or team convention as the basis for a
   direction decision, state only the scope verified in code or records (usage
   count, target screens, production presence). Do not generalize a few usages
