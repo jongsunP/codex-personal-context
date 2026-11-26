@@ -1,5 +1,15 @@
 # Dentlink 피드백 Amplitude 코드 조사
 
+## 현재 상태 — 2026-11-26 앱 주문 상세 조회 중복 제외 추가 반영
+
+- 사용자 추가 승인: 앱의 OrderDetailScreen 자동 조회 이벤트만 제외하고, 향후 네이티브 화면 전환 시 복원 주석을 남긴다. 웹 이벤트와 다른 앱 이벤트는 유지하며 기존 PR에 함께 반영한다.
+- **Office PR #367 갱신 완료:** https://github.com/Innvoaid/dentlink-app/pull/367 — 제목 `[DL-17635] 주문 상세 조회 중복과 컨펌 이벤트 오수집 수정`, head `feat/DL-17635` @ `d3c0aa866418311f67cc297a8dff8c54a91dc352`, base `release/v2.2.7`. 커밋 `fix: 웹뷰 주문 상세의 앱 조회 이벤트 제외` push 완료, PR 본문을 최종 두 변경 기준으로 갱신했다. 실제 base/head/파일 2개 diff/MERGEABLE 확인, 작업트리 clean. merge·배포 없음.
+- RootNavigator.tsx handleStateChange의 기존 공통 조회 조건에 `currentRoute.name !== "OrderDetailScreen"`만 추가했다. 웹뷰 웹 이벤트로 수집하므로 앱 중복 호출을 제외하고 네이티브 전환 시 복원해야 한다는 다중행 주석을 남겼다. 공통 이벤트 생성은 삭제/주석 처리하지 않았으며 다른 화면 조회·screen_params·setRouteName·배경 상태 갱신은 유지했다.
+- 컨펌 클릭 제한(이전 655ec74)도 그대로 유지한다. 이후 앱 DesignConfirmationScreen의 `designconfirmation_view`, FeedbackDetailsScreen의 `feedbackdetails_view` 등은 그대로 발생한다. 웹 소스/이벤트 수정 없음.
+- 검증: 실제 화면 변경 핸들러를 Babel로 추출·실행해 6개 케이스 통과(OrderDetail/BottomTab 제외, 컨펌/피드백/Order 조회 유지, undefined state 처리). 상태 갱신·params도 확인했다. RootNavigator ESLint 전후 동일 오류 0/기존 no-console 경고 3건, 최종 PR diff --check 통과. 이전 컨펌 분기 7개 검증은 해당 코드 불변으로 재사용했다. 영구 테스트 추가·설치·로컬 실행·실제 이벤트 전송은 하지 않았다.
+- 사용자 제공 관측: 문제의 confirmation_order_detail_click library가 amplitude-react-native-ts/1.13.0임을 확인했다고 했다. 해당 기록이 앱 SDK 발신이라는 해석을 설명했다. 앱의 orderdetail_view 역시 같은 native library로 기록되어 웹 이벤트 수집 증거로 오인할 수 있다는 구분을 공유했다. 원래 피드백 미표시 원인을 확정한 것은 아니다.
+- 다음 시작점: 이 PR의 요청된 리뷰·병합·배포만 별도 승인 후 진행한다. 두 이벤트 외 범위 확대나 자동 모니터링을 하지 않는다.
+
 ## 현재 상태 — 2026-11-26 Office 컨펌 이벤트 수정 PR 완료
 
 - 사용자가 이후 명시적으로 `confirmation_order_detail_click`만 실제 컨펌 화면 이동 때 호출하도록 수정하고 최신 Office 릴리스에 PR을 올리도록 승인했다. 아래 이전의 코드 작업 보류는 이 좁은 범위에 한해 해제됐다. 다른 이벤트·웹 수정·merge·배포는 범위 밖이다.
