@@ -1,5 +1,17 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 체크포인트 — 2026-11-26 4번 배송 목록 선택·높이 보완, 로컬 확인 대기
+
+- **이번 승인/합의:** 사용자가 4번 초안의 접근을 확인하고 주문 목록 수준의 선택 셀/행 동작 분리와 전체 선택, 테이블 높이 회귀 수정, 새 패널 출력 흐름 진행을 요청했다. 라벨 생성 옆 **기존 출력 팝업 버튼은 기존 사용자가 계속 그대로 쓰도록 별도 유지**한다. 새 선택/패널과 기존 팝업의 선택 상태·동작을 연동하거나 통합하지 않는다. 임시 대체 경로만 제공한다는 의미도 아니다.
+- **현재 위치/상태:** `/Users/parkjongsun/Repository/dentlink-client-dl-17583`, `feat/DL-17583`, HEAD `123b757b2` 유지. 이번 수정은 tracked8 + untracked3 =11파일, staged0인 **로컬 미커밋 변경**이다. 제품 commit/push/PR/merge/deploy 없음. 원본 checkout·다른 세션·사용자 Cursor/개발 서버/브라우저는 조작하지 않았다. 3번 사용자 완료 상태는 유지하며, 4번은 이번 보완을 사용자가 로컬 확인할 차례다.
+- **배송 선택 동작:** 표의 선택 열을52px로 정리하고, 헤더 체크박스/헤더 셀은 현재 페이지 전체 선택·해제, 본문 체크박스/선택 셀 전체는 해당 배송만 선택한다. 공용 legacy DataTable에 opt-in 셀/헤더 액션을 추가해 행 클릭으로 전파되지 않고 내부 native checkbox/label/button/link 클릭은 중복 실행되지 않게 했다. 배송의 기존 배송번호·트래킹·행별 출력 동작은 유지한다. 배송 페이지에 없던 전체 행 이동 동작을 새로 만들지 않았다. 모바일 행 제목에 헤더의 전체 선택 체크박스가 중복 렌더되던 부분은 별도 mobileName으로 제거했다.
+- **안전 조건:** 준비 중/로딩/미확정 scope/잘못된 ID/선택 한도에서 새 선택을 막고, 최대30건에서 기존 선택 해제는 가능하게 유지한다. 페이지별 해제는 다른 페이지 선택을 지우지 않는다. 선택 액션 열에는 핀을 숨기되 원래 첫 데이터 열과 끝 데이터 열의 고정은 유지하도록 pinnable edge를 계산한다. opt-in이 없는 기존 공용 테이블의 클릭/고정 기본 동작은 그대로다. 신규 문구나 기공소 타입 제한 변경 없음; 현재 모든4타입 허용 및 부착용 INTERNAL 기존 조건 유지.
+- **기존 출력 팝업:** shipping/index.tsx의 `!canUseLabelPrint` 숨김 조건을 제거해 항상 원래 위치에 렌더한다. PrintLabelStickerDropdown 내부·기존 팝업 선택/출력 로직은 변경하지 않았다. 새 패널 열림/닫힘 때 기존 버튼이 재마운트되지 않고 유지되는 연결 테스트를 추가했다.
+- **높이 원인/수정:** page SplitView의 컨테이너→grid→main과 PrintSelectionPanel 본문 wrapper 사이에서 flex 높이 전달이 끊겨 DataGrid가 내용 최소 높이로 축소됐다. page variant에서만 flex column/늘어나는 main을 연결하고 좁은 화면의 panel/main 행을 분리했다. container variant의 기본 구성은 유지한다. 공용 page 보완이므로 주문 패널의 기존 마운트/선택/출력 테스트도 함께 확인했다.
+- **검증:** Lab 영향4 suites33 tests(배송 새7 + 기존 주문/일괄 출력/경계26), DLOS SplitView4 tests로 고유37 tests 통과. Lab·DLOS 최종 타입 검사 통과. diff check 통과. Lab/신규 공용 소스 lint 새 오류0; 기존 배송 useEffect 경고1 유지. shared/ui 정상 cascade lint는 기존 Storybook plugin 중복 설치 충돌로 실행되지 않아 root 설정으로 확인했으며 DataTableHeader의 기존 빈 기본 callback4개 no-empty-function 오류가 HEAD와 현재 모두 동일함을 비교했다. 기존 오류를 새 수정의 통과로 표현하지 않는다.
+- **비표시 Chromium 높이 실측:** 실제 SplitView·PrintSelectionPanel·legacy DataGrid/List/Pagination과 Layout의 높이 구조를 복제한 **샘플 fixture**로 비교했다. 1440×1000에서 wrapper 없는 기준 표609px, 수정 전 초안378px, 수정 후 패널 닫힘/열림 모두609px. 1024/760/390폭에서 페이지 가로 넘침0·runtime error0. 최종 코드로 재번들/재확인했다. 실제 서비스 전체 Layout/계정/API/필터 데이터와 실물 프린터 검증을 했다는 의미는 아니다. 증거: `/Users/parkjongsun/.codex/visualizations/2026/11/24/01a20bee-0fb0-72b0-83df-9619645cb73a/2026-11-26-shipping-layout/`의 metrics.json·desktop-open.png·open-{1024,760,390}.png. 임시 fixture는 `/tmp/dl-17583-layout-check`, 환경 파일을 읽지 않는 Jest 설정은 `/tmp/dl-17583-panel-jest.json`; 제품 서버 실행 없음.
+- **다음:** 같은 worktree/branch에서 사용자가 배송 페이지의 표 높이, 셀/체크박스/전체 선택, 페이지 이동, 기존 팝업과 새 패널을 각각 확인한다. 새 변경은 로컬 검토 상태로 유지한다. 4번 최종 확정 뒤5번 생성 완료→출력,6번 다중 용지/프린터 목적을 이어서 검토한다. Windows Edge 실물 출력 및 실제 API/SSE, 최종 반영 전 최신 master/release 대조는 계속 남는다. 이번 턴 Jira 변경 없음.
+
 ## 최신 체크포인트 — 2026-11-25 3번 완료 확정·누적 작업 커밋/푸시·4번부터 다음 재개
 
 - **대기 재확정(목록 브리핑 후 사용자 지시):** 다음 작업은 **4번 배송 목록 선택·일괄 출력**부터다. 현재는 **정리·메모리만 저장하고 대기**한다. 새 요청 전에는 제품 코드/서버/브랜치/Jira를 변경하거나 추가 조사·모니터링하지 않는다. 재개 시 아래 완료/보류 상태와 모든 타입 허용 합의를 먼저 짧게 안내하고, 4번의 기존 초안 검토부터 이어간다. 3번은 완료 상태를 유지한다.
