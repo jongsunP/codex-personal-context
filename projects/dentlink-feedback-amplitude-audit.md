@@ -1,5 +1,16 @@
 # Dentlink 피드백 Amplitude 코드 조사
 
+## 현재 상태 — 2026-11-26 Lab 동일 범위 수정 PR 완료
+
+- 사용자 후속 `기공소앱도 작업해`로 Office와 같은 두 이벤트 보완을 Lab에 적용하고 별도 PR까지 진행했다. 기공소에 피드백 작성 기능이 없다는 사실과, 일반 주문 상세 공통 이벤트 문제가 있다는 사실은 구분한다.
+- **[Lab PR #58](https://github.com/Innvoaid/dentlink-lab-app/pull/58)**: `[DL-17635] 주문 상세 조회 중복과 컨펌 이벤트 오수집 수정`, `feat/DL-17635` → `release/v1.1.0`. 최신 origin/main `12cd290e4344065ac030f6a64696df4426a8b59c`에서 분기했고 기존 Lab PR56 및 원격 release `7768a098a1790ca9dcbfab92be673e3218d98556`를 대조했다.
+- commit-changes 스킬 적용: `dec82ee` / `fix: 컨펌 화면 이동에만 클릭 이벤트 전송`은 DentlinkWebView.tsx의 컨펌 현재·legacy 두 목적에만 이벤트를 허용한다. `525b4932472f2e6aca88f997ad598dffbc0fa20c` / `fix: 웹뷰 주문 상세의 앱 조회 이벤트 제외`는 RootNavigator.tsx에서 OrderDetailScreen만 제외하고 네이티브 전환 시 복원 주석을 남겼다. 다른 이동·params·interceptor·화면/배경 상태 갱신은 그대로다.
+- **밀링 주문 상세 제외 금지:** MillingOrderDetailScreen은 별도 네이티브 화면이므로 기존 자동 조회 이벤트를 유지했다. 웹 주문 상세 orderdetail_view와 이후 컨펌 등 다른 앱 이벤트도 유지한다. 웹·Office 코드 추가 변경 없음.
+- 작업공간 `/Users/parkjongsun/Repository/dentlink-lab-app-dl17635/dentlink-lab-app`은 managed worktree 생성·등록 완료, Repository 실제 경로 및 feat/DL-17635 확인, eligible env 1개 불투명 복사/동일성/ignore 확인. 원본 Lab의 다른 세션 feat/DL-16140-history-followup @5710b63은 checkout/코드 변경하지 않았다.
+- 검증: 변경 2파일 ESLint 전후 모두 오류 0, 기존 경고 각각 WebView 4/RootNavigator 3 그대로. 실제 호출자와 조건·최종 diff 정적 대조, git diff --check 통과. 해당 이벤트를 직접 검증하는 기존 테스트가 없고 Lab 지침상 새 테스트 작성 없이 린트·정적 확인으로 마무리했다. 설치·로컬 실행·기기 테스트·실제 Amplitude 전송 없음. 앱 런타임 정상/배포 성공을 주장하지 않는다.
+- PR 실물 base release/v1.1.0, head 525b493, 파일 2개 +15/-3, MERGEABLE 확인. commit/push 완료, 작업트리 clean. 최신 릴리스의 별도 라이브러리 변경은 덮어쓰지 않는다. Auto PR Title/Body SUCCESS, labels SKIPPED 후 실제 title/base/diff 유지까지 마지막 확인했다.
+- 기존 Office PR367(release/v2.2.7, d3c0aa86)과 Lab PR58는 독립 저장소의 별도 전달이다. 이번 turn Jira·Notion 변경 없음. merge·배포 및 추가 리뷰/모니터링은 다음 요청 전까지 하지 않는다.
+
 ## 현재 상태 — 2026-11-26 앱 주문 상세 조회 중복 제외 추가 반영
 
 - 사용자 추가 승인: 앱의 OrderDetailScreen 자동 조회 이벤트만 제외하고, 향후 네이티브 화면 전환 시 복원 주석을 남긴다. 웹 이벤트와 다른 앱 이벤트는 유지하며 기존 PR에 함께 반영한다.
