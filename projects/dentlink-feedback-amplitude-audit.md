@@ -1,5 +1,17 @@
 # Dentlink 피드백 Amplitude 코드 조사
 
+## 현재 상태 — 2026-11-26 실수집 확인 후 대기
+
+- 사용자 최종 지시: **지금은 코드 수정 없이 현황만 정리하고 대기**. 로컬에서 직접 전송을 관찰하는 준비 요청은 철회했다. 앱/에뮬레이터/Metro 실행과 이벤트 로직 변경은 하지 않았다. 사전 확인 중 adb daemon만 시작됐고 Terminal UI 제어 제한으로 실행 준비는 중단됐다. 추가 조사·실행·구현·모니터링은 새 요청 전까지 하지 않는다.
+- [사용자 댓글 45351](https://innovaid.atlassian.net/browse/DL-17635?focusedCommentId=45351)의 DEV iOS/Android 정상 확인 보고를 읽고, 사용자가 열어준 Chrome의 [연결된 Amplitude 사용자 활동](https://app.amplitude.com/analytics/innovaid/project/719548/search/amplitude_id%3D1610244535676/activity?_source=live%20events)을 직접 읽었다. 새 제품 이벤트를 직접 발생시키지 않았다.
+- **실수집 확인:** DEV 프로젝트(719548)에서 2026-11-26 KST 12:01:12 iOS(Mobile Safari UI/WKWebView), 12:08:14 Android(Chrome Mobile WebView 157)의 `review_feeback_click`, `feedbackType: Good`을 각각 원시 이벤트에서 확인했다. 두 건 모두 platform=Web, library=amplitude-ts/2.43.0, Page Domain=dev-portal.dentlink.io, 주문 상세 경로와 서버 수신 시각이 존재한다. Amplitude 화면 시간은 UTC 03:01:12/03:08:14였다. 사용자 ID 같은 값으로 묶여 있어도 native와 WebView 세션은 별개로 보였다(특히 Android timeline).
+- **환경별 코드 비교:** 원격 ref를 확인하고 stage를 fetch한 기준으로 web develop=`74f37befdcef0f8bee12d162c9dc87055d90e5c7`, stage=`9aef3b3cf7a0ea4b02a049e6e1a020b9d9079662`. `clinic/src/components/Feedback`, 주문 상세 `clinic/src/pages/orders/[order_id]/index.tsx`, `clinic/src/services/feedback`, `clinic/src/common/hooks/useAmplitudeInit.ts`, `shared/configs/utils/amplitude.ts`의 두 브랜치 diff는 없다. 환경별 호출 이벤트/시점 분기 없음. 실제 배포 완료 SHA나 env 값 동일성까지 검증한 뜻은 아니다. 조사 checkout HEAD는 기존 detached 9084878eaa 유지.
+- **공통 수집 조건은 구분:** 웹/WebView는 AMPLITUDE_ENABLED=true 및 키 존재가 조건이다. Office 고정 조사 SHA dd9fc9a28의 native 초기화는 DEV/STG/PRD 모두 Debug에서 skip하며 Release는 진행한다. 네이티브 Debug 제한이 WebView 웹 SDK 수집을 끄는 것은 아니다. APP_ENV에 따라 dev-portal/stg-portal로 접속한다. 실제 env 값/키는 읽지 않았다.
+- **현재 결론:** 확인한 DEV 양OS에서는 보고된 최초 클릭 누락이 재현되지 않았고 실제 수집이 확인됐다. 개발/스테이징 피드백 코드 차이가 원인이라는 근거는 없다. 과거 보고 건의 미표시 원인이나 STG 실제 수집 정상 여부는 미확정이다. 아래 과거의 '실수집 미검증' 기록은 당시 상태이며 이번 DEV 두 건 관측으로만 갱신한다.
+- **별도 보완 후보:** `confirmation_order_detail_click`의 공통 NAVIGATION 무조건 호출은 남아 있다. 실제 DesignConfirmationScreen 진입만 호출하고 legacy DesignConfirmation도 정규화하는 방안은 추후 고려 가능하지만 승인·구현·테스트하지 않았다. 사용자의 '고려 가능'은 수정 승인이 아니다.
+- [Jira 후속 댓글 45352](https://innovaid.atlassian.net/browse/DL-17635?focusedCommentId=45352)에 위 요약과 코드 작업 없이 대기 결정을 작성하고 반환 본문을 확인했다. Jira 상태/설명은 이번에 바꾸지 않았다. 제품 코드·테스트·문서·브랜치·PR·배포 변경 없음.
+- **다음 시작점:** 새 요청이 있을 때만 이 최신 기록과 DL-17635를 읽는다. 컨펌 이벤트 보완 요청이면 그 범위로 한정하고, 누락 재조사 요청이면 해당 실제 환경·동작·세션 근거를 확인한다. 정상 확인된 DEV 이벤트를 계속 미수집으로 설명하지 않는다.
+
 ## 후속 확인 — 2026-11-26
 
 - **수집 미표시 추가 조사·수정 방향(코드 수정 없음):** 사용자 요청은 (1) WebView review_feeback_click 미표시의 코드 원인 추가 확인, (2) confirmation_order_detail_click 수정 방향이다. 중간에 “앱 세션에 웹뷰 이벤트가 연결되지 않는 것 아닌가, 그렇다면 다른 웹 주문 상세 이벤트도 빠져야 하지 않나”라는 가설을 제시했다.
