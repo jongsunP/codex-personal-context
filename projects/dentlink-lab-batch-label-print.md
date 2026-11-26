@@ -1,5 +1,16 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 진행 — 2026-11-26 master에서 출력 작업만 재구성, Draft PR #4978
+
+- **사용자 확정/승인:** 다른 릴리즈 작업이 섞인217파일 PR을 분리한다. 기존 전체 구현은 안전하게 보존하고 기존 feat/DL-17583 이름을 최신 master에서 다시 사용한다. 출력 기능만 적용·검증한 새 Draft PR을 만들고 CodeRabbit 리뷰까지 진행한다. merge/deploy는 포함하지 않는다.
+- **보존:** 이전 HEAD814488bbf31943202d4f583dce83b469e9a54ad1을 로컬/원격 feat/DL-17583-release-preserved에 보존하고 ls-remote로 동일 SHA를 확인했다. 기존 PR4977은 종료하고 새 PR4978과 양방향 참조를 남겼다. 보존 확인 이후 원래 원격feat/DL-17583을 삭제하고 같은 worktree에서 origin/master023057ab6109e54d263079a6c64c139407f02a6b 기준으로 feat/DL-17583을 재생성했다. force push 없이 새 branch를 정상 push했다. 다른 세션·checkout·프로세스·env·화면은 건드리지 않았다.
+- **현재 제품 Git/PR:** /Users/parkjongsun/Repository/dentlink-client-dl-17583, feat/DL-17583. 새 단일 커밋078b8dff5cd2839c0a5c67ee902695b1d4e76589 `feat: 주문과 배송 목록의 선택 출력 추가`, origin 일치·clean. [Draft PR4978](https://github.com/Innvoaid/dentlink-client/pull/4978), master←feat/DL-17583, OPEN·isDraft=true·DRAFT라벨·[WIP]제목·HEAD일치·MERGEABLE을 실조회했다. 아래 PR4977이 현재 작업 PR이라는 과거 기록은 이 항목으로 대체한다.
+- **정확한 분리 범위:** 이전217파일을 master+기존release 병합 트리와 비교해 릴리즈 변경만144파일, 출력 변경73파일로 확인했다. 그대로 복사하지 않고 master에 재적용해 최종67파일3382추가274삭제로 줄였다. DL-17502 담당자/주문목록 개편,DL-17595 ZIP 다운로드,DL-17604 치과 이벤트와 clinic/admin/shared/models/shared/dlos/패키지·lockfile 변경은 모두 제외됐다. 공용에 남은 것은 출력 상수, legacy DataTable 선택 셀 이벤트/고정 열 계산, PopupMenu/출력 미리보기 범위뿐이다.
+- **주문 목록 재적용:** 새 릴리즈 OrderList 컴포넌트·검색필터를 가져오지 않고 기존 master pages/orders/index.tsx + lib/OrderList/useOrderList.tsx를 유지했다. 원래 DataGrid에 체크박스 열, 전체 선택, 출력→스티커→내보내기, 권한/30건 제한/선택 유지/초기화를 연결했다. 기존 필터/조회API/행 이동/페이지네이션을 보존하고 목록 오류·로딩에는 선택을 막는다. 좁은 데스크탑에서 toolbar가 줄바꿈되도록 기존 화면 범위에 적용했다. 제거한 선택패널용 shippingListDisplay 추출도 기존테이블 로직으로 복원했고, DLOS테이블 확장은 이번 사용처가 없어 제외했다. 주문상세/배송/인쇄 요구사항과5·7후속 경계는 앞선 최종 합의 유지.
+- **검증:** master기존 DataTable에 맞게 주문 목록 회귀 fixture를 이식했다. 첫 fixture는 열3개 기준 toggleIndex인데 mock1열만 제공해10개 실패했고 실제구조에 맞춰 fixture를 수정한 후 관련10suites120tests 통과, 앞서 배송/준비2suites19tests 통과로 총12suites139tests. Lab/E2E 타입 및 pnpm e2e:check248tests 통과. 커밋 훅Clinic/Lab/Admin 타입·push 훅앱lint/AdminDLOSguard/shared config77/hooks92/coverage 통과(기존경고포함). E2E 영향가드 origin/master+미커밋 전체 재검토 및 최종2곳보완 대조에서NO_IMPACT, WORKTREE marker 후PR직전check통과. 기존승인 배송IDlocator수정은유지하고 master제목locator/공유Header는보존. 실제브라우저E2E·실물프린터검증은미실행.
+- **CodeRabbit/조회 간격:** Draft를Ready로변경하거나공용설정을수정하지않고 새PR에 `@coderabbitai full review` 댓글7193952164를 남겼고 봇이실행시작을회신했다. 에이전트가결과를짧은간격으로반복조회하여사용자가지적했고즉시중단했다. 사용자가이어서 **15분간격으로확인·처리**를명시승인했다. 이후PR4978만15분간격으로조회하고, 실제의견을요구사항과대조해필요한최소수정/검증/push/답변을처리한다. 마감재확인도15분간격을지키고종료한다. 사용자요청없이더짧게조회하거나재리뷰를반복요청하지않는다. 현재결과미확인; 요청을리뷰완료로표현하지않는다.
+- **남은 경계:** 현재 새PR에서 리뷰결과를확인하고 타당한 범위의수정만처리한후최종기록한다. 이후5번은BE 생성응답단일shipmentId대기,7번은확장인쇄수단별도검토,현장WindowsEdge/프린터/용지QA는남는다. 자동merge/deploy/임의기능확대없음.
+
 ## 최신 마감 — 2026-11-26 master 동기화·E2E 보완·Draft PR #4977 생성 완료
 
 - **사용자 승인/결과:** 최신 master 확인·동기화와 현재 브랜치의 master 대상 Draft PR 생성을 요청했고, 필수 가드에서 발견한 배송 E2E 클릭 위치 한 곳 수정 + 정적 검사(실제 DEV 브라우저 E2E 제외)를 추가 승인했다. 아래 승인 대기는 해제됐다.
