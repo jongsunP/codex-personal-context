@@ -3,6 +3,10 @@
 최근 지침·체크포인트 변경의 요약입니다. 현재 정책/상태의 정본은 해당 문서이며, 이 로그 전체를 매 시작에 읽지 않습니다.
 [2026-10-16 이전 변경 이력](archive/memory-changelog-through-2026-10-16.md)은 필요한 과거 경위를 찾을 때만 읽습니다.
 
+## 2026-11-26 LBX 원본 최신화 및 별도 스테이징 PR 준비
+
+- [LBX 체크포인트](projects/dentlink-client-lbx.md)에 원본5237f2c6d, 별도 전달4ff9816c6, [PR #4966](https://github.com/Innvoaid/dentlink-client/pull/4966) OPEN/MERGEABLE과 검증을 기록했다. 최신 master를 원본에 병합하고 삭제된 LBX DTO10개만 복원했다. 실제 Admin11개 변경으로 자동 배포 조건을 확인했으며 현재 stage 삭제는 불필요했다. 원본 보존·운영 홀드·사용자 병합/배포 경계를 유지하고 Claude 메모리에도 기록했다.
+
 ## 2026-11-23 앱 미지원 조사 세션의 DL-17202 내용 갱신
 
 - Jira 본문·댓글을 다시 읽고 기존 Credits·Statements에 추가된 Payment History 조회와 Statements View 연결을 [앱 기능 차이 조사 기록](projects/dentlink-mobile-web-app-parity.md)에 반영했다. Jira 상태 완료를 확인했으며 Claude 메모리에도 같은 범위를 기록했다. 실제 구현·외부 문서 변경 없이 대기한다.
