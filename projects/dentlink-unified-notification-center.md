@@ -1,5 +1,16 @@
 # Dentlink 통합알림센터 — 현재 체크포인트
 
+## 2026-11-26 최신 양앱 릴리즈 Staging CodePush 완료
+
+- 사용자 명시 요청: 치과앱·기공소앱 각각 가장 최신 릴리즈로 **스테이징만 CodePush**. 실제 origin release 전체 fetch/list 확인 후 Office `release/v2.2.7@0317f39ce85234c46826b2807dfc0ec41f250a7a`, Lab `release/v1.1.0@f06cd25b1b065d14dc566340311810a5aacabf56`를 배포했다. 이번 알림센터 변경은 이미 release의 Office4f95fb2f/Lab6f02626에 통합됐고 기능 경로와 feature diff도 동일했다. 최신 release 전체에는 기존 주문 상세/담당자 기능·라이브러리 및 DL-17635 수정도 포함된다. 이번 세션에서 PR 병합은 하지 않았다.
+- **Staging 발행·활성화 확인:** Office iOS **v363**, Android **v362**, targetBinaryVersion **2.2.7**. Lab iOS/Android **v78**, targetBinaryVersion **1.1.0**. 네 앱 모두 Revopush 최신 history에서 `isDisabled=false`, `isMandatory=true`, `rollout=100`, 소스SHA 포함 description을 확인했다. 각각 별도 bundle/Hermes 컴파일·upload 성공(exit0). 운영/Development·스토어·태그·웹 배포는 실행하지 않았다.
+- 패키지 hash: Office iOS `bcd81210e18de6d6fabd73e2beaf69018b496ffb2e9c838ada2c5d361b1f3b64`, Android `00629837fa84977d49d86c7378d5d6e927d2f0c802714085699502f88515df89`; Lab iOS `a5059b2ce4eb6346220d70b0e206aa09e7621474fae39c6f354cbacbed3630b3`, Android `5403898005f161f723cf6b0b4608a0d6942526f63c7bdf96f073de1cfb609fc9`.
+- 실행은 팀의 `node scripts/codepush.js staging all --mute`로 **Office iOS→Android 완료 후 Lab iOS→Android 직렬** 처리했다. 공유 CodePush 임시 산출물 충돌을 피했고 사전 다른 실행 프로세스 없음 확인. Slack 쓰기 금지에 따라 mute 사용, 알림 전송 없음. 실제 env 값 열람·수정·복원 없이 기존 실행 설정을 사용했다.
+- 기존 자기 checkout에서 이미 존재하는 원격 release의 로컬 tracking branch를 생성/checkout했다. 현재 Office `/Users/parkjongsun/Repository/dentlink-app`는 release/v2.2.7, Lab `/Users/parkjongsun/Repository/dentlink-lab-app`는 release/v1.1.0이며 둘 다 clean·origin 대비0/0. feature 브랜치/커밋은 그대로 보존, 타 세션 DL-17635 worktree와 브랜치·프로세스 무수정. 새 worktree/제품 커밋/원격 Git 쓰기는 없었다.
+- Office RN0.82.1 의존성은 release와 일치했다. Lab release는 RN0.87.1로 변경돼 `yarn install --immutable`로 의존성을 맞춘 뒤 진행(성공, lock/package 변경 없음). 현재 Lab checkout·node_modules는 모두 release1.1.0 기준이므로 과거 feature/main으로 전환할 때 해당 의존성 재정렬 필요. 양앱 package/Android/Xcode version validator 통과. 최신 release의 관련 테스트 Office2 suites61개/Lab4 suites31개 통과; 로그 `/tmp/dl16140-office-staging-tests.log`, `/tmp/dl16140-lab-staging-tests.log`, Lab 설치 `/tmp/dl16140-lab-staging-install.log`.
+- 양OS bundle/Hermes 생성·발행은 정상. Office 기존 ISV 동영상1.48MiB 자산 경고, Lab 기존 Watchman recrawl·RN 내부 export fallback 경고는 있었으나 실패하지 않았고 이번 요청에서 코드/환경을 변경하지 않았다. 기존 알림 동작 런타임 증거는 재사용했으며 **이번 최신 release 전체·RN업그레이드 네이티브 바이너리의 기기 수신/크래시 QA를 새로 수행한 것은 아니다.** 정확히 Office2.2.7/Lab1.1.0의 호환 Staging 바이너리에만 OTA가 적용되며 그 바이너리 설치·접근 여부를 이번에 확인하지 않았다.
+- 사용자 확인은 해당 STG 앱에서 실제 푸시 탭→받은 소속 알림센터 전체 탭·읽음 기록과 일반 알림센터/수동 탭 유지. Lab 다른 소속 및 어드민 실제 표/CSV QA는 기존대로 별도다. 요청된 OTA 발행/활성화까지 완료했으므로 추가 기기/서버 실행·수신 추적·자동 폴링 없이 기록 저장 후 대기한다.
+
 ## 2026-11-25 후속 작업 정리·대기 — 개발/PR/요청 앱 리뷰 완료
 
 - 사용자 요청: “해당 세션관련 업무는 다 된거로 봐도 될지? 맞으면 메모리하고 정리하고 대기”. **이번에 요청받은 정책·계약 정리, 개발, 검증, commit/push, 세 제품 PR 생성과 Office CodeRabbit/Lab 동등 경로 검토까지 완료**로 정리한다. 실제 연동 QA·병합·배포 완료를 뜻하지 않는다. 더 질문하거나 개발을 확대하지 않고 다음 명시적 지시를 기다린다.
