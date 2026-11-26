@@ -1,5 +1,15 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 논의 — 2026-11-26 6번 구현 승인 해석 정정·전용 출력창 제안·Edge 기억 조사
+
+- **승인 정정:** 사용자는 ‘커밋푸시하고6번 하자’가6번 구현 승인이라는 해석을 정정했다.1~4번·후속 보완은 함께 조정했고5번은 BE 응답 대기로 합의 보류한 상태다. 에이전트가6번을 앞서 구현했으며 사용자는 일단 로컬 변경을 그대로 두라고 했다. 아래 ‘6번 승인’ 기록은 잘못된 해석이며 이 정정이 우선한다. 제품 eb3b0fb34의 누적 보완 commit/push는 승인된 완료 건이다.6번5파일은 계속 로컬 미커밋으로 유지하며 추가 구현·원복 모두 별도 지시 전에는 하지 않는다.
+- **새 제안(미확정/미구현):** 프린트 페이지 드롭다운 전환을 없애고 배송 목록의 기존 라벨(부착용) 앞에 자체기공소 전용 출력 영역을 추가한다. 라벨 전용과 주문서 전용의 두 창을 열어 각 창이 한 문서 종류만 담당한다. 행별 실행은 해당 배송1건, 선택 일괄 실행은 같은 선택 배송들을 문서 종류별로 각각 모은다. 기존 라벨/스티커/부착용은 보존한다. 전용 영역 배경·구분선 구별도 제안됐다. 신규 칸 수와 개별 버튼/두 창 동시 열기 구성은 아직 확정하지 않는다. 타입 SHIPPING/ORDER_SHEET는 이미 선언·렌더링 지원하지만 URL 진입은 현재ATTACHMENT만 인식하므로 연결 보완이 필요하다. 페이지 번호로 자르기보다 문서 타입으로 분리하면 다페이지 주문서를 보존한다. 두 창 동시 열기의 팝업 차단 가능성과 각각 열기 대안은 검토 사항이다.
+- **사용자 의도:** 최초 한 번 프린터를 직접 고르는 것은 괜찮다. 그 후 각 출력물에 맞는 선택이 계속 기억되는지가 핵심이다. 사용자는 기존 라벨·스티커에서 서로 다른 프린터 설정을 유지하며 쓰는 것으로 알고 있으며 같은 방법을 재사용하자는 뜻이다. 이를 계속 ‘최초 자동 프린터 지정 불가’로 답하지 않는다. 관찰된 현상과 일반 API 제약을 섞어 확정하지 않는다.
+- **앱 코드 조사:** 공용 /print의 출력 버튼은 window.print()를 호출하며 물리 프린터 ID/이름을 저장·복원하는 연결이 없다. stickerProperties와 shipmentPrintSettings:<format>은 용지 크기·배율·회전·위치 등 웹 문서 설정이다. 배송 PDF 라벨도 PrintPdf에서 /api/pdf-to-image로 이미지 변환 후 페이지에 그리므로 이 버튼 경로는 스티커와 함께 웹페이지 인쇄다. 외부 PDF 다운로드/브라우저 PDF 뷰어 인쇄까지 같은 경로라고 단정하지 않는다.
+- **공식 확인:** Edge PrintStickySettings는 기본(미설정/EnableAll)에서 PDF·웹페이지의 최근 인쇄 설정을 재사용한다. PrintPreviewUseSystemDefaultPrinter는 기본(미설정/disabled)에서 가장 최근 사용한 프린터를 선택하며 enabled는 OS 기본 프린터를 따른다. Chromium은 print-preview sticky 상태를 프로필 prefs에 저장하고 destination_store의 초기 선택은 정책→최근 프린터 순으로 처리하며 조사한 초기 선택 입력에 문서 URL/업무 종류 매핑은 없다. 따라서 ‘브라우저가 기억한다’는 사실은 확인됐지만 ‘새 URL/창마다 서로 다른 프린터를 영구 기억’까지 보장되는 근거는 아니다.
+- **근거:** https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies/PrintStickySettings ; https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies/PrintPreviewUseSystemDefaultPrinter ; https://chromium.googlesource.com/chromium/src/+/main/chrome/browser/printing/print_preview_sticky_settings.cc ; https://raw.githubusercontent.com/chromium/chromium/main/chrome/browser/resources/print_preview/data/destination_store.ts ; 팝업 제약 https://developer.mozilla.org/en-US/docs/Web/API/Window/open#description . 일반 문서/소스 검토이며 현장 Windows Edge의 설정·드라이버·실제 프린트 동작을 확인한 것은 아니다.
+- **남은 확인:** 현장의 기존 라벨A→스티커B→다시라벨A 흐름에서 프린터 선택이 유지되는 조건, 사용한 인쇄창/브라우저 프로필·정책, 창 유지/새로 열기/브라우저 재시작 시 차이를 확인해야 실제 이유와 신규 창 재현 가능성을 확정할 수 있다. 현재 Mac에서 현장 Windows 상태에 접근하지 않았다. 제품 코드 변경/실제 인쇄/테스트/서버·사용자 화면 조작 없음. 다음은 이 조사 결과를 바탕으로6번 방향 논의이며 구현 진행으로 간주하지 않는다.
+
 ## 최신 진행 — 2026-11-26 누적 보완 한 커밋 푸시 완료, 6번 로컬 구현
 
 - **최신 승인:** 사용자가 ‘커밋푸시하고6번 진행’, 이어 ‘지금 커밋 한번에 해도 됨, 빠르게 처리하고 불필요한 검증 반복 금지’를 지시했다. 이전 목적별 커밋 계획을 이번 누적분 한 커밋으로 대체했다. 아래 과거 기록의6번 미승인/논의 준비 상태도 이번 진행 승인으로 대체한다.
