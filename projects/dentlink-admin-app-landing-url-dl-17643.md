@@ -1,6 +1,10 @@
 # DL-17650 — 관리자 웹 알림의 앱 랜딩 URL (DL-17643 댓글 45364 후속)
 
-## 현재 상태 — 2026-11-26 구현·PR 완료
+## 현재 상태 — 2026-11-26 구현·PR·리뷰 처리 완료, 사용자 요청으로 정리·대기
+
+- 사용자 “메모리하고 정리하고 대기” 지시로 요청 범위를 마감한다. 구현·PR4969 생성·CodeRabbit 오탐1건 근거 회신/resolve 완료이며, 리뷰 마감 시 한 차례 재확인한 미해결 스레드는 0건이다. 이번 저장 턴에서는 외부 상태를 다시 조회하지 않았다.
+- 현재 재개 위치는 `/Users/parkjongsun/Repository/dentlink-client-dl-17643-app-landing-url/dentlink-client`, branch `feat/DL-17650`, 마지막 확인 HEAD `5b06dc1624bfd3cede405b5963f3eca06f31cc8a`. 미병합 PR 후속을 위해 worktree·branch·env를 보존하며 채팅을 보관하거나 작업 폴더를 삭제하지 않는다.
+- 병합/배포 및 STG 실응답·화면·CSV 확인은 완료 범위 밖이다. 사용자 검증 생략 지시를 유지하고 추가 실행·리뷰/CI 추적·메인 보고 없이 대기한다. 다음 명시적 요청이 오면 필요한 현재 상태만 확인해 이어간다. 개인 Git 정본·Claude 메모리·Codex 보조 메모리에 마감 상태를 기록한다.
 
 - **CodeRabbit 리뷰 처리 완료(11/26):** PR4969 HEAD `5b06dc1`의 actionable 1건(빈 값이 undefined/빈 셀로 표시된다는 지적)은 오탐이다. 실제 `/notifications/web` → DataGrid.DataList는 tooltip 컬럼이 없어 DLOS `toDataTableColumns` 경로를 사용한다. `dataList.utils.ts:30-43,64-70`에서 null/undefined/문자열 undefined/빈 문자열·공백을 이미 `-`로 처리하고 정상 URL은 그대로 표시한다. 레거시 `DataTableRow.tsx:150-156`에도 동일 후처리가 있어 그 경로 설명도 잘못됐다. [근거 회신](https://github.com/Innvoaid/dentlink-client/pull/4969#discussion_r4704932731) 후 스레드 `PRRT_kwDOJnA7-868QPE4` resolve. 제품 코드·커밋 변경 없이 유지했고 사용자 검증 생략 지시대로 테스트/브라우저는 실행하지 않았다. 팀 승인·병합·배포와 구분한다.
 
@@ -20,7 +24,7 @@
 - 사용자 후속 요청: 서버가 주는 `appLandingUrl`이 표시되지 않던 것인지 먼저 조사하고, 맞으면 기존 랜딩 URL 옆에 적절하게 추가 가능한지 순서대로 확인. 현재는 조사·별도 worktree/branch 준비만 승인됐다. 제품 코드 수정·테스트·commit/push/PR·Jira 쓰기·배포는 수행하지 않았다.
 - 읽음 개선, 전체 알림센터, 네이티브 앱, 발송/딥링크 정책은 범위 밖이다. 조사 후 사용자에게 직접 보고하고 다음 구현 지시를 기다린다. 메인에 자동 진행 전달·폴링하지 않는다.
 
-## 세션·작업 공간
+## 최초 세션·작업 공간 준비 이력 — 현재 브랜치는 위 재개 위치 참조
 
 - 채팅: `01a2169c-f4aa-7d40-a5cf-1141de706c9a`, **관리자 앱 랜딩 URL 표시 · DL-17643 후속**, host `local`, 메인과 같은 프로젝트 `4a13e754-960d-4ca3-b716-8f7a19311b64` 등록 확인.
 - 현재 turn 실행 메타데이터에서 `gpt-6-astra` / `xhigh` 확인.
