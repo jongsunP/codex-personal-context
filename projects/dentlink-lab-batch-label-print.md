@@ -1,5 +1,14 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 진행 — 2026-11-26 master 동기화 완료, Draft PR 가드 수정 승인 대기
+
+- **사용자 요청:** 최신 master 대비 동기화를 최종 확인하고 현재 feat/DL-17583에서 master로 Draft PR을 생성한다. Draft 상태·DRAFT 라벨·[WIP] 제목을 적용하며 merge/deploy는 요청하지 않았다.
+- **완료:** origin/master 023057ab6109e54d263079a6c64c139407f02a6b를 충돌 없이 병합했다. 커밋 b3022dc20f3921625e6e2740c8755359aa0531df `chore: 라벨 출력 브랜치에 최신 마스터 반영`을 origin/feat/DL-17583에 push했다. 같은 worktree /Users/parkjongsun/Repository/dentlink-client-dl-17583 유지, clean, master ancestor 확인. 세 앱 타입 검사 및 기존 push 훅 통과(기존 lint 경고 포함). 별도 기능 수정·서버·env·화면 조작 없음.
+- **PR 범위 주의:** 예전 승인된 release 병합으로 master 대비 217파일에 출력 기능 외 DL-17502(#4919 담당자/주문목록), DL-17595(#4943 ZIP 다운로드), DL-17604(#4945 홈 주문 이벤트)가 함께 포함된다. 기존 커밋을 유지하며 이 범위를 사용자에게 안내했고 PR 본문 초안 /tmp/dl17583-master-pr.md에도 명시했다. 최신 release 전체를 새로 병합한 것은 아니다.
+- **E2E 영향 판정 IMPACT:** 저장소 github-pr/e2e-guard 스킬에 따라 master...b3022dc20 전체 접점을 읽기 전용 검사했다. shipping/index.tsx의 체크박스 열이 숨김 p.col-name을 하나 추가해 e2e/clinic/steps/lab/shipment-create.ts:121의 p.nth(1)이 배송 ID 값이 아닌 숨김 열 제목을 클릭한다. 소비 spec은 04_labShipment.spec.ts의 배송 생성 단계. 권장 수정은 Shipping ID/배송 ID 이름으로 table-cell을 찾아 실제 p:not(.col-name)을 클릭하는 한 곳 변경이며 기존 POST 응답 대기·주문번호 행 필터·상세 heading assertion은 유지한다. 다른 확정 영향은 없고 기존 heading 전환/상태/피드백/홈 클릭 접점은 유지됨을 확인했다.
+- **진행 경계:** e2e-guard의 ‘승인 없이 파일을 수정하지 않는다’에 따라 사용자에게 ‘E2E 한 곳 수정 + 타입/정적 회귀 검사 후 PR 생성(추천)’ 또는 ‘수정 없이 위험 기록 후 Draft PR 생성’을 질문했다. 응답 전이므로 E2E 파일 수정·실행, 가드 완료 marker, PR 생성은 아직 하지 않았다. 실제 DEV 브라우저 E2E는 추천안에서도 실행하지 않는다. 경과 시간을 승인으로 해석하지 않는다.
+- **다음 시작점:** 질문 응답을 받아 해당 E2E 조치와 가드 기록/check를 마친 뒤 준비된 본문으로 Draft PR(master←feat/DL-17583)을 생성·검증한다. 이후 Jira 하위17582/17583에 PR 링크를 기록하고 이 정본/Claude 메모리의 대기를 완료 상태로 갱신한다. 제품5번 BE 응답 보완 대기·7번 확장 인쇄 검토·Windows 실물 출력 확인은 유지한다.
+
 ## 최신 마감 — 2026-11-26 최종 범위 검토·커밋/푸시·Jira 정리 완료
 
 - **사용자 승인/결과:** 사용자는 확정된 구현을 PR 전 관점에서 이번 변경 범위만 한 번 검토하고, 불필요한 코드를 정리한 뒤 커밋·푸시와 Jira/기록 정리까지 요청했다. 전수조사·추가 기능·PR 생성·merge/deploy는 요청 범위가 아니다. 아래 로컬 미커밋 대기는 이번 승인으로 해제됐다.
