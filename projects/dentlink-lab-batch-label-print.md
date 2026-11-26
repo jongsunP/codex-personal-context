@@ -1,5 +1,16 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 후속 — 2026-11-26 부착용 조건 확장 준비·출력 패널420px 로컬 구현
+
+- **승인:** 사용자가 직전 의견을 승인해 구현 진행. 부착용은 지금 다른 타입을 허용하는 것이 아니라 나중에 주문 QR/스티커와 조건을 맞출 수도 있도록 구조만 준비한다. 버튼 순서와 폭은 합의대로 적용한다.6번 프린트 페이지 전환 옵션 제공 범위는 계속 메모/추후 검토이며 이번에 확대하지 않는다.
+- **위치/전달 상태:** `/Users/parkjongsun/Repository/dentlink-client-dl-17583`, `feat/DL-17583`, HEAD는 기존4번 완료 커밋 `532e2dca6` 그대로. 이번 후속은 tracked22+untracked1=23파일, staged0인 로컬 미커밋 변경이다. 앞선4번 commit/push 승인은 완료된 건이며 이번 후속의 추가 commit/push/PR/deploy는 하지 않았다. 사용자 로컬 확인 대기.
+- **부착용 정책:** `labelPrintAccess.ts`에 별도 `ATTACHMENT_LABEL_PRINT_LAB_TYPES=[INTERNAL]`와 `canUseAttachmentLabelPrint`를 두고 active lab type에서 `canUseAttachmentLabelPrintAtom`을 만든다. 기존 `LABEL_PRINT_LAB_TYPES=[INTERNAL,PARTNER,SHARED,EXTERNAL]`/주문 출력 허용 조건과 대상 목록은 별개다. 현재 노출/처리 결과는 기존과 동일하며 이후 부착용 타입 추가·소거는 별도 목록에서 한다. 이는 FE 기능 조건이며 BE 권한 변경이 아니다.
+- **조건 연결 범위:** 배송 표·상세·기존 출력 팝업·새 패널 부착용 노출, 단건/기존 일괄/새 일괄 URL 생성, 팝업 크기 helper, 실제 PrintPage의 ATTACHMENT 해석까지 동일 조건을 전달한다. buildShippingBatchPrintUrl은 부착용 허용 boolean을 별도 필수 인수로 받는다. 기존 INTERNAL 전용 exportTradeCodes 포함 여부·스캔 배송 노출·6번 일반 라벨 분리 옵션 조건 등 무관한 업무 기준은 isInternal로 유지했다. useShippingRegister도 팝업 helper의 인수 의미를 맞추되 원래 일반 라벨 출력과 수출 코드 기준은 보존한다.
+- **폭/배치:** 공용 SplitView 자체는 이미 panelWidth prop/기본320px를 지원하므로 수정하지 않았다. PrintSelectionPanel→Order/ShippingBatchPrintPanel 래퍼에 panelWidth를 전달하고 각 주문/배송 목록 사용처가420px를 지정한다. 배송 액션 순서는 기존 표와 같은 라벨→스티커→라벨(부착용). 기존 flex-wrap/basis120px를 유지해 desktop420에서3개 가로 배치, 좁은 화면에서는 기존 상단 배치/줄바꿈을 유지한다. 주문은 원래 공용 라벨 버튼1개 그대로다. 기존 출력 팝업은 새 패널과 독립 유지.
+- **검증:** 관련8 suites 고유86 tests 통과(처음84개 후 실제 프린트 페이지의 독립 허용 조건2개 추가 및 영향2 suites30 tests 재검증). 현재4타입/미확정 조건, 단건·일괄 URL, 기존 페이지/설정, 버튼 순서, 허용 조건을 INTERNAL 여부와 독립적으로 바꾼 테스트에서 출력까지 연결되는지와 exportTradeCodes 미확대를 포함한다. Lab 최종 타입검사 통과, 영향 lint 오류0/기존경고17, 신규 정책 테스트 lint 통과, diff check 통과. 실제 정책 목록을 테스트 목적으로 넓히지는 않았다.
+- **화면 검증:** 실제 ShippingBatchPrintPanel/공용 SplitView/legacy DataGrid 조합의 비표시 Chromium 샘플, 실제 ko 문구로420px 패널과3버튼 순서·동일Y·높이40px 확인.1440×1000에서 표 높이609px 유지.1024/390폭에서 페이지 가로넘침0/runtime error0,390에서는2+1줄로 표시된다. 샘플 레이아웃이며 실제 계정/API/실물 프린터 검증은 아님. 증거 `/Users/parkjongsun/.codex/visualizations/2026/11/24/01a20bee-0fb0-72b0-83df-9619645cb73a/2026-11-26-print-panel-width/`(desktop/1024/390.png, metrics.json). 임시 fixture `/tmp/dl-17583-panel-width-check`, 제품 서버/환경파일/사용자 창 조작 없음.
+- **다음:** 이번 후속의 로컬 UI 확인.5번 완료 후 출력 연결은 기존 부분 구현 상태 그대로이며 scan→목록 선택 전달 보완이 다음 기능 지점.6번 전환 옵션 범위/용지·프린터 목적과 실제 QA·최신 master/release 대조는 남아 있다. 이번 턴 Jira 변경 없음.
+
 ## 검토 메모 — 2026-11-26 출력 전환 범위·부착용 조건·패널 폭
 
 - 사용자 요청1은 **6번 과제 메모만**: 프린트 페이지의 전환 선택이 일부 진입에서만 보이는 점을 지적했고, 같은 출력이라면 진입 경로에 관계없이 제공하는 방향을 검토한다. 현재 코드는 진입 버튼 자체를 구별하는 것이 아니라 `printTypeState === LABEL && isInternalLab && !routeLabelFormat`일 때 전체/배송 라벨/주문서 선택을 표시한다. 따라서 INTERNAL의 일반 라벨은 표시, ATTACHMENT 부착용·STICKER·다른 타입은 비표시다.6번에서 대상 형식/기존 조건/데이터 호환을 확인해 일관된 제공 범위를 정한다. 이번에는 제품 수정 없음.
