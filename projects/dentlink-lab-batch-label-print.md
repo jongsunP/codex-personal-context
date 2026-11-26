@@ -1,5 +1,17 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 로컬 작업 — 2026-11-26 출력 패널의 사용처별 구성·아이템 정보 정리
+
+- **사용자 요청/승인:** 5번 진행 전에 출력 선택 패널의 표시 내용을 보완한다. 공용 스플릿뷰/출력 패널이 주문번호·환자·의사라는 고정 스키마를 요구하면 안 된다. 아이템뿐 아니라 상단 버튼 영역도 주문·배송별로 다르게 구성할 수 있어야 하며, 사용 방식은 같게 유지한다. 주문 아이템은 주문일/주문번호/치과명/환자명 2×2, 배송은 주문번호/치과/생성일을 표시한다. 긴 값은 칸 안에서 말줄임하며 날짜·번호·빈 값 표현은 원 테이블과 같은 로직을 사용한다. 사용자가 ‘고려해서 진행’으로 구현 승인했다. 이번 변경의 제품 커밋/푸시 요청은 아직 없다.
+- **현재 Git:** `/Users/parkjongsun/Repository/dentlink-client-dl-17583`, `feat/DL-17583`, HEAD `26b6737f51e2af1bc7af7fcb6bea6f327f01b6c4` 유지. 이번 보완은 20파일(기존14+신규6) 로컬 미커밋·미스테이징 상태. 제품 commit/push/PR/merge/deploy 없음. 사용자 개발 서버·브라우저·Cursor를 조작하거나 재시작하지 않았다.
+- **구성 API:** `shared/dlos`의 SplitView는 기존부터 panel/panelToolbar/children 슬롯을 제공하므로 수정하지 않았다. Lab `PrintSelectionPanel<T extends {id:number}>`에서 고정 title/description 표시를 제거하고 `renderItem(item)`과 자유로운 `toolbar: ReactNode`를 받는다. 버튼 레이아웃을 패널 내부에서 강제하지 않는다. 기존 가로 버튼 스타일은 선택적으로 재사용하는 `PrintSelectionActions`로 내보내 각 업무 패널에서 사용한다. 공용 선택 건수/현재 페이지 선택/제외/닫기/오류 표시와 페이지·사용자 scope 수명은 유지한다.
+- **업무 데이터/표시 분리:** 선택 상태를 orders/shipping별 타입으로 유지하며 공통 선택 로직은 id만 요구한다. 주문은 orderedAt/office.name/patientName, 배송은 orderIds/office.name/requestedAt 원값 스냅샷을 저장한다. OrderPrintSelectionContent/ShipmentPrintSelectionContent가 각각 표시를 구성한다. PrintSelectionFields/Field는 선택적 2열 표시 도우미이며 다른 renderItem에 강제되지 않는다. 주문은 날짜·번호 / 치과·환자 2×2, 배송은 번호·치과 / 생성일(기존 표의 요일 포함)이다.
+- **테이블 일치:** `OrderList/orderListDisplay.ts`, `Shipment/shippingListDisplay.ts`로 기존 표현을 추출하여 원 테이블과 패널이 함께 사용한다. activeEmployeeDateFormatAtom 변경도 표시 시 반영한다. 배송 번호는 기존 getOrderIdsText의 대표 번호 + Nmore 표현을 그대로 사용하고, 이 함수가 sort하는 배열만 복사하여 원 API/선택 데이터를 변경하지 않는다. 말줄임은 기존 Typography ellipsis=1 방식과 전체 값 title, minmax(0,1fr) 칸으로 처리한다. 기존 표의 컬럼/행 클릭/레이아웃은 바꾸지 않았다.
+- **완료 알림 호환:** 배송 목록은 orderIds, 기존 완료 알림의 getShipment 상세는 shipmentDetails[].orderId를 제공하는 타입임을 확인했다. shippingPrintItem에서 두 구조를 변환하여 기존 완료 알림 수동 추가 초안에서도 번호가 표시되도록 했다. 5번의 이동/묶음 연결 정책을 구현한 것은 아니다. 권한은 기존과 동일하게 신규 주문/목록 선택 네 타입 허용, 부착용은 별도 INTERNAL 목록 유지.
+- **검증:** 관련6 suites/45 tests 통과. 주문 2×2 필드 순서·설정 변경 시 날짜 갱신·말줄임·배송 번호/원본 배열 보존·임의 아이템/사용자 정의 툴바 수용을 추가 검증했다. 완료 알림 상세→선택 메타데이터 매핑 검증을 강화한 뒤 해당13 tests 재통과. Lab tsc --noEmit --incremental false 통과, 변경 TS/TSX lint 오류0(기존16경고), diff --check 통과. 초기 테스트 mock의 날짜 atom/i18n 누락과 DTO 목록/상세 차이는 보완 후 위 최종 결과로 해소했다.
+- **화면 검증/한계:** env/API 없는 headless Chromium 샘플에서 주문·배송 각각1440/1024/390 폭으로 6가지 확인. 2열 배치/긴 이름 말줄임/title/가로 넘침0, 데스크톱 패널420px·원 표높이609px 유지. 좁은 화면은 기존 상단 패널/내부 스크롤 방식 유지. 산출물 `~/.codex/visualizations/2026/11/24/01a20bee-0fb0-72b0-83df-9619645cb73a/2026-11-26-print-panel-content/`. 샘플의 주문 출력 버튼 번역 stub은 gnb를 포함하지 않아 키로 보이지만 제품 버튼/번역 코드는 변경하지 않았다. 실제 로그인/API/SSE/Windows Edge·물리 출력 검증은 아니다.
+- **다음 시작점:** 사용자가 로컬에서 이번 패널 정보를 확인하고 후속 지시한다. 요청 시 이번 건 단독 commit/push. 이후5번 완료 후 출력 연결 논의/개발 →6번 간단한 JS 웹 출력 개선 →7번 여러 프린터/iframe 독립 인쇄/Electron 등 확장 검토. 기공소 타입 최종 정책·실물 QA·최신 master/release 재대조는 계속 별도 남는다.
+
 ## 최신 업무 구분 — 2026-11-26 6번 웹 개선 / 7번 확장 인쇄 분리
 
 - **사용자 확정:** 기존6번을6·7번으로 분리한다.6번은 현재 JS 웹 개발 안에서 가장 간단하고 빠르게 적용할 개선,7번은 iframe을 활용한 별도 인쇄 흐름이나 Electron 등 다른 수단까지 사용해 가능한지 탐구한다. 이 구분이 이전1~6번 목차에서 Electron을6번에 넣었던 분류를 대체한다. 방법 도입이 목적은 아니며, 기존 사용자 안전 우선·현장 편의 다음이라는 원칙은 유지한다.
