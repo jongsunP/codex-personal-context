@@ -1,6 +1,14 @@
 # 주문 PVS·픽업 변경 시 납기 재선택 — DL-17665 / DL-17671
 
-## 현재 체크포인트 — 2026-11-27 웹 배포 사용자 확인·치과앱 스테이징 CodePush 완료
+## 현재 체크포인트 — 2026-11-27 치과앱 스테이징 2.2.7 설치 빌드 미등록 확인
+
+- 사용자 iOS TestFlight·Android App Tester의2.2.7 등록 여부 확인 요청으로 기존 스테이징 배포 인증을 사용해 각 공식 API를 읽기 전용 조회했다. 키/토큰은 출력하지 않았고 빌드/업로드/재배포·제품 코드/설정·Jira 변경 없음.
+- iOS App Store Connect(18:32 KST): `Dentlink-Stg`, bundle `com.innovaid.dentlink.staging`, appId6749357071. 최신 빌드 **2.2.6(1)**, 업로드 **11/24 14:34:41 KST**, VALID·내부테스트 IN_BETA_TESTING. 앱+버전2.2.7로 preReleaseVersions를 별도 조회한 HTTP200 결과0건. 2.2.7은 미등록이다.
+- Android Firebase App Distribution(18:33 KST): staging package `com.innovaid.android.dentlink.staging`, appId `1:778967439894:android:321990b3fb0b2a6ce7b337`. releases 전체4건·추가페이지 없음. 최신 **2.2.6(135)**, 등록 **11/24 14:28:58 KST**, release `21m2t55bf84h0`. 2.2.7은 미등록이다. 실제 사용자 계정의 앱 표시/초대/설치는 이번에 별도 조회하지 않았다.
+- 앞선 iOS v364/Android v363 CodePush 발행·활성화 사실은 유효하나 targetBinaryVersion이 **정확히2.2.7**이다. 따라서 현재 배포된2.2.6 설치 앱에는 적용되지 않는다. 당시 버전 파일과 CodePush 메타데이터만 확인하고 실제 TestFlight/App Tester 대상 바이너리 존재를 확인하지 않은 사전검증 누락을 사용자에게 명확히 알렸다. 'OTA 발행 완료'를 '테스터가 업데이트 가능'으로 확대하면 안 된다.
+- 다음 필요 작업은 사용자 별도 승인 후 현재 release/v2.2.7 소스로 iOS TestFlight·Android App Tester 네이티브2.2.7 빌드 업로드 및 등록/테스터 제공 확인이다. 지금은 조사만 했고 업로드하지 않았다. 기존2.2.6에 맞춰 CodePush target을 임의로 넓히거나 다시 배포하지 않는다. 웹 완료는 사용자 확인, 기존 DEV 실행·보류 수정 진입·최종저장 한계는 아래 이력 유지.
+
+## 이전 체크포인트 — 2026-11-27 웹 배포 사용자 확인·치과앱 스테이징 CodePush 완료
 
 - 사용자는 웹 스테이징 배포를 직접 완료했다고 공유했고, 치과앱 `release/v2.2.7` 스테이징 CodePush를 명시 승인했다. 웹 배포는 사용자 확인이며 에이전트의 배포 결과/화면 QA 확인과 구분한다. 앱 PR368은 18:14 KST 병합, 원격 release HEAD `d6f0079eddcf6966c5c866f94aa3ebe91cc9e517` 확인.
 - 기존 `/Users/parkjongsun/Repository/dentlink-app`의 clean `release/v2.2.7`을 `0317f39c`에서 `d6f0079e`로 fast-forward했다. 직전 스테이징 소스 대비 이번 주문4단계 1파일만 변경, 테스트한 `e563e7ee`의 해당 파일과 바이트 단위 동일·lock 무변경. package/Android/Xcode 버전2.2.7 일치 검사 통과. 기능 worktree/feat 브랜치와 채팅 cwd는 그대로 유지, 새 checkout/브랜치·제품 commit/push·PR 변경 없음.
