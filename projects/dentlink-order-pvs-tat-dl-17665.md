@@ -1,6 +1,17 @@
 # 주문 PVS·픽업 변경 시 TAT 요구 조사 — DL-17665
 
-## 현재 체크포인트 — 2026-11-27 구현
+## 현재 체크포인트 — 2026-11-27 DEV 화면 검증
+
+- 사용자 화면 사용 승인 후 웹 Chrome/CUA, iOS Device Hub/CUA, Android Maestro·ADB(별도 명시 승인)로 실제 DEV 계정 `frankieDevOffice`를 사용해 확인했다. 제품 코드 추가 수정 없음. **배포 일정 미정, v1.95.0 포함 결정 없음**(사용자 확인). 웹 origin/master 기반·앱 origin/main 기반의 각각 `feat/DL-17665`와 기존 작업 폴더를 유지한다. 제품 commit/push/PR/릴리즈 반영/배포 없음.
+- 웹 신규 DRAFT `9000010141`(케이스명 `DL-17665 TAT QA`)에서 Scan 납기12/10 선택 → PVS 추가로 미선택·비활성 → 픽업11/30 예약 후 미선택 유지/최소12/11 → 납기12/18 선택 후 픽업12/1 변경으로 미선택 → 재선택 후 PVS 해제로 미선택을 확인했다.
+- 웹 기존 보류 테스트 주문 `9000010099`: 진입 시 저장된12/17 보존 → PVS 추가로 미선택 → 픽업12/15 예약 후 서버 기준 선택 시작일2027/1/6, 예전12/17 복원 없음 → 1/8 재선택 후 PVS 해제로 다시 미선택. 예약 취소 후 저장하지 않고 상세로 돌아가 원래12/17·PVS 없음·Pending Order/보류 유지 확인. 최종 Save Changes/Place Order는 실행하지 않았다.
+- iOS26.5 iPhone17Pro와 Android16 API36에서 위 DRAFT를 순차 사용했다. 양쪽 모두12/10 선택 후 PVS 추가·픽업11/30 예약 → 미선택 유지/최소12/11,12/18 재선택 후 픽업12/1 변경 → 미선택/최소12/14,12/18 재선택 후 PVS 해제 → 미선택을 실제 화면으로 확인했다. 테스트 픽업 모두 취소, 홈으로 복귀. DRAFT는 재검증용으로 남았으며 주문 최종 접수는 하지 않았다.
+- 제한: Android 기존 보류 주문의 `Review Order`는 네이티브 수정 화면 대신 DEV 웹 `/orders/9000010099/option`으로 이동해 `Mobile Not Supported`에 막혔다. 현재 웹 `useOrderDetail.ts`의 `handlerReviewOrder`도 option으로 직접 이동하며 이번 변경 파일이 아니다. 보류 주문의 이 진입 경로는 별도 확인 대상이다. 이번 검증으로 앱의 모든 기존 주문 수정 경로가 정상이라고 확대하지 않는다. 앱 수정 상태 로직은 앞선 컴포넌트 검증 근거와 구분한다.
+- 실행: 웹3000의 실제 cwd=해당 웹 worktree/clinic, Metro8081=앱 worktree 확인. iOS와 Android 모두 같은 Metro/DEV 코드에 연결됐고 Reactotron9090에서2개 연결 확인. 기존 설치된 DEV debug binary(iOS2.2.5/151, Android2.2.4/134)에 현재 JS를 번들링했으며 네이티브 재빌드는 하지 않았다. 확인 동작 중 앱 종료/오류 화면 없음, Android crash buffer 비어 있음, 당일 로컬 Dentlink crash report0. 전체 앱 무충돌 보장은 아니다.
+- 검증용 웹/Metro·두 기기는 실행 상태로 남겼다(웹 PID18901, Metro PID19568; 로그 `/tmp/dl17665-web.log`, `/tmp/dl17665-metro.log`). Codex와 분리된 background process로 실행했으나 Codex 재시작 생존 시험은 하지 않았다. iOS keyboard capture는 원래 off로 복구. Terminal CUA 접근 제한/Android 창 미지원은 우회하지 않고 CLI 서버 실행/사용자 승인 Android 도구로 처리했다.
+- 남음: 사용자 지시 시 제품 commit/PR 준비, 전달 시 앱 제품 카드·릴리즈 대상 확인. 배포 일정이나 릴리즈를 임의 확정하지 않는다. 이번 납기 변경 요구로 PM에게 다시 질문할 항목은 없다. 보류 주문의 앱 수정 진입 제한과 최종 주문 저장 미검증을 결과에 명시한다.
+
+## 구현 이력 — 2026-11-27
 
 - 사용자 “답변 오면 알려줄 테니 가능한 작업 진행”으로 웹 구현 승인, 이어 “답변 왔음. 확인하고 반영”으로 확정 범위 반영 요청.
 - [PM 답변45383](https://innovaid.atlassian.net/browse/DL-17654?focusedCommentId=45383), Yoonie 11/27 15:55: **웹+치과앱 모두 적용**, 별도 픽업 화면의 자동 납기 변경·안내 팝업은 다른 분 배정 예정. 이번 작업은 웹/Office 앱 주문 작성·수정4단계의 PVS 추가·해제/픽업일 변경 → 납기 초기화·서버 최소일 이후 재선택이다. 두 범위 질문 해소. Lab 앱·별도 픽업 화면은 미포함.
