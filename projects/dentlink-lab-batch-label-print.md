@@ -1,6 +1,15 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
-## 현재 상태 — 2026-11-27 Jira·기록 정리 및 현 HEAD 재리뷰 요청
+## 현재 상태 — 2026-11-27 재리뷰 2건 확인·근거 답변 완료
+
+- **현재 구조 유지 확정:** 사용자가 `_app.tsx`의 `PrintSelectionRouteBoundary` 연결을 유지하도록 확정했다. Jotai는 선택 상태를 보관하고 boundary는 주문/배송 목록에서 다른 pathname으로 이탈할 때만 해당 선택과 출력 준비를 정리한다. 페이지·검색 query 변경은 유지한다. 기존 AppProviders에 새 Jotai Provider를 추가한 것은 아니며 기존 기본 store를 사용한다. 목록 전용 Provider로 재구성하지 않는다.
+- **리뷰 결과:** 요청7207723695에 대한 CodeRabbit 전체 리뷰는 2026-11-27 11:11 KST, HEAD `57b09440ea656d1c5e1390fa6fe397dc58c771b2` 기준으로 완료되어 신규 의견2건(Minor1/Major1)을 남겼다. 사용자 요청으로 결과를 한 번 확인하고 실제 호출자/기존 요구와 대조했다.
+- **배송 상태 의견 — 코드 변경 없이 정리:** `getLabelUrlQuery`는 URL 구성 helper다. 목록과 상세는 실제로 status를 `PrintLabelStickerButtons`에 전달하고 PRE_DELIVERY이면 labelUrl 유무와 관계없이 `LabelRetry`를 반환한다. CREATING_WAYBILL은 실제 `PrintLabelButton`에서 비활성이다. 다른 helper 호출은 기존 SHIPMENT_COMPLETED_SSE 이후 수정 완료 흐름이며 단건 목록 버튼과 다르다. 일괄 출력의 준비 상태 검사를 제거할 근거가 없어 유지했다. [근거 답변4715643178](https://github.com/Innvoaid/dentlink-client/pull/4978#discussion_r4715643178).
+- **팝업 의견 — 기존 요구/대응 확인:** 두 창은 사이트 팝업 허용이 필요할 수 있고 기본 차단 우회를 보장하지 않는다. 두 번째 창 확보 실패 시 첫 창 정리, 조회 중단, 선택 유지, 프로젝트 WARNING 토스트가 이미 구현돼 있다. 확정 문구는 ‘팝업창이 차단되었습니다. 팝업을 허용한 뒤 다시 눌러 주세요.’(ko/en 반영). 기존 blocked 회귀 테스트의 확인 범위도 대조했다. 추가 UI나 인쇄 방식을 만들지 않았다. [근거 답변4715643445](https://github.com/Innvoaid/dentlink-client/pull/4978#discussion_r4715643445).
+- **마감 확인:** 두 스레드에 답변 후 resolve했다. 13:20 KST대 마지막 한 번 재확인에서 전체7스레드 resolved, 미해결0·추가 의견0이었다. 이는 근거에 따른 처리이며 사람/봇의 승인이나 현장 인쇄 검증 완료를 뜻하지 않는다. 재리뷰 요청·자동 폴링을 추가하지 않고 종료한다.
+- **Git/검증/다음:** 제품 worktree와 개인 정본 pull --ff-only 완료. 제품 feat/DL-17583은 57b09440e, clean이며 PR4978은 master 대상 Draft 유지. 제품 코드·테스트·commit/push 변경 없이 읽기 검토만 했으므로 테스트도 반복 실행하지 않았다. 개인 정본/Claude 기록과 인덱스에 결과를 동기화했다. Jira는 오전 확인한 두 하위 Ready for Deploy 상태를 이번에 재조회/수정하지 않았다. 5번 생성 응답 shipmentId 보완·7번 확장 인쇄·Windows Edge/실물 프린터 QA·병합/배포는 별도 후속이며 사용자 지시를 기다린다.
+
+## 이전 진행 — 2026-11-27 Jira·기록 정리 및 현 HEAD 재리뷰 요청
 
 - **상태 확인:** 사용자께서 배송 카드 상태를 변경했다고 알린 뒤 실조회했다. 담당 하위 DL-17582와 DL-17583은 둘 다 Ready for Deploy다. 에이전트가 다시 전환하지 않았다. 과거 DL-17583의 해야 할 일 기록은 당시 상태의 이력이며 현재 상태로 사용하지 않는다. 현재 개발 완료 범위는 주문2·3, 배송1·4·6이고,5번 생성 응답 shipmentId 연결과7번 확장 인쇄 검토는 완료 범위 밖의 후속이다. WindowsEdge·실물 인쇄 확인과 병합·배포는 남는다.
 - **Git/PR:** 개인 정본과 제품 worktree를 pull --ff-only해 최신화했다. /Users/parkjongsun/Repository/dentlink-client-dl-17583, feat/DL-17583, local/origin/PR HEAD57b09440ea656d1c5e1390fa6fe397dc58c771b2, clean. PR4978은 master 대상 OPEN/Draft 상태 유지. 제품 코드·테스트·새 commit/push·branch 통합은 이번 요청에서 하지 않았다. 기존 보존 브랜치와 닫힌 PR4977도 유지한다.

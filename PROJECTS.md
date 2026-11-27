@@ -35,7 +35,7 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 기공소 목록 라벨·스티커 출력 — DL-17549·DL-17565
 
-- 기공소 웹의 주문·배송 선택 출력, QR 배송 완료 후 출력 연결, 여러 용지/프린터 대응을 한 세션에서 다룬다. 기존 기공소 보존과 현장 편의를 우선하고 전용 워크트리 `dentlink-client-dl-17583`의 `feat/DL-17583`을 사용한다. 선택 출력은 스플릿뷰 없이 상단 버튼·메뉴로 구현했고 master 대상 Draft PR #4978에서 검토한다. 담당 하위 DL-17582/17583은 모두 Ready for Deploy이며, 현재 HEAD 재리뷰 결과 대기다. QR 생성 후 연결과 확장 인쇄는 이번 완료 범위 밖의 후속이다. 승인 경계·검증·후속 통합은 체크포인트를 따른다.
+- 기공소 웹의 주문·배송 선택 출력, QR 배송 완료 후 출력 연결, 여러 용지/프린터 대응을 한 세션에서 다룬다. 기존 기공소 보존과 현장 편의를 우선하고 전용 워크트리 `dentlink-client-dl-17583`의 `feat/DL-17583`을 사용한다. 선택 출력은 스플릿뷰 없이 상단 버튼·메뉴로 구현했고 master 대상 Draft PR #4978에서 검토한다. 담당 하위 DL-17582/17583은 모두 Ready for Deploy이며, 현재 HEAD 재리뷰2건도 근거 답변으로 정리해 전체7스레드가 resolved다. QR 생성 후 연결과 확장 인쇄는 이번 완료 범위 밖의 후속이다. 승인 경계·검증·후속 통합은 체크포인트를 따른다.
 - [작업 체크포인트](projects/dentlink-lab-batch-label-print.md)
 
 ### Dentlink Amplitude 이벤트 확인 — DL-17604
