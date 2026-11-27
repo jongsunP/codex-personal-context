@@ -205,6 +205,14 @@
   Before calling setup complete, verify the actual folder, Git registration,
   and the chat's persisted cwd agree. A listed attachment or an explicit
   command `workdir` alone does not fix a missing default chat directory.
+- User instruction, 2026-11-27: follow **Same-Task Worktree And Branch
+  Continuity** in `SESSION_WORKFLOW.md`. Keep one existing local checkout and
+  the canonical task branch through implementation, review, release-target
+  changes and conflict resolution. Do not create another worktree or a
+  competing release-suffixed task branch merely for integration or backup.
+  Confirm an actual need and obtain approval before a same-task split. Cleanup
+  is complete only after checkout ownership, intended branch/HEAD, PR head/base
+  and the chat's persisted cwd agree; an attachment alone is not sufficient.
 - Whenever creating a new worktree, follow **Local Env Inheritance** in
   `SESSION_WORKFLOW.md`: automatically copy all eligible Git-ignored,
   untracked local `.env*` files from the same repository's verified main

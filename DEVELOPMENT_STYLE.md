@@ -755,6 +755,12 @@ crash prevention. Apply the same decision in solo work and user-preview mode.
   follow-up work does not authorize inventing `qa/`, `backup/`, or another
   prefix. If an existing task branch must be preserved, use a permitted
   descriptive suffix within `feat/<Jira>` rather than a new namespace.
+- User clarification, 2026-11-27: a permitted suffix is not a reason to split
+  the active task. Keep the canonical `feat/<Jira>` through release PRs and
+  conflict resolution in the existing task checkout. A backup ref is distinct
+  from the active feature and does not require another local worktree. Follow
+  **Same-Task Worktree And Branch Continuity** in `SESSION_WORKFLOW.md`; a
+  release target alone does not justify renaming or duplicating the task.
 - Name a branch for its intended delivery scope. When a branch is meant to
   collect multiple QA fixes for one release, use the release QA purpose rather
   than the first Jira card alone; for example, `feat/vX.Y.Z-qa` for fixes

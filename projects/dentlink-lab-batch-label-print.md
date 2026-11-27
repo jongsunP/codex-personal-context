@@ -1,5 +1,14 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 체크포인트 — 2026-11-27 기존 폴더로 정식 브랜치 복귀·채팅 경로 정리 대기
+
+- **사용자 지시/원인:** 릴리즈 병합을 위해 같은 작업의 worktree를 추가로 만든 것은 불필요했다. 사용자는 기존 작업 폴더 하나만 남기고 로컬 백업 checkout을 없애며, 같은 불편이 재발하지 않도록 공통 지침에도 반영하라고 명시했다. 브랜치 ref 보존은 허용했으며 다른 세션의 checkout은 대상이 아니다.
+- **완료/지금 사용할 위치:** `/Users/parkjongsun/Repository/dentlink-client-dl-17583`에 정식 **feat/DL-17583@93c5871c36d9905dab0c021f6925106072df86cd**를 checkout했다. 이 폴더의 이전 -backup checkout을 정식 브랜치로 바꿨으며 clean, origin과 동일하다. 최종 tree **4718d1fb5a2250db18a96e0e9d029f4ae934c6fb**도 같아 기존 검증 코드가 그대로다. 사용자가 이 경로에서 git checkout할 때 발생했던 ‘다른 worktree에서 사용 중’ 문제는 해소됐다. 제품 코드·PR #4983·원격 브랜치 변경은 없다.
+- **미완료/정확한 차단:** 추가 경로 `/Users/parkjongsun/Repository/dentlink-client-dl-17583-release-v195/dentlink-client-dl-17583`는 동일 SHA의 clean detached HEAD로 바꿨으나 아직 남아 있다. `attach_worktree`로 기존 폴더 연결은 성공했지만 `read_thread`에서 이 채팅의 persisted cwd가 여전히 추가 경로다. `archive_worktree`는 **The task's primary checkout cannot be removed.**로 거부했다. 사용자가 Codex 화면 조작을 승인했으나 CUA도 **Computer Use is not allowed to use the app 'com.openai.codex' for safety reasons.**로 차단했다. 다른 도구/DB 편집/강제 삭제로 우회하지 않는다. 따라서 로컬 checkout 하나로 정리 완료라고 보고하지 않는다.
+- **정리한 항목/보존:** 실제로 존재하지 않는 옛 `dentlink-client-dl-17583-release-v1.95.0` attachment만 제거했다. 정본/백업/보존 branch refs, 다른 세션 worktree·프로세스·Cursor는 유지한다. 기존 폴더의 env/의존성은 그대로 사용하며 실제 env 파일을 읽거나 복사하지 않았다. 같은 SHA의 단순 checkout 정리이므로 타입/테스트/브라우저/현장 인쇄 검증을 반복하지 않았다.
+- **재발 방지:** AGENTS·SESSION_WORKFLOW의 **Same-Task Worktree And Branch Continuity**·DEVELOPMENT_STYLE에 ‘동일 작업은 기존 checkout과 정식 branch 유지, 릴리즈 PR/충돌 해결/백업만으로 별도 정본·worktree 생성 금지, 실제 분리 필요 시 사전 승인, 완료 전 실제 폴더/Git/PR/persisted cwd 확인’을 기록했다. Claude 자체 메모리와 Codex 로컬 지침에도 동기화한다.
+- **다음 시작점:** 지원되는 Codex UI에서 이 채팅의 기본 작업 경로를 위 기존 폴더로 옮긴 뒤 metadata로 확인하고, 추가 managed worktree를 `archive_worktree`로 제거한다. 호출 중인 채팅의 self-handoff는 도구가 지원하지 않는다. 현재 사용자는 기존 폴더에서 최신 코드를 볼 수 있으나 이 채팅의 기본 경로와 중복 폴더 정리는 아직 끝나지 않았다. 새 worktree·채팅·symlink로 해결하지 않는다. 코드 후속은 정식 branch/PR #4983 기준이며 병합·배포·현장 QA·5/7 후속은 별도다.
+
 ## 최신 체크포인트 — 2026-11-27 정식 브랜치 복원·PR #4983·최종 동일성 검토
 
 - **사용자 의도 정정/앞으로의 기준:** 작업은 master에서 feat/DL-17583으로 시작한 뒤 release 대상으로 PR하고, 충돌/호환 조정도 그 정식 feature 브랜치에 반영해 같은 브랜치를 계속 원본으로 쓰는 것이 목적이다. 릴리즈라는 이유만으로 정상 작업명에 별도 접미사를 붙여 최신 정본을 나눌 필요가 없다. 이번에는 사용자가 현재 최종 PR 브랜치를 feat/DL-17583으로 이름 변경하고 이전 master본만 -backup으로 보존하도록 승인했다. 앞으로 이 기능의 후속은 정식 feat/DL-17583에서 진행한다.

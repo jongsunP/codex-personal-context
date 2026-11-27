@@ -778,6 +778,52 @@ parallel work and in both local execution modes.
   is an execution rule, not a requirement to repeat unrelated QA: keep runtime
   verification proportional to actual code impact under DEVELOPMENT_STYLE.md.
 
+## Same-Task Worktree And Branch Continuity
+
+User instruction, 2026-11-27, across projects and agents: keep the user's
+existing working location stable for one logical task in one repository.
+
+- Reuse that task's one local checkout and canonical branch throughout
+  implementation, review, feedback and release integration. A changed PR base,
+  release conflict or desire to preserve previous code is not by itself a
+  reason to create a second checkout or a second competing canonical branch.
+  Separate product repositories and independently owned tasks remain separate.
+- For Dentlink, a normal `feat/<Jira>` starts from the documented shared base
+  and stays the task branch when targeting a release. Integrate necessary base
+  changes and resolve conflicts on that branch within the existing approval.
+  Do not append `-release-v...` to the active feature name merely because its
+  PR now targets that release, or keep a frozen "original" while continuing
+  the actual task in another delivery branch/worktree.
+- If genuine parallel development or another concrete constraint requires a
+  same-task split, explain why the existing checkout cannot serve it and obtain
+  approval before creating it. Do not infer approval from a request to prepare
+  a release PR, preserve previous work, review, or verify integration. Explicit
+  task-specific instructions, including separately authorized deployment-only
+  preparation, continue to take precedence.
+- Preserve recovery evidence with existing commits/remote history or an
+  explicitly needed backup ref; a backup branch does not require another
+  checkout. Do not leave extra local working copies as a backup. Respect an
+  explicit request to remove task-owned local backups, while preserving other
+  tasks and any unclassified changes until ownership is clear.
+- Before branch switching, renaming, relocation or cleanup, check this chat's
+  attachments, `git worktree list`, the exact path/branch/HEAD, upstream and
+  staged/unstaged/untracked state. Never bypass occupied-branch protection with
+  `--ignore-other-worktrees` to produce two writable copies of the same branch.
+- When consolidating an already split task, move the verified final branch and
+  all required changes into the user's intended existing checkout. Verify code
+  identity and PR head/base, then update the chat's persisted cwd through a
+  supported mechanism **before** deleting the checkout it still uses. Use the
+  required managed-worktree cleanup tool where applicable. A primary-checkout
+  protection error must not be bypassed with filesystem deletion, direct
+  runtime-database edits, a symlink, an empty old folder or another new worktree.
+- Report completion only when the task has one remaining local checkout, the
+  canonical branch is checked out there, and the chat's persisted cwd points to
+  that existing path. Attachments and explicit command `workdir` values alone
+  do not prove this. If tooling blocks the last step, state the exact remaining
+  folder and required user action; do not claim the duplicate was removed or
+  the missing-directory warning was fixed. Give the user one unambiguous
+  working path and branch, and record any pending app-path cleanup separately.
+
 ## Git Repository And Worktree Location
 
 User instruction, 2026-11-25, mandatory across every project, agent and
@@ -1314,6 +1360,11 @@ Treat the following as the branch strategy for the Dentlink web repository
 - A feature PR targets the release branch for its intended deployment version.
   The target expresses the planned release, but inclusion is not confirmed
   until the PR is merged.
+  Keep the existing canonical feature branch and checkout for that integration;
+  follow **Same-Task Worktree And Branch Continuity** rather than creating a
+  release-suffixed working copy merely to change the PR target or resolve
+  conflicts. A feature originally based on master can contain the approved
+  release compatibility fixes without becoming a separate task.
 - Multiple upcoming release branches may be active at the same time. When an
   earlier release is finalized, propagate it forward into `master` and every
   later active release branch so the later release remains cumulative.
