@@ -1,6 +1,14 @@
 # 주문 PVS·픽업 변경 시 납기 재선택 — DL-17665 / DL-17671
 
-## 현재 체크포인트 — 2026-11-27 웹·앱 릴리즈 병합 가능성 확인 후 대기
+## 현재 체크포인트 — 2026-11-27 웹·앱 PR 생성 완료
+
+- 사용자 “각각 PR 만들어줘” 승인으로 일반 PR 2개 생성. [웹 #4987](https://github.com/Innvoaid/dentlink-client/pull/4987)은 `feat/DL-17665@b536b24fa` → `release/v1.95.0@a320e1358`, [치과앱 #368](https://github.com/Innvoaid/dentlink-app/pull/368)은 `feat/DL-17665@e563e7ee` → `release/v2.2.7@0317f39c`. 생성 후 실제 base/head·SHA·제목·Open·Draft=false·merged=false·mergeable=true 재확인. 앱 제목/Issue는 앱 카드 DL-17671이며 기존 브랜치명은 유지했다.
+- 웹 release가 앞선 확인 후 갱신되어 fetch 후 재검사했다. 최신 merge tree `f9fe960fe56b16fe0910031e14bdc12b2d68067a`도 충돌0, 최종 diff는 작업 커밋4파일·53추가/2삭제와 정확히 동일. GitHub PR은 과거 master 이력 때문에5커밋/12파일로 보이며 추가8파일은 release에 이미 있어 실제 병합 차이에 남지 않는다. 앱은1커밋/1파일·41추가/10삭제 그대로다.
+- 웹 `github-pr`·`e2e-guard` 스킬 수행: 지정 읽기 전용 e2e-impact-guard의 판정 `NO_IMPACT`. 기존 `order-step4-additional.ts:36–79,97–115`가 픽업 POST→납기 GET 완료→토글 visible/enabled→날짜 직접 선택 순서를 따르므로 기존 E2E와 충돌하지 않음. ISV/스캐너/보류 주문·Lab 공통폼 소비자도 기존 계약 유지 확인. 전용 PVS 해제·픽업일 재변경 자동 회귀 시나리오는 없어 요구 전체의 자동검증 완료로 확대하지 않는다. E2E 수정/실행 없음. `mark.sh NO_IMPACT release/v1.95.0 feat/DL-17665` 및 `check.sh` exit0, hash `1c65e3bb06452e733a333aa2ab89cf9840b25092`.
+- PR 본문은 각 템플릿에 따라 변경 전후 동작·기존 검증 근거·타입/앱 보류 수정 진입·최종 저장 미검증 한계를 기록했다. 앱 자동 제목/base/body 규칙은 기존 `feat/`에 매칭되지 않음을 소스로 확인하고 생성 후 메타데이터도 재확인했다. 코드/커밋/작업 폴더 추가 변경 없이 PR만 생성. 테스트·서버·기기 재실행 없음, Jira 변경 없음.
+- 남음: 사용자 요청 시 리뷰 대응 또는 별도 승인 후 머지·배포. 이번 요청은 PR 생성까지이며 CodeRabbit/CI 자동 추적·리뷰 대응·머지·배포는 하지 않고 대기한다. 대상 PR base가 정해졌으나 실제 배포 일정은 미정이다.
+
+## 이전 체크포인트 — 2026-11-27 웹·앱 릴리즈 병합 가능성 확인 후 대기
 
 - 사용자 명시 요청: 웹·앱을 각각 커밋·푸시까지만 진행하고 PR은 만들지 않음. 검증용 실행 종료 및 필요한 문서/Jira 정리 완료. **배포 일정·대상 버전 미정,1.95.0 반영 결정 없음.** 새 지시 전 대기하며 자동 추적하지 않는다.
 - 웹 `feat/DL-17665` → origin 동일 브랜치에 `b536b24fa3e2b02baa23c7db7ef64d61efd560c1` 푸시 완료. 앱 `feat/DL-17665` → origin 동일 브랜치에 `e563e7ee5d4f41793646194af293b38e7e1510ff` 푸시 완료. 두 커밋 제목 `fix: 픽업 조건 변경 시 납기 재선택 처리`. 각각4파일/1파일, 원격 SHA 일치·작업트리 clean 확인. 웹 master 기반023057ab6, 앱 main 기반dd9fc9a2 유지, 원본/타 작업 무변경. PR/merge/배포 없음.
