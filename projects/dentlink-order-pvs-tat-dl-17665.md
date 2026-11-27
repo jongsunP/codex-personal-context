@@ -1,6 +1,15 @@
 # 주문 PVS·픽업 변경 시 납기 재선택 — DL-17665 / DL-17671
 
-## 현재 체크포인트 — 2026-11-27 사용자 머지·스테이징 배포 진행 보고
+## 현재 체크포인트 — 2026-11-27 웹 배포 사용자 확인·치과앱 스테이징 CodePush 완료
+
+- 사용자는 웹 스테이징 배포를 직접 완료했다고 공유했고, 치과앱 `release/v2.2.7` 스테이징 CodePush를 명시 승인했다. 웹 배포는 사용자 확인이며 에이전트의 배포 결과/화면 QA 확인과 구분한다. 앱 PR368은 18:14 KST 병합, 원격 release HEAD `d6f0079eddcf6966c5c866f94aa3ebe91cc9e517` 확인.
+- 기존 `/Users/parkjongsun/Repository/dentlink-app`의 clean `release/v2.2.7`을 `0317f39c`에서 `d6f0079e`로 fast-forward했다. 직전 스테이징 소스 대비 이번 주문4단계 1파일만 변경, 테스트한 `e563e7ee`의 해당 파일과 바이트 단위 동일·lock 무변경. package/Android/Xcode 버전2.2.7 일치 검사 통과. 기능 worktree/feat 브랜치와 채팅 cwd는 그대로 유지, 새 checkout/브랜치·제품 commit/push·PR 변경 없음.
+- 기존 `scripts/codepush.js staging all --mute`로 iOS→Android 순차 배포. 독립 TMPDIR `dentlink-dl17665-staging-jF4oWN`의 CodePush/CodePushSourceMap/CodePushBaseRelease 경로를 실제 CLI 출력에서 확인했다. 두 플랫폼 Metro 번들·Hermes 컴파일·업로드 exit0. 기존 isv.mp4 1.48MiB 자산 경고는 기존 스크립트의 `--force` 정책으로 통과, 제품/환경 설정 변경 없음. Slack 전송 없음.
+- 서버 history를 배포 후 각1회 조회하여 대상 `Dentlink-Office-iOS` / `Dentlink-Office-Android`, Staging, targetBinaryVersion `2.2.7`, `isDisabled=false`·`isMandatory=true`·rollout100, 설명의 소스 SHA를 확인했다. iOS **v364**(18:18:14 KST), Android **v363**(18:20:14 KST). 기존 라벨은 각각 v363/v362. 새 packageHash: iOS `ed2341f48a94dfa3350eb07fe83d75d096c0872cebbaa8e54ccb9660dc3ad56d`, Android `343bd6087362be7d4be19db1c59f50b3d9f7964bf0dda8b45dcac4ae043e899f`.
+- 기존 DEV iOS/Android 신규 주문 실행 근거와 최종 코드 동일성을 재사용했다. 이번 변경은 JS 폼 상태만 수정하며 네이티브 변경 없음, 확인한 범위의 새 크래시/회귀 징후 없음. 네이티브 빌드·기기 재실행·실제 OTA 수신·스테이징 최종 저장/기존 보류 수정 진입·전체 통합 QA는 이번에 검증하지 않았다. 신규 Retry UI 보류와 기존 진입 한계는 유지한다. 사용자 확인은 2.2.7 스테이징 앱 업데이트 후 주문4단계 PVS 추가/해제·픽업일 변경 시 납기가 비워지고 가능한 날짜를 다시 선택하는지에 한정한다.
+- Jira 기존 소유 댓글만 갱신: 웹45388에 사용자 웹 스테이징 배포 완료 보고, 앱45387에 PR 병합·iOS v364/Android v363·100% 활성·실기기 수신 미확인 기록. 기존 검증/한계 보존, 새 댓글·상태 전이·부모·배포버전 필드 변경 없음. 배포 후 release/기능 worktree clean 확인, 기록 후 자동 기기수신/배포 추적 없이 대기. Lab앱·Production·스토어 배포 없음.
+
+## 이전 체크포인트 — 2026-11-27 사용자 머지·스테이징 배포 진행 보고
 
 - 사용자가 “머지 및 스테이징 배포중”이라고 공유했다. 사용자 보고에 따른 진행 상태이며, 웹·치과앱 각각의 PR 병합 여부·배포 revision·Actions 결과·CodePush 발행/활성화·실제 화면 반영은 이번에 독립 확인하지 않았다. 배포 완료나 스테이징 QA 통과로 기록하지 않는다.
 - 구현·PR·리뷰·Jira 정리와 기존 검증 근거는 아래 이력을 유지한다. 제품 코드/PR/Jira 추가 변경, 배포 명령, 자동 추적 없이 기록 후 대기한다. 이후 사용자 확인이나 별도 검증 요청을 다음 시작점으로 삼는다.
