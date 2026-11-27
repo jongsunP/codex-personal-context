@@ -1,12 +1,14 @@
 # 주문 PVS·픽업 변경 시 납기 재선택 — DL-17665 / DL-17671
 
-## 현재 체크포인트 — 2026-11-27 웹·앱 PR 생성 및 비교 범위 정리 완료
+## 현재 체크포인트 — 2026-11-27 범위 재확인·치과앱 CodeRabbit 검토 완료
 
 - 사용자 “각각 PR 만들어줘” 승인으로 일반 PR 2개 생성. [웹 #4987](https://github.com/Innvoaid/dentlink-client/pull/4987)은 `feat/DL-17665@53edcdc8663e27d9fe833e9104dddd969de46e22` → `release/v1.95.0@a320e1358`, [치과앱 #368](https://github.com/Innvoaid/dentlink-app/pull/368)은 `feat/DL-17665@e563e7ee` → `release/v2.2.7@0317f39c`. 실제 base/head·SHA·제목·Open·Draft=false·merged=false·mergeable=true 확인. 앱 제목/Issue는 앱 카드 DL-17671이며 기존 브랜치명은 유지했다.
 - 후속 사용자 요청: PR Files changed에서 이번 작업 외 과거 변경을 제외. 같은 웹 worktree/브랜치/PR을 유지하여 최신 release를 작업 브랜치에 정상 병합하고 `53edcdc86`(chore: 릴리즈 이력 동기화로 PR 비교 범위 정리) 일반 push 완료. 강제 push/이력 재작성/새 브랜치/새 worktree/대상 release 머지 없음. GitHub PR Files changed **12→4파일** 확인, 실제4경로도 일치. 커밋 이력은 보존되어6커밋이며, 앱은 기존1커밋/1파일·41추가/10삭제 그대로다. tree `f9fe960fe56b16fe0910031e14bdc12b2d68067a`, release 대비 patch는 원래 b536b24fa의 작업4파일·53추가/2삭제와 바이트 단위 동일하다.
 - 웹 `github-pr`·`e2e-guard` 스킬 수행: 지정 읽기 전용 e2e-impact-guard의 판정 `NO_IMPACT`, 릴리즈 이력 반영 후에도 좁게 재확인하여 유지. 기존 `order-step4-additional.ts:36–79,97–115`가 픽업 POST→납기 GET 완료→토글 visible/enabled→날짜 직접 선택 순서를 따르므로 기존 E2E와 충돌하지 않음. ISV/스캐너/보류 주문·Lab 공통폼 소비자도 기존 계약 유지 확인. 전용 PVS 해제·픽업일 재변경 자동 회귀 시나리오는 없어 요구 전체의 자동검증 완료로 확대하지 않는다. E2E 수정/실행 없음. 새4파일 diff로 `mark.sh NO_IMPACT release/v1.95.0 feat/DL-17665` 및 push 전 `check.sh` exit0, hash `9ec4e8fc6bd71a133361fe5e7edf785a0a2e9db2`.
 - PR 본문은 각 템플릿에 따라 변경 전후 동작·기존 검증 근거·타입/앱 보류 수정 진입·최종 저장 미검증 한계를 기록했다. 웹의 과거12파일 안내는 현재4파일로 갱신. 앱 자동 제목/base/body 규칙은 기존 `feat/`에 매칭되지 않음을 소스로 확인하고 생성 후 메타데이터 재확인. 릴리즈 반영 커밋의 필수 검사: 초기 Lab 타입 오류는 릴리즈가 추가한 jszip의 로컬 미설치였고 `pnpm install --frozen-lockfile --offline`로 해결(추가 tracked 변경 없음). 재실행 Clinic/Lab/Admin 타입 통과, push hook lint 오류0/경고226·203·395, Admin DLOS guard·테스트 및 shared/configs86+hooks92=178테스트·coverage 검사 통과. 훅 우회 없음. 서버/기기/E2E 재실행·Jira 변경 없음, release에서 가져온 기존 Popover.test.tsx 말미 공백은 작업 diff 밖이므로 수정하지 않음.
-- 남음: 사용자 요청 시 리뷰 대응 또는 별도 승인 후 머지·배포. 이번 요청은 PR 생성까지이며 CodeRabbit/CI 자동 추적·리뷰 대응·머지·배포는 하지 않고 대기한다. 대상 PR base가 정해졌으나 실제 배포 일정은 미정이다.
+- 후속 범위 재확인: 사용자 요청으로 실제 원격 PR base/head와 원작업 patch를 다시 대조했다. 웹 PR4파일·53추가/2삭제는 b536b24fa의 원작업 patch와, 앱 PR1파일·41추가/10삭제는 e563e7ee의 원작업 patch와 각각 바이트 단위 동일. 이력 정리로 추가/누락된 작업 코드 없음. 앱은 Office 전용(`APP_SERVICE_TYPE=OFFICE`)이며 Lab 앱은 미대상. 부모 Jira 댓글45380/45383 원문을 재조회하여 웹+치과앱만 승인·별도 픽업 자동 납기/팝업은 다른 담당임을 재확인. 추가 사용자 댓글45390(17:55)은 v1.95.0 준비 중이라는 공유이며 실제 머지·배포 완료 근거는 아니다.
+- 치과앱 PR368 CodeRabbit 의견1건(Minor, thread `PRRT_kwDOLCkD4868tM7q`, comment4717360176): 조회 실패 안내·재시도 버튼 제안. 현 코드의 공통 QueryCache.onError→handleQueryError는 해당 /office/calendars/orders/... 오류를 토스트로 안내하므로 안내 부재 주장은 일부 다름. 같은 화면 재시도 버튼과 RN focus/online 연결은 없음. 사용자에게 기존 납기 화면에 없는 Retry UI 추가를 확인했고 **“요구사항도 아니고 없던 UI면 보류”**라고 결정. 다른 화면의 Retry 컴포넌트 존재는 이 화면 UI 승인으로 보지 않는다. 추가 UI/코드 변경 없이 보류, 댓글4717438980에 근거·사용자 결정·유지되는 복구 한계를 답변하고 해당 thread resolve. 구현 완료로 처리한 것이 아니라 범위상 미반영 정리이며 PR 본문에도 최종 실패 후 화면 재진입/픽업 변경 재조회 한계를 남김.
+- 앱 원래 HEAD e563e7ee/1파일 유지, 신규 제품 커밋·테스트·기기 실행 없음. 웹 CodeRabbit은 사용자 말대로 진행 중이므로 이번에 조회/대응하지 않았다. 남음: 사용자 요청 시 웹 리뷰 대응 또는 별도 승인 후 대상 release 머지·배포. 자동 리뷰/CI 추적·머지·배포 없이 대기한다.
 
 ## 이전 체크포인트 — 2026-11-27 웹·앱 릴리즈 병합 가능성 확인 후 대기
 
