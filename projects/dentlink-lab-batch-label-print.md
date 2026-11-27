@@ -1,5 +1,15 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 체크포인트 — 2026-11-27 정식 브랜치 복원·PR #4983·최종 동일성 검토
+
+- **사용자 의도 정정/앞으로의 기준:** 작업은 master에서 feat/DL-17583으로 시작한 뒤 release 대상으로 PR하고, 충돌/호환 조정도 그 정식 feature 브랜치에 반영해 같은 브랜치를 계속 원본으로 쓰는 것이 목적이다. 릴리즈라는 이유만으로 정상 작업명에 별도 접미사를 붙여 최신 정본을 나눌 필요가 없다. 이번에는 사용자가 현재 최종 PR 브랜치를 feat/DL-17583으로 이름 변경하고 이전 master본만 -backup으로 보존하도록 승인했다. 앞으로 이 기능의 후속은 정식 feat/DL-17583에서 진행한다.
+- **정리 결과:** 현재 정본 `feat/DL-17583@93c5871c36d9905dab0c021f6925106072df86cd`, 이전 master본 `feat/DL-17583-backup@b759045480a6aab3c013ba9ba1c422e5a16f37c3`. 원격 GitHub rename과 해당 두 worktree의 로컬 rename/upstream 설정으로 처리했다. 코드 재적용·새 제품 커밋·rebase·force push·reset/clean은 하지 않았다. 과거 feat/DL-17583-release-preserved@814488bbf는 그대로다. 옛 원격 추적 ref feat/DL-17583-release-v1.95.0만 대상 SHA를 확인해 정리했다.
+- **유효 PR:** [#4983 — [DL-17583] 기공소 주문·배송 목록 선택 출력 개선](https://github.com/Innvoaid/dentlink-client/pull/4983). base=release/v1.95.0, head=feat/DL-17583, head SHA=93c5871c3, OPEN·draft=false·라벨 없음·[WIP] 없음, MERGEABLE 확인. GitHub의 source branch rename 동작으로 #4978/#4982는 CLOSED가 됐으며, 본문에 #4983으로 이어지는 안내를 붙였다. 기록/리뷰는 삭제하지 않았다. 새 PR은69파일/2커밋이고 이전 #4982와 코드가 같다. 보호 규칙의 mergeStateStatus는 BLOCKED이며 승인/필수 검사 통과나 병합·배포까지 끝났다는 뜻은 아니다.
+- **작업 위치:** 정본의 실제 경로와 이 채팅 cwd는 `/Users/parkjongsun/Repository/dentlink-client-dl-17583-release-v195/dentlink-client-dl-17583`로 그대로다. 백업 checkout은 `/Users/parkjongsun/Repository/dentlink-client-dl-17583`이다. 이번 요청은 브랜치명 정리이며 폴더/세션/프로세스/env는 건드리지 않았다. 로컬·origin의 정본/백업 SHA 일치, 두 worktree clean 확인.
+- **최종 검토 근거:** 사용자가 이름 정리로 이미 검증한 코드가 틀어지지 않았는지 재검토를 요청했다. 변경 전후 HEAD와 전체 tree가 동일하고, release55086c9a1 대비 binary diff SHA256도 `e2c93ad6a89eb8bb578d78e486c12131bade0ff44500d2a74a3765c2ab48bdc5`로 완전히 동일하다. 정본 tree는4718d1fb5a2250db18a96e0e9d029f4ae934c6fb, 백업 tree는6519ca9c7b2f41be0cfde8f14dd4313a98475c9f다. 원본 출력 변경67파일 중56파일은 최종 파일 내용까지 동일하다. 나머지는7개 의도된 주문목록/번역/큰창/테스트 대응과4개 릴리즈 기반 차이(E2E heading, ko/en gnb, shared/configs export)이며 실제 release diff와 대조했다. 릴리즈의 주문 page/기존 columns/filter 코드는 그대로이고 출력 key도 유지된다. 주문 선택·출력 메뉴·타입 조건·라우트 이탈 정리·배송 두 창/실패 정리·DLOS 이벤트 계약을 다시 읽어 새 누락/충돌을 발견하지 않았다.
+- **검증 경계:** 코드 변경0건으로 이전 동일SHA의 통합106tests·큰창29tests·Lab/DLOS/E2E 타입·E2E정적248·기본 commit/push 훅 결과를 재사용했다. 브랜치명을 이유로 테스트를 반복하지 않았다. E2E 가드도 동일tree/diff를 읽기 전용으로 확인해 추가 영향 없음 판정을 재사용했고, 새 정식 브랜치에 IMPACT_FIXED mark/check 후 PR 생성했다. 실제 브라우저/E2E/프린터나 새 CodeRabbit 리뷰를 실행/조회/폴링하지 않았다. 라이브 release는55086c9a1 그대로이며 release 대비 뒤처진 커밋0·추가2다.
+- **기록/다음:** Jira 하위 DL-17582 댓글45381, DL-17583 댓글45382에 정식 브랜치/새 PR/동일성/미배포 상태를 남겼다. 카드 상태와 상위 카드는 그대로다. 현재 출력 작업과 릴리즈 호환 조정 및 큰 두 창 배치까지 들어간 코드/PR 준비본이며, 이후 검토·필요 QA와 별도 승인으로 병합/배포한다. 현장 Edge/프린터 확인,5번 shipmentId 응답 대기,7번 확장 인쇄 검토는 여전히 별도 후속이다.
+
 ## 최신 체크포인트 — 2026-11-27 1.95.0 일반 PR 및 큰 겹침 창 반영 완료
 
 - **사용자 승인/결과:** 마지막 메뉴 변경 commit/push 후 release/v1.95.0 PR 생성을 승인했고, Draft가 아닌 일반 PR임을 명시했다. 원본을 보존한 별도 릴리즈 통합을 완료한 뒤, 추가 요청한 배송 두 출력 창의 큰 겹침 배치도 같은 PR에 반영했다. 병합·배포는 하지 않았다.

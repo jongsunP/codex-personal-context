@@ -35,7 +35,7 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 기공소 목록 라벨·스티커 출력 — DL-17549·DL-17565
 
-- 주문·배송 선택 출력의 1.95.0 통합을 완료하고 일반 PR [#4982](https://github.com/Innvoaid/dentlink-client/pull/4982)를 생성했다. 현재 `feat/DL-17583-release-v1.95.0@93c5871c3`, 실제 경로는 `/Users/parkjongsun/Repository/dentlink-client-dl-17583-release-v195/dentlink-client-dl-17583`이다. 릴리즈 새 주문 목록을 보존했고 배송 두 창은 원본보다 작은 큰 창으로 겹쳐 배치한다. 원본 `feat/DL-17583@b75904548`/master Draft PR #4978은 보존했다. 통합106·창배치29tests, 타입·E2E 정적248·기본 훅 통과. Jira 하위 댓글에 기록했고 병합·배포는 하지 않았다. 11/30 동반 배포 계획, 현장 QA·5번 BE 응답·7번 확장 인쇄는 별도 후속이다.
+- 현재 정본은 `feat/DL-17583@93c5871c3`, release/v1.95.0 대상 일반 PR [#4983](https://github.com/Innvoaid/dentlink-client/pull/4983)이다. 릴리즈 새 주문목록 대응·큰 두 출력창 겹침 배치까지 포함한다. 사용자 의도에 따라 정식 작업명은 유지하고 이전 master본만 `feat/DL-17583-backup@b75904548`으로 보존했다. #4978/#4982는 닫힌 이력이다. 이름 정리 전후 HEAD/tree/전체diff 동일 및 최종 연결부 검토에서 새 문제 없음; 이전 동일SHA 검증 재사용. 현재 경로는 `/Users/parkjongsun/Repository/dentlink-client-dl-17583-release-v195/dentlink-client-dl-17583`, 미병합·미배포다. Jira/상세기록 동기화 완료, 현장 QA·5/7은 후속이다.
 - [작업 체크포인트](projects/dentlink-lab-batch-label-print.md)
 
 ### Dentlink Amplitude 이벤트 확인 — DL-17604
