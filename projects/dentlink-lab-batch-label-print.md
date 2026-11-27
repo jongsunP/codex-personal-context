@@ -1,5 +1,15 @@
 # 기공소 주문·배송 목록 라벨 및 스티커 출력
 
+## 최신 체크포인트 — 2026-11-27 최종 CodeRabbit 2건 수정·푸시·스레드 정리 완료
+
+- **요청/범위:** 사용자가 최종 CodeRabbit 리뷰 검토를 요청했다. PR4983의 93c5871c3 대상 자동 리뷰(16:06 KST)의 Minor 2건을 현재 요구사항/호출자에 대조했다. 확정 UI·문구·권한·수량·출력 데이터는 유지하고 제품2파일/테스트2파일만 보완했다. 기존 작업 폴더와 정식 브랜치를 그대로 사용했다.
+- **인쇄 준비 scope:** `usePrintPreparation.ts`의 렌더 본문 ref 쓰기를 기존 scope effect로 옮겼다. 커밋되지 않고 Suspense로 중단된 다른 scope 렌더 때문에 정상 준비 결과가 null로 버려지는 문제를 재현했다. 주문/배송 각각 기존 커밋 범위의 결과 유지, 실제 scope 변경 시 취소 및 다음 작업 허용을 확인했고 기존 unmount/요청 abort/공유 lock 동작은 유지했다. 새 layout effect/SSR 경고는 추가하지 않았다. 실제 호출자 OrderBatchPrintActions/useShippingBatchPrint의 정상 출력·취소 경로도 대조했다.
+- **동적 열 고정:** `shared/ui/src/DataTable/DataTable.tsx`에서 고정 당시 field 순서/isHide/pinnable 구성을 함께 기억한다. 구성이 바뀌면 렌더부터 고정 인덱스를 null로 전달하고 이후 상태를 비워 이전 구성으로 복귀해도 오래된 핀이 되살아나지 않게 했다. 동일 구성의 새 columns 배열·데이터/페이지 갱신에는 고정 유지. 선택 열 추가/제거 양방향, 첫 열/마지막 열 고정, 데이터 갱신 유지·해제 후 재고정을 검증했다. header/body/footer는 동일한 resolved index를 사용하고 기존 행/체크 셀 이벤트는 변경하지 않았다.
+- **검증:** 수정 전 신규 회귀4건 실패/기존21건 통과로 두 문제를 재현했다. 수정 후 관련4suites49tests 통과(선택/준비15, 배송 화면·pin, batchPrint, 주문 QR 버튼). 최초 push 훅에서 신규 테스트의 빈 Promise executor1건이 no-empty-function에 걸려 `() => undefined`로만 보정했고 해당15tests·파일 lint 재통과. Clinic/Lab/Admin 타입 및 최종 push 훅 lint/Admin DLOS/공용 테스트·coverage 검사 통과. 기존 lint 경고는 유지했다. E2E guard 읽기전용 에이전트는 후속 NO_IMPACT 판정; 기존 배송 ID locator 보완을 포함한 전체 PR 기록은 IMPACT_FIXED, check --push 통과. 실제 DEV/STG 브라우저 E2E나 프린터 QA는 실행하지 않았다.
+- **커밋/현재 기준:** `c1a2195c16234f9e053de9c12543b1a6cc4ed8c1` fix: 출력 준비 범위와 동적 열 고정 상태 보완, `325837f33d45ce338310c753411ebe6472b3df51` test: 중단 렌더 회귀 테스트의 린트 규칙 준수. 두 커밋 모두 origin/feat/DL-17583 및 PR4983에 반영. 현재 `/Users/parkjongsun/Repository/dentlink-client-dl-17583`, feat/DL-17583@325837f33, clean·local/origin 동일. PR은 release/v1.95.0 대상 OPEN·일반·MERGEABLE·미병합. PR 본문의 현재 HEAD와 리뷰 보완/검증도 갱신했다.
+- **리뷰 처리:** scope 의견4716568734에 답변4716709568, pin 의견4716568745에 답변4716709947을 남기고 두 스레드를 resolve했다. CodeRabbit 원문에도 ‘Addressed in commits c1a2195 to 325837f’ 표시가 붙은 것을 확인했다. 마감 한 번 재조회에서 전체2건 resolved·미해결0·추가 의견0. 이는 처리 근거와 현재 스레드 상태이며 사람 승인/전체 재리뷰/현장 검증 완료를 뜻하지 않는다. 강제 재리뷰 요청·자동 폴링 없이 종료한다.
+- **다음/보류 유지:** 병합·배포·Windows Edge/실물 인쇄 확인은 별도다. 5번 shipmentId 응답 보완과7번 확장 인쇄 검토도 보류 유지. 추가 release-v195 checkout은 이전93c5871c3 detached 상태이며 이번 수정 대상이 아니다. 사용자 결정대로 worktree/로컬 branch/채팅 경로/세션 보관 정리는 최종 작업 종료 시 함께 처리한다. 지금 추가 경로 삭제나 세션 보관은 하지 않는다.
+
 ## 최신 체크포인트 — 2026-11-27 확정 범위 PR 준비 완료·로컬 정리는 최종 종료 때
 
 - **사용자 최신 결정:** 추가 worktree/채팅 경로 문제는 지금 더 해결하지 않고, 실제 작업 완료 후 worktree·로컬 branch·세션 보관을 정리하는 시점에 반드시 함께 처리한다. 현재 폴더 삭제나 세션 보관을 실행하라는 지시는 아니다. 자동 감시/폴링 없이 다음 사용자 지시를 기다린다.
