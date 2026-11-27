@@ -35,7 +35,7 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 기공소 목록 라벨·스티커 출력 — DL-17549·DL-17565
 
-- 최종 CodeRabbit2건 재현·최소 수정·푸시·resolve 완료, 미해결0/추가의견0 확인. `feat/DL-17583@325837f33`, release/v1.95.0 일반 PR [#4983](https://github.com/Innvoaid/dentlink-client/pull/4983), 미병합·미배포. 기존 `/Users/parkjongsun/Repository/dentlink-client-dl-17583` clean. 관련49tests·3서비스 타입·필수 push 검사·E2E 영향 가드 통과. **추가 checkout/채팅 경로/로컬 branch 정리는 최종 작업 종료·세션 보관 때 함께 처리하며 지금 삭제하지 않는다.** 현장 QA·5번 BE 응답·7번 확장 인쇄는 후속이다. 자동 재리뷰/폴링 없이 대기한다.
+- 확정 출력 기능·릴리즈 대응·리뷰 보완 완료. `feat/DL-17583@325837f33`, release/v1.95.0 일반 PR [#4983](https://github.com/Innvoaid/dentlink-client/pull/4983), 미병합·미배포. 최신 SHA의 CodeRabbit **success**,2건 resolved·신규/미해결0 확인. 기존 작업 폴더 clean. **5/7은 현재 작업에서 제외하고 향후 재개용 메모만 보관한다.** 추가 checkout/채팅 경로/로컬 branch는 최종 종료·세션 보관 시 함께 정리. 별도 요청 없이 리뷰 폴링·추가 구현·병합·배포하지 않는다.
 - [작업 체크포인트](projects/dentlink-lab-batch-label-print.md)
 
 ### Dentlink Amplitude 이벤트 확인 — DL-17604
