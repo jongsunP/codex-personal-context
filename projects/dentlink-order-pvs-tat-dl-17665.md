@@ -1,6 +1,17 @@
-# 주문 PVS·픽업 변경 시 TAT 요구 조사 — DL-17665
+# 주문 PVS·픽업 변경 시 납기 재선택 — DL-17665 / DL-17671
 
-## 현재 체크포인트 — 2026-11-27 DEV 화면 검증
+## 현재 체크포인트 — 2026-11-27 커밋·푸시 후 종료
+
+- 사용자 명시 요청: 웹·앱을 각각 커밋·푸시까지만 진행하고 PR은 만들지 않음. 검증용 실행 종료 및 필요한 문서/Jira 정리 완료. **배포 일정·대상 버전 미정,1.95.0 반영 결정 없음.** 새 지시 전 대기하며 자동 추적하지 않는다.
+- 웹 `feat/DL-17665` → origin 동일 브랜치에 `b536b24fa3e2b02baa23c7db7ef64d61efd560c1` 푸시 완료. 앱 `feat/DL-17665` → origin 동일 브랜치에 `e563e7ee5d4f41793646194af293b38e7e1510ff` 푸시 완료. 두 커밋 제목 `fix: 픽업 조건 변경 시 납기 재선택 처리`. 각각4파일/1파일, 원격 SHA 일치·작업트리 clean 확인. 웹 master 기반023057ab6, 앱 main 기반dd9fc9a2 유지, 원본/타 작업 무변경. PR/merge/배포 없음.
+- 기존 작업 폴더와 브랜치는 후속 PR을 위해 보존. 웹 `/Users/parkjongsun/Repository/dentlink-client-dl-17665/dentlink-client`, 앱 `/Users/parkjongsun/Repository/dentlink-app-dl-17665/dentlink-app`. 채팅 cwd도 기존 앱 worktree 유지. 앱 Jira를 분리했어도 이미 검증한 같은 작업 브랜치를 임의 개명/분리하지 않는다.
+- 웹 commit hook의 Clinic/Lab/Admin 타입 검사 모두 통과. 처음 Lab 이미지 선언 오류는 ignored `next-env.d.ts` 부재였고 Lab/Admin `next typegen`으로 로컬 생성 파일만 준비해 해결, 제품/설정 diff 없음. push hook의 Clinic/Lab/Admin lint 오류0(경고226/186/396), Admin DLOS guard·테스트 통과, shared/configs77개·shared/hooks92개 테스트 통과. 커버리지 baseline 부재는 커버된49/36파일 및 해당 소스·테스트·설정·lock이 부모커밋과 무변경임을 확인한 뒤 프로젝트 명령으로 ignored baseline 생성, 재검사 delta0. 훅 우회 없음. GitHub 전송 정체는 원격 브랜치 부재 확인 후 정체 프로세스만 종료, HTTP/1.1·전송 timeout의 일회성 옵션으로 같은 커밋 재시도 성공(영구 Git 설정 변경 없음).
+- Jira: 기존 [웹 DL-17665](https://innovaid.atlassian.net/browse/DL-17665)는 제목에 웹을 명시하고 원문 보존. 같은 부모DL-17654의 중복 하위/연결 카드가 없음을 확인해 [치과앱 DL-17671](https://innovaid.atlassian.net/browse/DL-17671)을 Frankie 담당으로 생성. 각각 댓글45388/45387에 동작·실검증·한계·commit 링크·PR 미생성·배포 미정 기록. 두 카드 **Ready for Deploy(개발 완료)** 전이 확인. 부모 댓글/설명, story points·fixVersion·due date는 변경하지 않음.
+- 실행 종료: 이 작업 소유 웹3000·Metro8081·Reactotron9090 종료 및 listener 없음 확인. iPhone17Pro 시뮬레이터 shutdown·Android emulator5554 종료, booted/adb devices 없음 확인. 작업에서 연 DeviceHub와 adb server도 종료. 타 앱/작업 프로세스는 보존. 테스트 픽업 취소 상태, DRAFT9000010141만 재검증용으로 남음. 제품 최종 주문 접수/저장 미실행.
+- 검증 근거와 남은 한계: 아래 DEV 웹 신규·수정/iOS·Android 신규 화면 검증 및 컴포넌트45개 assertion 결과를 유지. 앱 보류 주문 `Review Order`의 모바일 미지원 진입 때문에 해당 수정 화면은 실검증하지 못했으며 별도 확인 대상으로 Jira에도 기록. 전체 앱 QA/최종 주문 저장/네이티브 신규 빌드/배포 검증은 완료로 간주하지 않는다.
+- 다음 시작: 사용자 PR 지시가 있을 때 현재 두 브랜치를 그대로 사용하고 목표 release를 그때 확인한다. 웹 PR 생성 전 E2E 가드 수행 필요(이번은 열린PR 없는 신규 branch push이므로 PR 단계 가드 미실행). 별도 픽업 화면 자동 납기·팝업과 Lab 앱은 범위 밖. 정본/Claude 보조 메모리 동기화, 메인 공통 파일 수정·자동 보고/폴링 없음.
+
+## DEV 화면 검증 이력 — 2026-11-27
 
 - 사용자 화면 사용 승인 후 웹 Chrome/CUA, iOS Device Hub/CUA, Android Maestro·ADB(별도 명시 승인)로 실제 DEV 계정 `frankieDevOffice`를 사용해 확인했다. 제품 코드 추가 수정 없음. **배포 일정 미정, v1.95.0 포함 결정 없음**(사용자 확인). 웹 origin/master 기반·앱 origin/main 기반의 각각 `feat/DL-17665`와 기존 작업 폴더를 유지한다. 제품 commit/push/PR/릴리즈 반영/배포 없음.
 - 웹 신규 DRAFT `9000010141`(케이스명 `DL-17665 TAT QA`)에서 Scan 납기12/10 선택 → PVS 추가로 미선택·비활성 → 픽업11/30 예약 후 미선택 유지/최소12/11 → 납기12/18 선택 후 픽업12/1 변경으로 미선택 → 재선택 후 PVS 해제로 미선택을 확인했다.
