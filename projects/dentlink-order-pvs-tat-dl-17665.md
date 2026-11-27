@@ -1,6 +1,6 @@
 # 주문 PVS·픽업 변경 시 납기 재선택 — DL-17665 / DL-17671
 
-## 현재 체크포인트 — 2026-11-27 범위 재확인·치과앱 CodeRabbit 검토 완료
+## 현재 체크포인트 — 2026-11-27 웹·치과앱 CodeRabbit 검토 완료
 
 - 사용자 “각각 PR 만들어줘” 승인으로 일반 PR 2개 생성. [웹 #4987](https://github.com/Innvoaid/dentlink-client/pull/4987)은 `feat/DL-17665@53edcdc8663e27d9fe833e9104dddd969de46e22` → `release/v1.95.0@a320e1358`, [치과앱 #368](https://github.com/Innvoaid/dentlink-app/pull/368)은 `feat/DL-17665@e563e7ee` → `release/v2.2.7@0317f39c`. 실제 base/head·SHA·제목·Open·Draft=false·merged=false·mergeable=true 확인. 앱 제목/Issue는 앱 카드 DL-17671이며 기존 브랜치명은 유지했다.
 - 후속 사용자 요청: PR Files changed에서 이번 작업 외 과거 변경을 제외. 같은 웹 worktree/브랜치/PR을 유지하여 최신 release를 작업 브랜치에 정상 병합하고 `53edcdc86`(chore: 릴리즈 이력 동기화로 PR 비교 범위 정리) 일반 push 완료. 강제 push/이력 재작성/새 브랜치/새 worktree/대상 release 머지 없음. GitHub PR Files changed **12→4파일** 확인, 실제4경로도 일치. 커밋 이력은 보존되어6커밋이며, 앱은 기존1커밋/1파일·41추가/10삭제 그대로다. tree `f9fe960fe56b16fe0910031e14bdc12b2d68067a`, release 대비 patch는 원래 b536b24fa의 작업4파일·53추가/2삭제와 바이트 단위 동일하다.
@@ -8,7 +8,10 @@
 - PR 본문은 각 템플릿에 따라 변경 전후 동작·기존 검증 근거·타입/앱 보류 수정 진입·최종 저장 미검증 한계를 기록했다. 웹의 과거12파일 안내는 현재4파일로 갱신. 앱 자동 제목/base/body 규칙은 기존 `feat/`에 매칭되지 않음을 소스로 확인하고 생성 후 메타데이터 재확인. 릴리즈 반영 커밋의 필수 검사: 초기 Lab 타입 오류는 릴리즈가 추가한 jszip의 로컬 미설치였고 `pnpm install --frozen-lockfile --offline`로 해결(추가 tracked 변경 없음). 재실행 Clinic/Lab/Admin 타입 통과, push hook lint 오류0/경고226·203·395, Admin DLOS guard·테스트 및 shared/configs86+hooks92=178테스트·coverage 검사 통과. 훅 우회 없음. 서버/기기/E2E 재실행·Jira 변경 없음, release에서 가져온 기존 Popover.test.tsx 말미 공백은 작업 diff 밖이므로 수정하지 않음.
 - 후속 범위 재확인: 사용자 요청으로 실제 원격 PR base/head와 원작업 patch를 다시 대조했다. 웹 PR4파일·53추가/2삭제는 b536b24fa의 원작업 patch와, 앱 PR1파일·41추가/10삭제는 e563e7ee의 원작업 patch와 각각 바이트 단위 동일. 이력 정리로 추가/누락된 작업 코드 없음. 앱은 Office 전용(`APP_SERVICE_TYPE=OFFICE`)이며 Lab 앱은 미대상. 부모 Jira 댓글45380/45383 원문을 재조회하여 웹+치과앱만 승인·별도 픽업 자동 납기/팝업은 다른 담당임을 재확인. 추가 사용자 댓글45390(17:55)은 v1.95.0 준비 중이라는 공유이며 실제 머지·배포 완료 근거는 아니다.
 - 치과앱 PR368 CodeRabbit 의견1건(Minor, thread `PRRT_kwDOLCkD4868tM7q`, comment4717360176): 조회 실패 안내·재시도 버튼 제안. 현 코드의 공통 QueryCache.onError→handleQueryError는 해당 /office/calendars/orders/... 오류를 토스트로 안내하므로 안내 부재 주장은 일부 다름. 같은 화면 재시도 버튼과 RN focus/online 연결은 없음. 사용자에게 기존 납기 화면에 없는 Retry UI 추가를 확인했고 **“요구사항도 아니고 없던 UI면 보류”**라고 결정. 다른 화면의 Retry 컴포넌트 존재는 이 화면 UI 승인으로 보지 않는다. 추가 UI/코드 변경 없이 보류, 댓글4717438980에 근거·사용자 결정·유지되는 복구 한계를 답변하고 해당 thread resolve. 구현 완료로 처리한 것이 아니라 범위상 미반영 정리이며 PR 본문에도 최종 실패 후 화면 재진입/픽업 변경 재조회 한계를 남김.
-- 앱 원래 HEAD e563e7ee/1파일 유지, 신규 제품 커밋·테스트·기기 실행 없음. 웹 CodeRabbit은 사용자 말대로 진행 중이므로 이번에 조회/대응하지 않았다. 남음: 사용자 요청 시 웹 리뷰 대응 또는 별도 승인 후 대상 release 머지·배포. 자동 리뷰/CI 추적·머지·배포 없이 대기한다.
+- 앱 원래 HEAD e563e7ee/1파일 유지, 앱 리뷰 대응으로 신규 제품 커밋·테스트·기기 실행 없음.
+- 웹 후속 CodeRabbit 검토(사용자 “웹도 리뷰 확인”): 의견1건(Minor, thread `PRRT_kwDOJnA7-868tVMD`, comment4717414802)은 OFFICE_SCANNER DRAFT의 픽업 변경 후 자동 최소일 대신 재선택하게 되는 범위 지적. 코드상 변화 자체는 맞으나 DL-17665 원문은 주문4단계 PVS 추가·해제 시 초기화·재선택이며 스캐너 제외 요구는 없다. 최초 진입/픽업 미변경의 스캐너 자동 최소일 설정과 ADMIN 기존 처리는 유지됨을 실제 호출 및 flag 기록 조건으로 확인. 과거78516d1242/DL-13703도 좁게 조회했으며 별도 픽업 변경 예외의 정책 근거는 확인되지 않음. 기존 PR의 “스캐너 기존 동작 유지”를 “픽업 미변경 최초 진입·ADMIN은 유지, 치과 PVS 변경은 스캐너도 재선택”으로 명확히 정정. 댓글4717483453에 요구·검증 근거 답변 후 thread resolve, 제품 코드 변경 없음.
+- 웹 리뷰 검증: 원작업 직전 b536b24fa^와 현재53edcdc86의 실제 useEffect 콜백을 TS AST로 추출하고 실제 isDateBefore 함수/date-fns를 사용해7조건·14개 결과 assertion 통과. 스캐너 초기 자동보정/픽업 변경 후 미선택/유효 재선택 유지/일반 접수 주문 재선택/ADMIN 스캐너/LAB/스캐너 픽업 미변경 유효일 유지 대조. React 렌더·실서버·실제 스캐너 계정 UI 검증은 아니며 추가 파일·브라우저·서버·기기 실행 없음. 웹 HEAD53edcdc86/4파일 유지.
+- CodeRabbit 리뷰 본문은 b536 기준12파일 이력으로 작성됐으나 지적한 날짜 코드는 현재53edcdc86과 동일하여 현재 코드로 검토했다. Verify는 이전 커밋 기준 outdated·0/5완료이므로 QA통과로 보지 않는다. bot YAML reviews.guidelines 경고/ESLint 환경 오류는 이번4파일의 제품 결함과 구분하고 공용 설정으로 작업을 확대하지 않음. 양쪽 등록 의견 각1건 사유 정리 완료, 다음은 별도 사용자 지시 후 리뷰 추가 대응 또는 대상 release 머지·배포. 자동 추적·머지·배포 없이 대기한다.
 
 ## 이전 체크포인트 — 2026-11-27 웹·앱 릴리즈 병합 가능성 확인 후 대기
 
