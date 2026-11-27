@@ -2,6 +2,7 @@
 
 ## 현재 체크포인트 — 2026-11-27 치과앱 스테이징 2.2.7 설치 빌드 미등록 확인
 
+- 최종 사용자 지시: 상황을 이해했으며 정리·메모리 후 대기. 조사와 기록을 마감하고 추가 조회·자동 추적·네이티브 빌드 업로드·CodePush 재배포는 진행하지 않는다. 다음 사용자 지시가 있을 때 아래 확인 상태에서 이어간다.
 - 사용자 iOS TestFlight·Android App Tester의2.2.7 등록 여부 확인 요청으로 기존 스테이징 배포 인증을 사용해 각 공식 API를 읽기 전용 조회했다. 키/토큰은 출력하지 않았고 빌드/업로드/재배포·제품 코드/설정·Jira 변경 없음.
 - iOS App Store Connect(18:32 KST): `Dentlink-Stg`, bundle `com.innovaid.dentlink.staging`, appId6749357071. 최신 빌드 **2.2.6(1)**, 업로드 **11/24 14:34:41 KST**, VALID·내부테스트 IN_BETA_TESTING. 앱+버전2.2.7로 preReleaseVersions를 별도 조회한 HTTP200 결과0건. 2.2.7은 미등록이다.
 - Android Firebase App Distribution(18:33 KST): staging package `com.innovaid.android.dentlink.staging`, appId `1:778967439894:android:321990b3fb0b2a6ce7b337`. releases 전체4건·추가페이지 없음. 최신 **2.2.6(135)**, 등록 **11/24 14:28:58 KST**, release `21m2t55bf84h0`. 2.2.7은 미등록이다. 실제 사용자 계정의 앱 표시/초대/설치는 이번에 별도 조회하지 않았다.
