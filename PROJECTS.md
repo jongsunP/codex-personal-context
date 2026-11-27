@@ -35,7 +35,7 @@ Check this folder first when finding or continuing local projects.
 
 ### Dentlink 기공소 목록 라벨·스티커 출력 — DL-17549·DL-17565
 
-- 기공소 웹의 주문·배송 선택 출력, QR 배송 완료 후 출력 연결, 여러 용지/프린터 대응을 한 세션에서 다룬다. 기존 기공소 보존과 현장 편의를 우선하고 전용 워크트리 `dentlink-client-dl-17583`의 `feat/DL-17583`을 사용한다. 선택 출력은 스플릿뷰 없이 상단 버튼·메뉴로 구현했고 master 대상 Draft PR #4978에서 검토한다. 담당 하위 DL-17582/17583은 모두 Ready for Deploy이며, 이전57b09440e 리뷰7스레드는 resolved다. 메뉴 아이콘 보완도2ec4bf4bc로 커밋·푸시했고 새 리뷰 요청은 하지 않았다. 11/27 결정으로 단독 배포 대신1.95.0과11/30월요일 배포 예정이며 통합은 미착수다. 배송 메뉴3/4순서 교체1파일은 로컬 미커밋이다. 기능 피드백과 공용/자체 전용 조건은 확인·마감했으며 다음은 마지막 변경 커밋과1.95.0 통합 준비다. QR 생성 후 연결과 확장 인쇄는 이번 완료 범위 밖의 후속이다. 승인 경계·검증·후속 통합은 체크포인트를 따른다.
+- 주문·배송 선택 출력의 1.95.0 통합을 완료하고 일반 PR [#4982](https://github.com/Innvoaid/dentlink-client/pull/4982)를 생성했다. 현재 `feat/DL-17583-release-v1.95.0@93c5871c3`, 실제 경로는 `/Users/parkjongsun/Repository/dentlink-client-dl-17583-release-v195/dentlink-client-dl-17583`이다. 릴리즈 새 주문 목록을 보존했고 배송 두 창은 원본보다 작은 큰 창으로 겹쳐 배치한다. 원본 `feat/DL-17583@b75904548`/master Draft PR #4978은 보존했다. 통합106·창배치29tests, 타입·E2E 정적248·기본 훅 통과. Jira 하위 댓글에 기록했고 병합·배포는 하지 않았다. 11/30 동반 배포 계획, 현장 QA·5번 BE 응답·7번 확장 인쇄는 별도 후속이다.
 - [작업 체크포인트](projects/dentlink-lab-batch-label-print.md)
 
 ### Dentlink Amplitude 이벤트 확인 — DL-17604
