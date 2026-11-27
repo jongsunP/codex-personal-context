@@ -1,6 +1,20 @@
 # 주문 PVS·픽업 변경 시 TAT 요구 조사 — DL-17665
 
-## 현재 체크포인트 — 2026-11-27
+## 현재 체크포인트 — 2026-11-27 구현
+
+- 사용자 “답변 오면 알려줄 테니 가능한 작업 진행”으로 웹 구현 승인, 이어 “답변 왔음. 확인하고 반영”으로 확정 범위 반영 요청.
+- [PM 답변45383](https://innovaid.atlassian.net/browse/DL-17654?focusedCommentId=45383), Yoonie 11/27 15:55: **웹+치과앱 모두 적용**, 별도 픽업 화면의 자동 납기 변경·안내 팝업은 다른 분 배정 예정. 이번 작업은 웹/Office 앱 주문 작성·수정4단계의 PVS 추가·해제/픽업일 변경 → 납기 초기화·서버 최소일 이후 재선택이다. 두 범위 질문 해소. Lab 앱·별도 픽업 화면은 미포함.
+- 웹: `/Users/parkjongsun/Repository/dentlink-client-dl-17665/dentlink-client`, `feat/DL-17665` @ `023057ab6`(최신 origin/master),4파일 미커밋 수정. 앱: `/Users/parkjongsun/Repository/dentlink-app-dl-17665/dentlink-app`, `feat/DL-17665` @ `dd9fc9a2`(fetch한 origin/main),1파일 미커밋 수정. 두 저장소 main/타 worktree 무변경.
+- 앱 scope 확정 후 create_worktree로 추가 준비. 실제 Repository 아래 경로/Git 등록/첨부/채팅 persisted cwd=앱 worktree 확인. 앱 main eligible ignored env1개 opaque 상속·동일성/ignore 확인, 값 미열람. 웹 pnpm frozen offline·앱 Yarn4 immutable 의존성 설치 완료, lockfile 무변경.
+- 웹 변경: `OrderAdditionalInfoForm.tsx`에서 픽업 조건을 실제 변경한 현재 주문을 추적하여 비운 납기를 저장된 날짜로 복원하지 않음. 같은 픽업일 재확정은 보존. 재선택 값이 새 최소일보다 이르면 다시 비움. 일반 접수 주문 수정 보존, ADMIN/LAB/초기 OFFICE_SCANNER 특례 유지. `calendars.query.ts` → `OrderAdditional.tsx` → `DeliveryInfo.tsx`로 조회중/오류 상태 전달하여 오래된 날짜 선택 방지.
+- 앱 변경: `OrderAdditionalInfoSection.tsx`에서 PVS 토글/픽업 저장 성공·삭제 성공 시 납기 초기화. 픽업 변경 후에는 서버 최소일을 자동 확정하지 않음. 예약 mutation/최소일 조회중·실패 시 납기 선택과 변경된 주문의 요약 진행 방지. 동일 픽업일·저장/삭제 실패의 기존 값 유지. 기본 일반 주문 흐름 보존, 네이티브/화면 구성·문구 변경 없음.
+- 검증: 실제 웹 폼+React Hook Form+실제 날짜 유틸/DeliveryInfo를 jsdom에서 실행,23개 assertion 통과. 실제 앱 컴포넌트+React Query의 기존 조회/변경 훅을 React Test Renderer에서 실행,22개 assertion 통과. PVS 추가/해제/픽업일 변경, 최소일 동일/앞당김/지연, 재선택/재조회, 조회 대기/실패, 예약 실패, 일반 주문/관리자/Lab/스캐너/DRAFT 경로를 필요한 범위로 확인. UI 주변 컴포넌트와 API transport는 stub, 실제 서버/기기 검증 아님. stdin 임시 실행으로 새 테스트 파일 미추가.
+- 타입: 웹 일반 `type`는 새 checkout의 Next image 선언 부재로 기존 PNG import 오류. Next 제공 image 타입을 메모리의 compiler root에만 추가해 동일 tsconfig로 HEAD/현재 대조한 결과 모두 진단0. 앱 `yarn typecheck`는 기존7개 오류(Icon2/Tooltip/MessageText/useOrderAddProduct2/RootNavigator); HEAD 소스 대체 비교로 동일7개·새 오류0 확인. 생성 파일/공용 설정 수정 없음.
+- lint: 앱 변경파일 통과. clinic 변경2파일 오류0/기존 effect 의존성 경고2. shared/ui lint는 root/UI의 Storybook plugin 중복 로딩 충돌로 실행 불가(설정 변경 없이 제한 기록). 양쪽 diff --check 통과.
+- 남음: 실제 DEV 서버 연결 웹·iOS/Android 화면 검증. 화면 사용 직전 승인을 질문해 대기 중(SESSION_WORKFLOW의 11/25 규칙). 서버/브라우저/기기 실행·실주문 API 쓰기 없음. 코드/branch 준비와 로컬 검증까지이며 제품 commit/push/PR/Jira 쓰기/배포 미수행·미승인. 전달 단계에서 앱 제품 카드 분리와 release 대상/선행 변경을 확인한다.
+- 다음 시작: 사용자 화면 승인 여부 반영 → 최종 코드로 주문4단계 집중 검증 → 별도 지시 시 제품 commit/PR 준비. 요구 범위 때문에 PM에게 다시 질문할 항목은 현재 없다.
+
+## 최초 조사 체크포인트 — 2026-11-27 이력
 
 - 사용자 요청: 새 업무의 뜻부터 조사해 설명한다. 구현 전 요구 해석 단계다.
 - Jira: [DL-17665](https://innovaid.atlassian.net/browse/DL-17665), 상위 [DL-17654](https://innovaid.atlassian.net/browse/DL-17654).
