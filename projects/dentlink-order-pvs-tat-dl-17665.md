@@ -1,6 +1,8 @@
 # 주문 PVS·픽업 변경 시 납기 재선택 — DL-17665 / DL-17671
 
-## 현재 체크포인트 — 2026-11-27 웹·치과앱 CodeRabbit 검토 완료
+## 현재 체크포인트 — 2026-11-27 코드·PR·리뷰 정리 완료, 머지·배포 지시 대기
+
+- 최종 사용자 요청: 의도한 코드 작업과 PR 생성까지 완료된 상태로 정리·메모리 후 대기. **머지 및 배포는 사용자가 별도로 지시한다.** 웹 PR4987(4파일)·치과앱 PR368(1파일)의 Open/미병합·head SHA를 마지막으로 확인. 현재 요청 범위의 구현·푸시·PR·등록 리뷰 의견 정리 완료, 추가 코드 작업/새 UI/자동 리뷰·CI·배포 추적 없음. 기존 작업 폴더·브랜치·앱 cwd를 후속 작업용으로 유지하고 실행을 재시작하지 않는다. 기공소앱은 작업 대상 아님. 검증 범위와 앱 보류 주문 수정 진입·최종 저장·릴리즈 통합 QA·Retry UI 보류 한계는 아래 기록을 유지한다.
 
 - 사용자 “각각 PR 만들어줘” 승인으로 일반 PR 2개 생성. [웹 #4987](https://github.com/Innvoaid/dentlink-client/pull/4987)은 `feat/DL-17665@53edcdc8663e27d9fe833e9104dddd969de46e22` → `release/v1.95.0@a320e1358`, [치과앱 #368](https://github.com/Innvoaid/dentlink-app/pull/368)은 `feat/DL-17665@e563e7ee` → `release/v2.2.7@0317f39c`. 실제 base/head·SHA·제목·Open·Draft=false·merged=false·mergeable=true 확인. 앱 제목/Issue는 앱 카드 DL-17671이며 기존 브랜치명은 유지했다.
 - 후속 사용자 요청: PR Files changed에서 이번 작업 외 과거 변경을 제외. 같은 웹 worktree/브랜치/PR을 유지하여 최신 release를 작업 브랜치에 정상 병합하고 `53edcdc86`(chore: 릴리즈 이력 동기화로 PR 비교 범위 정리) 일반 push 완료. 강제 push/이력 재작성/새 브랜치/새 worktree/대상 release 머지 없음. GitHub PR Files changed **12→4파일** 확인, 실제4경로도 일치. 커밋 이력은 보존되어6커밋이며, 앱은 기존1커밋/1파일·41추가/10삭제 그대로다. tree `f9fe960fe56b16fe0910031e14bdc12b2d68067a`, release 대비 patch는 원래 b536b24fa의 작업4파일·53추가/2삭제와 바이트 단위 동일하다.
